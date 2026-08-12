@@ -1,0 +1,40 @@
+name: Sync to Gitee
+
+# Pushes main and tags from GitHub to the Gitee mirror.
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch: {}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check required secrets
+        env:
+          GITEE_USERNAME: ${{ secrets.GITEE_USERNAME }}
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          [ -n "$GITEE_USERNAME" ] || { echo "::error::Missing Secret: GITEE_USERNAME"; exit 1; }
+          [ -n "$GITEE_TOKEN" ] || { echo "::error::Missing Secret: GITEE_TOKEN"; exit 1; }
+          echo "Required Gitee secrets are configured"
+
+      - name: Checkout full history
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Push to Gitee
+        env:
+          GITEE_USERNAME: ${{ secrets.GITEE_USERNAME }}
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          git remote add gitee "https://${GITEE_USERNAME}:${GITEE_TOKEN}@gitee.com/synovation/design-guide.git"
+          if [[ "$GITHUB_REF_TYPE" == "branch" && "$GITHUB_REF_NAME" == "main" ]]; then
+            git push gitee HEAD:refs/heads/main --force
+          elif [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            git push gitee "refs/tags/${GITHUB_REF_NAME}:refs/tags/${GITHUB_REF_NAME}" --force
+          else
+            echo "Skipping unsupported ref: ${GITHUB_REF_TYPE}/${GITHUB_REF_NAME}"
+          fi

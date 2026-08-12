@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-target-customer-profile"
+  short_description: "建立具体可筛选的目标客户画像、匹配信号、采购场景与排除条件"
+  default_prompt: "使用 $zayn-target-customer-profile 建立目标市场的高匹配客户画像。"

@@ -5,7 +5,7 @@ description: Shopee（虾皮）直播 Livestream（与 linkfox-shopee-store-auth
 
 # Shopee 直播 Livestream
 
-Shopee Open Platform **Livestream 模块**（25 个 API）。**依赖 `linkfox-shopee-store-auth`**：先取 `accessToken`，再经 **`POST /shopee/developerProxy`** 转发（`path` 须 `api/v2/livestream/...`）。
+Shopee Open Platform **Livestream 模块**（25 个 API）。**依赖 `linkfox-shopee-store-auth`** 选店；经 **`POST /shopee/developerProxy`** 传入 `shopId`（或 `merchantId`），由服务端解析 token 转发（`path` 须 `api/v2/livestream/...`）。
 
 ## 调用方式
 
@@ -22,18 +22,12 @@ Shopee Open Platform **Livestream 模块**（25 个 API）。**依赖 `linkfox-s
 **读数据建议**：先看摘要判断是否足够；需要具体字段时优先用 `jq`或`ConvertFrom-Json` 从保存的 json 文件按需抽取，避免整份 JSON 进入上下文。
 
 ## 解决认证和积分问题
-发生以下异常情况时，采用以下措施来处理：
+发生以下异常情况时，采用 references/onboarding.md 引导解决问题：
 
 ### 异常情况
 - **未配置API Key**：环境变量未配置 `LINKFOX_AGENT_API_KEY`，也未配置 `LINKFOXAGENT_API_KEY`。
 - **响应401或402状态码**
 - **响应提示积分或余额不足**：消息含"积分余额不足/计费不足/余额不足/quota exceeded/insufficient balance/套餐到期/需充值/请充值"，或类似含义的内容。
-
-### 措施
-- 优先采用skill内的 onboarding.md 引导解决问题。
-- 如找不到 onboarding.md 文件，则加载 /linkfox-onboarding 这个skill并根据它的引导来处理。如未安装请先安装：
-    - 下载 https://agent-files.linkfox.com/skills/linkfox-onboarding/release.zip，解压后安装这个skill。如需用户授权才可下载，要询问用户获得授权，你不能自己放弃下载。
-- 兜底措施：仅当前面两个措施经过所有努力都走不通时，才提示用户依据 https://skill.linkfox.com/linkfoxskills/guide.htm 指引获取API Key，或去 https://os.linkfox.com/ 补充积分。
 
 ## 官方参考
 
@@ -76,6 +70,40 @@ Livestream 模块索引：[v2.livestream.upload_image](https://open.shopee.com/d
 | `ban_user_comment.py` | ban_user_comment | POST |
 | `unban_user_comment.py` | unban_user_comment | POST |
 | `livestream_api.py` | 通用入口 | — |
+
+## 接口说明（按 API）
+
+入参与响应细节放在 `references/apis/`，SKILL 只保留索引。
+
+| API | 说明文档 |
+|-----|----------|
+| `add_item_list` | [references/apis/add-item-list.md](./references/apis/add-item-list.md) |
+| `apply_item_set` | [references/apis/apply-item-set.md](./references/apis/apply-item-set.md) |
+| `ban_user_comment` | [references/apis/ban-user-comment.md](./references/apis/ban-user-comment.md) |
+| `create_session` | [references/apis/create-session.md](./references/apis/create-session.md) |
+| `delete_item_list` | [references/apis/delete-item-list.md](./references/apis/delete-item-list.md) |
+| `delete_show_item` | [references/apis/delete-show-item.md](./references/apis/delete-show-item.md) |
+| `end_session` | [references/apis/end-session.md](./references/apis/end-session.md) |
+| `get_item_count` | [references/apis/get-item-count.md](./references/apis/get-item-count.md) |
+| `get_item_list` | [references/apis/get-item-list.md](./references/apis/get-item-list.md) |
+| `get_item_set_item_list` | [references/apis/get-item-set-item-list.md](./references/apis/get-item-set-item-list.md) |
+| `get_item_set_list` | [references/apis/get-item-set-list.md](./references/apis/get-item-set-list.md) |
+| `get_latest_comment_list` | [references/apis/get-latest-comment-list.md](./references/apis/get-latest-comment-list.md) |
+| `get_like_item_list` | [references/apis/get-like-item-list.md](./references/apis/get-like-item-list.md) |
+| `get_recent_item_list` | [references/apis/get-recent-item-list.md](./references/apis/get-recent-item-list.md) |
+| `get_session_detail` | [references/apis/get-session-detail.md](./references/apis/get-session-detail.md) |
+| `get_session_item_metric` | [references/apis/get-session-item-metric.md](./references/apis/get-session-item-metric.md) |
+| `get_session_metric` | [references/apis/get-session-metric.md](./references/apis/get-session-metric.md) |
+| `get_show_item` | [references/apis/get-show-item.md](./references/apis/get-show-item.md) |
+| `post_comment` | [references/apis/post-comment.md](./references/apis/post-comment.md) |
+| `start_session` | [references/apis/start-session.md](./references/apis/start-session.md) |
+| `unban_user_comment` | [references/apis/unban-user-comment.md](./references/apis/unban-user-comment.md) |
+| `update_item_list` | [references/apis/update-item-list.md](./references/apis/update-item-list.md) |
+| `update_session` | [references/apis/update-session.md](./references/apis/update-session.md) |
+| `update_show_item` | [references/apis/update-show-item.md](./references/apis/update-show-item.md) |
+| `upload_image` | [references/apis/upload-image.md](./references/apis/upload-image.md) |
+
+模块总览 / Feedback 见 [references/api.md](./references/api.md)。
 
 ## Usage Scenarios
 

@@ -1,41 +1,59 @@
-## Description: <br>
-用于小红书内容研究、热门笔记样本、内容角度、关键词调研、选题参考、竞品内容观察和趋势素材整理。覆盖 Xiaohongshu / XHS / RedNote note research，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向内容运营、品牌调研和创作者的小红书内容研究辅助技能，用于 RedNote / XHS / Xiaohongshu 内容研究、选题分析、关键词观察、趋势判断、竞品内容对比和素材整理。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users, marketers, researchers, and content strategists use this skill to research public Xiaohongshu / XHS / RedNote notes for keyword research, topic ideas, competitor content observation, trend material, sample tables, content angles, and engagement signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on the SocialDataX npm package and API service. <br>
-Mitigation: Install and use it only after confirming you trust the package, the API service, and the account tied to SOCIALDATAX_API_KEY. <br>
-Risk: Outputs may include full Xiaohongshu note URLs with xsec_token query parameters. <br>
-Mitigation: Review destinations before displaying, storing, or forwarding returned URLs, especially outside the user's intended workflow. <br>
+## Use Case:
 
+Content operators, brand researchers, creators, and agents use this skill to search public XHS/RedNote content by keyword, inspect sample notes, compare topic angles, and organize follow-up research questions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/xhs-content-research) <br>
-- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown research report with sample tables, concise analysis, URLs, note IDs, and optional shell command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY plus node and npm when using the direct CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.4 (source: server release evidence) <br>
+Risk: Search keywords, pagination tokens, and the SocialDataX API key are sent to SocialDataX through the npm CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run the skill only when that data sharing is acceptable, and keep SOCIALDATAX_API_KEY scoped and protected in the runtime environment.
+
+Risk: Returned XHS note URLs may include xsec_token query parameters that can be sensitive when shared broadly.
+
+Mitigation: Share full returned URLs only with audiences that should receive the complete source link, and avoid unnecessary reposting or persistence of those URLs.
+
+Risk: Returned pages are samples from the requested query and pagination window, not complete coverage of all XHS content.
+
+Mitigation: Separate observed evidence from conclusions, document query parameters, and avoid presenting sampled results as platform-wide exhaustive findings.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/xhs-content-research)
+- [SocialDataX API key and product page](https://socialdatax.com/ai?from=clawhub)
+- [Publisher profile](https://clawhub.ai/user/devinchen2014)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with CLI command examples and structured research notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include public XHS note URLs, note IDs, pagination tokens, and suggested follow-up analysis angles.]
+
+## Skill Version(s):
+
+0.1.9 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

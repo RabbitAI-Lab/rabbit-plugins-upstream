@@ -1,44 +1,60 @@
-## Description: <br>
-Academic Figures generates publication-quality charts from JSON or CSV data, including 14 chart types, colorblind-safe themes, CJK support, hatching, multi-panel layouts, flow diagrams, and PNG, SVG, PDF, TIFF, or EPS output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Academic Figures helps agents generate publication-ready academic charts from JSON or CSV data with journal presets, color themes, CJK support, and PDF quality checks.
 
-## Publisher: <br>
-[docsor1212](https://clawhub.ai/user/docsor1212) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[docsor1212](https://clawhub.ai/user/docsor1212)
 
-## Use Case: <br>
-Developers, researchers, and agents use this skill to turn structured JSON or CSV datasets into journal-ready academic figures, diagrams, and statistical visualizations. It is suited for local figure generation workflows where the user controls the input data and output path. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The plotting workflow reads the user-selected input file and can write or overwrite the requested output file. <br>
-Mitigation: Use intentional input data and explicit output paths, and review the generated figure before sharing or submitting it. <br>
-Risk: Generic chart-generation requests may activate the skill in contexts where another visualization workflow would be more appropriate. <br>
-Mitigation: Confirm the desired output is a publication-style academic figure before running the local generator. <br>
+## Use Case:
 
+Researchers, clinicians, and academic authors use this skill to turn JSON or CSV data into publication-ready figures and supplementary legends for manuscripts, journal submission, and technical reporting.
 
-## Reference(s): <br>
-- [Academic Figures Skill Page](https://clawhub.ai/docsor1212/academic-figures) <br>
-- [Data Format Reference](references/data-formats.md) <br>
-- [Academic Figures Pitfalls](references/pitfalls.md) <br>
-- [Reverse-Engineering Chart Colors from Reference Images](references/reverse-engineering-colors.md) <br>
-- [academic-figures v1.5.0 Upgrade Analysis](references/v1.5-upgrade-analysis.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration instructions, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples; generated figure files may be PNG, SVG, PDF, TIFF, or EPS.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Local execution with user-selected input and output paths; generated figures use a white background for publication workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: server release metadata; artifact frontmatter lists 1.5.0) <br>
+Risk: The skill bundles a hospital lab-report PDF parser and may be used on sensitive patient reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it on patient reports only after approved data handling and independent sanitization; remove or split extract_lab_pdf.py when that parser is not needed.
+
+Risk: Server security evidence marks the release suspicious because sensitive PDF extraction is bundled with the chart generator and de-identification is overstated.
+
+Mitigation: Review and scan the skill before installation, and keep use limited to local chart generation unless the PDF extraction path has been approved.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/docsor1212/skills/academic-figures)
+- [Data formats reference](references/data-formats.md)
+- [Clinical lab trends reference](references/clinical-lab-trends.md)
+- [Chinese lab report extraction reference](references/chinese-lab-report-extraction.md)
+- [Composite layouts reference](references/composite-layouts.md)
+- [Pitfalls reference](references/pitfalls.md)
+- [Reverse-engineering colors reference](references/reverse-engineering-colors.md)
+- [v1.5 upgrade analysis](references/v1.5-upgrade-analysis.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Shell commands, Code, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and generated figure files such as PNG, SVG, PDF, TIFF, or EPS]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local execution; generated chart and legend outputs depend on the user's data and requested format.]
+
+## Skill Version(s):
+
+2.0.0 (source: SKILL.md frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

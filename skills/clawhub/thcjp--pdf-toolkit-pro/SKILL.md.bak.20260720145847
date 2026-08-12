@@ -1,0 +1,233 @@
+---
+slug: pdf-workflow-suite
+name: pdf-toolkit-pro
+version: "1.1.0"
+displayName: "PDF工具箱Pro"
+summary: "PDF全流程处理:提取合并拆分填表生成,文档数字化一站搞定"
+license: Apache-2.0
+description: |-
+  PDF工具箱Pro全面处理PDF文档,核心功能包括文本表格图片提取(含OCR)、文档合并拆分旋转、PDF表单自动填充、注释标记水印签名、以及从HTML/Markdown/代码生成PDF。适用于文档数字化、合同处理、报表归档、表单自动化、批量PDF处理场景。触发关键词:PDF、PDF处理、文本提取、表格提取、PDF合并、PDF拆分、填表、PDF注释、文档数字化、PDF生成。
+tags: [PDF处理, 文档数字化, 文本提取, 表单填写, 文档生成]
+tools:
+  - [read
+  - exec]
+suggested_price: "0"
+pricing_tier: "free"
+pricing_rationale: "文件处理类, large市场, enterprise复杂度, daily频次, free层 → 高频通用工具"
+---
+# PDF工具箱Pro
+
+全面处理 PDF 文档。从内容提取到文档生成,从合并拆分到表单填写,覆盖 PDF 全流程。
+
+## 核心能力
+
+1. **PDF读取与解析**:读取PDF文件(支持加密PDF需密码),提取元数据(标题/作者/主题/创建时间),获取页面信息(页数/尺寸/方向),提取书签目录结构。
+2. **文本表格图片提取**:纯文本PDF直接提取保留段落,扫描PDF通过OCR识别(多语言),识别表格结构(行/列/合并单元格)输出CSV/Excel/Markdown,提取嵌入图片保留分辨率,处理跨页表格。
+3. **合并拆分与页面操作**:多PDF按顺序合并(添加分隔页/目录/统一页面大小),按页码范围/书签/章节拆分,每页拆为单独PDF,删除/重排/旋转(90/180/270)/提取指定页。
+4. **表单处理**:识别表单字段(文本框/复选框/单选/下拉/签名域),从JSON/Excel读取数据映射填充,批量填充多个表单,填充后扁平化锁定不可编辑。
+5. **注释标记与PDF生成**:高亮(多色)/批注/下划线/删除线/形状标注/手写签名嵌入/水印(文字图片),从HTML/CSS/Markdown生成PDF(含目录页码页眉页脚),程序化生成(文本/图片/表格/图形)。
+
+## 适用场景
+
+| 场景 | 输入 | 输出 |
+|:-----|:-----|:-----|
+| 内容提取 | PDF文件(文本或扫描件) | 文本`output/{pdf-name}/text.txt`、表格`output/{pdf-name}/tables/`、图片`output/{pdf-name}/images/` |
+| 文档合并 | 多个PDF文件 | 合并后`output/{merge-name}/merged.pdf`(含目录) |
+| 文档拆分 | 单个PDF+拆分规则 | 拆分后`output/{split-name}/pages/`(按页/章/书签) |
+| 表单填写 | PDF表单+数据(JSON/Excel) | 填充后`output/{form-name}/filled.pdf` |
+| PDF生成 | HTML/Markdown/数据 | 生成的`output/{gen-name}/output.pdf`(含页眉页脚水印) |
+| 注释标记 | PDF+标注需求 | 标注后`output/{pdf-name}/annotated.pdf` |
+
+**不适用于**:
+- PDF的深度内容理解与语义分析(需LLM单独处理)
+- PDF的矢量图形编辑(本工具为页面级操作)
+- 加密PDF的密码破解(需用户提供密码)
+- 视频帧提取PDF化(非本工具范围)
+
+## 使用流程
+
+### Step 1: PDF读取与解析
+1. 读取PDF文件(加密PDF需提供密码)
+2. 提取元数据:标题/作者/主题/关键词/创建时间
+3. 获取页面信息:页数/页面尺寸/方向
+4. 提取书签/目录结构
+
+### Step 2: 文本与表格提取
+1. **文本提取**:纯文本PDF直接提取保留段落;扫描PDF用OCR识别(支持中英文等多语言);布局保留(多栏/表格/图文混排)
+2. **表格提取**:识别表格结构(行/列/合并单元格);输出为CSV/Excel/Markdown表格;处理跨页表格
+3. **图片提取**:提取嵌入图片,保留原始分辨率
+
+### Step 3: 合并与拆分(按需)
+1. **合并**:多PDF按顺序合并,添加分隔页/目录,统一页面大小
+2. **拆分**:按页码范围(如1-5,6-10)/按书签章节/每页单独PDF
+3. **页面操作**:删除指定页/重排序/旋转(90/180/270)/提取指定页
+
+### Step 4: 表单处理(按需)
+1. 表单字段识别:文本框/复选框/单选/下拉/签名域
+2. 数据填充:从JSON/Excel读取,映射字段名到表单域,批量填充
+3. 表单扁平化:填充后锁定不可再编辑
+
+### Step 5: 注释与PDF生成(按需)
+1. **注释**:高亮/批注/画线标记/形状标注/签名嵌入/水印
+2. **生成**:HTML/CSS→PDF、Markdown→PDF(含目录/页码)、程序化生成(文本/图片/表格/图形)、页面设计(页眉页脚/页码/水印/边距)
+
+## 示例
+
+### 示例1: 提取PDF中的表格
+
+**输入**:
+```
+提取 report.pdf 中的所有表格,输出为CSV格式。PDF中包含3个跨页表格。
+```
+
+**输出** (`output/report/tables/`):
+```
+output/report/tables/
+├── table_1.csv
+├── table_2.csv
+└── table_3.csv
+```
+
+`table_1.csv` 内容示例:
+```csv
+季度,营收,增长率,净利润
+2024Q1,1.2亿,15.3%,0.3亿
+2024Q2,1.5亿,25.0%,0.4亿
+2024Q3,1.8亿,20.0%,0.5亿
+```
+
+提取脚本 (`output/report/extract_tables.py`):
+```python
+import pdfplumber
+import csv
+
+with pdfplumber.open("report.pdf") as pdf:
+    table_idx = 1
+    for page in pdf.pages:
+        tables = page.extract_tables()
+        for table in tables:
+            with open(f"output/report/tables/table_{table_idx}.csv", "w", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                writer.writerows(table)
+            table_idx += 1
+print(f"共提取 {table_idx-1} 个表格")
+```
+
+### 示例2: 从Markdown生成PDF报告
+
+**输入**:
+```
+将以下Markdown内容生成PDF报告,要求A4尺寸,含页眉(公司名)、页脚(页码)、目录。
+# 2024年度报告
+## 第一章 业务回顾
+本年度业务稳定增长...
+## 第二章 财务分析
+营收同比增长20%...
+```
+
+**输出** (`output/annual-report/output.pdf`):
+生成脚本 (`output/annual-report/generate.py`):
+```python
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+# 注册中文字体(国内可用思源黑体)
+pdfmetrics.registerFont(TTFont("SimSun", "simsun.ttc"))
+
+doc = SimpleDocTemplate("output/annual-report/output.pdf", pagesize=A4,
+    topMargin=72, bottomMargin=72, title="2024年度报告")
+styles = getSampleStyleSheet()
+styles["Normal"].fontName = "SimSun"
+styles["Title"].fontName = "SimSun"
+# 添加页眉页脚、目录、内容...
+# doc.build(story, onFirstPage=header_footer, onLaterPages=header_footer)
+```
+
+## 错误处理
+
+| 错误场景 | 原因 | 处理方式 |
+|:---------|:-----|:---------|
+| PDF加密无法读取 | 文件设有用户密码 | 要求用户提供密码,不支持暴力破解 |
+| OCR识别失败 | 扫描质量差/分辨率低/手写字体 | 提示提高扫描质量(建议300DPI+),手写内容需人工录入 |
+| 表格提取错乱 | 合并单元格/无边框表格/复杂布局 | 尝试不同提取策略(lattice/stream),仍失败则标注需人工校对 |
+| 跨页表格未合并 | 表格跨页时表头重复或断裂 | 检测跨页续表,合并时去重表头 |
+| 中文字体缺失 | 系统未安装中文字体 | 安装思源黑体/宋体,或使用reportlab内置CID字体 |
+| 表单字段识别失败 | 非AcroForm表单(如XFA表单) | 提示该表单类型不支持,建议转AcroForm后重试 |
+| 图片提取无分辨率 | 图片为矢量图形非位图 | 标注为矢量图,按页面DPI导出为位图 |
+| 合并后文件过大 | 原PDF含高分辨率图片 | 提供图片压缩选项,降低DPI |
+
+## 依赖说明
+
+### 运行环境
+- **Agent平台**: Claude Code / Cursor / Codex / Gemini CLI / Windsurf 等支持SKILL.md的任意Agent
+- **操作系统**: Windows / macOS / Linux
+- **运行时**: 需要Agent支持exec(命令行执行)能力
+
+### 依赖说明
+| 依赖项 | 类型 | 是否必需 | 获取方式 | 国内替代方案 |
+|:-------|:-----|:---------|:---------|:-------------|
+| Python 3.8+ | 运行时 | 推荐 | PDF处理主力语言 | 清华源安装:`-i https://pypi.tuna.tsinghua.edu.cn/simple` |
+| PyPDF2/pypdf | 库 | 推荐 | PDF读写合并拆分 | `pip install pypdf -i https://pypi.tuna.tsinghua.edu.cn/simple` |
+| pdfplumber | 库 | 可选 | 文本表格提取 | 国内PyPI镜像安装 |
+| reportlab | 库 | 可选 | PDF生成 | 国内PyPI镜像安装 |
+| pdf2image+poppler | 库 | 可选 | PDF转图片(OCR前置) | poppler需单独安装,Windows下载二进制 |
+| Tesseract OCR | 工具 | 可选 | 扫描件OCR识别 | 国内需单独安装+中文语言包(chi_sim) |
+| pymupdf(fitz) | 库 | 可选 | 高性能PDF处理 | 国内PyPI镜像安装 |
+| LLM API | API | 可选 | 由Agent内置LLM提供内容分析 | 国内Agent(通义/文心/智谱)均可 |
+
+### API Key 配置
+- **本Skill无需额外API Key配置**: 纯本地PDF处理
+- **如使用云端OCR服务**: API Key通过环境变量传入,不硬编码
+- **安全要求**: API Key零暴露,不写入文档、不输出到日志、不硬编码到代码中
+
+### 可用性分类
+- **分类**: MD+EXEC
+- **说明**: 纯Markdown,但需要exec能力(命令行执行),用于文件读写和Python库调用
+
+## 输出规范
+
+- 提取文本:`output/{pdf-name}/text.txt`
+- 提取表格:`output/{pdf-name}/tables/`(CSV/Excel)
+- 提取图片:`output/{pdf-name}/images/`
+- 合并结果:`output/{merge-name}/merged.pdf`
+- 拆分结果:`output/{split-name}/pages/`
+- 填充表单:`output/{form-name}/filled.pdf`
+- 元数据:`output/{pdf-name}/metadata.json`
+- 注释结果:`output/{pdf-name}/annotated.pdf`
+- 生成结果:`output/{gen-name}/output.pdf`
+
+## 常见问题
+
+### Q1: 扫描件PDF无法提取文本怎么办?
+A: 扫描件是图片形式,需用OCR识别。步骤:(1)用pdf2image将PDF转为图片(建议300DPI);(2)用Tesseract OCR识别(需安装中文语言包chi_sim);(3)输出文本。安装Tesseract:Windows下载安装包,macOS用`brew install tesseract`,Linux用`apt install tesseract-ocr tesseract-ocr-chi-sim`。
+
+### Q2: 提取的表格格式混乱怎么处理?
+A: pdfplumber提供两种提取策略:lattice(基于线条,适合有边框表格)和stream(基于文本对齐,适合无边框表格)。先尝试lattice,失败再尝试stream。对于合并单元格导致的错乱,需后处理逻辑修正。复杂表格建议人工校对。
+
+### Q3: 生成PDF时中文显示乱码?
+A: 中文字体未正确注册。reportlab需用`pdfmetrics.registerFont(TTFont("SimSun", "simsun.ttc"))`注册中文字体。Windows系统字体在`C:\Windows\Fonts\`,macOS在`/System/Library/Fonts/`,Linux需安装文泉驿或思源字体。推荐使用开源的思源黑体(Noto Sans CJK)。
+
+### Q4: 如何在国内安装PDF处理依赖?
+A: Python库用清华源:`pip install pypdf pdfplumber reportlab pymupdf -i https://pypi.tuna.tsinghua.edu.cn/simple`。Tesseract OCR需单独安装:Windows从UB-Mannheim下载,macOS用brew,Linux用apt。poppler:Windows下载二进制并添加PATH,macOS用brew install poppler。
+
+### Q5: 如何批量处理多个PDF文件?
+A: 编写批处理脚本,遍历目录下所有PDF文件,对每个文件执行相同操作。建议用Python的pathlib或glob模块遍历,处理结果按原文件名组织到output目录。大文件批量处理时注意内存管理,及时释放资源。
+
+## 已知限制
+
+- OCR识别准确率受扫描质量影响,手写体、低分辨率、倾斜扫描件识别率显著下降,重要内容需人工校对
+- 复杂表格(多层表头、合并单元格、跨页续表)的提取准确率有限,可能需要人工修正
+- PDF生成时中文字体需手动注册,不同操作系统字体路径不同,跨平台部署需注意字体文件携带
+- 加密PDF需用户提供密码,本工具不支持任何形式的密码破解
+- 处理超大PDF(500MB+)时内存占用高,可能需要分页处理或流式处理避免OOM
+
+## 安全
+
+- **API Key零暴露**: 云端OCR服务的API Key通过环境变量传入,不硬编码到代码、不写入日志、不输出到文档
+- **敏感PDF处理**: 合同、财务等敏感PDF处理建议在本地完成,不上传到云端服务
+- **密码安全**: 加密PDF的密码不记录在日志中,处理完成后清除内存中的密码
+- **文件权限**: 输出文件按需设置访问权限,敏感PDF输出目录不公开
+- **临时文件清理**: 处理过程中的临时文件(如OCR中间图片)处理完成后及时删除

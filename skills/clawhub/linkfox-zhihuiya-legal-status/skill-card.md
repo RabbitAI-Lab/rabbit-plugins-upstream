@@ -1,46 +1,66 @@
-## Description: <br>
-Queries Zhihuiya (PatSnap) for a single patent's current legal standing, validity status, and legal event history by patent ID or publication number. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries the Zhihuiya (PatSnap) database for patent legal status, validity, and legal-event history by patent ID or publication number.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Patent professionals, legal operations teams, and agents use this skill to check a single patent's legal status, validity, and legal events through the LinkFox Zhihuiya/PatSnap endpoint. It is suited for direct patent status lookups, not broader patent search, valuation, freedom-to-operate analysis, or family/citation analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends patent identifiers and query context to LinkFox/Zhihuiya services. <br>
-Mitigation: Use only when sharing the patent query with those services is acceptable, and avoid confidential patent work unless the environment's data-handling controls are appropriate. <br>
-Risk: Full API responses and cache files can persist locally under linkfox output directories. <br>
-Mitigation: Review and manage local output/cache files, especially in shared workspaces or when query results may be sensitive. <br>
-Risk: The security review notes silent feedback reporting and remote onboarding installation behavior. <br>
-Mitigation: Review before installing and control feedback/onboarding behavior in the target environment. <br>
-Risk: The endpoint consumes credits and supports only one patent per request. <br>
-Mitigation: Confirm user intent before additional or repeated lookups, especially for multiple patents or retry attempts. <br>
+## Use Case:
 
+External users, developers, and patent professionals use this skill to check whether patents are active, inactive, pending, expired, revoked, or otherwise affected by legal events such as transfer, license, pledge, litigation, opposition, or re-examination.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-legal-status) <br>
-- [API reference](artifact/references/api.md) <br>
-- [Zhihuiya legal status endpoint](https://tool-gateway.linkfox.com/zhihuiya/legalStatus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Files, JSON, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Structured patent legal-status guidance with JSON API responses saved locally and optional stdout JSON or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Queries one patent per request; responses may be cached for 24 hours and full API responses are written under a local linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: evidence.release.version) <br>
+Risk: Patent identifiers and feedback content may be sent to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is comfortable sharing the identifiers and avoid submitting confidential patent data unless the environment and account terms allow it.
+
+Risk: API keys may be read from environment variables or generated during onboarding.
+
+Mitigation: Treat generated keys as secrets, store them only in approved environment variables, and avoid printing or pasting them into shared logs.
+
+Risk: The onboarding flow can initiate paid plan orders after a user selects a plan and payment method.
+
+Mitigation: Show available plans, payment method, and cost before ordering, and proceed only after explicit user confirmation.
+
+Risk: Full API responses are persistently saved in local LinkFox session data and may contain sensitive patent lookup results.
+
+Mitigation: Protect or clean up saved response and cache files according to the workspace's data-handling requirements.
+
+Risk: Endpoint environment variables can redirect requests to alternate LinkFox-compatible services.
+
+Mitigation: Verify LINKFOX_* endpoint variables before use, especially in shared or production environments.
+
+## Reference(s):
+
+- [智慧芽专利法律状态查询 API 参考](references/api.md)
+- [解决认证和积分问题](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON files, guidance]
+
+**Output Format:** [Markdown guidance with shell commands; API responses as JSON printed to stdout and saved to local files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Caches identical requests for 24 hours; saves full responses under a LinkFox session data directory; summarizes responses over 8 KB unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

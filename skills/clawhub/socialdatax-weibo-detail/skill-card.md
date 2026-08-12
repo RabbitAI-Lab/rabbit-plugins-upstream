@@ -1,41 +1,54 @@
-## Description: <br>
-用于微博数据分析、微博帖子详情、帖子数据、互动指标、内容调研和内容分析。覆盖 Weibo post details，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves structured Weibo post details, interaction metrics, media information, and content fields through SocialDataX.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and agents use this skill to retrieve structured details for a single Weibo post, including content, author, media, publish time, interaction counts, and post URL when available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on a SocialDataX npm package and service that receives the user's SOCIALDATAX_API_KEY. <br>
-Mitigation: Install and run it only when the user trusts SocialDataX and intends to use that API key for read-only Weibo post lookups. <br>
-Risk: Optional media downloads can write files locally. <br>
-Mitigation: Save media only to an output path or directory explicitly chosen by the user. <br>
+## Use Case:
 
+External users and developers use this skill to look up a specific Weibo post by ID or URL and return factual post content, author, publish time, media, and interaction metrics for content research or analysis.
 
-## Reference(s): <br>
-- [SocialDataX AI Access Page](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub Skill Page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-detail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY for SocialDataX data calls; detail access is described as read-only.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: The skill uses SOCIALDATAX_API_KEY with SocialDataX as a third-party service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only if you accept sharing that API key with SocialDataX CLI calls, and use an appropriate scoped or dedicated key when available.
+
+Risk: Optional media download behavior can write files to the local filesystem.
+
+Mitigation: Provide only an intended output file or directory and review the destination before running media download commands.
+
+## Reference(s):
+
+- [SocialDataX API access and homepage](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-detail)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples; command responses are JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY for detail requests; optional media download writes only to a user-selected output path.]
+
+## Skill Version(s):
+
+0.1.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

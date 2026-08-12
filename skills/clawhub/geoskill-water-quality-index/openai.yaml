@@ -1,0 +1,14 @@
+name: geoskill-water-quality-index
+display_name: 水质遥感指数
+description: |
+  基于水色遥感经验模型反演叶绿素a、悬浮物与透明度，做水体掩膜与富营养化分级
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-water-quality-index.py
+runtime: python>=3.9
+tags:
+  - gis
+  - hydrology
+  - raster
+  - remote-sensing
+  - water

@@ -121,13 +121,18 @@
 | Kling | 3.0 | 16:9, 9:16, 1:1, 4:3, 3:4, 3:2, 2:3, 21:9 | 1K, 2K（默认 1K） | 0~1张 | 可灵 3.0 |
 | Kling | 3.0-Omni | 16:9, 9:16, 1:1, 4:3, 3:4, 3:2, 2:3, 21:9, **auto** | 1K, 2K, **4K**（默认 1K） | 0~10张 | 可灵 3.0-Omni；**支持主体生图**（多张参考图）；输出支持一次生成 1-9 张（`--output-image-count`）|
 | Kling | **O1** | 16:9, 9:16, 1:1, 4:3, 3:4, 3:2, 2:3, 21:9, **auto** | 1K, 2K, **4K**（默认 1K） | 0~10张 | 可灵 O1；与 3.0-Omni 类似；接口实测确认支持 |
+| Kling | **scene** | 不适用（由 `--ext-info` 四个 ratio 字段控制扩图范围） | 与原图等比放大，面积 ≤ 原图 3 倍 | **仅 1 张（必填）** | **扩图专用特殊版本**，非常规生图版本；必须配合 `--scene-type image_expand`；详见 §10.3 |
 | MJ | v8.1, v7 | 通过 prompt 指定（如 `--ar 16:9`） | 通过 prompt 指定（如 `--q 2`） | 0~3张 | Midjourney 模型；**接口名为 `MJ`**（`Midjourney` 接口拒绝）；v8.1 为最新版 |
+| MJ | **v8.2** | 通过 prompt 指定 | 通过 prompt 指定（`--q` 仅支持 `1`/`4`） | 0~3张 | MJ 最新版本（2026-08-03 上新）；`--q` 质量档位与 v7/niji_7 不同（v7/niji_7 支持 `1`/`2`/`4`） |
+| MJ | **niji_7** | 通过 prompt 指定 | 通过 prompt 指定（`--q` 支持 `1`/`2`/`4`） | 0~3张 | 二次元专用模型（2026-07-23 上新）；每次仍固定生成 4 张 |
 | GG | 2.5 | 1:1, 3:2, 2:3, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9, 21:9 | 1K, 2K, 4K（默认 1K） | 0~3张 | nano banana（GG 2.5）；**接口名 `GG`，历史别名 `GEM` 也被接口接受** |
 | GG | 3.0 | 1:1, 3:2, 2:3, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9, 21:9 | 1K, 2K, 4K（默认 1K） | 0~14张 | nano banana pro（GG 3.0）；支持扩图 |
 | GG | 3.1 | 1:1, 3:2, 2:3, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9, 21:9, **1:4, 4:1, 1:8, 8:1** | **512**, 1K, 2K, 4K（默认 1K） | 0~14张 | nano2（GG 3.1）；分辨率多 512 档；宽高比多 4 个极端比例 |
+| GG | **3.1-lite** | 1:1, 3:2, 2:3, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9, 21:9 | 1K（**仅支持 1K 直出**），2K/4K 走超分 | 0~14张 | nano banana 2 lite（GG 3.1-lite，2026-07-08 上新）；轻量版，仅原生 1K 出图，2K/4K 需超分放大 |
 | SI | **4.0** | 通过 prompt 指定 | 1K, 2K, 4K（默认 1K） | 0~14张 | Seedream 4.0；**支持多图输出**：Prompt 指定数量 + `--ext-info '{"AdditionalParameters": "{\"sequential_image_generation\":\"auto\"}"}'` |
 | SI | 4.5 | 通过 prompt 指定 | 2K, 4K（默认 2K） | 0~14张 | Seedream 4.5 |
 | SI | 5.0-lite | 通过 prompt 指定 | 2K, **3K**, 4K（默认 2K） | 0~14张 | Seedream 5.0-lite；多 3K 分辨率档 |
+| SI | **5.0-pro** | 通过 prompt 指定 | 1K, 2K, 4K（默认 1K） | 0~14张 | Seedream 5.0-pro（2026-07-16 上新）；旗舰版本，画质更优 |
 | OG | image2_low, image2_medium, image2_high | 1:1, 3:2, 2:3, 3:4, 4:3, 16:9, 9:16, 21:9, 9:21 | 1K, 2K, 4K（默认 1K） | 0~16张 | **GPT-Image2**：多语种文本渲染强、支持 jpeg/png 输出（`--output-format`）、支持一次生 1~8 张（`--output-image-count`）、支持蒙版编辑（`ReferenceType=mask`）、支持自定义任意 size（16 倍数，需走 `--ext-info`）；不支持透明背景；按输入图片计费 |
 | Jimeng | 4.0 | 不支持 AspectRatio | 通过 ExtInfo `width`/`height`，分辨率范围 [1024×1024, 4096×4096] | 0~10张 | 即梦 4.0；**自定义分辨率示例**：`--ext-info '{"AdditionalParameters": "{\"width\":1920, \"height\":1080}"}'`；风格化效果优秀 |
 
@@ -521,30 +526,53 @@ python3 scripts/vod_aigc_image.py create \
 
 ### 10.3 Kling 扩图（outpainting）
 
-> 🚨 **强制规则**：Kling 扩图是**图生图**变体，**必须传单张参考图**（`--file-id` 或 `--file-url`），并通过 `--ext-info` 传入 4 个方向的扩充比例。生成张数用 `--output-image-count`（1-9）。
+> 🚨 **强制规则**（对应官方接入指南 3.9.11 节，已通过文档规范核实）：
+> - **`--model-version` 必须传固定值 `scene`**（不是 2.1/3.0/3.0-Omni/O1 中任何一个，这是扩图专用的特殊版本标识）
+> - **`--scene-type` 必须传 `image_expand`**
+> - 只能输入**单张**参考图（`--file-id` 或 `--file-url` 二选一，**不支持** `--file-infos` 多图）
+> - 必须通过 `--ext-info` 传入 4 个方向的扩充比例（4 个字段均为**必填**）
+> - `--prompt` 为选填，最长 2500 字符
+> - `--output-image-count` 取值范围 `[1, 9]`，默认 1
+> - `--output-storage-mode` 建议用 `Permanent`（永久存储）
 
 **ratio 参数说明**（取值范围 `[0, 2]`，新图整体面积不得超过原图 3 倍）：
 
-| 字段 | 含义 |
-|---|---|
-| `up_expansion_ratio` | 向上扩充范围，基于原图**高度**的倍数 |
-| `down_expansion_ratio` | 向下扩充范围，基于原图**高度**的倍数 |
-| `left_expansion_ratio` | 向左扩充范围，基于原图**宽度**的倍数 |
-| `right_expansion_ratio` | 向右扩充范围，基于原图**宽度**的倍数 |
+| 字段 | 必填 | 含义 |
+|---|---|---|
+| `up_expansion_ratio` | ✅ | 向上扩充范围，基于原图**高度**的倍数（如原图高 20，值为 0.1，则向上扩 20×0.1=2） |
+| `down_expansion_ratio` | ✅ | 向下扩充范围，基于原图**高度**的倍数 |
+| `left_expansion_ratio` | ✅ | 向左扩充范围，基于原图**宽度**的倍数 |
+| `right_expansion_ratio` | ✅ | 向右扩充范围，基于原图**宽度**的倍数 |
 
-**命令模板**：
+**命令模板（URL 输入）**：
 
 ```bash
 python3 scripts/vod_aigc_image.py create \
-    --model Kling \
-    --file-id <参考图 FileId> \
+    --model Kling --model-version scene \
+    --scene-type image_expand \
+    --file-url "https://example.com/source.jpg" \
     --prompt "补全周围天空与海面（≤2500 字符）" \
     --output-image-count 2 \
+    --output-storage-mode Permanent \
+    --ext-info '{"AdditionalParameters":"{\"up_expansion_ratio\":0.1,\"down_expansion_ratio\":0.2,\"left_expansion_ratio\":0.3,\"right_expansion_ratio\":0.4}"}' \
+    --sub-app-id 1308104797
+```
+
+**命令模板（FileId 输入）**：
+
+```bash
+python3 scripts/vod_aigc_image.py create \
+    --model Kling --model-version scene \
+    --scene-type image_expand \
+    --file-id <参考图 FileId> \
+    --prompt "补全周围天空与海面" \
+    --output-image-count 2 \
+    --output-storage-mode Permanent \
     --ext-info '{"AdditionalParameters":"{\"up_expansion_ratio\":0.2,\"down_expansion_ratio\":0.2,\"left_expansion_ratio\":0.3,\"right_expansion_ratio\":0.3}"}' \
     --sub-app-id 1308104797
 ```
 
-> ⚠️ **未明确字段**：腾讯云接口文档未给出 ratio 字段的精确挂载位置，当前以 `ExtInfo.AdditionalParameters` 透传。如服务端报错"参数不识别"，请联系腾讯云商务确认接口形式。
+> ✅ **已通过 `--dry-run` 验证**：脚本参数体系无需改动即可正确构造该请求，生成的 JSON 与官方文档规范完全一致。此前版本文档缺少 `--model-version scene` 和 `--scene-type image_expand` 两个必填字段，已修正。
 
 ### 10.4 多图主体生图（3.0-Omni / O1，最多 10 张参考图）
 
@@ -674,6 +702,7 @@ python3 scripts/vod_aigc_image.py create \
 | SI 4.0 | 1K, 2K, 4K | 1K | 0~14 张 |
 | SI 4.5 | 2K, 4K | 2K | 0~14 张 |
 | SI 5.0-lite | 2K, 3K, 4K | 2K | 0~14 张 |
+| SI 5.0-pro | 1K, 2K, 4K | 1K | 0~14 张 |
 
 > SI 系列的宽高比通过 Prompt 指定（在文本中描述 16:9、9:16 等），不通过 `--output-aspect-ratio` 参数。
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Stock Watcher"
+  short_description: "Manage and summarize an A-share watchlist"
+  default_prompt: "Use $stock-watcher to summarize my local A-share watchlist."

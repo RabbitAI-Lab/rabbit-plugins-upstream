@@ -1,6 +1,6 @@
 ---
 name: premium-html-studio
-description: Generate professional-grade technical documentation AND proposals (方案) as stunning single-file HTML pages with premium design systems. Use when creating technical deep-dives, API documentation, architecture explanations, workflow analysis, technical proposals (技术方案), project plans (项目方案), architecture proposals (架构方案), design proposals (设计方案), implementation plans (实施方案), research reports (研究报告), or any HTML page that needs to look polished and professional — think Stripe/Linear/Apple Docs quality. Pairs beautifully with Prism.js syntax highlighting, Playfair Display + Inter + JetBrains Mono typography, sophisticated color palettes (indigo/purple), layered shadows, gradient accents, and publication-quality SVG diagrams. Triggers on: "技术文档", "HTML 文档", "技术方案", "项目方案", "架构方案", "设计方案", "实施方案", "研究报告", "proposal", "premium docs", "专业文档", "漂亮的页面", "生成 HTML", "create a nice looking page", "make a professional HTML doc", "write a proposal".
+description: "Generate professional-grade single-file HTML technical docs and proposals (方案) with two premium design systems. (1) International: Playfair Display + Inter + JetBrains Mono, indigo/purple palette, Stripe/Linear/Apple Docs quality for API docs, architecture, workflow analysis, research reports. (2) Chinese Technical Spec style (中文技术规格, Multi-ES style): Noto Sans SC + Noto Serif SC + JetBrains Mono, deep-purple gradient cover with KPI stats, numbered Part dividers, vertical pipeline flow charts with colored stage bars, data-flow funnel, tinted callouts — ideal for Chinese 流程详解/模式详解/链路图/节点拆解/参数说明 docs. Pairs with Prism.js syntax highlighting, layered shadows, gradient accents, publication-quality SVG diagrams. Triggers on: 技术文档, HTML 文档, 技术方案, 项目方案, 架构方案, 设计方案, 实施方案, 研究报告, 流程详解, 模式详解, 链路图, 流程图, 节点详解, pipeline 说明, proposal, premium docs, 专业文档, 漂亮的页面, 生成 HTML, make a professional HTML doc, write a proposal, generate a doc like Multi-ES, 按 Multi-ES 样式."
 ---
 
 # Premium HTML Docs & Proposals
@@ -1566,6 +1566,173 @@ When generating a proposal, use this structural template:
 **Mixed content**: If the request contains both elements, combine them — e.g., a technical proposal with architecture documentation sections.
 
 
+## Chinese Technical Spec Style (中文技术规格 · Multi-ES 风格)
+
+A second design system distilled from the reference document **《Multi-ES Precise 模式流程详解》** — the house style for Chinese technical deep-dives that walk through a pipeline, an algorithm flow, or a system's internals node by node (流程详解 / 模式详解 / 链路图 / 节点拆解 / 参数说明).
+
+**Choose this style when**: the doc is in Chinese AND explains a process/flow — a retrieval pipeline, an LLM chain, a multi-stage algorithm, a system workflow — with stages, steps, parameters and thresholds to document. Choose the International style (below) for English docs, API references, or content that is mostly prose rather than flow.
+
+Full CSS lives in **`templates/css-system-cn.css`** — copy it into the `<style>` block and customize `--purple`/`--blue` accents if you want a different hue. The core shapes (cover hero, part dividers, vertical flow, funnel) are what give the style its identity; keep them intact.
+
+### Fonts
+
+```html
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+```
+
+| Role | Font | Usage |
+|------|------|-------|
+| Body / UI | `Noto Sans SC` (300–700) | Paragraphs, lists, tables, callouts — CJK-optimized metrics |
+| Headings / Display | `Noto Serif SC` (400/600/700) | Cover H1, part titles, `h2.sec` — serif gives 中文文档 gravitas |
+| Code / Technical | `JetBrains Mono` (400/500) | Inline code, pre blocks, KPIs, numbers, badges |
+
+### Palette (semantic families)
+
+Six accent families, each with a base + light tint used for bars, callouts, stage tags and badges:
+
+```css
+--blue:#2563eb; --blt2:#dbeafe;      /* 召回/入口 */
+--purple:#7c3aed; --plt:#ede9fe;     /* 增强/扩展 + 主强调色 */
+--teal:#0891b2; --tlt:#cffafe;       /* 存储/DB */
+--green:#059669; --glt:#d1fae5;      /* 输出/成功 */
+--amber:#d97706; --alt:#fef3c7;      /* LLM 调用点 / 警告 */
+--red:#dc2626; --rlt:#fee2e2;        /* 错误 / 易错点 */
+```
+
+Plus 4-level text scale `--text:#1a1a2e → --text2 → --text3 → --text4` and surfaces `--bgsub:#f8f9fc` / `--border:#e2e6ef`. Page background is a light gray-blue gradient (`#eef1f7 → #e8ecf4`) so the white `.doc` card floats on top.
+
+### Layout skeleton
+
+```
+┌─ .doc (1200px white card, layered shadow) ─────────────────┐
+│ ┌─ .cover ── dark purple gradient hero ─────────────────┐ │
+│ │  [.tag pill]  h1(serif)  .sub  .meta  .kpis(4 个数字) │ │
+│ └──────────────────────────────────────────────────────┘ │
+│ ┌─ .body ──────────────────────────────────────────────┐ │
+│ │  .exec 管理摘要 (紫色左边条渐变卡)                      │ │
+│ │  .toc 分部分卡片网格 (Part 01 … 06)                    │ │
+│ │  .part 分隔条 + h2.sec 小节 + h3.sub + p.lead          │ │
+│ │  .flow 纵向流程 / .funnel 数据漏斗 / 表格 / callout     │ │
+│ │  .footer                                              │ │
+│ └──────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────┘
+```
+
+### Cover hero (with KPIs)
+
+The cover is a **155deg dark-purple gradient** (`#1a0a2e → #2d1440 → #4a0d5e → #5b0e7d`) with two radial glow circles (`::before`/`::after`) — the glow is what keeps it from looking flat. Layout: eyebrow `.tag` pill → serif `h1` → `.sub` one-line subtitle → `.meta` version/module lines with `<b>` labels → `.kpis` row of mono numbers.
+
+```html
+<div class="cover">
+  <span class="tag">Technical Spec · SAG-Benchmark</span>
+  <h1>Multi-ES Precise 模式流程详解</h1>
+  <p class="sub">高精度 LLM 精选的多元事项检索链路 — 一句话副标题</p>
+  <div class="meta">
+    <b>版本：</b>v1.0 — 2026 年 7 月<br>
+    <b>模块：</b>pipeline/modules/search/multi_vector.py<br>
+    <b>定位：</b>链路设计、阈值与机制说明
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="v">1</div><div class="l">LLM 调用次数</div></div>
+    <div class="kpi"><div class="v">2</div><div class="l">召回通道</div></div>
+    <div class="kpi"><div class="v">8</div><div class="l">链路节点</div></div>
+  </div>
+</div>
+```
+
+### Part dividers & section headings
+
+Long specs are split into **numbered Parts** — a `Part 01`-style divider with a 3px top rule and serif title, then `h2.sec` sub-sections each with a 48px purple underline accent, `h3.sub` for sub-points, and `p.lead` for gray intro paragraphs:
+
+```html
+<div class="part" id="p1">
+  <span class="num">Part 01</span>
+  <div class="title">链路全景图</div>
+</div>
+<h2 class="sec">数据流量漏斗</h2>
+<h3 class="sub">① 召回控制参数</h3>
+<p class="lead">Precise 模式的行为由 … 控制。</p>
+```
+
+### Executive summary
+
+A purple-left-border gradient box right after the cover, summarizing the whole chain in 2–3 paragraphs with inline `<code>` and `<b>` emphasis:
+
+```html
+<div class="exec">
+  <h2>管理摘要</h2>
+  <p>链路概要：<b>Step1</b> BM25 实体召回 → <b>Step2</b> … → <b>Step8</b> 获取 Chunk。</p>
+</div>
+```
+
+### Vertical flow (the signature component)
+
+This is the component that makes 流程详解 docs read like a pipeline. A `.flow` is a column of `.fnode`s; each node = a 5px colored `.fbar` + a `.fcard` with four fields — `.fn` (STEP label), `.ft` (bold title, usually the param name), `.fd` (description, may include `<code>`/`<br>`), `.fb` (output pill with `<b>` value). Nodes are joined by `.arrow` rows carrying ▼ and optional `.badge` count pills. Group stages under `.stage-tag` pills (st1 blue / st2 purple / st3 green).
+
+```html
+<span class="stage-tag st1">阶段一 · 召回</span>
+<div class="flow">
+  <div class="fnode"><div class="fbar" style="background:var(--blue)"></div>
+    <div class="fcard">
+      <div class="fn">STEP 1 · BM25 实体召回</div>
+      <div class="ft">entity_top_k = 20</div>
+      <div class="fd">ES 全文检索 · 按原始分排序截断，<b>无相似度阈值</b>。</div>
+      <div class="fb">输出 ≤ <b>20</b> 实体</div>
+    </div>
+  </div>
+  <div class="arrow">▼ <span class="badge">20 实体</span></div>
+  <div class="fnode"><div class="fbar" style="background:var(--green)"></div>
+    <div class="fcard">
+      <div class="fn">STEP 6 · 向量粗排</div>
+      <div class="ft">max_events = 100</div>
+      <div class="fd">kNN + <code>event_ids</code> 精确过滤，按相似度降序截断。</div>
+      <div class="fb">输出 ≤ <b>100</b> 候选</div>
+    </div>
+  </div>
+</div>
+```
+
+**Bar color semantics** (keep consistent across the doc): `--blue` = 召回/入口, `--purple` = 增强/扩展, `--green` = 精选/输出, `--amber` = LLM 调用点, `--teal` = 存储/MySQL. Explain the mapping once in a `.legend` (swatch + label) below the flow:
+
+```html
+<div class="legend">
+  <span class="lg"><span class="sw" style="background:var(--blue)"></span>召回节点</span>
+  <span class="lg"><span class="sw" style="background:var(--amber)"></span>LLM 调用点</span>
+</div>
+```
+
+### Funnel (data-flow sizing)
+
+When the doc tracks how candidate counts shrink through stages (20 → 40 → ≤100 → ≤10), use a `.funnel`: each row = right-aligned `.fstep` label + a width-encoded `.fbar2` bar (width % ≈ relative volume, color = stage family) + `.fnote` annotation. This makes capacity/throughput readable at a glance.
+
+```html
+<div class="funnel">
+  <div class="frow"><div class="fstep">BM25 实体</div><div class="fbar2" style="width:18%;background:var(--blue)">20</div><div class="fnote">Step1</div></div>
+  <div class="frow"><div class="fstep">LLM 精选</div><div class="fbar2" style="width:14%;background:var(--amber)">≤10</div><div class="fnote">Step7</div></div>
+</div>
+```
+
+### Callouts, tables, code
+
+- **Callouts** — four tinted semantics, full-border + tinted background (NOT left-bar gradient like the International style): `.callout.info` (teal, 细节), `.callout.warn` (amber, 提示/注意), `.callout.err` (red, 易错点), `.callout.ok` (green, 测试清单/结论). Put 易错点 lists in `.err` with numbered `<br>`-separated lines.
+- **Tables** — plain `<table>` (no `class`), `th` on `--bgsub` with `white-space:nowrap`, zebra rows via `tr:nth-child(even)`. First column is often a `<code>` param name.
+- **Code** — inline `code` is purple text on `--bgsub`; block `pre` is **dark** `#0f1220` with colored spans `.c` (comment `#5b6080`), `.k` (keyword `#c792ea`), `.s` (string `#a5d6a7`), `.n` (number `#82aaff`). Highlight code comments with `<span class="c">` and keywords with `<span class="k">`.
+- **Collapsibles** — use `<details open><summary>…</summary>…</details>` for long prompt texts / full source excerpts; summary is bold `13.5px`.
+- **Feature grid** — `.feature-grid` of `.feature` cards (`.ic` emoji + `.t` title + `.d` description) for "特点/能力" sections.
+
+### Footer & doc identity
+
+Close with `.footer` — centered, faint gray, `<b>` for the doc name, a `<br>` for related-doc links.
+
+### Style decision table
+
+| Doc type | Style | Reason |
+|----------|-------|--------|
+| 中文流程详解 / 模式详解 / 链路图 / 节点拆解 / 参数表 | **Chinese Technical Spec** | Noto SC fonts + flow/funnel components are built for CJK pipeline docs |
+| English doc / API reference / prose-heavy | International | Playfair/Inter system |
+| 中文方案 / 提案 (proposal without flow) | International (purple) | Proposal structure components live there |
+| Chinese research report with data & tables | Either — prefer CN style if it has a pipeline, else International | — |
+
 ## Core Design System
 
 ### Typography
@@ -2253,7 +2420,7 @@ Numbers (.num):    #fda4af  (pink)
 ### For Documentation:
 
 1. **Analyze content** — Understand the topic, identify sections, note where diagrams/code belong
-2. **Choose palette** — Indigo for technical/analytical, Purple for creative/LLM
+2. **Choose style + palette** — Chinese flow/process doc → Chinese Technical Spec style (`templates/css-system-cn.css`, cover + part dividers + flow/funnel); otherwise International style (Indigo for technical/analytical, Purple for creative/LLM)
 3. **Plan structure** — Map chapters to sections, decide density (high for reading, low for presenting)
 4. **Generate HTML skeleton** — Use the layout template above (header + TOC + sections)
 5. **Style each component** — Apply cards, tables, code blocks, callouts as appropriate
@@ -2314,6 +2481,13 @@ Numbers (.num):    #fda4af  (pink)
 
 Before delivering:
 - [ ] Content type identified (Doc vs Proposal vs Mixed)
+- [ ] **Style selected** (Chinese Technical Spec for CJK flow docs vs International for English/prose) and CSS copied from the matching template
+- [ ] CN style: cover has `.tag` + serif h1 + `.sub` + `.meta` + `.kpis`
+- [ ] CN style: parts numbered `Part 01…` with `.part` dividers; `h2.sec` has 48px purple underline
+- [ ] CN style: flow bar colors consistent with legend (blue 召回 / purple 增强 / green 输出 / amber LLM / teal DB)
+- [ ] CN style: `.exec` 管理摘要 present for pipeline docs
+- [ ] CN style: callouts use tinted full-border variants (info/warn/err/ok)
+- [ ] CN style: funnel bars width encodes relative volume
 - [ ] Playfair Display used for ALL display headings
 - [ ] Inter used for body text
 - [ ] JetBrains Mono for ALL technical terms (including inside tables)
@@ -2372,5 +2546,6 @@ Before delivering:
 
 | File | Purpose |
 |------|---------|
-| `templates/css-system.css` | Complete CSS with all components |
+| `templates/css-system.css` | International style — complete CSS with all components |
+| `templates/css-system-cn.css` | Chinese Technical Spec style (Multi-ES) — cover hero, part dividers, vertical flow, funnel, tinted callouts |
 | `templates/svg-components.svg` | Reusable SVG card templates |

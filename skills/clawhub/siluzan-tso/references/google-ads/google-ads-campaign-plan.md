@@ -19,8 +19,8 @@
 
 | 阶段 | 触发（满足其一即可） | 要不要 Google 账户 | Agent 必须做 | **禁止** |
 | ---- | -------------------- | ------------------ | ------------ | -------- |
-| **仅出方案** | 「出方案 / 规划 / 先别创建 / 先别开户 / 先别投钱 / 只要表格」；或用户**未**给账户且**未**说要创建/发布 | **不必须** | 交付同构 JSON + Markdown 投影；`account` / geo 数字 id 用占位并标注「待选定账户后补」 | **因缺账户 ID 阻塞交付**；未确认创建就跑 `list-accounts` 逼用户给号；未确认就 `campaign-create` |
-| **创建** | 用户已确认方案并明确要创建/发布，或已提供可用 `mediaCustomerId` 且意图是落地 | **必须** | `list-accounts` → `geo resolve` → 填真 id → `campaign-validate` → 确认 → `campaign-create` → batch… | 编造 geo id；跳过 validate |
+| **仅出方案** | 「出方案 / 规划 / 先别创建 / 先别开户 / 先别投钱 / 只要表格」；或用户**未**给账户且**未**说要创建/发布 | **不必须** | 落盘同构 JSON → **写代码**投影完整审查稿（默认 MD；用户指定则 Excel 等）；`account` / geo 数字 id 用占位并标注「待选定账户后补」 | **因缺账户 ID 阻塞交付**；只交概览表；未确认创建就跑 `list-accounts` 逼用户给号；未确认就 `campaign-create` |
+| **创建** | 用户已确认方案并明确要创建/发布，或已提供可用 `mediaCustomerId` 且意图是落地 | **必须** | `list-accounts` → `geo resolve` → 填真 id → `campaign-validate` → **写代码投影完整审查稿** → 用户确认 → `campaign-create` → batch… | 编造 geo id；跳过 validate；跳过完整审查稿 |
 
 **缺参时（仅出方案）**：用户只给官网 URL、未给预算/地域/账户 → 先从官网归纳产品/落地页（必要时 `google-ads-landing-page-discovery-via-webfetch.md`），预算/地域可合理默认并在方案里写明假设；**账户 ID 一律不追问为前置条件**（写 `[PENDING_ACCOUNT]` 即可）。仅当缺官网且无法推断产品时才追问 1 项；不得因信息不全就降级为「随便写几条广告」，也**不得**把「请先提供广告账户」当成第一步。
 
@@ -40,7 +40,7 @@
 - **Agent Read 顺序（建系列 / 出方案前必做）**：① `assets/campaign-create-template.json`（复制/改写的结构真相源）→ ② `assets/campaign-create-template.md`（字段说明与踩坑）。**禁止**只读 `.md` 凭印象拼 JSON。
 - **方案文件（Excel 等）额外必读**：`references/google-ads/rules/google-ads-plan-source-fidelity.md`（Agent **写代码**直接转成 campaign-create JSON；禁止对话手填完整 JSON）。
 - 改需求 **改转换脚本重跑**；若已进入创建阶段则再 `campaign-validate`，再刷新 Markdown。
-- **PMax 系列创建**走独立流水线（勿用本文件 JSON 模板）：**先 Read `assets/pmax-create-template.json`** + `assets/pmax-create-template.md` + `ad pmax-validate` / `ad pmax-create`；**Lead Gen/B2B 方案默认含 `campaignExtensions.leadForm`**（方案 Markdown 须单列表单）；运营诊断见 `references/google-ads/rules/google-ads-pmax-guide.md`。PMax **仅出方案**时同样**禁止**因缺账户阻塞；`account` 占位，跳过 validate/create。
+- **PMax 系列创建**走独立流水线（勿用本文件 JSON 模板）：**先 Read `assets/pmax-create-template.json`** + `assets/pmax-create-template.md` + `rules/google-ads-pmax-launch-plan-template.md`；落盘 JSON →（创建阶段 `pmax-validate`）→ **写代码投影完整审查稿** → 用户确认 → `pmax-create`；**Lead Gen/B2B 默认含 `campaignExtensions.leadForm`**（审查稿须单列表单节）。运营诊断见 `rules/google-ads-pmax-guide.md`。PMax **仅出方案**同样**禁止**因缺账户阻塞；`account` 占位，跳过 validate/create。
 - 搜索网络：仅 Google 搜索（`TargetSearchNetwork`/`TargetContentNetwork`/`TargetPartnerSearchNetwork` 均为 false）。
 - **地域 id（创建阶段）**：多国用 **`ad geo resolve`**（单国可用 `ad geo search`）；**禁止**编造 / ISO 心算。外层 `locations` 与 `targetedLocations` 数量必须一致（validate 硬校验）。**仅出方案**可用国家名占位，勿为取 id 而先逼用户给账户。
 - **匹配类型**：转换脚本按方案写入 EXACT/PHRASE/BROAD 分块（有方案源时勿压成一律 BROAD）。
@@ -61,13 +61,13 @@
 | 5   | 得到与模板同构的 `campaign-create` JSON（仅出方案时 `account`=`[PENDING_ACCOUNT]`）                                                                                                                                | **`assets/campaign-create-template.json`**                                        |
 | 6   | **创建阶段**：`ad campaign-validate --config-file <json>`；**仅出方案 → 跳过**，交付时说明「有账户后再 validate」                                                                                                                      | 下文「校验」                                                                      |
 | 6b  | **方案来自用户且不合规**（创建前）：列出问题 → **询问**「您自己改还是我帮您改？」→ 按选择处理后再 validate（**禁止**未问就静默改方案）                                         | **`rules/google-ads-plan-source-fidelity.md`** § 用户方案不合规                   |
-| 6c  | 用户选「我帮您改」：改 JSON 时**同步落盘变更账本**（from → to + reason）                                                                                              | 同上 § Agent 代改后：创建完成报告                                                  |
-| 7   | 给人看：国家（创建阶段补 **国家↔id**）+ **匹配类型条数** + Markdown 投影；**勿**贴整份 JSON 当主交付                                                                               | `google-ads-launch-plan-template.md`                                              |
+| 6c  | 用户选「我帮您改」：改 JSON 时**同步落盘变更账本**（from → to + reason）                                                                                              | 同上 § 创建完成报告                                                               |
+| 7   | **审查稿（必做）**：Agent **写代码**读 JSON，按 `google-ads-launch-plan-template.md` 投影完整文件（默认 MD；用户要 Excel 等则改格式）；须含全部关键词与 RSA 正文；**禁止**概览表代替；**勿**贴整份 JSON 当主交付 | `google-ads-launch-plan-template.md`                                              |
 | 8   | 用户确认后 **`ad campaign-create`**                                                                                                                                  | `references/google-ads/google-ads-write.md`                                       |
 | 9   | 每隔5s 获取创建结果                                                                                                                                                  | `ad batch get --id <taskId> --config-file ./campaign.json`                        |
 | 10  | 成功或部分成功后 **`ad batch diff`** 对照 JSON 与账户实况                                                                                                              |                                                                                   |
 | 11  | **自动补建缺失项**（见下文「batch diff 后自动补建」）：附加信息（Sitelink/Callout 等）**直接**执行 `ad extension *`；组/词/RSA 用对应 create 命令。**勿**仅汇报失败并反问用户是否补建 | `references/google-ads/google-ads-batch.md` § batch diff 后自动补建                     |
-| 12  | **若曾由 Agent 代改方案**：出「创建与修改报告」——创建了哪些 + 修改了哪些（从 xxx → xxx + 原因）                                                                   | **`rules/google-ads-plan-source-fidelity.md`** § 创建完成报告                     |
+| 12  | **向用户交付系列创建详情**（每个系列：计划 vs 实况、补建、失败项）；代改过方案时**另附**修改表（从 xxx → xxx + 原因）                                              | `agent-conventions.md` §四；**`rules/google-ads-plan-source-fidelity.md`** § 创建完成报告 |
 
 多系列：每系列一个 JSON；可选 `campaign-manifest.json`（`role: brand|competitor|generic`）仅作文件组织参考。
 
@@ -83,7 +83,8 @@
 | `references/google-ads/rules/google-ads-keyword-taxonomy.md`                      | 无方案源时的核心/长尾与匹配块**建议**                           |
 | `references/google-ads/rules/google-ads-compliance.md`                            | 词与文案合规                                                    |
 | `references/google-ads/rules/sensitive-industries.md`                             | 敏感行业（若相关）                                              |
-| `references/google-ads/rules/google-ads-launch-plan-template.md`                  | 用户可见 Markdown 结构与 RSA/否词表                             |
+| `references/google-ads/rules/google-ads-launch-plan-template.md`                  | 搜索审查稿结构；Agent 写代码从 JSON 投影                        |
+| `references/google-ads/rules/google-ads-pmax-launch-plan-template.md`             | PMax 审查稿结构；Agent 写代码从 JSON 投影                       |
 | `references/google-ads/rules/google-ads-creative-optimization.md`                 | RSA 创意主题；`campaign-validate` 强制 **15** 标题 + **4** 描述 |
 | **`assets/campaign-create-template.json`** + `assets/campaign-create-template.md` | JSON 结构（先 Read `.json`）+ 字段说明                          |
 
@@ -98,12 +99,25 @@
 | `references/google-ads/rules/google-ads-keyword-optimization.md`                | 上线后优化，非首建                                          |
 | `references/google-ads/rules/google-ads-account-audit.md`                       | 账户诊断，非首建                                            |
 | `references/google-ads/rules/google-ads-audience-strategy.md`                   | 受众/RLSA                                                   |
-| `references/google-ads/rules/google-ads-pmax-guide.md`                          | PMax 运营/诊断；**创建**见 `assets/pmax-create-template.md` |
+| `references/google-ads/rules/google-ads-pmax-guide.md`                          | PMax 运营/诊断；**创建**见 `assets/pmax-create-template.md` + `google-ads-pmax-launch-plan-template.md` |
 | `references/google-ads/pmax-api.md`                                             | PMax 网关路径与 Search API 边界                             |
 
 复述给用户：**3–5 条**与本次任务相关的合规/策略要点即可，无需罗列全部文件名。
 
 ---
+
+## 创建前最小命令清单（Search / PMax 落地）
+
+> **禁止**臆造命令名：列表是 `ad campaigns`，**不是** `ad-campaigns` / `campaign list`。`balance`/`stats` **必须** `-m Google`。geo/ad 的 403/500 **禁止**臆测授权过期 → `account check-access`（套餐已激活时）。
+
+1. `list-accounts -m Google -k <mediaCustomerId> --json-out ./snap`（核验存在 / 套餐 / `invalidOAuthToken`）
+2. 套餐已激活 → `account check-access -a <mediaCustomerId> --json-out ./snap`（以 `status` 为准）
+3. 地域：单国 `ad geo search -a <id> -q "United States" --json-out ./snap-geo`；多国 `ad geo resolve … --json-out`（读 `picked` / `targetedLocations`，**禁止**编造 id）
+4. 落盘同构 JSON → `ad campaign-validate` / `ad pmax-validate --json-out …`（修到 `ok:true`）
+5. **写代码**投影完整审查稿 → 用户确认
+6. `ad campaign-create` / `ad pmax-create --commit "…"`
+7. `ad batch get --id <taskId> --config-file … --json-out …` → **读 `agentWorkflow`**：无 `campaignId` 时**不要**跑 `batch diff`，按 `agentHint` 改 JSON 重提；有 `campaignId` 且 `nextCommand` 含 diff 再跑
+8. 仅当有 `campaignId`：`ad batch diff` → 有 `remediateCommand` 则补建
 
 ## 校验与创建（命令速查）
 
@@ -114,10 +128,12 @@ siluzan-tso ad campaign-create --config-file ./campaign.json
 siluzan-tso ad batch get --id <taskId> --config-file ./campaign.json
 siluzan-tso ad batch diff --batch-id <taskId> --config-file ./campaign.json
 siluzan-tso ad geo resolve -a <accountId> --from-file ./locations.json --json-out ./snap-geo
-siluzan-tso ad geo search -a <accountId> -q "United States"
+siluzan-tso ad geo search -a <accountId> -q "United States" --json-out ./snap-geo
+siluzan-tso ad campaigns -a <accountId> --json-out ./snap
+siluzan-tso ad extension snippet-headers --json-out ./snap
 ```
 
-validate 与 create **共用** `runCampaignCreateValidation`：词面规范化 + 后端/Google 硬约束（预算、RSA、匹配符号与 `MatchTypeV2` 对齐、搜索网络、`locations`/`targetedLocations` 数量一致等）。**不含**关键词分层数量建议、否词条数下限（策略表仍见 taxonomy）。
+validate 与 create **共用** `runCampaignCreateValidation`：词面规范化 + 后端/Google 硬约束（预算、RSA、匹配符号与 `MatchTypeV2` 对齐、搜索网络、`locations`/`targetedLocations` 数量一致、STRUCTURED_SNIPPET 合法英文标头等）。**不含**关键词分层数量建议、否词条数下限（策略表仍见 taxonomy）。`BudgetBudgetDeliveryMethodV2=ACCELERATED` 多数账户会被 Google 拒 → validate **警告**，建议 `STANDARD`。
 
 ### 超长内容：禁止 Agent 自动截断
 
@@ -146,6 +162,7 @@ validate 与 create **共用** `runCampaignCreateValidation`：词面规范化 +
 | 5 | 有缺失时 CLI **exit 2**；补建后再 `ad batch diff`，直到 `ok===true`（含 `counts.liveLocations === plannedLocations`） |
 | 6 | 汇总告诉用户「已自动补上 N 个投放国家 / M 条 Sitelink」 |
 | 7 | 仅当补建命令也失败时，才向用户说明原因并给改写方案 |
+| 8 | **向用户发送 Markdown 创建详情**（必做，即使 `ok===true`）：把 `batch diff` 的 **`reportMarkdown` 全文**（或 Read `reportMarkdownFile`）作为 Markdown 消息发出；含关键词/RSA 文案逐条状态。**禁止**只说「创建完成 / 未发现缺失」。多系列各发一份。细则见 `agent-conventions.md` §四；代改方案另附修改表见 `google-ads-plan-source-fidelity.md` |
 
 **Agent 易漏点**：`--json-out` 时人读「下一步」不会打印——**必须以落盘 `agentWorkflow` 为准**；`campaign-create` 落盘同样带 `agentWorkflow.nextCommand`（首轮 `batch get`）。
 

@@ -1,0 +1,13 @@
+name: geoskill-service-area-analysis
+display_name: 服务区分析
+description: |
+  网络等时圈分析+多设施服务区+覆盖统计，输出服务区GeoJSON
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-service-area-analysis.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - remote-sensing
+  - vector

@@ -1,46 +1,62 @@
-## Description: <br>
-Helps agents manage Temu Europe product listings through LinkFox gateway scripts and reference docs for Partner EU product, SKU, inventory, compliance, sale-status, pre-sale, and delete APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Temu Europe marketplace products through LinkFox, including product and SKU queries, stock changes, listing edits, deletion, sale status, category and property checks, compliance updates, external codes, and video cover retrieval.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Temu sellers, operators, and developers use this skill to query and update product listings for Temu Europe via LinkFox. It supports product discovery, detail and SKU lookup, stock edits, listing edits, compliance updates, sale-status changes, pre-sale changes, and deletion workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Europe for Temu EU product-management workflows. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform account-impacting Temu product actions, including deletion, stock overwrite, full listing update, compliance edit, and sale-status changes. <br>
-Mitigation: Require explicit human confirmation and review request payloads before running those operations against real stores. <br>
-Risk: The skill handles LinkFox and Temu seller credentials and includes helpers for local token storage. <br>
-Mitigation: Use least-privilege Temu tokens, keep token-store paths private, avoid raw token reveal or unmasked listing helpers, and rotate tokens if exposed. <br>
-Risk: Saved LinkFox response files may contain sensitive product or store data. <br>
-Mitigation: Clean up saved response files, restrict access to project output directories, and avoid sharing full JSON dumps unless needed. <br>
+## Use Case:
 
+Temu EU sellers, operators, and support agents use this skill to inspect and manage live product catalog records, SKU stock, publication state, compliance details, and related marketplace metadata through LinkFox-mediated Partner EU API calls.
 
-## Reference(s): <br>
-- [LinkFox Temu Europe product API reference](references/api.md) <br>
-- [Partner EU product API catalog](references/partner-eu-catalog.md) <br>
-- [Temu access token authorization guide](references/access-token.md) <br>
-- [Per-interface API reference index](references/apis/README.md) <br>
-- [Temu Partner EU Manage Products documentation](https://partner-eu.temu.com/documentation?menu_code=2283b8dc7fcc42529633b0b41114aef8) <br>
+### Deployment Geography for Use:
 
+Europe (Temu EU / Partner EU workflows)
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with Python command examples and JSON API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts save complete LinkFox responses under ./linkfox/<date>/<session>/data and print either full JSON or a response summary depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill handles LinkFox and Temu access tokens and merchant product data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in trusted seller workspaces, avoid placing tokens in shell history or source control, and control local token file permissions and retention.
+
+Risk: Some scripts can modify or delete live product listings, stock, sale status, and compliance information.
+
+Mitigation: Require explicit human confirmation and review request payloads before running delete, full update, stock, off-shelf, pre-sale, or compliance actions.
+
+Risk: Gateway endpoint override environment variables can redirect requests.
+
+Mitigation: Restrict who can set endpoint override variables and verify configured endpoints before sending real seller credentials or catalog data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-manage-product-eu)
+- [API reference](references/api.md)
+- [Partner EU Manage Product catalog](references/partner-eu-catalog.md)
+- [Temu access token guide](references/access-token.md)
+- [Onboarding and auth recovery](references/onboarding.md)
+- [Temu Partner EU Manage Product documentation](https://partner-eu.temu.com/documentation?menu_code=7289390cfd724be4a196f11ebe45a896)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples, shell commands, and saved JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts write full API responses under a local linkfox session data directory and print either full JSON or a concise summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

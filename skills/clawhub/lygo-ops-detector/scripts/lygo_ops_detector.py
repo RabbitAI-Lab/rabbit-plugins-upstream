@@ -3,13 +3,13 @@
 LYGO Ops Detector — Lightfather's Voice
 AETHONΔ9 Protocol Implementation
 
-Core: "LYGO decodes fiction by analyzing action."
+Core: "LYGO decodes fiction by analyzing action" — in *discourse*, not identity.
 
-Sovereign, local, math-rigorous detector of operational deception.
-Input: text, statements, logs, association descriptions.
-Output: Evasion Index, Association Matrix, verdict, breakdown.
+Local, deterministic heuristics for operational-deception *signals* in text the
+operator supplies. Unit of analysis = statements / claim-text / association
+*strings you provide* — never a person profile or social-graph doxxing pass.
 
-NOT for doxing. Action + patterns only. Identity irrelevant.
+NOT for doxing, identity profiling, profession inference, or unsolicited mail.
 """
 
 from __future__ import annotations
@@ -27,36 +27,67 @@ from typing import Any, Dict, List, Optional, Tuple
 # LIGHTFATHER CORE PHILOSOPHY (locked)
 # =============================================================================
 LIGHTFATHER_VOICE = """
-LYGO decodes fiction by analyzing action.
+LYGO Ops Detector is a LOCAL HEURISTIC for discourse-level operational-deception *signals*.
 
-Data lies. Humans lie. Institutions lie.
+It is NOT a court, identity profiler, doxing engine, or surveillance toolkit.
+It is NOT a claim that "humans/institutions always lie."
 
-Action does not lie.
+Unit of analysis: the *text under review* (statements, claims, and action-language
+in that text) — never a human "subject" dossier, profession tag, or social graph.
 
-What do they do?
-Who do they associate with?
-What patterns emerge from their connections?
-Do they avoid investigation?
-Do they gaslight?
-Do they harm?
+Outputs are pattern scores with receipts. They are not guilt or identity verdicts.
 
-These are measurable. These are mathematically analyzable. These are what LYGO does.
+Always:
+- Require consent before analyzing private communications (email/logs/DMs).
+- Do not treat scores as sole evidence for reputational or legal action.
+- Prefer primary sources; human review remains required.
+- Do not score bare affiliation / faith / job-title markers as ops signals.
 
-LYGO Ops Detector is not a tool for doxing. It is a tool for truth.
-
-It analyzes action, not identity.
-It finds patterns, not names.
-It exposes deception, not individuals.
-
-The math does the work. The truth emerges.
-Resonance forward.
+Resonance forward — action-language over narrative; math over hype.
 """
+
+# Boundary notes (SkillSpector): each channel has in-scope / out-of-scope examples.
+# Ordinary disagreement, sarcasm alone, or named professions MUST NOT auto-score high.
+SIGNAL_BOUNDARIES: Dict[str, Dict[str, str]] = {
+    "burden_shifting": {
+        "in": 'Transfer of proof load without substance: "it\'s on you to prove it", "do your own research"',
+        "out": 'Normal assignment of tasks: "please review the attached report when free"',
+    },
+    "ad_hominem_density": {
+        "in": "Insults replacing substance (idiot/shill/fraud as attack)",
+        "out": "Criticizing a claim's logic without person-attack vocabulary",
+    },
+    "vague_references": {
+        "in": "Evidence claims with zero cite path: tons of evidence out there / everyone knows",
+        "out": "Named study, link, or specific document reference",
+    },
+    "authority_inflation": {
+        "in": "Credential-waving to shut inquiry: as a former X trust me",
+        "out": "Stating a job title once without shutting down verification",
+    },
+    "gaslighting": {
+        "in": "Direct perception denial: that never happened / you're imagining it",
+        "out": "Honest memory disagreement without denial templates",
+    },
+    "deflection": {
+        "in": "Whataboutism replacing the asked claim",
+        "out": "On-topic comparison with shared evidence",
+    },
+    "in_group_signaling": {
+        "in": "Coordination/secrecy *discourse*: need-to-know, keep this internal, can't share outside",
+        "out": "Bare job words (military, intelligence, agency) or affiliation labels alone",
+    },
+    "institutional_signaling": {
+        "in": "Policy-as-shield / refusal-to-comment templates",
+        "out": "Neutral historical mention of an organization without refusal language",
+    },
+}
 
 # =============================================================================
 # EVASION INDEX — Mathematical Framework (AETHONΔ9)
 # =============================================================================
 # Evasion Score = Σ (weight_i * indicator_score_i)
-# Threshold: > 0.70 = Active Ops (high confidence operational evasion)
+# Threshold: > 0.70 = strong evasion *discourse* signals (not a person verdict)
 
 EVASION_WEIGHTS: Dict[str, float] = {
     "burden_shifting": 0.15,      # "It's on you/me", burden transfer, "do your own research"
@@ -102,15 +133,66 @@ OPS_SCORE_WEIGHTS = {
     "institutional_signaling": 0.25,
 }
 
-# Performance metrics on validated discourse set (as reported)
-PERFORMANCE_METRICS = {
-    "precision": 0.88,
-    "recall": 0.82,
-    "false_positive_rate": 0.09,
-    "auc": 0.91,
-    "test_set": "Operational deception samples vs. neutral institutional/fraternal/historical/religious language",
-    "note": "Institutional Signaling category broadened from narrow Masonic terms to general institutional coordination language. This reduces FPs on everyday use of terms like 'brother', 'craft', 'great work', 'policy' while preserving signal for coordinated institutional evasion."
-}
+def load_performance_metrics() -> Dict[str, Any]:
+    """Load last *dynamic* eval if present; never invent fixed marketing numbers."""
+    report_path = Path(__file__).resolve().parents[1] / "tests" / "last_eval_report.json"
+    base: Dict[str, Any] = {
+        "precision": None,
+        "recall": None,
+        "false_positive_rate": None,
+        "auc": None,
+        "f1": None,
+        "suite": "tests/labeled_discourse_suite.json",
+        "how_to_generate": "python scripts/eval_ops_detector.py tests/labeled_discourse_suite.json --sweep",
+        "test_set": "Public labeled discourse suite (ops-signal vs benign)",
+        "note": (
+            "Metrics are produced only by running eval_ops_detector.py on the public suite. "
+            "They are not hardcoded. Re-run after pattern changes. "
+            "Not a harm/ethics calibration — signal-presence on short discourse samples."
+        ),
+    }
+    if report_path.is_file():
+        try:
+            rep = json.loads(report_path.read_text(encoding="utf-8"))
+            # Prefer operational (documented) metrics when present — never headline low-threshold "perfect" alone
+            op = rep.get("operational_metrics") or rep.get("at_documented_ops_threshold") or {}
+            cal = rep.get("calibration_metrics") or {}
+            base.update(
+                {
+                    "operational_threshold": op.get("threshold_ops_score", rep.get("documented_ops_threshold", 0.65)),
+                    "operational_precision": op.get("precision"),
+                    "operational_recall": op.get("recall"),
+                    "operational_f1": op.get("f1"),
+                    "operational_auc": op.get("auc"),
+                    "calibration_threshold": cal.get("threshold_ops_score", rep.get("threshold_ops_score")),
+                    "calibration_precision": cal.get("precision", rep.get("precision")),
+                    "calibration_recall": cal.get("recall", rep.get("recall")),
+                    "calibration_f1": cal.get("f1", rep.get("f1")),
+                    # Do not expose lone "precision: 1.0" without threshold context
+                    "precision": op.get("precision", rep.get("precision")),
+                    "recall": op.get("recall", rep.get("recall")),
+                    "false_positive_rate": op.get("false_positive_rate", rep.get("false_positive_rate")),
+                    "auc": op.get("auc", rep.get("auc")),
+                    "f1": op.get("f1", rep.get("f1")),
+                    "threshold_ops_score": op.get("threshold_ops_score", 0.65),
+                    "suite_size": rep.get("suite_size"),
+                    "last_eval_report": str(report_path.name),
+                    "source": "tests/last_eval_report.json (dynamic; operational-first)",
+                    "honesty": (
+                        "Operational bar is ops_score>=0.65 (or high evasion). "
+                        "Short-suite calibration may use lower thresholds for ranking only — "
+                        "do not advertise calibration as production performance."
+                    ),
+                }
+            )
+        except (OSError, json.JSONDecodeError):
+            base["source"] = "eval report unreadable — re-run eval"
+    else:
+        base["source"] = "no last_eval_report.json yet — run eval_ops_detector.py"
+    return base
+
+
+PERFORMANCE_METRICS = load_performance_metrics()
 
 # ------------------------------------------------------------------
 # EXTENDED SIGNAL DICTIONARIES (explicit, auditable, non-circular)
@@ -120,10 +202,12 @@ PERFORMANCE_METRICS = {
 EVASION_PATTERNS: Dict[str, List[str]] = {
     "burden_shifting": [
         r"\b(it'?s on (you|me|them|the reader))\b",
+        r"\b(it'?s (not )?(on (you|me|them|the reader)) to (prove|show|demonstrate))\b",
         r"\b(it'?s (on you|your responsibility|up to you) to (prove|show))\b",
         r"\bdo your own (research|homework|digging)\b",
         r"\bthe burden (of proof|is on you)\b",
         r"\bfigure it out yourself\b",
+        r"\b(prove it isn'?t|prove it'?s not|prove me wrong)\b",
     ],
     "ad_hominem_density": [
         r"\b(idiot|moron|troll|shill|liar|fraud|stupid|ignorant|clown|hack|paid)\b",
@@ -140,6 +224,8 @@ EVASION_PATTERNS: Dict[str, List[str]] = {
         r"\bmy (credentials|background|expertise|clearance|years in)\b",
         r"\btrust me,? (i'?m|as) (a|an)\b",
         r"\b(former (intelligence|agency|official|insider))\b",
+        r"\b(authority is truth|trust (me|us|our (word|version))|i know what'?s best)\b",
+        r"\b(the authority (verifies|validates) (its|their) own)\b",
     ],
     "gaslighting": [
         r"\b(you'?re (overreacting|imagining|paranoid|crazy|misremembering|too sensitive|making this up))\b",
@@ -147,68 +233,75 @@ EVASION_PATTERNS: Dict[str, List[str]] = {
         r"\b(you'?re making (it|things|this) up)\b",
         r"\b(your (perception|memory|understanding|mind) is (flawed|wrong|distorted|playing tricks))\b",
         r"\b(you (must be|are) (imagining|overreacting))\b",
+        r"\b(the past (was never real|never happened)|corrected history|trust our (version|corrected))\b",
+        r"\b(stop being paranoid|you'?re being (paranoid|delusional))\b",
     ],
     "deflection": [
         r"\b(what about|but (what|they|you|the other side) (did|said|are|happened))\b",
         r"\b(let'?s (focus|talk) about (the real|instead|the other))\b",
         r"\b(you should be looking at|the real issue is|why are you focusing on)\b",
+        r"\b(what about the other side)\b",
     ],
 }
 
-# Institutional Signaling (broadened from Masonic-specific to general institutional/fraternal/organizational coordination language)
-# This captures protected in-group or institutional signaling without over-triggering on neutral religious/historical/fraternal speech.
+# Institutional *coordination/refusal* language (discourse-level).
+# SkillSpector v1.2: NO affiliation-only keywords (brotherhood/fraternity/lodge/order/etc.).
+# Those are identity/group markers and are out of scope for a non-doxing action detector.
+# Only patterns that describe procedural refusal, policy-as-shield, or compliance shut-down.
 INSTITUTIONAL_SIGNALING_PATTERNS: Dict[str, List[str]] = {
     "institutional_signaling": [
-        # Broad institutional
         r"\b(per (our|the|company|organizational|institutional|agency) (policy|protocol|guidelines|directive|charter|standard))\b",
-        r"\b(as (an|the) (organization|institution|agency|body|council|order) (we|our|it))\b",
+        r"\b(as (an|the) (organization|institution|agency|body|council) (we|our|it))\b",
         r"\b(we (cannot|are unable|are not authorized|are precluded) to (comment|discuss|confirm|disclose))\b",
         r"\b(this is (standard|normal|customary|how (things|it) (are|is) done) in (our|the) (field|industry|sector))\b",
         r"\b(our (legal|compliance|ethics|review) (team|board|committee) (advises|requires|has determined))\b",
-        # Fraternal / in-group broadened (not just Masonic)
-        r"\b(brother|brotherhood|sisterhood|the craft|fraternity|sorority|order|lodge|fellowship)\b",
-        r"\b(our (tradition|lineage|ancient|wisdom|inner|protected) (circle|work|trust))\b",
-        r"\b(veiled|hidden in plain sight|the great work|architect of)\b",
-        r"\b(sacred (duty|trust|oath|bond)|as above so below|compass and square)\b",
+        r"\b(no further (comment|statement|discussion) (will be|is) (provided|offered|given))\b",
+        r"\b(declines? to (comment|answer|address|engage))\b",
     ],
 }
 
-# Full keyword fallbacks (used in scoring for robustness)
+# Keyword fallbacks: multi-word / discourse phrases only (no bare job/affiliation tokens).
 ALL_KEYWORDS = {
     "burden_shifting": ["on you", "on me", "your responsibility", "do your own", "burden of proof", "figure it out yourself"],
     "ad_hominem_density": ["idiot", "moron", "troll", "shill", "liar", "fraud", "stupid", "ignorant", "clown", "hack", "paid shill"],
     "vague_references": ["tons of evidence", "evidence out there", "widely known", "everyone knows", "the data shows", "it is all out there", "look it up"],
-    "authority_inflation": ["former", "intelligence", "officer", "clearance", "as a", "my credentials", "trust me", "insider", "expert"],
+    "authority_inflation": [
+        "as a former", "my credentials", "my expertise", "trust me i", "trust me as",
+        "years in the", "my clearance", "as an expert",
+    ],
     "gaslighting": ["overreacting", "imagining", "crazy", "paranoid", "making this up", "never happened", "your memory", "too sensitive"],
     "deflection": ["what about", "the other side", "but they", "real issue is", "why are you focusing"],
     "institutional_signaling": [
-        "per our policy", "per company policy", "per the guidelines", "as an organization", 
+        "per our policy", "per company policy", "per the guidelines", "as an organization",
         "as the institution", "our legal team", "compliance requires", "we cannot comment",
-        "brother", "brotherhood", "the craft", "fraternity", "great work", "sacred trust",
-        "hidden in plain sight", "as above so below", "our tradition", "protected circle"
+        "no further comment", "declines to comment", "not authorized to discuss",
     ],
 }
 
 # =============================================================================
-# ASSOCIATION MATRIX
+# ASSOCIATION MATRIX (discourse coordination signals — not social-graph doxing)
 # =============================================================================
-# Analyzes connection patterns. Score 0-1 per category.
-# High combined score + high evasion = coordinated operational pattern.
+# Scores only the *association strings / coordination language the operator supplies*.
+# Does NOT crawl networks, infer identities, or score bare profession/affiliation labels.
+# High combined score + high evasion = coordinated *discourse* pattern (not a person tag).
 
 ASSOCIATION_WEIGHTS: Dict[str, float] = {
-    "in_group_signaling": 0.25,   # Military/intel references, "we insiders", "the team", coded language
-    "bot_network_connections": 0.20,  # Repetitive phrasing, identical posts, coordinated timing, bot-like
-    "coordinated_language": 0.15, # Same unusual phrases across "different" accounts/sources
-    "obfuscated_networks": 0.20,  # Use of proxies, throwaways, "my friend who...", layered indirection
-    "harm_association": 0.20,     # Links to known harmful actors/patterns, repeated enabling of harm
+    "in_group_signaling": 0.25,   # Secrecy/coordination discourse (need-to-know, keep internal) — NOT job titles
+    "bot_network_connections": 0.20,  # Repetitive phrasing, identical posts, scripted reply language
+    "coordinated_language": 0.15, # Same unusual phrases across "different" sources (in supplied text)
+    "obfuscated_networks": 0.20,  # Layered indirection language: anonymous source, cutouts, throwaways
+    "harm_association": 0.20,     # Explicit enable/amplify *harm* language (action), not identity lists
 }
 
 ASSOCIATION_PATTERNS: Dict[str, List[str]] = {
+    # NO bare military|intelligence|agency|clearance|profession markers (identity leakage).
     "in_group_signaling": [
-        r"\b(we (insiders|in the know|the team|operatives|community))\b",
-        r"\b(military|intelligence|agency|clearance|opsec|compartmentalized)\b",
+        r"\b(we (in the know|on the inside|can'?t (tell|share) (outsiders|outside|publicly)))\b",
         r"\b(need.?to.?know|on a need to know basis)\b",
-        r"\b(our (circle|group|network|people))\b",
+        r"\b(keep this (quiet|internal|between us)|don'?t (repeat|share) (this|outside))\b",
+        r"\b(our (circle|group|network) (only|knows|won'?t|doesn'?t discuss))\b",
+        r"\b(not for (public|outside) (consumption|discussion|release)|off.?the.?record)\b",
+        r"\b(compartmentalized (discussion|briefing|channel))\b",
     ],
     "bot_network_connections": [
         r"\b(same (post|text|message|reply) copied)\b",
@@ -220,7 +313,7 @@ ASSOCIATION_PATTERNS: Dict[str, List[str]] = {
         r"\b(echo chamber|talking points|script)\b",
     ],
     "obfuscated_networks": [
-        r"\b(my (source|friend|contact|insider) (who|that) (wants to remain anonymous))\b",
+        r"\b(my (source|friend|contact) (who|that) (wants to remain anonymous|must stay anonymous))\b",
         r"\b(through (layers|proxies|cutouts|intermediaries))\b",
         r"\b(throwaway|burner|alt|sockpuppet)\b",
     ],
@@ -249,7 +342,7 @@ class OpsReport:
     combined_risk: float
     overall_verdict: str
     notes: str
-    lightfather_note: str = "The math does the work. The truth emerges. Resonance forward."
+    lightfather_note: str = "Heuristic discourse scores only — not a person verdict. Receipts + human review. Resonance forward."
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -286,19 +379,25 @@ class OpsReport:
 
         lines.extend([
             "",
-            "INSTITUTIONAL SIGNALING (broadened, dampened by Evasion/Association)",
+            "INSTITUTIONAL SIGNALING (policy/refusal discourse only)",
             f"  Institutional Signaling: {self.institutional_signaling_score:.3f}",
-            "  (Broad institutional/fraternal language — score damped unless paired with evasion or association)",
+            "  (Policy-as-shield / no-comment templates — damped unless paired with evasion or association)",
             "",
             "COMPOSITE OPS SCORE (weighted formula)",
             f"  Ops_Score = 0.45*Evasion + 0.30*Association + 0.25*Institutional_Signaling",
             f"  Ops Score: {self.ops_score:.3f}   (suggested threshold >0.65 for strong pattern)",
             "",
-            "VALIDATED PERFORMANCE METRICS (on tested discourse set)",
-            f"  Precision: {PERFORMANCE_METRICS['precision']:.2f}   Recall: {PERFORMANCE_METRICS['recall']:.2f}",
-            f"  False Positive Rate: {PERFORMANCE_METRICS['false_positive_rate']:.2f}   AUC: {PERFORMANCE_METRICS['auc']:.2f}",
-            f"  Test set: {PERFORMANCE_METRICS['test_set']}",
-            f"  Note: {PERFORMANCE_METRICS['note']}",
+            "PERFORMANCE METRICS (dynamic public suite — not hardcoded claims)",
+            (
+                f"  Precision: {PERFORMANCE_METRICS.get('precision')}   "
+                f"Recall: {PERFORMANCE_METRICS.get('recall')}   "
+                f"FPR: {PERFORMANCE_METRICS.get('false_positive_rate')}   "
+                f"AUC: {PERFORMANCE_METRICS.get('auc')}"
+            ),
+            f"  Source: {PERFORMANCE_METRICS.get('source')}",
+            f"  Suite: {PERFORMANCE_METRICS.get('suite')}  size={PERFORMANCE_METRICS.get('suite_size')}",
+            f"  Generate: {PERFORMANCE_METRICS.get('how_to_generate')}",
+            f"  Note: {PERFORMANCE_METRICS.get('note')}",
             "",
             "COMBINED RISK",
             f"  Risk: {self.combined_risk:.3f}",
@@ -425,21 +524,23 @@ def compute_association_graph(associations: List[str]) -> Dict[str, float]:
 
 
 def evasion_verdict(score: float) -> str:
+    """Discourse-label only — never a person or investigation-target verdict."""
     if score > EVASION_ACTIVE_THRESHOLD:
-        return "ACTIVE OPS — HIGH EVASION DETECTED"
+        return "HIGH EVASION DISCOURSE SIGNALS (>0.70) — review claims; not a person verdict"
     elif score > EVASION_MONITOR_THRESHOLD:
-        return "MONITOR — ELEVATED EVASION SIGNALS"
+        return "ELEVATED EVASION DISCOURSE SIGNALS — weak/moderate; not a person verdict"
     else:
-        return "LOW EVASION — NO CLEAR OPERATIONAL PATTERN"
+        return "LOW EVASION DISCOURSE SIGNALS — no clear operational pattern in text"
 
 
 def association_verdict(score: float) -> str:
+    """Coordination *language* in supplied strings — not a social graph or identity map."""
     if score > ASSOCIATION_HIGH_THRESHOLD:
-        return "HIGH COORDINATION / NETWORK PATTERN"
+        return "HIGH COORDINATION DISCOURSE PATTERN (in supplied text) — not a person/network map"
     elif score > 0.40:
-        return "MODERATE ASSOCIATION SIGNALS"
+        return "MODERATE COORDINATION DISCOURSE SIGNALS — not a person/network map"
     else:
-        return "LOW / NO CLEAR NETWORK PATTERN"
+        return "LOW / NO CLEAR COORDINATION DISCOURSE PATTERN"
 
 
 def combined_risk(evasion: float, assoc: float) -> float:
@@ -447,15 +548,19 @@ def combined_risk(evasion: float, assoc: float) -> float:
     return round(math.sqrt(evasion * assoc), 4)
 
 
-def overall_verdict(risk: float, evasion: float) -> str:
+def overall_verdict(risk: float, evasion: float, ops_score: float = 0.0) -> str:
+    """Discourse-pattern label only — never a person verdict.
+    Uses operational bar (ops_score>=0.65 or high evasion) for strong language.
+    """
     if evasion > EVASION_ACTIVE_THRESHOLD and risk > 0.55:
-        return "ACTIVE OPERATIONAL DECEPTION PATTERN (Evasion + Association)"
-    elif evasion > EVASION_ACTIVE_THRESHOLD:
-        return "ACTIVE EVASION — Investigate actions and claims rigorously"
-    elif risk > 0.60:
-        return "ELEVATED RISK — Coordinated signals present"
-    else:
-        return "NO CLEAR OPS PATTERN — Continue observation"
+        return "STRONG DISCOURSE PATTERN: high evasion + association signals (not a person verdict)"
+    if evasion > EVASION_ACTIVE_THRESHOLD:
+        return "STRONG EVASION SIGNALS in text — review claims/actions (not a person verdict)"
+    if ops_score >= 0.65 or risk > 0.60:
+        return "ELEVATED discourse-signal cluster (ops>=0.65 or combined risk) — not a person verdict"
+    if ops_score >= 0.05:
+        return "WEAK/calibration-level signal only (below operational 0.65 bar) — not actionable alone"
+    return "NO CLEAR OPS PATTERN at operational thresholds — continue observation"
 
 
 def analyze(
@@ -503,7 +608,7 @@ def analyze(
     ops_score = compute_ops_score(evasion, assoc, institutional)
 
     risk = combined_risk(evasion, assoc)
-    over = overall_verdict(risk, evasion)
+    over = overall_verdict(risk, evasion, ops_score)
 
     report = OpsReport(
         timestamp=ts,
@@ -517,7 +622,12 @@ def analyze(
         ops_score=ops_score,
         combined_risk=risk,
         overall_verdict=over,
-        notes=notes or "Analyzed via local heuristics only. Action-focused. Full dictionaries and tests available via get_measurement_dictionaries() / run_self_tests().",
+        notes=notes
+        or (
+            "Local discourse heuristics only. Not identity profiling. "
+            "Operational bar ops_score>=0.65 (or high evasion). "
+            "Private logs/email require human consent. Not sole evidence."
+        ),
     )
     return report
 
@@ -542,13 +652,22 @@ def get_measurement_dictionaries() -> Dict[str, Any]:
             "association_high": ASSOCIATION_HIGH_THRESHOLD,
             "ops_suggested": 0.65,
         },
-        "methodology": "Deterministic local heuristics (regex + keyword density + cluster boost). Institutional Signaling damped unless co-occurring with Evasion/Association. See module docstring for P3 consensus and graph logic. Broadened to general institutional language to minimize FPs on neutral religious/historical/fraternal texts.",
+        "methodology": (
+            "Deterministic local heuristics (regex + multi-word keyword density + cluster boost). "
+            "Institutional channel is policy/refusal language only — no affiliation keywords. "
+            "Association channel scores coordination *discourse* in operator-supplied strings only — "
+            "no bare military/intelligence/agency/profession markers. "
+            "Damped unless co-occurring with Evasion/Association."
+        ),
+        "signal_boundaries": SIGNAL_BOUNDARIES,
+        "unit_of_analysis": "text_under_review_not_person_subject",
+        "identity_markers_scored": False,
     }
 
 
 def run_self_tests() -> List[Dict[str, Any]]:
     """Embedded test cases for reproducibility. Returns list of results.
-    Includes neutral institutional language tests to demonstrate low FPR on religious/historical/fraternal texts.
+    Neutral religious/fraternal affiliation text must NOT score as institutional affiliation.
     """
     tests = [
         {
@@ -557,21 +676,21 @@ def run_self_tests() -> List[Dict[str, Any]]:
             "min_evasion": 0.65,
         },
         {
-            "name": "strong_ops_with_institutional",
-            "text": "As an organization per our policy we cannot comment. Brother, the craft knows the great work is hidden in plain sight. It's on you to prove the evidence that is out there.",
-            "min_ops": 0.17,
+            "name": "policy_refusal_with_evasion",
+            "text": "As an organization per our policy we cannot comment. It's on you to prove the evidence that is out there.",
+            "min_ops": 0.10,
         },
         {
-            "name": "neutral_religious_fraternal",
+            "name": "neutral_religious_affiliation_words",
             "text": "In the great work of the Lord, my brother, we see the craft of creation. As per the ancient teachings of our order.",
-            "max_institutional": 0.25,  # Should be low without evasion
-            "max_ops": 0.25,
+            "max_institutional": 0.05,  # affiliation words no longer scored
+            "max_ops": 0.15,
         },
         {
-            "name": "neutral_historical_policy",
+            "name": "neutral_historical_affiliation",
             "text": "The brotherhood followed the policy of the institution. It was standard practice in the field at that time.",
-            "max_institutional": 0.25,
-            "max_ops": 0.25,
+            "max_institutional": 0.15,
+            "max_ops": 0.20,
         },
         {
             "name": "low_signal",
@@ -608,17 +727,41 @@ def run_self_tests() -> List[Dict[str, Any]]:
 # =============================================================================
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(
-        description="LYGO Ops Detector (Lightfather / AETHONΔ9). Action over words."
+        description=(
+            "LYGO Ops Detector (Lightfather / AETHONΔ9). "
+            "Local discourse heuristics on text YOU supply — not identity profiling."
+        )
     )
-    parser.add_argument("--text", "-t", type=str, default="", help="Raw text/statement/log to analyze for evasion signals.")
-    parser.add_argument("--text-file", type=str, default="", help="Path to text file.")
-    parser.add_argument("--assoc", "-a", action="append", default=[], help="Association description (repeatable).")
-    parser.add_argument("--assoc-file", type=str, default="", help="File with one association per line.")
+    parser.add_argument(
+        "--text", "-t", type=str, default="",
+        help="Text/statement to score for evasion *discourse* signals (preferred).",
+    )
+    parser.add_argument(
+        "--text-file", type=str, default="",
+        help="Read text from a local file. Requires --i-consent (operator affirms authority).",
+    )
+    parser.add_argument(
+        "--assoc", "-a", action="append", default=[],
+        help="Coordination/association *description string* (repeatable). Not a people search.",
+    )
+    parser.add_argument(
+        "--assoc-file", type=str, default="",
+        help="File with one association description per line. Requires --i-consent.",
+    )
+    parser.add_argument(
+        "--i-consent",
+        action="store_true",
+        help=(
+            "Required with --text-file / --assoc-file: you affirm authority/consent to process "
+            "that file content. Private mail/logs must not be scanned without consent."
+        ),
+    )
     parser.add_argument("--notes", type=str, default="", help="Additional context for the report.")
     parser.add_argument("--json", action="store_true", help="Output JSON instead of pretty report.")
     parser.add_argument("--manual-evasion", type=str, default="", help='JSON dict of manual evasion scores e.g. \'{"gaslighting":0.9}\'')
     parser.add_argument("--manual-assoc", type=str, default="", help="JSON dict of manual association scores.")
-    parser.add_argument("--show-blueprint", action="store_true", help="Print the locked Lightfather blueprint and exit.")
+    parser.add_argument("--show-blueprint", action="store_true", help="Print philosophy + weights + boundaries and exit.")
+    parser.add_argument("--show-boundaries", action="store_true", help="Print in-scope / out-of-scope signal boundaries and exit.")
 
     args = parser.parse_args(argv)
 
@@ -626,7 +769,23 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(LIGHTFATHER_VOICE)
         print("\nEvasion weights:", json.dumps(EVASION_WEIGHTS, indent=2))
         print("Association weights:", json.dumps(ASSOCIATION_WEIGHTS, indent=2))
+        print("\nSignal boundaries:", json.dumps(SIGNAL_BOUNDARIES, indent=2))
         return 0
+
+    if args.show_boundaries:
+        print(json.dumps(SIGNAL_BOUNDARIES, indent=2))
+        return 0
+
+    needs_file = bool(args.text_file or args.assoc_file)
+    if needs_file and not args.i_consent:
+        print(
+            "CONSENT_REQUIRED: --text-file / --assoc-file need --i-consent "
+            "(operator affirms authority to process that content). "
+            "Prefer pasting non-private text with --text. "
+            "Do not use for unsolicited private mail/log scanning.",
+            file=sys.stderr,
+        )
+        return 3
 
     text = args.text
     if args.text_file:
@@ -661,6 +820,14 @@ def main(argv: Optional[List[str]] = None) -> int:
             print("Bad --manual-assoc JSON", file=sys.stderr)
             return 2
 
+    if not (text or "").strip() and not assocs and not man_ev and not man_as:
+        print(
+            "NEED_INPUT: pass --text \"...\" (preferred) or --text-file PATH --i-consent. "
+            "This skill scores operator-supplied discourse only.",
+            file=sys.stderr,
+        )
+        return 2
+
     report = analyze(
         text=text,
         associations=assocs,
@@ -674,7 +841,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     else:
         print(report.pretty())
 
-    # Non-zero exit on clear active ops for scripting
+    # Non-zero exit on strong evasion discourse signals (scripting hook)
     if report.evasion_index > EVASION_ACTIVE_THRESHOLD:
         return 10
     return 0

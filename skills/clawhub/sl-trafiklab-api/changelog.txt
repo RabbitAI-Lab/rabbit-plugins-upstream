@@ -1,2 +1,1 @@
-- chore: bump version to 3.4.1
-- docs: clarify route saving workflow with specific constraints and remove PII
+- v1.1.0: graceful --direction validation, python3 migration, CLI execution docs

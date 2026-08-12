@@ -1,46 +1,59 @@
-## Description: <br>
-Find carbon emission factors for any material or process. 1M+ LCA datasets (HiQLCD, Ecoinvent, CarbonMinds). AI-powered BOM carbon footprint calculation and material comparison. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Looks up LCA emission factors and carbon footprint data from 18 life-cycle inventory databases and 24,000+ published EPDs for material, product, BOM, benchmarking, and EPD review tasks.
 
-## Publisher: <br>
-[KirbyInGitHub](https://clawhub.ai/user/KirbyInGitHub) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kirbyingithub](https://clawhub.ai/user/kirbyingithub)
 
-## Use Case: <br>
-Developers, sustainability analysts, and OpenClaw agents use this skill to search LCA datasets, answer carbon-footprint questions, compare materials, and estimate BOM emissions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends LCA questions, material lists, BOM details, and the HIQ_API_KEY to HiQ service endpoints. <br>
-Mitigation: Use it only under an approved data-sharing policy, avoid confidential product or supplier data unless authorized, and store the API key in environment or OpenClaw configuration rather than prompts. <br>
-Risk: Some dataset results may be restricted or require separate authorization. <br>
-Mitigation: Confirm access rights for restricted LCA datasets before relying on or redistributing returned values. <br>
-Risk: Carbon-footprint calculations and material comparisons depend on dataset choice, region, system boundary, and LCA methodology. <br>
-Mitigation: Review generated results against the intended ISO/LCA methodology and document assumptions before using them in reports or decisions. <br>
+## Use Case:
 
+External users, developers, and LCA practitioners use this skill to retrieve and compare emission factors, carbon footprint data, EPD peer distributions, and benchmark percentiles from HiQ Cortex while preserving database basis and comparability notes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/KirbyInGitHub/hiq-cortex) <br>
-- [HiQLCD platform](https://www.hiqlcd.com) <br>
-- [HiQ Cortex web app](https://carbonx.hiqlcd.com/cortex) <br>
-- [HiQ Cortex MCP endpoint](https://x.hiqlcd.com/api/deck/mcp) <br>
-- [HiQ Cortex search API](https://x.hiqlcd.com/api/deck/search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Plain text and Markdown with command examples and optional JSON configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js and HIQ_API_KEY; search results may include dataset names, sources, regions, units, GWP100 values, quality fit, and links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: release metadata) <br>
+Risk: Material names, BOM lines, or user wording may be sent to HiQ's remote service during searches.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Redact confidential product, supplier, customer, recipe, and process identifiers before use, and use only approved data with a limited account or key where possible.
+
+Risk: The release security summary says the skill under-discloses that raw user wording and BOM lines are sent to HiQ's remote service.
+
+Mitigation: Review the privacy posture before installation and disclose the remote-query behavior to users who may provide confidential LCA inputs.
+
+Risk: LCA values can be misleading when compared across different databases, functional units, system models, or system boundaries.
+
+Mitigation: Use the skill's comparability notes and require database, version, system model, geography, and reference unit beside every numeric result.
+
+## Reference(s):
+
+- [HiQ Cortex skill page](https://clawhub.ai/kirbyingithub/skills/hiq-cortex)
+- [HiQ agent skills repository](https://github.com/HiQ-AI/agent-skills)
+- [HiQ LCA data service](https://www.hiqlcd.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with shell commands, JSON snippets, and LCA dataset basis details.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include raw JSON when commands use --json; numeric results should include database, version, system model, geography, and reference unit.]
+
+## Skill Version(s):
+
+1.8.1 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

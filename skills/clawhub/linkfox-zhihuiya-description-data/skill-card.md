@@ -1,46 +1,63 @@
-## Description: <br>
-Retrieves patent description/specification data from the Zhihuiya patent database for a single patent ID or publication number. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves patent description and specification data from the Zhihuiya patent database by patent ID or publication number.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to retrieve full patent description text from LinkFox/Zhihuiya services when a user supplies a single patent ID or publication number. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Patent identifiers and retrieved descriptions are sent to LinkFox/Zhihuiya services. <br>
-Mitigation: Install and use only when that data sharing is acceptable for the patents being queried. <br>
-Risk: Full API responses are saved locally and may persist beyond the immediate task. <br>
-Mitigation: Review the saved linkfox data location and delete stored responses when they are no longer needed. <br>
-Risk: The skill can report interaction feedback through a separate LinkFox endpoint. <br>
-Mitigation: Review feedback behavior before use and avoid sending sensitive user details in feedback content. <br>
-Risk: Queries may consume paid LinkFox/Zhihuiya credits. <br>
-Mitigation: Confirm credit consumption before running lookups, especially when users request multiple patents. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve full patent description text for one or more known patents, identified by internal Zhihuiya patent ID or publication number.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-description-data) <br>
-- [Zhihuiya patent description API reference](references/api.md) <br>
-- [LinkFox API key and credit guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, shell commands, JSON API responses, and saved JSON files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts one patentId or patentNumber per request, plus optional replaceByRelated; large responses are saved locally and summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill uses LinkFox API keys and can guide phone/SMS account login.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review configured LINKFOX_* environment variables, use only trusted LinkFox endpoints, and avoid exposing API keys or verification codes in shared logs.
+
+Risk: Patent lookup and onboarding flows can consume paid credits or create payment orders after user selection.
+
+Mitigation: Confirm credit costs, plan selection, and payment method with the user before running paid lookup or order commands.
+
+Risk: Full lookup responses are saved locally and may contain sensitive patent research data.
+
+Mitigation: Run the skill from an appropriate workspace, review saved JSON files, and remove local session/cache data when retention is not desired.
+
+Risk: The skill can report feedback to a separate LinkFox endpoint.
+
+Mitigation: Review feedback content before submission and avoid including secrets, private patent strategy, or unnecessary personal data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-description-data)
+- [API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API responses and local JSON data files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full lookup responses are saved under a local linkfox session directory; large responses are summarized unless inline output is requested; repeated queries can use a 24-hour local cache.]
+
+## Skill Version(s):
+
+1.0.7 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

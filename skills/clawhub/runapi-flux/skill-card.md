@@ -1,46 +1,62 @@
-## Description: <br>
-Generate and remix images with Flux through RunAPI. Use when the user asks an agent to create or transform images with Flux. Default to the RunAPI CLI for one-off generation; use SDKs only when the user is integrating RunAPI into an app or backend. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and remix images with Flux through RunAPI for one-off CLI work or SDK-based application integrations.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers, engineers, and agents use this skill to create or transform images with Flux through RunAPI. It guides one-off CLI generation and SDK-based application integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, source images, and generated outputs are sent to RunAPI as an external image generation service. <br>
-Mitigation: Use the skill only with data appropriate for RunAPI processing and follow the user's or organization's data-sharing policy. <br>
-Risk: Agents may need RunAPI account access through an API key, saved CLI auth, or interactive login. <br>
-Mitigation: Prefer RUNAPI_API_KEY or saved CLI configuration for the intended account, and use browser login only when the user explicitly requests interactive authentication. <br>
-Risk: Generated media URLs returned by RunAPI are temporary. <br>
-Mitigation: Download generated files and store them in durable storage within 7 days. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to generate or transform Flux images through RunAPI, either by submitting a single CLI task or by integrating RunAPI SDKs into an application.
 
-## Reference(s): <br>
-- [RunAPI Flux model documentation](https://runapi.ai/models/flux.md) <br>
-- [RunAPI Flux homepage](https://runapi.ai/models/flux) <br>
-- [Black Forest Labs provider comparison](https://runapi.ai/providers/black-forest-labs.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [RunAPI CLI skill](https://github.com/runapi-ai/cli-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and SDK package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference temporary generated file URLs that should be downloaded to durable storage within 7 days.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Prompts and local input images may be sent to RunAPI for Flux image work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompts and image inputs for sensitive data before task submission, and use the skill only when the user accepts RunAPI processing.
+
+Risk: RunAPI API credentials could be exposed if copied into logs, files, or prompts.
+
+Mitigation: Prefer environment authentication or saved CLI configuration, keep RUNAPI_API_KEY protected, and import tokens from stdin when a key must be provided.
+
+Risk: Successful submissions may create billable RunAPI tasks or duplicate paid requests.
+
+Mitigation: Submit exactly once, persist task.json, wait on the same task id, and retry only when evidence confirms no task was created or billed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-flux)
+- [RunAPI Flux model overview](https://runapi.ai/models/flux)
+- [RunAPI Flux model documentation](https://runapi.ai/models/flux.md)
+- [Black Forest Labs provider overview](https://runapi.ai/providers/black-forest-labs.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI Flux SDK](https://github.com/runapi-ai/flux-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Code, Configuration, JSON, Files]
+
+**Output Format:** [Markdown guidance with shell commands, JSON request and response artifacts, and file verification steps.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create RunAPI tasks that return image files; the skill requires complete response validation and media download verification before reporting completion.]
+
+## Skill Version(s):
+
+0.1.2 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

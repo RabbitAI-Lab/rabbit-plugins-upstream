@@ -1,6 +1,6 @@
 ---
 name: unifly
-version: "0.9.2"
+version: "0.10.0"
 description: >-
   This skill should be used when the user asks to "manage UniFi devices",
   "configure UniFi networks", "create a VLAN", "provision an SSID",
@@ -24,10 +24,11 @@ description: >-
 unifly is a Rust CLI for managing Ubiquiti UniFi network infrastructure. It
 unifies the modern Integration API (REST, API key), the Session API (cookie
 plus CSRF), and Site Manager cloud APIs behind a single coherent interface,
-plus real-time WebSocket event streaming. 28 top-level commands cover devices,
-clients, networks, WiFi, firewall policies and zones, NAT policies, ACLs, DNS,
-traffic matching lists, hotspot vouchers, DPI, stats, backups, cloud fleet
-queries, and a raw API escape hatch.
+plus real-time WebSocket event streaming. 28 top-level commands cover devices
+and switch port config-as-code, clients, networks, WiFi, firewall policies,
+zones, and groups, NAT policies, ACLs, DNS, traffic matching lists, hotspot
+vouchers, DPI, stats, backups, the full VPN surface, site settings, cloud
+fleet queries, and a raw API escape hatch.
 
 Unique capabilities worth leading with when the user's task suits them:
 
@@ -62,12 +63,12 @@ unifly supports four modes. **API key mode is enough for most HTTP
 automation on UniFi OS controllers.** Choose **Hybrid** when the task needs
 live WebSocket features (`events watch`) or you want maximum compatibility.
 
-| Mode          | Credentials             | What It Unlocks                                                                                              |
-| ------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `integration` | API key                 | Integration API plus session HTTP on UniFi OS: CRUD, device commands, stats, reservations, admin, event list |
-| `session`     | Username + password     | Session HTTP + WebSocket only: events watch, stats, device commands, DPI control, admin, backups             |
-| `hybrid`      | API key + username/pass | Everything above, including session WebSocket plus enriched records with maximum controller compatibility    |
-| `cloud`       | Site Manager API key    | Connector-routed Integration CRUD plus `unifly cloud` fleet commands against `api.ui.com`                    |
+| Mode          | Credentials             | What It Unlocks                                                                                                                                                            |
+| ------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `integration` | API key                 | Integration API plus session HTTP on UniFi OS: CRUD, device commands, stats, reservations, admin, event list                                                               |
+| `session`     | Username + password     | Session HTTP + WebSocket only: events watch, stats, device commands, DPI control, admin, backups, NAT policies, firewall groups, switch port config-as-code, site settings |
+| `hybrid`      | API key + username/pass | Everything above, including session WebSocket plus enriched records with maximum controller compatibility                                                                  |
+| `cloud`       | Site Manager API key    | Connector-routed Integration CRUD plus `unifly cloud` fleet commands against `api.ui.com`                                                                                  |
 
 Session WebSocket still rejects API keys, so `events watch` needs `session` or
 `hybrid`. Cloud mode does **not** expose Session API endpoints or WebSocket
@@ -80,36 +81,36 @@ auth mode), consult `references/concepts.md`.
 
 All commands follow `unifly [global-flags] <command> <action> [args]`.
 
-| Command         | Aliases    | Actions                                                                                                                                                                                                                                                                                                                                                                                           |
-| --------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `devices`       | `dev`, `d` | list, get, adopt, remove, restart, locate, port-cycle, ports, ports-export, port-set, stats, pending, upgrade, provision, speedtest, tags                                                                                                                                                                                                                                                         |
-| `clients`       | `cl`       | list, find, get, roams, wifi, authorize, unauthorize, block, unblock, kick, forget, reservations (`res`), set-ip, remove-ip                                                                                                                                                                                                                                                                       |
-| `cloud`         |            | hosts [get], sites, switch, devices, isp [query], sdwan [get, status]                                                                                                                                                                                                                                                                                                                             |
-| `networks`      | `net`, `n` | list, get, create, update, delete, refs                                                                                                                                                                                                                                                                                                                                                           |
-| `wifi`          | `w`        | list, get, neighbors, channels, create, update, delete                                                                                                                                                                                                                                                                                                                                            |
-| `firewall`      | `fw`       | policies {list, get, create, update, patch, delete, reorder}, zones {list, get, create, update, delete}, groups {list, get, create, update, delete}                                                                                                                                                                                                                                               |
-| `nat`           |            | policies {list, get, create, update, delete}                                                                                                                                                                                                                                                                                                                                                      |
-| `acl`           |            | list, get, create, update, delete, reorder                                                                                                                                                                                                                                                                                                                                                        |
-| `dns`           |            | list, get, create, update, delete                                                                                                                                                                                                                                                                                                                                                                 |
-| `traffic-lists` |            | list, get, create, update, delete                                                                                                                                                                                                                                                                                                                                                                 |
-| `hotspot`       |            | list, get, create, delete, purge                                                                                                                                                                                                                                                                                                                                                                  |
-| `events`        |            | list, watch                                                                                                                                                                                                                                                                                                                                                                                       |
-| `alarms`        |            | list, archive, archive-all                                                                                                                                                                                                                                                                                                                                                                        |
-| `stats`         |            | site, device, client, gateway, dpi                                                                                                                                                                                                                                                                                                                                                                |
-| `dpi`           |            | apps, categories, status, enable, disable                                                                                                                                                                                                                                                                                                                                                         |
-| `topology`      | `topo`     | _(no subcommands)_                                                                                                                                                                                                                                                                                                                                                                                |
-| `system`        | `sys`      | info, health, sysinfo, backup {create, list, download, delete}, reboot, poweroff                                                                                                                                                                                                                                                                                                                  |
-| `settings`      |            | list, get, set, export                                                                                                                                                                                                                                                                                                                                                                            |
-| `sites`         |            | list, create, delete                                                                                                                                                                                                                                                                                                                                                                              |
-| `admin`         |            | list, invite, revoke, update                                                                                                                                                                                                                                                                                                                                                                      |
-| `wans`          |            | list                                                                                                                                                                                                                                                                                                                                                                                              |
-| `vpn`           |            | servers {list, get}, tunnels {list, get}, status, health, site-to-site {list, get, create, update, delete}, remote-access {list, get, create, update, suggest-port, download-config, delete}, clients {list, get, create, update, delete}, connections {list, get, restart}, peers {list, get, create, update, delete, subnets}, magic-site-to-site {list, get}, settings {list, get, set, patch} |
-| `radius`        |            | profiles                                                                                                                                                                                                                                                                                                                                                                                          |
-| `countries`     |            | _(no subcommands)_                                                                                                                                                                                                                                                                                                                                                                                |
-| `api`           |            | Raw API passthrough (GET/POST/PUT/PATCH/DELETE any path)                                                                                                                                                                                                                                                                                                                                          |
-| `config`        |            | init, cloud-setup, show, set, profiles, use, set-password                                                                                                                                                                                                                                                                                                                                         |
-| `tui`           |            | _(no subcommands)_                                                                                                                                                                                                                                                                                                                                                                                |
-| `completions`   |            | bash, zsh, fish, powershell, elvish                                                                                                                                                                                                                                                                                                                                                               |
+| Command         | Aliases    | Actions                                                                                                                                                                                                                                                                                                                                                                               |
+| --------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `devices`       | `dev`, `d` | list, get, adopt, remove, restart, locate, port-cycle, ports, ports-export, port-set, stats, pending, upgrade, provision, speedtest, tags                                                                                                                                                                                                                                             |
+| `clients`       | `cl`       | list, find, get, roams, wifi, authorize, unauthorize, block, unblock, kick, forget, reservations (`res`), set-ip, remove-ip                                                                                                                                                                                                                                                           |
+| `cloud`         |            | hosts [get], sites, switch, devices, isp [query], sdwan [get, status]                                                                                                                                                                                                                                                                                                                 |
+| `networks`      | `net`, `n` | list, get, create, update, delete, refs                                                                                                                                                                                                                                                                                                                                               |
+| `wifi`          | `w`        | list, get, neighbors, channels, create, update, delete                                                                                                                                                                                                                                                                                                                                |
+| `firewall`      | `fw`       | policies {list, get, create, update, patch, delete, reorder}, zones {list, get, create, update, delete}, groups {list, get, create, update, delete}                                                                                                                                                                                                                                   |
+| `nat`           |            | policies {list, get, create, update, delete}                                                                                                                                                                                                                                                                                                                                          |
+| `acl`           |            | list, get, create, update, delete, reorder                                                                                                                                                                                                                                                                                                                                            |
+| `dns`           |            | list, get, create, update, delete                                                                                                                                                                                                                                                                                                                                                     |
+| `traffic-lists` |            | list, get, create, update, delete                                                                                                                                                                                                                                                                                                                                                     |
+| `hotspot`       |            | list, get, create, delete, purge                                                                                                                                                                                                                                                                                                                                                      |
+| `events`        |            | list, watch                                                                                                                                                                                                                                                                                                                                                                           |
+| `alarms`        |            | list, archive, archive-all                                                                                                                                                                                                                                                                                                                                                            |
+| `stats`         |            | site, device, client, gateway, dpi                                                                                                                                                                                                                                                                                                                                                    |
+| `dpi`           |            | apps, categories, status, enable, disable                                                                                                                                                                                                                                                                                                                                             |
+| `topology`      | `topo`     | _(no subcommands)_                                                                                                                                                                                                                                                                                                                                                                    |
+| `system`        | `sys`      | info, health, sysinfo, backup {create, list, download, delete}, reboot, poweroff                                                                                                                                                                                                                                                                                                      |
+| `settings`      |            | list, get, set, export                                                                                                                                                                                                                                                                                                                                                                |
+| `sites`         |            | list, create, delete                                                                                                                                                                                                                                                                                                                                                                  |
+| `admin`         |            | list, invite, revoke, update                                                                                                                                                                                                                                                                                                                                                          |
+| `wans`          |            | list                                                                                                                                                                                                                                                                                                                                                                                  |
+| `vpn`           |            | servers [get], tunnels [get], status, health, site-to-site {list, get, create, update, delete}, remote-access {list, get, create, update, suggest-port, download-config, delete}, clients {list, get, create, update, delete}, connections {list, get, restart}, peers {list, get, create, update, delete, subnets}, magic-site-to-site {list, get}, settings {list, get, set, patch} |
+| `radius`        |            | profiles                                                                                                                                                                                                                                                                                                                                                                              |
+| `countries`     |            | _(no subcommands)_                                                                                                                                                                                                                                                                                                                                                                    |
+| `api`           |            | Raw API passthrough (GET/POST/PUT/PATCH/DELETE any path)                                                                                                                                                                                                                                                                                                                              |
+| `config`        |            | init, cloud-setup, show, set, profiles, use, set-password, theme                                                                                                                                                                                                                                                                                                                      |
+| `tui`           |            | _(no subcommands)_                                                                                                                                                                                                                                                                                                                                                                    |
+| `completions`   |            | bash, zsh, fish, powershell, elvish                                                                                                                                                                                                                                                                                                                                                   |
 
 For flag details and gotchas, consult `references/commands.md`. Every entity
 command accepts `--help` at runtime as the authoritative reference.
@@ -138,7 +139,7 @@ recipes with runnable shell scripts, consult `references/workflows.md`.
 
 Most entities accept `--from-file <path.json>` (or `-F`) instead of flag
 salad: `networks`, `wifi`, `firewall policies`, `firewall zones`, `firewall
-groups`, `nat policies`, `acl`, `dns`, `traffic-lists`, `hotspot`, `vpn
+groups`, `nat policies`, `acl`, `dns`, `traffic-lists`, `vpn
 site-to-site`, `vpn remote-access`, `vpn clients`, `vpn peers`, `vpn settings
 patch`, and `devices port-set` (JSONC for switch port config-as-code).
 Construct the JSON payload, validate it, then apply. See `examples/` for
@@ -159,8 +160,8 @@ unifly events watch
 # System, Admin, Firewall, Vpn, Unknown
 unifly events watch --types "Firewall,Admin"
 
-# JSON stream for piping into alerting
-unifly events watch --types Client -o json | jq -c 'select(.severity == "warning")'
+# JSON stream for piping into alerting (severity serializes PascalCase)
+unifly events watch --types Client -o json | jq -c 'select(.severity == "Warning")'
 ```
 
 ### Firewall policy reorder (round-trippable)
@@ -309,14 +310,16 @@ UNIFI_PROFILE=warehouse unifly system health
 
 ## Essential Gotchas
 
-1. **Default list limit is 25.** The CLI prints a truncation hint when
-   results hit the default. For enumeration, always pass `--all` or
-   `--limit 200` (or higher).
+1. **Default list limit is 25** (a few commands default higher: hotspot,
+   events, and alarms use 100; `clients roams` uses 50). The CLI prints a
+   truncation hint when results hit the default. For enumeration, always
+   pass `--all` or `--limit 200` (or higher).
 2. **Environment variables use the `UNIFI_` prefix, not `UNIFLY_`.** Relevant
    vars: `UNIFI_URL`, `UNIFI_API_KEY`, `UNIFI_USERNAME`, `UNIFI_PASSWORD`,
    `UNIFI_SITE`, `UNIFI_PROFILE`, `UNIFI_OUTPUT`, `UNIFI_INSECURE`,
-   `UNIFI_TIMEOUT`, `UNIFI_TOTP`. The only `UNIFLY_*` var is `UNIFLY_THEME`
-   for the TUI.
+   `UNIFI_TIMEOUT`, `UNIFI_TOTP`, `UNIFI_HOST_ID`, `UNIFI_DEMO`. The only
+   `UNIFLY_*` var is `UNIFLY_THEME`, which themes both CLI output and the
+   TUI.
 3. **`--yes` / `-y`** skips confirmation prompts for mutations. Required for
    non-interactive use.
 4. **API key mode covers most commands** on UniFi OS, including Session API
@@ -329,6 +332,12 @@ UNIFI_PROFILE=warehouse unifly system health
    controller access.
 6. **Exit codes are meaningful.** `0` on success, non-zero on error. Capture
    stderr for diagnostics.
+7. **Create commands print the created entity on stdout** in the chosen
+   `--output` format, with the confirmation on stderr. Capture IDs
+   directly: `ID=$(unifly networks create ... -o json | jq -r .id)`;
+   `-o plain` emits the bare ID. Exceptions that print nothing because
+   the controller returns no record: `sites create` and
+   `system backup create`.
 
 ## Agent Workflow
 
@@ -368,3 +377,5 @@ UNIFI_PROFILE=warehouse unifly system health
 - **`examples/vpn-site-to-site-ipsec.json`**: IPsec site-to-site tunnel payload
 - **`examples/vpn-client-openvpn.json`**: OpenVPN client payload
 - **`examples/vpn-wireguard-peer.json`**: WireGuard peer configuration payload
+- **`examples/switch-ports.jsonc`**: Switch port config-as-code payload for
+  `devices port-set -F`

@@ -14,7 +14,7 @@
 set -euo pipefail
 
 WS="${1:-/root/.lightclaw/workspace}"
-API="${KLYC_API_ENDPOINT:-https://ai.syln.cn/api}/api.php?route=yaochi/backup"
+API="${KLYC_API_ENDPOINT:-https://kunlunyaochi.com}/api.php?route=yaochi/backup"
 KEY_FILE="${WS}/.klyc-pmm/key"
 
 # 优先用参数2，其次读 key 文件
@@ -63,5 +63,5 @@ echo ""
 echo "已备份 ${COUNT}/${TOTAL} 个文件"
 echo ""
 echo "下一步：调用 finalize 生成昆仑令 → 交给人类保存"
-echo "  curl -sS --ssl-reqd -X POST \${KLYC_API_ENDPOINT:-https://ai.syln.cn/api}/api.php?route=yaochi/backup/finalize \\"
+echo "  curl -sS --ssl-reqd -X POST \${KLYC_API_ENDPOINT:-https://kunlunyaochi.com}/api.php?route=yaochi/backup/finalize \\"
 echo "    -H 'Content-Type: application/json' -H 'X-Kunlun-Key: $KEY'"

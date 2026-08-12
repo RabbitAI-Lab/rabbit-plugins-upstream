@@ -1,48 +1,67 @@
-## Description: <br>
-Environment-aware browser operations for UI verification, closed shadow DOM cascade diagnosis, and browser-login-assisted credential issuance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Web Browser routes an agent to visible browser backends for UI verification, CDP shadow DOM style diagnosis, and browser-login-assisted credential issuance or refresh.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect browser UIs, verify user-visible flows, diagnose closed shadow DOM styling, and help issue or refresh service credentials after user-controlled login. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can help create, extract, store, and reuse access tokens or secrets. <br>
-Mitigation: Require explicit user confirmation for each credential source, token action, handoff destination, and persistent store, while keeping authentication and MFA entry under user control. <br>
-Risk: Browser automation may access third-party or production logged-in pages. <br>
-Mitigation: Use the skill only on pages the user is authorized to inspect, and prefer visible browser backends so the user can monitor interactions. <br>
-Risk: Persisting credentials in local files can leave reusable secrets outside managed controls. <br>
-Mitigation: Prefer a dedicated secret manager or OS keyring over .env files or local CLI files, and store only the minimum credential needed for the requested handoff. <br>
+## Use Case:
 
+Developers and engineers use this skill to verify browser-visible UI behavior, diagnose page state and closed shadow DOM styling, and handle login-assisted credential issuance, refresh, revocation, persistence, and handoff.
 
-## Reference(s): <br>
-- [Web Browser skill page](https://clawhub.ai/drumrobot/skills/web-browser) <br>
-- [UI Test guide](./ui-test.md) <br>
-- [Credential Issue guide](./credential-issue.md) <br>
-- [CDP Trace guide](./cdp-trace.md) <br>
-- [Chrome DevTools Protocol DOM domain](https://chromedevtools.github.io/devtools-protocol/tot/DOM/) <br>
-- [Chrome DevTools Protocol CSS.getMatchedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMatchedStylesForNode) <br>
-- [Playwright BrowserContext.newCDPSession](https://playwright.dev/docs/api/class-browsercontext#browser-context-new-cdp-session) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces browser-operation plans, verification summaries, credential handoff steps, and CDP trace commands; raw snapshot data should be summarized.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release metadata and CHANGELOG, released 2026-07-23) <br>
+Risk: The skill can find, create, extract, persist, reuse, and revoke credentials through logged-in browser sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval for each credential source, token issuance, scope expansion, secret-store write, and revoke action before the agent proceeds.
+
+Risk: Credential material could be stored in long-lived locations such as .env files, skill data, or secret stores.
+
+Mitigation: Prefer scoped credentials and approved secret stores; avoid .env or skill-data storage unless the operator accepts the long-term exposure risk.
+
+Risk: Multi-account browser sessions can issue credentials under the wrong account or revoke the wrong credential.
+
+Mitigation: Verify the logged-in identity before issuance, verify the issued credential after handoff, and require an exact key or token identifier match before revocation.
+
+Risk: Interactive login in an invisible or headless browser can block the user from controlling authentication.
+
+Mitigation: Use a user-visible backend for fresh login flows and reserve invisible Playwright-style automation for sessions that are already authenticated.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/web-browser)
+- [UI Test Guide](ui-test.md)
+- [Credential Issue Guide](credential-issue.md)
+- [CDP Trace Guide](cdp-trace.md)
+- [Chrome DevTools Protocol DOM Domain](https://chromedevtools.github.io/devtools-protocol/tot/DOM/)
+- [CDP CSS.getMatchedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMatchedStylesForNode)
+- [Playwright BrowserContext.newCDPSession](https://playwright.dev/docs/api/class-browsercontext#browser-context-new-cdp-session)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summarizes UI findings instead of returning raw browser snapshots; credential workflows may produce commands or configuration for secret storage and downstream automation.]
+
+## Skill Version(s):
+
+0.2.6 (source: server release evidence, changelog released 2026-08-09)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

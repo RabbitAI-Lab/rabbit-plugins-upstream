@@ -1,43 +1,64 @@
-## Description: <br>
-Clone voice and generate new text reading audio with one click using Vidu Audio Clone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Clone voice and generate new text reading audio with one click using Vidu Audio Clone.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to call dLazy's hosted Vidu Audio Clone service to clone a voice from reference audio and generate spoken audio for new text. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist a dLazy API key locally, and the scan did not substantiate the claim that the saved key is restricted to only the current OS user. <br>
-Mitigation: Review the dLazy CLI before installing; prefer per-invocation DLAZY_API_KEY or npx when persistent credentials are not needed; check ~/.dlazy/config.json permissions and rotate or revoke any exposed key. <br>
-Risk: Voice cloning requests can upload reference audio and prompts to dLazy-hosted endpoints. <br>
-Mitigation: Use only audio the user is allowed to upload for voice cloning, and disclose that inputs and generated outputs are handled by dLazy hosted services. <br>
+## Use Case:
 
+External users and developers use this skill to provide reference audio and a prompt so an agent can call dLazy's hosted Vidu Audio Clone service to generate new speech audio.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-vidu-audio-clone) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files] <br>
-**Output Format:** [JSON result containing generated output URLs or asynchronous task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload referenced audio to dLazy media storage and return hosted files.dlazy.com URLs; --no-wait returns a generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and release evidence) <br>
+Risk: Voice cloning can be used on voices the user is not authorized to clone.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation that the user has rights and consent before uploading reference audio or generating cloned speech.
+
+Risk: The skill sends prompts and selected audio files to dLazy's hosted API and media storage.
+
+Mitigation: Confirm uploads with the user, avoid sensitive audio, and use dry-run mode when checking payloads or costs.
+
+Risk: The skill stores a dLazy API key in local CLI configuration or can read DLAZY_API_KEY from the environment.
+
+Mitigation: Use OS-user-restricted config permissions, rotate or revoke keys when needed, and avoid exposing keys in logs or shared shell history.
+
+Risk: Generation calls may incur service costs or fail because of insufficient balance.
+
+Mitigation: Use cost estimates where appropriate and require confirmation before paid generation calls.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-vidu-audio-clone)
+- [dLazy CLI source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, json]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON service responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return asynchronous task identifiers or hosted media URLs from files.dlazy.com.]
+
+## Skill Version(s):
+
+1.3.7 (source: server release evidence; artifact frontmatter lists 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

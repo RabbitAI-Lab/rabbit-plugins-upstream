@@ -1,44 +1,58 @@
-## Description: <br>
-Use when a video project needs reusable media metadata, word-level transcription, objective speech analysis, or evidence-backed semantic understanding before optional editing skills run. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when a video project needs reusable media metadata, word-level transcription, objective speech analysis, or evidence-backed semantic understanding before optional editing skills run.
 
-## Publisher: <br>
-[whitetowerai](https://clawhub.ai/user/whitetowerai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[whitetowerai](https://clawhub.ai/user/whitetowerai)
 
-## Use Case: <br>
-Developers and video-production agents use this skill to build a shared evidence layer before downstream editing skills run. It initializes a video project, extracts media metadata and transcripts, produces objective speech analysis, and records factual semantic understanding in source time. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review flags under-disclosed rendering and export capability beyond the stated analysis workflow. <br>
-Mitigation: Review any invocation of bundled render scripts before execution, especially when they can create final videos or change project status. <br>
-Risk: The skill reads and writes local video project files and creates cache or model files during media processing. <br>
-Mitigation: Run it in a dedicated project workspace and inspect generated evidence, transcript, review, and final-output files before relying on them. <br>
+## Use Case:
 
+Developers and video workflow agents use this skill to build a reusable evidence layer for video projects, including media facts, word-level transcripts, speech analysis, and human-reviewed semantic understanding before downstream editing skills run.
 
-## Reference(s): <br>
-- [Project Schema V1](artifact/reference/project-schema.md) <br>
-- [Timeline Schema V1](artifact/reference/timeline-schema.md) <br>
-- [Understanding Schema V1](artifact/reference/understanding-schema.md) <br>
-- [Understanding Example](artifact/examples/understanding.example.json) <br>
-- [ClawHub Skill Page](https://clawhub.ai/whitetowerai/skills/video-understand) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON project artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local video-project evidence files, review artifacts, transcripts, analysis JSON, and validation guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Bundled render helpers can create final video outputs and mark a project render as verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the render plan and project status changes before running render_project.py, and run the skill only inside a dedicated video project workspace.
+
+Risk: Local ffmpeg, ffprobe, Python, and transcription workflows process media files and write project artifacts.
+
+Mitigation: Limit filesystem access to the intended project directory and keep source media, cache files, and generated review outputs in that workspace.
+
+## Reference(s):
+
+- [Project Schema V1](artifact/reference/project-schema.md)
+- [Timeline Schema V1](artifact/reference/timeline-schema.md)
+- [Understanding Schema V1](artifact/reference/understanding-schema.md)
+- [Understanding Example](artifact/examples/understanding.example.json)
+- [ClawHub Skill Page](https://clawhub.ai/whitetowerai/skills/video-understand)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/whitetowerai)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, text, markdown, code]
+
+**Output Format:** [Markdown guidance with shell commands and JSON schema-backed project files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local video project evidence such as media metadata, transcripts, analysis JSON, semantic understanding JSON, review summaries, SRT captions, and contact sheets.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

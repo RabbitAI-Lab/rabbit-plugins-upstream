@@ -2,20 +2,9 @@
   "imports": [],
   "mcpServers": {
     "maverick-x": {
-      "baseUrl": "http://127.0.0.1:8765/mcp",
+      "baseUrl": "https://api.x.com/mcp",
       "transport": "http",
       "auth": "refreshable_bearer",
-      "allowedTools": [
-        "getUsersMe",
-        "getUsersByUsername",
-        "getUsersById",
-        "getPostsById",
-        "getPostsByIds",
-        "getUsersPosts",
-        "searchPostsRecent",
-        "createPosts",
-        "deletePosts"
-      ],
       "refresh": {
         "tokenEndpoint": "https://api.x.com/2/oauth2/token",
         "clientIdEnv": "MAVERICK_X_MCP_CLIENT_ID",

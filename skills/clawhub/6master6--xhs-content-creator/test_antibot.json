@@ -1,0 +1,9 @@
+{
+  "title": "🧪 浏览器指纹改造验证",
+  "body": "测试 addInitScript 注入效果。\n观察 actions.jsonl 中：\n1. 启动参数里是否还有 HeadlessChrome\n2. 请求 headers 是否带 Sec-CH-UA\n3. 是否有 Eaglet NoteEditSource 异常",
+  "topics": ["测试"],
+  "images": [
+    "runtime/inbound/01_riverside.jpg"
+  ],
+  "mode": "draft"
+}

@@ -1,0 +1,62 @@
+{
+  "skill": "urban-microclimate",
+  "skill_version": "1.0.0",
+  "command": "urban-microclimate --bbox 116.39 39.90 116.40 39.91 --synthetic --output-dir _review_out/agent-B/urban-microclimate/out/s03 --quiet",
+  "started_at": "2026-08-03T17:43:48.269117Z",
+  "finished_at": "2026-08-03T17:43:48.769085Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "rural_temp": 22.0,
+    "alpha": 10.0,
+    "beta": 6.0,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out/agent-B/urban-microclimate/out/s03\\microclimate.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.39,
+        39.9,
+        116.4,
+        39.91
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 3,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out/agent-B/urban-microclimate/out/s03\\microclimate_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "mean_lst_c": 28.233745574951172,
+    "mean_uhii_c": 6.23374605178833,
+    "max_uhii_c": 13.599998474121094,
+    "mean_ventilation_index": 0.41481563448905945,
+    "correlation_uhii_isa": 0.9971094326140849,
+    "rural_reference_c": 22.0
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "urban-microclimate"
+  },
+  "error": null
+}

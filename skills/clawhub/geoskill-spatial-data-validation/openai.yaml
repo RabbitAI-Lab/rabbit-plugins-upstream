@@ -1,0 +1,12 @@
+name: geoskill-spatial-data-validation
+display_name: 空间数据质量验证
+description: |
+  检查矢量几何有效性、拓扑错误、属性完整性与 CRS 一致性，输出分级质量报告。Validate geometry validity, topology, attribute completeness and CRS consistency for vector data and emit a graded quality report.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-spatial-data-validation.py
+runtime: python>=3.9
+tags:
+  - gis
+  - remote-sensing
+  - vector

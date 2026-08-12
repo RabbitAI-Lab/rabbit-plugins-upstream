@@ -19,7 +19,7 @@
 | Shell调用慢 | 初始化耗时>1秒 | 重复调用 | 使用 `--auto-init` 参数替代多次调用 |
 | 并发初始化冲突 | 初始化失败或数据损坏 | 多进程同时写入 | 使用文件锁机制（代码已实现） |
 | 磁盘空间不足 | 保存失败 | 存储空间不足 | 清理磁盘空间或更换存储路径 |
-| CLI工具执行失败 | 返回错误状态码 | 命令语法错误 | 检查命令语法，参考 [CLI工具箱完整指南](cli-tools-guide.md) |
+| 工具节点执行失败 | 返回错误状态码 | 命令语法错误 | 检查命令语法，经感知接口调用 toolnode（见 [感知接口工具箱约束规范](perception-toolbox-constraints.md)） |
 | 进程终止失败 | 进程仍然运行 | 权限不足 | 使用 `--signal KILL` 强制终止 |
 | 文件搜索超时 | 命令长时间无响应 | 搜索范围过大 | 限制搜索路径或文件模式 |
 
@@ -57,16 +57,17 @@ tail -f /var/log/syslog
 Get-EventLog -LogName Application -Newest 50
 ```
 
-### 测试CLI工具
+### 测试工具节点（toolnode）
 ```bash
+# 语法：toolnode.py <group> <op> --params '<json>'
 # 测试文件操作
-python3 scripts/cli_file_operations.py --action list --path ./
+python3 scripts/toolnode.py fs list --params '{"path": "./"}'
 
 # 测试系统信息
-python3 scripts/cli_system_info.py --action system
+python3 scripts/toolnode.py sys all --params '{}'
 
 # 测试进程管理
-python3 scripts/cli_process_manager.py --action list
+python3 scripts/toolnode.py proc list --params '{}'
 ```
 
 ### 检查Python环境
@@ -91,7 +92,7 @@ python3 -c "import aiofiles; print('aiofiles已安装')"
 - [C扩展使用说明](c_extension_usage.md) - C扩展的加载和降级机制
 - [智能体响应规则](intelligence-agent-response-rules.md) - 响应流程和错误处理
 - [使用示例](usage-examples.md) - 典型使用场景和示例
-- [CLI工具箱完整指南](cli-tools-guide.md) - CLI工具的完整API文档
+- [感知接口工具箱约束规范](perception-toolbox-constraints.md) - 工具节点（toolnode）约束与调用方式
 
 ### 环境要求
 - Python 3.11+

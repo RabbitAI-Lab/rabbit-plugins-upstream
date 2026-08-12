@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-market-opportunity"
+  short_description: "基于真实业务证据判断目标市场进入优先级、风险与验证动作"
+  default_prompt: "使用 $zayn-market-opportunity 判断哪些目标市场值得优先测试或开发。"

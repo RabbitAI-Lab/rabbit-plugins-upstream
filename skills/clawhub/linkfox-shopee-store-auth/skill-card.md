@@ -1,45 +1,63 @@
-## Description: <br>
-Shopee store authorization and management skill for generating OAuth authorization URLs, listing authorized stores, and reading masked store token data for downstream Shopee API use. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents generate Shopee ERP or Ads OAuth authorization URLs, list authorized stores, and check authorization status through LinkFox.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and agent developers use this skill to bind Shopee shops, inspect authorized shop identifiers, and obtain masked token data needed for downstream Shopee Open Platform calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles Shopee authorization data and LinkFox API credentials through credentialed network calls. <br>
-Mitigation: Install only if the publisher is trusted, keep LINKFOX_TOOL_GATEWAY and SHOPEE_API_BASE_URL pinned to the intended LinkFox host, and review behavior before use with real credentials. <br>
-Risk: Authorization URLs and API responses may be written to local files or copied to the clipboard. <br>
-Mitigation: Use on a trusted workstation, protect the generated linkfox data directory, avoid shared clipboards, and clear local artifacts when they are no longer needed. <br>
-Risk: The onboarding guidance includes a remote package installation path. <br>
-Mitigation: Avoid the remote onboarding install path unless the package and source can be verified. <br>
+## Use Case:
 
+External sellers, e-commerce operators, and agents use this skill to prepare Shopee ERP or Ads authorization, inspect authorized stores, and provide store identifiers for downstream Shopee workflows without exposing raw access tokens.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-auth) <br>
-- [linkfox-ai Publisher Profile](https://clawhub.ai/user/linkfox-ai) <br>
-- [API Reference](references/api.md) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global, with documented Shopee authorization regions cn, global, and br.
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes full responses to local JSON files; large responses are summarized; store token output masks accessToken and refreshToken values.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server-resolved release metadata) <br>
+Risk: The skill requires LinkFox API-key access and can guide account onboarding and paid billing recovery.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only in trusted workspaces, keep API keys private, and review any onboarding or payment action before proceeding.
+
+Risk: Generated Shopee authorization URLs and saved response JSON files can expose sensitive account or store context.
+
+Mitigation: Treat authorization URLs and saved LinkFox outputs as sensitive, avoid sharing them, and review or delete local linkfox/cache outputs after use.
+
+Risk: Endpoint environment variables can redirect requests away from official LinkFox hosts.
+
+Mitigation: Keep LinkFox endpoint environment variables pinned to official hosts unless intentionally testing in a controlled environment.
+
+Risk: Shopee ERP and Ads authorizations are separate, so using the wrong app type can cause failed or incorrect downstream workflows.
+
+Mitigation: Confirm appType and match shopId or merchantId with the intended ERP or Ads authorization before downstream calls.
+
+## Reference(s):
+
+- [API parameter and field reference](artifact/references/api.md)
+- [Authentication and billing onboarding guide](artifact/references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-auth)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, JSON, files, configuration]
+
+**Output Format:** [Markdown guidance with JSON API responses and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full API responses under a LinkFox session data directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

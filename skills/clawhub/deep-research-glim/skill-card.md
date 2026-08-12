@@ -1,41 +1,58 @@
-## Description: <br>
-Conducts deep, multi-angle research with glim MCP tools and parallel subagents for competitive landscape analysis, strategic intelligence, and multi-source synthesis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Conducts deep, multi-angle research using glim MCP tools and parallel subagents. Use for deep research, competitive landscape analysis, strategic intelligence, or /deep-research-glim [topic]. Triggers - deep research, deep dive on, competitive landscape, strategic intelligence, multi-source synthesis.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to run deep research on a topic, fan out across web, GitHub, Reddit, X, Amazon, and YouTube sources via glim tools, and synthesize validated findings into a structured Markdown report. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases such as asking for a deep dive can start a resource-heavy multi-source research workflow. <br>
-Mitigation: Use the explicit /deep-research-glim command when that behavior is intended, and review the planned source scope before allowing the workflow to fan out. <br>
-Risk: External research tools and background subagents may use private documents or sensitive context if those materials are provided as part of the research task. <br>
-Mitigation: Avoid providing private or sensitive material unless it is intended for research planning and synthesis. <br>
+## Use Case:
 
+Developers, analysts, and strategy teams use this skill to run deep research, competitive landscape analysis, strategic intelligence, and multi-source synthesis on a user-provided topic.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/deep-research-glim) <br>
-- [Skill Homepage](https://github.com/tenequm/skills/tree/main/skills/deep-research-glim) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown research synthesis with source links, structured findings, strategic insights, metrics, and annotated sources] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use external research tools and parallel background subagents when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.6 (source: SKILL.md frontmatter, CHANGELOG.md, ClawHub release metadata) <br>
+Risk: The workflow intentionally performs web-oriented research and may generate multiple network queries through glim tools and subagents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill for topics where multi-source research is desired, keep the research scope explicit, and review source citations before acting on findings.
+
+Risk: Broad research phrasing could trigger a longer workflow than intended.
+
+Mitigation: Prefer the explicit /deep-research-glim [topic] command and confirm ambiguous topics before spawning subagents.
+
+Risk: Strategic synthesis can include weakly supported claims when source quality is uneven.
+
+Mitigation: Apply the skill's coverage validation, contradiction checks, and source annotation requirements before using recommendations downstream.
+
+## Reference(s):
+
+- [Source homepage](https://github.com/tenequm/skills/tree/main/skills/deep-research-glim)
+- [ClawHub skill page](https://clawhub.ai/tenequm/skills/deep-research-glim)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured Markdown research report with citations and source annotations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include source links, quotations, metrics, contradictions, strategic recommendations, and annotated sources.]
+
+## Skill Version(s):
+
+0.2.7 (source: frontmatter metadata and changelog, released 2026-08-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

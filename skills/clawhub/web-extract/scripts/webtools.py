@@ -28,8 +28,7 @@ Usage:
     webtools.py check
 
 Auth:
-    ZOODATA_API_KEY env (legacy: APICLAW_API_KEY). Falls back to
-    ~/.zoodata/config.json or ~/.apiclaw/config.json (key: api_key).
+    ZOODATA_API_KEY env. Falls back to ~/.zoodata/config.json (key: api_key).
     Get a free key at https://zoodata.ai/en/api-keys.
 """
 
@@ -55,22 +54,24 @@ _last_request_time = 0.0
 # ─── Auth ────────────────────────────────────────────────────────────────────
 
 def get_api_key():
-    key = (
-        os.environ.get("ZOODATA_API_KEY", "").strip()
-        or os.environ.get("APICLAW_API_KEY", "").strip()
-    )
+    """Resolve the key from exactly two sources: ZOODATA_API_KEY env, then
+    ~/.zoodata/config.json. The legacy APICLAW fallbacks were removed — the
+    CLI reads no credential source beyond the two it declares."""
+    key = os.environ.get("ZOODATA_API_KEY", "").strip()
     if key:
         return key
-    for path in ("~/.zoodata/config.json", "~/.apiclaw/config.json"):
-        p = os.path.expanduser(path)
-        if os.path.exists(p):
-            try:
-                with open(p, "r", encoding="utf-8") as f:
-                    k = json.load(f).get("api_key", "").strip()
-                    if k:
-                        return k
-            except (json.JSONDecodeError, IOError):
-                pass
+    p = os.path.expanduser("~/.zoodata/config.json")
+    if os.path.exists(p):
+        try:
+            with open(p, "r", encoding="utf-8") as f:
+                k = (json.load(f).get("api_key") or "").strip()
+        except (json.JSONDecodeError, IOError):
+            k = ""
+        if k:
+            return k
+    if os.environ.get("APICLAW_API_KEY", "").strip():
+        print("NOTE: APICLAW_API_KEY is set but no longer read (legacy source "
+              "removed); rename it to ZOODATA_API_KEY.", file=sys.stderr)
     print("ERROR: ZOODATA_API_KEY not set. Get one at "
           "https://zoodata.ai/en/api-keys", file=sys.stderr)
     sys.exit(2)
@@ -86,6 +87,63 @@ def _headers():
         "Content-Type": "application/json",
         "User-Agent": USER_AGENT,
     }
+
+
+class _CreditTracker:
+    """Accumulates real API credit consumption across every request() in one
+    CLI invocation. Multi-call commands (e.g. crawl-wait, which submits then
+    polls) otherwise surface no credit figure at all; hooking the sole HTTP
+    site here never misses a billed call."""
+
+    def __init__(self):
+        self.consumed = 0.0
+        self.consumed_exact = 0.0
+        self.remaining = None
+        self.remaining_exact = None
+        self.calls = 0
+
+    def record(self, meta):
+        if not isinstance(meta, dict):
+            return
+        d = meta.get("creditsConsumed")
+        e = meta.get("creditsConsumedExact")
+        d = d if isinstance(d, (int, float)) else None
+        e = e if isinstance(e, (int, float)) else None
+        disp = d if d is not None else e
+        exact = e if e is not None else d
+        if disp is not None:
+            self.consumed += disp
+            self.consumed_exact += exact if exact is not None else disp
+            self.calls += 1
+        rd = meta.get("creditsRemaining")
+        if isinstance(rd, (int, float)):
+            self.remaining = rd
+        re_ = meta.get("creditsRemainingExact")
+        if isinstance(re_, (int, float)):
+            self.remaining_exact = re_
+
+
+_CREDITS = _CreditTracker()
+
+
+def _annotate_credits(payload):
+    """Stamp the invocation's total credit consumption onto a dict payload's
+    top-level `meta` (synthesising one when absent), so every command that hits
+    the API — including multi-call crawl-wait — reports what it actually cost."""
+    if not isinstance(payload, dict) or _CREDITS.calls == 0:
+        return
+    meta = payload.get("meta")
+    if not isinstance(meta, dict):
+        meta = {}
+        payload["meta"] = meta
+    disp = _CREDITS.consumed
+    meta["creditsConsumed"] = int(disp) if float(disp).is_integer() else disp
+    meta["creditsConsumedExact"] = _CREDITS.consumed_exact
+    if _CREDITS.remaining is not None:
+        meta["creditsRemaining"] = _CREDITS.remaining
+    if _CREDITS.remaining_exact is not None:
+        meta["creditsRemainingExact"] = _CREDITS.remaining_exact
+    meta["apiCalls"] = _CREDITS.calls
 
 
 def request(method, path, body=None, query=None, timeout=DEFAULT_TIMEOUT):
@@ -111,7 +169,9 @@ def request(method, path, body=None, query=None, timeout=DEFAULT_TIMEOUT):
             req = urllib.request.Request(url, data=data, headers=_headers(),
                                          method=method)
             with urllib.request.urlopen(req, timeout=timeout) as resp:
-                return json.loads(resp.read().decode("utf-8"))
+                data = json.loads(resp.read().decode("utf-8"))
+                _CREDITS.record(data.get("meta"))
+                return data
         except urllib.error.HTTPError as e:
             status = e.code
             body_text = e.read().decode("utf-8", errors="replace") if e.fp else ""
@@ -157,6 +217,7 @@ def request(method, path, body=None, query=None, timeout=DEFAULT_TIMEOUT):
 
 
 def output(obj):
+    _annotate_credits(obj)
     if sys.stdout.isatty():
         print(json.dumps(obj, indent=2, ensure_ascii=False))
     else:

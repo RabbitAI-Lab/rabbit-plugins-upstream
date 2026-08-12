@@ -1,45 +1,70 @@
-## Description: <br>
-Helps agents manage Temu US product pricing through LinkFox, including price-order queries, batch SKU base-price changes, recommended price queries, and base-price estimates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Temu 美国站商品价格管理 API，经 LinkFox 网关转发 Partner US 价格接口，支持定价单查询、批量修改 SKU 基础价、推荐供货价和基础价估算等操作。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External developers and Temu marketplace operators use this skill to prepare and run LinkFox-backed Temu US pricing workflows, including querying price orders, estimating base prices, and changing SKU supply/base prices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, limited to Temu US marketplace pricing workflows. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive LinkFox and Temu seller tokens and can perform pricing operations. <br>
-Mitigation: Pass tokens only when needed, avoid the plaintext local token store unless that risk is acceptable, and never commit or sync generated linkfox/ or ~/.linkfox files. <br>
-Risk: The skill includes broad Temu proxy and file-download helpers in addition to narrower pricing scripts. <br>
-Mitigation: Prefer the specific us_price_* scripts for normal pricing tasks and review request parameters before using the generic proxy or download helpers. <br>
+## Use Case:
 
+External Temu sellers, operators, and developers use this skill to manage United States marketplace pricing workflows, including price order lookup, recommended supply or base-price review, and batch SKU base-price changes.
 
-## Reference(s): <br>
-- [API reference](references/api.md) <br>
-- [Temu accessToken authorization](references/access-token.md) <br>
-- [Authorization flow](references/authorization-flow.md) <br>
-- [Partner US price API catalog](references/partner-us-catalog.md) <br>
-- [Price API documents index](references/apis/README.md) <br>
-- [Temu Partner US documentation](https://partner-us.temu.com/documentation?menu_code=fb16b05f7a904765aac4af3a24b87d4a) <br>
+### Deployment Geography for Use:
 
+Global, for workflows targeting the Temu United States site.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API Calls, Files, Configuration] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON request/response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes full API responses under a linkfox/ session data directory and may summarize large responses on stdout.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill can handle Temu seller access tokens and LinkFox API keys.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer direct accessToken use where appropriate, keep LinkFox keys out of shared shells and logs, and avoid unmasked token output.
+
+Risk: Batch price-change operations can affect live seller pricing and account workflows.
+
+Mitigation: Review the target site, store, goodsId, skuId, currency, and price values before running change-price scripts.
+
+Risk: Gateway URL environment overrides can redirect API traffic.
+
+Mitigation: Restrict LINKFOX_TOOL_GATEWAY, TEMU_API_BASE_URL, and STORE_API_BASE_URL to trusted LinkFox endpoints.
+
+Risk: Downloaded files and saved JSON responses may persist sensitive seller or pricing data locally.
+
+Mitigation: Store outputs only in controlled workspaces, restrict file permissions, and remove stale response files when they are no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-price-us)
+- [API reference](artifact/references/api.md)
+- [Access token authorization](artifact/references/access-token.md)
+- [Partner US catalog](artifact/references/partner-us-catalog.md)
+- [Price API index](artifact/references/apis/README.md)
+- [Price order query API](artifact/references/apis/bg-local-goods-priceorder-query.md)
+- [Change SKU price API](artifact/references/apis/bg-local-goods-priceorder-change-sku-price.md)
+- [Base price recommendation API](artifact/references/apis/temu-local-goods-baseprice-recommend.md)
+- [Recommended price query API](artifact/references/apis/temu-local-goods-recommendedprice-query.md)
+- [Temu Partner US documentation](https://partner-us.temu.com/documentation?menu_code=fb16b05f7a904765aac4af3a24b87d4a)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON, Files]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON API responses saved to local files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are written under a linkfox date and session data directory; stdout prints full JSON for small responses or summaries for large responses.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

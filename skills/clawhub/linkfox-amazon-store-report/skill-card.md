@@ -1,46 +1,63 @@
-## Description: <br>
-Automates Amazon seller report retrieval for inventory, orders, sales traffic, FBA, financial settlement, returns, and Brand Analytics reports, including request, polling, download, extraction, and local access to the extracted file. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automates Amazon seller report retrieval for inventory, orders, sales traffic, FBA, financial settlement, returns, and Brand Analytics reports, including request, polling, download, extraction, and local preview links.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and operators use this skill to request and download structured Amazon seller reports after authorization is handled by the companion auth skill. It is intended for report retrieval workflows, not for business interpretation of report contents. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive Amazon seller or customer report data may be stored locally, previewed in logs, or exposed through the default temporary local HTTP endpoint. <br>
-Mitigation: Use the skill only in trusted workspaces, disable HTTP serving for sensitive reports when possible, keep serving bound to loopback, and remove generated local report files after use. <br>
-Risk: Report retrieval depends on a companion authorization skill and valid store tokens; incorrect setup can cause failed or unauthorized report requests. <br>
-Mitigation: Confirm the auth dependency is installed and use only authorized stores and report types that match the seller account permissions. <br>
-Risk: Automatic feedback telemetry can send operational context to LinkFox when the skill decides feedback is warranted. <br>
-Mitigation: Review the feedback behavior before deployment and avoid entering unnecessary sensitive details into prompts or error reports. <br>
+## Use Case:
 
+External users and developers use this skill to pull structured Amazon Seller reports for authorized stores after selecting a seller account through the companion LinkFox authorization skill. It is intended for report acquisition and file delivery, not business interpretation of the downloaded data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-report) <br>
-- [API reference](artifact/references/api.md) <br>
-- [Report types reference](artifact/references/report-types.md) <br>
-- [Report request reference index](artifact/references/report-requests/README.md) <br>
-- [Amazon Selling Partner API report schemas](https://github.com/amzn/selling-partner-api-models/tree/main/schemas/reports) <br>
+### Deployment Geography for Use:
 
+Global, limited to the Amazon SP-API regions and marketplaces supported by the skill.
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON report-result fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce local file paths, file URIs, and short-lived local HTTP URLs for extracted Amazon report files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence, created 2026-07-13T12:06:34Z) <br>
+Risk: Amazon seller reports and API credentials can contain sensitive business data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat downloaded reports and returned API keys as sensitive, avoid exposing Amazon source URLs unless needed for troubleshooting, and keep report outputs local.
+
+Risk: Downloaded report files may be briefly served over local HTTP.
+
+Mitigation: Keep the HTTP bind host on 127.0.0.1, avoid broad or public interfaces, and use a short serving window.
+
+Risk: Account, billing, and payment setup guidance can trigger user decisions outside normal report retrieval.
+
+Mitigation: Review any account or purchase step before approving it, and stop for user confirmation when authentication or billing errors require action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-report)
+- [Amazon store report API reference](references/api.md)
+- [Report type values](references/report-types.md)
+- [Report request schemas](references/report-requests/README.md)
+- [Script usage guide](scripts/README.md)
+- [Amazon SP-API report type values](https://developer-docs.amazon.com/sp-api/docs/report-type-values)
+- [Amazon Selling Partner API report schemas](https://github.com/amzn/selling-partner-api-models/tree/main/schemas/reports)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Files, Configuration guidance]
+
+**Output Format:** [Markdown guidance, shell commands, and JSON results containing report identifiers, local file paths, file URIs, and short-lived local HTTP download URLs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes downloaded and extracted report files locally; may briefly serve the extracted file over 127.0.0.1 for browser download.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,60 @@
-## Description: <br>
-Manages Shopee store vouchers through the LinkFox developer proxy, covering create, list, detail, update, end, and delete operations for authorized shops. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Shopee shop vouchers through LinkFox's Shopee developer proxy, covering creation, listing, detail lookup, updates, early ending, and deletion.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External marketplace operators and developers use this skill to manage voucher campaigns for authorized Shopee shops, including creating, reviewing, updating, ending, or deleting store vouchers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update, end, or delete live Shopee shop voucher promotions. <br>
-Mitigation: Before using update, end, or delete actions, require the agent to show the exact voucher ID and planned change, then obtain explicit confirmation. <br>
-Risk: Full LinkFox and Shopee API responses are saved to local linkfox session files and may contain business-sensitive data. <br>
-Mitigation: Treat saved response files as sensitive business data, restrict access to the workspace, and delete the files when they are no longer needed. <br>
+## Use Case:
 
+External developers and marketplace operators use this skill to manage authorized Shopee store voucher campaigns from an agent workflow, including creating, reviewing, updating, ending, and deleting vouchers.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-voucher) <br>
-- [Voucher API reference](references/api.md) <br>
-- [Shopee Open Platform voucher documentation](https://open.shopee.com/documents/v2/v2.voucher.add_voucher?module=112&type=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [JSON responses printed to stdout, with full responses saved as JSON files and large responses summarized unless inline output is requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API credentials and the linkfox-shopee-store-auth dependency; response files are written under a linkfox session directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill can manage live Shopee voucher state, including add, update, end, and delete actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Manually confirm intended shop, voucher, and operation details before executing any state-changing action.
+
+Risk: The skill uses a LinkFox API key and may guide SMS login, API-key generation, and payment-order creation.
+
+Mitigation: Use only trusted account credentials, avoid sharing verification codes unless account onboarding is intended, and confirm billing actions before placing orders.
+
+Risk: The skill saves full API responses locally, which may include operational shop or voucher data.
+
+Mitigation: Run it in an appropriate workspace and review saved response files before sharing or committing generated output.
+
+## Reference(s):
+
+- [Shopee voucher API reference](references/api.md)
+- [Voucher onboarding and billing guidance](references/onboarding.md)
+- [Shopee Open Platform add_voucher documentation](https://open.shopee.com/documents/v2/v2.voucher.add_voucher?module=112&type=1)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-voucher)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance, JSON files]
+
+**Output Format:** [Markdown guidance with inline shell commands and saved JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are saved under ./linkfox/<date>/<session>/data; large responses print summaries unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

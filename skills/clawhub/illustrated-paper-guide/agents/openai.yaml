@@ -1,0 +1,6 @@
+interface:
+  display_name: "Illustrated Paper Guide"
+  short_description: "Turn papers into visual, checkpoint-based study guides"
+  default_prompt: "Use $illustrated-paper-guide to turn this paper into a source-grounded illustrated study guide with a linked reading checklist."
+policy:
+  allow_implicit_invocation: true

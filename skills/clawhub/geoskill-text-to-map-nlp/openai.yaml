@@ -1,0 +1,15 @@
+name: geoskill-text-to-map-nlp
+display_name: 自然语言生成地图
+description: |
+  自然语言关键词解析+参数提取+matplotlib渲染，输出专题地图PNG/GeoJSON（离线numpy等价实现）
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-text-to-map-nlp.py
+runtime: python>=3.9
+tags:
+  - ai
+  - extraction
+  - gis
+  - remote-sensing
+  - vector
+  - visualization

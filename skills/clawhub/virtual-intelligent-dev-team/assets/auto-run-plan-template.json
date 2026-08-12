@@ -1,0 +1,43 @@
+{
+  "schema_version": "auto-run-plan/v1",
+  "run_id": "",
+  "parent_run_id": null,
+  "trigger": "/auto",
+  "requested_phase": "setup",
+  "execution_mode": "auto-setup",
+  "run_style": "foreground",
+  "safety_level": "standard",
+  "resume_requested": false,
+  "detached_ready": false,
+  "requires_explicit_go": true,
+  "workflow_bundle": "",
+  "workflow_supported": false,
+  "request_text": "",
+  "root": ".",
+  "state_root": ".vidt/auto",
+  "state_dir": ".vidt/auto/state",
+  "plan_json": ".vidt/auto/auto-run-plan.json",
+  "plan_markdown": ".vidt/auto/auto-run-plan.md",
+  "resume_anchor": "",
+  "automation_state_schema": "references/automation-state.schema.json",
+  "automation_state_path": "",
+  "eligible_workflows": [
+    "post-release-close-loop",
+    "root-cause-remediate",
+    "ship-hold-remediate"
+  ],
+  "stop_caps": {
+    "iteration_online_round_cap": 3,
+    "release_hold_loop_max_rounds": 3
+  },
+  "safety_guards": [
+    "default mode stays manual unless /auto is explicit",
+    "setup and go are separate phases; go must be explicit",
+    "do not run destructive git actions automatically"
+  ],
+  "workflow_execution": {
+    "setup_actions": [],
+    "go_actions": [],
+    "artifacts": []
+  }
+}

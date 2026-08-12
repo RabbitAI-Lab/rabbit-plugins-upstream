@@ -20,6 +20,7 @@ CLI:  python component_audit.py <build_script.py> [<deck.pptx>] [--json]
 Exit: 0 = nothing to report · 2 = at least one cluster matches an unused component (advisory).
 """
 import argparse
+import ast
 import json
 import os
 import re
@@ -59,8 +60,11 @@ EMITTERS = set()
 
 # form components + the concrete guarantee each one gives that a hand-roll does not
 FORM_GUARANTEE = {
+    "sankey": "ribbon width strictly proportional to value on ONE deck-wide scale",
+    "venn": "zone labels placed and SIZED from each region's own geometry",
     "native_chart": "a real editable chart; axis derived from the data, non-Latin labels render",
     "segmented_bar": "parts are normalised to sum, and each segment's label is fitted to its width",
+    "unit_grid": "square cells sized to fit w x h, a countable row length, and a mandatory unit label",
     "meter_bar": "the value label is centered ON the bar's centerline by construction",
     "stat_row": "even column pitch and one baseline for every figure",
     "scorecard": "equal tiles with one hero, from the region — not a hand-picked pitch",
@@ -75,6 +79,8 @@ FORM_GUARANTEE = {
     "org_tree": "centroid parents and a horizontal bus; raises when it cannot fit legibly",
     "position_map": "labelled 2-D positions with anti-collision labels",
     "small_multiples": "every panel pinned to ONE shared value axis",
+    "image_grid": ("every label placed from the image's REAL rect, and ONE aspect ratio for the "
+                   "whole grid — so no cell is letterboxed or cropped"),
     "iso_bars": "a FAITHFUL 2.5D bar chart — height linear in the value, zero-based",
     "iso_stack": "an isometric layered stack with labels aligned to each slab",
     "iso_prism": "one extruded isometric block with fixed one-light-source face shading",
@@ -89,19 +95,52 @@ def _script_calls(path):
     A bare `\bdk\.` regex missed `from deckkit import scorecard` and any alias other than `dk`,
     so a deck that imported components directly had its OWN component output reported as a
     hand-roll — the tool punishing exactly the behaviour it exists to encourage.
+
+    The regex that replaced it stopped at the first `(`, so the PEP-8 PARENTHESIZED form —
+    `from deckkit import (a, b,\n                     c)`, which is what any import list longer
+    than a line becomes — contributed NOTHING. Measured on a real 14-slide build that calls
+    stat_row, step_list and unit_grid: reported as "calls 0 of the 23 form components", and its
+    own component output was then flagged as two hand-rolled clusters. Flattening the import (no
+    other change) turned the same deck into "3 of 23, cluster reporting suppressed" — so the one
+    gate PRE-FLIGHT 12 names was reporting the opposite of the truth, and reporting it in the
+    direction that makes a careful deck look careless.
+
+    Both misses are the same mistake made twice: a regex cannot see Python's grammar. So parse it.
+    The regex survives only as a fallback for a source that does not compile (a build script read
+    mid-edit), where it still sees the flat form.
     """
     src = open(path, encoding="utf-8", errors="ignore").read()
     names = set()
     aliases = {"dk", "deckkit"}
-    for m in re.finditer(r"^\s*import\s+deckkit\s+as\s+([A-Za-z_]\w*)", src, re.M):
-        aliases.add(m.group(1))
-    for m in re.finditer(r"^\s*from\s+deckkit\s+import\s+([^\n(]+)", src, re.M):
-        for part in m.group(1).split(","):
-            part = part.strip()
-            if not part or part == "*":
-                continue
-            names.add(part.split(" as ")[-1].strip())
-            names.add(part.split(" as ")[0].strip())
+    try:
+        tree = ast.parse(src)
+    except SyntaxError:
+        tree = None
+    if tree is not None:
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for a in node.names:
+                    if a.name == "deckkit" and a.asname:
+                        aliases.add(a.asname)
+            elif isinstance(node, ast.ImportFrom):
+                if (node.module or "").split(".")[-1] != "deckkit":
+                    continue
+                for a in node.names:
+                    if a.name == "*":
+                        continue
+                    names.add(a.name)
+                    if a.asname:
+                        names.add(a.asname)
+    else:
+        for m in re.finditer(r"^\s*import\s+deckkit\s+as\s+([A-Za-z_]\w*)", src, re.M):
+            aliases.add(m.group(1))
+        for m in re.finditer(r"^\s*from\s+deckkit\s+import\s+([^\n(]+)", src, re.M):
+            for part in m.group(1).split(","):
+                part = part.strip()
+                if not part or part == "*":
+                    continue
+                names.add(part.split(" as ")[-1].strip())
+                names.add(part.split(" as ")[0].strip())
     for a in aliases:
         names |= {m.group(1) for m in re.finditer(r"\b%s\.([a-z][a-z0-9_]*)\s*\(" % re.escape(a), src)}
     return names
@@ -282,6 +321,7 @@ def main():
     ap.add_argument("script")
     ap.add_argument("pptx", nargs="?")
     ap.add_argument("--json", action="store_true", dest="as_json")
+    ap.add_argument("--out", help="write the JSON audit to this path (requires --json)")
     a = ap.parse_args()
     pptx = a.pptx
     if pptx is None:
@@ -290,8 +330,16 @@ def main():
         pptx = os.path.join(d, cand[0]) if len(cand) == 1 else None
     r = audit(a.script, pptx)
     if a.as_json:
-        print(json.dumps(r, indent=1))
+        payload = json.dumps(r, indent=1)
+        if a.out:
+            with open(a.out, "w", encoding="utf-8") as fh:
+                fh.write(payload + "\n")
+            print("[json] wrote {}".format(a.out))
+        else:
+            print(payload)
         sys.exit(1 if not r.get("inspected") else (2 if r["actionable"] else 0))
+    if a.out:
+        ap.error("--out requires --json")
     # NEVER report clean for a deck that was not opened: a wrong path, an unreadable file, or an
     # ambiguous directory used to print the success line and exit 0 — a green PRE-FLIGHT tick for
     # a check that did no work, which is the worst failure a checklist tool can have.

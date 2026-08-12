@@ -1,0 +1,114 @@
+{
+  "skill": "spatial-etl-pipeline",
+  "quality": {
+    "initial_features": 30,
+    "final_features": 25,
+    "dropped_features": 5,
+    "retention": 0.8333,
+    "null_fractions": {
+      "feature_id": 0.0,
+      "value": 0.0,
+      "area": 0.0,
+      "cx": 0.0
+    },
+    "invalid_geometries": 0,
+    "crs": "EPSG:4326",
+    "n_steps": 6
+  },
+  "steps": [
+    {
+      "step": "extract",
+      "op": "extract",
+      "status": "ok",
+      "features_in": 0,
+      "features_out": 30,
+      "elapsed_ms": 269.872,
+      "message": "synthetic"
+    },
+    {
+      "step": "t1",
+      "op": "add_field",
+      "status": "ok",
+      "features_in": 30,
+      "features_out": 30,
+      "elapsed_ms": 81.56,
+      "message": ""
+    },
+    {
+      "step": "t2",
+      "op": "add_field",
+      "status": "ok",
+      "features_in": 30,
+      "features_out": 30,
+      "elapsed_ms": 1.591,
+      "message": ""
+    },
+    {
+      "step": "t3",
+      "op": "filter_attribute",
+      "status": "ok",
+      "features_in": 30,
+      "features_out": 25,
+      "elapsed_ms": 0.628,
+      "message": ""
+    },
+    {
+      "step": "t4",
+      "op": "rename",
+      "status": "ok",
+      "features_in": 25,
+      "features_out": 25,
+      "elapsed_ms": 0.166,
+      "message": ""
+    },
+    {
+      "step": "load",
+      "op": "load",
+      "status": "ok",
+      "features_in": 25,
+      "features_out": 25,
+      "elapsed_ms": 46.189,
+      "message": "geojson:./_test_cli_run\\etl_output.geojson"
+    }
+  ],
+  "config": {
+    "source": {
+      "type": "synthetic",
+      "bbox": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "n": 30
+    },
+    "steps": [
+      {
+        "op": "add_field",
+        "name": "area",
+        "source": "area"
+      },
+      {
+        "op": "add_field",
+        "name": "cx",
+        "source": "centroid_x"
+      },
+      {
+        "op": "filter_attribute",
+        "field": "value",
+        "cmp": ">",
+        "value": 20
+      },
+      {
+        "op": "rename",
+        "mapping": {
+          "id": "feature_id"
+        }
+      }
+    ],
+    "load": {
+      "format": "geojson",
+      "path": "./_test_cli_run\\etl_output.geojson"
+    }
+  }
+}

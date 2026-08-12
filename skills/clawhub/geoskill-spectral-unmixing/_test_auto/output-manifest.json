@@ -1,0 +1,70 @@
+{
+  "skill": "spectral-unmixing",
+  "skill_version": "1.0.0",
+  "command": "spectral-unmixing --bbox 116 39 117 40 --synthetic --n-endmembers 3 --endmembers auto --quiet --output-dir ./_test_auto",
+  "started_at": "2026-08-03T16:53:25.540743Z",
+  "finished_at": "2026-08-03T16:53:26.740501Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "n_endmembers": 3,
+    "endmembers": "auto",
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_auto\\abundance.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 3,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_auto\\endmembers.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_endmembers": 3,
+    "endmember_source": "auto",
+    "mean_abundance": {
+      "endmember_1": 0.3770345151424408,
+      "endmember_2": 0.22410069406032562,
+      "endmember_3": 0.39886474609375
+    },
+    "mean_rmse": 0.006348000839352608,
+    "n_valid_pixels": null,
+    "input_nodata": null,
+    "synthetic_true_mean_abundance": {
+      "vegetation": 0.3915877462330149,
+      "soil": 0.3851347903757934,
+      "water": 0.2232774633911917
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "spectral-unmixing"
+  },
+  "error": null
+}

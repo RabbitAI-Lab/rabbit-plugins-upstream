@@ -1,40 +1,53 @@
-## Description: <br>
-下载抖音视频到本地（无水印），以mp4格式默认保存在桌面目录。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+下载抖音视频到本地（无水印），以 mp4 格式默认保存在桌面目录。
 
-## Publisher: <br>
-[lvleiai123](https://clawhub.ai/user/lvleiai123) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lvleiai123](https://clawhub.ai/user/lvleiai123)
 
-## Use Case: <br>
-External users and developers use this skill to download a public Douyin share link or share text as a local no-watermark MP4 file. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Douyin share links are sent to the lvhomeproxy2.dpdns.org resolver before the video is downloaded. <br>
-Mitigation: Use only public links with user consent, and prefer a version that clearly documents the resolver before any network request is made. <br>
-Risk: The workflow saves files returned through the resolver-backed download path to the user's Desktop. <br>
-Mitigation: Validate returned download URLs, check file type and size before writing, and allow the user to choose the output folder. <br>
+## Use Case:
 
+External users and developers use this skill to run a local Python downloader for public Douyin share links and save the resulting no-watermark MP4 file to the desktop.
 
-## Reference(s): <br>
-- [ClawHub skill release](https://clawhub.ai/lvleiai123/douyin-no-watermark-downloader) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Text, Files] <br>
-**Output Format:** [Terminal text with a downloaded MP4 file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Downloads the first resolved video URL to the user's Desktop as an .mp4 file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: release evidence and frontmatter metadata) <br>
+Risk: The downloader sends the user's Douyin link to lvhomeproxy2.dpdns.org for parsing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use only if users are comfortable sending provided Douyin links to that third-party parsing service.
+
+Risk: The script downloads a video URL returned by the parsing service.
+
+Mitigation: Prefer a version that documents its network services, restricts accepted domains, and validates returned download URLs before downloading.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/lvleiai123/skills/douyin-no-watermark-downloader)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, files]
+
+**Output Format:** [Markdown guidance with inline shell commands and local MP4 file output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Downloads MP4 files to the user's Desktop by default and prints success or failure status in the terminal.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

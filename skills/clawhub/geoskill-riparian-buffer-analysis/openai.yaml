@@ -1,0 +1,17 @@
+name: geoskill-riparian-buffer-analysis
+display_name: 河岸缓冲带分析
+description: |
+  DEM 提取河网并生成多级河岸缓冲带，统计带内 LULC 构成并评估缓冲带完整性
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-riparian-buffer-analysis.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - dem
+  - extraction
+  - gis
+  - land-use
+  - remote-sensing
+  - terrain
+  - vector

@@ -24,6 +24,24 @@ bash install.sh          # minimal image — default
 
 `CODEXBOX_FULL=1` must be set before `install.sh` runs — the installer needs it in `bash`'s environment. The choice is baked into the installed wrapper; you don't need to set it again afterward.
 
+### Install from a local checkout
+
+From this repository, build and install without pulling a published codexbox
+image:
+
+```bash
+make install       # minimal image
+make install-full  # full image
+
+# wrapper only — no build or pull; select full when needed
+make install-wrapper
+CODEXBOX_FULL=1 make install-wrapper
+```
+
+The installer-only `CODEXBOX_SRC_LOCAL=true` flag skips `docker pull` and
+requires the selected local image to already exist. `make install-wrapper`
+uses that existing image without rebuilding it.
+
 **Verify:** `codexbox --version` should print the codex CLI version.
 
 ## Image Variants

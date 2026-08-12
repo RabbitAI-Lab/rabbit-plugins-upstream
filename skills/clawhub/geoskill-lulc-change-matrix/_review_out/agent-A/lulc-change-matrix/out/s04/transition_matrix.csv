@@ -1,0 +1,7 @@
+,0_water,1_vegetation,2_cropland,3_built_up,4_bare_soil,row_total
+0_water,786,0,0,0,0,786
+1_vegetation,0,2288,0,0,0,2288
+2_cropland,0,0,3038,0,0,3038
+3_built_up,0,0,0,1860,444,2304
+4_bare_soil,0,0,0,0,800,800
+col_total,786,2288,3038,1860,1244,9216

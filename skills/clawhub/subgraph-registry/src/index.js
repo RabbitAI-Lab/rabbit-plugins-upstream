@@ -36,7 +36,7 @@ const OPENAPI_JSON_PATH = join(DATA_DIR, "openapi.json");
 // Bundled with the npm package so runtime semantic search has zero
 // network dependency. Same model fastembed uses at crawl time
 // (Xenova/all-MiniLM-L6-v2) — vectors are bitwise-comparable.
-const EMBEDDING_MODEL_DIR = join(DATA_DIR, "models", "all-MiniLM-L6-v2");
+const EMBEDDING_MODEL_DIR = join(DATA_DIR, "models", "Xenova", "all-MiniLM-L6-v2");
 const GITHUB_DB_URL =
   "https://github.com/PaulieB14/subgraph-registry/raw/main/python/data/registry.db";
 
@@ -50,7 +50,7 @@ const GITHUB_DB_URL =
 //   3. Paste the new hash here and bump package.json version
 //   4. Update SKILL.md "Verifying the registry" section
 const EXPECTED_DB_SHA256 =
-  "b84e3a1cdf564b12cd3ef96cea67c02af67cb6af2ac946d5d0337be45c64d5d4";
+  "47fc0363f8002563d35d459464e15e34741e9150453da674f5837de15d4faf14";
 // Skip-verification escape hatch (set to "1" only if you're rebuilding the DB
 // locally and know what you're doing — never set in agent-runtime defaults).
 const SKIP_VERIFY = process.env.SUBGRAPH_REGISTRY_SKIP_VERIFY === "1";
@@ -221,7 +221,7 @@ function searchSubgraphs({
   const sql = `
     SELECT id, display_name, description, auto_description, domain, protocol_type, network,
            reliability_score, ipfs_hash, entity_count, canonical_entities,
-           powered_by_substreams, active_allocation_count
+           powered_by_substreams, active_allocation_count, example_query
     FROM subgraphs
     ${where}
     ORDER BY reliability_score DESC
@@ -249,6 +249,9 @@ function searchSubgraphs({
       canonical_entities: JSON.parse(r.canonical_entities),
       powered_by_substreams: Boolean(r.powered_by_substreams),
       active_allocation_count: r.active_allocation_count || 0,
+      // Ready-to-run GraphQL generated from this subgraph's actual schema — so an
+      // agent can POST it to query_url_x402 immediately, no get_subgraph_detail round-trip.
+      example_query: r.example_query || null,
       ...buildQueryEndpoints(r.id),
     });
     if (results.length >= limit) break;
@@ -257,7 +260,7 @@ function searchSubgraphs({
   return {
     total: results.length,
     subgraphs: results,
-    query_instructions: "Two ways to query: (a) RECOMMENDED — POST GraphQL to query_url_x402 and pay $0.01 USDC on Base per query via x402 (no API key required; gateway returns HTTP 402 with a payment manifest, use an x402 client like @graphprotocol/client-x402 to sign and retry). (b) LEGACY — replace [api-key] in query_url with a Graph API key from https://thegraph.com/studio/apikeys/. Call get_subgraph_detail first for the schema.",
+    query_instructions: "Two ways to query: (a) RECOMMENDED — POST GraphQL to query_url_x402 and pay $0.01 USDC on Base per query via x402 (no API key required; gateway returns HTTP 402 with a payment manifest, use an x402 client like @graphprotocol/client-x402 to sign and retry). (b) LEGACY — replace [api-key] in query_url with a Graph API key from https://thegraph.com/studio/apikeys/. Each result includes a ready-to-run `example_query` generated from that subgraph's real schema — POST it to query_url_x402 as-is, or adapt the entity/fields. Use get_subgraph_detail for the full schema.",
   };
 }
 
@@ -320,7 +323,7 @@ function recommendSubgraph({ goal, chain = "" }) {
   const where = `WHERE ${conditions.join(" AND ")}`;
   const sql = `
     SELECT id, display_name, description, auto_description, domain, protocol_type, network,
-           reliability_score, ipfs_hash, canonical_entities, active_allocation_count
+           reliability_score, ipfs_hash, canonical_entities, active_allocation_count, example_query
     FROM subgraphs
     ${where}
     ORDER BY reliability_score DESC
@@ -357,6 +360,7 @@ function recommendSubgraph({ goal, chain = "" }) {
       ipfs_hash: r.ipfs_hash,
       canonical_entities: JSON.parse(r.canonical_entities),
       active_allocation_count: r.active_allocation_count || 0,
+      example_query: r.example_query || null,
       schema_changed_at: stab.schema_changed_at,
       schema_stable_days: stab.schema_stable_days,
       ...buildQueryEndpoints(r.id),
@@ -536,7 +540,7 @@ async function getEmbedder() {
       }
       const extractor = await pipeline(
         "feature-extraction",
-        "all-MiniLM-L6-v2",
+        "Xenova/all-MiniLM-L6-v2",
         { quantized: true },
       );
       return extractor;
@@ -604,7 +608,9 @@ async function semanticSearchSubgraphs({
   // SQL pre-filter shaves ~14k → <1k rows for narrow queries (e.g.
   // "lending positions on Arbitrum"). Cosine math runs only on the
   // post-filter set.
-  const conditions = ["embedding IS NOT NULL"];
+  // Exclude the handful of null-ipfs "shell" rows — they carry embeddings but
+  // are unqueryable (no deployment) so they must not surface as recommendations.
+  const conditions = ["embedding IS NOT NULL", "ipfs_hash != ''", "ipfs_hash IS NOT NULL"];
   const params = [];
   if (!include_unserved) {
     conditions.push("active_allocation_count > 0");
@@ -631,7 +637,7 @@ async function semanticSearchSubgraphs({
       `SELECT id, display_name, description, auto_description, domain,
               protocol_type, network, reliability_score, ipfs_hash,
               entity_count, canonical_entities, powered_by_substreams,
-              active_allocation_count, embedding
+              active_allocation_count, example_query, embedding
        FROM subgraphs
        ${where}`,
     )
@@ -666,6 +672,7 @@ async function semanticSearchSubgraphs({
       canonical_entities: JSON.parse(r.canonical_entities),
       powered_by_substreams: Boolean(r.powered_by_substreams),
       active_allocation_count: r.active_allocation_count || 0,
+      example_query: r.example_query || null,
       semantic_score: Number(score.toFixed(4)),
       ...buildQueryEndpoints(r.id),
     });
@@ -956,7 +963,7 @@ const HANDLERS = {
 
 function createServer() {
   const server = new Server(
-    { name: "subgraph-registry", version: "0.6.0" },
+    { name: "subgraph-registry", version: "0.8.20" },
     { capabilities: { tools: {} } }
   );
 

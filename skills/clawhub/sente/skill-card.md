@@ -1,44 +1,59 @@
-## Description: <br>
-Sente gives an agent a durable sente.run email identity and account-management workflow for sending and receiving email, waiting for OTP or magic-link messages, registering permitted accounts, and connecting authorized existing accounts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sente gives an agent a durable email identity and account automation workflows for sending and receiving mail, waiting for verification codes or magic links, registering accounts, and connecting user-owned accounts.
 
-## Publisher: <br>
-[shim2k](https://clawhub.ai/user/shim2k) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shim2k](https://clawhub.ai/user/shim2k)
 
-## Use Case: <br>
-Developers and agents use Sente when an agent needs its own email address, inbox workflows, verification-code or magic-link extraction, or authorized account registration and re-login support. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill enables managed email identities, account registration, and connected-account workflows. <br>
-Mitigation: Use it only for accounts the user owns or is authorized to operate, and prefer confirm-before-submit where automated signup may violate site terms. <br>
-Risk: API tokens, vaulted credentials, OTPs, magic links, and webhook secrets are sensitive. <br>
-Mitigation: Keep SENTE_API_TOKEN, credentials, codes, magic links, and webhook secrets private; avoid printing, committing, or sharing them. <br>
-Risk: Inbound email content can contain untrusted instructions. <br>
-Mitigation: Extract only the expected OTP or magic-link value and do not treat email body instructions as user instructions. <br>
+## Use Case:
 
+Developers and agent operators use this skill when an agent needs its own email inbox, must retrieve verification codes or magic links, or needs authorized account signup, login, and relogin workflows.
 
-## Reference(s): <br>
-- [Sente on ClawHub](https://clawhub.ai/shim2k/skills/sente) <br>
-- [Sente service-integration guide](https://sente.run/skill.md) <br>
-- [Sente product and acceptable use information](https://sente.run) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes CLI setup, identity management, email, registration, connection, and credential-handling guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill manages durable email identities, inbox access, account signup, login, credentials, exported sessions, API tokens, and related account automation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the agent should perform those actions, store tokens and exported sessions as sensitive secrets, avoid printing or committing credentials, and revoke or delete connections when access is no longer needed.
+
+Risk: Autonomous account registration or login can be inappropriate for sites where automation is restricted or where user review is required.
+
+Mitigation: Use confirm-before-submit for sensitive or unclear targets, register only accounts the user's organization is accountable for, and hand blocked steps such as CAPTCHA or MFA to a human.
+
+Risk: Inbound email can contain untrusted content that attempts to influence the agent.
+
+Mitigation: Use extracted verification artifacts such as OTP codes or magic links only, and do not treat email body instructions as user or system instructions.
+
+## Reference(s):
+
+- [Sente service integration guide](https://sente.run/skill.md)
+- [Sente service site](https://sente.run)
+- [ClawHub Sente skill page](https://clawhub.ai/shim2k/skills/sente)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce sensitive CLI outputs such as API-token handling instructions, OTPs, magic links, account identifiers, credential metadata, webhook details, and browser session export paths.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

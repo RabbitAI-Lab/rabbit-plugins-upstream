@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-academic-figures v1.3.0: Publication-quality academic figure generator.
+academic-figures v2.0.0: Publication-quality academic figure generator.
 
 Generates charts from JSON/CSV data with:
 - Publication-grade aesthetics (Nature/Science/Lancet style)
@@ -26,6 +26,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
+from matplotlib.transforms import BboxBase
 import numpy as np
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -94,7 +95,7 @@ THEMES = {
         "dpi": 600,
         "font_size": 11,
         "colors": ["#5B8DBE",  # steel blue (比#70A0D0深一档，清晰可辨)
-                   "#D49356",  # warm terracotta (比#D09050饱和一档)
+                   "#D79D55",  # warm yellow (GLM-5.2原图黄色像素均值，比#D09050亮一档)
                    "#6BA776",  # sage green
                    "#9B7BB8",  # dusty purple
                    "#C9694E",  # muted coral
@@ -107,6 +108,34 @@ THEMES = {
         "spines": ["top", "right"],
         "colorblind_safe": True,
     },
+    # Cool theme: elegant muted cool-toned palette (blues, teals, slate)
+    # All colors in 190-260° hue range, low-medium saturation
+    # Inspired by editorial design (FT/Economist) cool palettes
+    "cool": {
+        "figsize": (9, 5.5),
+        "dpi": 600,
+        "font_size": 8,
+        "colors": ["#1B4965",  # deep navy
+                   "#2E6F9E",  # ocean blue
+                   "#4FA3C5",  # sky blue
+                   "#3D8080",  # dark teal
+                   "#62A0A8",  # medium teal
+                   "#5B7BA0",  # steel blue-gray
+                   "#7B9AB5",  # slate blue
+                   "#9DB5CC"],  # pale steel
+        "grid_alpha": 0.15,
+        "spines": ["top", "right"],
+        "colorblind_safe": True,
+    },
+}
+
+# ── Journal presets (v2.0) ─────────────────────────────────────────────
+# Column widths from Nature/Lancet author guidelines: single 89/85mm, double 183mm.
+JOURNAL_PRESETS = {
+    "nature": {"widths_mm": {"single": 89, "double": 183},
+               "font_size": 7, "min_text_size": 5, "font_family": "Helvetica", "dpi": 600},
+    "lancet": {"widths_mm": {"single": 85, "double": 183},
+               "font_size": 8, "min_text_size": 6, "font_family": "Arial", "dpi": 600},
 }
 
 # Hatching patterns for bar charts (print-friendly + accessibility)
@@ -149,10 +178,18 @@ def load_cjk_font(font_path=None):
 
 
 def has_cjk(text):
-    """Check if text contains CJK characters."""
+    """Check if text contains CJK characters (incl. supplementary-plane ideographs)."""
     if not text:
         return False
-    return any('\u4e00' <= ch <= '\u9fff' or '\u3400' <= ch <= '\u4dbf' for ch in str(text))
+    for ch in str(text):
+        o = ord(ch)
+        if 0x4e00 <= o <= 0x9fff or 0x3400 <= o <= 0x4dbf:  # BMP: CJK Unified + Ext-A
+            return True
+        if 0x20000 <= o <= 0x2ebef:  # Ext-B..F (rare, but real ideographs)
+            return True
+        if 0x30000 <= o <= 0x3134f:  # Ext-G
+            return True
+    return False
 
 
 def safe_text(ax, text, fontprop=None, **kwargs):
@@ -160,6 +197,190 @@ def safe_text(ax, text, fontprop=None, **kwargs):
     if fontprop and has_cjk(str(text)):
         return ax.set_text(text) if hasattr(ax, 'set_text') else ax.text(text, fontproperties=fontprop, **kwargs)
     return ax.set_text(text) if hasattr(ax, 'set_text') else ax.text(text, **kwargs)
+
+
+# ── Overlap prevention (mechanism-level) ───────────────────────────────
+
+MIN_TICK_GAP = 6.0
+
+
+def _boxes_overlap(b1, b2, ratio=0.04):
+    """True if intersection area exceeds `ratio` of the smaller box."""
+    inter = BboxBase.intersection(b1, b2)
+    if inter is None or inter.width <= 0 or inter.height <= 0:
+        return False
+    inter_area = inter.width * inter.height
+    return inter_area > ratio * min(b1.width * b1.height, b2.width * b2.height, 1)
+
+
+def _adjacent_too_close(b1, b2, axis, min_gap=MIN_TICK_GAP):
+    """True if two same-axis neighbor boxes touch or leave < min_gap px."""
+    inter = BboxBase.intersection(b1, b2)
+    if inter is not None and inter.width > 0 and inter.height > 0:
+        return True
+    if axis == 'x':
+        return (b2.x0 - b1.x1) < min_gap
+    return (b2.y0 - b1.y1) < min_gap
+
+
+def _tick_boxes(ax, renderer):
+    """Return (x_labels, y_labels, x_boxes, y_boxes) for visible tick labels."""
+    xl, yl, xb, yb = [], [], [], []
+    for lab in ax.get_xticklabels():
+        if lab.get_text().strip():
+            xl.append(lab)
+            xb.append(lab.get_window_extent(renderer))
+    for lab in ax.get_yticklabels():
+        if lab.get_text().strip():
+            yl.append(lab)
+            yb.append(lab.get_window_extent(renderer))
+    return xl, yl, xb, yb
+
+
+def _ensure_ylabel_clear(ax, fig=None, max_pad=24.0):
+    """Mechanism-level: auto-increase y-label labelpad until it clears tick labels.
+
+    Rotated (90°) y-axis titles -- especially long CJK+English mixes like
+    "最高研发阶段 (max phase)" -- can collide with the top/bottom tick labels
+    even when tick-vs-tick overlaps are handled. Measures real rendered
+    bounding boxes; only grows the pad when a collision exists, so figures
+    that already look right are left untouched.
+    """
+    fig = fig or ax.figure
+    label = ax.yaxis.get_label()
+    if not label.get_text().strip():
+        return
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    label_bb = label.get_window_extent(renderer)
+    tick_bbs = [t.get_window_extent(renderer) for t in ax.get_yticklabels()
+                if t.get_text().strip() and t.get_visible()]
+    if not tick_bbs:
+        return
+    cur = ax.yaxis.labelpad
+
+    def collides():
+        for tb in tick_bbs:
+            inter = BboxBase.intersection(label_bb, tb)
+            if inter is not None and inter.width > 0 and inter.height > 0:
+                return True
+        return False
+
+    while collides() and cur <= max_pad:
+        cur += 1.0
+        ax.yaxis.labelpad = cur
+        fig.canvas.draw()
+        label_bb = label.get_window_extent(renderer)
+    if collides():
+        # Pad exhausted: shrink the label font as a last resort.
+        label.set_fontsize(max(5, label.get_fontsize() - 1))
+        fig.canvas.draw()
+        print(f"WARNING: y-label '{label.get_text()[:20]}...' still near ticks "
+              f"after pad={cur:.0f}, font shrunk", file=sys.stderr)
+
+
+def _axis_has_overlap(xb, yb):
+    """Check adjacent x-x, adjacent y-y (with min-gap), and x-y collisions."""
+    for i in range(len(xb) - 1):
+        if _boxes_overlap(xb[i], xb[i + 1]) or _adjacent_too_close(xb[i], xb[i + 1], 'x'):
+            return True
+    for i in range(len(yb) - 1):
+        if _boxes_overlap(yb[i], yb[i + 1]) or _adjacent_too_close(yb[i], yb[i + 1], 'y'):
+            return True
+    for bx in xb:
+        for by in yb:
+            if _boxes_overlap(bx, by):
+                return True
+    return False
+
+
+def _degrade_axis(ax, axis, level):
+    """Apply one degradation step to tick labels. Returns True if applied."""
+    labels = ax.get_xticklabels() if axis == 'x' else ax.get_yticklabels()
+    labels = [l for l in labels if l.get_text().strip()]
+    if not labels:
+        return False
+    if level == 1 and axis == 'x':
+        if all(l.get_rotation() == 45 for l in labels):
+            return False
+        for l in labels:
+            l.set_rotation(45)
+            l.set_ha('right')
+        return True
+    if level == 2 and axis == 'x':
+        wrapped = False
+        for l in labels:
+            if ' ' in l.get_text() and '\n' not in l.get_text():
+                l.set_text('\n'.join(l.get_text().split(' ')))
+                wrapped = True
+        return wrapped
+    if level == 3:
+        sizes = {l.get_fontsize() for l in labels}
+        if all(s <= 5 for s in sizes):
+            return False
+        for l in labels:
+            l.set_fontsize(max(5, l.get_fontsize() - 1))
+        return True
+    if level >= 4:
+        stride = 2 ** (level - 3)
+        for i, l in enumerate(labels):
+            l.set_visible(i % stride == 0)
+        return True
+    return False
+
+
+def fix_tick_overlaps(fig):
+    """Post-render collision detection + auto-degradation ladder.
+
+    Draws the figure, measures real tick-label bounding boxes, and applies
+    rotation -> word-wrap -> font-shrink -> stride-thinning until no axis
+    (including composite panels) has overlapping labels. Mechanism-level:
+    adapts to any data/theme/size without hardcoded thresholds.
+    """
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    for _pass in range(8):
+        fixed_any = False
+        for ax in fig.axes:
+            xl, yl, xb, yb = _tick_boxes(ax, renderer)
+            if not _axis_has_overlap(xb, yb):
+                continue
+            for level in range(1, 9):
+                if not _axis_has_overlap(xb, yb):
+                    break
+                if level in (1, 2) and not xl:
+                    continue
+                applied = _degrade_axis(ax, 'x', level)
+                if not applied and level >= 3:
+                    applied = _degrade_axis(ax, 'y', level)
+                if applied:
+                    fixed_any = True
+                    fig.canvas.draw()
+                    renderer = fig.canvas.get_renderer()
+                    xl, yl, xb, yb = _tick_boxes(ax, renderer)
+        if not fixed_any:
+            break
+
+
+def place_annotation(ax, text, xy, fontsize=9.5, fontweight='bold', color='black', ha='center'):
+    """Place an annotation, testing candidate offsets against existing text
+    boxes (greedy collision avoidance). Returns the placed Text artist."""
+    fig = ax.figure
+    candidates = [(0, 14), (0, -24), (16, 0), (-16, 0), (0, 32), (0, -42),
+                  (30, 14), (-30, 14), (30, -24), (-30, -24), (30, 32), (-30, -42)]
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    placed = [t.get_window_extent(renderer) for t in ax.texts if t.get_text().strip()]
+    for dx, dy in candidates:
+        t = ax.annotate(text, xy=xy, xytext=(dx, dy), textcoords='offset points',
+                        ha=ha, va='center', fontsize=fontsize, fontweight=fontweight, color=color)
+        fig.canvas.draw()
+        bb = t.get_window_extent(renderer)
+        if not any(_boxes_overlap(bb, pb) for pb in placed):
+            return t
+        t.remove()
+    return ax.annotate(text, xy=xy, xytext=(0, 14), textcoords='offset points',
+                       ha=ha, va='center', fontsize=fontsize, fontweight=fontweight, color=color)
 
 
 # ── Data loading ───────────────────────────────────────────────────────
@@ -296,6 +517,269 @@ def load_data(path, chart_type=None):
         raise ValueError(f"Unsupported format: {ext}. Use .json or .csv")
 
 
+# ── Data validation layer (v2.0) ───────────────────────────────────────
+
+def validate_data(data, chart_type):
+    """Unified data validation: fatal errors + degradation warnings.
+
+    Returns (fatal_msgs, warning_msgs).
+    - fatal: figure CANNOT be drawn correctly -> caller must abort (exit code 1)
+    - warning: figure can be drawn but data looks suspicious -> caller prints WARNING
+
+    Covers per-type required fields, numeric types, length matching, and
+    degenerate-data detection (all-equal series, non-finite values, ragged rows).
+    """
+    fatal, warns = [], []
+
+    if not isinstance(data, dict):
+        fatal.append("Data must be a non-empty JSON object or CSV-derived dict")
+        return fatal, warns
+
+    def _nonempty_list(v):
+        return isinstance(v, (list, tuple)) and len(v) > 0
+
+    def _len(v):
+        return len(v) if isinstance(v, (list, tuple)) else 0
+
+    def _warn_flat(name, vals):
+        """Detect all-equal series -> flat chart, usually a data bug."""
+        fvals = [float(v) for v in vals if _is_number(v)]
+        if len(fvals) >= 2 and max(fvals) == min(fvals):
+            warns.append(
+                f"Series '{name}' has identical values ({fvals[0]:g} everywhere); "
+                f"the chart will be flat — verify this is intended data, not a column mix-up")
+
+    def _warn_non_numeric(name, vals):
+        n_bad = sum(1 for v in vals if not _is_number(v))
+        if n_bad:
+            warns.append(
+                f"Series '{name}' contains {n_bad} non-numeric value(s) that will be skipped — "
+                f"check for 'NA', '—', or stray text in the source")
+
+    def _check_series_dict(series, err_key, req_nonempty=True):
+        """Validate a {name: [values]} dict. Returns fatal messages list."""
+        msgs = []
+        if not isinstance(series, dict):
+            msgs.append(f"'{err_key}' must be a JSON object mapping names to value arrays")
+            return msgs
+        if req_nonempty and not series:
+            msgs.append(f"'{err_key}' is empty — provide at least one series")
+            return msgs
+        empty_names = [n for n, v in series.items() if not _nonempty_list(v)]
+        if empty_names:
+            msgs.append(f"'{err_key}' contains empty series: {empty_names[:3]}{'...' if len(empty_names) > 3 else ''}")
+        for n, v in series.items():
+            if _nonempty_list(v):
+                _warn_non_numeric(n, v)
+                _warn_flat(n, v)
+        return msgs
+
+    # ── bar family: labels + series (+ errors / significance) ──
+    if chart_type in ("bar", "grouped_bar", "hbar", "horizontal_bar", "line",
+                      "stacked_bar", "box", "boxplot", "violin"):
+        series = data.get("series", data.get("datasets", {}))
+        fatal += _check_series_dict(series, "series")
+        labels = data.get("labels", data.get("x", []))
+        is_boxlike = chart_type in ("box", "boxplot", "violin")
+        if _nonempty_list(labels) and series:
+            if is_boxlike:
+                # box/violin: labels are GROUP names — compare to series count,
+                # not to values-per-series (each group holds its own array)
+                n_labels, n_groups = _len(labels), len(series)
+                if n_labels != n_groups:
+                    fatal.append(
+                        f"labels has {n_labels} group names but {n_groups} series — "
+                        f"each box/violin needs exactly one group name; labels may be misaligned")
+            else:
+                n_labels, n_first = _len(labels), _len(next(iter(series.values())))
+                if n_labels != n_first:
+                    fatal.append(
+                        f"labels has {n_labels} entries but series values have {n_first} — "
+                        f"length mismatch will silently truncate the chart. Fix the CSV/JSON alignment.")
+        elif not is_boxlike and not _nonempty_list(labels):
+            warns.append("No 'labels' provided; x-axis will use indices 0..n-1")
+        # errors must reference existing series (silent KeyError risk)
+        errs = data.get("errors", {})
+        if isinstance(errs, dict) and errs:
+            unknown = [k for k in errs if k not in series]
+            if unknown:
+                warns.append(f"errors references series not present in data: {unknown[:3]}")
+            for n, v in errs.items():
+                if n in series and _nonempty_list(v) and _len(v) != _len(series[n]):
+                    warns.append(f"errors['{n}'] has {_len(v)} values but series '{n}' has {_len(series[n])} — error bars may be misplaced")
+        # significance keys must reference existing series
+        sig = data.get("significance", {})
+        if isinstance(sig, dict) and sig:
+            unknown = [k for k in sig if k not in series]
+            if unknown:
+                warns.append(f"significance references series not present in data: {unknown[:3]}")
+
+    # ── heatmap: matrix ──
+    elif chart_type == "heatmap":
+        matrix = data.get("matrix", data.get("data", data.get("values")))
+        if matrix is None:
+            fatal.append("heatmap requires 'matrix' (2D array of numbers) — key not found in data")
+        elif not isinstance(matrix, (list, tuple)) or len(matrix) == 0:
+            fatal.append("heatmap: 'matrix' is empty — provide a 2D array")
+        elif not all(isinstance(r, (list, tuple)) and _len(r) == _len(matrix[0]) for r in matrix):
+            fatal.append("heatmap: 'matrix' rows have unequal lengths (ragged rows) — every row must have the same number of cells")
+        else:
+            flat = [float(x) for r in matrix for x in r if _is_number(x)]
+            n_bad = sum(1 for r in matrix for x in r if not _is_number(x))
+            if n_bad:
+                warns.append(f"heatmap: {n_bad} non-numeric cell(s) will render as blank/NaN")
+            if flat and max(flat) == min(flat):
+                warns.append(f"heatmap: all {len(flat)} cells are identical ({flat[0]:g}) — the map will be one uniform color; check the data")
+
+    # ── scatter: x / y (+ groups) ──
+    elif chart_type == "scatter":
+        x = data.get("x", data.get("xs", []))
+        y = data.get("y", data.get("ys", []))
+        if not _nonempty_list(x):
+            fatal.append("scatter requires 'x' (array of numbers) — key missing or empty")
+        if not _nonempty_list(y):
+            fatal.append("scatter requires 'y' (array of numbers) — key missing or empty")
+        if not fatal:
+            if _len(x) != _len(y):
+                fatal.append(f"scatter: 'x' has {_len(x)} values but 'y' has {_len(y)} — each point needs one x AND one y; lengths must match")
+            _warn_non_numeric("x", x)
+            _warn_non_numeric("y", y)
+            if len(x) >= 2 and _is_number(x[0]) and _is_number(x[-1]) and max(float(v) for v in x if _is_number(v)) == min(float(v) for v in x if _is_number(v)):
+                warns.append("scatter: all x values are identical — points will stack vertically; trend line (if shown) is meaningless")
+        groups = data.get("groups", data.get("colors"))
+        if groups is not None and not _nonempty_list(groups):
+            fatal.append("scatter: 'groups' exists but is empty")
+        elif groups is not None and _len(groups) != _len(x) and _len(groups) > 0:
+            warns.append(f"scatter: 'groups' has {_len(groups)} entries but {_len(x)} points — group assignment may be misaligned")
+
+    # ── forest: estimates + ci_low + ci_high ──
+    elif chart_type == "forest":
+        estimates = data.get("estimates", data.get("values", []))
+        ci_low = data.get("ci_low", data.get("lower", []))
+        ci_high = data.get("ci_high", data.get("upper", []))
+        if not _nonempty_list(estimates):
+            fatal.append("forest requires 'estimates' (effect sizes per study) — key missing or empty")
+        if not _nonempty_list(ci_low):
+            fatal.append("forest requires 'ci_low' (lower confidence bound per study) — key missing or empty")
+        if not _nonempty_list(ci_high):
+            fatal.append("forest requires 'ci_high' (upper confidence bound per study) — key missing or empty")
+        if not fatal:
+            if not (_len(estimates) == _len(ci_low) == _len(ci_high)):
+                fatal.append(f"forest: estimates/ci_low/ci_high lengths differ ({_len(estimates)}/{_len(ci_low)}/{_len(ci_high)}) — every study needs all three values")
+            _warn_non_numeric("estimates", estimates)
+            for i in range(min(_len(estimates), _len(ci_low), _len(ci_high))):
+                if _is_number(estimates[i]) and _is_number(ci_low[i]) and _is_number(ci_high[i]):
+                    if not (float(ci_low[i]) <= float(estimates[i]) <= float(ci_high[i])):
+                        warns.append(f"forest: study {i} has estimate {estimates[i]:g} outside CI [{ci_low[i]:g}, {ci_high[i]:g}] — check the data")
+        labels = data.get("labels", data.get("studies", []))
+        if _nonempty_list(labels) and _len(labels) != _len(estimates):
+            warns.append(f"forest: {_len(labels)} study labels but {_len(estimates)} estimates — labels may be misaligned")
+        weights = data.get("weights")
+        if _nonempty_list(weights) and _len(weights) != _len(estimates):
+            warns.append(f"forest: {_len(weights)} weights but {_len(estimates)} estimates — bubble sizes may be misassigned")
+        events = data.get("events")
+        if isinstance(events, list) and events and _len(events) != _len(estimates):
+            warns.append(f"forest: {_len(events)} event rows but {_len(estimates)} estimates — events/total may be misaligned")
+
+    # ── KM: groups (list of [t, s] pairs) OR time + survival ──
+    elif chart_type in ("km", "survival"):
+        groups = data.get("groups", data.get("series", {}))
+        has_time = _nonempty_list(data.get("time", []))
+        if isinstance(groups, dict) and groups and all(isinstance(v, (list, tuple)) and v and all(isinstance(p, (list, tuple)) and _len(p) >= 2 for p in v) for v in groups.values()):
+            for gname, pairs in groups.items():
+                times = [p[0] for p in pairs if _is_number(p[0])]
+                if len(times) >= 2 and any(times[i] > times[i + 1] for i in range(len(times) - 1)):
+                    warns.append(f"km: group '{gname}' has non-increasing time points — survival curves assume chronological order")
+        elif has_time and isinstance(data.get("survival"), dict):
+            surv = data["survival"]
+            fatal += _check_series_dict(surv, "survival", req_nonempty=False)
+            for gname, s in surv.items():
+                if _nonempty_list(s) and _len(s) != _len(data["time"]):
+                    fatal.append(f"km: survival['{gname}'] has {_len(s)} values but 'time' has {_len(data['time'])} — lengths must match")
+        elif not isinstance(groups, dict) or not groups:
+            fatal.append("km requires 'groups' as {GroupName: [[t, s], ...]} pairs, or 'time' + 'survival' arrays — neither found")
+
+    # ── ROC: curves OR fpr + tpr ──
+    elif chart_type == "roc":
+        curves = data.get("curves", [])
+        fpr = data.get("fpr", data.get("x", []))
+        tpr = data.get("tpr", data.get("y", []))
+        if _nonempty_list(curves):
+            for i, c in enumerate(curves):
+                if not isinstance(c, dict) or not (_nonempty_list(c.get("fpr")) and _nonempty_list(c.get("tpr"))):
+                    fatal.append(f"roc: curves[{i}] must have 'fpr' and 'tpr' arrays")
+                elif _len(c["fpr"]) != _len(c["tpr"]):
+                    fatal.append(f"roc: curves[{i}] fpr/tpr lengths differ ({_len(c['fpr'])}/{_len(c['tpr'])}")
+                else:
+                    f = [float(v) for v in c["fpr"] if _is_number(v)]
+                    if len(f) >= 2 and any(f[i] > f[i + 1] + 1e-9 for i in range(len(f) - 1)):
+                        warns.append(f"roc: curves[{i}] fpr is not monotonic — sort the curve by threshold")
+                c_auc = c.get("auc")
+                if isinstance(c_auc, (int, float)) and not (0.0 <= float(c_auc) <= 1.0):
+                    warns.append(f"roc: curves[{i}] auc={c_auc:g} is outside [0, 1] — verify the value")
+        elif _nonempty_list(fpr) and _nonempty_list(tpr):
+            if _len(fpr) != _len(tpr):
+                fatal.append(f"roc: fpr has {_len(fpr)} values but tpr has {_len(tpr)} — lengths must match")
+            _warn_non_numeric("fpr", fpr)
+            _warn_non_numeric("tpr", tpr)
+        else:
+            fatal.append("roc requires 'curves' (list of {fpr, tpr}) or 'fpr' + 'tpr' arrays — neither found")
+        auc = data.get("auc")
+        if isinstance(auc, (int, float)) and not (0.0 <= float(auc) <= 1.0):
+            warns.append(f"roc: auc={auc:g} is outside [0, 1] — verify the value")
+
+    # ── dual_axis: labels + left + right ──
+    elif chart_type == "dual_axis":
+        labels = data.get("labels", data.get("x", []))
+        left = data.get("left", data.get("y1", {}))
+        right = data.get("right", data.get("y2", {}))
+        fatal += _check_series_dict(left, "left/y1")
+        fatal += _check_series_dict(right, "right/y2")
+        if not fatal and _nonempty_list(labels) and left and right:
+            n_first = _len(next(iter(left.values())))
+            if _len(labels) != n_first:
+                fatal.append(f"dual_axis: labels has {_len(labels)} entries but left/right series have {n_first} — lengths must match")
+
+    # ── composite: panels ──
+    elif chart_type == "composite":
+        panels = data.get("panels", [])
+        if not isinstance(panels, list) or not panels:
+            fatal.append("composite requires 'panels' (non-empty list of panel objects)")
+        else:
+            bad = [i for i, p in enumerate(panels) if not isinstance(p, dict) or not p.get("type")]
+            if bad:
+                fatal.append(f"composite: panels {bad[:5]} are missing a 'type' field — each panel needs 'type' (e.g. 'bar')")
+
+    # ── diagram: blocks ──
+    elif chart_type == "diagram":
+        blocks = data.get("blocks", [])
+        if not isinstance(blocks, list) or not blocks:
+            fatal.append("diagram requires 'blocks' (non-empty list of block objects)")
+
+    return fatal, warns
+
+
+def legend_audit(ax, chart_type, no_legend, n_series):
+    """Detect silently-empty legends: >= 2 series drawn, none labeled.
+
+    n_series comes from the DATA (not artist count — matplotlib's
+    get_legend_handles_labels only returns labeled artists, so an all-
+    unlabeled multi-series figure reports 0 handles). Types that use
+    x-axis labels (box/violin/forest), a colorbar (heatmap), or their
+    own legend (dual_axis, composite, diagram) are exempt.
+    """
+    if no_legend or chart_type in ("box", "boxplot", "violin", "heatmap", "forest",
+                                   "composite", "diagram", "dual_axis"):
+        return None
+    if n_series < 2:
+        return None
+    handles, labels = ax.get_legend_handles_labels()
+    if not any(labels):
+        return ("multiple series drawn but none carry a 'label' — the legend will be empty; "
+                "use series 'name' keys (JSON) or a group column (CSV) so series can be told apart")
+    return None
+
+
 # ── Figure generators ──────────────────────────────────────────────────
 
 def apply_base_style(ax, theme):
@@ -338,17 +822,21 @@ def gen_bar(data, ax, theme, cjk_fp, **kwargs):
                 errs = [errs] * n_groups
 
         hatch_val = HATCH_PATTERNS[i % len(HATCH_PATTERNS)] if use_hatch else None
-        fc = colors[i % len(colors)]
+        if kwargs.get("alternate", False) and n_series == 1:
+            # GLM-5.2 blog style: alternate first two theme colors per bar
+            bar_colors = [colors[j % 2] for j in range(len(values))]
+        else:
+            bar_colors = colors[i % len(colors)]
         if use_hatch:
             # GLM-5.2 blog style: ALL bars get hatching with black hatch lines
             # on colored fill. Black edgecolor ensures visibility on any fill.
             bars = bar_func(x + offset, values, w, yerr=errs,
-                            color=fc, edgecolor='black', linewidth=0.6,
+                            color=bar_colors, edgecolor='black', linewidth=0.6,
                             hatch=hatch_val, capsize=3,
                             error_kw={'linewidth': 1}, label=name)
         else:
             bars = bar_func(x + offset, values, w, yerr=errs,
-                            color=fc, edgecolor='white', linewidth=0.5,
+                            color=bar_colors, edgecolor='white', linewidth=0.5,
                             capsize=3, error_kw={'linewidth': 1}, label=name)
         all_bars.append((name, values, bars, offset))
 
@@ -410,13 +898,19 @@ def gen_bar(data, ax, theme, cjk_fp, **kwargs):
                             fontsize=8, fontweight=fw, color=fc)
 
     if horizontal:
+        y_fs = theme["font_size"] - 1
+        if len(labels) > 12:
+            y_fs -= 1
         ax.set_yticks(x)
-        ax.set_yticklabels(labels, fontsize=theme["font_size"] - 1,
+        ax.set_yticklabels(labels, fontsize=y_fs,
                            fontproperties=cjk_fp if cjk_fp and any(has_cjk(l) for l in labels) else None)
         ax.invert_yaxis()
     else:
+        max_lbl_len = max((len(str(l)) for l in labels), default=0)
+        rotation = 45 if (len(labels) > 8 or max_lbl_len > 12) else 0
         ax.set_xticks(x)
         ax.set_xticklabels(labels, fontsize=theme["font_size"] - 1,
+                           rotation=rotation, ha='right' if rotation else 'center',
                            fontproperties=cjk_fp if cjk_fp and any(has_cjk(l) for l in labels) else None)
 
 
@@ -456,7 +950,10 @@ def gen_heatmap(data, ax, theme, cjk_fp, **kwargs):
 
     ax.set_xticks(range(len(col_labels)))
     use_cjk_cols = cjk_fp and any(has_cjk(l) for l in col_labels)
+    max_col_len = max((len(str(l)) for l in col_labels), default=0)
+    rot = 45 if (len(col_labels) > 6 or max_col_len > 14) else 0
     ax.set_xticklabels(col_labels, fontsize=theme["font_size"] - 2,
+                       rotation=rot, ha='right' if rot else 'center',
                        fontproperties=cjk_fp if use_cjk_cols else None)
     ax.set_yticks(range(len(row_labels)))
     use_cjk_rows = cjk_fp and any(has_cjk(l) for l in row_labels)
@@ -476,6 +973,10 @@ def gen_scatter(data, ax, theme, cjk_fp, **kwargs):
         ax.scatter(x_data, y_data, s=60, color=theme["colors"][0],
                    edgecolors='white', linewidth=0.5, alpha=0.7, zorder=3)
     else:
+        # Validate groups length matches x/y data length
+        n = min(len(x_data), len(y_data))
+        if len(groups) > n:
+            groups = groups[:n]
         unique_groups = list(dict.fromkeys(groups))  # preserve order
         for i, g in enumerate(unique_groups):
             mask = [j for j in range(len(groups)) if groups[j] == g]
@@ -484,12 +985,29 @@ def gen_scatter(data, ax, theme, cjk_fp, **kwargs):
                        edgecolors='white', linewidth=0.5, alpha=0.7,
                        label=g, zorder=3)
 
+    # Point labels (data["labels"] — one per (x, y) point)
+    point_labels = data.get("labels", [])
+    if point_labels and len(point_labels) == len(x_data):
+        use_cjk = cjk_fp and any(has_cjk(str(l)) for l in point_labels)
+        n_pts = len(x_data)
+        for i, (xi, yi, lab) in enumerate(zip(x_data, y_data, point_labels)):
+            # Alternate above/below to keep neighbors readable; offset grows
+            # with index so clustered points (e.g. years 1950/1953/1955) don't collide.
+            row = i // 2  # every other point flips side
+            dy = 10 + 3 * row if i % 2 == 0 else -13 - 3 * row
+            ax.annotate(str(lab), xy=(xi, yi), xytext=(0, dy),
+                        textcoords='offset points', fontsize=6.5,
+                        ha='center', va='center', zorder=5,
+                        fontproperties=cjk_fp if use_cjk else None,
+                        color='#444444', alpha=0.9)
+
     # Trend line
     if kwargs.get("trend", True) and len(x_data) >= 3:
         z = np.polyfit(x_data, y_data, 1)
         p = np.poly1d(z)
         x_line = np.linspace(x_data.min(), x_data.max(), 100)
-        ax.plot(x_line, p(x_line), '--', color='gray', alpha=0.6, linewidth=1.2, zorder=2)
+        ax.plot(x_line, p(x_line), '--', color='gray', alpha=0.6, linewidth=1.2,
+                zorder=2, label='Linear trend')
         r = np.corrcoef(x_data, y_data)[0, 1]
         ax.text(0.95, 0.05, f'r = {r:.3f}', transform=ax.transAxes,
                 ha='right', va='bottom', fontsize=9, fontstyle='italic', color='gray',
@@ -534,7 +1052,9 @@ def gen_line(data, ax, theme, cjk_fp, **kwargs):
     ax.set_xticks(x if not any(isinstance(l, (int, float)) for l in labels) else range(len(labels)))
     if not any(isinstance(l, (int, float)) for l in labels):
         use_cjk = cjk_fp and any(has_cjk(l) for l in labels)
+        rot = 45 if len(labels) > 10 else 0
         ax.set_xticklabels(labels, fontsize=theme["font_size"] - 1,
+                           rotation=rot, ha='right' if rot else 'center',
                            fontproperties=cjk_fp if use_cjk else None)
 
 
@@ -805,7 +1325,8 @@ def gen_km(data, ax, theme, cjk_fp, **kwargs):
             # Median survival line
             if median_survival and gname in median_survival:
                 med_t = median_survival[gname]
-                ax.axvline(x=med_t, color=c, linestyle=':', alpha=0.4, linewidth=1)
+                if med_t is not None:
+                    ax.axvline(x=med_t, color=c, linestyle=':', alpha=0.4, linewidth=1)
 
     # Reference line at 0.5 (median)
     ax.axhline(y=0.5, color='gray', linestyle='--', alpha=0.3, linewidth=0.8)
@@ -815,6 +1336,10 @@ def gen_km(data, ax, theme, cjk_fp, **kwargs):
         p_val = log_rank.get("p", None)
         method = log_rank.get("method", "Log-rank")
         if p_val is not None:
+            try:
+                p_val = float(p_val)  # defensive: coerce strings like "0.001"
+            except (ValueError, TypeError):
+                p_val = 1.0
             p_str = f"p = {p_val:.3f}" if p_val >= 0.001 else "p < 0.001"
             sig = "***" if p_val < 0.001 else "**" if p_val < 0.01 else "*" if p_val < 0.05 else "NS"
             ax.text(0.95, 0.95, f'{method}\n{p_str} ({sig})',
@@ -1019,9 +1544,11 @@ def gen_dual_axis(data, ax, theme, cjk_fp, **kwargs):
     if left_ylabel:
         ax.set_ylabel(left_ylabel, fontsize=theme["font_size"],
                       fontproperties=cjk_fp if cjk_fp and has_cjk(left_ylabel) else None)
+        _ensure_ylabel_clear(ax)
     if right_ylabel:
         ax2.set_ylabel(right_ylabel, fontsize=theme["font_size"],
                        fontproperties=cjk_fp if cjk_fp and has_cjk(right_ylabel) else None)
+        _ensure_ylabel_clear(ax2)
 
     # Combine legends from both axes
     lines1, labels1 = ax.get_legend_handles_labels()
@@ -1088,6 +1615,7 @@ def gen_composite(data, ax, theme, cjk_fp, **kwargs):
             "trend": panel.get("trend", kwargs.get("trend", True)),
             "horizontal": panel.get("horizontal", False),
             "hatch": panel.get("hatch", False),
+            "alternate": panel.get("alternate", False),
             "show_ratio": panel.get("show_ratio", False),
             "cmap": panel.get("cmap", kwargs.get("cmap")),
             "vmin": panel.get("vmin", kwargs.get("vmin")),
@@ -1108,6 +1636,7 @@ def gen_composite(data, ax, theme, cjk_fp, **kwargs):
         if panel.get("ylabel"):
             sub_ax.set_ylabel(panel["ylabel"], fontsize=theme["font_size"] - 1,
                               fontproperties=cjk_fp if cjk_fp and has_cjk(panel["ylabel"]) else None)
+            _ensure_ylabel_clear(sub_ax)
 
         # Legend for panel
         show_legend = panel.get("legend", True)
@@ -1362,68 +1891,59 @@ def main():
     parser.add_argument("--vmax", type=float, default=None, help="Heatmap vmax")
     parser.add_argument("--horizontal", action="store_true", help="Horizontal bar chart (hbar)")
     parser.add_argument("--hatch", action="store_true", help="Add hatching patterns to bars (print-friendly)")
+    parser.add_argument("--alternate", action="store_true",
+                        help="GLM-5.2 style: alternate first two theme colors per bar (single series)")
     parser.add_argument("--show-ratio", action="store_true", help="Show ratio annotations (e.g., 4.96x) on grouped bars")
     parser.add_argument("--ratio-base", type=int, default=0, help="Base series index for ratio calculation (default: 0)")
+    parser.add_argument("--verify", action="store_true",
+                        help="Run pixel-level text-overlap verification on the PDF output; exit code 2 if overlaps found")
+    parser.add_argument("--journal", default=None, choices=["nature", "lancet"],
+                        help="Apply journal presets: figure width from column width, min font size, font family")
+    parser.add_argument("--column", default="double", choices=["single", "double"],
+                        help="Column layout for --journal (default: double)")
 
     args = parser.parse_args()
 
     theme = THEMES[args.theme]
+    if args.journal:
+        preset = JOURNAL_PRESETS[args.journal]
+        theme = dict(theme)
+        w_in = preset["widths_mm"][args.column] / 25.4
+        h_ratio = theme["figsize"][1] / theme["figsize"][0]
+        theme["figsize"] = (w_in, w_in * h_ratio)
+        theme["font_size"] = preset["font_size"]
+        theme["dpi"] = preset["dpi"]
+        if preset["font_family"] not in plt.rcParams['font.sans-serif']:
+            plt.rcParams['font.sans-serif'].insert(0, preset["font_family"])
+        print(f"Journal preset: {args.journal} ({args.column}-column, width={w_in:.2f}in, "
+              f"font={preset['font_family']} {preset['font_size']}pt, min text {preset['min_text_size']}pt "
+              f"— verify with audit_pdf.py --min-size {preset['min_text_size']})", file=sys.stderr)
     data = load_data(args.data, chart_type=args.type)
 
-    # Validate minimal required fields
-    if not data or not isinstance(data, dict):
-        print("ERROR: Data file is empty or invalid. Must be a non-empty JSON object or CSV.", file=sys.stderr)
-        sys.exit(1)
-    # Check that at least one data field exists
-    has_data = any(data.get(k) for k in ["series", "matrix", "x", "y", "estimates", "groups", "curves", "fpr", "tpr", "left", "right", "time", "survival", "blocks", "panels"])
-    if not has_data:
-        print("ERROR: No data fields found. Provide 'series', 'matrix', 'x'/'y', or 'estimates'.", file=sys.stderr)
-        sys.exit(1)
-    # Check that data fields are not empty (C3 fix)
-    series = data.get("series", {})
-    if series and all(len(v) == 0 for v in series.values()):
-        print("ERROR: 'series' exists but all values are empty.", file=sys.stderr)
-        sys.exit(1)
-    matrix = data.get("matrix", data.get("data", data.get("values")))
-    if matrix is not None and not isinstance(matrix, (int, float)):
-        arr = np.array(matrix) if not isinstance(matrix, np.ndarray) else matrix
-        if arr.size == 0:
-            print("ERROR: 'matrix' is empty.", file=sys.stderr)
-            sys.exit(1)
-    # KM validation
-    groups_data = data.get("groups", {})
-    if groups_data and isinstance(groups_data, dict) and all(len(v) == 0 for v in groups_data.values()):
-        print("ERROR: 'groups' exists but all values are empty.", file=sys.stderr)
-        sys.exit(1)
-    # ROC validation
-    curves_data = data.get("curves", [])
-    if curves_data and isinstance(curves_data, list) and len(curves_data) == 0:
-        print("ERROR: 'curves' is empty.", file=sys.stderr)
-        sys.exit(1)
-    # Dual-axis validation
-    left_data = data.get("left", data.get("y1", {}))
-    right_data = data.get("right", data.get("y2", {}))
-    if left_data and isinstance(left_data, dict) and all(len(v) == 0 for v in left_data.values()):
-        print("ERROR: 'left'/'y1' exists but all values are empty.", file=sys.stderr)
+    fatal_msgs, warn_msgs = validate_data(data, args.type)
+    for w in warn_msgs:
+        print(f"WARNING: {w}", file=sys.stderr)
+    if fatal_msgs:
+        for m in fatal_msgs:
+            print(f"ERROR: {m}", file=sys.stderr)
         sys.exit(1)
     cjk_fp = None
     # Auto-detect: scan displayable text for CJK chars
+    def _scan_cjk(obj):
+        if isinstance(obj, str):
+            return has_cjk(obj)
+        if isinstance(obj, dict):
+            return any(_scan_cjk(k) for k in obj.keys()) or any(_scan_cjk(v) for v in obj.values())
+        if isinstance(obj, (list, tuple)):
+            return any(_scan_cjk(v) for v in obj)
+        return False
+
     def _text_has_cjk():
         for t in [args.title, args.xlabel, args.ylabel]:
             if t and has_cjk(t):
                 return True
-        if data:
-            for field in ["labels", "row_labels", "col_labels"]:
-                for v in data.get(field, []):
-                    if isinstance(v, str) and has_cjk(v):
-                        return True
-            for v in data.get("series", {}).keys():
-                if isinstance(v, str) and has_cjk(v):
-                    return True
-            for v in data.get("groups", []):
-                if isinstance(v, str) and has_cjk(v):
-                    return True
-        return False
+        # Recursive scan catches CJK nested in composite panels/diagram text
+        return _scan_cjk(data) if data else False
     _auto_cjk = _text_has_cjk()
     if args.cjk or args.cjk_font or _auto_cjk:
         cjk_fp, cjk_name = load_cjk_font(args.cjk_font)
@@ -1450,6 +1970,7 @@ def main():
         "vmax": args.vmax,
         "horizontal": args.horizontal or args.type in ("hbar", "horizontal_bar"),
         "hatch": args.hatch,
+        "alternate": args.alternate,
         "show_ratio": args.show_ratio,
         "ratio_base": args.ratio_base,
     }
@@ -1474,6 +1995,7 @@ def main():
         if args.ylabel:
             ax.set_ylabel(args.ylabel, fontsize=theme["font_size"],
                           fontproperties=cjk_fp if cjk_fp and has_cjk(args.ylabel) else None)
+            _ensure_ylabel_clear(ax)
 
         # Colorbar (for heatmap only — extra must be a ScalarMappable)
         if extra is not None and hasattr(extra, 'get_cmap'):
@@ -1487,9 +2009,23 @@ def main():
         if not args.no_legend and args.legend and ax.get_legend_handles_labels()[1]:
             ax.legend(fontsize=theme["font_size"] - 1, loc='best', framealpha=0.9,
                       prop=cjk_fp if cjk_fp else None)
+        if args.type in ("bar", "grouped_bar", "hbar", "horizontal_bar", "line", "stacked_bar"):
+            n_series = len(data.get("series", data.get("datasets", {})))
+        elif args.type == "scatter":
+            groups = data.get("groups")
+            n_series = len(set(groups)) if isinstance(groups, (list, tuple)) and groups else 1
+        else:
+            n_series = 1
+        audit_msg = legend_audit(ax, args.type, args.no_legend, n_series)
+        if audit_msg:
+            print(f"WARNING: {audit_msg}", file=sys.stderr)
 
     if not is_self_managed:
         plt.tight_layout()
+
+    # Mechanism-level anti-overlap: detect real collisions post-render and
+    # degrade tick labels until no axis overlaps (works for composite panels)
+    fix_tick_overlaps(fig)
 
     # Determine output format and DPI
     out_ext = os.path.splitext(args.out)[1].lower()
@@ -1523,6 +2059,24 @@ def main():
     cjk_info = " (colorblind-safe)" if theme.get("colorblind_safe") else ""
     fmt_info = f"{out_format.upper()} @ {dpi}DPI" if not is_vector else f"{out_format.upper()} (vector)"
     print(f"Saved: {final_out} ({sz:,} bytes, {fmt_info}{cjk_info})", file=sys.stderr)
+
+    if args.verify:
+        if out_format != 'pdf':
+            print("WARNING: --verify only applies to PDF output; skipping", file=sys.stderr)
+        else:
+            try:
+                sys.path.insert(0, SCRIPT_DIR)
+                from verify_overlap_pixel import verify
+            except ImportError:
+                print("WARNING: --verify requires PyMuPDF (fitz) and scipy — install with: pip install pymupdf scipy",
+                      file=sys.stderr)
+            else:
+                real_overlaps, details = verify(final_out)
+                if real_overlaps > 0:
+                    print(f"VERIFY FAIL: {real_overlaps} real text overlap(s) in {final_out} — exit code 2",
+                          file=sys.stderr)
+                    sys.exit(2)
+                print(f"VERIFY OK: no text overlaps in {final_out}", file=sys.stderr)
 
 
 if __name__ == "__main__":

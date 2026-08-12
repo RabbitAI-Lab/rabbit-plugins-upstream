@@ -1,11 +1,11 @@
 ---
 name: dlazy-jimeng-omnihuman-1.5
 version: 1.3.4
-description: Generate realistic digital human broadcast videos from portrait images and audio/text using Jimeng OmniHuman 1.5. 使用即梦 (Jimeng) OmniHuman 1.5 模型，通过人像图片和音频/文本生成逼真的数字人播报视频。
+description: "Generate realistic digital human broadcast videos from portrait images and audio/text using Jimeng OmniHuman 1.5. 使用即梦 (Jimeng) OmniHuman 1.5 模型，通过人像图片和音频/文本生成逼真的数字人播报视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy jimeng-omnihuman-1.5 -h for help."}}
 ---
 
-# dlazy-jimeng-omnihuman-1.5
+# 数字人视频 即梦 OmniHuman 1.5
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

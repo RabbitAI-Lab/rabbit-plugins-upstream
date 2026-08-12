@@ -1,43 +1,59 @@
-## Description: <br>
-忆时 is a local OpenCode memory capsule system that simulates human-like recall, stores long-term memories in ChromaDB, and supports active association and time capsules. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A memory capsule system for OpenCode agents that stores, retrieves, exports, and resurfaces conversation-derived memories with human-like recall behavior.
 
-## Publisher: <br>
-[fslong520](https://clawhub.ai/user/fslong520) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fslong520](https://clawhub.ai/user/fslong520)
 
-## Use Case: <br>
-External developers and OpenCode users use this skill to give an agent persistent local memory, retrieve prior context, manage time-capsule memories, and import or export memory archives. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic recall, storage, backup, and resurfacing of conversation details can expose or reintroduce sensitive personal context. <br>
-Mitigation: Install only when persistent local memory is intended, review or disable the auto-loaded yishi-instructions, and require explicit confirmation before saving or recalling sensitive memories. <br>
-Risk: Bulk import, export, and backup workflows can preserve or transfer private memory records outside the active ChromaDB store. <br>
-Mitigation: Avoid importing sensitive files, protect exported Markdown and JSON files, protect the JSONL backup, and delete or encrypt exported memory artifacts when they are no longer needed. <br>
-Risk: Aggressive automatic recall and storage can cause stale, misleading, or unwanted memories to influence later agent responses. <br>
-Mitigation: Review recalled memories before relying on them and use update, delete, forget, or archive workflows to correct or retire stale records. <br>
+## Use Case:
 
+Developers and OpenCode users use this skill to give an agent local long-term memory for preferences, tasks, decisions, context, time capsules, workflow memories, and recall-driven conversation support.
 
-## Reference(s): <br>
-- [ChromaDB API reference](artifact/references/chroma-api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/fslong520/memocap) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and CLI text, with optional JSON or Markdown export files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read, store, retrieve, archive, back up, import, and export local memory records depending on the configured OpenCode instructions and CLI command.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: The skill can automatically record, search, export, and reuse selected conversation content, preferences, decisions, tasks, emotions, and workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, avoid storing secrets or confidential data, and consider manual-only use instead of adding the global instructions file.
+
+Risk: Local memory data, backups, temporary exports, and generated Desktop HTML files may retain sensitive conversation-derived information.
+
+Mitigation: Regularly inspect and delete ~/.local/share/opencode/忆时, backups, /tmp exports, and generated Desktop HTML files when retention is not intended.
+
+Risk: Automatic resurfacing of memories may introduce stale, private, or unwanted context into future agent responses.
+
+Mitigation: Review recalled memories before acting on them and delete or correct records that should not influence future sessions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fslong520/skills/memocap)
+- [ChromaDB API reference](references/chroma-api.md)
+- [bge-base-zh-v1.5 model download](https://hf-mirror.com/Xenova/bge-base-zh-v1.5/resolve/main/onnx/model.onnx)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, CLI text output, JSON or timeline exports, and generated local HTML visualizations.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update local ChromaDB data, JSONL backups, exported memory files, and generated HTML reports.]
+
+## Skill Version(s):
+
+2.2.1 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

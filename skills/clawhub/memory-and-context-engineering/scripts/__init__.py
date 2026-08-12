@@ -125,6 +125,11 @@ from .context_orchestrator import (
     LRUCache,
     PerformanceMonitor,
     BatchProcessor,
+    ContextPriority,
+    ContextSource,
+    ContextBlock,
+    ContextConfig,
+    PreparedContext,
 )
 # 链模块
 from .chains import (
@@ -159,16 +164,6 @@ from .token_budget import (
     TokenBudgetManager,
     create_token_budget_manager,
 )
-# Context Orchestrator（总控层）
-from .context_orchestrator import (
-    ContextPriority,
-    ContextSource,
-    ContextBlock,
-    ContextConfig,
-    PreparedContext,
-    ContextOrchestrator,
-    create_context_orchestrator,
-)
 from .type_defs import ContextPackage
 # 异步写入（性能优化）
 from .async_writer import (
@@ -184,6 +179,49 @@ from .batched_writer import (
     BatchedWriterStats,
     get_long_term_writer,
     get_state_sync_writer,
+)
+
+# 安全模块
+from .path_security import (
+    PathSecurity,
+    PathSecurityError,
+    validate_path_secure,
+    SecurePathContext,
+)
+from .intent_safety_manager import (
+    IntentSafetyManager,
+    OperationType,
+    PermissionLevel,
+    OperationResult,
+    AuditLog,
+)
+from .tool_output_sanitizer import (
+    ToolOutputSanitizer,
+    RiskLevel,
+    SanitizeResult,
+)
+from .privacy_consent import (
+    PrivacyConsent,
+    ConsentRecord,
+    ConsentStatus,
+    ConsentType,
+    ConsentValidationResult,
+)
+
+# 新增模块（优化阶段）
+from .logging_config import (
+    get_logger,
+    set_log_level,
+    set_log_format,
+)
+from .config import (
+    AgentMemoryConfig,
+    get_config,
+    reload_config,
+)
+from .benchmark import (
+    BenchmarkRunner,
+    BenchmarkResult,
 )
 
 __all__ = [
@@ -320,4 +358,23 @@ __all__ = [
     "BatchedWriterStats",
     "get_long_term_writer",
     "get_state_sync_writer",
+    # 安全模块
+    "PathSecurity",
+    "PathSecurityError",
+    "IntentSafetyManager",
+    "OperationType",
+    "PermissionLevel",
+    "ToolOutputSanitizer",
+    "ToolOutputResult",
+    "PrivacyConsent",
+    "ConsentStatus",
+    # 新增模块（优化阶段）
+    "get_logger",
+    "set_log_level",
+    "set_log_format",
+    "AgentMemoryConfig",
+    "get_config",
+    "reload_config",
+    "BenchmarkRunner",
+    "BenchmarkResult",
 ]

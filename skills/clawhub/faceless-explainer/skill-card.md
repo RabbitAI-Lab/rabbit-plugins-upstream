@@ -1,45 +1,59 @@
-## Description: <br>
-Turns arbitrary text into a faceless explainer video with invented visuals such as typography, abstract graphics, diagrams, and data visualization for topic explainers, concept breakdowns, how-tos, and listicles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns arbitrary text such as an article, notes, topic, or brief into a faceless explainer video with invented scene visuals such as typography, abstract graphics, diagrams, and data visualization.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External creators, video producers, and agent operators use this skill to turn text, notes, topics, or briefs into HyperFrames explainer videos with storyboard, narration, invented visuals, HTML frame compositions, captions, and a final MP4. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill tells the agent to silently update global HyperFrames skills from the network during normal use. <br>
-Mitigation: Require explicit approval before running update commands, and review the updated global skill set before continuing with video generation. <br>
-Risk: Generated HTML or caption output may rely on CDN dependencies, which can matter in offline or locked-down rendering environments. <br>
-Mitigation: Review generated HTML and CDN references before deployment, and replace or approve dependencies according to the target environment's policy. <br>
+## Use Case:
 
+External creators, marketers, educators, and developers use this skill to convert source text into a narrated faceless HyperFrames explainer video. The workflow plans the teaching story, creates storyboard and script files, designs invented visuals, builds HTML frame compositions, and renders a final video.
 
-## Reference(s): <br>
-- [Faceless Explainer ClawHub page](https://clawhub.ai/heygen-com/skills/faceless-explainer) <br>
-- [Story design](artifact/references/story-design.md) <br>
-- [Visual design](artifact/references/visual-design.md) <br>
-- [Motion language](artifact/references/motion-language.md) <br>
-- [Cut catalog](artifact/references/cut-catalog.md) <br>
-- [Frame worker delta](artifact/sub-agents/frame-worker.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown project files, JSON metadata, shell commands, HTML frame compositions, captions, and rendered MP4 artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates project-local video assets under videos/<project>; audio and media behavior depends on HyperFrames, HeyGen sign-in status, and available local fallbacks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.16 (source: server release evidence) <br>
+Risk: The skill directs the agent to silently refresh HyperFrames skills from GitHub before normal use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or disable the silent update step before deployment, and pin trusted versions when operating in controlled environments.
+
+Risk: User-provided source text and generated project files may contain sensitive content.
+
+Mitigation: Avoid providing secrets or sensitive source material unless storage in the generated project directory is acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/faceless-explainer)
+- [Publisher profile](https://clawhub.ai/user/heygen-com)
+- [Story design](references/story-design.md)
+- [Visual design](references/visual-design.md)
+- [Motion language](references/motion-language.md)
+- [Cut catalog](references/cut-catalog.md)
+- [Frame worker delta](sub-agents/frame-worker.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with shell commands plus generated project files, HTML frame code, JSON metadata, captions, audio metadata, and video render outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a HyperFrames project under videos/<project>/ with storyboard, script, frame compositions, index page, and renders/video.mp4 when the workflow completes.]
+
+## Skill Version(s):
+
+1.0.20 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,64 @@
-## Description: <br>
-Helps agents work with authorised Shopee stores by querying shop information, profile details, warehouse data, seller notifications, authorised reseller brands, Brazil onboarding status, and holiday-mode settings, and by updating supported shop profile or holiday-mode fields. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent-facing access to Shopee Shop APIs for reading shop information, profile, warehouse, notification, reseller-brand, Brazil onboarding, and holiday-mode data, and for updating shop profile and holiday-mode settings.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External marketplace operators, developers, and ecommerce support agents use this skill to inspect and manage authorised Shopee shop metadata and selected settings from an agent workflow. It is most useful for checking profile, warehouse, notification, reseller brand, Brazil KYC, and holiday-mode state before making store-management changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform live store-changing actions such as profile edits and holiday-mode changes. <br>
-Mitigation: Manually confirm the exact target shop and requested write parameters before running update_profile or set_shop_holiday_mode. <br>
-Risk: Full Shopee shop API responses may contain sensitive business information and are saved persistently on disk. <br>
-Mitigation: Store outputs only in an appropriate workspace and periodically delete linkfox session data that is no longer needed. <br>
-Risk: Use requires access to the LinkFox/Shopee store API flow and related credentials. <br>
-Mitigation: Install and use only when the operator is comfortable granting that access, and keep API keys in environment variables rather than command text or committed files. <br>
+## Use Case:
 
+External sellers, operators, and commerce agents use this skill to inspect authorized Shopee shop state and make supported shop-setting changes through LinkFox scripts. It is suited for workflows involving shop profile checks, warehouse and notification review, reseller-brand status, Brazil onboarding data, and holiday-mode management.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-shop) <br>
-- [Skill API reference](references/api.md) <br>
-- [Shopee Open Platform Shop API index](https://open.shopee.com/documents/v2/v2.shop.get_shop_info?module=92&type=1) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with Python or shell command examples and JSON API results saved to local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Small responses may be printed inline; larger responses are summarized while full JSON is saved under a linkfox session directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can access LinkFox/Shopee shop data and save full API responses locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for trusted workflows, treat response files as sensitive business data, and periodically delete saved LinkFox response files when they are no longer needed.
+
+Risk: The skill can change shop profile fields and holiday-mode settings.
+
+Mitigation: Manually confirm every profile or holiday-mode change before execution, especially changes that affect ordering or public shop presentation.
+
+Risk: The onboarding flow may handle API keys, SMS login, billing, and payment steps.
+
+Mitigation: Treat generated API keys like passwords, prefer existing configured keys when possible, and avoid the SMS onboarding path unless it is necessary.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-shop)
+- [Shopee Shop API index](https://open.shopee.com/documents/v2/v2.shop.get_shop_info?module=92&type=1)
+- [API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [get_shop_info](references/apis/get-shop-info.md)
+- [get_profile](references/apis/get-profile.md)
+- [update_profile](references/apis/update-profile.md)
+- [set_shop_holiday_mode](references/apis/set-shop-holiday-mode.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Files, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [JSON responses saved to local files, with stdout containing full JSON for small responses or summaries for larger responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses LinkFox API key environment variables and requires an authorized Shopee shop selected through the related auth skill.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

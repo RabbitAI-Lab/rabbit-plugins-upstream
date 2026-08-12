@@ -1,44 +1,59 @@
-## Description: <br>
-MiniMax lets an agent operate MiniMax through an OOMOL-connected account for model discovery, token estimation, and non-streaming response creation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MiniMax (minimax.io). Use this skill for ANY MiniMax request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect MiniMax connector schemas, list or retrieve OpenAI-compatible MiniMax model metadata, estimate input tokens, and create non-streaming MiniMax responses through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL as the credential-handling connector for MiniMax. <br>
-Mitigation: Install only if that connector model is acceptable, and avoid handling raw MiniMax credentials outside the OOMOL connection flow. <br>
-Risk: The first-time setup path includes remote oo CLI installer commands. <br>
-Mitigation: Treat the installer like any third-party installer and review it before running it; use setup commands only when oo is missing or authentication fails. <br>
-Risk: The create_response action changes MiniMax state by creating a non-streaming response. <br>
-Mitigation: Fetch the live connector schema, review the exact JSON payload and expected effect, and get user confirmation before running the write action. <br>
+## Use Case:
 
+Developers and agents use this skill to operate MiniMax through an OOMOL-connected account, including model discovery, token estimation, response creation, and video generation workflows.
 
-## Reference(s): <br>
-- [MiniMax homepage](https://www.minimax.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [MiniMax ClawHub listing](https://clawhub.ai/oomol/skills/oo-minimax) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo connector schemas and JSON payloads; create_response is a write action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact frontmatter and server release metadata) <br>
+Risk: Write actions can create MiniMax responses or video generation tasks in the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact payload and expected account effect with the user before running write-tagged actions.
+
+Risk: Destructive actions can delete MiniMax video generation tasks.
+
+Mitigation: Confirm the target task and obtain explicit user approval before running destructive actions.
+
+Risk: The skill depends on a trusted OOMOL account and MiniMax connection.
+
+Mitigation: Use only trusted connections and review payloads carefully before approving write or destructive commands.
+
+## Reference(s):
+
+- [ClawHub MiniMax skill](https://clawhub.ai/oomol/skills/oo-minimax)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [MiniMax homepage](https://www.minimax.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include connector JSON results and execution identifiers returned by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

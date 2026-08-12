@@ -67,12 +67,13 @@ Copy the entire repository into your AI agent's skills directory:
 
 ```
 <project>/.skills/code_flow_graph/
-  SKILL.md
-  example/
-    code_flow_graph.html
-    code_flow_graph_data.js
-  references/
-    data_format.md
+  SKILL.md            # Main skill instructions (~150 lines: when/what/gotchas/workflow)
+  config.json         # User preferences (output path, language, thresholds)
+  example/            # HTML template + example data
+  references/         # Data format spec + deep-dive types + analysis strategy
+  templates/          # Composable code patterns (node types, skeleton)
+  scripts/            # Validation helpers (5-point verification)
+  state/              # Cross-session persistence (gitignored)
 ```
 
 Then ask your AI: *"Visualize the code architecture of this project"* or *"Generate a code graph for this module"*.
@@ -81,7 +82,25 @@ The AI will:
 1. Analyze the project structure and discover entry points
 2. Generate an Overview diagram immediately (no scoping questions)
 3. Offer deep-dive options for specific call chains, UI layers, or data types
-4. Incrementally append new diagram pages as you select options
+4. Generate selected deep-dive diagrams using composable templates
+5. Validate output with `scripts/validate_data.js`
+6. Incrementally append new diagram pages as you select options; track progress across sessions
+
+### Configuration
+
+Edit `config.json` to customize behavior:
+
+```json
+{
+  "output_path": "docs/code_graph",
+  "language": "zh",
+  "default_scope": "project",
+  "include_external_deps": true,
+  "max_call_depth": 4,
+  "fan_out_threshold": 2,
+  "fan_in_threshold": 3
+}
+```
 
 ### Standalone Usage
 
@@ -90,6 +109,14 @@ You can also use the viewer independently:
 1. Copy `example/code_flow_graph.html` to your project
 2. Create a `code_flow_graph_data.js` file following the format in `references/data_format.md`
 3. Open the HTML file in a browser
+
+### Validation
+
+Use the included validation script to check generated data files:
+
+```bash
+node scripts/validate_data.js path/to/code_flow_graph_data.js
+```
 
 ## Data Format
 
@@ -109,15 +136,15 @@ Traces the **complete call chain** of one entry function. Nodes are organized le
 
 For UI projects (Qt, React, Web, etc.). Uses `widget` type nodes with sections for Widgets, Event Handlers, and Slots. Dashed pink connections link event handlers to business logic.
 
+### UI Layout Visualization
+
+Interactive nested widget-box tree for UI projects. Uses `UI_LAYOUT_VIEWS` data structure. Appears in sidebar under "🖼️ UI 布局" separator.
+
 ### Data Type Diagram
 
-Each dataclass/type definition → node with `type: 'data'` (peach color). Fields listed as attrs with type in the `val` field. Connections show how data flows between components:
+Each dataclass/type definition → node with `type: 'data'` (peach color). Fields listed as attrs with type in the `val` field. `fieldDetail` enables a right-sidebar computation panel showing how each field gets its value.
 
-| Connection Color | Meaning |
-|-----------------|---------|
-| 🔵 Blue | Data passed as input / output between functions |
-| 🟢 Green | Data constructed or returned by a function |
-| 🟠 Peach | Data consumed by an external dependency |
+See [`references/deep_dive_types.md`](references/deep_dive_types.md) for generation details.
 
 ## Color Scheme
 
@@ -125,13 +152,13 @@ Uses [Catppuccin Mocha](https://github.com/catppuccin/catppuccin) palette. Color
 
 | Type | Color | Badge |
 |------|-------|-------|
-| `entry` | 🟡 Yellow (`#f9e2af`) | ENTRY |
-| `class` | 🔵 Blue (`#89b4fa`) | CLASS |
-| `module` | 🟢 Green (`#a6e3a1`) | MODULE |
-| `function` | 🟣 Mauve (`#cba6f7`) | FUNC |
-| `data` | 🟠 Peach (`#fab387`) | DATA |
-| `widget` / `QDialog` | 💎 Sapphire (`#74c7ec`) | UI CLASS |
-| `slots` | 🩷 Pink (`#f5c2e7`) | SLOTS |
+| `entry` | Yellow (`#f9e2af`) | ENTRY |
+| `class` | Blue (`#89b4fa`) | CLASS |
+| `module` | Green (`#a6e3a1`) | MODULE |
+| `function` | Mauve (`#cba6f7`) | FUNC |
+| `data` | Peach (`#fab387`) | DATA |
+| `widget` / `QDialog` | Sapphire (`#74c7ec`) | UI CLASS |
+| `slots` | Pink (`#f5c2e7`) | SLOTS |
 
 > Nodes with `external: true` are rendered with dashed borders and an `EXT` tag to indicate third-party dependencies.
 
@@ -141,12 +168,12 @@ All connections render with a **gradient stroke** from transparent at source to 
 
 | Color | Style | Meaning |
 |-------|-------|---------|
-| 🟢 Green (`#a6e3a1`) | Solid | Direct function call |
-| 🔴 Red (`#f38ba8`) | Solid | Inheritance / override |
-| 🔵 Blue (`#89b4fa`) | Solid | Data flow / return value |
-| 🩷 Pink (`#f5c2e7`) | Dashed | Signal / event / callback |
-| 🟠 Peach (`#fab387`) | Solid | External dependency call |
-| ⚫ Overlay (`#6c7086`) | Solid | Weak reference / optional |
+| Green (`#a6e3a1`) | Solid | Direct function call |
+| Red (`#f38ba8`) | Solid | Inheritance / override |
+| Blue (`#89b4fa`) | Solid | Data flow / return value |
+| Pink (`#f5c2e7`) | Dashed | Signal / event / callback |
+| Peach (`#fab387`) | Solid | External dependency call |
+| Overlay (`#6c7086`) | Solid | Weak reference / optional |
 
 ## Keyboard Shortcuts
 
@@ -159,21 +186,6 @@ All connections render with a **gradient stroke** from transparent at source to 
 | `Escape` | Close search / detail panel |
 | Click function | Copy function name + highlight connections |
 | Click blank area | Clear all highlights |
-
-## Element Mapping
-
-| Code Concept | Graph Element |
-|---|---|
-| Entry function | NODE (`type: 'entry'`) — ENTRY badge |
-| Class / core object | NODE (`type: 'class'`) — CLASS badge |
-| Module / package | NODE (`type: 'module'`) — MODULE badge |
-| Function group / utility | NODE (`type: 'function'`) — FUNC badge |
-| Data type / dataclass | NODE (`type: 'data'`) — DATA badge |
-| UI widget / dialog | NODE (`type: 'widget'`) — UI CLASS badge |
-| Small helper called once | attr with `children` inside parent node |
-| Third-party dependency | NODE with `external: true` — dashed border + EXT tag |
-| Direct function call | CONNECTION (solid, gradient toward callee) |
-| Signal / event / callback | CONNECTION (dashed, gradient toward target) |
 
 ## License
 

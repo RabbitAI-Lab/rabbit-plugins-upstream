@@ -1,45 +1,60 @@
-## Description: <br>
-Runs Cue deep research for capital operations scenarios, cross-checking public data sources and returning sourced conclusions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用 Cue 跑「资本运作」场景的深度研究：全量回溯上市公司的并购重组、股份回购、股权激励与分拆商机，多源公开数据交叉、深挖战略意图与市场影响，每个结论都带来源链接可回查。
 
-## Publisher: <br>
-[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu)
 
-## Use Case: <br>
-Capital-markets researchers, analysts, and operators use this skill to run Cue research on corporate capital operations such as buybacks, equity incentives, M&A, event timelines, disclosures, and regulatory issues. It supports public-data research and should not be treated as legal, underwriting, or due-diligence advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow installs or updates an external Cue runner that reads the user's Cue API key from local configuration. <br>
-Mitigation: Install only if comfortable with the Cue runner and keep the Cue API key managed through the expected local Cue configuration. <br>
-Risk: Deep research runs can consume Cue credits. <br>
-Mitigation: Confirm the credit-spend prompt before each run and stop if the selected research target or buddy is unclear. <br>
-Risk: Outputs are based on public-data research and may be incomplete for legal, underwriting, or due-diligence decisions. <br>
-Mitigation: Use sourced results as research inputs and review them with appropriate professional or compliance checks before relying on them. <br>
+## Use Case:
 
+Managers, investment bankers, investors, and research teams use this skill to run Cue deep research on listed-company capital operations, including M&A, buybacks, equity incentives, spin-off opportunities, event timelines, and meeting-note interpretation. It returns traceable public-source research to support evaluation of market-value impact and future capital-allocation decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wangxiaoxu/skills/cue-capital-operations) <br>
-- [Cue playbook API](https://cuecue.cn/api/playbook) <br>
-- [Cue skills runner repository](https://github.com/sensedeal/cue-skills) <br>
-- [Cue skills runner mirror](https://gitee.com/sensedeal/cue-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown report with sourced links and inline shell commands when setup is needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Cue account credits and explicit user confirmation before running deep research.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: First use may clone or update an external Cue runner from GitHub or Gitee.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the runner source before installation when local code execution risk matters.
+
+Risk: Research execution uses a Cue account key and consumes Cue credits.
+
+Mitigation: Confirm the selected buddy, subject, and credit use with the user before running the research command.
+
+Risk: Capital-markets research based on public data can be incomplete or unsuitable as a substitute for due diligence, legal review, or underwriting.
+
+Mitigation: Preserve source links, present conclusions as public-source research, and route high-stakes decisions through qualified review.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/wangxiaoxu/skills/cue-capital-operations)
+- [Cue Playbook API](https://cuecue.cn/api/playbook)
+- [Cue Skills Runner on GitHub](https://github.com/sensedeal/cue-skills)
+- [Cue Skills Runner on Gitee](https://gitee.com/sensedeal/cue-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown report with source links and inline shell commands when setup or execution is needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses public data, requires a Cue account key for execution, and requires user confirmation before consuming Cue credits.]
+
+## Skill Version(s):
+
+1.0.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

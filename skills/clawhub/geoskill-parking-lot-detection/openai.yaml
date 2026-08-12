@@ -1,0 +1,13 @@
+name: geoskill-parking-lot-detection
+display_name: 停车场检测
+description: |
+  Detect parking lots using asphalt spectral signature, regular row and column texture, and painted marking density.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-parking-lot-detection.py
+runtime: python>=3.9
+tags:
+  - ai
+  - extraction
+  - gis
+  - remote-sensing

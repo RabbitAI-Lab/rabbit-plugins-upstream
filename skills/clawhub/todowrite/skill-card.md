@@ -1,43 +1,60 @@
-## Description: <br>
-Todowrite routes agent TODOs to session tasks, persistent checklist files, or GitHub Issues while enforcing task-reporting and synchronization discipline. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Route TODO checklists to the right storage and guide agents on TaskList conversation IDs, completion reports, priority prefixes, medium synchronization, and the included claude-task CLI.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent operators use Todowrite to decide whether TODO work belongs in session tracking, persistent checklist files, or team-shared GitHub Issues, and to keep related task records synchronized. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update task and checklist records during task transfers, so ambiguous transfer language could move or close the wrong work item. <br>
-Mitigation: Confirm ambiguous transfer scope, require explicit direction before creating issues, and report both the source and destination updates. <br>
+## Use Case:
 
+Developers and agent users use this skill to choose the right task medium for session work, persistent checklists, team-shared issues, and task JSON ledgers. It helps agents keep task state synchronized and produce visible completion reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/todowrite) <br>
-- [Task Completion Report Format](completion-report.md) <br>
-- [TaskList Conversation IDs](conversation-id.md) <br>
-- [Task-Checklist Two-Way Sync](fix-plan-sync.md) <br>
-- [Priority Prefix](priority-prefix.md) <br>
-- [Work Record Media Separation](media-separation.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with checklist and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update TaskList state, checklist files, and GitHub issue records when the user explicitly directs those routes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release metadata and changelog, released 2026-07-23) <br>
+Risk: The skill manages persistent task and checklist state, including helper tooling that can create, update, or delete local task records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only when persistent task management is desired, review claude-task CLI behavior before use, and surface write results to the user.
+
+Risk: Broad requests such as move, defer, hold, or transfer can lead an agent to update the wrong task medium.
+
+Mitigation: Confirm ambiguous transfer scope before changing state and keep task, checklist, and issue records synchronized in the same turn.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/todowrite)
+- [Skill definition](artifact/SKILL.md)
+- [claude-task CLI topic](artifact/claude-task.md)
+- [TaskList conversation IDs](artifact/conversation-id.md)
+- [Completion report format](artifact/completion-report.md)
+- [Task-checklist sync](artifact/fix-plan-sync.md)
+- [Priority prefix](artifact/priority-prefix.md)
+- [Work record media separation](artifact/media-separation.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline shell command examples and task/checklist conventions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May update local task JSON files or checklist files when the agent follows the workflow.]
+
+## Skill Version(s):
+
+0.7.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

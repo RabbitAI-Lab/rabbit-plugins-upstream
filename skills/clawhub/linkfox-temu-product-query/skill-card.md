@@ -1,45 +1,59 @@
-## Description: <br>
-Filters Temu products by keyword, product or store ID, category, price, rating, reviews, sales, listing date, fulfillment model, region, and tags. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+按多维度筛选 Temu 商品，包括关键词、商品 ID、店铺 ID、类目、价格、评分、评论、销量、上架时间、托管模式、地区和标签等。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and developers use this skill to query and compare Temu products for product research, using marketplace attributes, sales signals, and fulfillment details to narrow results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API credentials, Temu query content, and session metadata can be sent to a configurable LinkFox gateway. <br>
-Mitigation: Install only if LinkFox is trusted for this data, and keep LINKFOX_TOOL_GATEWAY unset unless the destination is intentionally controlled. <br>
-Risk: Credential or billing failures can lead the workflow to request installation of a separate onboarding skill. <br>
-Mitigation: Review the onboarding skill package before approving installation or use the documented LinkFox account and credit guidance instead. <br>
-Risk: Full query results may be saved locally and can fall back outside the current project directory. <br>
-Mitigation: Run the helper from an appropriate workspace and review generated linkfox data files before sharing logs or archives. <br>
-Risk: Broad or repeated paginated queries can consume LinkFox credits based on returned product count. <br>
-Mitigation: Confirm scope, page size, and pagination with the user before running high-volume queries. <br>
+## Use Case:
 
+External users and developers use this skill to query and filter Temu product data for product research, ecommerce selection, and competitive analysis. It can also guide users through LinkFox API key setup or billing recovery when authentication or balance errors occur.
 
-## Reference(s): <br>
-- [Temu product query API reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-product-query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API parameters and optional shell command output; helper script writes JSON result files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key; paginated product queries may consume credits based on returned product count.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: The skill contacts LinkFox services and can use LINKFOX_* environment overrides for service URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when LinkFox service access is expected, and run with trusted LINKFOX_* environment values.
+
+Risk: The onboarding flow can handle phone verification codes, API keys, billing plans, and payment ordering.
+
+Mitigation: Review onboarding and billing steps before use, and treat verification codes, generated API keys, payment links, and order details as sensitive.
+
+Risk: The query script stores full product lookup responses in a local linkfox session directory.
+
+Mitigation: Review stored response files for sensitive business data and apply local retention or cleanup controls appropriate for the workspace.
+
+## Reference(s):
+
+- [Temu 商品查询 API 参考](references/api.md)
+- [解决认证和积分问题](references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-product-query)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API results and optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May store full API responses under a local linkfox session directory and summarize larger responses inline.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

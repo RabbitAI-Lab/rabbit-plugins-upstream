@@ -1,50 +1,59 @@
 ---
 name: dinzeeagent
-description: "Cross-border e-commerce data agent. The user triggers a data source with an at-source marker such as @sif, or installs independent Dinzee business skills from the skill registry. The agent discovers available data sources and tools at runtime, calls them through the Dinzee gateway, and handles unified authentication and per-call billing. Upstream MCP endpoints and credentials are never exposed."
+description: "Cross-border e-commerce data agent. The user triggers a data source with an at-source marker such as @sif, or triggers a bundled local business skill with @<task-name> plus a natural-language task instruction. The agent syncs official Dinzee skills into the local Hermes/OpenClaw runtime, extracts business parameters, runs the matched local skill, and lets every data/tool call route through the Dinzee gateway for unified authentication and per-call billing. Available sources and tools are discovered at runtime from the gateway; upstream MCP endpoints and credentials are never exposed."
+metadata: {"DinzeeAgent":{"emoji":"🦅","homepage":"https://gateway.dinzee.ai/","requires":{"env":["DINZEE_USER_TOKEN"]}}}
 ---
 
 # DinzeeAgent — 跨境电商数据 Agent
 
-DinzeeAgent 让你用 `@<数据源>` 触发第三方电商数据能力，也支持从 Dinzee skill 仓库安装独立业务 skill。看到触发标记后，**你（agent）自行编排**调用该数据源的多个 MCP 工具，完成用户的调研/分析任务，最后汇总成结论。
+DinzeeAgent 让你用 `@<数据源>` 触发第三方电商数据能力，也让用户用 `@<业务任务>` 触发已同步到本地 Hermes/OpenClaw runtime 的 Dinzee 业务 skill。看到触发标记后，**你（agent）自行编排**调用该数据源的多个 MCP 工具，或运行匹配的本地业务 skill，完成用户的调研/分析任务，最后汇总成结论。
 
-所有 Dinzee 付费数据调用经由 **Dinzee Gateway**（`https://gateway.dinzee.ai/`）：网关负责鉴权、调用真实上游、记录 provider/tool 用量明细；本地业务 skill 带 `skill_slug + skill_run_id` 编排多次 MCP 调用后，最后通过 `/v1/skill-runs/finalize` 按本次 skill 总点数一次性结算。上游地址与凭证对调用方完全隐藏，本地 skill 不保存、不读取、不暴露第三方上游密钥。
-
-例外：用户自带账号的官方外部 MCP（例如 Sellersprite / 卖家精灵）不走 Dinzee Gateway，不扣 Dinzee 点数，也不能使用 Dinzee 平台共享 key。遇到这类需求时，优先调用用户本地已经配置好的官方 MCP；如果未配置，提示用户用自己的官方 key 配置。见 `references/seller-sprite.md`。
-
-核心执行原则：
-
-```text
-Hermes / OpenClaw / Codex 本地只负责执行 skill playbook。
-所有 Dinzee 付费数据源调用必须进入 Dinzee Gateway 的 /v1/mcp/calls。用户自带官方 MCP（如 Sellersprite）直接走用户本地 MCP，不走网关。
-Dinzee Gateway 负责鉴权、调用真实上游、记录明细，并在 skill finalize 时按 `skill_slug` 汇总扣费。
-本地 skill 不保存、不暴露上游数据源密钥。
-不要调用 server-skill-run 执行本地业务 workflow。
-*_run 永远只做完成标记，不作为数据源扣费。
-失败时返回 request_id，便于后台查账。
-```
+所有调用经由 **Dinzee 网关**（`https://gateway.dinzee.ai/`）：网关负责鉴权、按次扣点、转发到上游 MCP server。上游地址与凭证对调用方完全隐藏。
 
 **有哪些数据源、每个数据源有哪些工具，都由网关运行时决定（随时新增），本文档不写死。** 每次任务先用 `providers` / `list-tools` 实时发现（见下文「工具发现」）。
 
 ## 内置业务能力
 
-DinzeeAgent 是总入口和数据网关客户端。当前包不内置执行型 task skill，也不随包注册 server-skill manifest。业务 skill 需要从 Dinzee skill 仓库单独安装/更新。
+DinzeeAgent 是总入口。用户只需要安装/更新 `dinzeeagent`，再运行一次 `sync-skills`，不需要知道每个业务 skill 的安装名称。
+
+当前随 DinzeeAgent 推荐同步的业务能力：
+
+### Amazon 商品/市场分析
+
+- `@amazon-product-attribute-market-analysis`：美国站前台搜索、配送邮编模拟、TOP 商品采集、属性打标、销量容量饼图、爆款组合锁定。
+
+### 爆发新品/黑马挖掘
+
+- `@breakout-product-radar`：指定类目近周期新晋上架/新追踪商品，过滤 BSR 阈值，按销量权重排序并输出趋势报告。
+- `@momentum-product-scout`：低评价量、高近月销量商品扫描，识别视觉创新、功能差异化、套装组合、强 IP、季节/人群场景等起量路径。
 
 ### 数据网关工具
 
-- `@sif` 及其他已开放 Dinzee 数据源：通过 `providers` / `list-tools` 实时发现当前可用工具，按用户 token 计费调用。
-- `@sellersprite` / `@卖家精灵`：不走 Dinzee Gateway。要求用户自行配置官方 Sellersprite MCP，并直接调用用户本地 MCP；Dinzee 不扣点、不代理、不保存 key。
+- `@sif` 及其他已开放数据源：通过 `providers` / `list-tools` 实时发现当前可用工具，按用户 token 计费调用。
 
 ## Setup
 
 1. 取得用户接入 token（`sut_` 开头，由 ai_web 签发，每个用户独立）。
 2. 配置 token（二选一）：
-     （写入 `~/.dinzee/credentials.json`，权限 0600，重启不丢）
-3. （可选）覆盖网关地址：`export DINZEE_GATEWAY_BASE=https://gateway.dinzee.ai/`
-4. 自检：`python3 <skill>/scripts/dinzee.py status` 与 `python3 <skill>/scripts/dinzee.py providers`，确认 token 有效并看到当前可用的数据源。
+   - 环境变量（推荐，符合 openclaw 习惯）：`export DINZEE_USER_TOKEN=sut_xxxxxxxx`
+   - 或保存到凭证文件：`python3 <skill>/scripts/dinzee.py login sut_xxxxxxxx`
+     （默认写入 `/opt/data/.dinzee/credentials.json`，权限 0600，重启不丢）
+3. （可选）覆盖凭证路径：
+   `export DINZEE_CREDENTIALS_PATH=/your/persistent/path/credentials.json`
+   - 建议使用绝对路径，并确保运行 Agent 的系统用户可写。
+   - 旧路径 `~/.dinzee/credentials.json` 仅作为兼容读取回退；`login` 和 `logout` 不会写入或删除旧路径。
+4. MCP 调用结果默认写入 `/opt/data/.dinzee/data`。可覆盖：
+   `export DINZEE_DATA_DIR=/your/persistent/data`
+   - 建议使用绝对路径，并确保运行 Agent 的系统用户可写。
+   - 数据目录及 provider/tool 子目录会显式设置为 `0777`，数据 JSON 会设置为 `0666`。
+   - 该开放权限适用于单租户、容器内仅运行可信程序的部署；凭证文件仍严格保持 `0600`。
+   - 单次调用可通过 `--no-save` 禁止落盘。
+5. （可选）覆盖网关地址：`export DINZEE_GATEWAY_BASE_URL=https://gateway.dinzee.ai/`
+6. 自检：`python3 <skill>/scripts/dinzee.py status` 与 `python3 <skill>/scripts/dinzee.py providers`，确认 token 有效并看到当前可用的数据源。
 
 ## 装 / 更新数据 skill（安装不扣费）
 
-DinzeeAgent 既是数据网关客户端，也是 **skill 交付客户端**——用户可以通过它把我们的数据 skill 装进 agent、或更新到新版。安装/更新只交付包，不扣费；真实扣费发生在本地业务 skill 的付费数据调用时，通过 Gateway 按 `provider/tool` 成功调用次数计费，失败由 Gateway 自动退款。
+DinzeeAgent 既是数据网关客户端，也是 **skill 交付客户端**——用户可以通过它把我们的数据 skill 装进 agent、或更新到新版。安装/更新只交付包，不扣费；真实扣费发生在本地业务 skill 成功执行后，通过 Gateway 工具调用或 `dinzee_skill_meter` 记录。
 
 当用户说「**@dinzeeagent 安装 <skill>**」「**@dinzeeagent 更新 skill**」「更新一下技能」之类时：
 
@@ -64,31 +73,67 @@ DinzeeAgent 既是数据网关客户端，也是 **skill 交付客户端**——
    ```
    只拉取新版本包；安装/更新不扣费。
 
-4. **同步 Dinzee 业务 skill 包**：
+4. **同步 Dinzee 官方业务 skill 包（推荐）**：
    ```bash
    python3 <skill>/scripts/dinzee.py sync-skills
    ```
-   这会自动安装/更新当前由 Dinzee skill 仓库提供的业务 skill，用户不需要逐个记住子 skill 的 slug。
+   这会自动安装/更新当前随 DinzeeAgent 推荐的业务 skill，用户不需要知道每个子 skill 的 slug。当前包含官方商品/市场分析、爆发新品、低评高销挖掘，以及从 Dinzee skill 仓库导入的 Amazon/1688/SIF/BSC 等业务 skill。
 
 **注意**：
 - 安装/更新不扣费；不要把包交付当成业务调用收费。
 - `dinzeeagent` 自身是免费客户端，用 clawhub 安装/更新。
-- 业务扣费发生在本地业务 skill 完成后的 `finalize-skill-run` 汇总结算上；单个 Gateway `provider/tool` 调用只记录用量。不要用 `server-skill-run` 或 `*_run` 作为本地业务 skill 的数据源扣费入口。
+- 业务扣费只在本地 skill 成功完成并准备交付时发生，来源应是具体 Gateway 工具或 `dinzee_skill_meter.<skill>_run`。
 
-## 本地运行业务 skill
+## 本地运行业务 skill（推荐路径）
 
-当用户要运行一个已经封装好的任务包，先通过 `skills` 查看可安装包，再通过 `skill-install <slug>` 或 `sync-skills` 安装到本地 Hermes/OpenClaw runtime。DinzeeAgent 本包不再内置具体执行任务；已安装的独立业务 skill 以其自身 `SKILL.md` 为准。
+当用户要运行一个已经封装好的任务包，走**本地 Hermes/OpenClaw runtime 执行 skill**。Dinzee 服务端只负责网关鉴权、上游工具转发和扣点，不负责替用户执行整个业务 workflow。
 
-## 用户自带官方 MCP：Sellersprite / 卖家精灵
+对当前内置业务任务，先确认本地已同步这些 skill；如果本地还没有，先执行 `sync-skills`。随后打开对应本地 skill 的 `SKILL.md`，按其中脚本/流程运行；这些脚本会使用 `DINZEE_USER_TOKEN` 调 Dinzee gateway，工具调用或最终 `skill_meter` 会实时计费。
 
-Sellersprite 是用户自费官方服务，不属于 Dinzee Gateway 计费数据源。处理 `@sellersprite`、`@卖家精灵`、卖家精灵关键词/市场/ASIN/评论/ABA 等需求时：
+### 统一用户调用方式
 
-1. 不调用 `python3 <skill>/scripts/dinzee.py list-tools --provider sellersprite`，也不通过 `/v1/mcp/calls` 调 Sellersprite。
-2. 检查用户当前 agent/client 是否已配置官方 Sellersprite MCP。
-3. 如果已配置，直接调用用户本地 Sellersprite MCP 的 tools/list 和 tools/call。
-5. 这类调用不扣 Dinzee 点数；额度消耗由用户自己的 Sellersprite 账号承担。
+用户不需要知道 `skill_slug`、`params`、`idempotencyKey`。面向用户只暴露一种格式：
 
-详细说明见 `references/seller-sprite.md`。
+```text
+@任务名 自然语言任务指令
+```
+
+例如：
+
+```text
+@amazon-product-attribute-market-analysis
+模拟美国站点前台搜索，配送邮编设置为90001，搜索关键词为「MagSafe phone tripod」，抓取前50条TOP商品，完成属性打标、销量占比、饼状图和趋势总结。
+```
+
+OpenClaw/Hermes/Agent 看到这类指令时必须执行以下规则：
+
+1. **识别任务包**：如果 `@` 后面正好是某个已同步业务 skill 名称，直接使用该本地 skill；如果用户没有写精确名称，则根据任务语义从本地已同步 Dinzee 业务 skill 中选择最匹配的一个。
+2. **抽取业务参数**：从自然语言里抽取站点、邮编、关键词、数量、类目、时间窗口、BSR 阈值、评价数阈值、销量阈值等，只保留业务参数。
+3. **标准化参数**：把「美国 / 美国站 / US / Amazon.com」统一成 `"US"`；把「前50条 / top 50」统一成 `"limit": 50`；缺失但 manifest 有默认值的参数使用默认值。
+4. **执行本地 skill**：打开匹配 skill 的 `SKILL.md`，优先运行其 `scripts/` 下的封装脚本；不要把用户转去填写 `skill_slug`、变量名或 JSON 参数。
+5. **返回结果**：最终向用户展示报告文件/链接、结果摘要、关键样本和扣点明细。工具扣点明细来自 gateway 返回或运行日志。
+
+常用操作：
+
+```bash
+# 一键同步/更新 Dinzee 官方业务 skill
+python3 <skill>/scripts/dinzee.py sync-skills
+
+# 然后根据用户 @ 的任务名，进入对应本地 skill 执行其 SKILL.md 里的流程
+```
+
+当前随包注册的业务 skill 以 `scripts/dinzee.py sync-skills` 的清单为准；包括商品属性分析、爆发新品、低评高销挖掘，以及 Amazon/1688/SIF/BSC 等导入业务 skill。
+
+Hermes 用户任务优先走本地业务 skill + Dinzee gateway。历史调试命令保留在 CLI 中，仅供开发者排查旧链路。
+
+### 三个内置任务的自然语言映射
+
+- 用户提到「美国站前台搜索 / 商品属性打标 / 容量饼状图 / 爆款组合锁定」时，映射到 `amazon-product-attribute-market-analysis`。
+  常见参数：`site`、`zipcode`、`keyword`、`limit`。
+- 用户提到「近30天新上架 / BSR前10000 / 新品黑马 / 类目趋势」时，映射到 `breakout-product-radar`。
+  常见参数：`site`、`category`、`days_new`、`bsr_threshold`、`limit`。
+- 用户提到「低评价量 / 高销量 / 评价少但月销高 / 爆发单品」时，映射到 `momentum-product-scout`。
+  常见参数：`site`、`max_reviews`、`min_monthly_sales`、`limit`。
 
 ## 工具发现：动态，不要硬编码（核心）
 
@@ -117,55 +162,7 @@ Sellersprite 是用户自费官方服务，不属于 Dinzee Gateway 计费数据
    ```
 5. **汇总**：把多次调用的 JSON 结果整合成一份给用户的结论（不要把原始 JSON 直接丢给用户）。
 
-带 `skill_slug + skill_run_id` 的业务 skill 调用不会在单个工具阶段扣点；网关会记录每个成功工具的 `points_cost`。skill 结束后必须调用 `finalize-skill-run`，网关按本次 run 的成功工具总点数，以 `workflow_id=<skill_slug>` 一次性扣点并返回工具调用统计。
-
-### 本地业务 skill 的计费闭环（必须）
-
-业务 skill 运行时必须生成一个稳定的 `skill_run_id`，并在本次运行里的每个 Dinzee MCP 调用中传入 `skill_slug` 和 `skill_run_id`：
-
-### 本地业务 skill 烟雾测试与版本校验
-
-做安装后验证/烟雾测试时，优先遵循下面几条：
-
-1. **安装版本以 `<skill_dir>/_meta.json` 为准**。某些 Dinzee skill 的 `SKILL.md` frontmatter 版本号可能滞后于实际安装版本；当用户指定测试 `@1.0.4` 这类版本时，先读 `_meta.json` 再下结论。
-2. **`dinzee_skill_runner.py`、实际 Gateway 调用、`meter_skill_run.py` 必须共用同一个 `DINZEE_SKILL_RUN_ID`**。否则 finalize 容易报 `CLIENT_SKILL_RUN_EMPTY`。
-3. **重复测试必须更换每次调用的 `idempotencyKey`**。同一工具、不同参数却复用旧 key，会触发 `409 IDEMPOTENCY_CONFLICT`。
-4. **`report_hosting.upload_artifacts` 返回 `mode=local_artifact_placeholder` 时，只能证明 Gateway 调用链和 finalize 可用**，不能当作“公网报告托管功能已完整验证”。
-5. **当用户要求“每个 skill 都要按同一结算标准来”时，以 `sif-amazon-ads-analysis@1.0.5` 为基准审计 3 个脚本位点**：
-   - `scripts/meter_skill_run.py` 必须复用 `dinzee_wrapper.finalize_skill_run()`，不要自己裸调 finalize 接口。
-   - `scripts/dinzee_skill_runner.py` 必须把 `skill_run_id` 写入 `<OUTPUT_DIR>/data/run_context.json`。
-   - `scripts/dinzee_wrapper.py` 必须在 finalize 成功后，用服务端返回重写 `dinzee_billing_response.json` 与 `billing_summary.json`。
-6. **不要把“finalize 成功”误判为“整个业务 skill 已完成可计费闭环”**。还要继续检查主业务数据调用是否真的经过 Dinzee Gateway；如果业务脚本仍直连外部 MCP 或硬编码第三方 key，finalize 可能成功但 `tool_usage` 为空或 0 点。
-7. 当主业务数据必须走用户本地官方 MCP、但又需要 Dinzee 计费闭环时，采用“混合链路”模式：主分析保留在本地官方 MCP，下挂 1 个同 `DINZEE_SKILL_RUN_ID` 的 Dinzee 可计费补充步骤，再 finalize。已验证样例见 `references/mixed-chain-business-skills.md`。
-8. 详细做法见 `references/dinzee-business-skill-smoke-tests.md` 与 `references/business-skill-finalize-standard.md`。
-
-```bash
-export DINZEE_SKILL_SLUG="<business-skill-slug>"
-export DINZEE_SKILL_RUN_ID="run_$(date +%s)_$RANDOM"
-python3 <skill>/scripts/dinzee.py call <tool_name> --provider <provider> --args '<json>'
-```
-
-或显式传参：
-
-```bash
-python3 <skill>/scripts/dinzee.py call <tool_name> \
-  --provider <provider> \
-  --skill-slug <business-skill-slug> \
-  --skill-run-id <run_id> \
-  --idempotency-key <stable-step-key> \
-  --args '<json>'
-```
-
-每个工具成功后返回 `billing.chargeStatus=deferred`，表示已经记录用量、等待本次 skill 汇总结算。业务 skill 完成后必须调用：
-
-```bash
-python3 <skill>/scripts/dinzee.py finalize-skill-run \
-  --skill-slug <business-skill-slug> \
-  --skill-run-id <run_id> \
-  --idempotency-key <stable-final-key>
-```
-
-finalize 返回 `total_points`、`points_charged`、`billing_ledger_id` 和 `tool_usage`。`tool_usage` 是本次 skill 的 provider/tool 明细；后台扣费只发生一次，`workflow_id=<skill_slug>`。
+每次「可扣点」工具调用都会从用户积分扣除对应点数（单价见 `list-tools` 的 `points_cost`）。
 
 ## CLI 速查
 
@@ -179,8 +176,12 @@ python3 <skill>/scripts/dinzee.py list-tools --provider <source>
 # 查看单个工具是否可用 / 是否扣点
 python3 <skill>/scripts/dinzee.py describe <tool>
 
-# 调用工具（JSON 入参；可用 --skill-slug / --skill-run-id 写入账单维度）
+# 调用工具（JSON 入参）
 python3 <skill>/scripts/dinzee.py call <tool> --args '<json>'
+
+# 调用结果默认保存到 /opt/data/.dinzee/data/<provider>/<tool>/
+# 如本次不需要落盘
+python3 <skill>/scripts/dinzee.py call <tool> --no-save --args '<json>'
 
 # 大入参从 stdin 读（heredoc）
 python3 <skill>/scripts/dinzee.py call <tool> --stdin <<'EOF'
@@ -193,12 +194,27 @@ python3 <skill>/scripts/dinzee.py --format json call <tool> --args '{...}'
 # 耗时较长的工具可调大超时（秒）
 python3 <skill>/scripts/dinzee.py call <tool> --timeout 300 --args '{...}'
 
+# 根据本地落盘文件查询网关中已持久化的原调用记录
+python3 <skill>/scripts/dinzee.py trace /opt/data/.dinzee/data/<provider>/<tool>/<record>.json
+
 # token 状态
 python3 <skill>/scripts/dinzee.py status
 
 # 一键安装/更新 Dinzee 官方业务 skill 包
 python3 <skill>/scripts/dinzee.py sync-skills
 ```
+
+## MCP 调用结果落盘与溯源
+
+- `call` 收到 HTTP 200 响应后，默认将完整请求、响应及溯源 ID 原子写入 JSON 文件。
+- 数据根目录、provider/tool 子目录均显式设置为 `0777`；数据 JSON 设置为 `0666`，不受容器 `umask` 影响。
+- 凭证文件不使用开放权限，始终保持 `0600`。
+- 默认路径为 `/opt/data/.dinzee/data/<provider>/<tool>/`；文件中不保存用户 token。
+- 保存提示输出到 stderr，不会污染 `--format json` 的 stdout。
+- `trace <path>` 优先使用文件中的 `call_id` 查询
+  `GET /v1/mcp/calls/{call_id}`；没有 `call_id` 或该记录返回 404 时，使用
+  `GET /v1/mcp/calls/lookup?idempotencyKey=...`。
+- `trace` 只读取网关已持久化的调用记录，不会重新调用 Provider，不扣点，也不退款。
 
 ## 错误处理
 

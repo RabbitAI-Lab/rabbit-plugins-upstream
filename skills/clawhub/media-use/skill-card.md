@@ -1,52 +1,66 @@
-## Description: <br>
-Agent Media OS for HyperFrames projects that helps agents resolve, generate, operate on, and reuse media assets including background music, sound effects, images, icons, logos, voices, grades, LUTs, captions, transcription, and background removal. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+media-use helps agents resolve, generate, edit, and reuse HyperFrames media assets, including BGM, SFX, images, icons, logos, voiceover, transcription, captions, background removal, visual treatments, color grades, and LUTs.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and creative agents use this skill to select, generate, transform, freeze, and reuse media assets for HyperFrames projects. It is suited to workflows that need local media ledgers, provider-aware media resolution, audio processing, captions, transcription, color treatments, and reusable project or cross-project assets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can contact cloud media providers, CDNs, model registries, package registries, and service APIs. <br>
-Mitigation: Review provider choices before sending private media to cloud services, and use --local-only for sensitive work when local providers and cached assets are sufficient. <br>
-Risk: Usage telemetry may be linked to a HeyGen email or account identity. <br>
-Mitigation: Set HYPERFRAMES_NO_TELEMETRY=1 or DO_NOT_TRACK=1 when telemetry should be disabled. <br>
-Risk: The skill uses local credential or profile files and stores reusable media state under ~/.media. <br>
-Mitigation: Inspect local credential, profile, and media-cache locations before shared or regulated use, and clear or isolate reusable state when switching projects or clients. <br>
-Risk: Some workflows can auto-install dependencies or use model and package registries. <br>
-Mitigation: Run in a controlled environment, review dependency sources, and pin or preinstall approved tools for production workflows. <br>
-Risk: Media adoption and recipe workflows can alter project media assumptions. <br>
-Mitigation: Back up frame.md and review generated ledgers, recipes, and asset selections before adopting them into an existing project. <br>
+## Use Case:
 
+Developers and media-building agents use this skill to resolve, generate, operate on, and reuse media assets for HyperFrames projects. It supports audio, images, icons, logos, voiceover, transcription, captions, background removal, visual treatments, cuts, reframing, color grades, and LUT workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/media-use) <br>
-- [Setup and providers](artifact/references/setup-providers.md) <br>
-- [Resolve](artifact/references/resolve.md) <br>
-- [Audio](artifact/references/audio.md) <br>
-- [Operations](artifact/references/operations.md) <br>
-- [Media treatments](artifact/references/media-treatments.md) <br>
-- [HeyGen CLI documentation](https://developers.heygen.com/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON snippets, file paths, and reusable media ledger entries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or reference local media files, frozen assets, captions, transcripts, color-treatment JSON, LUT files, and reusable project or global media state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.34 (source: server release metadata) <br>
+Risk: Telemetry may be linked to account identity when authenticated provider workflows are used.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set HYPERFRAMES_NO_TELEMETRY=1 or DO_NOT_TRACK=1 in client or sensitive workspaces.
+
+Risk: Media prompts, assets, likenesses, scripts, or brand materials may persist and be reused across projects.
+
+Mitigation: Use --local-only for private media and avoid global reuse for confidential material unless cross-project sharing is acceptable.
+
+Risk: The security verdict recommends review before installation in sensitive environments.
+
+Mitigation: Review the skill and its provider setup before deployment, especially where account-linked telemetry or shared media caches are unacceptable.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/media-use)
+- [Resolve and Reuse](references/resolve.md)
+- [Setup and Providers](references/setup-providers.md)
+- [Audio Engine](references/audio.md)
+- [Media Treatments](references/media-treatments.md)
+- [Operations](references/operations.md)
+- [Telemetry and Privacy](references/meta.md)
+- [HeyGen CLI Documentation](https://developers.heygen.com/cli)
+- [Pixabay Sound Effects](https://pixabay.com/sound-effects/)
+- [Pixabay Content License](https://pixabay.com/service/license-summary/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and CLI-oriented text with code blocks, JSON snippets, file paths, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce frozen local media files, paste-ready blocks, ledger records, treatment JSON, transcripts, captions, cut lists, and usage reports.]
+
+## Skill Version(s):
+
+1.0.39 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

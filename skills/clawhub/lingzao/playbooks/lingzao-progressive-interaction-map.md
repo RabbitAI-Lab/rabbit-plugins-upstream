@@ -1,5 +1,10 @@
 # Lingzao Progressive Interaction Map
 
+Read `router-index.json` before this file. Load this map only when the user's
+input is vague, link-only, or still ambiguous after input/platform/stage/intent
+classification. Do not use this file as an always-on substitute for the
+central route registry.
+
 This file is bundled inside the Lingzao Agent plugin. Use it to keep user interaction layered and progressive, similar to a lightweight skill stack instead of a pile of separate prompts.
 
 Core idea:

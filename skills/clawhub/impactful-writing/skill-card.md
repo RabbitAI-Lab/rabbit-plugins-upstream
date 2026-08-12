@@ -1,45 +1,58 @@
-## Description: <br>
-Write clear, emotionally resonant, and well-structured content that readers remember and act upon across social posts, articles, documentation, emails, comments, updates, and other prose. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Write clear, emotionally resonant, and well-structured content that readers remember and act upon. Use when writing or editing any text - Twitter posts, articles, documentation, emails, comments, updates - for maximum clarity, engagement, and impact.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers, writers, and other external users use this skill to draft or revise content for clarity, structure, emotional resonance, and actionability. It supports social posts, long-form writing, technical documentation, professional messages, GitHub comments, release notes, and similar prose. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad writing and editing triggers may shape sensitive legal, medical, or highly technical content beyond the skill's general-purpose guidance. <br>
-Mitigation: Use domain-specific review or a narrower skill for sensitive content before relying on final text. <br>
-Risk: General prose revisions may over-simplify, change tone, or weaken required terminology. <br>
-Mitigation: Review revised content against the source facts, audience, required terminology, and publication context before use. <br>
+## Use Case:
 
+Employees, external users, developers, and other writers use this skill to draft or revise social posts, articles, documentation, professional messages, code reviews, announcements, and other text for clarity, structure, memorability, and reader action.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/impactful-writing) <br>
-- [Homepage](https://github.com/tenequm/skills/tree/main/skills/impactful-writing) <br>
-- [The Science of Writing Clarity](references/clarity-science.md) <br>
-- [The Science of Emotional Impact](references/emotional-impact.md) <br>
-- [Revision Frameworks and Editing Science](references/revision-frameworks.md) <br>
-- [Content Structure and Formatting Patterns](references/structure-patterns.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text writing guidance, rewrites, checklists, and structured recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No tool execution, credential access, persistence, or privileged operations are described in the release evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill gives broad writing and persuasion guidance that can influence legal, medical, compliance, safety-critical, political, sales, or emotionally charged content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use human review for sensitive content and keep persuasive techniques factual, transparent, and non-coercive.
+
+Risk: Writing advice may over-optimize for engagement or emotional resonance at the expense of accuracy or context.
+
+Mitigation: Verify factual claims, preserve required nuance, and adapt the guidance to the audience, domain, and policy constraints.
+
+## Reference(s):
+
+- [The Science of Writing Clarity](references/clarity-science.md)
+- [The Science of Emotional Impact](references/emotional-impact.md)
+- [Revision Frameworks and Editing Science](references/revision-frameworks.md)
+- [Content Structure and Formatting Patterns](references/structure-patterns.md)
+- [OpenClaw homepage](https://github.com/tenequm/skills/tree/main/skills/impactful-writing)
+- [ClawHub skill page](https://clawhub.ai/tenequm/skills/impactful-writing)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or plain text writing and revision guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces human-facing writing advice, rewrites, checklists, examples, and content structure suggestions.]
+
+## Skill Version(s):
+
+0.1.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

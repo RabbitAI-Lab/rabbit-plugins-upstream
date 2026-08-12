@@ -1,41 +1,59 @@
-## Description: <br>
-Transcribes Bilibili videos by retrieving available subtitles or converting audio, with support for comments, summaries, and optional Feishu/Lark document creation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bilibili Video Transcriber helps agents retrieve and validate Bilibili subtitles, fall back to official summaries or speech-to-text, and prepare structured video summaries.
 
-## Publisher: <br>
-[adolescen-he](https://clawhub.ai/user/adolescen-he) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[adolescen-he](https://clawhub.ai/user/adolescen-he)
 
-## Use Case: <br>
-Developers, analysts, and content reviewers use this skill to turn Bilibili video IDs or URLs into transcripts, structured metadata, summaries, and popular-comment extracts for review or downstream analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles Bilibili session cookies and may store or synchronize them across multiple local paths. <br>
-Mitigation: Remove bundled cookie files before use, prefer a low-privilege Bilibili account, and verify cookie storage paths and file permissions. <br>
-Risk: Transcripts, video metadata, comments, or login-related artifacts may be sent to Feishu/Lark when that integration is configured. <br>
-Mitigation: Disable or patch automatic Feishu/Lark document creation when local-only processing is required, and review any lark-cli configuration before use. <br>
+## Use Case:
 
+External users and developers use this skill to turn Bilibili videos into reliable subtitles, summaries, and Feishu-ready documentation. It is most useful when platform subtitles need validation or when missing subtitles require a controlled fallback.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/adolescen-he/bilibili-video-transcriber) <br>
-- [Publisher profile](https://clawhub.ai/user/adolescen-he) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, JSON, and plain-text transcript artifacts with CLI commands and configuration examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include video metadata, timed transcript segments, popular comments, cookie status, and optional Feishu/Lark document URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.4.0 (source: server release evidence) <br>
+Risk: The skill can read and store Bilibili session cookies.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid login flows unless they are required, run the skill in an appropriate workspace, and remove stored cookie files after use.
+
+Risk: The skill can publish transcript or comment content to Feishu/Lark through locally authenticated tooling.
+
+Mitigation: Confirm the target workspace and document before publishing, review generated content first, and avoid authenticated document creation when it is not needed.
+
+Risk: Fallback transcription can download or process video/audio and may run long local speech-to-text jobs.
+
+Mitigation: Get user consent before downloading media, check system load for long jobs, and prefer subtitle or official-summary paths when they are sufficient.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/adolescen-he/skills/bilibili-video-transcriber)
+- [Feishu Wiki API reference](references/feishu-wiki-api.md)
+- [Series discovery reference](references/series-discovery.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON transcript or summary artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write local transcript, subtitle, comment, and summary files; may create or update Feishu/Lark documents when authenticated tooling is available.]
+
+## Skill Version(s):
+
+3.0.0 (source: package.json and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

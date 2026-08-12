@@ -1,48 +1,62 @@
-## Description: <br>
-Container Host Aiops helps agents inspect, analyze, and operate single Docker, Portainer, or Podman container hosts, including host health, logs, restart-loop RCA, resource pressure, disk bloat, and guarded lifecycle or prune actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Container Host AIops helps agents inspect, analyze, and perform guarded operations on a single Docker, Portainer, or Podman container host.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and operations engineers use this skill to triage and manage non-orchestrator container hosts through Docker Engine, Portainer, or Podman. It supports host overview, container/image/volume/network/system reads, focused RCA analyses, and guarded write workflows with dry-run and audit support. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform destructive Docker, Portainer, or Podman actions with root-equivalent access and no built-in read-only or approval gate. <br>
-Mitigation: Install only where agent-level container-host administration is intended; prefer read-only Docker socket mounts or Portainer accounts without write scope for monitoring-only use. <br>
-Risk: Write operations such as container removal, image pruning, volume pruning, and stack recreation can remove services or data. <br>
-Mitigation: Use dry-run previews before writes, require operator review for destructive actions, and rely on backups for irreversible prune or removal outcomes. <br>
-Risk: Unauthenticated Docker TCP, disabled TLS, or exposed management endpoints can expand access beyond the intended host. <br>
-Mitigation: Avoid unauthenticated Docker TCP and disabled TLS outside lab environments, and keep Portainer or Docker API access scoped to trusted networks and accounts. <br>
-Risk: The local state directory contains audit history, undo state, configuration, and encrypted Portainer tokens. <br>
-Mitigation: Protect ~/.container-host-aiops/ and any relocated CONTAINER_HOST_AIOPS_HOME path with appropriate filesystem permissions and operational handling. <br>
+## Use Case:
 
+Developers and operations engineers use this skill to triage container host health, diagnose restart loops and resource pressure, review image or volume bloat, and perform dry-run-capable lifecycle or cleanup operations on non-orchestrator container hosts.
 
-## Reference(s): <br>
-- [Container Host AIops homepage](https://github.com/AIops-tools/Container-Host-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dry-run previews, host-operation recommendations, and audit-oriented follow-up steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release metadata) <br>
+Risk: The skill can control a container host through Docker or Podman socket access or a Portainer token, which can be root-equivalent on the host.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for trusted container-host administration and restrict socket or token access to trusted administrators; prefer read-only sockets or non-write Portainer accounts for observation workflows.
+
+Risk: Destructive writes such as remove, prune, and recreate operations can be irreversible and the skill does not provide a built-in approval or read-only gate.
+
+Mitigation: Require review of dry-run output before writes, use account-level permissions to block writes when appropriate, and keep backups for data-bearing volumes before pruning or removal.
+
+Risk: Local audit, undo, configuration, and encrypted secret files may contain sensitive operational history or credentials metadata.
+
+Mitigation: Protect the ~/.container-host-aiops directory with appropriate file permissions and periodically clean up retained audit, undo, config, and encrypted secret files according to local policy.
+
+## Reference(s):
+
+- [Container Host AIops ClawHub Skill](https://clawhub.ai/zw008/skills/container-host-aiops)
+- [Project homepage](https://github.com/AIops-tools/Container-Host-AIops)
+- [Capabilities reference](artifact/references/capabilities.md)
+- [CLI reference](artifact/references/cli-reference.md)
+- [Setup and security guide](artifact/references/setup-guide.md)
+- [Agent guardrails](artifact/references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, text, markdown]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured operational recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose MCP or CLI actions for reads, analyses, dry-run previews, and guarded writes against configured Docker, Portainer, or Podman targets.]
+
+## Skill Version(s):
+
+0.10.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

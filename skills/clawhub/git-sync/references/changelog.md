@@ -1,3 +1,203 @@
+## [2.45.6] - 2026-08-10
+
+- **文档强化：明确"全流程一条命令"铁律（git-sync 自推送实战再次验证）**：v2.45.5 只写了"决策文件用 _paths 路径函数写入"，但漏了最关键的根因——**让位 → 写决策 → 重跑必须放在同一条 Bash 命令里一次跑完**。2026-08-09 git-sync 自推送时拆成多条命令导致 scan/resume 文件跨命令消失（git-sync 每次运行重建/清理 temp），反复"文件存在却读不到"重试 N 次；合并为一条命令后一次通过。SKILL.md 约束升级为 v2.45.6 铁律，guide.md 步骤 3.7/4.5 警示框补充一条命令的完整 bash 写法与拆命令反例
+
+## [2.45.5] - 2026-08-09
+
+- **文档：固化 LLM 决策文件写入规范（2026-08-09 rag-assistant 推送实战教训）**：决策文件（`file_filter_{name}.decisions.json` / `sensitive_scan_{name}.decisions.json`）必须用 `_paths.py` 路径函数在 git-sync 脚本环境下写入并验证 `exists()`，严禁用 Write 工具或跨进程硬编码路径写入（沙箱隔离导致"文件存在却读不到"→ 反复让位 exit 3 死循环）。SKILL.md 约束新增警示条目，guide.md 步骤 3.7/4.5 新增详细警示框（含正确/错误写法对比）
+
+## [2.45.4] - 2026-08-07
+
+- step_pypi_publish copytree 排除 Windows 保留设备名（nul/con/prn/aux）与 .git，修复构建失败（WinError 87/5）
+
+## [2.45.3] - 2026-08-07
+
+- setup.py 模板新增 project_urls（GitHub/Gitee/Documentation 三链接），PyPI 页面 Project Links 显示双平台仓库链接
+
+
+## [2.45.2] - 2026-08-06
+
+### 修复：pypi_publish.py 独立脚本 2 个构建 bug（structured-writer 1.6.0b0 发布时暴露）
+
+- **多顶层包构建被拒**：pypi_publish.py copytree 保留项目自带 pyproject.toml，setuptools 自动发现命中 `data/` + `structured_writer/` → `Multiple top-level packages` 拒绝构建。**修复**：隔离构建目录覆盖写固定 build-system 的 pyproject.toml（与 git-sync.py 内联 step_pypi_publish 一致）
+- **模板 `\n` 转义错误**：SETUP_PY_TEMPLATE 里 `LONG_DESC += "\n\n---..."` 的 `\n` 在模板解析时变成真实换行 → 生成 setup.py 语法错误 `unterminated string literal`。**修复**：写成 `\\n`（模板双反斜杠，生成时单反斜杠）
+- **验证**：structured-writer 1.6.0b0 → PyPI `structured-writer-ldxs` 1.6.0b0 上传成功（releases 列表确认 whl）
+- **教训**：独立脚本与主脚本（git-sync.py step_pypi_publish）存在模板双份实现，前者是遗留旧版——发布异常时优先排查双份实现的差异；模板内所有字面 `\n` 必须双写
+
+## [2.45.1] - 2026-08-06
+
+### 修复：PyPI 发布链路 2 个 bug（structured-writer v1.5.0 发布时暴露）
+
+- **PyPI token 读取错误**：pypi_publish.py 打印声称"尝试 ~/.pypirc"，实际代码从
+  GitHub remote 提取 token（`https://user:[email-redacted]/...`）当 PyPI 凭证——
+  GitHub token（`gho_*`）与 PyPI token（`pypi-*`）类型不符，上传必失败；且
+  .pypirc 的 password 从未被读取。**修复**：优先读 `~/.pypirc` 的 `[pypi] password`
+  （PyPI 官方凭证），其次 `PYPI_TOKEN` 环境变量，移除 GitHub remote 提取逻辑
+- **step_pypi_publish NameError**：setup.py 模板内联 `{BS}`（反斜杠变量）只在生成
+  的 setup.py 里定义 `BS=chr(92)`，f-string 求值时 git-sync.py 函数作用域无 `BS` →
+  `NameError: name 'BS' is not defined` 中断发布。**修复**：函数内 f-string 前补
+  `BS = chr(92)`（两处重复定义均补）
+- **验证**：structured-writer v1.5.0 → PyPI `structured-writer-ldxs` 1.5.0 上传成功
+  （twine returncode 0 + pypi.org JSON API 确认）
+- **教训**：发布工具自身必须用真实 PyPI 凭证路径（.pypirc）跑通一次真实发布，
+  不能停留在"打印声称"的层面；f-string 模板内嵌变量必须在模板求值作用域定义
+
+## [2.45.0] - 2026-08-04
+
+### 修复：sync_files 硬编码 skills/ 前缀导致嵌套发布
+
+- **根因**：sync_files() 目标路径写死 `work_repo / 'skills' / name`，只适配
+  workbuddy-skills（skills/ 子目录结构）；maby_skills 是顶层结构（技能在仓库根），
+  导致自推送时新版写到 skills/<name> 嵌套副本，commit 却只提交顶层 → 双份版本分裂
+- **修复**：sync_files 增加 subdir 参数，目标路径 = work_repo / subdir，
+  由调用方传入 manifest/config 解析的 work_repo_subdir（顶层或 skills/ 子目录由
+  仓库配置决定，不再硬编码）；不传时回退顶层
+- **验证**：三场景 PASS（顶层/子目录/默认回退）
+- **教训**：仓库目录结构（顶层 vs skills/ 子目录）是用户配置，必须从 manifest
+  repo_path 读取，禁止在函数内硬编码
+
+## [2.44.0] - 2026-08-04
+
+### 安全硬约束：脱敏强制（severity 分级禁 keep）
+
+- **critical/high 禁止 keep**：sensitive_scan.py cmd_apply 对 severity=critical
+  （Token/私钥）和 high（邮箱）的发现强制 sanitize，LLM 决策写 keep 也会被
+  代码级拦截并转为脱敏——"脱敏强制"从软约束（靠 LLM 自觉）升级为硬约束
+- **只替换 forbidden 的 match**：强制脱敏仅替换 critical/high 的匹配文本，
+  medium（IP/路径/用户名公开署名）保持原样，保留合法 keep 豁免权
+- **硬约束兜底**：apply 完成后重新检查处理后文件，若仍残留 critical/high
+  原始 match 则 exit 1 阻断（防脱敏未生效静默通过）
+- **统计输出**：apply 输出 强制脱敏/正常脱敏/保留/跳过 四类计数，便于审计
+- 背景：2026-08-04 自推送实战中 LLM 写"全部 keep"导致真实邮箱/token 泄露
+  进仓库（已纠正+重推），此版本根治"脱敏可被绕过"的设计漏洞
+
+## [2.43.1] - 2026-08-04
+
+### 修复（v2.43.0 推送实战暴露的 helper 二次 bug）
+
+- **helper docstring 路径转义**：write_filter_decision_{name}.py / write_sensitive_decision_{name}.py
+  的 docstring 中嵌入 Windows 路径（含 \\U 转义）导致生成的 helper 脚本 SyntaxError，
+  改为 json.dumps(str(path)) 转义（与 with open 行一致）
+- **helper 扫描数据嵌入改为读文件**：原实现把扫描 JSON 用 json.loads("""...""") 嵌入源码，
+  Windows 路径 \\U 在源码解析时爆炸；改为 helper 直接 json.load(open(scan_path)) 读取扫描文件
+
+## [2.43.0] - 2026-08-04
+
+### 重大改进：让位式 LLM 握手（根治决策卡死）
+
+- **两处 LLM 决策点改为让位式握手**（文件过滤 step_llm_file_filter + 敏感脱敏 step_sensitive_scan）：
+  遇到决策点时写 resume 状态文件（TEMP_DIR/resume_{name}.json）+ exit 3 退出，把控制权
+  交还调用方（AI 助手），不再进程内 120s 轮询等待（旧版占用控制权导致 AI 无法并行写决策文件导致卡死）
+- **断点续跑**：重跑同一命令时 main() 检测 resume 状态，跳过已完成步骤：
+  file_filter 断点跳过 manifest/version/normalize；sensitive_scan 断点跳过文件过滤与同步，
+  直接用已同步目录从脱敏环节继续。决策消费成功后 resume 自动清除
+- **修复 helper 脚本转义 bug**：write_filter_decision_{name}.py / write_sensitive_decision_{name}.py
+  中 Windows 路径用 json.dumps 转义替代 r"{path}" 拼接（原实现生成脚本 SyntaxError）
+- **文档对齐**：SKILL.md 约束/核心能力/工作流程更新为让位式描述（原"仅前台运行/在回复中输出决策"
+  与实现"写决策文件"不一致，已修正）
+- **resume 状态路径**：_paths.py 新增 resume_state_path(name)（R-12 路径集中管理）
+
+## [2.42.0] - 2026-08-03
+
+### 修复
+
+- **skillhub_publish.py .gitignore 排除方案修正** — 原方案把 `.gitignore` 改名为 `.gitignore.skh_bak` 留在技能目录内，SkillHub 扫描仍判定为 git 元文件拒绝（400）；改为备份到系统临时目录、从技能目录移除、发布后恢复，彻底规避
+
+## [2.41.0] - 2026-08-03
+
+### 文档全面修正（对齐 v2.40.0 实际行为 + 泛化）
+
+- **多仓库模型文档对齐** — SKILL.md/guide.md/reference.md/faq.md 全部从 workbuddy-skills 时代描述更新为 v2.37.0 多仓库模型（config.json `repos` 注册表、按类型解析仓库路径）；manifest 命令示例仓库名参数改 `<repo>` 占位
+- **彻底去特化（通用性）** — 文档移除平台名（WorkBuddy）、本机路径（`~/.workbuddy/skills`、`~/WorkBuddy`）、真实用户名，统一改用 `$SKILLS_DIR`、`<repo>`、`调用方（AI 助手）` 等通用占位；LLM 交互步骤描述由"WorkBuddy 输出决策"改为"调用方（AI 助手）在回复中输出决策 JSON"
+- **路径统一管理机制写入文档** — 明确 `scripts/_paths.py` 为唯一路径定义源，14 个脚本一律 `from _paths import ...` 引用，仓库路径由 config.json 注册表 + `get_work_repo(type)` 动态解析
+- **删除虚构步骤** — guide.md 移除代码中不存在的"步骤 0.5 文件路径校准"（v2.3 残留，实际无此逻辑）
+- **ClawHub 绝对路径** — SKILL.md 平台差异表标注 ClawHub 必须传绝对路径（相对路径在 npx 下 resolve 失败报 "Path must be a folder"）
+- **skillhub_publish.py 排除 .gitignore** — 发布前临时移走 `.gitignore`（SkillHub 400 拒绝 git 元文件），`finally` 恢复，随下次 bump 一起发布
+- **clawhub_publish.py 路径探测** — 兼容 skills/ 子目录与顶层两种仓库结构
+
+### 修复
+
+- **PyPI long_description 粘合 CHANGELOG** — setup.py 模板 README 后追加当前版本 `## [x.y.z]` 区块（v2.40.0 已实现，本版本随文档同步发布市场）
+
+## [2.40.0] - 2026-08-03
+
+### 新增
+
+- **PyPI long_description 粘合更新日志** — `step_pypi_publish` 的 setup.py 模板新增 CHANGELOG 粘合：README.md 后追加当前版本对应的 `## [x.y.z]` 区块（`## 更新说明`），用户发布 PyPI 后包描述页直接展示最近更新内容。MANIFEST.in 同步 include CHANGELOG.md。附：修复 f-string 模板转义（`\n` 在 f-string 中为换行符，需 `\\n` 保留字面），并修 `python -m build` 下 pyproject `[project].readme` 覆盖 setup.py long_description 的问题（构建时用最小 pyproject 仅含 build-system）
+
+## [2.39.0] - 2026-08-03
+
+### 修复
+
+- **PyPI prerelease 判别 bug** — `step_pypi_publish` 的 `is_prerelease` 正则 `\.(a|b|rc|dev)\d+` 要求 prerelease 标识前必须有 `.`，但 PEP 440 的 `1.4.0b1`/`1.1.0b16`/`1.4.0rc2` 中 b/rc 前是数字（`0b1`）而非点号 → 全部误判为正式版，classifier 错误标成 Production/Stable。修复为 `(?:^|[._\d-])(?:a|alpha|b|beta|rc|dev)\d+`，9 场景测试全 PASS（b1/b16/rc2/a1/dev1 正确判 prerelease，纯数字版本判正式版）
+
+## [2.38.0] - 2026-08-02
+
+### 新特性（智能体 README 描述升级）
+- **智能体描述提取升级** — `update_readme.py` agents 分支：描述来源从 `__init__.py` docstring 首行升级为「README.md 引言 → PROTOCOL.md 概述段 → docstring」三级回退，README 表格描述与各智能体自带文档一致（rag-assistant/structured-writer 取引言 blockquote，Orchestrator 取 PROTOCOL 概述段）
+- **扫描排除 `.github`** — 智能体目录扫描排除 `.github` 等隐藏目录，避免误入列表
+
+## [2.37.0] - 2026-08-02
+
+### 新特性（多仓库模型）
+- **按项目类型动态解析目标仓库** — skill → `maby_skills`（`~/WorkBuddy/maby_skills`），agent → `maby_agent`（`~/WorkBuddy/maby_agent`）。`_paths.py` 新增 `get_work_repo()/get_repo_config()/get_repo_name()`，从 `config.json` 的 `repos` 注册表读取
+- **manifest 多仓库化** — manifest.json 重构为 `maby_skills`（22 项技能）+ `maby_agent`（3 项智能体）+ `workbuddy-skills`（冻结存档）三个仓库，`repo_path` 去掉 `skills/`、`agent/` 前缀（新仓库根下直接是项目目录）
+- **README 生成器多仓库化** — `update_readme.py` 按仓库类型（skills/agents）分别生成 README，支持 `readme.banner` 配置注入历史声明（手写说明改为配置驱动，不再被覆盖）
+- **ClawHub/SkillHub/Release/PyPI 目标仓库动态化** — 发布路径与 Release tag 推送目标随项目类型切换
+
+### 变更
+- **老仓库 workbuddy-skills 永久冻结**（2026-08-02 起）——git-sync 不再触碰，仅作历史存档
+- `git-sync.sh` / `git-sync.py` 的 `REPO_NAME`、`WORK_REPO`、`WORK_REPO_DIR` 全部动态化，移除对 `workbuddy-skills` 的硬编码引用
+
+## [2.36.0] - 2026-07-31
+
+### 修复（PyPI 发布链路 6 连 bug，structured-writer 1.1.0 发布时暴露）
+- **`--skip-market` 连带跳过 PyPI** — PyPI 发布被包在 `if not skip_market` 内，agent 走 `--skip-market --pypi` 时 PyPI 被误跳。修复：PyPI 只受 `--pypi` 控制
+- **market-only 模式全程静默** — `log()` 只写 LOG_BUFFER 从不打印，market-only 分支提前 return 跳过 LOG_BUFFER 输出，PyPI 成败完全不可见。修复：market-only 分支 return 前显式打印 LOG_BUFFER
+- **`python -m build` 隔离环境创建失败** — Windows/Python 3.14 下 venv+pip 隔离环境失败。修复：加 `--no-isolation`（用当前环境）
+- **sdist 构建失败** — setuptools 81 的 flat-layout 检测到 `data/` 与 `structured_writer` 两个顶层目录拒绝构建。修复：`packages=[pkg_dir]` 明确指定 + 只构建 wheel（`--wheel` 跳过 sdist）
+- **setup.py 模板缺 `from setuptools import setup`** — 模板直接调用 setup() 抛 NameError。修复：补导入
+- **（沿用 2.35.0）dev_status 自动判别 + 特化清除**
+
+## [2.35.0] - 2026-07-31
+
+### 修复
+- **PyPI 发布器特化残留（`pypi_publish.py`）** — setup.py 模板硬编码 `rag_assistant/__init__.py` 读取版本号，导致 structured-writer 等任意包目录名的 agent 发布时版本号回退到命令行参数。修复：改为 `rglob("__init__.py")` 扫描含 `__version__` 的文件，与主脚本 `git-sync.py` 的自动检测逻辑一致，不再特化
+- **README 更新器特化残留（`update_readme.py`）** — 硬编码 `rag_assistant/__init__.py` 读取 agent 描述，非 rag-assistant 目录名的 agent 描述永远读不到（回退"智能体"默认值）。修复：`os.walk` 自动检测含 `__init__.py` 的包目录
+- **setup.py 模板无效转义（SyntaxWarning）** — 模板内 `\s`/`\[`/`\n` 未转义触发 Python 3.12+ SyntaxWarning。修复：改为 `\\s`/`\\[`/`\\n`，生成的 setup.py 保持字面正则
+- **PyPI dev_status 写死 Beta（未兑现"自动判别"声明）** — SKILL.md 宣称 "dev_status 自动判别" 但代码硬编码 `4 - Beta`。修复：按版本号自动判别——含 `b`/`a`/`rc`（PEP 440 预发布）→ `4 - Beta`，否则 `5 - Production/Stable`（如 structured-writer 1.1.0 正式版发布时为 Production/Stable）
+
+### 变更
+- `SKILL.md` 约束更新 — "自动检测类型"描述由 `rag_assistant/__init__.py` 改为 rglob 扫描说明，明确不硬编码任何包目录名
+
+## [2.34.0] - 2026-07-31
+
+### 修复
+- **LLM 交互步骤被 QUIET_MODE 吞掉导致后台死锁** — `main()` 中的 `step_llm_file_filter`（文件筛除）和 `step_sensitive_scan`（敏感脱敏）在静默模式下 stdout 被重定向到 `/dev/null`，WorkBuddy 看不到输出也就无法写入决策文件，死循环挂起。修复：LLM 交互步骤临时恢复 `sys.stdout` 到 `sys.__stdout__`，确保 WorkBuddy 在前台能看到引导提示
+- **`step_sensitive_scan` 假 LLM 决策** — 声称"自动生成 LLM 决策"但实际上是一组硬编码的 if/else 规则（`public_docs` × `public_labels` 匹配），既不调用模型也不按用户指引推理。修复：改为真正的 LLM 交互模式，打印发现详情 + 脱敏引导 → 等待 WorkBuddy 写决策文件 → 超时 120s 后全部脱敏保安全
+- **`step_llm_file_filter` 无限等待** — 无超时回退，决策文件不来就永远挂起。修复：加 120s 超时 → 超时后全量保留所有文件
+
+### 变更
+- **SKILL.md 约束更新** — 明确标注"仅前台运行"，禁止在后台/Bash 任务中运行 git-sync，因为 LLM 交互步骤需要 WorkBuddy 在前台读取输出并写决策文件
+
+## [2.33.0] - 2026-07-27
+
+### 新增
+- **路径统一管理**：所有临时文件迁移到 `_paths.py` 的 `TEMP_DIR`（`~/.workbuddy/skills/.standardization/git-sync/temp/`），`_paths.py` 新增 `temp_scan_path()` / `temp_filter_scan_path()` 等统一路径函数
+- **Agent 类型自动检测**：不再硬编码 `rag_assistant/__init__.py`，改为 `rglob("__init__.py")` 扫描含 `__version__` 的文件，兼容 `structured_writer/__init__.py` 等任意命名
+- **文件筛除决策助手脚本**：`step_llm_file_filter` 生成 `write_filter_decision_{name}.py` 脚本，LLM 通过 Bash 执行写入决策文件，不再依赖 Write tool
+- **`WORK_REPO` 路径归一化**：`git-sync.sh` 使用 `.as_posix()` 统一为正斜杠，避免反斜杠在 Python 字符串中被转义
+
+### 变更
+- **`manifest.json` 路径同步 `_paths.py`**：`repos.workbuddy-skills.path` 改为 `.workbuddy/workbuddy-skills`，`manifest.py` `get_repo_path()` 回退到 `from _paths import WORK_REPO`
+- **`git-sync.py` 版本对比**：agent 仓库版本来用 `rglob` 而非硬编码路径
+- **参考文档修正**：`reference.md` 路径描述同步为 `.workbuddy`，移除错误的 `WorkBuddy` 引用
+
+### 修复
+- agent 版本号读取失败（硬编码 `rag_assistant/__init__.py`） → 改为 `rglob` 查找
+- `git-sync.sh` 版本号读取中反斜杠导致 Python 字符串转义错误
+- `clean_zip_source.py` / `sync_with_exclude.py` 未排除 `.standardization/git-sync/temp/` 目录
+
 ## [2.32.0] - 2026-07-21
 
 ### 变更

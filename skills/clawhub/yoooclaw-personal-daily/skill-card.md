@@ -1,42 +1,58 @@
-## Description: <br>
-Generates a personalized daily news briefing from configured user interest topics, using bounded web searches and strict recency and source-quality filters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates a source-linked Chinese personalized daily news digest from configured user interests, using available web search where possible and fixed RSS feeds as a fallback.
 
-## Publisher: <br>
-[vivalavida-say-hi](https://clawhub.ai/user/vivalavida-say-hi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vivalavida-say-hi](https://clawhub.ai/user/vivalavida-say-hi)
 
-## Use Case: <br>
-External users use this skill to turn selected topics, such as AI models, electric vehicles, startup financing, humanoid robotics, companies, or products, into a concise daily news digest with links to selected sources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Configured interest topics may be exposed through web searches. <br>
-Mitigation: Avoid confidential or highly sensitive topics in the interests file or scheduled message. <br>
-Risk: Daily search filtering can miss relevant current news or exclude items without explicit date signals. <br>
-Mitigation: Treat the briefing as a high-density digest and follow source URLs before relying on a news item for decisions. <br>
-Risk: Accidental activation could run searches using saved interests. <br>
-Mitigation: Use explicit prompts for personalized daily reports and review configured topics before scheduled use. <br>
+## Use Case:
 
+External users and agent operators use this skill to turn configured interests or scheduled-task topics into a concise Chinese daily news briefing with source links, publication-time checks, and trend signals.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/vivalavida-say-hi/yoooclaw-personal-daily) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-like conversational briefing text with topic sections, source URLs, summaries, and a fallback message when no current news is found.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs no files; target length is under 1500 Chinese characters with each item summarized in no more than three sentences.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Configured interests may be sent as search queries to external search providers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the interests file and scheduled-task topics before use, and include only topics suitable for external search.
+
+Risk: The fallback path fetches fixed external RSS feeds over the network.
+
+Mitigation: Deploy only in environments where outbound requests to the listed RSS sources are acceptable.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/vivalavida-say-hi/skills/yoooclaw-personal-daily)
+- [Hermes Daily Generation](references/generate/hermes.md)
+- [OpenClaw Daily Generation](references/generate/openclaw.md)
+- [Search Acquisition](references/acquisition/search.md)
+- [RSS Acquisition](references/acquisition/rss.md)
+- [Daily Output Template](references/output/template.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Chinese Markdown-style daily digest with inline source links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The final response is capped at 1500 Chinese characters and does not generate files.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

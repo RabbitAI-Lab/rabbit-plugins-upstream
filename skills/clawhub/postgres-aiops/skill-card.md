@@ -1,47 +1,66 @@
-## Description: <br>
-Postgres Aiops helps agents operate and troubleshoot PostgreSQL clusters with health checks, query and lock analysis, bloat and vacuum recommendations, replication checks, and guarded maintenance commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Postgres AIops helps agents inspect and operate PostgreSQL clusters with governed DBA workflows for health checks, slow-query root-cause analysis, bloat and vacuum analysis, blocking locks, replication, and audited maintenance actions.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Database administrators, developers, and operations engineers use this skill to inspect PostgreSQL health, diagnose slow queries, analyze bloat and blocking, and prepare guarded maintenance actions with audit and undo support where available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can connect to PostgreSQL databases and expose powerful read and write operations. <br>
-Mitigation: Install it only for databases you are authorized to administer, start with a read-only or least-privilege PostgreSQL role, and enable write-capable credentials only for deliberate maintenance. <br>
-Risk: Maintenance actions can affect database availability or state. <br>
-Mitigation: Use dry-run first, rely on the documented audit trail and undo support where available, and treat irreversible actions such as cancel, terminate, vacuum, reindex, and reset stats as operational changes requiring extra review. <br>
-Risk: The master password unlocks stored database credentials. <br>
-Mitigation: Treat the master password as a high-value secret and provide it only through secure runtime secret handling. <br>
+## Use Case:
 
+Database administrators, SREs, and agent developers use this skill to triage PostgreSQL health, analyze slow queries, table bloat, autovacuum lag, locks, and replication status, and run audited maintenance commands when an appropriate database role permits them.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/postgres-aiops) <br>
-- [Project Homepage](https://github.com/AIops-tools/Postgres-AIops) <br>
-- [Capabilities Reference](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup and Security Guide](references/setup-guide.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include PostgreSQL observations, cited analysis findings, dry-run previews, and operational recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+Risk: The skill can make real PostgreSQL changes when connected with a privileged database role.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with a read-only or pg_monitor-style role and grant write or DDL privileges only for targets where agent-driven maintenance is acceptable.
+
+Risk: Database credentials and POSTGRES_AIOPS_MASTER_PASSWORD are sensitive secrets.
+
+Mitigation: Protect the master password like any other secret and use the encrypted postgres-aiops secret store rather than plaintext credentials.
+
+Risk: Some operations, including cancel, terminate, vacuum, reindex, and query-stat resets, cannot restore the prior database state.
+
+Mitigation: Use dry-run previews, confirm the target object or backend pid, and prefer reversible operations or recorded undo flows where the tool supports them.
+
+Risk: The tool records and previews operations but does not decide whether a write is authorized.
+
+Mitigation: Rely on database role permissions, deployment policy, and agent approval rules to control which operations may run.
+
+## Reference(s):
+
+- [Capabilities Reference](artifact/references/capabilities.md)
+- [CLI Reference](artifact/references/cli-reference.md)
+- [Setup and Security Guide](artifact/references/setup-guide.md)
+- [Agent Guardrails](artifact/references/agent-guardrails.md)
+- [Project Homepage](https://github.com/AIops-tools/Postgres-AIops)
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/postgres-aiops)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON-like tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [MCP and CLI workflows may return result envelopes with limits and truncation flags; maintenance actions can include dry-run previews, audit records, and undo metadata where supported.]
+
+## Skill Version(s):
+
+0.9.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

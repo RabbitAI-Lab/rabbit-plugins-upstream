@@ -1,0 +1,257 @@
+version: 2
+scope:
+  geography: US
+  issuers:
+    - American Express
+    - Bank of America
+    - Barclays
+    - Bilt
+    - Capital One
+    - Chase
+    - Citi
+    - Discover
+    - Robinhood
+    - U.S. Bank
+    - Wells Fargo
+  rule: major-us-card-brands
+
+issuer_domains:
+  American Express:
+    - americanexpress.com
+    - aboutamex.com
+  Bank of America:
+    - bankofamerica.com
+    - newsroom.bankofamerica.com
+  Barclays:
+    - cards.barclaycardus.com
+    - barclays.com/credit-cards
+  Bilt:
+    - bfrrewards.com
+    - bfrrewards.com/credit-cards
+  Capital One:
+    - capitalone.com
+    - capitalone.com/about
+  Chase:
+    - chase.com
+    - media.chase.com
+  Citi:
+    - citi.com
+    - citicards.com
+    - blog.citigroup.com
+  Discover:
+    - discover.com
+  Robinhood:
+    - robinhood.com
+    - robinhood.com/credit-card
+  U.S. Bank:
+    - usbank.com
+    - usbank.com/credit-cards
+  Wells Fargo:
+    - wellsfargo.com
+    - newsroom.wf.com
+
+issuer_source_notes:
+  - Issuer blogs, newsrooms, and press release pages (e.g., media.chase.com, aboutamex.com) are treated as primary issuer sources, not secondary sources.
+  - Issuer social media accounts (Twitter/X, Instagram, YouTube) remain disallowed — use the issuer's own website or newsroom instead.
+  - Press releases from issuer newsrooms are valid for confirming product changes, new launches, and benefit updates.
+
+secondary_domains:
+  selected_on: 2026-03-12
+  methodology: curated shortlist of 6 high-signal sources — best mainstream reviewer, best points-and-miles sites, best breaking-news tracker
+  approved_for:
+    - best_public_signup_offer
+    - missing_benefit_details
+    - usage_limit_cross_check
+  sources:
+    - rank: 1
+      name: NerdWallet
+      domain: nerdwallet.com
+      url: https://www.nerdwallet.com
+      category: mainstream-finance
+      best_for: [card-full, card-compare, card-value]
+    - rank: 2
+      name: The Points Guy
+      domain: thepointsguy.com
+      url: https://thepointsguy.com/credit-cards/
+      category: points-and-miles
+      best_for: [card-full, card-transfer, card-value, card-news]
+    - rank: 3
+      name: Doctor of Credit
+      domain: doctorofcredit.com
+      url: https://www.doctorofcredit.com/credit-cards/
+      category: points-and-miles
+      best_for: [card-news, card-full]
+    - rank: 4
+      name: Bankrate Credit Cards
+      domain: bankrate.com
+      url: https://www.bankrate.com/credit-cards/
+      category: mainstream-finance
+      best_for: [card-rate, card-credits]
+    - rank: 5
+      name: One Mile at a Time
+      domain: onemileatatime.com
+      url: https://onemileatatime.com/guides/credit-cards/
+      category: points-and-miles
+      best_for: [card-credits, card-compare]
+    - rank: 6
+      name: Upgraded Points
+      domain: upgradedpoints.com
+      url: https://upgradedpoints.com/credit-cards/
+      category: points-and-miles
+      best_for: [card-transfer, card-wallet]
+  domains:
+    - nerdwallet.com
+    - thepointsguy.com
+    - doctorofcredit.com
+    - bankrate.com
+    - onemileatatime.com
+    - upgradedpoints.com
+
+disallowed_sources:
+  - reddit.com
+  - facebook.com
+  - instagram.com
+  - tiktok.com
+  - x.com
+  - youtube.com
+  - offer referral links
+  - targeted or mailed offers
+  - user-generated forums
+
+selection_rules:
+  - Prefer issuer pages for benefits, terms, and issuer-specific credits.
+  - Use the `sources` list above as the preferred secondary-source allowlist for current article and guide discovery.
+  - Prefer the strongest publicly available and clearly live offer among approved sources.
+  - Do not use a secondary source when the issuer page already resolves the fact cleanly unless validating a better public offer.
+  - When a source is stale or undated, lower confidence or omit the claim.
+
+search_method:
+  engine: websearch-with-optional-brave-fast-path
+  env_var: BRAVE_API_KEY
+  base_url: https://api.search.brave.com/res/v1/web/search
+  usage: |
+    Use WebSearch + WebFetch by default.
+
+    If BRAVE_API_KEY is set and Bash with curl is available, you may use Brave Search API instead. This is usually faster (~1s vs 30-60s).
+
+    Search openly — do NOT use site: filters. Let the search engine find the best pages:
+      curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD_NAME+QUERY_TERMS&count=10" \
+        -H "X-Subscription-Token: $BRAVE_API_KEY"
+
+    Parse the JSON response — results are in .web.results[] with .title, .url, .description fields.
+    Classify results by domain: issuer pages (use issuer_domains below) vs approved secondary sources.
+    If BRAVE_API_KEY is not set, stay on WebSearch + WebFetch.
+  notes:
+    - Do NOT use site: filters — search openly and classify results after
+    - The issuer_domains table is for classifying results, not constraining searches
+    - One API call surfaces both issuer and secondary results naturally
+    - Free tier allows 2000 queries/month
+    - Approved secondary pages are limited to the domains in secondary_domains.domains
+    - Use WebFetch for result-page retrieval; do not shell-fetch arbitrary result URLs
+
+fetch_safety_rules:
+  protocol: https-only
+  allowed_hosts:
+    issuer_domains: true
+    secondary_domains: true
+  retrieval_method: webfetch-only-for-result-pages
+  rules:
+    - Never execute a shell command that interpolates a raw URL taken from search results.
+    - Only fetch result pages when the URL scheme is https and the hostname matches issuer_domains or secondary_domains.domains.
+    - Use curl only for the optional Brave Search API calls, not for arbitrary page fetches.
+    - Skip any result URL that fails these checks and move to the next valid result.
+
+fast_search_policy:
+  target_budget: 30s
+  context_budget:
+    response_length: short
+    max_search_calls: 1
+    max_page_fetches: 2
+    rules:
+      - Treat one search result set as the shared discovery source for issuer facts, the current public offer, and any missing benefit detail.
+      - Do not run separate searches for best offers, historical offers, or comparison articles unless the user explicitly asks for that analysis.
+      - Do not reopen a page at multiple line numbers. Use the first fetch, a targeted find, or mark the detail unconfirmed.
+      - Keep tool results compact: extract only contract facts and do not carry raw page text into later research turns.
+      - When several cards are from one issuer, use one shared discovery pass and fetch their issuer pages in parallel.
+  phases:
+    - name: resolve
+      budget: 0-5s
+      action: Normalize card name, resolve exact variant using card-identity-rules.
+    - name: search
+      budget: 5-10s
+      action: Search openly once with WebSearch by default, or one Brave API call when the key is available. Then classify results as issuer or secondary by domain.
+    - name: fetch
+      budget: 10-25s
+      action: |
+        Fetch the top issuer page URL and secondary source URLs from search results with WebFetch.
+        Apply fetch_safety_rules before retrieving any page.
+        For knowledge-first: fetch the issuer page, plus one secondary only when the issuer page leaves a required fact unresolved.
+        For search-required: fetch the issuer page and at most one approved secondary.
+        Run fetches in parallel when possible.
+    - name: finalize
+      budget: 25-45s
+      action: Assemble compact output from fetched page content + search snippets + training knowledge. Flag unresolved fields in confidence_notes.
+  command_source_ceilings:
+    card-rate:
+      strategy: knowledge-first
+      max_secondary: 1
+      notes: Issuer page + one secondary for merchant-coding caveats.
+      preferred: [bankrate.com, thepointsguy.com]
+    card-credits:
+      strategy: knowledge-first
+      max_secondary: 1
+      notes: Issuer page + one secondary for credit trigger details.
+      preferred: [thepointsguy.com, bankrate.com]
+    card-transfer:
+      strategy: knowledge-first
+      max_secondary: 1
+      notes: Issuer page + one secondary for current transfer ratios.
+      preferred: [thepointsguy.com, onemileatatime.com]
+    card-wallet:
+      strategy: knowledge-first
+      max_secondary: 1
+      notes: One issuer page per card + one secondary for cross-checking.
+      preferred: [thepointsguy.com]
+    card-full:
+      strategy: search-required
+      max_secondary: 1
+      max_search_calls: 1
+      max_page_fetches: 2
+      multi_card_max_page_fetches: 4
+      parallel: true
+      notes: One issuer page plus one approved source for a live public offer or an unresolved required detail. Offer history is opt-in, not default.
+      preferred: [nerdwallet.com, thepointsguy.com]
+    card-news:
+      strategy: search-required
+      max_secondary: 2
+      max_search_calls: 1
+      max_page_fetches: 3
+      parallel: true
+      preferred: [doctorofcredit.com, thepointsguy.com, onemileatatime.com, nerdwallet.com, bankrate.com]
+    card-compare:
+      strategy: search-required
+      max_secondary: 1
+      max_search_calls: 1
+      max_page_fetches: 3
+      parallel: true
+      notes: Fetch one issuer page per compared card and one approved secondary total only if issuer pages leave a comparison field unresolved.
+      preferred: [nerdwallet.com, thepointsguy.com]
+    card-value:
+      strategy: search-required
+      max_secondary: 1
+      max_search_calls: 1
+      max_page_fetches: 2
+      parallel: true
+      preferred: [nerdwallet.com, thepointsguy.com]
+    card-profile-recommend:
+      strategy: search-required
+      max_secondary: 3
+      max_search_calls: 2
+      max_page_fetches: 6
+      parallel: true
+      notes: Group held cards by issuer, reuse each issuer page, and fetch secondary sources only for live offers or issuer-rule gaps. Do not research a candidate that cannot fill a named portfolio gap.
+      preferred: [nerdwallet.com, thepointsguy.com, doctorofcredit.com, onemileatatime.com, upgradedpoints.com]
+  stop_rules:
+    - Stop once all required contract fields are covered.
+    - Do not chase optional details after the contract is satisfied.
+    - Prefer a compact partially-resolved answer with clear uncertainty over an exhaustive search that exceeds the budget.

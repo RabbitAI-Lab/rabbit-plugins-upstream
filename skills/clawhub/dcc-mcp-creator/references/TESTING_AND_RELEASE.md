@@ -10,7 +10,7 @@ HTTP-level smoke when behavior crosses process boundaries.
 | Unit | option resolution, server construction, env vars, skill path collection |
 | Dispatcher | main-affinity calls run on the host dispatcher and return envelopes |
 | Skill lifecycle | `search_skills` -> `load_skill` -> typed tool -> `unload_skill` |
-| REST/MCP | direct `/mcp` or `/v1/*` search, describe, load, and call |
+| REST/MCP | direct `/mcp` or `/v1/*` search, then the returned `next_step` |
 | Gateway | multi-instance routing, policy, compact responses, debug traces |
 | Live DCC | one host smoke that creates/queries/cleans up real scene state |
 | Packaging | wheel or plugin archive installs into the target host runtime |
@@ -31,6 +31,13 @@ python -m pytest
 
 For Rust/PyO3 core changes, run the workspace's `just` or `cargo` gates that
 match the touched crates.
+
+For gateway discovery performance, use deterministic tests or Criterion as the
+regression gate. If a regression needs local diagnosis, build
+`dcc-mcp-server` with `--no-default-features --features gateway-daemon,tracy`
+and follow the [local Tracy workflow](../../../docs/guide/observability.md#6-local-tracy-profiling).
+Do not wrap async work across `.await` in a Tracy zone; correlate those phases
+with the existing request IDs and OTLP spans instead.
 
 For `dcc-mcp-core` toolchain or dependency refreshes, prefer vx-managed Cargo so
 local runs match CI:

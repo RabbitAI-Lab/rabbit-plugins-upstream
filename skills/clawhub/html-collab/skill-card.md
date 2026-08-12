@@ -1,43 +1,54 @@
-## Description: <br>
-Use this skill for HTML documents that go through LLM-human review cycles, including drafting, reading annotated files, and revising documents from embedded feedback. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for HTML documents that will go through LLM-human review cycles, including drafting, reading annotated files, and revising documents from comments and edits.
 
-## Publisher: <br>
-[ljn-hust](https://clawhub.ai/user/ljn-hust) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ljn-hust](https://clawhub.ai/user/ljn-hust)
 
-## Use Case: <br>
-Developers and document authors use this skill to create browser-openable HTML drafts with review metadata, read human annotations from html-collab files, and produce revised HTML that preserves feedback history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may write generated HTML files or overwrite revised documents. <br>
-Mitigation: Use it on non-sensitive drafts first, keep backups, and ask the agent to confirm before saving or replacing an original file. <br>
-Risk: The skill may run local image-processing commands while handling embedded screenshots. <br>
-Mitigation: Review proposed commands before execution and confirm compression behavior before modifying document data. <br>
-Risk: The artifact includes hidden AI-facing bootstrap text in generated HTML. <br>
-Mitigation: Review generated HTML before sharing or deploying it, especially bootstrap comments and embedded collaboration metadata. <br>
+## Use Case:
 
+Developers and document authors use this skill to create self-contained HTML review documents, extract human comments and edits, and produce revised versions for iterative review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ljn-hust/skills/html-collab) <br>
-- [html-collab live demo](https://ljn-hust.github.io/html-collab/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, HTML files, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and complete HTML document output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write generated or revised HTML files and may propose local image-compression commands when processing embedded screenshots.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Document text, comments, edits, and screenshots may be copied into chat history and stored inside the HTML file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use care with confidential documents and review the generated or revised HTML before sharing.
+
+Risk: The skill can write new local HTML documents and overwrite revised documents.
+
+Mitigation: Ask the agent to save a new version or backup before applying revisions to an existing file.
+
+## Reference(s):
+
+- [html-collab ClawHub release](https://clawhub.ai/ljn-hust/skills/html-collab)
+- [html-collab live demo](https://ljn-hust.github.io/html-collab/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance and complete HTML files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write new HTML review documents, overwrite revised local HTML files, and include document text, comments, edits, and screenshots in the conversation context.]
+
+## Skill Version(s):
+
+0.3.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
