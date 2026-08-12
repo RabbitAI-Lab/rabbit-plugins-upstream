@@ -1,52 +1,71 @@
-## Description: <br>
-Build internet-native payments with the x402 open protocol - HTTP 402 Payment Required for on-chain micropayments with no accounts or API keys. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build internet-native payments with the x402 open protocol - HTTP 402 Payment Required for on-chain micropayments with no accounts or API keys. Use when developing paid APIs, paywalled content, AI agent payment flows, or MCP tools that charge per call. Covers the TypeScript, Python, and Go SDKs across EVM, Solana, Stellar, Aptos, NEAR, and XRPL.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill to build x402 paid APIs, paywalled content, agent payment flows, MCP payment integrations, and multi-network on-chain payment clients and servers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: x402 examples can move real funds when connected to mainnet wallets or automatic payment flows. <br>
-Mitigation: Use testnets until reviewed, use dedicated low-balance wallets, and add explicit budgets, allowlists, and confirmation controls before enabling real-money or MCP auto-payment flows. <br>
-Risk: Private key environment variables grant signing authority for payment clients, servers, or facilitators. <br>
-Mitigation: Store keys in managed secrets, avoid committing them to source control, and scope wallets and facilitator keys to the minimum balance and permissions needed. <br>
-Risk: Non-local payment services can expose payment headers and settlement requests over the network. <br>
-Mitigation: Require HTTPS for deployed services and review facilitator endpoints before using them with production wallets. <br>
+## Use Case:
 
+Developers and engineers use this skill to build, test, and integrate x402 payment flows for paid APIs, paywalled content, AI agent payments, MCP tools, and multi-network on-chain settlement.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/x402-development) <br>
-- [Publisher profile](https://clawhub.ai/user/tenequm) <br>
-- [OpenClaw homepage](https://github.com/tenequm/skills/tree/main/skills/x402) <br>
-- [x402 documentation](https://docs.x402.org) <br>
-- [x402 protocol repository](https://github.com/x402-foundation/x402) <br>
-- [x402 protocol specifications](https://github.com/x402-foundation/x402/tree/main/specs) <br>
-- [Core concepts](references/core-concepts.md) <br>
-- [Protocol specification](references/protocol-spec.md) <br>
-- [TypeScript SDK](references/typescript-sdk.md) <br>
-- [Python SDK](references/python-sdk.md) <br>
-- [Go SDK](references/go-sdk.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline code snippets, commands, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference optional wallet, facilitator, API key, and network environment variables for payment integrations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.10.2 (source: frontmatter and server release evidence) <br>
+Risk: The skill supports crypto payment flows, so applying examples with production keys or mainnet funds can create financial exposure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use testnet and low-balance keys for examples, keep production private keys away from general agents, and require spending caps, explicit approval, trusted endpoint or tool allowlists, and approval-revocation procedures before mainnet use.
+
+Risk: Payment integration guidance can affect settlement behavior when copied into paid APIs, MCP tools, or agent payment workflows.
+
+Mitigation: Review generated code and configuration before deployment, test payment paths against development or testnet facilitators, and require operator approval before enabling production settlement.
+
+## Reference(s):
+
+- [ClawHub source homepage](https://github.com/tenequm/skills/tree/main/skills/x402)
+- [x402 GitHub repository](https://github.com/x402-foundation/x402)
+- [x402 Documentation](https://docs.x402.org)
+- [x402 Website](https://x402.org)
+- [x402 Protocol Specification (v2)](references/protocol-spec.md)
+- [Core Concepts](references/core-concepts.md)
+- [TypeScript SDK Reference](references/typescript-sdk.md)
+- [Python SDK Reference](references/python-sdk.md)
+- [Go SDK Reference](references/go-sdk.md)
+- [Transport Implementations](references/transports.md)
+- [x402 Extensions Reference](references/extensions.md)
+- [EVM Scheme Reference](references/evm-scheme.md)
+- [Solana (SVM) Exact Scheme Reference](references/svm-scheme.md)
+- [Aptos Exact Scheme Reference](references/aptos-scheme.md)
+- [NEAR Exact Scheme Reference](references/near-scheme.md)
+- [XRPL Exact Scheme Reference](references/xrpl-scheme.md)
+- [Stellar Exact Scheme Reference](references/stellar-scheme.md)
+- [Upto Scheme Reference](references/upto-scheme.md)
+- [Lifecycle Hooks Reference](references/lifecycle-hooks.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with code examples, shell commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+0.11.1 (source: frontmatter, changelog, and server release evidence; released 2026-08-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

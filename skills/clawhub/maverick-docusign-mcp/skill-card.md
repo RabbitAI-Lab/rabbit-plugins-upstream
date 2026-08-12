@@ -1,45 +1,59 @@
-## Description: <br>
-Search, read, and manage DocuSign envelopes, recipients, templates, documents, and signing status through a local MCP wrapper. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read DocuSign account, envelope, recipient, template, and signing-status data through DocuSign's official developer MCP server.
 
-## Publisher: <br>
-[maverick](https://clawhub.ai/user/maverick) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[maverick](https://clawhub.ai/user/maverick)
 
-## Use Case: <br>
-Employees, external collaborators, developers, and operations teams use this skill to inspect DocuSign envelopes, templates, recipients, documents, and signing status, and to send envelopes from templates when the user has clearly authorized the action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send real DocuSign envelopes and operate on signing workflows using sensitive OAuth credentials. <br>
-Mitigation: Use least-privilege OAuth scopes, start in a DocuSign sandbox when possible, and require clear human confirmation before any send, void, update, or document-changing action. <br>
-Risk: Unpinned runtime dependencies such as mcporter and Python packages can change behavior over time. <br>
-Mitigation: Pin approved dependency versions in controlled environments and review updates before deployment. <br>
-Risk: Credential rotation or setup with stale environment values can overwrite refreshed local vault credentials. <br>
-Mitigation: Run setup only from the current credential source of truth and reconnect the integration when OAuth grants expire or are revoked. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect DocuSign accounts, envelopes, recipients, templates, and signing status through a hosted read-only MCP integration without changing DocuSign data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/maverick/maverick-docusign-mcp) <br>
-- [mcporter](https://github.com/steipete/mcporter) <br>
-- [uv documentation](https://docs.astral.sh/uv/) <br>
-- [DocuSign OAuth token endpoint](https://account-d.docusign.com/oauth/token) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, API calls] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON tool responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Tool calls run through a local stdio MCP wrapper and may access DocuSign envelope, recipient, template, document, and signing-status data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: release evidence) <br>
+Risk: OAuth access and refresh tokens are stored in mcporter's local vault and sent to DocuSign developer MCP/token endpoints over HTTPS.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a DocuSign developer or demo account intended for agent inspection, rotate or revoke credentials when access is no longer needed, and avoid production data unless separately approved.
+
+Risk: The read-only tools can expose DocuSign account, envelope, recipient, template, and signing-status data to the agent session.
+
+Mitigation: Limit the connected account and OAuth grant to data the agent is allowed to inspect, and avoid passing unrelated sensitive content through these tools.
+
+Risk: Setup reseeds the local OAuth vault from environment-supplied credential values.
+
+Mitigation: Run setup only when the supplied environment contains the freshest credential state so a rotated refresh token is not overwritten by stale values.
+
+## Reference(s):
+
+- [DocuSign MCP overview](https://developers.docusign.com/tools/mcp-server/)
+- [DocuSign developer MCP endpoint](https://mcp-d.docusign.com/mcp)
+- [mcporter MCP CLI](https://github.com/openclaw/mcporter)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON MCP results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only DocuSign MCP responses; limited to the six allowed tools in mcporter.json and requires OAuth credentials.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

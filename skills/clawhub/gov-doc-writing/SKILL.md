@@ -2,7 +2,7 @@
 name: "国央企word文档"
 description: "此技能用于创建符合中国政府及央企规范的Word文档(.docx)。当用户要求创建公文、国央企文档、规范文书、正式报告等需要特定中国公文格式的文档时使用此技能。"
 author: "刘洪亮"
-version: "1.10"
+version: "1.12.4"
 ---
 
 # 国央企Work文档创建技能
@@ -28,6 +28,7 @@ version: "1.10"
 |------|----------|----------|------|
 | 首页大标题 | 方正小标宋简体 (FZXiaoBiaoSong-B05S) | Times New Roman | 小二号 (18pt) |
 | 正文 | 方正仿宋简体 (FZFangSong-Z02S) | Times New Roman | 小三号 (15pt) |
+| 正文无缩进 | 方正仿宋简体 (FZFangSong-Z02S) | Times New Roman | 小三号 (15pt) |
 | 一级标题 | 黑体 | Times New Roman | 小三号 (15pt) |
 | 二级标题 | 楷体 | Times New Roman | 小三号 (15pt) |
 | 三级标题 | 方正仿宋简体 (FZFangSong-Z02S) | Times New Roman | 小三号 (15pt) 加粗 |
@@ -42,6 +43,7 @@ version: "1.10"
 |------|--------|
 | 首页大标题 | 固定28磅 |
 | 正文 | 固定28磅 |
+| 正文无缩进 | 固定28磅 |
 | 一级标题 | 固定28磅 |
 | 二级标题 | 固定28磅 |
 | 三级标题 | 固定28磅 |
@@ -55,6 +57,7 @@ version: "1.10"
 | 样式 | 序号格式 | 首行缩进 | 大纲级别 |
 |------|----------|----------|----------|
 | 正文有缩进 | 无 | 2字符 | - |
+| 正文无缩进 | 无 | 0 | 1级 |
 | 一级的标题 | 一、二、三、 | 2字符 | 1级 |
 | 二级的标题 | （一）（二）（三） | 2字符 | 2级 |
 | 三级的标题 | 1.2.3. | 2字符 | 3级 |
@@ -67,6 +70,7 @@ version: "1.10"
 
 - `首页大标题` - 首页大标题
 - `正文有缩进` - 正文段落
+- `正文无缩进` - 无缩进正文段落（大纲级别一级，用于附件分页标题等需要出现在导航窗格的段落）
 - `一级的标题` - 一级标题
 - `二级的标题` - 二级标题
 - `三级的标题` - 三级标题
@@ -90,6 +94,7 @@ const {
   createLevel3Heading,
   createTable,
   createImageParagraph,
+  createAttachmentBlock,
   CHINESE_FONTS,
   FONT_SIZES,
   CONTENT_WIDTH,
@@ -105,7 +110,7 @@ const {
   TableCell,
   Footer,
   ImageRun,
-} = require('~/.openclaw/skills/gov-doc-writing/scripts/create_gov_doc.js');
+} = require('/Users/lhliang/.workbuddy/skills/workbuddy-skill-1777171174172/scripts/create_gov_doc.js');
 
 // 创建文档
 const doc = createDocument({
@@ -187,7 +192,7 @@ new TableRow({
 
 ## 落款规范
 
-- 落款（部门名称 + 日期）放文档右下角，与上方正文间隔一行
+- 落款（部门名称 + 日期）放文档右下角，与上方正文间隔三行空行
 - 两行均右顶格对齐，不加缩进；日期自然向左延伸
 - 部门名称使用 `落款-部门` 样式，日期使用 `落款-日期` 样式，均为方正仿宋小三号
 - 使用 `createSignatureBlock()` 一键生成
@@ -195,8 +200,80 @@ new TableRow({
 ```javascript
 const { createSignatureBlock } = require('...');
 
-// 一键创建落款块（含间隔空行 + 部门名称 + 日期）
+// 一键创建落款块（含三行空行 + 部门名称 + 日期）
 sections.push(...createSignatureBlock('科技创新部', '2026年6月'));
+```
+
+## 附件规范
+
+- **是否添加附件**：落款上方的段落是否包含"附件"列表，应根据文档需求和内容判断
+  - 文档正文引用了具体材料、表格、说明、名单等独立内容时，应添加附件列表
+  - 文档内容自包含、不引用其他材料时，不必添加附件
+- **位置与样式**：附件位于正文之后、落款之前，全部使用 `正文有缩进` 样式（方正仿宋小三号、固定28磅行距）
+- **附件名称后不加任何标点符号**（不加句号、顿号、逗号等）
+- **格式约定**：
+  - 第一个附件写在"附件："段内："附件：1.附件名称"（冒号后直接跟序号，不加空格），使用正文默认首行缩进 2 字符
+  - 只有 1 个附件时，段落保持正文默认首行缩进 2 字符
+  - 从附件 2 开始，覆盖首行缩进为 5 字符，使序号 "2." 与第一段 "1." 纵向对齐
+- 使用 `createAttachmentBlock()` 一键生成
+
+### 单附件示例
+
+```
+附件：1.科技创新工作周报表
+```
+
+### 多附件示例
+
+```
+附件：1.科技创新工作周报表
+      2.项目实施情况明细表
+      3.下一步工作计划
+```
+
+```javascript
+const { createAttachmentBlock } = require('...');
+
+// 单附件
+sections.push(...createAttachmentBlock(['科技创新工作周报表']));
+
+// 多附件
+sections.push(...createAttachmentBlock([
+  '科技创新工作周报表',
+  '项目实施情况明细表',
+  '下一步工作计划',
+]));
+```
+
+### 在 createGovDocument 中使用
+
+```javascript
+const sections = [
+  // ... 正文段落 ...
+  // ... 落款 ...
+];
+
+// 在正文和落款之间插入附件
+sections.push({ type: 'attachment', attachments: ['附件标题一', '附件标题二'] });
+```
+
+### 附件独立分页
+
+每个附件可在文档最后（落款之后）独占一页，用于手动插入图片或表格等实际内容，每页标题为"附件1""附件2"……依次排列。使用 `createAttachmentPages()` 一键生成。
+
+```javascript
+const { createAttachmentPages } = require('...');
+
+// 在落款之后插入附件独立分页
+sections.push(...createAttachmentPages(['附件A标题', '附件B标题']));
+```
+
+**格式**：分页符 → "附件1"（`正文无缩进` 样式、加粗、大纲一级，出现在 Word 导航窗格）→ `正文有缩进` 空行供插入内容。
+
+在 `createGovDocument` 中使用：
+
+```javascript
+sections.push({ type: 'attachment_pages', attachments: ['附件标题一', '附件标题二'] });
 ```
 
 ## 图片规范
@@ -220,9 +297,11 @@ const {
   PageNumber, ImageRun, AlignmentType, HeadingLevel, LevelFormat,
   createTitleParagraph, createBodyParagraph, createLevel1Heading,
   createLevel2Heading, createLevel3Heading, createTable,
-  createImageParagraph, createSignatureBlock, createDocument, CHINESE_FONTS, FONT_SIZES,
+  createImageParagraph, createSignatureBlock, createAttachmentBlock,
+  createAttachmentPages,
+  createDocument, CHINESE_FONTS, FONT_SIZES,
   CONTENT_WIDTH, PAGE_MARGINS, LINE_SPACING_EXACT_28
-} = require('~/.openclaw/skills/gov-doc-writing/scripts/create_gov_doc.js');
+} = require('/Users/lhliang/.workbuddy/skills/workbuddy-skill-1777171174172/scripts/create_gov_doc.js');
 
 // 内容构建
 const sections = [
@@ -248,8 +327,22 @@ const sections = [
   createLevel1Heading('四、下一步计划', 3),
   createBodyParagraph('针对以上问题，计划采取以下措施...'),
 
-  // 落款（右下对齐，与正文间隔一行）
+  // 附件列表（位置：正文与落款之间；按需添加）
+  ...createAttachmentBlock([
+    '科技创新工作周报表',
+    '项目实施情况明细表',
+    '下一步工作计划',
+  ]),
+
+  // 落款（右下对齐，与正文间隔三行空行）
   ...createSignatureBlock('科技创新部', '2026年6月'),
+
+  // 附件独立分页（每个附件独占一页，供插入图片/表格）
+  ...createAttachmentPages([
+    '科技创新工作周报表',
+    '项目实施情况明细表',
+    '下一步工作计划',
+  ]),
 ];
 
 // 创建文档（不设置作者）

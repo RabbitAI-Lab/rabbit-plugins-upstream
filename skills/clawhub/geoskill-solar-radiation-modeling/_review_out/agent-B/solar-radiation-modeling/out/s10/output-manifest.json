@@ -1,0 +1,58 @@
+{
+  "skill": "solar-radiation-modeling",
+  "skill_version": "1.0.0",
+  "command": "solar-radiation-modeling --bbox 116.0 39.0 117.0 40.0 --synthetic --turbidity 0 --output-dir _review_out/agent-B/solar-radiation-modeling/out/s10",
+  "started_at": "2026-08-03T14:35:53.349200Z",
+  "finished_at": "2026-08-03T14:35:53.515204Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out/agent-B/solar-radiation-modeling/out/s10\\solar_radiation.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out/agent-B/solar-radiation-modeling/out/s10\\radiation_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "day_of_year": 172,
+    "latitude": 39.5,
+    "sun_up_steps": 29,
+    "mean_radiation_mj": 41.87930548376465,
+    "max_radiation_mj": 41.8857015
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "solar-radiation-modeling"
+  },
+  "error": null
+}

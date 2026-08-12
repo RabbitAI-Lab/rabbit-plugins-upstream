@@ -1,42 +1,59 @@
-## Description: <br>
-Agentearth helps an agent discover, select, validate, and execute Agent Earth tools for current information, decision support, data retrieval, and multi-step external-information tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AgentEarth helps agents discover and execute AgentEarth API-backed external tools when live or external-tool results are useful and the host permits external API calls.
 
-## Publisher: <br>
-[shanminghui](https://clawhub.ai/user/shanminghui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shanminghui](https://clawhub.ai/user/shanminghui)
 
-## Use Case: <br>
-Developers and agent users use this skill to route external-information requests through Agent Earth, including current news, weather, price lookups, tool discovery, and context-aware multi-step tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill routes broad user requests and selected conversation context to Agent Earth under the configured API key. <br>
-Mitigation: Use only with approved data and avoid secrets, credentials, confidential documents, and sensitive personal data. <br>
-Risk: Agent Earth can choose and execute unspecified remote tools, including actions that may affect accounts, upload files, post publicly, change data, or spend money. <br>
-Mitigation: Validate the selected tool and parameters, and require explicit approval before sensitive, public, account-changing, or cost-incurring actions. <br>
+## Use Case:
 
+Developers and agent operators use this skill to route tasks requiring live or external data through AgentEarth's Recommend and Execute APIs while preserving host policy and credential safeguards.
 
-## Reference(s): <br>
-- [Agentearth ClawHub page](https://clawhub.ai/shanminghui/agentearth) <br>
-- [Agent Earth API specification](references/api-spevification.md) <br>
-- [Agent Earth](https://agentearth.ai/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text summarizing remote tool results and next-step guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires AGENT_EARTH_API_KEY and may send task prompts and selected conversation context to Agent Earth.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: Task queries and Execute parameters may include sensitive information that is sent to an external tool marketplace.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm trust in AgentEarth before use and avoid sending sensitive tokens, private code, account data, or other confidential values unless that is intended for the selected tool.
+
+Risk: API keys could be exposed through logs or sent to an unsafe endpoint if URL validation is skipped.
+
+Mitigation: Configure AGENT_EARTH_API_KEY through the host secret mechanism, redact credentials from user-visible output, and send the key only to validated HTTPS AgentEarth endpoints.
+
+Risk: Incorrect tool selection or malformed parameters could cause failed or misleading external tool execution.
+
+Mitigation: Call Recommend before Execute, select tools by task relevance and schema clarity, validate required fields and types, remove unknown keys when required, and ask the user for missing real values.
+
+## Reference(s):
+
+- [AgentEarth API Specification](references/api-specification.md)
+- [AgentEarth Homepage](https://agentearth.ai)
+- [ClawHub AgentEarth Skill Page](https://clawhub.ai/shanminghui/skills/agentearth)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with HTTP examples, shell commands, PowerShell commands, and JSON request and response snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires AGENT_EARTH_API_KEY and returns selected external tool results through the AgentEarth API flow.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

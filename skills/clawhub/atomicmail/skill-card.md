@@ -1,47 +1,58 @@
-## Description: <br>
-Atomic Mail lets an AI agent read and write email over JMAP, including inbox registration, mailbox listing, message fetching, and sending mail. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read and write email through Atomic Mail from an AI agent using proof-of-work authentication and JMAP method calls.
 
-## Publisher: <br>
-[atomicmail](https://clawhub.ai/user/atomicmail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[atomicmail](https://clawhub.ai/user/atomicmail)
 
-## Use Case: <br>
-Developers and external users use this skill to connect an AI agent to Atomic Mail so it can register an inbox, fetch and triage mailbox data, send replies, and upload attachments through JMAP. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores Atomic Mail credentials and JWT bearer tokens locally. <br>
-Mitigation: Keep the credentials directory private, exclude it from logs and backups where possible, and never commit credential or JWT files. <br>
-Risk: The skill can send email and upload attachments when invoked. <br>
-Mitigation: Require explicit user approval before sending mail, replying, forwarding, or uploading attachments through presets or custom JMAP requests. <br>
-Risk: Scheduled inbox polling can expose mailbox contents during recurring agent turns. <br>
-Mitigation: Use the documented agent-scheduled workflow only in trusted runtimes and avoid raw CLI cron jobs that fetch mail without an agent review step. <br>
+## Use Case:
 
+Developers and agents use this skill to register or access an Atomic Mail inbox, list mailboxes, fetch messages, send mail, and work with JMAP batches or bundled presets.
 
-## Reference(s): <br>
-- [Atomic Mail homepage](https://atomicmail.ai) <br>
-- [ClawHub Atomic Mail skill page](https://clawhub.ai/atomicmail/skills/atomicmail) <br>
-- [Atomic Mail overview help topic](lib/shared/help/topics/overview.md) <br>
-- [Atomic Mail JMAP cheatsheet help topic](lib/shared/help/topics/jmap_cheatsheet.md) <br>
-- [OpenClaw cron documentation](https://docs.openclaw.ai/automation/cron-jobs) <br>
-- [Hermes cron documentation](https://hermes-agent.nousresearch.com/docs/user-guide/features/cron) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute CLI calls that return JSON JMAP results and write local credential and JWT files during registration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.24 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: The skill stores Atomic Mail API keys and JWT bearer credentials for inbox access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the credential directory private, do not commit or share credentials.json or JWT files, and use separate credential directories for separate accounts.
+
+Risk: The skill can send replies, new messages, and attachments through JMAP.
+
+Mitigation: Require explicit review before sending mail or attachments, and treat inbox content as untrusted input.
+
+Risk: Scheduled inbox checks may run with more access than needed if configured outside the host scheduler.
+
+Mitigation: Use the host scheduler with narrow tool permissions and avoid raw OS-level cron or standalone jmap_request scheduling.
+
+## Reference(s):
+
+- [Atomic Mail homepage](https://atomicmail.ai)
+- [ClawHub skill page](https://clawhub.ai/atomicmail/skills/atomicmail)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JMAP JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or consume credential-path configuration, bundled preset names, and JMAP request payloads.]
+
+## Skill Version(s):
+
+0.3.26 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

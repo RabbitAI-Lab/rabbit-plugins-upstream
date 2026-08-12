@@ -11,7 +11,7 @@ This `.md` module relies on an executable companion at `<skill_dir>/modules/oaut
 **Pinned SHA256** (this is the SINGLE source of truth for what `oauth.js` content is accepted):
 
 ```
-oauth.js.sha256 = 8f0cbe88b95ddf832eb0cf3d644d105918355182333c0f549508ea52f6b7458b
+oauth.js.sha256 = dc49e997e805aeb1ca4d517b114dfa72a6bdb3f0d5b609c554d2e28c26515ec2
 oauth.js.url    = https://raw.githubusercontent.com/bybit-exchange/skills/main/modules/oauth.js
 ```
 
@@ -78,6 +78,8 @@ Read the file at that path. If it exists and the token has not expired (`Math.fl
 
 If a token exists but `ai-account` credentials are missing, skip to OAuth Step 6.
 
+---
+
 ## OAuth Step 2: Start callback server (background)
 
 The server writes output to a user-private directory (`~/.bybit/` on Unix, `%APPDATA%\bybit\` on Windows) with restricted permissions (0600). Get the output path from the server's init file after startup.
@@ -89,19 +91,24 @@ node <skill_dir>/modules/oauth.js --port 9876 --env <resolved_env>
 
 Run with `run_in_background`. The script auto-adapts to all platforms (macOS/Linux/Windows). If the port is occupied, it automatically tries the next available one. Timeout: 5 minutes (auto-exits if no callback received).
 
-The script outputs a JSON line to stdout immediately on startup containing `authorize_url`, `output_file`, `credential_path`, `port`, and `state`. Parse this stdout to get the authorization URL and the exact path where the callback result will be written (`output_file`).
+The script outputs a JSON line to stdout immediately on startup containing `authorize_url`, `output_file`, `credential_path`, `port`, `server_started`, `init_file`, and `state`. Parse this stdout to get the authorization URL and the exact path where the callback result will be written (`output_file`).
+
+**If `server_started` is `false`**: the local server could not bind a port. The script exits immediately after outputting the JSON. The authorization URL still uses `127.0.0.1` as the redirect target. Proceed to Step 3 — do NOT run the polling command, display the link and end your turn, then wait for the user to paste the authorization code in their next message.
 
 ## OAuth Step 3: Display authorization link and poll for callback (atomic — do NOT end turn)
 
-Read the init file. Extract `output_file` to know where to poll. First output the authorization link to the user:
+Read the init file. Extract `output_file` to know where to poll. Output the authorization link to the user (render in the language of the user's most recent message):
 
 ```
 [<ENV>] Please click the following link to authorize your Bybit account:
 
 <authorize_url from init file>
+
+After authorization completes, the system will detect the callback automatically.
+If the page displays an authorization code, please paste it here.
 ```
 
-Then **immediately** (in the same turn, do NOT end your response) run the polling command to wait for the callback.
+Then **immediately** (in the same turn, do NOT end your response) run the polling command to wait for the callback:
 
 **macOS/Linux:**
 ```bash
@@ -131,14 +138,26 @@ Write-Output '{"error":"timeout"}'
 
 **Do NOT end your turn before running this poll command. The link output and the poll must happen in the same turn.** The user will click the link while the poll is running.
 
+**If the user pastes an authorization code** (before the poll completes): immediately process it with:
+```bash
+node <skill_dir>/modules/oauth.js --manual-code "<user_provided_code>" --init-file "<init_file_path>" --env <resolved_env>
+```
+If the command outputs `{"success": true, ...}` (with or without `"already_handled": true`), proceed to Step 5 (token exchange). `already_handled` means the local callback server already received the code — this is normal and not an error, just skip to Step 5.
+
+If the command outputs `{"error": ...}`, display the error to the user and offer to retry from Step 2. Common errors: `empty_code` (empty input), `init_file_not_found` (session expired — restart from Step 2), `invalid_init_file` (corrupted state).
+
 The link already contains the `code_challenge` and `code_challenge_method=S256` parameters for PKCE verification.
 
 ## OAuth Step 4: Process callback result
 
 Once the polling command returns, parse the result:
 
-- If `{"error": "timeout"}`: tell the user authorization timed out, offer to retry
 - If `{"status": "ok"}`: proceed to OAuth Step 5 (exchange token immediately)
+- If `{"error": "timeout"}`: the local callback was not received. Ask the user to paste the authorization code (displayed on the page after they authorized). When the user provides the code, process it with:
+  ```bash
+  node <skill_dir>/modules/oauth.js --manual-code "<user_provided_code>" --init-file "<init_file_path>" --env <resolved_env>
+  ```
+  Then proceed to Step 5.
 
 The server validates state internally — if state mismatched, the callback file will contain `{error: "state_mismatch"}` (no code field), and the poll will continue until timeout. If this happens, abort with an error.
 
@@ -407,3 +426,16 @@ node -e "console.log(require('<skill_dir>/modules/oauth.js').getCredentialPath()
 File contents include:
 - `access_token` — for calling OAuth-protected endpoints
 - `ai-account.api_key` + `ai-account.api_secret` — for calling Bybit Open API directly (used by Runtime Decision in Step 3)
+
+If `BYBIT_CRED_DIR` environment variable is set, credentials are stored at `$BYBIT_CRED_DIR/oauth_token.json` instead of the default platform path. Cloud platforms should set this to a user-scoped directory for data isolation in shared environments.
+
+---
+
+## OAuth: Data Isolation (Cloud Environments)
+
+In cloud deployments where multiple users run on the same host infrastructure:
+
+- **Pod-level isolation** (e.g., OpenClaw, K8s): each user gets a dedicated container with its own filesystem. No additional configuration needed — the default `~/.bybit/` path is already user-scoped.
+- **Shared-host environments**: set `BYBIT_CRED_DIR` to a user-scoped directory (e.g., `/data/<user_id>/.bybit/`). The platform is responsible for setting this env var per user session.
+- **Security guarantees**: credential files are created with permission 0600 (owner-only read/write), directories with 0700. The `code_verifier` is never output to stdout — only stored in the init file.
+- **No cross-user leakage**: each OAuth session generates a unique PKCE pair (code_verifier + code_challenge). A code exchanged with the wrong code_verifier will fail with `code_verify_err`. Even if two users share a filesystem (misconfiguration), they cannot use each other's authorization codes.

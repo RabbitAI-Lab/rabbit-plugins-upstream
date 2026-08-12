@@ -1,0 +1,7 @@
+{
+  "source": "synthetic",
+  "depth": 3.0,
+  "fines_pct": 10.0,
+  "mean_water_table": 2.7447762489318848,
+  "method": "Youd-Iwasaki-simplified"
+}

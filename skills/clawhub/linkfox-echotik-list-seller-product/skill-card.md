@@ -1,45 +1,59 @@
-## Description: <br>
-Queries a TikTok Shop seller's EchoTik product list by sellerId and returns product titles, prices, sales and GMV metrics, ratings, reviews, commissions, listing dates, sales channels, and categories. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lists products for a single TikTok Shop seller by sellerId and returns product titles, prices, sales and GMV windows, ratings, reviews, commission rates, listing dates, sales channels, and categories.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketers, and e-commerce analysts use this skill to inspect a known TikTok Shop store's active product catalog and compare product performance by sales, GMV, price, reviews, and commission rate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends sellerId queries, API credentials, and session/application metadata to LinkFox services. <br>
-Mitigation: Confirm this data sharing is acceptable before installation, keep the LinkFox API key in environment variables, and avoid placing credentials or sensitive seller context in prompts or logs. <br>
-Risk: Calls consume LinkFox credits and repeated pagination or retries can increase cost. <br>
-Mitigation: Confirm cost expectations before high-volume use, prefer the built-in cache for repeated identical queries, and ask before making extra paid calls. <br>
-Risk: Full API responses are written locally, and scanner guidance notes review-worthy storage behavior. <br>
-Mitigation: Run the skill from an appropriate writable workspace, review saved `linkfox/` response and cache files for sensitive data, and delete retained outputs when they are no longer needed. <br>
-Risk: The artifact includes an automatic feedback API path that can transmit user feedback content to LinkFox. <br>
-Mitigation: Review feedback content before sending it and avoid including secrets, private business data, or unrelated user context. <br>
+## Use Case:
 
+External sellers, marketers, and ecommerce analysts use this skill to inspect what a known TikTok Shop store sells and compare per-product price, sales, GMV, review, category, and commission metrics. Developers and agent operators can also use it to retrieve the underlying EchoTik seller-product response for downstream reporting.
 
-## Reference(s): <br>
-- [EchoTik seller product API reference](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-list-seller-product) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Files, Guidance] <br>
-**Output Format:** [JSON response saved to a local file, with either full JSON or a concise stdout summary for large responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a sellerId and a LinkFox API key; pageSize must be a multiple of 10 up to 100; calls consume LinkFox credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill requires LinkFox/EchoTik API credentials and includes account setup, API-key generation, billing, and payment-order flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review any phone-code, API-key, billing, or payment-order step before allowing the agent to run it.
+
+Risk: Full API responses and QR images may be saved under a local linkfox directory.
+
+Mitigation: Inspect saved files for sensitive account or business data and delete them when they are no longer needed.
+
+Risk: Repeated product-list calls can consume paid credits.
+
+Mitigation: Confirm with the user before pagination, repeated calls, or high-frequency use when credit cost is unclear.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-list-seller-product)
+- [EchoTik seller product API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown summaries, shell commands, and JSON responses saved to local files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a sellerId, may consume LinkFox credits, caches identical calls for 24 hours, and saves full API responses under a local linkfox directory.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

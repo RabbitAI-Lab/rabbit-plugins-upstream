@@ -1,0 +1,63 @@
+================================================================
+TA-Lib 技术指标 转写对照 —— 跳过汇总
+================================================================
+源文件：scripts/因子初始参考文件/TA-Lib指标参考.md
+转写结果：scripts/task/factor-TA_Indicators.json（84 个因子；
+      v1.2.0 优化命名：去掉 TA_ 前缀、BB_→BOLL_、MACD→MACD_DIF 等，
+      删除与 TR 完全重复的 TR_DM，85→84 个）
+验证：本地冒烟 + 真实 QuantAll 引擎（全市场 5588 只，
+      2024-08 ~ 2026-07）batch_factor_analysis 全量正常、0 异常。
+      —— TA-Lib 标准 78 个 + 后续补的常用非 TA-Lib 指标 KDJ×3、BIAS×3 = 84。
+
+价格相关因子一律用复权价：ac=close*adj_factor, ah=high*adj_factor,
+al=low*adj_factor, ao=open*adj_factor。成交量/额用 d['vol']/d['amount']。
+
+----------------------------------------------------------------
+【已转写，78 个，覆盖】Overlap / Momentum / Volume / Volatility /
+Price-Transform / Statistic / Math-Operator(HHV/LLV) / Directional(ADX族)
+及 3 个 K线形态代表（CDL_ENGULFING/CDL_HAMMER/CDL_DOJI）。
+
+----------------------------------------------------------------
+【跳过项 & 原因】
+
+■ 需迭代/状态累积，纯向量化难以表达（无循环/apply/轴=1 约束下）：
+1. SAR / SAREXT（抛物线 SAR）
+   - 需追踪"极点价 EP"与"加速因子 AF"的逐根更新状态，属递归式状态机，
+     无法用 fixed-window rolling 表达。
+2. KAMA（Kaufman 自适应均线）
+   - 平滑系数 α 随效率比 ER 逐根变化，本质是"变 α 的 EMA"，
+     ewm(alpha=固定) 表达不了；需 rolling.apply 算累积状态（被禁）。
+3. NVI / PVI（正负量能指数）
+   - 条件累积：仅当 vol<prevVol 时按 (1+ret) 累乘，否则沿用前值。
+     属"带条件的前值保持"状态机，无法向量化。
+4. MAVP（可变周期均线）
+   - 窗口周期由另一序列实时决定，无法用固定 n 的 rolling 表达。
+
+■ Hilbert 变换类（周期/相位，需复数域迭代）：
+5. HT_DCPERIOD / HT_DCPHASE / HT_PHASOR / HT_SINE / HT_TRENDMODE
+6. MAMA / HT_TRENDLINE（MESA 自适应均线 / 瞬时趋势线）
+   - 均依赖希尔伯特变换（正交/同相分量、相位提取），
+     属迭代滤波，非简单 rolling 算子。
+
+■ 与已转写项重复，无需单列：
+7. MACDEXT（可变 MA 类型的 MACD）—— 已被 MACD_DIF / APO / PPO 覆盖。
+
+■ 纯逐点/算子原语，非独立因子（按需组合即可）：
+8. Math Transform 类（SQRT/LN/LOG10/EXP/SIN/COS/TAN/ASIN/...）
+   - 即 np.log(ac) 等逐点包装，无独立因子意义；需要时在因子里直接写。
+9. Math Operator 类（ADD/SUB/MULT/DIV/SUM/MAXINDEX/MININDEX/MINMAX）
+   - SUM/MAX/MIN 已由 rolling().sum()/HHV/LLV 覆盖；
+     MAXINDEX/MININDEX 等价于 AROON 的"距极值周期"语义，未单列。
+
+■ K线形态（CDL*，共 61 个）—— 仅做 3 个代表，其余跳过：
+10. 除 CDL_ENGULFING / CDL_HAMMER / CDL_DOJI 外，其余 58 个形态
+    - 逻辑均为"近 1~2 根 K 线的 OHLC 布尔比较"，原理可行但逐个编码冗长、
+      边际价值低；如需可参照已做的 3 个用 .where()/np.select 模板补。
+
+----------------------------------------------------------------
+【后续若想补全】
+- SAR/KAMA/NVI/PVI/MAVP 与全部 HT_*：引擎若未来开放"带状态的 rolling.apply"
+  或提供对应内置函数（如 rolling_sar/rolling_kama），可再补；
+  当前约束下强行用 np.where 链或 .apply 会触发运行失败，故跳过。
+- 其余 CDL 形态：照 CDL_ENGULFING 模板扩展即可，无技术障碍。
+================================================================

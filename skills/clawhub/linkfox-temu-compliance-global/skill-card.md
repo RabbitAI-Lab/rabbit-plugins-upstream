@@ -1,48 +1,70 @@
-## Description: <br>
-Provides Temu Global product compliance API guidance and Python command wrappers through LinkFox for nine Partner Global compliance endpoints. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+经 LinkFox 网关调用 Temu Partner Global 电商合规 OpenAPI，帮助代理查询和编辑商品合规模板、标签、资质、实拍图和证书上传相关数据。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Temu sellers and developers use this skill to prepare and run product compliance API calls for metadata, labels, certification upload/query, file upload, and real-image workflows on Temu Global through LinkFox. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Temu seller API traffic and access tokens pass through the LinkFox gateway. <br>
-Mitigation: Install only if you trust LinkFox for this workflow, keep tokens out of logs, and restrict token scope where possible. <br>
-Risk: Local token storage can expose account credentials on shared machines. <br>
-Mitigation: Avoid saving Temu access tokens on shared devices; use protected local storage or per-session credentials where possible. <br>
-Risk: Generic proxy scripts can forward broad Temu API requests beyond the named compliance helpers. <br>
-Mitigation: Review or restrict the generic proxy scripts before deployment. <br>
-Risk: Full API responses may be written to the project working directory and can contain sensitive commerce data. <br>
-Mitigation: Control filesystem access, review saved JSON outputs, and remove sensitive files when they are no longer needed. <br>
+## Use Case:
 
+External Temu Global sellers, operators, and developers use this skill to guide product compliance API calls for metadata lookup, compliance label retrieval, certificate upload/query, real-image upload, and compliance edits.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-compliance-global) <br>
-- [API reference](references/api.md) <br>
-- [Temu access token authorization](references/access-token.md) <br>
-- [Partner Global API catalog](references/partner-global-catalog.md) <br>
-- [Compliance API index](references/apis/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python shell commands and JSON request/response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts may save full JSON responses under the working directory and print either full JSON or summaries depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release evidence) <br>
+Risk: The skill can exercise broad Temu and LinkFox account authority through credentials and a generic proxy beyond the narrow compliance workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege Temu and LinkFox credentials, prefer the specific compliance scripts, and use the generic proxy only when broad API access is intended.
+
+Risk: API responses and saved Temu access tokens may remain on disk after use.
+
+Mitigation: Run in a trusted workspace, protect or override the token store path, and delete generated response files or stored tokens when they are no longer needed.
+
+Risk: Environment variables can redirect gateway calls to unexpected services.
+
+Mitigation: Confirm LINKFOX_TOOL_GATEWAY, TEMU_API_BASE_URL, and STORE_API_BASE_URL point only to trusted LinkFox or Temu endpoints before execution.
+
+Risk: Onboarding, SMS login, and payment/order commands can affect account setup or billing.
+
+Mitigation: Review those commands before running them and execute order or payment actions only after explicit user approval.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-compliance-global)
+- [Gateway and API reference](references/api.md)
+- [Partner Global compliance catalog](references/partner-global-catalog.md)
+- [Compliance API document index](references/apis/README.md)
+- [Temu access token authorization](references/access-token.md)
+- [Temu Partner documentation: bg.compliance.edit](https://partner-global.temu.com/documentation?menu_code=fb16b05f7a904765aac4af3a24b87d4a&sub_menu_code=a8829c8ede574d9a97cd3cea7c019bc4)
+- [Temu Partner documentation: bg.compliance.metadata.get](https://partner-global.temu.com/documentation?menu_code=fb16b05f7a904765aac4af3a24b87d4a&sub_menu_code=fd12bdf5cb364366bdef85aad9cd8e48)
+- [Temu Partner documentation: bg.goods.compliancelabel.get](https://partner-global.temu.com/documentation?menu_code=fb16b05f7a904765aac4af3a24b87d4a&sub_menu_code=c49495eb93904c93b750e9798c95e7db)
+- [Temu Partner documentation: certificate upload/query APIs](https://partner-global.temu.com/documentation?menu_code=fb16b05f7a904765aac4af3a24b87d4a&sub_menu_code=56de04bcafae45509b21edeab57c9fdb)
+- [Temu Partner documentation: image upload recognition](https://partner-global.temu.com/documentation?menu_code=fb16b05f7a904765aac4af3a24b87d4a&sub_menu_code=960adb7a9d1f47069cdc0a9abd686dc9)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses saved to disk.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts write full responses under a linkfox session data directory; small responses may also print full JSON, while larger responses print summaries unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

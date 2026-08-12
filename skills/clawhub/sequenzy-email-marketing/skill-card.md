@@ -1,46 +1,67 @@
-## Description: <br>
-Primary agent guide for operating Sequenzy as an email-marketing platform across authentication, subscribers, campaigns, sequences, templates, team operations, webhooks, transactional email, stats, and supported-workflow checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through Sequenzy email marketing operations, including authentication, subscriber management, campaigns, sequences, templates, transactional email, delivery stats, webhooks, inbox workflows, and supported workflow checks.
 
-## Publisher: <br>
-[polnikale](https://clawhub.ai/user/polnikale) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[polnikale](https://clawhub.ai/user/polnikale)
 
-## Use Case: <br>
-Developers, operators, and marketing teams use this skill to guide an agent through Sequenzy email-marketing workflows, including account checks, subscriber management, campaign and sequence creation, lifecycle control, delivery stats, webhooks, API keys, and product feedback. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill gives agents broad production email-marketing powers, including subscriber changes, campaign lifecycle control, webhooks, API-key creation, team invitations, product uploads, and feedback submission. <br>
-Mitigation: Require explicit user approval before campaign cancel/delete, scheduling sends, team invitations, API-key creation, webhook changes, subscriber bulk changes, product file uploads, or feedback submissions. <br>
-Risk: Campaign cancellation can stop scheduled, paused, waiting-approval, or sending campaigns immediately without a confirmation prompt. <br>
-Mitigation: Inspect the target campaign and confirm the intended action with the user before running cancellation or other destructive lifecycle commands. <br>
-Risk: Generated API keys and webhook signing secrets are sensitive one-time outputs. <br>
-Mitigation: Store generated secrets only in an approved secret manager or non-versioned local file, and redact raw values from chat, logs, tickets, and public transcripts. <br>
+## Use Case:
 
+Developers, operators, and marketing teams use this skill to help an agent choose and run supported Sequenzy CLI or MCP workflows for email marketing operations. It is most useful when the agent needs to inspect account state, manage contacts and audiences, draft or schedule email assets, handle transactional sends, review delivery data, or identify unsupported workflows.
 
-## Reference(s): <br>
-- [Sequenzy skill page](https://clawhub.ai/polnikale/skills/sequenzy-email-marketing) <br>
-- [Command reference](references/command-reference.md) <br>
-- [Use cases](references/use-cases.md) <br>
-- [Sequenzy application](https://sequenzy.com) <br>
-- [Sequenzy API](https://api.sequenzy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, markdown] <br>
-**Output Format:** [Markdown guidance with CLI and MCP command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dashboard URLs, JSON-oriented command flags, and redacted handling notes for sensitive outputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata) <br>
+Risk: The agent may operate with production Sequenzy credentials and affect real subscribers, campaigns, webhooks, or API keys.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege API keys and review the skill before installing it in an environment with production access.
+
+Risk: Sends, scheduling, deletes, cancellations, webhook changes, and API-key creation or revocation can have immediate account impact.
+
+Mitigation: Require explicit user confirmation for those actions and verify the exact recipient, campaign, sequence, webhook, or API-key target before execution.
+
+Risk: Permanent campaign cancellation may be suggested without a confirmation step in some situations.
+
+Mitigation: Inspect the campaign status and ID first, and require confirmation unless the user is explicitly asking to stop an active mistake immediately.
+
+Risk: Ambiguous campaign or sequence IDs can cause the agent to act on the wrong resource.
+
+Mitigation: Resolve and display the target resource before mutating it, and ask for clarification when identifiers or names are not unique.
+
+## Reference(s):
+
+- [Skill Source](artifact/SKILL.md)
+- [Command Reference](artifact/references/command-reference.md)
+- [Use Cases](artifact/references/use-cases.md)
+- [ClawHub Skill Page](https://clawhub.ai/polnikale/skills/sequenzy-email-marketing)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/polnikale)
+- [Sequenzy App](https://sequenzy.com)
+- [Sequenzy API](https://api.sequenzy.com)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, markdown, code]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON snippets, and configuration examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce operational recommendations for live Sequenzy resources; review sensitive or destructive actions before execution.]
+
+## Skill Version(s):
+
+1.6.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

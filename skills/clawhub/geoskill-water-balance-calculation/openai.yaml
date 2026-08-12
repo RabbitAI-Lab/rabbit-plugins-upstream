@@ -1,0 +1,15 @@
+name: geoskill-water-balance-calculation
+display_name: 水量平衡计算
+description: |
+  逐像元水量平衡计算 P = ET + Q + ΔS，评估闭合差。Per-pixel water balance computation P = ET + Q + ΔS with closure residual assessment. 输出各分量/闭合差 GeoTIFF + 报告 JSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-water-balance-calculation.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - hydrology
+  - raster
+  - remote-sensing
+  - water

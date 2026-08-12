@@ -1,48 +1,64 @@
-## Description: <br>
-Use Futu Trade Bot Skills to run account, quote, and trade workflows with real HK market data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Futu Trade Bot Skills to run account, quote, and trade workflows with real HK market data.
 
-## Publisher: <br>
-[jeffersonling1217-png](https://clawhub.ai/user/jeffersonling1217-png) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jeffersonling1217-png](https://clawhub.ai/user/jeffersonling1217-png)
 
-## Use Case: <br>
-External agent users and developers use this skill to configure Futu OpenD access, inspect accounts and HK market quotes, place or manage Futu orders, and run simple trading strategy scripts from natural-language requests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can unlock Futu accounts and place, modify, or cancel real-money orders. <br>
-Mitigation: Keep SIMULATE as the default trading environment and require explicit human approval before unlocking REAL trading or submitting, modifying, or canceling orders. <br>
-Risk: The skill can cancel all orders and run background strategy processes. <br>
-Mitigation: Confirm account, environment, symbol, quantity, and order scope before calling cancel_all_orders or launching long-running strategy scripts; record PID and log paths for monitoring and stop actions. <br>
-Risk: Configuration and generated account cache files may contain sensitive trading credentials or account data. <br>
-Mitigation: Avoid plaintext trade passwords, prefer protected credential handling, keep config and account_info.json out of shared storage, and restrict file permissions for local configuration. <br>
+## Use Case:
 
+External users, developers, and agent operators use this skill to query Futu account and Hong Kong market data, prepare trading workflows, and execute simulated or confirmed live brokerage actions through Futu OpenD.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/jeffersonling1217-png/futu-trading-bot) <br>
-- [README](README.md) <br>
-- [Account Manager documentation](docs/account.md) <br>
-- [Config Manager documentation](docs/config.md) <br>
-- [Quote Service documentation](docs/quote.md) <br>
-- [Trade Service documentation](docs/trade.md) <br>
-- [Strategy Helpers documentation](docs/strategy.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python snippets, shell commands, JSON configuration, and function call patterns] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Python strategy scripts, process commands, account or quote summaries, order-management guidance, and local configuration instructions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: ClawHub release evidence) <br>
+Risk: The skill can access Futu OpenD and perform live brokerage operations when configured for real trading.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to SIMULATE, require explicit confirmation for live actions, and review exact order parameters before execution.
+
+Risk: A direct path may bypass confirmation checks for live brokerage actions.
+
+Mitigation: Use the documented wrapper functions only and avoid importing or calling internal trade_service objects directly.
+
+Risk: Trading credentials and account data may be present in local configuration or optional cache files.
+
+Mitigation: Keep credentials in a private config file, prefer trade_password_md5, and only persist account information when explicitly requested.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jeffersonling1217-png/skills/futu-trading-bot)
+- [Publisher profile](https://clawhub.ai/user/jeffersonling1217-png)
+- [README](README.md)
+- [Account Manager documentation](docs/account.md)
+- [Config Manager documentation](docs/config.md)
+- [Quote Service documentation](docs/quote.md)
+- [Strategy Helpers documentation](docs/strategy.md)
+- [Trade Service documentation](docs/trade.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with Python and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include account, quote, order, strategy, and preflight results from local Futu OpenD workflows.]
+
+## Skill Version(s):
+
+1.0.9 (source: pyproject.toml, ClawHub release metadata, artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

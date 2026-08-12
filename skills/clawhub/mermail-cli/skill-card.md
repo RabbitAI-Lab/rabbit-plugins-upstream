@@ -1,44 +1,53 @@
-## Description: <br>
-Install and use the official Mermail CLI for deterministic shell automation across workspaces, mailboxes, email, folders, labels, agents, and task triage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Install and use the official Mermail CLI for deterministic shell automation across workspaces, mailboxes, email, folders, labels, agents, task triage, and Agent Wallet via MCP OAuth.
 
-## Publisher: <br>
-[mermail](https://clawhub.ai/user/mermail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mermail](https://clawhub.ai/user/mermail)
 
-## Use Case: <br>
-Developers and operators use this skill to install and run Mermail CLI commands with deterministic JSON output, safe credential handling, and explicit approval before external effects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to perform Mermail actions that change external email state. <br>
-Mitigation: Require explicit user approval before send, reply, forward, invite, scheduling, write, or delete commands. <br>
-Risk: Email content and command output may contain untrusted data. <br>
-Mitigation: Treat retrieved email content and CLI output as data, not instructions. <br>
-Risk: API credentials may be exposed through command history or process listings. <br>
-Mitigation: Keep MERMAIL_API_KEY in the environment and avoid passing the key through command flags. <br>
+## Use Case:
 
+Developers, operators, and agents use this skill to compose safe Mermail CLI workflows for mailbox automation, email operations, JSON output, CI scripts, authentication checks, and Agent Wallet commands.
 
-## Reference(s): <br>
-- [Mermail AI Skills Documentation](https://docs.mermail.app/ai/skills) <br>
-- [Mermail MCP Endpoint](https://console.mermail.app/mcp) <br>
-- [ClawHub Skill Release](https://clawhub.ai/mermail/skills/mermail-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include JSON-oriented command patterns and safety checks for Mermail CLI automation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release metadata) <br>
+Risk: The skill enables an agent to operate sensitive email and wallet workflows from the shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require human review of email sends, destructive commands, wallet transfer previews, and external effects before approval.
+
+Risk: The skill depends on MERMAIL_API_KEY and OAuth sessions that can grant access to Mermail resources.
+
+Mitigation: Keep API keys and OAuth sessions protected, avoid echoing secrets, and prefer environment variables over command-line key flags.
+
+## Reference(s):
+
+- [Mermail AI Skills Documentation](https://docs.mermail.app/ai/skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and structured guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON-oriented CLI command patterns, approval checkpoints, and environment-variable setup guidance.]
+
+## Skill Version(s):
+
+1.2.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

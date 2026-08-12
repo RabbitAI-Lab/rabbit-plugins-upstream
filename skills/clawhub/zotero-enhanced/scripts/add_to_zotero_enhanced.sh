@@ -18,12 +18,12 @@ Environment variables:
   ZOTERO_USER_ID, ZOTERO_API_KEY required.
   WEBDAV_URL, WEBDAV_USER, WEBDAV_PASS optional for WebDAV storage.
 
-Version: zotero-enhanced add_to_zotero_enhanced.sh v1.3.8
+Version: zotero-enhanced add_to_zotero_enhanced.sh v1.3.7
 EOF
         exit 0
         ;;
     --version)
-        echo "zotero-enhanced add_to_zotero_enhanced.sh v1.3.8"
+        echo "zotero-enhanced add_to_zotero_enhanced.sh v1.3.7"
         exit 0
         ;;
 esac

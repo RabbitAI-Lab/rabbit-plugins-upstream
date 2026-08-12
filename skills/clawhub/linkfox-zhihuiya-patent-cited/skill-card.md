@@ -1,45 +1,65 @@
-## Description: <br>
-This skill helps agents query Zhihuiya (PatSnap) for forward citation counts and citing-patent details for a single patent by publication number or internal patent ID. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+从智慧芽（PatSnap）查询专利被引用数据，包括被引用次数和引用专利详情。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to retrieve factual patent forward-citation metrics and citing-patent details from Zhihuiya (PatSnap). It is intended for single-patent citation lookup and tabular reporting, not patent valuation, legal-status review, or backward-citation research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Patent queries, API keys, and session metadata are sent to external LinkFox endpoints. <br>
-Mitigation: Install and use the skill only when LinkFox is trusted for the relevant patent data and credentials. <br>
-Risk: The API gateway can be configured through LINKFOX_TOOL_GATEWAY. <br>
-Mitigation: Verify that LINKFOX_TOOL_GATEWAY is unset or points to a trusted HTTPS endpoint before running the helper script. <br>
-Risk: Full API responses are written to a local linkfox directory and cache. <br>
-Mitigation: Review local storage policies and clean saved response files when patent query data should not persist. <br>
-Risk: The security review flagged under-scoped feedback reporting and possible onboarding-support installation. <br>
-Mitigation: Review feedback and onboarding behavior before deployment, especially in environments with strict data-sharing or installation controls. <br>
+## Use Case:
 
+External users, patent analysts, and developers use this skill to query forward citation counts and cited-by patent details for one or more PatSnap/Zhihuiya patent IDs or publication numbers. It helps compare citation metrics and present factual citation data without valuation or investment advice.
 
-## Reference(s): <br>
-- [智慧芽-专利被引用 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-patent-cited) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON parameters, shell commands, and tabular patent-citation summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The helper script saves full JSON API responses locally, uses a 24-hour cache by default, and summarizes large responses unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The skill can make paid LinkFox patent lookup calls and includes account onboarding and billing flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before paid calls or payment actions, especially when a query may consume credits dynamically.
+
+Risk: The skill handles API keys and may ask the user to use SMS-based account access.
+
+Mitigation: Treat printed API keys and SMS codes as secrets, and share SMS codes only when the user intends to create or access a LinkFox account.
+
+Risk: Patent query results, payment QR artifacts, and session metadata may be persisted locally.
+
+Mitigation: Review or disable local response and QR persistence before use with sensitive patent or business data.
+
+Risk: The release security evidence marks the skill as suspicious because it combines patent lookup, login, payments, feedback reporting, and local storage.
+
+Mitigation: Review and scan the skill before installation, and disable automatic feedback reporting if sensitive data may be exposed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-patent-cited)
+- [LinkFox Publisher Profile](https://clawhub.ai/user/linkfox-ai)
+- [智慧芽-专利被引用 API 参考](references/api.md)
+- [解决认证和积分问题](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, shell commands, configuration, guidance, API calls]
+
+**Output Format:** [Markdown tables and guidance with JSON API responses, saved JSON files, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full API responses under the working directory and may print either full JSON or a compact summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.7 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

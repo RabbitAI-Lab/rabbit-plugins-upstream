@@ -1,45 +1,61 @@
-## Description: <br>
-Generate MP3 speech with Fish Audio through RunAPI. Use for one-off speech generation or application integration. Prefer the RunAPI CLI for one-off requests and the target-language SDK for production integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate MP3 or WAV speech with Fish Audio through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to generate Fish Audio MP3 speech through RunAPI, either with the RunAPI CLI for one-off requests or language SDKs for application integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Text, reference audio, and transcripts are sent to RunAPI and Fish Audio for speech generation. <br>
-Mitigation: Use the service only with content appropriate for RunAPI and Fish Audio, and avoid submitting sensitive text or audio unless approved for that workflow. <br>
-Risk: The skill relies on local RunAPI CLI or SDK authentication, including optional API keys. <br>
-Mitigation: Prefer environment-based API keys or saved RunAPI configuration, and treat the CLI, SDKs, and stored tokens as trusted local tooling. <br>
+## Use Case:
 
+Developers and agents use this skill to generate speech audio with Fish Audio through RunAPI, either as one-off CLI requests or SDK-backed application integrations.
 
-## Reference(s): <br>
-- [Fish Audio model overview](https://runapi.ai/models/fish-audio.md) <br>
-- [Fish Audio homepage](https://runapi.ai/models/fish-audio) <br>
-- [Fish Audio provider page](https://runapi.ai/providers/fish-audio.md) <br>
-- [Fish Audio s1 model](https://runapi.ai/models/fish-audio/s1.md) <br>
-- [Fish Audio s2-pro model](https://runapi.ai/models/fish-audio/s2-pro.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and SDK guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference RunAPI-managed audio response fields and environment-based API key handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: release evidence) <br>
+Risk: The skill sends requests to RunAPI/Fish Audio and may upload referenced local media inputs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only approved inputs, review request files before submission, and work from a private directory.
+
+Risk: RunAPI requests may incur paid API usage.
+
+Mitigation: Authenticate deliberately and do not resubmit after terminal service failures without user authorization.
+
+Risk: Request, response, and generated audio files may be saved locally.
+
+Mitigation: Avoid secrets in request files and delete generated artifacts when they are no longer needed.
+
+## Reference(s):
+
+- [RunAPI Fish Audio Homepage](https://runapi.ai/models/fish-audio)
+- [Model Overview, Pricing, and Rate Limits](https://runapi.ai/models/fish-audio.md)
+- [Provider Overview](https://runapi.ai/providers/fish-audio.md)
+- [Full Model Catalog](https://runapi.ai/models.md)
+- [SDK Integration](https://github.com/runapi-ai/fish-audio-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON request files, SDK code, saved responses, and downloaded audio files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save request, response, and generated audio files locally; downloaded media is verified for non-empty audio MIME output.]
+
+## Skill Version(s):
+
+0.2.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

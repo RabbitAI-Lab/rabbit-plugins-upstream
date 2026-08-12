@@ -1,44 +1,61 @@
-## Description: <br>
-Automatically discovers novel, statistically validated patterns in tabular data and returns structured conditions, effect sizes, citations, and novelty scores. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automatically discover novel, statistically validated patterns in tabular data, including feature interactions, subgroup effects, conditional relationships, FDR-corrected p-values, citations, and novelty scores.
 
-## Publisher: <br>
-[jessicarumbelow](https://clawhub.ai/user/jessicarumbelow) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[jessicarumbelow](https://clawhub.ai/user/jessicarumbelow)
 
-## Use Case: <br>
-Developers, analysts, and data scientists use this skill to send tabular datasets to Disco, choose target and exclusion settings, run public or private analyses, and interpret statistically validated pattern results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Datasets may be sent to Disco's remote service, and public analyses may publish data or results. <br>
-Mitigation: Use private mode for confidential data and confirm the requested visibility before starting an analysis. <br>
-Risk: Private analyses and account actions can consume credits or involve paid plans. <br>
-Mitigation: Estimate cost first, get explicit user confirmation, and do not attach payment methods, buy credits, or change plans unless the user requested that exact action. <br>
+## Use Case:
 
+External users, developers, researchers, and data practitioners use this skill to upload or reference tabular datasets, choose a target column, and run Disco to find statistically validated patterns that may not be apparent from ordinary exploratory analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jessicarumbelow/skills/discovery-engine) <br>
-- [Disco homepage](https://disco.leap-labs.com) <br>
-- [Disco MCP endpoint](https://disco.leap-labs.com/mcp) <br>
-- [Python SDK documentation](docs/python-sdk.md) <br>
-- [OpenAPI specification](docs/openapi.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API and tool-call guidance, configuration snippets, and code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured pattern summaries with conditions, p-values, effect sizes, citations, novelty labels, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.152 (source: ClawHub release evidence; artifact package metadata reports 0.2.151) <br>
+Risk: Selected datasets or dataset URLs may be sent to Disco/Leap Labs for remote processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for data approved for remote processing, and verify the exact file path or URL before upload.
+
+Risk: Public analysis runs publish results by default.
+
+Mitigation: Choose private visibility for confidential, proprietary, regulated, or personal data before submitting an analysis.
+
+Risk: Agent-callable account tools can purchase credits, subscribe to paid plans, or change payment-method state.
+
+Mitigation: Require explicit user approval before any credit purchase, subscription, or payment-method action, and estimate private-run costs before analysis.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jessicarumbelow/skills/discovery-engine)
+- [Disco homepage](https://disco.leap-labs.com)
+- [Disco MCP endpoint](https://disco.leap-labs.com/mcp)
+- [Python SDK documentation](docs/python-sdk.md)
+- [OpenAPI specification](docs/openapi.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API Calls, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown and structured API results containing discovered patterns, conditions, effect sizes, p-values, citations, novelty classifications, feature importance, and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Disco API key through DISCOVERY_API_KEY or an authenticated session; public runs publish results, while private runs require credits.]
+
+## Skill Version(s):
+
+0.2.156 (source: evidence release, server.json, and pyproject.toml)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

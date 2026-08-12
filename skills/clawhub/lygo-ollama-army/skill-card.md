@@ -1,52 +1,72 @@
-## Description: <br>
-Local Ollama daemons and optional LYGO stack queue roles run when LYGO_STACK_ROOT is configured, with security guidance against remote LLM use, git push, ClawHub publishing, and autonomous social posting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Local Ollama multi-role army and assistant hub for queue-driven local automation, command-center monitoring, and optional consent-gated supervisor workflows.
 
-## Publisher: <br>
-[deepseekoracle](https://clawhub.ai/user/deepseekoracle) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deepseekoracle](https://clawhub.ai/user/deepseekoracle)
 
-## Use Case: <br>
-Developers and operators use this skill to run local Ollama assistant daemons, queue reviewed LYGO stack tasks, monitor local stack status, and generate local drafts or analysis. Stack-touching roles require a controlled LYGO_STACK_ROOT clone and explicit user approval before queue files or long-running automation are started. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security evidence flags this as a real local automation skill with queue-driven stack mutation and account or social pulse roles broader than the top-level safety claims. <br>
-Mitigation: Install only on a machine and LYGO_STACK_ROOT clone the operator controls; review SECURITY.md, SECURITY_AUDIT.md, AGENT_CONTRACT.md, and command-center configuration before enabling stack roles. <br>
-Risk: Long-running supervisors, cron flows, and daemon roles can keep processing local queues after startup. <br>
-Mitigation: Do not run army_autonomous_supervisor.py, cron examples, desktop launchers, seed scripts, or full-capacity scripts unless the operator has reviewed the scripts and intentionally wants those effects. <br>
-Risk: Queue task files can trigger stack audits, self-tuning, planting, registry operations, or other local mutations when daemons are active. <br>
-Mitigation: Agents should propose task JSON for human approval first; write queue files only after approval and only for a validated LYGO_STACK_ROOT. <br>
-Risk: Outbound webhook and social or account pulse behavior can interact with external services if explicitly enabled. <br>
-Mitigation: Keep webhook environment variables, social pulse roles, publishing paths, and sensitive account tooling disabled unless the operator has reviewed the code and requested that behavior. <br>
-Risk: Planting, self-tune, seed, and full-capacity paths can change local workspace state or expand automation scope. <br>
-Mitigation: Keep default configuration gates disabled, including planting.enabled, self_tune.enabled, LYGO_ARMY_FULL_CAPACITY, LYGO_ARMY_SEED_TASKS, and LYGO_ARMY_WEBHOOK_ENABLE, until intentionally enabled by the operator. <br>
+## Use Case:
 
+Developers and operators use this skill to run local Ollama worker roles, propose or review queue tasks, check health and sentinel status, and manage optional local automation surfaces. It is intended for controlled local machines where the user can review configuration, queue files, and consent-gated launchers before use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deepseekoracle/skills/lygo-ollama-army) <br>
-- [LYGO RESONANCE companion site](https://deepseekoracle.github.io/Excavationpro/LYGORESONANCE.html) <br>
-- [Security guidance](references/SECURITY.md) <br>
-- [SkillSpector security audit response](references/SECURITY_AUDIT.md) <br>
-- [Agent contract](references/AGENT_CONTRACT.md) <br>
-- [Command center README](ollama_command_center/README.md) <br>
-- [Example command-center configuration](ollama_command_center/config/army_config.example.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with shell command snippets, configuration notes, and reviewed JSON task proposals.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are intended for local Ollama and LYGO stack workflows; queue tasks and long-running daemons require human review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release evidence and SKILL.md metadata) <br>
+Risk: The skill can act as a powerful local automation hub with runtime and desktop-launcher paths that may be broader than a minimal skill surface.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only on a controlled local machine, read the security references first, and review queue files, config flags, and desktop launchers before running them.
+
+Risk: Queue tasks may execute when a daemon or worker role is running.
+
+Mitigation: Review task JSON before placing it in an execution queue, and avoid automatic queue writes by agents.
+
+Risk: Self-tune can rewrite configuration and prune queue files when enabled.
+
+Mitigation: Keep self_tune disabled by default and enable it only after explicitly accepting configuration mutation.
+
+Risk: Full-capacity PowerShell launchers intentionally spawn multiple Python processes when all gates are set.
+
+Mitigation: Use the in-process Python launcher for normal operation and run the full-capacity PowerShell path only with explicit operator consent.
+
+Risk: Optional public probes, browser opening, planting, social pulse, and external memory writes can have effects outside the default local-only path.
+
+Mitigation: Leave those flags disabled unless the user intends the specific effect and has confirmed the relevant local stack path and consent settings.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deepseekoracle/skills/lygo-ollama-army)
+- [LYGO protocol stack homepage](https://github.com/DeepSeekOracle/lygo-protocol-stack)
+- [LYGO resonance companion](https://deepseekoracle.github.io/Excavationpro/LYGORESONANCE.html)
+- [Security guidance](artifact/references/SECURITY.md)
+- [Security audit notes](artifact/references/SECURITY_AUDIT.md)
+- [SkillSpector audit response](artifact/references/SKILLSPECTOR_AUDIT.md)
+- [Agent contract](artifact/references/AGENT_CONTRACT.md)
+- [ClawHub security audit](https://clawhub.ai/deepseekoracle/skills/lygo-ollama-army/security-audit)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON task proposals, configuration notes, code snippets, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Normal output should keep queue writes, self-tune, planting, autonomous supervisor, full-capacity launchers, browser open, and public probes behind explicit user review or consent.]
+
+## Skill Version(s):
+
+0.8.2 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

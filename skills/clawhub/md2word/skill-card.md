@@ -1,44 +1,63 @@
-## Description: <br>
-Markdown转Word文档技能，将 Markdown 文档转换为符合中文排版标准的专业 Word 文档，并支持多种预设格式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts Markdown documents into professionally formatted Word documents for Chinese-language reports, legal documents, service proposals, papers, and work materials.
 
-## Publisher: <br>
-[cat-xierluo](https://clawhub.ai/user/cat-xierluo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[cat-xierluo](https://clawhub.ai/user/cat-xierluo)
 
-## Use Case: <br>
-Agents use this skill to convert Markdown drafts into Chinese-formatted Word documents for legal documents, service plans, academic papers, reports, and book manuscripts. It applies preset or custom formatting for headings, body text, tables, images, footnotes, and basic document structure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The security evidence reports that the skill can fetch arbitrary external image URLs while processing Markdown. <br>
-Mitigation: Use trusted local Markdown when possible, pre-download and review remote images, and run conversions with network access controlled for untrusted inputs. <br>
-Risk: The security evidence reports that user-supplied SVG and diagram content may be rendered through local tools. <br>
-Mitigation: Avoid untrusted inline SVG or Mermaid content unless the renderer is isolated and optional rendering tools are installed in a constrained environment. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to convert Markdown drafts into styled .docx files with presets, templates, tables, images, code blocks, footnotes, and configurable document formatting.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/cat-xierluo/skills/md2word) <br>
-- [ClawDIS Homepage](https://github.com/cat-xierluo/legal-skills) <br>
-- [Configuration Reference](references/config-reference.md) <br>
-- [Style Mappings](references/style-mappings.md) <br>
-- [Usage Examples](references/examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [files, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and generated .docx Word document files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports preset and custom YAML configuration; may create companion image files when rendering diagrams or inline SVG.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.8 (source: frontmatter, CHANGELOG, server release metadata) <br>
+Risk: Markdown with external image URLs can trigger outbound HTTP/HTTPS requests, which may expose network metadata or reach unintended internal resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Convert trusted Markdown only, or run the skill with restricted network egress when processing third-party content.
+
+Risk: Markdown can cause reachable local image files to be embedded in the generated Word document.
+
+Mitigation: Run conversions in a constrained working directory and review source Markdown paths before processing sensitive material.
+
+Risk: Mermaid and SVG rendering can invoke local external tools on document-derived content.
+
+Mitigation: Use sandboxing for untrusted inputs, keep rendering tools patched, and disable optional renderers where they are not needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/cat-xierluo/skills/md2word)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/cat-xierluo)
+- [Legal Skills Homepage](https://github.com/cat-xierluo/legal-skills)
+- [Configuration Reference](references/config-reference.md)
+- [Style Mappings](references/style-mappings.md)
+- [Usage Examples](references/examples.md)
+- [Configuration Template](assets/config-template.yaml)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and generated .docx files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces Word documents and reusable YAML configuration; may embed local or external images when converting Markdown.]
+
+## Skill Version(s):
+
+1.2.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

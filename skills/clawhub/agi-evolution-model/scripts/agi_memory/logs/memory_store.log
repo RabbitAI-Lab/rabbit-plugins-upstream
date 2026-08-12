@@ -1,0 +1,6 @@
+2026-08-11 20:22:24 - memory_store - INFO - [3cc39a7e-1e80-46d7-98a0-2e91660a4e9a] - 初始化MemoryStore
+2026-08-11 20:22:24 - memory_store - INFO - [235d3d58-6186-47bd-b01f-757517175e96] - 记录文件不存在，使用空记录列表
+2026-08-11 20:22:24 - memory_store - INFO - [fa9f9be4-b747-4abc-8565-cdaf9d311019] - MemoryStore初始化完成
+2026-08-11 20:22:24 - memory_store - INFO - [0786ba18-4ac1-40cf-ba31-0d28ae7705dd] - 开始存储记录
+2026-08-11 20:22:24 - memory_store - INFO - [bc7d8d13-c25c-4cd3-83f3-4ebc9e69993c] - 保存记录成功
+2026-08-11 20:22:24 - memory_store - INFO - [43590e5b-9998-4d1f-b2df-d2e5f1de958b] - 存储记录成功

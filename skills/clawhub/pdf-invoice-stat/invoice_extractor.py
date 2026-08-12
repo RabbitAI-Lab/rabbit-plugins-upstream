@@ -1,14 +1,24 @@
 #!/usr/bin/env python3
 """
-PDF增值税发票抽取工具 v1.0
-支持：增值税电子发票（普通发票）+ 铁路电子客票（火车票）
-依赖：pdfplumber, openpyxl
+PDF 增值税发票提取 v2.0.0
+- 修复：通行费 PDF 文本跨行 bug（合 计 / 金额分两行）
+- 新增：命令行参数支持（python3 invoice_extractor_v2.py <PDF> [输出.xlsx]）
+- 新增：康熙字典 ** → 生/海/消 等修复
+- 新增：水印页发票号/日期/税号兜底
+- 新增：多税率留空
+- 布局感知（基于 pdfplumber 坐标分析）
+- 支持增值税电子发票（普通发票）+ 通行费 + 其他 PDF
+- 输出 15 列 Excel：序号/发票号/日期/购方/购方税号/销售方/销售方税号/项目/金额/税率/税额/价税合计/备注/报销人/报销日期
 """
-import pdfplumber, re, sys
+import sys
+import pdfplumber, re
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment
 from openpyxl.utils import get_column_letter
 from collections import defaultdict
+
+PDF_PATH = sys.argv[1] if len(sys.argv) >= 2 else "invoices.pdf"
+OUTPUT_PATH = sys.argv[2] if len(sys.argv) >= 3 else (PDF_PATH.rsplit(".", 1)[0] + "_发票统计.xlsx")
 
 COL_SPLIT = 295; COL_SPLIT_RIGHT = 302
 
@@ -23,8 +33,7 @@ def norm(t):
 def parse_float(s):
     if not s: return 0.0
     s = str(s).replace(",","").replace("¥","").strip()
-    m = re.search(r'[-+]?\d*\.\d+|\d+', s)
-    return float(m.group()) if m else 0.0
+    m = re.search(r'[-+]?\d*\.\d+|\d+', s); return float(m.group()) if m else 0.0
 
 def normalize_date(text):
     if not text: return ""
@@ -33,28 +42,39 @@ def normalize_date(text):
         raw = re.sub(r'\s+', '', m.group(1).strip())
         dm = re.search(r'(\d{4})年(\d{2})[\u6708\u2F49\u4e00-\u9fff]*(\d{2})[\u65e5\u2F47\u4e00-\u9fff]*', raw)
         if dm: return f"{dm.group(1)}-{dm.group(2)}-{dm.group(3)}"
-    # 水印/水印页终极兜底
-    dm2 = re.search(r'(\d{4})年(\d{2})月(\d{2})日', text)
-    if dm2: return f"{dm2.group(1)}-{dm2.group(2)}-{dm2.group(3)}"
+    wm = re.search(r'国家税务总局\s*(\d{4})年(\d{2})月(\d{2})日', text)
+    if wm: return f"{wm.group(1)}-{wm.group(2)}-{wm.group(3)}"
     return ""
 
+def _extract_num(s):
+    '''从含¥的字符串中提取数字（小数优先，其次整数）'''
+    m = re.search(r'¥\s*([0-9,]+\.\d+)', s)
+    if m: return m.group(1)
+    m = re.search(r'¥\s*([0-9,]+)', s)
+    return m.group(1) if m else None
+
 def extract_amounts(text):
-    heji_match = re.search(r'合\s*计\s+(.+)', text)
+    # 先在合汁行提取
+    heji_match = re.search(r'(?<!价税)合\s*计[ \t]+([^\n]+)', text)
     if heji_match:
         heji_line = heji_match.group(1)
         nums = re.findall(r'¥\s*([0-9,]+\.\d+|\*+|\d+)', heji_line)
         if nums:
             amount_raw = nums[0].replace(',','')
-            if '***' in heji_line or amount_raw == '***':
-                jshj_m = re.search(r'价税合计[^¥]*¥\s*([0-9,]+\.\d+)', text)
-                total = parse_float(jshj_m.group(1).replace(',','')) if jshj_m else 0.0
-                return 0.0, 0.0, total
-            amount = float(amount_raw) if '.' in amount_raw else float(amount_raw)
+            # 免税/不征税：¥后直接是***，或只有一项且为整数
+            if amount_raw == '***' or re.match(r'^\d+$', amount_raw) and len(nums) == 1:
+                # 检查是否为免税/不征税（¥后直接是***）
+                if '***' in heji_line or '免税' in text or '不征税' in text:
+                    jshj_m = re.search(r'价税合计[^¥]*¥\s*([0-9,]+\.\d+)', text)
+                    total = parse_float(jshj_m.group(1).replace(',','')) if jshj_m else 0.0
+                    return 0.0, 0.0, total
+            amount = float(amount_raw) if re.search(r'\.', amount_raw) else float(amount_raw)
             tax_raw = nums[1].replace(',','') if len(nums) > 1 else '0'
             tax = float(tax_raw) if tax_raw != '***' else 0.0
             jshj_m = re.search(r'价税合计[^¥]*¥\s*([0-9,]+\.\d+)', text)
             total = parse_float(jshj_m.group(1).replace(',','')) if jshj_m else 0.0
             return amount, tax, total
+    # 回退：逐行扫描
     lines = text.split('\n')
     for i, line in enumerate(lines):
         if line.strip().startswith('¥'):
@@ -70,16 +90,21 @@ def extract_amounts(text):
     return 0.0, 0.0, 0.0
 
 def extract_tax_rate(text):
+    # 先统计税率数量，用于判断是否多税率
     rates = re.findall(r'(\d+)%', text)
     unique = sorted(set(rates))
     if len(unique) == 0:
+        # 无数值税率，再检查特殊标签
         if '不征税' in text: return '不征税'
         if '免税' in text: return '免税'
         return ""
-    if len(unique) > 1: return ""
-    return f"{unique[0]}%"
+    if len(unique) > 1:
+        return ""  # 多税率，无论是否含免税/不征税字样，均留空
+    # 单一数值税率
+    return f"{unique[0]}%" 
 
 def extract_item_name(text, page_words):
+    """修复：预处理`**`合并 + Kangxi标准化 + top分组合并"""
     header_y = col_end_x = None
     for w in page_words:
         if '项目名称' in w['text']: header_y = w['top']; break
@@ -119,6 +144,7 @@ def extract_item_name(text, page_words):
     for k, words_list in merged:
         line_text = ''.join(w[1] for w in sorted(words_list))
         if '*' not in line_text: continue
+        # 修复：预处理`**`→`*`，避免regex在`**`后无法匹配
         line_text_normalized = re.sub(r'\*\*', '*', line_text)
         for m in re.finditer(r'\*([^\*]+)\*([^\s\*]+)', line_text_normalized):
             full = parse_star_word(m.group())
@@ -137,11 +163,10 @@ def find_invoice_number(text):
     m = re.search(r'发票号码[：:\s]*(\d{10,})', text)
     if m: return m.group(1)
     m = re.search(r'(?:监\s*制\s*)(\d{10,})', text)
-    if m: return m.group(1)
-    m = re.search(r'([^0-9]|^)(\d{20})([^0-9]|$)', text)
-    return m.group(2) if m else None
+    return m.group(1) if m else None
 
 def find_tax_code_in_zone(words, zone_x_min, zone_x_max, top_hint=None, exclude_watermark=False):
+    """在指定x范围内查找税号，支持水印页兜底"""
     for w in words:
         if not (zone_x_min <= w['x0'] <= zone_x_max): continue
         if top_hint is not None and abs(w['top'] - top_hint) > 30: continue
@@ -150,54 +175,13 @@ def find_tax_code_in_zone(words, zone_x_min, zone_x_max, top_hint=None, exclude_
         if cm: return cm.group(1)
     return None
 
-def is_train_ticket(text, page_words):
-    if not text: return False
-    has_buyer_line = any('购买方名称:' in w['text'] for w in page_words)
-    has_train_number = any('电子客票号:' in w['text'] for w in page_words)
-    return has_buyer_line and has_train_number
-
-def extract_train_ticket(page_words, page_num):
-    text = ' '.join(w['text'] for w in page_words)
-    inv = None
-    for w in page_words:
-        m = re.search(r'(\d{20})', w['text'])
-        if m: inv = m.group(1); break
-    date_str = ""
-    for w in page_words:
-        m = re.search(r'开票日期[：:](\d{4})年(\d{2})月(\d{2})日', w['text'])
-        if m: date_str = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"; break
-    buyer = ""
-    for w in page_words:
-        if '购买方名称:' in w['text']:
-            buyer = re.sub(r'^购买方名称[：:]\s*', '', w['text']).strip()
-            break
-    buyer_code = ""
-    for w in page_words:
-        if '统一社会信用代码:' in w['text']:
-            m = re.search(r'([A-Z0-9]{10,})', w['text'])
-            if m: buyer_code = m.group(1); break
-    total = 0.0
-    for w in page_words:
-        m = re.search(r'[￥¥]\s*([0-9,]+\.?\d*)', w['text'])
-        if m:
-            try: total = float(m.group(1).replace(',','')); break
-            except: pass
-    return {
-        'invoice_id': inv or '', 'date': date_str,
-        'buyer': buyer, 'buyer_code': buyer_code,
-        'seller': '', 'seller_code': '',
-        'amount': 0.0, 'tax': 0.0, 'total': total,
-        'rate': '', 'item_name': '火车票',
-        'page_num': page_num, 'is_last': True,
-    }
-
 def get_page_info(page, text, page_num):
     page_words = page.extract_words() or []
-    if is_train_ticket(text, page_words):
-        return extract_train_ticket(page_words, page_num)
     inv = find_invoice_number(text)
     if not inv: return None
     date_str = normalize_date(text)
+    
+    # 购买方/销售方名称
     name_w_buyer = name_w_seller = None
     for w in page_words:
         if ('名称' in w['text'] and '统一' not in w['text']
@@ -206,29 +190,35 @@ def get_page_info(page, text, page_num):
             elif w['x0'] > COL_SPLIT_RIGHT and not name_w_seller: name_w_seller = w
     buyer_name = concat_name(page_words, name_w_buyer, COL_SPLIT-1)
     seller_name = concat_name(page_words, name_w_seller, 600)
+    
+    # 税号：先在标签词内找，再在水印页兜底
     buyer_code = seller_code = ""
+    # 标准逻辑：在标签词内找税号
     for w in page_words:
         if '统一社会信用代码' in w['text'] or '纳税人识别号' in w['text']:
             cm = re.search(r'([A-Z0-9]{10,})', w['text'])
             if cm:
                 if w['x0'] < COL_SPLIT and not buyer_code: buyer_code = cm.group(1)
                 elif w['x0'] > COL_SPLIT_RIGHT and not seller_code: seller_code = cm.group(1)
+    # 水印页兜底：在zone内找18位字母数字
     if not buyer_code:
         bc = find_tax_code_in_zone(page_words, 0, COL_SPLIT-1)
         if bc: buyer_code = bc
     if not seller_code:
         sc = find_tax_code_in_zone(page_words, COL_SPLIT_RIGHT+1, 700, exclude_watermark=True)
         if sc: seller_code = sc
+    
     amount, tax, total = extract_amounts(text)
     rate_str = extract_tax_rate(text)
     item_name = extract_item_name(text, page_words)
+    is_last = bool(re.search(r'价税合计[^\n]*¥\s*\d', text))
     return {
         'invoice_id': inv, 'date': date_str,
         'buyer': buyer_name, 'buyer_code': buyer_code,
         'seller': seller_name, 'seller_code': seller_code,
         'amount': amount, 'tax': tax, 'total': total,
         'rate': rate_str, 'item_name': item_name,
-        'page_num': page_num, 'is_last': True,
+        'page_num': page_num, 'is_last': is_last,
     }
 
 def extract_all_invoices(pdf_path):
@@ -335,39 +325,28 @@ def create_excel(invoices, duplicate_rows, output_path):
         ws.column_dimensions[letter].width=max_len+3
     wb.save(output_path)
 
-def main():
-    if len(sys.argv) < 2:
-        print("用法: python3 invoice_extractor.py <PDF路径> [输出Excel路径]")
-        print("  <PDF路径>  : 必填，合并PDF文件路径")
-        print("  [输出Excel路径]: 选填，默认在PDF同目录生成 <原文件名>_发票统计.xlsx")
-        sys.exit(1)
-    pdf_path = sys.argv[1]
-    if len(sys.argv) >= 3:
-        output_path = sys.argv[2]
-    else:
-        import os
-        base = os.path.splitext(pdf_path)[0]
-        output_path = base + "_发票统计.xlsx"
-
-    print(f"PDF: {pdf_path}")
-    print(f"输出: {output_path}")
-    invoices = extract_all_invoices(pdf_path)
+if __name__=='__main__':
+    invoices = extract_all_invoices(PDF_PATH)
     empty_date = [i+1 for i,inv in enumerate(invoices) if not inv['开票日期']]
     empty_buyer = [i+1 for i,inv in enumerate(invoices) if not inv['购买方信息-名称']]
     empty_buyer_code = [i+1 for i,inv in enumerate(invoices) if not inv['购买方信息-统一社会信用代码']]
-    zero_amt = [i+1 for i,inv in enumerate(invoices) if inv['金额']==0 and inv['项目名称']!='火车票']
+    zero_amt = [i+1 for i,inv in enumerate(invoices) if inv['金额']==0]
     empty_item = [i+1 for i,inv in enumerate(invoices) if not inv['项目名称']]
-    print(f"总数:{len(invoices)} | 日期空:{len(empty_date)} | 购方空:{len(empty_buyer)} | 购方税号空:{len(empty_buyer_code)} | 金额0(非火车票):{len(zero_amt)} | 项目空:{len(empty_item)}")
+    print(f"总数:{len(invoices)} | 日期空:{len(empty_date)} | 购方空:{len(empty_buyer)} | 购方税号空:{len(empty_buyer_code)} | 金额0:{len(zero_amt)} | 项目空:{len(empty_item)}")
     if empty_date: print(f"  日期空: {[invoices[i-1]['发票号码'] for i in empty_date]}")
     if empty_buyer_code: print(f"  购方税号空: {[invoices[i-1]['发票号码'] for i in empty_buyer_code]}")
     if empty_item: print(f"  项目空: {[invoices[i-1]['发票号码'] for i in empty_item]}")
+    # 验证问题发票
+    check_invs = {'26312000004018164286','26352000001516076731','26512000002667610411',
+                  '26127000000297200980','26317000002248685472'}
+    for inv_check in check_invs:
+        for inv in invoices:
+            if inv['发票号码'] == inv_check:
+                print(f"  {inv_check}: 项目={inv['项目名称'][:30] if inv['项目名称'] else '(空)'!r}, 购方税号={inv['购买方信息-统一社会信用代码']!r}, 金额={inv['金额']}, 税率={inv['税率/征收率']!r}, 价税合计={inv['价税合计']}")
     dupes = detect_duplicates(invoices)
     print(f"重复:{len(dupes)}行")
-    create_excel(invoices, dupes, output_path)
+    create_excel(invoices, dupes, OUTPUT_PATH)
     from collections import Counter
     rates = Counter(inv['税率/征收率'] for inv in invoices)
-    print(f"税率分布:{dict(sorted(rates.items(),key=lambda x:-x[1]))}")
-    print(f"完成! -> {output_path}")
+    print(f"税率:{dict(sorted(rates.items(),key=lambda x:-x[1]))}")
 
-if __name__=='__main__':
-    main()

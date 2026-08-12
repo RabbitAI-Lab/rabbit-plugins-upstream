@@ -1,41 +1,64 @@
-## Description: <br>
-Shopee-店铺折扣 helps agents create, list, update, end, and delete Shopee store discount promotions through LinkFox's Shopee developer proxy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Shopee store Discount promotions through LinkFox scripts for the Shopee Open Platform Discount APIs, including creating, listing, updating, ending, and deleting discounts.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and developers use this skill to manage authorized Shopee store discount campaigns, including creating promotions, adding or updating items, ending promotions, and reviewing discount details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, end, and delete live Shopee store discount promotions. <br>
-Mitigation: Require explicit user confirmation before any create, update, end, or delete action and review request parameters before execution. <br>
-Risk: Full LinkFox and Shopee API responses may be saved locally and can contain sensitive merchant data. <br>
-Mitigation: Treat saved response files as sensitive, keep them in an appropriate workspace, and review or delete them after use. <br>
+## Use Case:
 
+External sellers, operators, and developers use this skill to manage authorized Shopee store discount campaigns and inspect campaign results. It is intended for store-level promotion workflows that already have LinkFox and Shopee authorization in place.
 
-## Reference(s): <br>
-- [API reference](references/api.md) <br>
-- [Shopee Open Platform Discount API](https://open.shopee.com/documents/v2/v2.discount.add_discount?module=99&type=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, JSON, files, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response output or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved under a local linkfox data directory; small responses print full JSON and larger responses print summaries unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can create, update, end, and delete live Shopee store discount promotions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before every create, update, end, or delete operation, and verify shop IDs, merchant IDs, discount IDs, and request bodies before execution.
+
+Risk: The skill handles LinkFox account onboarding, billing actions, and API keys.
+
+Mitigation: Use it only with trusted LinkFox accounts, keep API keys in secure environment variables, and do not paste or expose keys in shared logs or prompts.
+
+Risk: Service URL overrides can redirect operational requests away from the expected LinkFox gateway.
+
+Mitigation: Avoid gateway or service URL environment overrides unless they have been reviewed and approved for the deployment environment.
+
+Risk: Saved and printed responses may contain sensitive store, campaign, billing, or account data.
+
+Mitigation: Protect the linkfox output directory, limit access to response files, and remove stored responses when they are no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-discount)
+- [Shopee Discount API reference](https://open.shopee.com/documents/v2/v2.discount.add_discount?module=99&type=1)
+- [Discount module API overview](references/api.md)
+- [Onboarding and billing guidance](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save complete JSON responses under a linkfox output directory and may print either full JSON or a summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

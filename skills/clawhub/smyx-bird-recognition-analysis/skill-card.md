@@ -1,45 +1,64 @@
-## Description: <br>
-Identifies bird species in images or videos, supports recognition of at least 500 common species, and can produce structured bird-recognition reports for ecological observation and birdwatching use cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies bird species in target-area images or videos, supports at least 500 common species, and can return structured reports for ecological observation and birdwatching scenarios.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze bird images, videos, or URLs, identify likely species, and retrieve prior cloud-generated recognition reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends bird images, videos, URLs, and an internal user identifier to a remote Life Emergence service for processing. <br>
-Mitigation: Install and use it only when remote processing of those inputs is acceptable for the user, organization, and data involved. <br>
-Risk: The skill can create local workspace data that may include reusable account or session tokens. <br>
-Mitigation: Prefer a release that documents storage and cleanup behavior, and review local workspace data handling before deployment. <br>
-Risk: The skill supports cloud history access for account-linked recognition reports. <br>
-Mitigation: Confirm that cloud history access is expected and appropriately disclosed before using report-listing features. <br>
+## Use Case:
 
+External users and developers use this skill to identify bird species from local images, videos, or public media URLs, retrieve structured analysis reports, and query prior cloud reports associated with the current internal user identity.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-bird-recognition-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands] <br>
-**Output Format:** [Markdown or JSON text with report links and recognition results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report links and historical report listings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server release metadata; SKILL.md frontmatter reports 1.0.7) <br>
+Risk: Bird images, videos, or media URLs are sent to a third-party cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media that is appropriate for third-party processing, avoid sensitive locations or bystanders, and confirm organizational approval before upload.
+
+Risk: The skill automatically associates requests with an internal user identity and can query cloud history.
+
+Mitigation: Make identity association and history lookup explicit to administrators and users before deployment, and avoid environments where silent account creation or history access is not allowed.
+
+Risk: Returned authentication tokens may be stored in a local workspace SQLite database.
+
+Mitigation: Restrict workspace file access, avoid sharing the workspace, and rotate or revoke tokens if the workspace may have been exposed.
+
+Risk: The authoritative scan verdict is suspicious because the API client has broader account and history behavior than the bird-recognition description suggests.
+
+Mitigation: Review the API permissions and endpoints before use, and prefer a release that clearly declares permissions and scopes the client to bird-recognition functions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-bird-recognition-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Bird recognition API documentation](artifact/references/api_doc.md)
+- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, API Calls, Markdown, JSON, Files]
+
+**Output Format:** [Markdown text or JSON structured report, with optional saved output file and report export link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local image/video file input, public media URL input, history-list queries, and optional output file path; documented size limit is 10 MB.]
+
+## Skill Version(s):
+
+1.0.16 (source: server release metadata; artifact frontmatter reports 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

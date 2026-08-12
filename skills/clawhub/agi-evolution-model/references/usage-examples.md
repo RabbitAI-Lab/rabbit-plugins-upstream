@@ -192,74 +192,61 @@ python3 scripts/personality_customizer.py get-summary --memory-dir ./agi_memory
 }
 ```
 
-### 文件操作工具示例
+### 文件操作示例（toolnode）
 ```bash
+# 语法：toolnode.py <group> <op> --params '<json>'
 # 读取文件
-python3 scripts/cli_file_operations.py --action read --path ./config.json
+python3 scripts/toolnode.py fs read --params '{"path": "./config.json"}'
 
 # 写入文件
-python3 scripts/cli_file_operations.py --action write --path ./output.txt --content "Hello"
+python3 scripts/toolnode.py fs write --params '{"path": "./output.txt", "content": "Hello"}'
 
 # 列出目录
-python3 scripts/cli_file_operations.py --action list --path ./projects --recursive
+python3 scripts/toolnode.py fs list --params '{"path": "./projects"}'
 
 # 搜索文件内容
-python3 scripts/cli_file_operations.py --action search --path ./src --pattern "import"
+python3 scripts/toolnode.py fs search --params '{"path": "./src", "pattern": "import"}'
 ```
 
-### 系统信息工具示例
+### 系统信息示例（toolnode）
 ```bash
-# 获取系统信息
-python3 scripts/cli_system_info.py --action system
+# 获取全部系统信息
+python3 scripts/toolnode.py sys all --params '{}'
 
-# 获取CPU信息
-python3 scripts/cli_system_info.py --action cpu
-
-# 获取内存信息
-python3 scripts/cli_system_info.py --action memory
-
-# 获取磁盘信息
-python3 scripts/cli_system_info.py --action disk --path /
-
-# 获取所有系统信息
-python3 scripts/cli_system_info.py --action all
+# 按子项获取（cpu/mem/disk/net/uptime/env）
+python3 scripts/toolnode.py sys cpu --params '{}'
+python3 scripts/toolnode.py sys mem --params '{}'
+python3 scripts/toolnode.py sys disk --params '{}'
 ```
 
-### 进程管理工具示例
+### 进程管理示例（toolnode）
 ```bash
 # 获取进程列表
-python3 scripts/cli_process_manager.py --action list
+python3 scripts/toolnode.py proc list --params '{}'
 
 # 搜索进程
-python3 scripts/cli_process_manager.py --action search --name nginx
+python3 scripts/toolnode.py proc search --params '{"name": "nginx"}'
 
 # 获取进程详情
-python3 scripts/cli_process_manager.py --action detail --pid 1234
+python3 scripts/toolnode.py proc detail --params '{"pid": 1234}'
 
 # 终止进程
-python3 scripts/cli_process_manager.py --action kill --pid 1234
+python3 scripts/toolnode.py proc kill --params '{"pid": 1234}'
 
 # 获取进程树
-python3 scripts/cli_process_manager.py --action tree
+python3 scripts/toolnode.py proc tree --params '{}'
 ```
 
-### 通用命令执行器示例
+### 通用命令执行示例（toolnode）
 ```bash
-# 执行简单命令
-python3 scripts/cli_executor.py --action execute --command "echo 'Hello'"
+# 执行简单命令（受危险命令网关保护）
+python3 scripts/toolnode.py exec run --params '{"command": "echo Hello"}'
 
 # 执行管道命令
-python3 scripts/cli_executor.py --action execute --command "ls -la | head -5"
-
-# 指定工作目录
-python3 scripts/cli_executor.py --action execute --command "pwd" --work-dir /tmp
-
-# 设置环境变量
-python3 scripts/cli_executor.py --action execute --command "echo $VAR" --env "VAR=test"
+python3 scripts/toolnode.py exec run --params '{"command": "ls -la | head -5"}'
 
 # Git操作
-python3 scripts/cli_executor.py --action execute --command "git status"
-python3 scripts/cli_executor.py --action execute --command "git log --oneline -10"
+python3 scripts/toolnode.py exec run --params '{"command": "git status"}'
 ```
 
 ---
@@ -267,4 +254,4 @@ python3 scripts/cli_executor.py --action execute --command "git log --oneline -1
 ## 相关文档
 - [架构文档](architecture.md) - 理解整体架构设计
 - [人格映射](personality_mapping.md) - 理解人格参数映射机制
-- [CLI工具箱详细说明](cli-tools-guide.md) - CLI工具的完整API文档
+- [感知接口工具箱约束规范](perception-toolbox-constraints.md) - 工具节点（toolnode）约束与调用方式

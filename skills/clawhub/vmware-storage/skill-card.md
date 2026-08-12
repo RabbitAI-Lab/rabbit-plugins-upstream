@@ -1,45 +1,62 @@
-## Description: <br>
-Use this skill to manage VMware storage tasks such as datastore browsing, deployable image scans, iSCSI target configuration, and vSAN health and capacity checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to manage VMware storage, including datastores, iSCSI targets, vSAN health and capacity, and deployable image discovery.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, infrastructure engineers, and VMware administrators use this skill to inspect datastores, find deployable images, configure iSCSI targets, and review vSAN health and capacity from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change VMware storage configuration, including iSCSI targets, which may affect host or datastore availability. <br>
-Mitigation: Restrict use to VMware administrators, use a dedicated least-privilege vSphere account, review policy gates, and run dry-run before iSCSI changes. <br>
-Risk: Credentials and local audit logs may contain sensitive operational data. <br>
-Mitigation: Keep ~/.vmware-storage/.env at 600 permissions or inject secrets from a manager, and treat ~/.vmware/audit.db as sensitive operational data. <br>
+## Use Case:
 
+Developers and infrastructure operators use this skill to inspect and administer VMware vSphere storage resources, including datastore browsing, iSCSI configuration, and vSAN health and capacity checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-storage) <br>
-- [Project homepage](https://github.com/zw008/VMware-Storage) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [VMware Storage Capabilities](references/capabilities.md) <br>
-- [Operating vmware-storage with a local / small model](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI/MCP workflow guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes local VMware storage administration guidance; write operations should use dry-run, policy gates, and audit logging.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release evidence) <br>
+Risk: The skill administers VMware storage and can affect vCenter or ESXi storage configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for agents that are intended to administer VMware storage and use a least-privilege vCenter or ESXi account.
+
+Risk: TLS or authentication checks can be weakened during setup or diagnostics.
+
+Mitigation: Use `verify_ssl: true` with trusted certificates in production and reserve `--skip-auth` for narrow diagnostic cases.
+
+Risk: Storage operations may involve credentials and optional notification settings.
+
+Mitigation: Store credentials through the documented environment-variable flow and confirm whether any webhook or notification setting is actually used before entering credentials.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-storage)
+- [Project homepage](https://github.com/vmware-skills/VMware-Storage)
+- [Agent Guardrails](references/agent-guardrails.md)
+- [VMware Storage Capabilities](references/capabilities.md)
+- [CLI Reference](references/cli-reference.md)
+- [Setup Guide](references/setup-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and structured tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include dry-run previews, audit-aware operational guidance, and configuration steps for local CLI or MCP use.]
+
+## Skill Version(s):
+
+1.8.10 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

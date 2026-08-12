@@ -1,42 +1,59 @@
-## Description: <br>
-Analyzes orchid images or videos to estimate new-shoot count, flower-spike growth, root color and condition, overall vitality, and care-oriented observations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects orchid shoots, flower spikes, and visible root condition from user-provided orchid images or videos, then returns a structured growth-status assessment and care guidance.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Orchid hobbyists, greenhouse operators, and horticulture studios use this skill to review orchid media for visible growth status, including shoots, flower spikes, and roots visible through transparent pots. It can also return or list structured cloud-backed analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Submitted orchid media and URLs are processed by the publisher's cloud service. <br>
-Mitigation: Use non-sensitive media unless the publisher clarifies retention, access, and handling of private or signed URLs. <br>
-Risk: The skill can create or reuse a persistent local identity and store auth tokens in a workspace SQLite database. <br>
-Mitigation: Avoid shared workspaces, keep per-user workspace separation, and remove local tokens or databases after use when required by policy. <br>
+## Use Case:
 
+External orchid hobbyists, greenhouse operators, and horticulture studios use this skill to assess visible growth status from orchid media, including new shoot count, flower-spike development, and root color or condition. Agents can use the output to summarize plant vitality, surface care considerations, and retrieve prior analysis reports when supported.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-orchid-growth-status-detection-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown summaries and JSON-backed structured analysis reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links and historical report listings returned by the provider's cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release evidence; artifact frontmatter reports 1.0.6) <br>
+Risk: The skill may upload orchid media or media URLs to lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media or URLs approved for that service, and avoid inputs that should not be associated with the external analysis provider.
+
+Risk: The skill may create or reuse a local identity and store account tokens locally for report history.
+
+Mitigation: Review local data retention before use, including how to delete the local identity database and API key files when they are no longer needed.
+
+Risk: Historical report lookup has limited user-facing control.
+
+Mitigation: Use the skill only where the local identity and report-history behavior is acceptable, and restrict access to local data files.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-orchid-growth-status-detection-analysis)
+- [API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Markdown report or JSON analysis output with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud-hosted report links and historical report tables.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

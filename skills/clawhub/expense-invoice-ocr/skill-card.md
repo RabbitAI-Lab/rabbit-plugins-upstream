@@ -1,43 +1,61 @@
-## Description: <br>
-Recognizes common enterprise expense invoices, travel receipts, tax documents, and medical invoices, then returns structured OCR data through the Sugon-Scnet OCR service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+expense_invoice_ocr extracts structured OCR data from 19 common expense, invoice, travel, tax, and medical billing document types by uploading a user-approved local image or PDF to Scnet's remote OCR service.
 
-## Publisher: <br>
-[scnet-sugon](https://clawhub.ai/user/scnet-sugon) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[scnet-sugon](https://clawhub.ai/user/scnet-sugon)
 
-## Use Case: <br>
-Employees, finance teams, and agent developers use this skill to extract structured fields from invoices, receipts, tax records, transportation tickets, and related reimbursement documents. It is intended for workflows where the user has permission to send the selected document to Scnet's OCR service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Selected invoice, receipt, tax, travel, or medical billing documents are sent to Scnet's external OCR API. <br>
-Mitigation: Use only documents the user is authorized to share with Scnet and avoid sending sensitive records outside approved workflows. <br>
-Risk: The skill requires a Scnet API key. <br>
-Mitigation: Store SCNET_API_KEY in a protected environment or config file and do not paste API keys into chat. <br>
+## Use Case:
 
+Employees, finance operations teams, and developers use this skill to extract structured reimbursement and invoice fields from a specific local document after confirming that the file may be uploaded to Scnet. It is suited for expense-processing workflows that can use a third-party remote OCR service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/scnet-sugon/expense-invoice-ocr) <br>
-- [Sugon-Scnet OCR API documentation](references/api-docs.md) <br>
-- [OCR field summary](assets/templates/fields-summary.md) <br>
-- [Scnet website](https://www.scnet.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Text] <br>
-**Output Format:** [Structured JSON on standard output, with plain text error messages on failure.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Output fields vary by OCR type; the skill requires a local document path and SCNET_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: frontmatter, skill.yaml, release metadata, CHANGELOG released 2025-05-29) <br>
+Risk: Selected invoices, receipts, travel documents, and medical billing files are uploaded to Scnet's remote OCR service and may contain sensitive personal, financial, tax, or medical data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only after the user explicitly approves the specific upload and confirms the file is authorized for external processing.
+
+Risk: The Scnet API key could be exposed if it is pasted into chat or stored in an unsafe location.
+
+Mitigation: Keep SCNET_API_KEY out of chat logs and store it only in protected local configuration, such as a restricted config/.env file.
+
+Risk: Requests may fail or be throttled when the remote OCR service rejects credentials, receives invalid files, or enforces rate limits.
+
+Mitigation: Check the configured token and file path before use, handle user-visible errors, and run calls serially when processing multiple files.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/scnet-sugon/skills/expense-invoice-ocr)
+- [Scnet OCR API documentation summary](references/api-docs.md)
+- [OCR field summary](assets/templates/fields-summary.md)
+- [Scnet website](https://www.scnet.cn)
+- [Scnet OCR API endpoint](https://api.scnet.cn/api/llm/v1/ocr/recognize)
+
+## Skill Output:
+
+**Output Type(s):** [json, text, shell commands, configuration, guidance]
+
+**Output Format:** [Structured JSON data on stdout, with human-readable warnings and errors on stderr.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an ocrType and a local filePath; uses SCNET_API_KEY and optionally SCNET_API_BASE from local configuration.]
+
+## Skill Version(s):
+
+1.0.8 (source: SKILL.md frontmatter, skill.yaml, evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

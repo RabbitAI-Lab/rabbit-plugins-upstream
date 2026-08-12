@@ -1,44 +1,63 @@
-## Description: <br>
-Provides an agent with a Chinese-language reference and role style for Ni Haixia-inspired classical Chinese medicine study, including six-channel pattern differentiation, classical formulas, materia medica, acupuncture notes, case summaries, and related teaching materials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language agent skill that helps answer from a curated knowledge base about Ni Haixia's classical Chinese medicine teachings, including Shanghan Lun, Jingui Yaolue, Huangdi Neijing, acupuncture, materia medica, and case notes.
 
-## Publisher: <br>
-[jangviktor-web](https://clawhub.ai/user/jangviktor-web) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jangviktor-web](https://clawhub.ai/user/jangviktor-web)
 
-## Use Case: <br>
-External users and agent builders use this skill as a historical and educational traditional Chinese medicine reference and persona layer for answering questions in the style of Ni Haixia. It should be kept out of clinical decision-making, diagnosis, prescribing, dosing, acupuncture, emergency care, and medication-change workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake historical or educational traditional Chinese medicine discussion for medical advice. <br>
-Mitigation: Present the skill as a study reference only and require clear reminders to consult licensed clinicians for diagnosis, treatment, prescriptions, herbs, dosing, acupuncture, emergencies, pregnancy, children, serious illness, medication changes, or standard medical care decisions. <br>
-Risk: The artifact can produce diagnosis-like or treatment-like guidance for serious conditions. <br>
-Mitigation: Do not deploy it in clinical, triage, emergency, prescribing, or care-management workflows; route health decisions to qualified professionals. <br>
+## Use Case:
 
+External users and developers use this skill to query and summarize a Chinese-language reference collection on Ni Haixia's academic style and classical Chinese medicine materials. It should be treated as historical or educational reference material, not as a source for medical diagnosis, prescribing, emergency care, or advice to avoid conventional care.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jangviktor-web/nihaixia) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/jangviktor-web) <br>
-- [Research notes: writings](references/research/01-writings.md) <br>
-- [Research notes: teaching methodology](references/research/07-teaching-methodology.md) <br>
-- [Research notes: clinical cases](references/research/08-clinical-cases.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown prose with tables and structured clinical-study explanations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Chinese-language traditional medicine terminology, formula names, case references, and safety caveats.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: ClawHub release evidence) <br>
+Risk: The skill can elicit concrete diagnosis, herbal dosing, acupuncture, emergency, cancer, or heart-disease treatment guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with medical safety safeguards that keep outputs educational, avoid diagnosis or prescribing, and direct urgent or serious symptoms to qualified care.
+
+Risk: Case notes and historical medical claims may be mistaken for patient-specific medical advice.
+
+Mitigation: Frame case material as historical reference and avoid applying it to identifiable people or current clinical decisions.
+
+Risk: The artifact includes strong viewpoints about medical systems that could encourage avoidance of conventional care.
+
+Mitigation: Require neutral wording and prevent advice that discourages emergency services, licensed clinicians, or evidence-based care.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jangviktor-web/skills/nihaixia)
+- [Distilled reference README](references/distilled/README.md)
+- [Six-meridian formulas quick reference](references/distilled/01-six-meridian-formulas.md)
+- [Acupuncture quick reference](references/distilled/02-acupuncture-quick-ref.md)
+- [Clinical experience notes](references/distilled/03-clinical-experience.md)
+- [Distillation audit notes](references/distilled/audit-notes.md)
+- [Research combined reference](references/research/combined_reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or conversational text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses are grounded in the bundled Chinese-language knowledge base and may include formula, herb, acupuncture, or case references; medical safety constraints should be applied before user-facing use.]
+
+## Skill Version(s):
+
+2.2.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

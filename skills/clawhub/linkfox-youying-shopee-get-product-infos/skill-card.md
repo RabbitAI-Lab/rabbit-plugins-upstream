@@ -1,47 +1,63 @@
-## Description: <br>
-友鹰Shopee商品选品工具，支持Shopee全站点的商品查询与筛选，覆盖马来西亚、中国台湾、印尼、泰国、菲律宾、新加坡、越南、巴西、墨西哥、智利、哥伦比亚等11个站点。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+友鹰-Shopee商品搜索 helps agents query and filter Shopee product data across 11 marketplaces for product discovery and market analysis.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketplace analysts, and agents use this skill to build paid LinkFox/YouYing API queries for Shopee product search, filtering, and market data review across 11 marketplaces. It helps return product metrics such as price, sales, rating, category, shop attributes, and source links without extending into advertising, logistics, or store-operation advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill calls third-party LinkFox/YouYing API endpoints using API keys from environment variables. <br>
-Mitigation: Install only in environments where the LinkFox/YouYing gateway is trusted, scope API-key access carefully, and avoid exposing credentials in logs or shared shells. <br>
-Risk: The script persists full API responses and cached results locally, which may include product, shop, query, or session data. <br>
-Mitigation: Review the generated linkfox data and cache directories, apply local retention controls, and avoid running the skill in workspaces where persisted marketplace data is not acceptable. <br>
-Risk: The artifact includes automatic feedback reporting behavior and remote onboarding or dependency-install guidance. <br>
-Mitigation: Review or disable feedback reporting and remote installation steps before deployment, especially in managed or restricted agent environments. <br>
-Risk: The API consumes paid credits and can incur cost through repeated queries. <br>
-Mitigation: Keep the default cache enabled, ask before broad pagination or repeated searches, and disclose additional credit use before issuing follow-up API calls. <br>
+## Use Case:
 
+External sellers, marketplace analysts, and agent users use this skill to search and filter Shopee product listings by marketplace, keyword, price, sales, ratings, category, shop, and listing recency.
 
-## Reference(s): <br>
-- [友鹰-Shopee 商品选品 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-youying-shopee-get-product-infos) <br>
-- [LinkFox tool gateway](https://tool-gateway.linkfox.com) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries and tables, JSON API responses saved to files, and inline shell/Python command examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The script always writes full API responses to a local linkfox session data path, uses a 24-hour local cache by default, and summarizes responses larger than 8 KB unless --inline is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Shopee search queries and API credentials are sent to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when sharing those queries and credentials with LinkFox is acceptable; avoid custom LinkFox endpoint environment variables unless the destination is trusted.
+
+Risk: The onboarding flow can request phone/SMS verification and expose paid credit purchase flows.
+
+Mitigation: Confirm costs, selected plans, and payment methods with the user before initiating purchases or follow-up billing actions.
+
+Risk: The scripts write full API responses and cache data under LinkFox, home, workspace, or temporary directories.
+
+Mitigation: Review saved files after use and remove local response or cache data that should not persist.
+
+Risk: Automatic feedback reporting can send user-visible feedback about skill behavior to the publisher.
+
+Mitigation: Avoid including sensitive business details, credentials, or private user data in feedback content.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-youying-shopee-get-product-infos)
+- [友鹰-Shopee 商品选品 API 参考](artifact/references/api.md)
+- [解决认证和积分问题](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Files, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with JSON parameters, shell commands, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full responses are saved under LinkFox session data directories; large responses print summaries unless inline output is requested; repeated parameter combinations may use a 24-hour cache.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

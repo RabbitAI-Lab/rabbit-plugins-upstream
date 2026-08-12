@@ -1,0 +1,17 @@
+name: geoskill-time-series-classification
+display_name: 时序特征分类
+description: |
+  NDVI 时序物候特征提取（峰值/谷值/振幅/生长季长度/相位）+ RandomForest 作物分类
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-time-series-classification.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - extraction
+  - gis
+  - lidar
+  - machine-learning
+  - point-cloud
+  - raster
+  - remote-sensing

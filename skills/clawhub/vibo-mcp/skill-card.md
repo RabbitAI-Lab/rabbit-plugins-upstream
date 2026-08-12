@@ -1,42 +1,55 @@
-## Description: <br>
-Access Vibo event music planning through an MCP server for events, timelines, song requests, playlists, guest activity, and connected music exports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Access Vibo event music planning through an MCP server for timelines, song requests, playlists, account details, and confirm-gated edits or exports.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and event hosts use this skill to let an agent inspect and manage Vibo event music planning, including timeline sections, requested songs, playlists, guest participation, and Spotify or Apple Music exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can depend on Vibo passwords, access tokens, refresh tokens, or captured browser sessions. <br>
-Mitigation: Keep `.mcp.json`, environment variables, and `~/.vibo-mcp/session.json` private, avoid committing them, and rotate Vibo credentials or sessions if exposed. <br>
-Risk: Write tools can modify event songs, comments, sections, guests, notifications, and connected music exports. <br>
-Mitigation: Review dry-run previews first and only rerun mutating tools with `confirm: true` when the proposed change is intended. <br>
+## Use Case:
 
+External Vibo users and the developers configuring their MCP client use this skill to read event timelines, song requests, playlists, guest details, and account state, and to prepare confirm-gated updates such as song edits, event joins, playlist imports, and music-service exports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/vibo-mcp) <br>
-- [vibo-mcp npm package](https://www.npmjs.com/package/vibo-mcp) <br>
-- [Vibo](https://vibodj.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with JSON configuration snippets, tool guidance, and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide MCP tool calls that read or mutate Vibo account and event data; mutating tools are described as confirm-gated.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: server release evidence) <br>
+Risk: The MCP server can access Vibo account data, event details, guest information, song lists, connected playlists, and confirm-gated edit or export actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that account access is acceptable, review proposed actions before confirmation, and keep mutating tool calls gated with explicit confirmation.
+
+Risk: Stored Vibo credentials or captured session tokens could expose the user's account if shared through configuration files, logs, or screenshots.
+
+Mitigation: Keep .mcp.json and ~/.vibo-mcp/session.json private, avoid sharing them in support material, and treat Vibo tokens and passwords as secrets.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/vibo-mcp)
+- [Vibo website](https://vibodj.com)
+- [vibo-mcp npm package](https://www.npmjs.com/package/vibo-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference MCP tool calls and confirm-gated action previews.]
+
+## Skill Version(s):
+
+1.5.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

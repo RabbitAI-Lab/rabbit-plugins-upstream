@@ -1,46 +1,59 @@
-## Description: <br>
-Batch-fetches detailed TikTok video performance and commerce metrics for known video IDs or URLs, including views, engagement, creator data, sales estimates, GMV estimates, and video attributes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Batch-fetches detailed analytics for known TikTok video IDs or URLs, including engagement, creator metadata, recent momentum, and estimated sales or GMV.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users, sellers, marketers, and agents use this skill to compare known TikTok videos side by side by playback, engagement, creator, commerce, and attribution metrics. It is intended for lookup and analysis of supplied video IDs or URLs, not discovery of new videos. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends TikTok video IDs or URLs, the LinkFox API key, and session or app metadata to LinkFox services. <br>
-Mitigation: Install and run it only when that data sharing is acceptable for the user's task and environment. <br>
-Risk: Full API responses are saved locally and may contain detailed TikTok analytics or operational context. <br>
-Mitigation: Review local output directories and retention practices before using the saved JSON files in shared workspaces. <br>
-Risk: Automatic feedback reporting can send user comments or operational context to a separate LinkFox feedback endpoint. <br>
-Mitigation: Review or disable feedback reporting if that information should not be reported outside the active workflow. <br>
-Risk: Video sales, GMV, and attribution values are estimates rather than exact TikTok platform figures. <br>
-Mitigation: Present these fields as approximate analytics and avoid using them as the sole basis for financial decisions. <br>
+## Use Case:
 
+External sellers, marketers, and analysts use this skill to compare known TikTok videos by views, likes, comments, shares, estimated sales or GMV, creator details, and recency metrics.
 
-## Reference(s): <br>
-- [EchoTik batch video detail API reference](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-batch-video-detail) <br>
-- [LinkFox tool gateway](https://tool-gateway.linkfox.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, JSON files, Guidance] <br>
-**Output Format:** [Markdown summaries and comparison tables, with full JSON responses saved to local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include local cache hits, saved response paths, summarized large responses, and cost-token information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: The skill can consume paid LinkFox credits and create payment orders during onboarding.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm cost expectations before repeated lookups or order creation, and prefer an existing limited API key when available.
+
+Risk: The skill can send TikTok video IDs or URLs and session metadata to LinkFox and store full responses locally.
+
+Mitigation: Use only trusted LinkFox endpoint environment variables and review saved response files before sharing or committing them.
+
+Risk: Onboarding can ask for phone numbers and verification codes to provision API keys.
+
+Mitigation: Use self-service key retrieval where possible, and provide phone or SMS codes only when account setup is intended.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-batch-video-detail)
+- [EchoTik batch video detail API reference](references/api.md)
+- [Authentication and credits onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown summaries and comparison tables, with JSON response files when the script runs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Large responses are summarized unless inline output is requested; full responses are stored in a session-scoped LinkFox data directory.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

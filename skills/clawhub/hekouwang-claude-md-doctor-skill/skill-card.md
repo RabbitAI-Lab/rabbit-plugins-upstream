@@ -1,42 +1,55 @@
-## Description: <br>
-Audits project CLAUDE.md files as runtime configuration, returns a scorecard with prioritized repair guidance, and can help apply confirmed fixes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audits AGENTS.md or CLAUDE.md runtime configuration files, returns a scorecard with prioritized fixes, and can apply user-approved repairs.
 
-## Publisher: <br>
-[huiyonghkw](https://clawhub.ai/user/huiyonghkw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[huiyonghkw](https://clawhub.ai/user/huiyonghkw)
 
-## Use Case: <br>
-Developers and teams use this skill to review CLAUDE.md files for context hygiene, actionable project instructions, secret-safety checks, and prioritized improvements before using them in Claude Code. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Suggested repairs can change persistent project instructions that affect future agent sessions. <br>
-Mitigation: Review proposed edits to CLAUDE.md and MEMORY.md before accepting them, and keep the audit report separate from approved configuration changes. <br>
-Risk: Hook configuration changes can influence future tool execution. <br>
-Mitigation: Inspect any proposed .claude/settings.json hook commands and approve only commands whose scope and side effects are understood. <br>
-Risk: The checker combines deterministic heuristics with qualitative review, so a score can miss project-specific context. <br>
-Mitigation: Treat the scorecard as review guidance and verify important recommendations against the project's tests, linters, and security requirements. <br>
+## Use Case:
 
+Developers and engineers use this skill to audit project agent runtime configuration files for context cost, actionable guidance, routing, and safety guardrails. It produces a report and prioritized repair plan, with file edits only after user approval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huiyonghkw/skills/hekouwang-claude-md-doctor-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown or text report with optional JSON output and inline code or shell-command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can propose edits to CLAUDE.md, MEMORY.md, and hook configuration after user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: frontmatter, changelog, server release metadata) <br>
+Risk: The optional suite script runs broader sibling skill and local environment checks beyond the core AGENTS.md/CLAUDE.md audit.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the core checker for standard audits; run scripts/run-all-doctors.sh only when broader local checks are intentional.
+
+Risk: The skill can propose or apply changes to project runtime configuration files.
+
+Mitigation: Review the generated scorecard and proposed edits before approving file changes.
+
+## Reference(s):
+
+- [Repository homepage](https://github.com/huiyonghkw/hekouwang-claude-md-doctor-skill)
+- [Doctor Suite reference](references/doctor-suite.md)
+- [ClawHub skill page](https://clawhub.ai/huiyonghkw/skills/hekouwang-claude-md-doctor-skill)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown report with optional JSON CLI output and proposed file edits]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May run the local checker; proposed file edits require user approval.]
+
+## Skill Version(s):
+
+1.3.1 (source: frontmatter and changelog, released 2026-08-12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

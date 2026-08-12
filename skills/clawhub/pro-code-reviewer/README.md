@@ -26,9 +26,9 @@ P1 🟡 RecyclerView adapter not using DiffUtil
 
 ## 🧠 How It Works
 
-1. **Detect** — Identifies platform from project files (`build.gradle` → Android, `*.xcodeproj` → iOS)
+1. **Detect** — Identifies platform from project markers (`build.gradle` → Android, `*.xcodeproj` → iOS, `go.mod` → Go, `tsconfig.json` → TypeScript)
 2. **Diff** — Extracts changes via `git diff` (staged, unstaged, commits, branches)
-3. **Review** — AI applies platform-specific rules across multiple dimensions
+3. **Review** — AI applies platform/language-specific rules across multiple dimensions
 4. **Report** — Outputs structured findings with severity, location, and fix suggestions
 
 ## 🎯 Three Review Modes
@@ -128,33 +128,31 @@ review branch feature-x   # Branch diff vs main
 - **Large diff protection** — 5000+ lines → warns before proceeding
 - **Auto-filtered files** — Skips generated code, binaries, lock files, vendor dirs
 
-## 📄 HTML Reports
 
-```
-review, generate HTML report
-```
-
-Saves to `.code-reviews/` and opens in browser. Includes dark theme, P0/P1/P2 filtering, and per-finding code diffs.
-
-> **Tip:** Add `.code-reviews/` to your `.gitignore`.
 
 ## 🏗 Architecture
 
 ```
 code-reviewer/
 ├── SKILL.md                    # AI agent instructions
-├── references/
-│   ├── review-general.md       # General review rules (7 dimensions)
-│   ├── review-android.md       # Android-specific rules (9 dimensions)
-│   └── review-ios.md           # iOS-specific rules (9 dimensions)
-└── scripts/
-    └── render_report.py        # HTML report renderer (JSON → standalone HTML)
+└── references/
+    ├── review-general.md       # General review rules
+    ├── review-android.md       # Android-specific rules (9 dimensions)
+    ├── review-ios.md           # iOS-specific rules (9 dimensions)
+    ├── review-typescript.md    # TypeScript-specific rules (7 dimensions)
+    ├── review-go.md            # Go-specific rules (7 dimensions)
+    └── review-skill-vetter.md  # Agent/LLM skill security review rules
 ```
 
 ## Requirements
 
 - Git repository
 - An AI coding assistant (OpenClaw, Claude Code, GitHub Copilot, etc.)
+
+## Feedback
+
+Found a bug or want a new language covered?
+[Open an issue →](https://github.com/TimeAground/code-reviewer/issues)
 
 ## License
 

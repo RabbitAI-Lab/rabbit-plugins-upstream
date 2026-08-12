@@ -2,9 +2,10 @@
 
 Base URL: `$MCE_API_BASE` (default `https://mce.motu.art`).
 Auth: create a key at `https://mce.motu.art/account` (English: `/en/account`), then send
-`X-API-Key: $MCE_API_KEY` (or `Authorization: Bearer $MCE_API_KEY`) on every endpoint
-**except** `/v1/health`. The full key is displayed once; store it securely and rotate or
-revoke it from the account page if exposed.
+`X-API-Key: $MCE_API_KEY` (or `Authorization: Bearer $MCE_API_KEY`) on private and
+processing endpoints. `/v1/health` and public Headshots discovery endpoints do not need
+a key. The full key is displayed once; store it securely and rotate or revoke it from
+the account page if exposed.
 
 Scopes:
 - `catalog:read` — styles, crop specs and approved outfits.
@@ -12,6 +13,8 @@ Scopes:
 - `id-photo:process` — crop, id-pack, id-check, optimize and print-sheet.
 - `outfit:process` — standalone outfit replacement. Also required in addition to
   `id-photo:process` or `portrait:process` when those requests include `outfit_id`.
+- `headshot:process` — private AI Headshots projects, reference preparation,
+  generation, candidates, post-processing, and exports. See `headshots-api.md`.
 
 Successful processing calls consume account credits; catalog requests do not. A `402`
 response uses `detail.code="insufficient_credits"` and includes `required`, `available`,
@@ -34,6 +37,14 @@ Grade an image. Fields:
   texture untouched (default). Softens pores/blemishes only; never reshapes the face.
 - `smooth_texture_retain` — optional, `0`–`1` (default `0.35`), how much natural
   texture to keep on top of the smoothing. Only used when `smooth_strength` > 0.
+- `portrait_lighting_style` — optional M17 light-sculpting preset:
+  `natural_dimension`, `soft_luminous`, or `studio_definition`. Omit it and all
+  `portrait_lighting_*` fields to keep the existing grading output unchanged.
+- `portrait_lighting_strength` — optional `0`–`1`; omitted uses the selected preset's
+  calibrated strength. Supplying this without a style uses `natural_dimension`.
+- `portrait_lighting_face_light_balance`, `portrait_lighting_subject_separation`,
+  `portrait_lighting_local_contrast`, `portrait_lighting_skin_protection`, and
+  `portrait_lighting_highlight_protection` — optional advanced overrides, each `0`–`1`.
 - `output_format` — `png` (default) | `jpeg` | `webp`.
 - `quality` — 1–100 for lossy formats (default 90).
 - `max_long_edge` — cap working long edge (default 1024; server ceiling applies).
@@ -57,6 +68,9 @@ Response JSON:
 ```
 Decode `image_base64` to bytes to get the graded image. `skin_delta_e_to_target`
 is the skin ΔE to the target skin (lower = closer).
+When portrait lighting is enabled, `GET report_url` includes a `portrait_lighting`
+metrics object describing the applied preset, strength, EV guard, and before/after
+subject-separation measurements.
 
 ## POST /v1/mask  (multipart/form-data)
 Segmentation only (decode + parse; **skips grading/render/score** — faster). Fields:
@@ -79,6 +93,31 @@ skin region; never reshapes the face or changes color. Fields:
 - `quality` — 1–100 for lossy formats (default 90).
 
 Returns the smoothed image as a raw payload (default `image/png`), like `/v1/mask`.
+
+## POST /v1/portrait-lighting  (multipart/form-data)
+Standalone deterministic portrait light sculpting. Runs decode + human parse + M17 +
+render only, preserving identity, geometry, image content, and the existing light
+direction. Fields:
+
+- `file` (required).
+- `style` — `natural_dimension` (default), `soft_luminous`, or `studio_definition`.
+- `strength` — optional `0`–`1`; omitted uses the selected style's calibrated default.
+- `face_light_balance`, `subject_separation`, `local_contrast`, `skin_protection`,
+  `highlight_protection` — optional advanced overrides, each `0`–`1`.
+- `max_long_edge` — optional working-resolution cap.
+- `output_format` — `png` (default), `jpeg`, or `webp`.
+- `quality` — 1–100 for lossy formats.
+
+Returns the processed image as a raw payload. `X-MCE-Trace-Id` identifies the request;
+`X-MCE-Lighting-Info` contains the applied style, strength, maximum EV adjustment,
+subject-separation measurements, and warnings.
+
+Local CLI equivalent:
+
+```bash
+mce run --input portrait.jpg --output lit.png --portrait-lighting-only \
+  --lighting-style natural_dimension --lighting-strength 0.70
+```
 
 ## GET /v1/crop/specs
 List the available purpose-crop specs (证件照/形象照/头像 standards). Returns

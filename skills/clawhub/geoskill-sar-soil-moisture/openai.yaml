@@ -1,0 +1,13 @@
+name: geoskill-sar-soil-moisture
+display_name: SAR土壤湿度反演
+description: |
+  SAR 土壤湿度反演：基于简化 Dubois/Oh 半经验模型，由后向散射系数 σ⁰、入射角与地表粗糙度解析反演裸土体积含水量 (m³/m³)
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-sar-soil-moisture.py
+runtime: python>=3.9
+tags:
+  - gis
+  - mining
+  - remote-sensing
+  - sar

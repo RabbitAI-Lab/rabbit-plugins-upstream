@@ -90,7 +90,7 @@ Recommended input fields:
 - `on_image_text`: short title, subtitle, labels, page text
 - `materials`: optional reference image, face photo, product photo, food/place
   photo, screenshot, logo, article draft
-- `reference_mode`: `structure`, `style`, `layout`, `color`, `none`
+- `reference_role`: `structure`, `style`, `layout`, `color`, `none`
 - `negative_constraints`
 - `quality_gate`: whether to review and repair after generation
 
@@ -348,7 +348,7 @@ Symptoms:
 
 Mitigation:
 
-- specify `reference_mode`: structure/style/layout/color
+- specify `reference_role`: structure/style/layout/color
 - state which parts to borrow and which parts to change
 - avoid asking for "same style" without decomposition
 

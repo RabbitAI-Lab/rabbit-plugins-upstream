@@ -1,42 +1,59 @@
-## Description: <br>
-Cue Research lets an agent run Cue research questions against saved buddy templates or free-form deep research, limited to public-data scenarios. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cue 深研 lets an agent route public-data research questions to Cue buddy templates or free-form deep research, confirm credit use, run jobs in the background, and return sourced Markdown reports.
 
-## Publisher: <br>
-[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill to delegate public-data research questions to Cue, choose between matched saved buddy templates and free-form deep research, and save useful free-form runs for future reuse. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The optional mimic-file path can upload local documents to Cue's backend. <br>
-Mitigation: Do not use mimic-file with confidential, internal, personal, medical, financial, or client documents unless upload is intended. <br>
-Risk: The skill depends on Cue API access, local report files under ~/cue-reports, and a sibling cue-buddy installation. <br>
-Mitigation: Install only when those dependencies and local output behavior are acceptable for the deployment environment. <br>
+## Use Case:
 
+Agent users and developers use this skill to run Cue-backed public-data research from a chat workflow, choose from matching saved templates or free-form research, and receive a cited report. It is intended for public-source business, investment, compliance, and industry research rather than private AML, medical, internal accounting, or confidential-document workflows.
 
-## Reference(s): <br>
-- [Cue Research skill page](https://clawhub.ai/wangxiaoxu/skills/cue-research) <br>
-- [Cue API endpoint](https://cuecue.cn/api) <br>
-- [Cue API key page](https://cuecue.cn/api-key) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown research reports, concise prompts, and shell commands for background runs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports are saved under ~/cue-reports; runs require cue-buddy as a sibling skill and may use CUE_API_KEY or CUE_API_BASE.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Prompts, research context, and selected files may be sent to Cue's backend.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for data you are comfortable sending to Cue, and avoid private AML, medical, internal accounting, confidential contracts, or other sensitive documents unless Cue's handling has been reviewed.
+
+Risk: Local sample or material files can be uploaded for mimic or document-grounded research.
+
+Mitigation: Upload files only after explicit user confirmation, and treat server limits and retention/handling policies as review items before sensitive use.
+
+Risk: The skill includes update behavior that can check or upgrade from a remote branch.
+
+Mitigation: Review the update behavior before allowing +upgrade or silent update checks in managed environments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wangxiaoxu/skills/cue-research)
+- [Cue API endpoint](https://cuecue.cn/api)
+- [Cue API key page](https://cuecue.cn/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports with inline links, short user prompts, and shell command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs can write reports and progress logs to local files; optional material or mimic files may be uploaded to Cue after user confirmation.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata); artifact metadata version 0.3.4
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -18,7 +18,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/stats-dark.svg">
-    <img src="docs/assets/stats-light.svg" alt="163 security checks · 21 attack-chain detectors · 10,400 automated tests · 0 dependencies · 0 network calls" width="900">
+    <img src="docs/assets/stats-light.svg" alt="184 security checks · 26 attack-chain detectors · 14,100 automated tests · 0 dependencies · 0 network calls" width="900">
   </picture>
 </p>
 
@@ -31,9 +31,11 @@ agent against you.**
 
 ClawSecCheck is a **security check-up for your agent**. It examines your setup,
 grades it **A–F**, and explains — in plain language, right in your chat — what
-is risky and why. It only reports: it never changes anything, needs no API key,
-and the scanner itself makes **no network calls** — no telemetry, no uploads,
-ever.
+is risky and why. It reports, it doesn't remediate: it never touches your OpenClaw
+config, needs no API key, and the scanner itself makes **no network calls** — no
+telemetry, no uploads, ever. (One narrow, opt-in exception: `--apply-ignore-proposals`
+can append entries to its own suppression file — see
+[Safe to run](#-safe-to-run) below.)
 
 ## 🚀 Start in one minute — no terminal needed
 
@@ -59,7 +61,7 @@ ever.
 <summary>See a longer excerpt of the same report</summary>
 
 <p align="center">
-  <img src="docs/assets/report.png" alt="A longer excerpt: score header, counts, and findings grouped by area, most urgent first" width="740">
+  <img src="docs/assets/report.png" alt="A longer excerpt: score header, counts, an inventory-by-subject summary, and findings grouped by subject, most urgent first" width="740">
 </p>
 
 </details>
@@ -70,7 +72,7 @@ No flags, no commands. Everything works as a conversation:
 
 | You say | You get |
 |---|---|
-| *"Audit my OpenClaw setup"* | Your A–F grade + the urgent problems, most dangerous first |
+| *"Audit my OpenClaw setup"* | A chat-sized card — your A–F grade, an inventory by subject, and the urgent problems most dangerous first — with a **PDF companion** carrying the rest: every installed skill/plugin/MCP server vetted, the riskiest capability chains, a behavioral replay, and a second opinion on any borderline call |
 | *"Is this skill safe to install?"* | A pre-install risk verdict with the reasons — flags **suspicious** and **dangerous** skills before you enable them |
 | *"Am I vulnerable to prompt injection?"* | An optional canary self-test you run against your own agent, alongside the static audit |
 | *"Watch my setup for changes"* | Alerts when something changes — a new skill, config drift, a dropped score |
@@ -89,7 +91,7 @@ No flags, no commands. Everything works as a conversation:
 | 🔐 **Secrets & data at rest** | Are your tokens, keys, and conversations lying around readable? |
 | 📡 **Monitoring & readiness** | Would you even notice a compromise — and could you investigate it? |
 
-On top of the 163 individual checks, a **risk engine** hunts for deadly
+On top of the 184 individual checks, a **risk engine** hunts for deadly
 *combinations* — chains like "untrusted input → reachable secrets → outbound
 tool" that make an attack trivial. Full list: **[check catalog](docs/CHECKS.md)**.
 
@@ -110,7 +112,15 @@ tool" that make an attack trivial. Full list: **[check catalog](docs/CHECKS.md)*
 - **Honest by design.** What it can't determine is reported as `UNKNOWN` —
   never quietly counted as safe. An open CRITICAL finding hard-caps your score:
   you can never get a pretty "A" with a real hole in it.
-- **Built like it matters.** 10,400 automated tests run on every change, a
+- **Not a rebadged lookup.** No network calls means no verdict borrowed from
+  someone else's reputation database and presented as ours. Every finding
+  traces to a real check with its own fixture and test, an AST layer that
+  reasons about code structure, and a combinational risk engine for the
+  attacks that only show up as a *combination* of individually-ordinary
+  capabilities — plus a documented zero-false-positive-FAIL release
+  discipline: an alarm reaching you is a specific, reproducible, test-pinned
+  condition in your own config, not a keyword match dressed up as a scan.
+- **Built like it matters.** 14,100 automated tests run on every change, a
   false alarm is treated as a release-blocking bug, and every release is
   cryptographically signed.
 - **Free and readable.** MIT-licensed, pure Python standard library, zero
@@ -119,15 +129,38 @@ tool" that make an attack trivial. Full list: **[check catalog](docs/CHECKS.md)*
 ## 🔒 Safe to run
 
 The tool that audits your agent survives an audit itself: it is **read-only**
-with respect to your OpenClaw setup (it never touches your config, skills, or
-bootstrap files), its engine is **offline by design**, and it writes only its
-own local history under `~/.clawseccheck/` — removable any time by asking your
-agent to *"purge the clawseccheck data"*.
+with respect to your OpenClaw setup, its engine is **offline by design**, and
+by default it writes only its own local history under `~/.clawseccheck/` —
+removable any time by asking your agent to *"purge the clawseccheck data"*.
+A few flags write local files only when you explicitly ask for them
+(`--save`, `--badge`, `--html`, `--sarif`, `--pdf`, `--monitor`, `--log`) — see the
+[User guide](docs/USAGE.md) for the full list. The one exception that touches
+the audited home itself is also opt-in and confirmation-gated:
+`--apply-ignore-proposals` can append entries — never invent them — to its
+own `.clawseccheckignore` suppression file there.
+
+The widest read that reaches **outside** your OpenClaw home is on by default: to
+catch a dependency that would run code the moment it is installed, the tool
+locates your installed OpenClaw package through your `PATH` (no subprocess),
+then walks that package's `node_modules` to read each dependency's manifest,
+its build config, and the in-package files those name as install-time targets.
+Bounded to 2,000 packages, symlinks are never followed, and nothing is ever
+executed — `--no-deptree` skips the walk. (The host-posture scan and the
+listening-socket scan also read outside the home; `--no-host` and `--no-sockets`
+skip those.) See the
+[security model](SECURITY_MODEL.md) for the complete, itemized capability
+surface.
 
 One honest nuance: when you use it through OpenClaw chat, the report text
 becomes part of your conversation and is handled by whatever model provider
 your agent already uses — the scanner itself adds no channel of its own.
 Details: [security model](SECURITY_MODEL.md) · [FAQ](docs/FAQ.md).
+
+The bundled known-bad IOC catalog is the same story: a small, dated,
+provenance-tagged dataset that ships **in-repo with each release** and is
+**never fetched** — no feed, no update endpoint, not even opt-in. See
+[Bundled IOC dataset](docs/IOC_DATA.md) for the provenance policy and how
+staleness is surfaced.
 
 <details>
 <summary><b>Verify your copy is genuine (for the cautious)</b></summary>
@@ -165,6 +198,8 @@ clawseccheck                         # audits ~/.openclaw by default
 clawseccheck --json                  # machine-readable result
 clawseccheck --sarif results.sarif   # SARIF 2.1.0 for GitHub Code Scanning
 clawseccheck --html report.html      # standalone HTML report (private)
+clawseccheck --pdf report.pdf        # complete audit as a paginated PDF (attach into chat)
+clawseccheck --exhaustive            # raise the scan caps: slower, maximum coverage
 clawseccheck --fail-under 70         # CI gate: exit 1 if score < 70
 ```
 
@@ -188,16 +223,26 @@ complete flag list.
 | Document | What it covers |
 |---|---|
 | [User guide](docs/USAGE.md) | Recipes, monitoring modes, and trust details |
-| [Check catalog](docs/CHECKS.md) | All 163 checks: what they verify and how to remediate |
+| [Check catalog](docs/CHECKS.md) | All 184 checks: what they verify and how to remediate |
 | [Threat coverage](docs/THREAT_COVERAGE.md) | OWASP LLM Top 10 / Agentic threat mapping |
+| [Bundled IOC dataset](docs/IOC_DATA.md) | Provenance policy, refresh cadence, and freshness discipline for the known-bad catalog |
 | [Output schema](docs/OUTPUT_SCHEMA.md) | The frozen `--json` / SARIF contract |
 | [FAQ](docs/FAQ.md) | Common questions, incl. the compromised-host protocol |
+| [Troubleshooting](docs/TROUBLESHOOTING.md) | ClawSecCheck itself won't run, crashes, or OpenClaw doesn't see it |
 | [Security model](SECURITY_MODEL.md) | ClawSecCheck's own capability surface and self-defense |
 | [Contributing](https://github.com/gl0di/clawseccheck/blob/main/CONTRIBUTING.md) | Dev setup, tests, how to author a new check |
+| [Support](SUPPORT.md) | Where a report goes — issue, discussion, or private advisory |
 
 ## 🙌 Feedback, security, license
 
 - **Something looks wrong?** [Open an issue](https://github.com/gl0di/clawseccheck/issues) —
-  false alarms are treated as bugs.
+  false alarms are treated as bugs. If the *tool itself* won't run or crashes, try
+  [Troubleshooting](docs/TROUBLESHOOTING.md) first.
+- **Questions, false positives, or an attack class we don't cover yet?**
+  [Start a discussion](https://github.com/gl0di/clawseccheck/discussions) — see
+  [SUPPORT.md](SUPPORT.md) for where each kind of report goes.
 - **Found a vulnerability?** Report privately via [SECURITY.md](SECURITY.md).
-- **License:** [MIT](LICENSE). Maintained by [gl0di](https://github.com/gl0di).
+- **License:** [MIT](LICENSE) for the code. The ClawSecCheck name and logo are not covered by
+  it — see [TRADEMARK.md](TRADEMARK.md). Contributors sign a short
+  [CLA](https://github.com/gl0di/clawseccheck/blob/main/CLA.md).
+  Maintained by [gl0di](https://github.com/gl0di).

@@ -1,24 +1,102 @@
 # tools / 可选脚本
 
-本目录存放**可重复执行的辅助脚本**。技能主流程以 `SKILL.md` 与 `prompts/` 为准；本目录侧重格式转换等可执行工具。
+本目录按职责分子目录：
 
-## 国知局公布公告检索（epub.cnipa.gov.cn，Step 5 查新优先）
+| 目录 | 内容 |
+|------|------|
+| **`crawl/`** | 国知局公布公告检索：`cnipa_epub_*.py`、`requirements-cnipa.txt` |
+| **`shared/`** | 公用：`docx/pptx/md` 转换、`mermaid`/`math`/`math_to_omml`（OMML）、`formula_paradigms` / `check_formula_plan`、`iteration_dialog_log`、`patent_type.py`、**可选** STEP / 线稿门禁 |
+| **`patent_reader/`** | 专利通俗解读：`shared/` · `extract/` · `analyze/` · `vault/`（见该目录 README） |
+| **`oa/`** | 模式 D 审查答复：嵌入配置、sqlite-vec 入库/检索（见该目录 README） |
+
+技能主流程以 `SKILL.md` 与 `prompts/` 为准。调用时请使用子目录完整路径（如 `tools/crawl/cnipa_epub_search.py`、`tools/shared/mermaid_render.py`）。
+
+## 国知局公布公告检索（`crawl/`，Step 5 查新优先）
 
 | 脚本 | 作用 |
 |------|------|
-| **`cnipa_epub_search.py`** | **（Step 5 优先）** 一步：拉取 + 解析，**不写结果页 HTML 落盘**；**Agent 须按 `prior_art_search.md` 分多次调用、每轮一词并自行合并 JSON**；脚本在**单次命令多词**时也会进程内循环检索并合并（人工/本地便利）；**stdout 仅一行** `EPUB_HITS_JSON:`；stderr 上 `EPUB_*` 为 **ASCII**；UTF-8 / PowerShell 见 **INSTALL.md**。 |
-| **`cnipa_epub_crawler.py`** | 仅 Playwright 拉取并**默认保存**结果页 HTML；stdout 亦含 **`EPUB_HITS_JSON:`**。结果页就绪判据：`commit` 导航后等 **title**（`EPUB_TITLE_*`）且 **`#result`** 内出现 `div.item` 或零结果文案（见脚本内 `_wait_result_page_ready`）。 |
-| **`cnipa_epub_parse.py`** | 仅解析已保存的 HTML：`python tools/cnipa_epub_parse.py path/to/_last_result_xxx.html`；字段含标题、公开号、链接、**`abstract`**（若有）。 |
+| **`crawl/cnipa_epub_search.py`** | **（Step 5 优先）** 一步拉取+解析，不落盘；**`--type invention\|utility_model\|design\|all`** 对应首页四类勾选；Agent 分次一词并合并 JSON。 |
+| **`crawl/cnipa_epub_crawler.py`** | 拉取并默认保存结果页 HTML；同样支持 `--type`。 |
+| **`crawl/cnipa_epub_parse.py`** | 仅解析已保存 HTML。 |
+| **`shared/patent_type.py`** | 类型别名、国知局 checkbox、Google Patents 查询提示；**`--pub` 按文献种类码推断类型**（解读 Schema 挂钩）。 |
 
-依赖：`pip install -r tools/requirements-cnipa.txt` 与 `python -m playwright install chromium`。环境变量见各脚本文件头。默认结果 HTML 落在 **`tools/_last_result_*.html`**（已 `.gitignore`）。
+依赖：`pip install -r tools/crawl/requirements-cnipa.txt` 与 `python -m playwright install chromium`。类型检索说明见 **`references/patent_type_search.yaml`**、**`prompts/disclosure/prior_art_search.md`**。
 
-抓取失败或解析无命中时，Agent 按 **`prompts/prior_art_search.md`** 降级 **WebSearch**（如 Google 学术 / Google Patents）。
+抓取失败时降级 **WebSearch**（Google 学术**无**专利类型过滤；Google Patents 支持 PATENT/DESIGN，实用新型靠关键词+国知局）。
 
 ---
 
-## Office 文档（Word / PPT）转成可扫描文本
+## CAD / STEP（`shared/`，可选，默认关闭）
 
-用本仓库 **`docx_to_md.py`**、**`pptx_to_md.py`**（纯 Python + 仓库根目录 `requirements.txt`），见下文各节；与 `SKILL.md`「工具与数据来源」一致。
+| 脚本 | 作用 |
+|------|------|
+| **`shared/cad_scan.py`** | 扫描 `.step`/`.stp` 与原生 CAD 后缀；输出 JSON（`ask_enable_step_parse` / `hint_export_step`）。**无重依赖**。 |
+| **`shared/cad_formats.py`** | 后缀表与提示文案。 |
+| **`shared/step_to_views.py`** | STEP → 多视角 PNG + `assembly_tree` / `figure_plan.seed` / `structure_schema.seed`。须 **`--enable-step-parse`**。 |
+| **`shared/gen_demo_snap_step.py`** | 生成教学用 `demo_snap_plate.step`（无 CadQuery）。 |
+| **`shared/requirements-step.txt`** | CadQuery + cairosvg；**仅用户确认后** `pip install`（建议 Py3.9–3.12）。 |
+
+流程纪律见 **`prompts/disclosure/project_scan.md`**「CAD / STEP」：有 STEP 先反问；仅有原生 CAD 则对话末尾提示导出 STEP。
+
+Windows 若无系统 Cairo，`cairosvg` 可能失败；`step_to_views` 会回退 **matplotlib 镶嵌投影** 出 PNG（仍写出 SVG）。建议 **Python 3.9–3.12** 隔离 venv 安装依赖（3.13 常无 CadQuery 轮子）。若全局 pip 配置了 `target` 指向共享目录，请对 venv 使用 `pip install --target <venv>/Lib/site-packages …`。
+
+```bash
+python tools/shared/cad_scan.py -r knowledge --json
+pip install -r tools/shared/requirements-step.txt   # 用户确认后
+python tools/shared/step_to_views.py --enable-step-parse -i a.step -o outputs/case/cad_views
+```
+
+---
+
+## 发明公式范式（`shared/` + `references/formulas/`）
+
+| 脚本 / 文档 | 作用 |
+|-------------|------|
+| **`references/formulas/paradigms.yaml`** | 默认可扩展范式库 |
+| **`references/schemas/formula_plan.schema.yaml`** | 案件 `formula_plan.yaml` 合同 |
+| **`shared/formula_paradigms.py`** | `list` / `show` / `combos`（支持案件目录覆盖） |
+| **`shared/check_formula_plan.py`** | 校验选题 id、禁装饰音、数值例 |
+
+```bash
+python tools/shared/formula_paradigms.py list
+python tools/shared/check_formula_plan.py -i outputs/case/formula_plan.yaml
+```
+
+成文纪律见 **`prompts/disclosure/invention/disclosure_builder.md` §7.7**。
+
+## 外观辅助线稿（`shared/`，可选，默认关闭）
+
+| 脚本 / 文档 | 作用 |
+|-------------|------|
+| **`prompts/shared/design_lineart_assist.md`** | Agent 流程：确认「是」→ 写 brief → 门禁 → **参考图**出线稿 |
+| **`shared/design_lineart_gate.py`** | 默认关；无源图拒绝；`--prepare-jobs` 写出 `lineart_assist/design_lineart_jobs.json` |
+| **`references/schemas/design_lineart_brief.schema.yaml`** | 描述合同 |
+
+```bash
+python tools/shared/design_lineart_gate.py --print-confirm
+python tools/shared/design_lineart_gate.py --enable-design-lineart --case-dir outputs/case --prepare-jobs
+```
+
+**禁止**纯文生图；辅助线稿默认 `use_in_disclosure: false`。
+
+## 实用新型结构辅助线稿（`shared/`，可选，默认关闭）
+
+| 脚本 / 文档 | 作用 |
+|-------------|------|
+| **`prompts/shared/structure_lineart_assist.md`** | Agent 流程：确认「是」→ 写 brief → 门禁 → **参考图**出轮廓 → 按 Structure 叠件号 |
+| **`shared/structure_lineart_gate.py`** | 默认关；无源图 / 无 Structure 拒绝；`--prepare-jobs` 写出 `lineart_assist/structure_lineart_jobs.json` |
+| **`references/schemas/structure_lineart_brief.schema.yaml`** | 描述合同（与外观 `design_lineart_*` 分文件） |
+
+```bash
+python tools/shared/structure_lineart_gate.py --print-confirm
+python tools/shared/structure_lineart_gate.py --enable-structure-lineart --case-dir outputs/case --prepare-jobs
+```
+
+**禁止**纯文生图与自创件号；推荐 `callout_mode: overlay`；辅助线稿默认 `use_in_disclosure: false`。
+
+## Office / mermaid（`shared/`）
+
+用 **`shared/docx_to_md.py`**、**`shared/pptx_to_md.py`**、**`shared/mermaid_render.py`** 等。
 
 ## mermaid_render.py — mermaid：图示 → PNG + 定稿 Markdown + **默认生成 Word**
 
@@ -67,20 +145,20 @@ npx -y @mermaid-js/mermaid-cli mmdc -i sample.mmd -o sample.png -b white
 ### 用法
 
 ```bash
-# 写出定稿 .md，并在同目录生成同名 .docx（默认）；-o 须为「案件名_YYYYMMDDHHmmss.md」（见 prompts/disclosure_builder.md §7.3 第 5 点）
-python3 tools/mermaid_render.py -i draft.md -o "一种XXX方法及系统_20260408143025.md"
+# 写出定稿 .md，并在同目录生成同名 .docx（默认）；-o 须为「案件名_YYYYMMDDHHmmss.md」（见 prompts/disclosure/invention/disclosure_builder.md §7.3 第 5 点）
+python3 tools/shared/mermaid_render.py -i draft.md -o "一种XXX方法及系统_20260408143025.md"
 
 # 指定 .docx 路径（.md 主名仍须含时间戳）
-python3 tools/mermaid_render.py -i draft.md -o out/一种XXX方法及系统_20260408143025.md --docx out/一种XXX方法及系统_20260408143025.docx
+python3 tools/shared/mermaid_render.py -i draft.md -o out/一种XXX方法及系统_20260408143025.md --docx out/一种XXX方法及系统_20260408143025.docx
 
 # 仅 Markdown，不要 Word
-python3 tools/mermaid_render.py -i draft.md -o "一种XXX方法及系统_20260408143025.md" --no-docx
+python3 tools/shared/mermaid_render.py -i draft.md -o "一种XXX方法及系统_20260408143025.md" --no-docx
 
 # 更高清晰度（可选）
-python3 tools/mermaid_render.py -i draft.md -o "…定稿.md" --mmdc-scale 3 --mmdc-width 1600 --mmdc-height 1200
+python3 tools/shared/mermaid_render.py -i draft.md -o "…定稿.md" --mmdc-scale 3 --mmdc-width 1600 --mmdc-height 1200
 
 # 指定 mermaid 图片子目录（相对输出 .md）
-python3 tools/mermaid_render.py -i draft.md -o out/一种XXX方法及系统_20260408143025.md --assets-dir figures/mermaid
+python3 tools/shared/mermaid_render.py -i draft.md -o out/一种XXX方法及系统_20260408143025.md --assets-dir figures/mermaid
 ```
 
 **Word 生成失败**（缺依赖、版式报错等）时：脚本仍以退出码 **0** 结束（Markdown 已成功）；stderr 会打印 **`md_to_docx.py` 的手动命令**，请复制执行。
@@ -89,22 +167,30 @@ Windows 上若仅装 Node 未执行 `npm install`，脚本会通过 `npx -y @mer
 
 ### 与交底书约定
 
-- 技能要求定稿**同时**交付 **Markdown + Word**，且 **`-o` 主文件名须含 `_{YYYYMMDDHHmmss}`**（`prompts/disclosure_builder.md` §7.3 第 5 点，含首次定稿）；**3.2 系统框图**与 **3.4 流程图**均用 fenced mermaid，**不要** ASCII 文字流程图或框图。
+- 技能要求定稿**同时**交付 **Markdown + Word**，且 **`-o` 主文件名须含 `_{YYYYMMDDHHmmss}`**（`prompts/disclosure/invention/disclosure_builder.md` §7.3 第 5 点，含首次定稿）；**3.2 系统框图**与 **3.4 流程图**均用 fenced mermaid，**不要** ASCII 文字流程图或框图。
 - 交付代理人前：运行 `mermaid_render.py` 一步即可（默认再调 `md_to_docx.py`）；若 Word 失败，按 stderr 提示手动执行 `md_to_docx.py`。
 
 ---
 
-## math_render.py — LaTeX 公式 → PNG
+## math_to_omml.py — LaTeX → 可编辑 Office Math
 
-将 Markdown 中的 **LaTeX 公式**（``$...$`` / ``\\(...\\)`` 行内；``$$...$$`` / ``\\[...\\]`` 块级）用 **matplotlib mathtext** 渲染为 PNG；**保留 LaTeX 原文**，图片引用写入 HTML 注释 ``<!-- ![...](math_figures/...) -->``（Markdown 预览不显示图），供 **`md_to_docx.py`** 嵌入 Word。
+``latex2mathml`` → MathML → Word ``m:oMath`` / ``m:oMathPara``。不依赖本机 TeX。由 **`md_to_docx.py`** 默认调用。
 
-**Mermaid 框图**：``mermaid_render.py`` **保留** `` ```mermaid`` 源码，并追加 ``<!-- ![图示 n](mermaid_figures/...) -->``（预览隐藏图引用，Word 仍大图嵌入）。
+```bash
+pip install latex2mathml   # 已写入根目录 requirements.txt
+```
 
-**mathtext 兼容**：渲染前自动将常见 LaTeX 简写映射为 mathtext 符号（如 ``\ge``→``\geq``、``\le``→``\leq``、``\land``→``\wedge``）；块级式内**换行压成一行**、``\tag{1}`` 转为式末 ``(1)``；仍无法解析的公式保留原文。
+---
 
-**失败降级**：某一公式渲染失败时**不中断**——该处**保留原文**（``$...$`` 或 ``$$...$$``）；``md_to_docx`` 对未转换的 ``$$`` 块以 **Consolas 代码块**写入 Word。
+## math_render.py — LaTeX 公式 → PNG（OMML 回退）
 
-**Word 版式**：**全部公式图**（行内与块级式 (1) 等）在 Word 中统一按约 **0.17 英寸**高度嵌入；**mermaid 框图/流程图**仍按 **5.5×8.2 英寸**上限等比嵌入。块级 PNG 默认与行内同字号（10.5pt）渲染，避免块级式显得过粗过大。
+将 Markdown 中的 **LaTeX 公式**用 **matplotlib mathtext** 渲染为 PNG；**保留 LaTeX 原文**，图片引用写入 HTML 注释，供 **`md_to_docx.py`** 在 **OMML 失败时**嵌入。
+
+**Mermaid 框图**：``mermaid_render.py`` **保留** `` ```mermaid`` 源码，并追加 ``<!-- ![图示 n](mermaid_figures/...) -->``。
+
+**mathtext 兼容**：``\ge``→``\geq`` 等；``\tag{1}`` 转式末 ``(1)``。
+
+**Word 主路径**：默认 **OMML 优先**；PNG 仅回退。``--no-omml`` 可强制旧行为。
 
 ### 依赖
 
@@ -115,8 +201,8 @@ pip install -r requirements.txt   # 含 matplotlib
 ### 用法
 
 ```bash
-python3 tools/math_render.py -i draft.md -o draft_with_math.md
-python3 tools/math_render.py -i draft.md -o out.md --assets-dir math_figures
+python3 tools/shared/math_render.py -i draft.md -o draft_with_math.md
+python3 tools/shared/math_render.py -i draft.md -o out.md --assets-dir math_figures
 ```
 
 定稿流水线：**``mermaid_render.py`` 默认先跑公式再跑 mermaid**（可用 ``--no-math`` 跳过）。单独转 Word 时 **`md_to_docx.py` 也会自动尝试公式渲染**（``--no-math-render`` 可关闭）。
@@ -135,24 +221,25 @@ python3 tools/math_render.py -i draft.md -o out.md --assets-dir math_figures
 pip install -r requirements.txt
 ```
 
-依赖为 `python-docx`（见仓库根目录 `requirements.txt`）。
+依赖为 `python-docx` + 可选 `latex2mathml`（见仓库根目录 `requirements.txt`）。缺 `latex2mathml` 时自动回退 PNG/原文。
 
 ### 用法
 
 ```bash
-python3 tools/md_to_docx.py --input path/to/交底书.md --output path/to/交底书.docx
+python3 tools/shared/md_to_docx.py --input path/to/交底书.md --output path/to/交底书.docx
+python3 tools/shared/md_to_docx.py -i a.md -o a.docx --no-omml   # 仅 PNG/原文
 ```
 
 图片 `![](相对路径.png)`：默认相对 **Markdown 文件所在目录**；也可指定根目录：
 
 ```bash
-python3 tools/md_to_docx.py -i ./outputs/case/disclosure.md -o ./outputs/case/disclosure.docx --base-dir ./outputs/case
+python3 tools/shared/md_to_docx.py -i ./outputs/case/disclosure.md -o ./outputs/case/disclosure.docx --base-dir ./outputs/case
 ```
 
 **插图**：对 PNG/GIF/JPEG 会读取像素尺寸，在默认 **最大宽 5.5" × 最大高 8.2"** 内**等比缩放**并同时指定 `width`/`height`，避免竖长流程图仅按宽度放大后**高度超出版心**、打印或阅读时像被裁切。可按纸张边距调整，例如：
 
 ```bash
-python3 tools/md_to_docx.py -i a.md -o a.docx --image-max-width-inches 6 --image-max-height-inches 9
+python3 tools/shared/md_to_docx.py -i a.md -o a.docx --image-max-width-inches 6 --image-max-height-inches 9
 ```
 
 在 Claude Code 中可将 `tools` 换为 `${CLAUDE_SKILL_DIR}/tools`。
@@ -170,7 +257,7 @@ python3 tools/md_to_docx.py -i a.md -o a.docx --image-max-width-inches 6 --image
 | `> ` | 左缩进引用 |
 | `---` 等 | 浅色分隔线 |
 | `![](path)` | 嵌入图片（路径需存在；默认宽/高上限内等比缩放；公式图与正文混排） |
-| `$` / `\\(...\\)` / `$$` / `\\[...\\]` LaTeX | 默认先 **`math_render`** 转 PNG（注释隐藏引用）；失败则 **原文**写入 Word |
+| `$` / `\\(...\\)` / `$$` / `\\[...\\]` LaTeX | **优先 OMML（可编辑公式）** → 失败则 **PNG** → 再失败则 **原文**；``--no-omml`` 跳过 OMML |
 
 **未完整支持**：复杂嵌套列表、HTML 块、**未预渲染的** mermaid 围栏（仍为代码块）、脚注、任务列表等。定稿前请运行 **`mermaid_render.py`**；若仅用外部工具导出 PNG，可直接写 `![](...)`。
 
@@ -183,12 +270,12 @@ python3 tools/md_to_docx.py -i a.md -o a.docx --image-max-width-inches 6 --image
 
 ## iteration_dialog_log.py — 修订对话记录（迭代用）
 
-每轮 **`merger.md` / `correction_handler.md`** 交付后，在**案件目录**追加一条 **`交底书修订对话记录.md`**：含**本地时间与 UTC**、用户说明摘要、本轮交付文件名、合并/纠正摘要摘录。规则见 **`prompts/iteration_context.md`**。
+每轮 **`prompts/disclosure/merger.md` / `correction_handler.md`** 交付后，在**案件目录**追加一条 **`交底书修订对话记录.md`**：含**本地时间与 UTC**、用户说明摘要、本轮交付文件名、合并/纠正摘要摘录。规则见 **`prompts/disclosure/iteration_context.md`**。
 
 **依赖**：仅标准库。
 
 ```bash
-python3 tools/iteration_dialog_log.py --case-dir outputs/某案件 --kind merge \
+python3 tools/shared/iteration_dialog_log.py --case-dir outputs/某案件 --kind merge \
   --user "补充了调度装置资料，合并进第三章" \
   --summary "已扩写 3.4，并更新实施例；未改保护点表述。" \
   --artifacts "一种XXX方法及系统_20260408143025.md,一种XXX方法及系统_20260408143025.docx"
@@ -202,7 +289,7 @@ python3 tools/iteration_dialog_log.py --case-dir outputs/某案件 --kind merge 
 
 ## docx_to_md.py — Word → Markdown + 抽取图片
 
-将 **.docx**（Word / WPS 等另存为 docx）转为 **Markdown**，并把文档内嵌图片落到磁盘，便于 **`Read` 与 Step 2 扫描**（与直接读二进制 .docx 相比更稳）。**Step 2** 对扫描树内**每一个** `.docx` 都应先转换再读产出 `.md`，见 `prompts/project_scan.md`。
+将 **.docx**（Word / WPS 等另存为 docx）转为 **Markdown**，并把文档内嵌图片落到磁盘，便于 **`Read` 与 Step 2 扫描**（与直接读二进制 .docx 相比更稳）。**Step 2** 对扫描树内**每一个** `.docx` 都应先转换再读产出 `.md`，见 `prompts/disclosure/project_scan.md`。
 
 ### 依赖
 
@@ -215,14 +302,14 @@ pip install -r requirements.txt
 ### 用法
 
 ```bash
-python3 tools/docx_to_md.py --input path/to/设计说明.docx --output outputs/case/design.md
+python3 tools/shared/docx_to_md.py --input path/to/设计说明.docx --output outputs/case/design.md
 ```
 
 - 默认图片目录：`outputs/case/design_media/`，Markdown 内为相对路径 `![](design_media/img_0001.png)`。
 - 自定义图片目录：
 
 ```bash
-python3 tools/docx_to_md.py -i ./raw/spec.docx -o ./knowledge/spec.md --media-dir ./knowledge/spec_assets
+python3 tools/shared/docx_to_md.py -i ./raw/spec.docx -o ./knowledge/spec.md --media-dir ./knowledge/spec_assets
 ```
 
 转换警告（如部分样式、WMF 图）会输出到 **stderr**，仍可能生成可用 `.md`。
@@ -239,7 +326,7 @@ python3 tools/docx_to_md.py -i ./raw/spec.docx -o ./knowledge/spec.md --media-di
 
 ## pptx_to_md.py — PowerPoint → Markdown + 抽取图片
 
-将 **.pptx** / **.ppsx** 按**幻灯片页**导出为 Markdown，并抽取幻灯片中的**嵌入位图**（`PICTURE` 形状），便于 **`Read` 与 Step 2 扫描**。**Step 2** 对扫描树内**每一个** `.pptx` 均应先转换再读 `.md`，见 `prompts/project_scan.md`。
+将 **.pptx** / **.ppsx** 按**幻灯片页**导出为 Markdown，并抽取幻灯片中的**嵌入位图**（`PICTURE` 形状），便于 **`Read` 与 Step 2 扫描**。**Step 2** 对扫描树内**每一个** `.pptx` 均应先转换再读 `.md`，见 `prompts/disclosure/project_scan.md`。
 
 ### 依赖
 
@@ -252,14 +339,14 @@ pip install -r requirements.txt
 ### 用法
 
 ```bash
-python3 tools/pptx_to_md.py --input path/to/评审材料.pptx --output outputs/case/review.md
+python3 tools/shared/pptx_to_md.py --input path/to/评审材料.pptx --output outputs/case/review.md
 ```
 
 - 默认图片目录：`outputs/case/review_media/`，文件名形如 `slide03_img0001.png`。
 - 自定义图片目录：
 
 ```bash
-python3 tools/pptx_to_md.py -i ./raw/deck.pptx -o ./knowledge/deck.md --media-dir ./knowledge/deck_media
+python3 tools/shared/pptx_to_md.py -i ./raw/deck.pptx -o ./knowledge/deck.md --media-dir ./knowledge/deck_media
 ```
 
 每页输出二级标题 `## 第 N 页`，其后为该页形状中的**文本与表格**（简化为管道表）及图片引用；若存在**演讲者备注**，以「**备注**」小节附于该页末尾。
@@ -280,7 +367,28 @@ python3 tools/pptx_to_md.py -i ./raw/deck.pptx -o ./knowledge/deck.md --media-di
 
 ```bash
 pip install -r tools/patent_reader/requirements.txt
+
+# 发明/实用新型全文 PDF
+python tools/patent_reader/extract/fetch_patent_pdf.py --pub CN… -o RUN
+
+# 外观设计视图（常无 PDF CDN；需 Playwright，同国知局爬虫依赖）
+pip install -r tools/crawl/requirements-cnipa.txt && python -m playwright install chromium
+python tools/patent_reader/extract/fetch_design_views.py --pub CN…S -o RUN
 ```
+
+---
+
+## 审查答复案例库（`oa/`，可选，默认关闭）
+
+| 脚本 | 作用 |
+|------|------|
+| **`oa/config.py`** | `recommend` / `skip-vector` / `enable-vector` / `status` / `set` |
+| **`oa/pdf_text.py`** | 审查通知书/答复 PDF→文本（pymupdf） |
+| **`oa/ingest_case.py`** | 脱敏入库；无向量亦可；支持 `--pdf` |
+| **`oa/search_cases.py`** | 标签检索 + 可选向量；失败回退；支持 `--pdf` |
+| **`oa/rebuild_vectors.py`** | 用户确认后扫描 oa/cases 重建向量 |
+
+依赖：`pip install -r tools/oa/requirements-oa.txt`。说明见 **`tools/oa/README.md`**、**`docs/oa/README.md`**。
 
 ---
 

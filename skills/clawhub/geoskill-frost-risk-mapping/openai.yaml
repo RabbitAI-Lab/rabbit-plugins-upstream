@@ -1,0 +1,17 @@
+name: geoskill-frost-risk-mapping
+display_name: 霜冻风险制图
+description: |
+  霜冻风险制图：由日最低温时序与 DEM 做高程递减率、冷空气湖（TPI 洼地）与坡向地形修正，逐像元统计霜冻频率/霜冻日数、初霜日、终霜日与无霜期，并分级霜冻风险。Frost risk mapping: terrain-corrected min-temperature (lapse rate, cold-air pooling via TPI, aspect) with frost frequency, first/last frost date, frost-free period and risk classification. 输出霜冻风险/无霜期/频率 GeoTIFF + 统计 JSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-frost-risk-mapping.py
+runtime: python>=3.9
+tags:
+  - ai
+  - climate
+  - dem
+  - disaster
+  - extraction
+  - gis
+  - lidar
+  - machine-learning

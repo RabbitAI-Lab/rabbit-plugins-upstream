@@ -1,0 +1,14 @@
+{
+  "record_id": "consent_3b02556c9dc4",
+  "user_id": "user_001",
+  "consent_type": "memory_storage",
+  "version": "1.0",
+  "status": "granted",
+  "granted_at": "2026-06-05T05:00:29.175356",
+  "ip_address_hash": "",
+  "user_agent": "",
+  "expires_at": "2027-06-05T05:00:29.175356",
+  "previous_hash": "b216c3c9d8e837486fa425d3d8fe6e861409fa20466bb9e07da20b3584b4efb9",
+  "integrity_hash": "14e5693586932fbeab6482bf5259401a91544a14dd34fcf1758fa2deaa3c9818",
+  "metadata": {}
+}

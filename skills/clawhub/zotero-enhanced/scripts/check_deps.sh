@@ -14,12 +14,12 @@ Check that all dependencies for Zotero Enhanced are installed.
 Environment variables checked (not required to be set):
   ZOTERO_USER_ID, ZOTERO_API_KEY, WEBDAV_URL, WEBDAV_USER, WEBDAV_PASS
 
-Version: zotero-enhanced check_deps.sh v1.3.8
+Version: zotero-enhanced check_deps.sh v1.3.7
 EOF
         exit 0
         ;;
     --version)
-        echo "zotero-enhanced check_deps.sh v1.3.8"
+        echo "zotero-enhanced check_deps.sh v1.3.7"
         exit 0
         ;;
 esac

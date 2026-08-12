@@ -1,0 +1,13 @@
+name: geoskill-network-routing
+display_name: 网络路径规划
+description: |
+  Dijkstra/A*多约束路径规划，支持时间/距离权重和多起终点
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-network-routing.py
+runtime: python>=3.9
+tags:
+  - gis
+  - network
+  - remote-sensing
+  - vector

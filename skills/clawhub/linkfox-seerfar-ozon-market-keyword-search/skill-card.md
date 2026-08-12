@@ -1,45 +1,63 @@
-## Description: <br>
-Seerfar-Ozon市场关键词搜索 helps agents query LinkFox's Seerfar Ozon keyword database and return market metrics for Ozon and Wildberries keyword research. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Seerfar-Ozon市场关键词搜索 helps agents search Seerfar's Ozon and Wildberries keyword dataset by volume, growth, seller and product counts, price, sales, conversion concentration, and related market metrics.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External marketplace researchers, e-commerce operators, and agent workflows use this skill to discover and rank Ozon market keywords by search volume, growth, competition, seller counts, price, sales, and related market indicators. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: LinkFox receives Ozon keyword queries, session/app identifiers, and the API credential needed for billing. <br>
-Mitigation: Use only approved LinkFox credentials and avoid submitting sensitive keyword research or identifiers unless that data sharing is authorized. <br>
-Risk: Full market research responses and cache files are saved under generated linkfox directories. <br>
-Mitigation: Review local output locations and periodically delete saved files when the market research data is sensitive. <br>
-Risk: The skill includes automatic external feedback reporting behavior. <br>
-Mitigation: Review the feedback-reporting instruction before use and avoid including confidential details in any feedback content. <br>
-Risk: Repeated API calls consume LinkFox credits. <br>
-Mitigation: Confirm expected credit use before high-frequency searches or repeated pagination. <br>
+## Use Case:
 
+External marketplace operators, e-commerce analysts, and agent developers use this skill to find and rank Ozon and available Wildberries search terms by demand, competition, price, sales, and conversion metrics.
 
-## Reference(s): <br>
-- [Seerfar Ozon 市场热词搜索 API 参考](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-market-keyword-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries and tables, shell commands, and JSON API responses saved to local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are persisted under linkfox session data directories; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill handles LinkFox account login, API-key issuance, and billing actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before phone login, token generation, plan selection, recharge, or payment-order creation.
+
+Risk: The skill sends marketplace keyword queries and credentials to LinkFox services.
+
+Mitigation: Install and use it only when the user trusts LinkFox with Ozon/Wildberries market queries, account data, and API keys.
+
+Risk: The skill saves full API responses, cache entries, session metadata, and payment QR files locally.
+
+Mitigation: Treat saved outputs as sensitive and delete response, cache, session, and QR files when they are no longer needed.
+
+Risk: The security verdict is suspicious because the package combines keyword research with payment, credential, feedback, and persistent-storage behavior.
+
+Mitigation: Review the skill before deployment and avoid unattended execution of onboarding, billing, or feedback-related commands.
+
+## Reference(s):
+
+- [Seerfar Ozon Market Keyword Search API Reference](artifact/references/api.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-market-keyword-search)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown summaries and tables, shell commands, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The script writes full API responses to a local linkfox session data directory and may print summaries for large responses.]
+
+## Skill Version(s):
+
+1.0.3 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

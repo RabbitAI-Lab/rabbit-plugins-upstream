@@ -1,0 +1,13 @@
+name: geoskill-land-degradation-assessment
+display_name: 土地退化评估
+description: |
+  SDG 15.3.1 三指标土地退化评估：生产力趋势、LULC 变化、土壤有机碳，综合分级退化/稳定/改善
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-land-degradation-assessment.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - land-use
+  - remote-sensing

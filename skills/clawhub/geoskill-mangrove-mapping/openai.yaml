@@ -1,0 +1,17 @@
+name: geoskill-mangrove-mapping
+display_name: 红树林制图
+description: |
+  融合 NDVI 高值、NDWI 水陆边界、海岸缓冲与 SAR 潮汐多次散射特征，规则融合提取红树林分布，输出红树林 GeoTIFF、得分栅格、面积统计与多期变化。Maps mangroves by fusing NDVI, NDWI coast buffer and SAR tidal signatures.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-mangrove-mapping.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - sar
+  - vector
+  - vegetation

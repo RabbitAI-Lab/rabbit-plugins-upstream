@@ -1,45 +1,60 @@
-## Description: <br>
-Monitors unread DingTalk conversations, uses AI to draft and send direct-message replies in the configured user's voice, and sends WeChat notifications for group or selected-message cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitors unread DingTalk conversations, generates AI replies for single chats in the user's own voice, and sends WeChat notifications for group or excluded conversations instead of auto-replying.
 
-## Publisher: <br>
-[noaheleven](https://clawhub.ai/user/noaheleven) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[noaheleven](https://clawhub.ai/user/noaheleven)
 
-## Use Case: <br>
-Employees or operators use this skill to run a personal DingTalk assistant that monitors unread chats, auto-replies to direct messages when configured, and escalates group or sensitive cases through WeChat notification. Developers may also use it as deployment guidance for configuring dws, CodeBuddy Agent SDK, environment variables, validation, and background startup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run as a persistent background DingTalk assistant that reads unread chats and sends replies as the user. <br>
-Mitigation: Install it only when that behavior is intended, begin with DRY_RUN, confirm DingTalk send permissions, and review audit logs before enabling real automatic replies. <br>
-Risk: Startup launcher or PATH changes can affect how the monitor runs and what local tools it can invoke. <br>
-Mitigation: Verify the exact scripts from the server-resolved source repository and check any Startup launcher or PATH changes before enabling background execution. <br>
-Risk: Automatic replies may be sent to inappropriate contacts or duplicate/self conversations if configuration is wrong. <br>
-Mitigation: Use skip lists, identity configuration, delayed reply behavior, and audit logs before enabling live replies. <br>
+## Use Case:
 
+Employees and developers use this skill to monitor DingTalk unread messages, generate single-chat replies with CodeBuddy Agent SDK, and route group messages or risky cases to WeChat for manual handling. It is intended for users who deliberately want an unattended workplace chat assistant with configurable dry-run, grounding, and safety controls.
 
-## Reference(s): <br>
-- [Server-resolved GitHub source](https://github.com/NoahEleven/dingtalk-auto-reply) <br>
-- [ClawHub skill page](https://clawhub.ai/noaheleven/skills/dingtalk-auto-reply) <br>
-- [Publisher profile](https://clawhub.ai/user/noaheleven) <br>
-- [CodeBuddy console](https://copilot.tencent.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes operational guidance for dry-run validation, background startup, audit logs, DingTalk permissions, and optional notification/image handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: The skill can auto-send DingTalk single-chat replies as the user.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Begin with DRY_RUN=1, validate generated replies with _validate.py, and only enable live sending after confirming the persona, skip lists, and manual-escalation behavior.
+
+Risk: The assistant can read workplace messages and media and may use broad tools through CodeBuddy, gbrain, dws, and optional local code search.
+
+Mitigation: Keep CODE_SEARCH_ROOTS empty unless source-code search is required, disable gbrain or extra tools for sensitive chats, and limit DingTalk permissions to the documented message and contact scopes.
+
+Risk: The installation can modify PATH and create a Windows Startup launcher for unattended persistence.
+
+Mitigation: Review generated startup files and PATH changes before live use, and use stop_monitor.ps1 or the platform process manager to stop the monitor when unattended operation is not desired.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/noaheleven/skills/dingtalk-auto-reply)
+- [README.md](artifact/README.md)
+- [SKILL.md](artifact/SKILL.md)
+- [dws-reply-examples.md](artifact/dws-reply-examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, configuration values, Python scripts, and generated chat reply text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local configuration, logs, media cache, audit records, and a Windows startup launcher when installed and run.]
+
+## Skill Version(s):
+
+0.1.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

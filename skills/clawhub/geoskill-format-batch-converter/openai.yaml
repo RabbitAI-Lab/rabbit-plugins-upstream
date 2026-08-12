@@ -1,0 +1,14 @@
+name: geoskill-format-batch-converter
+display_name: 格式批量转换
+description: |
+  基于 GDAL / OGR 批量转换栅格与矢量格式 (GeoTIFF / Shapefile / GeoPackage / GeoJSON) 并记录日志。Batch convert raster and vector formats (GeoTIFF / Shapefile / GeoPackage / GeoJSON) via GDAL / OGR with logging.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-format-batch-converter.py
+runtime: python>=3.9
+tags:
+  - gis
+  - raster
+  - remote-sensing
+  - tooling
+  - vector

@@ -1,46 +1,54 @@
-## Description: <br>
-Calls MiniMax text chat models through RunAPI using the official OpenAI SDK or compatible clients, including streaming and OpenAI-, Anthropic-, and Gemini-compatible request surfaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Call the MiniMax text API (MiniMax-M3 through MiniMax-M2) through RunAPI using OpenAI-compatible Chat Completions.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to configure OpenAI-compatible clients for MiniMax text chat through RunAPI, including streaming, model listing, and protocol-compatible calls for existing Anthropic or Gemini tooling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API keys may be exposed if tokens are hard-coded, committed, or left in shell history. <br>
-Mitigation: Store the RunAPI token in an environment variable or secret manager and avoid inlining credentials in source files or commands. <br>
-Risk: Prompts and responses are sent to RunAPI/MiniMax when the skill is used. <br>
-Mitigation: Use the skill only for data appropriate for that external service and review organizational privacy and compliance requirements before use. <br>
-Risk: Misconfigured client settings can route requests to the wrong endpoint or fail unexpectedly. <br>
-Mitigation: Set OPENAI_BASE_URL to https://runapi.ai/v1 and verify the intended MiniMax model ID before deployment. <br>
+## Use Case:
 
+Developers and agents use this skill to call MiniMax text chat models through RunAPI using OpenAI-compatible Chat Completions, including streaming and compatibility-client guidance.
 
-## Reference(s): <br>
-- [RunAPI MiniMax homepage](https://runapi.ai/models/minimax) <br>
-- [MiniMax model overview, pricing, and rate limits](https://runapi.ai/models/minimax.md) <br>
-- [RunAPI MiniMax provider comparison](https://runapi.ai/providers/minimax.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [ClawHub skill listing](https://clawhub.ai/runapi-ai/skills/runapi-minimax) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with Python, TypeScript, dotenv, and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires OPENAI_API_KEY and OPENAI_BASE_URL; prompts and responses are sent to RunAPI/MiniMax when used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: Chat content and prompts are sent to RunAPI/MiniMax.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only data approved for that provider, and avoid secrets, regulated data, or private customer content unless organizational approval and data handling terms are in place.
+
+## Reference(s):
+
+- [MiniMax compatibility protocols](references/compatibility-protocols.md)
+- [RunAPI MiniMax model documentation](https://runapi.ai/models/minimax.md)
+- [RunAPI MiniMax provider documentation](https://runapi.ai/providers/minimax.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI MiniMax homepage](https://runapi.ai/models/minimax)
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-minimax)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with Python code examples and environment-variable configuration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes OpenAI-compatible request guidance, streaming verification, retry boundaries, and compatibility protocol notes.]
+
+## Skill Version(s):
+
+0.1.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

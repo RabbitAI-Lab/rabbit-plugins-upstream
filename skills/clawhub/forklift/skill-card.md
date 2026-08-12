@@ -1,54 +1,74 @@
-## Description: <br>
-Provides Chinese forklift knowledge and guidance across brands, products, selection, maintenance, fault diagnosis, safety regulations, standards, market trends, parts, and used-equipment evaluation. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Forklift expert helps agents answer forklift questions across brands, product selection, technical troubleshooting, maintenance, parts, used-equipment evaluation, safety, standards, regulations, and market trends.
 
-## Publisher: <br>
-[yangpf6698](https://clawhub.ai/user/yangpf6698) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-CC BY-NC 4.0 + additional noncommercial terms <br>
+## Publisher:
 
+[yangpf6698](https://clawhub.ai/user/yangpf6698)
 
-## Use Case: <br>
-External users and domain specialists use this skill to answer forklift-related questions, structure selection and maintenance guidance, and identify when current official sources or qualified technicians are needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+CC-BY-NC-4.0 + additional noncommercial terms
 
-## Known Risks and Mitigations: <br>
-Risk: Maintenance, fault-diagnosis, and test-drive guidance could be mistaken for a substitute for trained technicians or OEM procedures. <br>
-Mitigation: Treat the skill as informational; defer hazardous work, high-voltage systems, hydraulic repairs, and test drives to qualified personnel using OEM manuals and lockout/tagout procedures. <br>
-Risk: Forklift specifications, standards, prices, and market figures can become stale or vary by region and configuration. <br>
-Mitigation: Verify current values through official manufacturer, regulator, standards, service-station, or market sources before operational, purchasing, or compliance decisions. <br>
-Risk: The artifact carries noncommercial and attribution requirements that may restrict deployment or reuse. <br>
-Mitigation: Confirm the CC BY-NC 4.0 and additional noncommercial terms before distribution, integration, training use, or other reuse. <br>
+## Use Case:
 
+External users and agents use this skill as a Chinese-language forklift reference assistant for selecting equipment, diagnosing common faults, planning maintenance, checking parts guidance, and understanding safety or standards topics. Operational recommendations should be verified against the exact model, OEM manual, local rules, and qualified personnel.
 
-## Reference(s): <br>
-- [Forklift expert on ClawHub](https://clawhub.ai/yangpf6698/skills/forklift) <br>
-- [Publisher profile: yangpf6698](https://clawhub.ai/user/yangpf6698) <br>
-- [Forklift brands and official sites](references/brands.md) <br>
-- [Forklift selection guide](references/selection-guide.md) <br>
-- [Forklift knowledge base](references/knowledge.md) <br>
-- [Forklift fault diagnosis manual](references/fault-diagnosis.md) <br>
-- [Forklift safety, licenses, insurance, and operating procedures](references/safety-regulation.md) <br>
-- [Forklift standards and regulations](references/standards.md) <br>
-- [Forklift market trends](references/market-trends.md) <br>
-- [Forklift maintenance plan](references/maintenance-plan.md) <br>
-- [Forklift parts, wear items, and consumables](references/parts-consumables.md) <br>
-- [Used forklift evaluation guide](references/used-forklift-evaluation.md) <br>
-- [WeChat article index](references/wechat-articles.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Analysis, Markdown] <br>
-**Output Format:** [Markdown text with structured recommendations and source notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require current official sources for exact model specifications, prices, standards, and market data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: ClawHub release metadata; artifact frontmatter lists 2.1.0) <br>
+Risk: Maintenance, fault diagnosis, test-drive, and safety guidance may be too general for a specific forklift model or worksite.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify recommendations against the exact model, serial number, OEM manual, local safety rules, and qualified technicians or licensed operators before acting.
+
+Risk: Standards, regulations, market data, prices, and model specifications can change or vary by region.
+
+Mitigation: Use the skill's standard-retrieval and web verification workflow for current status, dates, prices, and exact specifications before presenting conclusions.
+
+Risk: High-voltage batteries, controllers, hydraulics, and thermal events can create safety hazards if handled from general text guidance alone.
+
+Mitigation: Escalate hazardous repairs to the manufacturer, authorized service provider, or qualified personnel instead of giving step-by-step field repair instructions.
+
+Risk: The artifact license imposes noncommercial attribution terms that may conflict with some reuse scenarios.
+
+Mitigation: Confirm intended use is permitted and retain required attribution to 杨鹏飞 / 叉车技术老炮, or obtain written authorization before commercial reuse.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/yangpf6698/skills/forklift)
+- [SKILL.md](artifact/SKILL.md)
+- [AUTHOR.md](artifact/AUTHOR.md)
+- [LICENSE.md](artifact/LICENSE.md)
+- [brands.md](artifact/brands.md)
+- [selection-guide.md](artifact/selection-guide.md)
+- [fault-diagnosis.md](artifact/fault-diagnosis.md)
+- [maintenance-plan.md](artifact/maintenance-plan.md)
+- [parts-consumables.md](artifact/parts-consumables.md)
+- [safety-regulation.md](artifact/safety-regulation.md)
+- [standard-retrieval.md](artifact/standard-retrieval.md)
+- [standards.md](artifact/standards.md)
+- [used-forklift-evaluation.md](artifact/used-forklift-evaluation.md)
+- [market-trends.md](artifact/market-trends.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown answers with structured checklists, decision notes, and source reminders]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct the agent to verify current standards, market data, prices, and exact model specifications before answering.]
+
+## Skill Version(s):
+
+2.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

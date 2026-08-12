@@ -1,11 +1,11 @@
 ---
 name: dlazy-seedream-4.5
 version: 1.3.4
-description: Generate high-quality images with Doubao Seedream 4.5. Supports text-to-image and image-to-image. 使用豆包 Seedream 4.5 模型生成高质量图像，支持文生图与图生图。
+description: "Generate high-quality images with Doubao Seedream 4.5. Supports text-to-image and image-to-image. 使用豆包 Seedream 4.5 模型生成高质量图像，支持文生图与图生图。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy seedream-4.5 -h for help."}}
 ---
 
-# dlazy-seedream-4.5
+# 文生图 Seedream 4.5
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

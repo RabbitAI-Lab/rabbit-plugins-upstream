@@ -1,39 +1,60 @@
-## Description: <br>
-Provides agent-facing scripts and guidance for managing authorized Shopee store livestream sessions, items, comments, images, and metrics through LinkFox's Shopee developer proxy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent-facing access to 25 Shopee Open Platform Livestream APIs through LinkFox, including livestream session creation, start and end actions, item management, comments, metrics, and image upload.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and developers use this skill to create and manage Shopee livestream sessions, products, comments, moderation actions, media uploads, and metrics for an already authorized store. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [Skill API reference](references/api.md) <br>
-- [Shopee Open Platform Livestream API](https://open.shopee.com/documents/v2/v2.livestream.upload_image?module=125&type=1) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-livestream) <br>
+External sellers, operators, and agent developers use this skill to manage authorized Shopee store livestream sessions, products, comments, metrics, and supporting media from an agent workflow.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, JSON files] <br>
-**Output Format:** [Markdown guidance with shell commands; script output is JSON or a short text summary with full JSON saved to a local file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a trusted LinkFox API key and authorized Shopee store tokens. Confirm store-mutating actions before running scripts, and monitor or clean generated response files because they may contain shop, customer-interaction, media, or metric data.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill can perform Shopee store operations, billing/payment onboarding, and actions that may affect public livestream state.
+
+Mitigation: Use it in a controlled workspace and require explicit user confirmation before public, destructive, or billing actions.
+
+Risk: The skill handles API keys, account onboarding data, and phone or SMS-code flows.
+
+Mitigation: Review endpoint environment variables before running and share phone or SMS codes through the agent only when intended.
+
+Risk: Full API responses may be stored persistently and can contain store or account data.
+
+Mitigation: Review saved response files before sharing workspaces or logs, and avoid exposing sensitive Shopee store data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-livestream)
+- [Shopee Livestream API reference](https://open.shopee.com/documents/v2/v2.livestream.upload_image?module=125&type=1)
+- [Livestream API module reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [JSON API responses and summaries, plus Markdown-style operational guidance and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Complete API responses are saved as local JSON files; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
