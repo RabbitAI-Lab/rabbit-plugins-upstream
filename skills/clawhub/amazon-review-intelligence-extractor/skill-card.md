@@ -1,50 +1,61 @@
-## Description: <br>
-Extracts pain points, buying factors, user profiles, usage patterns, competitor review comparisons, and listing-copy suggestions from Amazon review and product data through ZooData. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deep consumer insights from pre-analyzed Amazon reviews, extracting pain points, buying factors, user profiles, usage patterns, differentiation opportunities, competitor sentiment, and listing-copy suggestions through ZooData.
 
-## Publisher: <br>
-[apiclaw](https://clawhub.ai/user/apiclaw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[apiclaw](https://clawhub.ai/user/apiclaw)
 
-## Use Case: <br>
-External users, developers, and ecommerce teams use this skill to analyze Amazon reviews by ASIN, competitor set, or category and produce consumer-insight reports, comparison findings, and listing-copy suggestions grounded in ZooData API results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a ZooData API key. <br>
-Mitigation: Prefer ZOODATA_API_KEY in the environment, avoid plaintext config files when possible, and rotate the key if it is exposed. <br>
-Risk: ZooData API calls can spend credits during review and product lookups. <br>
-Mitigation: Confirm the analysis scope before running calls, use documented page and sample limits, and stop on credit-exhausted responses instead of fabricating missing data. <br>
-Risk: Raw-review fallback can create local JSON exports containing review text and related metadata. <br>
-Mitigation: Store fallback files in a temporary run directory and delete raw exports when they are no longer needed. <br>
-Risk: Changing ZOODATA_BASE_URL can redirect requests away from the default ZooData endpoint. <br>
-Mitigation: Set ZOODATA_BASE_URL only to a trusted ZooData-compatible endpoint and verify it before sending credentials. <br>
-Risk: Small review samples can overstate percentage-based conclusions. <br>
-Mitigation: Surface sample-size warnings, report counts alongside percentages, and treat single-mention findings as directional rather than data-backed. <br>
+## Use Case:
 
+Developers, operators, and product teams use this skill to analyze Amazon reviews for single ASINs, competitor sets, or product categories. It produces customer-feedback intelligence, product-improvement signals, positioning guidance, and listing-copy suggestions from ZooData API results.
 
-## Reference(s): <br>
-- [Amazon Review Intelligence Extractor on ClawHub](https://clawhub.ai/apiclaw/skills/amazon-review-intelligence-extractor) <br>
-- [Publisher homepage from metadata](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
-- [ZooData API key setup](https://zoodata.ai/en/api-keys) <br>
-- [ZooData API documentation](https://api.zoodata.ai/api-docs) <br>
-- [ZooData API field reference](references/reference.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with structured sections, tables, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZOODATA_API_KEY and may consume ZooData credits; raw-review fallback can create temporary JSON files for review aggregation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill requires access to a ZooData API key and sends product identifiers, category paths, marketplace/date filters, and numeric filters to ZooData.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only where ZooData API use is acceptable, use a dedicated key, and keep credentials in the supported environment or local config path.
+
+Risk: Review analysis can consume ZooData credits, especially multi-call deep dives and optional endpoint probes.
+
+Mitigation: Confirm estimated credit use before broad scans, avoid optional endpoint probes unless diagnosing setup, and prefer granular commands when tighter credit control is needed.
+
+Risk: Business recommendations may be incomplete or misleading when API coverage is sparse or fallback samples are small.
+
+Mitigation: Report only returned evidence, surface sample-size and data-provenance notes, and validate important business decisions with additional sources.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/apiclaw/skills/amazon-review-intelligence-extractor)
+- [Project homepage from metadata](https://github.com/SerendipityOneInc/ZooData-Skills)
+- [ZooData API field reference](references/reference.md)
+- [ZooData CLI contract](references/cli-contract.md)
+- [ZooData](https://zoodata.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown report with structured tables, API provenance, confidence labels, and optional JSON intermediates from the bundled CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZOODATA_API_KEY; ZooData API calls consume account credits.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

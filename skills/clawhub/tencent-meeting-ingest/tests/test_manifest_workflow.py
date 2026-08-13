@@ -339,6 +339,15 @@ class ManifestWorkflowTest(unittest.TestCase):
         })
         self.assertEqual("meeting-1", success["record_meetings"][0]["meeting_id"])
 
+        wrapped_success = unwrap_tencent_response({
+            "*meta": {"hints": ["new skill version available"]},
+            "data": {
+                "status_code": 200,
+                "body": json.dumps({"record_meetings": [{"meeting_id": "meeting-2"}]}),
+            },
+        })
+        self.assertEqual("meeting-2", wrapped_success["record_meetings"][0]["meeting_id"])
+
         with self.assertRaisesRegex(RuntimeError, "500246"):
             unwrap_tencent_response({
                 "status_code": 400,
@@ -348,6 +357,19 @@ class ManifestWorkflowTest(unittest.TestCase):
                         "message": "quota exhausted",
                     }
                 }),
+            })
+
+        with self.assertRaisesRegex(RuntimeError, "500246"):
+            unwrap_tencent_response({
+                "data": {
+                    "status_code": 400,
+                    "body": json.dumps({
+                        "error_info": {
+                            "error_code": 500246,
+                            "message": "quota exhausted",
+                        }
+                    }),
+                }
             })
 
     def test_cli_validates_and_applies_manifest_using_context_paths(self):

@@ -1,44 +1,62 @@
-## Description: <br>
-Zwjh Skill provides a local long-term memory and knowledge graph layer for agents, with semantic and timeline retrieval, health checks, backups, and a localhost graph viewer. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+zwjh-skill provides a local long-term memory and knowledge graph base for agents, with memory deposit, search, timeline retrieval, health auditing, backup and restore, export and migration, narrative generation, multimodal indexing, and graph visualization.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Agent users and developers use this skill to capture conversations or files into local long-term memory, query that memory through semantic search and timelines, inspect entity relationships, and run health, backup, restore, and scheduled maintenance workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create daily scheduled tasks and index local memory logs, which may process sensitive personal or project data without repeated prompts. <br>
-Mitigation: Review the scheduled task setup before enabling it, limit the memory directory to intended content, and disable or remove the task when automatic processing is not needed. <br>
-Risk: The localhost web UI serves graph data derived from local memory and loads a third-party CDN script. <br>
-Mitigation: Use the web UI only on trusted machines, avoid exposing the localhost service beyond the local host, and accept the CDN dependency risk before launching it. <br>
-Risk: Backup, restore, and maintenance commands can overwrite or transform local memory data. <br>
-Mitigation: Create a backup before restore or maintenance commands, inspect paths and targets, and run destructive or state-changing operations only on data you intend to modify. <br>
+## Use Case:
 
+Developers and agent users use this skill to persist and retrieve project, customer, and personal context across sessions, organize entities and relationships, audit memory quality, and export or restore memory data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/zwjh-skill) <br>
-- [Publisher profile](https://clawhub.ai/user/fyniujin) <br>
-- [Local graph viewer](http://127.0.0.1:8080) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and command-line guidance with Python commands, JSON-style API responses, Mermaid graph output, and local web UI data views.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local files under the user's memory directory, can register daily scheduled tasks, can run a localhost web UI, and can perform backup or restore operations when invoked.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: evidence.json release.version, artifact SKILL.md frontmatter, and artifact version.json) <br>
+Risk: The skill can register a persistent daily scheduled job.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the scheduler entry after setup and remove it when automatic memory processing is not desired.
+
+Risk: The skill can ingest arbitrary files and store long-term memory data.
+
+Mitigation: Avoid ingesting sensitive files unless intended and periodically audit stored memory content and backups.
+
+Risk: Restore operations can overwrite or wipe existing memory data.
+
+Mitigation: Treat restore as destructive, verify the source path, and keep a separate backup before restoring.
+
+Risk: Optional Baidu Netdisk backup, remote update manifests, CDN-backed UI, and external LLM adapters can expand privacy boundaries beyond local processing.
+
+Mitigation: Leave optional networked features disabled unless the user accepts those data flows and has reviewed the relevant configuration.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/zwjh-skill)
+- [Publisher profile](https://clawhub.ai/user/fyniujin)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, CSV, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown and plain-text agent responses with shell commands, JSON or CSV export files, Cypher export text, and local web UI data.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May persist local SQLite data, memory files, backups, scheduled task entries, and optional web UI assets.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence, SKILL.md frontmatter, artifact/version.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

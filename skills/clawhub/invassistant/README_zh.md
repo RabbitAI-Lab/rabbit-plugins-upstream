@@ -1,4 +1,3 @@
-# InvAssistant — 个人投资组合管理框架
 
 一个 WorkBuddy/CodeBuddy Skill，实现多市场投资策略管理框架。覆盖美股、A股、港股，按资产分类执行差异化规则，组合层风控 + 纪律执行协议。
 

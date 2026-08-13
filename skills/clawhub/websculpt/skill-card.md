@@ -1,43 +1,57 @@
-## Description: <br>
-WebSculpt bootstraps browser automation with a reusable command library by installing or repairing the WebSculpt CLI and routing agents to lifecycle skills for exploration, capture, maintenance, and library management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WebSculpt bootstraps browser automation and command-library skills for agents that need to gather external information, scrape pages, call APIs, or repair an unavailable WebSculpt setup.
 
-## Publisher: <br>
-[bqw1013](https://clawhub.ai/user/bqw1013) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bqw1013](https://clawhub.ai/user/bqw1013)
 
-## Use Case: <br>
-Developers, researchers, analysts, content operators, and ecommerce teams use this skill to set up WebSculpt when they need browser automation, web data acquisition, API calls, scraping, or reusable commands for repeated web workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can install persistent global tooling and lifecycle skills across multiple agent skill directories. <br>
-Mitigation: Install only when persistent WebSculpt behavior is desired, and prefer project-local installation when the workflow should stay scoped to one project. <br>
-Risk: The default global setup can modify skill directories under the user's home folder. <br>
-Mitigation: Review the installation scope and installed files before allowing global setup or later updates. <br>
-Risk: Browser automation and scraping workflows may access logged-in or content-gated web data. <br>
-Mitigation: Use WebSculpt only for accounts, sites, and data sources the user is authorized to access, and review generated commands before reuse. <br>
+## Use Case:
 
+Agents use this skill to install, verify, update, or route WebSculpt browser automation workflows. It is aimed at users who need repeatable access to external web information, including content-wall workflows, scraping, API access, and command-library maintenance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/bqw1013/skills/websculpt) <br>
-- [Skill documentation](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and routing instructions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May install persistent global or project-local WebSculpt tooling and lifecycle skill files depending on user intent and environment state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The skill can install global npm packages and persistent agent lifecycle skills under the user's home directory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the install scope before use; prefer project-local installation when WebSculpt is needed for only one workspace.
+
+Risk: Future agent sessions may automatically use installed WebSculpt lifecycle skills after setup.
+
+Mitigation: Proceed only if persistent WebSculpt lifecycle behavior is acceptable for the environment.
+
+Risk: The scanner summary notes broad triggers without a clear consent checkpoint.
+
+Mitigation: Confirm user intent before installation, update, repair, or persistent skill changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/bqw1013/skills/websculpt)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May install or route persistent lifecycle skills and global CLI tooling when the WebSculpt environment is missing or broken.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

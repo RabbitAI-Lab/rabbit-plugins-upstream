@@ -1,42 +1,53 @@
-## Description: <br>
-基于 pdfplumber 本地提取增值税电子发票和火车票信息，并输出格式化 Excel，支持多税率及水印页兜底识别。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Extracts Chinese VAT invoice, train ticket, and toll invoice details from local PDFs and writes them to a formatted Excel workbook.
 
-## Publisher: <br>
-[seairteng](https://clawhub.ai/user/seairteng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seairteng](https://clawhub.ai/user/seairteng)
 
-## Use Case: <br>
-Finance, operations, and administrative users can use this skill to process local invoice PDF batches and create a structured Excel summary for reimbursement or accounting workflows. It extracts invoice identifiers, dates, buyer and seller details, tax rates, amounts, totals, duplicate indicators, and train-ticket records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Input PDFs and generated Excel summaries may contain sensitive financial and taxpayer information. <br>
-Mitigation: Handle PDF inputs and .xlsx outputs as confidential records, store them only in approved locations, and remove them when no longer needed. <br>
-Risk: Installing runtime dependencies from an untrusted package source could introduce supply-chain risk. <br>
-Mitigation: Install pdfplumber and openpyxl from trusted package indexes or approved internal mirrors before running the extractor. <br>
-Risk: Invoice parsing can miss or misread fields when PDFs use unusual layouts, watermarks, or OCR/text extraction edge cases. <br>
-Mitigation: Review the generated Excel summary, especially blank dates, missing tax IDs, zero non-train-ticket amounts, empty item names, and highlighted duplicates. <br>
+## Use Case:
 
+Finance operations users, developers, and agents use this skill to process local invoice PDFs into a structured Excel summary for reimbursement, reconciliation, or audit preparation. It supports Chinese VAT invoices, train tickets, toll invoices, multi-rate invoices, watermark fallback extraction, and OCR fallback for image-only or complex-layout PDFs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/seairteng/skills/pdf-invoice-stat) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, code, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with Python shell commands and generated Excel files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads local PDF invoice files and writes a formatted .xlsx summary; no network behavior is reported by the security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: OCR fallback may write temporary invoice page images under predictable /tmp filenames, which can expose sensitive invoice content on shared machines.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill on a trusted single-user machine or harden temporary-file handling before processing highly sensitive PDFs.
+
+Risk: PaddleOCR and PaddleX dependencies may download OCR model files into the local user cache.
+
+Mitigation: Install and run the dependencies in a managed environment where model downloads and local cache storage are acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/seairteng/skills/pdf-invoice-stat)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Code, Files, Guidance]
+
+**Output Format:** [Markdown guidance with Python scripts and generated .xlsx workbook output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The workbook contains extracted invoice fields, accounting number formats, frozen headers, duplicate highlighting, and blank reimbursement columns.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release metadata, _meta.json, and CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

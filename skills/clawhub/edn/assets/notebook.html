@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Engineering Notebook</title>
+<!--
+  edn scaffold — canonical visual system for engineering-notebook.html.
+
+  Usage:
+  - Copy this file to the repository root as engineering-notebook.html.
+  - Keep the visual system (layout, palette, type, section shells, diagram
+    conventions) intact; change only content, diagrams, and data.
+  - Diagram language:
+      solid line / box        = current architecture (exists in code)
+      dashed amber line / box = proposed (planned, not implemented)
+      dashed red line         = trust / security boundary
+      violet dashed box       = external system outside your control
+  - Text in diagrams is never clipped: keep node labels short and readable.
+  - Never introduce buttons or controls that execute code from the notebook.
+-->
+<style>
+  :root {
+    color-scheme: dark;
+    --bg:        #0b0f16;
+    --surface:   #11161f;
+    --surface-2: #1a2029;
+    --border:    #2a3240;
+    --border-2:  #3b4656;
+    --text:      #e8ecf4;
+    --muted:     #98a3b3;
+    --faint:     #5f6b7a;
+    --accent:    #58a6ff;
+    --good:      #2ea043;
+    --warn:      #d4a72c;
+    --red:       #f85149;
+    --ext:       #c792ea;
+    --code-bg:   #0d1117;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 248px minmax(0, 1fr);
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    padding: 26px 18px 26px 26px;
+    border-right: 1px solid var(--border);
+    height: 100vh;
+    overflow-y: auto;
+    font-size: 13px;
+  }
+  .sidebar .brand { margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .sidebar .brand .name { display: block; font-weight: 700; font-size: 14px; letter-spacing: -0.01em; }
+  .sidebar .brand .sub  { display: block; color: var(--muted); font-size: 12px; font-family: var(--mono); margin-top: 2px; }
+  .sidebar nav .group { margin: 16px 0 6px; color: var(--faint); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.09em; }
+  .sidebar nav a {
+    display: block;
+    color: var(--text);
+    padding: 3px 0 3px 10px;
+    border-left: 2px solid transparent;
+    line-height: 1.45;
+  }
+  .sidebar nav a:hover { color: var(--accent); border-left-color: var(--border-2); }
+
+  /* ---------- Main ---------- */
+  .main { padding: 44px 52px 96px; min-width: 0; }
+  .main .hero { margin-bottom: 36px; padding-bottom: 22px; border-bottom: 1px solid var(--border); }
+  .main .hero h1 { margin: 0 0 8px; font-size: 25px; letter-spacing: -0.02em; }
+  .main .hero p  { margin: 0; color: var(--muted); max-width: 72ch; }
+
+  .meta { margin-top: 14px; color: var(--faint); font-size: 12.5px; font-family: var(--mono); }
+  .meta span + span::before { content: " · "; color: var(--border-2); }
+
+  section { margin: 42px 0; scroll-margin-top: 16px; }
+  section > h2 {
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  section > h2 .num { color: var(--faint); font-family: var(--mono); font-size: 12.5px; font-weight: 500; margin-right: 10px; }
+  section > .lead { color: var(--muted); margin: 6px 0 16px; max-width: 74ch; font-size: 14px; }
+
+  h3 { font-size: 14.5px; margin: 22px 0 8px; letter-spacing: -0.01em; }
+  p  { max-width: 78ch; }
+  ul, ol { max-width: 78ch; padding-left: 22px; }
+  li { margin: 4px 0; }
+
+  code, pre, .mono { font-family: var(--mono); }
+  code { background: var(--code-bg); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font-size: 12.5px; }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.55;
+    color: var(--text);
+  }
+  pre code { background: none; border: 0; padding: 0; }
+
+  .card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 12px 0;
+  }
+  .card h3 { margin-top: 0; }
+
+  table {
+    width: 100%; border-collapse: collapse;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+    font-size: 13.5px;
+  }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); background: #11161d; }
+  tr:last-child td { border-bottom: 0; }
+  td code { font-size: 12px; }
+
+  .hint { color: var(--faint); font-size: 12.5px; }
+
+  /* ---------- Diagram visual language ---------- */
+  /* current = solid, proposed = dashed amber, boundary = dashed red, external = dashed violet */
+  .diagram { margin: 14px 0; overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); padding: 14px 10px; }
+  .legend {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    font-size: 12px; color: var(--muted);
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 7px 14px; margin: 10px 0 0;
+  }
+  .legend .item { display: inline-flex; align-items: center; gap: 7px; }
+  .legend .line { width: 24px; height: 0; border-top: 2px solid #8a97b0; display: inline-block; }
+  .legend .line.warn { border-top-color: var(--warn); border-top-style: dashed; }
+  .legend .line.red { border-top-color: var(--red); border-top-style: dashed; }
+  .legend .line.ext { border-top-color: var(--ext); border-top-style: dashed; }
+
+  /* SVG defaults: current = solid, proposed = dashed amber,
+     boundary = dashed red, external = dashed violet */
+  svg { display: block; width: 100%; height: auto; max-width: 100%; }
+  svg text { font-family: var(--sans); fill: var(--text); }
+
+  .diagram svg text { font-size: 12.5px; }
+  .diagram svg text.sub { font-size: 11px; fill: var(--muted); }
+  .diagram svg .title { font-size: 11px; fill: var(--faint); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* node boxes */
+  .box { fill: #141b24; stroke: #56617a; stroke-width: 1.5; rx: 6; }
+  .box.accent   { stroke: var(--accent); }
+  .box.proposed { stroke: var(--warn); stroke-width: 1.5; stroke-dasharray: 7 5; fill: #16130b; }
+  .box.ext      { stroke: var(--ext); stroke-width: 1.5; stroke-dasharray: 7 5; }
+
+  /* edges */
+  .edge      { stroke: #8a97b0; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+  .edge.proposed { stroke: var(--warn); stroke-width: 1.5; stroke-dasharray: 6 4; fill: none; marker-end: url(#arrow-warn); }
+  .edge.boundary { stroke: var(--red); stroke-width: 1.5; stroke-dasharray: 5 5; fill: none; marker-end: none; }
+  .edge.ext   { stroke: var(--ext); stroke-width: 1.5; stroke-dasharray: 5 5; fill: none; marker-end: url(#arrow-ext); }
+
+  /* architecture bands */
+  .band { fill: #0d131c; stroke: var(--border-2); stroke-width: 1; }
+
+  svg .flow-label { font-size: 11px; fill: var(--faint); font-family: var(--mono); }
+
+  .muted { color: var(--muted); }
+  .footnote { font-size: 12.5px; color: var(--faint); border-top: 1px solid var(--border); margin-top: 48px; padding-top: 16px; }
+
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar {
+      position: static; height: auto;
+      border-right: 0; border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+    }
+    .sidebar nav { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+    .sidebar nav .group { display: none; }
+    .main { padding: 28px 20px 72px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- shared arrow markers for all diagrams -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8a97b0"/>
+    </marker>
+    <marker id="arrow-warn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#d4a72c"/>
+    </marker>
+    <marker id="arrow-ext" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c792ea"/>
+    </marker>
+  </defs>
+</svg>
+
+<div class="layout">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="name">Repository Name</span>
+      <span class="sub">engineering-notebook</span>
+    </div>
+    <nav>
+      <div class="group">Sections</div>
+      <a href="#project-map">Project Map</a>
+      <a href="#system-architecture">System Architecture</a>
+      <a href="#core-components">Core Components</a>
+      <a href="#key-flows">Key Flows</a>
+      <a href="#data-ownership">Data / State Ownership</a>
+      <a href="#decisions">Decisions &amp; Tradeoffs</a>
+      <a href="#failure-modes">Failure Modes / Risks</a>
+      <a href="#current-proposed">Current vs Proposed</a>
+      <a href="#recent-changes">Recent Changes</a>
+      <a href="#dependencies">Dependencies &amp; Contracts</a>
+      <a href="#verification">Verification &amp; Evidence</a>
+    </nav>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <header class="hero">
+      <h1><code>repository-name</code> — Engineering Notebook</h1>
+      <p>What the system is, what it does, and its architectural style — in two or
+        three sentences. Used as an orientation point, not as marketing copy.</p>
+      <div class="meta">
+        <span>Explanation level: Junior</span>
+        <span>Last updated: YYYY-MM-DD</span>
+        <span>Maintainer: edn</span>
+      </div>
+    </header>
+
+    <!-- 1. Project Map -->
+    <section id="project-map">
+      <h2><span class="num">01</span>Project Map</h2>
+      <p class="lead">One screen showing the whole system: entry points, components,
+        stores, queues/caches, external systems, and trust boundaries. Diagram plus
+        terse annotations.</p>
+
+      <div class="legend">
+        <span class="item"><span class="line"></span> current</span>
+        <span class="item"><span class="line warn"></span> proposed</span>
+        <span class="item"><span class="line red"></span> trust boundary</span>
+        <span class="item"><span class="line ext"></span> external system</span>
+      </div>
+      <div class="diagram">
+        <svg viewBox="0 0 940 330" role="img" aria-label="Project map">
+          <title>Project map</title>
+          <!-- trust boundary -->
+          <line x1="305" y1="10" x2="305" y2="320" class="edge boundary"/>
+          <text x="312" y="20" class="flow-label">trust boundary</text>
+
+          <!-- entry points -->
+          <rect x="30"  y="50"  width="190" height="60" rx="8" class="box"/>
+          <text x="125" y="82"  text-anchor="middle">Browser clients</text>
+          <text x="125" y="99"  text-anchor="middle" class="sub">SPA on /app</text>
+
+          <rect x="30"  y="180" width="190" height="60" rx="8" class="box"/>
+          <text x="125" y="212" text-anchor="middle">Mobile clients</text>
+          <text x="125" y="229" text-anchor="middle" class="sub">iOS / Android</text>
+
+          <line x1="220" y1="85"  x2="395" y2="110" class="edge"/>
+          <line x1="220" y1="212" x2="395" y2="120" class="edge"/>
+
+          <!-- our system -->
+          <rect x="400" y="60" width="220" height="90" rx="8" class="box accent"/>
+          <text x="510" y="105" text-anchor="middle">Web / API</text>
+          <text x="510" y="122" text-anchor="middle" class="sub">entry · auth · validation</text>
+
+          <!-- data -->
+          <rect x="700" y="60"  width="180" height="60" rx="8" class="box"/>
+          <text x="790" y="92"  text-anchor="middle">PostgreSQL</text>
+          <text x="790" y="108" text-anchor="middle" class="sub">source of truth</text>
+
+          <rect x="700" y="180" width="180" height="56" rx="8" class="box proposed"/>
+          <text x="790" y="206" text-anchor="middle">Cache (proposed)</text>
+          <text x="790" y="222" text-anchor="middle" class="sub">hot reads</text>
+
+          <!-- external -->
+          <rect x="400" y="190" width="220" height="52" rx="8" class="box ext"/>
+          <text x="510" y="222" text-anchor="middle">Identity provider</text>
+
+          <!-- edges -->
+          <line x1="620" y1="100" x2="700" y2="100" class="edge"/>
+          <line x1="510" y1="150" x2="510" y2="188" class="edge"/>
+          <line x1="620" y1="130" x2="700" y2="185" class="edge proposed"/>
+          <line x1="790" y1="180" x2="790" y2="122" class="edge proposed"/>
+        </svg>
+      </div>
+      <div class="card">
+        <h3>Boundaries</h3>
+        <p class="hint">Name the boundaries and what crosses them. Example:</p>
+        <ul>
+          <li><strong>Auth boundary</strong> — handled by the API; nothing else trusts client claims.</li>
+          <li><strong>Tenant boundary</strong> — every row in PostgreSQL is scoped by <code>tenant_id</code>.</li>
+          <li><strong>Process boundary</strong> — the worker (proposed) is a separate runtime from the API.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 2. System Architecture -->
+    <section id="system-architecture">
+      <h2><span class="num">02</span>System Architecture</h2>
+      <p class="lead">Layers, responsibilities, dependency direction, runtime and
+        process boundaries. Not a file listing.</p>
+      <div class="diagram">
+        <svg viewBox="0 0 940 300" role="img" aria-label="System architecture">
+          <title>System architecture</title>
+          <g font-size="12.5">
+            <!-- band 1: presentation -->
+            <rect x="20" y="30" width="900" height="64" rx="6" class="band"/>
+            <text x="30" y="78" class="sub">Presentation</text>
+            <rect x="150" y="38" width="120" height="44" rx="6" class="box"/>
+            <text x="210" y="66" text-anchor="middle">Web client</text>
+            <rect x="290" y="38" width="120" height="44" rx="6" class="box"/>
+            <text x="350" y="66" text-anchor="middle">Mobile client</text>
+
+            <!-- band 2: application -->
+            <rect x="20" y="122" width="900" height="64" rx="6" class="band"/>
+            <text x="30" y="170" class="sub">Application</text>
+            <rect x="150" y="132" width="260" height="44" rx="6" class="box accent"/>
+            <text x="280" y="160" text-anchor="middle">API — auth · validation</text>
+            <rect x="430" y="132" width="180" height="44" rx="6" class="box proposed"/>
+            <text x="520" y="160" text-anchor="middle">Worker (proposed)</text>
+
+            <!-- band 3: data -->
+            <rect x="20" y="214" width="900" height="64" rx="6" class="band"/>
+            <text x="30" y="270" class="sub">Data</text>
+            <rect x="150" y="224" width="180" height="44" rx="6" class="box"/>
+            <text x="240" y="252" text-anchor="middle">PostgreSQL</text>
+            <rect x="350" y="224" width="180" height="44" rx="6" class="box proposed"/>
+            <text x="440" y="252" text-anchor="middle">Cache (proposed)</text>
+          </g>
+        </svg>
+      </div>
+      <h3>Invariants</h3>
+      <ul>
+        <li><em>invariant 1 — e.g. all writes pass through the domain layer.</em>
+          <span class="hint">(example)</span></li>
+        <li><em>invariant 2 — e.g. tenant_id is never derived from client input.</em>
+          <span class="hint">(example)</span></li>
+      </ul>
+    </section>
+
+    <!-- 3. Core Components -->
+    <section id="core-components">
+      <h2><span class="num">03</span>Core Components</h2>
+      <p class="lead">For each important component: purpose, ownership, public
+        interface, dependencies, important state, failure behavior.</p>
+
+      <div class="card">
+        <h3>Web / API</h3>
+        <table>
+          <tr><th>Purpose</th><td>Entry point for all client requests</td></tr>
+          <tr><th>Owns</th><td>request validation, auth, orchestration</td></tr>
+          <tr><th>Public interface</th><td><code>POST /v1/…</code> <code>GET /v1/…</code></td></tr>
+          <tr><th>Dependencies</th><td>PostgreSQL, identity provider</td></tr>
+          <tr><th>Important state</th><td>none persistent</td></tr>
+          <tr><th>Failure behavior</th><td>4xx/5xx; retry + timeout on Postgres; circuit on identity provider</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Worker <span class="hint">(proposed)</span></h3>
+        <table>
+          <tr><th>Purpose</th><td>long-running jobs (invoice generation)</td></tr>
+          <tr><th>Owns</th><td>job queue semantics in Postgres</td></tr>
+          <tr><th>Public interface</th><td>internal, no HTTP</td></tr>
+          <tr><th>Dependencies</th><td>PostgreSQL</td></tr>
+          <tr><th>Failure behavior</th><td>retry with backoff; no at-least-once guarantee without dedupe</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. Key Flows -->
+    <section id="key-flows">
+      <h2><span class="num">04</span>Key Flows</h2>
+      <p class="lead">End-to-end flows. Each: entry, components touched, state read
+        and written, external calls, failure points.</p>
+
+      <div class="card">
+        <h3>Flow: sign in</h3>
+        <div class="diagram">
+          <svg viewBox="0 0 980 130" role="img" aria-label="Sign in flow">
+            <title>Sign in flow</title>
+            <!-- equal 140x56 grid, 110px gaps -->
+            <rect x="32"  y="42" width="140" height="56" rx="6" class="box"/>
+            <text x="102" y="74" text-anchor="middle">Browser</text>
+            <rect x="282" y="42" width="140" height="56" rx="6" class="box accent"/>
+            <text x="352" y="74" text-anchor="middle">Web / API</text>
+            <rect x="532" y="42" width="140" height="56" rx="6" class="box ext"/>
+            <text x="602" y="74" text-anchor="middle">Identity provider</text>
+            <rect x="822" y="42" width="140" height="56" rx="6" class="box"/>
+            <text x="892" y="74" text-anchor="middle">PostgreSQL</text>
+
+            <!-- request lane -->
+            <line x1="172" y1="70" x2="282" y2="70" class="edge"/>
+            <line x1="422" y1="70" x2="532" y2="70" class="edge"/>
+            <line x1="672" y1="70" x2="822" y2="70" class="edge"/>
+
+            <!-- labels 12px above the line, centered in gaps -->
+            <text x="227" y="56" text-anchor="middle" class="flow-label">POST /auth</text>
+            <text x="477" y="56" text-anchor="middle" class="flow-label">OIDC flow</text>
+            <text x="747" y="56" text-anchor="middle" class="flow-label">create session</text>
+          </svg>
+        </div>
+        <table>
+          <tr><th>Entry</th><td>POST /auth/sign-in</td></tr>
+          <tr><th>Components touched</th><td>Web / API → identity provider → PostgreSQL</td></tr>
+          <tr><th>State written</th><td>session record, last_seen</td></tr>
+          <tr><th>Failure points</th><td>provider slow; session race on sign-out</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Flow: create invoice</h3>
+        <div class="diagram">
+          <svg viewBox="0 0 800 230" role="img" aria-label="Create invoice flow">
+            <title>Create invoice flow</title>
+            <!-- main row: equal 150x56 boxes, 130px gaps -->
+            <rect x="40"  y="48" width="150" height="56" rx="6" class="box"/>
+            <text x="115" y="80" text-anchor="middle">Browser</text>
+            <rect x="320" y="48" width="150" height="56" rx="6" class="box accent"/>
+            <text x="395" y="80" text-anchor="middle">Web / API</text>
+            <rect x="600" y="48" width="150" height="56" rx="6" class="box"/>
+            <text x="675" y="80" text-anchor="middle">PostgreSQL</text>
+
+            <!-- request lane -->
+            <line x1="190" y1="76" x2="320" y2="76" class="edge"/>
+            <line x1="470" y1="76" x2="600" y2="76" class="edge"/>
+
+            <!-- return lane (response), 64px below request -->
+            <polyline points="395,104 395,140 115,140 115,104" class="edge"/>
+
+            <!-- worker (proposed) centered under PostgreSQL -->
+            <rect x="600" y="150" width="150" height="44" rx="6" class="box proposed"/>
+            <text x="675" y="179" text-anchor="middle">Worker (proposed)</text>
+            <line x1="675" y1="104" x2="675" y2="150" class="edge proposed"/>
+
+            <!-- labels: centered, 12–16px above their lane -->
+            <text x="255" y="62" text-anchor="middle" class="flow-label">POST /invoices</text>
+            <text x="535" y="62" text-anchor="middle" class="flow-label">INSERT (tx)</text>
+            <text x="255" y="128" text-anchor="middle" class="flow-label">201 invoice</text>
+            <text x="610" y="118" text-anchor="middle" class="flow-label">async, proposed</text>
+          </svg>
+        </div>
+        <table>
+          <tr><th>Entry</th><td>POST /invoices</td></tr>
+          <tr><th>Components touched</th><td>Web / API → PostgreSQL</td></tr>
+          <tr><th>State written</th><td>invoice row (status: draft → sent)</td></tr>
+          <tr><th>Failure points</th><td>statement timeout; duplicate submissions</td></tr>
+          <tr><th>Proposed</th><td>generation moves to a worker; same Postgres writes</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- 5. Data / State Ownership -->
+    <section id="data-ownership">
+      <h2><span class="num">05</span>Data / State Ownership</h2>
+      <p class="lead">For meaningful state: owner, source of truth, storage, read and
+        mutation paths, tenant isolation. Call out authorization explicitly.</p>
+      <table>
+        <tr><th>State</th><th>Owner</th><th>Source of truth</th><th>Stored</th><th>Read path</th><th>Mutation path</th><th>Tenant-scoped</th></tr>
+        <tr><td>Users</td><td>User domain</td><td><code>users</code></td><td>PostgreSQL</td><td>API → DB</td><td>API → DB</td><td>No</td></tr>
+        <tr><td>Invoices</td><td>Billing</td><td><code>invoices</code></td><td>PostgreSQL</td><td>API → DB</td><td>API → DB</td><td><strong>Yes</strong></td></tr>
+        <tr><td>Sessions</td><td>Auth</td><td><code>sessions</code></td><td>PostgreSQL</td><td>API → DB</td><td>API → DB</td><td>No</td></tr>
+      </table>
+    </section>
+
+    <!-- 6. Decisions & Tradeoffs -->
+    <section id="decisions">
+      <h2><span class="num">06</span>Decisions &amp; Tradeoffs</h2>
+      <p class="lead">Only decisions a future engineer would reasonably question.</p>
+      <div class="card">
+        <h3>Single PostgreSQL, no cache</h3>
+        <table>
+          <tr><th>Why</th><td>reads are within budget; ops stays simple</td></tr>
+          <tr><th>Alternatives</th><td>Redis read-through cache</td></tr>
+          <tr><th>Gain</th><td>simplicity, no stale reads, single storage failure domain</td></tr>
+          <tr><th>Give up</th><td>headroom for hot reads at larger scale</td></tr>
+          <tr><th>Evidence</th><td>p95 read 30 ms at current scale <span class="hint">(link to Verification)</span></td></tr>
+          <tr><th>Revisit when</th><td>p95 read &gt; 200 ms or read:write &gt; 20:1</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- 7. Failure Modes / Risks -->
+    <section id="failure-modes">
+      <h2><span class="num">07</span>Failure Modes / Risks</h2>
+      <p class="lead">What can fail, the impact, detection, recovery, and what can be
+        lost / duplicated / delayed / exposed. Include boundary crossings.</p>
+      <table>
+        <tr><th>Failure</th><th>User impact</th><th>Detected</th><th>Recovery</th><th>Data risk</th></tr>
+        <tr><td>PostgreSQL down</td><td>API 5xx</td><td>health checks, alerts</td><td>failover / restart</td><td>in-flight writes lost</td></tr>
+        <tr><td>Identity provider slow</td><td>slow sign-in</td><td>latency alert</td><td>timeouts + retry</td><td>none</td></tr>
+        <tr><td>Auth leak</td><td>unauthenticated access</td><td>audit logs</td><td>rotate keys, revoke sessions</td><td>tenant exposure</td></tr>
+      </table>
+    </section>
+
+    <!-- 8. Current vs Proposed Architecture -->
+    <section id="current-proposed">
+      <h2><span class="num">08</span>Current vs Proposed Architecture</h2>
+      <p class="lead">Solid = in code today. Dashed = planned, not implemented.
+        Never present a proposal as shipped reality.</p>
+      <div class="legend">
+        <span class="item"><span class="line"></span> current</span>
+        <span class="item"><span class="line warn"></span> proposed</span>
+      </div>
+      <div class="diagram">
+        <svg viewBox="0 0 940 270" role="img" aria-label="Current vs proposed">
+          <title>Current vs proposed</title>
+
+          <text x="30" y="24" class="title">current</text>
+          <rect x="30"  y="40"  width="140" height="54" rx="6" class="box"/>
+          <text x="100" y="70" text-anchor="middle">Clients</text>
+          <rect x="240" y="40"  width="150" height="54" rx="6" class="box accent"/>
+          <text x="315" y="70" text-anchor="middle">Web / API</text>
+          <rect x="460" y="40"  width="170" height="54" rx="6" class="box"/>
+          <text x="545" y="70" text-anchor="middle">PostgreSQL</text>
+          <line x1="170" y1="67" x2="240" y2="67" class="edge"/>
+          <line x1="390" y1="67" x2="460" y2="67" class="edge"/>
+
+          <text x="30" y="160" class="title">proposed</text>
+          <rect x="30"  y="176" width="140" height="54" rx="6" class="box"/>
+          <text x="100" y="206" text-anchor="middle">Clients</text>
+          <rect x="240" y="176" width="150" height="54" rx="6" class="box accent"/>
+          <text x="315" y="206" text-anchor="middle">Web / API</text>
+          <rect x="460" y="176" width="170" height="54" rx="6" class="box proposed"/>
+          <text x="545" y="206" text-anchor="middle">Cache (proposed)</text>
+          <rect x="700" y="176" width="170" height="54" rx="6" class="box"/>
+          <text x="785" y="206" text-anchor="middle">PostgreSQL</text>
+          <line x1="170" y1="203" x2="240" y2="203" class="edge"/>
+          <line x1="390" y1="203" x2="460" y2="203" class="edge proposed"/>
+          <line x1="630" y1="203" x2="700" y2="203" class="edge proposed"/>
+
+          <text x="240" y="34" class="flow-label">reads hit PostgreSQL directly</text>
+          <text x="240" y="120" class="flow-label">proposed: reads via cache</text>
+          <text x="640" y="120" class="flow-label">writes straight to PostgreSQL</text>
+        </svg>
+      </div>
+      <p class="muted">What the proposal changes about ownership, consistency, failure
+        behavior, or operations.</p>
+    </section>
+
+    <!-- 9. Recent Architectural Changes -->
+    <section id="recent-changes">
+      <h2><span class="num">09</span>Recent Architectural Changes</h2>
+      <p class="lead">Structural changes, newest first. Not raw git history.</p>
+      <table>
+        <tr><th>Date</th><th>Change</th><th>Why</th><th>Affected</th><th>New tradeoff / risk</th></tr>
+        <tr><td>YYYY-MM-DD</td><td>Worker for invoice generation</td><td>long jobs off the request path</td><td>API, invoices</td><td>retry / duplicate semantics</td></tr>
+      </table>
+    </section>
+
+    <!-- 10. Dependencies & External Contracts -->
+    <section id="dependencies">
+      <h2><span class="num">10</span>Dependencies &amp; External Contracts</h2>
+      <p class="lead">Meaningful dependencies plus internal contracts — API shapes,
+        events, schemas, interface invariants.</p>
+      <table>
+        <tr><th>Dependency</th><th>Why</th><th>Used</th><th>Contract relied on</th><th>Failure behavior</th><th>Replacement</th></tr>
+        <tr><td>PostgreSQL 15</td><td>source of truth</td><td>all persistence</td><td>ACID tx, JSONB</td><td>timeout, reconnect</td><td>managed PG, same wire</td></tr>
+        <tr><td>Identity provider</td><td>auth</td><td>sign-in</td><td>OIDC userinfo</td><td>retry, cached keys</td><td>self-hosted IdP</td></tr>
+      </table>
+      <h3>Internal contracts</h3>
+      <ul>
+        <li><code>POST /invoices</code> → 201 + invoice JSON</li>
+        <li><code>event invoices.created</code> → { id, tenantId, amountCents }</li>
+      </ul>
+    </section>
+
+    <!-- 11. Verification & Evidence -->
+    <section id="verification">
+      <h2><span class="num">11</span>Verification &amp; Evidence</h2>
+      <p class="lead">How claims were validated: measurements, tests, benchmarks,
+        traces. Numbers, not best-practice assertions.</p>
+      <div class="card">
+        <h3>Claim: DB reads are not a bottleneck</h3>
+        <pre><code>p95 read endpoint = 30 ms   (50 local test requests)
+SQL query avg      = 12 ms
+Decision: no cache yet; index / query micro-tuning only</code></pre>
+      </div>
+      <div class="card">
+        <h3>Claim: invoice generation must move off the request path</h3>
+        <pre><code>p95 invoice generation = 3.1 s   (> 250 ms budget)
+Decision: background worker; queue not required (in-process job table)</code></pre>
+      </div>
+    </section>
+
+    <p class="footnote">
+      Maintained by <strong>edn</strong>. This file is documentation — a human decision
+      surface, not a control panel. Local and gitignored by default.
+    </p>
+  </main>
+</div>
+</body>
+</html>

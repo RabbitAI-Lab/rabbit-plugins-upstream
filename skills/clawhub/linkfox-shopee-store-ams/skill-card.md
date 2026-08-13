@@ -1,44 +1,64 @@
-## Description: <br>
-Provides agent guidance and Python wrappers for authorized Shopee store Affiliate Marketing Solutions workflows, including campaign, affiliate, commission, and performance operations through LinkFox. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shopee-店铺AMS helps agents operate Shopee Affiliate Marketing Solutions through LinkFox scripts for authorized-shop campaign, product, affiliate, commission, and performance APIs.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and ecommerce teams use this skill to inspect and manage Shopee Affiliate Marketing Solutions campaigns for authorized stores, including Open Campaign, Targeted Campaign, affiliate lists, commission settings, and performance reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change Shopee shop campaign settings through AMS operations. <br>
-Mitigation: Confirm each mutating action before execution and review request bodies for the intended shop, campaign, products, affiliates, and commission settings. <br>
-Risk: Full API responses may include sensitive shop, campaign, affiliate, or performance data and are saved persistently. <br>
-Mitigation: Use trusted workspaces, keep API keys in environment variables, avoid sharing real tokens, and delete generated linkfox response files when no longer needed. <br>
-Risk: The skill depends on authorized Shopee credentials and LinkFox proxy access. <br>
-Mitigation: Verify the required authorization skill before use and restrict API keys to trusted agents and environments. <br>
+## Use Case:
 
+External sellers, ecommerce operators, and developers use this skill to inspect and manage Shopee AMS open campaigns, targeted campaigns, affiliate lists, commission settings, and performance reports for authorized Shopee shops.
 
-## Reference(s): <br>
-- [Shopee AMS API reference](references/api.md) <br>
-- [Shopee Open Platform AMS documentation](https://open.shopee.com/documents/v2/v2.ams.get_open_campaign_added_product?module=127&type=1) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-ams) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with Python shell commands and JSON request/response data] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts save full API responses under a linkfox session data directory and print small responses or summaries to stdout.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill can access Shopee AMS operations through LinkFox, including state-changing and bulk campaign actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm destructive or bulk campaign changes manually before execution and review saved responses after high-impact operations.
+
+Risk: API keys, phone numbers, shop IDs, tokens, saved JSON responses, payment details, and order details may be sensitive.
+
+Mitigation: Treat those values as secrets, avoid sharing saved linkfox output directories, and clean local output directories when no longer needed.
+
+Risk: Environment variables can alter LinkFox endpoint selection.
+
+Mitigation: Use trusted LinkFox endpoint environment values only and avoid inheriting untrusted shell environments when running the scripts.
+
+Risk: The security scan verdict is suspicious because credential, billing, payment, broad local logging, and high-impact campaign mutation behavior require review.
+
+Mitigation: Install only after reviewing the security summary and guidance from the release evidence.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-ams)
+- [Shopee AMS official API index](https://open.shopee.com/documents/v2/v2.ams.get_open_campaign_added_product?module=127&type=1)
+- [AMS parameter and field reference](artifact/references/api.md)
+- [Authentication and billing onboarding reference](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [Markdown guidance with Python command examples and JSON API responses saved to local files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are saved under linkfox/<date>/<session>/data; stdout prints the full response for small payloads and summaries for larger payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

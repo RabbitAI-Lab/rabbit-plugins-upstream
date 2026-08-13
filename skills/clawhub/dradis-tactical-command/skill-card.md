@@ -1,42 +1,59 @@
-## Description: <br>
-Real-time supervisor and control interface for the DRADIS Polymarket high-frequency trading engine. Full support for DRADIS_API_KEY authentication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Real-time supervisor and control interface for the DRADIS prediction-market trading engine across Polymarket International, Polymarket US, and Kalshi, with DRADIS_API_KEY authentication support.
 
-## Publisher: <br>
-[mbordash](https://clawhub.ai/user/mbordash) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mbordash](https://clawhub.ai/user/mbordash)
 
-## Use Case: <br>
-External users and developers use this skill to monitor a DRADIS Polymarket trading engine, inspect portfolio and position state, and request approved changes to live strategy parameters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can view trading data and change live DRADIS strategy settings. <br>
-Mitigation: Install only for DRADIS trading engines you control and review every proposed PATCH before approving it. <br>
-Risk: A reused or overprivileged DRADIS_API_KEY could expand the impact of an agent or configuration mistake. <br>
-Mitigation: Use a dedicated least-privilege API key and point DRADIS_API_URL only at a trusted instance. <br>
+## Use Case:
 
+External users and developers use this skill to monitor a DRADIS prediction-market trading engine, inspect positions, telemetry, logs, latency, squadrons, and LLM advisor activity, and apply carefully confirmed configuration changes. It is intended for DRADIS instances the user controls.
 
-## Reference(s): <br>
-- [DRADIS project repository](https://github.com/mbordash/DRADIS) <br>
-- [ClawHub skill page](https://clawhub.ai/mbordash/dradis-tactical-command) <br>
-- [Publisher profile](https://clawhub.ai/user/mbordash) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, API calls, configuration, shell commands, text] <br>
-**Output Format:** [Markdown and structured API request guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include live trading status, portfolio summaries, position data, and human-confirmed configuration updates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata and artifact SKILL.md heading) <br>
+Risk: Confirmed configuration patches or LLM-action approvals can affect live trading behavior and real money.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit human confirmation before any write, validate fields with the config schema, and read back changed values before reporting success.
+
+Risk: A leaked or overprivileged DRADIS_API_KEY could expose a trading engine to unauthorized monitoring or configuration changes.
+
+Mitigation: Use a dedicated least-privilege API key and enable DRADIS_READ_ONLY when only monitoring is needed.
+
+Risk: Running against an untrusted or third-party DRADIS instance could expose account, position, strategy, or market data.
+
+Mitigation: Install only for DRADIS instances the user controls and treat logs, positions, telemetry, and configuration values as sensitive trading information.
+
+## Reference(s):
+
+- [DRADIS project homepage](https://github.com/mbordash/DRADIS)
+- [ClawHub skill page](https://clawhub.ai/mbordash/skills/dradis-tactical-command)
+- [Publisher profile](https://clawhub.ai/user/mbordash)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API Calls, configuration, guidance]
+
+**Output Format:** [Markdown and structured API request guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include DRADIS status summaries, position and telemetry analysis, logs, configuration patch proposals, and post-change verification results.]
+
+## Skill Version(s):
+
+1.5.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

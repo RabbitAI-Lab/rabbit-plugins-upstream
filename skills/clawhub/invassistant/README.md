@@ -1,4 +1,3 @@
-# InvAssistant — Personal Investment Portfolio Management Framework
 
 A WorkBuddy/CodeBuddy Skill implementing a multi-asset investment strategy framework. Covers US, A-share, and HK stocks with asset-class differentiated rules, portfolio-level risk controls, and disciplined execution protocols.
 
@@ -14,6 +13,16 @@ InvAssistant combines AI-driven strategy guidance with executable trading rules:
 - **Entry Modes** — Mode A (panic mispricing), Mode B (trend confirmation), Mode C (rebalancing), Mode D (A-class candidate zone entry, v2.1.1)
 - **QMS Scoring** — 4-factor quality rating (earnings trend, sector relative strength, EPS revision, price structure)
 
+
+## ⚠️ Risk Warning
+
+InvAssistant combines AI-driven strategy guidance with executable trading rules. **This is a decision-support framework, not financial advice.** Key risks:
+
+- **AI guidance is probabilistic**: Strategy rules encode judgment heuristics, not guarantees. Always cross-check with primary sources before acting.
+- **Executable rules can take action**: Red-line breaches trigger reduction actions; Mode B entry executes when 4 conditions pass. Review every proposed action before confirming.
+- **External notification risk**: `send_*.py` scripts push holdings/analysis to WeChat/DingTalk/Feishu. Holdings are sensitive financial data — review content and destination before pushing; never push to public channels.
+- **No liability**: The author assumes no responsibility for trading losses. Use at your own risk; past performance ≠ future results.
+
 ## Quick Start
 
 ```bash
@@ -21,7 +30,9 @@ cp -r invassistant-skill ~/.workbuddy/skills/invassistant
 pip install -r requirements.txt
 ```
 
-Then ask WorkBuddy: "检查持仓" or "portfolio check".
+Then ask WorkBuddy: "检查持仓" or "portfolio check" — use **only** when you explicitly want a full portfolio review (holdings + red-line checks + QMS scoring). Do not trigger during casual market chat; the skill reads live position files and may propose risk-control actions.
+
+**Trigger scope**: explicit portfolio review request only. Confirmation required before any position-changing action (reduce / add / exit). Not for real-time trading signals, market timing predictions, or specific stock tips without portfolio context.
 
 ## Version History
 
@@ -50,7 +61,7 @@ invassistant/
     ├── portfolio_checker.py    # Main checker
     ├── redline_engine.py       # Entry filter engine
     ├── exit_engine.py          # Exit engine (stop-loss, trend break, momentum)
-    └── send_*.py               # Push to WeChat/DingTalk/Feishu
+    └── send_*.py               # Push to WeChat/DingTalk/Feishu — WARNING: sends holdings + analysis to external messaging platforms; review content & destination before pushing; never push to public channels
 ```
 
 ## License

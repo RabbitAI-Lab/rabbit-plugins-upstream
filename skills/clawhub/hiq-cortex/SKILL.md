@@ -1,179 +1,180 @@
 ---
 name: hiq-cortex
-description: Find carbon emission factors for any material or process. 1M+ LCA datasets (HiQLCD, Ecoinvent, CarbonMinds). AI-powered BOM carbon footprint calculation and material comparison.
-homepage: https://www.hiqlcd.com
-metadata: {"openclaw":{"emoji":"🌱","requires":{"env":["HIQ_API_KEY"],"bins":["node"]},"primaryEnv":"HIQ_API_KEY","os":["darwin","linux","win32"]}}
+description: 'Look up real LCA emission factors and carbon footprint data from 18 life-cycle inventory databases (Ecoinvent, BAFU, USLCI, ELCD, EF, worldsteel, AusLCI, HiQLCD …) and 24,000+ published EPDs. Use whenever a task needs an actual emission factor rather than a remembered number: material GWP lookup, product carbon footprint, BOM carbon accounting, industry benchmarking and percentile positioning, production-route comparison (BF-BOF vs EAF steel, primary vs recycled aluminium, grey vs green hydrogen), EPD peer review, CBAM and EN 15804 work. Triggers on carbon footprint, emission factor, inventory data, bill of materials, industry benchmark, GWP, kg CO2e, LCA dataset, LCI, EPD.'
+slug: hiq-cortex
+displayName: HiQ Cortex — LCA Data
+version: 1.8.2
+summary: Look up real emission factors from 18 LCA databases and 24,000+ published EPDs. Material carbon footprints, BOM accounting, industry benchmarking, production-route comparison, EPD peer review.
+license: Apache-2.0
+homepage: https://github.com/HiQ-AI/agent-skills
+tags: [LCA, carbon-footprint, emission-factor, EPD, CBAM, ecoinvent, HiQLCD, GWP, LCI, life-cycle-assessment]
 ---
 
-# HiQ Cortex — LCA Data Search & Carbon Footprint AI
+# HiQ Cortex — LCA Data
 
-Find carbon emission factors for any material, product, or process — covering China's full industrial system (HiQLCD), global data (Ecoinvent), and chemicals (CarbonMinds). Calculate carbon footprints from Bills of Materials. ISO 14040/14044 compliant.
+Carbon footprint answers must come from real inventory data. A remembered "steel is about 2 kg CO₂e/kg" is useless to an LCA practitioner: the real value depends on database, version, system model, production route, and geography, and varies several-fold across those dimensions.
 
-## Privacy & Security
+## About
 
-This skill reads `HIQ_API_KEY` from your environment and sends queries to `x.hiqlcd.com` only. No other data is collected or transmitted.
+This skill connects to **HiQ Cortex** — the LCA data service of [HiQ (海科数据)](https://www.hiqlcd.com/), a Chinese provider of LCA background data and carbon footprint services that maintains its own China-specific life-cycle inventory databases and aggregates major international sources.
 
-## MCP Server (Cursor / Claude Desktop / Claude Code)
+Available:
 
-If you use Cursor, Claude Desktop, or Claude Code, you can skip this skill and connect directly via MCP:
+- **18 life-cycle inventory databases**, 11 of them free. Includes China-specific data (HiQLCD covering China's full industrial system, HiQLCD-AL for the aluminium value chain, CALCD for the automotive sector) alongside international sources (Ecoinvent, BAFU, ELCD, EF, worldsteel, USLCI, AusLCI, CarbonMinds, Agri-footprint …).
+- **24,000+ published EPDs** (EPDItaly, ECO Platform, EPD Norge) for peer distributions and outlier review.
+- ISO 14040/14044 and GB/T 24040/24044 conventions; system models covering cut-off, consequential, APOS, and EN 15804.
+
+**Search runs server-side.** Pass the user's own wording or raw BOM lines straight to the search endpoint — translating material names into LCA terminology, identifying production routes, and mapping categories to process direction all happen on the server. Returned candidates are already ranked and carry a match-quality marker. Do not re-derive search terms locally.
+
+## Privacy and security
+
+- The API key is **read only from the environment or the host's MCP config**. The skill never writes it to a file and never echoes it in output.
+- Queries go **only to `x.hiqlcd.com`** (HiQ's API), never to any third party.
+- **Nothing is collected or uploaded** — no local files, directory structure, or conversation content.
+- The bundled script uses only the Python standard library, no third-party dependencies, and the source is auditable on [GitHub](https://github.com/HiQ-AI/agent-skills).
+
+## Hard rules
+
+1. **Every number must come from a tool call in this session.** Never state a GWP, LCIA value, or distribution from memory. If the tools are unavailable, say so — do not fill the gap.
+2. **Every number needs its basis**: database + version + system model + geography + reference unit. `0.0269 kg CO₂e/kWh (BAFU 2025, DEFAULT, CH, low-voltage grid)` is usable; a bare `0.027` is not.
+3. **Restricted is not an error.** Commercial databases return a restriction marker and a `purchase_url` when the account lacks the data package. Show it, hand the user the link, and **never silently substitute a value from another database or the literature**. Retrying does not help. A free database may be used instead, but say that it is a substitution.
+4. **Do not compare across conventions.** Data with different functional units, system models, or system boundaries is not comparable — say so rather than presenting a misleading delta. Read `comparability_note` first; that is what it is for.
+
+## Access
+
+**With no credentials available, lead with browser sign-in — do not send the user to the console to create an API key.**
+
+Sign-in is one command plus one click, with no registration. Creating an API key means logging into a console, finding the right page, copying a secret, and setting an environment variable — an order of magnitude more friction. Putting that first is how you lose the user.
+
+```bash
+python3 scripts/cortex.py login    # ← the default when no credential is present
+```
+
+The command prints an authorization link. **Hand the link to the user verbatim, have them click "authorize"**, then carry on with the original task. Credentials land in `~/.hiq/credentials.json` (mode 600) and every command works from then on; the visible data scope matches that account, **including any commercial databases it has access to**. `logout` removes them.
+
+Only reach for an API key in three cases: the user asks for one, the environment is CI / server-side with no browser, or sign-in failed.
+
+```bash
+export HIQ_API_KEY=sk_xxx          # server-side / CI; takes precedence when both exist
+```
+
+The flow is three plain HTTP requests (standard device flow, RFC 8628) — any agent that can run a shell can do it without the script:
+
+```bash
+curl -sX POST https://x.hiqlcd.com/api/cortex/oauth/device_authorization \
+  -H 'Content-Type: application/json' \
+  -d '{"agent_id":"my-agent","agent_name":"My Assistant","scope":"lca_data"}'
+# hand the returned verification_uri_complete to the user → they approve
+curl -sX POST https://x.hiqlcd.com/api/cortex/oauth/token \
+  -H 'Content-Type: application/json' -d '{"device_code":"..."}'   # 428 = not yet approved, keep polling
+```
+
+Prefer MCP when the host supports it. If `lookup_datasets`, `aggregate_datasets`, `epd_search` are already available in this session, use them. Otherwise add this to the host's MCP config (WorkBuddy `~/.workbuddy/mcp.json`, Claude Code `~/.claude.json`, Cursor `~/.cursor/mcp.json`) and restart the host:
 
 ```json
 {
   "mcpServers": {
     "cortex": {
-      "url": "https://x.hiqlcd.com/api/deck/mcp",
+      "type": "http",
+      "url": "https://x.hiqlcd.com/api/cortex/mcp",
       "headers": { "X-API-Key": "sk_xxx" }
     }
   }
 }
 ```
 
-Two tools available via MCP: `search_lca_data` (structured JSON) and `run_cortex` (natural language AI assistant).
+Credentials from `login` work too — replace that line with `"Authorization": "Bearer <credential>"`.
 
-## Setup (OpenClaw)
-
-1. Get your API key at https://www.hiqlcd.com
-
-2. Add to `~/.openclaw/openclaw.json`:
-```json
-{
-  "skills": {
-    "entries": {
-      "hiq-cortex": {
-        "enabled": true,
-        "apiKey": "sk_xxx"
-      }
-    }
-  }
-}
-```
-
-Or set environment variable: `export HIQ_API_KEY=sk_xxx`
-
-3. Install (first time only):
-```bash
-cd ~/.openclaw/workspace/skills/hiq-cortex && npm ci
-```
+**Never hard-code credentials into files generated for the user.**
 
 ## Tools
 
-### 1. Search LCA Datasets
-
-Search databases for emission factors. Returns structured data with GWP values, dataset links, region, and data quality.
-
-```bash
-./search.js "stainless steel 304"                          # Search all databases
-./search.js "polyethylene HDPE" --sources "HiQLCD"         # Only HiQLCD
-./search.js "cement" --sources "Ecoinvent:3.12.0"          # Specific version
-./search.js "aluminum" --sources "HiQLCD|Ecoinvent:3.12.0" # Multiple sources
-```
-
-Available `--sources`: `HiQLCD`, `Ecoinvent`, `CarbonMinds`, `HiQLCD-AL`. Omit for all.
-
-#### Example Output
-
-```
-Status: found
-Summary: Found stainless steel 304 datasets.
-Verified: 3  Restricted: 2
-
-=== stainless steel 304 ===
---- market for steel, chromium steel 18/8, hot rolled ---
-  Key:        a15b4954-808b-307f-8ad9-d58fd7e30597_3.12.0
-  Source:     Ecoinvent 3.12.0
-  Region:    GLO
-  Unit:      kg
-  Fit:       high
-  GWP100:    5.23 kg CO2e
-  Link:      https://www.hiqlcd.com/dataset/Ecoinvent/3.12.0/CUT_OFF/a15b4954-...
-```
-
-#### Output Fields
-
-- **Name**: Full dataset name
-- **Key**: Unique identifier (`{UUID}_{version}`)
-- **Source/Version**: Database and version (e.g. Ecoinvent 3.12.0)
-- **Region**: Geographic scope (GLO=Global, RER=Europe, CN=China, US=USA)
-- **Unit**: Functional unit (kg, kWh, MJ)
-- **GWP100**: Carbon footprint in kg CO2e (restricted datasets require authorization)
-- **Fit**: Match quality (high/medium)
-- **Link**: Detail page on HiQLCD platform
-
-#### Status Values
-
-- `found` — All results available
-- `partial` — Some datasets are restricted (Ecoinvent paid data)
-- `not_found` — No matching datasets
-
-### 2. Ask LCA Questions
-
-Natural language AI assistant for LCA, carbon footprint, sustainability. Supports calculations, comparisons, and research.
-
-```bash
-./ask.js "calculate carbon footprint for 100kg steel + 50kg aluminum"
-./ask.js "compare environmental impact of PET vs HDPE"
-./ask.js "what are the main contributors to cement carbon footprint?"
-./ask.js "explain cut-off vs consequential system models"
-./ask.js "中国钢铁行业的平均碳排放因子是多少？"
-```
-
-The assistant can:
-- Calculate carbon footprints from BOM (Bill of Materials)
-- Compare materials and suggest lower-impact alternatives
-- Search and interpret Ecoinvent/HiQLCD datasets
-- Answer LCA methodology questions (GWP, system boundaries, allocation, ISO 14040/44)
-- Research sustainability topics, EPDs, and industry reports
-
-## When to Use
-
-- User asks about **carbon footprint**, **emission factors**, **GWP**, or **LCA**
-- User wants to find **environmental impact data** for materials or processes
-- User mentions **Ecoinvent**, **HiQLCD**, or **life cycle assessment**
-- User has a **Bill of Materials** and wants carbon footprint calculations
-- User asks about **sustainability**, **ISO 14040**, **EPD**, or **carbon neutrality**
-- User mentions **Chinese supply chain**, **CBAM**, **battery passport**, or **Scope 3** emissions
-- User asks about **China-specific emission factors** vs global averages
-
-## When NOT to Use
-
-- General chemistry or material science questions unrelated to environmental impact
-- Financial carbon credits or carbon trading (this tool covers physical carbon footprint)
-
----
-
-## About HiQ
-
-[HiQ](https://www.hiqlcd.com) is a full lifecycle data platform providing LCA databases, tools, and API services for carbon footprint assessment.
-
-### Databases
-
-| Database | Coverage |
-|---|---|
-| **HiQLCD** | China's domestic LCA database — 25+ industries (energy, steel, non-ferrous metals, building materials, photovoltaics, batteries, new energy) |
-| **HiQLCD-AL** | Specialized aluminum industry carbon footprint database |
-| **Ecoinvent** | Global LCA database — 100+ countries, 18,000+ datasets |
-| **CarbonMinds** | Chemicals & plastics carbon footprint database |
-
-All data compliant with **ISO 14040 / ISO 14044 / ISO 14067** and the **ILCD framework**. Compatible with openLCA and SimaPro.
-
-### Services
-
-- **Cortex AI Assistant** — Natural language LCA Q&A, BOM carbon footprint calculation, data analysis: https://carbonx.hiqlcd.com/cortex
-- **HiQLCD Platform** — Browse, compare, and export LCA datasets: https://www.hiqlcd.com
-- **CarbonX** — Carbon footprint management platform: https://carbonx.hiqlcd.com
-- **API & MCP** — Programmatic access for system integration and AI agent workflows
-- **Blockchain Verification** — Traceable LCA data provenance
-
-### All Integration Options
-
-| Method | Endpoint | Best For |
+| Need | MCP tool | Script command |
 |---|---|---|
-| **Web App** | https://carbonx.hiqlcd.com/cortex | Browser — no install, ready to use |
-| **This Skill** | CLI scripts (`search.js` / `ask.js`) | OpenClaw agents |
-| **MCP Server** | `https://x.hiqlcd.com/api/deck/mcp` | Cursor, Claude Desktop, Claude Code |
-| **REST API** | `https://x.hiqlcd.com/api/deck/search` | Backend services, automation pipelines |
+| Material / BOM line → dataset key | *(none, see below)* | `search "<user's wording>" [--sources X]` |
+| Key → GWP, basis, links | `lookup_datasets` | `lookup <key> [<key> ...]` |
+| Cohort → GWP distribution, percentile positioning | `aggregate_datasets` | `aggregate --source X [--target N]` |
+| Cohort → non-GWP LCIA indicators (AP/EP/ODP/WDP/ADP) | `aggregate_indicators` | `indicators <keys> --indicator AP --source X` |
+| Single dataset → process-level hotspots | `process_hotspot` | `hotspot <key>` |
+| Published EPD search | `epd_search` | `epd "<query>" [--unit m3]` |
+| EPD peer distribution, outlier check | `epd_peer_benchmark` | `epd-benchmark "<category>" --unit m3` |
 
-### Contact
+Add `--json` to any script command for the raw payload.
 
-- Website: https://www.hiqlcd.com
-- Email: info@hiqlcd.com
+Search has no MCP tool — it is a REST endpoint, wrapped by the script. Direct call:
+
+```bash
+curl -sN -X POST https://x.hiqlcd.com/api/cortex/search \
+  -H "X-API-Key: sk_xxx" -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "query=304 stainless steel&sources=BAFU,Ecoinvent"
+```
+
+The response is SSE — parse the `WorkflowCompleted` event, then JSON-decode its `content` field. **It takes 20–40 seconds** (the server searches and verifies each hit). That is normal, not a hang; do not retry in parallel.
+
+`dataset_key` is an opaque handle — pass it through unchanged, never construct or edit one.
+
+## Reading the response
+
+| Field | Meaning | What to do |
+|---|---|---|
+| `status: found` / `partial` / `not_found` | `partial` = results found, some restricted | Show them; handle restricted per hard rule 3 |
+| `summary` | The server's account of this search | Relay it; do not invent a competing explanation |
+| `fit: high / medium / low` | Server-assigned match quality | Confirm with the user before citing a `low` |
+| `name` / `ref_product` / `location` | Dataset name, reference flow, geography | Read before citing — "cold-rolled annealed coil" and "heavy plate" are different products |
+| `restricted: true` | No data package for that database | Give the `purchase_url`; a free-database alternative must be labelled as such |
+| `missing_keys` non-empty | Key came from an older catalogue version | Search again; do not hand-edit keys |
+| `comparability_note` | Cohort comparability caveats | Read before comparing |
+| `entitlement` | An empty aggregate is an entitlement issue, not a predicate issue | Do not retry with a different predicate |
+
+## Scenario routing
+
+Top to bottom, first match wins.
+
+| Signal | What to do |
+|---|---|
+| User gives **their own** number and asks where it sits ("is my 2.5 high or low") | `aggregate` with a cohort predicate + `--target` → percentile positioning |
+| A material or BOM to match against datasets | `search` → batch `lookup` |
+| Comparing two production routes (BF-BOF vs EAF steel, primary vs recycled aluminium) | Search and aggregate each route separately, compare under one functional unit |
+| "Is this EPD value reasonable" | `epd-benchmark` with an explicit `--unit`; cross-unit comparison is meaningless |
+| Multi-indicator assessment (acidification, eutrophication …) | `indicators`, one indicator at a time; `--source` must match the cohort's database |
+
+## When to ask the user
+
+**Search first, compare second, ask last.** If there is anything searchable — a material name, product, process, or BOM line — search it and give results in the same turn. Do not ask for information already stated in the conversation.
+
+"I'm not sure which one to use" is a **decision-support signal, not a question**: give the candidate list, compare under one convention, explain which dimension drives the difference, and give a conditional recommendation where the evidence supports one. A complete advisory answer can end there.
+
+Only ask when a single dataset must be finalised and the remaining ambiguity would materially change the result. Options must correspond to **candidates already shown** — never invent them. Use the host's interaction facility if one exists, and do not duplicate the options as a text list. After the answer, complete the match on the existing results; do not re-run the same search.
+
+## Data entitlements
+
+| Tier | Content | Requirement |
+|---|---|---|
+| Catalogue | All 18 databases: inventory, versions, system models, LCIA coverage; dataset names, units, geographies | None |
+| Free database values | GWP and aggregates for BAFU, USLCI, ELCD, EF, AusLCI, NEEDS, ozLCI, worldsteel, USDA, bioenergiedat, recycledplastics | Any valid credential |
+| Commercial database values | GWP and aggregates for Ecoinvent, HiQLCD, HiQLCD-AL, CALCD (automotive), CarbonMinds, Agri-footprint | Matching data package |
+
+Data packages and subscription plans are **two separate systems** — upgrading a plan does not unlock a database. When something is restricted, name the database, hand over the `purchase_url`, and offer a free-database path if one answers the same question, labelled as a substitution.
+
+## Voice and terminology
+
+Write for LCA practitioners, like a knowledgeable peer.
+
+- No pleasantries ("I hope this helps", "let me help you"), no adjective stacking, no summarising sign-off.
+- Use ISO 14040/14044, ILCD, and GB/T 24040 terminology — for this audience, standard terms are **clearer** than plain language.
+- unit process · elementary flow · reference flow · functional unit · system boundary · impact category · characterisation factor · cut-off · consequential.
+- Do not invent terminology. When unsure of the standard term, use the ISO wording.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `401 {"code":"INT-007"}` | Used Bearer, or the key is invalid | Use `X-API-Key` |
+| CDN returns `error 1010` | Default HTTP client User-Agent is blocked | The bundled script sets one; add a normal `User-Agent` on direct calls |
+| Search takes 30 seconds | Normal — it searches and verifies | Wait; do not retry in parallel |
+| Aggregate `status: "empty"` **with** `entitlement` | Commercial database, no package | Not a predicate problem; do not retry |
+| Aggregate `status: "empty"` **without** `entitlement` | The predicate genuinely matched nothing | Broaden the predicate |
+| `indicators` returns empty | `source` must equal the cohort's actual database (`method_id` is not portable) | Pass the correct `--source` |
+| Cohort values span orders of magnitude | Mixed functional units, not real dispersion | Narrow the predicate; read `comparability_note` first |
+| Authorization polling returns `428` | The user has not approved yet | Normal — keep polling at the returned `interval` |
+| Still no commercial data after login | That account has no such data package | Login only changes credentials, not entitlements; show the purchase link |

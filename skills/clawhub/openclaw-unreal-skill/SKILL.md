@@ -1,6 +1,6 @@
 ---
 name: unreal-plugin
-version: 1.0.1
+version: 1.0.2
 description: Control Unreal Engine Editor via OpenClaw Unreal Plugin. Use for Unreal development tasks including level/actor management, transforms, PIE control, debugging, input simulation, and console commands. Can create/delete actors, save levels, run console commands, simulate input, and capture viewport screenshots and logs — destructive operations should be confirmed with the user. Use only on explicit Unreal Editor requests, in trusted local projects.
 homepage: https://github.com/TomLeeLive/openclaw-unreal-skill
 author: Tom Jaejoon Lee
@@ -113,10 +113,11 @@ rm -rf YourProject/Plugins/OpenClaw/Binaries YourProject/Plugins/OpenClaw/Interm
 
 This skill drives a live Unreal Editor. Full disclosure of capabilities and current limitations:
 
-- **Local HTTP server has no authentication (current limitation)**: the embedded server (port 27184) accepts local requests without auth or origin restriction. **Keep it bound to localhost and never expose the port on shared or public networks** — any local process could otherwise send editor commands. Token authentication and origin allow-listing are on the roadmap.
+- **Local HTTP server hardening (plugin v1.3.1+)**: the embedded server (port 27184) rejects browser-originated requests (any `Origin` header → 403) and supports optional shared-secret auth — set `OPENCLAW_BRIDGE_TOKEN` for both the Unreal Editor process and the MCP client to require `X-OpenClaw-Token` on every request. Without the token set, keep the port on trusted machines only — any local process can send editor commands.
 - **Destructive operations** — confirm with the user before: deleting actors, saving levels, importing assets, running console commands (`console.execute`), and simulating keyboard/mouse input. None of these should run implicitly from a vague request.
 - **Data visibility**: `debug.screenshot` and `console.getLogs` can capture whatever is on screen or in project logs — including credentials, tokens, or source paths if present. Review before sharing captures outside the machine.
-- **Safety defaults**: `disableModelInvocation: true` is set — the model cannot auto-invoke this skill; it runs only on explicit user request. Keep the project under source control before automation sessions.
+- **Trigger scope**: routine-sounding requests ("clean up the level", "save everything", "just run it") map to state-changing Editor operations — confirm once before the first state-changing call in a session.
+- **Safety defaults**: `disableModelInvocation: true` is set — the model cannot auto-invoke this skill; it runs only on explicit user request. Keep the project under source control before automation sessions. The Korean `SKILL_KO.md` states the same recommendation; if the two ever disagree, this file governs.
 
 ## License
 

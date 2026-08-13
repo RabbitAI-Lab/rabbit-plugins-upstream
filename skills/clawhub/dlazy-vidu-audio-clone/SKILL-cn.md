@@ -1,11 +1,11 @@
 ---
 name: dlazy-vidu-audio-clone
 version: 1.3.5
-description: 使用 Vidu 声音克隆技术，通过参考音频一键复制音色并生成新文本的朗读音频。
+description: "使用 Vidu 声音克隆技术，通过参考音频一键复制音色并生成新文本的朗读音频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy vidu-audio-clone -h 查看帮助信息。"}}
 ---
 
-# dlazy-vidu-audio-clone
+# 声音克隆 Vidu Audio Clone
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

@@ -1,47 +1,59 @@
-## Description: <br>
-claudebox helps agents install, configure, launch, and script against Claude Code running in a Docker container through CLI, HTTP API, OpenAI-compatible, MCP, Telegram, and cron interfaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Claude Code running on the network inside a Docker container, managed through the claudebox wrapper and exposed through CLI, HTTP API, OpenAI-compatible, MCP, Telegram, and cron interfaces.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and engineers use claudebox to run Claude Code in a container, expose it through selected automation surfaces, and integrate it with scripts, CI, MCP clients, OpenAI-compatible clients, Telegram, or scheduled jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unauthenticated server modes can expose agent execution and workspace file access when mode-specific tokens are unset. <br>
-Mitigation: Set API and MCP bearer tokens before enabling network-facing modes, and bind services to localhost or place them behind a protected proxy. <br>
-Risk: Mounting /var/run/docker.sock can grant host-level container control to the running agent or to an attacker who reaches the service. <br>
-Mitigation: Avoid mounting the Docker socket unless the workload requires it, and use the deployment only on hosts you trust. <br>
-Risk: Mounted workspaces and credentials are accessible to the containerized agent by design. <br>
-Mitigation: Use scoped credentials, limit mounted directories to the task, and treat the container as a powerful coding environment rather than a boundary for untrusted input. <br>
-Risk: Downloaded install scripts run with the user's privileges. <br>
-Mitigation: Download and inspect install scripts before executing them instead of piping network content directly into a shell. <br>
+## Use Case:
 
+Developers and engineers use this skill to install, configure, launch, and script against a Docker-hosted Claude Code environment. It is intended for operating claudebox through its wrapper, API, OpenAI-compatible adapter, MCP server, Telegram bot, or cron scheduler.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/claudebox) <br>
-- [Publisher profile](https://clawhub.ai/user/psyb0t) <br>
-- [setup.md](references/setup.md) <br>
-- [Project homepage](https://github.com/psyb0t/docker-claudebox) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell, JSON, YAML, and Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance covers local CLI use, container setup, REST and OpenAI-compatible APIs, MCP configuration, Telegram mode, and cron scheduling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.3.1 (source: server release metadata) <br>
+Risk: Unauthenticated API, MCP, or Telegram surfaces can expose agent execution and workspace file access when bearer tokens are unset.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set the per-mode bearer tokens before exposing any port, bind services to localhost or an authenticating proxy, and install only on hosts you trust.
+
+Risk: Mounting /var/run/docker.sock gives processes in the container host-level container control.
+
+Mitigation: Avoid mounting the Docker socket unless the workload requires it, and only mount it on trusted hosts.
+
+Risk: Downloaded install scripts and scheduled or Telegram-triggered tasks can run with sensitive local context.
+
+Mitigation: Download and inspect install scripts before running them, and treat cron and Telegram history as sensitive because recent job context can be reused in later prompts.
+
+## Reference(s):
+
+- [Claudebox setup](references/setup.md)
+- [Claudebox ClawHub page](https://clawhub.ai/psyb0t/skills/claudebox)
+- [Project homepage](https://github.com/psyb0t/docker-claudebox)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce commands and configuration that affect Docker containers, mounted workspaces, API/MCP endpoints, Telegram mode, and cron jobs.]
+
+## Skill Version(s):
+
+2.3.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

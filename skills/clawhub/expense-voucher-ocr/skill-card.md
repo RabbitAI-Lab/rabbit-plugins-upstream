@@ -1,42 +1,60 @@
-## Description: <br>
-Recognizes 28 financial voucher and invoice types through the Sugon-Scnet OCR API and returns extracted fields as structured JSON. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recognizes common enterprise reimbursement vouchers and financial tickets through the Sugon-Scnet OCR API and returns structured extraction results.
 
-## Publisher: <br>
-[scnet-sugon](https://clawhub.ai/user/scnet-sugon) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[scnet-sugon](https://clawhub.ai/user/scnet-sugon)
 
-## Use Case: <br>
-Employees, finance teams, and developers use this skill to extract structured data from invoices, travel tickets, medical receipts, tax documents, and other reimbursement vouchers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Selected invoices, vouchers, tickets, PDFs, and similar financial documents are uploaded to a third-party OCR API. <br>
-Mitigation: Use only with documents and service terms approved by the organization; avoid confidential, regulated, medical, tax, bank, or customer data unless that approval covers Scnet's retention and privacy terms. <br>
-Risk: The skill requires a Scnet API token, which can be exposed if pasted into chat or stored with broad file permissions. <br>
-Mitigation: Configure SCNET_API_KEY through an environment variable or a local .env file with restricted permissions, and do not paste the token into conversations. <br>
+## Use Case:
 
+Employees, finance teams, and agent operators use this skill to extract structured fields from invoices, travel tickets, medical receipts, tax payment documents, and other reimbursement vouchers after the user explicitly provides a local file path for OCR.
 
-## Reference(s): <br>
-- [Sugon-Scnet OCR API Docs](references/api-docs.md) <br>
-- [SCNet Website](https://www.scnet.cn) <br>
-- [ClawHub Skill Page](https://clawhub.ai/scnet-sugon/skills/expense-voucher-ocr) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Text] <br>
-**Output Format:** [JSON array printed to standard output, with plain-text error messages when recognition or configuration fails.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an OCR type and a local file path; the selected document is sent to the Scnet OCR service for recognition.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter, skill.yaml, changelog, ClawHub release evidence) <br>
+Risk: Selected reimbursement documents are transmitted to Scnet for OCR and may contain personal, financial, travel, tax, or medical information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for files approved for external processing, avoid secrets or regulated data, and review Scnet privacy and retention terms before use.
+
+Risk: The skill requires a Scnet API key for authenticated OCR calls.
+
+Mitigation: Store SCNET_API_KEY in an environment variable or local configuration file with restricted permissions, and do not paste the key into chat or commit it to source control.
+
+Risk: OCR calls may hit Scnet rate limits when many files are processed at once.
+
+Mitigation: Run OCR requests serially, honor retry guidance for 429 responses, and reduce call frequency if rate limiting continues.
+
+## Reference(s):
+
+- [Sugon-Scnet OCR API documentation summary](references/api-docs.md)
+- [Financial voucher field summary](assets/templates/fields-summary.md)
+- [Scnet official site](https://www.scnet.cn)
+- [ClawHub skill page](https://clawhub.ai/scnet-sugon/skills/expense-voucher-ocr)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, guidance]
+
+**Output Format:** [JSON array written to standard output, with friendly text errors on failure]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the Scnet OCR API response data field and removes per-item confidence values before printing.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

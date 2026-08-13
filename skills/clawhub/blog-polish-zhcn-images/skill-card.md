@@ -1,41 +1,56 @@
-## Description: <br>
-Polish a technical blog draft into a 1000-1200 word, 4-5 section Simplified Chinese article, preserve technical terms and code, and generate consistent hero and per-section image prompts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Polish a technical blog draft into an 800-1000 word, 3-4 section zh-CN article, preserve technical terms/code, and generate consistent hero + per-section image prompts when the user asks to polish and translate a blog with images.
 
-## Publisher: <br>
-[j3ffyang](https://clawhub.ai/user/j3ffyang) <br>
+This skill is for demonstration purposes and not for production usage.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[j3ffyang](https://clawhub.ai/user/j3ffyang)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Blog authors, developer advocates, and technical content teams use this skill to turn a technical draft into a Simplified Chinese article package with consistent image prompts. Security evidence indicates the current implementation should be treated as draft/demo quality and reviewed before publication.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The workflow may leave the source text essentially unchanged while reporting a polished zh-CN package.
+
+Mitigation: Treat outputs as draft/demo material and review the article manually before publication or external sharing.
+
+Risk: Drafts and generated files may be saved persistently under ~/.openclaw/workspace/contentPolished/.
+
+Mitigation: Avoid sensitive drafts unless the output directory is approved, and clean generated files after review.
+
+Risk: Image prompts may be hard-coded rather than derived from the article sections.
+
+Mitigation: Check each prompt against the final article and revise prompts before image generation.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Writers, developer advocates, and technical content teams use this skill to polish an existing technical blog draft, translate it into Simplified Chinese, preserve technical accuracy, and package matching image prompts for publication. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [markdown, text, files]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads a local draft path that may contain sensitive or unpublished content. <br>
-Mitigation: Confirm the draft path before running the skill and avoid using drafts that contain secrets or confidential material. <br>
-Risk: The skill writes polished Markdown and image prompt outputs to a local directory. <br>
-Mitigation: Choose an output directory where generated publication files can be safely created and reviewed before sharing. <br>
+**Output Format:** [Markdown file plus structured JSON fields for polishedPath, imagePaths, and imagePrompts.]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/j3ffyang/blog-polish-zhcn-images) <br>
-- [Publisher Profile](https://clawhub.ai/user/j3ffyang) <br>
+**Other Properties Related to Output:** [Outputs may include intended image filenames and text prompts when image generation is not available.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown file plus JSON-style structured paths and image prompt lists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include a polished markdown path, intended or generated image paths, and single-line prompts for the hero and section images.] <br>
+1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.5)
 
-## Skill Version(s): <br>
-1.0.6 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

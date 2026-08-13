@@ -1,47 +1,64 @@
-## Description: <br>
-Decision validation and thinking frameworks for startup founders, including fundraising, customer development, runway management, prioritization, and crypto/web3 founder challenges. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Decision validation and thinking frameworks for startup founders covering fundraising, customer development, runway management, prioritization, and crypto/web3 founder challenges.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-External founders and startup operators use this skill to pressure-test strategic decisions, plan next steps, and structure coaching conversations. It is especially relevant for pre-revenue and crypto/web3 founders working through fundraising, runway, customer validation, product focus, and ecosystem-specific choices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can provide startup, fundraising, runway, crypto treasury, and regulatory-adjacent guidance that may be mistaken for professional financial, investment, tax, securities, or legal advice. <br>
-Mitigation: Treat outputs as educational coaching support and verify high-stakes financial, investment, tax, securities, and legal decisions with qualified professionals and current sources. <br>
-Risk: The skill may activate on broad decision-making phrases and provide confident-sounding strategic guidance outside the user's full business context. <br>
-Mitigation: Use it to surface options, assumptions, and questions; review recommendations against current facts, business constraints, and domain expertise before acting. <br>
+## Use Case:
 
+External founders and startup operators use this skill as a structured coaching partner to pressure-test decisions, validate next steps, and think through strategic choices. It is especially oriented toward early-stage startup, fundraising, customer development, runway, prioritization, and crypto/web3 scenarios.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/founder-playbook-web3) <br>
-- [OpenClaw Homepage](https://github.com/tenequm/skills/tree/main/skills/founder-playbook) <br>
-- [Founder Playbook Reference](references/founder-playbook.md) <br>
-- [Crypto/Web3 Founder Guide](references/crypto-web3-guide.md) <br>
-- [Coaching Techniques Reference](references/coaching-techniques.md) <br>
-- [Coaching Question Banks](references/question-banks.md) <br>
-- [Mueller and Dweck Growth Mindset Study](https://doi.org/10.1037/0022-3514.75.1.33) <br>
-- [Founder Mental Health Survey](https://sifted.eu/articles/founders-mental-health-2025) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and structured coaching questions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only guidance; no shell commands, code execution, data access, persistence, or credential handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.3 (source: SKILL.md frontmatter, evidence release metadata) <br>
+Risk: The skill covers business, fundraising, crypto, legal, and mental-health-adjacent topics that could be mistaken for professional advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat responses as decision-support prompts and require qualified professional review for legal, financial, medical, mental health, tax, or regulatory decisions.
+
+Risk: Broad activation wording such as "should I" may route unrelated decisions into this coaching posture.
+
+Mitigation: Use routing rules that limit activation to founder, startup, fundraising, customer development, runway, prioritization, or crypto/web3 contexts.
+
+Risk: Time-sensitive startup and crypto ecosystem material may become stale.
+
+Mitigation: Check current market, funding, regulatory, and ecosystem data before relying on specific claims.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/founder-playbook-web3)
+- [OpenClaw Homepage](https://github.com/tenequm/skills/tree/main/skills/founder-playbook)
+- [2025 Founder Playbook](references/founder-playbook.md)
+- [Crypto/Web3 Founder Guide](references/crypto-web3-guide.md)
+- [Coaching Techniques Reference](references/coaching-techniques.md)
+- [Coaching Question Banks](references/question-banks.md)
+- [Sifted Founder Mental Health 2025](https://sifted.eu/articles/founders-mental-health-2025)
+- [Mueller and Dweck 1998](https://doi.org/10.1037/0022-3514.75.1.33)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown coaching responses and structured guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Text-only decision-support output; no tool calls, automation, or hidden system access were identified in the security evidence.]
+
+## Skill Version(s):
+
+0.1.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

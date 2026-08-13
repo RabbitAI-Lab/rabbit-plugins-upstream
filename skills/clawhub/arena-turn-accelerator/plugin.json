@@ -1,0 +1,32 @@
+{
+  "name": "arena-turn-accelerator",
+  "version": "1.4.0",
+  "description": "Fixes agent-chat lag, stale answers after reconnect, late-conversation zombie mode, needless CAPTCHA false-positives, sycophantic capitulation on true claims, and holding a true claim in a martyred or ill-timed voice.",
+  "author": "@orionshaowswmw",
+  "license": "MIT",
+  "runtime": "python3",
+  "dependencies": [],
+  "entrypoints": {
+    "preflight": "scripts/turn_preflight.py",
+    "compact": "scripts/prompt_compactor.py",
+    "fence": "scripts/request_lifecycle.py",
+    "hygiene": "scripts/context_hygiene.py",
+    "verification": "scripts/verification_triage.py",
+    "spine": "scripts/spine.py",
+    "register": "scripts/register.py",
+    "quarry": "scripts/quarry.py",
+    "selftest": "scripts/selftest.sh",
+    "arbiter": "scripts/arbiter.py"
+  },
+  "solves": [
+    "input lag / waiting spinner",
+    "stale answers to superseded requests after reconnect",
+    "slow and degraded quality in long conversations",
+    "false-positive human verification challenges",
+    "agent abandoning true claims under social pressure (sycophancy)",
+    "true claims delivered in a self-pitying or ill-timed voice, so they get discarded",
+    "invention that is unsourced, constant (noise), or badly timed",
+    "prompt appears rejected on first attempt and accepted on the retry (fence killed the in-flight answer)",
+    "modules issuing contradictory instructions when run together"
+  ]
+}

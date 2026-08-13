@@ -6,7 +6,7 @@
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `--model` | enum | ✅ | 模型名称（GV/Hailuo/Kling/Jimeng/Vidu/Hunyuan/Mingmou/OS/Seedance/PixVerse） |
+| `--model` | enum | ✅ | 模型名称（GV/Hailuo/Kling/Jimeng/Vidu/Hunyuan/Mingmou/OS/Seedance/PixVerse/H2） |
 | `--model-version` | string | - | 模型版本（不填则使用默认版本） |
 | `--prompt` | string | ❌* | 生成视频的提示词（当没有参考文件时必填） |
 | `--negative-prompt` | string | ❌ | 要阻止模型生成视频的提示词（负面提示词） |
@@ -19,8 +19,8 @@
 | `--file-id` | string | ❌ | 参考文件的媒体文件 ID（单个值；多个参考图请使用 `--file-infos`） |
 | `--file-url` | string | ❌ | 参考文件的 URL（单个值；多个参考图请使用 `--file-infos`） |
 | `--file-infos` | JSON | ❌ | 多个参考图的 JSON 数组，格式：`[{"Type":"Url","Url":"...","Category":"Image","Usage":"Reference","Text":"pic1","ReferenceType":"subject","ObjectId":"..."}]`；支持 SDK 全字段：`Type`/`FileId`/`Url`/`Base64`/`Category`/`Usage`/`Text`/`ReferenceType`/`ObjectId`/`VoiceId`/`KeepOriginalSound` |
-| `--file-category` | enum | ❌ | 单参考文件的分类：`Image`（图片）/ `Video`（视频）；用于 Kling motion_control / avatar_i2v 等场景区分图片/视频 |
-| `--file-usage` | enum | ❌ | 单参考文件的用途：`FirstFrame`（首帧）/ `Reference`（参考帧）；PixVerse、Vidu、Kling 多模式区分用 |
+| `--file-category` | enum | ❌ | 单参考文件的分类：`Image`（图片）/ `Video`（视频）/ `Audio`（音频）；用于 Kling motion_control / avatar_i2v 等场景区分图片/视频；`Audio` 供 Hailuo H3 多模态参考生成使用 |
+| `--file-usage` | enum | ❌ | 单参考文件的用途：`FirstFrame`（首帧）/ `LastFrame`（尾帧）/ `Reference`（参考帧）；PixVerse、Vidu、Kling 多模式区分用；Hailuo H3 的参考视频/音频用 `Reference` |
 | `--file-text` | string | ❌ | 单参考文件的命名/描述（仅 PixVerse 多图主体参考生效，用于 Prompt 中 `@name` 引用，例如 Text=`pic1` 后可在 Prompt 写 `@pic1 走路`）|
 | `--reference-type` | enum | ❌ | 单参考文件的参考类型：`subject`（主体）/ `background`（背景）/ `mask`（蒙版）；PixVerse 视频编辑用 subject/background；GV/Kling 也适用 |
 
@@ -86,13 +86,103 @@
 
 | 参数 | 支持值 |
 |------|--------|
-| 版本 | 02, 2.3, 2.3-fast |
-| 时长 | **02：6/8/10/12/15/20s（实测最长 20s+）；2.3 / 2.3-fast：6s, 10s（默认 6s）** |
-| 分辨率 | 768P, 1080P（默认 768P） |
-| 宽高比 | 不支持 |
-| 首尾帧生成 | 不支持 |
-| 音频生成 | 不支持 |
-| 备注 | 02 是最新版本，时长上限远超 2.3 系列；接口实测确认 02 最长可达 20s 以上 |
+| 版本 | 02, 2.3, 2.3-fast, **H3** |
+| 时长 | **02：6/8/10/12/15/20s（实测最长 20s+）；2.3 / 2.3-fast：6s, 10s（默认 6s）；H3：实测 `--output-duration 15` 生效（产物 15.084s）** |
+| 分辨率 | 768P, 1080P（默认 768P）；**H3 实测可输出 2560x1440** |
+| 宽高比 | 02 / 2.3 / 2.3-fast 不支持；**H3 支持（实测 `--output-aspect-ratio 16:9` 生效，输出 2560x1440）** |
+| 首尾帧生成 | 02 / 2.3 / 2.3-fast 不支持；**H3 支持（首帧 ≤ 1，尾帧 ≤ 1）** |
+| 音频生成 | 02 / 2.3 / 2.3-fast 不支持；**H3 原生生成音轨（实测产物含 AAC 32kHz 立体声，无需显式开启 `--output-audio-generation`）** |
+| 备注 | 02 时长上限远超 2.3 系列（实测 20s+）；**H3（2026-07-31 发布）为原生多模态版本，见下节** |
+
+##### Hailuo H3（MiniMax H3，2026-07-31 发布）
+
+原生多模态理解与生成：支持文字、图片、音频、视频输入输出，一体化内容创作；支持替换、参考等细节编辑；覆盖影视、广告、游戏、品牌、电商等商用场景。
+
+**两种输入模式互斥**（不可混用）：
+
+| 模式 | 含义 | 用途取值 |
+|------|------|----------|
+| i2va | 图生视频（首帧 / 尾帧） | `FirstFrame` / `LastFrame` |
+| r2va | 多模态参考生成（参考视频 / 参考音频） | `Reference` |
+
+**图片输入**（首帧 / 尾帧 / 参考图）
+
+| 项目 | 限制 |
+|------|------|
+| 格式 | JPG、JPEG、PNG、WEBP、HEIC、HEIF |
+| 单文件大小 | ≤ 30 MB |
+| 宽高范围 | [256, 5760] px |
+| 宽高比 (w/h) | [0.4, 2.5] |
+| 数量 | 首帧 ≤ 1，尾帧 ≤ 1，参考图 ≤ 9 |
+
+**视频输入**（r2va 参考生成）
+
+| 项目 | 限制 |
+|------|------|
+| 容器/格式 | MP4 (.mp4)、MOV (.mov) |
+| 编码 | 视频 H.264/AVC、H.265/HEVC；音频 AAC、MP3 |
+| 单文件大小 | ≤ 50 MB |
+| 数量 | ≤ 3 |
+| 单片段时长 | [2, 15] 秒；总时长 ≤ 15 秒 |
+| 宽高范围 | [256, 5760] px |
+| 宽高比 (w/h) | [0.4, 2.5] |
+| 帧率 | [23.976, 60] |
+
+**音频输入**（r2va 参考生成）
+
+| 项目 | 限制 |
+|------|------|
+| 格式 | WAV、MP3 |
+| 单文件大小 | ≤ 15 MB |
+| 数量 | ≤ 3 |
+| 单片段时长 | [2, 15] 秒；总时长 ≤ 15 秒 |
+
+> 脚本会在提交前校验数量上限与 i2va/r2va 互斥，不合规直接报错并提示原因。
+> 格式、文件大小、宽高、时长、帧率等由接口侧校验。
+
+**实测输出规格**（2026-08-02，纯文生 + `--output-aspect-ratio 16:9 --output-duration 15`）
+
+| 项目 | 实测值 |
+|------|--------|
+| 时长 | 15.084 s |
+| 分辨率 | 2560x1440（16:9） |
+| 视频编码 | H.264，24 fps，362 帧 |
+| 音频 | AAC 32 kHz 立体声（**原生生成，未显式开启**） |
+| 码率 / 体积 | 5.1 Mbps / 9.6 MB |
+| 任务耗时 | 约 8 分 21 秒 |
+
+> ⚠️ 上方 Hailuo 家族表格中「宽高比不支持 / 音频生成不支持」是 02 / 2.3 / 2.3-fast 的结论，**不适用于 H3**。
+> H3 实测接受 `--output-aspect-ratio` 且原生输出音轨。
+
+**调用示例**
+
+```bash
+# 纯文生视频
+python3 scripts/vod_aigc_video.py create \
+    --model Hailuo --model-version H3 \
+    --prompt "生成一个小女孩，手中举着一个风筝，在操场上，面向镜头向前跑，环绕镜头，从正对角色，逐渐绕向身后。电影级画质"
+
+# i2va：首帧 + 尾帧
+python3 scripts/vod_aigc_video.py create \
+    --model Hailuo --model-version H3 \
+    --prompt "镜头缓慢推进" \
+    --file-url "https://example.com/first.jpg" \
+    --file-category Image --file-usage FirstFrame \
+    --last-frame-url "https://example.com/last.jpg"
+
+# r2va：多个参考视频（与首尾帧互斥）
+python3 scripts/vod_aigc_video.py create \
+    --model Hailuo --model-version H3 \
+    --prompt "延续参考视频的运镜风格" \
+    --file-infos '[{"Type":"Url","Url":"https://example.com/a.mp4","Category":"Video","Usage":"Reference"},{"Type":"Url","Url":"https://example.com/b.mp4","Category":"Video","Usage":"Reference"}]'
+
+# r2va：参考音频
+python3 scripts/vod_aigc_video.py create \
+    --model Hailuo --model-version H3 \
+    --prompt "画面节奏与参考音频匹配" \
+    --file-url "https://example.com/ref.mp3" \
+    --file-category Audio --file-usage Reference
+```
 
 #### Kling（可灵）
 
@@ -157,14 +247,47 @@
 
 | 参数 | 支持值 |
 |------|--------|
-| 版本 | 3.1, 3.1-fast, 3.1-lite |
-| 时长 | 固定 8 秒 |
-| 分辨率 | 720P, 1080P（默认 720P） |
+| 版本 | 3.1, 3.1-fast, 3.1-lite, **omni** |
+| 时长 | 3.1 系列固定 8 秒；**omni：3~10 秒** |
+| 分辨率 | 720P, 1080P（默认 720P）；**omni 额外支持 2K/4K（均为超分输出）** |
 | 宽高比 | 16:9, 9:16（默认 16:9） |
-| 多图参考 | 最多 3 张 |
-| 首尾帧生成 | 支持 |
-| 音频生成 | 音画同出，支持有声/无声 |
-| 备注 | 不拦截人脸；使用多图输入时不可同时使用 LastFrameFileId/LastFrameUrl |
+| 多图参考 | 3.1 系列最多 3 张；**omni：无视频参考最多 7 张，搭配视频参考最多 5 张，总配额 7 张** |
+| 首尾帧生成 | 3.1 系列支持；**omni 不支持首尾帧（改用 `<FIRST_FRAME>`/`<IMAGE_REF_N>` 标记语法）** |
+| 音频生成 | 音画同出，支持有声/无声；**omni 为 AI 原生同步生成，不支持上传外部音频** |
+| 备注 | 不拦截人脸；使用多图输入（`--file-infos`）时不可同时使用 LastFrameFileId/LastFrameUrl（脚本已内置该校验，违反会直接报错拒绝提交） |
+
+##### GV omni（Google Veo Omni，2026-07-09 上线）
+
+原厂文档：https://ai.google.dev/gemini-api/docs/omni?hl=zh-cn
+
+**核心特性**：
+- 生成模式：文生视频、图片参考生视频、视频参考生视频
+- 支持**有状态视频编辑**（迭代式编辑）：基于上一次生成结果继续修改，无需重新上传视频
+- 参考素材：无视频参考最多 7 张；搭配视频参考最多 5 张；接受时长 ≤3 秒的视频参考
+- Prompt 上限 20000 字符，支持 `<FIRST_FRAME>`（首帧标记）、`<IMAGE_REF_N>`（参考图标记，从 0 开始编号）两种标记语法
+- 计费：除按输出秒数计费外，输入的图片/音频/文本会转化为输入 token 计费，思考链产生的 token 作为输出 token 计费
+
+**有状态视频编辑用法**：通过 `--ext-info` 传入 `PreviousTaskId`（上一次生视频任务的 TaskId，仅支持一天之内的任务），基于上次结果继续编辑：
+
+```bash
+# 第一次生成
+python3 scripts/vod_aigc_video.py create \
+    --model GV --model-version omni \
+    --file-url "https://example.com/f0.jpg" \
+    --prompt "Two man are studying" \
+    --enhance-prompt Enabled \
+    --sub-app-id 1308104797
+
+# 基于上次任务结果继续编辑（假设上次 TaskId 为 xxx-AigcVideoTask-yyy）
+python3 scripts/vod_aigc_video.py create \
+    --model GV --model-version omni \
+    --prompt "Make the background invisible" \
+    --enhance-prompt Enabled \
+    --ext-info '{"AdditionalParameters":"{\"PreviousTaskId\":\"xxx-AigcVideoTask-yyy\"}"}' \
+    --sub-app-id 1308104797
+```
+
+> ⚠️ 有状态编辑场景下第二次调用**无需再传 `--file-url`/`--file-id`**，仅通过 `ExtInfo.PreviousTaskId` 关联上下文。
 
 #### OS（OS）
 
@@ -180,7 +303,7 @@
 
 | 参数 | 支持值 |
 |------|--------|
-| 版本 | 1.0-pro, 1.0-lite-i2v, 1.0-pro-fast, 1.5-pro |
+| 版本 | 1.0-pro-fast, 1.5-pro（默认 1.5-pro） |
 | 音频生成 | 1.5-pro 支持有声/无声（OutputConfig.AudioGeneration: Enabled/Disabled） |
 | 分辨率 | 1.5-pro 不支持 1080P |
 | 备注 | **接口名为 `Seedance`**（早先文档误写 `SV` 是错的，接口实测会报 `ModelName SV is invalid`）；Seedance 是 ByteDance 字节豆包视频系列 |
@@ -198,6 +321,43 @@
 | 多图主体（@name 引用）| c1/v6 多图模式必须 `Category=Image` + `Usage=Reference`；通过 `--file-text` 或 file-infos `Text` 给图命名（如 `pic1`），Prompt 内用 `@pic1` 精确引用 |
 | 视频编辑 | v5.6/v6/c1 支持视频编辑：参考视频用 `--file-category Video` + `--reference-type subject`（改主体）或 `background`（改背景）|
 | 备注 | c1 是最新角色一致性版本；v6 通用旗舰；v5.6 上一代稳定版；不支持 SceneType（motion_control/avatar_i2v/lip_sync 仅 Kling 用）|
+
+#### H2（快乐马，MiniMax H2 系列）
+
+| 参数 | 支持值 |
+|------|--------|
+| 版本 | 1.0（2026-04-30 上线）, **1.1**（2026-06-24 上新，默认） |
+| 生成模式 | 文生、首帧生（1.0：仅首帧图生）、参考生（1-9 张） |
+| 分辨率 | 720P, 1080P, 2K, 4K |
+| 宽高比 | 1.0：16:9, 9:16, 1:1, 3:4, 4:3；**1.1 新增**：4:5, 5:4, 9:21, 21:9（默认 16:9） |
+| 时长 | 3-15 秒（默认 5 秒） |
+| 音频生成 | 支持 |
+| 备注 | 图生视频仅支持首帧图（不支持首尾帧/尾帧单独输入）；1.1 相比 1.0 新增 4 个宽高比选项，其余参数一致 |
+
+**调用示例**：
+
+```bash
+# 文生视频
+python3 scripts/vod_aigc_video.py create \
+    --model H2 --model-version 1.1 \
+    --prompt "一只快乐的小马在草原上奔跑，电影级画质" \
+    --output-resolution 1080P --output-aspect-ratio 16:9 --output-duration 5 \
+    --sub-app-id 1308104797
+
+# 首帧图生视频
+python3 scripts/vod_aigc_video.py create \
+    --model H2 --model-version 1.1 \
+    --file-url "https://example.com/first.jpg" \
+    --prompt "让画面中的马跑起来" \
+    --sub-app-id 1308104797
+
+# 参考生视频（1-9 张参考图）
+python3 scripts/vod_aigc_video.py create \
+    --model H2 --model-version 1.1 \
+    --file-infos '[{"Type":"Url","Url":"https://example.com/ref1.jpg","Category":"Image","Usage":"Reference"},{"Type":"Url","Url":"https://example.com/ref2.jpg","Category":"Image","Usage":"Reference"}]' \
+    --prompt "融合参考图中的元素" \
+    --sub-app-id 1308104797
+```
 
 ### 任务状态说明
 
@@ -531,12 +691,13 @@ python3 scripts/vod_aigc_video.py create \
 |---|---|
 | Kling | **720P, 1080P, 4K**（默认 720P；接口实测全版本接受 4K）|
 | Jimeng | **仅 ExtInfo `width`/`height`** 自定义（不支持 OutputConfig.Resolution）|
-| Hailuo | 768P, 1080P（默认 768P）|
+| Hailuo | 768P, 1080P（默认 768P）；H3 实测可输出 2560x1440 |
 | Vidu | 720P, 1080P（默认 720P）|
-| GV | 720P, 1080P（默认 720P）|
+| GV | 3.1 系列：720P, 1080P（默认 720P）；**omni：720P, 1080P, 2K, 4K**（2K/4K 为超分输出）|
+| H2 | **720P, 1080P, 2K, 4K**（1.0/1.1 一致）|
 | OS | 720P 标准；也支持 ExtInfo `width`/`height` 自定义 |
 | PixVerse | **360P, 540P, 720P, 1080P, 4K**（接口实测全版本接受 4K）|
-| Seedance | 1.0-pro/1.0-pro-fast 多档；1.5-pro 不支持 1080P |
+| Seedance | 1.0-pro-fast 多档；1.5-pro 不支持 1080P |
 | Mingmou | **仅 ExtInfo `width`/`height`** 自定义 |
 | Hunyuan 1.5 | **仅 ExtInfo `size`** 自定义 |
 | Hunyuan 3d_2.0 + 3d_scene | 1080P（推荐）|

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/pdf-invoice-stat",
   "slug": "pdf-invoice-stat",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1782498929123,
-  "contentHash": "84fc399c88a68f23a6d81ccda72ca87606e3d6568ebe46272c9b4b5f6db2f43f",
-  "fetchedAt": "2026-07-26T18:23:07.198Z"
+  "version": "2.3.0",
+  "updatedAt": 1786565495391,
+  "contentHash": "469b230fe06665c2cfb2ffbb6ef951d7c27a0d8878f978cfe804da6d6345897b",
+  "fetchedAt": "2026-08-13T08:51:59.203Z"
 }

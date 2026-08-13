@@ -1,49 +1,67 @@
-## Description: <br>
-This skill helps agents use LinkFox gateway scripts for Temu EU returns, refunds, and after-sales APIs, including after-sales lists and details, return logistics, return addresses, return labels, signatures, carriers, and signed file downloads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents work with Temu Europe returns, refunds, and after-sales workflows through LinkFox-proxied Partner EU APIs for after-sales order lookup, return logistics, return addresses, return labels, carriers, signatures, uploads, and signed file download.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Temu merchants, operators, and developers use this skill to retrieve and process EU returns/refunds and after-sales data through LinkFox-mediated Temu Partner API calls. It is most useful when an agent needs structured API guidance, ready-to-run scripts, token setup guidance, and saved JSON responses for returns/refunds workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Europe (Temu EU marketplace contexts) <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access LinkFox and Temu merchant credentials and potentially sensitive returns, order, shipping, and customer data. <br>
-Mitigation: Install only in environments approved for those credentials and data, scope tokens to the needed Temu store and purpose, and avoid sharing command lines or logs that contain unmasked credentials. <br>
-Risk: The generic proxy and signed file-download scripts expose broader API and download capabilities than the dedicated returns/refunds scripts. <br>
-Mitigation: Prefer the dedicated returns/refunds scripts for routine workflows and review generic proxy or file-download requests before execution. <br>
-Risk: Local token storage can keep Temu access tokens in plaintext. <br>
-Mitigation: Avoid local token storage when possible; otherwise protect the token store path, use a dedicated TEMU_TOKEN_STORE_PATH, and remove stale tokens regularly. <br>
-Risk: Saved response files may contain sensitive return, refund, order, shipping, or customer data. <br>
-Mitigation: Regularly delete locally saved response files and restrict access to the linkfox output directory. <br>
+## Use Case:
 
+External Temu EU sellers, operators, and developers use this skill to query and manage returns, refunds, and related after-sales records through LinkFox gateway scripts and reference documentation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-returns-refunds-eu) <br>
-- [API Reference](references/api.md) <br>
-- [Temu accessToken Authorization](references/access-token.md) <br>
-- [Partner EU Returns & Refunds Catalog](references/partner-eu-catalog.md) <br>
-- [Returns & Refunds API Index](references/apis/README.md) <br>
-- [Temu Partner EU Documentation](https://partner-eu.temu.com/documentation?menu_code=7289390cfd724be4a196f11ebe45a896) <br>
+### Deployment Geography for Use:
 
+Europe (Temu Partner EU)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON files, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON request/response data; scripts save full API responses as JSON files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full responses are saved under linkfox/<date>/<session>/data; small responses may print inline, while larger responses print summaries unless --inline is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill can act as a broader LinkFox/Temu gateway than its returns and refunds title may imply.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the scripts and invoked API type before use, and limit use to the Temu EU returns, refunds, and after-sales operations needed for the task.
+
+Risk: Credential handling includes LinkFox API keys, Temu access tokens, and optional local token storage.
+
+Mitigation: Use dedicated least-privilege tokens where possible, avoid shared-machine plaintext token storage, and rotate or remove saved tokens when no longer needed.
+
+Risk: API responses and payment QR artifacts may be written to local linkfox session directories.
+
+Mitigation: Review saved response archives for sensitive order or customer data and clean local session files after completing the workflow.
+
+Risk: Onboarding scripts include phone login and payment-related commands.
+
+Mitigation: Run login, plan, order, or payment commands only when explicitly registering, retrieving an API key, or purchasing credits.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-returns-refunds-eu)
+- [API reference](references/api.md)
+- [Partner EU catalog](references/partner-eu-catalog.md)
+- [API documentation index](references/apis/README.md)
+- [Access token guide](references/access-token.md)
+- [Authorization flow](references/authorization-flow.md)
+- [Onboarding guide](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, shell command examples, JSON API responses, and local response files with summarized stdout for large payloads.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires LinkFox and Temu credentials for live API calls; scripts may save full responses under a local linkfox session directory.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

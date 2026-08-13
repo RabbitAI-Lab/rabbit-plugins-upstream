@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/article-fetcher",
   "slug": "article-fetcher",
   "ownerHandle": null,
-  "version": "1.3.4",
-  "updatedAt": 1784427750799,
-  "contentHash": "af9a5f056d615fc0a80a04406a9c2be278535016785326d272942f139306030e",
-  "fetchedAt": "2026-07-26T18:10:43.443Z"
+  "version": "1.3.6",
+  "updatedAt": 1786195092117,
+  "contentHash": "d8945dfad9744c36a4ea5cfc30a98d7b0da374db5d48db436b09540189d47c61",
+  "fetchedAt": "2026-08-13T09:09:15.438Z"
 }

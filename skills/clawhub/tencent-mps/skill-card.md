@@ -1,55 +1,69 @@
-## Description: <br>
-Tencent MPS helps agents choose and generate Python commands for Tencent Cloud Media Processing, COS file operations, task queries, usage checks, and media comparison workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tencent MPS helps agents generate commands for Tencent Cloud Media Processing Service workflows across video, audio, image processing, AI generation, content understanding, COS file operations, task lookup, usage checks, and comparison pages.
 
-## Publisher: <br>
-[ollielin](https://clawhub.ai/user/ollielin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[tencent-mpaas-skills](https://clawhub.ai/user/tencent-mpaas-skills)
 
-## Use Case: <br>
-Developers and media operators use this skill to prepare Tencent Cloud MPS and COS command-line workflows for video transcoding, enhancement, subtitles, audio processing, image generation and editing, content understanding, quality checks, usage reporting, and task follow-up. It is intended for users who already have Tencent Cloud credentials and appropriate rights to process the media they submit. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run Tencent Cloud MPS and COS commands with user credentials and upload local media to cloud storage. <br>
-Mitigation: Use least-privilege Tencent Cloud credentials, private buckets, explicit local paths and output directories, and avoid passing secrets on the command line. <br>
-Risk: Pre-signed URLs and COS result links may grant temporary access to processed media. <br>
-Mitigation: Treat generated links as temporary access tokens and share them only with intended recipients. <br>
-Risk: Dedupe, face-swap, voice-clone, and watermark-removal workflows can affect consent, rights, or impersonation-sensitive use cases. <br>
-Mitigation: Use those workflows only when the operator has clear rights and consent for the input media and requested transformation. <br>
-Risk: Cloud media-processing tasks may create costs or repeated processing side effects. <br>
-Mitigation: Use dry-run previews, review the proposed command before execution, and avoid retrying failed tasks until task status and billing impact are understood. <br>
+## Use Case:
 
+Developers and media operators use this skill to choose the correct Tencent Cloud MPS script and produce executable Python commands for processing, generating, analyzing, querying, uploading, downloading, and comparing media assets. It is intended for users who already control the relevant Tencent Cloud credentials, COS buckets, source media, and processing permissions.
 
-## Reference(s): <br>
-- [Tencent MPS Skill Page](https://clawhub.ai/ollielin/skills/tencent-mps) <br>
-- [MPS best-practice scenarios](references/best_practices.md) <br>
-- [Tencent Cloud MPS pricing](https://cloud.tencent.com/document/product/862/36180) <br>
-- [Tencent Cloud MPS request regions](https://cloud.tencent.com/document/product/862/37572) <br>
-- [Transcoding parameters and examples](references/mps_transcode.md) <br>
-- [Video enhancement parameters and examples](references/mps_enhance.md) <br>
-- [Subtitle and speech-recognition parameters and examples](references/mps_subtitle.md) <br>
-- [Image processing parameters and examples](references/mps_imageprocess.md) <br>
-- [AIGC image generation parameters and examples](references/mps_aigc_image.md) <br>
-- [AIGC video generation parameters and examples](references/mps_aigc_video.md) <br>
-- [COS file operation parameters and examples](references/mps_cos_ops.md) <br>
-- [Task query parameters and examples](references/mps_query_task.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Markdown, Guidance] <br>
-**Output Format:** [Markdown containing Python command lines, confirmation prompts, task IDs, and result links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands target scripts in the skill's scripts/ directory and may produce Tencent Cloud task IDs, COS URLs, pre-signed download links, or local comparison files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.8 (source: ClawHub release metadata and SKILL.md metadata) <br>
+Risk: The skill can run scripts with Tencent Cloud and COS credentials and may generate links or logs for processed media.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated least-privilege Tencent Cloud account and bucket, avoid sensitive or unauthorized media, and treat generated links and logs as sensitive.
+
+Risk: Processing tasks can incur Tencent Cloud costs, especially if expensive jobs are repeated or submitted without confirmation.
+
+Mitigation: Prefer dry-run first, require explicit confirmation before processing tasks, avoid manually repeating incomplete jobs, and use Tencent Cloud billing alerts or limits.
+
+Risk: Duplicate-detection evasion, voice cloning, face swap, watermark removal, and similar workflows can be misused.
+
+Mitigation: Use these workflows only for authorized content and do not use them to bypass platform rules, remove protected marks, or process people or media without permission.
+
+Risk: Runtime package upgrades can change SDK behavior after installation.
+
+Mitigation: Review dependency changes before upgrading and test commands in dry-run or a controlled environment before production use.
+
+## Reference(s):
+
+- [Tencent MPS pricing](https://cloud.tencent.com/document/product/862/36180)
+- [Tencent MPS request regions](https://cloud.tencent.com/document/product/862/37572)
+- [ProcessMedia API](https://cloud.tencent.com/document/api/862/37578)
+- [ProcessImage API](https://cloud.tencent.com/document/api/862/112896)
+- [CreateAigcImageTask API](https://cloud.tencent.com/document/api/862/114562)
+- [CreateAigcVideoTask API](https://cloud.tencent.com/document/api/862/126965)
+- [CreateAigcAudioTask API](https://cloud.tencent.com/document/api/862/132830)
+- [Tencent Cloud Python SDK](https://github.com/TencentCloud/tencentcloud-sdk-python)
+- [Tencent COS Python SDK](https://github.com/tencentyun/cos-python-sdk-v5)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown text with inline shell commands and links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Processing tasks should show TaskId values, use dry-run when appropriate, and present generated links as Markdown links.]
+
+## Skill Version(s):
+
+1.3.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

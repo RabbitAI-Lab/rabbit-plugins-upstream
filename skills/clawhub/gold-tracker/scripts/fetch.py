@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""
-黄金追踪 - 数据获取器
-获取金价和汇率，带验证、缓存和状态更新。
-零第三方依赖。
+"""数据抓取 + 校验 + 缓存 + 状态更新（配置驱动，零第三方依赖）。
+
+数据源、解析方式、校验范围全部来自 config.yaml；代码零硬编码。
+失败时按「缓存 → 上次状态」降级，并在输出中披露「数据可能过期」（数据降级约束）。
+每次运行追加一个采样点到价格序列，供趋势/波动率/EMA 计算。
 """
 
 import json
@@ -11,63 +12,26 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from datetime import datetime, timezone, timedelta
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-CACHE_DIR = ROOT / ".cache"
-STATE_FILE = ROOT / "state.json"
-CONFIG_FILE = ROOT / "config.yaml"
-
-CACHE_DIR.mkdir(exist_ok=True)
+from common import paths, config, atomic, history, heartbeat, timeutil
 
 OZ_TO_GRAM = 31.1034768
-TZ_BEIJING = timezone(timedelta(hours=8))
+
+# 数据源名 → state.json 中的存量字段（降级取值用；gold 的金价在 state 里叫 current_price）
+_STATE_FIELD = {"gold": "current_price", "fx": "usd_cny"}
 
 
-def load_config() -> dict:
-    """无需 PyYAML 的简单配置加载（只读取关键值）。"""
-    cfg = {
-        "gold_url": "https://goldpricez.com",
-        "gold_timeout": 15,
-        "gold_min": 1000.0,
-        "gold_max": 10000.0,
-        "fx_url": "https://open.er-api.com/v6/latest/USD",
-        "fx_timeout": 10,
-        "fx_min": 6.0,
-        "fx_max": 8.0,
-        "cache_ttl": 300,
-    }
-    if CONFIG_FILE.exists():
-        text = CONFIG_FILE.read_text(encoding="utf-8")
-        m = re.search(r'url:\s*"([^"]+goldpricez[^"]+)"', text)
-        if m: cfg["gold_url"] = m.group(1)
-        m = re.search(r'timeout:\s*(\d+)', text)
-        if m: cfg["gold_timeout"] = int(m.group(1))
-        m = re.search(r'min_price_usd:\s*([\d.]+)', text)
-        if m: cfg["gold_min"] = float(m.group(1))
-        m = re.search(r'max_price_usd:\s*([\d.]+)', text)
-        if m: cfg["gold_max"] = float(m.group(1))
-        m = re.search(r'ttl_seconds:\s*(\d+)', text)
-        if m: cfg["cache_ttl"] = int(m.group(1))
-    return cfg
+def _cache_file(name, cfg):
+    return paths.resolve(config.dig(cfg, "cache.dir", ".cache")) / f"{name}.json"
 
 
-def fetch_url(url: str, timeout: int) -> str:
-    req = urllib.request.Request(
-        url,
-        headers={"User-Agent": "GoldTracker/1.0"},
-    )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return resp.read().decode("utf-8", errors="replace")
-
-
-def get_cache(key: str, ttl: int) -> dict:
-    f = CACHE_DIR / f"{key}.json"
+def load_cache(name, cfg):
+    ttl = config.dig(cfg, "cache.ttl_seconds", 300)
+    f = _cache_file(name, cfg)
     if not f.exists():
         return {}
     try:
-        data = json.loads(f.read_text())
+        data = json.loads(f.read_text(encoding="utf-8"))
         if time.time() - data.get("_t", 0) < ttl:
             return data
     except Exception:
@@ -75,120 +39,175 @@ def get_cache(key: str, ttl: int) -> dict:
     return {}
 
 
-def set_cache(key: str, data: dict):
-    f = CACHE_DIR / f"{key}.json"
+def save_cache(name, cfg, data):
+    f = _cache_file(name, cfg)
+    data = dict(data)
     data["_t"] = time.time()
-    f.write_text(json.dumps(data))
+    atomic.atomic_write_json(f, data)
 
 
-def parse_gold_price(html: str) -> float:
-    """从 HTML 提取金价（美元/盎司）。失败返回 0。"""
-    patterns = [
-        r'class="gold-price"[^>]*>\$?([\d,]+\.?\d*)',
-        r'Gold Price.*?\$([\d,]+\.?\d*)',
-        r'"price":\s*"?([\d,]+\.?\d*)"?',
-        r'\$([\d,]{4,}\.\d{2})',
-    ]
-    for pat in patterns:
-        m = re.search(pat, html, re.IGNORECASE)
-        if m:
-            try:
-                return float(m.group(1).replace(",", ""))
-            except ValueError:
-                continue
-    return 0.0
+def fetch_url(url, timeout):
+    # 用浏览器 UA：部分免费源会拒绝默认 UA（HTTP 403）
+    req = urllib.request.Request(url, headers={
+        "User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                       "AppleWebKit/537.36 (KHTML, like Gecko) "
+                       "Chrome/120.0 Safari/537.36"),
+        "Accept": "*/*",
+    })
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return resp.read().decode("utf-8", errors="replace")
 
 
-def parse_cny_rate(text: str) -> float:
-    """从 JSON API 响应提取美元兑人民币汇率。失败返回 0。"""
+def _parse_json_path(data, path):
+    node = data
+    for part in path.split("."):
+        if isinstance(node, dict) and part in node:
+            node = node[part]
+        else:
+            return None
+    return node
+
+
+def parse_value(text, src_cfg):
+    """根据 parser 配置从原始文本提取数值。失败返回 None。"""
+    parser = src_cfg.get("parser", "regex")
+    if parser == "json_path":
+        try:
+            data = json.loads(text)
+        except Exception:
+            return None
+        v = _parse_json_path(data, src_cfg.get("json_path", ""))
+        if v is None:
+            return None
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return None
+
+    # 默认 regex
+    pattern = src_cfg.get("pattern", "")
+    if not pattern:
+        return None
+    m = re.search(pattern, text, re.IGNORECASE)
+    if not m:
+        return None
+    raw = m.group(1) if m.lastindex else m.group(0)
     try:
-        data = json.loads(text)
-        return float(data["rates"]["CNY"])
-    except Exception:
-        m = re.search(r'"CNY":\s*([\d.]+)', text)
-        if m:
-            try:
-                return float(m.group(1))
-            except ValueError:
-                pass
-    return 0.0
+        return float(str(raw).replace(",", ""))
+    except ValueError:
+        return None
 
 
-def fetch_all() -> dict:
-    cfg = load_config()
-    now = datetime.now(TZ_BEIJING)
+def fetch_source(name, src_cfg, cfg, last_state):
+    """抓取单个数据源，返回 (value, source_desc, stale, error)。"""
+    timeout = int(src_cfg.get("timeout", 15))
+    lo = float(src_cfg.get("min", 0))
+    hi = float(src_cfg.get("max", float("inf")))
+
+    # 1) 缓存
+    cache = load_cache(name, cfg)
+    if cache.get("value") is not None:
+        return cache["value"], "cache", False, None
+
+    # 2) 实时抓取
+    url = src_cfg.get("url", "")
+    if not url:
+        # 无配置 URL：降级到上次状态
+        prev = last_state.get(_STATE_FIELD.get(name))
+        if prev:
+            return float(prev), "state", True, "数据源 URL 未配置，使用上次状态"
+        return None, None, True, "数据源 URL 未配置且无历史状态"
+
+    try:
+        text = fetch_url(url, timeout)
+        value = parse_value(text, src_cfg)
+        if value is None:
+            return None, url, True, "解析失败"
+        if not (lo <= value <= hi):
+            return None, url, True, "数值超出范围 [{}, {}]: {}".format(lo, hi, value)
+        save_cache(name, cfg, {"value": value})
+        return value, url, False, None
+    except Exception as e:  # noqa: BLE001
+        prev = last_state.get(_STATE_FIELD.get(name))
+        if prev:
+            return float(prev), "state", True, "抓取失败({}), 使用上次状态".format(e)
+        return None, None, True, "抓取失败: {}".format(e)
+
+
+def fetch_all():
+    cfg = config.load()
+    tz = config.dig(cfg, "general.timezone", "Asia/Shanghai")
+    last_state = load_state()
     result = {
-        "timestamp": now.isoformat(),
-        "price_usd": 0.0,
-        "price_cny_per_gram": 0.0,
-        "usd_cny": 0.0,
+        "timestamp": timeutil.now_iso(tz),
+        "price_usd": None,
+        "usd_cny": None,
+        "price_cny_per_gram": None,
         "sources": {},
         "errors": [],
+        "stale": False,
     }
 
-    # 金价
-    cache = get_cache("gold", cfg["cache_ttl"])
-    if cache.get("price"):
-        result["price_usd"] = cache["price"]
-        result["sources"]["gold"] = "cache"
-    else:
-        try:
-            html = fetch_url(cfg["gold_url"], cfg["gold_timeout"])
-            price = parse_gold_price(html)
-            if cfg["gold_min"] <= price <= cfg["gold_max"]:
-                result["price_usd"] = price
-                result["sources"]["gold"] = cfg["gold_url"]
-                set_cache("gold", {"price": price})
-            else:
-                result["errors"].append(f"金价异常: {price}")
-        except Exception as e:
-            result["errors"].append(f"金价获取失败: {e}")
+    field_map = {"gold": "price_usd", "fx": "usd_cny"}
+    for name, src_cfg in (cfg.get("data_sources") or {}).items():
+        if not isinstance(src_cfg, dict):
+            continue
+        value, source_desc, stale, error = fetch_source(name, src_cfg, cfg, last_state)
+        field = src_cfg.get("field", field_map.get(name, name))
+        if value is not None:
+            result[field] = value
+            result["sources"][name] = source_desc
+            if stale:
+                result["stale"] = True
+                result["errors"].append("[{}] {}".format(name, error))
+        else:
+            result["errors"].append("[{}] {}".format(name, error))
 
-    # 汇率
-    cache = get_cache("fx", cfg["cache_ttl"])
-    if cache.get("rate"):
-        result["usd_cny"] = cache["rate"]
-        result["sources"]["fx"] = "cache"
-    else:
-        try:
-            text = fetch_url(cfg["fx_url"], cfg["fx_timeout"])
-            rate = parse_cny_rate(text)
-            if cfg["fx_min"] <= rate <= cfg["fx_max"]:
-                result["usd_cny"] = rate
-                result["sources"]["fx"] = cfg["fx_url"]
-                set_cache("fx", {"rate": rate})
-            else:
-                result["errors"].append(f"汇率异常: {rate}")
-        except Exception as e:
-            result["errors"].append(f"汇率获取失败: {e}")
-
-    # 计算人民币金价（元/克）
     if result["price_usd"] and result["usd_cny"]:
         result["price_cny_per_gram"] = round(
             result["price_usd"] * result["usd_cny"] / OZ_TO_GRAM, 2
         )
 
-    return result
+    return result, cfg, tz
 
 
-def update_state(data: dict):
-    state = {}
-    if STATE_FILE.exists():
-        try:
-            state = json.loads(STATE_FILE.read_text())
-        except Exception:
-            state = {}
+def load_state():
+    f = paths.resolve("state.json")
+    if not f.exists():
+        return {}
+    try:
+        data = json.loads(f.read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
 
-    last_price = state.get("current_price", 0.0)
+
+def update_state(data, cfg, tz):
+    state = load_state()
+    last_price = state.get("current_price")
     current = data["price_usd"]
 
+    max_points = config.dig(cfg, "cache.price_series_max_points", 2000)
+    series = history.append_point(current, data["timestamp"], max_points) if current else history.load_series()
+
+    # 昨日收盘：取今天之前最近一天的收盘价
+    closes = history.daily_closes(series)
+    prev_close = None
+    today = timeutil.today_str(tz)
+    prior = [c for c in closes if c["date"] < today]
+    if prior:
+        prev_close = prior[-1]["price"]
+
     state.update({
-        "date": datetime.now(TZ_BEIJING).strftime("%Y-%m-%d"),
+        "date": today,
         "last_update": data["timestamp"],
         "current_price": current,
         "price_cny_per_gram": data["price_cny_per_gram"],
         "usd_cny": data["usd_cny"],
         "sources": data["sources"],
+        "prev_close": prev_close,
+        "data_stale": bool(data["stale"]),
+        "fetch_status": "degraded" if data["stale"] else ("error" if current is None else "ok"),
     })
 
     if last_price and current:
@@ -196,26 +215,32 @@ def update_state(data: dict):
         state["last_price"] = last_price
         state["change_pct"] = round((change / last_price) * 100, 2)
         state["change_abs"] = round(change, 2)
-    else:
+    elif current:
         state["last_price"] = current
         state["change_pct"] = 0.0
         state["change_abs"] = 0.0
 
-    STATE_FILE.write_text(json.dumps(state, indent=2))
+    atomic.atomic_write_json(paths.resolve("state.json"), state)
+    return state
 
 
 def main():
-    data = fetch_all()
-    print(json.dumps(data, indent=2))
+    paths.ensure_env()
+    data, cfg, tz = fetch_all()
 
-    if data["price_usd"]:
-        update_state(data)
-        print(f"[成功] state.json 更新: ${data['price_usd']}", file=sys.stderr)
+    if data["price_usd"] is not None:
+        update_state(data, cfg, tz)
 
-    if data["errors"]:
-        for e in data["errors"]:
-            print(f"[警告] {e}", file=sys.stderr)
-        sys.exit(1 if not data["price_usd"] else 0)
+    heartbeat.record("fetch")
+    print(json.dumps(data, indent=2, ensure_ascii=False))
+
+    if data["stale"]:
+        print("[警告] 数据可能过期（部分来源已降级到缓存/上次状态）", file=sys.stderr)
+    for e in data["errors"]:
+        print("[警告] {}".format(e), file=sys.stderr)
+
+    if data["price_usd"] is None:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

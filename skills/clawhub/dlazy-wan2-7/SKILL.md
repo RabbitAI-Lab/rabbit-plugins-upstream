@@ -1,11 +1,11 @@
 ---
 name: dlazy-wan2.7
 version: 1.3.4
-description: Tongyi Wanxiang 2.7 video model 鈥?one model covers text-to-video, first/last-frame-to-video, and reference-to-video.
+description: "Tongyi Wanxiang 2.7 video model 鈥?one model covers text-to-video, first/last-frame-to-video, and reference-to-video."
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy wan2.7 -h for help."}}
 ---
 
-# dlazy-wan2.7
+# 视频生成 通义万相 Wan 2.7
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

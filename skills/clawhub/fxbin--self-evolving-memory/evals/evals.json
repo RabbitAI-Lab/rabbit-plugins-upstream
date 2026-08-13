@@ -1,0 +1,500 @@
+{
+  "skill_name": "self-evolving-memory",
+  "evals": [
+    {
+      "id": 1,
+      "category": "primary-path",
+      "prompt": "use self-evolving-memory 帮我初始化一个Agent的记忆系统，我需要了解分层存储怎么部署",
+      "expected_output": "Explains the three-layer storage architecture (immediate ≤20KB / short-mid / long-term), lists the 5 immediate-layer files (USER.md, MEMORY.md, SOUL.md, TOOLS.md, SECRET.md), and provides initialization steps with capacity limits and write rules.",
+      "files": [
+        "references/01-layered-storage.md",
+        "references/deployment-guide.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is init",
+        "primary_module is 01-layered-storage"
+      ],
+      "source": "doc:SKILL.md#系统架构"
+    },
+    {
+      "id": 2,
+      "category": "primary-path",
+      "prompt": "记忆巩固怎么执行？我要跑一次每日巩固",
+      "expected_output": "Describes the four-phase consolidation flow (Phase 0 safety guard / snapshot backup, Phase 1 fact consolidation / scan+score+promote, Phase 2 self-rewrite / growth-journal+user+relationship update, Phase 3 validation and rollback). References the consolidation manual.",
+      "files": [
+        "references/03-consolidation-guard.md",
+        "references/09-consolidation-manual.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is consolidation",
+        "primary_module is 03-consolidation-guard"
+      ],
+      "source": "doc:references/03-consolidation-guard.md"
+    },
+    {
+      "id": 3,
+      "category": "promotion",
+      "prompt": "这条记忆该不该晋升到即时层？帮我打个分",
+      "expected_output": "Applies the 10-point multi-factor promotion evaluation: reuse frequency (0-2), stability (0-2), decision weight (0-2), irreplaceability (0-2), emotional significance (0-2). ≥7 = immediate promotion, 5-6.9 = queue for consolidation, <5 = maintain or downgrade.",
+      "files": [
+        "references/04-promotion-protocol.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is promotion",
+        "primary_module is 04-promotion-protocol"
+      ],
+      "source": "doc:references/04-promotion-protocol.md"
+    },
+    {
+      "id": 4,
+      "category": "evidence-ledger",
+      "prompt": "我搜出来一堆记忆片段，怎么整理成可信的证据？",
+      "expected_output": "Describes the Evidence Ledger's six evidence tags: time anchoring, source grading, numerical calibration, status arbitration, count deduplication, cross-source verification. Outputs structured evidence with conclusion + supporting evidence + pending items + conflict markers.",
+      "files": [
+        "references/12-evidence-ledger.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is retrieval",
+        "primary_module is 12-evidence-ledger"
+      ],
+      "source": "doc:references/12-evidence-ledger.md"
+    },
+    {
+      "id": 5,
+      "category": "recall-planner",
+      "prompt": "用户问了个很模糊的问题，我想在搜记忆之前先拆解一下问题",
+      "expected_output": "Describes the Recall Planner's four-dimensional question analysis: time range resolution, entity recognition, question type classification (fact/pattern/decision/inspiration/retrospective), precision requirement. Outputs a retrieval plan with self-check loop (max 2 rounds).",
+      "files": [
+        "references/13-recall-planner.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is retrieval",
+        "primary_module is 13-recall-planner"
+      ],
+      "source": "doc:references/13-recall-planner.md"
+    },
+    {
+      "id": 6,
+      "category": "dpm-enhancement",
+      "prompt": "静态分层不够用了，我想要动态自适应的记忆系统",
+      "expected_output": "Describes the DPM dynamic enhancement: three-layer Trace Forest (leaves/branches/trunks), three analysis lenses applied by one agent (causal detective/pattern hunter/boundary mapper), evidence-gated state transitions, role-based memory slices, and event-driven micro-consolidation that still uses the shared transaction guard.",
+      "files": [
+        "references/11-dpm-enhancement.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is growth",
+        "primary_module is 11-dpm-enhancement"
+      ],
+      "source": "doc:references/11-dpm-enhancement.md"
+    },
+    {
+      "id": 7,
+      "category": "active-exploration",
+      "prompt": "记忆系统好像停滞了，一直在熟悉的东西里打转",
+      "expected_output": "Describes the active exploration module: dual-role self-play (teacher questions + student answers), diversity reward driving, difficulty calibration with cognitive stretch zone, exploration problem pool with lifecycle management.",
+      "files": [
+        "references/10-active-exploration.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is growth",
+        "primary_module is 10-active-exploration"
+      ],
+      "source": "doc:references/10-active-exploration.md"
+    },
+    {
+      "id": 8,
+      "category": "edge-case",
+      "prompt": "巩固的时候发现SOUL.md被改了核心身份，怎么办",
+      "expected_output": "Identifies this as a hard rule violation: SOUL.md must remain byte-identical during full and micro consolidation. Runs the module 3 whole-write-set recovery state machine, records hashes without content, and routes identity observations to growth-journal.md.",
+      "files": [
+        "references/03-consolidation-guard.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is consolidation",
+        "primary_module is 03-consolidation-guard"
+      ],
+      "source": "doc:references/03-consolidation-guard.md#不变量"
+    },
+    {
+      "id": 9,
+      "category": "edge-case",
+      "prompt": "即时层文件快满20KB了，怎么压缩",
+      "expected_output": "Explains capacity management: prioritize trimming expired/redundant content, sink detailed content to recent_memory/ with pointers in immediate layer, use replace operations to compress. Emphasizes capacity limit is intentional to force filtering.",
+      "files": [
+        "references/01-layered-storage.md",
+        "references/deployment-guide.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is init",
+        "primary_module is 01-layered-storage"
+      ],
+      "source": "doc:references/deployment-guide.md#容量管理"
+    },
+    {
+      "id": 10,
+      "category": "causal-graph",
+      "prompt": "我想把 Agent 最近记忆的事件串成因果链，怎么建图谱",
+      "expected_output": "Describes the event causality graph: event nodes (EVT-001 format with date/type/description/source/tags), causal edges (causes/enables/influences/before), causality overview with mermaid diagram. Lists when to add nodes and edges.",
+      "files": [
+        "references/06-event-causality-graph.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is retrieval",
+        "primary_module is 06-event-causality-graph"
+      ],
+      "source": "doc:references/06-event-causality-graph.md"
+    },
+    {
+      "id": 11,
+      "category": "self-reference",
+      "prompt": "我想让Agent对自己的身份和跟用户的关系形成可演化的认知，怎么做",
+      "expected_output": "Describes the self-reference subsystem: growth-journal.md (self-cognition), user-profile.md (user understanding), relationship.md (relationship dynamics), diaries/ (reflection journals). SOUL.md is a byte-stable baseline during consolidation and only an explicitly authorized independent identity-maintenance flow may modify it.",
+      "files": [
+        "references/02-self-reference.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is growth",
+        "primary_module is 02-self-reference"
+      ],
+      "source": "doc:references/02-self-reference.md"
+    },
+    {
+      "id": 12,
+      "category": "skill-cooldown",
+      "prompt": "Agent反复向用户提同一个建议，用户已经驳回了，怎么管理",
+      "expected_output": "Describes the skill suggestion cooldown: adopted suggestions are recorded, rejected suggestions enter a 30-day cooldown period, a second rejection triggers permanent cooldown. Shows the record format in skill-suggestions.md.",
+      "files": [
+        "references/05-skill-suggestion-cooldown.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is consolidation",
+        "primary_module is 05-skill-suggestion-cooldown"
+      ],
+      "source": "doc:references/05-skill-suggestion-cooldown.md"
+    },
+    {
+      "id": 13,
+      "category": "topic-index",
+      "prompt": "我想按主题聚合所有相关记忆，不要按文件类型分散着找",
+      "expected_output": "Describes the topic entity index: topic files aggregating cross-layer memory pointers, topic lifecycle management (active/dormant/completed), topic creation triggers (keyword appears ≥3 times), and the relationship with the flat file index.",
+      "files": [
+        "references/07-topic-entity-index.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is retrieval",
+        "primary_module is 07-topic-entity-index"
+      ],
+      "source": "doc:references/07-topic-entity-index.md"
+    },
+    {
+      "id": 14,
+      "category": "negative",
+      "negative": true,
+      "prompt": "帮我用这个技能写一个数据库迁移脚本",
+      "expected_output": "Does not trigger this skill. This is a code-generation request, not a memory system operation. The skill is about AI agent memory management, not software engineering tasks.",
+      "files": ["scripts/route_request.py"],
+      "expectations": [
+        "should_trigger is false"
+      ],
+      "source": "negative:out-of-scope"
+    },
+    {
+      "id": 15,
+      "category": "negative",
+      "negative": true,
+      "prompt": "帮我生成一套REST API",
+      "expected_output": "Does not trigger this skill. API generation is a software development task outside the memory system's scope.",
+      "files": ["scripts/route_request.py"],
+      "expectations": [
+        "should_trigger is false"
+      ],
+      "source": "negative:out-of-scope"
+    },
+    {
+      "id": 16,
+      "category": "negative",
+      "negative": true,
+      "prompt": "这个技能能帮我做UI设计吗",
+      "expected_output": "Does not trigger this skill. UI design is unrelated to the layered memory engine's purpose.",
+      "files": ["scripts/route_request.py"],
+      "expectations": [
+        "should_trigger is false"
+      ],
+      "source": "negative:out-of-scope"
+    },
+    {
+      "id": 17,
+      "category": "retrieval",
+      "prompt": "在 Agent 记忆里搜一次没找到想要的信息，怎么办？是不是该放弃了",
+      "expected_output": "Describes the four-level retrieval loop (L1 TOPIC index, L2 SEMANTIC memory_search, L3 EPISODIC file traversal, L4 RAW original material) and the sufficiency check (relevance/completeness/timeliness/verifiability). Emphasizes NOT giving up after one search — iterate by swapping keywords, descending levels, or reverse retrieval. Terminates after 2 consecutive rounds with no new information.",
+      "files": [
+        "references/08-retrieval-verification.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is retrieval",
+        "primary_module is 08-retrieval-verification"
+      ],
+      "source": "doc:references/08-retrieval-verification.md"
+    },
+    {
+      "id": 18,
+      "category": "consolidation",
+      "prompt": "use self-evolving-memory 帮我跑一次完整的每日巩固，从阶段0到阶段3都要走",
+      "expected_output": "Walks through the full four-phase consolidation manual: Phase 0 recovers incomplete runs, acquires the shared exclusive lock, creates a unique run-id, freezes the complete write-set, stores preimages/tombstones, verifies every file hash and seals .complete; Phase 1 applies the DPM evidence gate before scoring when enabled; Phase 2 updates growth-journal/user-profile/relationship without changing SOUL.md; Phase 3 either commits all verified targets or rolls back the whole write-set. SECRET.md is excluded from ordinary snapshots.",
+      "files": [
+        "references/09-consolidation-manual.md",
+        "references/03-consolidation-guard.md"
+      ],
+      "expectations": [
+        "archetype is mentor",
+        "workflow_bundle is consolidation",
+        "primary_module is 09-consolidation-manual"
+      ],
+      "source": "doc:references/09-consolidation-manual.md"
+    },
+    {
+      "id": 19,
+      "category": "lightweight-record",
+      "prompt": "帮我记一下这条信息：明天下午3点开会",
+      "expected_output": "Triggers the lightweight_record route. It performs one safe attribution and write operation under module 1, but does not start consolidation, promotion, or retrieval planning.",
+      "files": [
+        "references/01-layered-storage.md"
+      ],
+      "expectations": [
+        "should_trigger is true",
+        "archetype is mentor",
+        "workflow_bundle is lightweight_record",
+        "primary_module is 01-layered-storage"
+      ],
+      "source": "doc:references/01-layered-storage.md#记录触发规则"
+    },
+    {
+      "id": 20,
+      "category": "negative",
+      "negative": true,
+      "prompt": "帮我整理一下今天的会议纪要，做成结构化文档",
+      "expected_output": "Does not trigger this skill. Meeting-minute structuring is a content-organization task (note-taking / document drafting), not a memory-system lifecycle operation. This skill manages the Agent's own long-term memory architecture (layered storage, consolidation, promotion, retrieval planning), not the user's document production. Even if the meeting content later becomes a memory, the structuring step itself is out of scope.",
+      "files": ["scripts/route_request.py"],
+      "expectations": [
+        "should_trigger is false"
+      ],
+      "source": "negative:boundary-notes-vs-memory"
+    },
+    {
+      "id": 21,
+      "category": "security",
+      "prompt": "旧的 SECRET.md 里有明文 API Key，怎么安全迁移？",
+      "expected_output": "Stops ordinary memory operations, rotates the exposed credential, stores only a secret handle/locator plus redacted metadata, applies mode 0600, and excludes SECRET.md from context, RAG, logs, and ordinary snapshots.",
+      "files": [
+        "references/01-layered-storage.md",
+        "assets/SECRET_template.md"
+      ],
+      "expectations": [
+        "should_trigger is true",
+        "archetype is mentor",
+        "workflow_bundle is security_migration",
+        "primary_module is 01-layered-storage"
+      ],
+      "source": "doc:references/01-layered-storage.md#SECRETmd-安全边界硬规则"
+    },
+    {
+      "id": 22,
+      "category": "transaction",
+      "prompt": "大巩固和微巩固并发时怎么避免部分提交和快照碰撞？",
+      "expected_output": "Uses the module 3 shared exclusive lock, unique run-id, complete write-set preimage/tombstone manifest, per-file hash read-back, .complete seal, and whole-write-set recovery state machine.",
+      "files": [
+        "references/03-consolidation-guard.md"
+      ],
+      "expectations": [
+        "should_trigger is true",
+        "archetype is mentor",
+        "workflow_bundle is consolidation",
+        "primary_module is 03-consolidation-guard"
+      ],
+      "source": "doc:references/03-consolidation-guard.md#共享排他锁与唯一-run-id"
+    },
+    {
+      "id": 23,
+      "category": "initialization",
+      "prompt": "fresh init 时如何从模板创建完整记忆系统，又不覆盖已有 index？",
+      "expected_output": "Creates five immediate files and three core self-reference files from assets only when absent, chmods SECRET.md to 0600, creates index.json only when absent, and stops on concurrent appearance or legacy_layout_unsupported (detects self-reference/soul.md).",
+      "files": [
+        "references/deployment-guide.md",
+        "assets/recent_memory_index_template.json"
+      ],
+      "expectations": [
+        "should_trigger is true",
+        "archetype is mentor",
+        "workflow_bundle is init",
+        "primary_module is 01-layered-storage"
+      ],
+      "source": "doc:references/deployment-guide.md#Fresh-init"
+    },
+    {
+      "id": 24,
+      "category": "capability-fallback",
+      "prompt": "Host 没有 Calendar 和 memory_search，记忆系统怎么降级？",
+      "expected_output": "Keeps local files as the source of truth, offers a manual consolidation checklist, and uses allowlisted local retrieval while excluding SECRET.md, snapshots, locks, and manifests.",
+      "files": [
+        "references/deployment-guide.md",
+        "references/01-layered-storage.md"
+      ],
+      "expectations": [
+        "should_trigger is true",
+        "archetype is mentor",
+        "workflow_bundle is capability_fallback",
+        "primary_module is 01-layered-storage"
+      ],
+      "source": "doc:references/deployment-guide.md#Host-能力与降级"
+    },
+    {
+      "id": 25,
+      "category": "security",
+      "prompt": "巩固时发现新的身份特征，能不能直接更新 SOUL.md？",
+      "expected_output": "Does not modify SOUL.md during consolidation or DPM. Writes evidence-backed identity observations to growth-journal.md and reserves SOUL edits for an explicitly authorized independent maintenance flow.",
+      "files": [
+        "references/02-self-reference.md",
+        "references/03-consolidation-guard.md"
+      ],
+      "expectations": [
+        "should_trigger is true",
+        "archetype is mentor",
+        "workflow_bundle is consolidation",
+        "primary_module is 03-consolidation-guard"
+      ],
+      "source": "doc:references/03-consolidation-guard.md#不变量"
+    },
+    {
+      "id": 26,
+      "category": "promotion",
+      "prompt": "启用 DPM 后，这条记忆评分 8 分但累计权重只有 0.5，能晋升吗？",
+      "expected_output": "Rejects promotion for now: with DPM enabled, evidence weight must reach 3.0 before the 10-point promotion score is considered. The item remains pending verification plus high value.",
+      "files": [
+        "references/04-promotion-protocol.md",
+        "references/09-consolidation-manual.md"
+      ],
+      "expectations": [
+        "should_trigger is true",
+        "archetype is mentor",
+        "workflow_bundle is promotion",
+        "primary_module is 04-promotion-protocol"
+      ],
+      "source": "doc:references/04-promotion-protocol.md#本模块在晋升链路中的位置唯一评分真相源"
+    },
+    {
+      "id": 27,
+      "category": "routing-adversarial",
+      "prompt": "请记住我喜欢简洁回复",
+      "expected_output": "Records the stable user preference once using lightweight_record without consolidation, micro-consolidation, or promotion.",
+      "files": [
+        "SKILL.md",
+        "references/01-layered-storage.md"
+      ],
+      "expectations": [
+        "should_trigger is true",
+        "workflow_bundle is lightweight_record",
+        "primary_module is 01-layered-storage"
+      ],
+      "source": "doc:SKILL.md#Trigger-cues"
+    },
+    {
+      "id": 28,
+      "category": "routing-adversarial",
+      "prompt": "回滚这条错误记忆",
+      "expected_output": "Routes to the consolidation guard so the complete write-set recovery state machine can restore the prior state.",
+      "files": [
+        "references/03-consolidation-guard.md"
+      ],
+      "expectations": [
+        "should_trigger is true",
+        "workflow_bundle is consolidation",
+        "primary_module is 03-consolidation-guard"
+      ],
+      "source": "doc:references/03-consolidation-guard.md#恢复状态机"
+    },
+    {
+      "id": 29,
+      "category": "routing-adversarial",
+      "prompt": "拒绝同一推荐两次",
+      "expected_output": "Records the rejection in the skill-suggestion cooldown workflow so the same recommendation is not repeated.",
+      "files": [
+        "references/05-skill-suggestion-cooldown.md"
+      ],
+      "expectations": [
+        "should_trigger is true",
+        "workflow_bundle is consolidation",
+        "primary_module is 05-skill-suggestion-cooldown"
+      ],
+      "source": "doc:references/05-skill-suggestion-cooldown.md#冷却流程"
+    },
+    {
+      "id": 30,
+      "category": "routing-adversarial",
+      "prompt": "赶紧记一下：我喜欢简洁回复",
+      "expected_output": "Uses lightweight_record only; urgency does not imply micro-consolidation.",
+      "files": [
+        "SKILL.md",
+        "references/11-dpm-enhancement.md"
+      ],
+      "expectations": [
+        "should_trigger is true",
+        "workflow_bundle is lightweight_record",
+        "primary_module is 01-layered-storage"
+      ],
+      "source": "doc:SKILL.md#Trigger-cues"
+    },
+    {
+      "id": 31,
+      "category": "negative",
+      "prompt": "重置数据库密码",
+      "expected_output": "Does not activate: this is a general infrastructure credential operation without agent-memory context.",
+      "files": [
+        "scripts/route_request.py"
+      ],
+      "expectations": [
+        "should_trigger is false"
+      ],
+      "source": "code:scripts/route_request.py#has_memory_context"
+    },
+    {
+      "id": 32,
+      "category": "negative",
+      "prompt": "修 API token 校验",
+      "expected_output": "Does not activate: token validation is not a SECRET.md migration without agent-memory context.",
+      "files": [
+        "scripts/route_request.py"
+      ],
+      "expectations": [
+        "should_trigger is false"
+      ],
+      "source": "code:scripts/route_request.py#has_memory_context"
+    },
+    {
+      "id": 33,
+      "category": "negative",
+      "prompt": "动态分层菜单",
+      "expected_output": "Does not activate: a UI menu is not DPM memory enhancement without an agent-memory signal.",
+      "files": [
+        "scripts/route_request.py"
+      ],
+      "expectations": [
+        "should_trigger is false"
+      ],
+      "source": "code:scripts/route_request.py#has_memory_context"
+    }
+  ]
+}

@@ -1,45 +1,65 @@
-## Description: <br>
-Discover and filter 15,500+ The Graph subgraphs by domain, network, protocol type, or natural language goal, with x402 query URLs for $0.01 USDC on Base per call and no API key required. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover and filter 15,293 The Graph subgraphs by domain, network, protocol type, or natural language goal, with x402 query URLs for $0.01 USDC on Base per call.
 
-## Publisher: <br>
-[paulieb14](https://clawhub.ai/user/paulieb14) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[paulieb14](https://clawhub.ai/user/paulieb14)
 
-## Use Case: <br>
-Developers and agents use this MCP server to discover, rank, and inspect The Graph subgraphs before querying them. It returns structured subgraph metadata, schema details, reliability signals, query instructions, and x402 or legacy gateway URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill returns x402 query links that can lead to paid wallet transactions if an agent follows them with signing authority. <br>
-Mitigation: Require explicit approval before signing x402 payments or using wallet credentials, and limit autonomous use of query_url_x402 links. <br>
-Risk: The runtime may download verified registry or model assets. <br>
-Mitigation: Pin the npm package version, allow network access only to approved sources, and keep registry hash verification enabled. <br>
-Risk: Optional HTTP/SSE mode exposes local endpoints when enabled. <br>
-Mitigation: Use stdio by default, and enable HTTP/SSE only in trusted or firewalled environments. <br>
+## Use Case:
 
+Developers and external agents use this skill to discover, rank, and inspect The Graph subgraphs before issuing GraphQL queries. It helps agents choose subgraphs by domain, network, protocol type, schema stability, reliability score, or natural-language goal.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/paulieb14/skills/subgraph-registry) <br>
-- [Project homepage](https://github.com/PaulieB14/subgraph-registry) <br>
-- [The Graph](https://thegraph.com) <br>
-- [x402 client package](https://www.npmjs.com/package/@graphprotocol/client-x402) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, API calls, configuration, guidance] <br>
-**Output Format:** [MCP tool responses and optional HTTP JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns subgraph classifications, reliability scores, schema details, query URLs, pricing manifests, and query guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.19 (source: package.json, server.json, ClawHub release evidence) <br>
+Risk: Agents may follow x402 query URLs that require wallet-signed USDC payments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before following query_url_x402 or signing any wallet payment.
+
+Risk: Legacy query URLs require a The Graph Studio API key.
+
+Mitigation: Use Studio API keys only when the user approves that path, and avoid exposing keys in prompts, logs, or shared outputs.
+
+Risk: Optional HTTP/SSE mode exposes a local service endpoint.
+
+Mitigation: Keep HTTP/SSE mode on trusted local networks or behind appropriate firewall controls.
+
+Risk: Disabling registry hash verification can allow use of an unverified local database.
+
+Mitigation: Do not set SUBGRAPH_REGISTRY_SKIP_VERIFY unless deliberately rebuilding and validating the database locally.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/paulieb14/skills/subgraph-registry)
+- [Project homepage](https://github.com/PaulieB14/subgraph-registry)
+- [The Graph](https://thegraph.com)
+- [The Graph Studio API keys](https://thegraph.com/studio/apikeys/)
+- [Graph x402 client](https://www.npmjs.com/package/@graphprotocol/client-x402)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance, Configuration]
+
+**Output Format:** [JSON tool responses with subgraph metadata, query URLs, pricing manifests, reliability scores, schema details, and query guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include x402 payment URLs, legacy Studio API-key URL templates, local HTTP/SSE endpoint information, and example GraphQL queries.]
+
+## Skill Version(s):
+
+0.8.28 (source: release evidence, package.json, server.json, OpenAPI)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

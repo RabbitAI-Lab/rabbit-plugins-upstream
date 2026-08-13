@@ -1,39 +1,57 @@
-## Description: <br>
-Multi-layer memory system for LLM agents with daily memory, mesh edges, fuzzy search, auto-summarization, logging, and compliance checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mesh Publish provides a multi-layer local memory system for agents, including fresh daily notes, mesh graph indexing, interaction logging, cross-layer search, compliance checks, PDF archival, and vault sync.
 
-## Publisher: <br>
-[mozz0](https://clawhub.ai/user/mozz0) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mozz0](https://clawhub.ai/user/mozz0)
 
-## Use Case: <br>
-Developers and agent builders use this skill to add persistent memory workflows that record, relate, search, summarize, and check agent memory across sessions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent memory workflows may record or search sensitive workspace data if connected to external project tools without review. <br>
-Mitigation: Review the referenced external project and configure memory storage, retention, and search behavior before using it with sensitive data. <br>
+## Use Case:
 
+Developers and agent operators use this skill to persist, search, summarize, and recover local agent memory across sessions, resets, and workspace rebuilds. It is intended for workflows where local logs, mesh records, and PDF archives are acceptable memory stores.
 
-## Reference(s): <br>
-- [MeshMorize ClawHub release](https://clawhub.ai/mozz0/josh-learns) <br>
-- [MeshMorize project link from artifact](https://github.com/mozz0/MeshMorize) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command and configuration references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code is included in the submitted artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.2.2 (source: server-resolved release evidence) <br>
+Risk: Persistent conversation logging and PDF archiving may capture secrets, tokens, personal data, private keys, or regulated information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Define explicit controls for logging scope, redaction, retention, deletion, and archive access before using it with sensitive information.
+
+Risk: Vault sync can push archives to a hardcoded NAS destination using embedded credentials and weakened SSH host verification.
+
+Mitigation: Remove hardcoded credentials and destinations, use managed secrets, and restore SSH host verification before installing or running vault sync.
+
+Risk: Long-lived local and PDF memory stores may retain more data than intended.
+
+Mitigation: Set retention limits and review archived content before syncing or sharing the vault.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/mozz0/skills/josh-learns)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and generated local files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces or updates local memory logs, JSON mesh records, checkpoint files, PDF vault archives, and optional NAS sync output.]
+
+## Skill Version(s):
+
+3.3.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

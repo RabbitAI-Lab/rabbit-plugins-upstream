@@ -1,0 +1,124 @@
+@page {
+  size: letter;
+  margin: 0.8in 0.75in;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  color: #24292e;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 20pt;
+  font-weight: 700;
+  border-bottom: 2px solid #2f5496;
+  padding-bottom: 6px;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  color: #2f5496;
+  page-break-after: avoid;
+}
+
+h2 {
+  font-size: 14pt;
+  font-weight: 700;
+  border-bottom: 1px solid #d0d7de;
+  padding-bottom: 4px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #1f3864;
+  page-break-after: avoid;
+}
+
+h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: #333;
+  page-break-after: avoid;
+}
+
+p {
+  margin: 0 0 10px 0;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10px 0 16px 0;
+  font-size: 9.5pt;
+  page-break-inside: auto;
+}
+
+thead {
+  background-color: #2f5496;
+  color: white;
+}
+
+th {
+  padding: 6px 10px;
+  text-align: left;
+  font-weight: 600;
+  border: 1px solid #2f5496;
+}
+
+td {
+  padding: 5px 10px;
+  border: 1px solid #d0d7de;
+  vertical-align: top;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f6f8fa;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+/* Lists */
+ol, ul {
+  margin: 4px 0 12px 0;
+  padding-left: 24px;
+}
+
+li {
+  margin-bottom: 4px;
+}
+
+/* Bold text */
+strong {
+  font-weight: 700;
+}
+
+/* Horizontal rules */
+hr {
+  border: none;
+  border-top: 1px solid #d0d7de;
+  margin: 16px 0;
+}
+
+/* Links */
+a {
+  color: #2f5496;
+  text-decoration: none;
+}
+
+/* Hide the pandoc title block since the content has its own h1 */
+#title-block-header {
+  display: none;
+}
+
+/* Prevent orphaned headings — already set per-element above */
+
+/* Keep table rows together when possible */
+tr {
+  page-break-inside: avoid;
+}

@@ -49,10 +49,25 @@ const skill = read("SKILL.md");
 const readme = read("README.md");
 const readmeEnglish = read("README.en.md");
 const changelog = read("CHANGELOG.md");
-const architectureSvg = read("docs/architecture.svg");
-const migrationGuide = read("docs/migration-v1.3.1.md");
-const roadmap = read("docs/roadmap.md");
-const captionReference = read("references/captions-terminology.md");
+const architectureSvg = read("04-项目设计与路线图/系统架构.svg");
+const migrationGuide = read("04-项目设计与路线图/V1.3.1迁移指南.md");
+const roadmap = read("04-项目设计与路线图/公开路线图.md");
+const captionReference = read("02-剪辑方法手册/07-字幕与术语.md");
+const openAiAgent = read("agents/openai.yaml");
+const liveCanaryReport = JSON.parse(read(`reports/live-canary-v${packageVersion}.json`));
+const orchestrationProfiles = [
+  "balanced-stable",
+  "tight-short",
+  "trust-longform",
+  "screen-demo",
+].map((id) => ({id, document: JSON.parse(read(`profiles/${id}.json`))}));
+const workflowDocuments = [
+  "one-click-stable",
+  "fast-cut",
+  "pro-enhance",
+  "resume",
+  "official-skill-map",
+].map((id) => ({id, document: read(`workflows/${id}.md`)}));
 
 const skillVersion = skill.match(/^metadata:\s*\n\s+version:\s*([^\s]+)\s*$/m)?.[1];
 const changelogVersion = changelog.match(/^## V(\d+\.\d+\.\d+)\b/m)?.[1];
@@ -142,11 +157,47 @@ if (packageManifest.scripts?.["validate:feedback"] !== "node scripts/validate-fe
 if (!packageManifest.scripts?.verify?.includes("npm run validate:feedback")) {
   errors.push("package.json: verify must include the feedback governance gate");
 }
+if (packageManifest.scripts?.["validate:extensions"] !== "node scripts/validate-extensions.mjs") {
+  errors.push("package.json: validate:extensions must invoke the extension pack gate");
+}
+if (!packageManifest.scripts?.verify?.includes("npm run validate:extensions")) {
+  errors.push("package.json: verify must include the extension pack gate");
+}
+for (const [scriptName, command] of Object.entries({
+  "validate:runtime-contracts": "node scripts/validate-runtime-fixtures.mjs",
+  "validate:docs-routing": "node scripts/validate-docs-routing.mjs",
+  "validate:live-claim": "node scripts/validate-live-canary-claim.mjs",
+  "smoke:one-click:fake": "node scripts/smoke-one-click.mjs",
+})) {
+  if (packageManifest.scripts?.[scriptName] !== command) {
+    errors.push(`package.json: ${scriptName} must invoke ${command}`);
+  }
+  if (!packageManifest.scripts?.verify?.includes(`npm run ${scriptName}`)) {
+    errors.push(`package.json: verify must include ${scriptName}`);
+  }
+}
+for (const command of [
+  "run",
+  "status",
+  "review",
+  "approve-decisions",
+  "approve-sample",
+  "request-revision",
+  "resume",
+  "report",
+]) {
+  if (!packageManifest.scripts?.[command]?.includes("src/cli/koubo.mjs")) {
+    errors.push(`package.json: missing ${command} user-flow command`);
+  }
+}
+if (packageManifest.bin?.["majia-koubo"] !== "src/cli/koubo.mjs") {
+  errors.push("package.json: majia-koubo bin must point to src/cli/koubo.mjs");
+}
 if (ruleRegistry.policyVersion !== policyVersion) {
   errors.push(`rules/registry.json: policyVersion ${ruleRegistry.policyVersion ?? "<missing>"} != hard policy ${policyVersion}`);
 }
 if (!architectureSvg.includes(`· v${packageVersion} ·`)) {
-  errors.push(`docs/architecture.svg: footer version does not match ${packageVersion}`);
+  errors.push(`04-项目设计与路线图/系统架构.svg: footer version does not match ${packageVersion}`);
 }
 for (const profile of currentProfilePolicyVersions) {
   if (profile.version !== policyVersion) {
@@ -171,7 +222,7 @@ if (!readme.includes("七执行状态")) errors.push("README.md: missing seven-s
 if (!readmeEnglish.includes("seven-state")) errors.push("README.en.md: missing seven-state capability wording");
 if (readmeEnglish.includes("five-state")) errors.push("README.en.md: stale five-state capability wording");
 for (const [name, document] of [["README.md", readme], ["README.en.md", readmeEnglish]]) {
-  if (!document.includes("docs/roadmap.md")) {
+  if (!document.includes("04-项目设计与路线图/公开路线图.md")) {
     errors.push(`${name}: missing public roadmap link`);
   }
 }
@@ -191,16 +242,47 @@ for (const marker of [
   "Local Media QA + export authorization gate — SHIPPED",
   "Distribution pack foundation — SHIPPED",
   "Feedback governance foundation — SHIPPED",
+  "R7 · 一句话稳剪产品层 — OFFLINE SHIPPED / LIVE UNVERIFIED",
+  "stableClaimEligible=true",
 ]) {
   if (!roadmap.includes(marker)) {
-    errors.push(`docs/roadmap.md: missing governance marker ${marker}`);
+    errors.push(`04-项目设计与路线图/公开路线图.md: missing governance marker ${marker}`);
   }
+}
+const skillLineCount = skill.split(/\r?\n/u).length;
+if (skillLineCount < 200 || skillLineCount > 300) {
+  errors.push(`SKILL.md: expected 200-300 lines, got ${skillLineCount}`);
+}
+if (!openAiAgent.includes("$majia-chatcut-koubo")) {
+  errors.push("agents/openai.yaml: default prompt must explicitly name $majia-chatcut-koubo");
+}
+for (const workflow of workflowDocuments) {
+  if (!workflow.document.includes("UNVERIFIED")) {
+    errors.push(`workflows/${workflow.id}.md: missing explicit UNVERIFIED live boundary`);
+  }
+}
+for (const profile of orchestrationProfiles) {
+  if (profile.document.id !== profile.id || profile.document.version !== "1.0.0") {
+    errors.push(`profiles/${profile.id}.json: identity/version drift`);
+  }
+  const treatments = profile.document.defaults?.treatments ?? {};
+  for (const disabled of ["restructure", "broll", "motionGraphics", "music", "generatedMedia", "export"]) {
+    if (treatments[disabled] !== false) {
+      errors.push(`profiles/${profile.id}.json: ${disabled} must default to false`);
+    }
+  }
+}
+if (liveCanaryReport.releaseVersion !== packageVersion) {
+  errors.push(`live canary releaseVersion ${liveCanaryReport.releaseVersion ?? "<missing>"} != package ${packageVersion}`);
+}
+if (liveCanaryReport.stableClaimEligible !== false && !liveCanaryReport.eligibility?.eligible) {
+  errors.push("live canary report: stable claim cannot be enabled without eligible evidence");
 }
 for (const [name, document] of [
   ["README.md", readme],
   ["README.en.md", readmeEnglish],
-  ["docs/migration-v1.3.1.md", migrationGuide],
-  ["references/captions-terminology.md", captionReference],
+  ["04-项目设计与路线图/V1.3.1迁移指南.md", migrationGuide],
+  ["02-剪辑方法手册/07-字幕与术语.md", captionReference],
 ]) {
   if (!document.includes("--root <profile-config-root>")
     && !document.includes("--root <profile 配置根目录>")) {
@@ -217,10 +299,10 @@ for (const marker of [
   "shortCardEvidence",
 ]) {
   if (!migrationGuide.includes(marker)) {
-    errors.push(`docs/migration-v1.3.1.md: missing caption contract marker ${marker}`);
+    errors.push(`04-项目设计与路线图/V1.3.1迁移指南.md: missing caption contract marker ${marker}`);
   }
   if (!captionReference.includes(marker)) {
-    errors.push(`references/captions-terminology.md: missing caption contract marker ${marker}`);
+    errors.push(`02-剪辑方法手册/07-字幕与术语.md: missing caption contract marker ${marker}`);
   }
 }
 

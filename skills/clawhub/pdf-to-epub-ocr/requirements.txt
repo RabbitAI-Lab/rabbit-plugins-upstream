@@ -1,0 +1,28 @@
+# PDF转EPUB OCR技能依赖包
+
+# 核心依赖
+ebooklib==0.17.1                    # EPUB文件生成和处理
+pytesseract==0.3.10                 # Tesseract OCR的Python封装
+pdf2image==1.16.3                   # PDF转图片
+Pillow==10.1.0                      # 图像处理库
+PyPDF2==3.0.1                       # PDF元数据提取
+
+# 可选依赖（增强功能）
+opencv-python==4.8.1.78             # 图像预处理（倾斜校正等）
+numpy==1.24.3                       # 数值计算（OpenCV依赖）
+
+# 开发依赖（可选）
+pytest==7.4.3                       # 单元测试
+black==23.12.1                      # 代码格式化
+flake8==6.1.0                       # 代码检查
+
+# 系统依赖说明：
+# Ubuntu/Debian:
+# sudo apt-get install tesseract-ocr tesseract-ocr-chi-sim poppler-utils
+#
+# macOS:
+# brew install tesseract tesseract-lang poppler
+#
+# Windows:
+# 下载安装Tesseract OCR: https://github.com/UB-Mannheim/tesseract/wiki
+# 下载安装poppler: https://github.com/oschwartz10612/poppler-windows/releases/

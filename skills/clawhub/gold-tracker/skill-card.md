@@ -1,45 +1,57 @@
-## Description: <br>
-Gold Tracker helps AI agents fetch and validate gold prices and USD/CNY exchange rates, manage alerts and archives, and generate market briefings from agent-authored analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gold Tracker helps agents fetch gold price and USD/CNY data, collect relevant news, validate sourced analysis, manage threshold-based alerts, send notifications, and archive local tracking records.
 
-## Publisher: <br>
-[jeromeex](https://clawhub.ai/user/jeromeex) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jeromeex](https://clawhub.ai/user/jeromeex)
 
-## Use Case: <br>
-Developers and operators use this skill to let an AI agent maintain a lightweight gold price tracking workflow: fetching price and FX data, recording market analysis, detecting price moves, and producing briefings for review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill recommends persistent cron jobs that run unattended. <br>
-Mitigation: Require explicit user opt-in before installing cron entries, show the exact entries first, and keep uninstall commands available. <br>
-Risk: Maintenance commands can mutate or delete local alert and archive files. <br>
-Mitigation: Run cleanup and archive commands only after reviewing retention settings and keeping backups of important logs. <br>
-Risk: Market data and exchange-rate fetches depend on external services and may be unavailable or stale. <br>
-Mitigation: Use the skill's validation, cache, and state checks, and label analysis clearly when data falls back to cached or last-known values. <br>
+## Use Case:
 
+Developers and agent operators use this skill to run a local gold-market monitoring workflow with sourced analysis checks, configurable alert thresholds, notifications, and archives. It is suited for operational tracking and briefing support, not as standalone financial advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jeromeex/skills/gold-tracker) <br>
-- [Publisher profile](https://clawhub.ai/user/jeromeex) <br>
-- [Goldpricez data source](https://goldpricez.com) <br>
-- [USD exchange-rate data source](https://open.er-api.com/v6/latest/USD) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON, YAML, cron, and shell command snippets; bundled scripts emit JSON, Markdown summaries, and console text.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or updates local state, logs, alerts, archives, and cache files during use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact skill.yaml says 1.1.0) <br>
+Risk: Configured notifier commands run with the agent's environment and can send generated content outside the local workspace.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review config.yaml before enabling notifications, start with the file notifier or --dry-run, and enable webhook or email only after confirming destinations and message contents.
+
+Risk: Scheduled runs can repeatedly execute notification and fetch workflows from local configuration.
+
+Mitigation: Keep config.yaml writable only by trusted users and avoid running scheduled notifications in environments that expose sensitive tokens.
+
+## Reference(s):
+
+- [Gold Tracker ClawHub page](https://clawhub.ai/jeromeex/skills/gold-tracker)
+- [Publisher profile: jeromeex](https://clawhub.ai/user/jeromeex)
+- [SKILL.md operation manual](artifact/SKILL.md)
+- [Configuration example](artifact/config.example.yaml)
+- [Generic scheduling example](artifact/examples/generic-schedule.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and YAML log/output schemas]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local state, alert, notification, archive, and log files when its scripts are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

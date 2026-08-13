@@ -7,7 +7,7 @@ description: Create a shareable RooQuiz preview personality / outcome test — o
 
 POST an outcome test as JSON to RooQuiz's open preview endpoint and instantly get a **short-lived (~1 hour)**, **browser-openable** preview link. The creation endpoint is public (`access.create => true`), so this needs **no account, login, API key, or credentials** — anything that can make an HTTP request can use it.
 
-An **outcome test** (`scene: "outcome"`) is a personality / type test: there are no right answers and no numeric score. Each option *votes* for one or more result types, and the most-voted type is shown as the result (e.g. "The Explorer" vs "The Homebody"). It produces a **temporary preview**, not a permanently published form — the link expires automatically (recreate it in RooQuiz if you need to keep it).
+An **outcome test** (`scene: "outcome_quiz"`) is a personality / type test: there are no right answers and no numeric score. Each option *votes* for one or more result types, and the most-voted type is shown as the result (e.g. "The Explorer" vs "The Homebody"). It produces a **temporary preview**, not a permanently published form — the link expires automatically (recreate it in RooQuiz if you need to keep it).
 
 Two sibling skills cover the other assessment types — pick the one that matches:
 - **preview-quiz** — a right/wrong assessment where correct answers earn points and the taker gets a graded score.
@@ -65,14 +65,13 @@ If you set a `secret` in the JSON, append `?secret=<secret>` to that link. For a
 
 ```jsonc
 {
-  "scene": "outcome",              // required & fixed for this skill. Sets allowed question types and scoring. Cannot change after creation.
+  "scene": "outcome_quiz",              // required & fixed for this skill. Sets allowed question types and scoring. Cannot change after creation.
   "title": "What's Your X?",       // required
   "description": "Optional intro",
   "language": "en_US",             // form language; default zh_CN. See "language values" in Notes.
-  "personalized": {                // appearance; omit to use defaults (list layout, light theme)
+  "personalized": {                // appearance; omit to use defaults (light theme)
     "key": "default",
-    "theme": { "name": "light" },
-    "layout": "card"               // "list" | "card"
+    "theme": { "name": "light" }
   },
   "indexDisplayMode": "number",    // question numbering: none (default) | number | uppercase | roman
   "fields": [ /* questions — see "Question types" and "Scoring" */ ],
@@ -89,7 +88,7 @@ Key points:
 
 ## Themes
 
-`personalized.theme.name` sets the visual theme. Omit `theme` to default to `light`. Set it as `"personalized": { "key": "default", "theme": { "name": "synthwave" }, "layout": "card" }` (`layout` is still only `list` or `card`).
+`personalized.theme.name` sets the visual theme. Omit `theme` to default to `light`. Set it as `"personalized": { "key": "default", "theme": { "name": "synthwave" } }`. There is no `personalized.layout` — card is the only answering layout. (The per-field `layout` (`list`/`grid`) is a different thing and still valid.)
 
 Pick a theme that fits the quiz's topic/mood. **To use a random theme** — when the user asks for one, wants variety, or has no preference — just choose a random `name` from this list when building the JSON (there's no server-side "random" option). Recommended palette:
 
@@ -124,7 +123,7 @@ Input/number/date/time/`Rate`/`FillBlank`/`Ordering`/`Cascade` are **not** allow
 
 ## Scoring
 
-Map each option to the result type(s) it votes for with **`outcomeScoring`** (a field-level array, sitting next to `choices`). Do **not** set `correctAnswer`, `exactScoring`, or `partialScoring` — none of those are allowed in the outcome scene.
+Map each option to the result type(s) it votes for with **`outcomeScoring`** (a field-level array, sitting next to `choices`). Do **not** set `correctAnswer`, `exactScoring`, or `partialScoring` — none of those are allowed in the outcome_quiz scene.
 
 ```jsonc
 "outcomeScoring": [
@@ -170,7 +169,7 @@ These wrong patterns get reached for out of habit; the server rejects them with 
 - **Scoring is a field-level `outcomeScoring` array, not a value nested inside each choice.** Correct: `"outcomeScoring": [{ "value": "a", "outcomes": [{ "code": "type1" }] }]` next to `choices`. Wrong: `{ "code": "a", "value": "…", "outcomeScoring": { "type1": 1 } }` on the option.
 - **`report.overallAnalysis` is still required** (give it a `title`) — the result *types* go in the separate `report.outcomeAnalysis.outcomes`.
 - **Every `outcomes[].code` used in scoring must be defined in `outcomeAnalysis.outcomes`**, or you'll get a 400 for an undefined result code.
-- **Don't set `correctAnswer`/`exactScoring`/`partialScoring`** — those belong to the quiz/scorecard scenes and are rejected here.
+- **Don't set `correctAnswer`/`exactScoring`/`partialScoring`** — those belong to the knowledge_quiz / scored_quiz scenes and are rejected here.
 
 ## Complete example
 
@@ -178,10 +177,10 @@ The `personalized.theme.name` is matched to the topic (see **Themes** above) —
 
 ```json
 {
-  "scene": "outcome",
+  "scene": "outcome_quiz",
   "title": "What's Your Travel Style?",
   "language": "en_US",
-  "personalized": { "key": "default", "theme": { "name": "pastel" }, "layout": "card" },
+  "personalized": { "key": "default", "theme": { "name": "pastel" } },
   "fields": [
     {
       "type": "SingleCheck", "code": "q1", "name": "Ideal weekend?",
@@ -223,6 +222,6 @@ The `personalized.theme.name` is matched to the topic (see **Themes** above) —
 
 - **Expiry:** previews self-destruct after about **1 hour** (`expiresAt`); the link 404s afterward. Recreate it in RooQuiz to keep it permanently.
 - **Rate limit:** anonymous creation is capped at about **10 previews per hour** per IP.
-- **Validation errors:** a 400 response includes `errors[].path` and `message` — fix the JSON and retry. Most common: a question type that doesn't match `scene: "outcome"`, or an `outcomeScoring` referencing a result `code` that isn't defined in `outcomeAnalysis.outcomes`.
+- **Validation errors:** a 400 response includes `errors[].path` and `message` — fix the JSON and retry. Most common: a question type that doesn't match `scene: "outcome_quiz"`, or an `outcomeScoring` referencing a result `code` that isn't defined in `outcomeAnalysis.outcomes`.
 - **Results page looks empty?** This is a preview (no submission backend); results are computed in the browser from the returned questions + `report`. Make sure `report.overallAnalysis` exists and every voted question carries `outcomeScoring` pointing at defined outcomes.
 - **`language` values:** `en_US` `de_DE` `es` `pt_BR` `fr` `zh_CN` (default) `zh_TW` `ja_JP` `ko_KR`.

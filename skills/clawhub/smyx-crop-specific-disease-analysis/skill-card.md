@@ -1,42 +1,60 @@
-## Description: <br>
-Expands the disease identification library to cover economic-crop-specific diseases such as corn northern and southern leaf blight, potato late blight, peanut leaf spot, and tomato viral disease for precise leaf-disease recognition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Expands the disease identification library to cover economic-crop-specific diseases (corn northern/southern leaf blight, potato late blight, peanut leaf spot, tomato viral disease, etc.) for precise leaf-disease recognition.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and agricultural developers use this skill to analyze crop leaf images, videos, or URLs for economic-crop-specific disease identification and structured report retrieval. It focuses on visual recognition and report output, not treatment or prevention recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Leaf images, videos, URLs, and report requests are sent to a remote Life Emergence service. <br>
-Mitigation: Review the service and data handling expectations before installation, and avoid submitting sensitive or unrelated media. <br>
-Risk: The skill can silently create or reuse a local identity and persist session tokens in a workspace SQLite database. <br>
-Mitigation: Install only in trusted workspaces, review local persistence before use, and remove stored identity or token data when the skill is no longer needed. <br>
+## Use Case:
 
+External growers, agronomy users, and agents use this skill to analyze economic-crop leaf images or videos for crop-specific disease identification and to retrieve prior disease-analysis reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-crop-specific-disease-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis reports with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include disease type, confidence, symptom description, report links, and Markdown tables for historical reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter says 1.0.3) <br>
+Risk: Crop images, videos, or media URLs are sent to a remote LifeEmergence service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with crop media that is acceptable to transmit to that service, and avoid including unrelated sensitive content in submitted media.
+
+Risk: The skill can silently create or reuse account identity and persist returned tokens in workspace data.
+
+Mitigation: Run it in a workspace with controlled access, and remove the workspace data database and any smyx API key file when uninstalling or rotating identity.
+
+Risk: Historical report lookup depends on cloud-stored analysis history for the current identity.
+
+Mitigation: Install it only where generated report history is acceptable to store and retrieve, and avoid sharing one workspace identity across unrelated users.
+
+## Reference(s):
+
+- [ClawHub skill release page](https://clawhub.ai/18072937735/skills/smyx-crop-specific-disease-analysis)
+- [Crop disease API documentation](references/api_doc.md)
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Files, Guidance]
+
+**Output Format:** [Markdown text with structured JSON analysis content, report links, and optional saved result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can submit local crop media or media URLs, poll for cloud analysis results, and return historical report lists.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

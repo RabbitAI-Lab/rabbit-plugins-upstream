@@ -1,44 +1,63 @@
-## Description: <br>
-Analyzes fixed-camera videos or video URLs of an elderly person's resting hand to detect periodic tremor motion, estimate frequency and amplitude, and produce a screening-oriented risk report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera videos of an older person's resting hand to estimate tremor frequency, pixel amplitude, affected side, and a non-diagnostic resting-tremor risk level.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Developers and care-workflow builders can use this skill to connect elderly hand-resting video inputs to a structured tremor screening report for home care, nursing home, or community health scenarios. It is intended to support early attention and follow-up, not to replace professional neurological diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive elderly health video data or video URLs are sent to external LifeEmergence services for analysis. <br>
-Mitigation: Use only with informed consent from the monitored person or authorized caregiver, and avoid submitting videos unless that cloud processing is acceptable. <br>
-Risk: The skill can silently create or reuse a persistent local or cloud user identity and link analysis history to it. <br>
-Mitigation: Confirm that account linkage and report-history access match the user's privacy expectations before installation or use. <br>
-Risk: The output is a screening-oriented risk report and may be misunderstood as a clinical diagnosis. <br>
-Mitigation: Present results as objective video-motion indicators and encourage professional neurological evaluation for concerning findings. <br>
+## Use Case:
 
+External caregivers, family members, care-facility staff, and health-support developers use this skill to submit resting-hand videos or URLs for non-diagnostic tremor screening and to retrieve historical analysis reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-elderly-hand-tremor-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with tremor metrics, risk level, follow-up prompt, and report link when available] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the report to a user-specified output file and can return a Markdown table of cloud history reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Sensitive elderly hand videos and report metadata are sent to a configured cloud health-analysis service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit consent from the recorded person or caregiver, and avoid submitting videos that are not needed for the stated screening task.
+
+Risk: The skill can silently create or reuse an internal identity and associate report history with it.
+
+Mitigation: Run the skill in a dedicated workspace for sensitive use and review account-linking behavior before deployment.
+
+Risk: Reusable local account tokens may be stored and used for subsequent cloud requests.
+
+Mitigation: Restrict workspace access, rotate or remove stored credentials when access is no longer needed, and review the skill before installing it in shared environments.
+
+Risk: Resting-tremor outputs may be mistaken for a clinical diagnosis.
+
+Mitigation: Present results as non-diagnostic screening signals and route concerning results to qualified medical review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-elderly-hand-tremor-detection-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API interface documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown text with structured JSON-style analysis results, risk labels, report links, and command examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts local video file paths or public video URLs; history queries return cloud-backed report lists.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -6,7 +6,7 @@ last-reviewed: 2026-07-09
 
 # apolloio (Apollo.io)
 
-Apollo-anchored person and organization enrichment. Only **two of its eleven actions are credits-based** — `enrichPerson` (1, or 3 with phone reveal) and `enrichOrganization` (1); everything else (searches, contact CRUD, sequences) runs **only on your own Apollo API key** connector. Use the credits pair as an ENRICH alternative when Apollo's coverage is stronger for the niche ([`../references/alternatives.md`](../references/alternatives.md)) — e.g. its investor coverage in [`../recipes/portfolio-prospecting.md`](../recipes/portfolio-prospecting.md). Don't route generic enrichment here first: the priority stack (`cargo` native → `waterfall`) leads.
+Apollo-anchored person and organization enrichment. Only **two of its eleven actions are credits-based** — `enrichPerson` (1, or 3 with phone reveal) and `enrichOrganization` (1); everything else (searches, contact CRUD, sequences) runs **only on your own Apollo API key** connector. That credits pair is **in the priority stack** ([`../SKILL.md`](../SKILL.md) §5) as the **niche-coverage ENRICH rung** — promoted per-batch when a pilot shows Apollo hits where `cargo` (2) and `waterfall` (2) miss, its investor coverage in [`../recipes/portfolio-prospecting.md`](../recipes/portfolio-prospecting.md) being the standing example. Stack membership is not a licence to route generic enrichment here first: `cargo` native → `waterfall` still leads the default chain, and Apollo runs on the residue.
 
 ## Credits-based actions
 
@@ -81,6 +81,12 @@ cargo-ai orchestration action execute-batch \
 - `enrichPerson` — **ENRICH (person), fallback rung** beside the stack's `cargo` → `waterfall` → `peopleDataLabs` chain; promote it for a batch only when the pilot shows better niche coverage.
 - `enrichOrganization` — **ENRICH (company), fallback rung** after `cargo.enrichBusinessFirmographics` (0.5) and `linkedin` (0.25–0.5).
 - Own-key sequence actions — post-VERIFY **activation**, outside the credits spine.
+
+## Recurring use
+
+- **No scheduled fit on credits** — both credits actions are per-record enrichment. The own-key `search*` actions can feed a scheduled sourcing tool on your Apollo plan's quota; dedup re-pulls there with the `prospected_by_current_team` filter.
+- **In-play gate:** `enrichPerson` only where the target contact field (`email`) is still empty; `enrichOrganization` only where firmographics are empty. Never leave `revealPhoneNumber: true` on a play node — every re-evaluated row bills 3 instead of 1.
+- **Stable data, tight ceiling:** enrichment output doesn't decay, and the 400 calls/hour limit means an ungated recurring batch both re-bills and stalls the queue.
 
 ## Action shape
 

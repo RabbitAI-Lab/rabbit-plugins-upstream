@@ -359,8 +359,8 @@ def check_host_egress_posture(ctx: Context) -> Finding:
             "Could not determine read-only whether outbound traffic defaults to "
             "deny or allow on this host.",
             "Verify manually whether outbound traffic defaults to deny (nftables/"
-            "iptables OUTPUT policy, ufw DEFAULT_OUTGOING_POLICY) — an unreadable "
-            "policy is the expected result on most systems.",
+            "iptables OUTPUT policy, ufw DEFAULT_OUTPUT_POLICY in /etc/default/ufw) "
+            "— an unreadable policy is the expected result on most systems.",
             evidence=evidence,
         )
 
@@ -434,8 +434,8 @@ def check_incident_readiness(ctx: Context) -> Finding:
             "agents/<agent>/sessions/ should not grant write to Users / Everyone.",
         )
 
-    home = ctx.home
-    files = _trajectory.find_trajectory_files(home) if isinstance(home, Path) else []
+    from ..scanbudget import limits_for  # noqa: PLC0415 (F-164, leaf import, no cycle)
+    files = _trajectory.find_trajectory_files(ctx.home, max_files=limits_for(ctx).traj_max_files) if isinstance(ctx.home, Path) else []
     if not files:
         return _finding(
             "B85",
@@ -1048,7 +1048,8 @@ def check_audit_trail_signals(
               each of the three has a legitimate benign story this check cannot rule out
               (a deliberately tightened policy; a third-party MCP tool name that still
               slipped past an older OpenClaw's syntax gate; trajectory tracing turned off
-              on purpose).
+              on purpose). ``Finding.sub_signals`` names which fired (F-154 round 2) so
+              a cap-only consumer can react to the two strong ones, never bare divergence.
     PASS    — ``audit_events`` present, readable, non-empty, and none of the three
               signals fired in the sampled window. ``pass_confidence`` is ``"verified"``
               when the sample covered the whole table, or ``"no_signal"`` when
@@ -1114,6 +1115,7 @@ def check_audit_trail_signals(
 
     hits: list[str] = []
     evidence: list[str] = []
+    sub_signals: set = set()  # F-154 round 2: see Finding.sub_signals docstring.
     if blocked:
         hits.append(
             f"{len(blocked)} tool call(s) were BLOCKED by the policy engine at runtime "
@@ -1124,6 +1126,7 @@ def check_audit_trail_signals(
             + (f" session_id={r.get('session_id')}" if r.get("session_id") else "")
             for r in blocked[:6]
         ]
+        sub_signals.add("blocked")
     if evasive:
         hits.append(
             f"{len(evasive)} tool call(s) reached execution with a tool name OpenClaw's "
@@ -1135,12 +1138,14 @@ def check_audit_trail_signals(
             + (f" session_id={r.get('session_id')}" if r.get("session_id") else "")
             for r in evasive[:6]
         ]
+        sub_signals.add("evasive")
     if trajectory_compared and divergent_sessions:
         hits.append(
             f"{len(divergent_sessions)} session id(s) recorded in audit_events have no "
             "matching trajectory sidecar record"
         )
         evidence += [f"divergent session_id: {s}" for s in sorted(divergent_sessions)[:6]]
+        sub_signals.add("divergence")
 
     if hits:
         return _finding(
@@ -1155,6 +1160,7 @@ def check_audit_trail_signals(
             "divergence, confirm whether OPENCLAW_TRAJECTORY was intentionally disabled "
             "or the trajectory sidecar has simply rotated past its 60-file cap.",
             evidence=evidence,
+            sub_signals=frozenset(sub_signals),
         )
 
     span = ""

@@ -1,45 +1,64 @@
-## Description: <br>
-Fetches articles from WeChat, Xiaohongshu, Douban, and Zhihu, uploads article images to Aliyun OSS, extracts tags with an optional LLM, and archives results to Obsidian or optional Notion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetches articles from WeChat, Xiaohongshu, Douban, and Zhihu, uploads article images to Aliyun OSS, extracts keywords with an optional LLM workflow, and archives results to an Obsidian knowledge base with optional Notion sync.
 
-## Publisher: <br>
-[ajayhao](https://clawhub.ai/user/ajayhao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ajayhao](https://clawhub.ai/user/ajayhao)
 
-## Use Case: <br>
-External users and developers use this skill to capture supported Chinese content-platform articles and save structured knowledge-base records in Obsidian, Notion, or terminal preview workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires Aliyun OSS credentials and can use Notion and LLM API credentials when those integrations are enabled. <br>
-Mitigation: Use limited-scope OSS and Notion credentials, configure only needed integrations, and keep API keys in the local agent environment. <br>
-Risk: When LLM tag extraction is enabled, article text is sent to the configured LLM endpoint. <br>
-Mitigation: Disable the LLM integration for sensitive content or avoid sending private, regulated, or confidential articles to the configured endpoint. <br>
-Risk: Platform cookies may be used for WeChat or Zhihu fallback fetching. <br>
-Mitigation: Use low-risk platform cookies and rotate or revoke them if they are no longer needed. <br>
-Risk: The security guidance recommends upgrading the pinned lxml dependency before routine use. <br>
-Mitigation: Review and update the pinned dependency set during deployment maintenance. <br>
+## Use Case:
 
+External users and developers use this skill to collect supported Chinese-platform articles, preserve article content as Markdown or Notion records, and keep image assets accessible through Aliyun OSS. It supports URL-based fetching as well as HTML or MHTML offline input for archiving workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ajayhao/skills/article-fetcher) <br>
-- [Project homepage](https://github.com/AjayHao/article-fetcher) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files] <br>
-**Output Format:** [Markdown files, Notion pages, and terminal text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload article images to Aliyun OSS and optionally create Notion pages when configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: server release metadata, SKILL.md metadata, CHANGELOG v1.3.4 released 2026-07-19) <br>
+Risk: Article images are uploaded to Aliyun OSS as part of normal operation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated bucket with least-privilege PutObject/GetObject credentials and confirm users have rights to archive the target content.
+
+Risk: Optional LLM keyword extraction sends up to the first 12000 characters of article text to the configured LLM endpoint.
+
+Mitigation: Leave LLM credentials unset for local word-frequency fallback, or configure only an approved provider and model for the data being processed.
+
+Risk: Cookie files may be used for WeChat or Zhihu anti-scraping fallbacks.
+
+Mitigation: Keep cookie files narrowly scoped, rotate them regularly, and prefer low-risk accounts for cookie-based scraping.
+
+Risk: Optional Notion archiving writes article metadata and content to a Notion database.
+
+Mitigation: Grant the Notion integration access only to the intended database and review database sharing permissions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ajayhao/skills/article-fetcher)
+- [Project homepage](https://github.com/AjayHao/article-fetcher)
+- [README](artifact/README.md)
+- [Changelog](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Configuration guidance]
+
+**Output Format:** [Terminal status text, Obsidian Markdown files with YAML frontmatter, and optional Notion page records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write local Markdown files, upload images to Aliyun OSS, and optionally send article text to the configured LLM endpoint for keyword extraction.]
+
+## Skill Version(s):
+
+1.3.6 (source: server release metadata, SKILL.md metadata, README, CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

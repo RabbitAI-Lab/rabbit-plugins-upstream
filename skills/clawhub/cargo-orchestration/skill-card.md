@@ -1,35 +1,62 @@
-## Description: <br>
-Cargo Orchestration is an agent skill release on ClawHub; local source evidence was unavailable to characterize its behavior further. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Interact with the Cargo platform via CLI. Use when the user wants to execute an action, run a workflow, trigger a batch, message an AI agent, query orchestration runtime tables (runs/batches/spans/records) with SQL, fetch segment records, resolve an action's output schema, or inspect a model schema.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and operators can use this skill when they need agent guidance related to cargo orchestration workflows. The available workspace evidence does not identify more specific tasks or execution capabilities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
+Developers and operators use this skill to direct Cargo CLI orchestration tasks, including running actions, workflows, batches, AI agent messages, orchestration SQL queries, segment fetches, output schema inspection, and model schema inspection.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+Global
 
-## Skill Version(s): <br>
-1.5.1 (source: target metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Cargo operations can trigger costly remote workflows, upload data, or write to connected systems.
+
+Mitigation: Use the skill only in authorized workspaces, confirm scope and cost before mutating or large-batch actions, and prefer samples, sandbox connectors, and least-privilege credentials.
+
+## Reference(s):
+
+- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills)
+- [ClawHub skill page](https://clawhub.ai/cargo-ai/skills/cargo-orchestration)
+- [Action examples](references/examples/actions.md)
+- [AI agent examples](references/examples/agents.md)
+- [Play examples](references/examples/plays.md)
+- [Orchestration query examples](references/examples/queries.md)
+- [Segment data examples](references/examples/segments.md)
+- [Orchestration templates](references/examples/templates.md)
+- [Tool examples](references/examples/tools.md)
+- [Prefer built-in actions + expressions over code/HTTP nodes](references/node-selection.md)
+- [Creating nodes](references/nodes.md)
+- [Async polling reference](references/polling.md)
+- [Response shapes](references/response-shapes.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Code, Markdown]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces user-directed Cargo CLI procedures and command arguments; commands may trigger remote workflows, uploads, or writes to connected systems when executed.]
+
+## Skill Version(s):
+
+1.6.1 (source: SKILL.md frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

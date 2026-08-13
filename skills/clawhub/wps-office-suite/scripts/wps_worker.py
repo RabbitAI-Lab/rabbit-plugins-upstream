@@ -1,6 +1,18 @@
 """
-WPS Worker v4.3.0 - 智能引擎切换 v4.3
+WPS Worker v4.5.0 - 智能引擎切换 v4.5
 引擎优先级: WPS > MS Office > LibreOffice > 纯Python
+
+v4.5.0 变更:
+  - 🎯 会议纪要生成（ASR 转写 → LLM 摘要 → Word 生成）
+  - 🎯 ASR 降级链（whisper → azure → google → template）
+  - 🎯 LLM 降级链（rule-engine → external-llm → pure-template）
+  - 🎯 COM 健康检查（状态检测 + 残留进程 + 自动释放）
+  - 🎯 故障排除大章合并（避坑+FAQ+错误ID 统一索引）
+
+v4.4.0 变更:
+  - 🎯 长文档排版自动化（目录/页眉页脚/标题编号/图表索引/交叉引用/格式统一）
+  - 🎯 多级标题编号引擎（中文/阿拉伯/罗马数字三种样式）
+  - 🎯 格式统一预设模板（论文/标书/报告）
 
 v4.3.0 变更:
   - 🎯 Excel 深度分析（公式纠错/数据清洗/透视表/数据预测/NL2Formula）
@@ -792,6 +804,62 @@ def cmd_excel_analyze(args):
         agg_func=args.get("agg_func", "sum"),
     )
 
+def cmd_long_document(args):
+    """长文档排版 v4.4"""
+    from long_document import format_document
+    return format_document(
+        filepath=args.get("file"),
+        task=args.get("task", "analyze"),
+        max_level=args.get("max_level", 3),
+        field=args.get("field", False),
+        insert=args.get("insert", False),
+        odd_even=args.get("odd_even", False),
+        odd_header=args.get("odd_header", ""),
+        even_header=args.get("even_header", ""),
+        chapter_in_header=args.get("chapter_in_header", False),
+        page_number=args.get("page_number", False),
+        page_format=args.get("page_format", "arabic"),
+        page_start=args.get("page_start", 1),
+        style=args.get("style", "arabic"),
+        preset=args.get("preset", "thesis"),
+        numbering_style=args.get("numbering_style", "arabic"),
+        output_path=args.get("output", ""),
+    )
+
+def cmd_meeting_minutes(args):
+    """会议纪要生成 v4.5"""
+    from meeting_minutes import MeetingMinutesGenerator
+    config = {
+        "asr_method": args.get("asr_method", "auto"),
+        "summary_method": args.get("summary_method", "auto"),
+        "segment_minutes": args.get("segment_minutes", 5),
+        "progress_cb": lambda *a: None,  # Worker 模式下静默
+    }
+    gen = MeetingMinutesGenerator(config)
+    return gen.generate_minutes(
+        audio_path=args.get("file"),
+        output_path=args.get("output", ""),
+        title=args.get("title", "会议纪要"),
+        language=args.get("language", "zh"),
+    )
+
+def cmd_com_health(args):
+    """COM 健康检查 v4.5"""
+    from com_health import COMHealthChecker
+    checker = COMHealthChecker(auto_release=args.get("auto_release", False))
+    check_type = args.get("check_type", "full")
+    
+    if check_type == "wps":
+        return checker.check_wps_com()
+    elif check_type == "ms":
+        return checker.check_ms_com()
+    elif check_type == "residuals":
+        return checker.check_com_residuals()
+    elif check_type == "release":
+        return checker.release_all_com(force=args.get("force", False))
+    else:
+        return checker.full_health_check()
+
 COMMANDS = {
     "create_word": cmd_create_word,
     "edit_word": cmd_edit_word,
@@ -823,6 +891,9 @@ COMMANDS = {
     "invoice_ocr": cmd_invoice_ocr,
     "ppt_generate": cmd_ppt_generate,
     "excel_analyze": cmd_excel_analyze,
+    "long_document": cmd_long_document,
+    "meeting_minutes": cmd_meeting_minutes,
+    "com_health": cmd_com_health,
     "exit": None,
 }
 

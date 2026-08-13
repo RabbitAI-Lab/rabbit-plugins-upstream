@@ -1,46 +1,64 @@
-## Description: <br>
-Generate and edit video with Veo 3 through RunAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit video with Veo 3 through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to create, edit, extend, and upscale Veo 3 videos through RunAPI. It supports one-off CLI generation and SDK-based application integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use a RunAPI API key or saved CLI authentication to send generation requests to an external provider. <br>
-Mitigation: Use environment-based or saved CLI authentication, avoid exposing secrets in prompts or logs, and confirm external-provider use is acceptable for the task. <br>
-Risk: RunAPI-generated file URLs are temporary and may expire before assets are retained. <br>
-Mitigation: Download generated videos or related assets into durable storage within the documented temporary URL window. <br>
-Risk: Using the CLI as a production runtime integration layer can make app integrations harder to operate and test. <br>
-Mitigation: Use the RunAPI SDK path for application, backend, worker, library, webhook, or production workflow integrations. <br>
+## Use Case:
 
+Developers, content teams, and agents use this skill to create, edit, or transform video with Veo 3 through RunAPI. For one-off generation it guides use of the RunAPI CLI; for application integration it directs developers to the current SDK references.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-veo-3-1) <br>
-- [RunAPI Veo 3.1 homepage](https://runapi.ai/models/veo-3.1) <br>
-- [RunAPI Veo 3.1 model documentation](https://runapi.ai/models/veo-3.1.md) <br>
-- [RunAPI Google provider comparison](https://runapi.ai/providers/google.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline shell commands, SDK package names, and JSON request guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents toward RunAPI CLI use for one-off video tasks and SDK use for application integrations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.8 (source: server release evidence) <br>
+Risk: Using this skill can authenticate to RunAPI, submit video-generation tasks, upload local media included in requests, and download generated media.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm RunAPI account, billing, credential handling, and media upload intent before installation or use.
+
+Risk: Interactive browser login and background task execution can change user expectations about authorization or completion status.
+
+Mitigation: Use environment or approved CLI authentication by default, and use browser login or background execution only when explicitly requested.
+
+Risk: Generated media may be missing, empty, or returned with an unexpected content type.
+
+Mitigation: Download every requested deliverable and verify both non-empty file contents and expected MIME type before reporting completion.
+
+## Reference(s):
+
+- [RunAPI Veo 3.1 model homepage](https://runapi.ai/models/veo-3.1)
+- [RunAPI Veo 3.1 model documentation](https://runapi.ai/models/veo-3.1.md)
+- [RunAPI Google provider overview](https://runapi.ai/providers/google.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI Veo 3.1 SDK integration](https://github.com/runapi-ai/veo-3.1-sdk)
+- [RunAPI Veo 3.1 variant](https://runapi.ai/models/veo-3.1/veo-3.1.md)
+- [RunAPI Veo 3.1 Fast variant](https://runapi.ai/models/veo-3.1/fast.md)
+- [RunAPI Veo 3.1 Lite variant](https://runapi.ai/models/veo-3.1/lite.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Code, Files]
+
+**Output Format:** [Markdown with shell commands, JSON request files, SDK guidance, and downloaded media file verification steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent guidance for authenticated RunAPI video-generation workflows; media deliverables are external service outputs that must be downloaded and MIME-checked.]
+
+## Skill Version(s):
+
+0.2.10 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

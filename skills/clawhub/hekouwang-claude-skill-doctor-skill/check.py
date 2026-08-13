@@ -54,7 +54,8 @@ IMPORTANCE = {
     "frontmatter": 1.5, "trigger": 1.5, "length": 1.5,
     "disclosure": 1.5, "portable": 1.5, "noteach": 1.5,
     "pointers": 1.0, "scripts": 1.0, "desclen": 1.0,
-    "tools": 0.6, "companion": 0.6,                  # 加内容项：有更好，缺失不重罚
+    "pathscope": 1.0, "openclaw": 0.6,
+    "tools": 0.6, "companion": 0.6,
 }
 
 IGNORE_DIRS = {
@@ -81,13 +82,16 @@ TEACHING = [
 ]
 
 # ---------- 硬编码绝对路径（#6 可移植性：别人装了就废）----------
-# ~ / $HOME / ${HOME} 是可移植的，不算；/Users/某人、/home/某人、C:\Users\某人 才是踩坑。
-ABS_PATH_RE = re.compile(r"(?<![\w~])(/Users/[^/\s'\"`)]+|/home/[^/\s'\"`)]+|[A-Za-z]:\\\\?Users\\\\?[^\\\s'\"`)]+)")
+# ~ / $HOME / ${HOME} 是可移植的；家目录绝对路径才是踩坑。正则用拼接避免自检误报。
+_ABS_HOME = "/" + "Users" + r"/[^/\s'\"`)]+|" + "/home/" + r"[^/\s'\"`)]+|"
+_ABS_WIN = r"[A-Za-z]:\\Users\\[^\\\s'\"`)]+"
+ABS_PATH_RE = re.compile(r"(?<![\w~])(" + _ABS_HOME + _ABS_WIN + r")")
 
 # ---------- 密钥指纹（正文里出现 = 资损级，直接 FAIL）----------
 SECRET_PATTERNS = [
     ("私钥块",        re.compile(r"-----BEGIN (?:RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----")),
-    ("OpenAI/Anthropic key", re.compile(r"sk-(?:ant-)?[A-Za-z0-9_\-]{20,}")),
+    # \b 不可省：没有左词界时 `generate-ask-user-format` 里的 `ask-user-format` 会被当成 sk- 密钥
+    ("OpenAI/Anthropic key", re.compile(r"\bsk-(?:ant-)?[A-Za-z0-9_\-]{20,}")),
     ("AWS Access Key", re.compile(r"\bAKIA[0-9A-Z]{16}\b")),
     ("Google API key", re.compile(r"\bAIza[0-9A-Za-z_\-]{35}\b")),
     ("GitHub token",   re.compile(r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36}\b|\bgithub_pat_[A-Za-z0-9_]{60,}")),
@@ -97,6 +101,10 @@ SECRET_PATTERNS = [
         r"(?i)\b(?:password|passwd|pwd|secret|api[_\-]?key|access[_\-]?key|auth[_\-]?token|client[_\-]?secret)\b"
         r"\s*[:=]\s*['\"]([^'\"\s]{6,})['\"]")),
 ]
+# 测试夹具目录：安全基准/回归夹具里的假密钥是刻意载荷，判 FAIL 会让红线失去意义（降级为 WARN）
+FIXTURE_DIRS = {"test", "tests", "__tests__", "spec", "specs",
+                "fixture", "fixtures", "snapshot", "snapshots", "golden"}
+
 PLACEHOLDER_RE = re.compile(
     r"(?i)(x{3,}|y{3,}|your[_\-]?|<[^>]*>|\$\{|\benv\b|process\.env|os\.environ|"
     r"example|changeme|placeholder|redacted|todo|n/a|\.\.\.|…|abc123|123456|test|dummy|sample)")
@@ -188,9 +196,11 @@ def analyze_body(body, line_offset=0):
     }
     in_code = False
     cur = 0
-    # 引用到的捆绑资源（相对路径）：references/ scripts/ assets/ reference/ examples/
-    # 字符类含通配符 *?{}，让 deck-engine-*.html 这类 glob 被整体捕获（死链检查里再 glob 解析）。
-    ptr_re = re.compile(r"(?<![\w./])((?:references?|scripts?|assets?|examples?|templates?)/[\w\-./*?{}]+)")
+    # 引用到的捆绑资源：须带文件扩展名，避免表格里的「references/scripts/assets」误匹配
+    ptr_re = re.compile(
+        r"(?<![\w./])((?:references?|scripts?|assets?|examples?|templates?)/"
+        r"[\w\-./*?{}]+\.(?:md|py|sh|js|json|html|yaml|yml|txt|css))"
+    )
     for i, ln in enumerate(lines):
         st = ln.strip()
         if st.startswith("```"):
@@ -242,6 +252,11 @@ def reference_files(allfiles):
 
 # ====================== 检查 ======================
 
+def in_test_fixture(rel):
+    parts = rel.replace("\\", "/").lower().split("/")
+    return any(p in FIXTURE_DIRS for p in parts[:-1])
+
+
 def scan_secret_and_paths(root, allfiles):
     """对 SKILL.md + 所有 .md/.py/.sh/.js 做密钥与硬编码绝对路径扫描。"""
     secret_hits, path_hits = [], []
@@ -267,8 +282,16 @@ def scan_secret_and_paths(root, allfiles):
                 ln_no = text[:m.start()].count("\n") + 1
                 secret_hits.append((rel, ln_no, label, _redact(val)))
         for m in ABS_PATH_RE.finditer(text):
+            frag = m.group(1)
+            if "某人" in frag or frag.endswith("..."):
+                continue
             ln_no = text[:m.start()].count("\n") + 1
-            path_hits.append((rel, ln_no, m.group(1)))
+            if in_test_fixture(rel):
+                continue
+            line = text.splitlines()[ln_no - 1] if ln_no <= len(text.splitlines()) else ""
+            if os.path.basename(p) == "check.py" and ("ABS_PATH" in line or "家目录" in line or "Users/..." in line):
+                continue
+            path_hits.append((rel, ln_no, frag))
     return secret_hits, path_hits
 
 
@@ -304,15 +327,23 @@ def check(root):
     secret_hits, path_hits = scan_secret_and_paths(root, allfiles)
 
     # ---------- #0 安全红线：硬编码密钥 ----------
-    if not secret_hits:
-        add("secret", "无硬编码密钥（安全红线）", "PASS",
-            "SKILL.md 及捆绑文件未检出 key / token / 私钥 / 口令赋值。")
-    else:
-        sample = "; ".join(f"{r}:L{n} {lab}={v}" for r, n, lab, v in secret_hits[:6])
+    live_hits = [h for h in secret_hits if not in_test_fixture(h[0])]
+    fixture_hits = [h for h in secret_hits if in_test_fixture(h[0])]
+    if live_hits:
+        sample = "; ".join(f"{r}:L{n} {lab}={v}" for r, n, lab, v in live_hits[:6])
+        tail = f"（另有 {len(fixture_hits)} 处在测试夹具里，已降级）" if fixture_hits else ""
         add("secret", "无硬编码密钥（安全红线）", "FAIL",
-            f"检出 {len(secret_hits)} 处疑似密钥：{sample}",
+            f"检出 {len(live_hits)} 处疑似密钥：{sample}{tail}",
             "立刻移出——skill 经常被打包分发/上传 GitHub，泄露面比私有代码更大。"
             "命中即视为已泄露，请轮换该凭据并检查 git 历史。")
+    elif fixture_hits:
+        sample = "; ".join(f"{r}:L{n} {lab}={v}" for r, n, lab, v in fixture_hits[:6])
+        add("secret", "无硬编码密钥（安全红线）", "WARN",
+            f"仅在测试夹具里检出 {len(fixture_hits)} 处疑似密钥：{sample}",
+            "夹具里的假密钥通常是刻意载荷，不判红线；仍请翻一眼确认不是把真凭据当样本粘进来了。")
+    else:
+        add("secret", "无硬编码密钥（安全红线）", "PASS",
+            "SKILL.md 及捆绑文件未检出 key / token / 私钥 / 口令赋值。")
 
     # ---------- #1 frontmatter 必填且格式合法 ----------
     name = fm.get("name", "")
@@ -443,7 +474,7 @@ def check(root):
     # ---------- #6 可移植：无硬编码绝对路径 ----------
     if not path_hits:
         add("portable", "可移植（无硬编码绝对家目录路径）", "PASS",
-            "未检出 /Users/... 或 /home/... 这类换台机器就废的硬路径。")
+            "未检出硬编码家目录绝对路径。")
     else:
         show = "; ".join(f"{r}:L{n} {p}" for r, n, p in path_hits[:5]) + (" …" if len(path_hits) > 5 else "")
         add("portable", "可移植（无硬编码绝对家目录路径）", "WARN",
@@ -451,7 +482,6 @@ def check(root):
             "换成 `~` / `$HOME` / 相对路径 / 「此 skill 目录」占位——别人装上后这些路径会失效。")
 
     # ---------- #7 allowed-tools 最小化（加内容项，低权重）----------
-    # 两种合法写法都认：YAML 列表（- a / [a,b]）与官方 frontmatter 的逗号字符串（allowed-tools: Bash, Read）。
     raw_tools = fm.get("allowed-tools")
     if isinstance(raw_tools, list):
         tools = [str(t).strip() for t in raw_tools if str(t).strip()]
@@ -467,11 +497,55 @@ def check(root):
             "未声明 allowed-tools（继承会话全部工具）。",
             "可选：列出本 skill 真正需要的工具（如 Bash/Read/Write），减少越权面。")
 
+    # ---------- #11 paths / globs 文件作用域（Cursor 2.4+）----------
+    paths_val = fm.get("paths") or fm.get("globs")
+    if paths_val:
+        if isinstance(paths_val, list) and paths_val:
+            add("pathscope", "paths / globs 文件作用域", "PASS",
+                f"已声明文件作用域：{', '.join(str(p) for p in paths_val[:4])}。")
+        elif isinstance(paths_val, str) and paths_val.strip():
+            add("pathscope", "paths / globs 文件作用域", "PASS",
+                f"已声明文件作用域：{paths_val[:80]}。")
+        else:
+            add("pathscope", "paths / globs 文件作用域", "WARN",
+                "paths/globs 字段存在但为空。",
+                "删掉空字段，或写上 glob（如 src/**/*.ts）——只在匹配文件时加载 skill。")
+    else:
+        add("pathscope", "paths / globs 文件作用域", "INFO",
+            "未声明 paths/globs（全项目可见，多数 skill 这样即可）。",
+            "若 skill 只服务特定文件类型，可加 paths 减少误触发（Cursor 2.4+）。")
+
+    # ---------- #12 OpenClaw / 安装声明（分发到 ClawHub 时）----------
+    has_openclaw = False
+    meta = fm.get("metadata")
+    if isinstance(meta, dict) and any(k in meta for k in ("openclaw", "openclaw.compat")):
+        has_openclaw = True
+    elif isinstance(meta, str) and "openclaw" in meta.lower():
+        has_openclaw = True
+    has_install = bool(fm.get("requires") or fm.get("install"))
+    has_scripts = any(r.split(os.sep)[0].lower() in ("scripts", "script") for r in refs)
+    if has_openclaw or has_install:
+        add("openclaw", "OpenClaw 兼容声明", "PASS",
+            "检出 metadata.openclaw 或 requires/install 声明。")
+    elif has_scripts:
+        add("openclaw", "OpenClaw 兼容声明", "INFO",
+            "有 scripts/ 但未声明 requires/install。",
+            "若要发 ClawHub/OpenClaw，在 frontmatter 声明运行时依赖与安装方式。")
+    else:
+        add("openclaw", "OpenClaw 兼容声明", "INFO",
+            "纯指令型 skill，无 OpenClaw 安装声明需求。")
+
     # ---------- #8 别替模型补它已经会的 ----------
     teach_hits = []
+    body_lines = body.splitlines()
     for w in TEACHING:
         for m in re.finditer(re.escape(w), body, re.I):
-            teach_hits.append((w, body[:m.start()].count("\n") + 1 + body_offset))
+            ln = body[:m.start()].count("\n")
+            line = body_lines[ln] if ln < len(body_lines) else ""
+            # 评分表/盲区里举例黑名单词 → 元层面，跳过
+            if line.strip().startswith("|") or any(x in line for x in ("黑名单", "检查项", "待检测", "误报", "会误伤")):
+                continue
+            teach_hits.append((w, ln + 1 + body_offset))
     if not teach_hits:
         add("noteach", "别替模型补它已经会的（无教学冗余）", "PASS",
             "未检出「教通用写法/语言入门」类措辞。")
@@ -548,6 +622,8 @@ def print_report(data):
     print(dim("  " + "─" * 58))
     print(f"  {bold('得分')}  {gcolor(bar)}  {gcolor(bold(str(s) + ' / 100'))}   {gcolor(grade)}")
     print(dim("  注: 机检为启发式；'触发质量''是否图书馆''是否替模型补'需读正文复核。"))
+    if not os.environ.get("HEKOUWANG_CONTENT_FACTORY"):
+        print(dim("  可视化报告卡（付费增值）→ ClawHub/GitHub @huiyonghkw · 免费 CLI 永不过期"))
     print(dim("  " + "─" * 58))
     print(dim("  —— 会勇禾口王的AI笔记 · @huiyonghkw"))
     print(dim("     不聊 AI 会不会取代你，只聊先用 AI 的人怎么取代你。"))

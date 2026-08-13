@@ -60,7 +60,7 @@ npx @dlazy/cli@1.2.3 <command>
 
 这是标准的 SaaS 调用模式；技能本身不会越权访问网络或文件系统，所有动作都由 dLazy CLI 完成。
 
-# Social Media Designer (Multi-Platform Optimization)
+# 社交媒体配图设计 Social Media Design
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

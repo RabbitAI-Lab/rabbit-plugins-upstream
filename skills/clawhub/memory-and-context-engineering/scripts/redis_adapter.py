@@ -66,17 +66,25 @@ except ImportError:
 
 class RedisConfig(BaseModel):
     """
-    Redis 连接配置
+    Redis 连接配置（安全增强版）
 
     支持单机模式，集群模式可后续扩展。
+
+    安全特性：
+    - 密码认证（生产环境必须）
+    - SSL/TLS 加密连接（可选，推荐）
+    - 连接池限制（防止资源耗尽）
+    - 敏感数据加密存储（可选）
 
     使用示例：
     ```python
     config = RedisConfig(
         host="localhost",
         port=6379,
-        password="your_password",
+        password="your_password",  # 生产环境必须
         db=0,
+        enable_ssl=True,          # 推荐开启
+        encrypt_sensitive_data=True,  # 敏感数据加密
     )
     adapter = RedisAdapter(config)
     ```
@@ -84,8 +92,15 @@ class RedisConfig(BaseModel):
 
     host: str = Field(default="localhost", description="Redis 主机地址")
     port: int = Field(default=6379, description="Redis 端口")
-    password: str | None = Field(default=None, description="Redis 密码")
+    password: str | None = Field(default=None, description="Redis 密码（生产环境必须设置）")
     db: int = Field(default=0, description="Redis 数据库编号")
+
+    # 安全配置
+    enable_ssl: bool = Field(default=False, description="启用 SSL/TLS 加密连接")
+    ssl_cert_reqs: str = Field(default="required", description="SSL 证书要求 (none, optional, required)")
+    ssl_ca_certs: str | None = Field(default=None, description="CA 证书文件路径")
+    ssl_keyfile: str | None = Field(default=None, description="SSL 密钥文件路径")
+    ssl_certfile: str | None = Field(default=None, description="SSL 证书文件路径")
 
     # 连接池配置
     max_connections: int = Field(default=10, description="最大连接数")
@@ -94,11 +109,43 @@ class RedisConfig(BaseModel):
     retry_on_timeout: bool = Field(default=True, description="超时是否重试")
     retry_on_error: int = Field(default=3, description="错误重试次数")
 
+    # 敏感数据加密配置
+    encrypt_sensitive_data: bool = Field(default=False, description="是否加密敏感数据")
+    encryption_key: str | None = Field(default=None, description="数据加密密钥（32字节，base64编码）")
+
     # 健康检查配置
     health_check_interval: int = Field(default=30, description="健康检查间隔（秒）")
 
     # Key 前缀
     key_prefix: str = Field(default="memory", description="所有 Key 的前缀")
+
+    def model_post_init(self, __context) -> None:
+        """配置后处理"""
+        # 安全警告
+        if not self.password:
+            import warnings
+            warnings.warn(
+                "WARNING: Redis password not set! "
+                "Set password for production environments.",
+                UserWarning
+            )
+        
+        # SSL 验证警告
+        if self.enable_ssl and self.ssl_cert_reqs == "none":
+            import warnings
+            warnings.warn(
+                "WARNING: SSL enabled but certificate verification disabled!",
+                UserWarning
+            )
+        
+        # 加密密钥验证
+        if self.encrypt_sensitive_data and not self.encryption_key:
+            import warnings
+            warnings.warn(
+                "WARNING: Encryption enabled but no key provided! "
+                "Sensitive data will not be encrypted.",
+                UserWarning
+            )
 
 
 # ============================================================================
@@ -288,7 +335,7 @@ class RedisAdapter:
 
     def _connect(self) -> bool:
         """
-        建立 Redis 连接（内部方法）
+        建立 Redis 连接（内部方法，安全增强版）
 
         Returns:
             是否连接成功
@@ -297,17 +344,37 @@ class RedisAdapter:
             return False
 
         try:
-            self._client = Redis(
-                host=self._config.host,
-                port=self._config.port,
-                password=self._config.password,
-                db=self._config.db,
-                max_connections=self._config.max_connections,
-                socket_timeout=self._config.socket_timeout,
-                socket_connect_timeout=self._config.socket_connect_timeout,
-                retry_on_timeout=self._config.retry_on_timeout,
-                decode_responses=True,  # 自动解码为字符串
-            )
+            # 构建 Redis 连接参数
+            redis_params = {
+                'host': self._config.host,
+                'port': self._config.port,
+                'db': self._config.db,
+                'max_connections': self._config.max_connections,
+                'socket_timeout': self._config.socket_timeout,
+                'socket_connect_timeout': self._config.socket_connect_timeout,
+                'retry_on_timeout': self._config.retry_on_timeout,
+                'decode_responses': True,
+            }
+
+            # 安全增强：密码认证
+            if self._config.password:
+                redis_params['password'] = self._config.password
+
+            # 安全增强：SSL/TLS 加密
+            if self._config.enable_ssl:
+                ssl_config = {
+                    'ssl': True,
+                    'ssl_cert_reqs': self._config.ssl_cert_reqs,
+                }
+                if self._config.ssl_ca_certs:
+                    ssl_config['ssl_ca_certs'] = self._config.ssl_ca_certs
+                if self._config.ssl_keyfile:
+                    ssl_config['ssl_keyfile'] = self._config.ssl_keyfile
+                if self._config.ssl_certfile:
+                    ssl_config['ssl_certfile'] = self._config.ssl_certfile
+                redis_params.update(ssl_config)
+
+            self._client = Redis(**redis_params)
 
             # 测试连接
             self._client.ping()

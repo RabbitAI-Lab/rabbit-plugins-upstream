@@ -1,8 +1,8 @@
 ---
 name: skill-usefulness-audit
 slug: skill-usefulness-audit
-description: Audit or inventory installed agent-skill packages for cleanup using usage, overlap, burden, risk, and optional ablation/community evidence. Trigger only on explicit requests to review installed agent skills, analyze installed skill usage, or run a structure-only skill inventory; not for ordinary repository code review, general security audit, or human skills.
-version: 0.3.17
+description: Review your installed agent skills to see what you actually use, what overlaps, and what may no longer be worth keeping.
+version: 0.3.22
 tags: ["audit","skills","ablation","openclaw"]
 user-invocable: true
 disable-model-invocation: true
@@ -11,29 +11,6 @@ homepage: https://github.com/gongyu0918-debug/skill-usefulness-audit
 metadata: {"openclaw":{"skillKey":"skill-usefulness-audit","requires":{"bins":["python"]},"homepage":"https://github.com/gongyu0918-debug/skill-usefulness-audit"}}
 ---
 # Skill Usefulness Audit
-
-## ClawHub / OpenClaw Edition
-
-This ClawHub bundle is packaged for OpenClaw. Install it from an OpenClaw workspace with:
-
-```bash
-openclaw skills install @gongyu0918-debug/skill-usefulness-audit
-```
-
-OpenClaw picks up installed workspace skills in the next session. For other agent hosts, use the GitHub repository instead: https://github.com/gongyu0918-debug/skill-usefulness-audit
-
-Because model invocation is disabled, invoke the installed skill explicitly from chat:
-
-```text
-/skill skill-usefulness-audit --skills-root ./skills
-```
-
-本 ClawHub 包是 OpenClaw 专用发布包。其他 agent 版本请访问 GitHub 仓库：https://github.com/gongyu0918-debug/skill-usefulness-audit
-
-
-## Overview
-
-Judge whether installed agent skills still deserve to stay installed using usage, overlap, outcome impact, burden, confidence, optional community evidence, and static risk hints.
 
 ## Manual Trigger Only
 
@@ -66,12 +43,12 @@ Examples: Excel, DOCX, PDF, browser automation, deployment, OCR, external API wr
 1. Collect user-provided roots before host-local defaults.
 2. Load only the usage, history, ablation, and community evidence that is available.
 3. Inspect each `SKILL.md` and its script/reference/asset metrics.
-4. Classify each skill as `api`, `tool`, or `general`, then score it with `{baseDir}/references/scoring-rubric.md`.
+4. Let the bundled script classify each skill as `api`, `tool`, or `general` and calculate its score. Read `{baseDir}/references/scoring-rubric.md` only when checking or explaining a score, verdict, or action.
 5. Print the short usefulness report and, when requested, write Markdown evidence or an ablation plan.
 
 ## Ablation Rules
 
-Read `{baseDir}/references/ablation-protocol.md` only when generating an ablation plan or evaluating ablation results.
+Read `{baseDir}/references/ablation-protocol.md` only when running replays, preparing normalized ablation records, or reviewing mixed or delete-boundary results. The script can generate an ablation plan without loading the protocol.
 Replay only selected `general` candidates with identical prompts/artifacts and pairwise judging.
 Do not fake no-tool ablation for `api` or `tool` skills; use the rubric's protected-capability branch.
 
@@ -96,13 +73,12 @@ Add evidence only when available:
 - `--ablation-file`: normalized JSON or JSONL skill-on/skill-off results.
 - `--community-file`: offline JSON, JSONL, CSV, or TSV registry metrics.
 - `--ablation-plan-out`: a cost estimate and focused replay plan; its case counts can be overridden with the four `--ablation-*-cases` options documented by `--help`.
-- `--json-out`: machine-readable evidence only when requested or needed by another tool. Do not paste raw JSON into chat unless requested.
+- `--json-out`: machine-readable evidence only when requested or needed by another tool.
 
 Pass `--report-language zh-CN` for a Chinese invocation and `--report-language en` for an English invocation. `auto` reads `SKILL_AUDIT_REPORT_LANGUAGE` or the process locale, then falls back to English.
 
 Run without extra files only when you need a structure-only audit.
 Usage, community, and ablation evidence become lower-confidence in that mode.
-Do not delete skills based only on a structure-only report.
 History and usage files may contain sensitive conversations, local paths, project names, and customer data.
 Missing env means not configured in the current audit process, not proof that the skill is broken in every host.
 
@@ -113,9 +89,9 @@ Standard output is a short natural-language report. Its opening paragraph states
 When `--markdown-out` is provided, write the detailed evidence—with scores, action codes, missing evidence, burden, and risk notes—in the same run.
 Match the user's language: clean Chinese for `zh-CN` and clean English for `en`, except for skill names and unavoidable paths or commands.
 
-Before delivering the result, read `{baseDir}/references/report-narration-prompt.md`. Copy the short report to chat verbatim, apart from making its evidence path clickable. Do not paste raw JSON or the full Markdown evidence unless the user asks.
+Copy the short report to chat verbatim, apart from making its evidence path clickable. Do not paste raw JSON or the full Markdown evidence unless the user asks. Read `{baseDir}/references/report-narration-prompt.md` only when another agent or host must deliver an already-generated report.
 
-JSON includes `report_mode`, per-skill `score_breakdown`, `quality_penalty`, `quality_penalty_uncapped`, `quality_evidence`, `community_breakdown`, `action_advice`, and `risk_review`. It includes `ablation_plan` only when `--ablation-plan-out` is used.
+JSON includes `report_mode`, per-skill `score_breakdown`, `quality_penalty`, `quality_penalty_uncapped`, `quality_evidence`, `community_breakdown`, `action_advice`, and `risk_review`. It includes `ablation_plan` only when `--ablation-plan-out` is used. JSON emits both `risk_*` and `static_risk_*` with identical values, and `total_score` as an alias of `local_score`; treat `risk_*` and `local_score` as canonical.
 
 Keep deletion advice conservative for system or host-core skills, and prefer narrowing or merging when overlapping skills still serve distinct host integrations.
 
@@ -125,4 +101,4 @@ Keep deletion advice conservative for system or host-core skills, and prefer nar
 - `{baseDir}/scripts/skill_usefulness_audit_lib/`: collect metadata, score skills, scan static risk hints, and render Markdown reports plus optional JSON artifacts.
 - `{baseDir}/references/report-narration-prompt.md`: concise prompt for turning the report into a user-facing conversational summary.
 - `{baseDir}/references/scoring-rubric.md`: 10-point scoring rules, confidence logic, community prior, and action thresholds.
-- `{baseDir}/references/ablation-protocol.md`: normalized replay method for historical conversation tests.
+- `{baseDir}/references/ablation-protocol.md`: normalized replay method for historical conversations.

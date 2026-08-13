@@ -1,8 +1,8 @@
 ---
 name: cargo-storage
 description: Manage models, datasets, columns, and relationships and query workspace storage with SQL using the Cargo CLI. Use when the user wants to inspect or modify data models, create or update columns, list datasets, set model relationships, understand the schema, or run SQL against storage.
-version: "1.1.1"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+version: "1.2.1"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -28,6 +28,7 @@ Data layer management: inspecting and modifying models, datasets, columns, relat
 > See `references/examples/datasets.md` for dataset listing and navigation examples.
 > See `references/examples/columns.md` for column creation and management examples.
 > See `references/examples/queries.md` for `storage query execute` / `storage query download` SQL examples (WHERE, aggregations, joins, pagination, exports).
+> See `references/examples/ingest-webhook.md` for ingest (webhook-fed) models — deriving the webhook URL and POSTing records.
 
 ## Prerequisites
 
@@ -94,6 +95,29 @@ cargo-ai storage model remove <model-uuid>
 
 **Querying:** Use `cargo-ai storage query execute "<sql>"` (or `storage query download --query "<sql>"` for full exports) to run SQL against storage. Tables are referenced as `<datasetSlug>.<modelSlug>` (e.g. `default.companies`) and rewritten to the underlying storage table under the hood. See [Query with SQL](#query-with-sql) below.
 
+## Ingest models (webhook-fed)
+
+A model whose extractor has `mode.kind === "ingest"` — `http.listenHook` and
+friends — is filled by **pushing** records to Cargo. The app shows a "Webhook URL"
+on the model settings screen; **no CLI command or API field returns it**, but it's
+assembled from values the CLI already exposes:
+
+```
+<baseUrl>/v1/models/<model-uuid>/records/ingest?token=<api-token>
+```
+
+```bash
+MODEL_UUID=<model-uuid>
+BASE=$(cargo-ai whoami | jq -r '.baseUrl')
+TOKEN=$(cargo-ai workspaceManagement token list | jq -r '.tokens[0].token')
+echo "$BASE/v1/models/$MODEL_UUID/records/ingest?token=$TOKEN"
+```
+
+Check the extractor's mode first — when it reports `"autoIngest": true` (calendly,
+smartlead, instantlyV2, heyReach, datachimp, cargo signals) Cargo registers the
+hook with the provider itself and the URL must **not** be handed out. Full flow,
+payload shapes, and limits: `references/examples/ingest-webhook.md`.
+
 ## Datasets
 
 Datasets are logical groupings of models.
@@ -134,6 +158,23 @@ cargo-ai storage column reorder --model-uuid <uuid> --column-slug <slug> --to-in
 Column types: `string`, `number`, `boolean`, `date`, `object`, `array`, `vector`, `any`.
 
 Column kinds: `custom` (user-defined), `computed` (expression over other columns), `metric` (aggregated from a related model), `lookup` (single field pulled from a related model via a join).
+
+## Preview what you built
+
+A column list doesn't tell the user whether the model is right — rows do. Two checkpoints (the pack-wide convention lives in [`../cargo/references/interaction.md`](../cargo/references/interaction.md) §4):
+
+**1. Right after `model create` / `column create` — show the schema, not rows.** A new model is empty; a `LIMIT 10` here returns nothing and reads as failure. Echo the columns as a compact table instead (column, type, what will fill it).
+
+**2. As soon as data lands — show the rows.** After a batch, play, or import writes into the model, preview it:
+
+```bash
+cargo-ai storage query execute \
+  "SELECT * FROM <dataset-slug>.<model-slug> LIMIT 10"
+```
+
+Show ~10 rows and only the columns that carry meaning. Storage queries are free, so this costs nothing but a few lines of output — and it's the first moment the user can actually see what they built. When a play fills a *new* column, preview that column next to the record's identifying fields (`name`, `domain`) so filled vs. empty is obvious.
+
+If the preview comes back empty or all-null when it shouldn't, that's a finding — surface it rather than reporting the write as a success. See [`cargo-diagnostics`](../cargo-diagnostics/SKILL.md) to trace why.
 
 ## Relationships
 

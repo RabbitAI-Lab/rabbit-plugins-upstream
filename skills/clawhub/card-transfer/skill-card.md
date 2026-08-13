@@ -1,42 +1,52 @@
-## Description: <br>
-Returns transfer partners, ratios, timing, and restrictions for one major U.S. credit card across major issuers, including co-branded hotel and airline cards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Return transfer partners, transfer ratios, timing notes, and restrictions for one major-US credit card.
 
-## Publisher: <br>
-[jiahongc](https://clawhub.ai/user/jiahongc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[jiahongc](https://clawhub.ai/user/jiahongc)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users and agents use this skill to answer redemption-transfer questions for one exact major U.S. credit-card variant, including transfer partners, ratios, timing notes, restrictions, caveats, and confidence notes.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Current public issuer and secondary-source pages may change or disagree about transfer ratios, timing, bonuses, or restrictions.
+
+Mitigation: Fetch the issuer page first, use an approved secondary source only when needed, and include confidence notes when details are uncertain.
+
+Risk: An ambiguous card name can lead to transfer details for the wrong card variant.
+
+Mitigation: Resolve the exact card variant first and stop for a numbered user choice list when the card is ambiguous.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Travel rewards users and agents use this skill to identify credit card transfer partners, ratios, timing, caveats, and source-backed confidence notes for a specific card variant. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Transfer partners, ratios, timing, and restrictions can change or conflict across sources. <br>
-Mitigation: Use current issuer and approved secondary sources, list fetched sources, and flag uncertain or conflicting claims in confidence notes. <br>
-Risk: The optional BRAVE_API_KEY is a search API credential. <br>
-Mitigation: Configure the key only when needed and avoid asking the skill to process private account numbers or personal financial details. <br>
-Risk: The skill uses web search and page fetches to answer current card-program questions. <br>
-Mitigation: Fetch only public HTTPS issuer or approved secondary pages and review source links before relying on the output. <br>
+**Output Format:** [Markdown with transfer-program sections]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jiahongc/card-transfer) <br>
+**Other Properties Related to Output:** [Visible output includes transfer program, transfer partners, transfer caveats, and confidence notes.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown report with section headings, numbered lists, confidence notes, and source links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask a clarification question for ambiguous card names; relies on current public web sources when available.] <br>
+1.0.1 (source: server release metadata)
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

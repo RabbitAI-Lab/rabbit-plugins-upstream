@@ -1,43 +1,58 @@
-## Description: <br>
-Integrate SanctifAI Trust Proof-of-Human attestations. Use when an app needs cryptographic proof a human performed a task or human-in-the-loop verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Integrates SanctifAI Trust Proof-of-Human attestations for apps that need cryptographic proof a human performed a task or completed human-in-the-loop verification.
 
-## Publisher: <br>
-[sanctifai](https://clawhub.ai/user/sanctifai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sanctifai](https://clawhub.ai/user/sanctifai)
 
-## Use Case: <br>
-Developers and engineers use this skill to integrate SanctifAI Trust attestations into applications that need proof a human completed or approved a task. It guides embedded REST API and extension-based integration paths that return a participation ID, certificate URL, QR URL, and optional verification URL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Trust API key could be exposed if embedded integration code places it in client-side JavaScript. <br>
-Mitigation: Keep TRUST_API_KEY only on the backend or in a secret manager, and mint browser sessions server-side. <br>
-Risk: Public certificate URLs or on-chain attestations could reveal sensitive metadata if identifiers or labels contain PII. <br>
-Mitigation: Use opaque internal identifiers and avoid names, emails, account numbers, government IDs, addresses, or other PII in certificate-visible fields. <br>
-Risk: Production attestations depend on an external SanctifAI service and tenant configuration. <br>
-Mitigation: Confirm the organization trusts SanctifAI Trust before production use, target the production API, and verify tenant origin allowlists before asking users to test. <br>
+## Use Case:
 
+Developers and engineers use this skill to integrate SanctifAI Trust into applications that need verifiable proof of human review, approval, signoff, or other human-in-the-loop work.
 
-## Reference(s): <br>
-- [SanctifAI Trust documentation](https://trust.sanctifai.com) <br>
-- [ClawHub skill page](https://clawhub.ai/sanctifai/skills/sanctifai-trust) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with JavaScript, HTML, environment variable, and API request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may produce backend API calls to SanctifAI Trust; no package install is required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Tenant credentials could be exposed if copied into browser code or shared logs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Store tenant credentials only on the backend or in a secret manager, and keep the Trust API key out of client-side JavaScript and agent chat logs.
+
+Risk: Public certificate URLs and selected metadata can expose sensitive user or task information.
+
+Mitigation: Treat certificate URLs as public, use opaque IDs, and avoid PII in certificate-visible fields.
+
+Risk: Integrating a third-party proof-of-human attestation service may introduce external dependency and data-handling obligations.
+
+Mitigation: Confirm organizational approval for SanctifAI Trust before installation and review the skill's security guidance before deployment.
+
+## Reference(s):
+
+- [SanctifAI Trust](https://trust.sanctifai.com)
+- [ClawHub Skill Page](https://clawhub.ai/sanctifai/skills/sanctifai-trust)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, code, shell commands, configuration]
+
+**Output Format:** [Markdown with inline code blocks and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to produce integration steps, API usage, browser and backend code, environment-variable guidance, and verification checks.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

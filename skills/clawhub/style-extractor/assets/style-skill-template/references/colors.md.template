@@ -1,0 +1,62 @@
+# Color Palette — {STYLE_TITLE}
+
+> Extracted from: {SOURCE_DESC} | Evidence quality: {EVIDENCE_QUALITY_LEVEL}
+
+## Primitive: Color Scales
+
+Raw color materials. Named by what they ARE, not where they're used.
+
+### Blue Scale
+| Token | Hex | Evidence | Notes |
+|-------|-----|----------|-------|
+{BLUE_SCALE_ROWS}
+
+### Neutral / Gray Scale
+| Token | Hex | Evidence | Notes |
+|-------|-----|----------|-------|
+{GRAY_SCALE_ROWS}
+
+{ADDITIONAL_COLOR_SCALES}
+
+## Semantic: Design Roles
+
+Design roles referencing primitive colors. Named by what they DO.
+
+| Token | Maps To | Light Theme | Dark Theme | Evidence | Usage |
+|-------|---------|-------------|------------|----------|-------|
+{SEMANTIC_COLOR_ROWS}
+
+### Same-Value / Different-Semantic Alerts
+
+> ⚠️ These tokens share the same hex value in one theme but serve different roles. They MUST remain separate semantic tokens — changing one does not change the other.
+
+| Shared Value | Token A | Token B | Why Separate |
+|-------------|---------|---------|-------------|
+{SAME_VALUE_ALERTS}
+
+## Component: Per-Element Tokens
+
+Only tokens that genuinely differ from semantic defaults.
+
+| Token | Maps To | Evidence | Notes |
+|-------|---------|----------|-------|
+{COMPONENT_COLOR_ROWS}
+
+> Components that use semantic tokens directly (e.g., buttons using `color.action.primary`) are documented in components.md, not re-declared here.
+
+## CSS Variables
+
+```css
+:root {
+  /* === Primitive: Color Scales === */
+{FULL_PRIMITIVE_CSS}
+
+  /* === Semantic: Design Roles === */
+{FULL_SEMANTIC_CSS}
+
+  /* === Dark Theme Overrides === */
+  [data-theme="dark"] {
+{DARK_THEME_CSS}
+  }
+}
+```

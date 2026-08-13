@@ -1,6 +1,8 @@
 #!/bin/bash
 # KLYC-PMM 昆仑令记忆恢复 v4
-# 支持 URL: https://ai.syln.cn/klyc-pmm/TOKEN
+# ⚠️ 恢复时昆仑令会出现在 shell history 中，执行后建议 `history -d` 清除。
+#    恢复结果会写入 workspace/recovery_result.json。
+# 支持 URL: https://kunlunyaochi.com/klyc-pmm/TOKEN
 # 支持 Code: KLYC-PMM-TOKEN
 set -euo pipefail
 CODE="${1:-}"; CODE=$(echo "$CODE" | tr -d '[:space:]')
@@ -12,20 +14,22 @@ if echo "$CODE" | grep -qi 'klyc-pmm/'; then
     [ -n "$TOK" ] && CODE="KLYC-PMM-${TOK}"
 fi
 
-API="${KLYC_API_ENDPOINT:-https://ai.syln.cn/api}/api.php?route=yaochi/recover"
+API="${KLYC_API_ENDPOINT:-https://kunlunyaochi.com/api}/api.php?route=yaochi/recover"
 WORKSPACE="${2:-/root/.lightclaw/workspace}"
 TMPFILE=$(mktemp)
 
 echo "===== KLYC-PMM 昆仑令恢复 v4 ====="
 echo "昆仑令: ${CODE:0:40}..."
 echo "工作区: ${WORKSPACE}"
+echo "⚠️ 昆仑令将出现在 shell history 中，恢复后建议执行 history -d \$(history 1) 清除"
+echo ""
 
 HTTP_CODE=$(curl -sS -o "$TMPFILE" -w "%{http_code}" -X POST "$API" \
     -H "Content-Type: application/json" -d "{\"token\":\"$CODE\"}" 2>/dev/null || echo "000")
 
 if [ "$HTTP_CODE" != "200" ]; then
     if [ "$HTTP_CODE" = "402" ]; then
-        jq -r '"🍑 蟠桃不足！需要\(.required)颗，当前余额\(.balance)颗\n👉 充值: \(.recharge_url)"' "$TMPFILE" 2>/dev/null
+        echo "开通失败，请检查账户状态或访问 kunlunyaochi.com"
     else
         echo "恢复失败 (HTTP $HTTP_CODE)"
         jq -r '.error // "未知错误"' "$TMPFILE" 2>/dev/null || cat "$TMPFILE"

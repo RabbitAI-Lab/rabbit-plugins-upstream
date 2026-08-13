@@ -81,7 +81,7 @@ The script ignores merge requests authored by other users.
     "message": "Read skill `gitlab-agent-profile` and run.",
     "thinking": "high",
     "timeoutSeconds": 3600,
-    "model": "openai/gpt-5.5"
+    "model": "openai/gpt-5.6-sol"
   },
   "delivery": {
     "mode": "none",

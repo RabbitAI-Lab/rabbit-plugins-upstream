@@ -2,7 +2,7 @@
 
 ## 需求
 
-Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
 目标用户：solo founders, product managers, makers, and small teams who need to test whether a product idea is worth building before spending heavily
 
@@ -10,12 +10,12 @@ Validated demand: Founders and builders need a repeatable way to turn rough prod
 
 需求评分：100/100
 
-证据覆盖：12 条信号，覆盖 3 个来源类型。
+证据覆盖：12 条信号，覆盖 4 个来源类型。
 
 ## 来源证据
 
-- hacker-news-ask-hn：[Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49045271)
-- github-issues：[RFC-0002 Slice 14/17: certify Lotus Idea data-product, trust telemetry, and canonical proof in platform gates](https://github.com/sgajbi/lotus-platform/issues/598)
+- hacker-news-search：[Ventora Expands Its AI Business Builder to Help Solo Founders](https://news.ycombinator.com/item?id=49107855)
+- github-issues：[Brainstorm persona happy-path harness options](https://github.com/FundLoop/fundloop-website/issues/97)
 - segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
 - segmentfault-search：[typescript](https://segmentfault.com/t/typescript)
@@ -23,9 +23,9 @@ Validated demand: Founders and builders need a repeatable way to turn rough prod
 - segmentfault-search：[问： 属性或方法“$v”未使用 Vuelidate 定义](https://segmentfault.com/q/1010000042816440)
 - segmentfault-search：[问： 从JDK 1.8切换到JDK 21时遇到NoProviderFoundException如何解决？](https://segmentfault.com/q/1010000047230462)
 - segmentfault-search：[问： laravel validator验证不通过返回The given data was invalid，而不是返回定义的提示信息](https://segmentfault.com/q/1010000018250396)
-- github-issues：[Follow-up: extend meta validation config across the CMS](https://github.com/novaramedia/novaramedia-com/issues/572)
-- github-issues：[Correct Tool Contract startup-validation claim](https://github.com/Nokia-Bell-Labs/declarative-agents/issues/1006)
-- hacker-news-search：[What I learned selling 2,500 MIDI recorders: Hardware is not so hard](https://news.ycombinator.com/item?id=48974605)
+- github-issues：[Ω-PROTOTYPE-PORTFOLIO-T∞ — crystallize the prototype portfolio](https://github.com/Tristan-TM-Poly/TFUGA-AI7-TRISTAN2/issues/341)
+- csdn-search：[24 Idea Validation - Save Yourself Time and Money](https://wenku.csdn.net/doc/7fnjuwdtp5?ops_request_misc=elastic_search_misc&request_id=ff9773f2cb3844dbbb0396b3e3f83ad9&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-1-7fnjuwdtp5-null-null.142^v102^pc_search_result_base7&utm_term=product%20idea%20validation)
+- csdn-search：[debugging-and- validation](https://wenku.csdn.net/doc/62or4vx1j7?ops_request_misc=elastic_search_misc&request_id=ff9773f2cb3844dbbb0396b3e3f83ad9&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-3-62or4vx1j7-null-null.142^v102^pc_search_result_base7&utm_term=product%20idea%20validation)
 
 ## 这个技能如何满足需求
 

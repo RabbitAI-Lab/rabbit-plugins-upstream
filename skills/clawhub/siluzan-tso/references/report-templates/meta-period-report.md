@@ -34,7 +34,7 @@ siluzan-tso facebook-analysis render \
   --out ./meta-period-report.html
 ```
 
-`--snapshot-dir` 与步骤 1 的 `--json-out` 同目录；CLI 自动合并 KPI、平台/国家/受众图表与表格（Agent JSON 已有字段不覆盖）。
+`--snapshot-dir` 与步骤 1 的 `--json-out` 同目录；CLI 自动合并 KPI、平台/国家/受众图表与表格（**数值一律以 CLI 快照覆盖**；`meta` 仅补空）。
 
 ---
 
@@ -66,7 +66,7 @@ siluzan-tso facebook-analysis render \
 - `report-templates/meta-period-report.runtime.js` — 可选外链运行时（逻辑已内联于 HTML；ECharts 渲染 + 章节 DOM 拼装）
 
 `render` 会向输出目录写入 HTML + `meta-period-report.runtime.js`，并注入 `window.__META_PERIOD_REPORT__`。  
-传 `--snapshot-dir` 时 CLI 自动从快照合并 KPI、平台/国家/受众图表数据、广告组与受众表格（Agent JSON 中已有字段不覆盖）。
+传 `--snapshot-dir` 时 CLI 自动从快照合并 KPI、平台/国家/受众图表数据、广告组与受众表格（**数值以 CLI 为准**，覆盖 Agent 预填）。
 
 ---
 

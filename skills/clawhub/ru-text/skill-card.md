@@ -1,45 +1,64 @@
-## Description: <br>
-Use when writing, editing, or reviewing Russian-language text, or when user mentions ru-text; covers typography, info-style, editorial, UX writing, business correspondence, and AI-text cleanup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Russian text quality support for typography, info-style editing, editorial review, UX writing, business correspondence, and AI-text cleanup.
 
-## Publisher: <br>
-[talkstream](https://clawhub.ai/user/talkstream) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[talkstream](https://clawhub.ai/user/talkstream)
 
-## Use Case: <br>
-Writers, editors, product teams, and agents use this skill to produce or review Russian-language text with consistent typography, clearer style, UX copy, business-writing conventions, and quality scoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic typography and editorial normalization can change exact source text where byte-for-byte preservation matters. <br>
-Mitigation: Disable or explicitly constrain the skill for legal quotations, tests, logs, literal transcription, and other workflows that require exact formatting preservation. <br>
+## Use Case:
 
+External users, employees, writers, editors, and product teams use this skill to improve Russian-language text, apply Russian typography defaults, review grammar and punctuation, prepare UX or business copy, and score text quality.
 
-## Reference(s): <br>
-- [ru-text homepage](https://ru-text.org) <br>
-- [ClawHub skill page](https://clawhub.ai/talkstream/skills/ru-text) <br>
-- [Sources and Attribution](references/sources.md) <br>
-- [Russian typography rules](references/typography.md) <br>
-- [Info-style methodology](references/info-style.md) <br>
-- [UX writing in Russian](references/ux-writing.md) <br>
-- [Russian business writing guide](references/business-writing.md) <br>
-- [Scoring: text quality assessment](references/scoring.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Guidance] <br>
-**Output Format:** [Markdown and plain text with corrected Russian prose, change lists, quality scores, and editorial guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May automatically normalize Russian typography and editorial style when generating Russian text.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.10.1 (source: server release metadata) <br>
+Risk: Broad implicit invocation can change Russian punctuation, quote style, number formatting, or editorial tone in normal responses.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill when those Russian typography and editorial defaults are desired; disable implicit invocation or request exact preservation when fidelity to the original text matters.
+
+Risk: A proofreading or editing task could accidentally alter user-owned or third-party text beyond the user's intent.
+
+Mitigation: Return corrected text with a change summary for review, preserve quoted material and code blocks, and rewrite files only when the user explicitly asks.
+
+## Reference(s):
+
+- [ru-text homepage](https://ru-text.org)
+- [ClawHub skill page](https://clawhub.ai/talkstream/skills/ru-text)
+- [Sources and Attribution](references/sources.md)
+- [Russian Typography Rules](references/typography.md)
+- [Info-Style Methodology](references/info-style.md)
+- [Russian Text Anti-Patterns](references/anti-patterns.md)
+- [Scoring: text quality assessment](references/scoring.md)
+- [UX-writing on Russian language](references/ux-writing.md)
+- [Russian Business Writing Guide](references/business-writing.md)
+- [Editorial: Grammar and Style](references/editorial-grammar.md)
+- [Editorial: Punctuation](references/editorial-punctuation.md)
+- [Addenda](references/addenda.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Plain text or Markdown with corrected Russian text, change notes, diagnostics, and scoring when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May apply Russian typography silently to Russian output; file rewrites are only appropriate when explicitly requested by the user.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
