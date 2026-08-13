@@ -1,45 +1,60 @@
-## Description: <br>
-Post to 21 platforms via a single unified API and manage accounts, groups, media, scheduling, analytics, inbox, comments, and webhooks through RelayAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+RelayAPI lets agents post to 22 social and messaging platforms through a unified API while managing accounts, workspaces, media, scheduling, analytics, inbox activity, and webhooks.
 
-## Publisher: <br>
-[zanhk](https://clawhub.ai/user/zanhk) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zanhk](https://clawhub.ai/user/zanhk)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent prepare RelayAPI calls for social media publishing, scheduling, account management, analytics, inbox workflows, and webhooks across connected platforms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to manage real social accounts, public posts, direct messages, webhooks, and account connections. <br>
-Mitigation: Install only when those capabilities are intended, use a least-privilege RelayAPI key where possible, and keep account connection flows in RelayAPI's browser or dashboard experience. <br>
-Risk: Posting, deleting, unpublishing, disconnecting accounts, sending messages, changing webhooks, and follow or retweet actions can have public or destructive effects. <br>
-Mitigation: Require explicit user confirmation before any public, destructive, account-changing, messaging, webhook, or social engagement action. <br>
-Risk: The security scan found broad authority without enough scoping or confirmation guidance. <br>
-Mitigation: Scope requests to the intended workspace, account, platform, or post before execution, and review proposed RelayAPI calls before running them. <br>
+## Use Case:
 
+Developers, operators, and social media teams use this skill to have an agent prepare RelayAPI requests for publishing, scheduling, account management, analytics, inbox moderation, media uploads, and webhook setup across connected platforms.
 
-## Reference(s): <br>
-- [RelayAPI Skill on ClawHub](https://clawhub.ai/zanhk/skills/relayapi) <br>
-- [RelayAPI Homepage](https://relayapi.dev) <br>
-- [RelayAPI API Docs](https://api.relayapi.dev/docs) <br>
-- [RelayAPI OpenAPI Spec](https://api.relayapi.dev/openapi.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires RELAYAPI_API_KEY and curl for live API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill can enable broad changes to connected social-media accounts, including publishing, deletion, account connection, moderation, workspace changes, direct messages, replies, and webhook creation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before any publishing, bulk posting, local file upload, account connection or disconnection, content deletion or unpublishing, workspace or queue change, DM or reply, or webhook creation.
+
+Risk: The skill depends on a RelayAPI API key that can authorize actions against connected accounts.
+
+Mitigation: Use a limited API key where possible, store RELAYAPI_API_KEY in OpenClaw secrets, and do not ask users to paste the key into chat.
+
+Risk: Immediate publishing is asynchronous and may result in partial or failed delivery across target platforms.
+
+Mitigation: Check post status after creation or use webhooks to confirm final delivery state before treating a publish request as complete.
+
+## Reference(s):
+
+- [RelayAPI Homepage](https://relayapi.dev)
+- [RelayAPI API Docs](https://api.relayapi.dev/docs)
+- [RelayAPI OpenAPI Spec](https://api.relayapi.dev/openapi.json)
+- [RelayAPI ClawHub Skill Listing](https://clawhub.ai/zanhk/skills/relayapi)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, API call guidance]
+
+**Output Format:** [Markdown with inline JSON and bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires RELAYAPI_API_KEY and curl; API responses are returned by RelayAPI.]
+
+## Skill Version(s):
+
+1.0.1 (source: ClawHub release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

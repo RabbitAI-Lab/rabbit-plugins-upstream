@@ -1,43 +1,58 @@
-## Description: <br>
-Guided first-run demo for the Cargo CLI that takes a fresh workspace to about 25 buyer-persona-matched leads with a cost receipt in under two minutes, then offers to save the search as a recurring play. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guided first-run demo for the Cargo CLI - from a fresh workspace to a real deliverable of 25 leads matching the user's buyer persona, with a cost receipt, in under two minutes and ending by saving the demo as a recurring play.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers, sales operators, and GTM teams use this skill to demonstrate Cargo from a new workspace by sourcing buyer-persona-matched leads, showing a spend receipt, and optionally saving the search as a weekly play. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use connected lead providers and spend credits while retrieving prospect data. <br>
-Mitigation: Keep the quickstart on the capped low-cost path and require explicit user approval before any higher-cost fallback runs. <br>
-Risk: Demo lead output is temporarily written under /tmp. <br>
-Mitigation: Treat the temporary files as prospect data and remove or protect them when the demo is complete. <br>
-Risk: Saving the search as a weekly play can continue using provider data and credits. <br>
-Mitigation: Create the recurring play only after explicit user consent, and review or disable the schedule when it is no longer needed. <br>
+## Use Case:
 
+Developers, sales operators, and go-to-market teams use this skill to run a guided first Cargo CLI demo that sources a small buyer-persona lead set, shows spending and hit-rate, and offers to convert the search into a recurring play.
 
-## Reference(s): <br>
-- [Cargo Quickstart on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-quickstart) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands, lead tables, receipts, and next-step guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the Cargo CLI and a Cargo account; may use connected lead providers and credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The skill can spend Cargo account credits during the demo.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the normal demo path near the documented one-credit cap, require explicit confirmation before higher-cost fallback actions, and review the receipt after execution.
+
+Risk: The buyer persona may be sent to external lead providers and resulting lead data may be temporarily stored on the local machine.
+
+Mitigation: Avoid sensitive persona inputs, confirm before networked or paid actions when needed, and delete temporary output files after the demo.
+
+Risk: A recurring play can continue running after the initial demo.
+
+Mitigation: Confirm the schedule, destination, and cost expectations before enabling recurrence, and monitor or disable the play when it is no longer needed.
+
+## Reference(s):
+
+- [Cargo Skills Homepage](https://github.com/getcargohq/cargo-skills)
+- [Cargo Quickstart on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-quickstart)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and concise tabular lead summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create temporary local JSON files for run metadata and lead outputs during the demo.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter, skill-metadata.json, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,60 @@
-## Description: <br>
-Helps agents query and filter Shopify independent store records through LinkFox by keyword or domain, country, store age, product count, ad count, traffic, orders, and social followers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries and filters independent Shopify stores by dimensions such as name or domain, country, store age, product count, ad count, monthly visits, monthly orders, and social followers.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and developers use this skill to discover Shopify sellers, competitor stores, and store performance signals for market research or ecommerce analysis. It is useful when an agent needs structured Shopify store results and documented filter, sort, and pagination parameters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can consume paid LinkFox credits because billing is based on returned Shopify store count and each page is a new request. <br>
-Mitigation: Confirm the intended query scope, page size, and pagination plan with the user before running searches that may return many stores. <br>
-Risk: The skill sends Shopify query parameters and the LinkFox API key to the LinkFox gateway. <br>
-Mitigation: Use only approved LinkFox credentials and avoid sending sensitive or unnecessary query terms. <br>
-Risk: The script saves full API responses locally, which may include store contact details or other business data. <br>
-Mitigation: Store results only in an appropriate workspace and remove local response files when they are no longer needed. <br>
-Risk: The skill directs agents to fetch and install a secondary onboarding skill from an external URL during some authentication or credit failures. <br>
-Mitigation: Install the secondary skill only after verifying the source and obtaining user approval for the download. <br>
+## Use Case:
 
+External users and developers use this skill to discover Shopify stores and compare storefront signals for prospecting, competitive research, or market analysis. It also provides guidance for LinkFox credential setup and billing remediation when access or balance issues block a query.
 
-## Reference(s): <br>
-- [Shopify Store Query API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopify-store-query) <br>
-- [LinkFox API Key Guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
-- [LinkFox Account and Credits Portal](https://os.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples, JSON API responses, and saved JSON files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key; paginated results may consume paid credits; full responses are saved locally and large responses may be summarized in stdout.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: The skill requires a LinkFox API key and can persist query results in local LinkFox session or cache files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user is comfortable granting that access, and periodically delete local LinkFox cache or session files when query results are sensitive.
+
+Risk: Troubleshooting can involve SMS login, API key generation, and paid plan ordering.
+
+Mitigation: Prefer the self-service LinkFox account page for credentials, do not share OTPs unless the user intends to authenticate, and review any plan purchase before confirming it.
+
+Risk: Queries consume credits dynamically based on the number of stores returned, so broad searches or additional pages can create higher-than-expected cost.
+
+Mitigation: Warn the user before large or repeated queries, keep page size scoped to the task, and ask for confirmation before continuing when a query may consume many credits.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopify-store-query)
+- [Shopify 店铺查询 API 参考](references/api.md)
+- [解决认证和积分问题](references/onboarding.md)
+- [LinkFox account page](https://agent.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON query responses, summaries, and file paths to saved result data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full Shopify query responses are saved to LinkFox session data files; larger responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

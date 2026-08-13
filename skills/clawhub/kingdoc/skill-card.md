@@ -1,52 +1,69 @@
-## Description: <br>
-Kingdoc helps agents create, edit, manage, convert, recover, and resolve conflicts in Kingsoft/WPS online documents using local document tools and Kingsoft/WPS APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+KingDoc lets an agent create, edit, manage, compare, and collaborate on Kingsoft/WPS online documents, with local document generation, OCR, compliance checks, and WPS AI-style assistance.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Employees, external collaborators, and developers use Kingdoc to operate Kingsoft/WPS documents through an agent, including document creation, spreadsheet and multidimensional table editing, file management, OCR, format conversion, sharing, version recovery, and collaborative conflict resolution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Kingsoft/WPS documents and selected local files. <br>
-Mitigation: Use a dedicated working folder, grant only needed document permissions, and review selected files before upload or download. <br>
-Risk: Document deletion, sharing, upload, overwrite, and webhook actions can affect user data or expose content. <br>
-Mitigation: Require explicit user confirmation for delete, share, upload, overwrite, permission, batch, and webhook operations before execution. <br>
-Risk: Credential and token handling can expose account access if configuration or logs are mishandled. <br>
-Mitigation: Protect config.json, avoid running auth token tests in logged terminals, and keep credentials out of shared logs or prompts. <br>
-Risk: The security verdict is suspicious due to powerful capabilities and weaker runtime guardrails than the safety text claims. <br>
-Mitigation: Review and scan the skill before deployment, then enforce operational approvals and file-scope restrictions in the host agent. <br>
+## Use Case:
 
+Employees and developers use KingDoc to automate WPS/Kingsoft document workflows, including document creation, editing, sharing, version recovery, comparison, compliance checks, OCR, and collaboration. The skill is intended for agents that help users manage cloud documents and selected local files.
 
-## Reference(s): <br>
-- [Kingdoc ClawHub page](https://clawhub.ai/fyniujin/skills/kingdoc) <br>
-- [Kingsoft Developer Platform](https://developer.kdocs.cn) <br>
-- [WPS Open Platform](https://open.wps.cn) <br>
-- [Authentication reference](references/auth.md) <br>
-- [Security design](references/security.md) <br>
-- [Workflow reference](references/workflows.md) <br>
-- [Spreadsheet API reference](references/et_references.md) <br>
-- [Office conversion and extraction reference](references/office_references.md) <br>
-- [Rate limit and hardware adaptation reference](references/rate_limit.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text with configuration snippets, shell commands, API-oriented guidance, and generated document content.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local document artifacts and cloud document operations when configured with user credentials and explicit action approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.3.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Broad document-management access can affect WPS/Kingsoft files, sharing settings, versions, webhooks, notifications, and selected local files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each requested operation before execution, use the least-privileged account or scope available, and prefer read-only or short-lived sharing links.
+
+Risk: Deletion, overwrite, permission, rollback, batch, and webhook changes can cause data loss or unintended exposure.
+
+Mitigation: Require explicit confirmation for dangerous actions, inspect the target file list and impact, and use dry-run behavior when available.
+
+Risk: Cloud OCR fallback and uploads may send document or image contents to external services.
+
+Mitigation: Use local OCR and local generation when possible, avoid sensitive local paths, and confirm before cloud processing or upload.
+
+Risk: Credential and configuration files can expose WPS/Kingsoft access if mishandled.
+
+Mitigation: Protect config.json, avoid committing credentials, and rotate App ID or App Secret if exposure is suspected.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/kingdoc)
+- [Publisher profile](https://clawhub.ai/user/fyniujin)
+- [Kingsoft Developer Platform](https://developer.kdocs.cn)
+- [SKILL.md](SKILL.md)
+- [Authentication reference](references/auth.md)
+- [Security design](references/security.md)
+- [Rate limit and hardware adaptation](references/rate_limit.md)
+- [Office conversion and OCR reference](references/office_references.md)
+- [Common workflows](references/workflows.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, structured text, JSON-like tool arguments, shell commands, and generated document content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose or perform document operations through WPS/Kingsoft APIs and local file-processing tools.]
+
+## Skill Version(s):
+
+3.5.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

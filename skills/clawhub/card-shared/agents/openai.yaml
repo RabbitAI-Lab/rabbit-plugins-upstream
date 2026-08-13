@@ -1,0 +1,7 @@
+interface:
+  display_name: "Card Shared Rules"
+  short_description: "Shared contracts and sourcing for card skills"
+  default_prompt: "Use $card-shared to check the shared contract for the card skill suite."
+
+policy:
+  allow_implicit_invocation: false

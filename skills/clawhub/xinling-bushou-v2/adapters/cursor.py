@@ -63,7 +63,7 @@ class CursorAdapter(PlatformAdapter):
         """生成 Cursor 规则文件"""
         return f"""# 心灵补手 - {persona.name}
 
-> 由心灵补手 V2.0 自动生成
+> 由心灵补手 V3.5.0 自动生成
 > 人格 ID: {persona.id}
 > 谄媚程度: {persona.level}/10
 

@@ -1,44 +1,59 @@
-## Description: <br>
-Searches locally synchronized Etsy category data by keyword to retrieve category names, ids, parent ids, and parentIds for product or shop filtering workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches previously synchronized Etsy category data by keyword and returns category names, IDs, levels, and parent IDs for product or shop filtering.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and developers use this skill to find Etsy category identifiers from synchronized LinkFox category data before passing those ids into Etsy product or shop search tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a LinkFox API key and can send lookup requests to the LinkFox tool gateway. <br>
-Mitigation: Install only when LinkFox is trusted, scope the API key to the needed use, and review or constrain the configured gateway before use. <br>
-Risk: The helper script writes full responses and cache data to local linkfox folders, which may expose lookup results in the workspace or fallback locations. <br>
-Mitigation: Run it only in appropriate workspaces, inspect generated linkfox folders, and remove cached or response files that should not persist. <br>
-Risk: The authentication fallback can guide the agent to install a separate onboarding skill from a remote ZIP. <br>
-Mitigation: Require explicit manual approval and review the remote onboarding package before installing any additional skill. <br>
+## Use Case:
 
+External e-commerce operators, sellers, and agent workflows use this skill to find Etsy category IDs from LinkFox-synchronized category data for product and shop search filters. It also provides guidance for LinkFox authentication and billing recovery when lookup access fails.
 
-## Reference(s): <br>
-- [API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-etsy-category-search) <br>
-- [LinkFox Tool Gateway](https://tool-gateway.linkfox.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with optional shell commands and JSON API responses or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The helper script writes full lookup responses and cache files under local linkfox folders and prints either the full JSON response or a compact summary.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: The skill handles LinkFox API keys, phone numbers, SMS codes, account tokens, and payment-order data during onboarding.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in trusted workspaces, avoid sharing logs that contain secrets or account data, and rotate credentials if they are exposed.
+
+Risk: The release includes account login, API-key issuance, and billing/payment flows beyond Etsy category lookup.
+
+Mitigation: Install only when LinkFox authentication and billing management are expected, and manually confirm any selected plan or payment action before proceeding.
+
+Risk: The helper script can write full lookup responses and cache files under local LinkFox output directories.
+
+Mitigation: Run it in an appropriate workspace and remove local output or cache files when category results should not persist.
+
+## Reference(s):
+
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-etsy-category-search)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [JSON lookup results and Markdown-style guidance with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Lookup output includes category fields such as id, name, categoryLevel, parentId, and parentIds; large responses may be summarized while full JSON is saved locally by the helper script.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

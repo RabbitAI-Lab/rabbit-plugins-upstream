@@ -1,0 +1,99 @@
+/* ================================================================
+   html-slides 品牌预设:Apple 风(brand-apple)
+   浅色素净高端 —— 适用产品发布/高管汇报(浅态原生,hero 用纯黑段)
+   色值来源:VoltAgent/awesome-design-md, MIT(品牌名仅描述风格灵感,与品牌方无关)
+   用法:复制本文件覆盖项目 assets/theme.css(变量名与默认完全一致)
+   ================================================================ */
+
+:root {
+  /* 主色:Apple Blue(界面唯一彩色) */
+  --brand-primary: #0071E3;         /* Apple Blue */
+  --lenovo-red: var(--brand-primary);   /* 别名(向后兼容,169 处历史引用) */
+  --brand-primary-dark: #005BB0;    /* 推导:同色相明度 -12% */
+  --lenovo-red-dark: var(--brand-primary-dark);   /* 别名(向后兼容,169 处历史引用) */
+  --brand-dark: #000000;          /* Pure Black(hero 段) */
+  --deep-navy: var(--brand-dark);   /* 别名(向后兼容,169 处历史引用) */
+  --brand-dark-soft: #272729;    /* Dark Surface 1 */
+  --deep-navy-light: var(--brand-dark-soft);   /* 别名(向后兼容,169 处历史引用) */
+  --charcoal: #1A1A1A;
+  --charcoal-soft: #2C2C2C;
+
+  /* 白+灰系(承载) */
+  --white: #FFFFFF;
+  --off-white: #F5F5F7;          /* Light Gray(招牌承载色) */
+  --card-bg: #FFFFFF;
+  --text-primary: #1D1D1F;       /* Near Black */
+  --text-secondary: #333333;     /* 混合:rgba(0,0,0,0.8) on #FFF */
+  --text-tertiary: #7F7F80;      /* 混合:rgba(0,0,0,0.48) on #F5F5F7 */
+  --border-light: #D2D2D7;       /* 招牌细分隔线 */
+  --border-medium: #A1A1A6;
+
+  /* 深色底上的浅色文字(预算混合:白混 Pure Black) */
+  --on-navy-text: #FFFFFF;
+  --on-navy-sub: #D9D9D9;        /* ≈ 白 85% */
+  --on-navy-dim: #B3B3B3;        /* ≈ 白 70% */
+
+  /* 代码块 */
+  --code-bg: #0F1419;
+  --code-text: #E8E8E8;
+  --code-highlight: #FFD966;
+  --code-comment: #7A8B99;
+
+  /* 信号色(跨预设一致) */
+  --signal-green: #00A651;
+  --signal-yellow: #F9A825;
+  --signal-blue: #1976D2;
+  --signal-red: #E2232A;
+  --signal-gray: #757575;
+
+  /* 强调:Bright Blue(深底链接/高光) */
+  --accent-orange: #2997FF;
+
+  /* 字体 */
+  --font-cn: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-en: "Inter", -apple-system, "Segoe UI", "Helvetica Neue", sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, monospace;
+
+  /* ── 版面分区与间距(2026-08-02 设计总纲;与默认 theme.css 保持一致) ── */
+  --zone-header-top: 60px;
+  --zone-content-top: 320px;
+  --zone-content-bottom: 940px;
+  --zone-footer-top: 980px;
+  --page-margin: 100px;
+  --content-width: 1720px;
+  --space-block: 60px;
+  --space-item: 40px;
+  --space-item-tight: 24px;
+
+  /* ── 字号阶(演讲档基准;混合/阅读档按 design-principles.md 字号阶等比) ── */
+  --text-cover: 104px;
+  --text-title-page: 60px;
+  --text-title-block: 32px;
+  --text-body: 24px;
+  --text-note: 16px;
+  --text-floor: 14px;
+}
+
+/* Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { margin: 0; padding: 0; overflow: hidden; }
+
+body {
+  font-family: var(--font-cn);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 画布:转换器只认 1920x1080 + relative + hidden */
+.slide-container {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--off-white);
+  font-family: var(--font-cn);
+}
+
+/* 数字/西文用 Inter(表格数字、页码等,可加 class="num") */
+.num { font-family: var(--font-en); font-feature-settings: "tnum"; }

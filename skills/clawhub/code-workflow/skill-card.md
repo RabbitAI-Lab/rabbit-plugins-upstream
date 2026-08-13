@@ -1,47 +1,57 @@
-## Description: <br>
-Code Workflow guides agents through a staged code-change process covering research, planning, user review, test-driven implementation, and optional pull request evidence capture. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A four-stage code-change workflow for research, planning, user review, and TDD implementation, with optional pull request capture guidance.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to structure non-trivial code changes, preserve research and plan artifacts, require explicit review before implementation, and apply TDD-oriented implementation and verification steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: A hook resource is described as advisory but can block execution when undecided plan markers are detected. <br>
-Mitigation: Review the hook behavior before enabling it, and either make the hook warning-only or document and accept its blocking behavior. <br>
-Risk: Broad plan and research search rules can read unrelated local planning documents into the agent context. <br>
-Mitigation: Limit searches to task-relevant issue numbers, explicit domain keywords, and configured project plan directories. <br>
-Risk: Strict workflow gates can slow or interrupt small changes when applied too broadly. <br>
-Mitigation: Use the skill for moderate or complex code changes, and rely on the documented trivial-task exception for simple one- or two-line edits. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to structure non-trivial code changes through research artifacts, implementation plans, explicit review gates, TDD execution, verification, and optional PR evidence capture.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/code-workflow) <br>
-- [Skill manifest](SKILL.md) <br>
-- [Workflow steps](steps.md) <br>
-- [Implementation guidance](implement.md) <br>
-- [PR workflow](pr.md) <br>
-- [Release changelog](CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with command snippets, workflow checklists, and file-oriented instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide creation of research and plan Markdown files, test code, Git commands, and pull request evidence when explicitly requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release metadata and CHANGELOG.md) <br>
+Risk: The optional plan-file hook claims to be warning-only while returning a blocking exit code when undecided markers are detected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the hook before installation and use it only when a blocking undecided-marker gate is acceptable for the workspace.
+
+Risk: The skill is an opinionated hard-stop workflow that can interrupt normal coding, planning, commit, and PR actions.
+
+Mitigation: Adopt it deliberately for tasks that benefit from enforced review and TDD gates, and use explicit invocations to avoid accidental activation.
+
+## Reference(s):
+
+- [Code Workflow on ClawHub](https://clawhub.ai/drumrobot/skills/code-workflow)
+- [Skill Definition](artifact/SKILL.md)
+- [Implementation Workflow](artifact/implement.md)
+- [Research, Plan, Review, and Branch Steps](artifact/steps.md)
+- [Pull Request Workflow](artifact/pr.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with checklists, file-writing conventions, code snippets, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create workspace-local research, plan, task, and pull request evidence artifacts when followed by an agent.]
+
+## Skill Version(s):
+
+0.6.1 (source: server release metadata and CHANGELOG, released 2026-08-05)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

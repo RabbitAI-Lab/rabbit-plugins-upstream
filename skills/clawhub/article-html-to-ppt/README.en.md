@@ -1,12 +1,77 @@
 # MeowClaw PPT Smith
 
+<p align="center">
+  <img src="./assets/samples/pptsmith-github-en.png" alt="MeowClaw PPT Smith icon" width="836">
+</p>
+
 > 中文文档（默认）: [README.md](./README.md) · OpenClaw execution contract: [SKILL.md](./SKILL.md)
 
 Convert articles, Markdown drafts, HTML pages, WeChat drafts, PRDs, automation plans, knowledge posts, and review-approved manuscripts into low-rework, persona-fit slide decks.
 
 `MeowClaw PPT Smith` is the public display name introduced in v2.0.6. `MeowClaw PPTSmith` and `MeowClaw 夜猫 PPT 工坊` remain compatibility and search aliases only. The ClawHub slug and installed OpenClaw route remain `article-html-to-ppt` for update continuity.
 
-**v2.0.7 readiness:** this release adds native straight, orthogonal/elbow, and curved connector routing plus diagram-topology gates. QA rejects straight connectors through unrelated nodes or text and ambiguous connector crossings. Complex technical diagrams require enlarged single-slide render review before whole-deck packaging. The v2.0.6 public name and discovery copy remain unchanged. Native Microsoft PowerPoint compatibility remains unverified. See [the v2.0 acceptance report](docs/v2.0-acceptance-report.md).
+**v3.0.2 readiness:** the v3.0.1 task routing, Page Design Intent, Visual Planner, Deck Rhythm, editable semantic renderers, PMO runtime, and overflow/contrast/arrow-safety gates remain. Registry packages include runtime source and documentation but exclude local tests, generated decks, rendered files, QA logs, and caches. Standard is verified on macOS with LibreOffice; Premium remains run-specific and requires real rendering, zero-error QA, rubric scoring, and human visual review. The distributed source is under the bundled [MeowClaw Lab Non-Commercial Source License v1.0](./LICENSE): third-party commercial use needs prior written permission, while MeowClaw Lab and its written designees retain commercial rights. See [the v3.0.2 license notice](docs/v3.0.2-license-notice.md).
+
+## v3.0.2: Third-Party Non-Commercial Use; Author Commercial Rights Retained
+
+v3.0.2 changes the distribution license only; it does not reduce the public PMO runtime or the feature boundary. Personal learning, education, research, evaluation, charitable work, and other non-commercial use are permitted under the bundled license. Third parties need MeowClaw Lab’s prior written permission for selling, paid delivery, SaaS/hosting, commercial internal operations, or any other commercial use. MeowClaw Lab, the copyright owner(s), and parties separately authorized by MeowClaw Lab retain unrestricted commercial rights.
+
+Read the complete [`LICENSE`](./LICENSE) and [v3.0.2 license notice](docs/v3.0.2-license-notice.md). Earlier Apache-2.0 / MIT-0 grants cannot be retroactively revoked; earlier releases remain governed by their original terms.
+
+## v3.0.1: Public PMO Runtime, Code Path and Verified Pipeline
+
+v3.0.1 retains two bounded generation paths:
+
+- **Path A — Code Path**: an LLM writes a standalone `python-pptx` build script for bespoke composition, editable flywheels, complex native arrows, asymmetric layouts, and page-level refinement—the strengths demonstrated by the best v1.2.0 runs.
+- **Path B — IR / Pipeline Path**: PPT IR, Style Contract, component routing, real rendering, and QA produce traceable, repeatable standard output. Its IR completeness and evidence-quality gate requires source-bound primary data plus independent evidence; insufficient input stops with named blockers and never gains `verified` merely because it rendered.
+
+They serve different needs, not different truth standards: Path A pursues the visual ceiling of a capable model and still needs real-render plus human review; Path B provides a verified production floor. See the [v3.0.1 public-PMO release notes](docs/v3.0.1-release-notes.md) and the [v3.0.0 release notes, v1.2.0 comparison, and multi-model evidence](docs/v3.0.0-release-notes.md).
+
+## v3.0 Hero Showcase
+
+The 12-slide *Future of Work 2030* showcase uses native editable objects and passed real rendering without whole-slide rasterization.
+
+![PPTSmith 3.0 Hero Showcase](./assets/samples/pptsmith-2.1-hero-showcase-overview.png)
+
+## Sample Gallery
+
+These samples mirror the repository-home gallery and are copied into the Skill-owned asset directory so they render directly from this page.
+
+### State of AI 2025: complete 14-slide sample
+
+![State of AI 2025 14-page PPT sample](./assets/samples/stateofai-2025-final-contact-sheet.png)
+
+### Unified palette-system upgrade
+
+![Palette upgrade overview](./assets/samples/palette-upgrade-overview.png)
+
+### Native editable architecture diagram
+
+![Native editable architecture diagram](./assets/samples/native-architecture-diagram.png)
+
+## v2.0.7 AI Engineering Project Deck
+
+These screenshots come from a real 19-slide AI project deck rendered and reviewed with LibreOffice. They demonstrate the v2.0.7 upgrades for execution layers, state machines, Agent routing, RAG, model routing, and deployment evolution.
+
+![AI engineering project core upgrade contact sheet](./assets/samples/ai-project-core-upgrade-contact-sheet.png)
+
+### Execution layer: elbow routing across layers
+
+Runtime-to-capability relationships use reserved connector channels instead of diagonal lines through content.
+
+![AI project execution layer](./assets/samples/ai-project-execution-layer.png)
+
+### Agent Router: a dispatch bus instead of a radial connector web
+
+Policy, Router, Dispatch Bus, and Agent Groups are separated so every route remains traceable.
+
+![AI project Agent Router](./assets/samples/ai-project-agent-router.png)
+
+### Model routing: input container, score policy, and capability pools
+
+Constraints enter one explicit container before Routing Score and the three capability pools, keeping the main path and external-action boundary clear.
+
+![AI project model routing](./assets/samples/ai-project-model-routing.png)
 
 This skill is designed for article-to-presentation and source-to-deck workflows where the output must be more than a quick template conversion. It helps an agent identify the user persona, derive a storyline, lock content, select a fitting visual baseline, generate editable PPTX files when possible, create native dynamic PPTX decks for presentation mode, upload to Feishu Slides when requested, and report verification status honestly.
 
@@ -229,7 +294,7 @@ Before Feishu/Lark export, confirm that the user intended cloud delivery. Do not
 
 ## Version
 
-2.0.4
+3.0.1
 
 The version claim distinguishes three scopes: Standard production readiness on the verified environment; Premium final acceptance on the recorded LibreOffice route; and native Microsoft PowerPoint compatibility, which has not been verified.
 

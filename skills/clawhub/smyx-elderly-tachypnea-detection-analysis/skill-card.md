@@ -1,47 +1,60 @@
-## Description: <br>
-Analyzes fixed-camera bedroom video of an elderly person at rest to estimate respiratory rate and flag possible tachypnea or dyspnea risk without providing a medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill analyzes infrared or low-light bedroom video of an older adult at rest to estimate respiratory rate and flag elevated tachypnea risk without providing a medical diagnosis.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External caregivers, elder-care operators, and developers use this skill to submit resting chest or abdomen video, receive a structured respiratory-rate analysis, and review historical cloud reports. It is an assistive monitoring tool and does not replace clinical assessment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bedroom-health videos and cloud reports may contain highly sensitive personal and health information. <br>
-Mitigation: Use the skill only with consent from the monitored person or an authorized caregiver, and confirm the remote service and data handling practices are trusted before deployment. <br>
-Risk: The skill may silently create or reuse an internal identity and associate analysis activity with that identity. <br>
-Mitigation: Run it in per-user workspaces and verify identity, deletion, and retention practices before use in care settings. <br>
-Risk: Authentication tokens may persist in a local workspace database. <br>
-Mitigation: Protect local workspaces, restrict access to token storage, and rotate or remove stored credentials when the skill is no longer needed. <br>
-Risk: Respiratory-rate alerts are assistive signals and may be incomplete or wrong. <br>
-Mitigation: Require human follow-up for urgent alerts and do not treat the output as a diagnosis or substitute for clinical care. <br>
+## Use Case:
 
+External caregivers, family members, and elder-care platform operators can use this skill to analyze resting chest or abdominal video and receive structured respiratory-rate findings, risk labels, alerts, and report links. It is intended as auxiliary monitoring for home elderly care, nursing homes, and rehabilitation wards, not as clinical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-elderly-tachypnea-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured reports with optional report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release evidence; SKILL.md frontmatter says 1.0.6) <br>
+Risk: Sensitive bedroom video and respiratory report data may be processed through external cloud APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with informed consent from the monitored person or guardian, avoid unrelated private footage, and confirm how uploaded media and reports are protected.
+
+Risk: Historical reports may be linked to a locally persisted identity or token.
+
+Mitigation: Review token storage, report-link access controls, and deletion procedures before deployment.
+
+Risk: Respiratory-rate alerts can be mistaken for medical diagnosis.
+
+Mitigation: Present outputs as auxiliary visual monitoring, require human follow-up for urgent alerts, and direct users to appropriate medical care when needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-elderly-tachypnea-detection-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown and structured JSON text with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include respiratory-rate fields, signal quality, risk level, alert text, medical follow-up hints, and exported report links.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter says 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

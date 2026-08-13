@@ -1,0 +1,222 @@
+---
+name: agent-guild
+description: |
+  智能体协会（agent-guild）— a local-first, cross-agent shared memory protocol.
+  Any AI agent (Claude Code / Cursor / Copilot / Aider / Cline / Windsurf /
+  desktop assistants / ...) shares one user identity, one set of rules, and
+  coordinated handoffs — no servers, plaintext Markdown + JSON only.
+
+  Capabilities: bootstrap the shared dir (`ag init`); self-audit your own home
+  and move skills/mcp/tools/data/memory into the guild, linked back so your
+  runtime keeps working (`ag adopt`); load all shared context in one shot
+  (`ag bootstrap`); inbox + handoffs; daily log; health check (`ag doctor`).
+
+  Triggers — before work: "read shared identity", "what's the current focus",
+  "check my inbox", "读共享身份", "当前焦点", "检查收件箱". After work:
+  "log this to agent guild", "记到共享日志", "沉淀一下", "hand off to <agent>",
+  "交接给 <其他 agent>". Setup: "join agent guild", "加入智能体协会",
+  "adopt my skills", "把我的 skill 搬进协会", "数据存哪". Or any equivalent.
+
+  Not joined yet? Run docs/ONBOARDING.md once; this file is the runtime skill.
+slug: agent-guild
+displayName: 智能体协会 Agent Guild
+protocol_version: "3.0"
+version: "3.1"
+license: MIT
+homepage: https://github.com/dqsjqian/agent-guild
+repository: https://github.com/dqsjqian/agent-guild
+agent_created: true
+---
+
+# Agent Guild — Runtime Skill
+
+> Local-first cross-agent shared memory. Join once, share identity/rules/focus
+> across every agent on this machine. Data lives at `~/.agent-guild/`
+> (plaintext, yours, never uploaded).
+
+`SKILL_DIR` below means the directory containing this file. CLI entry point:
+`python3 <SKILL_DIR>/scripts/ag.py` (referred to as `ag`). Requires Python 3.9+
+(stdlib only, no third-party packages). On Windows use `python` instead of
+`python3` if that is what your PATH exposes.
+
+## Quick start (for an agent that has NOT joined yet)
+
+1. Run the onboarding flow: `~/.agent-guild/ONBOARDING.md` (or this skill's
+   `docs/ONBOARDING.md`) — discover your runtime's user-extensible skills dir,
+   install this skill (symlink → copy → readonly), run the closed-loop trigger
+   test, register yourself in `registry.json`.
+2. Then come back here — this file is your everyday capability.
+
+## Mandatory Session Contract (once per session, MUST)
+
+> ⛔ 这些是**强制动作**，不是建议。每次会话开始（或首次需要用户上下文时）执行，不要等用户点名。
+> 全部通过 `ag` 一条命令完成，别手工开五个文件。
+>
+> **No shell / no Python?** Every step below has a plain-file equivalent — read
+> the listed files directly and Edit them in place. The contract still applies;
+> only the mechanism changes. On Windows, use `python` if `python3` is not on PATH.
+
+### M0 — Ensure the guild exists (first use / every session start)
+
+```bash
+python3 <SKILL_DIR>/scripts/ag.py init <your-agent-name>
+```
+
+幂等：目录不存在则建全套骨架 + 落地本 skill；已存在则只补缺失项，**绝不覆盖已有数据**。
+输出 `initialized` = 首次自举，`verified` = 已存在。
+
+### M1 — Bootstrap: read shared context BEFORE real work
+
+```bash
+python3 <SKILL_DIR>/scripts/ag.py bootstrap <your-agent-name>
+```
+
+一次读全：用户画像 → 日程 → 最高优先级戒律 → 在做的项目 → 各 agent 当前焦点 → 你的未读收件箱。
+
+| 文件 | 内容 |
+|---|---|
+| `identity/profile.md` | 用户是谁 |
+| `identity/ROUTINE.md` | 日程 / 习惯 |
+| `rules/universal.md` | 最高优先级戒律 |
+| `projects/active.md` | 用户当前在做什么 |
+| `handoff/shared-state/current-focus.md` | 各 agent 当前焦点 |
+
+读到什么就按什么做。**没读就动手 = 违反协议。** 之后按需再读 `toolchain/*.md`、其他 `rules/*.md`。
+
+### M2 — Write memory after substantive work
+
+完成**实质工作**后 MUST 追加 daily log（见 Capability 4）。满足任一即"实质工作"：
+产出交付物（代码/文档/报告/网站/脚本）・改了代码或配置・做了技术决策・修复错误并定位根因・学到可复用的长期事实（用户偏好/项目约定/坑）。
+
+**跳过**：寒暄、简单查询、短问答、纯检索。
+
+跨 agent 有价值的事实 → 也写 `memory/shared/`；只对你自己有意义的 → 留在 `memory/<你的名字>/`。
+
+### M3 — Route skills & data into the guild (default-on)
+
+- **装新 skill**：MUST 装到 `~/.agent-guild/skills/<name>/`，再从那里软链回自己 runtime（symlink → copy → readonly 降级，见 ONBOARDING.md Step 3）。
+- **写持久化数据**：MUST 写 `~/.agent-guild/skills_data/<skill>/`（敏感数据拆 `private/`）。
+- **MCP / 插件 / CLI 工具**：分别进 `mcp/`、`plugins/`、`tools/`。
+- **唯一豁免**：你的 runtime 强制私有路径（如 platform-managed）——在 registry 里记录原因即可，不算违反。
+
+### M4 — Self-audit: adopt what's still scattered (first join + monthly)
+
+```bash
+python3 <SKILL_DIR>/scripts/ag.py adopt <your-agent-name>            # DRY-RUN, 只报告
+python3 <SKILL_DIR>/scripts/ag.py adopt <your-agent-name> --apply    # 真的搬 + 软链回来
+```
+
+扫五类资产：`skills` / `skills_data` / `mcp` / `tools` / `memory`。
+**默认 dry-run**，先把清单给用户看；`--apply` 才动手（搬完自动验证软链，失败自动回滚，删除走废纸篓）。
+
+自动排除：可重建缓存（`.venv`/`node_modules`/`__pycache__`）、凭证、runtime 内部元数据、平台托管包（`__skillhub`/`connector-*`）、connector 型 skill。
+
+健康检查（发现悬空软链 / 旧路径残留 / registry 漂移）：
+
+```bash
+python3 <SKILL_DIR>/scripts/ag.py doctor
+```
+
+## Self-check (each session, before real work)
+
+```bash
+# 1. registered?
+grep -q '"<your-agent-name>"' ~/.agent-guild/registry.json && echo registered || echo not_registered
+# 2. protocol version compatible?
+grep -E '"protocol_version"' ~/.agent-guild/skills/agent-guild/manifest.json | head -1
+```
+Not registered → run onboarding first. Central major version > yours → re-run
+onboarding from the top.
+
+## The `ag` CLI — use it for all writes
+
+Writes to shared files are atomic + audited when done through the CLI
+(zero-dependency Python, stdlib only). Reads stay plain file reads.
+
+```bash
+AG="python3 <SKILL_DIR>/scripts/ag.py"
+
+$AG init <agent>                    # bootstrap the guild (idempotent)
+$AG bootstrap <agent>               # read ALL shared context in one shot
+$AG adopt <agent>                   # dry-run: what of mine belongs in the guild?
+$AG adopt <agent> --apply           # move it in + symlink back
+$AG doctor                          # dangling links / stale paths / drift
+$AG status                          # who is registered
+$AG register <agent> <home> <tier>  # join (tier: symlink|copy|readonly)
+$AG last-seen <agent>               # refresh presence
+echo "<body>" | $AG send <dst> <topic>        # handoff message
+echo "<body>" | $AG log <agent> "<title>"     # daily log
+echo "<body>" | $AG focus <agent> "<title>"   # update current-focus
+$AG audit                           # audit trail of shared writes
+$AG prune 30                        # list idle agents
+```
+
+If the CLI is unavailable (no Python, sandboxed runtime), fall back to the
+manual file operations below — Edit in place, never Write-overwrite a shared
+file. Every capability in this skill is reachable by plain file reads/writes;
+the CLI only adds atomicity and an audit trail.
+
+## Capability 1 — Read shared user context
+
+| File | Purpose |
+|---|---|
+| `~/.agent-guild/identity/profile.md` | Who the user is |
+| `~/.agent-guild/identity/ROUTINE.md` | Daily schedule / routines |
+| `~/.agent-guild/rules/universal.md` | **Mandatory commandments** — highest priority |
+| `~/.agent-guild/rules/public-repo.md` | Public-repo hard rules |
+| `~/.agent-guild/rules/file-cleanup.md` | File deletion preferences |
+| `~/.agent-guild/rules/safety.md` | Safety guardrails |
+| `~/.agent-guild/projects/active.md` | What the user is working on |
+| `~/.agent-guild/handoff/shared-state/current-focus.md` | What any agent is focused on now |
+| `~/.agent-guild/toolchain/*.md` | Tool-specific config — read on demand |
+
+Read on demand; don't slurp everything every turn.
+
+## Capability 2 — Update current-focus
+
+`current-focus.md` is the "what's hot right now" board. When you start or
+finish a major task, prepend your block (`ag focus` or manual Edit in place).
+Never rewrite history other agents wrote.
+
+## Capability 3 — Check inbox / send messages
+
+Inbox: `~/.agent-guild/handoff/inbox/`.
+- Receive: `ls ~/.agent-guild/handoff/inbox/ | grep "to-<your-agent-name>-"`, read, act, then `mv` to `handoff/archive/`.
+- Send: `from-<src>-to-<dst>-<topic>.md` — write for a recipient with no context (what you did, what's left, where artifacts are).
+
+## Capability 4 — Daily log
+
+After **substantive work** (built/fixed/decided/learned a lasting fact), append to `~/.agent-guild/log/daily/YYYY-MM-DD-<your-agent-name>.md` — per-agent file, append-only. **Skip** greetings / lookups / short Q&A.
+
+Good entry: `## <title>` + What / Why / Result / Cross-agent note (if others need to know).
+
+## Capability 5 — Refresh last_seen
+
+Once per session, update your entry's `last_seen` (prefer `ag last-seen`, fallback Edit). Never overwrite the whole registry — patch only your entry.
+
+## Capability 6 — Where to persist shared data
+
+New skill / MCP / plugin / tool / persistent data you install → **MUST** go under `~/.agent-guild/{skills,skills_data,mcp,plugins,tools}/<name>/`, not a private path (唯一豁免见 M3). The user backs up the whole `~/.agent-guild/` with one command.
+
+## Capability 7 — Cross-agent memory
+
+| Path | What goes there |
+|---|---|
+| `~/.agent-guild/memory/<agent>/` | 该 agent 的私有记忆文件（`ag adopt` 搬进来后软链回原位，runtime 照常读写） |
+| `~/.agent-guild/memory/shared/` | 跨 agent 都该知道的事实（用户偏好、项目约定、踩过的坑） |
+
+写之前先读：别把别人已经记过的东西重复记一遍。
+
+## Failure modes
+
+- Some files missing → read what exists, note the rest, don't block.
+- `registry.json` not writable → log the issue, proceed read-only.
+- Inbox file in an unexpected format → read anyway, reply with a structured request for clarity.
+
+## Spec
+
+- Manifest: `manifest.json`
+- Onboarding (one-time): `docs/ONBOARDING.md`
+- Conventions: `docs/CONVENTIONS.md`
+- Repository: https://github.com/dqsjqian/agent-guild
+- License: MIT

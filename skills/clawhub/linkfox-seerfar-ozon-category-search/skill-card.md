@@ -1,44 +1,61 @@
-## Description: <br>
-Seerfar Ozon Category Search retrieves product lists and category-level sales, revenue, price, rating, seasonality, brand, seller, and fulfillment metrics for a specified Ozon category ID. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Looks up products in a specified Ozon category through Seerfar and returns category-level aggregates plus product metrics for category selection, best-seller ranking, price-band analysis, and seasonality checks.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External e-commerce operators, analysts, and developers use this skill to size an Ozon category, inspect best-selling or high-revenue products, compare price bands, and review fulfillment and seasonal signals. It is intended for category selection analysis when a category ID is already known or has been resolved by another Ozon source. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and consumes LinkFox credits for Ozon category queries. <br>
-Mitigation: Confirm the user is comfortable with API-key use and credit cost before running repeated queries; rely on the documented cache and avoid automatic retry or pagination loops. <br>
-Risk: The skill can automatically send feedback externally when it detects result quality or user sentiment signals. <br>
-Mitigation: Review or disable feedback reporting before using sensitive task context. <br>
-Risk: The script stores complete API results locally, including category and product result data. <br>
-Mitigation: Treat saved output and cache directories as sensitive working data and clean the linkfox output/cache directories after use when retention is not needed. <br>
+## Use Case:
 
+External e-commerce analysts, marketplace operators, and agent users use this skill to retrieve Ozon category product rows, rankings, and aggregate sales, revenue, price, rating, and fulfillment data. It supports category sizing, category best-seller discovery, historical month snapshots, and fulfillment-filtered analysis when a category ID is available.
 
-## Reference(s): <br>
-- [Seerfar Ozon Category Search API Reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-category-search) <br>
-- [LinkFox skills site](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance, files] <br>
-**Output Format:** [Markdown summaries, shell command examples, and JSON API responses saved to local files or printed to stdout.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The script writes complete API responses under a local linkfox session data directory, may print a compact summary for large responses, and uses a 24-hour cache for repeated parameter sets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The security summary reports sensitive phone login, API-key generation, payment-order, automatic feedback, and persistent storage behavior in addition to the advertised Ozon lookup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if LinkFox is trusted with category queries and account setup data; obtain and configure API keys directly when possible, avoid relaying OTP codes through the agent unless intentionally using the onboarding flow, and review payment actions before proceeding.
+
+Risk: The skill stores full API responses and cache data locally, which may include queried category data and account-related session artifacts.
+
+Mitigation: Review or delete the local linkfox response, session, and cache directories after use, especially on shared workspaces.
+
+Risk: Each lookup consumes credits and repeated pagination or retries can create unexpected cost.
+
+Mitigation: Confirm additional calls with the user when high-frequency lookups, pagination, historical comparisons, or billing recovery are needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-category-search)
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+- [LinkFox Agent Setup](https://agent.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API parameters, tabular summaries, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The runtime script writes full API responses under a linkfox session data directory, prints full JSON for small responses, and summarizes larger responses unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,73 @@
-## Description: <br>
-x402 Compute helps agents browse, provision, manage, resize, extend, and destroy Singularity Cloud Network GPU/VPS instances, AI Machines, SGL Grid inference, and node-operator workflows using x402, MPP, or preloaded credits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+x402 Compute helps agents manage Singularity Cloud Network compute, including GPU/VPS provisioning, AI machines, confidential grid inference, grid node operation, hosted agent pods, and paid processor endpoints.
 
-## Publisher: <br>
-[ivaavimusic](https://clawhub.ai/user/ivaavimusic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivaavimusic](https://clawhub.ai/user/ivaavimusic)
 
-## Use Case: <br>
-Developers and operators use this skill to provision paid GPU/VPS compute, deploy private OpenAI-compatible LLM endpoints, consume SGL Grid inference, or run grid nodes from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can spend wallet funds and manage cloud servers. <br>
-Mitigation: Use a dedicated low-balance wallet, confirm spend and target instance before execution, and avoid unattended confirmation flags unless the cost and lifecycle action are known. <br>
-Risk: The skill handles sensitive wallet keys, API keys, and root-access material. <br>
-Mitigation: Keep secrets out of logs, prefer SSH keys over password fallback, delete any one-time password files immediately, and scope API keys to the intended workflow. <br>
-Risk: Runtime installers or dependency changes can introduce supply-chain exposure. <br>
-Mitigation: Pin or review dependencies and inspect the node installer before running remote install commands. <br>
+## Use Case:
 
+Developers and external agents use this skill to browse, provision, manage, resize, extend, and destroy compute resources; run OpenAI-compatible inference; deploy hosted agent pods; and publish paid processor endpoints. It is intended for workflows where an agent may need wallet-backed payment, compute API-key management, or shell/API guidance for Singularity Cloud Network services.
 
-## Reference(s): <br>
-- [x402 Compute Documentation](https://docs.x402layer.cc/agentic-access/x402-compute) <br>
-- [x402 Compute Cloud App](https://cloud.x402compute.cc) <br>
-- [ClawHub Skill Page](https://clawhub.ai/ivaavimusic/skills/x402-compute) <br>
-- [AI Machines Reference](references/ai-machines.md) <br>
-- [x402Compute API Reference](references/api-reference.md) <br>
-- [SGL Grid Node Operator Reference](references/node-operator.md) <br>
-- [OpenWallet / OWS Reference](references/openwallet-ows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, environment-variable guidance, API request examples, and operational checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce commands or configuration that manage paid cloud resources, wallet-backed payments, API keys, SSH access, and server lifecycle actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.10.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can use wallet credentials and compute API keys to spend funds.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use dedicated low-balance wallets and scoped API keys, avoid primary custody wallets, and review every paid action before execution.
+
+Risk: The skill can delete, resize, or otherwise change compute resources.
+
+Mitigation: Confirm resource identifiers, backups, and intended lifecycle changes before running destructive or irreversible commands.
+
+Risk: Processor payments are final and failed paid runs may not be refundable.
+
+Mitigation: Read processor reliability signals before paying and retry failed paid runs by re-sending the same X-Payment header when supported.
+
+Risk: The node-operator workflow can install long-running node software through a curl-to-shell installer.
+
+Mitigation: Independently verify the installer source and service trust before running it, and use an isolated machine for node operation.
+
+Risk: Unpinned or drifting dependencies can change wallet, payment, or provisioning behavior.
+
+Mitigation: Pin or lock dependencies before use and review dependency changes before running payment or management workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ivaavimusic/skills/x402-compute)
+- [x402 Compute documentation](https://docs.x402layer.cc/agentic-access/x402-compute)
+- [x402 Compute cloud app](https://cloud.x402compute.cc)
+- [API reference](references/api-reference.md)
+- [AI Machines](references/ai-machines.md)
+- [Agent Pods](references/agent-pods.md)
+- [Node Operator](references/node-operator.md)
+- [OpenWallet / OWS](references/openwallet-ows.md)
+- [Processors](references/processors.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON request examples, and Python script invocations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include payment, wallet credential, compute lifecycle, and API-key handling steps.]
+
+## Skill Version(s):
+
+1.16.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

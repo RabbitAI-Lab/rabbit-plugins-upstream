@@ -2,7 +2,7 @@
 name: xreply
 description: Generate, schedule, and publish posts across 15 platforms — X, LinkedIn, Instagram, Threads, Facebook, YouTube, TikTok, Pinterest, Bluesky, Mastodon, Discord, Telegram, Tumblr, Google Business, and Slack — in your voice using AI. Manage preferences and track billing.
 slug: xreply
-version: 0.13.0
+version: 0.17.1
 license: MIT-0
 homepage: https://xreplyai.com
 metadata: {"openclaw":{"emoji":"✨","requires":{"anyBins":["mcporter","npx"],"env":["XREPLY_TOKEN"]},"primaryEnv":"XREPLY_TOKEN","install":[{"id":"mcporter","kind":"node","package":"mcporter","bins":["mcporter"],"label":"Install mcporter (node)"}]}}
@@ -21,13 +21,13 @@ All tools require an `XREPLY_TOKEN` environment variable — an API key from Xre
 The XreplyAI MCP server is published as `@xreplyai/mcp` on npm. You invoke tools via `mcporter`:
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' <tool_name> [param:value ...]
+mcporter call 'npx @xreplyai/mcp@0.17.1' <tool_name> [param:value ...]
 ```
 
 To discover all available tools and their parameters:
 
 ```
-mcporter list 'npx @xreplyai/mcp@0.13.0' --all-parameters
+mcporter list 'npx @xreplyai/mcp@0.17.1' --all-parameters
 ```
 
 ## Tools
@@ -39,12 +39,12 @@ mcporter list 'npx @xreplyai/mcp@0.13.0' --all-parameters
 Generate AI post(s) in the user's voice and auto-save as draft(s). Use `platform` for a single platform or `platforms` (array) to generate platform-native variants for multiple platforms at once. Each platform variant counts as 1 against the daily quota (100/day on Pro, 500/day on Team — the MCP requires a Pro or Team plan, or an active Pro trial).
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate topic:"my SaaS hit 1000 users"
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate topic:"lessons from year 1" angle:story_arc
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate platform:linkedin topic:"leadership lessons"
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate angle:one_liner
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate topic:"entrepreneurship hardships" 'platforms:["twitter","linkedin","threads"]'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate topic:"my SaaS hit 1000 users"
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate topic:"lessons from year 1" angle:story_arc
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate platform:linkedin topic:"leadership lessons"
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate angle:one_liner
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate topic:"entrepreneurship hardships" 'platforms:["twitter","linkedin","threads"]'
 ```
 
 Parameters:
@@ -58,8 +58,8 @@ Parameters:
 Generate multiple AI posts at once. Each post counts as 1 against the daily quota — check billing first if quota is a concern.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate_batch category:personalized count:5
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate_batch category:trending count:3
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate_batch category:personalized count:5
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate_batch category:trending count:3
 ```
 
 Parameters:
@@ -75,7 +75,7 @@ Parameters:
 List all posts in the queue — drafts, scheduled, and recent posts. Returns post IDs, body text, status, scheduled times, and per-platform content.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_list
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_list
 ```
 
 No parameters.
@@ -86,37 +86,37 @@ Save a post draft. Use `body` for a simple X-only post. Use `post_contents` for 
 
 **X-only post (simple):**
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create body:"Your tweet text here"
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create body:"Your tweet text here"
 ```
 
 **X post with auto-retweet:**
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Tweet text","metadata":{"auto_rt_hours":24}}]'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Tweet text","metadata":{"auto_rt_hours":24}}]'
 ```
 
 **X thread (multiple twitter entries with position 0, 1, 2, ... — publishes as one connected thread):**
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Tweet one","position":0},{"platform":"twitter","body":"Tweet two","position":1},{"platform":"twitter","body":"Tweet three","position":2}]'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Tweet one","position":0},{"platform":"twitter","body":"Tweet two","position":1},{"platform":"twitter","body":"Tweet three","position":2}]'
 ```
 
 **LinkedIn post:**
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"linkedin","body":"Your long LinkedIn post here..."}]'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"linkedin","body":"Your long LinkedIn post here..."}]'
 ```
 
 **Cross-post to X and LinkedIn with different text:**
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Short tweet"},{"platform":"linkedin","body":"Expanded LinkedIn version..."}]'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Short tweet"},{"platform":"linkedin","body":"Expanded LinkedIn version..."}]'
 ```
 
 **X post with image (upload first with xreply_media_upload):**
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Check this out","content_type":"single_image","metadata":{"media_id":"1234567890"}}]'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Check this out","content_type":"single_image","metadata":{"media_id":"1234567890"}}]'
 ```
 
 **LinkedIn post with image (upload first with xreply_media_upload):**
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"linkedin","body":"Caption here","content_type":"single_image","metadata":{"asset_urn":"urn:li:digitalmediaAsset:..."}}]'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"linkedin","body":"Caption here","content_type":"single_image","metadata":{"asset_urn":"urn:li:digitalmediaAsset:..."}}]'
 ```
 
 Parameters:
@@ -133,9 +133,9 @@ Parameters:
 Edit a post's content, scheduled time, or auto-retweet setting. Use `body` to update X-only text, or `post_contents` to update per-platform content. Cannot edit posts that are processing or already published.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_edit id:123 body:"Updated tweet text"
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_edit id:123 'scheduled_at:2026-03-15T09:00:00Z'
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_edit id:123 post_contents:'[{"platform":"linkedin","body":"Updated LinkedIn text"}]'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_edit id:123 body:"Updated tweet text"
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_edit id:123 'scheduled_at:2026-03-15T09:00:00Z'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_edit id:123 post_contents:'[{"platform":"linkedin","body":"Updated LinkedIn text"}]'
 ```
 
 Parameters:
@@ -149,7 +149,7 @@ Parameters:
 Delete a post. Cannot delete posts that are processing or already published.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_delete id:123
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_delete id:123
 ```
 
 Parameters:
@@ -167,13 +167,13 @@ Upload an image file from disk and get back a media identifier to attach to a po
 
 **Upload an image for X:**
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_media_upload image_path:/path/to/photo.jpg platform:twitter
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_media_upload image_path:/path/to/photo.jpg platform:twitter
 → returns { platform: "twitter", media_id: "1234567890" }
 ```
 
 **Upload an image for LinkedIn:**
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_media_upload image_path:/path/to/photo.png platform:linkedin
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_media_upload image_path:/path/to/photo.png platform:linkedin
 → returns { platform: "linkedin", asset_urn: "urn:li:digitalmediaAsset:..." }
 ```
 
@@ -196,7 +196,7 @@ Upload an MP4 video file from disk to LinkedIn and get back an asset URN to atta
 
 **Upload a video for LinkedIn:**
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_video_upload video_path:/path/to/video.mp4
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_video_upload video_path:/path/to/video.mp4
 → returns { platform: "linkedin", asset_urn: "urn:li:video:ABC123" }
 ```
 
@@ -215,10 +215,10 @@ Use the returned `asset_urn` in `post_contents[].metadata` with `content_type: "
 Publish or schedule a post. Requires `account_id` or `account_ids` — if neither is provided and no accounts were attached when the post was created, returns `NO_ACCOUNT_SPECIFIED`. If `scheduled_at` is provided (ISO 8601), the post will be queued for that time (scheduling horizon depends on your plan). If `use_next_slot: true`, the post is queued into the next open slot in the account owner's posting schedule (same as the dashboard's "Add to Queue") — mutually exclusive with `scheduled_at`. If both are omitted, the post is published immediately. Each platform (X, LinkedIn) requires the corresponding social account to be connected.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:123 account_id:1
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:123 account_id:1 'scheduled_at:2026-03-15T09:00:00Z'
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:123 account_id:1 use_next_slot:true
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:123 'account_ids:[1,2]'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:123 account_id:1
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:123 account_id:1 'scheduled_at:2026-03-15T09:00:00Z'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:123 account_id:1 use_next_slot:true
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:123 'account_ids:[1,2]'
 ```
 
 Parameters:
@@ -233,9 +233,9 @@ Parameters:
 Preview when a post would go out if queued — returns `{ scheduled_at }` without scheduling anything. Resolves the same slot that `xreply_posts_publish` with `use_next_slot: true` would use.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_next_slot id:123
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_next_slot id:123 account_id:1
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_next_slot id:123 'account_ids:[1,2]'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_next_slot id:123
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_next_slot id:123 account_id:1
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_next_slot id:123 'account_ids:[1,2]'
 ```
 
 Parameters:
@@ -254,7 +254,7 @@ Returns `NO_SLOT_AVAILABLE` if the account owner has no posting schedule with an
 Get subscription tier (free/starter/pro/team), quota usage, daily limits, and subscription details.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_billing_status
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_billing_status
 ```
 
 No parameters.
@@ -264,7 +264,7 @@ No parameters.
 Get voice profile status — whether it has been analyzed, tweet count, AI provider configured, and writing style summary.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_voice_status
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_voice_status
 ```
 
 No parameters.
@@ -274,7 +274,7 @@ No parameters.
 Get current post generation preferences — tone, emoji usage, and default structure.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_preferences_get
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_preferences_get
 ```
 
 No parameters.
@@ -284,22 +284,25 @@ No parameters.
 Update post generation preferences. Provide only the fields you want to change.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_preferences_set tone:witty
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_preferences_set tone:professional include_emoji:false
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_preferences_set structure:story_arc
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_preferences_set tone:witty
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_preferences_set tone:professional include_emoji:false
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_preferences_set structure:story_arc
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_preferences_set ai_model:gemini-flash
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_preferences_set ai_model:claude-opus
 ```
 
 Parameters:
 - `tone` (optional): `auto` | `casual` | `professional` | `witty` | `empathetic`
 - `include_emoji` (optional): `true` | `false`
 - `structure` (optional): `one_liner` | `paragraph` | `question` | `list` | `story_arc`
+- `ai_model` (optional): registry key of the default model for replies, posts, and analysis, or `null` to clear it. Call `xreply_preferences_get` for the valid keys, each with `premium` and `typical_cost_micros`. Premium models are settable and bill the prepaid AI balance on each generation, degrading to the free default once that balance runs out — confirm with the user before switching them onto one.
 
 #### xreply_list_social_accounts
 
 List all connected social accounts (X/Twitter, LinkedIn, YouTube, Threads) with their IDs, platform, username, and primary status. Use this to find `account_id` values needed for `xreply_posts_create` and `xreply_posts_publish` — especially for newly connected accounts that have no posts yet.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_list_social_accounts
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_list_social_accounts
 ```
 
 Returns: `social_accounts[]` — each with `id`, `platform`, `uid` (platform-native user ID), `username`, `email`, `primary`, `connected_at`.
@@ -309,8 +312,8 @@ Returns: `social_accounts[]` — each with `id`, `platform`, `uid` (platform-nat
 Get the effective platform style profiles — system defaults merged with your per-platform overrides. Shows tone, structure, target length, hashtag rules, CTA rules, and whether defaults are active.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_platform_styles_get
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_platform_styles_get platform:linkedin
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_platform_styles_get
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_platform_styles_get platform:linkedin
 ```
 
 Parameters:
@@ -321,9 +324,9 @@ Parameters:
 Override style settings for a specific platform. Only the fields you provide are updated — other fields keep their system defaults. Changes apply to all future generation for that platform.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_platform_styles_set platform:linkedin tone:witty
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_platform_styles_set platform:threads hashtag_rules:none cta_rules:soft_question
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_platform_styles_set platform:linkedin custom_instructions:"always reference my bootstrapping journey"
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_platform_styles_set platform:linkedin tone:witty
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_platform_styles_set platform:threads hashtag_rules:none cta_rules:soft_question
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_platform_styles_set platform:linkedin custom_instructions:"always reference my bootstrapping journey"
 ```
 
 Parameters:
@@ -342,7 +345,7 @@ Parameters:
 List custom writing rules applied during generation — e.g. "never use hashtags", "always end with a question". Requires a Pro subscription.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_rules_list
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_rules_list
 ```
 
 No parameters.
@@ -352,8 +355,8 @@ No parameters.
 Add a new custom writing rule. Requires a Pro subscription.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_rules_create title:"No hashtags" content:"Never use hashtags in any post"
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_rules_create title:"End with question" content:"Always end posts with a question to drive engagement" active:true
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_rules_create title:"No hashtags" content:"Never use hashtags in any post"
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_rules_create title:"End with question" content:"Always end posts with a question to drive engagement" active:true
 ```
 
 Parameters:
@@ -366,8 +369,8 @@ Parameters:
 Edit an existing custom writing rule. Only the fields you provide are changed. Use `xreply_rules_list` to get rule IDs. Requires a Pro subscription.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_rules_update id:1 content:"Never use hashtags or emoji"
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_rules_update id:2 active:false
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_rules_update id:1 content:"Never use hashtags or emoji"
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_rules_update id:2 active:false
 ```
 
 Parameters:
@@ -381,7 +384,7 @@ Parameters:
 Delete a custom writing rule permanently. Use `xreply_rules_list` to get rule IDs. Requires a Pro subscription.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_rules_delete id:1
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_rules_delete id:1
 ```
 
 Parameters:
@@ -392,7 +395,7 @@ Parameters:
 List your automated weekly content plans. Returns each plan's name, active status, platform configs, content strategy/topics, schedule day and time, and when it last ran and is next due. Use this before generating posts manually to see what content is already scheduled to auto-generate.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_content_plan_list
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_content_plan_list
 ```
 
 No parameters.
@@ -402,7 +405,7 @@ No parameters.
 List the posting schedules — the recurring posting rhythm for each connected account (one schedule per `social_account_id`). Each schedule carries spacing config (`min_gap_minutes`, `max_posts_per_day` — 0 = no limit), a timezone, a `paused` flag, protection toggles, and a list of `posting_slots`. In each slot, `day_of_week` is 0=Sunday..6=Saturday and `time_of_day` is 24-hour "HH:MM" in the schedule's timezone. Call `xreply_list_social_accounts` first to map `social_account_id` to platforms and usernames.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posting_schedule_list
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posting_schedule_list
 ```
 
 No parameters.
@@ -412,9 +415,9 @@ No parameters.
 Update ONE posting schedule by `id` (get the id from `xreply_posting_schedule_list`). Only the fields you provide are changed — omitted fields are left unchanged. A slot WITH an `id` edits it, a slot WITHOUT an `id` adds it, and `{ id, _destroy: true }` removes it. Cannot create or delete whole schedules — one exists automatically per connected account.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posting_schedule_update id:1 paused:true
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posting_schedule_update id:1 timezone:"America/New_York" max_posts_per_day:3
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posting_schedule_update id:1 'slots:[{"day_of_week":1,"time_of_day":"09:05"},{"id":11,"_destroy":true}]'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posting_schedule_update id:1 paused:true
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posting_schedule_update id:1 timezone:"America/New_York" max_posts_per_day:3
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posting_schedule_update id:1 'slots:[{"day_of_week":1,"time_of_day":"09:05"},{"id":11,"_destroy":true}]'
 ```
 
 Parameters:
@@ -431,22 +434,38 @@ Parameters:
 List the X communities the user has previously posted to, ordered by most recently used. Returns community IDs and names to use as `community_id` in post_contents metadata.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_list_twitter_communities
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_list_twitter_communities
 ```
 
 No parameters.
 
 ---
 
-### Replies, Ideas & Plans (v0.13.0)
+#### xreply_short_links_create (v0.15.0)
+
+Shorten URLs into branded short links. Returns a map of each original URL to its short link.
+
+**Use this only to shorten WITHOUT posting.** Posts created via `xreply_posts_create` already shorten their links automatically — do not call this first when you are about to create a post.
+
+```
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_short_links_create '{"urls": ["https://example.com/a-long-url"]}'
+```
+
+- `urls` (required): array of URLs, max 5 per call.
+
+Requires the `links:write` scope. Shortening the same URL twice returns the same link and consumes no extra quota. Any `utm_*` params already on a URL are preserved and win; defaults only fill the ones you did not set. URLs that are already short links, or that point at a private network address, are skipped. A URL that fails to shorten is omitted from the result rather than failing the call.
+
+---
+
+### Replies, Ideas & Plans (v0.13.1)
 
 #### xreply_reply_generate
 
 Generate an on-voice reply to a tweet/post in the user's own voice. Pass the tweet being replied to (`text` required, optionally `author`, `tweet_id`, and `conversation_context` for thread awareness). Optionally shape the output with `preferences` (tone, include_emoji, structure, custom_rules). To get a different take, pass `previous_attempts` — up to 5 earlier drafts to avoid repeating. Counts against the daily AI generation quota and requires a paid subscription.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_reply_generate tweet:'{"text":"Just shipped a huge refactor","author":"@builder"}'
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_reply_generate tweet:'{"text":"Thoughts on remote work?"}' preferences:'{"tone":"witty","include_emoji":false}'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_reply_generate tweet:'{"text":"Just shipped a huge refactor","author":"@builder"}'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_reply_generate tweet:'{"text":"Thoughts on remote work?"}' preferences:'{"tone":"witty","include_emoji":false}'
 ```
 
 Parameters:
@@ -461,7 +480,7 @@ Returns `{ reply: { text } }`.
 List today's available content ideas — AI-suggested topics/angles the user can turn into posts. Each idea has an id, platform, topic, angle, prompt, and source.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_content_ideas_list
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_content_ideas_list
 ```
 
 No parameters.
@@ -471,7 +490,7 @@ No parameters.
 Request a fresh batch of content ideas. Asynchronous — the ideas regenerate in the background and are not returned immediately. Returns `{ status: "refresh_queued" }`; call `xreply_content_ideas_list` again shortly afterward to see the new ideas.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_content_ideas_refresh
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_content_ideas_refresh
 ```
 
 No parameters.
@@ -481,8 +500,8 @@ No parameters.
 Act on a single content idea. `action:use` marks the idea consumed and returns a `seed_prompt` to feed to `xreply_posts_generate_from_idea`. `action:dismiss` removes the idea from the list.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_content_idea_action id:42 action:use
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_content_idea_action id:42 action:dismiss
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_content_idea_action id:42 action:use
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_content_idea_action id:42 action:dismiss
 ```
 
 Parameters:
@@ -494,9 +513,9 @@ Parameters:
 Generate post draft text from a seed idea in the user's voice. Pass `idea` (a seed_prompt, e.g. from `xreply_content_idea_action` with action=use) and optionally `platform`. Use `variants` (2-3) for multiple alternative drafts, or `refine` (`{ instruction, draft }`, instruction one of `shorter` | `more_personal` | `less_salesy`) to rewrite an existing draft. `refine` and `variants` are mutually exclusive. Returns `{ body }` for a single draft or `{ drafts: [...] }` for variants. Does NOT auto-save — pass the returned text to `xreply_posts_create`. Counts against the daily quota; requires a paid subscription.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate_from_idea idea:"lessons from bootstrapping" platform:linkedin
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate_from_idea idea:"my launch story" variants:3
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate_from_idea refine:'{"instruction":"shorter","draft":"a long draft..."}'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate_from_idea idea:"lessons from bootstrapping" platform:linkedin
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate_from_idea idea:"my launch story" variants:3
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate_from_idea refine:'{"instruction":"shorter","draft":"a long draft..."}'
 ```
 
 Parameters:
@@ -510,7 +529,7 @@ Parameters:
 Create a content plan — a recurring planner that auto-generates posts on a weekly cadence. `name` is required. `schedule_day` (0=Sunday..6=Saturday) and `schedule_time` (HH:MM, 24-hour, in the user's timezone) set when it runs. `platform_configs` is a per-platform settings object; `content_strategy` holds strategy settings. Creating a plan triggers an initial async run. Requires a paid subscription; at most 10 plans.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_content_plan_create name:"Weekly build-in-public" schedule_day:1 schedule_time:"09:00"
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_content_plan_create name:"Weekly build-in-public" schedule_day:1 schedule_time:"09:00"
 ```
 
 Parameters:
@@ -527,7 +546,7 @@ Parameters:
 Trigger a manual run of an existing content plan by `id`. Asynchronous — posts are generated in the background. Returns 422 `PLAN_INACTIVE` if the plan is paused. Requires a paid subscription.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_content_plan_run id:3
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_content_plan_run id:3
 ```
 
 Parameters:
@@ -538,8 +557,8 @@ Parameters:
 List upcoming open "ready to post" calendar slots across all active posting schedules — the times a new post could be dropped into without colliding with existing scheduled posts or planner assignments. Each slot has `scheduled_at` (ISO 8601), `social_account_id`, and `platform`. Optionally narrow with `from`/`to` (ISO 8601); the horizon is capped server-side. Feed a slot's `scheduled_at` to `xreply_posts_create`/`xreply_posts_edit`.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posting_schedule_open_slots
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posting_schedule_open_slots 'from:2026-07-22T00:00:00Z' 'to:2026-07-29T00:00:00Z'
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posting_schedule_open_slots
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posting_schedule_open_slots 'from:2026-07-22T00:00:00Z' 'to:2026-07-29T00:00:00Z'
 ```
 
 Parameters:
@@ -548,31 +567,14 @@ Parameters:
 
 Returns `{ open_slots: [...] }`.
 
-#### xreply_media_library_list
-
-List reusable media library assets (previously uploaded images/videos). Returns each asset's `id`, `r2_key`, `public_url`, `content_type`, `media_kind`, `filename`, `display_name`, `tags`, and `size_bytes`. Optionally filter by `kind` (image/video) or `tag`, and paginate with `limit`/`offset`. To attach an existing asset to a post, pass its `r2_key` (or `public_url`) in `post_contents[].metadata` instead of re-uploading.
-
-```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_media_library_list
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_media_library_list kind:image tag:branding
-```
-
-Parameters:
-- `kind` (optional): `image` | `video`
-- `tag` (optional): filter to assets carrying this tag
-- `limit` (optional): 1-200 (default 100)
-- `offset` (optional): pagination offset (default 0)
-
-Returns `{ media_assets: [...] }`.
-
 #### xreply_posts_review
 
 Run the team review workflow on a post. `action:submit` moves a draft to `needs_review`; `action:approve` approves it (scheduling it); `action:reject` sends it back — `rejection_reason` is REQUIRED when rejecting. Pro/Team tiers only.
 
 ```
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_review post_id:123 action:submit
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_review post_id:123 action:approve
-mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_review post_id:123 action:reject rejection_reason:"tone is off-brand"
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_review post_id:123 action:submit
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_review post_id:123 action:approve
+mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_review post_id:123 action:reject rejection_reason:"tone is off-brand"
 ```
 
 Parameters:
@@ -587,83 +589,83 @@ Parameters:
 ### Generate and schedule an X post
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate topic:"ship fast, learn faster" angle:story_arc
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate topic:"ship fast, learn faster" angle:story_arc
    → returns { body: "...", post: { id: 42, ... } }
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:42 account_id:1 'scheduled_at:2026-03-12T09:00:00Z'
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:42 account_id:1 'scheduled_at:2026-03-12T09:00:00Z'
 ```
 
 ### Generate and schedule a LinkedIn post
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate platform:linkedin topic:"leadership lessons from year 1" angle:story_arc
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate platform:linkedin topic:"leadership lessons from year 1" angle:story_arc
    → returns { body: "...", post: { id: 43, ... } }
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:43 account_id:2 'scheduled_at:2026-03-12T09:00:00Z'
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:43 account_id:2 'scheduled_at:2026-03-12T09:00:00Z'
 ```
 
 ### Cross-post to X and LinkedIn with different text
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate topic:"motivation" platform:twitter
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate topic:"motivation" platform:twitter
    → { body: "Short tweet...", post: { id: 44 } }
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate topic:"motivation" platform:linkedin
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate topic:"motivation" platform:linkedin
    → { body: "Long LinkedIn article...", post: { id: 45 } }
 
    Or create as a single post with both platforms:
-3. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"x","body":"Short tweet..."},{"platform":"linkedin","body":"Long LinkedIn article..."}]'
-4. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:46 'account_ids:[1,2]' 'scheduled_at:2026-03-13T09:00:00Z'
+3. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"x","body":"Short tweet..."},{"platform":"linkedin","body":"Long LinkedIn article..."}]'
+4. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:46 'account_ids:[1,2]' 'scheduled_at:2026-03-13T09:00:00Z'
 ```
 
 ### Plan posts for the week
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_billing_status
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_billing_status
    → check remaining quota before a large batch
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_generate_batch category:personalized count:7
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_generate_batch category:personalized count:7
    → generates 7 drafts
-3. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_list
+3. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_list
    → review the queue
-4. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_edit id:101 'scheduled_at:2026-03-11T09:00:00Z'
-   mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_edit id:102 'scheduled_at:2026-03-12T09:00:00Z'
+4. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_edit id:101 'scheduled_at:2026-03-11T09:00:00Z'
+   mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_edit id:102 'scheduled_at:2026-03-12T09:00:00Z'
    → schedule each post
 ```
 
 ### Queue a draft to the next open slot
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create body:"Your tweet text here"
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create body:"Your tweet text here"
    → { post: { id: 60, ... } }
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_next_slot id:60
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_next_slot id:60
    → { scheduled_at: "2026-03-12T09:00:00Z" } — optional preview
-3. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:60 account_id:1 use_next_slot:true
+3. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:60 account_id:1 use_next_slot:true
 ```
 
 ### Edit and publish an existing draft
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_list
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_list
    → find the draft ID
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_edit id:55 body:"Revised tweet text"
-3. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:55 account_id:1
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_edit id:55 body:"Revised tweet text"
+3. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:55 account_id:1
 ```
 
 ### Post an X image
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_media_upload image_path:/Users/me/photo.jpg platform:twitter
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_media_upload image_path:/Users/me/photo.jpg platform:twitter
    → { media_id: "1234567890" }
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Check this out!","content_type":"single_image","metadata":{"media_id":"1234567890"}}]'
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Check this out!","content_type":"single_image","metadata":{"media_id":"1234567890"}}]'
    → { post: { id: 77, ... } }
-3. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:77 account_id:1
+3. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:77 account_id:1
 ```
 
 ### Post to an X community
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_list_twitter_communities
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_list_twitter_communities
    → returns [{ community_id: "12345", name: "AI Builders", last_used_at: "..." }, ...]
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Exciting update for the community!","metadata":{"community_id":"12345"}}]'
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"twitter","body":"Exciting update for the community!","metadata":{"community_id":"12345"}}]'
    → { post: { id: 88, ... } }
-3. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:88 account_id:1
+3. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:88 account_id:1
 ```
 
 ---
@@ -671,11 +673,11 @@ Parameters:
 ### Post to Threads
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_list_social_accounts
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_list_social_accounts
    → find your Threads account id (platform: "threads")
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"threads","body":"Your Threads post here (max 500 chars)"}]'
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"threads","body":"Your Threads post here (max 500 chars)"}]'
    → { post: { id: 90, ... } }
-3. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:90 account_id:3
+3. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:90 account_id:3
 ```
 
 ### Post a Threads image
@@ -683,9 +685,9 @@ Parameters:
 Threads takes a public image URL directly — no upload step needed (unlike X and LinkedIn).
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"threads","body":"Check this out!","content_type":"single_image","metadata":{"image_url":"https://example.com/image.jpg"}}]'
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"threads","body":"Check this out!","content_type":"single_image","metadata":{"image_url":"https://example.com/image.jpg"}}]'
    → { post: { id: 91, ... } }
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:91 account_id:3
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:91 account_id:3
 ```
 
 ---
@@ -693,21 +695,21 @@ Threads takes a public image URL directly — no upload step needed (unlike X an
 ### Post a LinkedIn image
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_media_upload image_path:/Users/me/banner.png platform:linkedin
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_media_upload image_path:/Users/me/banner.png platform:linkedin
    → { asset_urn: "urn:li:digitalmediaAsset:ABC123" }
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"linkedin","body":"Excited to share this!","content_type":"single_image","metadata":{"asset_urn":"urn:li:digitalmediaAsset:ABC123"}}]'
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"linkedin","body":"Excited to share this!","content_type":"single_image","metadata":{"asset_urn":"urn:li:digitalmediaAsset:ABC123"}}]'
    → { post: { id: 78, ... } }
-3. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:78 account_id:2
+3. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:78 account_id:2
 ```
 
 ### Post a LinkedIn video
 
 ```
-1. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_video_upload video_path:/Users/me/demo.mp4
+1. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_video_upload video_path:/Users/me/demo.mp4
    → { platform: "linkedin", asset_urn: "urn:li:video:ABC123" }
-2. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_create post_contents:'[{"platform":"linkedin","body":"Watch this demo!","content_type":"video","metadata":{"asset_urn":"urn:li:video:ABC123"}}]'
+2. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_create post_contents:'[{"platform":"linkedin","body":"Watch this demo!","content_type":"video","metadata":{"asset_urn":"urn:li:video:ABC123"}}]'
    → { post: { id: 79, ... } }
-3. mcporter call 'npx @xreplyai/mcp@0.13.0' xreply_posts_publish id:79 account_id:2
+3. mcporter call 'npx @xreplyai/mcp@0.17.1' xreply_posts_publish id:79 account_id:2
 ```
 
 ---

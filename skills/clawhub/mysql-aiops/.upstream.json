@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/mysql-aiops",
   "slug": "mysql-aiops",
   "ownerHandle": null,
-  "version": "0.4.0",
-  "updatedAt": 1784635200545,
-  "contentHash": "a64009aca5a6788cbdda122788e997c0f895b7bf7a13d4f28326f0db256d252c",
-  "fetchedAt": "2026-07-26T18:09:05.767Z"
+  "version": "0.9.0",
+  "updatedAt": 1786580931014,
+  "contentHash": "dcd4849e70a588837ef6b604b0025729986f285e954084f1918b892375cb1c45",
+  "fetchedAt": "2026-08-13T08:51:35.228Z"
 }

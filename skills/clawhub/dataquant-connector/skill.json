@@ -1,0 +1,5 @@
+{
+  "name": "dataquant-connector",
+  "version": "1.1.0",
+  "description": "DataQuant 量化数据平台对接 Skill，覆盖 A股/港股/美股/加密货币/指数/ETF 六大市场，支持 K线（日线 OHLCV，含 adj_factor 复权因子）、最新快照（估值/规模/动量/52 周）、条件筛选、宏观数据。DataQuant 取数、dataquant kline、dataquant detail。"
+}

@@ -1,53 +1,69 @@
-## Description: <br>
-Converts Figma designs into project-aware mobile UI code for Android, iOS, and Flutter by fetching design data, optionally scanning local project resources, and supporting iterative feedback. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts Figma design links into mobile UI code for Compose, Android XML, SwiftUI, UIKit, and Flutter using the Figma REST API, optional project resource scanning, multi-frame comparison, and feedback-log corrections.
 
-## Publisher: <br>
-[timeaground](https://clawhub.ai/user/timeaground) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[timeaground](https://clawhub.ai/user/timeaground)
 
-## Use Case: <br>
-Developers and engineers use this skill to turn selected Figma frames into mobile layout code for Jetpack Compose, Android XML, SwiftUI, UIKit, or Flutter while reusing project resources when scan access is approved. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Figma personal access token through FIGMA_TOKEN. <br>
-Mitigation: Set the token as an environment variable, do not paste it into chat, and rotate or revoke it if exposure is suspected. <br>
-Risk: Project scanning reads local project files to reuse colors, strings, images, and components. <br>
-Mitigation: Approve scans only for intended project directories and review generated scan reports as local project data. <br>
-Risk: Generated UI code and feedback logs may be written into the project. <br>
-Mitigation: Review generated files and feedback-log.md before committing or sharing them. <br>
-Risk: SVG export may download from Figma-provided asset URLs in addition to api.figma.com. <br>
-Mitigation: Allow network access only when needed for the conversion task and review downloaded assets before use. <br>
+## Use Case:
 
+Developers and mobile engineers use this skill to turn selected Figma frames into platform-idiomatic mobile UI code while reusing project resources when a local scan is approved.
 
-## Reference(s): <br>
-- [figma-to-mobile on ClawHub](https://clawhub.ai/timeaground/skills/figma-to-mobile) <br>
-- [Publisher profile](https://clawhub.ai/user/timeaground) <br>
-- [Issue tracker](https://github.com/TimeAground/figma-to-mobile/issues) <br>
-- [Figma interpretation rules](references/figma-interpretation.md) <br>
-- [Generation rules](references/generation-rules.md) <br>
-- [Project scan usage](references/scan-usage.md) <br>
-- [Jetpack Compose patterns](references/compose-patterns.md) <br>
-- [Android XML patterns](references/xml-patterns.md) <br>
-- [SwiftUI patterns](references/swiftui-patterns.md) <br>
-- [UIKit patterns](references/uikit-patterns.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with generated mobile code blocks, file names, shell commands, and concise guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce project scan reports, generated UI code files, and feedback-log.md when the user approves the related local actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.5 (source: server-resolved ClawHub release metadata) <br>
+Risk: The skill requires a Figma personal access token through the FIGMA_TOKEN environment variable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set the token as an environment variable, do not paste it into chat, and rotate it if it is exposed.
+
+Risk: Approved project scans read local mobile project files to find colors, strings, images, and components.
+
+Mitigation: Review the scan path before approving a scan and inspect generated scan-report.json before sharing it.
+
+Risk: Feedback logging may store before-and-after snippets that contain sensitive product details.
+
+Mitigation: Create feedback-log.md only after consent and avoid logging sensitive snippets unless local storage is acceptable.
+
+Risk: Generated UI code may not exactly match design intent or project conventions.
+
+Mitigation: Review, test, and adapt generated files in the target Android, iOS, or Flutter project before release.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/timeaground/skills/figma-to-mobile)
+- [Publisher profile](https://clawhub.ai/user/timeaground)
+- [Figma REST API endpoint](https://api.figma.com)
+- [Figma community demo design](https://www.figma.com/community/file/1169726503071187057/)
+- [Figma node interpretation rules](references/figma-interpretation.md)
+- [Code generation rules](references/generation-rules.md)
+- [Project scan usage guide](references/scan-usage.md)
+- [Error handling](references/error-handling.md)
+- [Feedback log format](references/feedback-log.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown conversation output with generated mobile source code files, shell command snippets, JSON scan reports, and setup guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce scan-report.json after approved project scanning and feedback-log.md after user consent.]
+
+## Skill Version(s):
+
+2.3.0 (source: SKILL.md frontmatter, CHANGELOG, and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

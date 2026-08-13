@@ -1,50 +1,73 @@
-## Description: <br>
-Tencent VOD helps agents generate python3 shell commands for Tencent Cloud VOD uploads, media processing, search, AIGC tasks, token management, and task queries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates Python commands for Tencent Cloud VOD uploads, media processing, media search, AIGC media generation, token and usage management, image processing, knowledge import, sub-application lookup, and task status queries.
 
-## Publisher: <br>
-[tencent-mpaas-skills](https://clawhub.ai/user/tencent-mpaas-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[tencent-mpaas-skills](https://clawhub.ai/user/tencent-mpaas-skills)
 
-## Use Case: <br>
-Developers and operators use this skill to generate commands for Tencent Cloud VOD workflows such as upload, pull upload, transcoding, media search, task lookup, image/video AIGC, token management, and knowledge import. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Generated commands can trigger billable Tencent Cloud VOD processing, AIGC, storage, or token operations. <br>
-Mitigation: Require explicit user confirmation for processing and token deletion commands, prefer --dry-run for uncertain or high-cost operations, and use budget alerts. <br>
-Risk: Runtime scripts use Tencent Cloud credentials and can persist cloud tokens or task metadata locally. <br>
-Mitigation: Use least-privilege credentials, avoid sensitive media, internal URLs, secrets, and personal data, and inspect ~/.env, project .env, and mem/elements.json. <br>
-Risk: The skill can change the local Python environment through dependency installation or runtime package updates. <br>
-Mitigation: Use a dedicated Python environment, preinstall dependencies yourself, and avoid allowing runtime scripts to auto-upgrade packages. <br>
+## Use Case:
 
+Developers and operators use this skill to turn Tencent Cloud VOD tasks into concrete Python script commands for upload, processing, search, AIGC generation, media inspection, and task management workflows.
 
-## Reference(s): <br>
-- [Tencent VOD ClawHub listing](https://clawhub.ai/tencent-mpaas-skills/skills/tencent-vod) <br>
-- [Tencent Cloud VOD pricing](https://cloud.tencent.com/document/product/266/2838) <br>
-- [VOD upload reference](references/vod_upload.md) <br>
-- [VOD media processing reference](references/vod_process_media.md) <br>
-- [VOD media search reference](references/vod_search_media.md) <br>
-- [VOD semantic search reference](references/vod_search_media_by_semantics.md) <br>
-- [VOD AIGC image reference](references/vod_aigc_image.md) <br>
-- [VOD AIGC video reference](references/vod_aigc_video.md) <br>
-- [VOD AIGC token reference](references/vod_aigc_token.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, markdown, guidance] <br>
-**Output Format:** [Plain text commands with Markdown links and short confirmation prompts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands target python3 scripts and may include --dry-run for previews or explicit confirmation for billable operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: artifact frontmatter and server release metadata) <br>
+Risk: The skill can call billable Tencent Cloud VOD, media processing, and AIGC APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated commands before execution, use dry-run previews for uncertain or high-cost tasks, and configure billing alerts or spending limits.
+
+Risk: The skill depends on Tencent Cloud credentials, AIGC tokens, and dotenv-based configuration.
+
+Mitigation: Run in an isolated environment, keep dotenv files out of source control, and limit credential scope to the intended VOD account or sub-application.
+
+Risk: Media URLs, prompts, and generated assets may be sent to cloud VOD and AIGC services.
+
+Mitigation: Avoid submitting secrets, private URLs, personal data, or regulated media unless the use is approved for those cloud services.
+
+Risk: The skill may install or rely on Python dependencies for Tencent Cloud API access.
+
+Mitigation: Install dependencies in a virtual environment and review dependency installation output before running operational commands.
+
+## Reference(s):
+
+- [Tencent VOD skill page](https://clawhub.ai/tencent-mpaas-skills/skills/tencent-vod)
+- [Tencent Cloud VOD pricing](https://cloud.tencent.com/document/product/266/2838)
+- [Tencent Cloud VOD API reference](https://cloud.tencent.com/document/api/266/31767)
+- [VOD upload reference](references/vod_upload.md)
+- [VOD pull upload reference](references/vod_pull_upload.md)
+- [VOD media processing reference](references/vod_process_media.md)
+- [VOD media description reference](references/vod_describe_media.md)
+- [VOD search reference](references/vod_search_media.md)
+- [VOD AIGC image reference](references/vod_aigc_image.md)
+- [VOD AIGC video reference](references/vod_aigc_video.md)
+- [VOD AIGC audio reference](references/vod_aigc_audio.md)
+- [VOD AIGC chat reference](references/vod_aigc_chat.md)
+- [VOD task description reference](references/vod_describe_task.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Markdown, Guidance]
+
+**Output Format:** [Plain text commands with Markdown links for returned URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands target python3 scripts in the skill package and may include dry-run flags or confirmation guidance for higher-cost processing.]
+
+## Skill Version(s):
+
+1.1.3 (source: frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

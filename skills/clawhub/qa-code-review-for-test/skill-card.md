@@ -1,43 +1,56 @@
-## Description: <br>
-Provides Chinese-language QA review guidance for code changes, focusing on change impact, high-risk patterns, test gaps, and the minimum regression test scope. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers and QA engineers review code changes from a testing perspective, identify impact areas and high-risk patterns, and define a minimal regression test scope.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, QA engineers, and test leads use this skill when a PR, diff, or described code change needs test-impact analysis. It focuses on changed files, affected interfaces, data or configuration changes, high-risk patterns, and practical regression scope recommendations.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill reads code changes and diffs to analyze test impact.
+
+Mitigation: Use it only in workspaces where code and diff review for QA purposes is acceptable.
+
+Risk: Broad trigger phrases may match ordinary developer conversations.
+
+Mitigation: Invoke it explicitly for PR or diff test-impact analysis when that behavior is intended.
+
+Risk: Test-impact recommendations may be incomplete or misleading if the provided diff or context omits dependencies.
+
+Mitigation: Review the recommendations with developers and supplement with dependency or boundary analysis before relying on the regression scope.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, developers, and test leads use this skill after pull requests or code changes to identify affected areas, likely defect zones, missing tests, and focused regression coverage. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Analysis, Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad code review prompts and can read workspace code while assessing test impact. <br>
-Mitigation: Use it only in repositories where QA review access to code changes is appropriate. <br>
-Risk: Review findings may be incomplete or misleading if dependency impact is missed. <br>
-Mitigation: Confirm the change scope and regression risk with the development team, and supplement with boundary analysis when dependency coverage is uncertain. <br>
-Risk: Users may treat the review report as direct implementation guidance. <br>
-Mitigation: Use the report to plan testing and review coverage; do not modify source code solely from the report without developer confirmation. <br>
+**Output Format:** [Markdown test-impact analysis report]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-code-review-for-test) <br>
-- [Publisher profile](https://clawhub.ai/user/kokxi) <br>
+**Other Properties Related to Output:** [Outputs review findings, test gaps, impact analysis, high-risk patterns, and regression scope recommendations.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown report with structured review findings, test gaps, impact analysis, high-risk patterns, and regression scope recommendations.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses traceability identifiers for each code review and links findings to a change or requirement identifier when available.] <br>
+1.6.3 (source: frontmatter and server release evidence)
 
-## Skill Version(s): <br>
-1.6.0 (source: SKILL.md frontmatter and server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

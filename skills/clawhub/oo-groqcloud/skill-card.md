@@ -1,44 +1,56 @@
-## Description: <br>
-GroqCloud (groq.com) lets agents read, create, and update GroqCloud data through the OOMOL oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GroqCloud lets agents work with GroqCloud through an OOMOL-connected account using the oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate GroqCloud through an OOMOL-connected account, including model discovery, model metadata lookup, and non-streaming OpenAI-compatible chat completions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected GroqCloud account and may use sensitive account credentials managed by OOMOL. <br>
-Mitigation: Install and use it only when the agent is intended to access that connected GroqCloud account. <br>
-Risk: Chat-completion requests may send user-provided content to GroqCloud and consume account credits. <br>
-Mitigation: Review prompts and payloads before running chat-completion actions, especially for sensitive data or cost-sensitive accounts. <br>
-Risk: Optional oo CLI installation and login steps introduce trust and account-linking decisions. <br>
-Mitigation: Run install, login, or connection setup only after an auth or connection failure and only when the OOMOL oo CLI is trusted for the environment. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect GroqCloud models and run chat, transcription, and translation actions through an OOMOL-connected GroqCloud account.
 
-## Reference(s): <br>
-- [ClawHub GroqCloud Skill](https://clawhub.ai/oomol/oo-groqcloud) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [GroqCloud Homepage](https://groq.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May trigger GroqCloud connector calls through the OOMOL oo CLI and return connector JSON responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Chat, transcription, and translation actions may send prompts, audio, URLs, or files to the connector service and GroqCloud.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the action schema and exact payload with the user before running write actions.
+
+Risk: The skill operates through the user's OOMOL-connected GroqCloud account.
+
+Mitigation: Install it only when agents should use that connected account, and rely on the documented confirmation flow for actions that send or change data.
+
+## Reference(s):
+
+- [ClawHub GroqCloud Skill](https://clawhub.ai/oomol/skills/oo-groqcloud)
+- [GroqCloud Homepage](https://groq.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before payload construction; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

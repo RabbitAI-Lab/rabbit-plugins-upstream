@@ -217,9 +217,9 @@ def usage_score(usage_record: dict[str, object], evidence_weight: float) -> floa
 
 
 def uniqueness_score(overlap: float) -> float:
-    if overlap >= 0.85:
+    if overlap >= NEAR_DUPLICATE_OVERLAP_THRESHOLD:
         return 0.0
-    if overlap >= 0.65:
+    if overlap >= HIGH_OVERLAP_THRESHOLD:
         return 1.0
     if overlap >= 0.40:
         return 2.0
@@ -241,11 +241,11 @@ def impact_score(
             score += 0.5
         if calls >= 3:
             score += 0.5
-        if overlap >= 0.75:
+        if overlap >= DUPLICATE_OVERLAP_THRESHOLD:
             score -= 1.0
         if calls == 0:
             score -= 0.5
-        return max(0.0, min(4.0, round(score, 2)))
+        return clamp(round(score, 2), 0.0, 4.0)
 
     if not ablation or ablation.get("cases", 0) <= 0:
         return 1.0 if calls <= 0 else 2.0
@@ -268,7 +268,7 @@ def impact_score(
         score += 1.0
     elif worse > better:
         score -= 1.0
-    return max(0.0, min(4.0, round(score, 2)))
+    return clamp(round(score, 2), 0.0, 4.0)
 
 
 def runtime_quality_evidence(
@@ -310,7 +310,7 @@ def runtime_quality_evidence(
     if calls >= 5 and ablation and ablation.get("cases", 0) > 0:
         consistency = float(ablation.get("consistency_rate", 0.0))
         better = float(ablation.get("better_rate", 0.0))
-        if consistency >= 0.85 and better <= 0.10:
+        if consistency >= NO_IMPACT_CONSISTENCY_THRESHOLD and better <= NO_IMPACT_BETTER_THRESHOLD:
             evidence.append(
                 quality_issue(
                     "overtrigger-no-impact",
@@ -424,7 +424,7 @@ def quality_penalty(
 
 
 def catalog_quality_evidence(overlap_peer: str | None, overlap_value: float) -> list[dict[str, object]]:
-    if not overlap_peer or overlap_value < 0.85:
+    if not overlap_peer or overlap_value < NEAR_DUPLICATE_OVERLAP_THRESHOLD:
         return []
     return [
         quality_issue(
@@ -485,15 +485,15 @@ def confidence_score(
 
 
 def verdict(total: float, confidence: float | None = None) -> str:
-    if confidence is not None and confidence < 0.55 and total < 4.5:
+    if confidence is not None and confidence < LOW_CONFIDENCE_THRESHOLD and total < SCORE_REVIEW_THRESHOLD:
         return "insufficient-evidence"
-    if total >= 8.0:
+    if total >= SCORE_KEEP_THRESHOLD:
         return "keep"
-    if total >= 6.0:
+    if total >= SCORE_KEEP_NARROW_THRESHOLD:
         return "keep-narrow"
-    if total >= 4.5:
+    if total >= SCORE_REVIEW_THRESHOLD:
         return "review"
-    if total >= 3.0:
+    if total >= SCORE_MERGE_DELETE_THRESHOLD:
         return "merge-delete"
     return "delete"
 
@@ -516,44 +516,44 @@ def recommend_action(
 
     if risk_level == "high":
         return "quarantine-review", "high-risk patterns need a closer check", False
-    if risk_level == "medium" and total >= 6.0:
+    if risk_level == "medium" and total >= SCORE_KEEP_NARROW_THRESHOLD:
         return "keep-review-risk", "useful locally with medium-risk patterns", False
-    if quality_penalty_value >= 1.2 and total >= 6.0:
+    if quality_penalty_value >= QUALITY_BURDEN_REVIEW_THRESHOLD and total >= SCORE_KEEP_NARROW_THRESHOLD:
         return "keep-review-burden", "useful locally but expensive to maintain or load", False
-    if quality_penalty_value >= 1.2 and total >= 4.5:
+    if quality_penalty_value >= QUALITY_BURDEN_REVIEW_THRESHOLD and total >= SCORE_REVIEW_THRESHOLD:
         return "review-burden", "maintenance cost lowers the final score", False
 
-    if total >= 8.0:
+    if total >= SCORE_KEEP_THRESHOLD:
         return "keep", "high final score", False
-    if total >= 6.0:
-        if overlap >= 0.65 and calls <= 1:
+    if total >= SCORE_KEEP_NARROW_THRESHOLD:
+        if overlap >= HIGH_OVERLAP_THRESHOLD and calls <= 1:
             return "keep-narrow", "high overlap suggests narrower scope", False
         return "keep-narrow", "good final score", False
 
     if risk_level == "medium":
         return "review-risk", "medium-risk patterns require review", False
 
-    if confidence < 0.55:
+    if confidence < LOW_CONFIDENCE_THRESHOLD:
         return "observe-30d", "evidence confidence is low", False
 
-    if total >= 4.5:
-        if overlap >= 0.65:
+    if total >= SCORE_REVIEW_THRESHOLD:
+        if overlap >= HIGH_OVERLAP_THRESHOLD:
             return "merge-or-review", "mid score with high overlap", False
-        if community_prior is not None and community_prior >= 0.6:
+        if community_prior is not None and community_prior >= STRONG_COMMUNITY_PRIOR_THRESHOLD:
             return "review-vs-community", "community signal is stronger than final score", False
         return "review", "mid final score", False
 
     if kind in {"api", "tool"}:
-        if calls == 0 and overlap >= 0.75:
+        if calls == 0 and overlap >= DUPLICATE_OVERLAP_THRESHOLD:
             return "merge-delete", "unused duplicate protected skill", True
-        if community_prior is not None and community_prior >= 0.6:
+        if community_prior is not None and community_prior >= STRONG_COMMUNITY_PRIOR_THRESHOLD:
             return "review-vs-community", "protected skill has strong community signal", False
         return "merge-or-review", "protected skill scores low after burden", False
 
-    if community_prior is not None and community_prior >= 0.6:
+    if community_prior is not None and community_prior >= STRONG_COMMUNITY_PRIOR_THRESHOLD:
         return "review-vs-community", "community signal suggests benchmark before removal", False
-    if total < 3.0:
+    if total < SCORE_MERGE_DELETE_THRESHOLD:
         return "delete", "very low final score", True
-    if overlap >= 0.65 and calls <= 1:
+    if overlap >= HIGH_OVERLAP_THRESHOLD and calls <= 1:
         return "merge-delete", "low usage plus high overlap", True
     return "merge-delete", "low final score", True

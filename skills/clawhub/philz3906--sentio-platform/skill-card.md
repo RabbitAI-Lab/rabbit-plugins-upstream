@@ -1,46 +1,58 @@
-## Description: <br>
-Build, modify, or troubleshoot Sentio projects across processors, Sentio SQL in Data Studio, alerting, and dashboards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build, modify, or troubleshoot Sentio projects across processors, Sentio SQL in Data Studio, alerting, and dashboards.
 
-## Publisher: <br>
-[philz3906](https://clawhub.ai/user/philz3906) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[philz3906](https://clawhub.ai/user/philz3906)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Sentio projects, query project data, configure alerts, work with dashboards, inspect processors, and run simulations through the Sentio CLI and API schema. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent broad authority over real Sentio account resources. <br>
-Mitigation: Install only when the agent is expected to manage Sentio resources, use the least-privileged API key available, and review planned actions before execution. <br>
-Risk: Credential handling could expose long-lived Sentio API keys or bearer tokens. <br>
-Mitigation: Avoid pasting long-lived secrets into chat or shell arguments; prefer short-lived or scoped credentials when possible. <br>
-Risk: Project deletes, processor pause or stop actions, dashboard imports, public sharing, and simulations can have material account or project impact. <br>
-Mitigation: Require explicit confirmation before destructive or externally visible operations. <br>
-Risk: Generated SQL queries and dashboard JSON can be incorrect or operationally misleading. <br>
-Mitigation: Review generated SQL and dashboard JSON before running commands or importing dashboards. <br>
+## Use Case:
 
+Developers and engineers use this skill to manage Sentio projects, query Sentio data, configure alerts and endpoints, and create or update dashboards with the Sentio CLI and API schemas.
 
-## Reference(s): <br>
-- [Sentio API OpenAPI schema](artifact/references/openapi.swagger.json) <br>
-- [ClawHub skill page](https://clawhub.ai/philz3906/skills/sentio-platform) <br>
-- [Publisher profile](https://clawhub.ai/user/philz3906) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Code, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Sentio CLI commands, SQL queries, alert definitions, dashboard JSON, processor-management steps, and review guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can guide broad changes to Sentio projects, including delete, pause, stop, import, and public-sharing operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation and verify the target project before destructive, state-changing, import, or public-sharing actions.
+
+Risk: The skill may involve Sentio API keys or bearer tokens for CLI authentication.
+
+Mitigation: Use least-privilege credentials and avoid placing long-lived secrets in chat messages, shell history, or command arguments.
+
+Risk: The security verdict is suspicious because the skill has broad authority and limited safety guidance.
+
+Mitigation: Review the skill before installing it for production or sensitive Sentio projects, and scan generated commands before execution.
+
+## Reference(s):
+
+- [Sentio OpenAPI Swagger](references/openapi.swagger.json)
+- [ClawHub skill page](https://clawhub.ai/philz3906/skills/sentio-platform)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce commands that query or modify Sentio projects and dashboards.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

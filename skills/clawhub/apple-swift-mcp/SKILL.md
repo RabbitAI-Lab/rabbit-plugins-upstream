@@ -28,7 +28,7 @@ Requires **macOS 14+ on Apple Silicon**. Intel users can build from source (`swi
 ### Mail / Messages / Notes (AppleScript-backed)
 - `mail` — search, read, send, reply, forward; Messages.app-style threading
 - `messages` — send iMessage / SMS, query `chat.db` for history, group chats
-- `notes` — list, search, read, create notes
+- `notes` — list, search (optionally with bodies inline), get a full note (pageable), folders, create, update, delete
 
 ### Photos (PhotoKit + AppleScript)
 - `photos` — list/search assets and albums, get asset detail, favorite/organize/import/export, get a JPEG rendition, set title/description/keywords, free-text search

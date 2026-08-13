@@ -1,46 +1,55 @@
-## Description: <br>
-Find carbon emission factors for any material or process. 1M+ LCA datasets (HiQLCD, Ecoinvent, CarbonMinds). AI-powered BOM carbon footprint calculation and material comparison. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Look up LCA emission factors, product carbon footprint data, BOM accounting inputs, production-route comparisons, EPD peer data, and benchmark distributions from HiQ Cortex databases and published EPDs.
 
-## Publisher: <br>
-[KirbyInGitHub](https://clawhub.ai/user/KirbyInGitHub) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kirbyingithub](https://clawhub.ai/user/kirbyingithub)
 
-## Use Case: <br>
-Developers, sustainability analysts, and OpenClaw agents use this skill to search LCA datasets, answer carbon-footprint questions, compare materials, and estimate BOM emissions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends LCA questions, material lists, BOM details, and the HIQ_API_KEY to HiQ service endpoints. <br>
-Mitigation: Use it only under an approved data-sharing policy, avoid confidential product or supplier data unless authorized, and store the API key in environment or OpenClaw configuration rather than prompts. <br>
-Risk: Some dataset results may be restricted or require separate authorization. <br>
-Mitigation: Confirm access rights for restricted LCA datasets before relying on or redistributing returned values. <br>
-Risk: Carbon-footprint calculations and material comparisons depend on dataset choice, region, system boundary, and LCA methodology. <br>
-Mitigation: Review generated results against the intended ISO/LCA methodology and document assumptions before using them in reports or decisions. <br>
+## Use Case:
 
+External users, developers, and LCA practitioners use this skill to query HiQ Cortex for dataset matches, GWP values, LCIA indicators, process hotspots, EPD search, and peer benchmarks. It is intended for carbon-footprint and life-cycle-assessment workflows that need database, version, system model, geography, and reference-unit basis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/KirbyInGitHub/hiq-cortex) <br>
-- [HiQLCD platform](https://www.hiqlcd.com) <br>
-- [HiQ Cortex web app](https://carbonx.hiqlcd.com/cortex) <br>
-- [HiQ Cortex MCP endpoint](https://x.hiqlcd.com/api/deck/mcp) <br>
-- [HiQ Cortex search API](https://x.hiqlcd.com/api/deck/search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Plain text and Markdown with command examples and optional JSON configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js and HIQ_API_KEY; search results may include dataset names, sources, regions, units, GWP100 values, quality fit, and links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: release metadata) <br>
+Risk: The skill can send raw LCA queries, product descriptions, and BOM lines to the external HiQ Cortex service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when external HiQ Cortex processing is intended, and redact confidential material lists or product details before querying.
+
+Risk: Browser sign-in stores reusable credentials in ~/.hiq/credentials.json.
+
+Mitigation: Use the logout command to remove local credentials when the session should no longer persist, and avoid shared host accounts for sensitive work.
+
+## Reference(s):
+
+- [HiQ Cortex skill page](https://clawhub.ai/kirbyingithub/skills/hiq-cortex)
+- [HiQ-AI agent-skills repository](https://github.com/HiQ-AI/agent-skills)
+- [HiQ LCA data service](https://www.hiqlcd.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and optional JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include dataset keys, GWP or LCIA values with basis, entitlement notes, purchase URLs, credential setup guidance, and raw JSON when requested.]
+
+## Skill Version(s):
+
+1.8.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

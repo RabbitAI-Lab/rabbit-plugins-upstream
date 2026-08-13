@@ -1,7 +1,7 @@
-slug: env-mgr
-name: env-mgr
+slug: env-manager
+name: env-manager
 description: Scaffolds dev project files (package.json, Dockerfile, Cargo.toml, etc.) and returns toolchain commands for the calling agent to run. Writes files only inside the agent workspace. Environment names are strictly sanitized to a conservative allowlist (lowercase letters, digits, hyphen, underscore, dot) and rejected if they contain path separators, parent-directory references, or shell metacharacters. Does not run shell commands.
-version: 1.4.0
+version: 3.0.6
 type: skill
 author: OpenClaw
 license: MIT

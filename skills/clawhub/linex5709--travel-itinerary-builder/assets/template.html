@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>首尔盛夏亲子微冒险：6日终极实操手册</title>
+<style>
+/* ============ 基础重置 ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue: #3b82f6; --blue-dark: #2563eb; --blue-light: #eff6ff; --blue-50: #dbeafe;
+  --amber: #fbbf24; --amber-light: #fef3c7; --amber-text: #92400e;
+  --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0; --slate-300: #cbd5e1;
+  --slate-400: #94a3b8; --slate-500: #64748b; --slate-600: #475569; --slate-700: #334155;
+  --slate-800: #1e293b; --slate-900: #0f172a; --green: #22c55e; --white: #fff;
+  --radius: 1.5rem; --radius-lg: 2.5rem;
+}
+body {
+  font-family: 'PingFang SC','Microsoft YaHei','Hiragino Sans GB',system-ui,-apple-system,sans-serif;
+  background: var(--slate-50); color: var(--slate-800); line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* ============ 布局 ============ */
+.container { max-width: 1024px; margin: 0 auto; padding: 0 16px; }
+
+/* ============ Header ============ */
+header {
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+  position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--slate-200);
+}
+.header-inner { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; }
+.header-left { display: flex; align-items: center; gap: 12px; }
+.logo-badge { background: var(--blue); padding: 8px 12px; border-radius: 12px; color: #fff; font-weight: 900; font-size: 1.1rem; }
+.header-title { font-size: 1.15rem; font-weight: 700; }
+.header-title .date { color: var(--slate-400); font-weight: 400; font-size: 0.8rem; margin-left: 4px; }
+.header-tag { background: var(--amber-light); color: var(--amber-text); font-size: 0.65rem; font-weight: 700; padding: 6px 12px; border-radius: 999px; border: 1px solid #fde68a; white-space: nowrap; }
+
+/* ============ 能量概览 ============ */
+.overview { margin: 32px 0; }
+.overview-card {
+  background: var(--slate-900); border-radius: var(--radius-lg); padding: 32px;
+  color: #fff; position: relative; overflow: hidden;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center;
+}
+.overview-card::after { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; background:var(--blue); border-radius:50%; filter:blur(80px); opacity:0.2; }
+.overview-card > * { position: relative; z-index: 1; }
+.overview-card h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; }
+.overview-card p { color: var(--slate-400); font-size: 0.85rem; margin-bottom: 20px; line-height: 1.7; }
+.overview-card .highlight-blue { color: #60a5fa; font-weight: 700; }
+.overview-card .highlight-amber { color: var(--amber); font-weight: 700; }
+.stat-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.stat-box { background: var(--slate-800); border: 1px solid var(--slate-700); padding: 10px 14px; border-radius: 16px; }
+.stat-box .label { display: block; font-size: 0.7rem; color: var(--slate-500); }
+.stat-box .value { font-size: 1rem; font-weight: 700; }
+.stat-box .value.green { color: var(--green); }
+
+/* ============ CSS 条形图（替代 Chart.js） ============ */
+.css-chart { display: flex; flex-direction: column; gap: 12px; padding: 8px 0; }
+.chart-row { display: flex; align-items: center; gap: 10px; }
+.chart-label { font-size: 0.75rem; color: var(--slate-400); width: 28px; flex-shrink: 0; font-weight: 700; }
+.chart-bar-track { flex: 1; height: 22px; background: var(--slate-800); border-radius: 11px; overflow: hidden; position: relative; }
+.chart-bar-energy { height: 100%; border-radius: 11px; transition: width 0.8s ease; }
+.chart-bar-fun { height: 100%; border-radius: 11px; transition: width 0.8s ease; opacity: 0.6; }
+.chart-legend { display: flex; gap: 16px; margin-top: 4px; font-size: 0.7rem; color: var(--slate-400); }
+.legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: middle; }
+
+/* ============ 日期导航 ============ */
+.day-nav { display: flex; gap: 8px; margin-bottom: 36px; overflow-x: auto; padding-bottom: 12px; -webkit-overflow-scrolling: touch; }
+.day-nav::-webkit-scrollbar { display: none; }
+.day-btn {
+  padding: 14px 22px; border-radius: 16px; background: var(--white);
+  border: 1px solid var(--slate-200); font-size: 0.82rem; font-weight: 700;
+  cursor: pointer; white-space: nowrap; transition: all 0.2s; color: var(--slate-700);
+  font-family: inherit;
+}
+.day-btn:hover { border-color: var(--blue); color: var(--blue); }
+.day-btn.active {
+  background: var(--blue) !important; color: #fff !important;
+  transform: scale(1.05); box-shadow: 0 8px 14px -4px rgba(59,130,246,0.35); border-color: var(--blue);
+}
+
+/* ============ 日程内容 ============ */
+#day-content { min-height: 400px; }
+.day-intro { border-left: 4px solid var(--blue); padding-left: 16px; margin-bottom: 32px; }
+.day-intro .badges { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.badge-blue { background: var(--blue); color: #fff; font-size: 0.72rem; font-weight: 700; padding: 2px 10px; border-radius: 6px; }
+.badge-amber { background: var(--amber-light); color: var(--amber-text); font-size: 0.72rem; font-weight: 700; padding: 2px 10px; border-radius: 6px; }
+.day-intro h3 { font-size: 1.6rem; font-weight: 700; color: var(--slate-800); }
+.day-intro .desc { color: var(--slate-500); font-size: 0.85rem; margin-top: 8px; line-height: 1.7; }
+.timeline-box { margin-top: 12px; background: var(--blue-light); border: 1px solid var(--blue-50); border-radius: 12px; padding: 8px 14px; display: inline-block; }
+.timeline-box .tl-label { font-size: 0.75rem; font-weight: 700; color: var(--blue-dark); }
+.timeline-box .tl-text { font-size: 0.75rem; color: var(--slate-600); }
+
+/* ============ 景点卡片 ============ */
+.spots-list { display: flex; flex-direction: column; gap: 48px; }
+.spot-card {
+  background: #fff; border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); border: 1px solid var(--slate-100);
+}
+.spot-img-wrap { position: relative; overflow: hidden; }
+.spot-img { width: 100%; height: 280px; object-fit: cover; transition: transform 0.6s; }
+.spot-card:hover .spot-img { transform: scale(1.05); }
+.spot-img-name { position: absolute; bottom: 20px; left: 20px; background: rgba(255,255,255,0.92); backdrop-filter: blur(6px); padding: 8px 16px; border-radius: 16px; font-weight: 700; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.spot-body { padding: 32px; }
+.time-badge { display: inline-block; background: var(--blue-light); color: var(--blue-dark); font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; margin-bottom: 14px; }
+.transport-box { background: rgba(239,246,255,0.5); border: 1px solid var(--blue-50); border-radius: 16px; padding: 14px 16px; margin-bottom: 22px; font-size: 0.78rem; }
+.transport-box .t-label { font-weight: 700; color: var(--blue-dark); }
+.transport-box .t-text { color: var(--slate-600); }
+
+.spot-reason { margin-bottom: 28px; }
+.spot-reason .r-label { font-size: 0.7rem; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-style: italic; }
+.spot-reason p { color: var(--slate-700); font-weight: 500; line-height: 1.7; }
+
+.spot-how { margin-bottom: 32px; }
+.spot-how .h-label { font-size: 0.82rem; font-weight: 700; color: var(--slate-800); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.spot-how .h-icon { background: var(--blue-light); color: var(--blue); padding: 2px 8px; border-radius: 6px; font-size: 0.9rem; }
+.step-item { display: flex; gap: 16px; margin-bottom: 16px; }
+.step-num { min-width: 32px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--blue); color: #fff; border-radius: 50%; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+.step-text { font-size: 0.82rem; color: var(--slate-600); line-height: 1.7; padding-top: 4px; }
+
+.tips-box { background: var(--slate-50); border: 1px solid var(--slate-100); border-radius: var(--radius); padding: 22px; display: flex; gap: 16px; align-items: flex-start; }
+.tips-box .tips-icon { font-size: 1.5rem; flex-shrink: 0; }
+.tips-box .tips-label { display: block; font-weight: 700; font-size: 0.7rem; color: var(--slate-400); text-transform: uppercase; margin-bottom: 4px; }
+.tips-box .tips-text { font-size: 0.78rem; color: var(--slate-600); line-height: 1.7; }
+
+/* ============ 工具箱 ============ */
+.logistics { margin-top: 64px; border-top: 1px solid var(--slate-200); padding-top: 48px; }
+.logistics-intro { border-left: 4px solid var(--blue); padding-left: 16px; margin-bottom: 28px; }
+.logistics-intro h3 { font-size: 1.4rem; font-weight: 700; }
+.logistics-intro p { color: var(--slate-500); font-size: 0.82rem; }
+.logistics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.logistics-card { background: #fff; padding: 24px; border-radius: var(--radius); border: 1px solid var(--slate-100); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.logistics-card .lc-title { color: var(--blue); font-weight: 700; margin-bottom: 14px; font-size: 0.95rem; }
+.logistics-card .lc-text { font-size: 0.76rem; color: var(--slate-600); line-height: 1.8; }
+.logistics-card .lc-text b { color: var(--slate-800); }
+
+/* ============ Footer ============ */
+footer { margin-top: 64px; padding: 40px 0; text-align: center; color: var(--slate-400); font-size: 0.72rem; border-top: 1px solid var(--slate-100); }
+
+/* ============ 响应式 ============ */
+@media (max-width: 768px) {
+  .overview-card { grid-template-columns: 1fr; }
+  .logistics-grid { grid-template-columns: 1fr; }
+  .spot-body { padding: 20px; }
+  .day-intro h3 { font-size: 1.3rem; }
+  .header-tag { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container header-inner">
+    <div class="header-left">
+      <div class="logo-badge">SEOUL</div>
+      <div class="header-title">盛夏亲子微冒险<span class="date">8.14 - 8.19</span></div>
+    </div>
+    <div class="header-tag">2大1小 (7岁) 定制</div>
+  </div>
+</header>
+
+<div class="container" style="padding-top: 28px;">
+
+  <!-- 能量概览 -->
+  <section class="overview">
+    <div class="overview-card">
+      <div>
+        <h2>📈 6日探险能量趋势</h2>
+        <p>根据 8 月中旬平均 33°C 高温动态调整。<span class="highlight-blue">D4 (KidZania)</span> 是全室内回血日，<span class="highlight-amber">D3 (汉江)</span> 是体能高峰。首日下午 12:30 落地仁川，末日 20:00 航班离开 — 行程已按此精准编排。</p>
+        <div class="stat-row">
+          <div class="stat-box"><span class="label">日均步数预估</span><span class="value">12,500 步</span></div>
+          <div class="stat-box"><span class="label">避暑系数</span><span class="value green">高 (85%)</span></div>
+          <div class="stat-box"><span class="label">航班窗口</span><span class="value">12:30→20:00</span></div>
+        </div>
+        <div class="chart-legend" style="margin-top:12px;">
+          <span><span class="legend-dot" style="background:var(--blue);"></span>体能消耗</span>
+          <span><span class="legend-dot" style="background:var(--amber);"></span>趣味冒险感</span>
+        </div>
+      </div>
+      <div class="css-chart" id="cssChart"></div>
+    </div>
+  </section>
+
+  <!-- 日期导航 -->
+  <nav class="day-nav" id="dayNav">
+    <button class="day-btn active" onclick="renderDay(1)">D1 落地/好客</button>
+    <button class="day-btn" onclick="renderDay(2)">D2 迷宫/气球</button>
+    <button class="day-btn" onclick="renderDay(3)">D3 汉江/圣水</button>
+    <button class="day-btn" onclick="renderDay(4)">D4 职场探险</button>
+    <button class="day-btn" onclick="renderDay(5)">D5 现代/喷泉</button>
+    <button class="day-btn" onclick="renderDay(6)">D6 匠心/归途</button>
+  </nav>
+
+  <!-- 日程内容 -->
+  <div id="day-content"></div>
+
+  <!-- 工具箱 -->
+  <section class="logistics">
+    <div class="logistics-intro">
+      <h3>🛠️ 探险实战工具箱</h3>
+      <p>帮助你在首尔街头快速决策的关键信息。</p>
+    </div>
+    <div class="logistics-grid">
+      <div class="logistics-card">
+        <div class="lc-title">📍 住宿建议</div>
+        <p class="lc-text">建议锁定 <b>明洞/忠武路</b> 区域。D1/D2/D6 景点均在 2km 半径内。D1 落地后乘坐 <b>6015 路机场巴士</b> 可直达酒店门口，无需折腾地铁——对 7 岁孩子体能最友好。票价约 ₩17,000/人。</p>
+      </div>
+      <div class="logistics-card">
+        <div class="lc-title">📱 地图与App</div>
+        <p class="lc-text"><b>Naver Map：</b>韩国唯一准确的地图，支持中文界面，可查实时公交到站时间。Google Map 在韩国基本不可用。<br><b>Kakao T：</b>打车软件，支持英文，绑定信用卡后无需现金。<br><b>Papago：</b>Naver 出品翻译 App，韩语翻译准确度远超 Google 翻译。</p>
+      </div>
+      <div class="logistics-card">
+        <div class="lc-title">🎒 必备装备</div>
+        <p class="lc-text">夏季首尔室外暴晒、室内空调极冷。务必携带：<b>便携电风扇、儿童防晒喷雾、薄长袖防晒衣</b>（室内空调应对）、<b>折叠伞</b>（8月偶有阵雨）、<b>T-Money 交通卡</b>（便利店即可充值）。</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>首尔亲子探险大师 · 为 7 岁冒险家量身定制的 6 日盛夏之旅 | 航班：8.14 12:30抵达 — 8.19 20:00离开</p>
+</footer>
+
+<script>
+// ============ 行程数据 ============
+var itinerary = {
+  1: {
+    title: "落地首尔：数字与溪流的初体验",
+    date: "8月14日（周三）",
+    flightNote: "✈️ 12:30 抵达仁川国际机场 (ICN)",
+    timeline: "12:30 落地 → 14:00 出关 → 15:00 抵达酒店 → 16:00 开始探索 → 20:30 返回休息",
+    description: "中午 12:30 落地仁川，出关取行李约需 60-90 分钟，乘机场巴士 6015 路约 60 分钟抵达明洞区域。入住后稍作休整，下午 16:00 左右正式开启探索。今日主打\u201c适应性冒险\u201d——全部在室内或傍晚室外，不消耗过多体能。",
+    spots: [
+      {
+        name: "HiKR Ground (好客空间)",
+        img: "seoul_images/compressed/hikr_ground.jpg",
+        timeSlot: "16:00 — 18:00（建议游玩 2 小时）",
+        transport: "从明洞步行约 10 分钟即达，位于清溪川路 40 号韩国观光公社大楼内",
+        reason: "完全室内的沉浸式数字艺术馆，K-Pop 氛围拉满。位于韩国观光公社大楼内，是替代已停业动画中心的最佳选择。冷气强劲，是午后避暑的绝佳去处，同时也是了解首尔旅游资源的起点。",
+        how: [
+          "【1F 入口】在接待台领取免费的中文导览图，孩子可以在进门处的巨型 LED 媒体墙上看到自己的身影出现在首尔地标之间。",
+          "【2F K-Pop Ground】这里是重点区域：模拟 MV 拍摄现场（地铁车厢、自助洗衣房等场景），孩子可以操作控制台上的按钮实时改变背景颜色和灯光效果，拍照非常出片。",
+          "【3F XR 体验厅】站在巨大的弧形屏幕前，体验虚拟的首尔全景飞行。戴上耳机进入沉浸式 K-Pop 演唱会视角。",
+          "【4F 旅游咨询区】这里可以免费领取首尔各地图、优惠券，还有盖章收集卡——孩子可以一路集齐各个区域的纪念章。",
+          "【5F 好客休息站】透明落地窗边可俯瞰清溪川全景，有舒适的休息沙发，适合中途休整充电。"
+        ],
+        tips: "完全免费，无需预约。空调极强，记得穿上随身带的薄外套。出口正对清溪川起点（清溪广场），是下一站的完美衔接点。"
+      },
+      {
+        name: "清溪川晚风踩水",
+        img: "seoul_images/compressed/cheonggyecheon.jpg",
+        timeSlot: "18:00 — 20:00（建议停留 1.5-2 小时，含晚餐）",
+        transport: "从 HiKR Ground 5 楼出门即是清溪广场（清溪川起点），零步行距离",
+        reason: "首尔夏日夜晚最具仪式感的体验。这条从市中心穿流而过的人工溪流全长约 10 公里，清溪广场段最为热闹，是本地家庭晚饭后最爱的消暑去处。潺潺流水配上两岸灯光，城市中心却有度假般的放松感。",
+        how: [
+          "从清溪广场的螺旋形雕塑（Spring 雕塑）出发，这里是清溪川的起点标志，先拍一张全家福。",
+          "沿石阶走下溪边步道，两侧是精心设计的景观灯光。夏季傍晚 19:00 左右天色渐暗、灯光全亮，氛围最佳。",
+          "脱掉鞋子，卷起裤腿，在清凉的溪水中漫步——水面仅到脚踝深度，水流清澈见底，能看到小鱼游过。7 岁孩子可以安全地在水中玩耍 15-20 分钟。",
+          "沿溪边往上游方向步行约 500 米，会经过多个小型瀑布和水景装置，每个都有不同的灯光颜色主题。",
+          "溪边有很多小吃摊位和便利店，可以买一份韩式炒年糕或鱼饼串作为轻便晚餐，坐在溪边石阶上边吃边看夜景。"
+        ],
+        tips: "溪边石阶适合坐着休息，建议随身带一块小毛巾擦脚。穿凉鞋/拖鞋最方便。晚上 20:00 左右返回酒店，第一天不宜太晚，让孩子保持充足睡眠迎接 D2 的体能挑战。"
+      }
+    ]
+  },
+  2: {
+    title: "体能迷宫与高空系留气球",
+    date: "8月15日（周四）",
+    timeline: "09:00 出发 → 10:00 动态迷宫 → 12:30 仁寺洞午餐 → 14:30 前往汝矣岛 → 17:00 首尔月气球 → 19:30 晚餐 → 21:00 返回",
+    description: "今日是本次行程的第一个冒险高潮，主打\u201c极限高度\u201d与\u201c身体协作\u201d。上午在仁寺洞挑战体能迷宫，下午转战汝矣岛乘坐首尔新地标——氦气球升至 130 米高空。两个景点间需地铁换乘，已预留充足交通时间。",
+    spots: [
+      {
+        name: "动态迷宫 (Dynamic Maze)",
+        img: "seoul_images/compressed/dynamic_maze.jpg",
+        timeSlot: "10:00 — 12:00（建议游玩 1.5-2 小时）",
+        transport: "从明洞乘地铁至安国站（3号线，约10分钟），4号出口步行5分钟即达仁寺洞大街。迷宫位于仁寺洞 Ssamziegil 附近。",
+        reason: "这不是普通的迷宫，而是一场需要全家人通力合作的体能闯关游戏。需要钻洞、爬绳、攀网、解谜、集体呐喊——7 岁孩子的灵活体型在这里反而是最大优势。比隔壁的爱来魔相艺术馆更具互动性和冒险感。",
+        how: [
+          "【入场准备】进门先寄存所有随身物品（免费储物柜），全家人手牵手进入。穿运动鞋和袜子是强制要求。工作人员会用英文做简短安全说明。",
+          "【镜子迷宫】第一个挑战区域：在无数面镜子中找到真正的出口通道，孩子个子矮反而能看到大人看不到的低位通道标记——让孩子在前面领路，增加参与感。",
+          "【尖叫墙】全家人站在传感器前集体大喊，分贝达标后隐藏门才会打开——这是孩子最爱的环节，会笑得停不下来。",
+          "【攀爬障碍区】需要钻过低矮的绳网隧道、爬过软垫障碍——孩子体型小可以轻松前进，体重大的人则要费力爬行，角色反转乐趣无穷。",
+          "【协作解谜】部分关卡需要两人以上同时触发不同位置的开关，是锻炼家庭默契的绝佳场景。全程大约需要 40-60 分钟通关。"
+        ],
+        tips: "门票成人约 ₩12,000、儿童 ₩10,000。务必穿袜子！建议穿透气运动服+运动短裤，不宜穿裙子。迷宫内无空调但通风良好，8 月会有些闷热，带好小风扇。出口有纪念品店可以买闯关证书。"
+      },
+      {
+        name: "仁寺洞 Ssamziegil 与午餐",
+        img: "seoul_images/compressed/ssamziegil.jpg",
+        timeSlot: "12:00 — 14:00（午餐+逛街约 2 小时）",
+        transport: "从动态迷宫步行 3 分钟即到 Ssamziegil（人人广场）",
+        reason: "方形螺旋式的文创商场，整栋建筑没有台阶，沿缓坡盘旋而上，孩子可以边逛边跑完全不吃力。每一层都有手工文创小店，是仁寺洞最适合亲子的休息站。",
+        how: [
+          "从 1 楼沿着缓坡一路逛到 4 楼，中途有各种手工艺摊位：手工香皂、手绘明信片、韩纸工艺品——让孩子挑一件小纪念品。",
+          "4 楼天台有露天休息区和艺术装置，可以看到仁寺洞传统街区的全景。",
+          "午餐推荐：Ssamziegil 周边有大量传统韩食餐厅，推荐尝试韩定食或参鸡汤。也可去 B1 层的便当食堂，价格亲民、上菜快。"
+        ],
+        tips: "周末仁寺洞主街会变成步行街，有街头表演。D2 是周四，人相对较少，逛起来更舒适。"
+      },
+      {
+        name: "SEOULDAL (首尔月) 氦气气球",
+        img: "seoul_images/compressed/seouldal.jpg",
+        timeSlot: "16:30 — 18:30（含排队，实际空中约 15 分钟）",
+        transport: "从安国站乘 3 号线至钟路 3 街站换乘 5 号线，至汝矣渡口站 3 号出口，步行约 8 分钟到达汝矣岛公园。全程约 35-40 分钟。",
+        reason: "2024 年首尔最热门的新地标。这是一枚系留氦气气球（非热气球），垂直升降至 130 米高空。吊篮中间有镂空玻璃地板，可以垂直俯瞰下方的汉江和汝矣岛全貌——对 7 岁孩子来说既是勇气挑战也是终生难忘的体验。",
+        how: [
+          "抵达后先在售票处扫码领取电子等候号，现场大屏幕会显示当前叫号。等待期间可以在汝矣岛公园草坪上休息，这里有树荫和长椅。",
+          "排队登舱：一次可容纳约 20 人，工作人员会引导站位。推荐站在吊篮边缘位置，视野最好；镂空玻璃地板区域在中间，敢站上去的可以拍出震撼照片。",
+          "升空过程平稳缓慢，约 2-3 分钟到达最高点。130 米高度可以清楚看到汉江蜿蜒穿过首尔、63 大厦、国会议事堂、甚至远处北汉山的轮廓。",
+          "空中停留约 10 分钟，随后缓慢下降。全程约 15 分钟。建议在 17:00-17:30 登球，可以看到夕阳染红汉江的景色——拍出来的照片最好看。"
+        ],
+        tips: "票价成人 ₩25,000、儿童 ₩20,000。强风或雨天会暂停运营，出发前务必查看官方 Instagram (@seouldal_official) 确认当日运营状态。傍晚排队人数较多，建议 16:30 前到达。气球旁有咖啡车，可以买冰饮消暑等候。"
+      }
+    ]
+  },
+  3: {
+    title: "汉江征服者与潮流艺术区",
+    date: "8月16日（周五）",
+    timeline: "08:30 出发 → 09:30 皮划艇 → 12:00 午餐+换装 → 13:00 前往圣水洞 → 13:30 圣水洞探索 → 18:30 晚餐 → 20:00 返回",
+    description: "今日是体能消耗最高的一天。上午在汉江水上运动释放能量，中午稍作休整后转战首尔最潮的艺术街区圣水洞。上午务必早出发以避开午间高温，下午全程以室内/半室内为主。",
+    spots: [
+      {
+        name: "纛岛汉江公园：亲子皮划艇",
+        img: "seoul_images/compressed/ttukseom_kayak.jpg",
+        timeSlot: "09:30 — 11:30（建议 2 小时，含换装和教学）",
+        transport: "地铁 7 号线纛岛游园区站 2 号出口，步行 5 分钟即达汉江公园水上运动中心。从明洞出发约 30 分钟。",
+        reason: "在首尔市中心、汉江的正中央划行皮划艇——这种体验极其独特且成就感爆棚。上午 9:30 场次气温约 28°C，在江面上有风吹着体感舒适。7 岁孩子坐在双人艇中间，父母两侧发力，是完美的家庭协作运动。",
+        how: [
+          "建议提前 1-2 天在纛岛水上运动中心官网或现场预约上午 9:30 的第一场，此时人最少、温度最舒适。",
+          "到达后先签到、领取救生衣和船桨。工作人员会用简单英文进行 10 分钟的安全教学：如何握桨、如何转向、落水应对等。",
+          "双人皮划艇：爸爸在后、妈妈在前、孩子坐在中间位置。孩子的任务是\u201c方向指挥官\u201d——帮忙观察前方方向。",
+          "划行路线：从码头出发，向汉江大桥方向划约 1 公里。近距离看大桥底部的结构和桥墩上的涂鸦，江鸥会在船边盘旋——孩子会非常兴奋。",
+          "全程约 1 小时划行后返回码头。上岸后可以在汉江公园的草坪上休息，江边有便利店可以买冰饮料。"
+        ],
+        tips: "价格约 ₩20,000-30,000/艇（2-3人）。务必带全套换洗衣物（包括内衣）和防水袋装手机。水面反射紫外线强，防水防晒霜必须厚涂。公园内有公共淋浴间（收费 ₩1,000），可以简单冲洗。"
+      },
+      {
+        name: "圣水洞：Ader Error 旗舰店 & 艺术街区",
+        img: "seoul_images/compressed/seongsu_ader.jpg",
+        timeSlot: "13:30 — 18:30（建议 4-5 小时，含午餐和咖啡休息）",
+        transport: "从纛岛游园区站乘 7 号线至建大入口站换乘 2 号线至圣水站，约 20 分钟。3 号出口即进入圣水洞核心区。",
+        reason: "圣水洞是首尔近两年最炙手可热的潮流地标，由旧工厂区改造而成的艺术街区。红砖厂房里藏着独立设计师店、画廊、精品咖啡馆。Ader Error 旗舰店被称为\u201c可以逛的科幻电影场景\u201d——对 7 岁孩子来说就是一个巨大的未来博物馆。",
+        how: [
+          "【13:30-14:30 午餐】圣水站 3 号出口周边有大量网红餐厅。强烈推荐：圣水土豆汤（土豆排骨汤），软烂入味、孩子可以吃脱骨的肉和土豆。备选：圣水洞手工汉堡店或意面馆。",
+          "【14:30-16:00 Ader Error 旗舰店】一进门就是一个沉浸式的艺术装置空间——巨大屏幕、动态雕塑、音效配合，完全不像是服装店。穿过\u201c宇宙飞船\u201d走廊进入试衣间区域，每个试衣间的设计都不同（有的像太空舱、有的像实验室）。即使不买衣服，光是拍照体验就值回票价。顶楼有咖啡厅和露台，可以俯瞰圣水洞的红砖厂房。",
+          "【16:00-17:30 圣水洞咖啡与街区漫步】圣水洞以咖啡馆密度高闻名。推荐去大林仓库（Daelim Changgo）——由旧仓库改造的巨大咖啡馆，工业风挑高空间让孩子可以自由走动。或者去 onion 圣水店，建筑设计本身就值得一看。沿途可以在工厂改造的画廊和小店之间随意漫步。",
+          "【17:30-18:30 圣水洞街头艺术与晚餐】傍晚的圣水洞灯光渐亮，红砖墙上经常有新的涂鸦和壁画，非常适合拍照。晚餐可选圣水洞烤韩牛或创意韩食餐厅。"
+        ],
+        tips: "Ader Error 周末排队可能超过 1 小时，周五下午相对人少。圣水洞大部分咖啡馆和店铺在 20:00-21:00 关闭，时间充裕。建议在 Naver Map 上提前收藏几个想去的小店，按路线顺序打卡。"
+      }
+    ]
+  },
+  4: {
+    title: "职场大探险：KidZania 全日作战",
+    date: "8月17日（周六）",
+    timeline: "09:30 出发 → 10:30 乐天世界 Mall → 12:30 午餐 → 14:00 KidZania 报到 → 19:30 结束 → 20:00 晚餐 → 21:00 返回",
+    description: "17号全天。这是孩子的\u201c梦想工厂\u201d，也是父母的\u201c回血日\u201d——全程室内冷气覆盖。上午在乐天世界 Mall 轻松逛逛，下午至晚上沉浸于 90+ 种职业体验。周六 KidZania 人多但下午场相对缓解，4.5 小时足够深度体验 6-8 个职业。",
+    spots: [
+      {
+        name: "乐天世界 Mall & 乐天水族馆（可选）",
+        img: "seoul_images/compressed/lotte_world_mall.jpg",
+        timeSlot: "10:30 — 13:30（建议 3 小时，含午餐）",
+        transport: "地铁 2/8 号线蚕室站，从明洞出发约 25 分钟。KidZania 位于乐天世界 Mall 的 B1 层。",
+        reason: "KidZania 下午场 15:00 才开始，上午可以在亚洲最大的室内主题购物中心轻松游玩。乐天世界 Mall 内部空间巨大、冷气舒适，有水族馆、电影院、书店等丰富选择。",
+        how: [
+          "到达后先在 Mall 内四处逛逛，1 楼中庭经常有快闪活动和大型装置艺术展示。",
+          "可选：乐天世界水族馆（Lotte World Aquarium）——拥有韩国最长的海底隧道（25 米），可以看到沙丁鱼风暴和企鹅喂食表演。适合上午 1-1.5 小时游览。（门票成人 ₩35,000、儿童 ₩29,000）",
+          "Mall B1 层美食广场午餐，选择极其丰富：韩式炸酱面、日式拉面、西式汉堡应有尽有，孩子可以自己选想吃的。",
+          "餐后 14:00 左右前往 B1 层 KidZania 入口排队报到。提前 30 分钟到达可以排在队伍前段，进场后优先抢热门职业。"
+        ],
+        tips: "周六乐天世界 Mall 人流量大，建议 10:30 一开门就到达。水族馆最晚入场时间 13:00。如果不看水族馆，可以去 Mall 内的教保文库（Kyobo Bookstore）——韩国的超大型书店，儿童区有各种韩文绘本和玩具。"
+      },
+      {
+        name: "KidZania Seoul (职业体验城)",
+        img: "seoul_images/compressed/kidzania.jpg",
+        timeSlot: "15:00 — 19:30（下午场，4.5 小时）",
+        transport: "乐天世界 Mall B1 层，从午餐区域步行直达",
+        reason: "7 岁孩子的\u201c梦想工厂\u201d。90 多种职业，从消防员到飞机驾驶员，从便利店店员到广播主持人——全真实设备、制服和工作流程。孩子在游戏中自然地理解\u201c工作→赚钱→消费→储蓄\u201d的经济循环，这是任何课堂都给不了的体验。",
+        how: [
+          "【Step 1 — 领钱+开户】入场后凭门票领取 50 KidZo 支票（KidZania 内专用虚拟货币）。第一件事带孩子去银行柜台，亲自填写\u201c开户单\u201d，领取专属银行卡和钱包挂绳——仪式感满分。",
+          "【Step 2 — 赚钱职业（推荐优先级）】热门项目排队最长，建议优先抢：① 消防员（穿全套防火服、乘迷你消防车鸣笛出警、用水枪\u201c灭火\u201d）→ ② 飞机驾驶员（进入仿真波音 737 驾驶舱操控仪表盘）→ ③ 警察（穿警服、配手铐和警棍、在\u201c街道\u201d上巡逻）。完成每个职业可获得 10-20 KidZo 工资。",
+          "【Step 3 — 消费职业】赚了钱要花：去拉面工厂亲手和面、切面、煮面并吃掉；去巧克力工坊制作巧克力棒带回家；去汉堡店做真正的汉堡当晚餐。消费类项目需要支付 10-15 KidZo。",
+          "【Step 4 — 理财教育】离场前带孩子回到银行，把剩余 KidZo 存入 ATM 机，打印\u201c存款凭证\u201d——让孩子体验到\u201c存钱\u201d的仪式感和积累感。也可以去 KidZania 便利店用余额购买小零食和文具。",
+          "【额外推荐】电视台主播（进入真实演播室面对摄像机播报新闻）、快递员（穿制服骑小摩托送包裹）、牙医（用仿真口腔模型学习刷牙和补牙）——这些职业对 7 岁孩子来说既有新鲜感又有教育意义。"
+        ],
+        tips: "下午场 15:00-19:30，建议提前 30 分钟到入口排队。部分热门职业（如消防员）有身高/年龄限制，7 岁基本都可以参与。父母不能进入职业体验区，只能在玻璃窗外观看拍照——这对孩子来说是独立性的极好锻炼。KidZania 内有家长休息区、咖啡厅和免费 WiFi。门票价格：儿童 ₩35,000-45,000、成人 ₩18,000-20,000（成人不能体验）。提前在官网或 Klook 购票比现场便宜约 20%。"
+      }
+    ]
+  },
+  5: {
+    title: "室内森林与月光彩虹喷泉",
+    date: "8月18日（周日）",
+    timeline: "09:00 出发 → 09:30 现代百货 → 13:00 午餐 → 15:00 首尔林/汉江 → 17:30 前往盘浦 → 18:30 Tubester 登船 → 19:30 喷泉秀 → 20:30 返回",
+    description: "今日是\u201c视觉盛宴日\u201d。上午在全首尔最美的商场看室内森林和瀑布（周日务必早到避开人流），下午漫步首尔林或汉江公园，傍晚乘坐电动圆船在汉江上看世界最长的大桥喷泉秀——彩色水幕在头顶绽放的那一刻，将是整个行程最梦幻的收尾。",
+    spots: [
+      {
+        name: "The Hyundai Seoul (现代百货首尔)",
+        img: "seoul_images/compressed/hyundai_seoul.jpg",
+        timeSlot: "09:30 — 12:30（建议 3 小时）",
+        transport: "地铁 5 号线汝矣渡口站 3 号出口，连接地下通道直达商场 B2 层。从明洞出发约 25 分钟。周日建议 09:20 到门口等待开门。",
+        reason: "颠覆传统百货的\u201c未来商场\u201d。5 楼 Sounds Forest 拥有 12 米高的室内瀑布和 3,000 平方米的室内森林——在冷气中聆听水声和鸟鸣，如同走进阿凡达的潘多拉世界。是首尔 Instagram 出片率最高的商场，更是亲子家庭的周末天堂。",
+        how: [
+          "【09:30-10:30】一开门直奔 5 楼 Sounds Forest！此时几乎没有人，可以独占整个室内森林拍照。在蜿蜒的林间小径漫步，看瀑布从 12 米高空倾泻入水池——即使在盛夏也感觉像在秋天的森林里。森林中央有圆形阶梯座位，孩子可以坐下来安静地感受。",
+          "【10:30-11:30】6 楼艺术展厅参观当季的免费快闪展览（展览主题每月更换，通常是适合亲子的互动类艺术装置）。旁边是 Alt One 书店，儿童专区有大量韩文绘本和创意玩具，可以让孩子安静翻书 30 分钟。",
+          "【11:30-12:30】B1 层美食天堂 Tasty Seoul：这里汇集了全首尔最火的小吃和甜点品牌——手工巧克力、韩式马卡龙、创意紫菜包饭、现做鱼糕。让孩子自己逛一圈选午餐，各取所需。推荐尝试 Knotted 甜甜圈（首尔最火甜甜圈品牌）和 Camel Coffee 的拿铁。"
+        ],
+        tips: "周日是客流量最大的日子，务必赶在 10:00 开门即进场。Sounds Forest 在 10:00 前已有早起人群在拍照。商场内冷气非常强，记得给孩子穿薄外套。B1 美食区周末午间 12:00 起排队严重，建议 11:30 前买好食物或先取号。"
+      },
+      {
+        name: "盘浦大桥：Tubester 电动圆船 + 月光彩虹喷泉",
+        img: "seoul_images/compressed/banpo_bridge.jpg",
+        timeSlot: "17:30 — 20:30（含排队登船、航行和观秀，约 3 小时）",
+        transport: "从汝矣岛区域乘地铁至高速巴士客运站（3/7/9 号线），8 号出口步行约 15 分钟至盘浦汉江公园。全程约 35 分钟。",
+        reason: "盘浦大桥的月光彩虹喷泉是吉尼斯认证的世界最长大桥喷泉——1,140 米长的喷水线、200 多个彩色灯光喷头、配合音乐舞动的水幕。坐在汉江上的 Tubester（圆形电动小艇）上，以最完美的视角仰视这道水与光的奇观——这是任何岸上视角都无法比拟的沉浸体验。",
+        how: [
+          "【17:30 到达盘浦汉江公园】此时可以在江边草地上找到位置铺野餐垫。公园有便利店可以购买炸鸡、啤酒、果汁和零食——在韩国，汉江边吃炸鸡喝啤酒（치맥）是最地道的夏日仪式。孩子可以吃炸鸡配果汁。",
+          "【18:00-18:30 租 Tubester】前往 Tubester 租赁站（位于盘浦大桥下方西侧）。一艘 Tubester 可坐 4-6 人，桌板中央有圆形桌子可以放食物。提供救生衣。租赁时间通常为 30 分钟或 60 分钟，建议选 60 分钟（约 ₩30,000-40,000/艘）以充分覆盖喷泉秀时间。",
+          "【18:30-19:30 江上航行+野餐】大人操控方向盘（非常简单，像开卡丁车），孩子当导航员。在江面上慢慢漂行，在船上享用带来的炸鸡和饮品。船速很慢（最高 5km/h），非常安全平稳。日落时分（约 19:15）的天空从橙色渐变到紫色，映在江面上极为壮丽。",
+          "【19:30-20:00 月光彩虹喷泉秀】对准喷泉开始时间（4-10 月每天 19:30/20:00/20:30 各一场，每场 20 分钟），把船停在最佳观赏位置（大桥正下方约 100 米处）。当水幕在头顶随音乐舞动、200 道彩色灯光穿透水雾——这个画面会成为整个旅行最难忘的家庭记忆。",
+          "返航后归还救生衣、取回押金。可以在江边再坐一会儿，或者直接乘地铁返回酒店。"
+        ],
+        tips: "喷泉秀时间随季节调整，建议当天在盘浦大桥官网确认。Tubester 周末傍晚可能需要排队 20-30 分钟，预留好时间。船上没有遮阳/遮雨棚，带好防晒和薄外套（傍晚江面有风）。如果 Tubester 等待过久，备选方案是在岸边草地上观赏喷泉——岸上视角虽然不如船上，但也是很好的体验。"
+      }
+    ]
+  },
+  6: {
+    title: "匠心回忆与归途市场",
+    date: "8月19日（周一）",
+    flightNote: "✈️ 20:00 从仁川国际机场 (ICN) 起飞",
+    timeline: "08:30 退房寄存行李 → 09:30 北村韩屋 → 10:30 螺钿工坊 → 12:30 广藏市场 → 15:00 取行李 → 15:30 出发去机场 → 17:00 到达机场",
+    description: "最后一天，20:00 的航班意味着需要在 17:00 前到达机场（国际航班提前 3 小时）。上午利用好最后几小时完成一份有温度的纪念品，中午在广藏市场吃最地道的韩式小吃——在烟火气中与首尔告别。15:30 准时出发去机场。",
+    spots: [
+      {
+        name: "北村韩屋村 & 螺钿漆器工坊",
+        img: "seoul_images/compressed/bukchon_hanok.jpg",
+        timeSlot: "09:30 — 12:30（韩屋村漫步 1 小时 + 工坊课程 2 小时）",
+        transport: "从明洞乘地铁至安国站（3号线，约10分钟），2号出口步行8分钟到达北村韩屋村。周一早晨游客较少。",
+        reason: "亲手用闪亮的贝壳碎片制作一件螺钿漆器艺术品——这是韩国最传统、最具温度的旅行纪念品。工坊位于北村韩屋村的传统韩屋中，古色古香的环境本身就是一种体验。7 岁孩子的手部精细动作已经可以完成镶嵌和拼贴，带回家的成品将承载全家的首尔回忆。",
+        how: [
+          "【09:30-10:30 北村韩屋村漫步】趁早晨人少、气温舒适，在北村韩屋村的主路（北村路 5 街）上漫步。两旁的韩屋保留了朝鲜时代的建筑风格，斜坡上可以远眺南山塔。穿上韩服拍照是经典项目，但考虑到时间有限，简单漫步拍照即可。建议走到\u201c北村 8 景\u201d中的第 5 景和第 6 景——这两个位置的取景最好，可以拍到层层叠叠的韩屋屋顶。",
+          "【10:30-12:30 螺钿漆器工坊】提前预约 10:30 的亲子课程（约 ₩35,000-50,000/人，含材料费）。工坊老师会先用简单英文（或借助翻译 App）介绍螺钿工艺的千年历史和基本技法。老师展示如何挑选贝壳碎片——天然的鲍鱼壳和珍珠贝在光线下呈现七彩光泽，孩子会被这些闪亮的碎片迷住。",
+          "用镊子将细小的贝壳碎片按照设计图案一片片粘贴在漆器表面（可选镜子、首饰盒或钥匙扣作为底胚）。7 岁孩子可以独立完成简单图案（如星星、花朵、小动物），大人可以在旁边协助精密部分。",
+          "老师最后进行表面抛光和封层处理（约需 15 分钟），当场即可带走成品。工坊内古色古香的韩屋环境非常适合拍一张认真做手工的全家福。"
+        ],
+        tips: "工作坊务必提前 1-3 天预约（通过 Naver 或工坊官网）。课程一般提供镜子、小盒子或手机支架等底胚选择，建议选小盒子——最实用、也最好做。韩屋村坡道较多，穿舒适的平底鞋。周一早晨游客少，拍照不用等。"
+      },
+      {
+        name: "广藏市场：最后的吃货大冒险",
+        img: "seoul_images/compressed/gwangjang_market.jpg",
+        timeSlot: "12:30 — 14:30（建议 2 小时）",
+        transport: "从北村韩屋村乘地铁至钟路 5 街站（1号线，约10分钟），7号出口步行2分钟即达广藏市场东门。",
+        reason: "首尔最接地气、最多元化的传统市场。Running Man 等无数综艺节目的取景地。眼花缭乱的小吃摊位、此起彼伏的叫卖声、滋滋作响的铁板——这才是最真实的首尔味道。在离开前的最后几个小时，用舌尖做一次告别巡礼。",
+        how: [
+          "【12:30-13:30 必吃清单】按顺序横扫：① 绿豆饼（녹두빈대떡）——看着大妈在石磨上现磨绿豆、在铁板上煎到外脆里嫩，切块蘸酱油吃，孩子看到制作过程会非常好奇；② 麻药紫菜包饭（마약김밥）——极小一颗、一口一个，蘸芥末酱油汁，名字就让孩子兴奋不已；③ 韩式拌饭（비빔밥）——在市场中央区的拌饭专门摊位，新鲜蔬菜配上辣酱，7 岁孩子可以选少辣或不辣版本。",
+          "【13:30-14:30 扫货+探索】吃完主食后：买一份糖饼（호떡）作为甜点边走边吃——油炸面团里是红糖和坚果碎，咬开会流心。在市场内的韩服布料区闲逛，这里可以看到韩服的丝绸面料和传统刺绣工艺。买一些韩国海苔（김）、炒年糕零食和即食拌饭作为伴手礼——价格比超市便宜许多。",
+          "【14:30-15:00】从广藏市场步行或打车回酒店取寄存行李。大约 15:00 到达酒店。"
+        ],
+        tips: "市场人多拥挤，一定要牵好孩子的手！建议让孩子坐在摊位的高脚凳上吃饭（不要边走边吃），更安全也更地道。多数摊位只收现金，提前准备好韩元。不建议在市场买生鲜带回——海关可能有限制。15:00 前务必离开市场返回酒店取行李。"
+      }
+    ]
+  }
+};
+
+// ============ 能量数据（用于 CSS 图表） ============
+var chartData = {
+  labels: ['D1','D2','D3','D4','D5','D6'],
+  energy: [40, 75, 90, 55, 70, 50],
+  fun: [65, 90, 88, 100, 95, 80]
+};
+
+// ============ 渲染 CSS 条形图 ============
+function renderChart() {
+  var c = document.getElementById('cssChart');
+  if (!c) return;
+  var html = '';
+  for (var i = 0; i < chartData.labels.length; i++) {
+    html += '<div class="chart-row">';
+    html += '<span class="chart-label">' + chartData.labels[i] + '</span>';
+    html += '<div class="chart-bar-track">';
+    html += '<div class="chart-bar-fun" style="width:' + chartData.fun[i] + '%;background:' + (i === 3 ? '#f59e0b' : '#fbbf24') + ';position:absolute;top:0;left:0;"></div>';
+    html += '<div class="chart-bar-energy" style="width:' + chartData.energy[i] + '%;background:' + (i === 2 ? '#2563eb' : '#3b82f6') + ';position:relative;z-index:1;"></div>';
+    html += '</div></div>';
+  }
+  c.innerHTML = html;
+}
+
+// ============ 转义 HTML ============
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============ 渲染日程 ============
+function renderDay(dayNum) {
+  // 切换按钮高亮
+  var btns = document.querySelectorAll('.day-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  var activeBtn = document.getElementById('btn-' + dayNum);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  var day = itinerary[dayNum];
+  var container = document.getElementById('day-content');
+
+  var html = '';
+  html += '<div class="day-intro">';
+  html += '<div class="badges">';
+  html += '<span class="badge-blue">' + esc(day.date) + '</span>';
+  if (day.flightNote) html += '<span class="badge-amber">' + esc(day.flightNote) + '</span>';
+  html += '</div>';
+  html += '<h3>Day ' + dayNum + ': ' + esc(day.title) + '</h3>';
+  html += '<p class="desc">' + esc(day.description) + '</p>';
+  html += '<div class="timeline-box"><span class="tl-label">🕐 时间线：</span><span class="tl-text">' + esc(day.timeline) + '</span></div>';
+  html += '</div>';
+
+  html += '<div class="spots-list">';
+  for (var si = 0; si < day.spots.length; si++) {
+    var spot = day.spots[si];
+    html += '<div class="spot-card">';
+    html += '<div class="spot-img-wrap">';
+    html += '<img class="spot-img" src="' + esc(spot.img) + '" alt="' + esc(spot.name) + '" loading="lazy" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 300%22%3E%3Crect fill=%22%23e2e8f0%22 width=%22800%22 height=%22300%22/%3E%3Ctext x=%22400%22 y=%22155%22 text-anchor=%22middle%22 fill=%22%2394a3b8%22 font-size=%2218%22 font-family=%22sans-serif%22%3E' + encodeURIComponent(spot.name) + '%3C/text%3E%3C/svg%3E\';">';
+    html += '<div class="spot-img-name">' + esc(spot.name) + '</div>';
+    html += '</div>';
+    html += '<div class="spot-body">';
+
+    if (spot.timeSlot) html += '<div><span class="time-badge">⏰ ' + esc(spot.timeSlot) + '</span></div>';
+    if (spot.transport) html += '<div class="transport-box"><span class="t-label">🚇 交通指引：</span><span class="t-text">' + esc(spot.transport) + '</span></div>';
+
+    html += '<div class="spot-reason">';
+    html += '<div class="r-label">Why It\'s an Adventure?</div>';
+    html += '<p>' + esc(spot.reason) + '</p>';
+    html += '</div>';
+
+    html += '<div class="spot-how">';
+    html += '<div class="h-label"><span class="h-icon">🛠️</span> 具体流程：保姆级【怎么玩】</div>';
+    for (var hi = 0; hi < spot.how.length; hi++) {
+      html += '<div class="step-item"><div class="step-num">' + (hi + 1) + '</div><p class="step-text">' + esc(spot.how[hi]) + '</p></div>';
+    }
+    html += '</div>';
+
+    html += '<div class="tips-box"><div class="tips-icon">💡</div><div><span class="tips-label">Expert Tips</span><p class="tips-text">' + esc(spot.tips) + '</p></div></div>';
+
+    html += '</div>'; // spot-body
+    html += '</div>'; // spot-card
+  }
+  html += '</div>'; // spots-list
+
+  container.innerHTML = html;
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
+// ============ 初始化 ============
+renderChart();
+renderDay(1);
+</script>
+
+</body>
+</html>

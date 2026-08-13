@@ -1,0 +1,37 @@
+name: image-process
+display_name: 图片处理小工具
+version: 1.0.0
+slug: image-process
+description: 图片处理小工具——改尺寸、转格式(WebP/PNG/JPG)、自动裁白边、缩略图、压缩优化、生成分享图(OG图)、批量处理、去背景(抠图)。基于 Pillow，纯本地运行，不上传任何图片。
+category: 办公效率
+tags:
+  - 图片处理
+  - 批量处理
+  - 抠图
+  - 压缩优化
+  - WebP
+triggers:
+  - 压缩图片
+  - 图片太大了
+  - 转成webp
+  - 把png转jpg
+  - 改图片尺寸
+  - 缩小图片
+  - 裁掉白边
+  - logo去白底
+  - 做缩略图
+  - 生成分享图
+  - 批量处理图片
+  - 批量转webp
+  - 优化网站图片
+  - 去背景
+  - 抠图
+  - 去掉背景
+  - 背景透明
+author: 朗途
+license: Apache-2.0（改编自 GitHub jezweb/claude-skills 的 image-processing）
+dependencies:
+  pip:
+    - Pillow
+    - rembg  # 仅"去背景"功能需要；不装也可使用其余全部功能
+homepage: https://www.workbuddy.cn

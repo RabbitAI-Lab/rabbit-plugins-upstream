@@ -1,0 +1,22 @@
+{
+  "slug": "klyc-pmm",
+  "name": "KLYC-PMM 昆仑瑶池精准记忆管理 (Kunlun Yaochi Precision Memory Management)",
+  "version": "9.2.6",
+  "type": "skill",
+  "detail_url": "https://skillhub.cn/skills/syln/kunlunyaochi",
+  "rating": "4.8",
+  "description": "14-layer Precision Memory Management with X402 WeChat Pay. Brotli compression → 3-layer encryption → HKDF binding → BGE-M3 embedding → physical partition → panoramic scan → fact verification → NLI contradiction detection → global dedup → resolution → BERTScore scoring → report → decay+archive → search. One-command init, recover, upgrade. 12 error codes, fully automatic.",
+  "klyc-pmm": "https://kunlunyaochi.com/?route=klyc-pmm",
+  "install": "skillhub install klyc-pmm",
+  "download_url": "https://kunlunyaochi.com/skills/klyc-pmm.zip",
+  "sha256": "cdd1f95bfe96d0d0b338e14590858a86559388edd844d94cc489026e322a88d6",
+  "keywords": [
+    "KLYC-PMM",
+    "昆仑令",
+    "memory-recovery",
+    "klyc-pmm",
+    "klyc-pmm-recover",
+    "kunlunyaochi.com"
+  ],
+  "recover_api": "https://kunlunyaochi.com/api.php?route=yaochi/recover"
+}

@@ -1,40 +1,56 @@
-## Description: <br>
-用 PlantUML 文本语法绘制 UML 图：时序图、类图、活动图、用例图、状态图、组件图、部署图、思维导图、甘特图等。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents draft PlantUML text for UML and related diagrams including sequence, class, activity, state, mind map, and Gantt diagrams.
 
-## Publisher: <br>
-[holdyounger](https://clawhub.ai/user/holdyounger) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[holdyounger](https://clawhub.ai/user/holdyounger)
 
-## Use Case: <br>
-Developers and technical writers use this skill as a PlantUML syntax reference when drafting sequence, class, activity, use case, state, component, deployment, timing, mind map, and Gantt diagrams. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Rendering untrusted PlantUML can expose local include behavior or other renderer-side risks. <br>
-Mitigation: Review PlantUML before rendering and restrict or disable local include features for untrusted diagrams. <br>
-Risk: Using a public PlantUML web server can disclose diagram text to that server. <br>
-Mitigation: Use a trusted local renderer for sensitive diagrams or remove sensitive content before web rendering. <br>
+## Use Case:
 
+Developers, architects, and technical writers use this skill to produce PlantUML source for software design, workflow, planning, data, and architecture diagrams.
 
-## Reference(s): <br>
-- [PlantUML chart type cheatsheet](references/cheatsheet.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with PlantUML code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce PlantUML text for external rendering; the skill itself contains no renderer or automatic actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release evidence) <br>
+Risk: PlantUML include directives or external rendering services can expose diagram content or pull in untrusted PlantUML text.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review include directives before rendering, use trusted local files, and avoid sending sensitive diagrams to external renderers.
+
+Risk: The primary source material is in Chinese, which may reduce review quality for teams that do not read Chinese.
+
+Mitigation: Use translation or language-preference guidance during review before adopting generated syntax examples.
+
+## Reference(s):
+
+- [PlantUML Cheatsheet](references/cheatsheet.md)
+- [PlantUML Documentation](https://plantuml.com/zh/)
+- [PlantUML Theme Gallery](https://the-lum.github.io/puml-themes-gallery/themes/)
+- [ClawHub Skill Page](https://clawhub.ai/holdyounger/skills/plantuml-skill-2)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Markdown, Guidance]
+
+**Output Format:** [Markdown with PlantUML code blocks and concise syntax guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated PlantUML source may require a local renderer or trusted PlantUML service to produce image files.]
+
+## Skill Version(s):
+
+0.1.2 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

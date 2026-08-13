@@ -186,7 +186,8 @@ done
 # Validate it actually proxies
 info "Verifying tunnel is reachable..."
 TS=$(date +%s)
-SIG=$(python3 "$HMAC_PY" GET /v1/files "$TS" --key "$SPACEDUCK_BEAK_KEY")
+# [HARDEN-071] key via env, not argv (argv is visible in `ps`)
+SIG=$(SPACEDUCK_BEAK_KEY="$SPACEDUCK_BEAK_KEY" python3 "$HMAC_PY" GET /v1/files "$TS")
 HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 8 \
   -H "Authorization: Bearer $SPACEDUCK_BEAK_KEY" \
   -H "X-Spaceduck-Timestamp: $TS" \
@@ -234,7 +235,7 @@ To stop the bridge + tunnel + flip back to platform-managed:
 Manual verify-curl (uses the persisted state file):
     source $STATE_FILE
     TS=\$(date +%s)
-    SIG=\$(python3 $HMAC_PY GET /v1/files \$TS --key \$SPACEDUCK_BEAK_KEY)
+    SIG=\$(SPACEDUCK_BEAK_KEY=\$SPACEDUCK_BEAK_KEY python3 $HMAC_PY GET /v1/files \$TS)
     curl -s -H "Authorization: Bearer \$SPACEDUCK_BEAK_KEY" \\
          -H "X-Spaceduck-Timestamp: \$TS" -H "X-Spaceduck-Signature: \$SIG" \\
          \$TUNNEL_URL/v1/files | jq .

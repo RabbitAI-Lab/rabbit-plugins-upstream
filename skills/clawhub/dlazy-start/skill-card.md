@@ -1,43 +1,56 @@
-## Description: <br>
-Dlazy Start helps AI orchestrators drive @dlazy/cli for installation, authentication, capability discovery, cloud and local tool invocation, async task polling, and common failure recovery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Quickstart for AI orchestrators (Claude Code / Cursor / Codex / Copilot) driving @dlazy/cli, covering install, auth, capability discovery, cloud and local tool invocation, async task polling, and common failure recovery.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-AGPL-3.0-or-later <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and AI orchestrator users use this skill to operate @dlazy/cli consistently, including discovering available tools, preparing JSON inputs, running cloud or local media commands, polling asynchronous jobs, and recovering from common CLI failures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can lead an agent to use browser session cookies for downloads when handling anti-bot challenges. <br>
-Mitigation: Allow cookies_from_browser only after explicit user approval for that specific download, and avoid logging or reusing cookie-derived inputs. <br>
-Risk: The CLI uses an API key, cloud media services, local media tools, and optional runtime installers. <br>
-Mitigation: Install and invoke it only when the user accepts those access requirements, keep credentials out of logs, and review commands before running paid or local-install operations. <br>
+## Use Case:
 
+Developers and AI-agent operators use this skill to install and authenticate @dlazy/cli, discover available tools, invoke cloud and local media/text tools, poll asynchronous tasks, and recover from common CLI failures.
 
-## Reference(s): <br>
-- [Dlazy Start on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-start) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [@dlazy/cli source reference](https://github.com/dlazyai/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON input conventions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to discover the live CLI tool surface before invoking commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.6 (source: frontmatter and server release metadata) <br>
+Risk: Browser-cookie use for video downloading can expose account session data to the tool.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review cookie-based workflows before installing or running the skill, use only accounts and browsers approved for that exposure, and prefer normal authentication or non-cookie inputs when possible.
+
+Risk: Registered CLI tools and cost shapes may change over time, which can lead to incorrect or unexpected tool calls.
+
+Mitigation: Run dlazy tools list and dlazy tools describe before claiming a tool exists or invoking paid generation, and record provider, model, and cost information before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-start)
+- [dLazy homepage](https://dlazy.com)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy CLI source link from artifact metadata](https://github.com/dlazyai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, markdown]
+
+**Output Format:** [Markdown guidance with inline bash commands and JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides an agent to verify tool availability with dlazy tools list and dlazy tools describe before invocation.]
+
+## Skill Version(s):
+
+2.0.8 (source: server release metadata; artifact frontmatter lists 2.0.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

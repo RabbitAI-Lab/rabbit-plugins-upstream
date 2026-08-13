@@ -1,55 +1,65 @@
-## Description: <br>
-Build, secure, and optimize production MCP servers with the TypeScript SDK, covering transports, tool and schema design, error handling, security and OAuth, performance, known SDK issues, content delivery, v2 migration, MCP Apps, extensions, and the Registry. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build, harden, and debug production MCP servers with the TypeScript SDK, including transport choices, tool schemas, errors, OAuth, token budgets, SDK migration, MCP Apps, extensions, and registry guidance.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill when building or reviewing production MCP servers and tools. It helps them make implementation decisions about transports, tool schemas, result delivery, error handling, OAuth security, performance, v2 migration, apps, extensions, and registry integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may copy guidance into production MCP servers without adapting it to their threat model. <br>
-Mitigation: Review the guidance against the deployment environment and add authentication, origin validation, least-privilege scopes, rate limiting, and explicit GET /mcp handling before public exposure. <br>
-Risk: The skill is a documentation reference rather than an enforcement mechanism. <br>
-Mitigation: Use it to inform implementation and review decisions, then validate the resulting server with security review, tests, and deployment-specific controls. <br>
-Risk: License evidence is inconsistent between server metadata and the artifact license file. <br>
-Mitigation: Confirm the intended release license before publishing or redistributing the skill card. <br>
+## Use Case:
 
+Developers and engineers use this skill when writing or reviewing production MCP servers that already exist. It helps them choose transports, design tool schemas and results, handle errors, add OAuth, reduce token bloat, and migrate SDK or protocol versions.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/tenequm/skills/mcp-best-practices) <br>
-- [Source homepage](https://github.com/tenequm/skills/tree/main/skills/mcp-best-practices) <br>
-- [Error Handling](references/error-handling.md) <br>
-- [Extensions and Registry](references/extensions-registry.md) <br>
-- [MCP Apps](references/mcp-apps.md) <br>
-- [Security and Authorization](references/security-auth.md) <br>
-- [Tool Schema Guide](references/tool-schema-guide.md) <br>
-- [Transport Patterns](references/transport-patterns.md) <br>
-- [V2 Migration Guide](references/v2-migration.md) <br>
-- [MCP latest specification](https://modelcontextprotocol.io/specification/latest) <br>
-- [MCP TypeScript SDK docs](https://ts.sdk.modelcontextprotocol.io) <br>
-- [MCP TypeScript SDK v2 docs](https://ts.sdk.modelcontextprotocol.io/v2/) <br>
-- [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) <br>
-- [MCP Registry](https://modelcontextprotocol.io/registry/about) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with TypeScript examples, command snippets, tables, and links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only reference material; no code is installed or executed by the skill itself.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.2 (source: frontmatter, changelog, and server release metadata; released 2026-07-24) <br>
+Risk: Tunnel or MCP Apps examples can expose unintended tools or data if adapted without access controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Expose only intended tools, require authentication for remote access, avoid sensitive test data, and validate authorization server-side.
+
+Risk: Security-sensitive implementation guidance may be copied into production without matching the deployment context.
+
+Mitigation: Treat examples as design references and review the final server behavior against the security and authorization guidance before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tenequm/skills/mcp-best-practices)
+- [Project homepage](https://github.com/tenequm/skills/tree/main/skills/mcp-best-practices)
+- [Error Handling](references/error-handling.md)
+- [Extensions and Registry](references/extensions-registry.md)
+- [MCP Apps](references/mcp-apps.md)
+- [Known SDK Bugs](references/sdk-bugs.md)
+- [Security and Authorization](references/security-auth.md)
+- [Spec 2026-07-28](references/spec-2026-07-28.md)
+- [Tool Schema Guide](references/tool-schema-guide.md)
+- [Transport Patterns](references/transport-patterns.md)
+- [V2 Migration Guide](references/v2-migration.md)
+- [Model Context Protocol specification](https://modelcontextprotocol.io/specification/latest)
+- [TypeScript SDK documentation](https://ts.sdk.modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with TypeScript snippets, command examples, configuration notes, and reference links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only output; may include MCP version, SDK version, and environment variable guidance.]
+
+## Skill Version(s):
+
+1.1.0 (source: SKILL.md frontmatter, CHANGELOG.md, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

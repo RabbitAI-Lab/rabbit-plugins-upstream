@@ -1,7 +1,7 @@
 ---
 name: scrapling-official
 description: Scrape web pages using Scrapling with anti-bot bypass (like Cloudflare Turnstile), stealth headless browsing, spiders framework, adaptive scraping, and JavaScript rendering. Use when asked to scrape, crawl, or extract data from websites; web_fetch fails; the site has anti-bot protections; write Python code to scrape/crawl; or write spiders.
-version: "0.4.11"
+version: "0.4.14"
 license: Complete terms in LICENSE.txt
 metadata:
   homepage: "https://scrapling.readthedocs.io/en/latest/index.html"
@@ -40,7 +40,7 @@ Blazing fast crawls with real-time stats and streaming. Built by Web Scrapers fo
 
 Create a virtual Python environment through any way available, like `venv`, then inside the environment do:
 
-`pip install "scrapling[all]>=0.4.11"`
+`pip install "scrapling[all]>=0.4.14"`
 
 Then do this to download all the browsers' dependencies:
 
@@ -326,6 +326,8 @@ class BlogCrawler(CrawlSpider):
 ```
 For sitemap-driven crawls, use `SitemapSpider` with the same `rules()` API. It fetches `sitemap_urls`, descends into sitemap indexes, and dispatches each URL through your rules. Put a `robots.txt` URL directly in `sitemap_urls` and the spider extracts each `Sitemap:` directive from it automatically. See `references/spiders/generic-templates.md` for the full reference, including `LinkExtractor`'s allow/deny/restrict_css/canonicalize options.
 
+For XML feeds (RSS, Atom, product feeds), use `XMLFeedSpider`: set `itertag` to the node name and override `parse_node(response, node)`, which receives each matching node as a namespace-stripped `lxml` element (`node.findtext("title")`). For CSV feeds, use `CSVFeedSpider`: override `parse_row(response, row)`, which receives each row as a dictionary, with `headers`/`delimiter`/`quotechar` for non-standard feeds. Both decompress gzipped feeds automatically. See `references/spiders/generic-templates.md`.
+
 For Shopify-powered stores, subclass `ShopifySpider` and set `target_website` to the store's domain; it extracts every product variant through Shopify's JSON API without touching the HTML. See `references/spiders/platform-templates.md`.
 
 ### Advanced Parsing & Navigation
@@ -395,7 +397,7 @@ async with AsyncDynamicSession(capture_xhr=r"https://api\.example\.com/.*") as s
 
 ## References
 You already had a good glimpse of what the library can do. Use the references below to dig deeper when needed
-- `references/mcp-server.md` - MCP server tools, persistent session management, and capabilities
+- `references/mcp-server.md` - MCP server tools, persistent session management, remote browsers over CDP, authentication, and capabilities
 - `references/parsing` - Everything you need for parsing HTML
 - `references/fetching` - Everything you need to fetch websites and session persistence
 - `references/spiders` - Everything you need to write spiders, proxy rotation, and advanced features. It follows a Scrapy-like format
@@ -408,6 +410,6 @@ This skill encapsulates almost all the published documentation in Markdown, so d
 ## Guardrails (Always)
 - Only scrape content you're authorized to access.
 - Respect robots.txt and ToS. Use `robots_txt_obey = True` on spiders to enforce this automatically.
-- Add delays (`download_delay`) for large crawls.
+- Add delays (`download_delay`) for large crawls, or set `autothrottle_enabled = True` to let the spider pick the delay per domain and back off when the website starts blocking.
 - Don't bypass paywalls or authentication without permission.
 - Never scrape personal/sensitive data.

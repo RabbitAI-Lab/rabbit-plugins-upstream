@@ -1,0 +1,141 @@
+# =========================================================
+# gold-tracker 配置模板（唯一的配置模板；公开免费数据源 + 写文件通知器）
+#
+# 用法：
+#   cp config.example.yaml config.yaml
+#   然后按需调整数据源与通知器，运行 python3 scripts/verify.py check 验证。
+#
+# 注意：下方数据源为公开免费接口，可能随时变更解析格式，仅作示例；
+# 若解析失败请自行更换数据源并调整 parser/pattern/json_path。
+# =========================================================
+
+general:
+  timezone: "Asia/Shanghai"
+  language: "zh-CN"
+  expected_run_interval_minutes: 30
+  scheduler_grace_multiplier: 3
+
+data_sources:
+  gold:
+    # 示例：从公开金价页抓取（HTML，用正则提取美元价格）
+    url: "https://goldpricez.com"
+    parser: "regex"
+    pattern: '\\$([0-9,]{4,}\\.[0-9]{2})'
+    json_path: ""
+    timeout: 15
+    min: 1000.0
+    max: 10000.0
+    field: "price_usd"
+  fx:
+    # 示例：公开免费汇率接口（无需 key）
+    url: "https://open.er-api.com/v6/latest/USD"
+    parser: "json_path"
+    pattern: ""
+    json_path: "rates.CNY"
+    timeout: 10
+    min: 6.0
+    max: 8.0
+    field: "usd_cny"
+
+# 新闻源（RSS，免费公开、无付费墙/登录，正文可被 web_fetch 免费抓取）。
+# 选择标准：① 标准 RSS（XML <item>）② 免费可访问（无付费墙/反爬/登录墙）
+# ③ 覆盖 >=2 个独立域名（满足反幻觉闸门的来源多样性要求）。
+# 下面三个源已实测可用（2026-08），均为中立的信息/新闻源（无看多/看空倾向）：
+# 黄金/矿业供给 + 大宗商品/地缘 + 外汇/贵金属/美元，覆盖金价判断的核心驱动维度；
+# 可自行增补/替换，但必须保持上述标准（中立、免费、可访问）。
+news_sources:
+  - name: "mining.com"
+    url: "https://www.mining.com/feed/"
+    type: "rss"
+    max_items: 10
+    timeout: 15
+    enabled: true
+  - name: "oilprice"
+    url: "https://oilprice.com/rss/main"
+    type: "rss"
+    max_items: 10
+    timeout: 15
+    enabled: true
+  - name: "fxstreet"
+    url: "https://www.fxstreet.com/rss/news"
+    type: "rss"
+    max_items: 10
+    timeout: 15
+    enabled: true
+
+cache:
+  ttl_seconds: 300
+  dir: ".cache"
+  price_series_max_points: 2000
+
+alerts:
+  threshold_pct: 1.0
+  min_threshold_pct: 0.5
+  max_threshold_pct: 3.0
+  volatility_multiplier: 1.5
+  lookback_days: 7
+  benchmarks:
+    prev_close: true
+    last_fetch: true
+    ema: false
+    ema_window: 20
+    trend: true
+    trend_consecutive_n: 3
+  cooldown_minutes: 30
+  max_alerts_per_day: 10
+  max_alerts_per_direction_per_day: 1
+  auto_resolve_minutes: 1440
+  retention_days: 30
+
+output:
+  max_push_bytes: 2000
+  min_factors_per_analysis: 2
+  max_factors_per_analysis: 6
+  constraints:
+    allowed_impacts: [利多, 利空, 偏多, 偏空, 中性, 多空交织]
+    required_factor_fields: [factor, impact, reasoning, sources]
+    sources:
+      must_be_http_url: true
+      must_be_in_fetch_log: true
+      min_count_per_factor: 1
+      min_unique_domains: 2
+    forbidden_phrases: ["根据经验", "众所周知", "一般来说", "通常情况下", "据了解", "据业内人士", "显而易见"]
+    no_data_marker: "no_data"
+
+validation:
+  gold_price_min: 1000.0
+  gold_price_max: 10000.0
+
+archive:
+  retention_days: 365
+  index_enabled: true
+  auto_archive_hour: 23
+
+notification:
+  enabled: true
+  dedup_max_fingerprints: 100
+  default_timeout_seconds: 90
+  default_retry_count: 2
+  retry_backoff_seconds: 10
+  send_summary: true
+
+# 示例：只启用写文件通知器（无真实通知渠道，安全可测）
+notifiers:
+  - name: "file"
+    command: "notifiers/file.sh"
+    args: []
+    stdin: true
+    env:
+      OUTPUT_FILE: "notifications/latest.txt"
+    success_marker: "SENT"
+    timeout_seconds: 90
+    retry_count: 2
+    enabled: true
+
+paths:
+  logs: "logs"
+  archive: "archive"
+  alerts: "alerts"
+  cache: ".cache"
+  state: "state.json"
+  notifications: "notifications"

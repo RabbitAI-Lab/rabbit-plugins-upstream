@@ -1,43 +1,59 @@
-## Description: <br>
-MxToolbox enables agents to run DNS, mail, HTTP, ping, blacklist, monitor, and usage checks through an OOMOL-connected MxToolbox account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MxToolbox helps an agent run live DNS, blacklist, mail-record, monitor-status, and usage lookups through an OOMOL-connected MxToolbox account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to query MxToolbox diagnostics and account monitor data from an agent workflow without handling raw MxToolbox credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connected account credentials through OOMOL and can fail or expose account context if used outside the intended ClawHub/OOMOL setup. <br>
-Mitigation: Use it only in the intended ClawHub/OOMOL context, rely on server-side credentials, and follow the setup flow only after an authentication or connection error. <br>
-Risk: Incorrect connector payloads can produce failed or misleading MxToolbox lookups. <br>
-Mitigation: Fetch the live connector schema before each action and build payloads that match the authoritative schema. <br>
+## Use Case:
 
+Developers, administrators, and support agents use this skill to inspect DNS, mail authentication, blacklist, SMTP, HTTP, ping, monitor, and API usage data for domains or IP addresses through MxToolbox.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-mx-toolbox) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: Account-level actions can expose monitor status and API usage for the connected MxToolbox account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use account-level actions only when the user asks for that account information, and avoid sharing returned monitor or usage details outside the intended task.
+
+Risk: Live domain and IP lookups may disclose the queried targets to the connected MxToolbox service and can consume account usage or credits.
+
+Mitigation: Confirm sensitive targets before lookup when appropriate, and stop on billing or insufficient-credit errors until the user resolves the account state.
+
+Risk: First-time setup may require installing the oo CLI and signing in to OOMOL.
+
+Mitigation: Run setup steps only after an auth, connection, or missing-CLI failure, and do not proactively start login or connection flows.
+
+## Reference(s):
+
+- [MxToolbox homepage](https://mxtoolbox.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mx-toolbox)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, json]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs agents to fetch the live connector schema before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,57 @@
-## Description: <br>
-AI Guardian helps agents observe and govern single-endpoint local LLM runtimes by inventorying models, scanning prompts, policy-gating generation, recording usage, and surfacing anomalies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Guardian helps agents observe and govern single-endpoint local LLM runtimes by inventorying models, checking policy and provenance, scanning prompts, routing guarded generation, and auditing usage.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, security reviewers, and operations teams use this skill to inspect local LLM endpoints, detect unsanctioned or drifted models, scan prompts for sensitive content, and route approved prompts through a governance guard. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review reports that installer metadata points to a different package than the documented install command. <br>
-Mitigation: Resolve the package-name mismatch before installation or publication, and verify the package source before running the skill. <br>
-Risk: The security review reports high-impact write actions without built-in authorization gates. <br>
-Mitigation: Expose only scan and observe tools for routine use, and run against a runtime or account that cannot administer model storage unless writes are intended. <br>
-Risk: The security guidance treats local audit and usage databases as sensitive operational records. <br>
-Mitigation: Restrict access to the local state directory and avoid persistent master-password exports for encrypted token storage. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect local LLM endpoints, identify unsanctioned or drifted models, scan prompts for secrets, PII, code leakage, or jailbreak patterns, and route approved local generation through an audited guard.
 
-## Reference(s): <br>
-- [AI Guardian ClawHub page](https://clawhub.ai/zw008/skills/ai-guardian) <br>
-- [AI Guardian homepage](https://github.com/AIops-tools/AI-Guardian) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and MCP tool-call recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference local configuration, audit, usage, and undo records; artifact evidence says raw prompts are not stored.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+Risk: The skill can change or delete local models and policy without a built-in read-only mode or approval gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only where the agent account is allowed to manage the target local LLM runtime; for observe-only use, run against an account or runtime that cannot modify the model store, or expose only scan and observe tools.
+
+Risk: Local ai-guardian state can include sensitive configuration, encrypted secrets, and observed usage records.
+
+Mitigation: Treat ~/.ai-guardian as sensitive local state and avoid long-lived master passwords in environment variables that could be exposed through shell history, child processes, CI logs, or process inspection.
+
+## Reference(s):
+
+- [AI Guardian project homepage](https://github.com/AIops-tools/AI-Guardian)
+- [ai-guardian capabilities](references/capabilities.md)
+- [ai-guardian CLI reference](references/cli-reference.md)
+- [ai-guardian setup and security guide](references/setup-guide.md)
+- [Agent guardrails for ai-guardian](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with command snippets and structured local-LLM governance recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference local runtime state, local configuration paths, and audited guard decisions.]
+
+## Skill Version(s):
+
+0.10.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

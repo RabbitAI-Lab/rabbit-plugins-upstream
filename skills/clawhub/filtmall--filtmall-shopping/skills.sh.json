@@ -1,0 +1,13 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Shopping",
+      "description": "Agent-native value shopping with verifiable same-product price evidence, checkout, orders, delivery, and after-sales.",
+      "skills": [
+        "filtmall-shopping"
+      ]
+    }
+  ]
+}

@@ -1,45 +1,58 @@
-## Description: <br>
-Converts Markdown files into DOCX, PPTX, XLSX, PDF, PNG, HTML, notebooks, data formats, and extracted code files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Convert Markdown text to DOCX, PPTX, XLSX, PDF, PNG, SVG, HTML, IPYNB, MD, CSV, JSON, JSONL, XML files, and extract code blocks in Markdown to Python, Bash, JS, and other code files.
 
-## Publisher: <br>
-[bowenliang123](https://clawhub.ai/user/bowenliang123) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[bowenliang123](https://clawhub.ai/user/bowenliang123)
 
-## Use Case: <br>
-Developers and other users use this skill to ask an agent to convert Markdown files into document, presentation, spreadsheet, image, web, notebook, structured data, or source-code outputs with the markdown-exporter CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or overwrite files at output paths selected by the user. <br>
-Mitigation: Use a dedicated output folder, verify input and output paths before running commands, and avoid pointing outputs at important existing files unless replacement is intended. <br>
-Risk: The skill depends on the third-party md-exporter package and markdown-exporter binary. <br>
-Mitigation: Install only if you trust the md-exporter package and publisher. <br>
+## Use Case:
 
+Developers and agents use this skill to turn Markdown source files into document, spreadsheet, image, notebook, web, data, and code-file outputs through the markdown-exporter CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/bowenliang123/markdown-exporter) <br>
-- [Markdown Exporter project homepage](https://github.com/bowenliang123/markdown-exporter) <br>
-- [md-exporter PyPI package](https://pypi.org/project/md-exporter/) <br>
-- [Pandoc slide show syntax](https://pandoc.org/MANUAL.html#slide-shows) <br>
-- [Markdown table syntax](https://www.markdownguide.org/extended-syntax/#tables) <br>
-- [Markdown fenced code blocks](https://www.markdownguide.org/extended-syntax/#fenced-code-blocks) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Text, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands; generated artifacts may be DOCX, PPTX, XLSX, PDF, PNG, HTML, IPYNB, Markdown, CSV, JSON, JSONL, XML, LaTeX, ZIP, or extracted code files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [All commands use file paths for inputs and outputs; some conversions can create multiple output files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.6.10 (source: server release metadata) <br>
+Risk: The skill creates output files at paths supplied by the user or agent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated output folder, avoid sensitive destinations, and check for existing files before export.
+
+Risk: The code-block extraction command can write executable code files such as Python, Bash, or JavaScript.
+
+Mitigation: Treat extracted code as untrusted until reviewed before execution or reuse.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/bowenliang123/skills/markdown-exporter)
+- [Project homepage](https://github.com/bowenliang123/markdown-exporter)
+- [md-exporter Python package](https://pypi.org/project/md-exporter/)
+- [Pandoc slide show syntax](https://pandoc.org/MANUAL.html#slide-shows)
+- [Markdown Guide: tables](https://www.markdownguide.org/extended-syntax/#tables)
+- [Markdown Guide: fenced code blocks](https://www.markdownguide.org/extended-syntax/#fenced-code-blocks)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Files, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with shell command examples; generated artifacts include DOCX, PPTX, XLSX, PDF, PNG, SVG, HTML, IPYNB, Markdown, CSV, JSON, JSONL, XML, LaTeX, Jira wiki markup, and extracted code files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates files at user- or agent-supplied output paths; some commands can create multiple numbered files or compressed code-block exports.]
+
+## Skill Version(s):
+
+4.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

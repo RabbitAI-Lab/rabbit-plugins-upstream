@@ -1,5 +1,22 @@
 # Code Flow Graph Data Format Reference
 
+## Quick Reference
+
+| Element | Key Fields |
+|---------|-----------|
+| Node | `id`, `label`, `type`, `x`, `y`, `w`, `sections[]` |
+| Attr | `id` (format: `NodeId.method`), `name`, `sig`, `desc`, `detail`, `children`, `callChain`, `fieldDetail` |
+| Connection | `[sourceAttrId, targetAttrId, '#color', dashed, 'label?']` |
+| Group | `id`, `label`, `nodes[]`, `color`, `bg` |
+
+**Node types**: `entry` (yellow), `class` (blue), `module` (green), `function` (mauve), `data` (peach), `widget` (sapphire)
+
+**Connection colors**: `#a6e3a1` call, `#f38ba8` inherit, `#89b4fa` data, `#f5c2e7` signal, `#fab387` external, `#6c7086` weak
+
+**Grid**: columns at x = 30, 350, 670, 990...; 40px vertical gap between nodes
+
+---
+
 ## Overview
 
 The data file `code_flow_graph_data.js` defines a global `var DIAGRAMS = {};` object. Each key in `DIAGRAMS` is a diagram identifier (sidebar entry). A special `_projectTitle` key can set the sidebar header.

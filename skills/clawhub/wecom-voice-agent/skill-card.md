@@ -1,47 +1,61 @@
-## Description: <br>
-Wecom Voice Agent helps agents handle WeCom voice interactions, including voice-message transcription handling, intent routing, task responses, call flows, meeting minutes, scheduling, compliance recording, and emotion-aware replies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WeCom Voice Agent helps an agent run an Enterprise WeChat voice assistant for voice-message handling, intent parsing, office task execution, outbound calls, call summaries, scheduling, and weather or time queries.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Developers and WeCom administrators use this skill to prototype and operate a WeCom voice assistant for employee-facing voice messages, call handling, task routing, scheduling, transcript summaries, and consent-based recording. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The webhook processes WeCom callbacks and may handle sensitive call, transcript, session, and emotion data. <br>
-Mitigation: Deploy only in an admin-controlled WeCom environment with HTTPS, WeCom signature/AES validation, restricted inbound access, and protected Token, Secret, and AESKey values. <br>
-Risk: Outbound and batch calling, recording, transcription, and emotion tracking can create consent, retention, and disclosure obligations. <br>
-Mitigation: Review or disable those features until consent flows, retention limits, deletion procedures, and local file-permission controls are approved. <br>
-Risk: The artifact documents local recording, transcript, session, and call-record storage. <br>
-Mitigation: Limit local storage to necessary data, restrict filesystem permissions, and enforce retention and deletion policies for recordings, transcripts, session files, and call records. <br>
+## Use Case:
 
+Developers and workplace automation teams use this skill to set up, test, and operate a WeCom voice assistant for voice-driven office workflows. It supports webhook setup, simulated voice-message testing, schedule and todo intents, weather and time responses, message sending, outbound call handling, call minutes, and local operational scripts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/wecom-voice-agent) <br>
-- [Step-by-step setup guide](references/step_by_step_setup.md) <br>
-- [WeCom bot API reference](references/wecom_bot_api.md) <br>
-- [WeCom official site](https://work.weixin.qq.com) <br>
-- [WeCom intelligent bot documentation](https://developer.work.weixin.qq.com/document/path/101039) <br>
-- [WeCom error code documentation](https://developer.work.weixin.qq.com/document/path/90313) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples, Python code paths, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local operational guidance and helper-script outputs for WeCom voice, call, transcript, scheduling, recording, and emotion-analysis workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.0 (source: SKILL.md frontmatter, README version history, ClawHub release evidence) <br>
+Risk: The skill exposes a webhook for WeCom callbacks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy only on a hardened server and add callback verification, HTTPS, replay protection, and operational monitoring before public exposure.
+
+Risk: Voice transcripts, recordings, sessions, tickets, and call records may contain sensitive personal or business information.
+
+Mitigation: Define retention and deletion rules, keep records local where required, restrict access, and avoid placing CorpID or Secret values in commands, logs, or source files.
+
+Risk: Automatic emotion analysis and ticket creation can affect users without clear expectations.
+
+Mitigation: Enable these features explicitly, disclose them to users, and review generated tickets or escalations before acting on sensitive outcomes.
+
+## Reference(s):
+
+- [Step-by-step WeCom setup guide](references/step_by_step_setup.md)
+- [WeCom bot API reference](references/wecom_bot_api.md)
+- [WeCom intelligent robot official documentation](https://developer.work.weixin.qq.com/document/path/101039)
+- [WeCom API error codes](https://developer.work.weixin.qq.com/document/path/90313)
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/wecom-voice-agent)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown instructions with JSON examples, Python script references, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes webhook deployment guidance, local Python utilities, JSON strategy templates, and sample session data for testing.]
+
+## Skill Version(s):
+
+2.4.0 (source: evidence release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

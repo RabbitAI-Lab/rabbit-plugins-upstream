@@ -66,12 +66,12 @@ import os
 import sys
 import time
 
-from mps_auto_upgrade import check_sdk_version
 
 # 同目录辅助模块
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 if _SCRIPT_DIR not in sys.path:
     sys.path.insert(0, _SCRIPT_DIR)
+from mps_auto_upgrade import check_sdk_version
 
 check_sdk_version()
 try:
@@ -266,10 +266,11 @@ def print_storage_hint(statuses):
 # =============================================================================
 
 def get_credentials():
-    """从环境变量获取腾讯云凭证。若缺失则尝试从系统文件自动加载后重试。"""
+    """从环境变量获取腾讯云凭证。若缺失则尝试从 dotenv 文件自动加载后重试。"""
     secret_id = os.environ.get("TENCENTCLOUD_SECRET_ID", "")
     secret_key = os.environ.get("TENCENTCLOUD_SECRET_KEY", "")
     if not secret_id or not secret_key:
+        # 凭证可能写在 ~/.env 等 dotenv 文件中而未导出，先尝试加载再重试
         if _LOAD_ENV_AVAILABLE:
             print("[load_env] 环境变量未设置，尝试从系统文件自动加载...", file=sys.stderr)
             _ensure_env_loaded(verbose=True)
@@ -282,7 +283,7 @@ def get_credentials():
             else:
                 print(
                     "\n错误：TENCENTCLOUD_SECRET_ID / TENCENTCLOUD_SECRET_KEY 未设置。\n"
-                    "请在 ~/.env 等文件中添加这些变量。\n",
+                    "请在 ~/.env、~/.bashrc、~/.profile 或 <SKILL_DIR>/.env 中添加这些变量。\n",
                     file=sys.stderr,
                 )
             sys.exit(1)

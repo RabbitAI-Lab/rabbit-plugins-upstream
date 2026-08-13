@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "opc-discover": {
+      "command": "npx",
+      "args": ["-y", "@opc/skill-content-discover"],
+      "env": {
+        "OPC_API_BASE": "https://mrkjai.com",
+        "OPC_API_KEY": "opc_user_xxx..."
+      }
+    }
+  }
+}

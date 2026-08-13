@@ -1,44 +1,52 @@
-## Description: <br>
-This skill helps an agent work with local Apple app data through a native Swift MCP server for Calendar, Reminders, Contacts, Maps, Mail, Messages, Notes, and Photos on macOS. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents use the native Swift MCP to work with Apple Calendar, Reminders, Contacts, Maps, Mail, Messages, Notes, and Photos data on macOS.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[chrischall](https://clawhub.ai/user/chrischall)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users and developers use this skill to let an agent inspect and manage Apple app data on macOS, including calendar events, reminders, contacts, mail, messages, notes, maps, and photos.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill can access private Calendar, Contacts, Mail, Messages, Notes, Photos, and Messages history data.
+
+Mitigation: Install it only for trusted use cases, review macOS permission prompts carefully, and grant only permissions needed for the task.
+
+Risk: The skill can create, update, send, import, export, or delete data in Apple apps.
+
+Mitigation: Confirm sensitive actions before execution and review proposed writes, sends, exports, or deletions before allowing them.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and macOS users use this skill to let an agent search, read, create, update, send, organize, import, export, or delete data in local Apple apps. It is intended for macOS 14+ on Apple Silicon, with some operations requiring Apple TCC permissions or app automation access. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive local Apple app data including calendar entries, contacts, emails, messages, notes, photos, and reminders. <br>
-Mitigation: Grant only the app and disk permissions needed for the current task, and review requested data access before allowing the agent to proceed. <br>
-Risk: The skill supports write or state-changing actions such as sending messages or mail, creating or deleting events and reminders, exporting photos, and changing photo metadata. <br>
-Mitigation: Require explicit user confirmation before send, delete, update, export, import, or metadata-changing actions. <br>
-Risk: Messages history may require direct local database access, and AppleScript-backed app automation can operate on personal application data. <br>
-Mitigation: Avoid broad full-disk or automation permissions unless the user understands which local data stores will be readable. <br>
+**Output Format:** [Markdown with inline shell commands and configuration values]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/apple-swift-mcp) <br>
-- [apple-swift-mcp GitHub repository](https://github.com/chrischall/apple-swift-mcp) <br>
-- [apple-swift-mcp GitHub releases](https://github.com/chrischall/apple-swift-mcp/releases) <br>
+**Other Properties Related to Output:** [May include user-facing summaries of macOS app data and proposed create, update, send, import, export, or delete actions.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with tool-use guidance, commands, and configuration notes.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on macOS 14+, Apple Silicon, local app permissions, and user confirmation for sensitive read or write actions.] <br>
+1.4.5 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

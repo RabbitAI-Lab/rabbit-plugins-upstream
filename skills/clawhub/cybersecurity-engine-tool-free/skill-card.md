@@ -1,42 +1,58 @@
-## Description: <br>
-Cybersecurity Engine Tool Free helps individual developers perform lightweight security self-checks, basic OWASP Top 10 review, threat registration, and vulnerability tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A lightweight cybersecurity assessment skill for individual developers that guides security posture checks, basic OWASP Top 10 review, threat modeling, and vulnerability tracking before release.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect project files, run local command-line audit checks, document threats, and prioritize basic security fixes before release. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local project review can surface secrets or sensitive source details in agent context or generated reports. <br>
-Mitigation: Run the skill only in repositories approved for agent review, exclude files that should not be inspected, and review outputs before sharing them. <br>
-Risk: Dependency audit commands such as npm audit or pip-audit may contact external services or disclose package metadata. <br>
-Mitigation: Approve networked audit commands only when appropriate for the project, and use local or restricted alternatives where policy requires them. <br>
-Risk: Pattern-based security checks can produce false positives or miss issues that require expert review. <br>
-Mitigation: Treat findings as triage input, manually validate each result, and use professional security review for high-risk or production systems. <br>
+## Use Case:
 
+Developers and engineers use this skill to perform quick local security self-checks, identify common web application risks, create a basic STRIDE threat register, and prioritize vulnerability remediation. It is intended as lightweight guidance and does not replace a professional security audit.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cybersecurity-engine-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash and YAML examples plus JSON-style result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include local audit command output, threat-register entries, vulnerability-priority guidance, and security self-check summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill may ask an agent to read project files and run local audit or search commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when local file access and command execution are acceptable, and review proposed commands before running them.
+
+Risk: Some command examples in the artifact are malformed and may fail or need adjustment.
+
+Mitigation: Validate command syntax in a safe project copy before relying on scan output or remediation decisions.
+
+Risk: Security scans can expose secrets or sensitive project details in terminal output.
+
+Mitigation: Avoid pasting real secrets into prompts, redact sensitive scan output, and run checks in an environment appropriate for the project data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cybersecurity-engine-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, JSON, Analysis]
+
+**Output Format:** [Markdown guidance with inline bash, YAML, text, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May suggest local grep, npm audit, pip-audit, and threat-register workflows; review commands before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

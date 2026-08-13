@@ -1,44 +1,55 @@
-## Description: <br>
-Create a shareable RooQuiz preview scorecard, a scored questionnaire where each option adds points toward a total that buckets into levels, and get a link to open in the browser. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create temporary RooQuiz preview links for scored questionnaires where answer choices contribute points to a total score and result level.
 
-## Publisher: <br>
-[rooquiz](https://clawhub.ai/user/rooquiz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rooquiz](https://clawhub.ai/user/rooquiz)
 
-## Use Case: <br>
-Developers and agents use this skill to draft, validate, and create temporary RooQuiz scorecard previews for self-assessments, readiness checks, maturity checks, surveys, and other scored questionnaires. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to send questionnaire content to a public RooQuiz preview endpoint. <br>
-Mitigation: Review the generated JSON for sensitive or inappropriate content before approving the request. <br>
-Risk: Generated preview links are temporary and may be unsuitable as permanent published forms. <br>
-Mitigation: Use preview links only for short-lived review and recreate or publish through RooQuiz when a durable form is needed. <br>
-Risk: Generated commands or HTTP requests could target the wrong endpoint when environment overrides are used. <br>
-Mitigation: Review the exact endpoint, request body, and command before execution. <br>
+## Use Case:
 
+Developers and content authors use this skill to construct RooQuiz scored questionnaire JSON, submit it to a public preview endpoint, and return a short-lived browser link for review or sharing.
 
-## Reference(s): <br>
-- [Preview Scorecard on ClawHub](https://clawhub.ai/rooquiz/skills/preview-scorecard) <br>
-- [RooQuiz Preview API](https://preview.rooquiz.com/api/preview-forms) <br>
-- [RooQuiz Preview Link Base](https://quizster.app) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown with JSON examples, HTTP request details, shell command examples, and preview-link guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include a short-lived RooQuiz preview link that expires after about 1 hour.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release evidence) <br>
+Risk: Questionnaire content is sent to the configured RooQuiz preview service and may be viewable by anyone with the generated link if no secret is set.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not include private or sensitive personal data in preview forms, and set a secret when sharing should be limited.
+
+Risk: Preview links are temporary and expire after about one hour.
+
+Mitigation: Use previews for review and testing only; recreate the form in RooQuiz when a persistent version is needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/rooquiz/skills/preview-scorecard)
+- [RooQuiz Preview API](https://preview.rooquiz.com/api/preview-forms)
+- [RooQuiz Preview Viewer](https://quizster.app)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, API Calls, Shell commands, Guidance]
+
+**Output Format:** [Markdown with JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces short-lived preview links and optional secret-protected links.]
+
+## Skill Version(s):
+
+0.1.3 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

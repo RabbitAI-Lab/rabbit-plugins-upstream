@@ -1,46 +1,67 @@
-## Description: <br>
-Automates daily Amazon market monitoring for a user's ASINs and selected competitors, producing change-detection briefings on price moves, BSR shifts, new entrants, review waves, stockout signals, and tiered RED/YELLOW/GREEN alerts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Amazon Daily Market Radar produces ZooData-based daily Amazon seller monitoring briefings that compare tracked ASINs and competitors against prior baselines for price, BSR, entrant, review, and stockout changes.
 
-## Publisher: <br>
-[apiclaw](https://clawhub.ai/user/apiclaw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[apiclaw](https://clawhub.ai/user/apiclaw)
 
-## Use Case: <br>
-External Amazon sellers and commerce operators use this skill to schedule recurring market checks for their own products and competitor ASINs, then review a daily operational digest of material changes and recommended follow-up actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Amazon ASINs, keywords, category paths, and review-related data are sent to ZooData for scheduled monitoring. <br>
-Mitigation: Install only when this data sharing is acceptable for the monitored products and business context. <br>
-Risk: The bundled CLI uses credential and persistence patterns that should be reviewed before installation. <br>
-Mitigation: Use ZOODATA_API_KEY from a controlled environment or secret manager and clear bundled sample data before first use. <br>
-Risk: Unattended daily runs can keep transmitting watchlist data beyond the original setup moment. <br>
-Mitigation: Tie scheduling to an explicit owner-approved ASIN watchlist and review the watchlist before enabling automation. <br>
+## Use Case:
 
+External Amazon sellers and operators use this skill to opt in to daily monitoring for their own ASINs and competitors, then receive a ZooData-based change digest with alerts, KPI comparisons, market shifts, and action items.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/apiclaw/skills/amazon-daily-market-radar) <br>
-- [ZooData-Skills GitHub repository](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
-- [ZooData API documentation](https://api.zoodata.ai/api-docs) <br>
-- [ZooData API base endpoint reference](https://api.zoodata.ai/openapi/v2) <br>
-- [Local API field reference](references/reference.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown report with alert sections, KPI tables, data provenance, API usage, and inline shell commands for setup and execution.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Report language follows the user's input language; each conclusion is labeled as data-backed, inferred, or directional.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence and skill metadata) <br>
+Risk: Tracked ASINs, competitor ASINs, keywords, category paths, and marketplace/date/filter values are sent to ZooData on each monitoring run.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill only after explicit monitoring opt-in and review the tracked product and market inputs before scheduled use.
+
+Risk: Daily monitoring consumes ZooData account credits, with the composite daily radar documented at roughly 15 to 30 credits per run.
+
+Mitigation: Monitor credit use for scheduled runs and use granular commands when a lower credit cap is required.
+
+Risk: Local watchlist and last-run baseline snapshots persist under the skill data folder for day-over-day comparisons.
+
+Mitigation: Delete the skill data folder when resetting monitoring or removing retained baseline data.
+
+Risk: The skill requires a ZooData API key for API access.
+
+Mitigation: Set ZOODATA_API_KEY through the environment or a secret manager and avoid embedding credentials in prompts or shared files.
+
+## Reference(s):
+
+- [ZooData API Field Reference](references/reference.md)
+- [ZooData CLI Contract](references/cli-contract.md)
+- [ClawHub Skill Page](https://clawhub.ai/apiclaw/skills/amazon-daily-market-radar)
+- [Publisher Profile](https://clawhub.ai/user/apiclaw)
+- [ZooData Skills Homepage](https://github.com/SerendipityOneInc/ZooData-Skills)
+- [ZooData API Key Setup](https://zoodata.ai/en/api-keys)
+- [ZooData](https://zoodata.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown briefing with alert sections, KPI tables, data provenance, API usage, and local JSON baseline updates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Output language follows the user's input language; conclusions are labeled as data-backed, inferred, or directional.]
+
+## Skill Version(s):
+
+1.0.9 (source: SKILL.md metadata and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

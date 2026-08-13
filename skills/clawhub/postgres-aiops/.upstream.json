@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/postgres-aiops",
   "slug": "postgres-aiops",
   "ownerHandle": null,
-  "version": "0.6.0",
-  "updatedAt": 1784635314518,
-  "contentHash": "1a8c33fd9405fe70419031c0a8cf7aa217e9403bcfa88c7833528115060d8384",
-  "fetchedAt": "2026-07-26T18:09:04.579Z"
+  "version": "0.9.0",
+  "updatedAt": 1786344879448,
+  "contentHash": "6e80d0be59cc5c078136c2bcf2132260edc8b780cedbae82a8ddb9cb07f1a530",
+  "fetchedAt": "2026-08-13T09:04:58.292Z"
 }

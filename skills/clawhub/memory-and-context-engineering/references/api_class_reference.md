@@ -105,7 +105,7 @@
 
 | 类名 | 导入路径 | 职责 | 主要方法 |
 |------|----------|------|----------|
-| `ContextOrchestrator` | `scripts.context_orchestrator` | 上下文编排器 | `prepare()`, `get_context()` |
+| `ContextOrchestrator` | `scripts.context_orchestrator` | 上下文编排器 | `prepare_context()`, `compress_context()`, `store_memory()` |
 | `ContextReconstructor` | `scripts.context_reconstructor` | 上下文重构器 | `reconstruct()`, `get_package()` |
 | `ContextBlock` | `scripts.context_orchestrator` | 上下文块 | - |
 | `ContextConfig` | `scripts.context_orchestrator` | 上下文配置 | - |

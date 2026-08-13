@@ -21,7 +21,7 @@
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `google-period-report.md`                    | **Google 周期分析报告（默认）**：终稿=HTML，四步流程 → `google-analysis render` 出 HTML                                                                           |
 | `google-period-report-excel.md`              | **仅用户要 Excel 时**（P4 定制 Sheet）：先 `*.outline.txt` 后脚本写 xlsx；账户须 `-k` 核验，无 CLI excel 子命令                                                   |
-| `stats-daily-excel.md`                       | **P4-DAILY**：账户级按日 Excel（`stats --by-day`）                                                                                                              |
+| `stats-daily-excel.md`                       | **P4-DAILY**：账户级按日 Excel（`stats --by-day`）                                                                                                                |
 | `google-account-diagnosis-report.md`         | Google 账户深度诊断（健康度/转化/结构等）                                                                                                                         |
 | `google-ads-diagnosis.md`                    | Google **广告诊断**完整纲要（HTML 区块、**每日趋势 2 位小数**、**每模块必填分析/建议**）                                                                          |
 | `meta-period-report.md` / `.html`            | **Meta（Facebook）周期报告（默认）**：四步流程 → `facebook-analysis render` 出 HTML，见 P4-FB                                                                     |

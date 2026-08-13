@@ -11,12 +11,21 @@ import './node-version-check.mjs';
 import JSON5 from 'json5';
 import { createHash, randomBytes } from 'crypto';
 import { createRequire } from 'module';
-import { readFileSync, writeFileSync, existsSync, mkdirSync, mkdtempSync, statSync, readdirSync, realpathSync, lstatSync, unlinkSync, rmdirSync, rmSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, mkdtempSync, statSync, readdirSync, realpathSync, lstatSync, unlinkSync, rmdirSync, rmSync, renameSync } from 'fs';
 import { join, dirname, basename, extname, sep, resolve } from 'path';
 import { homedir, tmpdir } from 'os';
 import sharp from 'sharp';
 import { getEnv, hasEnv } from './env.mjs';
+import { getOrCreateSogniAppId } from './sogni-app-id.mjs';
 import { PACKAGE_VERSION } from './version.mjs';
+import {
+  SOGNI_APP_SOURCE,
+  attributionHeaders,
+  clientAttribution,
+  createInvocationLineage,
+  resolveAgentAttribution,
+  semanticWorkloadAttribution,
+} from './attribution.mjs';
 import { assertSafeUrl, fetchSafeUrl } from './ssrf-guard.mjs';
 import {
   INTERNAL_FLAG as UPDATE_CHECK_INTERNAL_FLAG,
@@ -49,7 +58,7 @@ import {
   dimensionsForAspectRatio,
   dimensionsWithShortSide,
   dispatchPublicSkillToolCall,
-  getModelDefaults,
+  getModelDefaults as getSharedModelDefaults,
   getVideoPromptGuardrailPlan,
   inferVideoWorkflowFromAssets,
   inferVideoWorkflowFromModel,
@@ -78,6 +87,8 @@ import {
   extractToolCallProgressUpdate
 } from '@sogni-ai/sogni-intelligence-client/chatRun';
 import {
+  buildImageEditExecutionControls,
+  isKreaIdentityEditModel,
   SEEDANCE_R2V_REFERENCE_AUDIO_MAX_DURATION_SECONDS,
   prepareSeedanceV2VSourceVideo as prepareSharedSeedanceV2VSourceVideo
 } from '@sogni-ai/sogni-intelligence-client/media';
@@ -99,7 +110,6 @@ const SPARK_PACKS_PURCHASE_URL = 'https://docs.sogni.ai/pricing/#spark-packs';
 const SPARK_PACKS_PURCHASE_HINT = `Buy Spark Packs to continue: ${SPARK_PACKS_PURCHASE_URL}`;
 
 const UNLIMITED_PLAN_URL = 'https://docs.sogni.ai/pricing/unlimited-plan-details';
-const SOGNI_MODEL_CATALOG_URL = 'https://www.sogni.ai/models';
 const SOGNI_MODEL_CATALOG_MAX_BYTES = 5 * 1024 * 1024;
 const SOGNI_MODEL_CATALOG_TIMEOUT_MS = 10000;
 const KNOWN_MODEL_CATALOG_TAGS = new Set([
@@ -121,6 +131,9 @@ const KNOWN_MODEL_CATALOG_TAGS = new Set([
 // covered job that cannot bill. Codes are the source of truth in
 // sogni-socket/constants/errorCodes.js (4078-4081).
 const SUBSCRIPTION_BILLING_ERROR_CODES = new Set(['4078', '4079', '4080', '4081']);
+const APP_ID_LIMIT_ERROR_CODE = '4061';
+const APP_ID_LIMIT_HINT =
+  'This CLI now persists and reuses one installation app ID. Keep ~/.config/sogni/app-id between sessions; for ephemeral/container homes, set one stable SOGNI_APP_ID or persist SOGNI_APP_ID_PATH. App IDs already registered from this address remain counted until 00:00 UTC, so wait for the next UTC reset once if the address is already blocked.';
 
 function subscriptionBillingFallback(code) {
   if (code === undefined || code === null) return null;
@@ -192,6 +205,24 @@ function subscriptionBillingCodeFromError(error) {
     ?? record.payload?.error_code;
 }
 
+function isAppIdLimitError(error) {
+  if (!error) return false;
+  const code = error.code
+    ?? error.errorCode
+    ?? error.error_code
+    ?? error.payload?.errorCode
+    ?? error.payload?.error_code;
+  if (String(code) === APP_ID_LIMIT_ERROR_CODE) return true;
+  const message = `${error.message || ''} ${error.reason || ''} ${error.payload?.message || ''}`.toLowerCase();
+  return message.includes('too many app-ids') || message.includes('too many app ids');
+}
+
+function enrichAppIdLimitError(error) {
+  if (!isAppIdLimitError(error)) return;
+  error.code = APP_ID_LIMIT_ERROR_CODE;
+  if (!error.hint) error.hint = APP_ID_LIMIT_HINT;
+}
+
 const require = createRequire(import.meta.url);
 const rootClientModule = process.env.SOGNI_AGENT_TEST_STATE_PATH
   ? await import('@sogni-ai/sogni-intelligence-client')
@@ -240,6 +271,7 @@ function sanitizePath(p, label) {
 
 const DEFAULT_CREDENTIALS_PATH = join(homedir(), '.config', 'sogni', 'credentials');
 const DEFAULT_LAST_RENDER_PATH = join(homedir(), '.config', 'sogni', 'last-render.json');
+const DEFAULT_MODEL_CATALOG_CACHE_PATH = join(homedir(), '.config', 'sogni', 'model-catalog-cache.json');
 const DEFAULT_OPENCLAW_CONFIG_PATH = join(homedir(), '.openclaw', 'openclaw.json');
 // Current OpenClaw home, with a fallback to the legacy clawdbot-era directory
 // for installs that predate the rename. Only used when neither
@@ -260,9 +292,10 @@ const DEFAULT_SAFE_API_HOSTS = Object.freeze(['api.sogni.ai']);
 const LOOPBACK_API_HOSTS = Object.freeze(['localhost', '127.0.0.1', '::1']);
 const DEFAULT_LLM_MODEL = 'qwen3.6-35b-a3b-gguf-iq4xs';
 const VALID_API_TASK_PROFILES = new Set(['general', 'coding', 'reasoning']);
-const SOGNI_APP_SOURCE = 'sogni-creative-agent-skill';
 const OPENCLAW_CONFIG_PATH = getEnv('OPENCLAW_CONFIG_PATH') || DEFAULT_OPENCLAW_CONFIG_PATH;
 const IS_OPENCLAW_INVOCATION = Boolean(getEnv('OPENCLAW_PLUGIN_CONFIG'));
+const AGENT_ATTRIBUTION = resolveAgentAttribution({ surfaceVersion: PACKAGE_VERSION });
+const INVOCATION_LINEAGE = createInvocationLineage();
 const RAW_ARGS = process.argv.slice(2);
 const CLI_WANTS_JSON = RAW_ARGS.includes('--json');
 const JSON_ERROR_MODE = CLI_WANTS_JSON || IS_OPENCLAW_INVOCATION;
@@ -376,6 +409,182 @@ const MUSIC_MODEL_DEFAULTS = {
     scheduler: { allowed: ['simple', 'linear_quadratic'], default: 'linear_quadratic' }
   }
 };
+const DEFAULT_MODEL_CATALOG_URL = 'https://api.sogni.ai/v1/model-catalog';
+const MODEL_CATALOG_CACHE_TTL_MS = 5 * 60 * 1000;
+let liveModelDefaults = null;
+
+function getModelDefaults(modelId, config) {
+  const sharedDefaults = getSharedModelDefaults(modelId, config);
+  const catalogDefaults = liveModelDefaults?.[modelId];
+  const configuredDefaults = config?.modelDefaults?.[modelId];
+  const fixedDefaults = modelId === LTX23_10EROS_MODEL_ID
+    ? LTX23_10EROS_FIXED_SETTINGS
+    : null;
+  if (!catalogDefaults && !configuredDefaults && !fixedDefaults) return sharedDefaults;
+  // The live catalog supersedes bundled registry data. Explicit user config
+  // remains the final override except where a workflow has immutable settings.
+  return {
+    ...(sharedDefaults || {}),
+    ...(catalogDefaults || {}),
+    ...(configuredDefaults || {}),
+    ...(fixedDefaults || {})
+  };
+}
+
+function defaultsFromModelTier(card) {
+  const defaults = {};
+  if (Number.isFinite(card?.steps?.default)) defaults.steps = card.steps.default;
+  if (Number.isFinite(card?.guidance?.default)) defaults.guidance = card.guidance.default;
+  if (card?.comfySampler?.default) defaults.sampler = card.comfySampler.default;
+  if (card?.comfyScheduler?.default) defaults.scheduler = card.comfyScheduler.default;
+  if (Number.isFinite(card?.width?.default)) defaults.defaultWidth = card.width.default;
+  if (Number.isFinite(card?.height?.default)) defaults.defaultHeight = card.height.default;
+  if (Number.isFinite(card?.width?.min)) defaults.minDimension = card.width.min;
+  if (Number.isFinite(card?.width?.max)) defaults.maxDimension = card.width.max;
+  if (Number.isFinite(card?.width?.step)) defaults.dimensionMultiple = card.width.step;
+  const defaultSize = String(card?.defaultSize || '').match(/^(\d+)x(\d+)$/i);
+  if (defaultSize) {
+    defaults.defaultWidth = Number(defaultSize[1]);
+    defaults.defaultHeight = Number(defaultSize[2]);
+  }
+  return defaults;
+}
+
+function validateModelTierSelections(modelId, card) {
+  const validateRange = (source, value, range) => {
+    if (value === null || value === undefined || !range) return;
+    if (
+      (Number.isFinite(range.min) && value < range.min) ||
+      (Number.isFinite(range.max) && value > range.max)
+    ) {
+      const error = new Error(
+        `${source} ${value} is outside the live catalog range for "${modelId}" ` +
+        `(${range.min}–${range.max}).`
+      );
+      error.code = 'INVALID_MODEL_PARAMETER';
+      error.hint = `Use a value between ${range.min} and ${range.max}. Catalog: ${MODEL_CATALOG_URL}`;
+      throw error;
+    }
+  };
+  validateRange('--steps', options.steps, card.steps);
+  validateRange('--guidance', options.guidance, card.guidance);
+  const configuredDefaults = openclawConfig?.modelDefaults?.[modelId];
+  validateRange('Configured steps', configuredDefaults?.steps, card.steps);
+  validateRange('Configured guidance', configuredDefaults?.guidance, card.guidance);
+}
+
+function persistModelCatalogCache(catalog, cachePath = MODEL_CATALOG_CACHE_PATH) {
+  const tempPath = `${cachePath}.${process.pid}.${randomBytes(4).toString('hex')}.tmp`;
+  try {
+    mkdirSync(dirname(cachePath), { recursive: true });
+    writeFileSync(tempPath, JSON.stringify(catalog), { mode: 0o600 });
+    renameSync(tempPath, cachePath);
+  } catch (error) {
+    if (!options.quiet) {
+      console.error(`Warning: could not persist model catalog cache (${error?.message || error}).`);
+    }
+  } finally {
+    try {
+      if (existsSync(tempPath)) unlinkSync(tempPath);
+    } catch {
+      // Cache cleanup is best-effort and must never block generation.
+    }
+  }
+}
+
+async function loadLiveModelDefaults(modelId) {
+  // Existing CLI tests mock the SDK rather than the public catalog API.
+  // A supplied JSON fixture opts a test into exercising this lookup.
+  const testFixture = getEnv('SOGNI_AGENT_TEST_MODEL_TIERS_JSON');
+  let cachedCatalog = null;
+  try {
+    if (existsSync(MODEL_CATALOG_CACHE_PATH)) {
+      const cached = JSON.parse(readFileSync(MODEL_CATALOG_CACHE_PATH, 'utf8'));
+      const cacheAge = Date.now() - cached?.fetchedAt;
+      if (
+        Number.isFinite(cached?.fetchedAt) &&
+        cacheAge >= 0 &&
+        cached?.modelId === modelId &&
+        cached?.descriptor?.parameters &&
+        typeof cached.descriptor.parameters === 'object'
+      ) {
+        cachedCatalog = cached;
+        if (cacheAge < MODEL_CATALOG_CACHE_TTL_MS) {
+          const card = cached.descriptor.parameters;
+          validateModelTierSelections(modelId, card);
+          liveModelDefaults = { [modelId]: defaultsFromModelTier(card) };
+          return;
+        }
+      }
+    }
+  } catch {
+    // A corrupt cache is treated as a miss and replaced by the live response.
+  }
+
+  if (
+    !testFixture &&
+    getEnv('SOGNI_AGENT_TEST_STATE_PATH') &&
+    !getEnv('SOGNI_MODEL_CATALOG_URL')
+  ) return;
+
+  let catalog;
+  try {
+    if (testFixture) {
+      const fixture = JSON.parse(testFixture);
+      const descriptor = fixture?.data?.model || fixture?.model || (() => {
+        const model = fixture?.models?.find?.((entry) => entry?.id === modelId);
+        const tierId = model?.tier || modelId;
+        const parameters = fixture?.tiers?.[tierId] || (!fixture?.tiers ? fixture?.[tierId] : null);
+        return parameters ? { id: modelId, parameters } : null;
+      })();
+      catalog = { fetchedAt: Date.now(), modelId, etag: null, descriptor };
+    } else {
+      const url = `${MODEL_CATALOG_URL}/${encodeURIComponent(modelId)}`;
+      const headers = { accept: 'application/json' };
+      if (cachedCatalog?.etag) headers['if-none-match'] = cachedCatalog.etag;
+      const response = await fetch(url, {
+        headers,
+        signal: AbortSignal.timeout(10_000)
+      });
+      if (response.status === 304 && cachedCatalog) {
+        catalog = { ...cachedCatalog, fetchedAt: Date.now() };
+      } else {
+        if (response.status === 404) {
+          const error = new Error(`Model "${modelId}" is not present in the live Sogni model catalog.`);
+          error.code = 'MODEL_NOT_FOUND';
+          error.hint = `Choose a model currently listed by ${MODEL_CATALOG_URL}`;
+          throw error;
+        }
+        if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
+        const payload = await response.json();
+        catalog = {
+          fetchedAt: Date.now(),
+          modelId,
+          etag: response.headers.get('etag'),
+          descriptor: payload?.data?.model
+        };
+      }
+    }
+    persistModelCatalogCache(catalog);
+  } catch (cause) {
+    if (cause?.code === 'MODEL_NOT_FOUND') throw cause;
+    const error = new Error(`Could not load the live Sogni model catalog (${cause?.message || cause}).`);
+    error.code = 'MODEL_CATALOG_UNAVAILABLE';
+    error.hint = `Check Sogni platform status and retry. Catalog: ${MODEL_CATALOG_URL}`;
+    throw error;
+  }
+
+  const card = catalog?.descriptor?.parameters;
+  if (!card || typeof card !== 'object') {
+    const error = new Error(`Model "${modelId}" is not present in the live Sogni model catalog.`);
+    error.code = 'MODEL_NOT_FOUND';
+    error.hint = `Choose a model currently listed by ${MODEL_CATALOG_URL}`;
+    throw error;
+  }
+  validateModelTierSelections(modelId, card);
+  liveModelDefaults = { [modelId]: defaultsFromModelTier(card) };
+}
+
 const MUSIC_DURATION_LIMITS = { min: 10, max: 600, default: 30 };
 const MUSIC_BPM_LIMITS = { min: 30, max: 300, default: 120 };
 const MUSIC_PROMPT_STRENGTH_LIMITS = { min: 0, max: 10 };
@@ -687,6 +896,7 @@ function reportFatalError(error) {
   if (getEnv('SOGNI_DEBUG') || getEnv('DEBUG')) {
     console.error(error?.stack || String(error));
   }
+  enrichAppIdLimitError(error);
   if (isInvalidApiKeyError(error)) {
     fatalCliError('Invalid Sogni API key.', {
       code: 'INVALID_API_KEY',
@@ -710,6 +920,7 @@ async function connectSogniClient(client) {
   try {
     await client.connect();
   } catch (error) {
+    enrichAppIdLimitError(error);
     if (isInvalidApiKeyError(error) && !error.hint) {
       error.hint = INVALID_API_KEY_HINT;
       if (!error.code) error.code = 'INVALID_API_KEY';
@@ -1243,7 +1454,22 @@ const DEFAULT_VIDEO_DIMENSION_RULES = {
 };
 const WRAPPER_MAX_VIDEO_DIMENSION = 2048;
 const WRAPPER_MAX_WAN_VIDEO_DIMENSION = 1536;
+
+// SogniClientWrapper.normalizeVideoDimensions in @sogni-ai/sogni-intelligence-client clamps to
+// MAX_VIDEO_DIMENSION = 1536 for every model before it resizes a reference image and overwrites
+// the project dimensions with the resized reference's. So on any reference-bearing workflow a
+// larger ceiling is not reachable: the CLI waves 1600x896 through as "valid", the wrapper then
+// clamps to 1536x848 and hands the model a 1514x848 reference that is off-divisor — the exact
+// failure the i2v sizing logic exists to prevent. Applied only to reference-bearing workflows;
+// t2v never goes through the reference resize. Keep in sync with the pinned client version.
+const WRAPPER_MAX_REF_VIDEO_DIMENSION = 1536;
 const VIDEO_DIMENSION_MULTIPLE = DEFAULT_VIDEO_DIMENSION_RULES.dimensionMultiple;
+
+// i2v reference sizing: when an exact-aspect bounding box would cost more than this share of
+// the pixel budget, pre-resize the reference to the model cap instead. The aspect ceiling keeps
+// the swap invisible — a 25:14 source becoming 16:9 drifts 0.44%, far under the limit.
+const VIDEO_REF_PRERESIZE_MIN_AREA_GAIN = 1.1;
+const VIDEO_REF_PRERESIZE_MAX_ASPECT_DRIFT = 0.02;
 
 function isWanVideoModelId(modelId) {
   return typeof modelId === 'string' && modelId.startsWith('wan_');
@@ -1288,9 +1514,16 @@ function requiresSparkOnlyToken(modelId) {
 // Attach the user's explicit --billing-mode to a project config. Omitted by
 // default so the server keeps deciding coverage (Unlimited members get 'auto'
 // coverage server-side; token payers are unaffected).
-function withBillingMode(config) {
-  if (!options.billingMode) return config;
-  return { ...config, billingMode: options.billingMode };
+function nextSemanticWorkloadAttribution(options = {}) {
+  return semanticWorkloadAttribution(AGENT_ATTRIBUTION, INVOCATION_LINEAGE.next(options));
+}
+
+function withBillingMode(config, attributionOptions = {}) {
+  return {
+    ...config,
+    ...(options.billingMode ? { billingMode: options.billingMode } : {}),
+    attribution: nextSemanticWorkloadAttribution(attributionOptions),
+  };
 }
 
 // Best-effort Sogni Unlimited entitlement lookup. Returns null (never throws)
@@ -1355,6 +1588,7 @@ function getMaxContextImages(modelId) {
 }
 
 function videoDurationLimitsLikeWrapper(modelId) {
+  if (isMiniMaxH3Model(modelId)) return { ...MINIMAX_H3_DURATION_LIMITS };
   if (isSeedanceModel(modelId)) return { min: 4, max: 15 };
   if (isHappyHorseModel(modelId)) return { min: 3, max: 15 };
   if (isLtx2Model(modelId) || isWanAnimateVideoModelId(modelId)) return { min: 1, max: 20 };
@@ -1375,6 +1609,9 @@ function videoDurationLimitsLikeWrapper(modelId) {
 // explicit -w/-h/--target-resolution, config, and prompt-derived dimensions
 // still win (see the video preflight defaults block).
 function videoModelDimensionDefaultsLikeWrapper(modelId) {
+  if (isMiniMaxH3Model(modelId)) {
+    return { defaultWidth: 1344, defaultHeight: 768, maxDimension: 1344, dimensionMultiple: 32 };
+  }
   if (isHappyHorseModel(modelId) || isHappyHorseModelSelectionLocal(modelId)) {
     return { defaultWidth: 1920, defaultHeight: 1080, maxDimension: 1920, dimensionMultiple: 1 };
   }
@@ -1400,33 +1637,48 @@ function videoDimensionRulesFromDefaults(modelDefaults, modelId) {
 }
 
 /**
+ * Predicts the dimensions `resizeImageBufferForVideo` will produce for a reference image.
+ *
+ * Scales the reference up to the model's max dimension (preserving aspect via fit:inside),
+ * then rounds each side to the nearest model divisor. Unlike an exact-aspect bounding box,
+ * this always reaches the model cap — at the cost of a sub-pixel-percent aspect adjustment.
+ *
+ * `resizeImageBufferForVideo` delegates to this so the prediction can never drift from the
+ * actual resize.
+ */
+function predictVideoRefPreResizeDims(refWidth, refHeight, rules = DEFAULT_VIDEO_DIMENSION_RULES) {
+  const rw = Number(refWidth);
+  const rh = Number(refHeight);
+  if (!Number.isFinite(rw) || !Number.isFinite(rh) || rw <= 0 || rh <= 0) return null;
+
+  const multiple = rules.dimensionMultiple || VIDEO_DIMENSION_MULTIPLE;
+  const minDimension = rules.minDimension || DEFAULT_VIDEO_DIMENSION_RULES.minDimension;
+  const maxDimension = rules.maxDimension || DEFAULT_VIDEO_DIMENSION_RULES.maxDimension;
+  const roundToMultiple = (n) => Math.max(multiple, Math.round(n / multiple) * multiple);
+  // Never round past the model's hard limits.
+  const floorMultiple = Math.floor(maxDimension / multiple) * multiple;
+  const ceilMultiple = Math.ceil(minDimension / multiple) * multiple;
+  const clamp = (n) => Math.min(floorMultiple, Math.max(ceilMultiple, roundToMultiple(n)));
+
+  const boxWidth = Math.max(minDimension, Math.min(maxDimension, roundToMultiple(rw)));
+  const boxHeight = Math.max(minDimension, Math.min(maxDimension, roundToMultiple(rh)));
+  const fitted = predictSharpInsideResizeDims(rw, rh, boxWidth, boxHeight);
+  if (!fitted) return null;
+
+  return { width: clamp(fitted.width), height: clamp(fitted.height) };
+}
+
+/**
  * Resizes an image buffer to model-compatible dimensions while maintaining aspect ratio.
  * Uses sharp's fit:inside to preserve aspect, then rounds to the model divisor.
  */
 async function resizeImageBufferForVideo(buffer, originalWidth, originalHeight, rules = DEFAULT_VIDEO_DIMENSION_RULES) {
-  const multiple = rules.dimensionMultiple || VIDEO_DIMENSION_MULTIPLE;
-  const roundToMultiple = (n) => Math.max(multiple, Math.round(n / multiple) * multiple);
-  const targetWidth = Math.max(rules.minDimension, Math.min(rules.maxDimension, roundToMultiple(originalWidth)));
-  const targetHeight = Math.max(rules.minDimension, Math.min(rules.maxDimension, roundToMultiple(originalHeight)));
+  const target = predictVideoRefPreResizeDims(originalWidth, originalHeight, rules);
+  if (!target) return buffer;
 
-  // Resize using sharp with fit:inside (maintains aspect ratio)
-  const resizedBuffer = await sharp(buffer)
-    .resize(targetWidth, targetHeight, { fit: 'inside', withoutEnlargement: false })
+  return await sharp(buffer)
+    .resize(target.width, target.height, { fit: 'cover', withoutEnlargement: false })
     .toBuffer();
-
-  // Get actual dimensions after resize
-  const metadata = await sharp(resizedBuffer).metadata();
-  const actualWidth = roundToMultiple(metadata.width);
-  const actualHeight = roundToMultiple(metadata.height);
-
-  // If dimensions aren't exactly model-compatible, do a final resize/crop.
-  if (metadata.width !== actualWidth || metadata.height !== actualHeight) {
-    return await sharp(resizedBuffer)
-      .resize(actualWidth, actualHeight, { fit: 'cover' })
-      .toBuffer();
-  }
-
-  return resizedBuffer;
 }
 
 function normalizeVideoDimensionsLikeWrapper(width, height, rules = DEFAULT_VIDEO_DIMENSION_RULES) {
@@ -1611,6 +1863,112 @@ const OUTPAINT_POSITION_SET = new Set(OUTPAINT_POSITIONS);
 const LTX_TRANSITION_LORA_ID = 'transition';
 const LTX_TRANSITION_TRIGGER = 'zhuanchang';
 const LTX_TRANSITION_DEFAULT_STRENGTH = 1.0;
+const LTX23_10EROS_MODEL_ID = 'ltx23-22b-10eros-v1.4-fp8mixed_i2v';
+const MINIMAX_H3_MODEL_MODES = new Map([
+  ['minimax-h3-fl2va-fp8_t2v', 't2v'],
+  ['minimax-h3-fl2va-fp8_i2v', 'i2v'],
+  ['minimax-h3-fl2va-fp8_flf2v', 'flf2v'],
+  ['minimax-h3-ref2va-fp8_r2v', 'r2v'],
+  ['minimax-h3-fl2va-fp8_t2v_turbo', 't2v'],
+  ['minimax-h3-fl2va-fp8_i2v_turbo', 'i2v'],
+  ['minimax-h3-fl2va-fp8_flf2v_turbo', 'flf2v']
+]);
+const MINIMAX_H3_MODEL_IDS = new Set(MINIMAX_H3_MODEL_MODES.keys());
+const MINIMAX_H3_R2V_MODEL_ID = 'minimax-h3-ref2va-fp8_r2v';
+const MINIMAX_H3_REFERENCE_LIMITS = Object.freeze({
+  images: 9,
+  videos: 3,
+  audios: 3,
+  assets: 12
+});
+// H3 renders on a fixed 24fps frame grid: frames are 124 + n×17, from 124
+// through 362. Every duration the user asks for is snapped to that grid, so the
+// deliverable range is 5.17-15.08s — not the round 5-15s it rounds to.
+const MINIMAX_H3_FRAME_GRID = Object.freeze({
+  fps: 24,
+  min: 124,
+  max: 362,
+  step: 17
+});
+const MINIMAX_H3_DURATION_LIMITS = Object.freeze({
+  min: MINIMAX_H3_FRAME_GRID.min / MINIMAX_H3_FRAME_GRID.fps,
+  max: MINIMAX_H3_FRAME_GRID.max / MINIMAX_H3_FRAME_GRID.fps
+});
+
+// Grid-snapped durations are rarely whole seconds; keep the printed form short
+// without implying more precision than the frame count carries.
+function formatDurationSeconds(seconds) {
+  return String(Number(Number(seconds).toFixed(2)));
+}
+
+// Snap a duration in seconds onto the H3 frame grid.
+function miniMaxH3FramesForDuration(durationSeconds) {
+  const { fps, min, max, step } = MINIMAX_H3_FRAME_GRID;
+  const desiredFrames = durationSeconds * fps;
+  return Math.max(min, Math.min(max, min + Math.round((desiredFrames - min) / step) * step));
+}
+
+const LTX23_10EROS_FIXED_SETTINGS = Object.freeze({
+  steps: 9,
+  guidance: 1,
+  sampler: 'euler_ancestral',
+  scheduler: 'manual_sigmas',
+  requiresDisabledSafetyFilter: true
+});
+const DR34ML4Y_LORA_ID = 'dr34ml4y-v3';
+const DR34ML4Y_DEFAULT_STRENGTH = 1.0;
+const DR34ML4Y_SUPPORTED_MODEL_IDS = new Set([
+  'ltx23-22b-fp8_i2v',
+  'ltx23-22b-fp8_i2v_dev',
+  LTX23_10EROS_MODEL_ID
+]);
+
+function resolveSkillVideoModelAlias(modelId, workflow = null, hasEndFrame = false) {
+  const normalized = String(modelId || '').trim().toLowerCase();
+  if (normalized === 'minimax-h3' && workflow) {
+    if (workflow === 'r2v') return MINIMAX_H3_R2V_MODEL_ID;
+    if (workflow === 'i2v') {
+      return hasEndFrame ? 'minimax-h3-fl2va-fp8_flf2v' : 'minimax-h3-fl2va-fp8_i2v';
+    }
+    return 'minimax-h3-fl2va-fp8_t2v';
+  }
+  if (normalized === 'minimax-h3-t2v') {
+    return 'minimax-h3-fl2va-fp8_t2v';
+  }
+  if (normalized === 'minimax-h3-i2v') return 'minimax-h3-fl2va-fp8_i2v';
+  if (normalized === 'minimax-h3-flf2v') return 'minimax-h3-fl2va-fp8_flf2v';
+  if (normalized === 'minimax-h3-r2v') return MINIMAX_H3_R2V_MODEL_ID;
+  return normalized === '10eros' || normalized === 'ltx23-eros'
+    ? LTX23_10EROS_MODEL_ID
+    : modelId;
+}
+
+function isMiniMaxH3Model(modelId) {
+  return MINIMAX_H3_MODEL_IDS.has(String(modelId || '').trim().toLowerCase());
+}
+
+function isMiniMaxH3R2vModel(modelId) {
+  return String(modelId || '').trim().toLowerCase() === MINIMAX_H3_R2V_MODEL_ID;
+}
+
+function isMiniMaxH3ModelSelectionLocal(modelId) {
+  const normalized = String(modelId || '').trim().toLowerCase();
+  return normalized === 'minimax-h3'
+    || normalized === 'minimax-h3-t2v'
+    || normalized === 'minimax-h3-i2v'
+    || normalized === 'minimax-h3-flf2v'
+    || normalized === 'minimax-h3-r2v'
+    || isMiniMaxH3Model(normalized);
+}
+
+function miniMaxH3ModeFromModelId(modelId) {
+  const normalized = String(modelId || '').trim().toLowerCase();
+  if (normalized === 'minimax-h3-t2v') return 't2v';
+  if (normalized === 'minimax-h3-i2v') return 'i2v';
+  if (normalized === 'minimax-h3-flf2v') return 'flf2v';
+  if (normalized === 'minimax-h3-r2v') return 'r2v';
+  return MINIMAX_H3_MODEL_MODES.get(normalized) || null;
+}
 
 function normalizeMultiAngleValue(value, aliases, allowedKeys, label) {
   if (!value) return null;
@@ -1661,7 +2019,12 @@ function isLtx23V2VModelId(modelId) {
 }
 
 function isLtxI2vTransitionModelId(modelId) {
-  return !!modelId && modelId.includes('ltx') && /_i2v(_|$)/.test(modelId);
+  return (
+    !!modelId &&
+    modelId !== LTX23_10EROS_MODEL_ID &&
+    modelId.includes('ltx') &&
+    /_i2v(_|$)/.test(modelId)
+  );
 }
 
 function applyLtxTransitionLora(projectConfig, modelId, hasStartFrame, hasEndFrame) {
@@ -1785,6 +2148,13 @@ const LAST_RENDER_PATH = resolveConfiguredPath(
   DEFAULT_LAST_RENDER_PATH,
   'SOGNI last render path'
 );
+const MODEL_CATALOG_CACHE_PATH = resolveConfiguredPath(
+  getEnv('SOGNI_MODEL_CATALOG_CACHE_PATH'),
+  DEFAULT_MODEL_CATALOG_CACHE_PATH,
+  'Sogni model catalog cache path'
+);
+const MODEL_CATALOG_LIST_CACHE_PATH = `${MODEL_CATALOG_CACHE_PATH}.models`;
+const MODEL_CATALOG_URL = (getEnv('SOGNI_MODEL_CATALOG_URL') || DEFAULT_MODEL_CATALOG_URL).replace(/\/+$/, '');
 const MEDIA_INBOUND_DIR = resolveConfiguredPath(
   getEnv('SOGNI_MEDIA_INBOUND_DIR') || openclawConfig?.mediaInboundDir,
   DEFAULT_MEDIA_INBOUND_DIR,
@@ -2964,7 +3334,7 @@ Image Options:
   --output-format <f>   Image output format: png|jpg (webp for gpt-image-2)
   --sampler <name>      Sampler (model-dependent)
   --scheduler <name>    Scheduler (model-dependent)
-  --lora <id>           LoRA id (repeatable, edit only)
+  --lora <id>           Image LoRA id (repeatable; order is significant)
   --loras <ids>         Comma-separated LoRA ids
   --lora-strength <n>   LoRA strength (repeatable)
   --lora-strengths <n>  Comma-separated LoRA strengths
@@ -2996,7 +3366,7 @@ Music Options:
 
 Video Options:
   --video, -v           Generate video instead of image
-  --workflow <type>     Video workflow: t2v|i2v|s2v|ia2v|a2v|v2v|animate-move|animate-replace
+  --workflow <type>     Video workflow: t2v|i2v|r2v|s2v|ia2v|a2v|v2v|animate-move|animate-replace
   --fps <num>           Frames per second (model default unless set)
   --duration <sec>      Duration in seconds (default: 5)
   --frames <num>        Override total frames (optional)
@@ -3004,19 +3374,22 @@ Video Options:
   --auto-resize-assets  Auto-resize video reference assets (default)
   --no-auto-resize-assets  Disable auto-resize for video assets
   --estimate-video-cost Estimate video cost and exit
-  --ref <path|url>      Reference image for video (start/first frame on Seedance)
-  --ref-end <path|url>  End frame for interpolation/morphing (last frame on Seedance)
-  --ref-audio <path|url> Audio reference. Repeatable on Seedance models (up to 3 total);
+  --ref <path|url>      Reference image for video (start frame; Picture 1 on H3 r2v)
+  --ref-end <path|url>  End frame for interpolation/morphing; with --ref it
+                         defaults to the LTX-2.3 transition/morph model
+                         (last frame on Seedance)
+  --ref-audio <path|url> Audio reference. Repeatable on Seedance and H3 r2v (up to 3 total);
                          first entry is the primary, extras must be HTTPS URLs in CLI
-                         direct-gen (use --api-chat for multi local-file uploads).
+                         direct-gen for Seedance; H3 r2v uploads local/remote files.
                          On LTX/WAN: single primary only (for ia2v/a2v/s2v lip-sync).
   --audio-start <sec>   Start offset into --ref-audio for audio-driven clips
   --audio-duration <sec> Duration slice from --ref-audio
   --reference-audio-identity <path>  Voice identity clip for LTX native audio
   --voice-persona <name>  Use saved persona voice clip as LTX voice identity
-  --ref-video <path|url> Video reference. Repeatable on Seedance models (up to 3 total);
+  --ref-video <path|url> Video reference. Repeatable on Seedance and H3 r2v (up to 3 total);
                          first entry is the primary, extras must be HTTPS URLs in CLI
-                         direct-gen. On LTX/WAN: single primary for animate/v2v workflows.
+                         direct-gen for Seedance. On LTX/WAN: single primary for animate/v2v.
+  --generate-audio, --no-generate-audio  Keep or strip MiniMax H3's generated audio track
 
 Seedance Reference Modes (mutually exclusive on seedance2 / seedance2-mini / seedance2-fast):
   - DEDICATED FRAME MODE: --ref (first frame) and/or --ref-end (last frame).
@@ -3094,7 +3467,7 @@ Hosted API Modes:
   --api-base-url <url>  Sogni API base URL (default: ${DEFAULT_API_BASE_URL})
 
 General:
-  -t, --timeout <sec>   Timeout in seconds (default: 30, video: 300, music: 600)
+  -t, --timeout <sec>   Timeout in seconds (default: 30, video: 1800, music: 600)
   --steps <num>         Override steps (model-dependent)
   --guidance <num>      Override guidance (model-dependent)
   --token-type <type>   Token type: spark|sogni|auto (default: spark, auto retries with alternate)
@@ -3175,10 +3548,12 @@ Image Models:
 
 Recommended LTX 2.3 Video Models:
   ltx23-22b-fp8_t2v_distilled     Text-to-video with native dialogue/audio
-  ltx23-22b-fp8_i2v_distilled     Image-to-video with native dialogue/audio
+  ltx23-22b-fp8_i2v_distilled     Image-to-video with native dialogue/audio; default for --ref + --ref-end pairs
+  ltx23-eros                       Explicit uncensored I2V (30GB+ worker; requires --no-filter)
   ltx23-22b-fp8_ia2v_distilled    Image+audio-to-video
   ltx23-22b-fp8_a2v_distilled     Audio-to-video
   ltx23-22b-fp8_v2v_distilled     Video-to-video with ControlNet
+  ltx23-22b-10eros-v1.4-fp8mixed_i2v  Private mature-theme I2V; first and/or last frame; requires --no-filter
 
 Music Models:
   ace_step_1.5_xl_turbo           Default direct music generation
@@ -3198,9 +3573,20 @@ HappyHorse 1.1 Video Model Selectors (3-15s, fixed 24fps, native audio, 720P/108
   happyhorse-1.1-i2v                Image-to-video from a single first-frame image (--ref)
   happyhorse-1.1-r2v                Reference-to-video from 1-9 reference images (-c/--context)
 
+MiniMax H3 Video Model Selectors (fixed 24fps, native 32kHz stereo audio + dialogue,
+frames 124+n*17 = 5.17-15.08s, sizes /32 up to 1,032,192px, 32GB-class workers.
+Prompt is natural cinematic prose — a timed shot list ("[0-2 seconds] ...") plus
+explicit audio direction; see references/video-prompting.md "MiniMax H3
+Prompting". No negative prompt field: state negatives in the prompt text.):
+  minimax-h3                        Text-to-video (also accepts minimax-h3-t2v); --ref/--ref-end pick i2v/flf2v
+  minimax-h3-i2v                    Image-to-video from a single first-frame image (--ref)
+  minimax-h3-flf2v                  First-frame -> last-frame transition (--ref plus --ref-end)
+  minimax-h3-r2v                    Multi-reference video: --ref/-c images, repeatable --ref-video/--ref-audio
+                                     (9 images / 3 videos / 3 audios / 12 files total)
+
 WAN 2.2 Video Models:
   wan_v2.2-14b-fp8_t2v_lightx2v   Text-to-video (fast)
-  wan_v2.2-14b-fp8_i2v_lightx2v   Fast simple image-to-video
+  wan_v2.2-14b-fp8_i2v_lightx2v   Default single-image image-to-video (fast)
   wan_v2.2-14b-fp8_i2v            Higher quality
   wan_v2.2-14b-fp8_s2v_lightx2v   Face lip-sync with uploaded audio (fast)
   wan_v2.2-14b-fp8_s2v            Sound-to-video (quality)
@@ -3602,6 +3988,16 @@ if (options.outputFormat) {
   }
 }
 
+if (options.video) {
+  options.model = resolveSkillVideoModelAlias(options.model);
+  if (options.model === LTX23_10EROS_MODEL_ID && !options.noFilter) {
+    fatalCliError(
+      `LTX-2.3 10Eros is an opt-in mature-theme model and requires --no-filter.`,
+      { code: 'INVALID_ARGUMENT' }
+    );
+  }
+}
+
 if (options.loraStrengths.length > 0 && options.loras.length === 0) {
   fatalCliError('--lora-strength requires at least one --lora.', { code: 'INVALID_ARGUMENT' });
 }
@@ -3614,8 +4010,43 @@ if (options.loraStrengths.length > 0 && options.loras.length > 0 &&
   });
 }
 
-if ((options.video || options.music) && options.loras.length > 0) {
-  fatalCliError('--lora options are image-only.', { code: 'INVALID_ARGUMENT' });
+if (!options.video && options.loras.length > 8) {
+  fatalCliError('Image generation supports at most 8 LoRAs per render.', {
+    code: 'INVALID_ARGUMENT',
+    details: { loras: options.loras.length, maximum: 8 }
+  });
+}
+
+if (options.music && options.loras.length > 0) {
+  fatalCliError('--lora options are not supported for music.', { code: 'INVALID_ARGUMENT' });
+}
+
+if (options.video && options.loras.length > 0) {
+  const unsupportedVideoLoras = options.loras.filter(loraId => loraId !== DR34ML4Y_LORA_ID);
+  if (unsupportedVideoLoras.length > 0) {
+    fatalCliError(
+      `Video LoRA "${unsupportedVideoLoras[0]}" is not supported. ` +
+      `The supported video LoRA is "${DR34ML4Y_LORA_ID}".`,
+      { code: 'INVALID_ARGUMENT' }
+    );
+  }
+  if (!DR34ML4Y_SUPPORTED_MODEL_IDS.has(options.model)) {
+    fatalCliError(
+      `"${DR34ML4Y_LORA_ID}" requires a supported LTX-2.3 I2V model: ` +
+      'ltx23-22b-fp8_i2v, ltx23-22b-fp8_i2v_dev, or 10eros. ' +
+      'The separately trained WAN DR34ML4Y artifact is not installed on Sogni.',
+      { code: 'INVALID_ARGUMENT' }
+    );
+  }
+  if (!options.noFilter) {
+    fatalCliError(
+      `"${DR34ML4Y_LORA_ID}" is an opt-in mature-theme LoRA and requires --no-filter.`,
+      { code: 'INVALID_ARGUMENT' }
+    );
+  }
+  if (options.loraStrengths.length === 0) {
+    options.loraStrengths = options.loras.map(() => DR34ML4Y_DEFAULT_STRENGTH);
+  }
 }
 
 if (options.video && (options.sampler || options.scheduler)) {
@@ -3642,12 +4073,15 @@ if (options.video) {
     const normalized = normalizeVideoWorkflow(options.videoWorkflow);
     if (normalized) {
       options.videoWorkflow = normalized;
-    } else if (options.videoWorkflow === 'r2v' && isHappyHorseModelSelectionLocal(options.model)) {
-      // HappyHorse adds a reference-to-video (r2v) mode that the shared
-      // SkillVideoWorkflow enum does not carry; accept it for HappyHorse only.
+    } else if (
+      options.videoWorkflow === 'r2v'
+      && (isHappyHorseModelSelectionLocal(options.model) || isMiniMaxH3ModelSelectionLocal(options.model))
+    ) {
+      // HappyHorse and MiniMax H3 add reference-to-video (r2v) modes that the
+      // shared SkillVideoWorkflow enum does not carry yet.
       options.videoWorkflow = 'r2v';
     } else {
-      fatalCliError(`Unknown workflow "${options.videoWorkflow}". Use t2v|i2v|s2v|ia2v|a2v|v2v|animate-move|animate-replace (r2v on HappyHorse).`, {
+      fatalCliError(`Unknown workflow "${options.videoWorkflow}". Use t2v|i2v|s2v|ia2v|a2v|v2v|animate-move|animate-replace (r2v on HappyHorse or MiniMax H3).`, {
         code: 'INVALID_ARGUMENT',
         details: { workflow: options.videoWorkflow }
       });
@@ -3673,6 +4107,31 @@ if (options.video) {
     } else {
       options.videoWorkflow = 't2v';
     }
+  }
+
+  // MiniMax H3 has four concrete modes. The FL2VA checkpoint covers t2v, i2v,
+  // and first/last-frame (represented by the CLI's i2v workflow); Ref2VA is a
+  // separate r2v checkpoint and is never inferred from loose references alone.
+  // Selecting minimax-h3-r2v or explicitly passing --workflow r2v is required.
+  if (isMiniMaxH3ModelSelectionLocal(options.model)) {
+    const pinnedMode = miniMaxH3ModeFromModelId(options.model);
+    const pinnedWorkflow = pinnedMode === 'flf2v' ? 'i2v' : pinnedMode;
+    if (pinnedWorkflow) {
+      if (options.videoWorkflow && options.videoWorkflow !== pinnedWorkflow) {
+        fatalCliError(`Workflow "${options.videoWorkflow}" does not match model "${options.model}".`, {
+          code: 'INVALID_ARGUMENT',
+          details: { workflow: options.videoWorkflow, model: options.model }
+        });
+      }
+      options.videoWorkflow = pinnedWorkflow;
+    } else if (!options.videoWorkflow) {
+      options.videoWorkflow = (options.refImage || options.refImageEnd) ? 'i2v' : 't2v';
+    }
+    options.model = resolveSkillVideoModelAlias(
+      options.model,
+      options.videoWorkflow,
+      Boolean(options.refImageEnd)
+    );
   }
 
   // HappyHorse 1.1 has no v2v/ia2v. A concrete `happyhorse-1.1-<mode>` id pins
@@ -3712,7 +4171,10 @@ if (options.video) {
     options.videoWorkflow = workflowFromModel || inferVideoWorkflowFromAssets(options) || configuredDefaultVideoWorkflow || 't2v';
   }
   if (options.model) {
-    options.model = resolveVideoModelAlias(options.model, options.videoWorkflow);
+    options.model = resolveVideoModelAlias(
+      resolveSkillVideoModelAlias(options.model, options.videoWorkflow, Boolean(options.refImageEnd)),
+      options.videoWorkflow
+    );
   }
 }
 
@@ -3768,9 +4230,56 @@ if (options.music) {
     options.timeout = 600000;
   }
 } else if (options.video) {
-  options.model = options.model || selectDefaultVideoModel(options.videoWorkflow, options, openclawConfig) || 'wan_v2.2-14b-fp8_i2v_lightx2v';
+  if (!options.model) {
+    let defaultVideoModel = selectDefaultVideoModel(options.videoWorkflow, options, openclawConfig);
+    // Two-image first/last-frame animation defaults to the LTX-2.3 i2v morph
+    // path (transition LoRA auto-applies); a configured videoModels.i2v or an
+    // LTX pick from audio/quality routing still wins.
+    if (
+      options.videoWorkflow === 'i2v'
+      && options.refImage && options.refImageEnd
+      && !openclawConfig?.videoModels?.i2v
+      && !isLtx2Model(defaultVideoModel)
+    ) {
+      defaultVideoModel = 'ltx23-22b-fp8_i2v_distilled';
+    }
+    options.model = defaultVideoModel || 'wan_v2.2-14b-fp8_i2v_lightx2v';
+  }
   options.model = resolveVideoModelAlias(options.model, options.videoWorkflow);
+  try {
+    await loadLiveModelDefaults(options.model);
+  } catch (error) {
+    fatalCliError(error?.message || 'Could not load the live Sogni model catalog.', {
+      code: error?.code || 'MODEL_CATALOG_UNAVAILABLE',
+      hint: error?.hint
+    });
+  }
   const videoModelDefaults = getModelDefaults(options.model, openclawConfig);
+  if (videoModelDefaults?.requiresDisabledSafetyFilter) {
+    if (!options.noFilter) {
+      fatalCliError('LTX-2.3 10Eros requires explicit --no-filter acknowledgement.', {
+        code: 'INVALID_ARGUMENT',
+        details: { model: options.model, requiredFlag: '--no-filter' },
+        hint: 'Retry with --video --workflow i2v --ref <image> -m ltx23-eros --no-filter'
+      });
+    }
+    const fixedSettings = {
+      steps: videoModelDefaults.steps,
+      guidance: videoModelDefaults.guidance,
+      sampler: videoModelDefaults.sampler,
+      scheduler: videoModelDefaults.scheduler
+    };
+    for (const [setting, expected] of Object.entries(fixedSettings)) {
+      if (expected === undefined) continue;
+      if (cliSet[setting] && options[setting] !== expected) {
+        fatalCliError(`LTX-2.3 10Eros requires --${setting} ${expected}.`, {
+          code: 'INVALID_ARGUMENT',
+          details: { model: options.model, setting, expected, received: options[setting] }
+        });
+      }
+      options[setting] = expected;
+    }
+  }
   // Fall back to skill-local defaults for models the intel registry does not
   // carry (e.g. HappyHorse), so they get a sensible 16:9 default instead of the
   // 512x512 square. Registry defaults still take precedence when present.
@@ -3793,7 +4302,12 @@ if (options.music) {
   }
   const videoQuality = options.quality ? QUALITY_TIERS[options.quality]?.video : null;
   if (videoQuality) {
-    if (!isSeedanceVideo && !cliSet.steps && Number.isFinite(videoQuality.steps)) {
+    if (
+      !isSeedanceVideo
+      && options.model !== LTX23_10EROS_MODEL_ID
+      && !cliSet.steps
+      && Number.isFinite(videoQuality.steps)
+    ) {
       options.steps = videoQuality.steps;
     }
   }
@@ -3815,7 +4329,7 @@ if (options.music) {
     }
   }
   if (!cliSet.timeout && !timeoutFromConfig && options.timeout === 30000) {
-    options.timeout = 300000; // 5 min for video
+    options.timeout = 1800000; // 30 min for queued and long-running video jobs
   }
 } else if (options.photobooth) {
   // Photobooth uses SDXL Turbo + InstantID ControlNet
@@ -3982,6 +4496,8 @@ if (options.photobooth) {
 if (options.video) {
   const isSeedanceVideo = isSeedanceModel(options.model);
   const isHappyHorseVideo = isHappyHorseModel(options.model);
+  const isMiniMaxH3Video = isMiniMaxH3Model(options.model);
+  const isMiniMaxH3R2v = isMiniMaxH3R2vModel(options.model);
   if (isSeedanceVideo && !['t2v', 'ia2v', 'v2v'].includes(options.videoWorkflow)) {
     fatalCliError('Seedance models support only t2v, ia2v, or v2v workflows.', {
       code: 'INVALID_ARGUMENT',
@@ -3994,15 +4510,42 @@ if (options.video) {
       details: { workflow: options.videoWorkflow, model: options.model }
     });
   }
+  if (isMiniMaxH3Video && !['t2v', 'i2v', 'r2v'].includes(options.videoWorkflow)) {
+    fatalCliError('MiniMax H3 models support only t2v, i2v/flf2v, or r2v workflows.', {
+      code: 'INVALID_ARGUMENT',
+      details: { workflow: options.videoWorkflow, model: options.model }
+    });
+  }
   if (isHappyHorseVideo && options.videoControlNetName) {
     fatalCliError('HappyHorse video models do not support ControlNet.', {
       code: 'INVALID_ARGUMENT',
       details: { model: options.model, controlNetName: options.videoControlNetName }
     });
   }
+  if (isMiniMaxH3Video && (options.videoControlNetName || options.refMask || options.referenceAudioIdentity)) {
+    fatalCliError('MiniMax H3 does not support ControlNet, masks, or LTX voice-identity references.', {
+      code: 'INVALID_ARGUMENT',
+      details: { model: options.model }
+    });
+  }
+  if (isMiniMaxH3Video && (cliSet.steps || cliSet.guidance)) {
+    fatalCliError('MiniMax H3 uses fixed sampling settings; omit --steps and --guidance.', {
+      code: 'INVALID_ARGUMENT',
+      details: { model: options.model, steps: options.steps, guidance: options.guidance }
+    });
+  }
+  if (isHappyHorseVideo && options.apiGenerateAudio !== null) {
+    fatalCliError('HappyHorse native audio is always on; omit --generate-audio/--no-generate-audio.', {
+      code: 'INVALID_ARGUMENT',
+      details: { model: options.model }
+    });
+  }
 
   if (options.videoWorkflow === 't2v') {
-    if (!isSeedanceVideo && (options.refImage || options.refImageEnd || options.refAudio || options.refVideo)) {
+    if (!isSeedanceVideo && (
+      options.refImage || options.refImageEnd || options.refAudio || options.refVideo
+      || options.contextImages.length > 0 || options.refAudios.length > 0 || options.refVideos.length > 0
+    )) {
       fatalCliError('t2v does not accept reference image/audio/video.', {
         code: 'INVALID_ARGUMENT'
       });
@@ -4018,6 +4561,23 @@ if (options.video) {
       if (options.refAudio || options.refVideo) {
         fatalCliError('HappyHorse i2v does not accept reference audio/video.', { code: 'INVALID_ARGUMENT' });
       }
+    } else if (isMiniMaxH3Video) {
+      const h3Mode = miniMaxH3ModeFromModelId(options.model);
+      if (h3Mode === 'flf2v') {
+        if (!options.refImage || !options.refImageEnd) {
+          fatalCliError('MiniMax H3 flf2v requires both --ref and --ref-end.', { code: 'INVALID_ARGUMENT' });
+        }
+      } else {
+        if (!options.refImage) {
+          fatalCliError('MiniMax H3 i2v requires --ref (a single first-frame image).', { code: 'INVALID_ARGUMENT' });
+        }
+        if (options.refImageEnd) {
+          fatalCliError('MiniMax H3 i2v accepts one first-frame image; use -m minimax-h3-flf2v for --ref plus --ref-end.', { code: 'INVALID_ARGUMENT' });
+        }
+      }
+      if (options.contextImages.length > 0 || options.refAudio || options.refVideo || options.refAudios.length > 0 || options.refVideos.length > 0) {
+        fatalCliError('MiniMax H3 i2v/flf2v accepts only --ref and optional --ref-end image anchors; use minimax-h3-r2v for loose image/video/audio references.', { code: 'INVALID_ARGUMENT' });
+      }
     } else {
       if (!options.refImage && !options.refImageEnd) {
         fatalCliError('i2v requires --ref and/or --ref-end.', { code: 'INVALID_ARGUMENT' });
@@ -4027,15 +4587,25 @@ if (options.video) {
       }
     }
   } else if (options.videoWorkflow === 'r2v') {
-    // HappyHorse reference-to-video: 1-9 loose image references via -c/--context.
-    if (!Array.isArray(options.contextImages) || options.contextImages.length === 0) {
-      fatalCliError('HappyHorse r2v requires 1-9 reference images via -c/--context.', { code: 'INVALID_ARGUMENT' });
-    }
-    if (options.refImage || options.refImageEnd) {
-      fatalCliError('HappyHorse r2v takes reference images via -c/--context, not --ref/--ref-end.', { code: 'INVALID_ARGUMENT' });
-    }
-    if (options.refAudio || options.refVideo) {
-      fatalCliError('HappyHorse r2v does not accept reference audio/video.', { code: 'INVALID_ARGUMENT' });
+    if (isMiniMaxH3R2v) {
+      const imageCount = (options.refImage ? 1 : 0) + options.contextImages.length;
+      if (imageCount === 0) {
+        fatalCliError('MiniMax H3 r2v needs at least one reference image via --ref or -c/--context.', { code: 'INVALID_ARGUMENT' });
+      }
+      if (options.refImageEnd) {
+        fatalCliError('MiniMax H3 r2v has no end-frame anchor; use -c/--context for another loose image or minimax-h3-flf2v for first/last frames.', { code: 'INVALID_ARGUMENT' });
+      }
+    } else {
+      // HappyHorse reference-to-video: 1-9 loose image references via -c/--context.
+      if (!Array.isArray(options.contextImages) || options.contextImages.length === 0) {
+        fatalCliError('HappyHorse r2v requires 1-9 reference images via -c/--context.', { code: 'INVALID_ARGUMENT' });
+      }
+      if (options.refImage || options.refImageEnd) {
+        fatalCliError('HappyHorse r2v takes reference images via -c/--context, not --ref/--ref-end.', { code: 'INVALID_ARGUMENT' });
+      }
+      if (options.refAudio || options.refVideo || options.refAudios.length > 0 || options.refVideos.length > 0) {
+        fatalCliError('HappyHorse r2v does not accept reference audio/video.', { code: 'INVALID_ARGUMENT' });
+      }
     }
   } else if (options.videoWorkflow === 's2v') {
     if (!options.refImage || !options.refAudio) {
@@ -4115,15 +4685,15 @@ if (options.video) {
   }
   // Non-Seedance video models do not understand multi-ref audio/video extras —
   // they only support a single primary --ref-audio / --ref-video each.
-  if (!isSeedanceVideo) {
+  if (!isSeedanceVideo && !isMiniMaxH3R2v) {
     if (Array.isArray(options.refAudios) && options.refAudios.length > 0) {
-      fatalCliError('Multiple --ref-audio entries are only supported for Seedance models (seedance2, seedance2-mini, seedance2-fast).', {
+      fatalCliError('Multiple --ref-audio entries are supported only for Seedance loose references and MiniMax H3 r2v.', {
         code: 'INVALID_ARGUMENT',
         details: { model: options.model, extras: options.refAudios },
       });
     }
     if (Array.isArray(options.refVideos) && options.refVideos.length > 0) {
-      fatalCliError('Multiple --ref-video entries are only supported for Seedance models (seedance2, seedance2-mini, seedance2-fast).', {
+      fatalCliError('Multiple --ref-video entries are supported only for Seedance loose references and MiniMax H3 r2v.', {
         code: 'INVALID_ARGUMENT',
         details: { model: options.model, extras: options.refVideos },
       });
@@ -4238,9 +4808,13 @@ if (options.video && (isSeedanceModel(options.model) || isHappyHorseModel(option
 
 if (options.video && !options.frames) {
   const durationLimits = videoDurationLimitsLikeWrapper(options.model);
+  const requestedDuration = options.duration;
   const clampedDuration = Math.max(durationLimits.min, Math.min(durationLimits.max, options.duration));
   if (clampedDuration !== options.duration) {
-    if (!options.quiet) {
+    // H3 reports its own adjustment below, after the frame grid decides the
+    // duration actually delivered; announcing the clamp here would name a
+    // duration H3 cannot render.
+    if (!options.quiet && !isMiniMaxH3Model(options.model)) {
       console.error(
         `Adjusted video duration from ${options.duration}s to ${clampedDuration}s ` +
         `(supported range for ${options.model}: ${durationLimits.min}-${durationLimits.max}s).`
@@ -4248,6 +4822,29 @@ if (options.video && !options.frames) {
     }
     options.duration = clampedDuration;
   }
+  if (isMiniMaxH3Model(options.model)) {
+    options.frames = miniMaxH3FramesForDuration(options.duration);
+    options.fps = MINIMAX_H3_FRAME_GRID.fps;
+    const deliveredDuration = options.frames / MINIMAX_H3_FRAME_GRID.fps;
+    if (!options.quiet && Math.abs(deliveredDuration - requestedDuration) > 1e-6) {
+      console.error(
+        `Adjusted video duration from ${formatDurationSeconds(requestedDuration)}s to ` +
+        `${formatDurationSeconds(deliveredDuration)}s (${options.frames} frames). ` +
+        `MiniMax H3 renders ${MINIMAX_H3_FRAME_GRID.min} + n×${MINIMAX_H3_FRAME_GRID.step} frames at ` +
+        `${MINIMAX_H3_FRAME_GRID.fps}fps, so ${options.model} delivers ` +
+        `${formatDurationSeconds(durationLimits.min)}-${formatDurationSeconds(durationLimits.max)}s.`
+      );
+    }
+  }
+} else if (options.video && isMiniMaxH3Model(options.model)) {
+  const { min: minFrames, max: maxFrames, step: frameStep, fps: h3Fps } = MINIMAX_H3_FRAME_GRID;
+  if (options.frames < minFrames || options.frames > maxFrames || (options.frames - minFrames) % frameStep !== 0) {
+    fatalCliError(`MiniMax H3 frames must be ${minFrames} + n×${frameStep}, from ${minFrames} through ${maxFrames}.`, {
+      code: 'INVALID_ARGUMENT',
+      details: { frames: options.frames, minimum: minFrames, maximum: maxFrames, step: frameStep }
+    });
+  }
+  options.fps = h3Fps;
 }
 
 // Video dimensions:
@@ -4256,7 +4853,55 @@ if (options.video && !options.frames) {
 //   with sharp `fit: inside` and then override the project width/height with the resized reference dims.
 //   That means a "valid" requested size can still fail if the resized ref lands off the model divisor.
 if (options.video) {
-  const videoDimensionRules = videoDimensionRulesFromDefaults(getModelDefaults(options.model, openclawConfig), options.model);
+  const baseVideoDimensionRules = videoDimensionRulesFromDefaults(getModelDefaults(options.model, openclawConfig), options.model);
+  // A reference image routes through the wrapper's resize, which caps at 1536 for every model
+  // and then adopts the resized reference's dimensions as the project's. Honour that ceiling up
+  // front so the CLI picks a divisor-valid size instead of letting the wrapper clamp blindly.
+  const hasVideoReference = Boolean(options.refImage || options.refImageEnd);
+  const videoDimensionRules = hasVideoReference
+    ? {
+      ...baseVideoDimensionRules,
+      maxDimension: Math.min(baseVideoDimensionRules.maxDimension, WRAPPER_MAX_REF_VIDEO_DIMENSION)
+    }
+    : baseVideoDimensionRules;
+
+  // An implicit LTX i2v canvas follows an already-compatible local reference
+  // directly. Resolve this before normalizing the model's landscape default so
+  // the CLI does not print an intermediate adjustment that will immediately be
+  // discarded in favor of the reference aspect.
+  const hasRequestedVideoCanvas =
+    cliSet.width ||
+    cliSet.height ||
+    cliSet.targetResolution ||
+    widthFromConfig ||
+    heightFromConfig ||
+    widthFromPrompt ||
+    heightFromPrompt ||
+    targetResolutionFromPrompt;
+  if (
+    isLtx2Model(options.model) &&
+    options.videoWorkflow === 'i2v' &&
+    !hasRequestedVideoCanvas
+  ) {
+    const implicitRefPath = options.refImage || options.refImageEnd;
+    if (implicitRefPath && !isHttpUrl(implicitRefPath) && existsSync(implicitRefPath)) {
+      const implicitRefBuffer = readFileSync(implicitRefPath);
+      const implicitRefDims = getImageDimensionsFromBuffer(implicitRefBuffer);
+      if (implicitRefDims?.width && implicitRefDims?.height) {
+        const sourceCanvas = computeSourceAspectCanvas(
+          implicitRefDims.width,
+          implicitRefDims.height,
+          videoDimensionRules
+        );
+        options.width = sourceCanvas.width;
+        options.height = sourceCanvas.height;
+        options._ltxReferencePassthrough =
+          sourceCanvas.width === implicitRefDims.width &&
+          sourceCanvas.height === implicitRefDims.height;
+      }
+    }
+  }
+
   if (!Number.isFinite(options.width) || options.width <= 0 || !Number.isFinite(options.height) || options.height <= 0) {
     fatalCliError('Video width/height must be positive numbers.', {
       code: 'INVALID_ARGUMENT',
@@ -4269,6 +4914,12 @@ if (options.video) {
   const normalizedVideoDims = normalizeVideoDimensionsLikeWrapper(options.width, options.height, videoDimensionRules);
   options.width = normalizedVideoDims.width;
   options.height = normalizedVideoDims.height;
+  if (isMiniMaxH3Model(options.model) && options.width * options.height > 1344 * 768) {
+    const scale = Math.sqrt((1344 * 768) / (options.width * options.height));
+    options.width = Math.max(32, Math.floor((options.width * scale) / 32) * 32);
+    options.height = Math.max(32, Math.floor((options.height * scale) / 32) * 32);
+    normalizedVideoDims.adjusted = true;
+  }
   if (normalizedVideoDims.adjusted && !options.quiet) {
     console.error(
       `Auto-adjusted video dimensions from ${originalVideoWidth}x${originalVideoHeight} ` +
@@ -4305,6 +4956,7 @@ if (options.video) {
       const buffer = readFileSync(ref.path);
       const dims = getImageDimensionsFromBuffer(buffer);
       if (!dims?.width || !dims?.height) continue;
+
       localRefDims.set(ref.key, dims);
 
       const predicted = predictSharpInsideResizeDims(dims.width, dims.height, options.width, options.height);
@@ -4342,6 +4994,46 @@ if (options.video) {
 
       const beforeW = options.width;
       const beforeH = options.height;
+
+      // An exact-aspect bounding box can only land on sizes where BOTH sides are divisor-valid.
+      // For aspect ratios with sparse valid sizes (e.g. 25:14 on a /16 model, which tops out at
+      // 1200x672 under a 1536 cap) that forfeits a large share of the model's pixel budget.
+      // Pre-resizing the reference reaches the cap instead, trading a tiny aspect adjustment for
+      // the resolution — so prefer it when it wins materially on pixels and barely moves the aspect.
+      const preResize = predictVideoRefPreResizeDims(dims.width, dims.height, videoDimensionRules);
+      const candidateArea = candidate.output ? candidate.output.width * candidate.output.height : 0;
+      const preResizeArea = preResize ? preResize.width * preResize.height : 0;
+      const refAspect = dims.width / dims.height;
+      const aspectDrift = preResize
+        ? Math.abs((preResize.width / preResize.height) - refAspect) / refAspect
+        : Infinity;
+
+      if (preResizeArea > candidateArea * VIDEO_REF_PRERESIZE_MIN_AREA_GAIN
+        && aspectDrift <= VIDEO_REF_PRERESIZE_MAX_ASPECT_DRIFT) {
+        options.width = preResize.width;
+        options.height = preResize.height;
+        options[ref.resizeFlag] = true;
+        options._adjustedVideoDims = {
+          reason: 'i2v-ref-pre-resize',
+          referenceType: ref.key,
+          requested: { width: beforeW, height: beforeH },
+          adjusted: { width: options.width, height: options.height },
+          resizedFrom: predicted,
+          resizedTo: { width: preResize.width, height: preResize.height },
+          insteadOf: candidate.output
+            ? { width: candidate.output.width, height: candidate.output.height }
+            : null
+        };
+        if (!options.quiet) {
+          console.error(
+            `Pre-resizing ${ref.label.toLowerCase()} to ${preResize.width}x${preResize.height} ` +
+            `instead of shrinking the video to ${candidate.output.width}x${candidate.output.height} ` +
+            `(keeps ${Math.round((preResizeArea / candidateArea - 1) * 100)}% more pixels).`
+          );
+        }
+        continue;
+      }
+
       options.width = candidate.width;
       options.height = candidate.height;
 
@@ -4374,12 +5066,17 @@ if (options.video) {
 
     const effectiveDimsSource = localRefDims.get('refImage') || localRefDims.get('refImageEnd') || null;
     if (effectiveDimsSource) {
-      const predicted = predictSharpInsideResizeDims(
-        effectiveDimsSource.width,
-        effectiveDimsSource.height,
-        options.width,
-        options.height
-      );
+      const effectiveResizeFlag = localRefDims.has('refImage') ? '_needsRefResize' : '_needsRefEndResize';
+      // A pre-resized reference reaches the wrapper already divisor-valid, so the video lands on
+      // the pre-resize dims rather than the fit:inside prediction of the original.
+      const predicted = options[effectiveResizeFlag]
+        ? predictVideoRefPreResizeDims(effectiveDimsSource.width, effectiveDimsSource.height, videoDimensionRules)
+        : predictSharpInsideResizeDims(
+          effectiveDimsSource.width,
+          effectiveDimsSource.height,
+          options.width,
+          options.height
+        );
       if (predicted) {
         options._effectiveVideoDims = {
           width: predicted.width,
@@ -4546,12 +5243,13 @@ function requireApiKeyCredentials(creds, modeLabel) {
   throw err;
 }
 
-function apiRequestHeaders(apiKey, extra = {}) {
+function apiRequestHeaders(apiKey, extra = {}, workloadAttribution = undefined) {
   return {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${apiKey}`,
     'api-key': apiKey,
-    ...extra
+    ...extra,
+    ...attributionHeaders(AGENT_ATTRIBUTION, workloadAttribution),
   };
 }
 
@@ -4591,7 +5289,8 @@ async function dispatchWorkflowActionViaSdk(action, apiKey, params) {
       restEndpoint: restBase,
       socketEndpoint: process.env.SOGNI_SOCKET_ENDPOINT || undefined,
       appSource: SOGNI_APP_SOURCE,
-      appId: `sogni-skill-sdk-${process.pid}-${Date.now()}`,
+      appId: getOrCreateSogniAppId(),
+      attribution: clientAttribution(AGENT_ATTRIBUTION),
     },
     async (client) => {
       if (action === 'list') {
@@ -4625,6 +5324,7 @@ async function dispatchWorkflowActionViaSdk(action, apiKey, params) {
               : {}),
             ...(params.confirmCost != null ? { confirmCost: params.confirmCost } : {}),
             ...(params.idempotencyKey ? { idempotencyKey: params.idempotencyKey } : {}),
+            ...(params.attribution ? { attribution: params.attribution } : {}),
           },
           {},
         );
@@ -4653,7 +5353,7 @@ async function dispatchWorkflowActionViaSdk(action, apiKey, params) {
  * Returns `null` when SDK transport is off so the caller falls back
  * to `fetchApiJson`.
  */
-async function dispatchChatHostedViaSdk(apiKey, body) {
+async function dispatchChatHostedViaSdk(apiKey, body, workloadAttribution) {
   let helpers;
   try {
     helpers = await import('./sogni-hosted-client.mjs');
@@ -4669,9 +5369,13 @@ async function dispatchChatHostedViaSdk(apiKey, body) {
       restEndpoint: restBase,
       socketEndpoint: process.env.SOGNI_SOCKET_ENDPOINT || undefined,
       appSource: SOGNI_APP_SOURCE,
-      appId: `sogni-skill-sdk-${process.pid}-${Date.now()}`,
+      appId: getOrCreateSogniAppId(),
+      attribution: clientAttribution(AGENT_ATTRIBUTION),
     },
-    async (client) => helpers.sdkChatHostedCreate(client, body),
+    async (client) => helpers.sdkChatHostedCreate(client, {
+      ...body,
+      ...(workloadAttribution ? { attribution: workloadAttribution } : {}),
+    }),
   );
 }
 
@@ -4712,7 +5416,8 @@ async function dispatchMediaReferenceUrlViaSdk({ ref, file, index, jobId, action
       restEndpoint: restBase,
       socketEndpoint: process.env.SOGNI_SOCKET_ENDPOINT || undefined,
       appSource: SOGNI_APP_SOURCE,
-      appId: `sogni-skill-sdk-${process.pid}-${Date.now()}`,
+      appId: getOrCreateSogniAppId(),
+      attribution: clientAttribution(AGENT_ATTRIBUTION),
     },
     async (client) => {
       const type = apiMediaReferenceUploadType(ref, index);
@@ -4778,11 +5483,17 @@ async function fetchWithTimeout(resource, init = {}, timeoutMs = DEFAULT_HTTP_TI
   }
 }
 
-async function fetchApiJson(path, { apiKey, method = 'GET', body = undefined, headers = {} } = {}) {
+async function fetchApiJson(path, {
+  apiKey,
+  method = 'GET',
+  body = undefined,
+  headers = {},
+  workloadAttribution = undefined,
+} = {}) {
   const url = await buildSafeApiUrl(path);
   const init = {
     method,
-    headers: apiRequestHeaders(apiKey, headers),
+    headers: apiRequestHeaders(apiKey, headers, workloadAttribution),
     ...(body === undefined ? {} : { body: JSON.stringify(body) })
   };
 
@@ -5388,15 +6099,17 @@ async function runApiChat(log) {
     ...(options.noFilter === true ? { safeContentFilter: false } : {}),
     ...(apiMediaReferences.length > 0 ? { media_references: apiMediaReferences } : {})
   };
+  const workloadAttribution = nextSemanticWorkloadAttribution();
   if (options.durableChat) {
-    return runApiChatDurable(log, { apiKey, body });
+    return runApiChatDurable(log, { apiKey, body, workloadAttribution });
   }
   const payload =
-    (await dispatchChatHostedViaSdk(apiKey, body))
+    (await dispatchChatHostedViaSdk(apiKey, body, workloadAttribution))
     ?? (await fetchApiJson('/v1/chat/completions', {
       apiKey,
       method: 'POST',
-      body
+      body,
+      workloadAttribution,
     }));
   const message = extractChatMessage(payload);
   const workflows = extractChatWorkflows(payload);
@@ -5446,7 +6159,7 @@ async function runApiChat(log) {
  * installed) we fail with a clear error rather than silently falling
  * back to the synchronous endpoint.
  */
-async function runApiChatDurable(log, { apiKey, body }) {
+async function runApiChatDurable(log, { apiKey, body, workloadAttribution }) {
   let helpers;
   try {
     helpers = await import('./sogni-hosted-client.mjs');
@@ -5483,6 +6196,7 @@ async function runApiChatDurable(log, { apiKey, body }) {
     ...(typeof body.safeContentFilter === 'boolean'
       ? { runtimeConfig: { safeContentFilter: body.safeContentFilter } }
       : {}),
+    ...(workloadAttribution ? { attribution: workloadAttribution } : {}),
   };
 
   const restEndpoint = await buildSafeApiUrl('/');
@@ -5500,7 +6214,8 @@ async function runApiChatDurable(log, { apiKey, body }) {
       restEndpoint: restBase,
       socketEndpoint: process.env.SOGNI_SOCKET_ENDPOINT || undefined,
       appSource: SOGNI_APP_SOURCE,
-      appId: `sogni-skill-sdk-${process.pid}-${Date.now()}`,
+      appId: getOrCreateSogniAppId(),
+      attribution: clientAttribution(AGENT_ATTRIBUTION),
     },
     async (client) => {
       const created = await helpers.sdkChatRunsCreate(client, runParams);
@@ -5847,12 +6562,19 @@ async function generateStoryboardWorkflowStoryline(apiKey) {
     sogni_tools: false,
     sogni_tool_execution: false
   };
+  // Planning is internal compute for the workflow intent. Reserve the
+  // invocation root for the workflow start so headline counts stay at one.
+  const workloadAttribution = nextSemanticWorkloadAttribution({
+    scope: 'child',
+    parentOperationId: INVOCATION_LINEAGE.rootOperationId,
+  });
   const payload =
-    (await dispatchChatHostedViaSdk(apiKey, body))
+    (await dispatchChatHostedViaSdk(apiKey, body, workloadAttribution))
     ?? (await fetchApiJson('/v1/chat/completions', {
       apiKey,
       method: 'POST',
-      body
+      body,
+      workloadAttribution,
     }));
   const message = extractChatMessage(payload);
   const storyline = typeof message.content === 'string' ? message.content.trim() : '';
@@ -5960,119 +6682,94 @@ function normalizeLiveModelTag(value) {
     .replace(/[\s_]+/g, '-');
 }
 
-function decodeModelCatalogAttribute(value) {
-  return String(value || '')
-    .replace(/&#(\d+);/g, (_match, code) => String.fromCodePoint(Number(code)))
-    .replace(/&#x([0-9a-f]+);/gi, (_match, code) => String.fromCodePoint(Number.parseInt(code, 16)))
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;|&apos;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&');
-}
-
-function modelCatalogEntriesFromHtml(html) {
-  const entries = [];
-  const anchorPattern = /<a\b[^>]*>/gi;
-  let anchorMatch;
-  while ((anchorMatch = anchorPattern.exec(String(html || ''))) !== null) {
-    const attributes = {};
-    const attributePattern = /([:\w-]+)\s*=\s*"([^"]*)"/g;
-    let attributeMatch;
-    while ((attributeMatch = attributePattern.exec(anchorMatch[0])) !== null) {
-      attributes[attributeMatch[1].toLowerCase()] = decodeModelCatalogAttribute(attributeMatch[2]);
-    }
-    const classes = (attributes.class || '').split(/\s+/);
-    if (!classes.includes('mcard')) continue;
-
-    const textTokens = (attributes['data-text'] || '')
-      .toLocaleLowerCase()
-      .split(/\s+/)
-      .filter(Boolean);
-    const capabilities = (attributes['data-caps'] || '')
-      .toLocaleLowerCase()
-      .split(/\s+/)
-      .filter(Boolean);
-    const tags = new Set();
-    if (attributes['data-uncensored'] === '1' || capabilities.includes('uncensored')) {
-      tags.add('uncensored');
-    }
-    if (attributes['data-community'] === '1') tags.add('community');
-    const tier = normalizeLiveModelTag(attributes['data-tier']);
-    if (tier) tags.add(tier);
-    for (const tag of KNOWN_MODEL_CATALOG_TAGS) {
-      if (textTokens.includes(tag)) tags.add(tag);
-    }
-    entries.push({
-      modelIds: new Set(textTokens),
-      tags: [...tags].sort()
-    });
-  }
-  return entries;
-}
-
-async function fetchModelCatalogEntries() {
-  if (getEnv('SOGNI_AGENT_TEST_STATE_PATH')) {
-    return modelCatalogEntriesFromHtml(getEnv('SOGNI_AGENT_TEST_MODEL_CATALOG_HTML') || '');
-  }
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), SOGNI_MODEL_CATALOG_TIMEOUT_MS);
+async function fetchLiveModelCatalog(network, media) {
+  const fixtureJson = getEnv('SOGNI_AGENT_TEST_MODEL_CATALOG_JSON');
+  let cachedCatalog = null;
   try {
-    const response = await fetchSafeUrl(
-      SOGNI_MODEL_CATALOG_URL,
-      {
-        headers: { Accept: 'text/html' },
-        signal: controller.signal
-      },
-      { allowedHosts: ['www.sogni.ai'] }
-    );
-    if (!response.ok) {
-      const err = new Error(`Sogni model catalog returned HTTP ${response.status}.`);
-      err.code = 'MODEL_CATALOG_UNAVAILABLE';
-      throw err;
+    if (existsSync(MODEL_CATALOG_LIST_CACHE_PATH)) {
+      const cached = JSON.parse(readFileSync(MODEL_CATALOG_LIST_CACHE_PATH, 'utf8'));
+      const cacheAge = Date.now() - cached?.fetchedAt;
+      if (
+        Number.isFinite(cached?.fetchedAt) &&
+        cacheAge >= 0 &&
+        cached?.network === network &&
+        cached?.media === media &&
+        Array.isArray(cached?.models)
+      ) {
+        cachedCatalog = cached;
+        if (cacheAge < MODEL_CATALOG_CACHE_TTL_MS) return cached;
+      }
     }
-    const contentLength = Number(response.headers.get('content-length'));
-    if (Number.isFinite(contentLength) && contentLength > SOGNI_MODEL_CATALOG_MAX_BYTES) {
-      const err = new Error('Sogni model catalog response is unexpectedly large.');
-      err.code = 'MODEL_CATALOG_INVALID';
-      throw err;
-    }
-    const html = await response.text();
-    if (Buffer.byteLength(html, 'utf8') > SOGNI_MODEL_CATALOG_MAX_BYTES) {
-      const err = new Error('Sogni model catalog response is unexpectedly large.');
-      err.code = 'MODEL_CATALOG_INVALID';
-      throw err;
-    }
-    const entries = modelCatalogEntriesFromHtml(html);
-    if (entries.length === 0) {
-      const err = new Error('Sogni model catalog contained no model cards.');
-      err.code = 'MODEL_CATALOG_INVALID';
-      throw err;
-    }
-    return entries;
-  } finally {
-    clearTimeout(timeoutId);
+  } catch {
+    // A corrupt cache is treated as a miss and replaced by the live response.
   }
-}
 
-function enrichLiveModelsWithCatalogTags(models, catalogEntries) {
-  return models.map((model) => {
-    const modelId = String(model.id || '').toLocaleLowerCase();
-    const entry = catalogEntries.find((candidate) => candidate.modelIds.has(modelId));
-    return {
-      ...model,
-      tags: entry?.tags || []
-    };
-  });
+  try {
+    let catalog;
+    if (fixtureJson) {
+      const payload = JSON.parse(fixtureJson);
+      const data = payload?.data || payload;
+      catalog = {
+        fetchedAt: Date.now(),
+        network,
+        media,
+        etag: null,
+        catalogVersion: data?.catalogVersion || null,
+        models: data?.models
+      };
+    } else {
+      const url = new URL(MODEL_CATALOG_URL);
+      url.searchParams.set('network', network);
+      if (media !== 'all') url.searchParams.set('mediaType', media);
+      const headers = { accept: 'application/json' };
+      if (cachedCatalog?.etag) headers['if-none-match'] = cachedCatalog.etag;
+      const response = await fetch(url, {
+        headers,
+        signal: AbortSignal.timeout(SOGNI_MODEL_CATALOG_TIMEOUT_MS)
+      });
+      if (response.status === 304 && cachedCatalog) {
+        catalog = { ...cachedCatalog, fetchedAt: Date.now() };
+      } else {
+        if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
+        const contentLength = Number(response.headers.get('content-length'));
+        if (Number.isFinite(contentLength) && contentLength > SOGNI_MODEL_CATALOG_MAX_BYTES) {
+          const error = new Error('Sogni model catalog response is unexpectedly large.');
+          error.code = 'MODEL_CATALOG_INVALID';
+          throw error;
+        }
+        const text = await response.text();
+        if (Buffer.byteLength(text, 'utf8') > SOGNI_MODEL_CATALOG_MAX_BYTES) {
+          const error = new Error('Sogni model catalog response is unexpectedly large.');
+          error.code = 'MODEL_CATALOG_INVALID';
+          throw error;
+        }
+        const payload = JSON.parse(text);
+        catalog = {
+          fetchedAt: Date.now(),
+          network,
+          media,
+          etag: response.headers.get('etag'),
+          catalogVersion: payload?.data?.catalogVersion || null,
+          models: payload?.data?.models
+        };
+      }
+    }
+    if (!Array.isArray(catalog?.models)) {
+      const error = new Error('Sogni model catalog response contained no model list.');
+      error.code = 'MODEL_CATALOG_INVALID';
+      throw error;
+    }
+    persistModelCatalogCache(catalog, MODEL_CATALOG_LIST_CACHE_PATH);
+    return catalog;
+  } catch (cause) {
+    const error = new Error(`Could not load the live Sogni model catalog (${cause?.message || cause}).`);
+    error.code = cause?.code || 'MODEL_CATALOG_UNAVAILABLE';
+    error.hint = `Check Sogni platform status and retry. Catalog: ${MODEL_CATALOG_URL}`;
+    throw error;
+  }
 }
 
 async function runLiveModels() {
-  const creds = loadCredentials();
-  const apiKey = requireApiKeyCredentials(
-    creds,
-    options.liveModelAction === 'search' ? '--search-models' : '--list-models'
-  );
   const network = options.liveModelNetwork || openclawConfig?.defaultNetwork || 'fast';
   const media = options.liveModelMedia || 'all';
   const query = options.liveModelQuery?.trim() || null;
@@ -6083,95 +6780,77 @@ async function runLiveModels() {
     err.code = 'INVALID_ARGUMENT';
     throw err;
   }
-  const modelClient = new SogniClientWrapper({
-    appSource: SOGNI_APP_SOURCE,
+  const catalog = await fetchLiveModelCatalog(network, media);
+  let models = catalog.models.map((model) => ({
+    id: model.id,
+    name: model.name || model.id,
+    workerCount: Number(model.workerCounts?.[network] || 0),
+    media: model.mediaType,
+    networks: Array.isArray(model.availableNetworks) ? model.availableNetworks : [],
+    workerCounts: model.workerCounts || {},
+    tierId: model.tierId || null,
+    tags: Array.isArray(model.tags)
+      ? [...new Set(model.tags.map(normalizeLiveModelTag).filter(Boolean))].sort()
+      : []
+  })).filter(model =>
+    ['image', 'video', 'audio'].includes(model.media) &&
+    model.networks.includes(network) &&
+    (media === 'all' || model.media === media)
+  );
+  const catalogTagsAvailable = catalog.models.every(model => Array.isArray(model.tags));
+  const queryAsTag = normalizeLiveModelTag(query);
+  if ((tagFilters.length > 0 || KNOWN_MODEL_CATALOG_TAGS.has(queryAsTag)) && !catalogTagsAvailable) {
+    const error = new Error('Sogni model catalog response does not include catalog tags.');
+    error.code = 'MODEL_CATALOG_INVALID';
+    error.hint = `Tag filtering requires catalog tags from ${MODEL_CATALOG_URL}`;
+    throw error;
+  }
+  models.sort((left, right) =>
+    right.workerCount - left.workerCount ||
+    left.name.localeCompare(right.name) ||
+    left.id.localeCompare(right.id)
+  );
+  if (tagFilters.length > 0) {
+    models = models.filter((model) => tagFilters.every((tag) => model.tags.includes(tag)));
+  }
+  if (normalizedQuery) {
+    models = models.filter((model) =>
+      normalizeLiveModelSearch(`${model.id} ${model.name} ${model.tags.join(' ')}`).includes(normalizedQuery)
+    );
+  }
+
+  const result = {
+    success: true,
+    type: 'live-models',
     network,
-    autoConnect: false,
-    apiKey,
-    authType: 'apiKey'
-  });
+    media,
+    query,
+    tagFilters,
+    catalogTagsAvailable,
+    catalogVersion: catalog.catalogVersion,
+    count: models.length,
+    models,
+    timestamp: new Date().toISOString()
+  };
+  if (options.json || JSON_ERROR_MODE) {
+    console.log(JSON.stringify(result));
+    return;
+  }
 
-  try {
-    await connectSogniClient(modelClient);
-    let models = await modelClient.getAvailableModels({ sortByWorkers: true });
-    const queryAsTag = normalizeLiveModelTag(query);
-    const catalogRequired = tagFilters.length > 0 || KNOWN_MODEL_CATALOG_TAGS.has(queryAsTag);
-    let catalogTagsAvailable = false;
-    try {
-      const catalogEntries = await fetchModelCatalogEntries();
-      if (catalogRequired && catalogEntries.length === 0) {
-        const err = new Error('Sogni model catalog contained no model cards.');
-        err.code = 'MODEL_CATALOG_INVALID';
-        throw err;
-      }
-      models = enrichLiveModelsWithCatalogTags(models, catalogEntries);
-      catalogTagsAvailable = catalogEntries.length > 0;
-    } catch (error) {
-      if (catalogRequired) {
-        if (!error.code) error.code = 'MODEL_CATALOG_UNAVAILABLE';
-        error.hint = 'Tag filtering requires the live Sogni model catalog at https://www.sogni.ai/models.';
-        throw error;
-      }
-      models = enrichLiveModelsWithCatalogTags(models, []);
-      if (!options.quiet && !options.json && !JSON_ERROR_MODE) {
-        console.error(`Warning: model catalog tags unavailable: ${cliErrorMessage(error)}`);
-      }
-    }
-    if (media !== 'all') {
-      models = models.filter((model) => model.media === media);
-    }
-    if (tagFilters.length > 0) {
-      models = models.filter((model) =>
-        tagFilters.every((tag) => model.tags.includes(tag))
-      );
-    }
-    if (normalizedQuery) {
-      models = models.filter((model) =>
-        normalizeLiveModelSearch(`${model.id} ${model.name} ${model.tags.join(' ')}`).includes(normalizedQuery)
-      );
-    }
-
-    const result = {
-      success: true,
-      type: 'live-models',
-      network,
-      media,
-      query,
-      tagFilters,
-      catalogTagsAvailable,
-      count: models.length,
-      models,
-      timestamp: new Date().toISOString()
-    };
-    if (options.json || JSON_ERROR_MODE) {
-      console.log(JSON.stringify(result));
-      return;
-    }
-
-    const scope = [
-      media === 'all' ? 'all media' : media,
-      `network=${network}`,
-      query ? `query=${JSON.stringify(query)}` : null,
-      tagFilters.length ? `tags=${tagFilters.join('+')}` : null
-    ].filter(Boolean).join(', ');
-    console.log(`Live Sogni models (${models.length}; ${scope})`);
-    if (models.length === 0) {
-      console.log('No matching models found.');
-      return;
-    }
-    console.log('MEDIA\tWORKERS\tMODEL ID\tTAGS\tNAME');
-    for (const model of models) {
-      console.log(`${model.media}\t${model.workerCount}\t${model.id}\t${model.tags.join(',') || '-'}\t${model.name}`);
-    }
-  } finally {
-    try {
-      if (modelClient.isConnected()) {
-        await Promise.race([
-          modelClient.disconnect(),
-          new Promise(resolve => setTimeout(resolve, 1000))
-        ]);
-      }
-    } catch {}
+  const scope = [
+    media === 'all' ? 'all media' : media,
+    `network=${network}`,
+    query ? `query=${JSON.stringify(query)}` : null,
+    tagFilters.length ? `tags=${tagFilters.join('+')}` : null
+  ].filter(Boolean).join(', ');
+  console.log(`Live Sogni models (${models.length}; ${scope})`);
+  if (models.length === 0) {
+    console.log('No matching models found.');
+    return;
+  }
+  console.log('MEDIA\tWORKERS\tMODEL ID\tTAGS\tNAME');
+  for (const model of models) {
+    console.log(`${model.media}\t${model.workerCount}\t${model.id}\t${model.tags.join(',') || '-'}\t${model.name}`);
   }
 }
 
@@ -6614,6 +7293,7 @@ async function runApiWorkflow() {
     input = buildGeneratedKeyframeVideoWorkflowInput();
   }
 
+  const workloadAttribution = nextSemanticWorkloadAttribution({ scope: 'top_level' });
   payload =
     (await dispatchWorkflowActionViaSdk('start', apiKey, {
       input,
@@ -6622,6 +7302,7 @@ async function runApiWorkflow() {
       maxEstimatedCapacityUnits: options.apiWorkflowMaxCost ?? undefined,
       confirmCost: options.apiWorkflowConfirmCost ?? undefined,
       idempotencyKey: options.apiWorkflowIdempotencyKey ?? undefined,
+      attribution: workloadAttribution,
     }))
     ?? (await fetchApiJson('/v1/creative-agent/workflows', {
       apiKey,
@@ -6638,7 +7319,8 @@ async function runApiWorkflow() {
         ...(options.apiWorkflowConfirmCost !== null ? { confirm_cost: options.apiWorkflowConfirmCost } : {}),
         token_type: tokenType,
         app_source: SOGNI_APP_SOURCE
-      }
+      },
+      workloadAttribution,
     }));
   const workflow = workflowFromPayload(payload);
   const workflowId = workflow?.workflowId || workflow?.id;
@@ -7479,6 +8161,34 @@ function enforceHappyHorseReferenceCaps() {
   }
 }
 
+function enforceMiniMaxH3ReferenceCaps() {
+  const { images, videos, audios } = effectiveSeedanceReferenceCounts();
+  const total = images + videos + audios;
+  const checks = [
+    ['images', images, MINIMAX_H3_REFERENCE_LIMITS.images],
+    ['videos', videos, MINIMAX_H3_REFERENCE_LIMITS.videos],
+    ['audios', audios, MINIMAX_H3_REFERENCE_LIMITS.audios]
+  ];
+  for (const [kind, count, maximum] of checks) {
+    if (count > maximum) {
+      fatalCliError(`MiniMax H3 r2v supports at most ${maximum} reference ${kind} (got ${count}).`, {
+        code: 'MINIMAX_H3_REFERENCE_LIMIT_EXCEEDED',
+        details: { kind, count, maximum, limits: MINIMAX_H3_REFERENCE_LIMITS }
+      });
+    }
+  }
+  if (total > MINIMAX_H3_REFERENCE_LIMITS.assets) {
+    fatalCliError(
+      `MiniMax H3 r2v supports at most ${MINIMAX_H3_REFERENCE_LIMITS.assets} reference files in total `
+      + `(got ${total}: ${images} image, ${videos} video, ${audios} audio).`,
+      {
+        code: 'MINIMAX_H3_REFERENCE_LIMIT_EXCEEDED',
+        details: { images, videos, audios, total, limits: MINIMAX_H3_REFERENCE_LIMITS }
+      }
+    );
+  }
+}
+
 function resolveMultiAngleOutputConfig(outputPath, outputFormat) {
   if (!outputPath) return null;
   const ext = extname(outputPath);
@@ -7597,8 +8307,11 @@ function isNonEmptyFile(filePath) {
   }
 }
 
-async function runCommand(command, args, { captureOutput = false } = {}) {
-  const options = { reject: false };
+async function runCommand(command, args, { captureOutput = false, env = undefined } = {}) {
+  const options = {
+    reject: false,
+    ...(env ? { env: { ...process.env, ...env } } : {}),
+  };
   if (captureOutput) {
     options.stdout = 'pipe';
     options.stderr = 'pipe';
@@ -8370,8 +9083,22 @@ function parseSourceReelChildJson(stdout) {
   }
 }
 
-async function runSourceReelChild(label, args, logPath, outputPath) {
-  const result = await runCommand(process.execPath, args, { captureOutput: true });
+function sourceReelLineageEnvironment(workloadAttribution) {
+  return {
+    SOGNI_AGENT_OPERATION_SCOPE: workloadAttribution.operationScope,
+    SOGNI_AGENT_OPERATION_ID: workloadAttribution.operationId,
+    SOGNI_AGENT_ROOT_OPERATION_ID: workloadAttribution.rootOperationId,
+    ...(workloadAttribution.parentOperationId
+      ? { SOGNI_AGENT_PARENT_OPERATION_ID: workloadAttribution.parentOperationId }
+      : {}),
+  };
+}
+
+async function runSourceReelChild(label, args, logPath, outputPath, workloadAttribution) {
+  const result = await runCommand(process.execPath, args, {
+    captureOutput: true,
+    env: sourceReelLineageEnvironment(workloadAttribution),
+  });
   const parsed = parseSourceReelChildJson(result.stdout);
   const logBody = [
     `label=${label}`,
@@ -8423,7 +9150,14 @@ async function runSourceReel(log) {
     }
     log(`START clip ${clip.id} ${clip.name}`);
     const args = sourceReelChildArgs(['--ref', clip.refPath], clip.clipPath, clip.prompt, plan, plan.imageSeconds);
-    await runSourceReelChild(`clip ${clip.id}`, args, clip.logPath, clip.clipPath);
+    const workloadAttribution = nextSemanticWorkloadAttribution();
+    await runSourceReelChild(
+      `clip ${clip.id}`,
+      args,
+      clip.logPath,
+      clip.clipPath,
+      workloadAttribution,
+    );
     log(`DONE  clip ${clip.id} -> ${clip.clipPath}`);
   });
 
@@ -8455,7 +9189,14 @@ async function runSourceReel(log) {
         plan,
         plan.transitionSeconds
       );
-      await runSourceReelChild(`transition ${transition.key}`, args, transition.logPath, transition.clipPath);
+      const workloadAttribution = nextSemanticWorkloadAttribution();
+      await runSourceReelChild(
+        `transition ${transition.key}`,
+        args,
+        transition.logPath,
+        transition.clipPath,
+        workloadAttribution,
+      );
       log(`DONE  transition ${transition.key} -> ${transition.clipPath}`);
     });
   }
@@ -8501,10 +9242,61 @@ async function runSourceReel(log) {
   }
 }
 
+async function buildProjectTimeoutError(projects, timeoutMs, label = 'Project') {
+  const timeoutSeconds = timeoutMs / 1000;
+  const cancellableProjects = [...new Set((projects || []).filter(Boolean))]
+    .filter((project) => typeof project.cancel === 'function');
+  const projectIds = cancellableProjects
+    .map((project) => project.id)
+    .filter(Boolean);
+
+  if (cancellableProjects.length === 0) {
+    const error = new Error(
+      `Timeout after ${timeoutSeconds}s; no cancellable Sogni project handle was available. ` +
+      'The project may still be running.'
+    );
+    error.code = 'PROJECT_TIMEOUT_CANCEL_UNAVAILABLE';
+    error.details = { timeoutSeconds, projectIds: [], canceled: false };
+    return error;
+  }
+
+  const failures = [];
+  for (const project of cancellableProjects) {
+    try {
+      await project.cancel();
+    } catch (cancelError) {
+      failures.push({
+        projectId: project.id || null,
+        message: cancelError?.message || String(cancelError)
+      });
+    }
+  }
+
+  if (failures.length > 0) {
+    const failedIds = failures.map((failure) => failure.projectId).filter(Boolean);
+    const error = new Error(
+      `Timeout after ${timeoutSeconds}s; failed to cancel Sogni ${label.toLowerCase()} ` +
+      `${failedIds.join(', ') || '(unknown id)'}. The project may still be running.`
+    );
+    error.code = 'PROJECT_TIMEOUT_CANCEL_FAILED';
+    error.details = { timeoutSeconds, projectIds, canceled: false, failures };
+    return error;
+  }
+
+  const error = new Error(
+    `Timeout after ${timeoutSeconds}s; canceled Sogni ${label.toLowerCase()} ` +
+    `${projectIds.join(', ') || '(unknown id)'}.`
+  );
+  error.code = 'PROJECT_TIMEOUT';
+  error.details = { timeoutSeconds, projectIds, canceled: true };
+  return error;
+}
+
 async function runImageEditProjectWithEvents(client, editConfig, expectedCount, log, timeoutMs, label) {
   const results = [];
   let completed = 0;
   let projectId = null;
+  let activeProject = null;
 
   let resolvePromise;
   let rejectPromise;
@@ -8546,7 +9338,8 @@ async function runImageEditProjectWithEvents(client, editConfig, expectedCount, 
 
   const timeout = setTimeout(() => {
     cleanup();
-    rejectPromise(new Error(`Timeout after ${timeoutMs / 1000}s`));
+    void buildProjectTimeoutError([activeProject], timeoutMs, 'image edit project')
+      .then(rejectPromise);
   }, timeoutMs);
 
   client.on(ClientEvent.JOB_COMPLETED, onCompleted);
@@ -8554,6 +9347,7 @@ async function runImageEditProjectWithEvents(client, editConfig, expectedCount, 
 
   try {
     const projectResult = await client.createImageEditProject(withBillingMode(editConfig));
+    activeProject = projectResult?.project || null;
     projectId = projectResult?.project?.id || projectId;
 
     // Check for errors in the response (e.g., insufficient tokens)
@@ -8636,20 +9430,23 @@ async function runMultiAngleFlow(client, log) {
       numberOfMedia: options.count,
       width: options.width,
       height: options.height,
-      steps,
-      guidance,
       tokenType: options.tokenType || 'spark',
       waitForCompletion: false,
-      disableNSFWFilter: options.noFilter === true
+      disableNSFWFilter: options.noFilter === true,
+      ...buildImageEditExecutionControls(options.model, {
+        steps,
+        guidance,
+        sampler: options.sampler,
+        scheduler: options.scheduler
+      }, {
+        steps: cliSet.steps ? options.steps : undefined,
+        guidance: cliSet.guidance ? options.guidance : undefined,
+        sampler: cliSet.sampler ? options.sampler : undefined,
+        scheduler: cliSet.scheduler ? options.scheduler : undefined
+      })
     };
     if (options.outputFormat) {
       editConfig.outputFormat = options.outputFormat;
-    }
-    if (options.sampler) {
-      editConfig.sampler = options.sampler;
-    }
-    if (options.scheduler) {
-      editConfig.scheduler = options.scheduler;
     }
     if (options.loras.length > 0) {
       editConfig.loras = options.loras;
@@ -8939,6 +9736,26 @@ function buildVideoEstimateParams({ tokenType, steps }) {
   return params;
 }
 
+function isMiniMaxH3ExtendedDurationEstimateError(err) {
+  const actualDuration = options.frames
+    ? options.frames / options.fps
+    : options.duration;
+  return isMiniMaxH3Model(options.model)
+    && actualDuration > 10
+    && /duration must be between 1 and 10 seconds/i.test(String(err?.message || err || ''));
+}
+
+function buildMiniMaxH3EstimateUnavailableError(cause) {
+  const err = new Error(
+    'MiniMax H3 generation supports clips through 15.08 seconds, but this client cannot pre-estimate clips over 10 seconds.'
+  );
+  err.code = 'VIDEO_COST_ESTIMATE_UNAVAILABLE';
+  err.retryable = false;
+  err.hint = 'Submit without --estimate-video-cost so the server can validate balance when the render starts, or estimate a clip of 10 seconds or less.';
+  err.cause = cause;
+  return err;
+}
+
 async function ensureSufficientVideoBalance(client, log) {
   if (!options.video || options.estimateVideoCost) return;
   // Sogni Unlimited bills covered video jobs to the subscription, so a low
@@ -8980,7 +9797,12 @@ async function ensureSufficientVideoBalance(client, log) {
     estimate = await client.estimateVideoCost(buildVideoEstimateParams({ tokenType, steps }));
   } catch (err) {
     if (!options.quiet) {
-      log(`Warning: Could not estimate video cost (${err?.message || 'error'})`);
+      if (isMiniMaxH3ExtendedDurationEstimateError(err)) {
+        const estimateError = buildMiniMaxH3EstimateUnavailableError(err);
+        log(`Note: ${estimateError.message} ${estimateError.hint}`);
+      } else {
+        log(`Warning: Could not estimate video cost (${err?.message || 'error'})`);
+      }
     }
     return;
   }
@@ -9076,6 +9898,8 @@ async function runDoctor() {
     try {
       doctorClient = new SogniClientWrapper({
         appSource: SOGNI_APP_SOURCE,
+        appId: getOrCreateSogniAppId(),
+        attribution: clientAttribution(AGENT_ATTRIBUTION),
         network: openclawConfig?.defaultNetwork || 'fast',
         autoConnect: false,
         apiKey: creds.SOGNI_API_KEY,
@@ -9617,6 +10441,8 @@ async function main() {
     log('Connecting to Sogni...');
     client = new SogniClientWrapper({
       appSource: SOGNI_APP_SOURCE,
+      appId: getOrCreateSogniAppId(),
+      attribution: clientAttribution(AGENT_ATTRIBUTION),
       network: openclawConfig?.defaultNetwork || 'fast',
       autoConnect: false,
       apiKey: creds.SOGNI_API_KEY,
@@ -9670,6 +10496,11 @@ async function main() {
       return;
     }
 
+    // Video catalog data is loaded before model-aware dimension planning.
+    // Other media types retain the connected-stage lookup used previously.
+    if (!options.video) {
+      await loadLiveModelDefaults(options.model);
+    }
     await ensureSufficientVideoBalance(client, log);
 
     if (options.estimateVideoCost) {
@@ -9686,7 +10517,15 @@ async function main() {
         tokenType: options.tokenType || 'spark',
         steps
       });
-      const estimate = await client.estimateVideoCost(estimateParams);
+      let estimate;
+      try {
+        estimate = await client.estimateVideoCost(estimateParams);
+      } catch (err) {
+        if (isMiniMaxH3ExtendedDurationEstimateError(err)) {
+          throw buildMiniMaxH3EstimateUnavailableError(err);
+        }
+        throw err;
+      }
       if (options.json) {
         const duration = options.frames ? Math.max(1, Math.round((options.frames - 1) / options.fps)) : options.duration;
         console.log(JSON.stringify({
@@ -9720,10 +10559,16 @@ async function main() {
     const results = [];
     let completedJobs = 0;
     let loopingStartImageBuffer;
+    const activeProjects = new Set();
+    const trackProjectResult = (projectResult) => {
+      if (projectResult?.project) activeProjects.add(projectResult.project);
+      return projectResult;
+    };
     
     const completionPromise = new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        reject(new Error(`Timeout after ${options.timeout / 1000}s`));
+        void buildProjectTimeoutError([...activeProjects], options.timeout)
+          .then(reject);
       }, options.timeout);
       
       client.on(ClientEvent.JOB_COMPLETED, (data) => {
@@ -9784,11 +10629,17 @@ async function main() {
       if (options.refImage) log(`Reference image: ${options.refImage}`);
       if (options.refImageEnd) log(`End frame: ${options.refImageEnd}`);
       if (options.refAudio) log(`Reference audio: ${options.refAudio}`);
+      for (const referenceAudio of options.refAudios) log(`Additional reference audio: ${referenceAudio}`);
       if (options.referenceAudioIdentity) log(`Voice identity: ${options._voicePersonaResolvedName || options.referenceAudioIdentity}`);
       if (options.refVideo) log(`Reference video: ${options.refVideo}`);
+      for (const referenceVideo of options.refVideos) log(`Additional reference video: ${referenceVideo}`);
+      if (options.videoWorkflow === 'r2v') {
+        for (const contextImage of options.contextImages) log(`Loose reference image: ${contextImage}`);
+      }
 
       const isSeedanceVideo = isSeedanceModel(options.model);
       const isHappyHorseVideo = isHappyHorseModel(options.model);
+      const isMiniMaxH3R2v = isMiniMaxH3R2vModel(options.model);
       // Vendor video models forward image references as HTTPS URL arrays (or
       // Sogni-hosted uploads) instead of inline buffers; HappyHorse takes
       // image-only references (i2v first_frame, r2v reference_image).
@@ -9802,6 +10653,9 @@ async function main() {
         // Source of truth: @sogni-ai/sogni-intelligence-client/tools
         // HAPPYHORSE_REFERENCE_LIMITS (per-mode image-only caps).
         enforceHappyHorseReferenceCaps();
+      }
+      if (isMiniMaxH3R2v) {
+        enforceMiniMaxH3ReferenceCaps();
       }
       const seedanceReferenceImageUrls = [];
       const seedanceReferenceVideoUrls = [];
@@ -9918,8 +10772,24 @@ async function main() {
       let audioBuffer = options.refAudio && !useRefAudioUrl ? await fetchMediaBuffer(options.refAudio) : undefined;
       let videoBuffer = options.refVideo && !useRefVideoUrl ? await fetchMediaBuffer(options.refVideo) : undefined;
       let maskBuffer = options.refMask ? await fetchMediaBuffer(options.refMask) : undefined;
+      const contextImageBuffers = isMiniMaxH3R2v
+        ? await Promise.all(options.contextImages.map((reference) => fetchMediaBuffer(reference)))
+        : [];
+      let additionalAudioBuffers = isMiniMaxH3R2v
+        ? await Promise.all(options.refAudios.map((reference) => fetchMediaBuffer(reference)))
+        : [];
+      const additionalVideoBuffers = isMiniMaxH3R2v
+        ? await Promise.all(options.refVideos.map((reference) => fetchMediaBuffer(reference)))
+        : [];
       if (audioBuffer) {
         audioBuffer = await prepareReferenceAudioForVideoBuffer(audioBuffer, options.refAudio);
+      }
+      if (additionalAudioBuffers.length > 0) {
+        additionalAudioBuffers = await Promise.all(
+          additionalAudioBuffers.map((buffer, index) =>
+            prepareReferenceAudioForVideoBuffer(buffer, options.refAudios[index])
+          )
+        );
       }
       if (
         videoBuffer
@@ -10057,8 +10927,13 @@ async function main() {
       if (options.outputFormat) {
         projectConfig.outputFormat = options.outputFormat;
       }
+      // Skip the wrapper's generic resize only for the proven no-op case: an
+      // implicit LTX canvas already equals the compatible local reference.
+      // Explicit canvases and incompatible references retain wrapper handling.
       if (options.autoResizeVideoAssets !== null) {
         projectConfig.autoResizeVideoAssets = options.autoResizeVideoAssets;
+      } else if (options._ltxReferencePassthrough) {
+        projectConfig.autoResizeVideoAssets = false;
       }
 
       if (options.frames) {
@@ -10071,6 +10946,9 @@ async function main() {
       if (endImageBuffer) {
         projectConfig.referenceImageEnd = endImageBuffer;
       }
+      if (contextImageBuffers.length > 0) {
+        projectConfig.contextImages = contextImageBuffers;
+      }
       applyLtxTransitionLora(
         projectConfig,
         options.model,
@@ -10079,6 +10957,9 @@ async function main() {
       );
       if (audioBuffer) {
         projectConfig.referenceAudio = audioBuffer;
+      }
+      if (additionalAudioBuffers.length > 0) {
+        projectConfig.referenceAudios = additionalAudioBuffers;
       }
       if (options.audioStart !== null && !useRefAudioUrl) {
         projectConfig.audioStart = options.audioStart;
@@ -10091,6 +10972,9 @@ async function main() {
       }
       if (videoBuffer) {
         projectConfig.referenceVideo = videoBuffer;
+      }
+      if (additionalVideoBuffers.length > 0) {
+        projectConfig.referenceVideos = additionalVideoBuffers;
       }
       if (seedanceReferenceImageUrls.length > 0) {
         projectConfig.referenceImageUrls = seedanceReferenceImageUrls;
@@ -10107,21 +10991,25 @@ async function main() {
       if (options.seed !== null && options.seed !== undefined) {
         projectConfig.seed = options.seed;
       }
-      if (Number.isFinite(steps) && !isHappyHorseVideo) {
+      if (options.apiGenerateAudio !== null && isMiniMaxH3Model(options.model)) {
+        projectConfig.generateAudio = options.apiGenerateAudio;
+      }
+      if (Number.isFinite(steps) && !isHappyHorseVideo && !isMiniMaxH3Model(options.model)) {
         // HappyHorse routes through the vendor-job path and ignores `steps`,
-        // mirroring Seedance (whose model defaults already omit them).
+        // mirroring Seedance (whose model defaults already omit them). H3 has
+        // fixed sampling parameters and should receive no overrides.
         projectConfig.steps = steps;
       }
-      if (guidance !== null && guidance !== undefined) {
+      if (guidance !== null && guidance !== undefined && !isMiniMaxH3Model(options.model)) {
         projectConfig.guidance = guidance;
       }
-      if (modelDefaults?.sampler) {
+      if (modelDefaults?.sampler && !isMiniMaxH3Model(options.model)) {
         projectConfig.sampler = modelDefaults.sampler;
       }
-      if (modelDefaults?.scheduler) {
+      if (modelDefaults?.scheduler && !isMiniMaxH3Model(options.model)) {
         projectConfig.scheduler = modelDefaults.scheduler;
       }
-      if (modelDefaults?.shift !== null && modelDefaults?.shift !== undefined) {
+      if (modelDefaults?.shift !== null && modelDefaults?.shift !== undefined && !isMiniMaxH3Model(options.model)) {
         projectConfig.shift = modelDefaults.shift;
       }
       if (options.videoControlNetName && !isSeedanceModel(options.model)) {
@@ -10154,8 +11042,14 @@ async function main() {
       if (options.lastFrameStrength != null) {
         projectConfig.lastFrameStrength = options.lastFrameStrength;
       }
+      if (options.loras.length > 0) {
+        projectConfig.loras = options.loras;
+        projectConfig.loraStrengths = options.loraStrengths;
+      }
 
-      const videoResult = await client.createVideoProject(withBillingMode(projectConfig));
+      const videoResult = trackProjectResult(
+        await client.createVideoProject(withBillingMode(projectConfig))
+      );
 
       // Check for errors in the response (e.g., insufficient tokens)
       if (videoResult?.error || videoResult?.message) {
@@ -10217,7 +11111,9 @@ async function main() {
         projectConfig.seed = options.seed;
       }
 
-      const audioResult = await client.createAudioProject(withBillingMode(projectConfig));
+      const audioResult = trackProjectResult(
+        await client.createAudioProject(withBillingMode(projectConfig))
+      );
 
       if (audioResult?.error || audioResult?.message) {
         throw buildProjectResultError(audioResult);
@@ -10250,10 +11146,19 @@ async function main() {
         numberOfMedia: options.count,
         width: options.width,
         height: options.height,
-        steps,
-        guidance,
         tokenType: options.tokenType || 'spark',
-        disableNSFWFilter: options.noFilter === true
+        disableNSFWFilter: options.noFilter === true,
+        ...buildImageEditExecutionControls(options.model, {
+          steps,
+          guidance,
+          sampler: options.sampler || modelDefaults?.sampler,
+          scheduler: options.scheduler || modelDefaults?.scheduler
+        }, {
+          steps: cliSet.steps ? options.steps : undefined,
+          guidance: cliSet.guidance ? options.guidance : undefined,
+          sampler: cliSet.sampler ? options.sampler : undefined,
+          scheduler: cliSet.scheduler ? options.scheduler : undefined
+        })
       };
 
       if (options.outputFormat) {
@@ -10261,12 +11166,6 @@ async function main() {
       }
       if (gptImageQuality) {
         editConfig.gptImageQuality = gptImageQuality;
-      }
-      if (options.sampler || modelDefaults?.sampler) {
-        editConfig.sampler = options.sampler || modelDefaults.sampler;
-      }
-      if (options.scheduler || modelDefaults?.scheduler) {
-        editConfig.scheduler = options.scheduler || modelDefaults.scheduler;
       }
       if (options.loras.length > 0) {
         editConfig.loras = options.loras;
@@ -10279,9 +11178,9 @@ async function main() {
         editConfig.seed = options.seed;
       }
       
-      const editResult = isGptImage2ModelSelection(options.model)
+      const editResult = trackProjectResult(isGptImage2ModelSelection(options.model)
         ? await client.createImageProject(withBillingMode(editConfig))
-        : await client.createImageEditProject(withBillingMode(editConfig));
+        : await client.createImageEditProject(withBillingMode(editConfig)));
       if (editResult?.error || editResult?.message) {
         throw buildProjectResultError(editResult);
       }
@@ -10326,7 +11225,9 @@ async function main() {
       if (options.loras.length > 0) projectConfig.loras = options.loras;
       if (options.loraStrengths.length > 0) projectConfig.loraStrengths = options.loraStrengths;
 
-      const projectResult = await client.createImageProject(withBillingMode(projectConfig));
+      const projectResult = trackProjectResult(
+        await client.createImageProject(withBillingMode(projectConfig))
+      );
 
       // Check for errors in the response (e.g., insufficient tokens)
       if (projectResult?.error || projectResult?.message) {
@@ -10390,12 +11291,20 @@ async function main() {
         if (steps) {
           projectConfig.steps = steps;
         }
+        if (options.loras.length > 0) {
+          projectConfig.loras = options.loras;
+        }
+        if (options.loraStrengths.length > 0) {
+          projectConfig.loraStrengths = options.loraStrengths;
+        }
 
         if (options.seed !== null && options.seed !== undefined) {
           projectConfig.seed = options.seed;
         }
 
-        const imageResult = await client.createImageProject(withBillingMode(projectConfig));
+        const imageResult = trackProjectResult(
+          await client.createImageProject(withBillingMode(projectConfig))
+        );
         if (imageResult?.error || imageResult?.message) {
           throw buildProjectResultError(imageResult);
         }
@@ -10475,6 +11384,7 @@ async function main() {
           if (options.audioStart !== null) renderInfo.audioStart = options.audioStart;
           if (options.audioDuration !== null) renderInfo.audioDuration = options.audioDuration;
         }
+        if (options.refAudios.length > 0) renderInfo.refAudios = options.refAudios;
         if (options.referenceAudioIdentity) {
           renderInfo.referenceAudioIdentity = options.referenceAudioIdentity;
           if (options._voicePersonaResolvedName || options.voicePersonaName) {
@@ -10484,6 +11394,10 @@ async function main() {
         if (options.refVideo) {
           renderInfo.refVideo = options.refVideo;
           if (options.videoStart !== null) renderInfo.videoStart = options.videoStart;
+        }
+        if (options.refVideos.length > 0) renderInfo.refVideos = options.refVideos;
+        if (options.apiGenerateAudio !== null && isMiniMaxH3Model(options.model)) {
+          renderInfo.generateAudio = options.apiGenerateAudio;
         }
         if (options.videoControlNetName && !isSeedanceModel(options.model)) {
           renderInfo.controlNet = {
@@ -10560,6 +11474,8 @@ async function main() {
           const creds = loadCredentials();
           const client2 = new SogniClientWrapper({
             appSource: SOGNI_APP_SOURCE,
+            appId: getOrCreateSogniAppId(),
+            attribution: clientAttribution(AGENT_ATTRIBUTION),
             network: openclawConfig?.defaultNetwork || 'fast',
             autoConnect: false,
             apiKey: creds.SOGNI_API_KEY,
@@ -10569,9 +11485,11 @@ async function main() {
           await disableLiveModelAvailabilityEvents(client2);
 
           // Create second clip and wait for completion via events
+          let activeClip2Project = null;
           const clip2Promise = new Promise((resolve, reject) => {
             const timeout = setTimeout(() => {
-              reject(new Error('Second clip generation timed out'));
+              void buildProjectTimeoutError([activeClip2Project], options.timeout, 'second clip project')
+                .then(reject);
             }, options.timeout);
 
             client2.on(ClientEvent.JOB_COMPLETED, async (data) => {
@@ -10615,6 +11533,7 @@ async function main() {
           });
 
           const clip2Result = await client2.createVideoProject(withBillingMode(projectConfig2));
+          activeClip2Project = clip2Result?.project || null;
 
           // Check for errors in the response (e.g., insufficient tokens)
           if (clip2Result?.error || clip2Result?.message) {
@@ -10697,6 +11616,7 @@ async function main() {
             if (options.audioStart !== null) output.audioStart = options.audioStart;
             if (options.audioDuration !== null) output.audioDuration = options.audioDuration;
           }
+          if (options.refAudios.length > 0) output.refAudios = options.refAudios;
           if (options.referenceAudioIdentity) {
             output.referenceAudioIdentity = options.referenceAudioIdentity;
             if (options._voicePersonaResolvedName || options.voicePersonaName) {
@@ -10706,6 +11626,10 @@ async function main() {
           if (options.refVideo) {
             output.refVideo = options.refVideo;
             if (options.videoStart !== null) output.videoStart = options.videoStart;
+          }
+          if (options.refVideos.length > 0) output.refVideos = options.refVideos;
+          if (options.apiGenerateAudio !== null && isMiniMaxH3Model(options.model)) {
+            output.generateAudio = options.apiGenerateAudio;
           }
           if (options.videoControlNetName && !isSeedanceModel(options.model)) {
             output.controlNet = {
@@ -10767,6 +11691,7 @@ async function main() {
       if (!error.hint) error.hint = INVALID_API_KEY_HINT;
       if (!error.code) error.code = 'INVALID_API_KEY';
     }
+    enrichAppIdLimitError(error);
 
     exitCode = 1;
     const shouldJson = options.json || IS_OPENCLAW_INVOCATION;

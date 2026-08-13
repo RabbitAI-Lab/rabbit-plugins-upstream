@@ -1,41 +1,62 @@
-## Description: <br>
-Memory Radar helps agents scan AI memory files and workspace configuration for prompt injection, credential exposure, data-exfiltration instructions, and related security risks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+记忆雷达 is a Chinese-language agent skill that guides security scans of AI agent memory files for prompt injection, credential leakage, cross-file threat correlation, false-positive suppression, and quarantine or recovery workflows.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent operators use this skill to audit agent memory and configuration files before continued use, after importing external content, or before sharing context across agents. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Remote LLM analysis may transmit portions of memory content outside the local environment. <br>
-Mitigation: Use the default local mode for routine scans and require explicit approval before enabling remote analysis. <br>
-Risk: Quarantine, restore, or scheduled-scan setup can modify files or create persistent local state. <br>
-Mitigation: Review the proposed changes before allowing quarantine actions or scheduled monitoring to run. <br>
+## Use Case:
 
+Developers, teams, and agent operators use this skill to review AI agent memory files, imported external content, and workspace configuration for prompt injection, credential leakage, data exfiltration instructions, and related memory-security risks.
 
-## Reference(s): <br>
-- [Memory Radar ClawHub listing](https://clawhub.ai/thcjp/skills/memory-radar) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and optional JSON scan reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include local scan recommendations, optional remote LLM analysis, quarantine and restore steps, and scheduled scan setup.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The security evidence notes missing referenced scripts and overbroad wording, so runtime behavior may not be fully represented by the artifact text.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the referenced scripts or implementation before enabling scheduled monitoring, quarantine, or recovery actions.
+
+Risk: Optional remote LLM analysis may send redacted memory content outside the local environment.
+
+Mitigation: Use local scanning by default and enable --allow-remote only when redacted remote analysis is acceptable.
+
+Risk: Quarantine and recovery workflows can modify memory files after user confirmation.
+
+Mitigation: Confirm the files and lines to be changed, verify backups exist, and review proposed changes before quarantine.
+
+Risk: Pattern-based local scanning can miss semantic prompt injection or credentials without known prefixes.
+
+Mitigation: Treat scan results as review guidance and use additional analysis for high-risk imported memory or nonstandard secrets.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/memory-radar)
+- [Skill homepage](https://skillhub.cn/skill/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with bash command examples and an optional JSON scan-report structure]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language workflow; local scanning by default, with optional remote LLM analysis only when enabled by the user.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata; artifact frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

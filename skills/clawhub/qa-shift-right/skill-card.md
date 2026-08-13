@@ -1,44 +1,53 @@
-## Description: <br>
-Helps QA and release teams design shift-right validation for production releases using canary monitoring, synthetic checks, A/B validation, user feedback, chaos engineering, alert thresholds, and rollback triggers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teams plan shift-right production validation with canary monitoring metrics, synthetic checks, alert thresholds, rollback triggers, A/B validation, user feedback loops, and chaos engineering.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and release owners use this skill when a feature is live or entering canary release and they need a production validation plan covering monitoring, synthetic checks, feedback loops, chaos experiments, alerts, and rollback criteria. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Production validation guidance could be mistaken for permission to change monitoring, rollout, or experiment settings. <br>
-Mitigation: Use the skill only with release ownership and explicit approval for production monitoring, rollout changes, and chaos experiments. <br>
-Risk: User behavior analysis or feedback collection could involve personal or sensitive data. <br>
-Mitigation: Confirm consent, data handling requirements, and applicable privacy obligations before collecting or analyzing user data. <br>
-Risk: Chaos experiments or canary releases can affect live users if the blast radius is too broad. <br>
-Mitigation: Start in non-production, shadow, or narrowly scoped canary environments, then expand only with circuit breakers and rollback criteria in place. <br>
-Risk: A production rollout plan without clear rollback thresholds can delay recovery from regressions. <br>
-Mitigation: Define rollback triggers for error rate, latency, business metrics, and user feedback before rollout begins, and rehearse the rollback path. <br>
+## Use Case:
 
+Developers, QA engineers, SREs, and release teams use this skill after launch or during canary rollout to design production validation plans covering monitoring, synthetic checks, feedback loops, chaos experiments, alert thresholds, and rollback criteria.
 
-## Reference(s): <br>
-- [Qa Shift Right on ClawHub](https://clawhub.ai/kokxi/skills/qa-shift-right) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown plan with monitoring metrics, synthetic checks, alert thresholds, rollback triggers, feedback loops, and traceability notes.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Planning guidance only; no production action is executed by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Production validation, canary rollout, monitoring, and chaos engineering guidance can affect live users or systems if applied without authorization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with organizational approval, limited blast radius, monitoring, and tested rollback procedures.
+
+Risk: User analytics, feedback loops, and behavior monitoring may involve personal or behavioral data.
+
+Mitigation: Complete privacy review and confirm user consent and data-protection compliance before collecting or analyzing production data.
+
+## Reference(s):
+
+- [ClawHub qa-shift-right skill page](https://clawhub.ai/kokxi/skills/qa-shift-right)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, configuration]
+
+**Output Format:** [Markdown guidance with structured plans, checklists, thresholds, and rollback criteria]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces production validation planning guidance; it does not execute production changes by itself.]
+
+## Skill Version(s):
+
+1.6.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

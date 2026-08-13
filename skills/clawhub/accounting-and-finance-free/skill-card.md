@@ -1,43 +1,53 @@
-## Description: <br>
-A lightweight financial analysis skill that helps agents calculate basic solvency and profitability ratios, perform three-factor DuPont analysis, and assess operating, investing, and financing cash-flow structure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finance LITE helps agents perform basic financial ratio analysis, DuPont decomposition, and cash-flow structure analysis from provided financial statement data.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Personal investors, finance learners, and small-business operators use this skill to inspect financial statement inputs, compute core ratios, explain DuPont ROE drivers, and summarize cash-flow health. It is intended as a lightweight analysis aid, not as professional accounting, legal, or investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial conclusions may be incomplete or misleading when source reports are incomplete, unaudited, stale, or mapped to nonstandard accounts. <br>
-Mitigation: Use audited or otherwise trusted statements when possible, verify key line items and assumptions, and treat missing data explicitly before relying on the analysis. <br>
-Risk: Users may mistake generated ratio commentary for professional investment, accounting, tax, or legal advice. <br>
-Mitigation: Use the output as educational analysis and require qualified professional review before making material financial, accounting, legal, or investment decisions. <br>
-Risk: The free skill does not support valuation modeling, fraud detection, real-time market analysis, or industry-specialized analysis. <br>
-Mitigation: Do not use it for DCF, DDM, comparable-company pricing, Beneish or Z-score style risk checks, trading decisions, or sector-specific decisions without a fit-for-purpose tool. <br>
+## Use Case:
 
+External users and developers use this skill to analyze supplied financial statements for solvency, profitability, ROE drivers, cash-flow health, and basic improvement suggestions.
 
-## Reference(s): <br>
-- [Accounting And Finance Free on ClawHub](https://clawhub.ai/thcjp/skills/accounting-and-finance-free) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown financial analysis with ratio tables, calculations, health summaries, and narrative guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; output quality depends on the completeness and accuracy of user-provided financial statement data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The security scan marked the release suspicious because the read-only finance-analysis skill also describes command execution, file writing, external APIs, and API keys.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review carefully before installing and treat the skill as read-only finance-analysis guidance; remove or tightly scope unrelated command, API, credential, and file-writing language before broad deployment.
+
+Risk: Financial conclusions can be misleading when source statements are incomplete, unaudited, or mapped incorrectly.
+
+Mitigation: Require complete statement inputs where possible, state missing data and assumptions in outputs, and have finance-qualified reviewers verify conclusions before decisions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/accounting-and-finance-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown text with calculation tables, ratio explanations, health assessments, and recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs depend on user-provided financial statement data and do not include real-time market analysis.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata; artifact frontmatter version is 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

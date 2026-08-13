@@ -101,6 +101,14 @@ check, also read `references/project-handoff-schema.md`, use its strict JSON sch
 and run `scripts/validate_project_handoff.py`; never collapse its four independent
 results into one PASS.
 
+## Visual-Source Priority
+
+This ordering governs step 5 below. A unique active enterprise Profile remains a known, previously confirmed visual binding and may be reused with its existing concise notice. For every other route, resolve whether the customer has a specific template, enterprise master, or preferred reference image before presenting any fallback theme. Unless a supported reference is already supplied, a concrete built-in system is already named, or the customer explicitly delegates the built-in choice, ask exactly:
+
+> 本次是否有希望参考的模板、企业母版或喜欢的意向图？有的话请上传静态截图；没有则从内置视觉系统中选择。
+
+A clear “有” enters the supported static-reference route and must produce the existing VI design standards board before project-theme compilation. A clear “没有” enters `references/visual-systems.md`, where TaoHtml displays the complete applicable built-in catalog; it must not recommend, display, or select a fallback theme before the reference decision is known. This visual-source decision is independent from ordinary clarification and must not be bundled with theme or motion selection. A request to replace a reused enterprise Profile also enters this reference-first choice.
+
 ## Required State Flow
 
 Follow the branch selected by the handoff decision before applying this sequence.
@@ -160,14 +168,14 @@ Block only on the hard boundaries in `references/intake-workflow.md`: never inve
 
 After brief confirmation, load only what the task needs:
 
-The Report IR path remains an explicit engineering route in this development
-version. Enter it only when the user explicitly asks to research, generate, validate,
-compile, benchmark, or continue a Report IR project, or when the current project has
-an explicit internal pilot authorization. Do not silently move an ordinary customer
-build from the confirmed direct-HTML workflow onto Report IR, and do not call the
-research Compiler a released customer capability. For an authorized pilot, read
-`references/report-ir-pilot-workflow.md`; do not ask the customer to select IR or add
-an IR questionnaire. For other explicit Report IR engineering work, read
+The Report IR path is TaoHtml's supported, deterministic engineering route. Enter it
+when the user explicitly asks to research, generate, validate, compile, benchmark, or
+continue a Report IR project, or when the current project has an explicit Report IR
+authorization. Do not silently move an ordinary customer build from the confirmed
+direct-HTML workflow onto Report IR: Direct HTML remains the default production route.
+For an authorized Report IR build, read `references/report-ir-pilot-workflow.md`; do
+not ask the customer to select IR or add an IR questionnaire. For other explicit
+Report IR engineering work, read
 `references/report-ir-v1.md`, validate the exact IR with
 `scripts/validate_report_ir.py`, then compile it with
 `scripts/compile_report_ir.py`. The Compiler never replaces the Report Design Brief or
@@ -186,8 +194,8 @@ confirmed.
 - `references/visual-systems.md`: built-in system routing and selection policy; after selection, load only that system's `theme.json`, `theme.css`, and `templates.html` under `assets/visual-systems/`.
 - `references/static-reference-vi.md`: one-time reconstruct/corporate-fidelity routing, supported static-input gate, observed/extension/unknown boundary, exact executable layout grammar, corporate template-family contract, unified VI board, confirmation gate, and next-step handoff.
 - `references/project-theme-compiler.md`: post-confirmation hash-bound handoff, deterministic structural project-theme compilation, corporate multi-shell crop generation and role routing, eligible/compiled usage mapping, fallback policy, explicit project rendering, and verification.
-- `references/report-ir-v1.md`: experimental report-source contract, semantic/evidence/page/state model, four independent validation results, deterministic Compiler boundary, project-theme routing, and unreleased capability limits. Load only for the explicit Report IR engineering route above.
-- `references/report-ir-pilot-workflow.md`: explicit internal pilot routing, confirmed-brief derivation, no-fallback deterministic orchestration, existing QA/Handoff reuse, and machine-checkable not-executed states.
+- `references/report-ir-v1.md`: formal report-source contract, semantic/evidence/page/state model, four independent validation results, deterministic Compiler boundary, project-theme routing, and implemented capability limits. Load only for the explicit Report IR engineering route above.
+- `references/report-ir-pilot-workflow.md`: explicit Report IR routing, confirmed-brief derivation, no-fallback deterministic orchestration, existing QA/Handoff reuse, and machine-checkable not-executed states. Its legacy filename and machine field names are retained for compatibility.
 - `references/profile-memory.md`: explicit TaoHtml home, exact enterprise resolution, immutable corporate-profile versions, automatic binding, override/update/other-company semantics, export/import, and current-task authorization boundary.
 - `references/design-quality-rubric.md`: optional diagnosis when the user asks for a design review or says the result feels ordinary; do not use a fixed aesthetic score as the production authorization gate.
 - `references/runtime-contract.md`: implemented DOM, controls, state, modes, and extension boundary.
@@ -204,7 +212,7 @@ Use the bundled scripts where relevant:
 - `scripts/check_production_authorization.py`: validate current material-summary, VI or profile-use binding, project-theme, and design-brief state before a requested preview, formal HTML, QA, or delivery action.
 - `scripts/validate_project_handoff.py`: validate a structured portable handoff's schema, exact bindings, continuation state, and recorded delivery evidence without executing QA.
 - `scripts/validate_report_ir.py`: validate Report IR schema, references, semantics, and current compiler readiness separately; it never executes QA.
-- `scripts/orchestrate_report_ir_pilot.py`: preserve direct HTML by default, or validate an explicitly authorized pilot and bind Production Authorization, Report IR validation, local Compiler outputs, and existing Handoff records without generating content or claiming QA execution.
+- `scripts/orchestrate_report_ir_pilot.py`: preserve direct HTML by default, or validate an explicitly authorized Report IR project and bind Production Authorization, Report IR validation, local Compiler outputs, and existing Handoff records without generating content or claiming QA execution. Its legacy filename is retained for compatibility.
 - `scripts/compile_report_ir.py`: deterministically compile a validated Report IR through a built-in theme or validated project theme into Runtime HTML, Source Map, normalized IR, and Build Manifest without model calls.
 - `scripts/apply_report_ir_patch.py`: extract or load a controlled Runtime text/image Patch, verify its exact base binding and before-values, update Report IR and image provenance, and stop with a reconfirmation gate when meaning changes.
 - `scripts/check_assets.py`: find missing, remote, or non-portable assets.
