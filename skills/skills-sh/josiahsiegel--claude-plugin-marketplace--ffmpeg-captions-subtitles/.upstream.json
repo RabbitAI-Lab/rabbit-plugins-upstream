@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/josiahsiegel/claude-plugin-marketplace/ffmpeg-captions-subtitles",
+  "repo": "josiahsiegel/claude-plugin-marketplace",
+  "skillId": "ffmpeg-captions-subtitles",
+  "branch": "main",
+  "pushedAt": "2026-06-18T20:57:10Z",
+  "contentHash": "874275fdcf2a605c638d55712a2f619b9b1ca8491f359b00dfe0de2ada0200d0",
+  "fetchedAt": "2026-08-13T08:49:48.287Z"
+}

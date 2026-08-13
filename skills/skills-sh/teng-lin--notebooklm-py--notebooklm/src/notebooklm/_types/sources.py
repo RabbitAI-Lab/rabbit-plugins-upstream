@@ -1,0 +1,443 @@
+"""Private source type implementations."""
+
+from __future__ import annotations
+
+import warnings
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import TYPE_CHECKING, Any
+
+from .._url_utils import pdf_url_display_title
+from ..rpc.types import DriveSourceStatus, SourceStatus
+from .common import (
+    UnknownTypeWarning,
+)
+
+if TYPE_CHECKING:
+    from .._row_adapters.sources import SourceRow
+
+
+class SourceType(str, Enum):
+    """User-facing source types.
+
+    This is a str enum, so comparisons work with both enum members and strings:
+        source.kind == SourceType.WEB_PAGE  # True
+        source.kind == "web_page"           # Also True
+    """
+
+    GOOGLE_DOCS = "google_docs"
+    GOOGLE_SLIDES = "google_slides"
+    GOOGLE_SPREADSHEET = "google_spreadsheet"
+    PDF = "pdf"
+    PASTED_TEXT = "pasted_text"
+    WEB_PAGE = "web_page"
+    GOOGLE_DRIVE_AUDIO = "google_drive_audio"
+    GOOGLE_DRIVE_VIDEO = "google_drive_video"
+    YOUTUBE = "youtube"
+    MARKDOWN = "markdown"
+    DOCX = "docx"
+    POWERPOINT = "powerpoint"
+    CSV = "csv"
+    EPUB = "epub"
+    IMAGE = "image"
+    MEDIA = "media"
+    UNKNOWN = "unknown"
+
+
+_warned_source_types: set[int] = set()
+
+
+_SOURCE_TYPE_CODE_MAP: dict[int, SourceType] = {
+    0: SourceType.UNKNOWN,
+    1: SourceType.GOOGLE_DOCS,
+    2: SourceType.GOOGLE_SLIDES,  # Was GOOGLE_OTHER, now more specific
+    3: SourceType.PDF,
+    4: SourceType.PASTED_TEXT,
+    5: SourceType.WEB_PAGE,
+    6: SourceType.POWERPOINT,
+    8: SourceType.MARKDOWN,
+    9: SourceType.YOUTUBE,
+    10: SourceType.MEDIA,
+    11: SourceType.DOCX,
+    13: SourceType.IMAGE,
+    14: SourceType.GOOGLE_SPREADSHEET,
+    16: SourceType.CSV,
+    17: SourceType.EPUB,
+}
+
+
+_SOURCE_TYPE_COMPAT_MAP: dict[SourceType, str] = {
+    SourceType.GOOGLE_DOCS: "text",
+    SourceType.GOOGLE_SLIDES: "text",
+    SourceType.GOOGLE_SPREADSHEET: "text",
+    SourceType.PDF: "text_file",
+    SourceType.PASTED_TEXT: "text",
+    SourceType.WEB_PAGE: "url",
+    SourceType.YOUTUBE: "youtube",
+    SourceType.MARKDOWN: "text_file",
+    SourceType.DOCX: "text_file",
+    SourceType.POWERPOINT: "text_file",
+    SourceType.CSV: "text",
+    SourceType.EPUB: "text_file",
+    SourceType.IMAGE: "text",
+    SourceType.MEDIA: "text",
+    SourceType.UNKNOWN: "text",
+}
+
+
+# The type_code==14 overload (#1828/#1832): the backend returns 14 for BOTH a
+# native Google Sheet AND a Drive-hosted binary file (e.g. a PDF). Live capture
+# showed Drive sources carry no URL (metadata[5]/[7] are null and metadata[0]
+# holds the Drive metadata block — see ``SourceRow.drive_document_id`` — rather
+# than a URL), so the only disambiguation signal is the MIME at metadata[19] /
+# metadata[9][2]. A native
+# Sheet carries "application/vnd.google-apps.spreadsheet" (→ stay 14); a Drive
+# PDF carries "application/pdf" (→ 3). Only MIMEs proven by live capture are
+# mapped; anything else under 14 is left as GOOGLE_SPREADSHEET (conservative —
+# never relabel a real Sheet, never introduce UNKNOWN). Extend as more
+# Drive-hosted-binary-under-14 collisions are captured.
+_TYPE_CODE_14_MIME_OVERRIDE: dict[str, int] = {
+    "application/pdf": 3,  # Drive-hosted PDF → PDF
+}
+
+
+def _disambiguate_type_code(type_code: int | None, mime: str | None) -> int | None:
+    """Correct the ambiguous ``type_code == 14`` using the row MIME (#1832).
+
+    Returns the effective type code: a Drive-hosted binary whose MIME maps in
+    :data:`_TYPE_CODE_14_MIME_OVERRIDE` is remapped (PDF → 3); every other case
+    (native Sheet MIME, no MIME, or an unrecognized MIME) is returned unchanged
+    so real Google Sheets keep decoding as ``GOOGLE_SPREADSHEET``.
+    """
+    if type_code == 14 and mime is not None:
+        return _TYPE_CODE_14_MIME_OVERRIDE.get(mime, type_code)
+    return type_code
+
+
+def _safe_source_type(type_code: int | None) -> SourceType:
+    """Convert internal type code to user-facing SourceType enum."""
+    if type_code is None:
+        return SourceType.UNKNOWN
+
+    result = _SOURCE_TYPE_CODE_MAP.get(type_code)
+    if result is None:
+        if type_code not in _warned_source_types:
+            _warned_source_types.add(type_code)
+            warnings.warn(
+                f"Unknown source type code {type_code}. "
+                "Consider updating notebooklm-py to the latest version.",
+                UnknownTypeWarning,
+                stacklevel=3,
+            )
+        return SourceType.UNKNOWN
+    return result
+
+
+def _extract_source_url(metadata: Any, *, allow_bare_http: bool = True) -> str | None:
+    """Extract a source URL from a ``src[2]`` metadata array.
+
+    Thin compatibility shim over
+    :meth:`notebooklm._row_adapters.sources.SourceRow.url_from_metadata`,
+    which centralises the ``metadata[7]`` > ``metadata[5]`` > ``metadata[0]``
+    positional precedence in the sanctioned row-adapter layer. The adapter
+    method reproduces this helper's exact (soft, un-coerced) semantics, so this
+    re-exported public helper is behavior-preserved while its position
+    knowledge no longer lives here.
+    """
+    from .._row_adapters.sources import SourceRow
+
+    return SourceRow.url_from_metadata(metadata, allow_bare_http=allow_bare_http)
+
+
+def _extract_source_created_at(metadata: Any) -> datetime | None:
+    """Extract a source creation timestamp from a ``src[2]`` metadata array.
+
+    Thin compatibility shim over
+    :meth:`notebooklm._row_adapters.sources.SourceRow.created_at_from_metadata`,
+    which owns the ``metadata[2][0]`` timestamp position. Behavior-identical to
+    the original inline walk (both funnel the inner value through
+    :func:`_datetime_from_timestamp`).
+    """
+    from .._row_adapters.sources import SourceRow
+
+    return SourceRow.created_at_from_metadata(metadata)
+
+
+#: Drive states that mean "the notebook's copy is not a faithful view of a
+#: readable live Drive file" — what :attr:`Source.is_drive_degraded` reports.
+#: An explicit allowlist, not ``!= ACTIVE``: the client-side ``UNKNOWN``
+#: sentinel says nothing about health, and a future backend member must be
+#: classified deliberately rather than inherit "degraded" by default.
+_DEGRADED_DRIVE_STATUSES: frozenset[DriveSourceStatus] = frozenset(
+    {
+        DriveSourceStatus.INACCESSIBLE,
+        DriveSourceStatus.SYNCING,
+        DriveSourceStatus.DELETED,
+        DriveSourceStatus.GEN_AI_ACCESS_DENIED,
+    }
+)
+
+
+def _pdf_url_title_fallback(
+    title: str | None, url: str | None, type_code: int | None
+) -> str | None:
+    """Derive a display title for a direct-PDF-URL source, or return ``title``.
+
+    Direct-PDF URLs arrive with the raw request URL in the title slot (the
+    server extracts ``<title>`` for HTML pages but not for a link that points
+    straight at a ``.pdf``), so this falls back to the URL path basename —
+    e.g. ``https://host/papers/SomePaper.pdf`` → ``SomePaper`` (#1850).
+
+    Fires only when the title is *exactly* the source ``url`` (the server
+    degradation — never a user-set title that merely resembles a URL, e.g. a
+    PDF renamed to a URL string) and the source is a PDF. Uses a plain
+    :data:`_SOURCE_TYPE_CODE_MAP` lookup rather than :func:`_safe_source_type`
+    so parsing an unknown-typed source never emits ``UnknownTypeWarning`` at
+    construction time (the warning stays at ``.kind`` access).
+
+    Shared by :meth:`Source.from_row` (add + list paths) and the
+    ``source fulltext`` / ``GET_SOURCE`` read (``SourceContentRenderer``), so
+    every user-visible read of a degraded PDF title is corrected consistently.
+    """
+    if (
+        title is not None
+        and title == url
+        and type_code is not None
+        and _SOURCE_TYPE_CODE_MAP.get(type_code) is SourceType.PDF
+    ):
+        return pdf_url_display_title(title) or title
+    return title
+
+
+@dataclass
+class Source:
+    """Represents a NotebookLM source."""
+
+    id: str
+    title: str | None = None
+    url: str | None = None
+    _type_code: int | None = field(default=None, repr=False)
+    created_at: datetime | None = None
+    # ``status`` holds a :class:`~notebooklm.rpc.SourceStatus` member (an
+    # ``int`` enum) decoded from the GET_NOTEBOOK source-list status block.
+    # The annotation was previously ``int`` even though every construction
+    # path (the listing service and :meth:`from_api_response`) populates it
+    # with a ``SourceStatus``; ``SourceStatus`` is the accurate declared type
+    # and remains ``int``-compatible at runtime and for equality.
+    status: SourceStatus = SourceStatus.READY
+    #: Google Drive file id for Drive-backed sources; ``None`` for every other
+    #: kind. Drive sources carry no :attr:`url` (the backend leaves the URL
+    #: slots empty), so this is the only field tying such a source back to the
+    #: ``file_id`` it was created from — ``sources.add_drive`` matches on it to
+    #: stay idempotent when a create has to be retried (#2113).
+    drive_document_id: str | None = None
+    #: Drive-side health of a Drive-backed source
+    #: (``SourceSettings.userDriveSourceStatus``), or ``None`` when the row
+    #: makes no Drive-health claim — every non-Drive source, and a Drive source
+    #: whose status is the proto3 default. Orthogonal to :attr:`status`, which
+    #: reports NotebookLM's own ingestion pipeline: a source whose Drive file
+    #: was deleted or unshared keeps reporting ``READY`` because ingestion did
+    #: complete (#2111). See :attr:`is_drive_degraded`.
+    drive_status: DriveSourceStatus | None = None
+
+    @property
+    def kind(self) -> SourceType:
+        """Get source type as SourceType enum."""
+        return _safe_source_type(self._type_code)
+
+    @property
+    def is_ready(self) -> bool:
+        """Check if NotebookLM finished ingesting this source (status=READY).
+
+        .. note::
+           This reports **NotebookLM's ingestion pipeline only**
+           (``SourceSettings.status``). For a Drive-backed source it does not
+           track the Drive file: ingestion completes once, and stays complete,
+           even after the file is deleted, unshared, or is mid-resync — so
+           ``is_ready`` can be ``True`` while chat is grounded on a stale
+           snapshot. Drive-side health is reported separately by
+           :attr:`drive_status` / :attr:`is_drive_degraded` (#2111); this
+           property deliberately does not fold them in, because
+           ``wait_until_ready`` would then poll forever on a Drive file that
+           can never come back.
+        """
+        return self.status == SourceStatus.READY
+
+    @property
+    def is_drive_degraded(self) -> bool:
+        """Whether the backend reports a *non-healthy* Drive state for this source.
+
+        ``True`` only for the four explicitly degraded members —
+        ``INACCESSIBLE``, ``SYNCING``, ``DELETED``, ``GEN_AI_ACCESS_DENIED``.
+        Everything else is ``False``:
+
+        * ``drive_status is None`` — no Drive-health claim on the row (every
+          non-Drive source, and the proto3-default case).
+        * ``ACTIVE`` — nothing wrong reported.
+        * ``UNKNOWN`` — the slot carried a code this client does not model. A
+          state we cannot name is not evidence of degradation; callers who
+          prefer to fail closed should read :attr:`drive_status` directly and
+          decide for themselves.
+
+        ``False`` therefore means "the backend reported no degradation", NOT
+        "the Drive file is confirmed present and readable" — the three cases
+        above all report ``False`` without any such confirmation.
+
+        Note that ``SYNCING`` is transient and self-healing: it means the copy
+        is mid-update, not broken. Callers wiring this to an alert should
+        exclude it (``src.is_drive_degraded and src.drive_status is not
+        DriveSourceStatus.SYNCING`` recovers the sticky-fault set).
+
+        The degraded set is an explicit allowlist rather than
+        ``!= ACTIVE`` so a future backend member cannot silently start
+        reporting every Drive source as broken.
+
+        .. warning::
+           ``ACTIVE`` is the only value this project has observed on the wire;
+           the degraded members are read off the backend enum. See
+           :class:`~notebooklm.rpc.types.DriveSourceStatus`.
+        """
+        return self.drive_status in _DEGRADED_DRIVE_STATUSES
+
+    @property
+    def is_processing(self) -> bool:
+        """Check if source is still being processed (status=PROCESSING)."""
+        return self.status == SourceStatus.PROCESSING
+
+    @property
+    def is_error(self) -> bool:
+        """Check if source processing failed (status=ERROR)."""
+        return self.status == SourceStatus.ERROR
+
+    @classmethod
+    def from_row(cls, row: SourceRow) -> Source:
+        """Build a :class:`Source` from a normalized :class:`SourceRow`.
+
+        This is the **single** construction site for a :class:`Source`
+        from a parsed source row. Both :meth:`from_api_response` (the
+        public classmethod used by ``ADD_SOURCE`` / rename paths) and
+        :meth:`notebooklm._source.listing.SourceLister._parse_source`
+        (the ``GET_NOTEBOOK`` list/get/poll path) funnel through here so
+        every code path produces identical :class:`Source` instances —
+        including the decoded :attr:`status`.
+
+        Minimal flat rows historically yield ``_type_code=None`` and skip
+        metadata-derived fields. That invariant is now handled by SourceRow
+        when no metadata list is present at ``_raw[2]``, so
+        :attr:`SourceRow.metadata` returns ``None`` and
+        :attr:`~SourceRow.type_code` / :attr:`~SourceRow.url` /
+        :attr:`~SourceRow.created_at` all resolve to ``None`` while
+        :attr:`~SourceRow.status` resolves to ``SourceStatus.UNKNOWN``. The
+        single field mapping below therefore covers all three wire shapes
+        identically.
+        """
+        # Correct the type_code==14 native-Sheet/Drive-PDF overload by the row
+        # MIME before it reaches ``kind`` (#1832). No-op for every other type
+        # code and for real Sheets.
+        type_code = _disambiguate_type_code(row.type_code, row.mime)
+        return cls(
+            id=row.id,
+            # #1850: a direct-PDF URL arrives with the raw URL in the title slot
+            # (the server extracts <title> for HTML pages but not for a link
+            # that points straight at a .pdf). Fall back to the URL path
+            # basename. This single funnel covers the add and list paths.
+            title=_pdf_url_title_fallback(row.title, row.url, type_code),
+            url=row.url,
+            _type_code=type_code,
+            created_at=row.created_at,
+            status=row.status,
+            drive_document_id=row.drive_document_id,
+            drive_status=row.drive_status,
+        )
+
+    @classmethod
+    def from_api_response(
+        cls,
+        data: list[Any],
+        notebook_id: str | None = None,
+        *,
+        method_id: str | None = None,
+    ) -> Source:
+        """Parse source data from various API response formats.
+
+        Multi-shape dispatch (the three wire shapes — deeply nested,
+        medium nested, flat) is centralised in
+        :meth:`notebooklm._row_adapters.sources.SourceRow.from_unknown_shape`;
+        position knowledge for the entry layout lives on
+        :class:`SourceRow` itself. This method only normalizes the wire
+        shape into a :class:`SourceRow` and defers to :meth:`from_row` —
+        the single construction site shared with the
+        ``GET_NOTEBOOK`` list/get/poll path
+        (:meth:`notebooklm._source.listing.SourceLister._parse_source`) —
+        so all paths produce identical :class:`Source` instances,
+        including the decoded :attr:`status`. ``status`` earlier silently
+        fell back to the ``SourceStatus.READY`` default here while the
+        listing path read it from the row.
+
+        Args:
+            data: Raw decoded source payload (one of the three wire
+                shapes handled by
+                :meth:`~notebooklm._row_adapters.sources.SourceRow.from_unknown_shape`).
+            notebook_id: Accepted for call-site symmetry and forward
+                compatibility but currently unused — the parsed source
+                wire shape carries no notebook reference, so this value
+                does not influence the returned :class:`Source`. It is
+                retained (rather than dropped) because
+                ``Source.from_api_response`` is tracked public surface;
+                removing the parameter would be a backward-incompatible
+                signature change flagged by
+                ``scripts/audit_public_api_compat.py``.
+            method_id: Originating RPC method id (e.g.
+                ``RPCMethod.ADD_SOURCE.value`` /
+                ``RPCMethod.UPDATE_SOURCE.value``) used only to tag
+                ``safe_index`` drift diagnostics with the real method.
+                Defaults to ``None``, which lets
+                :meth:`~notebooklm._row_adapters.sources.SourceRow.from_unknown_shape`
+                fall back to its ``GET_NOTEBOOK`` default — preserving
+                the historical behavior for callers that do not pass it.
+        """
+        # Keep the row-adapter dependency local so importing the source
+        # dataclass package does not pull source-row parsing helpers into
+        # the top-level public type facade.
+        from .._row_adapters.sources import SourceRow
+
+        return cls.from_row(SourceRow.from_unknown_shape(data, method_id=method_id))
+
+
+@dataclass
+class SourceFulltext:
+    """Full text content of a source as indexed by NotebookLM."""
+
+    source_id: str
+    title: str
+    content: str
+    _type_code: int | None = field(default=None, repr=False)
+    url: str | None = None
+    char_count: int = 0
+
+    @property
+    def kind(self) -> SourceType:
+        """Get source type as SourceType enum."""
+        return _safe_source_type(self._type_code)
+
+    def find_citation_context(
+        self,
+        cited_text: str,
+        context_chars: int = 200,
+    ) -> list[tuple[str, int]]:
+        """Search for citation text and return matching contexts."""
+        if not cited_text or not self.content:
+            return []
+
+        search_text = cited_text[: min(40, len(cited_text))]
+
+        matches = []
+        pos = 0
+        while (idx := self.content.find(search_text, pos)) != -1:
+            start = max(0, idx - context_chars)
+            end = min(len(self.content), idx + len(search_text) + context_chars)
+            matches.append((self.content[start:end], idx))
+            pos = idx + len(search_text)
+
+        return matches

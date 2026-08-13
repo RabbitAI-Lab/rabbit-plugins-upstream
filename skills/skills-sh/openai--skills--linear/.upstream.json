@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/linear",
+  "repo": "openai/skills",
+  "skillId": "linear",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "48f6eba163811e7f16238439c91c985e73781526ad3ade1fe431bf54d624c4de",
+  "fetchedAt": "2026-08-13T08:49:17.110Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/josiahsiegel/claude-plugin-marketplace/powershell-master",
+  "repo": "josiahsiegel/claude-plugin-marketplace",
+  "skillId": "powershell-master",
+  "branch": "main",
+  "pushedAt": "2026-06-18T20:57:10Z",
+  "contentHash": "0c2c4d574dcbdf85334adf0fc7c8826f05ff751edd8858cdcbc0317d1b3b3162",
+  "fetchedAt": "2026-08-13T08:49:48.221Z"
+}

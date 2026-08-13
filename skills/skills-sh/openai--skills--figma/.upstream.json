@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/figma",
+  "repo": "openai/skills",
+  "skillId": "figma",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "50e2fddd547a5e76a941443e279593d0257591d148b0c1ca1699ec9fcfa6cd46",
+  "fetchedAt": "2026-08-13T08:49:17.128Z"
+}
