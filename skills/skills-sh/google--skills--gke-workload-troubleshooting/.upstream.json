@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-workload-troubleshooting",
+  "repo": "google/skills",
+  "skillId": "gke-workload-troubleshooting",
+  "branch": "main",
+  "pushedAt": "2026-08-12T18:27:18Z",
+  "contentHash": "080df8b84d0f8d0e62fd3246b17bade36140e08f3f07fc41511e4a224a0d86db",
+  "fetchedAt": "2026-08-13T08:49:15.930Z"
+}

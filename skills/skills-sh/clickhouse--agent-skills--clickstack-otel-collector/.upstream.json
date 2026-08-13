@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/clickhouse/agent-skills/clickstack-otel-collector",
+  "repo": "clickhouse/agent-skills",
+  "skillId": "clickstack-otel-collector",
+  "branch": "main",
+  "pushedAt": "2026-08-06T14:07:59Z",
+  "contentHash": "b2271cb562af309c4249f348139ed0a050e8e82f24889714c43da831323a8a80",
+  "fetchedAt": "2026-08-13T08:49:31.455Z"
+}

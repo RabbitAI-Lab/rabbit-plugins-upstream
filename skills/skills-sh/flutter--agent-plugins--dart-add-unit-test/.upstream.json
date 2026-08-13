@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/flutter/agent-plugins/dart-add-unit-test",
+  "repo": "flutter/agent-plugins",
+  "skillId": "dart-add-unit-test",
+  "branch": "main",
+  "pushedAt": "2026-08-10T21:47:56Z",
+  "contentHash": "c6ecc0c8aac99f5dd8f57369b6b3440c4a36724eee4e8f367cd45209eacf22c2",
+  "fetchedAt": "2026-08-13T08:47:25.555Z"
+}
