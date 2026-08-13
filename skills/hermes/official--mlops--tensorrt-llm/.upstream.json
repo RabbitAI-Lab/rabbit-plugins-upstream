@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/mlops/tensorrt-llm",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "ea04a59b49ed7418612285a12c126d552c860e59996a5a34fe20d4398d0900f2",
-  "fetchedAt": "2026-07-26T17:03:57.023Z"
+  "pushedAt": "2026-08-13T08:44:27Z",
+  "contentHash": "7d6ae631b6fec25e4f686bfaa4222aed5c1aea825ad283119bdf1c36cfb2902a",
+  "fetchedAt": "2026-08-13T08:48:07.212Z"
 }
