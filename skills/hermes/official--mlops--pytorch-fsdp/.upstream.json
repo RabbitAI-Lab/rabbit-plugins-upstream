@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/mlops/pytorch-fsdp",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "9c84c2e21d80396fac93ab2696bb45d77090fcbf3662f2b82df48393a3f0dce6",
-  "fetchedAt": "2026-07-26T17:03:57.012Z"
+  "pushedAt": "2026-08-13T08:44:27Z",
+  "contentHash": "abe2fae9ad595fa26c5b6f84979469f35189c46f8e3b7e61c993322adb0a48f1",
+  "fetchedAt": "2026-08-13T08:48:07.202Z"
 }
