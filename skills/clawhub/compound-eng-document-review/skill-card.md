@@ -1,41 +1,52 @@
-## Description: <br>
-Structural review of documents for gaps, clarity, completeness, and organization before a brainstorm, plan, spec, ADR, or other document moves to the next workflow step. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Structural review of documents for gaps, clarity, completeness, and organization before the next workflow step.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers, product builders, and internal teams use this workflow to review planning documents, specs, ADRs, and brainstorm notes for unclear assumptions, missing decisions, scope creep, and readiness for the next workflow step. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Minor wording or formatting edits may be saved inline without a separate approval step. <br>
-Mitigation: Review the resulting diff, especially for legal, financial, customer-facing, or policy documents. <br>
-Risk: If no document is specified, the workflow may choose a recent brainstorm or plan from conventional documentation folders. <br>
-Mitigation: Specify the exact file to review when the target document matters. <br>
-Risk: Document review guidance can miss domain-specific obligations in high-stakes materials. <br>
-Mitigation: Use appropriate subject-matter review before relying on revised legal, financial, customer-facing, or policy content. <br>
+## Use Case:
 
+Developers and document authors use this workflow to review brainstorms, plans, specs, ADRs, and similar documents for clarity, completeness, scope control, assumptions, and security considerations before moving to the next workflow step.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown review findings and inline document edits when approved] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May modify the reviewed document inline after minor fixes or approved substantive changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Minor wording or formatting edits may be applied directly to the document under review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review saved edits when precision matters, and require approval before substantive restructuring or meaning changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-document-review)
+- [Publisher profile](https://clawhub.ai/user/iliaal)
+- [SKILL.md](artifact/SKILL.md)
+- [SPEC.md](artifact/SPEC.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Files]
+
+**Output Format:** [Markdown review findings with optional inline document edits]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May directly edit minor wording or formatting; substantive changes are presented for approval first.]
+
+## Skill Version(s):
+
+4.4.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

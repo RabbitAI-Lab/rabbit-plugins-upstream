@@ -1,9 +1,8 @@
 ---
 name: cue-overseas-expansion
 description: >
-  用 Cue 跑「出海企业线索」场景的深度研究：多源公开数据交叉、结论带来源。
-  Run Cue deep research for the "Overseas Expansion Leads" scenario.
-  触发 Triggers: 出海企业线索、企业尽调、信披与监管 / overseas expansion, sanctions screening, export control
+  用 Cue 跑「出海企业线索」场景的深度研究：锁定指定区域内有 ODI 备案、实际出海动作的跨境企业，按开户、结算、发债、并购等需求精准匹配商机。覆盖跨境制裁与海外执法筛查、跨境法规调研、出海企业资质尽调底稿、出海企业跨境业务线索、目的地国营商准入扫描等核心搭子，产出可回查、可派单的出海商机清单与合规底稿。
+
 license: MIT
 metadata:
   source: cuecue.cn/playbook

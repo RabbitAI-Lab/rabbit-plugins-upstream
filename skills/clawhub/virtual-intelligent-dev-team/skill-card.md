@@ -1,47 +1,60 @@
-## Description: <br>
-Virtual Intelligent Dev Team routes complex software tasks into bounded workflows with lead selection, optional copilots, verification, release gates, and resumable evidence. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes complex software work to the smallest defensible workflow, keeps one semantic lead across eight specialists, asks for intent confirmation when needed, and closes with verifiable evidence.
 
-## Publisher: <br>
-[fxbin](https://clawhub.ai/user/fxbin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fxbin](https://clawhub.ai/user/fxbin)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to triage complex software work, choose a lead workflow, and manage planning, implementation, iteration, release, and feedback loops with verifiable closure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Repository-changing commands, Git workflows, release gates, and /auto flows can affect a project workspace. <br>
-Mitigation: Review generated plans first, confirm before running project scripts or commands, and use the setup and resume states for higher-risk work. <br>
-Risk: Some referenced scripts or artifacts may not be included in the skill package. <br>
-Mitigation: Verify referenced files exist before relying on a workflow path, and treat unavailable automation as guidance-only. <br>
-Risk: Workflow routing advice can be incorrect or incomplete for a specific repository or release context. <br>
-Mitigation: Require verifiable completion evidence, targeted checks, and human review before accepting done, ready, ship, or handoff claims. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to route complex software work into bounded delivery, planning, iteration, release, and governance workflows with explicit evidence and recovery anchors.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/fxbin/skills/virtual-intelligent-dev-team) <br>
-- [Server-Resolved GitHub Provenance](https://github.com/fxbin/virtual-intelligent-dev-team) <br>
-- [README](README.md) <br>
-- [Usage Guide](docs/usage-guide.md) <br>
-- [Playbook Index](references/playbook-index.md) <br>
-- [Tooling Command Index](references/tooling-command-index.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown responses with optional code blocks, command snippets, workflow bundles, and evidence summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose repository actions; review plans and commands before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Automation paths can run shell commands and mutate repository files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated commands and command-bearing JSON before execution; prefer disposable worktrees for automation.
+
+Risk: The skill can create .vidt workflow state, resume plans, and remediation artifacts in a candidate repository.
+
+Mitigation: Install it only where workflow orchestration is desired, and check scope, residual risk, and completion evidence before accepting changes.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/fxbin/skills/virtual-intelligent-dev-team)
+- [Server-Resolved GitHub Repository](https://github.com/fxbin/virtual-intelligent-dev-team)
+- [Public Documentation Site](https://fxbin.github.io/virtual-intelligent-dev-team)
+- [Architecture Documentation](https://fxbin.github.io/virtual-intelligent-dev-team/architecture.html)
+- [Playbook Index](references/playbook-index.md)
+- [Tooling Command Index](references/tooling-command-index.md)
+- [Agent Catalog](references/agent-catalog.md)
+- [Team Engine Lite Protocol](references/team-engine-lite-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, guidance, markdown, code, shell commands, configuration, JSON files]
+
+**Output Format:** [Markdown guidance with code blocks, shell commands, configuration snippets, and optional structured JSON artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local workflow state, evidence files, resume anchors, and command-bearing plans when automation paths are used.]
+
+## Skill Version(s):
+
+0.1.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

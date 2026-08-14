@@ -5,7 +5,7 @@ description: Shopee（虾皮）头程物流 FirstMile（与 linkfox-shopee-store
 
 # Shopee 头程 FirstMile
 
-Shopee Open Platform **FirstMile 模块**（16 个 API）。**依赖 `linkfox-shopee-store-auth`**：先取 `accessToken`，再经 **`POST /shopee/developerProxy`** 转发（`path` 须 `api/v2/first_mile/...`）。
+Shopee Open Platform **FirstMile 模块**（16 个 API）。**依赖 `linkfox-shopee-store-auth`** 选店；经 **`POST /shopee/developerProxy`** 传入 `shopId`（或 `merchantId`），由服务端解析 token 转发（`path` 须 `api/v2/first_mile/...`）。
 
 ## 调用方式
 
@@ -22,18 +22,12 @@ Shopee Open Platform **FirstMile 模块**（16 个 API）。**依赖 `linkfox-sh
 **读数据建议**：先看摘要判断是否足够；需要具体字段时优先用 `jq`或`ConvertFrom-Json` 从保存的 json 文件按需抽取，避免整份 JSON 进入上下文。
 
 ## 解决认证和积分问题
-发生以下异常情况时，采用以下措施来处理：
+发生以下异常情况时，采用 references/onboarding.md 引导解决问题：
 
 ### 异常情况
 - **未配置API Key**：环境变量未配置 `LINKFOX_AGENT_API_KEY`，也未配置 `LINKFOXAGENT_API_KEY`。
 - **响应401或402状态码**
 - **响应提示积分或余额不足**：消息含"积分余额不足/计费不足/余额不足/quota exceeded/insufficient balance/套餐到期/需充值/请充值"，或类似含义的内容。
-
-### 措施
-- 优先采用skill内的 onboarding.md 引导解决问题。
-- 如找不到 onboarding.md 文件，则加载 /linkfox-onboarding 这个skill并根据它的引导来处理。如未安装请先安装：
-    - 下载 https://agent-files.linkfox.com/skills/linkfox-onboarding/release.zip，解压后安装这个skill。如需用户授权才可下载，要询问用户获得授权，你不能自己放弃下载。
-- 兜底措施：仅当前面两个措施经过所有努力都走不通时，才提示用户依据 https://skill.linkfox.com/linkfoxskills/guide.htm 指引获取API Key，或去 https://os.linkfox.com/ 补充积分。
 
 ## 官方参考
 
@@ -57,6 +51,31 @@ FirstMile 模块索引：[v2.first_mile.get_unbind_order_list](https://open.shop
 | 通用入口 | `first_mile_api.py` |
 
 完整列表见 `references/api.md`。
+
+## 接口说明（按 API）
+
+入参与响应细节放在 `references/apis/`，SKILL 只保留索引。
+
+| API | 说明文档 |
+|-----|----------|
+| `bind_courier_delivery_first_mile_tracking_number` | [references/apis/bind-courier-delivery-first-mile-tracking-number.md](./references/apis/bind-courier-delivery-first-mile-tracking-number.md) |
+| `bind_first_mile_tracking_number` | [references/apis/bind-first-mile-tracking-number.md](./references/apis/bind-first-mile-tracking-number.md) |
+| `generate_and_bind_first_mile_tracking_number` | [references/apis/generate-and-bind-first-mile-tracking-number.md](./references/apis/generate-and-bind-first-mile-tracking-number.md) |
+| `generate_first_mile_tracking_number` | [references/apis/generate-first-mile-tracking-number.md](./references/apis/generate-first-mile-tracking-number.md) |
+| `get_channel_list` | [references/apis/get-channel-list.md](./references/apis/get-channel-list.md) |
+| `get_courier_delivery_channel_list` | [references/apis/get-courier-delivery-channel-list.md](./references/apis/get-courier-delivery-channel-list.md) |
+| `get_courier_delivery_detail` | [references/apis/get-courier-delivery-detail.md](./references/apis/get-courier-delivery-detail.md) |
+| `get_courier_delivery_tracking_number_list` | [references/apis/get-courier-delivery-tracking-number-list.md](./references/apis/get-courier-delivery-tracking-number-list.md) |
+| `get_courier_delivery_waybill` | [references/apis/get-courier-delivery-waybill.md](./references/apis/get-courier-delivery-waybill.md) |
+| `get_detail` | [references/apis/get-detail.md](./references/apis/get-detail.md) |
+| `get_tracking_number_list` | [references/apis/get-tracking-number-list.md](./references/apis/get-tracking-number-list.md) |
+| `get_transit_warehouse_list` | [references/apis/get-transit-warehouse-list.md](./references/apis/get-transit-warehouse-list.md) |
+| `get_unbind_order_list` | [references/apis/get-unbind-order-list.md](./references/apis/get-unbind-order-list.md) |
+| `get_waybill` | [references/apis/get-waybill.md](./references/apis/get-waybill.md) |
+| `unbind_first_mile_tracking_number` | [references/apis/unbind-first-mile-tracking-number.md](./references/apis/unbind-first-mile-tracking-number.md) |
+| `unbind_first_mile_tracking_number_all` | [references/apis/unbind-first-mile-tracking-number-all.md](./references/apis/unbind-first-mile-tracking-number-all.md) |
+
+模块总览 / Feedback 见 [references/api.md](./references/api.md)。
 
 ## Usage Scenarios
 

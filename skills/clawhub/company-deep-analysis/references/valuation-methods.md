@@ -80,14 +80,14 @@ Step4：是否盈利用 Forward？
 | 营收增速 | ⚠️ 需算 | `(revenue_ttm / revenue_prev_year) - 1` | — |
 | 历史 EPS（5-10 年） | ⚠️ 缺 | 需联网搜年报 | 周期 PE 必需 |
 | 净负债（短借+长借-货币） | ⚠️ 需算 | `data["fzb"]` 三个字段 | EV 必需 |
-| EBITDA | ⚠️ **本 skill 自动拆解** | `valuation.py 内置 _calc_ebitda(data)` | 见 §5 |
+| EBITDA | ⚠️ **本 skill 自动拆解** | `westock_data.calc_ebitda(lrb, llb)` | 见 §5 |
 | 可比公司 PE/PB/PS 中位数 | ✅ 自动获取 | `WebSearch（行业竞品）` + `finance` 循环 + `pandas.median()` | 申万行业自动拉，**无手工拍板** |
 
 ---
 
 ## §5 EBITDA 拆解（`calc_ebitda` 已落地）
 
-**位置**：`scripts/valuation.py`（`_calc_ebitda` 函数）
+**位置**：`scripts/westock_data.py:297`
 
 **公式**：
 ```

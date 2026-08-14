@@ -1,0 +1,35 @@
+# Known Gaps & Exceptions — {STYLE_TITLE}
+
+> All unresolved discrepancies, assumptions needing user review, and deliberately excluded values.
+
+## Source Conflicts
+
+Conflicts between different sources (docs vs code, different versions, etc.) and how they were resolved.
+
+| # | Issue | Source A | Source B | Resolution | Impact |
+|---|-------|----------|----------|------------|--------|
+{Known_GAPS_SOURCE_CONFLICTS}
+
+## Unconfirmed Assumptions (Grade A)
+
+Values marked as assumptions that need user verification.
+
+| # | Token / Value | Assumption | Reason for Uncertainty | Action Needed |
+|---|--------------|-----------|----------------------|---------------|
+{Known_GAPS_ASSUMPTIONS}
+
+## Deliberate Exceptions
+
+Values found in the source but intentionally NOT extracted as tokens, with justification.
+
+| # | Value | Location | Why Not a Token |
+|---|-------|----------|-----------------|
+{Known_GAPS_EXCEPTIONS}
+
+## Extraction Limitations
+
+Limitations of the extraction method itself.
+
+| # | Limitation | Impact | Mitigation |
+|---|-----------|--------|------------|
+{Known_GAPS_LIMITATIONS}

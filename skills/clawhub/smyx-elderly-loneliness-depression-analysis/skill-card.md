@@ -1,47 +1,60 @@
-## Description: <br>
-Analyzes fixed-camera home video or image inputs for behavior signals such as dazing, sighing, and self-talking, then returns behavior statistics, an emotional-risk level, recommendations, and report links without providing a medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Using fixed cameras in homes or care settings, this skill analyzes daily elder activity video to detect behavior indicators such as dazing, sighing, and self-talking and generate behavior-based loneliness or depression-tendency risk reports.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users such as family members, care providers, and community workers can use this skill to analyze solo-living elder activity-area footage for non-diagnostic behavioral risk indicators and care prompts. Developers and agents can also use it to request current or historical structured reports from the configured cloud service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive elder home video, video URLs, derived reports, report history, and account identifiers may be sent to Lifeemergence cloud endpoints. <br>
-Mitigation: Use the skill only with informed consent from the monitored elder or lawful guardian, confirm cloud data handling and retention terms before use, and avoid submitting footage beyond the minimum needed for care review. <br>
-Risk: Reports are associated with a persisted local identity and stored tokens. <br>
-Mitigation: Restrict workspace access, review how the local database and token files are protected, and rotate or remove credentials when the workspace changes owners or is no longer needed. <br>
-Risk: Exported report links and historical report queries may expose sensitive health-related observations. <br>
-Mitigation: Verify who can access report links, limit sharing to authorized caregivers, and remove or expire exported reports according to the deployment's privacy policy. <br>
-Risk: Behavioral signals may be mistaken for clinical depression indicators. <br>
-Mitigation: Treat outputs as non-diagnostic behavioral prompts and route medical concerns to qualified clinicians or emergency services when appropriate. <br>
+## Use Case:
 
+External caregivers, family members, and community elder-care workers use this skill to analyze fixed-camera video or URL inputs for objective behavioral indicators, risk-level reports, care reminders, and historical report lookup. Outputs should be treated as behavior-based risk prompts, not as medical diagnosis, psychological scale scoring, or treatment advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-loneliness-depression-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Structured JSON or Markdown text with behavior metrics, risk level, recommendations, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include exported report-image URLs and historical report records returned by cloud APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
+Risk: Sensitive home video, optional audio, identity values, and report history may be sent to LifeEmergence backend services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit informed consent from the elder and anyone recorded; confirm retention, access-control, and deletion practices before using real household footage.
+
+Risk: Shared workspaces or default accounts may expose identity-linked analysis history.
+
+Mitigation: Avoid shared workspaces and shared default accounts, and protect the workspace data directory used by the skill.
+
+Risk: Behavior-based risk levels may be mistaken for a clinical diagnosis.
+
+Mitigation: Present outputs as monitoring prompts only and route diagnosis, treatment, or urgent self-harm concerns to qualified professionals.
+
+## Reference(s):
+
+- [API interface documentation](artifact/references/api_doc.md)
+- [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-loneliness-depression-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Markdown reports and JSON analysis output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include behavior metrics, risk levels, care reminders, history tables, and report links.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

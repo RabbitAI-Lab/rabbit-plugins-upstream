@@ -24,6 +24,7 @@ Available Commands:
   schema          Show the schema of a branch
   show            Show a specific branch of a database
   switch          Switches the current project to use the specified branch
+  vtgate          Manage VTGate size for a Vitess branch
 
 Flags:
   -h, --help         help for branch
@@ -502,6 +503,78 @@ Global Flags:
 
 ```
 
+## pscale branch vtgate
+
+```text
+Manage VTGate size for a Vitess branch
+
+Usage:
+  pscale branch vtgate [command]
+
+Available Commands:
+  resize      Resize VTGates for a Vitess production branch
+  show        Show the current VTGate configuration for a Vitess branch
+```
+
+## pscale branch vtgate show
+
+```text
+Show the current VTGate configuration for a Vitess branch
+
+Usage:
+  pscale branch vtgate show <database> <branch> [flags]
+```
+
+Use `--format json` to preserve `vtgate_size`, per-availability-zone `vtgate_count`, `vtgate_autoscaling`, `vtgate_max_count`, and `vtgate_target_cpu_utilization` for agent review.
+
+## pscale branch vtgate resize
+
+```text
+Resize the VTGate SKU, count, and/or autoscaling for a Vitess production branch.
+
+Development branches cannot be resized. Use "pscale branch vtgate resize status"
+to track a resize and "pscale branch vtgate resize cancel" to cancel one while
+queued.
+
+Usage:
+  pscale branch vtgate resize <database> <branch> [flags]
+  pscale branch vtgate resize [command]
+
+Available Commands:
+  cancel      Cancel a queued VTGate resize for a Vitess branch
+  status      Show the latest VTGate resize for a Vitess branch
+
+Flags:
+  -h, --help                                help for resize
+      --vtgate-autoscaling                  Enable or disable VTGate autoscaling (use --vtgate-autoscaling=false to disable)
+      --vtgate-count int                    Number of VTGates per availability zone (minimum when autoscaling is enabled)
+      --vtgate-max-count int                Maximum VTGates per availability zone when autoscaling is enabled
+      --vtgate-size string                  VTGate size SKU (e.g. VTG_320, VTG_1280)
+      --vtgate-target-cpu-utilization int   Target CPU utilization percent when autoscaling is enabled
+```
+
+At least one resize flag is required. Omitted flags are not sent as changes; boolean disablement therefore requires explicit `--vtgate-autoscaling=false`.
+
+## pscale branch vtgate resize status
+
+```text
+Show the latest VTGate resize for a Vitess branch
+
+Usage:
+  pscale branch vtgate resize status <database> <branch> [flags]
+```
+
+## pscale branch vtgate resize cancel
+
+```text
+Cancel a queued VTGate resize for a Vitess branch
+
+Usage:
+  pscale branch vtgate resize cancel <database> <branch> [flags]
+```
+
+Cancel is an operational write. Confirm the target and latest request state before running it, then re-run `resize status` and `vtgate show` to verify the result and applied configuration.
+
 ## pscale branch vtctld
 
 ```text
@@ -542,6 +615,76 @@ Global Flags:
 Use "pscale branch vtctld [command] --help" for more information about a command.
 
 ```
+
+## pscale branch vtctld throttler
+
+```text
+Inspect and configure the tablet throttler
+
+Usage:
+  pscale branch vtctld throttler [command]
+
+Available Commands:
+  check         Issue a throttler check against a single tablet
+  status        Get the throttler status for a single tablet
+  update-config Update the throttler configuration for a keyspace
+
+Flags:
+  -h, --help   help for throttler
+```
+
+## pscale branch vtctld throttler status
+
+```text
+Get the throttler status for a single tablet, identified by its alias. Discover tablet aliases with `pscale branch vtctld list-tablets`.
+
+Usage:
+  pscale branch vtctld throttler status <database> <branch> [flags]
+
+Flags:
+  -h, --help                  help for status
+      --tablet-alias string   Alias of the tablet to probe (e.g. "zone1-0000000100") (required)
+```
+
+## pscale branch vtctld throttler check
+
+```text
+Issue a throttler check against a single tablet, identified by its alias. Discover tablet aliases with `pscale branch vtctld list-tablets`.
+
+Usage:
+  pscale branch vtctld throttler check <database> <branch> [flags]
+
+Flags:
+      --app-name string           App to issue the check on behalf of (e.g. "online-ddl"). Defaults to the throttler's default app.
+  -h, --help                      help for check
+      --ok-if-not-exists          Return OK even if the requested metric does not exist
+      --scope string              Scope of the check, either "shard" or "self". Defaults to the throttler's default scope.
+      --skip-request-heartbeats   Do not renew the throttler's heartbeat lease while serving this check
+      --tablet-alias string       Alias of the tablet to check (e.g. "zone1-0000000100") (required)
+```
+
+## pscale branch vtctld throttler update-config
+
+```text
+Update the tablet throttler configuration for a keyspace. Omit --enabled to leave the keyspace enable state unchanged. Flag behavior mirrors vtctldclient UpdateThrottlerConfig: --throttle-app and --unthrottle-app are mutually exclusive; --app-name and --app-metrics are required together.
+
+Usage:
+  pscale branch vtctld throttler update-config <database> <branch> [flags]
+
+Flags:
+      --app-metrics strings              Metrics to check for --app-name (e.g. lag,loadavg)
+      --app-name string                  App name for which to assign checked metrics (requires --app-metrics)
+      --enabled                          Enable (true) or disable (false) the throttler for the keyspace. Omit to leave unchanged.
+  -h, --help                             help for update-config
+      --keyspace string                  Keyspace whose throttler config to update (required)
+      --threshold float                  Replication lag threshold in seconds for the default check
+      --throttle-app string              App name to throttle (e.g. "rowstreamer")
+      --throttle-app-duration duration   Duration after which the --throttle-app rule expires (default 1h0m0s)
+      --throttle-app-ratio float         Ratio to throttle the app specified by --throttle-app (0.00-1.00) (default 1)
+      --unthrottle-app string            App name whose throttled-app rule should be removed
+```
+
+`--throttle-app` and `--unthrottle-app` are mutually exclusive. `--app-name` and `--app-metrics` are required together.
 
 ## pscale branch vtctld move-tables create
 

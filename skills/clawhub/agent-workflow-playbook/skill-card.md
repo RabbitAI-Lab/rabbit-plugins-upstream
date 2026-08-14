@@ -1,42 +1,60 @@
-## Description: <br>
-Agent Workflow Playbook helps developers design AI agent skills, multi-agent workflows, marketplace distribution, monetization, and production deployment checklists. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Agent Workflow Playbook guides developers and product teams in turning expert work into measurable, reusable agent systems using workflow discovery, skill decomposition, harness design, evaluation, human escalation, observability, cost control, and multi-agent orchestration.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-Developers, teams, and product managers use this skill as a playbook for structuring AI agent skills, coordinating multi-agent systems, and preparing skills for marketplace distribution and production deployment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad AI-agent or plugin-marketplace trigger phrases may route the skill into conversations where a narrower specialist skill would be more appropriate. <br>
-Mitigation: Use narrower invocation phrases or confirm the user is asking for agent architecture, orchestration, marketplace distribution, monetization, or deployment checklist guidance before applying the playbook. <br>
-Risk: The skill provides reference guidance rather than executable validation, so architecture or marketplace recommendations may not match a specific product, compliance environment, or deployment plan. <br>
-Mitigation: Treat recommendations as planning guidance and review them against project requirements before production use. <br>
+## Use Case:
 
+Developers, automation teams, and product managers use this skill to design agent workflows with clear task boundaries, skill contracts, evaluation harnesses, human approval points, observability, rollback planning, and orchestration choices.
 
-## Reference(s): <br>
-- [English Reference Guide](references/en/README.md) <br>
-- [Japanese Reference Guide](references/ja/README.md) <br>
-- [Korean Reference Guide](references/ko/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands] <br>
-**Output Format:** [Markdown guidance with lists, tables, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only reference content; no executable code or hidden access behavior found in security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: Readers may implement workflows from this playbook and grant agents high-impact tools such as publishing, deletion, payment, private-data access, or autonomous execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each derived workflow separately before granting those capabilities, and require human approval for high-impact actions.
+
+Risk: The core playbook is mainly written in Chinese, while the language-specific reference files are shorter summaries.
+
+Mitigation: Use the full source playbook or a bilingual review when turning guidance into operating procedures.
+
+Risk: The reported delivery metrics are labeled as case evidence and may not transfer to other teams or domains.
+
+Mitigation: Establish a local baseline, evaluation set, quality rubric, and rollback threshold before relying on automation gains.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/agent-workflow-playbook)
+- [English reference guide](references/en/README.md)
+- [Japanese reference guide](references/ja/README.md)
+- [Korean reference guide](references/ko/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration]
+
+**Output Format:** [Markdown guidance with structured checklists, tables, and workflow templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only guidance; no executable install behavior.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

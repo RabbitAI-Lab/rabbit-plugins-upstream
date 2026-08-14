@@ -34,8 +34,18 @@ except ImportError:
     sys.exit(1)
 
 
-DEFAULT_REGION = "ap-guangzhou"
+FALLBACK_REGION = "ap-guangzhou"
 MAX_LIMIT = 200
+
+
+def default_region() -> str:
+    """获取默认地域。
+
+    必须在调用时（而非 import 时）读取环境变量：.env 的加载发生在
+    get_credential() 内，若在模块级求值会早于 .env 加载，导致用户
+    在 .env 中配置的 TENCENTCLOUD_REGION 被忽略。
+    """
+    return os.getenv("TENCENTCLOUD_REGION", FALLBACK_REGION)
 
 
 def get_credential():
@@ -64,9 +74,13 @@ def get_credential():
     return credential.Credential(secret_id, secret_key)
 
 
-def get_client(region=DEFAULT_REGION):
+def get_client(region=None):
     """获取 VOD 客户端"""
     cred = get_credential()
+    # region 兜底必须放在 get_credential() 之后：此时 .env 中的
+    # TENCENTCLOUD_REGION 才已进入 os.environ
+    if region is None:
+        region = default_region()
     http_profile = HttpProfile()
     http_profile.endpoint = "vod.tencentcloudapi.com"
     client_profile = ClientProfile()
@@ -241,7 +255,8 @@ def create_parser():
     )
     parser.add_argument("--offset", type=int, help="分页起始偏移量，默认 0")
     parser.add_argument("--limit", type=int, help="分页返回数量，范围 1-200")
-    parser.add_argument("--region", default=DEFAULT_REGION, help="地域")
+    parser.add_argument("--region", default=None,
+                        help=f"地域（不指定时读取 TENCENTCLOUD_REGION，缺省 {FALLBACK_REGION}）")
     parser.add_argument("--json", action="store_true", help="JSON 格式输出")
     parser.add_argument("--dry-run", action="store_true", help="预览请求参数")
 

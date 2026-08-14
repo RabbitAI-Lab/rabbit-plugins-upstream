@@ -1,5 +1,5 @@
 ---
-name: product-dev-ops-playbook
+name: gr-product-dev-ops
 description: |
   🇺🇸 Your dev team ships features nobody asked for while user-reported bugs pile up for months. Operations blames engineering for ignoring users; engineering blames operations for not understanding technical constraints. This gives you the complete Product × Engineering × Operations alignment SOP — from unified backlog to 10-day sprint cadence to veto power rules.
 
@@ -39,6 +39,7 @@ tags:
   - startup-operations
   - team-alignment
   - commercialization
+source: https://github.com/Gingiris-1031/gingiris-skills/tree/main/skills/gr-product-dev-ops
 ---
 
 > 🌍 **Language / 语言**: [中文](#中文版) | [English](references/en/README.md) | [日本語](references/ja/README.md) | [한국어](references/ko/README.md)
@@ -57,6 +58,10 @@ clawhub install product-dev-ops-playbook
 ---
 
 # 产品研发 × 运营协同 SOP
+
+## 证据补充：避免“40 分功能”陷阱
+
+本地播客逐字稿中的 AFFiNE 复盘指出：方案被想出来时，产品工作才刚开始。若团队不断追逐新点子，会留下大量只做到 40–60 分、没有验证激活和留存的功能。每次迭代规划必须回答：本期把哪个已有能力从“能用”磨到“可靠”，完成阈值是什么，以及为此明确停止什么。
 
 > 本 SOP 整合一场真实产品战略会议纪要、用户反馈录入模板、内测用户访谈体系，提炼出一套**产品、研发、运营三方协同**的通用工作框架。
 >
@@ -477,15 +482,3 @@ clawhub install product-dev-ops-playbook
 ---
 
 *本 SOP 整合自真实产品战略会议纪要、用户反馈录入模板、内测用户访谈体系。适用于所有需要在产品、研发、运营三方之间建立协同机制的产品团队。*
-
-
----
-
-## 🔗 About the Author
-
-**Iris Wei** — Growth consultant for 150+ AI startups. Ex-COO at AFFiNE (69K GitHub stars).
-
-- 🐦 Twitter: [@WeiYipei](https://twitter.com/WeiYipei) — Daily growth tactics
-- 💬 Consulting: [@Iris_carrot on Telegram](https://t.me/Iris_carrot)
-- 🛒 Premium Bundle (all 5 playbooks + templates): [Get on Gumroad ($249)](https://gingiris.gumroad.com/l/gingiris-complete-global-launch-bundle)
-- 📚 40+ Free Playbooks: [gingiris.tools/skills](https://gingiris.tools/skills/)

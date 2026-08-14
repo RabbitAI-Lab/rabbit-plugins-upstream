@@ -1,41 +1,60 @@
-## Description: <br>
-此技能用于创建符合中国政府及央企规范的Word文档(.docx)。当用户要求创建公文、国央企文档、规范文书、正式报告等需要特定中国公文格式的文档时使用此技能。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+此技能用于创建符合中国政府及央企规范的 Word 文档（.docx），适用于公文、国央企文档、规范文书和正式报告。
 
-## Publisher: <br>
-[a-lhliang](https://clawhub.ai/user/a-lhliang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[a-lhliang](https://clawhub.ai/user/a-lhliang)
 
-## Use Case: <br>
-Employees, analysts, and developers use this skill to generate formal Chinese government and state-owned-enterprise Word documents with prescribed page layout, fonts, heading levels, tables, images, page numbers, and signature blocks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The CLI writes a .docx file to the output path supplied by the user. <br>
-Mitigation: Choose a non-sensitive destination and avoid filenames that would overwrite important local documents. <br>
-Risk: Marketplace capability tags mention wallet or sensitive credential use even though the reviewed artifacts do not support that behavior. <br>
-Mitigation: Treat the skill as a local Word document formatting helper and do not provide wallet details, credentials, or other secrets. <br>
+## Use Case:
 
+Employees, document authors, and agents use this skill to generate .docx files that follow Chinese government and state-owned enterprise formatting conventions, including title, heading, body, table, image, attachment, signature, and page-number styles.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/a-lhliang/gov-doc-writing) <br>
-- [Publisher profile](https://clawhub.ai/user/a-lhliang) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with JavaScript examples and local .docx file generation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces user-requested Word .docx files at caller-specified local output paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.10.0 (source: server release evidence) <br>
+Risk: Dependency version ranges can make installs less reproducible.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin the docx dependency exactly before deployment.
+
+Risk: Example imports use an absolute local skill path that may not exist in another environment.
+
+Mitigation: Adjust the require path to the installed skill path before running examples.
+
+Risk: The document generator writes a .docx file to the requested output path.
+
+Mitigation: Choose explicit output paths and review whether an existing file would be overwritten.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/a-lhliang/skills/gov-doc-writing)
+- [Publisher profile](https://clawhub.ai/user/a-lhliang)
+- [SKILL.md](artifact/SKILL.md)
+- [Document creation script](artifact/scripts/create_gov_doc.js)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, files, guidance]
+
+**Output Format:** [Markdown guidance with JavaScript snippets and Node.js commands; generated documents are .docx files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write a local .docx file to the requested output path.]
+
+## Skill Version(s):
+
+1.12.4 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

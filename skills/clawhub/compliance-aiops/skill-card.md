@@ -1,47 +1,66 @@
-## Description: <br>
-This skill helps agents read local AIops audit trails and produce framework-mapped compliance evidence, change-approval reports, gap analyses, exception reports, and hash-chain-sealed evidence bundles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Compliance AIops turns local governed AIops audit trails into framework-mapped compliance evidence, reports, gap analysis, OSCAL assessment results, and hash-chain-sealed evidence bundles.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and compliance reviewers use this skill to turn existing governed AIops audit trails into evidence for HIPAA, PCI-DSS, SOC 2, GDPR, ISO 27001, and DJCP L3 controls. It is intended for evidence collection, control coverage review, gap analysis, exception reporting, and bundle integrity checks, not for certifying compliance or operating infrastructure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read referenced AIops audit databases and create or sign local evidence bundles. <br>
-Mitigation: Install and run it only from an account that is allowed to access those audit trails and write evidence bundles; for query-only sessions, restrict the agent prompt or operating-system permissions. <br>
-Risk: A model could overstate evidence as a compliance certification or ignore missing, truncated, or weak audit data. <br>
-Mitigation: Require tool-backed answers, report control strengths and caveats, and state that the output is evidence rather than certification. <br>
-Risk: Hash-chain-sealed bundles are tamper-evident, not tamper-proof. <br>
-Mitigation: Record chain heads out of band and treat the source audit databases as the system of record when verifying or investigating mismatches. <br>
+## Use Case:
 
+Developers, operators, and compliance teams use this skill to inspect local AIops audit trails, map recorded activity to HIPAA, PCI-DSS, SOC 2, GDPR, ISO 27001, or DJCP L3 controls, and produce evidence reports or sealed bundles for review. It supports evidence gathering and integrity checks, not compliance certification or infrastructure operations.
 
-## Reference(s): <br>
-- [Compliance AIops homepage](https://github.com/AIops-tools/Compliance-AIops) <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/compliance-aiops) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with CLI commands and references to local JSON, Markdown, or CSV evidence bundle outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to create local evidence bundles under ~/.compliance-aiops/bundles/ when the user asks for bundle generation or export.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release metadata) <br>
+Risk: The skill reads local AIops audit databases and may write evidence bundles and state under ~/.compliance-aiops.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated account or filesystem permissions for query-only operation, and verify discovered audit sources before generating bundles.
+
+Risk: Generated bundles and reports can be mistaken for compliance certification.
+
+Mitigation: Treat outputs as evidence artifacts for qualified review; do not present them as proof of certification or full compliance.
+
+Risk: Optional bundle signing depends on a local signing secret and master password.
+
+Mitigation: Only configure signing when needed, keep COMPLIANCE_AIOPS_MASTER_PASSWORD out of command history and cron lines, and rely on the encrypted secrets store.
+
+Risk: A sealed bundle is tamper-evident, not tamper-proof.
+
+Mitigation: Record chain heads out of band and use verify_bundle and verify_source_chain to check delivered bundles and source audit trails.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/compliance-aiops)
+- [Project Homepage](https://github.com/AIops-tools/Compliance-AIops)
+- [Capabilities Reference](references/capabilities.md)
+- [CLI Reference](references/cli-reference.md)
+- [Setup and Security Guide](references/setup-guide.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, JSON, CSV, OSCAL JSON, and shell command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local evidence reports, exported bundles, integrity verification results, and setup or scheduling guidance.]
+
+## Skill Version(s):
+
+0.10.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

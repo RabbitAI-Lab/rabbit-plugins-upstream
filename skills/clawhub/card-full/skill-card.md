@@ -1,42 +1,56 @@
-## Description: <br>
-Return a compact full report for one major-US credit card, including fees, welcome offer, earning rates, redemption, credits, travel benefits, protections, mechanics, eligibility, and strategy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Return a compact full report for one major-US credit card, covering fees, offer, earnings, redemption, credits, travel benefits, protections, mechanics, eligibility, and strategy.
 
-## Publisher: <br>
-[jiahongc](https://clawhub.ai/user/jiahongc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jiahongc](https://clawhub.ai/user/jiahongc)
 
-## Use Case: <br>
-External users and agents use this skill to research major US credit cards and produce a concise markdown report covering fees, offers, rewards, benefits, protections, eligibility, and strategy. It is intended for public credit-card research, not for processing personal financial details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credit-card fees, welcome offers, benefits, and issuer rules can change or conflict across sources. <br>
-Mitigation: Verify important fees, offer terms, benefits, and eligibility rules directly with the issuer before applying. <br>
-Risk: Optional Brave Search use sends card-search queries under the user's Brave API key. <br>
-Mitigation: Use built-in web search when possible, and provide BRAVE_API_KEY only if comfortable with those queries being sent to Brave. <br>
-Risk: The report may influence financial-product decisions. <br>
-Mitigation: Avoid entering personal financial details and treat the output as research guidance, not financial advice. <br>
+## Use Case:
 
+External users and agents use this skill to research one exact major U.S. credit-card variant and produce a whole-card report. The report covers fees, welcome offer, earning rates, redemption, credits, travel benefits, protections, account mechanics, eligibility, strategy, fit, similar cards, and confidence notes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jiahongc/card-full) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Compact Markdown report with required sections, confidence notes, and source links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask a clarifying question for ambiguous card names; reports unresolved or conflicting welcome-offer evidence explicitly.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server-resolved release metadata) <br>
+Risk: Credit-card offers, fees, eligibility rules, and benefits change frequently, so generated guidance can become stale or incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify important fees, eligibility, benefits, and offer terms on the issuer page before applying or making financial decisions.
+
+## Reference(s):
+
+- [Card Full skill page](https://clawhub.ai/jiahongc/skills/card-full)
+- [Publisher profile](https://clawhub.ai/user/jiahongc)
+- [Card Identity](../card-identity/SKILL.md)
+- [Source Policy](../card-shared/source-policy.yaml)
+- [Section Definitions](../card-shared/section-definitions.md)
+- [Command Contracts](../card-shared/command-contracts.yaml)
+- [Confidence Rules](../card-shared/confidence-rules.md)
+- [Normalization Rules](../card-shared/normalization-rules.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown report with required sections and hidden source YAML]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses bounded issuer-first research and marks unresolved optional details as unconfirmed.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,60 @@
-## Description: <br>
-Cue Person Check helps agents run Cue deep research for person background checks, cross-referencing public data and returning source-linked findings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用 Cue 跑「人物核查」场景的深度研究：穿透人物的全生命周期工商与司法轨迹，映射其商业控制版图。覆盖个人背调底稿、基金经理言行核查、企业管理层风险体检、实控人关联穿透、关键人物批量核查等核心搭子，批量核验失信、限高、被执行、行政处罚、股权冻结等公开风险，逐人定级排序，产出合作或准入前可用的背调底稿。
 
-## Publisher: <br>
-[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu)
 
-## Use Case: <br>
-External users and developers use this skill to have an agent select and run Cue person-check research templates for public-data due diligence, executive history review, related-entity checks, and management risk screening. It is not a substitute for legal, underwriting, or formal diligence review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can handle sensitive person and related-entity due-diligence topics. <br>
-Mitigation: Confirm the exact subject and research purpose before running, use only public-data outputs as supporting research, and route legal, underwriting, or formal diligence conclusions to qualified reviewers. <br>
-Risk: Running Cue deep research consumes Cue credits. <br>
-Mitigation: Ask for explicit user confirmation before each run and state which Cue template and subject will be used. <br>
-Risk: The skill asks the agent to clone or update and execute an external Cue runner. <br>
-Mitigation: Review the runner source before deployment, keep the Cue API key private, and avoid exposing local Cue configuration in logs or responses. <br>
+## Use Case:
 
+External users and due-diligence analysts use this skill to run Cue person-check research for public-record background checks, management risk reviews, beneficial-owner association tracing, and batch screening of key people before cooperation or admission decisions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wangxiaoxu/skills/cue-person-check) <br>
-- [Cue Playbook API](https://cuecue.cn/api/playbook) <br>
-- [Cue Skills Runner Source](https://github.com/sensedeal/cue-skills) <br>
-- [Cue Skills Runner Mirror](https://gitee.com/sensedeal/cue-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown report with source links, plus inline shell commands and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The agent should preserve source links, request credit confirmation before running Cue research, and report empty results without fabrication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill may install or update a third-party Cue runner before use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the runner source and install it only from the documented Cue repositories before executing research commands.
+
+Risk: The workflow reads a local Cue API key and sends queried person or organization details to Cue.
+
+Mitigation: Use an appropriate Cue account, avoid submitting unnecessary sensitive details, and confirm the query is suitable for public-record due diligence.
+
+Risk: Deep research consumes Cue credits and important conclusions may be incomplete or incorrect.
+
+Mitigation: Require explicit credit confirmation before running and independently verify material findings against the report's cited sources.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wangxiaoxu/skills/cue-person-check)
+- [Cue playbook API](https://cuecue.cn/api/playbook)
+- [Cue runner GitHub repository](https://github.com/sensedeal/cue-skills)
+- [Cue runner Gitee mirror](https://gitee.com/sensedeal/cue-skills)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, markdown, configuration]
+
+**Output Format:** [Markdown report with source links and inline shell commands for running Cue research]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Research runs can consume Cue credits, require a Cue API key, and may take several minutes before a final sourced report is available.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

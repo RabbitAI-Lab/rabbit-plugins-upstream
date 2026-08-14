@@ -1,11 +1,11 @@
 ---
 name: dlazy-qwen-tts
 version: 1.3.5
-description: 阿里云百炼 qwen3-tts 文本转语音，支持系统音色（含方言）或通过自然语言描述自定义新音色（声音设计）。
+description: "阿里云百炼 qwen3-tts 文本转语音，支持系统音色（含方言）或通过自然语言描述自定义新音色（声音设计）。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy qwen-tts -h 查看帮助信息。"}}
 ---
 
-# dlazy-qwen-tts
+# 语音合成 通义 Qwen TTS
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

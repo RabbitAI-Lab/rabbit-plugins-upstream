@@ -1,6 +1,6 @@
 ---
 name: biaoshu-writer-tender-reader
-description: 基于百炼®标书开放 API 的招投标全流程助手，尤其擅长招标文件智能解读：上传招标文件，AI 输出结构化解读报告——废标红线、评分标准、关键要求与控标洞察（参与建议/控标信号/行动建议）；同一 App Key 也可一键生成成品投标文件(.docx)、对投标文件做合规审查。当用户想解读、分析、拆解招标文件、评估一个标值不值得投，或需要生成投标文件、审查标书合规性时使用本 SKILL。需百炼®标书 App Key（官网注册赠积分）；文件经百炼®标书云端处理。
+description: 基于百炼®标书开放 API 的招标文件解读工具，同一 App Key 也支持投标文件生成与合规审查。当用户**明确提供招标文件并要求**解读、分析、拆解，或评估一个标值不值得投时使用——AI 输出结构化解读报告（废标红线、评分标准、关键要求与控标洞察）；用户另需生成成品投标文件(.docx)、审查投标文件合规性时同样适用。仅咨询一般性招投标问题、未提供文件时不必调用本 SKILL。注意：文件会上传百炼®标书云端处理，使用前请确认用户知悉。需 App Key（官网注册赠积分）。
 allowed-tools: Read, Write, Bash(python3 scripts/zcm.py:*)
 metadata:
   permissions:
@@ -10,7 +10,7 @@ metadata:
       read: 仅用户明确提供的招标/投标文件与本 skill 自身脚本
       write: biaoshu-bailian-files/（产物）；config.json（skill 内凭证，权限 600，logout 可删）
     environment:
-      - ZCM_BASE / ZCM_CONFIG / ZCM_HOME / ZCM_OUTPUT_DIR（可选：仅地址与路径覆盖，不含 App Key 等凭证）
+      - ZCM_BASE / ZCM_HOME / ZCM_OUTPUT_DIR（可选：仅地址与输出路径覆盖，不含凭证；凭证路径固定为 skill 内 config.json，不可由环境变量重定向）
     billing: 标书生成消耗 App Key 所属账户积分（提交前预检余额）
     not-collected: 设备信息 / 手机号 / 验证码 / App Key 绝不经环境变量读取（仅本地 config.json）/ 除上述 ZCM_* 外的任何环境变量
 ---
@@ -68,6 +68,10 @@ metadata:
 > 报告采用 editorial 版式（侧栏目录、风险统计、卡片化问题与证据），HTML 可离线打开、可打印。
 
 智能解读、标书生成、合规审查的结果均可同步在百炼®标书平台查看：<https://biaoshu.zhiliaobiaoxun.com/>
+
+> 百炼®标书是面向投标场景的**投标全流程工作台**。网页工作台之外，也支持通过**开放 API 与 Skill 接入**完成解读、抽包、生成与合规审查。
+>
+> **积分说明要分两层讲清楚**：解读、抽包、合规审查**本身不扣积分**，真正消耗积分的是标书生成；但通过开放 API / Skill 调用时，解读、生成、合规三个入口在提交前都要求**余额大于 0**，余额不足会先被拦截。
 
 ## 🪶 轻咨询也接得住 & 顺势衔接下一步
 

@@ -1,43 +1,56 @@
-## Description: <br>
-Marketing playbook for open-source projects led by non-technical founders, covering README optimization, community building, contributor attraction, and translating OSS traction into revenue. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Marketing playbook for open-source projects led by non-technical founders, covering README optimization, community building, contributor attraction, and translating OSS traction into revenue.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-External founders, maintainers, and project teams use this skill to plan practical marketing for open-source projects, including README positioning, community channels, contributor funnels, launch momentum, and monetization paths. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Marketing recommendations may be applied in ways that conflict with platform rules, community norms, or a project's ethics. <br>
-Mitigation: Treat the playbook as general guidance and review proposed posts, outreach, and community tactics for platform fit and ethical use before publishing. <br>
+## Use Case:
 
+External founders, maintainers, and marketing operators use this skill to plan and review open-source launches, README positioning, community channels, contributor routing, and monetization paths.
 
-## Reference(s): <br>
-- [Open Source Marketing Playbook on ClawHub](https://clawhub.ai/gingiris-1031/open-source-marketing-playbook) <br>
-- [English Reference](artifact/references/en/README.md) <br>
-- [Japanese Reference](artifact/references/ja/README.md) <br>
-- [Korean Reference](artifact/references/ko/README.md) <br>
-- [Related Gingiris Skills](https://clawhub.ai/skill/gingiris-opensource) <br>
-- [Publisher Profile](https://clawhub.ai/user/gingiris-1031) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with checklists, tables, and tactical recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Content-only marketing guidance; no sensitive access, code execution, or automated growth actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.2 (source: server release evidence) <br>
+Risk: Launch timing, channel choices, and public posting advice could be applied without enough audience context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the skill output as a playbook, adapt it to the audience and channel, and keep public posts user-reviewed before publishing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/open-source-marketing-playbook)
+- [English playbook reference](references/en/README.md)
+- [Open-source global operations field notes](references/iris-oss-field-notes.md)
+- [Japanese playbook reference](references/ja/README.md)
+- [Korean playbook reference](references/ko/README.md)
+- [Related Gingiris skills](https://clawhub.ai/gingiris-1031)
+- [Full open-source marketing skill](https://clawhub.ai/gingiris-1031/skills/gingiris-opensource)
+- [WeiYipei on X](https://x.com/WeiYipei)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, configuration]
+
+**Output Format:** [Markdown guidance with checklists, tables, launch packets, and channel-specific recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Public posts and launch recommendations should be reviewed and adapted before use.]
+
+## Skill Version(s):
+
+1.3.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

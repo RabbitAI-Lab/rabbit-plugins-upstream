@@ -1,46 +1,64 @@
-## Description: <br>
-Detects workplace phone usage in images or video streams using cloud computer-vision analysis, then returns structured monitoring results, usage counts, duration statistics, recommendations, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects workplace phone use in images or video, sends the media to a cloud vision API, and returns structured monitoring results, warnings, suggestions, history data, and report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Enterprise operators and workplace-management teams use this skill to analyze office surveillance images, videos, or media URLs for phone-use behavior and to retrieve historical monitoring reports. The output is intended as an internal management aid and should be reviewed alongside privacy, labor, and workplace-notice requirements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill performs workplace surveillance analysis and may process employee images or videos. <br>
-Mitigation: Confirm employee notice or consent, lawful workplace-monitoring basis, retention rules, and human review before operational use. <br>
-Risk: Media and report queries are sent to a cloud service with historical report access. <br>
-Mitigation: Use only approved media, verify backend access controls and retention settings, and avoid submitting sensitive footage outside the intended workspace. <br>
-Risk: The skill may reuse or create an identity and store authentication tokens in local workspace data. <br>
-Mitigation: Run in an isolated workspace, review the workspace data file and SQLite database before use, and remove stored credentials when access should end. <br>
+## Use Case:
 
+Enterprise administrators and authorized workplace operations teams use this skill to analyze office-area images or video for employee phone-use events, compliance scores, warnings, and improvement suggestions. It also supports cloud history lookup for prior monitoring reports linked to the resolved user identity.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-phone-usage-monitoring-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [Workplace phone usage monitoring API documentation](references/api_doc.md) <br>
-- [Shared API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, files, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with optional saved output file and report-link text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires image/video input or a media URL; can also query historical cloud reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release metadata; artifact frontmatter states 1.0.9) <br>
+Risk: Employee surveillance and workplace behavior monitoring can be inappropriate or unlawful without authority, notice, consent, and a legitimate business purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in authorized workplace monitoring programs with required employee notice or consent, documented scope, and review against applicable labor, privacy, and surveillance rules.
+
+Risk: Media and report data are sent to a vendor cloud service and may contain employee images, workplace activity, and behavioral inferences.
+
+Mitigation: Review the vendor's retention, access-control, deletion, and data-processing practices before using real workplace footage; limit uploads to necessary media.
+
+Risk: Automatic identity linkage, history retrieval, and local account/token persistence can expose monitoring history or credentials if the runtime is shared or compromised.
+
+Mitigation: Run in a controlled environment, restrict filesystem and account access, protect persisted tokens, and clear local state when rotating users or decommissioning the skill.
+
+Risk: Automated compliance scores and phone-use detections can be wrong or incomplete if image quality, context, or model behavior is unsuitable.
+
+Mitigation: Treat results as management-support information, review important findings manually, and avoid using this skill as the sole basis for employment decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-phone-usage-monitoring-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Workplace phone behavior monitoring API documentation](artifact/references/api_doc.md)
+- [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, files]
+
+**Output Format:** [Markdown or JSON report text, with optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include compliance scores, detected phone-use counts and duration, warnings, suggestions, cloud history data, and export links.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

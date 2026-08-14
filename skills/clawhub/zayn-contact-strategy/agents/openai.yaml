@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-contact-strategy"
+  short_description: "为已筛选公司规划联系部门、岗位、查找路径与开发角度"
+  default_prompt: "使用 $zayn-contact-strategy 为已筛选公司规划联系人查找和首次开发路径。"

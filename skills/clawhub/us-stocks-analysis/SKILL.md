@@ -1,6 +1,6 @@
 ---
 name: us-stocks-analysis
-description: "US stocks analysis by an adversarial investment committee. Legendary-investor personas independently research a thesis, attack each other's cases against a shared evidence ledger (sentiment, smart money, SEC fundamentals), and reconcile into a verdict with recorded dissents. Structured rubrics keep every number sourced, on any model. Includes five quick data workflows. Read-only. No trading, no purchases, no write operations, no wallet access."
+description: "US stocks analysis by an adversarial investment committee. Legendary-investor personas independently research a thesis, attack each other's cases against a shared evidence ledger (sentiment, smart money, SEC fundamentals), and reconcile into a verdict with recorded dissents. Structured rubrics keep every number sourced, on any model. Includes five quick data workflows. Use for stock research, investment thesis, bull case vs bear case, due diligence on a ticker, should I buy this stock, deep dive on a company. Read-only. No trading, no purchases, no write operations, no wallet access."
 homepage: https://sentisense.ai
 requires:
   env:
@@ -188,7 +188,7 @@ The single most important artifact. Every downstream claim must cite a ledger ro
 ### EVIDENCE LEDGER: {TICKER}   (filled {date})
 | ID  | Fact                            | Value | As-of / Period      | Class     | Tier | Source |
 |-----|---------------------------------|-------|---------------------|-----------|------|--------|
-| E1  | Price + day change              | $__ / __% | live            | realtime  | D1   | SS /stocks/price |
+| E1  | Price + day change              | $__ / __% | 15-min delayed  | realtime  | D1   | SS /stocks/price |
 | E2  | Revenue (TTM or latest FY)      | $__   | __ (state FY end)   | quarterly | P    | EDGAR XBRL |
 | E3  | Net income (TTM or latest FY)   | $__   | __                  | quarterly | P    | EDGAR XBRL |
 | E4  | Operating cash flow             | $__   | __                  | quarterly | P    | EDGAR XBRL |
@@ -214,7 +214,7 @@ Rules under the table, non-negotiable:
 
 - **Cite or say you don't have it.** `[NOT AVAILABLE]` is a respectable value; a plausible guess is a defect.
 - **Force the fiscal period into every fundamental row.** FY ends differ (NVDA ends January, AAPL ends September). "Q4 2025" without the FY convention is a bug.
-- **Batch rows carry their as-of** and are never described as real time. Sentiment, Score, insights, mood are batch; price and chart are real time.
+- **Every row carries its as-of, and nothing is described as real time.** Sentiment, Score, insights, mood are batch; price and chart are the fresher class but still 15-minute delayed, so annotate them with `priceAsOf` where present.
 - **New facts found mid-debate get appended as E20, E21, ...** before anyone may cite them. No row, no citation, no claim.
 - **13F: quarters first.** Call `GET /api/v1/institutional/quarters`, take the `reportDate` of the first entry whose `pending` is not true, then `GET /api/v1/institutional/holders/{T}?reportDate={Q}`. Never hardcode a quarter; never take a `pending:true` one.
 - **Insider tallies exclude non-signals.** Count only `transactionType == "BUY"` / `"SELL"`; exclude `AWARD` (code A, `totalValue:0`), `GIFT`, `EXERCISE` from counts and dollar sums.
@@ -580,7 +580,7 @@ Run last, before showing the user anything:
 [ ] Every number in the output traces to a ledger row ID.
 [ ] No [NOT AVAILABLE] row was used downstream as if it had a value.
 [ ] Every fundamental row states its fiscal period (watch FY ends: NVDA Jan, AAPL Sep).
-[ ] Every batch row shows its as-of; nothing batch is called "real time".
+[ ] Every row shows its as-of; nothing is called "real time", including price.
 [ ] Every seat voted from the single stance vocabulary and cited at least one row.
 [ ] At least one MATERIAL+ objection was filed; dissents are recorded, not smoothed away.
 [ ] Every rebuttal opened with a steelman.
@@ -762,7 +762,7 @@ PRIMARY (no key; see Fetch safety)
 - **`market-mood` nests the composite under `market`**; `sectors` is a dict with duplicate GICS spellings to dedupe.
 - **Options are end-of-day chain aggregates, not order flow.** `/options/*` gives put/call volume and OI, an ATM IV term structure, 25-delta skew, OI walls with max pain, and unusual contracts, each ranked as a percentile of that ticker's OWN trailing history (`ivRank1y`, `pcVolPctl1y`, `skewPctl1y`), `asOf` the prior session. Read it as positioning context, never as live sweeps or dealer books. The `/options/overview` board is stocks-only; ETFs (`SPY`, `QQQ`, `TLT`, sector `XL*`) are covered but reachable only via `/stocks/{T}/options/summary`.
 - **Don't hallucinate endpoints.** No real-time options order flow or sweeps feed (the `/options/*` endpoints above are end-of-day), no dark pool, no `/congress` (it's `/politicians`), no financial-statements endpoint on SentiSense (fundamentals come from EDGAR).
-- **Batch vs real time.** Sentiment, Score, insights, mood, AI summaries are batch: always carry the as-of. Price and chart are real time.
+- **Batch vs delayed.** Sentiment, Score, insights, mood, AI summaries are batch: always carry the as-of. Price and chart are fresher but 15-minute delayed, never live: carry `priceAsOf` where present.
 - **Parallelize independent calls; be brief.** Users want the synthesis, not the recipe.
 
 ---

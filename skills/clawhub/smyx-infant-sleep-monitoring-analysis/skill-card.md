@@ -1,43 +1,60 @@
-## Description: <br>
-Identifies infant sleep states such as deep sleep, light sleep, waking, and restlessness, then generates structured sleep reports and schedule analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies sleep states like deep sleep, light sleep, waking, and restlessness, then generates daily sleep reports and schedule analysis to help parents understand a baby's sleep patterns.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and agents use this skill to analyze baby sleep monitoring video or image inputs, classify sleep states, summarize sleep timing and awakenings, and retrieve prior cloud reports. Results are for parenting reference and are not a substitute for professional medical advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Baby-monitoring media, media URLs, and identifiers are processed by a cloud service. <br>
-Mitigation: Use only when the publisher's privacy and retention practices are acceptable, and avoid submitting unrelated or highly sensitive media. <br>
-Risk: The skill may automatically create or reuse account identity and store authentication tokens in the workspace data directory. <br>
-Mitigation: Run in a controlled workspace, protect or clear stored tokens according to local policy, and avoid sharing the workspace with untrusted users. <br>
-Risk: Cloud report history can be queried by the skill. <br>
-Mitigation: Use history retrieval only when the user expects prior report access and the account context is appropriate. <br>
+## Use Case:
 
+Parents, caregivers, and agents assisting them use this skill to analyze infant sleep-monitoring video or video URLs, classify sleep states, and retrieve structured daily reports or historical report lists. The output is for parenting reference and should not replace professional medical advice.
 
-## Reference(s): <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands] <br>
-**Output Format:** [Markdown text with JSON analysis content, history lists, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write an optional output file when requested; supports mp4, avi, and mov inputs up to 10 MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence; packaged SKILL.md frontmatter reports 1.0.7) <br>
+Risk: The skill handles highly sensitive infant sleep videos or video URLs through lifeemergence.com cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only videos the user is authorized to analyze, avoid unnecessary identifying context, and confirm the provider's retention, deletion, account-linkage, and access-control practices before use.
+
+Risk: The skill silently creates or reuses a locally persisted backend identity and may link report history to that identity.
+
+Mitigation: Use separate trusted workspaces for different families or accounts, clear persisted identity data when appropriate, and avoid shared machines unless account-linkage behavior is acceptable.
+
+Risk: Sleep-state analysis can be mistaken for medical assessment.
+
+Mitigation: Treat generated reports as parenting reference only and consult a pediatric clinician for sleep abnormalities or health concerns.
+
+## Reference(s):
+
+- [ClawHub skill release page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-sleep-monitoring-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](references/api_doc.md)
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, guidance]
+
+**Output Format:** [Markdown or JSON text with structured sleep-analysis results, historical report lists, and report export links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud-generated report links; local file inputs are limited to mp4, avi, or mov videos up to 10 MB.]
+
+## Skill Version(s):
+
+1.0.9 (source: ClawHub release metadata; artifact frontmatter reports 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

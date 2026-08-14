@@ -1,41 +1,58 @@
-## Description: <br>
-A notesmd-cli toolkit that helps agents manage Obsidian vaults through headless batch operations, frontmatter edits, daily note generation, and editor-based workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+An Obsidian notes automation skill that guides agents in using notesmd-cli for headless vault operations, frontmatter updates, daily note generation, and editor-based note workflows.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, knowledge workers, and agents use this skill to script Obsidian vault maintenance, including note creation, search, frontmatter updates, daily note generation, and batch archive workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Shell workflows can edit, move, delete, archive, or batch update Obsidian vault files. <br>
-Mitigation: Preview target files, use dry-run where available, and keep the vault in Git or another backup system before execution. <br>
-Risk: CI push workflows can publish unintended note changes. <br>
-Mitigation: Review generated diffs before push and scope repository credentials to the intended workflow. <br>
+## Use Case:
 
+Developers, knowledge workers, and automation teams use this skill to have an agent plan or run notesmd-cli workflows for Obsidian vault maintenance, including bulk frontmatter edits, daily-note creation, archival, and CI-driven note updates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/notes-cli-toolkit) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell, YAML, JSON, and code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose commands that create, edit, move, delete, archive, or push note files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Bulk shell and write operations can change many Obsidian Markdown files in a vault.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a version-controlled or backed-up vault, run dry-runs first, and review affected files before applying bulk edits or moves.
+
+Risk: The skill depends on executing notesmd-cli with access to local vault paths.
+
+Mitigation: Install only when the notesmd-cli source is trusted and scope the agent's shell and write access to the intended vault.
+
+Risk: Unclear scope and install safety can lead to use outside the intended notes automation workflow.
+
+Mitigation: Limit use to Obsidian notes automation and avoid unrelated data-analysis tasks.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/notes-cli-toolkit)
+- [Declared homepage](https://skillhub.cn/skill/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include dry-run recommendations and file-change review guidance before bulk vault edits.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,37 +1,57 @@
-## Description: <br>
-Helps QA practitioners write complete bug reports with reproducible steps, expected and actual results, root-cause notes, impact assessment, and attachment guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA testers, developers, and teams create clear, reproducible bug reports with prerequisites, reproduction steps, expected versus actual results, attachments, impact assessment, and optional root-cause notes.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, testers, and product teams use this skill to draft or improve bug reports that developers can reproduce and triage with less follow-up. It is useful when a bug report was rejected as incomplete or when a team wants a consistent defect-reporting structure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bug reports and attachments can include production secrets, customer personal data, payment details, screenshots, logs, or HAR files. <br>
-Mitigation: Redact sensitive data before sharing reports or attachments, and run any capture commands only in a controlled test environment. <br>
+## Use Case:
 
+QA testers, developers, and engineering teams use this skill to draft or improve bug reports so issues are reproducible, include the required environment and evidence, and can move into defect management with less back-and-forth.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown bug-report structure with checklist-style guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include bug IDs, test case IDs, reproduction steps, expected versus actual results, root-cause notes, impact assessments, and attachment lists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server evidence) <br>
+Risk: Bug reports and attachments may include customer, identity, payment, screenshot, log, or production evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Redact or mask personal, customer, financial, and production data before using the skill or sharing generated reports.
+
+Risk: Examples mention packet capture and log inspection workflows that can collect sensitive operational data.
+
+Mitigation: Run capture and log collection only in controlled test environments and review collected files before attaching them to reports.
+
+Risk: Broad trigger wording may activate the skill during unrelated QA discussions.
+
+Mitigation: Narrow trigger wording before publishing if accidental activation is a concern.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-bug-reporting)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown bug report template, structured fields, examples, and checklist guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include bug IDs, linked test case IDs, severity and priority, reproduction steps, expected and actual results, attachment lists, impact assessment, and optional root-cause notes.]
+
+## Skill Version(s):
+
+1.6.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -79,9 +79,9 @@ MODEL_VERSIONS = {
     "Hunyuan": ["3.0", "3d_2.0"],
     "Vidu": ["q2"],
     "Kling": ["2.1", "3.0", "3.0-Omni", "O1"],
-    "MJ": ["v8.1", "v7"],
-    "GG": ["2.5", "3.0", "3.1"],
-    "SI": ["4.0", "4.5", "5.0-lite"],
+    "MJ": ["v8.1", "v7", "v8.2", "niji_7"],
+    "GG": ["2.5", "3.0", "3.1", "3.1-lite"],
+    "SI": ["4.0", "4.5", "5.0-lite", "5.0-pro"],
     "OG": ["image2_low", "image2_medium", "image2_high"],
     "Jimeng": ["4.0"],
 }
@@ -456,7 +456,7 @@ def main():
 
     # 其他参数
     create_parser.add_argument('--scene-type',
-                               help='场景类型（当 ModelName 为 Hunyuan 时：3d_panorama 表示全景图；其他模型暂不支持）')
+                               help='场景类型：Hunyuan 用 3d_panorama 表示全景图；Kling 用 image_expand 表示扩图（需配合 --model-version scene）；其他模型暂不支持')
     create_parser.add_argument('--seed', type=int, help='模型随机种子')
     create_parser.add_argument('--input-region', choices=['Mainland', 'Oversea'],
                                help='输入文件区域：Mainland（默认）/ Oversea（国外地址时使用）')
@@ -467,7 +467,7 @@ def main():
     create_parser.add_argument('--sub-app-id', type=int,
                                default=int(os.environ.get("TENCENTCLOUD_VOD_SUB_APP_ID", 0)) or None,
                                help='子应用 ID，2023-12-25 后开通点播的客户必填')
-    create_parser.add_argument('--region', default='ap-guangzhou', help='地域，默认 ap-guangzhou')
+    create_parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'), help='地域，默认 ap-guangzhou')
     create_parser.add_argument('--no-wait', action='store_true', help='仅提交任务，不等待结果')
     create_parser.add_argument('--max-wait', type=int, default=600, help='最大等待时间(秒)，默认 600')
     create_parser.add_argument('--json', action='store_true', help='JSON 格式输出完整响应')
@@ -482,7 +482,7 @@ def main():
     query_parser.add_argument('--sub-app-id', type=int,
                               default=int(os.environ.get("TENCENTCLOUD_VOD_SUB_APP_ID", 0)) or None,
                               help='子应用 ID')
-    query_parser.add_argument('--region', default='ap-guangzhou', help='地域，默认 ap-guangzhou')
+    query_parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'), help='地域，默认 ap-guangzhou')
     query_parser.add_argument('--no-wait', action='store_true', help='仅查询状态，不等待完成')
     query_parser.add_argument('--poll-interval', type=int, default=10, help='轮询间隔（秒），默认 10')
     query_parser.add_argument('--max-wait', type=int, default=600, help='最大等待时间(秒)，默认 600')

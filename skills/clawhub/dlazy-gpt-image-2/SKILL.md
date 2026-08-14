@@ -5,7 +5,7 @@ description: 'GPT Image 2 model for text-to-image and image editing. Supports ge
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy gpt-image-2 -h for help."}}
 ---
 
-# dlazy-gpt-image-2
+# 图像生成 GPT Image 2
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

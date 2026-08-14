@@ -1,0 +1,23 @@
+{
+  "translation": "Translated text here...",
+  "source_language": "en",
+  "target_language": "zh-CN",
+  "context_mode": "business",
+  "cultural_notes": [
+    {
+      "type": "idiom",
+      "source_phrase": "break the ice",
+      "explanation": "No direct Mandarin equivalent. Translated as 破冰 (break ice) which has gained usage in business contexts."
+    }
+  ],
+  "glossary_terms": [
+    {
+      "source": "intellectual property",
+      "target": "知识产权",
+      "matched": true
+    }
+  ],
+  "warnings": [
+    "Line 4 contained ambiguous pronoun reference; translated based on context."
+  ]
+}

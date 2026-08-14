@@ -1,7 +1,7 @@
 ---
 name: apple-health-sync
 description: Sync encrypted Apple Health data from an iOS device (iPhone, iPad) to OpenClaw, Hermes Agent, Claude, Codex or any other AI agent.
-metadata: {"openclaw":{"homepage":"https://gethealthsync.app/","requires":{"bins":["openssl"],"pythonPackages":["cryptography"]},"config":{"stateDirs":[".apple-health-sync"]},"install":[{"id":"brew-openssl","kind":"brew","formula":"openssl@3","bins":["openssl"],"label":"Install OpenSSL (brew)"},{"id":"pip-cryptography","kind":"pip","packages":["cryptography"],"label":"Install Python cryptography package"}]}}
+metadata: {"openclaw":{"homepage":"https://gethealthsync.app/","requires":{"bins":["openssl"],"pythonPackages":["cryptography"]},"config":{"stateDirs":[".apple-health-sync"]},"install":[{"id":"brew-openssl","kind":"brew","formula":"openssl@3","bins":["openssl"],"label":"Install OpenSSL (brew)"},{"id":"pip-cryptography","kind":"pip","packages":["cryptography>=50.0.0,<51"],"label":"Install Python cryptography package"}]}}
 ---
 
 # Apple Health Sync
@@ -52,7 +52,7 @@ Stay within these declared boundaries:
 
 ## Resources
 
-- `scripts/onboarding.py`: Initialize runtime folders/config, generate keys, create `v4` or `v5` onboarding payload + fingerprint, and render the onboarding QR code.
+- `scripts/onboarding.py`: Initialize runtime folders/config, generate keys, archive an existing identity during `--rotate`, create `v4` or `v5` onboarding payload + fingerprint, and render the onboarding QR code.
 - `scripts/fetch_health_data.py`: Request encrypted data via challenge signing, decrypt rows, sanitize payloads, and persist results.
 - `scripts/unlink_device.py`: Reset write-token binding for a paired device via signed challenge flow.
 - `scripts/create_data_summary.py`: Aggregate local snapshots into `daily|weekly|monthly` summaries.
@@ -102,6 +102,26 @@ Never share:
 
 After successful onboarding in the iOS App, run the "Sync data" action only when the user requests it. A first successful sync in the iOS app is required upfront.
 
+### 1a) Rotate an existing identity
+
+Run rotation only after the user explicitly requests and confirms it:
+
+```bash
+python3 {baseDir}/scripts/onboarding.py --rotate --state-dir <existing-state-dir>
+```
+
+`--rotate` always creates both new key material and a new user ID. There is no keep-user-ID mode because an existing server identity remains bound to its previous signing and encryption keys.
+
+Before replacing any active key files, the script archives the existing identity under `config/key-backups/<UTC timestamp>/`. The private `0700` backup directory contains the previous config, available onboarding artifacts, all recognized key files, and a `0600` manifest that maps the previous user ID to the replacement user ID. Every archived file is copied as `0600` and verified byte-for-byte. If an existing identity is incomplete or any backup cannot be verified, rotation aborts without generating replacement keys.
+
+After rotation:
+
+1. Reset the iOS App in settings.
+2. Onboard it with the newly generated QR code or Hex payload.
+3. Complete a first sync before fetching data with the skill.
+
+Existing encrypted server data remains associated with the archived user ID and can be decrypted only with the archived encryption key. Rotation backups contain unencrypted private keys protected by filesystem permissions; keep the state directory private and do not upload or share those backups.
+
 ### 1b) Upgrade an existing v4 setup to v5
 
 Before starting the upgrade, check these prerequisites:
@@ -115,7 +135,7 @@ Upgrade flow:
 python3 {baseDir}/scripts/onboarding.py --state-dir <existing-state-dir>
 ```
 
-This keeps the existing `user_id`, generates the `v5` signing/encryption keys, updates `config/config.json` to `protocol_version=5`, and creates a new `v5` onboarding payload.
+Without `--rotate`, this keeps the existing `user_id`, generates the `v5` signing/encryption keys, updates `config/config.json` to `protocol_version=5`, and creates a new `v5` onboarding payload.
 
 Then:
 

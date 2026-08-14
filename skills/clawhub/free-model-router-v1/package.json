@@ -1,6 +1,6 @@
 {
   "name": "free-model-router",
-  "version": "2.0.2",
+  "version": "2.2.0",
   "description": "Local AI model router with dual deployment modes (Skill + Standalone) — test trigger",
   "main": "core/server.js",
   "bin": {

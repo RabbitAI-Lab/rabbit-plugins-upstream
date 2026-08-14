@@ -1,42 +1,58 @@
-## Description: <br>
-Provides a structured coding workflow for individual developers, including planning, step-by-step implementation, validation, checkpoint tracking, and explicit preference memory. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A structured development workflow skill for individual developers that guides planning, implementation, verification, testing, preference memory, and checkpoint-based task tracking.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External developers use this skill to structure personal coding work from request through planning, execution, verification, and delivery. It helps split tasks, track checkpoints, remember explicitly stated preferences, and prepare quality checks before handoff. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to read, write, test, and run commands in a project, which may affect local files. <br>
-Mitigation: Keep use scoped to the active project and review proposed file changes and commands before relying on them. <br>
-Risk: Preference memory and checkpoint files may capture sensitive details if the user stores them there. <br>
-Mitigation: Do not place secrets in memory.md or checkpoint files, and store only preferences the user explicitly wants remembered. <br>
-Risk: The optional callback_url field can send completion information outside the local environment. <br>
-Mitigation: Use callback_url only when remote notification behavior is intentional and the transmitted information is understood. <br>
+## Use Case:
 
+Developers use this skill to structure coding work into request, planning, execution, verification, and delivery stages, with optional preference memory and checkpoints for task tracking. It is aimed at personal development workflows that need explicit planning and validation steps.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/code-dev-v1-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline code, shell commands, checklists, and optional JSON status output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose file edits, tests, checkpoint records, and local preference or checkpoint files for user review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The documentation gives conflicting claims about command execution, network/API use, and credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the intended behavior before enabling command execution, network access, credential use, or automation, and run the skill with the least privileges needed.
+
+Risk: Preference memory and checkpoint files can persist project details or personal workflow preferences.
+
+Mitigation: Store only explicitly requested preferences and review or delete local memory and checkpoint files before sharing a workspace.
+
+Risk: Generated development guidance may include code changes or shell commands that affect a project.
+
+Mitigation: Review proposed diffs and commands before applying them, then run the relevant tests or checks before delivery.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/code-dev-v1-tool-free)
+- [SkillHub homepage](https://skillhub.cn/skill/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with code, shell command, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe local preference and checkpoint files for the agent workflow.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

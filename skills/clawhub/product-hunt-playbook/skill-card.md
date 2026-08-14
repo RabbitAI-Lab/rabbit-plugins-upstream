@@ -1,43 +1,61 @@
-## Description: <br>
-Provides Product Hunt launch strategy guidance, including launch-day operations, ranking factors, supporter outreach, asset preparation, and post-launch momentum planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Product Hunt launch guidance, including launch-day operations, ranking-factor heuristics, ethical voter mobilization, asset preparation, and post-launch conversion planning.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-External makers, startup teams, and launch operators use this skill to plan and review Product Hunt launches, including timing, ranking strategy, outreach hygiene, and post-launch conversion work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on generic launch-day wording and return Product Hunt-specific ranking advice when the user intended a broader launch plan. <br>
-Mitigation: Use it when Product Hunt launch strategy is desired, and confirm the target launch channel before following the advice. <br>
-Risk: Vote-mobilization and ranking tactics may conflict with Product Hunt rules or platform expectations if applied mechanically. <br>
-Mitigation: Review recommendations against Product Hunt's current rules before using outreach, upvote, or ranking tactics. <br>
+## Use Case:
 
+External makers, startup teams, and growth operators use this skill to plan Product Hunt launches, coordinate launch-day outreach, and convert Product Hunt traffic into retained users while avoiding ranking manipulation.
 
-## Reference(s): <br>
-- [Product Hunt Playbook on ClawHub](https://clawhub.ai/gingiris-1031/skills/product-hunt-playbook) <br>
-- [English Product Hunt Launch Playbook](references/en/README.md) <br>
-- [Japanese Product Hunt Launch Playbook](references/ja/README.md) <br>
-- [Korean Product Hunt Launch Playbook](references/ko/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, checklists, tables, and launch planning notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static advisory content; Clawscan found no hidden execution, credential access, persistence, or destructive behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.9 (source: server release evidence) <br>
+Risk: The skill includes commercial links and paid coaching offers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the commercial links as disclosed third-party offers and evaluate them independently before purchase or use.
+
+Risk: The skill references an optional related skill installation command.
+
+Mitigation: Do not run the optional `clawhub install gingiris-launch` command unless that related skill has been separately reviewed and trusted.
+
+Risk: Launch guidance can be misused for spam, vote buying, or platform manipulation.
+
+Mitigation: Follow the skill's stated boundary: use only authentic user outreach, avoid vote exchanges or purchased support, and pause amplification when suspicious activity appears.
+
+## Reference(s):
+
+- [Product Hunt Launch Playbook](references/en/README.md)
+- [Iris Product Hunt Field Notes](references/iris-field-notes.md)
+- [Product Hunt Launch Playbook - Japanese](references/ja/README.md)
+- [Product Hunt Launch Playbook - Korean](references/ko/README.md)
+- [ClawHub Skill Page](https://clawhub.ai/gingiris-1031/skills/product-hunt-playbook)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown guidance with checklists, launch sequencing, and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes multilingual reference material and commercial upsell links disclosed in the skill content.]
+
+## Skill Version(s):
+
+1.7.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

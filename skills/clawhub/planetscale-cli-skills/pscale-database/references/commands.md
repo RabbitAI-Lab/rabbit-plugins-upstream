@@ -1,4 +1,4 @@
-Create, read, delete, and dump/restore databases
+Create, read, update, delete, and dump/restore databases
 
 Usage:
   pscale database [command]
@@ -7,12 +7,14 @@ Aliases:
   database, db
 
 Available Commands:
-  create       Create a database instance
-  delete       Delete a database instance
-  dump         Backup and dump your database (Vitess databases only)
-  list         List databases
-  restore-dump Restore your database from a local dump directory (Vitess databases only)
-  show         Retrieve information about a database
+  create         Create a database instance
+  delete         Delete a database instance
+  dump           Backup and dump your database (Vitess databases only)
+  ip-restriction Manage Postgres IP restrictions
+  list           List databases
+  restore-dump   Restore your database from a local dump directory (Vitess databases only)
+  show           Retrieve information about a database, including settings
+  update         Update a database's settings
 
 Flags:
   -h, --help         help for database
@@ -29,3 +31,106 @@ Global Flags:
       --service-token-id string   The Service Token ID for authenticating.
 
 Use "pscale database [command] --help" for more information about a command.
+
+Agents: run "pscale agent-guide --format json" for machine-readable guidance, or "pscale help agents" to read the full guide.
+
+## pscale keyspace read-only-regions
+
+```text
+List read-only regions configured for a Vitess keyspace.
+
+This command is only supported for Vitess databases.
+
+Usage:
+  pscale keyspace read-only-regions <database> <branch> <keyspace> [flags]
+  pscale keyspace read-only-regions [command]
+
+Available Commands:
+  add         Add a read-only region to a keyspace
+  remove      Remove a read-only region from a keyspace
+  update      Update a keyspace's read-only region
+```
+
+JSON output includes each region's identifying fields plus cluster size and replica count. Use a ready region's slug, display name, or ID with `database dump --read-only-region`.
+
+## pscale database dump
+
+```text
+Backup and dump your database.
+
+This command is only supported for Vitess databases. For Postgres databases,
+use standard PostgreSQL tools like pg_dump.
+
+Usage:
+  pscale database dump <database> <branch> [options] [flags]
+
+Flags:
+      --columns stringArray         Columns to include for specific tables (format: 'table:col1,col2'). Can be specified multiple times for different tables.
+  -h, --help                        help for dump
+      --keyspace string             Optionally target a specific keyspace to be dumped. Useful for sharded databases.
+      --local-addr string           Local address to bind and listen for connections. By default the proxy binds to 127.0.0.1 with a random port.
+      --output string               Output directory of the dump. By default the dump is saved to a folder in the current directory.
+      --output-format string        Output format for data: sql (for MySQL, default), json, or csv. (default "sql")
+      --rdonly                      Dump from a rdonly tablet in the primary region (if available; will fail if not). Not for separate read-only regions — use --read-only-region instead.
+      --read-only-region string     Dump from a Vitess read-only region (region slug, display name, or id). List regions with: pscale keyspace read-only-regions <database> <branch> <keyspace>.
+      --remote-addr hostname:port   PlanetScale Database remote network address. By default the remote address is populated automatically from the PlanetScale API. (format: hostname:port)
+      --replica                     Dump from a replica tablet in the primary region (if available; will fail if not).
+      --schema-only                 Only dump schema, skip table data.
+      --shard string                Optional shard to target, must be used with keyspace
+      --tables string               Comma separated string of tables to dump. By default all tables are dumped.
+      --threads int                 Number of concurrent threads to use to dump the database. (default 16)
+      --wheres string               Comma separated string of WHERE clauses to filter the tables to dump. Only used when you specify tables to dump.
+```
+
+`--read-only-region` cannot be combined with `--rdonly` or `--replica`. The command rejects regions that are not ready and creates a short-lived reader credential scoped to the selected region; it does not fall back to the primary region.
+
+## pscale database update
+
+```text
+Usage:
+  pscale database update <database> [flags]
+
+Flags:
+      --allow-data-branching            Allow seeding branches with data (Vitess only)
+      --allow-foreign-key-constraints   Allow foreign key constraints (Vitess only)
+      --automatic-migrations            Copy migration data to new branches and deploy requests (Vitess only)
+      --default-branch string           The default branch of the database (PostgreSQL and Vitess)
+      --insights-raw-queries            Collect full SQL queries for Insights (Vitess only)
+      --migration-framework string      Migration framework for the database (Vitess only)
+      --migration-table-name string     Migration table name for the database (Vitess only)
+      --new-name string                 Rename the database (PostgreSQL and Vitess)
+      --production-branch-web-console   Allow the web console on the production branch (PostgreSQL and Vitess)
+      --require-approval-for-deploy     Require admin approval for deploy requests (Vitess only)
+      --restrict-branch-region          Limit branch creation to the database region (PostgreSQL and Vitess)
+```
+
+Only supplied flags are sent. Set booleans explicitly, for example `--require-approval-for-deploy=true` or `=false`.
+
+## pscale database ip-restriction
+
+```text
+Usage:
+  pscale database ip-restriction [command]
+
+Aliases:
+  ip-restriction, cidr, cidrs
+
+Available Commands:
+  create      Create an IP restriction entry
+  delete      Delete an IP restriction entry
+  list        List IP restriction entries for a Postgres database
+  show        Show an IP restriction entry
+  update      Update an IP restriction entry
+```
+
+Create requires `--cidrs` with repeatable or comma-separated IPv4 CIDRs; optional `--schema`, `--role`, and `--description` scope the entry. Update replaces only supplied fields. Delete accepts `--force` but should be treated as destructive because entries apply across all database branches.
+
+## pscale keyspace read-only-regions writes
+
+```text
+pscale keyspace read-only-regions add <database> <branch> <keyspace> <region> [--cluster-size <size>] [--replicas <count>]
+pscale keyspace read-only-regions update <database> <branch> <keyspace> <region> [--cluster-size <size>] [--replicas <count>]
+pscale keyspace read-only-regions remove <database> <branch> <keyspace> <region>
+```
+
+These commands are Vitess-only. `add` uses a slug from `pscale region list`; update/remove require a region already configured on the keyspace. Verify the resulting list after every write.

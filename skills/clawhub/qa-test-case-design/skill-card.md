@@ -1,44 +1,56 @@
-## Description: <br>
-Transforms completed QA analysis inputs into structured, prioritized, traceable test case designs with coverage notes and review guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transforms completed QA analysis, including requirements, scenario trees, boundary lists, and combination matrices, into structured, prioritized, traceable test cases.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and test leads use this skill after requirements, scenario, boundary, or combination analysis to turn those inputs into P0-P3 test case sets with traceability, coverage summaries, and review-ready expected results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases may activate the skill before enough upstream QA analysis is available. <br>
-Mitigation: Provide clear requirements and, when possible, completed scenario, boundary, or combination analysis before using the generated case design. <br>
-Risk: Generated test cases can miss product-specific details or include assumptions that do not match the target system. <br>
-Mitigation: Have a QA owner review the cases, fill in system-specific test steps, and verify traceability and coverage before execution. <br>
+## Use Case:
 
+QA engineers, testers, and development teams use this skill to turn sufficiently analyzed requirements into standardized P0-P3 test-case reports with coverage notes, traceability IDs, expected results, and review guidance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-test-case-design) <br>
-- [Coverage and Quality Standards](references/coverage-and-quality.md) <br>
-- [Design Methods Reference](references/design-methods.md) <br>
-- [Output Template](references/output-template-full.md) <br>
-- [Review Standards](references/review-standards.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown reports and tables with structured test case fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Leaves test steps for the user to complete and emphasizes requirement-based design rather than code inspection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Users may need general QA discussion instead of full structured test-case generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Clarify whether the requested work is test-case generation, review, coverage analysis, or lightweight QA guidance before applying the full structure.
+
+Risk: Generated test cases can be generic or incomplete when requirements, scenarios, boundaries, or business context are missing.
+
+Mitigation: Request missing inputs and clearly mark assumptions, missing information, and residual coverage risks in the output.
+
+## Reference(s):
+
+- [Test Coverage Strategy and Quality Standards](references/coverage-and-quality.md)
+- [Test Case Design Methods](references/design-methods.md)
+- [Full Test Case Output Template](references/output-template-full.md)
+- [Requirements Documentation and Test Case Review Standards](references/review-standards.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Analysis, Guidance]
+
+**Output Format:** [Markdown test-case reports, tables, checklists, and structured guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generates prioritized P0-P3 test cases with traceability IDs, expected results, coverage analysis, and risk notes; test steps are intentionally left for users to fill from the actual system.]
+
+## Skill Version(s):
+
+1.6.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

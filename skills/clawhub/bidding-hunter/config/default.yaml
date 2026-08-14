@@ -1,0 +1,201 @@
+# Bidding Hunter — Default Configuration
+# Copy this file to ~/.bidding-hunter/config.yaml and customize.
+# All paths support ~ expansion and ${ENV_VAR} substitution.
+
+# ============================================================
+# Matching Configuration (REQUIRED)
+# ============================================================
+matching:
+  # Search queries: what to type into platform search boxes.
+  # Each query runs a separate search. REPLACE WITH YOUR OWN KEYWORDS.
+  search_queries: []
+  # Example: ["video", "design", "construction", "consulting"]
+
+  # Keyword tiers for title matching. Matched in order (high → medium → low).
+  # An item gets the first tier that matches.
+  tiers:
+    high:
+      label: "L1"
+      description: "High relevance — direct business match"
+      keywords: []
+      # Example: ["video production", "branding", "consulting"]
+    medium:
+      label: "L2"
+      description: "Medium relevance — related services"
+      keywords: []
+      # Example: ["event planning", "design", "logistics"]
+    low:
+      label: "L3"
+      description: "Low relevance — extended keywords"
+      keywords: []
+      # Example: ["media", "printing", "translation"]
+
+  # Blacklist: titles containing any of these words are filtered out.
+  blacklist: []
+  # Example for Chinese procurement: ["中标", "成交", "废标", "更正", "变更", "流标"]
+
+  # Case-sensitive matching (default: false, case-insensitive)
+  case_sensitive: false
+
+# ============================================================
+# Database Configuration
+# ============================================================
+database:
+  # Path to SQLite database file
+  path: "~/.bidding-hunter/data.db"
+  # Backup before each scan (will add .bak suffix)
+  backup_before_scan: true
+
+# ============================================================
+# Scan Configuration
+# ============================================================
+scan:
+  # Date window: how many days back to scan (from today)
+  # e.g., 2 = today + yesterday
+  date_window: 2
+
+  # Maximum pages to scan per search query per platform
+  max_pages: 15
+
+  # Maximum concurrent platform scans
+  concurrency: 3
+
+  # Retry strategy for page loads (ms)
+  # Each step: [timeout_ms, wait_until_strategy]
+  retry_stairs:
+    - timeout: 30000
+      wait_until: "domcontentloaded"
+    - timeout: 45000
+      wait_until: "domcontentloaded"
+    - timeout: 60000
+      wait_until: "networkidle"
+
+  # Wait between actions to avoid detection (ms)
+  polite_delay: 2500
+
+  # Output directory for scan results
+  results_dir: "~/.bidding-hunter/scan_results"
+
+  # User agent string for browser
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+# ============================================================
+# Platforms Configuration
+# ============================================================
+platforms:
+  # Which platforms to scan. Use platform IDs (see README for built-in list).
+  enabled:
+    - beijing
+    - hebei
+    - liaoning
+    - dalian
+    - national
+
+  # Custom platform adapter paths (in addition to built-in)
+  custom_paths: []
+
+  # Platform-specific overrides
+  overrides:
+    # Example: disable a specific platform temporarily
+    # beijing:
+    #   enabled: false
+
+    # Example: increase max pages for a specific platform
+    # national:
+    #   max_pages: 20
+
+# ============================================================
+# Detail Fetch Configuration
+# ============================================================
+detail_fetch:
+  # Whether to fetch detail pages for tracked entries
+  enabled: true
+
+  # Max concurrent detail page fetches
+  concurrency: 2
+
+  # Only fetch for entries without deadlines
+  skip_if_has_deadlines: true
+
+  # Don't retry the same URL on the same day
+  skip_today_retry: true
+
+  # Max days since first_seen to attempt fetch (older entries, skip)
+  max_age_days: 30
+
+# ============================================================
+# Reminder Configuration
+# ============================================================
+reminders:
+  # Days before deadline to start reminding
+  urgent_days: 7
+
+  # Include past-due (yesterday) in urgent
+  include_yesterday: true
+
+# ============================================================
+# Notification Configuration
+# ============================================================
+notifications:
+  channels: []
+  # Example channels:
+  #   - type: feishu
+  #     webhook: "${FEISHU_WEBHOOK_URL}"
+  #     secret: "${FEISHU_SECRET}"
+  #
+  #   - type: dingtalk
+  #     webhook: "${DINGTALK_WEBHOOK_URL}"
+  #     secret: "${DINGTALK_SECRET}"
+  #
+  #   - type: slack
+  #     webhook: "${SLACK_WEBHOOK_URL}"
+  #
+  #   - type: file
+  #     path: "~/.bidding-hunter/reports/"
+  #
+  #   - type: stdout
+  #     format: markdown   # markdown | text | json
+
+# ============================================================
+# Report Configuration
+# ============================================================
+report:
+  # Max title length in report (longer titles truncated)
+  max_title_length: 60
+
+  # Include scan statistics section
+  show_stats: true
+
+  # Include reminder section
+  show_reminders: true
+
+  # Show undecided count prompt
+  show_undecided_prompt: true
+
+# ============================================================
+# Scheduling (for reference; actual cron config is separate)
+# ============================================================
+schedule:
+  # Cron expression (informational — set up crontab separately)
+  cron: "0 16 * * *"
+  timezone: "Asia/Shanghai"
+
+# ============================================================
+# Session / Context Management
+# ============================================================
+sessions:
+  # Max tokens before compacting persistent context
+  max_tokens: 60000
+
+# ============================================================
+# Logging
+# ============================================================
+logging:
+  # Log level: debug | info | warn | error
+  level: "info"
+
+  # Log to file
+  file: "~/.bidding-hunter/bidding-hunter.log"
+
+  # Log to stderr
+  stderr: true

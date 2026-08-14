@@ -1,49 +1,58 @@
-## Description: <br>
-全国采招大数据中心-采招网 helps agents search procurement and bid records across regions and industries, combine company profile data with market analysis, and present procurement intelligence to users. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+全国采招大数据中心-采招网 helps agents search Chinese procurement notices, analyze company bidding activity, inspect market trends, and retrieve account usage information through the provider's API.
 
-## Publisher: <br>
-[pkuycl](https://clawhub.ai/user/pkuycl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pkuycl](https://clawhub.ai/user/pkuycl)
 
-## Use Case: <br>
-External users and business analysts use this skill to search procurement notices, retrieve bid details, profile companies, analyze buyers, suppliers, brands, and prices, and identify renewal or bidding opportunities through the Zhiliaobiaoxun procurement data API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Procurement queries, company names, and bid-related search terms are sent to the zhiliaobiaoxun.com API. <br>
-Mitigation: Use the skill only for data you are comfortable sharing with that third-party API, and avoid confidential strategy, secrets, or personal data. <br>
-Risk: The skill requires the sensitive ZLBX_API_KEY credential. <br>
-Mitigation: Store the key in the configured environment variable and avoid pasting it into prompts, logs, or shared outputs. <br>
-Risk: Company matching can include affiliates or subsidiaries and may broaden the scope of analysis. <br>
-Mitigation: Confirm the intended company scope before relying on aggregated search, supplier, or purchaser analysis. <br>
-Risk: Returned project contact details may include sensitive business contact information. <br>
-Mitigation: Use contact details only for authorized business purposes and handle them according to applicable privacy and procurement rules. <br>
+## Use Case:
 
+External users and agents use this skill to answer procurement, supplier, buyer, competitor, project-renewal, and market-price questions using Caizhaowang/Zhiliaobiaoxun data. It is most useful when a task needs cross-region bid search, company profiles, partner/contact lookup, or aggregate market analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pkuycl/national-procurement-data-center-caizhaowang) <br>
-- [API overview and usage guide](artifact/SKILL.md) <br>
-- [Bid search API reference](artifact/references/api-search.md) <br>
-- [Company analysis API reference](artifact/references/api-company.md) <br>
-- [Market analysis API reference](artifact/references/api-market.md) <br>
-- [Zhiliaobiaoxun API key setup](https://ai.zhiliaobiaoxun.com/?ch=s32) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown or plain text with JSON request examples when needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include procurement search results, company profiles, market summaries, and follow-up analysis suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: If no API key is configured, the skill may initiate an optional automatic trial signup that collects OS type, CPU architecture, and a hashed MAC-derived value, then sends them to the provider and stores an API key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure ZLBX_API_KEY before use to avoid the automatic signup path, and approve the signup flow only when comfortable with the described device-feature collection.
+
+Risk: Company contact lookup and group-wide company analysis can expose sensitive business or contact information returned by the provider.
+
+Mitigation: Use the returned information only for the requested procurement analysis, avoid unnecessary broad queries, and do not ask users to share or reveal API keys.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pkuycl/skills/national-procurement-data-center-caizhaowang)
+- [API overview](references/api-search.md)
+- [Company analysis API](references/api-company.md)
+- [Market analysis API](references/api-market.md)
+- [Account API](references/api-account.md)
+- [Automatic registration flow](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API Calls, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown responses with JSON request examples, shell commands, and API-derived analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or provider-managed local configuration for authenticated API access.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

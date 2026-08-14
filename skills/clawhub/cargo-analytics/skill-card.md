@@ -1,45 +1,62 @@
-## Description: <br>
-Download workflow run results, export segment data, and monitor run metrics using the Cargo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Download workflow run results, export segment data, and monitor run metrics using the Cargo CLI.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers, operators, and Cargo workspace users use this skill to measure workflow run health, count errors, download run or batch results, and export segment data. It is for analytics and retrieval workflows, not root cause diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cargo analytics commands can retrieve downloaded runs, segment exports, signed URLs, and records that may contain sensitive business data. <br>
-Mitigation: Use Cargo permissions, filters, date ranges, and row limits to keep exports authorized and minimal. <br>
-Risk: Broad analytics queries or downloads can expose more workspace data than intended. <br>
-Mitigation: Prefer scoped workflow, batch, status, and date filters before downloading or exporting results. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Cargo workspace run metrics, count failures, download run or batch outputs, and export segment data. It supports measurement and retrieval workflows, not root-cause diagnosis or billing analysis.
 
-## Reference(s): <br>
-- [Cargo Skills Repository](https://github.com/getcargohq/cargo-skills) <br>
-- [Cargo Analytics on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-analytics) <br>
-- [Response shapes](references/response-shapes.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Run analytics examples](references/examples/run-analytics.md) <br>
-- [Data export examples](references/examples/exports.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Analysis, Files, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference Cargo CLI outputs, downloaded run or batch data, signed URLs, and exported CSV or JSON payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.2 (source: frontmatter and release evidence) <br>
+Risk: Authenticated Cargo CLI access can query and export workspace run and segment data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only in workspaces where the agent is allowed to access that data, and verify the active account with cargo-ai whoami before running commands.
+
+Risk: The failed-record rerun workflow can create new batches, consume credits, and trigger workflow side effects.
+
+Mitigation: Require explicit user approval before any cargo-ai orchestration batch create command.
+
+Risk: Large exports or broad analytics queries can retrieve more data than intended.
+
+Mitigation: Prefer scoped workflow UUIDs, batch UUIDs, status filters, date ranges, and limits before downloading or exporting results.
+
+## Reference(s):
+
+- [Cargo Analytics on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-analytics)
+- [Cargo Skills repository](https://github.com/getcargohq/cargo-skills)
+- [Run analytics examples](references/examples/run-analytics.md)
+- [Data export examples](references/examples/exports.md)
+- [Response shapes](references/response-shapes.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Cargo CLI commands for analytics queries, exports, downloads, and reruns of failed records.]
+
+## Skill Version(s):
+
+1.4.3 (source: frontmatter, skill-metadata.json, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

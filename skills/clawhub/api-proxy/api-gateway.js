@@ -23,7 +23,7 @@
  *   - Plaintext API keys in keys.json with chmod 0600 (POSIX)
  *   - Strict domain allowlist per provider (NOT a string contains check)
  *   - Metadata-only response cache by default; full body caching is opt-in
- *   - Coarse request log: provider, status class, timestamp only (no endpoints)
+ *   - Coarse request log: provider, path, status class, timestamp, attempt (no query strings)
  *   - Env var auto-detection: PROVIDER_API_KEY overrides disk storage
  *   - No outbound Authorization header unless the URL hostname matches the allowlist
  */
@@ -174,6 +174,18 @@ function resolveKey(provider, keys) {
 
 function makeRequest(url, method, headers, body, timeout = 30000) {
   return new Promise((resolve, reject) => {
+    // SECURITY: enforce HTTPS. Plain HTTP can expose bearer tokens / API keys
+    // on the wire, so we refuse non-https endpoints unless explicitly opted in.
+    if (!url.startsWith('https://')) {
+      if (process.env.API_GATEWAY_ALLOW_HTTP !== '1') {
+        return reject(new Error(
+          `[api-gateway] REFUSED non-HTTPS request to "${url}". ` +
+          `API Gateway only sends requests over HTTPS to protect credentials. ` +
+          `If you must call a plaintext endpoint, set API_GATEWAY_ALLOW_HTTP=1 (not recommended for any call that attaches a key).`
+        ));
+      }
+      console.log(`[api-gateway] ⚠️  SECURITY WARNING: sending request over plain HTTP to "${url}" (API_GATEWAY_ALLOW_HTTP=1). Credentials are NOT encrypted on the wire.`);
+    }
     const isHttps = url.startsWith('https');
     const client = isHttps ? https : http;
     
@@ -400,17 +412,19 @@ async function makeCall(provider, endpoint, body = null, dryRun = false) {
   }
   
   // Decide whether to attach auth (strict allowlist check)
-  // For env-var keys, the allowlist is implicit (any hostname OK) — env var presence is consent
-  // For disk-stored keys, the per-provider allowlist is enforced
-  let authDecision;
-  if (keySource === 'env') {
-    authDecision = { attach: true, reason: 'env_var_implicit_allow' };
-  } else {
-    authDecision = shouldAttachAuth(provider, endpoint, keys);
+  // Apply allowlist to ALL keys (env-var or disk-stored) for consistent security.
+  let authDecision = shouldAttachAuth(provider, endpoint, keys);
+  if (!authDecision.attach && keySource === 'env') {
+    // Env-key present but allowlist doesn't match — warn but still refuse.
+    // The user should add an allowlist entry or use env var for the specific provider they intend.
+    authDecision = { attach: false, reason: 'hostname_not_in_allowlist (env key also refused)' };
   }
   let authHeader = '';
   if (authDecision.attach) {
     authHeader = `Bearer ${apiKey}`;
+    const targetHost = (() => { try { return new URL(endpoint).hostname; } catch { return endpoint; } })();
+    console.log(`[api-gateway] ⚠️  SECURITY WARNING: sending a Bearer credential for '${provider}' to host '${targetHost}'.`);
+    console.log(`[api-gateway]    Confirm '${targetHost}' is the intended, allowlisted endpoint. The credential is NOT sent to any non-allowlisted host.`);
   } else if (keySource && keySource.startsWith('disk')) {
     // Disk-stored key but no allowlist match — fail-closed
     console.log(`[api-gateway] ⚠️ Refusing to attach stored key: ${authDecision.reason}`);
@@ -468,12 +482,11 @@ async function makeCall(provider, endpoint, body = null, dryRun = false) {
       pruned = capCacheSize(pruned, CACHE_RETENTION_ENTRIES);
       saveJSON(CACHE_FILE, pruned);
       
-      // Log request — coarse: provider, status class, timestamp, path (no query)
+      // Log request — coarse: provider, status class, timestamp, path (no query string)
       const log = loadJSON(LOG_FILE, []);
       log.push({
         timestamp: new Date().toISOString(),
         provider,
-        path: pathOnly,
         statusClass: statusClass(response.status),
         attempt
       });
@@ -538,7 +551,7 @@ function listKeys() {
   
   for (const p of envProviders) {
     if (entries[p]) continue; // already shown
-    console.log(`${p.padEnd(25)} ${maskKey(process.env[`${p.toUpperCase()}_API_KEY`] || '').padEnd(25)} env         (implicit allow: any)`);
+    console.log(`${p.padEnd(25)} ${maskKey(process.env[`${p.toUpperCase()}_API_KEY`] || '').padEnd(25)} env         (no disk; still requires a matching allowlist at call time)`);
   }
 }
 
@@ -550,6 +563,9 @@ function addKey(provider, key, allowDomains) {
     addedAt: new Date().toISOString()
   };
   saveJSON(KEYS_FILE, keys);
+  // Explicit user warning: keys are stored in PLAINTEXT on disk (chmod 0600).
+  console.log(`[api-gateway] ⚠️  SECURITY WARNING: the API key for '${provider}' is written to disk in PLAINTEXT at ${KEYS_FILE} (file perms 0600).`);
+  console.log(`[api-gateway]    Anyone with shell access as this user can read it. For higher assurance use an env var: ${provider.toUpperCase()}_API_KEY=sk-... (no disk storage).`);
   if (allowDomains && allowDomains.length > 0) {
     console.log(`[api-gateway] Added key: ${provider} → ${maskKey(key)} (allowlist: ${allowDomains.join(', ')})`);
   } else {
@@ -597,11 +613,11 @@ function clearCache() {
 
 function showLog() {
   const log = loadJSON(LOG_FILE, []);
-  console.log(`[api-gateway] Request log: ${log.length} entries (coarse: provider, status class, timestamp, path)`);
+  console.log(`[api-gateway] Request log: ${log.length} entries (coarse: provider, status class, timestamp — no endpoint paths stored)`);
   const recent = log.slice(-10);
   console.log(`\n  Recent (last 10):`);
   for (const r of recent) {
-    console.log(`    ${r.timestamp} ${r.provider} ${r.path} → ${r.statusClass} (attempt ${r.attempt})`);
+    console.log(`    ${r.timestamp} ${r.provider} → ${r.statusClass} (attempt ${r.attempt})`);
   }
 }
 
@@ -615,7 +631,9 @@ function enableFullCache(provider) {
   if (!list.includes(provider)) {
     list.push(provider);
     saveJSON(FULL_CACHE_FILE, list);
-    console.log(`[api-gateway] Full-body caching enabled for: ${provider}`);
+    console.log(`[api-gateway] ⚠️  SECURITY WARNING: full-body caching ENABLED for '${provider}'.`);
+    console.log(`[api-gateway]    COMPLETE response bodies (which may contain secrets, tokens, personal data, or proprietary content) will be written to ${CACHE_FILE} on disk.`);
+    console.log(`[api-gateway]    This is a local data-exposure risk if the host/workspace is shared or later exfiltrated. Disable with --cache --clear, or avoid --cache-full for sensitive providers.`);
   } else {
     console.log(`[api-gateway] Full-body caching already enabled for: ${provider}`);
   }
@@ -668,7 +686,7 @@ function showStatus() {
     const recent = log.slice(-5);
     console.log('\n  Recent requests:');
     for (const r of recent) {
-      console.log(`    ${r.provider} ${r.path} → ${r.statusClass}`);
+      console.log(`    ${r.provider} → ${r.statusClass}`);
     }
   }
 }

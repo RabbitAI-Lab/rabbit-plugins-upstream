@@ -1,45 +1,56 @@
-## Description: <br>
-Detects aggressive interactions in livestock and poultry from continuous barn videos, including fighting, biting, chasing, and butting, and outputs behavior type, intensity level, and alert level. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects aggressive interactions in livestock and poultry from continuous barn videos, including fighting, biting, chasing and butting, and outputs behavior type, intensity level and alert level.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and agricultural operations teams use this skill to screen barn camera media for livestock or poultry conflict events and receive structured behavior, intensity, alert, and report-link outputs. It supports local media files, media URLs, and cloud history lookup for prior analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded livestock media or supplied media URLs are sent to LifeEmergence cloud APIs for processing. <br>
-Mitigation: Install and run the skill only where cloud processing of the media is permitted by the user or organization. <br>
-Risk: The skill can create or reuse internal identity state and query cloud history associated with that identity. <br>
-Mitigation: Review the identity and history-query behavior before deployment, and limit use to environments where local identity persistence is acceptable. <br>
-Risk: Service tokens may be stored in a local workspace SQLite database. <br>
-Mitigation: Protect the workspace, restrict access to local data files, and remove persisted state when the skill is no longer needed. <br>
+## Use Case:
 
+Developers, farm operations teams, and livestock monitoring teams use this skill to analyze barn images or videos for aggressive animal interactions and retrieve structured reports with behavior type, intensity, alert level, affected positions, and report links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-aggressive-behavior-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis text with optional report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include behavior classifications, timestamps or segment lists, locations of involved animals, intensity level, alert level, historical report records, and exported report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Barn images, videos, or supplied media URLs are sent to the LifeEmergence cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when cloud processing is acceptable, use a dedicated workspace or account for testing, and avoid providing sensitive non-livestock footage or private URLs.
+
+Risk: The skill creates or reuses an internal identity, can query cloud history, and stores local authentication tokens in the workspace.
+
+Mitigation: Review the skill before installation, use a dedicated workspace or account when testing, and limit access to workspaces containing service tokens.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-aggressive-behavior-detection-analysis)
+- [API Documentation](artifact/references/api_doc.md)
+- [SMYX Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON text, with optional saved output files and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local file or URL input, historical report listing, detail-level selection, and optional output-file writing.]
+
+## Skill Version(s):
+
+1.0.7 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

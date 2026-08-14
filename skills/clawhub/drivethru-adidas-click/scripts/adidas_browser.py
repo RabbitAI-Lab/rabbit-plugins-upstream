@@ -28,6 +28,7 @@ import shutil
 import string
 import subprocess
 import sys
+import time
 from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
@@ -115,17 +116,26 @@ def _parse_available(indicator: str | None) -> int | None:
     return _to_int(text)
 
 
-class _InsufficientStockPause(Exception):
-    """Internal signal: some line isn't fully in stock and the policy is 'pause'.
+class _OrderPause(Exception):
+    """Internal signal: the order needs a human decision before it can be placed.
 
-    Carries the out-of-stock summary and a snapshot of all requested lines so
-    the entry point can return a ``needs_confirmation`` result without ordering.
+    Raised when a line isn't fully in stock and ``on_insufficient_stock`` is
+    ``pause``, and/or adidas has no product page for a requested style and
+    ``on_missing_product`` is ``pause``. Carries both summaries plus a snapshot
+    of all requested lines so the entry point can return a
+    ``needs_confirmation`` result without ordering anything.
     """
 
-    def __init__(self, out_of_stock: list[dict], lines: list["OrderLineResult"]):
-        super().__init__("insufficient stock — awaiting confirmation")
+    def __init__(
+        self,
+        out_of_stock: list[dict],
+        lines: list["OrderLineResult"],
+        missing_products: list[dict] | None = None,
+    ):
+        super().__init__("order paused — awaiting confirmation")
         self.out_of_stock = out_of_stock
         self.lines = lines
+        self.missing_products = missing_products or []
 
 
 def _group_by_style(lines: list[OrderLine]) -> dict[str, list[OrderLine]]:
@@ -244,56 +254,85 @@ def _unit_price(line_total: str | None, quantity: int | None) -> str | None:
     return f"{symbol}{value / quantity:,.2f}"
 
 
-def _install_chromium() -> None:
-    """Download Playwright's Chromium browser binary (one-time, ~150 MB)."""
+# Debian/Ubuntu package names for Chromium's runtime shared libraries — listed
+# in the host-level error so the environment can be fixed.
+_CHROMIUM_SYSTEM_PACKAGES = (
+    "libglib2.0-0 libnss3 libnspr4 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 "
+    "libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 "
+    "libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2"
+)
 
-    subprocess.run(
-        [sys.executable, "-m", "playwright", "install", "chromium"],
-        check=True,
+
+def _run_playwright(*args: str) -> None:
+    """Run ``python -m playwright <args>``, raising on non-zero exit."""
+
+    subprocess.run([sys.executable, "-m", "playwright", *args], check=True)
+
+
+def _missing_binary(message: str) -> bool:
+    return "executable doesn't exist" in message
+
+
+def _missing_system_libs(message: str) -> bool:
+    return (
+        "shared librar" in message
+        or "libglib" in message
+        or "error while loading shared" in message
+        or "cannot open shared object" in message
     )
 
 
 def _launch_chromium(playwright, headless: bool):
-    """Launch Chromium, auto-installing the browser binary if it is missing.
+    """Launch Chromium, self-healing a missing binary or (best-effort) OS deps.
 
     The Playwright *package* is a declared dependency, but its Chromium *binary*
-    is a separate ~150 MB download that pip/uv does not fetch. There is no
-    OpenClaw install-time hook for it, so on the first run — if the binary is
-    absent — we install it once and retry, rather than requiring a manual
-    `python -m playwright install chromium`.
+    is a separate ~150 MB download that pip/uv doesn't fetch, and the browser
+    also needs OS-level shared libraries. There is no OpenClaw install-time hook
+    for either, so on the first run we try to install the binary (and, if the
+    launch fails on missing shared libraries, the system deps — which needs
+    root) and retry. If the host still lacks the libraries, we raise a precise,
+    actionable error rather than a raw stack trace.
     """
 
     try:
         return playwright.chromium.launch(headless=headless, args=_STEALTH_LAUNCH_ARGS)
     except Exception as exc:  # noqa: BLE001
         message = str(exc).lower()
-        looks_missing = (
-            "executable doesn't exist" in message
-            or "playwright install" in message
-            or "browsertype.launch" in message
-            and "download" in message
-        )
-        if not looks_missing:
+        if not (_missing_binary(message) or _missing_system_libs(message)):
             raise AdidasConfigError(
-                "Could not launch a Chromium browser for Playwright "
+                f"Could not launch a Chromium browser for Playwright "
                 f"(underlying error: {exc})."
             ) from exc
-        logger.info("Chromium binary missing — installing it once (~150 MB)…")
+
+        # Best-effort self-heal: install the binary and/or the OS deps.
         try:
-            _install_chromium()
-        except Exception as install_exc:  # noqa: BLE001
-            raise AdidasConfigError(
-                "Chromium is not installed and the automatic install failed. Run "
-                "`python -m playwright install chromium` manually. (install error: "
-                f"{install_exc})"
-            ) from install_exc
+            if _missing_binary(message):
+                logger.info("Chromium binary missing — installing it (~150 MB)…")
+                _run_playwright("install", "chromium")
+            if _missing_system_libs(message):
+                logger.info("Chromium system libraries missing — installing deps…")
+                _run_playwright("install-deps", "chromium")
+        except Exception as install_exc:  # noqa: BLE001 — retry decides the outcome
+            logger.warning("Automatic browser install step failed: %s", install_exc)
+
         try:
             return playwright.chromium.launch(headless=headless, args=_STEALTH_LAUNCH_ARGS)
         except Exception as retry_exc:  # noqa: BLE001
+            if _missing_system_libs(str(retry_exc).lower()):
+                raise AdidasConfigError(
+                    "Chromium is installed but the host is missing the system "
+                    "libraries it needs (e.g. libglib-2.0.so.0). This is a host/"
+                    "environment issue the skill can't fix without root. Fix it "
+                    "one of these ways: (1) run `python -m playwright install-deps "
+                    "chromium` (or `playwright install --with-deps chromium`) as "
+                    "root on the agent host; (2) have the OpenClaw environment's "
+                    "setup script / base image install Chromium's deps — apt "
+                    f"packages: {_CHROMIUM_SYSTEM_PACKAGES}. (error: {retry_exc})"
+                ) from retry_exc
             raise AdidasConfigError(
                 "Could not launch Chromium even after installing it. Run "
-                "`python -m playwright install chromium` and check the container "
-                f"has the required system libraries. (error: {retry_exc})"
+                "`python -m playwright install --with-deps chromium` and check the "
+                f"host has the required system libraries. (error: {retry_exc})"
             ) from retry_exc
 
 
@@ -397,6 +436,70 @@ def _insufficient_stock_message(out_of_stock: list[dict]) -> str:
     return msg
 
 
+def _validate_policies(request: OrderRequest) -> tuple[str, str]:
+    """Normalize and validate the two "what do I do about it" policies.
+
+    Returns ``(on_insufficient_stock, on_missing_product)`` lowercased. Called
+    before the browser launches as well as inside :meth:`add_lines`, so a typo
+    fails in milliseconds instead of after a login.
+    """
+
+    stock = (request.on_insufficient_stock or "pause").strip().lower()
+    if stock not in {"pause", "order", "skip"}:
+        raise AdidasConfigError(
+            f"on_insufficient_stock must be 'pause', 'order', or 'skip'; "
+            f"got {request.on_insufficient_stock!r}."
+        )
+    missing = (request.on_missing_product or "pause").strip().lower()
+    if missing not in {"pause", "skip", "error"}:
+        raise AdidasConfigError(
+            f"on_missing_product must be 'pause', 'skip', or 'error'; "
+            f"got {request.on_missing_product!r}."
+        )
+    return stock, missing
+
+
+def _missing_product_message(missing: list[dict], *, ordering: bool = True) -> str:
+    """Human-readable summary + the choices when adidas has no such product.
+
+    ``ordering`` false phrases it for a read-only check (which reports whatever
+    it *could* read rather than placing nothing).
+    """
+
+    parts = []
+    for m in missing:
+        # "*" is the whole-style inventory request (a check line with no size).
+        sizes = (
+            ", ".join(s for s in m.get("sizes", []) if s and s != "*") or "all sizes"
+        )
+        parts.append(f"{m['style']} ({sizes}) — {m.get('detail') or 'no product page'}")
+    head = (
+        f"adidas Click has no product listing for {len(missing)} requested "
+        f"style(s), so the order was NOT placed: "
+        if ordering
+        else (
+            f"adidas Click has no product listing for {len(missing)} requested "
+            f"style(s), so they could not be checked: "
+        )
+    )
+    tail = (
+        " Ask the user how to proceed, then re-run: correct the article number "
+        "(adidas article numbers encode the colorway, e.g. JW4306 — a base "
+        "style without the color code will not resolve); drop the style and "
+        "proceed with the rest (on_missing_product='skip'); or substitute a "
+        "different article."
+    )
+    note = ""
+    if any(m.get("reason") == "unresolved" for m in missing):
+        note = (
+            " NOTE: at least one style is 'unresolved' — the portal neither "
+            "showed the product nor said it was missing (it may be a slow page "
+            "or a portal change), so treat it as unconfirmed rather than proven "
+            "absent; a retry may resolve it."
+        )
+    return head + "; ".join(parts) + "." + tail + note
+
+
 def _resolve_state_name(state: str) -> str:
     """Map a 2-letter US state abbreviation to adidas's full name; pass through
     a value that is already a full name."""
@@ -470,6 +573,27 @@ _SEARCH_SUBMIT_BUTTON = "#HeaderSearchSubmitButton"
 # Product page. adidas article numbers encode the color, so navigating straight
 # to the product URL lands on the right color with no color picker.
 _PRODUCT_PATH = "/adidas/reorder/product/{style}"
+# A style adidas does not offer has no size table to wait for, so the product
+# page is polled (rather than blocking on one long wait_for_selector) and gives
+# up sooner than the global timeout: an absent product must not burn 30s per
+# style before the caller can be told. A real product page renders its size
+# table well inside this budget.
+_PRODUCT_WAIT_MS = 15_000
+_PRODUCT_POLL_MS = 400
+# Grace window given to a slow size table after a not-found tell matches, before
+# the style is declared missing (see _wait_for_size_table).
+_PRODUCT_TELL_GRACE_MS = 2_000
+# Positive "no such product" tells, matched against the page's visible text once
+# the authenticated shell has painted. The portal's empty-product markup is NOT
+# captured (no selector is invented for it), so this is deliberately a text
+# match over the wording such pages use, backed by the URL check below. A false
+# positive is safe by construction: it can only route the style into the
+# missing-product escalation, which places nothing and asks the user.
+_PRODUCT_MISSING_TELL_RE = re.compile(
+    r"no results|no products? (?:were |was )?found|not found|no such (?:product|article)"
+    r"|does(?:n't| not) exist|no longer available|no items? match",
+    re.IGNORECASE,
+)
 
 # Cart / checkout. /adidas/reorder/cart opens the *active* cart. Quantities that
 # overflow availability (when spread is declined) go to a separate, inactive
@@ -531,6 +655,13 @@ _SIZE_TRANSLATION_PREFIX = "CartModule-SizeBar-SizeTranslation-"
 #   material total:   #CartModule-MaterialRow-Summary-TotalQuantity-{style}
 #   product name:     #CartModule-TinyProduct-{style}-ProductName
 
+# Availability-date tab (outside the size table). The button text is the
+# earliest date on which the product can ship. If it isn't today, the size
+# table's inventory numbers refer to *that future date*, not today — so no
+# quantity is orderable now regardless of what the tiles show. Must be
+# checked first, before reading any size-tile inventory.
+_AVAILABLE_DATE_BUTTON = "#DateTabButton"
+
 
 # ---------------------------------------------------------------------------
 # Driver
@@ -551,6 +682,16 @@ class AdidasClickDriver:
         # Populated from the review page during complete_submission.
         self.order_total: str | None = None
         self.line_net_prices: list[str | None] = []
+        # Styles adidas served no product page for, keyed by style so a style
+        # visited more than once in a run (e.g. a check that falls back from
+        # pricing to an inventory read) is reported once.
+        self._missing_by_style: dict[str, dict] = {}
+
+    @property
+    def missing_products(self) -> list[dict]:
+        """Styles this run could not open a product page for, in request order."""
+
+        return list(self._missing_by_style.values())
 
     # -- cart management --------------------------------------------------
 
@@ -767,32 +908,40 @@ class AdidasClickDriver:
         applies the ``on_insufficient_stock`` policy for any line whose full
         quantity is not available:
 
-        - ``pause`` (default): raise :class:`_InsufficientStockPause` — the entry
-          point returns ``needs_confirmation`` and **nothing is ordered**.
+        - ``pause`` (default): raise :class:`_OrderPause` — the entry point
+          returns ``needs_confirmation`` and **nothing is ordered**.
         - ``order``: enter it anyway, accepting delayed delivery (spread).
         - ``skip``: do not enter it (removed from the order); order the rest.
+
+        A style adidas serves **no product page** for is handled separately by
+        ``on_missing_product``: ``pause`` (default) raises the same
+        :class:`_OrderPause` carrying ``missing_products`` so the caller can
+        take the choice to the user, ``skip`` drops those lines and orders the
+        rest, and ``error`` fails the run outright.
 
         Lines are grouped by style so each product page is opened once; adidas
         encodes color in the article number, so no color selection is needed.
         """
 
-        policy = (request.on_insufficient_stock or "pause").strip().lower()
-        if policy not in {"pause", "order", "skip"}:
-            raise AdidasConfigError(
-                f"on_insufficient_stock must be 'pause', 'order', or 'skip'; "
-                f"got {request.on_insufficient_stock!r}."
-            )
+        policy, missing_policy = _validate_policies(request)
 
-        prepared = self._prepare_lines(request)
+        # "error" restores the pre-0.7 behaviour: a style adidas does not carry
+        # aborts the run inside _open_product instead of coming back as a
+        # decision for the caller.
+        prepared = self._prepare_lines(request, missing_ok=missing_policy != "error")
 
-        problems = [p for p in prepared if p["status"] != "ok"]
-        if policy == "pause" and problems:
-            raise _InsufficientStockPause(
+        missing = [p for p in prepared if p["status"] == "not_found"]
+        problems = [
+            p for p in prepared if p["status"] not in ("ok", "not_found")
+        ]
+        if (policy == "pause" and problems) or (missing_policy == "pause" and missing):
+            raise _OrderPause(
                 out_of_stock=[self._shortfall_dict(p) for p in problems],
                 lines=[
                     self._prepared_result(p, note=self._status_note(p))
                     for p in prepared
                 ],
+                missing_products=self.missing_products if missing else [],
             )
 
         results: list[OrderLineResult] = []
@@ -801,12 +950,23 @@ class AdidasClickDriver:
         for p in prepared:
             status, style, line, code = p["status"], p["style"], p["line"], p["code"]
 
+            # A style with no product listing has nothing to enter a quantity
+            # into. Reaching here means the policy is "skip" (or a pause was
+            # already raised above), so drop the line and keep going.
+            if status == "not_found":
+                results.append(
+                    self._prepared_result(p, quantity=0, note=self._status_note(p))
+                )
+                continue
+
             # "Not available" sizes can never be ordered (no quantity input) —
-            # drop them under every policy, with a clear note.
+            # drop them under every policy, with a clear note. Date-gated
+            # products (available date != today) surface the future date so
+            # the caller knows when the size can ship.
             if status == "unavailable":
                 results.append(
                     self._prepared_result(
-                        p, quantity=0, note="not available — cannot be ordered"
+                        p, quantity=0, note=self._status_note(p)
                     )
                 )
                 continue
@@ -848,26 +1008,57 @@ class AdidasClickDriver:
             )
 
         if not entered_any:
+            reasons = []
+            if any(p["status"] == "not_found" for p in prepared):
+                reasons.append(
+                    "adidas has no product listing for "
+                    + ", ".join(sorted(self._missing_by_style))
+                )
+            if problems:
+                reasons.append("every requested size was out of stock or unavailable")
             raise AdidasConfigError(
-                "No lines could be ordered — every requested size was out of "
-                "stock or unavailable."
+                "No lines could be ordered — "
+                + ("; ".join(reasons) or "no line resolved to an orderable size")
+                + "."
             )
         return results
 
-    def _prepare_lines(self, request: OrderRequest) -> list[dict]:
+    def _prepare_lines(
+        self, request: OrderRequest, *, missing_ok: bool = True
+    ) -> list[dict]:
         """Resolve each line to its size code and classify availability.
 
         Opens each product once; scrolls the horizontal size row to bring each
         requested size into view (it lazy-loads). Classifies each size as:
         ``ok`` (enough stock), ``short`` (orderable but < requested — e.g. 0 with
-        a restock date), or ``unavailable`` (the "not available" / X cell, which
-        can never be ordered). Raises if a requested size is not offered at all.
+        a restock date), ``unavailable`` (the "not available" / X cell, which
+        can never be ordered), or ``not_found`` (adidas has no product page for
+        the style at all — see :meth:`_open_product`; ``missing_ok`` false raises
+        there instead). Raises if a requested size is not offered at all.
         """
 
         prepared: list[dict] = []
         for style, lines in _group_by_style(request.lines).items():
-            self._open_product(style)
+            if not self._open_product(style, missing_ok=missing_ok):
+                # adidas serves no listing for this style: record every one of
+                # its lines as not_found and let add_lines apply the policy.
+                for line in lines:
+                    entry = self._note_missing_line(style, line.size, line.quantity)
+                    prepared.append(
+                        {
+                            "style": style,
+                            "line": line,
+                            "code": None,
+                            "product_name": None,
+                            "indicator": None,
+                            "available": None,
+                            "status": "not_found",
+                            "detail": entry["detail"],
+                        }
+                    )
+                continue
             product_name = self._read_product_name(style)
+            available_today, available_date = self._product_available_today()
             code_map = self._size_code_map()
             for line in lines:
                 code = next(
@@ -880,6 +1071,20 @@ class AdidasClickDriver:
                         f"Size {line.size!r} is not offered for {style}. "
                         f"Available sizes: {', '.join(sorted(code_map)) or '(none read)'}."
                     )
+                if not available_today:
+                    prepared.append(
+                        {
+                            "style": style,
+                            "line": line,
+                            "code": code,
+                            "product_name": product_name,
+                            "indicator": None,
+                            "available": 0,
+                            "status": "unavailable",
+                            "available_date": available_date,
+                        }
+                    )
+                    continue
                 status, indicator, available = self._classify_size(
                     style, code, line.quantity
                 )
@@ -965,7 +1170,17 @@ class AdidasClickDriver:
 
     @staticmethod
     def _status_note(p: dict) -> str | None:
+        if p["status"] == "not_found":
+            return (
+                f"not offered — adidas Click has no product listing for "
+                f"{p['style']} ({p.get('detail') or 'no product page'})"
+            )
         if p["status"] == "unavailable":
+            if p.get("available_date"):
+                return (
+                    f"not available until {p['available_date']} — "
+                    "no inventory available today"
+                )
             return "not available — cannot be ordered"
         if p["status"] == "short":
             return (
@@ -990,25 +1205,134 @@ class AdidasClickDriver:
 
     # -- product page -----------------------------------------------------
 
-    def _open_product(self, style: str) -> None:
+    def _open_product(self, style: str, *, missing_ok: bool = False) -> bool:
         """Navigate straight to a style's product page and await the size table.
 
         The size grid sits below the fold and **lazy-renders its per-size tiles
         only when scrolled into view**, so after the table container appears we
         scroll it into view and wait for this style's tiles to attach.
+
+        Returns True once the product is open. When adidas serves no listing for
+        the style (a wrong article number, or one this account is not offered),
+        ``missing_ok`` decides: True records the style in
+        :attr:`missing_products` and returns False so the caller can escalate to
+        the user, False raises :class:`AdidasAPIError` as before.
         """
 
         url = self.base_url + _PRODUCT_PATH.format(style=style)
         self.page.goto(url, wait_until="domcontentloaded")
-        try:
-            self.page.wait_for_selector(_SIZE_TABLE, timeout=_DEFAULT_TIMEOUT_MS)
-        except Exception as exc:  # noqa: BLE001
+        if self._wait_for_size_table():
+            self._ensure_size_tiles_rendered(style)
+            return True
+
+        reason, detail = self._missing_product_reason(style)
+        if not missing_ok:
             raise AdidasAPIError(
-                f"Could not open the product page for {style!r} — the size table "
-                "did not render. Check the article number (it must include the "
-                "color, e.g. JW4306)."
-            ) from exc
-        self._ensure_size_tiles_rendered(style)
+                f"Could not open the product page for {style!r} — {detail}. "
+                "Check the article number (it must include the color, e.g. "
+                "JW4306)."
+            )
+        logger.warning("adidas Click has no product page for %s (%s)", style, detail)
+        self._missing_by_style.setdefault(
+            style,
+            {
+                "style": style,
+                "sizes": [],
+                "requested": 0,
+                "reason": reason,
+                "detail": detail,
+            },
+        )
+        return False
+
+    def _note_missing_line(self, style: str, size: str, quantity: int | None) -> dict:
+        """Attach one requested size to a missing style's summary entry.
+
+        Creates the entry if it somehow isn't there yet, so recording a line can
+        never be the thing that fails a run.
+        """
+
+        entry = self._missing_by_style.setdefault(
+            style,
+            {
+                "style": style,
+                "sizes": [],
+                "requested": 0,
+                "reason": "unresolved",
+                "detail": "no product page could be opened",
+            },
+        )
+        label = size or "*"
+        if label not in entry["sizes"]:
+            entry["sizes"].append(label)
+            entry["requested"] += quantity or 0
+        return entry
+
+    def _wait_for_size_table(self) -> bool:
+        """Poll for the product's size table, bailing early on a not-found tell.
+
+        A blind ``wait_for_selector`` would spend the full timeout on every
+        style adidas does not carry, which is exactly the case the caller most
+        needs a fast answer for. So poll instead: return as soon as the table
+        attaches, and stop early once the page positively says there is no such
+        product.
+        """
+
+        deadline = time.monotonic() + _PRODUCT_WAIT_MS / 1000
+        while True:
+            if self.page.locator(_SIZE_TABLE).count() > 0:
+                return True
+            if self._missing_product_tell():
+                # Confirm before giving up: a stray match (a toast, a background
+                # widget, footer copy) must not beat a size table that is merely
+                # slow, so give the table one last grace window.
+                self.page.wait_for_timeout(_PRODUCT_TELL_GRACE_MS)
+                return self.page.locator(_SIZE_TABLE).count() > 0
+            if time.monotonic() >= deadline:
+                return self.page.locator(_SIZE_TABLE).count() > 0
+            self.page.wait_for_timeout(_PRODUCT_POLL_MS)
+
+    def _missing_product_tell(self) -> str | None:
+        """Return the page's "no such product" wording, if it is showing one.
+
+        Only trusted once the authenticated shell has painted — before that an
+        empty page means "still loading", not "no product". Returns None while
+        the page is still coming up or when no tell is present.
+        """
+
+        try:
+            if self.page.locator(_LOGGED_IN_MARKER).count() == 0:
+                return None
+            text = self.page.locator("body").first.inner_text()
+        except Exception:  # noqa: BLE001 — mid-navigation DOM churn
+            return None
+        match = _PRODUCT_MISSING_TELL_RE.search(text or "")
+        return _clean(match.group(0)) if match else None
+
+    def _missing_product_reason(self, style: str) -> tuple[str, str]:
+        """Classify why a product page never produced a size table.
+
+        ``not_found`` — the portal said so, or bounced off the product URL
+        entirely: the style is genuinely not offered on this account.
+        ``unresolved`` — neither the product nor a not-found tell appeared, so
+        the style is *unconfirmed*: it may be a slow page or a portal change,
+        and the caller should say so rather than assert the style is missing.
+        """
+
+        tell = self._missing_product_tell()
+        if tell:
+            return "not_found", f"the portal reported {tell!r}"
+        try:
+            url = self.page.url or ""
+        except Exception:  # noqa: BLE001
+            url = ""
+        if url and "/reorder/product/" not in url.lower():
+            return "not_found", f"the portal redirected off the product page (to {url})"
+        return (
+            "unresolved",
+            "the product page never rendered a size table (no confirmation "
+            "either way that the style exists)",
+        )
 
     def _ensure_size_tiles_rendered(self, style: str) -> None:
         """Scroll the size grid into view so its per-size tiles render, then wait.
@@ -1071,6 +1395,48 @@ class AdidasClickDriver:
             if code and label:
                 out[label] = code
         return out
+
+    def _product_available_today(self) -> tuple[bool, str | None]:
+        """Return ``(available_today, raw_date_text)`` from the availability tab.
+
+        The product page shows an availability-date button
+        (``#DateTabButton``) outside the size table — its text is the earliest
+        date on which the product can ship (e.g. ``"Jul 31, 2026"``). If that
+        isn't today, the size-tile inventory numbers refer to that future date
+        and nothing is orderable now; the order flow and inventory read both
+        gate on this before trusting the size tiles.
+
+        Fail-open: a missing/unparseable date returns ``(True, raw_or_None)``
+        with a warning log — a portal shape change should not silently block
+        every order. The raw text is returned either way so callers can
+        surface it.
+        """
+
+        from datetime import date, datetime
+
+        try:
+            raw = _clean(
+                self.page.locator(_AVAILABLE_DATE_BUTTON).first.inner_text()
+            ) or None
+        except Exception:  # noqa: BLE001
+            raw = None
+        if not raw:
+            logger.warning(
+                "adidas product page: availability date button (%s) missing "
+                "or empty — skipping the today check",
+                _AVAILABLE_DATE_BUTTON,
+            )
+            return True, None
+        try:
+            parsed = datetime.strptime(raw, "%b %d, %Y").date()
+        except ValueError:
+            logger.warning(
+                "adidas product page: could not parse availability date %r "
+                "(expected e.g. 'Jul 31, 2026') — skipping the today check",
+                raw,
+            )
+            return True, raw
+        return parsed == date.today(), raw
 
     def _read_inventory(self, style: str, code: str) -> str | None:
         """Return the inventory-indicator text for a size (e.g. '300+', '160', '0')."""
@@ -1432,20 +1798,45 @@ class AdidasClickDriver:
         can ask "how much of JW4306 is in stock across sizes?" in one line.
 
         A size that isn't offered is reported with a note (not raised) so one bad
-        size never aborts the whole check.
+        size never aborts the whole check — and likewise a **style** adidas has
+        no product page for is reported as ``not_found`` lines and recorded in
+        :attr:`missing_products`, so the other styles in the same check still
+        get read.
         """
 
         results: list[CheckLineResult] = []
         for style, lines in _group_by_style(request.lines).items():
-            self._open_product(style)
+            if not self._open_product(style, missing_ok=True):
+                for line in lines:
+                    entry = self._note_missing_line(style, line.size, line.quantity)
+                    results.append(
+                        CheckLineResult(
+                            style=style,
+                            size=line.size,
+                            color=line.color,
+                            requested_quantity=line.quantity,
+                            status="not_found",
+                            in_stock=False,
+                            note=(
+                                "not offered — adidas Click has no product "
+                                f"listing for {style} ({entry['detail']})"
+                            ),
+                        )
+                    )
+                continue
             product_name = self._read_product_name(style)
+            available_today, available_date = self._product_available_today()
             code_map = self._size_code_map()
             for line in lines:
                 wants_all = _norm(line.size) in {"", "*", "all"}
                 if wants_all:
                     for label, code in code_map.items():
                         results.append(
-                            self._inventory_line(style, label, code, product_name, line, None)
+                            self._inventory_line(
+                                style, label, code, product_name, line, None,
+                                available_today=available_today,
+                                available_date=available_date,
+                            )
                         )
                     continue
                 code = next(
@@ -1468,7 +1859,11 @@ class AdidasClickDriver:
                     )
                     continue
                 results.append(
-                    self._inventory_line(style, line.size, code, product_name, line, line.quantity)
+                    self._inventory_line(
+                        style, line.size, code, product_name, line, line.quantity,
+                        available_today=available_today,
+                        available_date=available_date,
+                    )
                 )
         return results
 
@@ -1480,8 +1875,34 @@ class AdidasClickDriver:
         product_name: str | None,
         line: OrderLine,
         requested: int | None,
+        *,
+        available_today: bool = True,
+        available_date: str | None = None,
     ) -> "CheckLineResult":
-        """Classify one size's stock into a :class:`CheckLineResult` (no cart)."""
+        """Classify one size's stock into a :class:`CheckLineResult` (no cart).
+
+        Short-circuits to ``unavailable`` when the product page's availability
+        date isn't today — the size-tile numbers refer to that future date, so
+        reading them for a "today" answer would report ghost stock.
+        """
+
+        if not available_today:
+            return CheckLineResult(
+                style=style,
+                size=size_label,
+                color=line.color or (product_name or ""),
+                requested_quantity=requested,
+                available=None,
+                available_count=0,
+                status=_INVENTORY_STATUS["unavailable"],
+                in_stock=False,
+                note=(
+                    f"not available until {available_date} — "
+                    "no inventory available today"
+                    if available_date
+                    else "not available — no inventory available today"
+                ),
+            )
 
         # Classify against 1 unit so "short" means "cannot even ship one" (== 0
         # with a restock date); the raw indicator carries the actual level.
@@ -1632,7 +2053,9 @@ def create_purchase_order(
     if not request.lines:
         raise AdidasConfigError("at least one order line is required.")
 
-    # Sanitize the Customer PO up front (fail fast, before launching a browser).
+    # Validate the out-of-stock / missing-product policies and sanitize the
+    # Customer PO up front (fail fast, before launching a browser).
+    _validate_policies(request)
     original_po = request.po_number
     clean_po, po_changed = _sanitize_po_number(original_po)
     if not clean_po:
@@ -1699,16 +2122,30 @@ def create_purchase_order(
 
             try:
                 result.lines = driver.add_lines(request)
-            except _InsufficientStockPause as pause:
-                # on_insufficient_stock == "pause" and something is short: place
-                # nothing and hand the decision back to the agent/user.
+            except _OrderPause as pause:
+                # Something needs a human decision — a short line under
+                # on_insufficient_stock="pause", and/or a style adidas does not
+                # carry under on_missing_product="pause". Place nothing and hand
+                # the decision back to the agent/user.
                 result.status = "needs_confirmation"
                 result.lines = pause.lines
                 result.out_of_stock = pause.out_of_stock
+                result.missing_products = pause.missing_products
                 result.total_quantity = sum(
                     ln.quantity for ln in pause.lines if ln.quantity
                 ) or None
-                result.message = _insufficient_stock_message(pause.out_of_stock)
+                result.message = " ".join(
+                    part
+                    for part in (
+                        _missing_product_message(pause.missing_products)
+                        if pause.missing_products
+                        else "",
+                        _insufficient_stock_message(pause.out_of_stock)
+                        if pause.out_of_stock
+                        else "",
+                    )
+                    if part
+                )
                 if screenshot_path:
                     driver.screenshot(screenshot_path)
                     result.screenshot_path = screenshot_path
@@ -1716,6 +2153,18 @@ def create_purchase_order(
             result.total_quantity = sum(
                 ln.quantity for ln in result.lines if ln.quantity
             ) or None
+            # Reached here with missing styles means on_missing_product="skip":
+            # the order goes ahead without them, so say plainly what was dropped
+            # rather than leaving it to a per-line note.
+            result.missing_products = driver.missing_products
+            if result.missing_products:
+                result.warnings.append(
+                    "Skipped "
+                    + ", ".join(m["style"] for m in result.missing_products)
+                    + " — adidas Click has no product listing for "
+                    + ("them" if len(result.missing_products) > 1 else "it")
+                    + " (on_missing_product='skip')."
+                )
 
             if not CHECKOUT_IMPLEMENTED:
                 result.status = "not_implemented"
@@ -1784,6 +2233,8 @@ def _line_stock(line: OrderLineResult) -> tuple[str | None, bool | None]:
     """
 
     note = (line.note or "").lower()
+    if "not offered" in note:
+        return "not_found", False
     if "not available" in note:
         return "unavailable", False
     count = _parse_available(line.available)
@@ -1853,6 +2304,32 @@ def _safe_delete_cart(
         return False
 
 
+def _apply_missing_products(
+    driver: "AdidasClickDriver",
+    result: CheckResult,
+    *,
+    escalate: bool,
+) -> str:
+    """Attach any missing styles to a check result; return the message prefix.
+
+    ``escalate`` (``on_missing_product`` left at ``pause``) flips the result to
+    ``needs_confirmation`` so the caller takes the missing styles to the user
+    instead of quietly reporting a short list of lines. Everything the check
+    *did* read is kept either way.
+    """
+
+    result.missing_products = driver.missing_products
+    if not result.missing_products:
+        return ""
+    message = _missing_product_message(result.missing_products, ordering=False)
+    if escalate:
+        result.status = "needs_confirmation"
+    else:
+        result.warnings.append(message)
+        return ""
+    return message + " "
+
+
 def check_inventory_pricing(
     *,
     request: OrderRequest,
@@ -1879,6 +2356,14 @@ def check_inventory_pricing(
     buy. Since the order is never placed, the check never pauses on short stock —
     a ``pause`` policy is upgraded to ``order`` so every orderable line gets a
     price.
+
+    A style adidas serves **no product page** for never aborts the check: those
+    lines come back with ``status="not_found"``, the rest are read as usual, and
+    the styles are summarised in ``missing_products``. With
+    ``on_missing_product`` left at ``pause`` (default) the result's status
+    becomes ``needs_confirmation`` so the caller escalates the missing styles to
+    the user; ``skip`` reports them as a warning instead, and ``error`` fails the
+    check outright.
     """
 
     check = (check or "both").strip().lower()
@@ -1892,6 +2377,15 @@ def check_inventory_pricing(
         )
 
     needs_cart = check in {"pricing", "both"}
+
+    # A check reports on every style it *can* read and hands the ones adidas has
+    # no listing for back to the caller, so the driver never pauses or raises
+    # mid-run on a missing style: it drops those lines and the caller escalates
+    # from ``missing_products`` below. ``error`` is still honoured for a caller
+    # that wants a missing style to fail the check outright.
+    _, missing_policy = _validate_policies(request)
+    if missing_policy != "error":
+        request.on_missing_product = "skip"
 
     pre_warnings: list[str] = []
     po_number: str | None = None
@@ -1944,8 +2438,12 @@ def check_inventory_pricing(
                 if screenshot_path:
                     driver.screenshot(screenshot_path)
                     result.screenshot_path = screenshot_path
-                result.message = (
-                    f"Inventory check complete for {len(result.lines)} line(s) — "
+                prefix = _apply_missing_products(
+                    driver, result, escalate=missing_policy == "pause"
+                )
+                readable = sum(1 for ln in result.lines if ln.status != "not_found")
+                result.message = prefix + (
+                    f"Inventory check complete for {readable} line(s) — "
                     "no cart was created."
                 )
                 return result
@@ -1960,18 +2458,24 @@ def check_inventory_pricing(
 
             try:
                 order_lines = driver.add_lines(request)
-            except AdidasConfigError as exc:
-                # e.g. every requested size is unavailable — nothing to price.
-                # Report inventory instead, then clean up the (empty) cart.
+            except (AdidasConfigError, AdidasAPIError) as exc:
+                # e.g. every requested size is unavailable, or a requested size
+                # is not offered — nothing to price. Report inventory instead,
+                # then clean up the (empty) cart: a throwaway DO-NOT-BUY cart
+                # must never be left behind because a line failed to resolve.
+                # Delete first, so a failing inventory read cannot strand it.
+                result.cart_deleted = _safe_delete_cart(driver, po_number, result)
                 result.lines = driver.read_inventory(request)
                 result.total_quantity = (
                     sum((ln.requested_quantity or 0) for ln in result.lines) or None
                 )
-                result.cart_deleted = _safe_delete_cart(driver, po_number, result)
                 if screenshot_path:
                     driver.screenshot(screenshot_path)
                     result.screenshot_path = screenshot_path
-                result.message = (
+                prefix = _apply_missing_products(
+                    driver, result, escalate=missing_policy == "pause"
+                )
+                result.message = prefix + (
                     "Pricing check could not add any line to the cart "
                     f"({exc}); inventory levels are reported instead."
                 )
@@ -2000,7 +2504,10 @@ def check_inventory_pricing(
                 else f" NOTE: the throwaway cart {po_number!r} could NOT be "
                 "auto-deleted — remove it in the portal."
             )
-            result.message = (
+            prefix = _apply_missing_products(
+                driver, result, escalate=missing_policy == "pause"
+            )
+            result.message = prefix + (
                 f"Pricing check complete — {priced} line(s) priced"
                 + (f", order total {result.order_total}." if result.order_total else ".")
                 + tail

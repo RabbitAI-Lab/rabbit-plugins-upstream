@@ -458,7 +458,13 @@ def cmd_interactive(args):
         print(json.dumps(decisions, ensure_ascii=False, indent=2))
 
 def cmd_apply(args):
-    """根据决策 JSON，对技能目录中的文件执行脱敏/保留"""
+    """根据决策 JSON，对技能目录中的文件执行脱敏/保留
+
+    v2.44.0 硬约束（方案 A）：severity=critical/high 的发现禁止 keep。
+    邮箱（high）、Token/私钥（critical）必须 sanitize——"脱敏强制"是代码级
+    铁律，不是 LLM 可选项。keep 仅允许 medium 及以下的公开署名类豁免
+    （如 LICENSE/README 的 wUwproject 署名、占位符）。
+    """
     with open(args.decisions, "r", encoding="utf-8") as f:
         decisions = json.load(f)
     with open(args.scan_result, "r", encoding="utf-8") as f:
@@ -466,23 +472,44 @@ def cmd_apply(args):
     skill_dir = normalize_path(args.skill_dir)
     # 构建 file → findings 映射
     file_findings = {e["file"]: e["findings"] for e in results}
+
+    # 统计（审计用）
+    stat = {"forced": 0, "kept": 0, "sanitized": 0, "skipped": 0}
+
+    FORBIDDEN_KEEP = {"critical", "high"}  # 这些 severity 禁止 keep（硬约束）
+
     for file_rel, decision in decisions.items():
         if file_rel.startswith("__"):
             continue
         fpath = os.path.join(skill_dir, file_rel)
         if not os.path.exists(fpath):
             print(f"  ⚠️  文件不存在，跳过: {file_rel}")
+            stat["skipped"] += 1
             continue
+
+        findings = file_findings.get(file_rel, [])
+        # ── 硬约束：critical/high 发现禁止 keep，强制转为 sanitize ──
+        forbidden = [f for f in findings if f.get("severity") in FORBIDDEN_KEEP]
+        forced = False
+        if decision == "keep" and forbidden:
+            print(f"  🔒 强制脱敏（{forbidden[0]['severity']}: {forbidden[0]['label']}）: {file_rel}")
+            decision = "sanitize"
+            forced = True
+            stat["forced"] += 1
+
         if decision == "keep":
             print(f"  ⏭️  保留（不脱敏）: {file_rel}")
+            stat["kept"] += 1
             continue
         if decision == "sanitize":
-            findings = file_findings.get(file_rel, [])
-            replacements = build_replacements(findings)
+            # 强制场景只替换 critical/high 的 match（medium 及以下保持原样）
+            target = forbidden if forced else findings
+            replacements = build_replacements(target) if target else {}
             new_content = sanitize_content(open(fpath, "r", encoding="utf-8").read(), replacements)
             with open(fpath, "w", encoding="utf-8") as f:
                 f.write(new_content)
             print(f"  ✅ 已脱敏: {file_rel}")
+            stat["sanitized"] += 1
         elif isinstance(decision, dict) and decision.get("mode") == "custom":
             # 用户逐项选择的结果
             replacements = decision.get("replacements", {})
@@ -490,7 +517,31 @@ def cmd_apply(args):
             with open(fpath, "w", encoding="utf-8") as f:
                 f.write(new_content)
             print(f"  ✅ 已脱敏（部分）: {file_rel}")
+            stat["sanitized"] += 1
+
     print(f"\n  ✅ 处理完成，技能目录: {skill_dir}")
+    print(f"     统计: 强制脱敏 {stat['forced']} / 正常脱敏 {stat['sanitized']} / 保留 {stat['kept']} / 跳过 {stat['skipped']}")
+    # 硬约束兜底：处理后文件仍含 critical/high 的原始 match（说明脱敏未生效）→ 阻断
+    remain = []
+    for file_rel, findings in file_findings.items():
+        fpath = os.path.join(skill_dir, file_rel)
+        if not os.path.exists(fpath) or file_rel.startswith("__"):
+            continue
+        forbidden = [x for x in findings if x.get("severity") in FORBIDDEN_KEEP]
+        if not forbidden:
+            continue
+        try:
+            content = open(fpath, "r", encoding="utf-8").read()
+        except Exception:
+            continue
+        leaked = [x["match"] for x in forbidden if x.get("match") and x["match"] in content]
+        if leaked:
+            remain.append((file_rel, leaked))
+    if remain:
+        print(f"  ❌ 硬约束失败：处理后仍残留 critical/high 敏感信息:")
+        for f, leaked in remain:
+            print(f"     {f}: {leaked}")
+        sys.exit(1)
 
 def main():
     parser = argparse.ArgumentParser(description="敏感信息扫描与脱敏")

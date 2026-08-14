@@ -1,8 +1,8 @@
 ---
 name: cargo-cdk
 description: "Define an entire Cargo workspace in code — connectors, models, plays, tools, agents, MCP servers, context, capacities, territories, segments, folders, files, workers, apps — and deploy it declaratively with `cargo-ai cdk` (init → types → plan → deploy), the way you'd manage cloud infra with Pulumi or the AWS CDK. Use when the user wants to manage Cargo resources as code: reproducibly, version-controlled, in git, from a template, or across environments. Routes to authoring/deploy/typing guides (Level 2), recipes (Level 2.5), and references. For one-off imperative operations (create one connector, read a model, run a workflow), use the matching capability skill instead."
-version: "1.0.0"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+version: "1.2.1"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -128,9 +128,9 @@ state) · `cargo-ai cdk rollback` (restore the pre-deploy state snapshot).
 ## 6) Critical rules
 
 - **Commit `cargo.state.json`.** It is the link from your code to the resources
-  Cargo created — and the **only** handle on a deployed **play** or **agent**
-  (they have no slug). Lose it and those resources orphan; recover a link with
-  `cargo-ai cdk import`. It records only `{hash, uuid, outputs}` — never secret
+  Cargo created — and the **only** handle on a deployed **play**, **agent**, or
+  **alert** (they have no slug). Lose it and those resources orphan; recover a link
+  with `cargo-ai cdk import`. It records only `{hash, uuid, outputs}` — never secret
   values. Git-ignore the working files (`cdk init` scaffolds this):
   ```gitignore
   .cargo-ai/
@@ -157,6 +157,34 @@ state) · `cargo-ai cdk rollback` (restore the pre-deploy state snapshot).
   land in the wrong directory. Use `--dir <path>` to be explicit.
 - **`--yes` in CI.** `deploy` and `destroy` prompt for confirmation; non-interactive
   runs must pass `--yes`.
+- **A `definePlay`/`defineTool` graph with paid nodes gets a sample run before it
+  goes wide.** Deploying is not running, but the first thing that runs a deployed
+  play is usually a batch over the whole segment — and a scheduled play re-bills
+  every node on every run. Before enrolling everything (or enabling a schedule),
+  run the deployed workflow on **10–20 records** — `cargo-ai orchestration batch
+  create --data '{"kind":"filter","modelUuid":"…","filter":…,"limit":15}'`, or
+  `batch create --file ./plays/x.ts` to test-run the module without deploying —
+  then ask the user to approve the full enrollment with the **record count** and
+  **credit estimate**. Read the provider's playbook
+  (`../cargo-gtm/provider-playbooks/<slug>.md`, esp. its *Recurring use* section)
+  and the gate in
+  [`../cargo-gtm/references/cost-discipline.md`](../cargo-gtm/references/cost-discipline.md).
+- **A `defineAlert` whose actions call paid nodes re-bills on every breach.** An
+  alert's `actions` fire as real runs, so a badly-sized `threshold` on a tight
+  `schedule` can breach — and bill — every tick. Size the threshold with
+  `cargo-ai observability alert preview` before deploying, prefer cheap notification
+  actions (an agent that posts, a connector notification) over anything that fans
+  out, and apply the same cost gate above when an action calls a credits-based
+  provider. Scope/threshold and firing semantics:
+  [`../cargo-observability/SKILL.md`](../cargo-observability/SKILL.md).
+- **Route CDK-managed resources into a clearly-labelled folder.** Set `folder:` on
+  each builder so everything CDK owns lands in a dedicated folder whose name signals
+  "owned by code — don't hand-edit" to anyone in the UI (manual UI edits read back as
+  drift on the next `plan`). Folders are per-kind, so give each kind its own but share
+  one short, recognizable prefix — recommended: **`🔒 CDK`** (e.g. `🔒 CDK Models`,
+  `🔒 CDK Agents`). Keep names short (long labels truncate in the folder tree); the
+  lock emoji is the "don't touch" cue. See
+  [`guides/authoring-resources.md`](guides/authoring-resources.md).
 
 ## Prerequisites
 

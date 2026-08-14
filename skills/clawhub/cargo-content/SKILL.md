@@ -1,8 +1,8 @@
 ---
 name: cargo-content
 description: Manage workspace knowledge files and libraries in the Cargo content domain — upload, list, rename, move, and remove files (PDFs, CSVs, text), and create or sync native and connector-backed libraries for retrieval-augmented generation (RAG). Use when the user wants to upload or organize knowledge files, build a knowledge library, or sync an external knowledge source. To attach these to an agent, use the cargo-ai skill.
-version: "1.0.0"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+version: "1.0.1"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -55,8 +55,8 @@ cargo-ai content file list
 cargo-ai content file get <file-uuid>
 
 # Upload a file (optionally straight into a folder)
-cargo-ai content file upload --file-path ./knowledge-base.pdf
-cargo-ai content file upload --file-path ./knowledge-base.pdf --folder-uuid <folder-uuid>
+cargo-ai content file upload --file ./knowledge-base.pdf
+cargo-ai content file upload --file ./knowledge-base.pdf --folder-uuid <folder-uuid>
 
 # Update a file's name or folder
 cargo-ai content file update --uuid <file-uuid> --name "Q1 Research Notes"

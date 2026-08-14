@@ -1,48 +1,68 @@
-## Description: <br>
-Temu Global (non-US/EU) cancel-order API skill that helps agents use LinkFox gateway scripts for buyer after-sales cancellations and seller appeal or out-of-stock cancellation workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Temu Global cancel-order guidance and scripts for buyer after-sales cancellation and seller appeal or out-of-stock cancellation flows through the LinkFox gateway.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and ecommerce operations teams use this skill to guide an agent through Temu Global order-cancellation workflows, including buyer after-sales cancellation review, seller cancellation appeals, out-of-stock cancellation requests, and status checks through LinkFox gateway scripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global (Temu Global site; excludes US/EU regional skills) <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release includes broad Temu proxy and file-download utilities beyond a narrow cancel-order workflow. <br>
-Mitigation: Install only in trusted workspaces and use the generic proxy or download utilities only when they are intentionally needed for the task. <br>
-Risk: Temu tokens and API responses may be stored locally by the skill's scripts. <br>
-Mitigation: Use narrowly scoped Temu tokens, restrict access to local token and response files, and delete or secure saved files after use. <br>
-Risk: The skill can perform live order-cancellation operations through LinkFox and Temu APIs. <br>
-Mitigation: Confirm the target site, store, order identifiers, and cancellation action before executing scripts against production credentials. <br>
+## Use Case:
 
+External Temu sellers and developers use this skill to prepare and run global-region cancel-order API calls, including buyer after-sales cancellation, seller cancellation appeals, and out-of-stock cancellation review flows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-cancel-order-global) <br>
-- [API reference](references/api.md) <br>
-- [Temu accessToken authorization and retrieval](references/access-token.md) <br>
-- [Partner Global cancel-order catalog](references/partner-global-catalog.md) <br>
-- [Cancel Order API document index](references/apis/README.md) <br>
-- [Temu Partner Global documentation](https://partner-global.temu.com/documentation?menu_code=dbd3d395963a408984b8ae7dbc5f64f9) <br>
-- [Temu Global OpenAPI router](https://openapi-b-global.temu.com/openapi/router) <br>
+### Deployment Geography for Use:
 
+Global, excluding the US and EU flows that the skill directs users to handle with separate regional skills.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, API calls, Files] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON API responses saved to local files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts persist complete responses under a linkfox date/session data directory; small responses print full JSON to stdout, larger responses print summaries unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill includes broader proxy, onboarding, file-download, account, payment, token, and local-retention capabilities than cancel-order workflows alone require.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the scripts before installation and run only the cancel-order entry points needed for the task; avoid generic proxy, onboarding, payment, and file-download commands unless those broader capabilities are intentional.
+
+Risk: Temu access tokens and LinkFox gateway credentials can be supplied through environment variables, JSON parameters, or an optional local token store.
+
+Mitigation: Avoid saving Temu access tokens unless necessary, restrict permissions on any token store, prefer short-lived task-specific credentials, and do not share command transcripts containing tokens.
+
+Risk: Gateway base URLs can be overridden by environment variables, which could redirect API traffic if the workspace is not trusted.
+
+Mitigation: Verify LinkFox gateway environment variables point to legitimate LinkFox domains before running API or file-download scripts.
+
+Risk: Scripts may write complete API responses to a local linkfox data directory, which can retain order and account information after the task completes.
+
+Mitigation: Use the skill only in a trusted workspace, review generated response files, and remove stored outputs when they are no longer needed.
+
+## Reference(s):
+
+- [API Reference](references/api.md)
+- [Partner Global Cancel Order Catalog](references/partner-global-catalog.md)
+- [Temu accessToken Authorization](references/access-token.md)
+- [Authorization Flow](references/authorization-flow.md)
+- [Onboarding and Account Guidance](references/onboarding.md)
+- [Cancel Order API Index](references/apis/README.md)
+- [Temu Partner Global Documentation](https://partner-global.temu.com/documentation)
+- [Temu Global OpenAPI Router](https://openapi-b-global.temu.com/openapi/router)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with Python command examples and JSON API responses saved to local files or printed to stdout.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts may write full gateway responses under a local linkfox data directory and summarize large responses unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

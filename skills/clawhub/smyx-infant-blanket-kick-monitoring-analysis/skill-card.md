@@ -1,45 +1,64 @@
-## Description: <br>
-Identifies infants kicking off blankets or exposing their bodies during sleep and returns monitoring results, suggestions, and report links for caregiver review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies babies kicking off blankets or exposing their bodies during sleep and alerts parents to cover them up to prevent catching a cold.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External caregivers and operators use this skill to analyze infant sleep monitoring media for blanket-kicking or body-exposure events and to review current or historical cloud reports. Results are auxiliary reminders and do not replace direct child supervision or safe sleep practices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Nursery media or media URLs may be uploaded to the publisher's cloud service for analysis. <br>
-Mitigation: Use only with explicit caregiver consent, avoid unnecessary sensitive footage, and confirm the publisher's retention, deletion, and access-control practices before deployment. <br>
-Risk: Reports may be linked to a persistent local or backend identity and retained for report history. <br>
-Mitigation: Review account/token storage behavior, report-link access controls, and deletion procedures before using the skill with child-monitoring footage. <br>
-Risk: Monitoring output may be mistaken for a substitute for direct infant supervision. <br>
-Mitigation: Present results as auxiliary reminders only and keep human supervision and safe sleep practices as the primary safety control. <br>
+## Use Case:
 
+Parents, caregivers, and agents assisting with nursery monitoring use this skill to analyze infant sleep video or image inputs for blanket-kicking, body exposure, and related alert/report output. It can also retrieve cloud-hosted historical monitoring reports associated with the current workspace identity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-blanket-kick-monitoring-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report text, with optional saved output file and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local media paths, media URLs, report-list queries, optional API endpoint configuration, and basic/standard/json detail levels.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence; artifact frontmatter reports 1.0.8) <br>
+Risk: Sensitive infant sleep footage and report queries are sent to LifeEmergence cloud endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit caregiver approval, approved media handling policy, and inputs that are appropriate to transmit to the configured cloud service.
+
+Risk: The skill can silently create or reuse a local workspace identity and associate cloud report history with that identity.
+
+Mitigation: Review identity behavior before deployment and require confirmation before historical report retrieval in environments with privacy or consent requirements.
+
+Risk: A local workspace database can store service tokens used by the skill.
+
+Mitigation: Limit file permissions for the workspace, rotate tokens after testing, and prefer a version with explicit token retention and deletion controls.
+
+Risk: Monitoring output is an auxiliary signal and may be wrong or incomplete.
+
+Mitigation: Do not use the output as a substitute for caregiver supervision, safe sleep practices, or other infant safety monitoring.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-blanket-kick-monitoring-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Infant blanket monitoring API documentation](references/api_doc.md)
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files]
+
+**Output Format:** [Markdown or JSON analysis report, with optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include monitoring results, recommendations, report links, and historical report tables.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

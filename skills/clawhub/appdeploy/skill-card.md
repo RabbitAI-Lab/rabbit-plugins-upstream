@@ -1,43 +1,52 @@
-## Description: <br>
-AppDeploy helps agents deploy or publish web apps with backend APIs, database, file storage, AI operations, authentication, realtime, and cron jobs to a public URL via HTTP API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deploy web apps with backend APIs, database, file storage, AI operations, authentication, realtime, and cron jobs.
 
-## Publisher: <br>
-[avimak](https://clawhub.ai/user/avimak) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
+
+[avimak](https://clawhub.ai/user/avimak)
+
+### License/Terms of Use:
+
+MIT
+
+## Use Case:
+
+Developers and engineers use this skill to publish, update, and manage AppDeploy-hosted websites and web apps with public URLs. It supports workflows for app templates, SDK feature references, deployment status checks, source inspection, secrets, versions, and custom domains.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The .appdeploy API key grants administrative access to deploy and manage apps.
+
+Mitigation: Keep the key out of repositories and logs, restrict file permissions, and rotate it if exposed.
+
+Risk: Administrative actions can delete apps, remove secrets, change domains, or read deployed source snapshots.
+
+Mitigation: Require explicit confirmation before destructive or sensitive app-management actions.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and coding agents use AppDeploy to prepare deployment instructions, submit app files to AppDeploy, check deployment status, and manage deployed web apps with public URLs. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [guidance, shell commands, configuration, code]
 
-## Known Risks and Mitigations: <br>
-Risk: AppDeploy sends app files to an external hosting service for public deployment. <br>
-Mitigation: Install and use it only when public deployment through AppDeploy is intended, and review which files will be sent before deploying. <br>
-Risk: Source snapshots or deployment files could include secrets or private credentials. <br>
-Mitigation: Keep secrets out of source snapshots, keep .appdeploy private, and ensure .appdeploy is gitignored. <br>
-Risk: Updating or deleting an existing app can overwrite or remove a public deployment. <br>
-Mitigation: Require explicit confirmation before overwriting or deleting an existing app. <br>
+**Output Format:** [Markdown with inline JSON and bash code blocks]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [AppDeploy on ClawHub](https://clawhub.ai/avimak/skills/appdeploy) <br>
-- [AppDeploy publisher profile](https://clawhub.ai/user/avimak) <br>
+**Other Properties Related to Output:** [May guide API-key setup, deployment calls, status polling, source inspection, secret management, and domain configuration.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Code, Text] <br>
-**Output Format:** [Markdown guidance with curl commands, JSON-RPC payloads, app file content, and deployment status text.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create, update, inspect, or delete public app deployments when the corresponding tool workflow is used.] <br>
+1.0.8 (source: server release metadata and skill frontmatter)
 
-## Skill Version(s): <br>
-1.0.7 (source: frontmatter and server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

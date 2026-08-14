@@ -1,44 +1,65 @@
-## Description: <br>
-Shopee store product management skill that helps agents call LinkFox-forwarded Shopee Open API Product endpoints for listing lookup, item creation, item updates, price and stock changes, boosting, comments, categories, attributes, and related catalog operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents manage authorized Shopee store product listings through LinkFox, including category lookup, listing CRUD, SKU, price, stock, promotion, and comment workflows.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and developers use this skill to let an agent inspect and manage authorized Shopee store listings through Product module APIs. It supports product listing workflows such as category and attribute lookup, item creation, updates, stock and price changes, unlisting, boosting, comments, SKU/model operations, and related product diagnostics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make live Shopee store changes, including delete, unlist, price, stock, comment reply, boost, and bulk update actions. <br>
-Mitigation: Require explicit human confirmation before any destructive, public-facing, pricing, inventory, reply, promotional, or bulk operation. <br>
-Risk: Full Shopee API responses are persisted under local linkfox session data and may contain sensitive store data. <br>
-Mitigation: Store outputs only in protected workspaces and periodically remove or restrict access to saved linkfox session JSON files. <br>
-Risk: The server security evidence notes inconsistent credit or billing language and possible feedback calls that may send task context to LinkFox. <br>
-Mitigation: Confirm expected cost behavior before repeated calls and prevent or approve feedback submissions before sending operational context. <br>
+## Use Case:
 
+External developers and ecommerce operators use this skill in an agent to inspect and update authorized Shopee store listings, SKUs, prices, stock, categories, attributes, comments, and related product data.
 
-## Reference(s): <br>
-- [Artifact API Reference](artifact/references/api.md) <br>
-- [Shopee Product API: get_category](https://open.shopee.com/documents/v2/v2.product.get_category?module=89&type=1) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-product) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses saved to local files with stdout JSON or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API credentials and an authorized Shopee store; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can create, update, delete, unlist, reprice, restock, boost, and reply to comments on live Shopee store listings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation and review request bodies before any mutating action, especially add, update, delete, unlist, price, stock, and comment operations.
+
+Risk: The skill includes LinkFox login, API-key, and billing or payment helper flows.
+
+Mitigation: Review onboarding and billing behavior before installation, and avoid exposing API keys, phone numbers, payment links, or QR codes in shared logs.
+
+Risk: Untrusted environment overrides can redirect LinkFox endpoint traffic.
+
+Mitigation: Use trusted gateway defaults and avoid setting LinkFox or Shopee endpoint override variables from untrusted sources.
+
+Risk: Full API responses may be saved locally and can include store, listing, pricing, stock, or customer interaction data.
+
+Mitigation: Run from an appropriate workspace, restrict access to the linkfox session output directory, and redact persisted JSON before sharing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-product)
+- [Shopee Product API reference](https://open.shopee.com/documents/v2/v2.product.get_category?module=89&type=1)
+- [LinkFox skill catalog](https://skill.linkfox.com/)
+- [Product API local reference](references/api.md)
+- [Onboarding and billing local reference](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses; large responses are saved as local JSON files with stdout summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a LinkFox API key and an authorized Shopee store; full API responses may be persisted under a linkfox session directory.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

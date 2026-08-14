@@ -1,44 +1,54 @@
-## Description: <br>
-Manages TikTok creator and video-account OAuth authorization, authorized-account listing, token lookup, and access-token refresh through LinkFox's /tiktokVideo APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides TikTok creator and video-account OAuth authorization, authorized-account listing, token lookup, and access-token refresh through the LinkFox /tiktokVideo workflow.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External operators and developers use this skill to authorize TikTok creator/video accounts, list authorized accounts, retrieve masked token details, and refresh access tokens before downstream video-upload API workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with an explicit US region option for authorization flows. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles TikTok creator access and refresh tokens. <br>
-Mitigation: Install only when LinkFox is trusted for the authorization flow, avoid exposing full token values, and avoid retaining response files that may contain account or token data. <br>
-Risk: The gateway endpoint can be overridden with LINKFOX_TOOL_GATEWAY. <br>
-Mitigation: Confirm LINKFOX_TOOL_GATEWAY is unset or points to the expected LinkFox host before running authorization or token scripts. <br>
-Risk: The security guidance flags automatic feedback and onboarding-download behavior as review points. <br>
-Mitigation: Review or disable automatic feedback and onboarding-download behavior if user context or installation actions should not be sent through LinkFox services. <br>
+## Use Case:
 
+Developers and operators use this skill to connect TikTok creator or video accounts, list authorized accounts, check stored token status, and refresh access tokens before downstream TikTok video workflows.
 
-## Reference(s): <br>
-- [TikTok 视频上传 API — 授权与令牌管理 API Reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-tiktok-video-auth) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global, with a separate US region option.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Token values are intended to be masked in user-facing output; response files may persist API data when response_io.py is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence) <br>
+Risk: The skill handles TikTok authorization links, access tokens, refresh tokens, and the LinkFox API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when LinkFox is trusted for the authorization flow, keep API keys in environment variables, and do not display or share full tokens.
+
+Risk: Persisted response files may contain sensitive account, token, or authorization data.
+
+Mitigation: Write response files only outside shared or git-tracked folders and delete temporary files after use.
+
+## Reference(s):
+
+- [TikTok Video Authorization API Reference](artifact/references/api.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-tiktok-video-auth)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, guidance]
+
+**Output Format:** [JSON API responses with concise Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Token-query and refresh scripts mask access and refresh tokens before displaying them.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

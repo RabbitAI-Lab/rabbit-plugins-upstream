@@ -10,9 +10,7 @@ Route complex software work into the smallest defensible delivery workflow, keep
 
 ## Positioning
 
-This skill is not only an expert router. It is a bounded work-loop skill for complex tasks.
-
-It has seven core closure layers plus one optional stage-council overlay:
+This skill is a bounded work-loop router for complex tasks. Routing is one of its closures; the full set is six closure layers, one delivery subgraph, and one optional stage-council overlay:
 
 1. `Planning closure`
    - Large rewrites, migrations, and project-wide transformations get a lightweight analysis / plan / progress pack before implementation.
@@ -26,8 +24,11 @@ It has seven core closure layers plus one optional stage-council overlay:
    - Release readiness uses a formal `ship` / `hold` gate and bootstraps the next remediation loop when needed.
 6. `Drill closure`
    - Offline drills verify rollback, resume, and release-gate bootstrap paths.
-7. `Team Engine Lite closure`
+Delivery subgraph:
+
+- `Team Engine Lite`（Delivery closure 内子图，非独立层）
    - Code-facing delivery uses Worker / Verifier separation, max-cycle retry, remediation patch, controlled real subagent runtime eligibility, external-agent soft orchestration fallback, and a DeliveryCycleReport before Lead acceptance.
+   - Verifier 独立性由"禁止上游预判下游"硬约束(P0-3)保证,而非独立成层。详见 `references/team-engine-lite-protocol.md` 和 `references/verifier-extraction-guide.md`。
 Optional overlay:
 
 - `Stage council overlay`
@@ -108,8 +109,7 @@ If the task is simple and clearly single-domain, keep routing lightweight.
 
 1. Identify task type, risk level, language stack, and Git/process needs.
 2. Choose the smallest output mode with [references/mode-selection-protocol.md](references/mode-selection-protocol.md): Direct Answer, Multi-Expert Execution, Expert Routing, or Full Workflow.
-3. Keep Direct Answer advice-only. If the user asks for code edits, refactors, bug fixes, verification, commits, release readiness, or repeated iteration, route to the smallest delivery bundle instead.
-3.5. Use Multi-Expert Execution only when multiple specialist perspectives materially change the result. Spawn real experts only when runtime evidence exists; otherwise label the result as soft expert orchestration.
+3. Keep Direct Answer advice-only. If the user asks for code edits, refactors, bug fixes, verification, commits, release readiness, or repeated iteration, route to the smallest delivery bundle instead. Use Multi-Expert Execution only when multiple specialist perspectives materially change the result; spawn real experts only when runtime evidence exists, otherwise label the result as soft expert orchestration.
 4. If the request is a narrow implementation or bug fix, use quick slice delivery instead of a full product or planning workflow.
 5. Choose one lead agent.
 6. Add one or two assistant agents only when they add clear value.
@@ -117,13 +117,14 @@ If the task is simple and clearly single-domain, keep routing lightweight.
 8. Use a compact handoff when lead and assistants need structured coordination.
 9. If the request is primarily about building AI-readable project context, route execution to `skill-forge` and its project knowledge capture protocol after the software-risk lanes are identified.
 10. If the request is a fuzzy idea or low-information route-changing ask, ask one intent-confirmation question before treating the provisional route as final.
+10.5. Worktree semantic review: `needs_worktree` from the router is a keyword-based first pass, not a final verdict. When it is true, confirm the task genuinely involves parallel work or workspace isolation; if it was a false trigger (e.g. the user mentioned "two" in passing but the work is a single coherent task), downgrade and do not force a worktree. When it is false but the task clearly needs parallel isolation (multiple independent changes that must not interfere), suggest a worktree to the user and explain the benefit. Record the review outcome as a route-changing assumption.
 11. Apply execution-quality guardrails: surface route-changing assumptions, keep the smallest defensible bundle, limit scope surgically, and define verifiable closure.
 12. For broad, repeated-failure, release, beta, multi-agent, or drift-prone work, apply goal framing: success evidence, stop condition, and non-goals must be explicit before implementation.
-13. For code-facing routes, apply the Harness constraint gate before implementation: create or refresh `.skill-harness/engineering-constraints.md`.
+13. For code-facing routes, apply the Harness constraint gate before implementation: create or refresh `.vidt/harness/engineering-constraints.md`.
 14. For changes that add or retire guards, fallbacks, adapters, duplicate owners, compatibility paths, schema, persistence, or source-of-truth behavior, apply anti-entropy governance before choosing delete, compat, or confirmation paths.
-15. For code-facing, release-facing, Git-facing, or remediation routes, apply Team Engine Lite: Worker can produce, Verifier can pass/fail/hold, and Lead can accept only after a DeliveryCycleReport.
-16. If the user explicitly asks for multi-agent / subagent / parallel agent execution, or `/auto` reaches an eligible workflow, build a controlled real subagent runtime plan; only claim actual real subagent execution when the host exposes spawn / wait / merge runtime evidence.
-17. If external Agent backends are available but real subagent runtime is not proven, treat them as soft backend sessions under the same role boundary; do not claim true async multi-process runtime without runtime evidence.
+15. For code-facing, release-facing, Git-facing, or remediation routes, apply Team Engine Lite: Worker can produce, Verifier can return pass/fail/hold/spec_violation, and Lead can accept only after a DeliveryCycleReport.
+16. If the user explicitly asks for multi-agent / subagent / parallel agent execution, or `/auto` reaches an eligible workflow, build a controlled real subagent runtime plan with three tiers: `real_subagent_runtime` (host exposes spawn / wait / merge), `single_backend_multi_session` (host exposes create_session / kill_session / restart_session; session is the circuit-breaker unit), or `soft_orchestration_only` (no isolation; `known-shortcut:` ceiling). The host downgrades to the highest tier it can actually enforce; never upgrade beyond proven capability.
+17. If external Agent backends are available but real subagent runtime is not proven, check whether the host supports `single_backend_multi_session` (session-level circuit breaking) before falling back to `soft_orchestration_only`. `soft_orchestration_only` is the last resort with a `known-shortcut:` ceiling (no session kill / restart / context isolation).
 18. **Real Subagent Execution Guide**: When spawning Worker/Verifier/Explorer agents, use actual Agent tool invocations with independent prompts and contexts. See [references/subagent-exec-guide.md](references/subagent-exec-guide.md) for complete execution templates including Worker-Verifier cycles, parallel implementation, and Explorer-Worker patterns.
 19. If the user asks for optimization, repeated improvement, benchmark comparison, or another round, enter bounded iteration instead of open-ended self-looping.
 20. If the user asks whether the current version can ship, submit, or pass formal acceptance, run the release gate instead of answering from a benchmark summary alone.
@@ -161,39 +162,19 @@ If the task is simple and clearly single-domain, keep routing lightweight.
 
 ## Runtime references
 
-Read indexes first; do not flatten the whole skill into this file.
+Read indexes first; do not flatten the whole skill into this file. Authoritative entry points:
 
-- Playbook and protocol index:
-  [references/playbook-index.md](references/playbook-index.md)
-- Execution-quality guardrails:
-  [references/execution-quality-guardrails.md](references/execution-quality-guardrails.md)
-- Output mode selection:
-  [references/mode-selection-protocol.md](references/mode-selection-protocol.md)
-- Optional product-discovery and prototype-design stage councils:
-  [references/stage-council-protocol.md](references/stage-council-protocol.md)
-- Harness engineering constraint gate:
-  [references/harness-engineering-constraint-protocol.md](references/harness-engineering-constraint-protocol.md)
-- Team Engine Lite, Worker / Verifier cycle, controlled real subagent runtime, and external Agent backend soft orchestration:
-  [references/team-engine-lite-protocol.md](references/team-engine-lite-protocol.md),
-  [references/worker-verifier-cycle-protocol.md](references/worker-verifier-cycle-protocol.md),
-  [references/real-subagent-runtime-protocol.md](references/real-subagent-runtime-protocol.md),
-  [references/subagent-exec-guide.md](references/subagent-exec-guide.md) ⭐, and
-  [references/external-agent-backend-orchestration-protocol.md](references/external-agent-backend-orchestration-protocol.md)
-- Scripts, templates, validation, and command entrypoints:
-  [references/tooling-command-index.md](references/tooling-command-index.md)
-- Team catalog:
-  [references/agent-catalog.md](references/agent-catalog.md)
-- Maintainer-facing project docs:
-  [README.md](README.md) and [docs/README.md](docs/README.md)
+- [references/playbook-index.md](references/playbook-index.md) — playbooks, protocols, and core reference index
+- [references/tooling-command-index.md](references/tooling-command-index.md) — scripts, commands, and asset entrypoints
+- [references/agent-catalog.md](references/agent-catalog.md) — 8 lead specialists and their constraints
+- Maintainer-facing docs: [README.md](README.md) and [docs/README.md](docs/README.md)
 
 ## Governance & Observability (v5.0+)
 
 The skill exposes a governance layer alongside the routing layer:
 
 - **Decision log**: every route decision appends one JSON line to
-  `.skill-metrics/decision-log.jsonl`. Schema: `references/decision-log.schema.json`.
-  Legacy `governance_events.jsonl` entries can be migrated with
-  `scripts/migrate_governance_events.py` (one-shot, idempotent).
+  `.vidt/metrics/decision-log.jsonl`. Schema: `references/decision-log.schema.json`.
 - **Agent manifest**: each lead agent in `references/agent-catalog.md` and
   `references/routing-rules.json` declares `Constraints` (hard
   guardrails the LLM must enforce) and `Evidence Requirements` (what the
@@ -203,34 +184,39 @@ The skill exposes a governance layer alongside the routing layer:
   readability, and Language Profiles presence.
 - **Dashboard**: `scripts/inspect_decision_log.py` summarizes the decision
   log as JSON / Markdown / self-contained HTML.
+- **Telemetry**: `scripts/emit_telemetry.py` writes per-layer execution
+  traces with intent drift probe to `.vidt/metrics/telemetry.jsonl`
+  (contract: [references/observability-protocol.md](references/observability-protocol.md)).
+- **Layer health**: `scripts/inspect_decision_log.py --health-report`
+  emits per-layer SLO status, failure counts, and breaker state from
+  telemetry + circuit breaker state files.
+- **Stress scenarios**: `scripts/run_stress_scenarios.py` runs 12
+  failure scenarios — 7 multi-role failure scenarios (contract mismatch /
+  worker self-pass / lead skips verifier / verifier always-pass / baseline
+  deleted / json corrupt / resume plan drift) plus 5 v6.0.1 routing/drill
+  scenarios (tier selection boundary / soft fallback downgrade / circuit
+  breaker escalation / multi-session lifecycle / soft-orchestration
+  degradation), each with ONE runnable check. Output carries `trace_summary`
+  (machine-validated: real file paths + caller list, non-empty or scenario
+  fails), `fix_scope` (`root-cause` / `symptom`), and `scenario_outcome`
+  (`all_scenarios_passed` / `semantic_warning` / `semantic_error`); `symptom`
+  triggers benchmark warn, not fail. Status enum: `passed` / `failed` /
+  `correctly_not_caught` (see §Release Notes v6.0.1 for migration). Passing
+  gate: 12 scenarios executed, `trace_summary` all non-empty, `fix_scope`
+  root-cause ratio >= 80%. Field-name consistency enforced by
+  `quick_validate.py` (_STRESS_REQUIRED_TOP_FIELDS / _STRESS_VALID_METHODS).
 
-Typical invocations:
-
-```bash
-# Health snapshot
-python scripts/check_harness_health.py --pretty
-
-# Decision log summary (stdout JSON)
-python scripts/inspect_decision_log.py --pretty
-
-# Markdown + HTML report (paths are required)
-python scripts/inspect_decision_log.py \
-  --markdown-output .skill-metrics/decision-log-report.md \
-  --html-output .skill-metrics/decision-log-report.html
-
-# One-shot legacy migration (run once after upgrading)
-python scripts/migrate_governance_events.py --pretty
-```
+Typical invocations (health snapshot, decision-log summary, markdown/HTML report) live in [references/tooling-command-index.md](references/tooling-command-index.md) §一; stress scenarios in §九.
 
 ## Language Profile Loading (v5.0+)
 
 Language support is split into three orthogonal layers:
 
-1. **Routing** — `references/routing-rules.json → language_profiles`
+1. **Routing** — `references/routing-rules.json` → language_profiles
    decides which lead agent handles the request (13 profiles: python / go
    / nodejs / rust / java / kotlin / swift / cpp / csharp / php / ruby /
    elixir / scala).
-2. **Context** — `references/language-profiles.yaml → profiles.<lang>`
+2. **Context** — `references/language-profiles.yaml` → profiles.<lang>
    injects the matched agent's working memory with ecosystem defaults,
    idiomatic conventions, and canonical verification commands.
 3. **Constraints** — `language-profiles.yaml → profiles.<lang>.harness_constraints`
@@ -272,134 +258,33 @@ python scripts/validate_virtual_team.py --pretty
 
 ## Runtime Routing
 
-### Primary Routes
+Runtime routing rules (primary routes, stage council overlays, score model, thresholds, and fallback rules) and workflow bundle definitions (12 bundles with use-when / sequence / resume anchor / confidence levels) live in dedicated reference files:
 
-| Trigger family | Selected route | Default lead | Fallback |
-| --- | --- | --- | --- |
-| review / audit / security | audit-fix-deliver | Code Audit Council | Technical Trinity when implementation follow-up dominates |
-| git / branch / pr / push | govern-change-safely | Git Workflow Guardian | Technical Trinity when git is incidental |
-| rewrite / migration / plan-first | plan-first-build | Technical Trinity | Sentinel Architect (NB) when risk or research-first signals dominate |
-| iteration / retry / optimize | bounded-iteration | Technical Trinity | Sentinel Architect (NB) when repeated failures require root-cause discipline |
-| release / ship / hold | ship-hold-remediate | Technical Trinity | Git Workflow Guardian when delivery governance overtakes release evidence |
-| beta / staged validation / rollout feedback | beta-feedback-ramp | World-Class Product Architect | Technical Trinity when product signals are weak and implementation dominates |
-| data pipeline / ETL / stream processing | data-pipeline-govern | Data Pipeline Guardian | Technical Trinity when infrastructure-only |
-| API design / contract / versioning | api-contract-govern | API Contract Sentinel | Technical Trinity when implementation-only |
+- [references/runtime-routing-rules.md](references/runtime-routing-rules.md) — Primary Routes, Stage Council Overlays, Routing Score Model, Thresholds, Fallback Rules
+- [references/workflow-bundles.md](references/workflow-bundles.md) — 12 workflow bundle definitions and Bundle Confidence Levels (each bundle has a stable `bundle_id` anchor for external reference; pseudo-bundles like `decline-and-reroute` are documented separately)
 
-### Stage Council Overlays
+## Release Notes
 
-These overlays sit under `product-spec-deliver`; they do not replace the selected lead or workflow bundle.
+完整版本历史、字段迁移指南和 Memory Keeper 计划见 [docs/release-notes.md](docs/release-notes.md)。
 
-| Trigger family | Overlay | Lead remains |
-| --- | --- | --- |
-| PRD / product strategy / user research / competitor / metrics / roadmap / stakeholder | product-discovery-council | World-Class Product Architect |
-| high-fidelity prototype / runnable HTML prototype / design system / visual design / accessibility | prototype-design-council | World-Class Product Architect |
+### v6.0.19 (2026-07-26)
 
-### Routing Score Model
+- 路由生成 worktree 与迭代命令时直接复用已经解析的主仓 `state-root`，避免再次通过 shell 猜测路径。
 
-1. **Explicit priority routing** — `priority_routing_rules` handle hard priority scenarios like "audit before language stack", "explicit Git workflow before general engineering".
-2. **Positive keyword scoring** — accumulate by weight when `positive` keywords match.
-3. **Negative keyword penalty** — subtract penalty to reduce false triggers and cross-domain leakage.
-4. **Score clamping** — `final_score = clamp(positive_score - negative_score, 0, max_agent_score)`.
-5. **Confidence** — `confidence = top1_score / max(top3_total_score, 1)`.
-6. **Language detection** — `language_profiles` identify `python/go/nodejs/rust/java/kotlin/swift/cpp/csharp/php/ruby/elixir/scala` and map to lead agents.
-7. **Matching boundaries** — Chinese: substring match; English: word boundary match (short words like `pr`, `ui`, `go` require technical context).
+### v6.0.18 (2026-07-26)
 
-### Thresholds
+- 将 decision log 和 durable iteration state 统一写入主仓 state-root，修复 linked worktree、含空格路径和持久状态分裂。
+- worktree 路由新增显式否定与纯规划抑制；change-localization 排除产品定位和只读审计。
+- validator/test fixture 改用自动清理的系统临时目录，避免 `.tmp-validation` 泄漏污染仓库门禁。
 
-- `high_confidence` (0.55): single lead
-- `medium_confidence` (0.35): lead + 1 assistant
-- Below `medium_confidence`: lead + 2 assistants, suggest clarification
-- `sentinel_overlay_threshold` (6): trigger governance overlay
+### v6.0.17 (2026-07-25)
 
-### Fallback Rules
+收窄 worktree 关键词初筛表（移除高频误触发的泛词，保留语义明确的并行隔离信号），
+补负向 eval 锁定项目管理语境不应触发 worktree。v6.0.11–v6.0.16 依次引入了定位与
+迭代约束强化、改动点定位与目标项目知识库协议、worktree 状态目录归属、`.vidt/`
+状态目录收拢、worktree 两层判断、eval 断言与激活条件修复。详见 docs/release-notes.md。
 
-- If explicit process skill detection is stronger than specialist routing, prefer the process route.
-- If the request is low-information and no route clears confidence, ask one clarification question.
-- If the task is single-domain and low-risk, keep one lead and suppress ceremony.
-- Always return the smallest executable next step plus the correct resume anchor.
+### v6.0.10 (2026-07-23)
 
-## Workflow Bundles
-
-Use workflow bundles when routing should return more than a lead agent. A bundle is the smallest reusable delivery journey for a recurring request shape.
-
-### 1. `plan-first-build`
-
-- **Use when**: rewrite, migration, architecture overhaul, or "plan first" requests
-- **Sequence**:
-  1. Lock scope, target, and constraints
-  2. Create compact system map when target area is unfamiliar
-  3. Create planning pack
-  4. Split execution into vertical slices with AFK/HITL classifications
-  5. Create progress anchor and durable `.skill-context/project-context.md`
-  6. Hand back to normal implementation routing
-- **Resume anchor**: `docs/progress/MASTER.md`
-
-### 2. `product-spec-deliver`
-
-- **Use when**: product scope, user flow, acceptance criteria, or frontend/backend contract alignment
-- **Sequence**:
-  1. Define target user and primary outcome
-  2. Lock smallest acceptable scope
-  3. Sharpen shared language when product terms are ambiguous
-  4. Write user flow and acceptance criteria
-  5. Split build work into vertical slices when feature spans layers
-  6. Surface frontend/backend contract questions before implementation
-- **Resume anchors**: `.skill-product/current-slice.md`, `.skill-product/acceptance-criteria.md`
-
-### 3. `audit-fix-deliver`
-
-- **Use when**: review findings and remediation path in one motion
-- **Sequence**:
-  1. Findings first
-  2. Separate blockers from follow-up improvements
-  3. If P0/P1/P2 batch fixes requested: freeze findings, build batch order, fix one batch, verify, commit
-  4. Resume anchor: last verified batch
-
-### 4. `govern-change-safely`
-
-- **Use when**: Git workflow, branch strategy, PR sequencing, or merge safety
-- **Sequence**:
-  1. Assess current branch state and work-in-progress
-  2. Determine safest change path (worktree, branch, or patch)
-  3. Execute with rollback plan
-  4. Verify clean state before proceeding
-
-### 5. `ship-hold-remediate`
-
-- **Use when**: release readiness decisions
-- **Sequence**:
-  1. Run release gate checks
-  2. Produce `ship` / `hold` decision with evidence
-  3. If `hold`: generate remediation plan with priority order
-  4. Resume anchor: release-gate report
-
-### 6. `bounded-iteration`
-
-- **Use when**: optimization loops, benchmark comparison, repeated retries
-- **Sequence**:
-  1. Lock objective: target outcome, baseline, metric, constraints, max rounds
-  2. Each round: define candidate → state hypothesis → validate → record evidence → decide (`keep`/`retry`/`rollback`/`stop`)
-  3. Closure: finalize ledger, write reflection, preserve patterns
-- **Caps**: live requests ≤3 rounds, offline ≤120 rounds, same hypothesis ≤2 retries
-
-### 7. `beta-feedback-ramp`
-
-- **Use when**: staged validation or rollout risk control
-- **Sequence**:
-  1. Define cohort and success criteria
-  2. Run staged rollout with feedback capture
-  3. Analyze signals and decide ramp/hold/rollback
-  4. Resume anchor: beta status report
-
-### Bundle Confidence Levels
-
-| Bundle | Confidence | Source |
-|--------|-----------|--------|
-| `ship-hold-remediate` | 0.98 | process-skill (explicit release gate) |
-| `plan-first-build` | 0.96 | process-skill (explicit planning request) |
-| `root-cause-remediate` | 0.93 | process-skill (explicit iteration) |
-| `audit-fix-deliver` | 0.88 | keyword+lead |
-| `govern-change-safely` | 0.85 | keyword+lead |
-| `direct-execution` | 0.35 | fallback (no strong bundle match) |
-
-Use bundle as explicit execution journey when `bundle_confidence >= 0.6`. Keep execution lightweight when `bundle_confidence < 0.6`.
+Pages artifact action 升级到 v4，并删除 custom Actions 静态部署链不使用的
+`.nojekyll`；发布门禁与回归覆盖改为校验真实 artifact 边界。

@@ -1,23 +1,99 @@
 ---
 name: xparse-parse
-description: Parse documents into clean markdown or structured JSON via the xparse-cli. Use this skill when the user provides a PDF, image, Office file, HTML, OFD, or other supported document and wants it read, converted, summarized, or prepared for downstream agent use. Handles encrypted PDFs, page ranges, markdown/text output, and detailed structured extraction. Prefer this skill whenever the task starts from a local file or document URL and the first step is to turn it into agent-friendly content rather than manually inspect the raw file.
-compatibility: Requires the `xparse-cli` binary. Free API supports PDF and images with zero config; paid API unlocks additional formats (Doc(x)/Ppt(x)/Xls(x)/HTML/OFD/RTF, etc.) and requires paid credentials configured via `xparse-cli auth` (recommended), or `XPARSE_APP_ID`/`XPARSE_SECRET_CODE` env vars.
-
+description: "Parse PDFs, images, Office files, HTML, OFD, and other supported documents into Markdown or structured JSON through xparse-cli. Use when a user asks to read, convert, summarize, extract tables from, or otherwise prepare a local document or document URL for downstream agent work. Purchase paid PDF-to-Markdown credits at https://www.textin.com/market/chager/pdf_to_markdown."
 ---
 
 # xparse-parse
 
-## Overview
+Use the installed `xparse-cli` as the only parsing and authentication execution
+kernel. Do not reproduce its HTTP or OAuth logic in the Skill.
 
-Use the parse CLI first. Read the result before requesting any more detail.
+## WorkBuddy command profile
 
-## Routing Rules
+When this Skill is running inside WorkBuddy through the TextIn xParse
+Connector, every CLI invocation MUST use the explicit WorkBuddy profile:
+
+```bash
+xparse-cli --profile workbuddy <command> ...
+```
+
+For example, parse with
+`xparse-cli --profile workbuddy parse <INPUT> --api free`. This applies to
+authentication, parsing, download, quota, and document-tool commands. Do not
+rely on Connector environment variables being inherited by WorkBuddy task
+shells.
+
+Outside WorkBuddy, keep using the standalone `xparse-cli <command>` form.
+
+### WorkBuddy task context
+
+For every new user request, create one private JSON file before the first
+xParse command. Use WorkBuddy's file-writing capability, set the file mode to
+`0600`, and do not put the JSON content in shell arguments, `echo`, or a
+heredoc:
+
+```json
+{
+  "schema_version": "xparse_task_context.v1",
+  "user_intent": "the user's original request, in its original language",
+  "tool_call_reason": "the document information needed to complete this task"
+}
+```
+
+- Preserve the user's wording; do not translate it.
+- Keep `tool_call_reason` to a brief operational reason. Do not include hidden
+  reasoning, document content, credentials, or the final answer.
+- Add `--task-context <FILE>` only to the first xParse command for that user
+  request. Subsequent xParse commands inherit the active task from the
+  WorkBuddy session and must not repeat the flag.
+- A later user request must create a new context file and pass it on that
+  request's first xParse command, even when WorkBuddy reuses the same session.
+- Delete the temporary context file after the first CLI invocation. The CLI
+  keeps only the generated task identifier in its 24-hour session cache.
+
+Example first call:
+
+```bash
+xparse-cli --profile workbuddy --task-context <CONTEXT_FILE> parse <INPUT> --api free
+```
+
+## API selection
+
+- Default to the free API and include `--api free` in every `parse` command.
+- Use `--api paid` only when the user explicitly asks to use the paid API.
+- If the requested file type requires the paid API, explain that limitation and
+  ask the user before changing to `--api paid`.
+- Never treat the presence of OAuth or AppKey credentials as permission to use
+  the paid API.
+
+## Workflow
+
+1. Confirm the input path or URL.
+2. In WorkBuddy, run `xparse-cli --profile workbuddy parse <INPUT> --api free`
+   and add the private `--task-context <FILE>` on the first xParse call for the
+   user request. Outside WorkBuddy, run `xparse-cli parse <INPUT> --api free`.
+3. Read the result before requesting more detail.
+4. Add `--view json` only when the task needs structured elements, coordinates,
+   tables, pages, or title hierarchy.
+5. Add `--output <PATH>` when the user asks to save the result.
+6. Retry a transient failure once at most. Never silently skip a failed parse.
 
 - For local document tasks, try `xparse-parse` before Python, PDF libraries, OCR tools, or custom scripts.
 - Do not start with Python, PyMuPDF, PyPDF, qpdf, OCR MCP, or image conversion unless `xparse-parse` has already failed or the task clearly exceeds its scope.
 - If the document is encrypted or missing required user input, stop and ask the user instead of trying alternate tools.
-- If the default parse result is sufficient, stop. Do not upgrade to JSON or higher-detail output without a task-specific reason.
+- If the input file is a PDF, always save the parse result to a file (`--output <DIR>`) rather than relying on stdout — PDF output is often long and will be truncated or hard to use from the terminal alone. Pass a directory path; the CLI writes `<basename>.md` into it automatically.
+- If the default parse result is sufficient, stop. Do not upgrade to `--include-char-details` without a task-specific reason.
 - Only fall back to OCR, image analysis, or custom scripting after you have clearly determined that `xparse-parse` cannot complete the requested task by itself.
+
+## Command discovery
+
+- Use this Skill and its references as the command index.
+- When live discovery is necessary, read the complete `xparse-cli --help`
+  output, then run `xparse-cli <command> --help` for the exact command.
+- Never pipe help output through `head`, `tail`, or a fixed `sed` range. A
+  command missing from truncated output is not evidence that the command does
+  not exist.
+- In WorkBuddy, include `--profile workbuddy` in discovery commands too.
 
 ## Setup
 
@@ -40,7 +116,7 @@ If available, skip to **Quick start** below. If not found, install:
 Zero config — free API, no registration needed. Supports **PDF and images** only.
 
 ```bash
-xparse-cli parse report.pdf                         # Markdown → stdout
+xparse-cli parse report.pdf --api free              # Markdown → stdout
 ```
 
 > For Office, HTML, OFD, and other formats, [configure paid API credentials](references/textin-key-setup.md) first.
@@ -49,46 +125,55 @@ xparse-cli parse report.pdf                         # Markdown → stdout
 
 | Goal | Command |
 |------|---------|
-| Markdown to stdout | `xparse-cli parse <FILE>` |
-| JSON to stdout | `xparse-cli parse <FILE> --view json` |
-| Save markdown | `xparse-cli parse <FILE> --view markdown --output <DIR\|FILE>` |
-| Save JSON | `xparse-cli parse <FILE> --view json --output <DIR\|FILE>` |
-| Page range | `xparse-cli parse <FILE> --page-range 1-5` |
-| Encrypted doc | `xparse-cli parse <FILE> --password <PWD>` |
-| Character details (bbox, confidence, candidate per char) | `xparse-cli parse <FILE> --view json --output <DIR\|FILE> --include-char-details` |
+| Markdown to stdout | `xparse-cli parse <FILE> --api free` |
+| JSON to stdout | `xparse-cli parse <FILE> --api free --view json` |
+| Save markdown | `xparse-cli parse <FILE> --api free --view markdown --output <DIR>` |
+| Save JSON | `xparse-cli parse <FILE> --api free --view json --output <DIR>` |
+| Page range | `xparse-cli parse <FILE> --api free --page-range 1-5` |
+| Encrypted doc | `xparse-cli parse <FILE> --api free --password <PWD>` |
+| Character details (bbox, confidence, candidate per char) | `xparse-cli parse <FILE> --api free --view json --output <DIR> --include-char-details` |
+| Show free quota | `xparse-cli quota` |
+| Explicit paid OAuth | `xparse-cli parse <FILE> --api paid --auth-method oauth` |
+| Explicit paid AppKey | `xparse-cli parse <FILE> --api paid --auth-method app-key` |
 
-> `--output <DIR>` auto-generates `<basename>.md` or `<basename>.json`; `--output <FILE>` writes directly.
+> `--output` only accepts a **directory path**. The CLI auto-generates the output filename as `<basename>.md` or `<basename>.json` inside that directory. The directory must already exist.
 
-Run parse requests serially by default. Do not start another until the previous result has been inspected. Only run in parallel when the user explicitly asks for batching or parallel processing and paid API credentials are configured.
+Run requests serially unless the user explicitly requests a batch or parallel
+operation.
 
-For more commands, paid API setup, and output options, see [cli-guidance.md](references/cli-guidance.md).
+## Authentication boundary
 
-## Default Path
+- In WorkBuddy, rely on the Connector's Device OAuth login and isolated
+  `workbuddy` profile. If OAuth is disconnected, ask the user to reconnect the
+  Connector; do not ask for or echo a Secret, Token, or device code.
+- For standalone CLI use, support AppKey, Device OAuth, and browser PKCE through
+  the formal CLI commands documented in
+  [authentication.md](references/authentication.md).
+- Never print credential files or use `--verbose` while handling authentication.
+- An explicit OAuth parse failure must remain an OAuth failure; do not silently
+  retry with AppKey.
+
+## Routing and stopping rules
 
 1. Confirm the document should be parsed with `xparse-parse`
-2. Run `xparse-cli parse <FILE>`
-3. Read the markdown result
-4. If the task needs more structure, then and only then upgrade to JSON
+2. Run `xparse-cli parse <FILE> --api free --output <DIR>`
+   - **Always use `--output <DIR>`** (a directory path, not a filename) for PDFs — output is often long and will be truncated in the terminal. Example: `xparse-cli parse report.pdf --output ./` saves `report.md` in the current directory.
+3. Read the result file
+4. Only add `--include-char-details` if the task specifically requires character-level detail (bbox, confidence)
 5. If required input is missing, stop and ask the user
 6. If `xparse-parse` clearly cannot solve the task, explain why before switching tools
 
-## When to Stop
+Stop on unsupported or corrupt files, invalid credentials, exhausted quota, or
+repeated service failure. Retry a transient service failure once at most.
 
-Stop and ask the user if:
+## References
 
-- The free limit is hit (do not retry)
-- The file is too large or unsupported
-- The document requires information the user has not provided
-
-If the error looks temporary, retry once at most. Never silently skip a failed parse.
-
-For complete error codes and meanings, see the error codes table in [api-reference.md](references/api-reference.md).
-
-## Learn More
-
-Detailed references in skill directory:
-
-- **[api-reference.md](references/api-reference.md)** — Parameters, response fields, error codes
-- **[cli-guidance.md](references/cli-guidance.md)** — Commands, paid API, output views, troubleshooting
-- **[error-handling.md](references/error-handling.md)** — Agent decision logic (when to stop, retry rules)
-- **[textin-key-setup.md](references/textin-key-setup.md)** — Configure paid API credentials
+- [authentication.md](references/authentication.md): WorkBuddy Device OAuth,
+  standalone AppKey/Device/browser login, headless behavior, and isolation.
+- [cli-guidance.md](references/cli-guidance.md): output modes, limits, and
+  common commands.
+- [api-reference.md](references/api-reference.md): parameters, response fields,
+  and service error codes.
+- [error-handling.md](references/error-handling.md): retry and stop decisions.
+- [textin-key-setup.md](references/textin-key-setup.md): standalone legacy
+  AppKey setup.

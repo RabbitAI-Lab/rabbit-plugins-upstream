@@ -1,49 +1,66 @@
-## Description: <br>
-Analyzes A-share and Hong Kong-listed companies from data collection through company profile, industry structure, moat, financial, and relative valuation work, producing a Markdown deep-analysis report and an HTML investment brief. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes A-share and Hong Kong-listed companies from a company name or ticker, then produces a structured company research report and investment briefing.
 
-## Publisher: <br>
-[pm2-567](https://clawhub.ai/user/pm2-567) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT No Attribution <br>
+## Publisher:
 
+[pm2-567](https://clawhub.ai/user/pm2-567)
 
-## Use Case: <br>
-External users such as individual investors, investment managers, industry researchers, and advisors use this skill to screen A-share and Hong Kong listed companies, generate focused company or financial analyses, and prepare deep research reports and investment briefs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; analysis coverage is limited to A-share and Hong Kong listed companies. <br>
+MIT No Attribution
 
-## Known Risks and Mitigations: <br>
-Risk: Company names, stock codes, and research queries may be sent to public finance or search providers during data collection and fallback lookup. <br>
-Mitigation: Use the skill for public-company research and avoid sensitive unpublished company names or confidential deal context when query disclosure matters. <br>
-Risk: The skill writes temporary market-data JSON and local report files during normal operation. <br>
-Mitigation: Run it in a workspace where local file creation is expected, review generated files before sharing, and clean temporary data when reports are complete. <br>
-Risk: Generated valuation and investment commentary may be incomplete, stale, or unsuitable as direct investment advice. <br>
-Mitigation: Treat outputs as research support, verify key figures against current filings or trusted data providers, and require human investment review before decisions. <br>
-Risk: The workflow depends on Python packages and public data endpoints that can change or fail. <br>
-Mitigation: Keep dependencies updated and rerun or cross-check the analysis when data quality is degraded or a provider fallback is used. <br>
+## Use Case:
 
+External users, investors, research analysts, and investment teams use this skill to perform initial A-share and Hong Kong equity research, including company profiling, industry structure, moat analysis, financial review, and relative valuation. It can run a full six-step workflow or narrower company-profile and financial-analysis modes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pm2-567/skills/company-deep-analysis) <br>
-- [AI internal rules](references/ai-internal-rules.md) <br>
-- [Financial analysis guide](references/financial-analysis-guide.md) <br>
-- [Moat analysis framework](references/moat-analysis-framework.md) <br>
-- [Porter five forces template](references/porter-five-forces-template.md) <br>
-- [Valuation methods](references/valuation-methods.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, HTML, Shell commands, Guidance] <br>
-**Output Format:** [Markdown reports, HTML briefs, JSON data files, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates local report files and temporary market-data JSON; requires Python dependencies for scripted data collection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Company names, tickers, and lookup terms may be sent to public finance and search providers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for data that can be shared with those providers, or run it in an environment with approved network controls and provider allow lists.
+
+Risk: Generated reports and temporary JSON files may be written locally and retained by the host environment.
+
+Mitigation: Apply the organization's retention policy to report outputs and clear temporary data after use, especially in managed or confidential research workflows.
+
+Risk: Dependency and browser asset hygiene may matter in controlled environments.
+
+Mitigation: Update dependency minimums during deployment review and prefer a local copy of html2canvas instead of loading it from a public CDN.
+
+## Reference(s):
+
+- [Skill README](README.md)
+- [Financial Analysis Guide](references/financial-analysis-guide.md)
+- [Moat Analysis Framework](references/moat-analysis-framework.md)
+- [Porter Five Forces Template](references/porter-five-forces-template.md)
+- [Relative Valuation Methods](references/valuation-methods.md)
+- [Company Profile Template](templates/company-profile-template.md)
+- [Deep Analysis Report Template](templates/deep-analysis-report-template.md)
+- [Financial Analysis Template](templates/financial-analysis-template.md)
+- [Briefing Card Template](templates/briefing-card-template.html)
+- [ClawHub Skill Page](https://clawhub.ai/pm2-567/skills/company-deep-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, html, json, shell commands, guidance]
+
+**Output Format:** [Markdown reports, HTML briefing cards, local JSON data files, and inline command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full mode emits a Markdown deep analysis report and an HTML investment briefing; single-step modes emit one focused Markdown report.]
+
+## Skill Version(s):
+
+1.0.12 (source: frontmatter, changelog, server release; changelog released 2026-08-13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

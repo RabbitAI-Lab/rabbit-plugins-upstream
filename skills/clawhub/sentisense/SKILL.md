@@ -1,6 +1,6 @@
 ---
 name: sentisense
-description: "Read-only financial market data API. Stock prices, sentiment, insider trading, institutional flows, politician trades, AI insights. No trading, no purchases, no write operations, no wallet access."
+description: "US stock market data API for AI agents: news and social sentiment, the SentiSense Score, insider Form 4 trades, congressional STOCK Act disclosures, institutional 13F holdings and flows, options positioning, analyst ratings, the earnings calendar, AI-generated market insights, and stock prices. One free API key covers every endpoint. Use for stock sentiment API, stock market API, insider trading data, congress stock trades, 13F holdings, options flow, earnings calendar, stock price API, market data for AI agents. Read-only. No trading, no purchases, no write operations, no wallet access."
 homepage: https://sentisense.ai
 requires:
   env:
@@ -117,11 +117,18 @@ Position ahead of earnings instead of reacting to them. Pull the forward calenda
 - `GET /api/v1/insider/trades/{ticker}` to see if insiders moved ahead of the date
 
 ### Market Dashboard
-Real-time market overview combining prices, sentiment, and top signals.
+Market overview combining prices, sentiment, and top signals.
 - `GET /api/v1/stocks/market-status` to check if the market is open
 - `GET /api/v1/market-summary` for AI-generated market headline and analysis
 - `GET /api/v1/insights/market` for the top market-moving signals right now
 - `GET /api/v1/stocks/prices?tickers=SPY,QQQ,IWM,DIA` for index tracking
+
+### Market Sentiment Structure
+Which way the market's tone leans, and how widely it's shared. Daily snapshots.
+- `GET /api/v1/sentiment/sectors` for the 11 GICS sectors vs the market's own tone (`consensusVsMarket` + "Hotter/Cooler than market" labels; market-relative because news tone skews positive as a genre)
+- `GET /api/v1/sentiment/breadth` for the bullish/neutral/bearish share of ~1,000 covered stocks (the sentiment advance/decline line; `netBreadth` in points, stock- and mention-weighted)
+- `GET /api/v1/trackers/sentiment-leaderboard` for the most bullish and bearish stocks by pure sentiment polarity (tone, not the SentiSense Score), with a minimum-mention confidence floor
+- `GET /api/v1/trackers/sentiment-movers` for the biggest 7-day shifts in tone, improving and deteriorating
 
 ---
 
@@ -142,7 +149,7 @@ Real-time market overview combining prices, sentiment, and top signals.
 ### Endpoints That Do NOT Exist
 Do not hallucinate these. They are not part of the SentiSense API:
 - `/api/v1/options/flow` or `/api/v1/dark-pool`: these exact paths do not exist. For end-of-day options analytics (IV rank, put/call percentile, 25-delta skew, open-interest walls, max pain, unusual-by-volume contracts) use the Options Intelligence endpoints instead: `/api/v1/options/overview` and `/api/v1/stocks/{ticker}/options/summary`. We do not attribute tick-level order flow (no buy/sell aggressor tagging) and we have no dark-pool data
-- `/api/v1/earnings`: for the earnings calendar use `/api/v1/calendar/earnings`; for reported financials use `/api/v1/stocks/fundamentals` (single period) or `/api/v1/stocks/fundamentals/history` (multi-period trend, up to 40 quarters or 20 years)
+- `/api/v1/earnings` as a root: the only path under it is `/api/v1/earnings/recent` (which covered companies already reported in a recent window). For the forward calendar use `/api/v1/calendar/earnings`; for a company's per-quarter earnings analysis report use `/api/v1/stocks/{ticker}/earnings-summaries`; for reported financials use `/api/v1/stocks/fundamentals` (single period) or `/api/v1/stocks/fundamentals/history` (multi-period trend, up to 40 quarters or 20 years)
 - `/api/v1/alerts` or `/api/v1/notifications`: alerts are user-facing only, not available via API
 - `/api/v1/chat` or `/api/v1/ask`: the AI chat is not accessible via API
 - `/api/v2/sentiment`: the correct path is `/api/v2/metrics/entity/{id}/metric/sentiment`
@@ -153,7 +160,7 @@ Do not hallucinate these. They are not part of the SentiSense API:
 ## Stocks API (`/api/v1/stocks`)
 
 ### GET /api/v1/stocks/price
-Real-time stock price. **Public.**
+Latest stock price, 15-minute delayed. **Public.**
 
 | Param | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -164,12 +171,16 @@ curl -H "X-SentiSense-API-Key: $SENTISENSE_API_KEY" \
   "https://app.sentisense.ai/api/v1/stocks/price?ticker=AAPL"
 ```
 
-Response: `{ ticker, currentPrice, change, changePercent, previousClose, volume, timestamp, expiresEpochSecond, extendedHours? }`.
+Response: `{ ticker, currentPrice, change, changePercent, previousClose, volume, timestamp, priceAsOf?, expiresEpochSecond, extendedHours? }`.
 
-`currentPrice` is always the regular-session price: live last trade during RTH (09:30 to 16:00 ET), most recent regular-session close otherwise. The optional `extendedHours` field is present only during pre-market (04:00 to 09:30 ET) or after-hours (16:00 to 20:00 ET) and carries `{ session: "pre" | "post", price, change, changePercent }`, where `change` / `changePercent` are computed vs `currentPrice`.
+**Prices are delayed 15 minutes.** This applies to every price on this API, in every session, including the `extendedHours` values below. Do not present these quotes as live, and do not use them for execution or for any decision that turns on the current tick.
+
+Read **`priceAsOf`** for freshness: it is when the market data behind `currentPrice` is actually from, in epoch milliseconds. Do not use `timestamp` for this. `timestamp` is when the response was served, so it tracks the current clock no matter how old the value is. `priceAsOf` is omitted outside regular hours and whenever the upstream data carries no time of its own, so treat an absent `priceAsOf` as unknown age, not as fresh, and fall back to assuming the 15 minutes.
+
+`currentPrice` is always the regular-session price: the most recent regular-session value during RTH (09:30 to 16:00 ET), and the most recent regular-session close otherwise. The optional `extendedHours` field is present only during pre-market (04:00 to 09:30 ET) or after-hours (16:00 to 20:00 ET) and carries `{ session: "pre" | "post", price, change, changePercent }`, where `change` / `changePercent` are computed vs `currentPrice`.
 
 ### GET /api/v1/stocks/prices
-Batch real-time prices. **Public.** Returns a JSON array; each element has the same shape as `/price` (including a `ticker` field and an optional `extendedHours` object).
+Batch latest prices, 15-minute delayed (see `/price` above). **Public.** Returns a JSON array; each element has the same shape as `/price` (including a `ticker` field and an optional `extendedHours` object).
 
 | Param | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -181,10 +192,20 @@ Historical OHLCV chart data. **Public.**
 | Param | Type | Required | Description |
 |-------|------|----------|-------------|
 | `ticker` | string | Yes | Stock ticker |
-| `timeframe` | string | No | `1D`, `5D`, `1W`, `1M`, `3M`, `6M`, `1Y`, `ALL` (default: `1M`) |
-| `range` | string | No | Alias: `5d`, `1mo`, `3mo`, `6mo`, `1y` (alternative to `timeframe`) |
+| `timeframe` | string | No | `1D`, `5D`, `1W`, `1M`, `3M`, `6M`, `1Y`, `5Y`, `10Y`, `MAX` (default: `1M`) |
 
-Each bar includes `timestamp` (Unix ms), `date`, `open`, `high`, `low`, `close`, `volume`, and `session`. The `session` field is `pre` (04:00 to 09:30 ET), `regular` (09:30 to 16:00 ET), or `post` (16:00 to 20:00 ET) for intraday timeframes (`1D`, `5D`, `1W`, `1M`); it is `null` for daily and weekly bars (`3M` and longer) that span whole sessions. The `1M` timeframe is filtered to `regular`-session bars only.
+`MAX` returns a stock's full available history, up to 26 years (AAPL: 320 monthly bars back to
+1999). Granularity scales with the range: intraday for `1D` through `1M` (5-minute for `1D`,
+15-minute for `5D`, 30-minute for `1W`, hourly for `1M`), daily for `3M` through `1Y`, weekly for
+`5Y`/`10Y`, monthly for `MAX`. Ranges of `10Y` and `MAX` are adjusted for both splits and
+dividends so the series is comparable end to end; shorter ranges (through `5Y`) are split-adjusted
+only, so the two bases differ on the same historical date by roughly the dividends paid since.
+
+`10Y` and `MAX` may answer `202 Accepted` with an empty array and a `Retry-After` header, meaning
+that stock's deep history is still being assembled; retry and you get the full series. A `200`
+always carries the range you asked for, never a silently shortened one.
+
+Each bar includes `timestamp` (Unix ms), `date`, `open`, `high`, `low`, `close`, `volume`, and `session`. The `session` field is `pre` (04:00 to 09:30 ET), `regular` (09:30 to 16:00 ET), or `post` (16:00 to 20:00 ET) for intraday timeframes (`1D`, `5D`, `1W`, `1M`); it is `null` for daily, weekly, and monthly bars (`3M` and longer) that span whole sessions. The `1M` timeframe is filtered to `regular`-session bars only.
 
 ### GET /api/v1/stocks
 List all tracked ticker symbols. **Public.**
@@ -201,7 +222,7 @@ Popular stock tickers. **Public.**
 Popular stocks with company details (same schema as `/detailed`). **Public.**
 
 ### GET /api/v1/stocks/images
-Company logo URLs. **Public.**
+Company logo URLs. **Public.** `GET` a returned URL to receive the image bytes; no API key is needed for the image fetch itself. Treat the URLs as refreshable rather than permanent: brand assets are periodically refreshed, so re-read them from this endpoint instead of storing them long term.
 
 | Param | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -224,8 +245,37 @@ Peer/similar stocks. **Public.**
 |-------|------|----------|---------|-------------|
 | `limit` | int | No | 5 | Max results |
 
+### GET /api/v1/stocks/{ticker}/sentiment
+One-call sentiment picture for a stock: the SentiSense Score with its 30-day regime, where the conversation is happening by source, and what is driving it. **Free (API key required).**
+
+Returns `ticker`, `companyName`, `asOf`, then:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `sentisenseScore` | number | Latest Score (0-centered composite of sentiment and mentions, unbounded) |
+| `sentisenseScoreAvg30d` | number | 30-day average, the stable regime figure |
+| `sentisenseScoreDelta30d` | number | Change over 30 days |
+| `scoreLabel` | string | Seven-band label of the 30-day average |
+| `direction` | string | `Bullish`, `Neutral` or `Bearish`, from the 30-day average |
+| `latestDirection` | string | Same three bands, from today's read |
+| `trend` | string | `UP`, `DOWN` or `FLAT` |
+| `scoreSparkline` | number[] | Daily Score series |
+| `mentions` / `mentionsAvg30d` | number | Today's mention volume, and the 30-day daily average |
+| `socialDominance` | number | Latest share of voice, as a fraction (`0.021` = 2.1%) |
+| `bySource[]` | array | Per-source tone, loudest first: `source` (`News`, `Reddit`, `X`, `YouTube`, `Substack`), `direction`, `mentionShare` (whole-number percent, the array sums to 100), `value` (per-source polarity, -1 to +1) |
+| `relatedTickers[]` | array | Curated peers: `ticker`, `name` |
+| `drivers[]` | array | Top story drivers: `title`, `tone` (-1 to +1) |
+| `narrative` | string | Plain-language summary of why the Score sits where it does |
+| `faq[]` | array | `question` / `answer` pairs for the common asks on this ticker |
+
+Use this when you want the headline read in one call. Use `GET /api/v2/metrics/entity/{ticker}/metric/sentiment` instead when you need a time series over a specific window. Returns `404` when the ticker has no sentiment coverage.
+
+Aggregate metrics such as sentiment and mention counts incorporate signals from sources that are not individually retrievable as documents, so document counts from the Documents API are not a complete audit trail of a score.
+
+> Via the MCP connector this same picture comes back from the `get_stock_snapshot` tool rather than a separate sentiment tool.
+
 ### GET /api/v1/stocks/{ticker}/entities
-Related knowledge base entities (CEO, products, partners). **Public.** Each entry carries a `urlSlug` (e.g. `Tim-Cook`) that plugs into the Metrics API `{entityId}` parameter.
+Related ontology entities (CEO, products, partners). **Public.** Each entry carries a `urlSlug` (e.g. `Tim-Cook`) that plugs into the Metrics API `{entityId}` parameter.
 
 ### GET /api/v1/stocks/{ticker}/ai-summary
 AI-generated stock analysis report. **PRO** (Free: `depth=basic` unlimited, `depth=deep` limited to 10/month). `depth=basic` returns a preheader summary. `depth=deep` returns a full multi-section report. Exhausting the `depth=deep` monthly view allowance returns `429` with `{error: "quota_exceeded", ...}`, the same contract as every other quota-gated endpoint.
@@ -233,7 +283,6 @@ AI-generated stock analysis report. **PRO** (Free: `depth=basic` unlimited, `dep
 | Param | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
 | `depth` | string | No | `basic` | `basic` or `deep` |
-| `forceRefresh` | boolean | No | false | Generate fresh report |
 
 Response: flat object (no `{isPreview, data}` wrapper).
 
@@ -246,10 +295,12 @@ Response: flat object (no `{isPreview, data}` wrapper).
 | `reportType` | string | `SUMMARY` for `depth=basic`, `FULL` for `depth=deep` |
 | `version` | integer | Report date encoded as yymmdd (e.g. 260520) |
 | `lastUpdated` | long | Epoch milliseconds |
-| `sections` | object | Section name to `{content, directives}`. Present on `depth=deep` only. |
-| `sectionOrder` | string[] | Ordered section keys for rendering. Present on `depth=deep` only. |
-| `moatRating` | integer or null | Proprietary moat quality score 0-10 (network effects, switching costs, intangibles, cost advantages, efficient scale). Null if not yet assessed for this ticker. |
-| `aiDisruptionRisk` | string or null | `Low`, `Medium`, `High`, or `Critical`. Measures AI revenue-displacement exposure. Null if not yet assessed. |
+| `sections` | object | Section name to `{content, directives}`. Present on both depths: `depth=basic` returns a single `Executive Summary` section, `depth=deep` returns the full set. |
+| `sectionOrder` | string[] | Ordered section keys for rendering. Present on both depths; `["Executive Summary"]` on `depth=basic`. |
+| `moatRating` | integer or null | Proprietary moat quality score 0-10 (network effects, switching costs, intangibles, cost advantages, efficient scale). Present on `depth=deep` only. Null if not yet assessed for this ticker. |
+| `aiDisruptionRisk` | string or null | `Low`, `Medium`, `High`, or `Critical`. Measures AI revenue-displacement exposure. Present on `depth=deep` only. Null if not yet assessed. |
+
+**Do not test for the presence of `sections` to detect a deep report:** both depths return it. Branch on `reportType` (`SUMMARY` vs `FULL`) instead.
 
 ### GET /api/v1/stocks/{ticker}/metrics/{metricType}/breakdown
 Sentiment or mention metrics breakdown by sub-entities. **Public.**
@@ -274,6 +325,15 @@ Financial statement data. **Public.**
 | `timeframe` | string | No | `quarterly` | `quarterly` or `annual` |
 | `fiscalPeriod` | string | No | - | e.g., `Q4` |
 | `fiscalYear` | int | No | - | e.g., `2024` |
+
+**Reporting currency (applies to every fundamentals endpoint):** figures are as reported by the
+filer, in the filer's own currency, never converted to USD. Foreign ADR filers report in home
+currency (SK hynix: KRW, Toyota: JPY, ASML: EUR). The optional `reportedCurrency` field ("USD",
+"KRW", ...) on the response (and on each `/fundamentals/history` row) names it; when absent the
+currency is unknown, not implicitly USD. Never mix these figures with the share price: the price
+is the USD ADR price, so for non-USD filers `peRatio` / `psRatio` / `pbRatio` are served as
+`null` on purpose, and you should not recompute them. Same-currency ratios (margins, ROE, ROA,
+current ratio, debt/equity) stay valid for all filers.
 
 ### GET /api/v1/stocks/fundamentals/current
 Most recent fundamental data snapshot. **Public.**
@@ -340,9 +400,11 @@ Short volume trading data. **Public.**
 | `limit` | int | No | 90 | Max data points |
 
 ### GET /api/v1/stocks/{ticker}/quote
-Aggregate quote snapshot: live price, today OHLC, 52-week range, market cap, P/E, EPS TTM, dividend yield, 200-day moving average. Single call for detail pages. **API key required.**
+Aggregate quote snapshot: latest price (15-minute delayed), today OHLC, 52-week range, market cap, P/E, EPS TTM, dividend yield, 200-day moving average. Single call for detail pages. **API key required.**
 
-Response: `{ ticker, currentPrice, change, changePercent, volume, open, dayHigh, dayLow, previousClose, week52High, week52Low, marketCap, peRatio, epsTTM, dividendYield, movingAverage200Day, timestamp, extendedHours? }` -- all fields except `ticker` are nullable. `currentPrice` is always the regular-session price; the optional `extendedHours` object (`{ session, price, change, changePercent }`) is present only during pre-market or after-hours. `movingAverage200Day` is `null` when fewer than 200 trading days of history exist. Cached 15 s server-side.
+Response: `{ ticker, currentPrice, change, changePercent, volume, open, dayHigh, dayLow, previousClose, week52High, week52Low, marketCap, peRatio, epsTTM, dividendYield, movingAverage200Day, reportedCurrency, timestamp, extendedHours? }` -- all fields except `ticker` are nullable. `currentPrice` is always the regular-session price; the optional `extendedHours` object (`{ session, price, change, changePercent }`) is present only during pre-market or after-hours. `movingAverage200Day` is `null` when fewer than 200 trading days of history exist. `reportedCurrency` ("USD", "EUR", "KRW", ...) names the currency `epsTTM` is reported in, matching the fundamentals endpoints. Cached 15 s server-side.
+
+**Null fields are omitted, and foreign filers omit the fundamentals trio.** A null field is left out of the JSON entirely rather than serialized as `null`, so do not assume a key is present: read defensively. In particular `reportedCurrency`, `epsTTM` and `peRatio` are all absent on foreign ADR filers such as `ASML` and `TM`, while price fields and `dividendYield` are served normally. This is the same cross-currency rule as the fundamentals endpoints: the price is the USD ADR price and the filer's earnings are in home currency, so `peRatio` is withheld rather than computed across two currencies. Do not divide `currentPrice` by a non-USD `epsTTM` to fill the gap yourself.
 
 ETF tickers (e.g. `VTI`, `SPY`) return `400 ticker_is_etf` from this endpoint. Use `GET /api/v1/etfs/{ticker}/quote` instead, which returns AUM, expense ratio, NAV, and inception date rather than market cap, P/E, and EPS.
 
@@ -388,7 +450,7 @@ for t in types:
 ## Entities API (`/api/v1/kb`)
 
 ### GET /api/v1/kb/entities/search
-Search the knowledge base for the people, companies, products, and organizations SentiSense tracks, and get the handle to query their metrics. **Public** (API key required).
+Search the SentiSense ontology for the people, companies, products, and organizations SentiSense tracks, and get the handle to query their metrics. **Public** (API key required).
 
 | Param | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
@@ -411,6 +473,8 @@ Curated list of high-profile tracked entities (major CEOs, political figures, th
 ## Metrics API (`/api/v2/metrics`)
 
 Time series metrics for stocks and entities: mentions, sentiment, social dominance, and more. The `{entityId}` path segment accepts a stock ticker (e.g. `AAPL`) or an entity `urlSlug` (e.g. `Nancy-Pelosi`); both are case-insensitive, and a ticker-shaped identifier always means the listed company. Discover handles with `GET /api/v1/kb/entities/search?q=` or `GET /api/v1/stocks/{ticker}/entities`. An unknown identifier returns `404 entity_not_found` with up to three `suggestions`.
+
+Which handle to store: the `urlSlug` is the quick, memorable one and is what discovery hands you. For a long-lived reference, such as a tracker that must keep working if an entity is renamed, store the entity `id` in URL-safe dashed form instead (replace `/` with `-`, e.g. `kb-person-65`). Both forms resolve on every endpoint that takes an `{entityId}`.
 
 Every metric type (`mentions`, `sentiment`, `sentisense`, `social_dominance`) is available on the Free tier: no PRO subscription needed. All metrics endpoints are **Quota-gated**: an API key is required and each request counts against your monthly quota (Free: 1,000 requests/month; PRO: no monthly cap). Per-minute rate limits apply on every tier.
 
@@ -548,7 +612,7 @@ Documents within a date range. **Public.**
 | `limit` | int | No | Max results (capped at 200) |
 
 ### GET /api/v1/documents/entity/{entityId}
-Documents mentioning a knowledge base entity. **Public.** Use URL-safe format: `kb-person-67` instead of `kb/person/67`.
+Documents mentioning an ontology entity. **Public.** Use URL-safe format: `kb-person-67` instead of `kb/person/67`.
 
 ### GET /api/v1/documents/search
 Smart search with natural language queries. **Public.**
@@ -576,7 +640,8 @@ AI-curated news story clusters. **Public.**
 | Param | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
 | `limit` | int | No | 20 | Max stories (capped at 50) |
-| `days` | int | No | 7 | Lookback in days (max 15) |
+| `filterHours` | int | No | none | Lookback window in hours, e.g. `720` for 30 days. This is the real lookback control for this endpoint. |
+| `days` | int | No | 7 | Accepted but has no effect on the response; ignored server-side. Use `filterHours` instead. |
 | `offset` | int | No | 0 | Pagination offset |
 
 Response: Story objects with a top-level `id` AND `clusterId` (both equal to the cluster id -- pass either to `/documents/stories/{clusterId}`), plus `cluster.title`, `cluster.averageSentiment`, `tickers`, `displayTickers`, `impactScore` (0-10), `brokeAt` (epoch seconds, nullable), `cluster.clusteredAt` (epoch seconds). Use `tickers` (bare symbols, e.g. `["AAPL"]`) programmatically; `displayTickers` are human-formatted labels (e.g. `["Apple Inc (AAPL)"]`) for display only, do not parse symbols out of them. The `cluster.createdAt` field (epoch millis) is deprecated and will be removed on or after 2026-08-16; use `cluster.clusteredAt`.
@@ -729,13 +794,15 @@ Congressional STOCK Act trading disclosures: purchases, sales, and exercises by 
 **Amount ranges:** STOCK Act disclosures report dollar amounts as ranges (e.g., "$1,001 - $15,000"), not exact values. The API returns the raw range string plus parsed `amountMin`/`amountMax`.
 
 ### GET /api/v1/politicians/activity
-Recent congressional trades across all politicians, sorted by disclosure date (most recently disclosed first). "Recent" means recently disclosed, not recently traded: a filing can reveal a transaction made up to 45 days earlier. **Public (preview)** -- Free: top 5, PRO: full data.
+Recent congressional trades across all politicians, paged, sorted by disclosure date (most recently disclosed first) and tie-broken to a total order so `limit`/`offset` page without dropping or repeating rows. "Recent" means recently disclosed, not recently traded: a filing can reveal a transaction made up to 45 days earlier. **Public (preview)** -- Free: top 5, PRO: pages the whole window.
 
 | Param | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
 | `lookbackDays` | int | No | 90 | Trailing window applied to the disclosure date (1-365) |
+| `limit` | int | No | 200 | Rows per page. Above 500 is clamped, not rejected. Returns `400 invalid_limit` below 1 |
+| `offset` | int | No | 0 | Rows to skip, for paging |
 
-Response: `{ isPreview, previewReason, data: [...] }`. Each trade: `politicianName`, `firstName`, `lastName`, `chamber`, `party`, `state`, `bioguideId`, `imageUrl`, `ticker`, `assetDescription`, `assetType` (`Stock`, `ETF`, or `Stock Option`), `assetMetadata` (object: `null`, or `{kind:"OPTION", optionType, strikePrice, expirationDate}` for options), `transactionType`, `transactionDate`, `disclosureDate`, `disclosureDelayDays`, `amountRange`, `amountMin`, `amountMax`, `owner`, `urlSlug`.
+Response: `{ isPreview, previewReason, totalCount, data: [...] }`. `totalCount` is the size of the whole window, not the page, so `offset + data.length < totalCount` means there is another page. Each trade: `politicianName`, `firstName`, `lastName`, `chamber`, `party`, `state`, `bioguideId`, `imageUrl`, `ticker`, `assetDescription`, `assetType` (`Stock`, `ETF`, or `Stock Option`), `assetMetadata` (object: `null`, or `{kind:"OPTION", optionType, strikePrice, expirationDate}` for options), `transactionType`, `transactionDate`, `disclosureDate`, `disclosureDelayDays`, `amountRange`, `amountMin`, `amountMax`, `owner`, `urlSlug`.
 
 ```python
 client = SentiSenseClient(api_key=os.environ["SENTISENSE_API_KEY"])
@@ -837,7 +904,7 @@ Personalized insights for the authenticated user, biased toward their watchlist 
 Response wrapper is `{isPreview: false, previewReason: null, data: [...] }` since the endpoint is auth-required.
 
 ### GET /api/v1/insights/stock/{ticker}/types
-Available insight types for a ticker. **Public** -- no authentication required.
+Available insight types for a ticker. API key required. Every type listed has at least one currently servable insight, so filtering the main endpoint by a returned type always yields rows; types whose insights have all expired drop off the list.
 
 | Param | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -849,7 +916,7 @@ Response: string array, e.g. `["insider_buy_signal", "institutional_position_cha
 
 ## Analyst Ratings API (`/api/v1/analyst`)
 
-Wall Street analyst coverage: aggregate price target band, buy/hold/sell distribution, recent upgrade/downgrade actions, and forward EPS estimates with earnings surprise history. Free users still get the price target band (`targetLow`, `targetMean`, `targetHigh`, `numberOfAnalysts`, `consensusLabel`) in full -- it powers the public projection cone. The buy/hold/sell distribution counts and full action/estimate history are PRO-only.
+Wall Street analyst coverage: aggregate price target band, buy/hold/sell distribution, recent upgrade/downgrade actions, and forward EPS estimates with earnings surprise history. This is one of the most free-tier-generous surfaces in the API: free users get the price target band (`targetLow`, `targetMean`, `targetHigh`, `numberOfAnalysts`, `consensusLabel`) in full -- it powers the public projection cone -- and the entire first page (50 rows) of market-wide `/activity`. The buy/hold/sell distribution counts, full per-ticker action/estimate history, and deep `/activity` paging are PRO.
 
 ### GET /api/v1/analyst/{ticker}/consensus
 Aggregate Wall Street consensus: price target band, number of covering analysts, upside-to-current, recommendation distribution. **PRO (preview)** -- Free: full price band, no buy/hold/sell counts. PRO: full distribution.
@@ -859,6 +926,8 @@ Aggregate Wall Street consensus: price target band, number of covering analysts,
 | `ticker` | path | Yes | Stock ticker (e.g. `AAPL`) |
 
 Response: `{ isPreview, previewReason, data: { ticker, currentPrice, targetLow, targetMean, targetHigh, targetMedian, numberOfAnalysts, upsidePercent, consensusLabel, recommendationMean, strongBuy, buy, hold, sell, strongSell, updatedAt } }`. The five `*Buy/*Sell/hold` count fields are zero in the free preview. Returns 404 when no analyst coverage exists for the ticker.
+
+**`currentPrice` on this endpoint is not the live quote.** It is the reference price captured when the analyst snapshot was written, dated by `updatedAt`, and `upsidePercent` is computed against that same reference so the band and the upside stay internally consistent. Expect it to drift from the traded price between snapshots (a few percent is normal). When you need the current regular-session price, read `currentPrice` from `/api/v1/stocks/price` or `/api/v1/stocks/{ticker}/quote` instead, where the field tracks the session and carries the standard 15-minute delay rather than a snapshot's age.
 
 ### GET /api/v1/analyst/{ticker}/actions
 Recent analyst upgrade/downgrade actions for a ticker, newest first. **PRO (preview)** -- Free: 3 most recent, PRO: full list.
@@ -880,11 +949,18 @@ Forward EPS estimates and recent earnings surprise history. **PRO (preview)** --
 Response: `{ isPreview, previewReason, data: { estimates: [...], surprises: [...] } }`.
 
 ### GET /api/v1/analyst/activity
-Market-wide recent analyst actions across all covered tickers, newest first. **PRO (preview)** -- Free: 5 most recent, PRO: full list.
+Market-wide recent analyst actions across all covered tickers, paged. Ordered by action date descending, ties broken by ticker then id ascending, a total order so paging is stable. **Free: the full first page** -- the first 50 rows of the window are complete data on every tier (`isPreview: false`). Depth is what PRO buys: `limit` above 50 or any `offset` past row 50 serves FREE keys their in-allowance slice as a preview (`previewReason: "PRO_REQUIRED"`) while PRO pages the whole window.
 
 | Param | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
-| `lookbackDays` | int | No | 30 | Days of history to return |
+| `lookbackDays` | int | No | 30 | Days of history to search |
+| `limit` | int | No | 50 | Page size, capped at 500. Returns `400 invalid_limit` below 1 |
+| `offset` | int | No | 0 | Rows to skip. Returns `400 invalid_offset` when negative |
+| `actionTypes` | string | No | - | CSV filter on action type: any of `UPGRADE`, `DOWNGRADE`, `INITIATE`, `REITERATE`, `OTHER` (case-insensitive). Unknown values return `400 invalid_actionTypes` |
+
+Response: `{ isPreview, previewReason, totalCount, data: [...] }`. `totalCount` is the number of actions in the whole `lookbackDays` window **after the `actionTypes` filter**, not the page size, so `offset + data.length < totalCount` means another page is available.
+
+Around 200 rating actions land on a single active market day, and roughly 83% of all actions are `REITERATE` (an analyst confirming an unchanged rating). For actual rating changes, pass `actionTypes=UPGRADE,DOWNGRADE,INITIATE` -- otherwise the newest-first page is mostly reiterations. Since rows come back newest first, the default 50-row page is typically filled by the newest day alone, and raising `lookbackDays` by itself returns nothing new. Raise `limit` for a wider slice, or walk the window with `offset`.
 
 Same per-action shape as `/api/v1/analyst/{ticker}/actions`.
 
@@ -911,7 +987,7 @@ Full composition of an ETF: per-holding weights, freshness timestamps, partial-c
 Response: `{ ticker, issuer, issuerEndpoint, asOfDate (ISO date), fetchedAt (epoch seconds), nextRefreshDue (ISO date), totalHoldings, holdings: [{ ticker, name, weightPct, firstSeen (ISO date) }], partial?, totalKnownHoldings? }`. Returns 404 for unknown ETFs or commodity-only funds (e.g. GLD) without equity holdings.
 
 ### GET /api/v1/etfs/{ticker}/quote
-Aggregate ETF detail-page quote: live price, today OHLC, 52-week range, trailing-12-month dividend yield, AUM, expense ratio, NAV, inception date. Peer of `/api/v1/stocks/{ticker}/quote` for fund tickers. **API key required.**
+Aggregate ETF detail-page quote: latest price (15-minute delayed), today OHLC, 52-week range, trailing-12-month dividend yield, AUM, expense ratio, NAV, inception date. Peer of `/api/v1/stocks/{ticker}/quote` for fund tickers. **API key required.**
 
 | Param | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -1058,6 +1134,50 @@ Response:
 
 ---
 
+## Indexes API (`/api/v1/indexes`)
+
+Every SentiSense composite index on one standardized envelope: a single scalar, its history, and where applicable the constituent breakdown behind it. **Free (API key required)** on every index today. Full docs: <https://sentisense.ai/docs/api/indexes>.
+
+Market Mood is a member of this family. Read it here when you want every index to answer the same shape, or at `/api/v2/market-mood` above when you want its phase band, weekly change, per-signal breakdown, and sector map.
+
+### GET /api/v1/indexes
+Discovery endpoint. Returns every published index.
+
+Response: `{"indexes": IndexListing[]}` where each `IndexListing` has:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `indexId` | string | URL slug; use as `{indexId}` below |
+| `displayName` | string | Human-readable name |
+| `description` | string | One-sentence summary |
+| `scale` | string | `SENTIMENT` (signed, -1 to +1) or `PERCENT_0_100` |
+| `accessTier` | string | `free` or `pro`. Every index is `free` today. Read this rather than assuming |
+| `canonicalUrl` | string | Richest view of the index. For Market Mood this is `/api/v2/market-mood`; every id still resolves at `/api/v1/indexes/{indexId}` |
+
+Live indexes: `market-mood` (0-100 fear and greed composite), `fed-sentiment` (weekly, Federal Reserve leadership), `ai-sentiment` (daily, AI-exposed names). Treat the discovery endpoint as the source of truth, not this list.
+
+### GET /api/v1/indexes/{indexId}
+Latest reading for one index.
+
+Response: `indexId`, `displayName`, `asOf` (YYYY-MM-DD), `value`, `scale`, `coverage`, `basketSize`, `totalMentions`, `methodologyNote`, `constituents[]`.
+
+Two archetypes share this envelope. A **basket** index (`fed-sentiment`, `ai-sentiment`) weight-averages tracked entities, so `constituents[]` carries `kbEntityId`, `displayName`, `role`, `weight`, `value`, `mentionsCount`, `staleness`, `contribution`, `link`, and `coverage`/`basketSize`/`totalMentions` describe how the headline was built. **`contribution` is reserved and currently returns `null` on every constituent, so do not build on it**; derive a constituent's share of the headline as `weight * value` over the sum of `weight` across the constituents whose `staleness` is not `EXCLUDED`. A **composite** index (`market-mood`) is built from signals rather than entities, so those four fields are `null`. That `null` means "no constituents by construction", not "data missing": branch on it instead of treating it as an error.
+
+`staleness` is `FRESH` (mentioned inside the lookback), `CARRIED_FORWARD` (last known value standing in), `EXCLUDED` (no usable reading, renormalized out), or `OUT_OF_SEGMENT` (not in the basket on this date; `weight` is 0). Compare `coverage` against `basketSize` to spot a thin day before quoting the number.
+
+### GET /api/v1/indexes/{indexId}/history
+Historical scalar series for charting.
+
+| Param | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `days` | int | No | 180 | Days of history to return |
+
+Response: `{"indexId", "displayName", "scale", "days", "history": [{"date": "2026-05-25", "value": 0.12}]}`, oldest first.
+
+Point spacing follows the index, not the calendar: weekly indexes emit one point per Monday-Sunday bucket, daily indexes one per day, and Market Mood trading days only. Thin or low-coverage buckets are withheld rather than published, so `history` can be shorter than `days` and can contain gaps. Plot against `date`; do not assume a fixed interval, and do not read a missing date as zero.
+
+---
+
 ## Trackers API (`/api/v1/trackers`)
 
 Observational data products. Every tracker returns the same standardized envelope, so one renderer per `viewType` covers every current and future SentiSense tracker. Full docs: <https://sentisense.ai/docs/api/trackers>.
@@ -1109,7 +1229,7 @@ Column headers are the metric labels on `rows[0]`. Common metric `unit` values a
 
 Errors: `404 unknown_tracker`, `404 no_snapshot`, `503 tracker_unavailable`.
 
-**Methodology:** <https://sentisense.ai/methodology#institution-rankings>.
+**Methodology:** <https://sentisense.ai/methodology/> (each tracker's `methodologyAnchor` from the discovery listing points at its own section; an empty anchor means the tracker has no dedicated section yet).
 
 ---
 
@@ -1123,7 +1243,7 @@ Discover which calendars are available. **Discovery (no quota cost)** -- API key
 Response: `{ calendars: [ { type, path, description } ] }`. Today: `earnings`.
 
 ### GET /api/v1/calendar/earnings
-Upcoming company earnings, sorted by date. **Public (preview)** -- Free: current week, PRO: full forward window (about 30 days). Field richness is identical across tiers; the gate is how far ahead you can see, not which columns you get. Defaults to the current week onward; pass an earlier `from` to include already-reported earnings.
+Upcoming company earnings, sorted by date. **Public (preview)** -- Free: one week, PRO: full forward window (about 30 days). Field richness is identical across tiers; the gate is how much of the window you get back, not which columns you get. On Free the week returned is the first week of the window you asked for, so `week=next` returns next week and `week=this` (or no date params) returns the current week. Defaults to the current week onward, measured from Monday of the current US Eastern week rather than from today, so it can include dates earlier in the week that have already passed; pass an earlier `from` to reach further back. Entries are schedule data in every case and never carry what a company actually reported.
 
 | Param | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
@@ -1134,7 +1254,7 @@ Upcoming company earnings, sorted by date. **Public (preview)** -- Free: current
 | `confirmed` | bool | No | - | When `true`, only company-confirmed dates |
 | `time` | string | No | - | `before_open`, `after_close`, `during_market`, `unknown` |
 
-Response: `{ isPreview, previewReason, totalCount?, data: { earnings: [...], metadata: {...} } }`. Each event: `{ ticker, companyName, earningsDate (ISO date), earningsTime, fiscalQuarter, confirmed, estimatedEps }`. Metadata: `{ generatedAt (epoch seconds), windowStart, windowEnd, count, source }`. On a FREE preview, `totalCount` is the full-window event count and `data.earnings` is limited to the current week.
+Response: `{ isPreview, previewReason, totalCount?, data: { earnings: [...], metadata: {...} } }`. Each event: `{ ticker, companyName, earningsDate (ISO date), earningsTime, fiscalQuarter, confirmed, estimatedEps }`. Metadata: `{ generatedAt (epoch seconds), windowStart, windowEnd, count, source }`. On a FREE preview, `totalCount` is the full-window event count and `data.earnings` is limited to one week. `metadata.windowStart`/`windowEnd` always describe the window actually returned and `metadata.count` always equals `data.earnings.length`, so read the window off the response rather than assuming which week you got.
 
 `earningsTime` is always one of `before_open`, `after_close`, `during_market`, or `unknown`, never null or absent. Treat `unknown` as "no session claim applies" and render it as blank rather than as missing data. It covers two cases: timing the issuer has not published yet, and timing that cannot exist. A few issuers release results on a Saturday or Sunday ahead of a Monday call, and there is no weekend open or close for the report to sit against. **A weekend `earningsDate` is legitimate data, not a bug.** Do not drop it, and do not shift it to the next weekday; the date is what the issuer announced.
 

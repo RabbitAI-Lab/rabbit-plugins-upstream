@@ -1,43 +1,53 @@
-## Description: <br>
-css-free helps agents generate modern CSS layout, animation, responsive design, and component styling guidance for Flexbox, Grid, container queries, Tailwind, BEM, and CSS Modules. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates modern CSS layouts, animations, responsive styles, and component styling patterns for Flexbox, Grid, Tailwind, BEM, CSS Modules, and CSS-in-JS workflows.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and designers use this skill to turn layout, animation, responsive behavior, or component styling requirements into CSS-oriented guidance and code examples. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests broad read, write, and command execution access for CSS assistance. <br>
-Mitigation: Install and run it only in workspaces where that level of agent tool access is acceptable, and review generated commands or file edits before execution. <br>
-Risk: The artifact mentions callback URLs and API key setup without clearly scoping the destination service or transmitted data. <br>
-Mitigation: Avoid untrusted callback URLs and configure an API key only after confirming which service will receive it and what data will be sent. <br>
-Risk: Generated CSS and compatibility guidance may be incomplete for a target browser or framework. <br>
-Mitigation: Test generated styles in the target browsers and framework runtime before shipping them. <br>
+## Use Case:
 
+Developers, designers, and automation workflow users use this skill to draft CSS layouts, animations, responsive rules, and component styles from Chinese-language prompts. It is not intended for 3D modeling, 3D animation, Canvas/WebGL rendering, SVG path animation, or CSS preprocessor compilation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/css-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with CSS, JSON, and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include CSS snippets, HTML structure examples, compatibility notes, API key setup guidance, and JSON-formatted result examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill asks for command execution and file-operation authority beyond normal CSS and HTML generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if that authority is acceptable, review proposed shell commands and file changes before execution, and prefer a narrower CSS/HTML-only version where available.
+
+Risk: The artifact includes unrelated API key and automation sections that may confuse users or broaden expected behavior.
+
+Mitigation: Avoid providing secrets unless the host agent explicitly requires them for the requested task, and confirm any external API use before running the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/css-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with CSS, HTML, and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include browser compatibility notes, HTML structure examples, CSS method choices, and setup guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

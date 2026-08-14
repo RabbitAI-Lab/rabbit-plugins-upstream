@@ -4,9 +4,11 @@
 
 **让 Agent 用最少的 token 做最准的事**
 
+> ⚔️ **将军受命，君必先谋于庙，行令于廷，君身以斧钺授将。曰：左、右、中军皆有分职；若逾分而上请者死；军无二令，二令者诛；留令者诛；失令者诛。**
+>
 > 💬 **用不完，根本用不完，妈妈再也不用担心我缺 token 了。**
 
-[![Version](https://img.shields.io/badge/version-1.8.2-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.10.0-blue.svg)]()
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
 [![Author](https://img.shields.io/badge/author-phoenixlucky-orange.svg)]()
 </div>
@@ -19,6 +21,12 @@
 >
 > ✅ **适用于：** Reasonix / Codex CLI / OpenCode / Hermes / Cline 等主流 Agent 工具。一次学习，全平台受益。
 
+<div align="center">
+
+<img src="assets/zerotoken-banner.webp" alt="ZeroToken Skill 概览" width="480">
+
+</div>
+
 ---
 
 ## 🔌 平台集成指南
@@ -27,8 +35,8 @@
 
 请依次阅读并安装以下 Skill。
 
-ZeroToken Skill — phoenixlucky，Token 高效约束：最少 token 和精准提示完成任务，减少无效输出  
-地址：https://github.com/phoenixlucky/zerotoken-skill
+- **ZeroToken Skill** — phoenixlucky，Token 高效约束：最少 token 和精准提示完成任务，减少无效输出
+- 地址：https://github.com/phoenixlucky/zerotoken-skill
 
 请根据上面每个 Skill 的「安装指令」完成安装。
 
@@ -113,7 +121,7 @@ install-source --source https://clawhub.ai/phoenixlucky/zerotoken-skill
 | **C. 📦 多文件任务** | 短计划 → 分批加载 → 按步推进 | 🟡 中 |
 | **D. 📚 大资料总结** | 要点 + 证据位置，不逐段复述 | 🟠 中高 |
 | **E. 🏗️ 重大架构调整** | 诊断根因 → 确认方案 → 增量迁移 | 🔴 高（但可控） |
-| **F. 🖥️ Windows/PowerShell 环境适配** | 8 条陷阱规则 + 脚本工具，解决中文+Windows 工作流痛点 | 🟢 低 |
+| **F. 🖥️ Windows/PowerShell 环境适配** | 12 条陷阱规则 + 脚本工具，解决中文+Windows 工作流痛点 | 🟢 低 |
 
 ---
 
@@ -251,7 +259,7 @@ install-source --source https://clawhub.ai/phoenixlucky/zerotoken-skill
 **行为表现：**
 ```
 🏷️ 识别 → "Windows/PowerShell + 中文环境，启用 F 模式"
-   📋 检查 → 8 条已知陷阱匹配当前症状
+   📋 检查 → 12 条已知陷阱匹配当前症状
       🛠️ 解决 → 对应脚本工具或安全模板处理
          📝 输出 → 修复结果 + 验证确认
 ```
@@ -262,27 +270,59 @@ install-source --source https://clawhub.ai/phoenixlucky/zerotoken-skill
 
 ---
 
+## ⚔️ AI 编程总纲（尉缭子十原则）
+
+> **将军受命，君必先谋于庙，行令于廷，君身以斧钺授将。曰：左、右、中军皆有分职；若逾分而上请者死；军无二令，二令者诛；留令者诛；失令者诛。**
+
+核心不是军事，而是 **权限边界、单一指令、责任明确、执行一致**。与 ZeroToken 纪律互补：**省 token 是效率，尉缭子是秩序**。
+
+完整十原则（含违反示例）、与任务模式的对应关系及 System Prompt 总纲见 [SKILL.md「⚔️ AI 编程总纲（尉缭子十原则）」](SKILL.md#⚔️-ai-编程总纲尉缭子十原则)。
+
+---
+
+## 🔍 搜索资料规范
+
+**当任务需要搜索外部资料时，按以下优先级执行：**
+
+| 优先级 | 方式 | 条件 |
+|--------|------|------|
+| 🥇 **Chrome MCP** | 真实浏览器搜索（不限百度） | `mcp_call.py` 存在且服务在线 |
+| 🥈 **web_fetch** | 备选 | 仅当 Chrome MCP 不可用 |
+
+> Chrome MCP 真实浏览器可通杀微博/知乎/小红书等反爬严格的平台；若 Chrome MCP 不可用，允许使用当前网络可用的其他搜索方式。
+
+完整规则（禁用行为、Windows 调用注意、搜索命令示例）见 [SKILL.md「🔍 搜索资料规范」](SKILL.md#🔍-搜索资料规范)。
+
+---
+
+## 📝 精准提示词模板
+
+用「目标 / 输入 / 约束 / 输出 / 预算」五要素压缩提示词；请求含糊时先用模板提炼再执行，只有缺少关键输入会导致结果不可用才追问，且一次只问 1 个问题。模板全文见 [SKILL.md「📝 精准提示词模板」](SKILL.md#📝-精准提示词模板)。
+
+---
+
+## 📜 Unicode 安全编码规范
+
+全项目硬性编码规范，详见 **[`docs/unicode-encoding-spec.md`](docs/unicode-encoding-spec.md)**（15 条硬性规定 + 项目执行细则）：
+
+- 🔤 文本文件统一 **UTF-8**（`.ps1` 例外，必须 UTF-8 with BOM）
+- 📖 `open()` 一律显式 `encoding='utf-8'`，写模式加 `newline='\n'` 防 CRLF 污染
+- 🚫 禁止 `errors='replace'` 静默损坏数据；非 UTF-8/UTF-16/GB18030 文件显式抛错
+- 🖥️ Python 控制台输出优先 `sys.stdout.reconfigure(encoding='utf-8')`
+- 🌐 HTTP 头显式 `charset=utf-8`；JSON 用 `ensure_ascii=False`
+- 🧪 完成后运行 `python scripts/audit_encoding.py --root . --out audit_result.txt` 全项目审计（检测非 UTF-8 / 替换字符 / 混合换行）
+
+---
+
 ## ✨ ZeroToken 强化模式
 
-当用户明确要求"省 token"时，叠加以下规则：
+当用户明确要求"省 token"时，叠加更激进的压缩规则（零问候、最大压缩输出、省略冗余、准确性不妥协），触发词如"省点 token""简洁点""直接给结果"。完整规则见 [SKILL.md「⚡ ZeroToken 强化模式」](SKILL.md#⚡-zerotoken-强化模式)。
 
-- 🔇 **零问候、零过渡、零客套** — 直接给结果
-- 📉 **最大压缩输出** — 用最短的合法表达
-- 🧹 **省略一切冗余** — 无总结、无"如果你还需要帮助"、无格式装饰
-- ⚖️ **准确性不妥协** — 省的是表达方式，不是答案质量
-
-**何时触发：** 用户说"省点 token"、"简洁点"、"直接给结果"等。
+---
 
 ## 🚫 退出条件
 
-以下场景自动**退出 ZeroToken 模式**，切换为**详尽模式**：
-
-| 场景 | 原因 |
-|------|------|
-| 🎓 **教学/学习** | 需要详细解释和示例 |
-| 🧠 **头脑风暴** | 需要探索多种可能性 |
-| 🔬 **深度研究** | 需要全面分析和引用 |
-| ❓ **用户要求详细** | 用户主动要求更详尽的回答 |
+教学/学习、头脑风暴、深度研究、用户要求详细等场景自动**退出 ZeroToken 模式**，切换为**详尽模式**。完整规则见 [SKILL.md「🚫 何时不使用 ZeroToken」](SKILL.md#🚫-何时不使用-zerotoken)。
 
 ---
 
@@ -291,11 +331,14 @@ install-source --source https://clawhub.ai/phoenixlucky/zerotoken-skill
 所有详细规范定义在 **[`SKILL.md`](SKILL.md)**，配套脚本工具在 **`scripts/`** 目录：
 
 - 📐 **快速决策表** — 按请求类型匹配模式与工具链
-- 🧭 **核心原则** — 先分类再预算、压缩提示词、渐进读取、先给结果、不复述
-- 📝 **精准提示词模板** — 目标 → 输入 → 约束 → 输出
+- 🧭 **核心原则** — 先分类再预算、压缩提示词、渐进读取、先给结果、不复述、设置停止条件
+- ⚔️ **AI 编程总纲（尉缭子十原则）** — 权限边界、单一指令、责任明确、执行一致，附 System Prompt 总纲
+- 📝 **精准提示词模板** — 目标 → 输入 → 约束 → 输出 → 预算
+- 🔍 **搜索资料规范** — Chrome MCP 优先，web_fetch 备选
+- 📜 **Unicode 安全编码规范** — 全项目编码硬性规定，见 `docs/unicode-encoding-spec.md`
 - 🔄 **六种任务模式详解 (A-F)** — 每种模式的完整行为规范
-- 🖥️ **F. Windows/PowerShell 环境适配** — 8 条已知陷阱与解决方案
-- 🛠️ **scripts/ 工具集** — `safe_io.py`, `detect_gbk_contamination.py`, `batch_edit.py`, `fix_encoding.py`, `verify_output.py`, `init_env.ps1`
+- 🖥️ **F. Windows/PowerShell 环境适配** — 12 条已知陷阱与解决方案
+- 🛠️ **scripts/ 工具集** — `safe_io.py`, `detect_gbk_contamination.py`, `batch_edit.py`, `fix_encoding.py`, `verify_output.py`, `audit_encoding.py`, `init_env.ps1`
 - ⚡ **ZeroToken 强化模式 & 退出条件**
 - 🛡️ **质量底线** — 压缩不降质的硬性要求
 
@@ -318,6 +361,7 @@ install-source --source https://clawhub.ai/phoenixlucky/zerotoken-skill
 | 4 | **先给结果** | 结论先行，细节随后 |
 | 5 | **不复述** | 不重复用户已说的内容 |
 | 6 | **plan 只写顶层步骤** | 避免 bullet 子步骤被 todo 系统注册为独立待办项 |
+| 7 | **设置停止条件** | 已定位目标、必要调用方和验证方式后即停止搜索，不重复读取未变化的文件 |
 
 ---
 

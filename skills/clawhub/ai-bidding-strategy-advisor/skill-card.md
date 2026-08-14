@@ -1,45 +1,62 @@
-## Description: <br>
-Helps teams evaluate a specific tender, develop bidding and pricing strategy, assess competitors and buyer patterns, and generate a data-backed decision report from historical tender data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI投标策略顾问 helps users analyze a specific procurement project and produce bid/no-bid, pricing, competitor, buyer-profile, risk, and action recommendations grounded in Zhiliaobiaoxun bidding data.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Bid, procurement, and sales teams use this skill to decide whether to pursue a tender, estimate competitive pricing bands, understand likely competitors, and produce a strategy report grounded in historical bidding records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends tender and company search terms to the vendor API and stores a local API key. <br>
-Mitigation: Use it only for queries you are comfortable sending to the vendor, keep the API key secured, and rely on preconfigured credentials when automatic registration is not desired. <br>
-Risk: Generated HTML reports may include signed links that bypass login and expose referenced tender data if shared broadly. <br>
-Mitigation: Treat generated reports as sensitive, remove or review signed links before redistribution, and share reports only with intended recipients. <br>
+## Use Case:
 
+External users and bidding teams use this skill to evaluate a concrete bid opportunity, estimate competitive pricing, identify likely competitors, profile the buyer, and prepare a decision report. The skill is intended for procurement strategy support, not as a substitute for independent commercial, legal, or compliance review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/ai-bidding-strategy-advisor) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Analysis workflow](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Automatic registration workflow](references/auto-register.md) <br>
-- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown decision report with optional generated HTML report file path] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved automatic registration; full reports typically consume 12-25 API credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill may create a trial account and store a local API key if no API key is already configured.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer configuring ZLBX_API_KEY before use; require explicit user consent before auto-registration or local credential storage.
+
+Risk: The skill sends bidding query terms such as project names, buyer names, and company names to Zhiliaobiaoxun APIs and may include signed access links in generated reports.
+
+Mitigation: Use the skill only for data that may be queried with the provider, and share generated reports and signed links only with intended recipients.
+
+Risk: Bidding recommendations can be incomplete or misleading when source data is missing, stale, or interpreted as a definitive allegation.
+
+Mitigation: Require reports to identify data gaps, separate facts from inferences, avoid accusatory language, and receive human review before business action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/ai-bidding-strategy-advisor)
+- [API quick reference](artifact/references/api-quick.md)
+- [Bidding analysis workflow](artifact/references/workflow.md)
+- [Report template](artifact/references/report-template.md)
+- [Auto-registration reference](artifact/references/auto-register.md)
+- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool_name})
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown decision report with optional self-contained HTML report file and supporting JSON input for rendering]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include source citations, data-gap notes, estimated API credit usage, and signed access links returned by the provider API.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

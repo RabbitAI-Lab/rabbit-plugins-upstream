@@ -1,46 +1,64 @@
-## Description: <br>
-Analyzes child activity videos or video URLs to identify happy moments such as laughter, jumping, clapping, and joyful reactions, then returns structured reports with captured moment links and positive-reinforcement actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes child-focused camera video or video URLs to identify happy moments such as laughter, jumping, clapping, and reactions to praise, then returns structured reports, capture links, encouragement actions, and history results.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, parents, caregivers, and developers can use this skill to process child activity media through Life Emergence cloud services and review structured happy-moment reports. Use requires appropriate consent and controls for child photos, videos, report access, retention, and deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Child photos, videos, or video URLs are sent to Life Emergence cloud services for analysis and historical report retrieval. <br>
-Mitigation: Use only with explicit guardian consent, documented retention and deletion expectations, and clear limits on who may access generated reports. <br>
-Risk: The skill can create or reuse local account identity records and tokens in the workspace. <br>
-Mitigation: Review workspace data storage before deployment, restrict filesystem access, and rotate or delete local identity data when the skill is removed or transferred. <br>
-Risk: Captured child moments and report links may expose sensitive media if shared beyond authorized caregivers. <br>
-Mitigation: Limit report access to approved guardians or operators, verify deletion controls, and avoid use on shared devices without account separation. <br>
-Risk: Positive-reinforcement outputs can be inappropriate if they over-trigger, misclassify emotional context, or encourage performative behavior. <br>
-Mitigation: Keep human review and opt-out controls in place, apply the documented safety checks before saving clips, and maintain conservative reinforcement frequency. <br>
+## Use Case:
 
+External users and developers use this skill to analyze fixed-camera child activity footage from homes, kindergartens, playgrounds, or parent-child centers for objective happy-moment detection, structured reporting, parent-facing capture links, and cloud history lookup. It is intended for positive reinforcement and memory capture, not psychological assessment or personality labeling.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-happy-moment-capture-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON text with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write an optional output file when the user supplies an output path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Sensitive child media or video URLs are sent to lifeemergence.com cloud services for analysis and history lookup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with confirmed guardian consent for every child recorded, especially in public or school settings, and verify that the deployment's privacy notices cover cloud processing.
+
+Risk: The skill may silently create or reuse a local/cloud identity and persist authentication tokens for report history.
+
+Mitigation: Review local credential and database storage before deployment, restrict access to the agent workspace, and rotate or remove stored tokens when the skill is no longer needed.
+
+Risk: Happy-moment capture can preserve sensitive or unintended child footage.
+
+Mitigation: Keep the documented safety controls enabled: pre-save review for positive, appropriate clips; guardian deletion and pause controls; and short retention for footage not explicitly saved.
+
+Risk: Positive reinforcement could be overused or mistaken for psychological assessment.
+
+Mitigation: Limit encouragement frequency, avoid personality or mental-health labels, and present outputs as behavior observations and parent-child memory aids only.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill usage demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-happy-moment-capture-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and structured JSON text with report export links; optional file output when --output is supplied.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts local video files or video URLs, supports history-list output, and relies on cloud API responses for analysis and report history.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,58 @@
-## Description: <br>
-Guides an agent through maintaining a configured GitLab project by proposing focused improvement merge requests and closing stale self-authored merge requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill guides an agent to inspect opportunities for improvement in a GitLab project and create, assign, or close merge requests when appropriate.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and maintainers use this skill to identify useful improvements for the configured GitLab project, open focused merge requests, and close their own stale merge requests when appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can direct an agent to create or close merge requests on a specific GitLab project using GitLab credentials. <br>
-Mitigation: Use a least-privilege GITLAB_TOKEN, require explicit approval before creating or closing merge requests, and review proposed changes before execution. <br>
-Risk: The skill's public description understates its GitLab repository maintenance behavior. <br>
-Mitigation: Treat it as a GitLab repository maintenance workflow rather than a personal-growth aid and verify the target project before use. <br>
+## Use Case:
 
+Developers and maintainers use this skill to have an agent identify meaningful project improvements and prepare narrowly scoped GitLab merge requests. It is most appropriate when merge-request automation is expected and reviewed by a human.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-self-improvement) <br>
-- [Configured GitLab project](https://gitlab.com/xrow-public/helm-openclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with possible GitLab CLI shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires glab and GITLAB_TOKEN as indicated by server-resolved metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.75.3 (source: server release metadata) <br>
+Risk: The skill presents itself as personal self-improvement while instructing an agent to perform GitLab merge-request automation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat it as GitLab merge-request automation, disclose that behavior to users, and require explicit confirmation before any merge request is created, assigned, or closed.
+
+Risk: Use of GITLAB_TOKEN can grant the agent project-modifying access.
+
+Mitigation: Use a GitLab token intentionally scoped to the target project and limited to the permissions needed for reviewed merge-request work.
+
+Risk: The skill can close older merge requests created by the agent.
+
+Mitigation: Require review of the target merge request, last activity date, and review state before allowing closure.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-self-improvement)
+- [Referenced GitLab project](https://gitlab.com/xrow-public/helm-openclaw)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown merge-request content with GitLab CLI actions or guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires glab and GITLAB_TOKEN; may create, assign, or close GitLab merge requests.]
+
+## Skill Version(s):
+
+1.81.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

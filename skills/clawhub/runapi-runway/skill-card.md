@@ -1,45 +1,61 @@
-## Description: <br>
-Generate and edit video with Runway through RunAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate or extend videos with Runway through RunAPI. Use the RunAPI CLI for one-off results and an SDK when integrating Runway into an app, backend, worker, library, or production codebase.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill to generate, edit, extend, or transform video with Runway through the RunAPI CLI for one-off tasks, or through RunAPI SDKs when integrating video generation into an application or backend. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use RUNAPI_API_KEY or a saved runapi login session as credentials. <br>
-Mitigation: Treat the API key and saved CLI session as secrets, avoid exposing them in logs or shared files, and revoke or rotate them if disclosed. <br>
-Risk: Prompts, media, and task data may be sent to RunAPI/Runway and may incur provider costs. <br>
-Mitigation: Use the skill only when the user accepts RunAPI/Runway processing and any applicable pricing, rate limits, and provider terms. <br>
-Risk: The runtime depends on installing the runapi binary from the RunAPI Homebrew tap. <br>
-Mitigation: Verify the Homebrew tap and binary source before installation and keep the CLI updated through the documented package manager. <br>
+## Use Case:
 
+Developers and agents use this skill to create or extend Runway videos through RunAPI, either as one-off CLI tasks or SDK-backed application integrations. The skill guides contract discovery, request construction, task execution, result download, and deliverable verification.
 
-## Reference(s): <br>
-- [RunAPI Runway model overview](https://runapi.ai/models/runway.md) <br>
-- [RunAPI Runway provider comparison](https://runapi.ai/providers/runway.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [RunAPI Runway homepage](https://runapi.ai/models/runway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, SDK package names, and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include RunAPI CLI commands, request-file guidance, asynchronous polling commands, and SDK selection guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: release evidence) <br>
+Risk: Prompts and user-selected media files may be sent to RunAPI or Runway.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated API key where possible and review request.json before submission for sensitive content or file paths.
+
+Risk: Submitting generation tasks may create billable work.
+
+Mitigation: Submit only after authentication and request validation, and do not create replacement paid tasks without user authorization.
+
+Risk: Incomplete or unexpected media results could be mistaken for finished deliverables.
+
+Mitigation: Download every requested media output and verify each file is non-empty with the expected MIME type before reporting completion.
+
+## Reference(s):
+
+- [RunAPI Runway model overview](https://runapi.ai/models/runway.md)
+- [RunAPI Runway provider overview](https://runapi.ai/providers/runway.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI Runway homepage](https://runapi.ai/models/runway)
+- [RunAPI Runway SDK](https://github.com/runapi-ai/runway-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON request and response files, SDK integration code, and downloaded media deliverables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the runapi CLI for CLI workflows and may use RUNAPI_API_KEY authentication.]
+
+## Skill Version(s):
+
+0.2.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
