@@ -1,42 +1,57 @@
-## Description: <br>
-Side-by-side comparison of two major-US credit cards across fees, earning rates, credits, transfer partners, and key benefits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Return a side-by-side comparison of two major-US credit cards across fees, earning rates, credits, transfer partners, and key benefits. Use when the user is deciding between two cards.
 
-## Publisher: <br>
-[jiahongc](https://clawhub.ai/user/jiahongc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jiahongc](https://clawhub.ai/user/jiahongc)
 
-## Use Case: <br>
-External users and agents use this skill to compare two exact credit card variants side by side using issuer-first web research and approved secondary sources. It is intended for compact factual comparisons, not personalized financial advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credit-card names and comparison queries may be sent to web search and fetch services. <br>
-Mitigation: Use the skill only when those queries are acceptable to share with the selected search and fetch providers. <br>
-Risk: Optional Brave API use may consume API quota and requires a sensitive credential. <br>
-Mitigation: Provide BRAVE_API_KEY only when the Brave search path is desired, and manage the key as a normal secret. <br>
-Risk: Credit-card offers, fees, credits, and benefits can change. <br>
-Mitigation: Verify important terms against issuer pages before acting on a comparison. <br>
+## Use Case:
 
+Consumers and agents assisting them use this skill to compare two exact major US credit card variants across fees, earning rates, credits, transfer partners, benefits, and factual winners by dimension.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jiahongc/card-compare) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown comparison report with two-column tables, confidence notes, and source links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask a clarification question when a card name is ambiguous; may use optional Brave Search API credentials when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Credit-card fees, offers, credits, and benefits can change or vary by exact card variant.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify issuer pages and an approved secondary source when required before relying on the comparison.
+
+Risk: The skill relies on referenced shared card policy and identity skills for source limits and normalization behavior.
+
+Mitigation: Install the referenced shared skills only from trusted sources and review their behavior before use.
+
+Risk: A side-by-side card comparison could be mistaken for personalized financial advice.
+
+Mitigation: Keep the bottom line limited to factual winners by dimension and avoid personalized recommendations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jiahongc/skills/card-compare)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Markdown with two-column comparison sections and hidden YAML sources]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes fees, earning rates, credits, transfer partners, key benefits, factual bottom-line winners by dimension, and confidence notes.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

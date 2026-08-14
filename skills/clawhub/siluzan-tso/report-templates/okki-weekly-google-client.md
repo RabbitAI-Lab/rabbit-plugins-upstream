@@ -6,7 +6,6 @@
 > **媒体**：当前模板仅规范 **Google**（`mediaCustomerId`）。其他媒体用各自 `*-period-report.md`。  
 > **Excel 版式基准**：与运营样表《**数据复盘分析**》类 xlsx 对齐（如 `2025.12数据复盘分析.xlsx`）；工作簿 5 个 Sheet、顺序与表头以下文规范为准。
 
-
 ## Contents
 
 - 须先确认

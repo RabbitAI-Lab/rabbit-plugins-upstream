@@ -21,7 +21,7 @@
 ```
 Step 1  Initialize Upload     →  upload_url + upload_token
 Step 2  Upload Chunks & Merge →  PUT 分片至 upload_url（不经 LinkFox 网关）
-Step 3  Bind Business Resource →  file_id（供后续发布；可选预检）
+Step 3  Bind Business Resource →  file_id（供后续预检/发布）
 ```
 
 | 步骤 | 调用方 | 经 LinkFox `/tiktokVideo/developerProxy` |
@@ -183,7 +183,5 @@ Step 1 / Step 3 文档路径为 **`open/{version}/file/...`**，**不在现网�
 ## 在发布链路中的位置
 
 ```
-选品 → [大文件分片上传 或 直传] → file_id → （可选）预检 → 发布 → 查状态
+选品 → [大文件分片上传 或 直传] → file_id → 预检 → 发布 → 查状态
 ```
-
-> 选品请使用 **`linkfox-tiktok-video-products`**。预检为可选步骤；上传获得 `file_id` 后可直接发布。

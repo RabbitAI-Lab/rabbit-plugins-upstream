@@ -34,6 +34,9 @@ from core.chapter_slicer import ChapterSlicer
 from core.speaker_diarization import SpeakerDiarization
 from core.timestamped_summary import TimestampedSummary
 from core.update_notifier import UpdateNotifier
+from core.platform_adapters import PlatformRouter
+from core.editing import HighlightDetector, RedundancyDetector, TimelineGenerator, EDLExporter, SubtitleStylist, JianyingExporter
+from core.speaker_diarization.quality_scorer import QualityScorer
 
 logger = get_logger(__name__)
 
@@ -98,6 +101,25 @@ def parse_args():
                         help="启用说话人分离（多人对话场景）")
     parser.add_argument("--slice-chapters", action="store_true",
                         help="按章节切片视频片段 + 生成SRT字幕")
+    parser.add_argument("--platform", action="store_true",
+                        help="启用短视频平台适配（自动识别抖音/快手/B站/视频号链接）")
+    parser.add_argument("--editing-suggest", action="store_true",
+                        help="启用自动剪辑建议（高光检测/冗余标记/时间线生成/EDL导出）")
+    parser.add_argument("--edl-format", default="cmx3600",
+                        choices=["cmx3600", "csv", "json"],
+                        help="EDL 导出格式 (默认: cmx3600)")
+    parser.add_argument("--subtitle-style", default=None,
+                        choices=["douyin", "bilibili", "movie", "minimal"],
+                        help="字幕样式模板")
+    parser.add_argument("--subtitle-format", default="ass",
+                        choices=["srt", "ass", "vtt"],
+                        help="字幕输出格式 (默认: ass)")
+    parser.add_argument("--export-edl", action="store_true",
+                        help="导出 EDL 剪辑时间线文件")
+    parser.add_argument("--jianying", action="store_true",
+                        help="导出剪映 draft.json 格式（可直接导入剪映专业版）")
+    parser.add_argument("--quality-score", action="store_true",
+                        help="启用说话人分离质量评分")
     
     return parser.parse_args()
 
@@ -106,7 +128,7 @@ def print_banner():
     """打印启动横幅"""
     banner = """
 ╔══════════════════════════════════════════════════╗
-║          🎬 video-analyzer v3.5.0               ║
+║          🎬 video-analyzer v4.1.0               ║
 ║        视频分析处理 — 本地视频反编译工具         ║
 ╚══════════════════════════════════════════════════╝
     """
@@ -223,7 +245,7 @@ def main():
         # ========== 版本更新检查（非阻塞） ==========
         if not args.no_update_check:
             try:
-                notifier = UpdateNotifier(config, current_version="3.5.0")
+                notifier = UpdateNotifier(config, current_version="4.1.0")
                 update_result = notifier.check_for_updates()
                 update_msg = notifier.format_update_message(update_result)
                 if update_msg:
@@ -306,11 +328,23 @@ def main():
         
         # ========== 说话人分离（可选） ==========
         diarize_result = None
+        quality_score = None
         if args.diarize:
             logger.info("🗣️  说话人分离...")
             diarizer = SpeakerDiarization(config)
             diarize_result = diarizer.diarize(audio_path, transcript.get("segments", []))
             logger.info(f"   分离完成: {diarize_result['n_speakers']} 人")
+            
+            # 分离质量评分（v4.1 新增）
+            if args.quality_score:
+                logger.info("📊 评估分离质量...")
+                scorer = QualityScorer(config)
+                # 提取特征用于评分
+                features = diarizer._extract_segment_features(audio_path, transcript.get("segments", []))
+                quality_score = scorer.score(diarize_result, features, transcript.get("segments", []))
+                logger.info(f"   质量评分: {quality_score.get('overall_score')} 分 ({quality_score.get('level')}可信度)")
+                logger.info(f"   声纹距离: {quality_score.get('voiceprint_distance')}, 重叠率得分: {quality_score.get('overlap_ratio')}")
+                logger.info(f"   建议: {quality_score.get('suggestion')}")
         
         # ========== 阶段 4: 场景检测 ==========
         logger.info("🎬 [4/7] 场景检测...")
@@ -388,7 +422,10 @@ def main():
             fused_data=fused_data,
             highlights=highlights,
             media_info=media_info,
-            output_dir=args.output
+            output_dir=args.output,
+            platform_analysis=platform_analysis,
+            platform_meta=platform_meta,
+            editing_result=editing_result,
         )
         
         # ========== 章节切片（可选） ==========
@@ -399,6 +436,109 @@ def main():
             chapters_result = slicer.slice_chapters(video_path, scenes, transcript, chapters_dir)
             logger.info(f"   切片完成: {chapters_result['total_chapters']} 个章节")
             output_paths["chapters"] = chapters_dir
+        
+        # ========== 短视频平台适配（可选） ==========
+        platform_analysis = None
+        platform_meta = None
+        if args.platform:
+            logger.info("📱 短视频平台适配...")
+            platform_router = PlatformRouter(config)
+            
+            # 尝试从输入识别平台
+            parse_result = platform_router.parse_link(args.input)
+            if parse_result:
+                platform_name, video_id = parse_result
+                logger.info(f"   识别平台: {platform_name}, 视频ID: {video_id}")
+                
+                # 提取平台元数据
+                platform_meta = platform_router.extract_metadata(platform_name, video_id)
+                if platform_meta:
+                    logger.info(f"   标题: {platform_meta.title[:30]}...")
+                    logger.info(f"   作者: {platform_meta.author}")
+                    logger.info(f"   点赞: {platform_meta.like_count}, 评论: {platform_meta.comment_count}")
+                
+                # 执行短视频特有分析
+                platform_analysis = platform_router.analyze_short_video(
+                    platform_name, video_path, platform_meta, transcript, scenes
+                )
+                
+                if platform_analysis:
+                    logger.info(f"   黄金前3秒: {platform_analysis.opening_3s.get('hook_type', '未知')}")
+                    logger.info(f"   带货分析: {'是' if platform_analysis.ecommerce_analysis.get('is_ecommerce') else '否'}")
+            else:
+                logger.info("   未识别到平台链接，跳过平台分析")
+        
+        # ========== 自动剪辑建议（可选） ==========
+        editing_result = None
+        if args.editing_suggest:
+            logger.info("🎬 自动剪辑建议...")
+            
+            # 高光检测
+            logger.info("   检测高光片段...")
+            highlight_detector = HighlightDetector(config)
+            highlights_list = highlight_detector.detect(video_path, transcript, scenes)
+            logger.info(f"   发现 {len(highlights_list)} 个高光片段")
+            
+            # 冗余检测
+            logger.info("   检测冗余片段...")
+            redundancy_detector = RedundancyDetector(config)
+            redundancies = redundancy_detector.detect(video_path, transcript, scenes)
+            logger.info(f"   发现 {len(redundancies)} 个冗余片段")
+            
+            # 生成剪辑时间线
+            logger.info("   生成剪辑时间线...")
+            timeline_gen = TimelineGenerator(config)
+            original_duration = media_info.get("duration", 0)
+            timeline = timeline_gen.generate(highlights_list, redundancies, original_duration)
+            logger.info(f"   时间线: {len(timeline.get('clips', []))} 个片段, "
+                       f"压缩比 {timeline.get('compression_ratio', 0):.0%}")
+            
+            editing_result = {
+                "highlights": highlights_list,
+                "redundancies": redundancies,
+                "timeline": timeline,
+            }
+            
+            # 导出 EDL
+            if args.export_edl:
+                logger.info("   导出 EDL 文件...")
+                edl_exporter = EDLExporter(config)
+                edl_dir = os.path.join(args.output, "edl")
+                os.makedirs(edl_dir, exist_ok=True)
+                edl_path = os.path.join(edl_dir, f"timeline.{args.edl_format}")
+                edl_exporter.export(timeline, edl_path, format=args.edl_format)
+                output_paths["edl"] = edl_path
+                logger.info(f"   EDL 已导出: {edl_path}")
+            
+            # 导出剪映 draft.json（v4.1 新增）
+            if args.jianying:
+                logger.info("   导出剪映 draft.json...")
+                jianying_exporter = JianyingExporter(config)
+                jy_dir = os.path.join(args.output, "jianying")
+                os.makedirs(jy_dir, exist_ok=True)
+                jy_path = os.path.join(jy_dir, "draft.json")
+                jianying_exporter.export(
+                    timeline=timeline,
+                    transcript=transcript,
+                    video_path=video_path,
+                    output_path=jy_path
+                )
+                output_paths["jianying"] = jy_path
+                logger.info(f"   剪映文件已导出: {jy_path}")
+            
+            # 生成字幕文件
+            logger.info("   生成字幕文件...")
+            subtitle_stylist = SubtitleStylist(config)
+            subtitle_dir = os.path.join(args.output, "subtitles")
+            os.makedirs(subtitle_dir, exist_ok=True)
+            subtitle_path = os.path.join(subtitle_dir, f"subtitle.{args.subtitle_format}")
+            subtitle_stylist.generate(
+                transcript, subtitle_path,
+                style=args.subtitle_style,
+                format=args.subtitle_format
+            )
+            output_paths["subtitle"] = subtitle_path
+            logger.info(f"   字幕已生成: {subtitle_path}")
         
         # ========== 说话人字幕（可选） ==========
         if diarize_result:

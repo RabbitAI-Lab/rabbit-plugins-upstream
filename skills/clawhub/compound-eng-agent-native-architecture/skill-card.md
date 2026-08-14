@@ -1,57 +1,70 @@
-## Description: <br>
-Design agent-native applications where agents replace UI users as the primary actor for MCP tools, agent-loop architectures, system prompt design, hooks policy, shared-workspace file patterns, and self-modifying agent systems. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Design agent-native applications where agents replace UI users as the primary actor, including MCP tools, agent-loop architectures, system prompts, hooks policy, shared-workspace files, and self-modifying agent systems.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill to design or review agent-native systems, including MCP tools, agent loops, prompt architecture, shared workspaces, hooks policy, mobile execution patterns, and safety-oriented self-modification. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill promotes high-impact agent capabilities such as broad file access, shell and HTTP primitives, persistent memory, sensitive-data access, public publishing, and self-modification. <br>
-Mitigation: Review proposed architectures before implementation and add least-privilege scopes, user consent, approval gates, audit logs, rollback, and retention limits before using these patterns in real systems. <br>
-Risk: Copying architectural examples directly into production can preserve unsafe defaults or insufficient safety scoping. <br>
-Mitigation: Treat examples as design guidance, then adapt them to the application's threat model, data sensitivity, governance requirements, and deployment constraints. <br>
+## Use Case:
 
+Developers and product engineers use this skill to design or review agent-native systems where agents operate as primary actors. It provides architecture guidance for MCP tool design, agent loops, prompt-native behavior, shared workspaces, context injection, hooks, mobile constraints, testing, and self-modification.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/iliaal/skills/compound-eng-agent-native-architecture) <br>
-- [Skill Definition](SKILL.md) <br>
-- [Skill Specification](SPEC.md) <br>
-- [Core Principles](references/core-principles.md) <br>
-- [Architecture Patterns](references/architecture-patterns.md) <br>
-- [MCP Tool Design](references/mcp-tool-design.md) <br>
-- [Agent Execution Patterns](references/agent-execution-patterns.md) <br>
-- [Dynamic Context Injection](references/dynamic-context-injection.md) <br>
-- [Action Parity Discipline](references/action-parity-discipline.md) <br>
-- [Shared Workspace Architecture](references/shared-workspace-architecture.md) <br>
-- [Files as Universal Interface](references/files-universal-interface.md) <br>
-- [System Prompt Design](references/system-prompt-design.md) <br>
-- [Hooks Patterns](references/hooks-patterns.md) <br>
-- [Self-Modification](references/self-modification.md) <br>
-- [Agent-Native Testing](references/agent-native-testing.md) <br>
-- [Anti-Patterns](references/anti-patterns.md) <br>
-- [Success Criteria](references/success-criteria.md) <br>
-- [Quick Start](references/quick-start.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with code blocks, command examples, checklists, and configuration recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May route the agent to focused reference material before producing design or review guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: ClawHub release evidence) <br>
+Risk: The skill recommends broad agent capabilities that can exceed appropriate workspace or system access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Apply least-privilege file scopes, exclude secrets, and keep approval gates around sensitive writes, publication, deployment, and other irreversible actions.
+
+Risk: Self-modification guidance can lead to unreviewed code, prompt, or deployment changes.
+
+Mitigation: Require human review for self-modification, preserve rollback points, and verify changes before allowing deployment or restart.
+
+Risk: Cloud LLM use, iCloud storage, checkpoints, logs, and context files can expose or retain sensitive information.
+
+Mitigation: Provide privacy notices, avoid storing credentials or private data, and set retention limits for checkpoints, logs, and context files.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-agent-native-architecture)
+- [Skill instructions](artifact/SKILL.md)
+- [Skill specification](artifact/SPEC.md)
+- [Core principles](artifact/references/core-principles.md)
+- [Architecture patterns](artifact/references/architecture-patterns.md)
+- [MCP tool design](artifact/references/mcp-tool-design.md)
+- [System prompt design](artifact/references/system-prompt-design.md)
+- [Dynamic context injection](artifact/references/dynamic-context-injection.md)
+- [Shared workspace architecture](artifact/references/shared-workspace-architecture.md)
+- [Action parity discipline](artifact/references/action-parity-discipline.md)
+- [Agent execution patterns](artifact/references/agent-execution-patterns.md)
+- [Self-modification](artifact/references/self-modification.md)
+- [Hooks patterns](artifact/references/hooks-patterns.md)
+- [Agent-native testing](artifact/references/agent-native-testing.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with checklists, tables, and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routes to focused reference files based on the user's requested architecture topic.]
+
+## Skill Version(s):
+
+4.4.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

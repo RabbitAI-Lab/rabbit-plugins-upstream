@@ -1,7 +1,7 @@
 ---
 name: clawsouls
-version: 0.6.4
-description: Manage AI agent personas (Souls) for OpenClaw. Installs/switches/restores persona files in the agent workspace, searches and publishes to the clawsouls.ai registry (network + token auth), optionally syncs encrypted agent memory via Git (explicit `sync`/`swarm` commands only), and detects the local agent platform. Use only when the user explicitly asks to manage personas — e.g. "install a soul", "switch persona to X", "list souls", "restore my previous soul", "publish my soul", or "login to clawsouls". Workspace-modifying and publishing actions should be confirmed with the user first.
+version: 0.6.5
+description: Manage AI agent personas (Souls) for OpenClaw, Hermes Agent, ZeroClaw, and other agents that use Soul Spec workspace files (SOUL.md, IDENTITY.md, AGENTS.md). Installs/switches/restores persona files in the agent workspace, searches and publishes to the clawsouls.ai registry (network + token auth), optionally syncs encrypted agent memory via Git (explicit `sync`/`swarm` commands only), and detects the local agent platform. Use only when the user explicitly asks to manage personas — e.g. "install a soul", "switch persona to X", "list souls", "restore my previous soul", "publish my soul", or "login to clawsouls". Workspace-modifying and publishing actions should be confirmed with the user first.
 ---
 
 # ClawSouls — AI Persona Manager
@@ -225,7 +225,17 @@ npx clawsouls platform              # show detected agent platform(s) and worksp
 npx clawsouls detect                # alias
 ```
 
-Detects which agent platform is running (OpenClaw, SoulClaw, ZeroClaw, etc.) and shows workspace paths.
+Detects which agent platform is running (OpenClaw, SoulClaw, ZeroClaw, Hermes Agent, etc.) and shows workspace paths. If detection misses your platform, run soul commands from inside the agent workspace directory — souls are plain Soul Spec files, so any workspace that reads SOUL.md works.
+
+## Platform Notes
+
+| Platform | Workspace | Apply changes |
+|---|---|---|
+| OpenClaw / SoulClaw | agent workspace dir | `soulclaw gateway restart` + `/new` |
+| Hermes Agent | Hermes workspace (reads SOUL.md / AGENTS.md natively; imports OpenClaw layouts) | restart the Hermes session, then start a new chat |
+| ZeroClaw | workspace dir (OpenClaw-style markdown via IdentityConfig) | see `ZEROCLAW_ADAPTER.md` |
+
+Hermes details: `HERMES_ADAPTER.md` in this repo.
 
 ## MCP Server (for Claude Desktop / Cowork)
 

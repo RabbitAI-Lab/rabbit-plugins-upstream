@@ -1,44 +1,61 @@
-## Description: <br>
-Use when an understood video project needs selective transcript-timed titles, lower-thirds, statistics, lists, quotes, chapter cards, or calls to action authored as HyperFrames HTML graphics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when an understood video project needs selective transcript-timed titles, lower-thirds, statistics, metric spotlights, comparisons, lists, quotes, chapter cards, or calls to action authored as HyperFrames HTML graphics.
 
-## Publisher: <br>
-[whitetowerai](https://clawhub.ai/user/whitetowerai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[whitetowerai](https://clawhub.ai/user/whitetowerai)
 
-## Use Case: <br>
-Video editors and agentic video-production workflows use this skill after video understanding to turn approved semantic moments into transcript-timed content cards and transparent graphics overlays. It guides theme selection, card planning, human review, HyperFrames composition, and render contribution handoff. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads and writes local video workflow files and can change project plans, review artifacts, cache files, and render contributions. <br>
-Mitigation: Run it only in the intended project workspace, review generated plans and summaries before final render, and keep normal project backups or version control checkpoints. <br>
-Risk: The workflow runs local tools such as Python, ffmpeg, npx HyperFrames, and Chrome-based rendering. <br>
-Mitigation: Install only in environments where those tools are expected, review commands before execution, and keep runtime dependencies pinned or reviewed for production work. <br>
-Risk: Preview galleries and review pages may involve browser activity and example dependencies that are not suitable for offline or privacy-sensitive workflows. <br>
-Mitigation: For offline or sensitive projects, review or bundle preview dependencies before use and avoid opening externally dependent examples until they are cleared. <br>
+## Use Case:
 
+Developers and video-editing agents use this skill after video understanding to create transcript-timed content card overlays, review candidate copy and placement, and render approved HyperFrames graphics for a video project.
 
-## Reference(s): <br>
-- [Content Cards Review UX Design](artifact/reference/ux-design.md) <br>
-- [Content Cards Review Template Implementation Plan](artifact/reference/ux-implementation-plan.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/whitetowerai/skills/video-add-content-cards) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with shell commands and generated project files, including JSON plans, HTML compositions, review pages, Markdown summaries, and transparent video overlay assets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an existing video-understand project, ffmpeg, Python, Node.js 22 or newer, HyperFrames, and headless Chrome-compatible rendering.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The preview workflow opens local HTML pages, and some bundled examples request GSAP and fonts from third-party CDNs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the example HTML before use in restricted or offline environments; prefer the generated project review pages when local and self-contained assets are required.
+
+Risk: The skill reads and writes project working files and runs ffmpeg, Python, HyperFrames, Node.js, and browser preview tooling.
+
+Mitigation: Run it only in the intended project workspace after reviewing proposed commands, generated paths, and dependency availability.
+
+Risk: Incorrect card copy or placement could misstate transcript evidence or obscure protected faces, head silhouettes, or captions.
+
+Mitigation: Use the candidate review, evidence references, composited still checks, and face/caption clearance gates before rendering the final overlay.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/whitetowerai/skills/video-add-content-cards)
+- [Chart Data Reference](artifact/reference/chart-data.md)
+- [Content Cards Review Template Design](artifact/reference/ux-design.md)
+- [Content Cards Review Template Implementation Plan](artifact/reference/ux-implementation-plan.md)
+- [Animated Theme Gallery](artifact/examples/gallery-animated.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files]
+
+**Output Format:** [Markdown guidance with JSON plans, HTML/CSS/JavaScript compositions, Python and Node shell commands, local review pages, and rendered media files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces project working files, review artifacts, transparent overlay renders, and summary documentation; depends on /video-understand plus local ffmpeg, Python, Node.js, HyperFrames, and browser preview tooling.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

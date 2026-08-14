@@ -162,9 +162,9 @@ def fetch_today_tick(code: str) -> Optional[list]:
 def fetch_money_flow(code: str, days: int = 10) -> list:
     """
     资金流向数据采集 — 三源级联降级
-    1) 东方财富 push2his（完整主力/大小单明细）
-    2) 腾讯日K线（量价趋势，降级）
-    3) 腾讯实时行情（仅当日主力净流入，兜底）
+    1) 东方财富 push2his（完整主力/大小单明细，2026-08 起可能 RemoteDisconnected）
+    2) 新浪 qsfx（全量历史，主力净额 r0_net，无大小单拆分）
+    3) 东方财富 push2delay（末级兜底，仅最新1天）
     返回 [{date, main_net, small_net, medium_net, large_net, super_net, ...}] 尽量标准化的格式
     """
     # ----- 源1: 东方财富 push2his -----
@@ -202,62 +202,75 @@ def fetch_money_flow(code: str, days: int = 10) -> list:
     except Exception as e:
         print(f"[money_flow] 东方财富 {code}: {e}")
 
-    # ----- 源2: 腾讯日K线（量价趋势）-----
+    # ----- 源2: 新浪 qsfx 资金流向（全量历史）-----
+    # 字段: opendate/trade/changeratio/netamount(总净额)/r0_net(主力净额)/r0_ratio
+    # 单位: 元；changeratio 为小数涨跌幅；无大小单拆分 → medium/large/super=0
     try:
         mk = _market(code)
-        param = f"{mk}{code},day,,,5,qfq"
-        url2 = f"http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={urllib.parse.quote(param)}"
-        req2 = urllib.request.Request(url2, headers={"User-Agent":"Mozilla/5.0"})
-        resp2 = urllib.request.urlopen(req2, timeout=10)
-        d2 = json.loads(resp2.read())
-        data_node = d2.get("data", {})
-        # 腾讯返回结构: {data:{sh600600:{day:[...], qfqday:[...]}, ...}}
-        stock_key = next((k for k in data_node if mk in k), None)
-        klines2 = None
-        if stock_key:
-            klines2 = data_node[stock_key].get("qfqday") or data_node[stock_key].get("day")
-        if klines2 and len(klines2) >= 2:
-            result = []
-            for k in klines2:
-                # 格式: [日期, 开盘, 收盘, 最高, 最低, 成交量(手)]
-                if isinstance(k, list) and len(k) >= 6:
+        url2 = ("https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/"
+                f"MoneyFlow.ssl_qsfx_zjlrqs?page=1&num={days}&sort=opendate&asc=0&daima={mk}{code}")
+        req2 = urllib.request.Request(url2, headers={
+            "User-Agent":"Mozilla/5.0","Referer":"https://finance.sina.com.cn/"
+        })
+        resp2 = urllib.request.urlopen(req2, timeout=12)
+        text2 = resp2.read().decode("utf-8")
+        if text2 and not text2.startswith("null"):
+            items2 = json.loads(text2)
+            if items2:
+                result = []
+                for it in items2:
+                    main_net = float(it.get("r0_net") or 0)
+                    total_net = float(it.get("netamount") or 0)
                     result.append({
-                        "date": str(k[0])[:10],
-                        "close": float(k[2]) if k[2] else 0,
-                        "volume": float(k[5]) if k[5] else 0,  # 手
-                        "volume_str": f"{float(k[5]):.0f}手" if k[5] else "",
-                        "change_pct": 0,  # 腾讯K线不直接给涨跌幅
-                        "source": "tencent_kline",
+                        "date": str(it.get("opendate",""))[:10],
+                        "main_net": main_net,
+                        "small_net": total_net - main_net,
+                        "medium_net": 0,
+                        "large_net": 0,
+                        "super_net": 0,
+                        "main_pct": round(float(it.get("r0_ratio") or 0) * 100, 2),
+                        "close": float(it.get("trade") or 0),
+                        "change_pct": round(float(it.get("changeratio") or 0) * 100, 2),
+                        "source": "sina",
+                    })
+                if result:
+                    return result
+    except Exception as e:
+        print(f"[money_flow] 新浪 {code}: {e}")
+
+    # ----- 源3: 东方财富 push2delay（末级兜底，仅最新1天）-----
+    try:
+        url3 = (f"https://push2delay.eastmoney.com/api/qt/stock/fflow/daykline/get"
+                f"?lmt=0&klt=101&fields1=f1,f2,f3,f7"
+                f"&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63"
+                f"&secid={market}{code}")
+        req3 = urllib.request.Request(url3, headers={
+            "User-Agent":"Mozilla/5.0","Referer":"https://data.eastmoney.com/"
+        })
+        resp3 = urllib.request.urlopen(req3, timeout=12)
+        d3 = json.loads(resp3.read())
+        klines3 = d3.get("data",{}).get("klines",[])
+        if klines3:
+            result = []
+            for k in klines3[:days]:
+                parts = k.split(",")
+                if len(parts) >= 13:
+                    result.append({
+                        "date": parts[0],
+                        "main_net": float(parts[1]) if parts[1] else 0,
+                        "small_net": float(parts[2]) if parts[2] else 0,
+                        "medium_net": float(parts[3]) if parts[3] else 0,
+                        "large_net": float(parts[4]) if parts[4] else 0,
+                        "super_net": float(parts[5]) if parts[5] else 0,
+                        "main_pct": float(parts[6]) if len(parts) > 6 and parts[6] else 0,
+                        "close": float(parts[11]) if len(parts) > 11 and parts[11] else 0,
+                        "change_pct": float(parts[12]) if len(parts) > 12 and parts[12] else 0,
+                        "source": "eastmoney_delay",
                     })
             if result:
                 return result
     except Exception as e:
-        print(f"[money_flow] 腾讯K线 {code}: {e}")
-
-    # ----- 源3: 腾讯实时行情（仅当日主力净流入字段索引50）-----
-    try:
-        mk = _market(code)
-        req3 = urllib.request.Request(f"http://qt.gtimg.cn/q={mk}{code}",
-                                      headers={"User-Agent":"Mozilla/5.0"})
-        resp3 = urllib.request.urlopen(req3, timeout=10)
-        text3 = resp3.read().decode("gbk")
-        if "~" in text3:
-            parts3 = text3.split("~")
-            if len(parts3) > 50:
-                main_net_str = parts3[50].strip()
-                if main_net_str and main_net_str != "0.000":
-                    main_net_val = float(main_net_str)
-                    result = [{
-                        "date": datetime.now().strftime("%Y-%m-%d"),
-                        "main_net": main_net_val,
-                        "close": float(parts3[3]) if len(parts3) > 3 else 0,
-                        "volume": float(parts3[6]) if len(parts3) > 6 else 0,
-                        "change_pct": float(parts3[32]) if len(parts3) > 32 else 0,
-                        "source": "tencent_qt",
-                    }]
-                    return result
-    except Exception as e:
-        print(f"[money_flow] 腾讯QT {code}: {e}")
+        print(f"[money_flow] 东方财富delay {code}: {e}")
 
     # 全部失败
     return []

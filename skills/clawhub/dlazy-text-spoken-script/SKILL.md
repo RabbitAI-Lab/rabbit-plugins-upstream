@@ -1,7 +1,7 @@
 ---
 name: dlazy-text-spoken-script
 version: 1.3.6
-description: This skill is used to guide the AI in generating short video spoken scripts with high contrast, strong resonance, a sense of story, and personal IP attributes. All generated scripts must str
+description: "This skill is used to guide the AI in generating short video spoken scripts with high contrast, strong resonance, a sense of story, and personal IP attributes. All generated scripts must str"
 triggers:
   - Short Video Spoken Script Generation (Text Spoken Script)
   - Suitable for short video spoken scripts, character story sharing, and IP viewpoint scripts.
@@ -68,7 +68,7 @@ name: 'text-spoken-script'
 description: 'Generate high-contrast, resonant, and story-driven spoken scripts. Call this skill when you need to create short video spoken scripts, character stories, or personal IP scripts.'
 ---
 
-# Short Video Spoken Script Generation (Text Spoken Script)
+# 短视频口播文案 Spoken Script
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

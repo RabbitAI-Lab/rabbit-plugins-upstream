@@ -147,6 +147,10 @@ Post-split 低流通盘是常见结构，但 split effective date 当日价格�
 | post_split | bool | 是否属于近期反向拆股结构；只标记风险，不自动排除 |
 | last_split_date | date | 最近拆股日期 |
 | dilution_overhang | bool/string | 潜在稀释风险 |
+| premarket_supply_risk | bool/string | 盘前消息与最新正式文件是否确认存在当前事件窗口的新增/可售股份风险 |
+| supply_risk_type | string | `ACTIVE_ATM`、`OFFERING`、`REGISTERED_RESALE`、`PIPE_EQUITY_LINE`、`WARRANT`、`CONVERTIBLE`、`UNLOCK` 或 `OTHER` |
+| supply_risk_source | string | SEC filing、交易所公告或发行人正式公告的链接/编号 |
+| supply_risk_checked_at | datetime | 供给风险核验时间，需带时区 |
 | halted | bool | 当前是否停牌；为真时禁止输出 `EXECUTE` |
 | open_price | USD | 正式开盘价 |
 | last_price | USD | 当前常规时段价格 |
@@ -160,6 +164,11 @@ Post-split 低流通盘是常见结构，但 split effective date 当日价格�
 布尔值支持 `true/false`, `yes/no`, `1/0`, `是/否`。
 
 评分脚本只输出 `EXECUTE`、`WAIT_OPEN`、`WAIT_DATA`、`WATCH`、`EXCLUDE`。JSON额外返回 `path_type` 和 `risk_flags`；`evidence_score` 只表示证据完整度与强度，不是概率。
+
+供给风险是硬门控：`premarket_supply_risk=true` 或旧字段 `dilution_overhang=true`
+时直接 `EXCLUDE`；核验结果为 `UNKNOWN` 时输出 `WAIT_DATA`。单独存在 shelf registration
+但无法确认 takedown 时保持 `UNKNOWN`，不得把融资容量等同于已经发行，也不得据此判定
+风险已经解除。
 
 ## 7. 局限
 

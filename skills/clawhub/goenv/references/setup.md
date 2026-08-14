@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Go **1.25** or newer (per the module's `go.mod`).
+- Go **1.26** or newer (per the module's `go.mod`).
 - Nothing else. goenv's only import is the standard library `os`; it pulls in zero third-party dependencies.
 
 ## Install
@@ -21,7 +21,7 @@ Module path: `github.com/psyb0t/goenv`.
 
 ## The entire API
 
-Three functions and three constants. That's the whole surface.
+Three functions, three constants, and one type. That's the whole surface.
 
 | Symbol | Kind | Behavior |
 |---|---|---|

@@ -1,45 +1,62 @@
-## Description: <br>
-Executes authorized software goals through bounded AI coding loops with persistent state, staged timeboxes, evidence requirements, failure budgets, context controls, stop gates, and resumable handoffs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Execute an authorized software goal through low-context, bounded-autonomous AI coding loops with persistent state, proactive repair, automatic and functional evidence, layered stage review, independent final acceptance, safe workspace boundaries, and resumable handoffs.
 
-## Publisher: <br>
-[englandtong](https://clawhub.ai/user/englandtong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[englandtong](https://clawhub.ai/user/englandtong)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to run scoped coding work through bounded implementation, verification, state recording, and handoff loops when goals and acceptance criteria are clear. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agents may make scoped coding changes and update project-local execution state. <br>
-Mitigation: Install only for repositories where this behavior is intended, and provide clear acceptance criteria and protected boundaries before use. <br>
-Risk: Sensitive or high-impact work can involve secrets, production data, destructive actions, privileged changes, or unclear authority. <br>
-Mitigation: Use the skill's stop gates: stop before those actions, require explicit authority, and record approvals without storing secret values. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to carry an authorized coding goal through bounded Controller, Developer, and Stage Reviewer loops while keeping compact state, evidence, and handoff records. It is intended for clear targets with acceptance criteria, not for vague requirement discovery or final independent QA acceptance.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/englandtong/skills/agent-loop-engineering) <br>
-- [Execution Loop](artifact/references/en/execution-loop.md) <br>
-- [Evidence And Completion](artifact/references/en/evidence-and-completion.md) <br>
-- [Safety And Context](artifact/references/en/safety-and-context.md) <br>
-- [Automation And Handoff](artifact/references/en/automation-and-handoff.md) <br>
-- [Legacy State Migration](artifact/references/en/migration.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports, project-local state updates, JSONL loop records, code changes, and shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update authorized project files, Docs/ACTIVE_PACKET.md, and Docs/LOOP_RUNS.jsonl while recording concise evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md, artifact/_meta.json, server release metadata) <br>
+Risk: The skill can guide an agent to make project-local code changes and maintain repository execution records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with a clear authorized goal, acceptance criteria, allowed changes, protected boundaries, and required evidence.
+
+Risk: Credential, customer-data, deployment, destructive Git, or system-level work could exceed the intended release posture.
+
+Mitigation: Stop before those actions unless there is separate explicit approval, scoped authority, rollback planning, and appropriate evidence.
+
+Risk: An executing agent may overstate completion if final acceptance is not independent.
+
+Mitigation: Require task-local evidence and a separate agent, task, or human reviewer for Standard and Full final acceptance.
+
+## Reference(s):
+
+- [Agent Loop Engineering skill page](https://clawhub.ai/englandtong/skills/agent-loop-engineering)
+- [Execution Loop 2.1](artifact/references/en/execution-loop.md)
+- [Evidence And Completion 2.1](artifact/references/en/evidence-and-completion.md)
+- [Safety And Context 2.1](artifact/references/en/safety-and-context.md)
+- [Automation And Handoff 2.1](artifact/references/en/automation-and-handoff.md)
+- [Legacy State Migration 2.1](artifact/references/en/migration.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown status reports, code edits, shell commands, JSONL loop records, and YAML or Markdown state files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Maintains compact execution state and evidence links; final Standard or Full acceptance remains outside the executing agent.]
+
+## Skill Version(s):
+
+2.1.0 (source: artifact/SKILL.md and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

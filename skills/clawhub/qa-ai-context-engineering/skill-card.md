@@ -1,41 +1,57 @@
-## Description: <br>
-Packages completed QA analysis, including requirement breakdowns, scenario trees, boundary lists, and risk assessments, into a structured AI context package for downstream test-case generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill packages upstream QA analysis, requirement artifacts, and user-provided URL content into a structured AI context package for test-case generation.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and test architects use this skill after requirement analysis and scenario modeling to assemble a complete business, functional, and technical context package before generating test prompts or test cases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded requirement files or fetched URLs may contain sensitive or untrusted content. <br>
-Mitigation: Review inputs before use, avoid including secrets, and treat fetched content as untrusted until checked. <br>
-Risk: Incomplete upstream analysis can lead to assumptions in the generated context package. <br>
-Mitigation: Review the context package before test-case generation and fill missing upstream analysis when assumptions affect coverage or risk. <br>
+## Use Case:
 
+QA engineers and developers use this skill after requirement decomposition and scenario analysis to assemble business, functional, technical, boundary, and risk context before prompting an AI to generate test cases. When upstream inputs are missing, it can read provided requirement files or fetch provided URLs while flagging gaps that should still be completed upstream.
 
-## Reference(s): <br>
-- [Output Template](references/output-template.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-ai-context-engineering) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured Markdown context package with labeled sections and traceability fields.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Carries upstream requirement IDs and scenario IDs; labels provided, inferred, and assumed information when inputs are incomplete.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Sensitive requirement documents or private URLs may be read or fetched when supplied by a user.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only intended inputs, avoid sensitive internal PRDs or private links unless access is authorized, and confirm this access is acceptable before installation.
+
+Risk: Fetched web content and user-provided documents can contain untrusted or incomplete information.
+
+Mitigation: Treat external content as untrusted, preserve source labels, and review the resulting context before using it to generate test cases.
+
+Risk: Supplementing missing inputs could be mistaken for completing the upstream QA analysis workflow.
+
+Mitigation: Review missing-item flags and complete upstream requirement, scenario, boundary, and risk analysis when those inputs are required.
+
+## Reference(s):
+
+- [Test Case Output Template](references/output-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured Markdown context package]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes scenario summaries, boundary conditions, risk indicators, source labels, and missing-context guidance.]
+
+## Skill Version(s):
+
+1.6.3 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

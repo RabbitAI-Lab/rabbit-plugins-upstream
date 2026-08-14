@@ -1,42 +1,52 @@
-## Description: <br>
-Provides mobile QA planning guidance and categorized test checklists for iOS and Android apps, H5/mobile web pages, and mini-program releases, with emphasis on interruptions, network changes, permissions, compatibility, and performance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps plan focused mobile testing for iOS/Android native apps, H5/mobile web pages, and mini-programs, emphasizing interruption, network, permission, compatibility, and performance scenarios.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and developers use this skill to plan mobile release testing and produce structured coverage for device compatibility, interruption handling, weak-network behavior, permissions, performance, and platform-specific scenarios. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Desktop and PC web reference files may be mistaken for primary mobile coverage. <br>
-Mitigation: Use the mobile app, mobile web, and mini-program references as the primary planning sources, and treat desktop and PC web references as supplemental cross-platform material. <br>
+## Use Case:
 
+Developers, QA engineers, and release teams use this skill to produce mobile test plans, device coverage matrices, platform-specific testing checklists, and performance checks before mobile releases.
 
-## Reference(s): <br>
-- [Mobile App Testing](references/platform-mobile-app.md) <br>
-- [Mobile Web/H5 Testing](references/platform-mobile-web.md) <br>
-- [Mini Program Testing](references/platform-mini-program.md) <br>
-- [Desktop Testing](references/platform-desktop.md) <br>
-- [PC Web Testing](references/platform-pc-web.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance] <br>
-**Output Format:** [Markdown checklists and structured QA planning guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include mobile test plans, device coverage matrices, platform-specific checklists, performance checks, and traceable test case IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The release may surface desktop or PC Web reference material outside the stated mobile testing scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill for iOS/Android native apps, H5/mobile web, and mini-program testing; ignore desktop or PC Web guidance unless intentionally expanding the test scope.
+
+## Reference(s):
+
+- [Mini Program Testing Reference](references/platform-mini-program.md)
+- [Mobile App Testing Reference](references/platform-mobile-app.md)
+- [Mobile Web/H5 Testing Reference](references/platform-mobile-web.md)
+- [PC Web Testing Reference](references/platform-pc-web.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown with structured testing checklists, matrices, and planning guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs commonly include mobile_test_plan, device_coverage, platform_specific, and performance_checks sections.]
+
+## Skill Version(s):
+
+1.6.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

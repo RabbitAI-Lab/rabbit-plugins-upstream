@@ -1,40 +1,53 @@
-## Description: <br>
-Honeybook helps an agent use a HoneyBook client-portal MCP server to review vendor contracts, invoices, workspace files, payment methods, and portal deep links for signing or paying. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides HoneyBook client-portal assistance for viewing vendor contracts, invoices, files, workspaces, payment methods, and deep links for signing or payment.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and their agents use this skill to inspect HoneyBook client-portal data across wedding vendors, including contracts, invoices, brochures, proposals, payment methods, and workspace status. It can return portal deep links for signing contracts or paying invoices after explicit confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: HoneyBook magic links and cached sessions can provide access to client-portal data. <br>
-Mitigation: Paste magic links only when intentionally authenticating, treat cached sessions like credentials, and clear ~/.honeybook-mcp/sessions.json when access is no longer needed or the device is shared. <br>
-Risk: Signing and payment flows can affect vendor contracts or invoices if a user follows returned portal links. <br>
-Mitigation: Require explicit confirmation before returning signing or payment deep links, then review the HoneyBook portal page before completing the action. <br>
+## Use Case:
 
+People managing HoneyBook wedding-vendor portals use this skill through an agent to capture magic-link sessions, review contract and invoice status, inspect shared files and payment methods, and request deep links for signing or payment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/honeybook-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or plain text summaries with HoneyBook portal links and file, workspace, invoice, contract, or payment-method details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Signing and payment links require explicit confirmation; cached HoneyBook sessions should be treated as login credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.1 (source: server release metadata) <br>
+Risk: The skill captures HoneyBook magic-link sessions and stores session data locally, which can expose sensitive portal access if the host account or session file is mishandled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for intended HoneyBook portal workflows, keep local session storage protected, and capture sessions only from trusted vendor magic-link emails.
+
+Risk: Broad wording around contracts, invoices, vendors, and payments could activate the skill for unrelated requests.
+
+Mitigation: Use explicit HoneyBook wording before invoking the skill and require confirmation before returning signing or payment deep links.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/honeybook-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API Calls, Links]
+
+**Output Format:** [Markdown or plain text with tool-call results and portal deep links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Signing and payment link requests require explicit confirmation.]
+
+## Skill Version(s):
+
+0.4.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,10 @@
+{
+  "checkpoint_id": "cp_20260713_024406_ee477a40",
+  "thread_id": "snapshot",
+  "node_name": "snapshot",
+  "timestamp": "2026-07-13T02:44:06.750571",
+  "state_hash": "2f60a6555ea0c741",
+  "state_diff": {},
+  "metadata": {},
+  "ttl_hours": 168
+}

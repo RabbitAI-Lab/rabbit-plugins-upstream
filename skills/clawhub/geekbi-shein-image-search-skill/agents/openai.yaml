@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云 SHEIN 图搜同款"
+  short_description: "根据商品图片搜索 SHEIN 同款并分析市场表现与竞争"
+  default_prompt: "使用 $geekbi-shein-image-search-skill 根据图片搜索并分析 SHEIN 同款。"

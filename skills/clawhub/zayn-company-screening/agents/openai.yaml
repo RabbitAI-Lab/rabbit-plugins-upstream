@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-company-screening"
+  short_description: "根据人工搜索结果和客户池证据去重并筛选高匹配目标公司"
+  default_prompt: "使用 $zayn-company-screening 筛选人工提供的目标公司候选结果。"

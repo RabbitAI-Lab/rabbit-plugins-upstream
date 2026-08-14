@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/expense-invoice-ocr",
   "slug": "expense-invoice-ocr",
   "ownerHandle": null,
-  "version": "1.0.6",
-  "updatedAt": 1780450921720,
-  "contentHash": "1f4466d160e8fe60a7aa0a5563c47f90a9c7cf5fceed15f7777ab778582bfc08",
-  "fetchedAt": "2026-07-26T18:36:15.679Z"
+  "version": "1.0.8",
+  "updatedAt": 1786441205460,
+  "contentHash": "4ae62c60e2a018501e8d86dfa65a5301b07f4bae5ddb68328fb0a20fb20ac490",
+  "fetchedAt": "2026-08-14T08:56:56.670Z"
 }

@@ -1,0 +1,3458 @@
+{
+  "skill_name": "virtual-intelligent-dev-team",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "This is a PR. Please do a security review and give refactor advice.",
+      "expected_output": "Lead should route to Code Audit Council without incorrectly enabling Git workflow.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents is empty",
+        "needs_git_workflow is false",
+        "process_skills is empty"
+      ],
+      "categories": [
+        "review"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Please review this Java GC issue and give recommendations.",
+      "expected_output": "Lead should route to Code Audit Council with Java Virtuoso as the language copilot.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents contains Java Virtuoso",
+        "priority_routing agent is Code Audit Council",
+        "workflow_bundle is audit-fix-deliver",
+        "resume_artifacts contains .vidt/iterations/current-round-memory.md"
+      ],
+      "categories": [
+        "backend-stack",
+        "review"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Design a Go plus Gin high-concurrency API gateway.",
+      "expected_output": "Lead should route to Technical Trinity and detect Go context.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "detected_languages contains go",
+        "language_routing.go is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Redo the admin page interaction and visual design, and improve the React component structure.",
+      "expected_output": "Lead should route to World-Class Product Architect without backend or audit agents taking over.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents is empty",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Help me commit this change set properly and push the branch.",
+      "expected_output": "Lead should route to Git Workflow Guardian and include a git-workflow plan.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Git Workflow Guardian",
+        "needs_git_workflow is true",
+        "process_skills contains git-workflow",
+        "process_plan first commands contain python scripts/git_workflow_guardrail.py --repo . --stage G3 --pretty",
+        "process_plan first commands contain git push -u origin feat/<ticket>-<summary>"
+      ],
+      "categories": [
+        "git-workflow"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Core module refactor. Research first, then execute.",
+      "expected_output": "Research-first core refactor work should escalate to Sentinel Architect (NB) without forcing extra governance overlays unless stronger risk signals are present.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Sentinel Architect (NB)",
+        "needs_git_workflow is false",
+        "assistant_agents is empty"
+      ],
+      "categories": [
+        "general",
+        "high-risk"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Define the onboarding user flow, acceptance criteria, and backend contract for this signup revamp.",
+      "expected_output": "Product-definition requests should route to World-Class Product Architect, attach Technical Trinity, and use the product delivery bundle.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Technical Trinity",
+        "workflow_bundle is product-spec-deliver",
+        "stage_council_plan.enabled is false",
+        "workflow_bundle_bootstrap.required is true",
+        "workflow_bundle_bootstrap.commands contains python scripts/init_product_delivery.py --root . --pretty",
+        "mode is not single-agent execution"
+      ],
+      "categories": [
+        "product-delivery",
+        "cross-domain"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Define the rollback plan and branch delivery flow for this core refactor.",
+      "expected_output": "Governance-heavy delivery requests should route to Git Workflow Guardian and use the governance bundle.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Git Workflow Guardian",
+        "needs_git_workflow is true",
+        "workflow_bundle is govern-change-safely",
+        "workflow_bundle_bootstrap.required is true",
+        "workflow_bundle_bootstrap.commands contains python scripts/init_technical_governance.py --root . --pretty"
+      ],
+      "categories": [
+        "technical-governance",
+        "git-workflow"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "This is a PR. Please do the audit, then after the fixes commit and push properly.",
+      "expected_output": "Mixed audit plus commit/push execution should route to Git Workflow Guardian as the delivery lead once explicit Git actions dominate the request.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Git Workflow Guardian",
+        "assistant_agents is empty",
+        "needs_git_workflow is true"
+      ],
+      "categories": [
+        "git-workflow",
+        "review"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Help me figure out what to do with this requirement.",
+      "expected_output": "Low-information requests should fall back to clarification instead of forced routing.",
+      "files": [],
+      "expectations": [
+        "confidence is 0.0",
+        "assistant_agents is empty",
+        "clarifying_question is not null",
+        "intent_confirmation.required is true",
+        "intent_confirmation.option_ids contains product-opportunity",
+        "intent_confirmation.option_ids contains technical-feasibility",
+        "response_pack_json intent_confirmation.required is true",
+        "response_pack_json intent_confirmation.option_ids contains delivery-plan",
+        "response_pack contains ## Intent Confirmation",
+        "reason.unknown_only_fallback is true"
+      ],
+      "categories": [
+        "general",
+        "clarification"
+      ]
+    },
+    {
+      "id": 63,
+      "prompt": "Run the formal release gate.",
+      "expected_output": "Process-only, low-confidence requests should stay single-lead instead of expanding to assistants.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "process_skills contains release-gate",
+        "assistant_agents is empty",
+        "confidence is 0.0"
+      ],
+      "categories": [
+        "release-gate",
+        "clarification"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Use Python and FastAPI to build a backend service.",
+      "expected_output": "Lead should route to Technical Trinity and detect Python without enabling Git workflow.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "detected_languages contains python",
+        "language_routing.python is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack",
+        "cross-domain"
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Review this Django API for security issues.",
+      "expected_output": "Lead should route to Code Audit Council and attach Technical Trinity as the Python implementation copilot.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents contains Technical Trinity",
+        "priority_routing agent is Code Audit Council",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack",
+        "review"
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "Refactor this Flask service and then commit and push the branch.",
+      "expected_output": "Git execution should route to Git Workflow Guardian and enable git-workflow even when a Python service is mentioned.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Git Workflow Guardian",
+        "detected_languages contains python",
+        "needs_git_workflow is true",
+        "process_skills contains git-workflow"
+      ],
+      "categories": [
+        "backend-stack",
+        "git-workflow"
+      ]
+    },
+    {
+      "id": 14,
+      "prompt": "Design a Python service with Celery workers and reliability guardrails.",
+      "expected_output": "Python async service design should stay with Technical Trinity and not trigger Git workflow.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "detected_languages contains python",
+        "language_routing.python is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack"
+      ]
+    },
+    {
+      "id": 15,
+      "prompt": "This is a PR. Review this Django service for security issues before merge.",
+      "expected_output": "Mixed PR audit on a Python service should keep Code Audit Council as lead while attaching Git Workflow Guardian and Technical Trinity.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents contains Git Workflow Guardian",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is true",
+        "priority_routing agent is Code Audit Council"
+      ],
+      "categories": [
+        "backend-stack",
+        "git-workflow",
+        "review"
+      ]
+    },
+    {
+      "id": 16,
+      "prompt": "Use FastAPI for a backend service, then commit, push, and isolate the work in a worktree.",
+      "expected_output": "FastAPI plus Git execution plus isolation should route to Git Workflow Guardian, attach Technical Trinity, and enable both worktree and git-workflow process skills.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Git Workflow Guardian",
+        "assistant_agents contains Technical Trinity",
+        "detected_languages contains python",
+        "needs_worktree is true",
+        "needs_git_workflow is true",
+        "process_skills contains using-git-worktrees",
+        "process_skills contains git-workflow"
+      ],
+      "categories": [
+        "backend-stack",
+        "git-workflow",
+        "cross-domain",
+        "worktree"
+      ]
+    },
+    {
+      "id": 17,
+      "prompt": "Design a Go service with Gin and improve concurrency.",
+      "expected_output": "Go service design should route to Technical Trinity and detect Go without enabling Git workflow.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "detected_languages contains go",
+        "language_routing.go is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack"
+      ]
+    },
+    {
+      "id": 18,
+      "prompt": "Review this Go API for security issues before merge.",
+      "expected_output": "Go audit review should keep Code Audit Council as lead, attach Technical Trinity, and still enable Git workflow for merge-oriented context.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents contains Technical Trinity",
+        "detected_languages contains go",
+        "needs_git_workflow is true",
+        "priority_routing agent is Code Audit Council"
+      ],
+      "categories": [
+        "backend-stack",
+        "git-workflow",
+        "review"
+      ]
+    },
+    {
+      "id": 19,
+      "prompt": "Use Go with Gin, then commit, push, and isolate the work in a worktree.",
+      "expected_output": "Go plus Git execution plus worktree isolation should route to Git Workflow Guardian, attach Technical Trinity, and enable both process skills.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Git Workflow Guardian",
+        "assistant_agents contains Technical Trinity",
+        "detected_languages contains go",
+        "needs_worktree is true",
+        "needs_git_workflow is true",
+        "process_skills contains using-git-worktrees",
+        "process_skills contains git-workflow"
+      ],
+      "categories": [
+        "backend-stack",
+        "git-workflow",
+        "worktree"
+      ]
+    },
+    {
+      "id": 20,
+      "prompt": "Design a Node.js service with NestJS.",
+      "expected_output": "Node.js service design should route to Technical Trinity and detect nodejs without enabling Git workflow.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "detected_languages contains nodejs",
+        "language_routing.nodejs is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack"
+      ]
+    },
+    {
+      "id": 21,
+      "prompt": "Review this NestJS API for security issues before merge.",
+      "expected_output": "Node.js audit review should keep Code Audit Council as lead and attach Technical Trinity while enabling Git workflow for merge context.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents contains Technical Trinity",
+        "detected_languages contains nodejs",
+        "needs_git_workflow is true",
+        "priority_routing agent is Code Audit Council"
+      ],
+      "categories": [
+        "backend-stack",
+        "git-workflow",
+        "review"
+      ]
+    },
+    {
+      "id": 22,
+      "prompt": "Use Node.js with NestJS, then commit, push, and isolate the work in a worktree.",
+      "expected_output": "Node.js plus Git execution plus worktree isolation should route to Git Workflow Guardian, attach Technical Trinity, and enable both process skills.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Git Workflow Guardian",
+        "assistant_agents contains Technical Trinity",
+        "detected_languages contains nodejs",
+        "needs_worktree is true",
+        "needs_git_workflow is true",
+        "process_skills contains using-git-worktrees",
+        "process_skills contains git-workflow"
+      ],
+      "categories": [
+        "backend-stack",
+        "git-workflow",
+        "worktree"
+      ]
+    },
+    {
+      "id": 23,
+      "prompt": "Design a Java Spring Boot service for order processing.",
+      "expected_output": "Java service design should route to Java Virtuoso without enabling Git workflow.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Java Virtuoso",
+        "assistant_agents is empty",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack"
+      ]
+    },
+    {
+      "id": 24,
+      "prompt": "Review this Spring Boot API for security issues before merge.",
+      "expected_output": "Java audit review should keep Code Audit Council as lead, attach Java Virtuoso and Git Workflow Guardian, and enable Git workflow for merge context.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents contains Java Virtuoso",
+        "assistant_agents contains Git Workflow Guardian",
+        "needs_git_workflow is true",
+        "priority_routing agent is Code Audit Council"
+      ],
+      "categories": [
+        "backend-stack",
+        "git-workflow",
+        "review"
+      ]
+    },
+    {
+      "id": 25,
+      "prompt": "Use Java with Spring Boot, then commit, push, and isolate the work in a worktree.",
+      "expected_output": "Java plus Git execution plus worktree isolation should route to Git Workflow Guardian, attach Java Virtuoso, and enable both process skills.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Git Workflow Guardian",
+        "assistant_agents contains Java Virtuoso",
+        "needs_worktree is true",
+        "needs_git_workflow is true",
+        "process_skills contains using-git-worktrees",
+        "process_skills contains git-workflow"
+      ],
+      "categories": [
+        "backend-stack",
+        "git-workflow",
+        "worktree"
+      ]
+    },
+    {
+      "id": 26,
+      "prompt": "Redesign this React dashboard UI and improve the interaction flow.",
+      "expected_output": "Frontend redesign and interaction work should route to World-Class Product Architect without backend or Git agents taking over.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents is empty",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend"
+      ]
+    },
+    {
+      "id": 27,
+      "prompt": "Audit this checkout UX for accessibility and mobile responsiveness.",
+      "expected_output": "Checkout UX and accessibility review should stay with World-Class Product Architect and must not be misrouted to Git because of the word checkout.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents is empty",
+        "needs_git_workflow is false",
+        "process_skills is empty"
+      ],
+      "categories": [
+        "frontend",
+        "review"
+      ]
+    },
+    {
+      "id": 28,
+      "prompt": "Improve the Tailwind admin UI, then commit, push, and isolate the work in a worktree.",
+      "expected_output": "Frontend UI work plus Git execution and worktree isolation should keep World-Class Product Architect as lead, attach Git Workflow Guardian, and enable both process skills.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Git Workflow Guardian",
+        "needs_worktree is true",
+        "needs_git_workflow is true",
+        "process_skills contains using-git-worktrees",
+        "process_skills contains git-workflow"
+      ],
+      "categories": [
+        "frontend",
+        "git-workflow",
+        "worktree"
+      ]
+    },
+    {
+      "id": 29,
+      "prompt": "Design a React design system with Tailwind tokens and shared components.",
+      "expected_output": "Design-system work should route to World-Class Product Architect without backend or Git agents taking over.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents is empty",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend"
+      ]
+    },
+    {
+      "id": 30,
+      "prompt": "Improve the motion design for this React landing page with Framer Motion.",
+      "expected_output": "Motion and interaction design should route to World-Class Product Architect.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents is empty",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend"
+      ]
+    },
+    {
+      "id": 31,
+      "prompt": "Redesign this analytics dashboard for mobile responsiveness and better information hierarchy.",
+      "expected_output": "Responsive dashboard redesign should route to World-Class Product Architect instead of falling back to a generic technical lead.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents is empty",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend"
+      ]
+    },
+    {
+      "id": 32,
+      "prompt": "Audit this signup form UX for accessibility, validation, and conversion friction.",
+      "expected_output": "Form UX and accessibility review should route to World-Class Product Architect.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents is empty",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend",
+        "review"
+      ]
+    },
+    {
+      "id": 33,
+      "prompt": "Redesign this React admin page and align the frontend flow with the backend API contract.",
+      "expected_output": "Frontend redesign plus backend contract alignment should keep World-Class Product Architect as lead and attach Technical Trinity as the engineering copilot.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend",
+        "cross-domain"
+      ]
+    },
+    {
+      "id": 34,
+      "prompt": "Design a Next.js admin console with shadcn/ui and Tailwind.",
+      "expected_output": "Next.js plus shadcn/ui plus Tailwind design work should route to World-Class Product Architect.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents is empty",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend"
+      ]
+    },
+    {
+      "id": 35,
+      "prompt": "Improve the Framer Motion transitions and loading states in this React onboarding flow.",
+      "expected_output": "Framer Motion interaction work should route to World-Class Product Architect.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents is empty",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend"
+      ]
+    },
+    {
+      "id": 36,
+      "prompt": "Redesign the login flow, align auth UX with the backend API, and handle error states clearly.",
+      "expected_output": "Auth UX plus backend API alignment should keep World-Class Product Architect as lead and attach Technical Trinity.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend",
+        "cross-domain"
+      ]
+    },
+    {
+      "id": 37,
+      "prompt": "用 Next.js 和 Tailwind 重做这个后台页面的交互和视觉层次。",
+      "expected_output": "Chinese frontend redesign requests for Next.js and Tailwind should route to World-Class Product Architect.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents is empty",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend",
+        "chinese",
+        "mixed-language"
+      ]
+    },
+    {
+      "id": 38,
+      "prompt": "优化这个表单的错误提示、空状态和接口失败反馈，并和后端 API 契约对齐。",
+      "expected_output": "Chinese frontend error-state plus API-contract requests should keep World-Class Product Architect as lead and attach Technical Trinity.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "iteration",
+        "chinese",
+        "mixed-language"
+      ]
+    },
+    {
+      "id": 39,
+      "prompt": "帮我提个 commit 然后 push，那个 dashboard 也顺手改下。",
+      "expected_output": "Colloquial Git plus dashboard requests should keep World-Class Product Architect as lead and attach Git Workflow Guardian as the delivery copilot.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Git Workflow Guardian",
+        "needs_git_workflow is true",
+        "priority_routing agent does not exist"
+      ],
+      "categories": [
+        "frontend",
+        "git-workflow",
+        "chinese",
+        "mixed-language"
+      ]
+    },
+    {
+      "id": 40,
+      "prompt": "把这个注册流程需求拆一下，验收标准和接口契约也一起落一下。",
+      "expected_output": "Colloquial product-scope requests should route to World-Class Product Architect and attach Technical Trinity.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is false",
+        "workflow_bundle is product-spec-deliver"
+      ],
+      "categories": [
+        "product-delivery",
+        "cross-domain",
+        "chinese",
+        "mixed-language"
+      ]
+    },
+    {
+      "id": 41,
+      "prompt": "review 下这个 nest 接口，顺便看下 auth flow。",
+      "expected_output": "Mixed Chinese-English audit requests over Nest auth flows should keep Code Audit Council as lead and attach Technical Trinity.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "review",
+        "cross-domain",
+        "chinese",
+        "mixed-language"
+      ]
+    },
+    {
+      "id": 42,
+      "prompt": "给这个 djagno 登录表单做个 ux review，并和后端 api 对齐。",
+      "expected_output": "Misspelled framework plus frontend/backend mixed review should keep World-Class Product Architect as lead and attach Technical Trinity.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "frontend",
+        "review",
+        "chinese",
+        "mixed-language"
+      ]
+    },
+    {
+      "id": 43,
+      "categories": [
+        "frontend",
+        "product-delivery",
+        "cross-domain"
+      ],
+      "prompt": "We need an onboarding MVP with product scope, acceptance criteria, and backend delivery.",
+      "expected_output": "MVP product-delivery requests should route to World-Class Product Architect, attach Technical Trinity, and keep governance in the regular track.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Technical Trinity",
+        "workflow_bundle is product-spec-deliver",
+        "governance_plan.privy_council.selected_track is regular track"
+      ]
+    },
+    {
+      "id": 44,
+      "categories": [
+        "backend-stack",
+        "review"
+      ],
+      "prompt": "This is a PR. Review this Django service for security issues, then tell me the exact fixes and the safest next delivery step.",
+      "expected_output": "Audit-and-fix handoff scenarios should keep Code Audit Council as lead, attach Technical Trinity, and preserve review priority routing.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is false",
+        "priority_routing agent is Code Audit Council"
+      ]
+    },
+    {
+      "id": 45,
+      "categories": [
+        "clarification"
+      ],
+      "prompt": "Set the pricing strategy and growth plan for this SaaS.",
+      "expected_output": "Pure business-strategy requests should stay low-confidence and ask for clarification instead of pretending the skill owns company strategy.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "confidence is 0.0",
+        "clarifying_question is not null",
+        "assistant_agents is empty"
+      ]
+    },
+    {
+      "id": 46,
+      "categories": [
+        "frontend",
+        "cross-domain"
+      ],
+      "prompt": "Redesign the billing settings UX, align it with the backend API contract, and make the states responsive.",
+      "expected_output": "Frontend and backend coupling runbook scenarios should keep World-Class Product Architect as lead and attach Technical Trinity.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is false"
+      ]
+    },
+    {
+      "id": 47,
+      "categories": [
+        "general",
+        "high-risk",
+        "git-workflow"
+      ],
+      "prompt": "This is a production-critical payment migration. Research first, stage it, define rollback, and handle the PR safely.",
+      "expected_output": "High-risk production migration scenarios without a concrete language stack should keep Sentinel Architect (NB) as lead and attach Git Workflow Guardian.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Sentinel Architect (NB)",
+        "assistant_agents contains Git Workflow Guardian",
+        "needs_git_workflow is true",
+        "governance_plan.privy_council.selected_track is regular track",
+        "governance_plan.execution_contract.dri_required is true"
+      ]
+    },
+    {
+      "id": 48,
+      "categories": [
+        "backend-stack",
+        "git-workflow",
+        "review"
+      ],
+      "prompt": "Review this Spring Boot PR, then commit and push the fixes.",
+      "expected_output": "When review, git delivery, and Java stack signals conflict, review should remain lead while Git and implementation specialists attach as assistants.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents contains Git Workflow Guardian",
+        "assistant_agents contains Java Virtuoso",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is true",
+        "priority_routing agent is Code Audit Council"
+      ]
+    },
+    {
+      "id": 49,
+      "categories": [
+        "frontend",
+        "git-workflow",
+        "cross-domain"
+      ],
+      "prompt": "Redesign the dashboard UX, align it with the backend API, then commit and push.",
+      "expected_output": "When frontend/backend coupling and explicit git delivery conflict, World-Class Product Architect should remain lead while Technical Trinity and Git Workflow Guardian attach as assistants.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Technical Trinity",
+        "assistant_agents contains Git Workflow Guardian",
+        "needs_git_workflow is true",
+        "priority_routing agent does not exist"
+      ]
+    },
+    {
+      "id": 50,
+      "categories": [
+        "product-delivery",
+        "cross-domain"
+      ],
+      "prompt": "Define the onboarding flow, then define the implementation plan and rollout PR flow.",
+      "expected_output": "When product scope, implementation, and rollout PR flow conflict, World-Class Product Architect should remain lead while Git Workflow Guardian and Technical Trinity attach.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Git Workflow Guardian",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is true"
+      ]
+    },
+    {
+      "id": 51,
+      "categories": [
+        "technical-governance",
+        "git-workflow"
+      ],
+      "prompt": "Define the rollback plan, then open the PR and define rollback for this refactor.",
+      "expected_output": "When governance and explicit PR or rollback flow conflict, Git Workflow Guardian should remain lead and keep the governance bundle active.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Git Workflow Guardian",
+        "needs_git_workflow is true",
+        "workflow_bundle is govern-change-safely"
+      ]
+    },
+    {
+      "categories": [
+        "general",
+        "root-cause",
+        "high-risk"
+      ],
+      "prompt": "We already tried two fixes. It still fails in production. Stop guessing, inspect the logs, find the root cause, and only then propose the next step.",
+      "expected_output": "Repeated failed attempts plus explicit root-cause language should escalate to Sentinel Architect (NB), with Technical Trinity attached for runtime or implementation analysis.",
+      "expectations": [
+        "lead_agent is Sentinel Architect (NB)",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is false",
+        "governance_plan.dual_sign.required is true",
+        "governance_plan.execution_contract.dri_agent is Sentinel Architect (NB)"
+      ],
+      "id": 52,
+      "files": []
+    },
+    {
+      "categories": [
+        "general",
+        "root-cause",
+        "high-risk"
+      ],
+      "prompt": "This MCP server registration still fails after multiple attempts. Read the logs, inspect the config, identify the root cause, and stage the safest fix.",
+      "expected_output": "MCP or config-runtime root-cause requests should escalate to Sentinel Architect (NB) and attach Technical Trinity for system-level diagnosis.",
+      "expectations": [
+        "lead_agent is Sentinel Architect (NB)",
+        "assistant_agents contains Technical Trinity",
+        "needs_git_workflow is false",
+        "governance_plan.dual_sign.required is true",
+        "governance_plan.execution_contract.dri_agent is Sentinel Architect (NB)"
+      ],
+      "id": 53,
+      "files": []
+    },
+    {
+      "id": 54,
+      "categories": [
+        "iteration"
+      ],
+      "prompt": "Run another iteration, benchmark it against the baseline, and stop if the result regresses.",
+      "expected_output": "Explicit optimization-loop prompts should enable bounded iteration, keep the lead lightweight, and expose the iteration plan.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "needs_iteration is true",
+        "process_skills contains bounded-iteration",
+        "iteration_profile.enabled is true",
+        "process_plan first commands contain mkdir -p .vidt/iterations",
+        "process_plan first commands contain cp assets/iteration-plan-template.json .vidt/iterations/iteration-plan.json",
+        "process_plan first commands contain python scripts/register_benchmark_baseline.py --workspace .vidt/iterations --label stable --report <baseline-report> --pretty",
+        "process_plan first commands contain python scripts/run_iteration_cycle.py --workspace .vidt/iterations --round-id round-01 --objective \"<goal>\" --baseline-label stable --owner \"Technical Trinity\" --candidate \"<candidate-change>\" --candidate-worktree ../wt-round-01 --candidate-output-dir .tmp-iteration-round-01 --pretty",
+        "process_plan first commands contain python scripts/compare_benchmark_results.py --baseline .vidt/iterations/baselines/stable/benchmark-results.json --candidate .tmp-iteration-round-01/benchmark-results.json --pretty",
+        "process_plan first commands contain python scripts/promote_iteration_baseline.py --workspace .vidt/iterations --round-id round-01 --label accepted-round-01 --pretty",
+        "process_plan first commands contain python scripts/sync_distilled_patterns.py --workspace .vidt/iterations --pretty",
+        "process_plan first commands contain python scripts/run_iteration_loop.py --workspace .vidt/iterations --plan .vidt/iterations/iteration-plan.json --pretty"
+      ]
+    },
+    {
+      "id": 55,
+      "categories": [
+        "iteration",
+        "release-gate",
+        "release-readiness"
+      ],
+      "prompt": "Is this version ready to ship? Do not answer from benchmark alone. Run the formal release gate.",
+      "expected_output": "Release-readiness prompts should enable the formal ship-or-hold gate instead of routing to generic git workflow.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "assistant_agents is empty",
+        "needs_release_gate is true",
+        "needs_git_workflow is false",
+        "process_skills contains release-gate",
+        "process_plan first commands contain python scripts/verify_completion_evidence.py --evidence .vidt/evidence/completion-evidence.json --pretty",
+        "process_plan first commands contain python scripts/run_release_gate.py --output-dir evals/release-gate --pretty"
+      ]
+    },
+    {
+      "id": 56,
+      "categories": [
+        "iteration",
+        "release-gate",
+        "release-readiness",
+        "chinese",
+        "mixed-language"
+      ],
+      "prompt": "这版现在能不能提交/发版？不要只看 benchmark，通过正式 release gate 做提交前验收。",
+      "expected_output": "Chinese release-readiness prompts with ambiguous 提交/发版 wording should still prefer the formal release gate and suppress generic git workflow routing.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "assistant_agents is empty",
+        "needs_release_gate is true",
+        "needs_git_workflow is false",
+        "process_skills contains release-gate",
+        "process_plan first commands contain python scripts/verify_completion_evidence.py --evidence .vidt/evidence/completion-evidence.json --pretty",
+        "process_plan first commands contain python scripts/run_release_gate.py --output-dir evals/release-gate --pretty"
+      ]
+    },
+    {
+      "id": 57,
+      "categories": [
+        "backend-stack",
+        "planning"
+      ],
+      "prompt": "Rewrite this project in Rust, plan before coding, and keep a progress tracker we can resume later.",
+      "expected_output": "Large rewrite planning should enable the pre-development planning branch, keep Technical Trinity as the default lead, and emit planning artifacts instead of jumping straight to iteration or Git workflow.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "needs_pre_development_planning is true",
+        "process_skills contains pre-development-planning",
+        "process_plan first commands contain python scripts/init_pre_development_plan.py --root . --task-name \"<task-name>\" --task-description \"<task-description>\" --phase-name foundation --pretty",
+        "process_plan first commands contain python scripts/init_project_memory.py --root . --mode planning --pretty",
+        "workflow_bundle is plan-first-build",
+        "bundle_confidence >= 0.95",
+        "progress_anchor_recommended is docs/progress/MASTER.md",
+        "process_plan first artifacts contain docs/progress/phase-4-cutover.md",
+        "response_pack_json planning_pack exists",
+        "response_pack_json optimization_loop does not exist"
+      ]
+    },
+    {
+      "id": 58,
+      "categories": [
+        "planning",
+        "chinese"
+      ],
+      "prompt": "这个核心模块要大规模迁移，先调研再执行，先规划再开发。",
+      "expected_output": "Chinese research-first migration should keep the pre-development planning branch active while Sentinel Architect (NB) owns the high-risk planning flow.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Sentinel Architect (NB)",
+        "needs_pre_development_planning is true",
+        "process_skills contains pre-development-planning",
+        "workflow_bundle is plan-first-build"
+      ]
+    },
+    {
+      "id": 59,
+      "categories": [
+        "iteration",
+        "workflow-bundle"
+      ],
+      "prompt": "Run another iteration, benchmark it against the baseline, and stop if the result regresses.",
+      "expected_output": "Evidence-driven optimization should return the remediation loop bundle with a resume-ready round-memory anchor.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "needs_iteration is true",
+        "workflow_bundle is root-cause-remediate",
+        "progress_anchor_recommended is .vidt/iterations/current-round-memory.md",
+        "resume_artifacts contains .vidt/iterations/distilled-patterns.md",
+        "process_plan first commands contain python scripts/init_project_memory.py --root . --mode iteration --pretty",
+        "response_pack_json optimization_loop exists"
+      ]
+    },
+    {
+      "id": 60,
+      "categories": [
+        "release-gate",
+        "workflow-bundle"
+      ],
+      "prompt": "Is this version ready to ship? Do not answer from benchmark alone. Run the formal release gate.",
+      "expected_output": "Formal ship readiness should return the ship-hold-remediate bundle and point the next session at release-gate artifacts.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "needs_release_gate is true",
+        "workflow_bundle is ship-hold-remediate",
+        "progress_anchor_recommended is evals/release-gate/release-gate-report.md",
+        "resume_artifacts contains evals/release-gate/next-iteration-brief.json",
+        "response_pack_json schema_version is response-pack-sidecar/v1",
+        "response_pack_json evidence.workflow_source_explanation contains primary execution journey",
+        "response_pack_json next_action.smallest_executable_action contains run the release gate first",
+        "response_pack_json resume.progress_anchor is evals/release-gate/release-gate-report.md"
+      ]
+    },
+    {
+      "id": 61,
+      "categories": [
+        "review",
+        "workflow-bundle"
+      ],
+      "prompt": "This is a PR. Please do a security review and give refactor advice.",
+      "expected_output": "Audit-first requests should expose the audit-fix-deliver workflow bundle even when Git workflow is not required.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "needs_git_workflow is false",
+        "workflow_bundle is audit-fix-deliver",
+        "response_pack_json team_dispatch.workflow_bundle_source is lead+keyword",
+        "response_pack_json evidence.workflow_source_explanation contains strongly anchored in task semantics"
+      ]
+    },
+    {
+      "id": 62,
+      "categories": [
+        "cross-domain",
+        "workflow-bundle"
+      ],
+      "prompt": "Define the onboarding user flow, acceptance criteria, and backend contract for this signup revamp.",
+      "expected_output": "Cross-domain product routing should keep a structured assistant delta contract so the lead can merge evidence instead of loose role fragments.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_delta_contract.enabled is true",
+        "assistant_delta_contract.lead_owner is World-Class Product Architect",
+        "assistant_delta_contract.strict_mode is true",
+        "assistant_delta_contract.required_fields contains claim",
+        "assistant_delta_contract.required_fields contains evidence",
+        "response_pack_json bundle_bootstrap.resume_anchor is .vidt/product/current-slice.md"
+      ]
+    },
+    {
+      "id": 64,
+      "categories": [
+        "planning",
+        "chinese",
+        "workflow-bundle"
+      ],
+      "prompt": "这个核心模块要大规模迁移，先调研再执行，先规划再开发。",
+      "expected_output": "Chinese planning response packs should expose structured evidence and resume blocks alongside the workflow source explanation.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Sentinel Architect (NB)",
+        "workflow_bundle is plan-first-build",
+        "response_pack_json language is zh",
+        "response_pack_json evidence.workflow_source_explanation contains 主执行旅程",
+        "response_pack_json resume.progress_anchor is docs/progress/MASTER.md",
+        "response_pack_json next_action.current_owner is Sentinel Architect (NB)"
+      ]
+    },
+    {
+      "id": 65,
+      "runner": "verify_action",
+      "check": "git-workflow",
+      "categories": [
+        "git-workflow",
+        "contract-output"
+      ],
+      "prompt": "Refactor this Flask service and then commit and push the branch.",
+      "expected_output": "verify_action should expose a schema-valid git-workflow decision with stable router snapshot fields.",
+      "files": [],
+      "expectations": [
+        "allowed is true",
+        "verify_action_json details.needs_git_workflow is true",
+        "verify_action_json details.commands length is 12",
+        "verify_action_json router_snapshot.progress_anchor_recommended is .vidt/governance/change-plan.md",
+        "verify_action_json explanation_card.workflow_bundle_source is lead-default"
+      ]
+    },
+    {
+      "id": 66,
+      "runner": "verify_action",
+      "check": "bundle-bootstrap",
+      "categories": [
+        "product-delivery",
+        "contract-output"
+      ],
+      "prompt": "Define the onboarding user flow, acceptance criteria, and backend contract for this signup revamp.",
+      "expected_output": "verify_action should expose a schema-valid bundle-bootstrap decision when product delivery must initialize its workspace anchors first.",
+      "files": [],
+      "expectations": [
+        "allowed is true",
+        "verify_action_json details.workflow_bundle is product-spec-deliver",
+        "verify_action_json details.bootstrap_required is true",
+        "verify_action_json details.progress_anchor_matches_resume_anchor is true",
+        "verify_action_json details.workspace_state is missing",
+        "verify_action_json details.bootstrap_command_required_now is true",
+        "verify_action_json details.bootstrap.resume_anchor is .vidt/product/current-slice.md",
+        "verify_action_json details.bootstrap.commands contains python scripts/init_product_delivery.py --root . --pretty"
+      ]
+    },
+    {
+      "id": 67,
+      "categories": [
+        "product-delivery",
+        "workflow-bundle",
+        "chinese"
+      ],
+      "prompt": "这个产品开发前后都要做内测，分三轮递增用户，并模拟不同类型的内测用户来收集反馈。",
+      "expected_output": "Beta-validation requests should route to the product lead, activate the beta bundle, and expose a staged cohort plan with simulated users.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "workflow_bundle is beta-feedback-ramp",
+        "workflow_bundle_bootstrap.required is true",
+        "workflow_bundle_bootstrap.commands contains python scripts/init_beta_validation.py --root . --pretty",
+        "workflow_bundle_bootstrap.commands contains python scripts/init_beta_simulation.py --root . --round-id round-0 --phase \"pre-build concept smoke\" --objective \"<objective>\" --pretty",
+        "response_pack_json template is beta",
+        "response_pack_json beta_program.simulation_allowed is true",
+        "response_pack_json beta_program.simulation_profile_template is assets/simulated-user-profile-template.json",
+        "response_pack_json beta_program.simulation_config_template is assets/beta-simulation-config-template.json",
+        "response_pack_json beta_program.simulation_run_dir is .vidt/beta/simulation-runs",
+        "response_pack_json beta_program.simulation_init_command_template contains python scripts/init_beta_simulation.py",
+        "response_pack_json beta_program.simulation_run_command_template contains python scripts/run_beta_simulation.py",
+        "response_pack_json beta_program.simulation_summary_command_template contains python scripts/summarize_beta_simulation.py",
+        "response_pack_json beta_program.rounds length is 3",
+        "response_pack_json beta_program.feedback_anchor is .vidt/beta/feedback-ledger.md",
+        "response_pack_json beta_program.report_template is assets/beta-round-report-template.json",
+        "response_pack_json beta_program.gate_command_template contains python scripts/evaluate_beta_round.py"
+      ]
+    },
+    {
+      "id": 68,
+      "runner": "release_gate",
+      "categories": [
+        "release-gate",
+        "contract-output"
+      ],
+      "prompt": "Release gate fixture: offline drill failure should hold and reopen the loop.",
+      "expected_output": "release_gate should expose a schema-valid hold result with reopened follow-up artifacts when offline drill fails.",
+      "files": [],
+      "release_gate_summary": {
+        "tests_passed": true,
+        "validator_passed": true,
+        "evals_passed": true,
+        "offline_drill_enabled": true,
+        "offline_drill_passed": false,
+        "overall_passed": false
+      },
+      "expectations": [
+        "decision is hold",
+        "release_gate_json ok is false",
+        "release_gate_json follow_up.loop_state is reopened",
+        "release_gate_json explanation_card.workflow_bundle is ship-hold-remediate",
+        "release_gate_json explanation_card.resume_artifacts length is 2"
+      ]
+    },
+    {
+      "id": 69,
+      "runner": "release_gate",
+      "categories": [
+        "release-gate",
+        "beta-validation",
+        "contract-output"
+      ],
+      "prompt": "Release gate fixture: benchmark is green, but the latest beta round is still on hold.",
+      "expected_output": "release_gate should refuse ship when the latest beta round has not advanced, and expose the beta gate evidence in the contract output.",
+      "files": [],
+      "release_gate_summary": {
+        "tests_passed": true,
+        "validator_passed": true,
+        "evals_passed": true,
+        "offline_drill_enabled": true,
+        "offline_drill_passed": true,
+        "overall_passed": true
+      },
+      "release_gate_beta": {
+        "decision": "hold",
+        "round_id": "round-02",
+        "reason": "This round has not yet cleared the minimum sample, success-rate, or blocker thresholds."
+      },
+      "expectations": [
+        "decision is hold",
+        "release_gate_json ok is false",
+        "release_gate_json summary.beta_gate_enabled is true",
+        "release_gate_json summary.beta_gate_passed is false",
+        "release_gate_json summary.beta_gate_decision is hold",
+        "release_gate_json beta_gate.round_id is round-02",
+        "release_gate_json beta_gate.blocker_breakdown exists",
+        "release_gate_json explanation_card.route_evidence contains beta=FAIL"
+      ]
+    },
+    {
+      "id": 70,
+      "categories": [
+        "product-delivery",
+        "workflow-bundle"
+      ],
+      "prompt": "The release is already live. Pull together telemetry, support, and user feedback, then decide whether we should monitor, reopen iteration, or escalate governance.",
+      "expected_output": "Post-release feedback requests should route into the dedicated post-release-close-loop bundle and expose its workspace bootstrap.",
+      "files": [],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "workflow_bundle is post-release-close-loop",
+        "progress_anchor_recommended is .vidt/post-release/triage-summary.md",
+        "workflow_bundle_bootstrap.required is true",
+        "workflow_bundle_bootstrap.commands contains python scripts/init_post_release_feedback.py --root . --pretty",
+        "response_pack_json resume.progress_anchor is .vidt/post-release/triage-summary.md"
+      ]
+    },
+    {
+      "id": 71,
+      "runner": "release_gate",
+      "categories": [
+        "release-gate",
+        "post-release-feedback",
+        "contract-output"
+      ],
+      "prompt": "Release gate fixture: green release should also bootstrap the post-release feedback loop.",
+      "expected_output": "release_gate ship should archive the release baseline and expose a post-release bootstrap in follow-up artifacts.",
+      "files": [],
+      "release_gate_summary": {
+        "tests_passed": true,
+        "validator_passed": true,
+        "evals_passed": true,
+        "offline_drill_enabled": true,
+        "offline_drill_passed": true,
+        "overall_passed": true
+      },
+      "release_gate_completion_evidence": {
+        "status": "passed",
+        "confidence_grade": "B",
+        "covered_scope": [
+          "green release fixture"
+        ],
+        "uncovered_scope": [
+          "none"
+        ],
+        "residual_risk": [
+          "none"
+        ],
+        "evidence_refs": [
+          "python scripts/run_release_gate.py --output-dir evals/release-gate --pretty"
+        ]
+      },
+      "expectations": [
+        "decision is ship",
+        "release_gate_json ok is true",
+        "release_gate_json completion_evidence.completion_allowed is true",
+        "release_gate_json follow_up.post_release_bootstrap.resume_anchor contains .vidt/post-release/triage-summary.md",
+        "release_gate_json follow_up.post_release_bootstrap.signal_report contains .vidt/post-release/current-signals.json"
+      ]
+    },
+    {
+      "id": 91,
+      "runner": "release_gate",
+      "categories": [
+        "release-gate",
+        "completion-evidence",
+        "contract-output"
+      ],
+      "prompt": "Release gate fixture: green benchmark without completion evidence should still hold.",
+      "expected_output": "release_gate should refuse ship when completion evidence is missing, even if benchmark, offline drill, and beta conditions are green.",
+      "files": [],
+      "release_gate_summary": {
+        "tests_passed": true,
+        "validator_passed": true,
+        "evals_passed": true,
+        "offline_drill_enabled": true,
+        "offline_drill_passed": true,
+        "overall_passed": true
+      },
+      "expectations": [
+        "decision is hold",
+        "release_gate_json ok is false",
+        "release_gate_json summary.completion_evidence_passed is false",
+        "release_gate_json completion_evidence.decision is missing",
+        "release_gate_json follow_up.blockers contains completion evidence is missing",
+        "release_gate_json explanation_card.route_evidence contains completion-evidence=FAIL"
+      ]
+    },
+    {
+      "id": 72,
+      "categories": [
+        "auto-run",
+        "workflow-bundle",
+        "iteration"
+      ],
+      "prompt": "/auto fix this repeated regression until stable and keep benchmark evidence.",
+      "expected_output": "Explicit /auto root-cause requests should stay on the root-cause bundle, expose auto setup mode, and publish an auto_run sidecar section.",
+      "files": [],
+      "expectations": [
+        "auto_mode_enabled is true",
+        "execution_mode is auto-setup",
+        "workflow_bundle is root-cause-remediate",
+        "process_plan first auto_run.requested_phase is setup",
+        "response_pack_json auto_run.enabled is true",
+        "response_pack_json auto_run.workflow_bundle is root-cause-remediate",
+        "response_pack_json auto_run.workflow_supported is true",
+        "response_pack_json auto_run.setup_command contains python scripts/run_auto_workflow.py"
+      ]
+    },
+    {
+      "id": 73,
+      "categories": [
+        "auto-run",
+        "release-gate"
+      ],
+      "prompt": "/auto Is this version ready to ship? Run the formal release gate.",
+      "expected_output": "Explicit /auto release requests should keep the release-gate journey while exposing setup/go commands for the ship-hold-remediate bundle.",
+      "files": [],
+      "expectations": [
+        "auto_mode_enabled is true",
+        "workflow_bundle is ship-hold-remediate",
+        "response_pack_json auto_run.workflow_bundle is ship-hold-remediate",
+        "response_pack_json auto_run.requested_phase is setup",
+        "response_pack_json auto_run.go_command contains python scripts/run_auto_workflow.py --mode go"
+      ]
+    },
+    {
+      "id": 74,
+      "categories": [
+        "auto-run",
+        "post-release-feedback"
+      ],
+      "prompt": "/auto The release is already live. Pull together telemetry, support, and user feedback, then decide whether we should monitor, reopen iteration, or escalate governance.",
+      "expected_output": "Explicit /auto post-release requests should route to post-release-close-loop and surface the post-release auto workflow contract.",
+      "files": [],
+      "expectations": [
+        "auto_mode_enabled is true",
+        "workflow_bundle is post-release-close-loop",
+        "process_plan first skill is post-release-feedback",
+        "response_pack_json auto_run.workflow_bundle is post-release-close-loop",
+        "response_pack_json auto_run.workflow_supported is true"
+      ]
+    },
+    {
+      "id": 75,
+      "runner": "verify_action",
+      "check": "auto-mode",
+      "categories": [
+        "auto-run",
+        "contract-output"
+      ],
+      "prompt": "/auto go Is this version ready to ship? Run the formal release gate.",
+      "expected_output": "verify_action should reject auto go when setup artifacts do not exist yet and instruct the caller to run setup first.",
+      "files": [],
+      "expectations": [
+        "allowed is false",
+        "verify_action_json details.auto_mode_enabled is true",
+        "verify_action_json details.requested_phase is go",
+        "verify_action_json details.plan_exists is false",
+        "recommended_next_step contains Run auto setup first"
+      ]
+    },
+    {
+      "id": 76,
+      "categories": [
+        "auto-run",
+        "contract-output"
+      ],
+      "prompt": "/auto background safe fix this repeated regression until stable and keep benchmark evidence.",
+      "expected_output": "Auto background/safe modifiers should stay inside the explicit setup phase while publishing machine-readable run style and safety controls.",
+      "files": [],
+      "expectations": [
+        "auto_mode_enabled is true",
+        "workflow_bundle is root-cause-remediate",
+        "response_pack_json auto_run.run_style is background",
+        "response_pack_json auto_run.safety_level is safe",
+        "response_pack_json auto_run.detached_ready is true",
+        "response_pack_json auto_run.state_dir is .vidt/auto/state",
+        "response_pack_json auto_run.automation_state_schema is references/automation-state.schema.json"
+      ]
+    },
+    {
+      "id": 77,
+      "runner": "verify_action",
+      "check": "auto-mode",
+      "categories": [
+        "auto-run",
+        "contract-output"
+      ],
+      "prompt": "/auto resume background safe fix this repeated regression until stable and keep benchmark evidence.",
+      "expected_output": "verify_action should expose resume/background/safe sub-protocol details for explicit auto requests.",
+      "files": [],
+      "expectations": [
+        "allowed is true",
+        "verify_action_json details.run_style is background",
+        "verify_action_json details.safety_level is safe",
+        "verify_action_json details.resume_requested is true",
+        "verify_action_json details.detached_ready is true",
+        "verify_action_json details.state_dir is .vidt/auto/state"
+      ]
+    },
+    {
+      "id": 78,
+      "categories": [
+        "planning",
+        "quality-guardrails",
+        "contract-output"
+      ],
+      "prompt": "Migrate this subsystem. Plan before coding, keep the change surgical, and define verification first.",
+      "expected_output": "Plan-first routing should expose the execution quality gate adapted from compact behavioral guideline skills.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is plan-first-build",
+        "quality_gate.reference is references/execution-quality-guardrails.md",
+        "quality_gate.principles contains surface-assumptions",
+        "quality_gate.principles contains smallest-defensible-bundle",
+        "quality_gate.surgical_scope.workflow_bundle is plan-first-build",
+        "quality_gate.verification_check contains docs/progress/MASTER.md"
+      ]
+    },
+    {
+      "id": 79,
+      "categories": [
+        "backend-stack",
+        "contract-output",
+        "technical-governance"
+      ],
+      "prompt": "Implement the checkout API fix and verify the regression test before editing production code.",
+      "expected_output": "Code-facing routing should require the Harness engineering constraint file before implementation.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is quick-slice-deliver",
+        "workflow_bundle_bootstrap.required is true",
+        "workflow_bundle_bootstrap.commands contains python scripts/init_project_context.py --root . --pretty",
+        "workflow_bundle_bootstrap.commands contains python scripts/init_quick_slice.py --root . --pretty",
+        "workflow_bundle_bootstrap.artifacts contains .vidt/delivery/current-slice.md",
+        "resume_artifacts contains .vidt/context/project-context.md",
+        "harness_constraint_gate.required is true",
+        "harness_constraint_gate.reference is references/harness-engineering-constraint-protocol.md",
+        "harness_constraint_gate.artifact is .vidt/harness/engineering-constraints.md",
+        "harness_constraint_gate.command contains init_harness_constraints.py",
+        "harness_constraint_gate.principles contains constraints-before-code",
+        "response_pack_json engineering_constraints.artifact is .vidt/harness/engineering-constraints.md",
+        "response_pack_json next_action.smallest_executable_action contains Harness engineering constraints first"
+      ]
+    },
+    {
+      "id": 90,
+      "categories": [
+        "backend-stack",
+        "quick-slice",
+        "clarification"
+      ],
+      "prompt": "这个小 bug 直接修一下并跑回归。",
+      "expected_output": "Chinese quick-fix prompts that ask only to run regression checks should stay in quick-slice delivery instead of opening bounded iteration.",
+      "files": [
+        "scripts/route_request.py",
+        "references/regression-cases.json"
+      ],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "needs_iteration is false",
+        "process_skills length is 0",
+        "workflow_bundle is quick-slice-deliver",
+        "micro_practice_names contains feedback-loop-first",
+        "harness_constraint_gate.required is true"
+      ]
+    },
+    {
+      "id": 80,
+      "categories": [
+        "backend-stack",
+        "team-engine-lite",
+        "contract-output"
+      ],
+      "prompt": "Implement the checkout API fix and verify the regression test before editing production code.",
+      "expected_output": "Code-facing delivery should expose Team Engine Lite role separation and prevent Worker self-pass.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is quick-slice-deliver",
+        "team_engine_gate.required is true",
+        "team_engine_gate.reference is references/team-engine-lite-protocol.md",
+        "team_engine_gate.cycle_reference is references/worker-verifier-cycle-protocol.md",
+        "team_engine_gate.producer_can_self_pass is false",
+        "team_engine_gate.leader_accept_requires_cycle_report is true",
+        "team_engine_gate.verifier_fail_requires_remediation_patch is true",
+        "team_engine_gate.runtime_claim is soft_orchestration_only",
+        "team_engine_gate.team_engine_closure_verdict is pass_with_watch",
+        "response_pack_json team_engine.producer_can_self_pass is false",
+        "response_pack_json team_engine.leader_accept_requires_cycle_report is true",
+        "response_pack_json team_engine.team_engine_closure_verdict is pass_with_watch"
+      ]
+    },
+    {
+      "id": 81,
+      "categories": [
+        "multi-agent",
+        "external-agent-backend",
+        "contract-output"
+      ],
+      "prompt": "Use Codex, Claude Code, or OpenCode as separate agents to refactor src/payment.py without changing behavior, run its unit tests, and independently verify the patch.",
+      "expected_output": "External Agent backend orchestration should stay a soft orchestration claim unless real runtime evidence exists.",
+      "files": [],
+      "expectations": [
+        "team_engine_gate.required is true",
+        "external_agent_backend_plan.enabled is true",
+        "external_agent_backend_plan.reference is references/external-agent-backend-orchestration-protocol.md",
+        "external_agent_backend_plan.orchestration_mode is soft_external_backend",
+        "external_agent_backend_plan.runtime_claim is soft_orchestration_only",
+        "external_agent_backend_plan.backend_orchestration_verdict is simulated",
+        "external_agent_backend_plan.required_outputs contains WorkOrder",
+        "external_agent_backend_plan.required_outputs contains VerificationReport",
+        "response_pack_json external_agent_backend.runtime_claim is soft_orchestration_only",
+        "response_pack_json external_agent_backend.backend_orchestration_verdict is simulated"
+      ],
+      "runtime_dependent": true
+    },
+    {
+      "id": 82,
+      "categories": [
+        "multi-agent",
+        "real-subagent-runtime",
+        "contract-output"
+      ],
+      "prompt": "Use real subagents in parallel to refactor src/payment_api.py without changing the public contract, run its unit tests, and independently verify the patch.",
+      "expected_output": "Explicit real-subagent requests should expose controlled runtime eligibility, keep the current route soft until runtime evidence exists, and require Lead-owned merge plus verifier evidence.",
+      "files": [
+        "references/real-subagent-runtime-protocol.md",
+        "references/team-engine-lite-protocol.md",
+        "references/worker-verifier-cycle-protocol.md"
+      ],
+      "expectations": [
+        "workflow_bundle is quick-slice-deliver",
+        "team_engine_gate.required is true",
+        "real_subagent_runtime.eligible is true",
+        "real_subagent_runtime.reference is references/real-subagent-runtime-protocol.md",
+        "real_subagent_runtime.runtime_claim is soft_orchestration_only",
+        "real_subagent_runtime.candidate_runtime_claim is real_subagent_runtime",
+        "real_subagent_runtime.runtime_evidence_required is true",
+        "real_subagent_runtime.max_subagents >= 2",
+        "real_subagent_runtime.spawn_policy.user_explicit_or_auto_required is true",
+        "real_subagent_runtime.spawn_policy.no_default_swarm is true",
+        "real_subagent_runtime.spawn_policy.blocking_work_stays_local is true",
+        "real_subagent_runtime.spawn_policy.code_workers_need_disjoint_write_scopes is true",
+        "real_subagent_runtime.merge_policy.lead_merges_only is true",
+        "real_subagent_runtime.merge_policy.verifier_before_acceptance is true",
+        "real_subagent_runtime.merge_policy.delivery_cycle_report_required is true",
+        "response_pack_json real_subagent_runtime.eligible is true",
+        "response_pack_json real_subagent_runtime.runtime_claim is soft_orchestration_only",
+        "response_pack_json real_subagent_runtime.candidate_runtime_claim is real_subagent_runtime",
+        "response_pack_json real_subagent_runtime.runtime_evidence_required is true"
+      ],
+      "runtime_dependent": true
+    },
+    {
+      "id": 83,
+      "categories": [
+        "project-knowledge",
+        "technical-governance",
+        "workflow-bundle"
+      ],
+      "prompt": "Use $virtual-intelligent-dev-team to help this repository build AGENTS.md and project-local .agents/skills so future AI agents understand the codebase, commands, tests, helpers, and risky areas without inventing facts.",
+      "expected_output": "Routes to the capture-project-knowledge workflow, keeps a software governance lead such as Technical Trinity or Sentinel Architect (NB), activates the project-knowledge-capture process skill, points to skill-forge's project knowledge capture protocol, and requires validation of referenced files and commands.",
+      "files": [
+        "SKILL.md",
+        "references/playbook-index.md"
+      ],
+      "expectations": [
+        "process_skills contains project-knowledge-capture",
+        "workflow_bundle is capture-project-knowledge",
+        "workflow_bundle_bootstrap.reference is skill-forge/references/project-knowledge-capture-protocol.md",
+        "workflow_bundle_bootstrap.commands contains rg --files",
+        "progress_anchor_recommended is AGENTS.md",
+        "resume_artifacts contains AGENTS.md"
+      ]
+    },
+    {
+      "id": 84,
+      "categories": [
+        "feedback-loop-first",
+        "quick-slice",
+        "team-engine-lite"
+      ],
+      "prompt": "Fix the checkout API regression by first reproducing it with a failing test.",
+      "expected_output": "Regression fixes should activate feedback-loop-first evidence and Team Engine feedback loop gate, even when routed through bounded/root-cause remediation.",
+      "files": [
+        "references/feedback-loop-first-protocol.md",
+        "references/quick-slice-delivery-playbook.md"
+      ],
+      "expectations": [
+        "workflow_bundle is root-cause-remediate",
+        "micro_practice_names contains feedback-loop-first",
+        "response_pack_json micro_practices.names contains feedback-loop-first",
+        "response_pack_json micro_practices.ledger.resume_anchor is .vidt/practices/micro-practice-ledger.json",
+        "response_pack_json micro_practices.ledger.update_command contains update_micro_practices.py",
+        "response_pack_json micro_practices.ledger.evaluation_command contains evaluate_micro_practices.py",
+        "response_pack_json micro_practices.ledger.evaluation_schema is references/micro-practice-evaluation.schema.json",
+        "response_pack contains ## Engineering Micro-Practices",
+        "response_pack contains Update command: python scripts/update_micro_practices.py",
+        "response_pack contains Evaluation command: python scripts/evaluate_micro_practices.py",
+        "team_engine_gate.acceptance_gates contains feedback_loop_gate",
+        "reason.micro_practice_names contains feedback-loop-first"
+      ]
+    },
+    {
+      "id": 85,
+      "categories": [
+        "product-delivery",
+        "vertical-slice",
+        "shared-language"
+      ],
+      "prompt": "Turn this signup revamp into AFK/HITL vertical slices with acceptance criteria and backend contract questions.",
+      "expected_output": "Product delivery should activate shared-language and vertical-slice micro-practices while preserving the product-spec-deliver bundle.",
+      "files": [
+        "references/shared-language-and-decision-capture.md",
+        "references/vertical-slice-delivery-protocol.md",
+        "references/product-delivery-playbook.md"
+      ],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "assistant_agents contains Technical Trinity",
+        "workflow_bundle is product-spec-deliver",
+        "micro_practice_names contains shared-language-and-decision-capture",
+        "micro_practice_names contains vertical-slice-delivery",
+        "response_pack_json micro_practices.names contains shared-language-and-decision-capture",
+        "response_pack_json micro_practices.names contains vertical-slice-delivery",
+        "response_pack_json micro_practices.ledger.resume_anchor is .vidt/practices/micro-practice-ledger.json",
+        "response_pack_json micro_practices.ledger.update_command contains update_micro_practices.py",
+        "response_pack_json micro_practices.ledger.evaluation_command contains evaluate_micro_practices.py",
+        "response_pack_json micro_practices.ledger.evaluation_schema is references/micro-practice-evaluation.schema.json",
+        "workflow_bundle_bootstrap.commands contains python scripts/init_micro_practices.py --root . --text \"<user request>\" --pretty",
+        "workflow_bundle_bootstrap.micro_practice_ledger.update_command contains update_micro_practices.py",
+        "workflow_bundle_bootstrap.micro_practice_ledger.evaluation_command contains evaluate_micro_practices.py",
+        "resume_artifacts contains .vidt/practices/micro-practice-ledger.json",
+        "response_pack contains ## Engineering Micro-Practices",
+        "response_pack contains Update command: python scripts/update_micro_practices.py",
+        "response_pack contains Evaluation command: python scripts/evaluate_micro_practices.py",
+        "team_engine_gate.acceptance_gates contains shared_language_gate",
+        "team_engine_gate.acceptance_gates contains vertical_slice_gate"
+      ]
+    },
+    {
+      "id": 86,
+      "categories": [
+        "planning",
+        "system-map",
+        "architecture-deepening"
+      ],
+      "prompt": "Before planning this migration, zoom out and map the relevant modules, callers, and seams.",
+      "expected_output": "Generic migration planning should route to Technical Trinity, not Java Virtuoso, and activate system-map plus architecture-deepening micro-practices.",
+      "files": [
+        "references/system-map-protocol.md",
+        "references/architecture-deepening-protocol.md",
+        "references/pre-development-planning-playbook.md"
+      ],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "needs_pre_development_planning is true",
+        "workflow_bundle is plan-first-build",
+        "micro_practice_names contains system-map",
+        "micro_practice_names contains architecture-deepening",
+        "micro_practice_names contains vertical-slice-delivery",
+        "response_pack_json micro_practices.names contains system-map",
+        "response_pack_json micro_practices.names contains architecture-deepening",
+        "response_pack_json micro_practices.ledger.resume_anchor is .vidt/practices/micro-practice-ledger.json",
+        "response_pack_json micro_practices.ledger.update_command contains update_micro_practices.py",
+        "response_pack_json micro_practices.ledger.evaluation_command contains evaluate_micro_practices.py",
+        "response_pack_json micro_practices.ledger.evaluation_schema is references/micro-practice-evaluation.schema.json",
+        "workflow_bundle_bootstrap.micro_practice_ledger.update_command contains update_micro_practices.py",
+        "workflow_bundle_bootstrap.micro_practice_ledger.evaluation_command contains evaluate_micro_practices.py",
+        "resume_artifacts contains .vidt/practices/micro-practice-ledger.json",
+        "response_pack contains ## Engineering Micro-Practices",
+        "response_pack contains Update command: python scripts/update_micro_practices.py",
+        "response_pack contains Evaluation command: python scripts/evaluate_micro_practices.py",
+        "progress_anchor_recommended is docs/progress/MASTER.md"
+      ]
+    },
+    {
+      "id": 87,
+      "runner": "verify_action",
+      "check": "micro-practice-ledger",
+      "categories": [
+        "micro-practices",
+        "completion-gate",
+        "contract-output"
+      ],
+      "prompt": "Fix the checkout API regression by first reproducing it with a failing test.",
+      "expected_output": "Completion preflight should block routes with active micro-practices until the micro-practice ledger exists and has been evaluated.",
+      "files": [
+        "references/feedback-loop-first-protocol.md",
+        "references/micro-practice-ledger.schema.json",
+        "references/micro-practice-evaluation.schema.json"
+      ],
+      "expectations": [
+        "allowed is false",
+        "verify_action_json details.micro_practice_required is true",
+        "verify_action_json details.ledger_exists is false",
+        "verify_action_json details.decision is missing",
+        "verify_action_json details.active_practices contains feedback-loop-first",
+        "verify_action_json details.recommended_commands contains python scripts/init_micro_practices.py --root . --text \"<user request>\" --pretty"
+      ]
+    },
+    {
+      "id": 88,
+      "runner": "verify_action",
+      "check": "completion-evidence",
+      "categories": [
+        "completion-evidence",
+        "completion-gate",
+        "contract-output"
+      ],
+      "prompt": "Fix the checkout API regression by first reproducing it with a failing test.",
+      "expected_output": "Completion preflight should block done/ready/handoff claims until structured completion evidence exists.",
+      "files": [
+        "references/completion-evidence.schema.json",
+        "assets/completion-evidence-template.json"
+      ],
+      "expectations": [
+        "allowed is false",
+        "verify_action_json details.completion_evidence_required is true",
+        "verify_action_json details.evidence_exists is false",
+        "verify_action_json details.decision is missing",
+        "verify_action_json details.template is assets/completion-evidence-template.json",
+        "verify_action_json details.verify_command contains verify_completion_evidence.py"
+      ]
+    },
+    {
+      "id": 89,
+      "prompt": "用产品专家团帮我做这个 AI coding 工具的 PRD、用户研究、竞品分析和路线图。",
+      "expected_output": "Explicit product expert-team requests should keep World-Class Product Architect as lead, keep product-spec-deliver as the workflow bundle, and activate product-discovery-council as a stage overlay.",
+      "files": [
+        "references/stage-council-protocol.md",
+        "assets/stage-council-plan-template.json"
+      ],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "workflow_bundle is product-spec-deliver",
+        "stage_council_plan.enabled is true",
+        "active_councils contains product-discovery-council",
+        "stage_council_plan.reference is references/stage-council-protocol.md",
+        "response_pack_json stage_councils.enabled is true",
+        "response_pack_json stage_councils.active_councils contains product-discovery-council",
+        "response_pack contains ## 阶段专家团"
+      ],
+      "categories": [
+        "product-delivery",
+        "stage-council",
+        "contract-output"
+      ]
+    },
+    {
+      "id": 92,
+      "prompt": "用原型设计专家团做一个高保真 HTML 原型，包含设计系统和可访问性审查。",
+      "expected_output": "Explicit prototype design expert-team requests should keep World-Class Product Architect as lead, keep product-spec-deliver as the workflow bundle, and activate prototype-design-council as a stage overlay.",
+      "files": [
+        "references/stage-council-protocol.md",
+        "assets/stage-council-plan-template.json"
+      ],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "workflow_bundle is product-spec-deliver",
+        "stage_council_plan.enabled is true",
+        "active_councils contains prototype-design-council",
+        "stage_council_plan.reference is references/stage-council-protocol.md",
+        "response_pack_json stage_councils.enabled is true",
+        "response_pack_json stage_councils.active_councils contains prototype-design-council",
+        "response_pack contains ## 阶段专家团"
+      ],
+      "categories": [
+        "frontend",
+        "stage-council",
+        "contract-output"
+      ]
+    },
+    {
+      "id": 93,
+      "prompt": "我有个模糊猜想，不确定是该做产品验证、原型还是技术可行性，你先帮我判断方向。",
+      "expected_output": "Fuzzy idea requests that could route to product opportunity, prototype exploration, or technical feasibility should ask for intent confirmation before hard-routing the provisional expert team.",
+      "files": [
+        "SKILL.md",
+        "references/response-pack-sidecar.schema.json"
+      ],
+      "expectations": [
+        "intent_confirmation.required is true",
+        "intent_confirmation.option_ids contains product-opportunity",
+        "intent_confirmation.option_ids contains prototype-exploration",
+        "intent_confirmation.option_ids contains technical-feasibility",
+        "stage_council_plan.enabled is false",
+        "clarifying_question is not null",
+        "response_pack_json intent_confirmation.required is true",
+        "response_pack_json intent_confirmation.option_ids contains prototype-exploration",
+        "response_pack_json stage_councils.enabled is false",
+        "response_pack contains ## 意图确认"
+      ],
+      "categories": [
+        "clarification",
+        "product-delivery",
+        "contract-output"
+      ]
+    },
+    {
+      "id": 100,
+      "prompt": "前端页面加载很慢，怎么优化",
+      "expected_output": "Single-domain simple optimization should stay in direct-execution and avoid harness or Team Engine overhead.",
+      "files": [
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "needs_iteration is false",
+        "workflow_bundle is direct-execution",
+        "workflow_bundle_source is single-domain-direct-answer",
+        "harness_constraint_gate.required is false",
+        "team_engine_gate.required is false",
+        "workflow_bundle_bootstrap.required is false"
+      ],
+      "categories": [
+        "blind-routing",
+        "single-domain",
+        "lightweight-route",
+        "negative"
+      ],
+      "source": "doc:SKILL.md#quick-examples",
+      "negative": true,
+      "runner": "route"
+    },
+    {
+      "id": 101,
+      "prompt": "微服务架构拆分规划",
+      "expected_output": "Multi-domain architecture split should trigger multi-expert collaboration while preserving an honest runtime claim until real spawn/wait/merge evidence exists.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is multi-expert-execution",
+        "bundle_confidence >= 0.85",
+        "workflow_runtime_claim is soft_orchestration_until_runtime_evidence",
+        "multi_expert_plan.runtime_evidence_required is true",
+        "multi_expert_roles contains architecture-specialist",
+        "multi_expert_roles contains data-persistence-specialist",
+        "multi_expert_roles contains delivery-devops-specialist"
+      ],
+      "categories": [
+        "blind-routing",
+        "multi-expert",
+        "architecture"
+      ],
+      "source": "doc:SKILL.md#quick-examples",
+      "runner": "route"
+    },
+    {
+      "id": 102,
+      "prompt": "先别写代码，先把这个单体拆分迁移项目规划清楚",
+      "expected_output": "Plan-first intent triggers pre-development planning bundle.",
+      "files": [],
+      "expectations": [
+        "needs_pre_development_planning is true",
+        "workflow_bundle is plan-first-build"
+      ],
+      "categories": [
+        "blind-routing",
+        "planning"
+      ],
+      "source": "doc:SKILL.md#workflow",
+      "runner": "route"
+    },
+    {
+      "id": 103,
+      "prompt": "这个小 bug 直接修一下并跑回归",
+      "expected_output": "Narrow bug-fix slice routes to quick-slice delivery.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is quick-slice-deliver"
+      ],
+      "categories": [
+        "blind-routing",
+        "quick-slice"
+      ],
+      "source": "doc:SKILL.md#workflow",
+      "runner": "route"
+    },
+    {
+      "id": 104,
+      "prompt": "这个版本现在能发布吗",
+      "expected_output": "Release-readiness question must trigger formal release gate (ship/hold).",
+      "files": [],
+      "expectations": [
+        "needs_release_gate is true",
+        "workflow_bundle is ship-hold-remediate"
+      ],
+      "categories": [
+        "blind-routing",
+        "release-gate"
+      ],
+      "source": "doc:SKILL.md#workflow",
+      "runner": "route"
+    },
+    {
+      "id": 105,
+      "prompt": "已经试过很多次了，帮我找根因",
+      "expected_output": "Repeated-failure + root-cause intent triggers root-cause remediation led by Sentinel.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is root-cause-remediate",
+        "lead_agent is Sentinel Architect (NB)"
+      ],
+      "categories": [
+        "blind-routing",
+        "root-cause"
+      ],
+      "source": "doc:SKILL.md#workflow",
+      "runner": "route"
+    },
+    {
+      "id": 106,
+      "prompt": "多轮优化直到达标",
+      "expected_output": "Genuine iteration intent (multi-round with convergence target) must still trigger bounded-iteration.",
+      "files": [],
+      "expectations": [
+        "needs_iteration is true",
+        "process_skills contains bounded-iteration"
+      ],
+      "categories": [
+        "regression",
+        "iteration",
+        "boundary-guard"
+      ],
+      "source": "regression:CASE1-fix (suppress only single-domain optimize)",
+      "runner": "route"
+    },
+    {
+      "id": 107,
+      "prompt": "这个版本现在能发布吗，需要走提交流程",
+      "expected_output": "Release question with explicit commit workflow should still trigger release gate (higher priority than git-workflow).",
+      "files": [],
+      "expectations": [
+        "needs_release_gate is true",
+        "workflow_bundle is ship-hold-remediate"
+      ],
+      "categories": [
+        "regression",
+        "release-gate",
+        "boundary-guard"
+      ],
+      "source": "regression:CASE5-fix (release-gate beats git-workflow)",
+      "runner": "route"
+    },
+    {
+      "id": 108,
+      "prompt": "把这个函数重构一下",
+      "expected_output": "Ordinary single-function refactor is a code-facing delivery slice, so it should use quick-slice delivery with harness and Team Engine evidence instead of falling through to direct execution or multi-expert execution.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is quick-slice-deliver",
+        "harness_constraint_gate.required is true",
+        "team_engine_gate.required is true",
+        "workflow_bundle is not multi-expert-execution"
+      ],
+      "categories": [
+        "regression",
+        "quick-slice",
+        "team-engine-lite",
+        "multi-expert",
+        "boundary-guard"
+      ],
+      "source": "regression:CASE2-fix (only multi-domain split triggers multi-expert)",
+      "runner": "route"
+    },
+    {
+      "id": 109,
+      "prompt": "单体拆分成微服务",
+      "expected_output": "Monolith-to-microservices decomposition triggers multi-expert collaboration.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is multi-expert-execution"
+      ],
+      "categories": [
+        "regression",
+        "multi-expert",
+        "boundary-guard"
+      ],
+      "source": "regression:CASE2-fix (variant phrasing of split intent)",
+      "runner": "route"
+    },
+    {
+      "id": 110,
+      "prompt": "帮我修复接口慢的问题？",
+      "expected_output": "Chinese fix requests with a question mark should remain quick-slice delivery, not direct-answer consultation.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is quick-slice-deliver",
+        "workflow_bundle_source is keyword+lead",
+        "harness_constraint_gate.required is true",
+        "team_engine_gate.required is true",
+        "workflow_bundle_bootstrap.required is true"
+      ],
+      "categories": [
+        "regression",
+        "quick-slice",
+        "single-domain",
+        "boundary-guard"
+      ],
+      "source": "blind-review:A (Chinese fix request must not be captured by direct-answer)",
+      "runner": "route"
+    },
+    {
+      "id": 111,
+      "prompt": "React 应用全面性能优化",
+      "expected_output": "The SKILL.md React performance example should trigger multi-expert execution with an honest soft runtime claim.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is multi-expert-execution",
+        "workflow_runtime_claim is soft_orchestration_until_runtime_evidence",
+        "multi_expert_plan.runtime_evidence_required is true",
+        "multi_expert_roles contains frontend-performance-specialist",
+        "multi_expert_roles contains build-tool-specialist",
+        "multi_expert_roles contains code-review-specialist"
+      ],
+      "categories": [
+        "regression",
+        "multi-expert",
+        "frontend",
+        "boundary-guard"
+      ],
+      "source": "doc:SKILL.md#quick-examples",
+      "runner": "route"
+    },
+    {
+      "id": 112,
+      "prompt": "系统重构方案",
+      "expected_output": "The SKILL.md system refactor example should trigger multi-expert execution instead of fallback direct execution.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is multi-expert-execution",
+        "workflow_runtime_claim is soft_orchestration_until_runtime_evidence",
+        "multi_expert_plan.runtime_evidence_required is true",
+        "multi_expert_roles contains architecture-specialist",
+        "multi_expert_roles contains data-persistence-specialist",
+        "multi_expert_roles contains delivery-devops-specialist"
+      ],
+      "categories": [
+        "regression",
+        "multi-expert",
+        "architecture",
+        "boundary-guard"
+      ],
+      "source": "doc:SKILL.md#quick-examples",
+      "runner": "route"
+    },
+    {
+      "id": 113,
+      "prompt": "前端页面加载很慢，帮我实现优化并跑验证",
+      "expected_output": "Implementation and verification wording should upgrade from lightweight direct answer into a delivery workflow.",
+      "files": [],
+      "expectations": [
+        "workflow_bundle is product-spec-deliver",
+        "harness_constraint_gate.required is true",
+        "team_engine_gate.required is true",
+        "workflow_bundle_bootstrap.required is true"
+      ],
+      "categories": [
+        "regression",
+        "single-domain",
+        "product-delivery",
+        "boundary-guard"
+      ],
+      "source": "blind-review:C (neighboring implementation wording should not stay direct-answer)",
+      "runner": "route"
+    },
+    {
+      "id": 114,
+      "prompt": "审查完成后按 P0/P1/P2 分批修复并提交，每批独立 commit",
+      "expected_output": "Audit findings that must be fixed by severity batch should remain audit-led, attach Git workflow, and expose the audit batch fix source.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents contains Git Workflow Guardian",
+        "needs_git_workflow is true",
+        "process_skills contains git-workflow",
+        "workflow_bundle is audit-fix-deliver",
+        "workflow_bundle_source is audit-batch-fix",
+        "workflow_steps contains freeze the audit finding list before implementation",
+        "workflow_steps contains create one independent commit per accepted batch using the repo commit convention"
+      ],
+      "categories": [
+        "regression",
+        "review",
+        "git-workflow",
+        "workflow-bundle",
+        "boundary-guard"
+      ],
+      "source": "proposal:qoder-code-audit-batch-fix",
+      "runner": "route"
+    },
+    {
+      "id": 115,
+      "prompt": "This is a PR. Review it, then fix P0/P1/P2 findings in separate commits.",
+      "expected_output": "English audit batch remediation should keep Code Audit Council as lead and require separate severity-batch commits.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "needs_git_workflow is true",
+        "process_skills contains git-workflow",
+        "workflow_bundle is audit-fix-deliver",
+        "workflow_bundle_source is audit-batch-fix",
+        "workflow_steps contains classify findings into P0/P1/P2 batches with scope and dependencies",
+        "workflow_steps contains fix one severity batch at a time, starting with P0"
+      ],
+      "categories": [
+        "regression",
+        "review",
+        "mixed-language",
+        "git-workflow",
+        "workflow-bundle"
+      ],
+      "source": "proposal:qoder-code-audit-batch-fix",
+      "runner": "route"
+    },
+    {
+      "id": 116,
+      "prompt": "帮我按 P0/P1/P2 排一下需求优先级",
+      "expected_output": "Product or requirement priority bucketing without audit findings, remediation, and commits should not trigger audit batch fix.",
+      "files": [
+        "references/release-gate-playbook.md"
+      ],
+      "negative": true,
+      "expectations": [
+        "workflow_bundle is not audit-fix-deliver",
+        "workflow_bundle_source is not audit-batch-fix"
+      ],
+      "categories": [
+        "negative",
+        "product-delivery",
+        "boundary-guard"
+      ],
+      "source": "proposal:qoder-code-audit-batch-fix (negative boundary)",
+      "runner": "route"
+    },
+    {
+      "id": 117,
+      "prompt": "用 Kotlin 写一个 Ktor 接口，处理用户登录请求，序列化用 kotlinx.serialization。",
+      "expected_output": "JVM-side Kotlin request should route to Technical Trinity and inject the language-profiles.yaml kotlin profile conventions.",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains kotlin",
+        "language_routing.kotlin is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "kotlin"
+      ]
+    },
+    {
+      "id": 118,
+      "prompt": "Build a SwiftUI view with a list and a detail page using Swift Concurrency.",
+      "expected_output": "Swift request should route to Technical Trinity and inject the swift profile (SwiftUI / Swift Concurrency) into context.",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains swift",
+        "language_routing.swift is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "swift"
+      ]
+    },
+    {
+      "id": 119,
+      "prompt": "Modernize a C++ codebase to C++20 and switch to std::span in the hot path.",
+      "expected_output": "C++ request should route to Technical Trinity and inject the cpp profile (C++20, CMake, sanitizers) into context.",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains cpp",
+        "language_routing.cpp is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "cpp"
+      ]
+    },
+    {
+      "id": 120,
+      "prompt": "Implement a new endpoint in ASP.NET Core using Entity Framework Core for an existing C# service.",
+      "expected_output": "C# request should route to Technical Trinity and inject the csharp profile (ASP.NET Core, EF Core) into context.",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains csharp",
+        "language_routing.csharp is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "csharp"
+      ]
+    },
+    {
+      "id": 121,
+      "prompt": "Refactor a Laravel controller to use dependency injection and avoid N+1 in Eloquent.",
+      "expected_output": "PHP request should route to Technical Trinity and inject the php profile (Laravel / Composer / phpstan) into context.",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains php",
+        "language_routing.php is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "php"
+      ]
+    },
+    {
+      "id": 122,
+      "prompt": "Implement a service object in a Rails app and write the corresponding RSpec coverage.",
+      "expected_output": "Ruby request should route to Technical Trinity and inject the ruby profile (Rails / RSpec / rubocop) into context.",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains ruby",
+        "language_routing.ruby is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "ruby"
+      ]
+    },
+    {
+      "id": 123,
+      "prompt": "Wire a new Phoenix LiveView page and back it with an Ecto Changeset for form validation.",
+      "expected_output": "Elixir request should route to Technical Trinity and inject the elixir profile (Phoenix / OTP / Ecto) into context.",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains elixir",
+        "language_routing.elixir is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "elixir"
+      ]
+    },
+    {
+      "id": 124,
+      "prompt": "Refactor a Scala service to use ZIO for the async boundary and sealed traits for the domain model.",
+      "expected_output": "Scala request should route to Technical Trinity and inject the scala profile (Cats / ZIO / sbt) into context.",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains scala",
+        "language_routing.scala is Technical Trinity",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "scala"
+      ]
+    },
+    {
+      "id": 125,
+      "prompt": "Migrate a Spring Boot 3 service to Java 21 virtual threads and verify with Gradle tests.",
+      "expected_output": "Java request should route to Java Virtuoso and inject the java profile (Spring Boot 3.x, JVM 21+, Gradle/Maven) into context.",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains java",
+        "language_routing.java is Java Virtuoso",
+        "needs_git_workflow is false"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "java"
+      ]
+    },
+    {
+      "id": 126,
+      "prompt": "Refactor this Python helper and update the focused unit test.",
+      "expected_output": "Code-editing refactor requests should not stay in advice-only direct execution; they should enter quick-slice delivery with verification evidence.",
+      "files": [],
+      "expectations": [
+        "lead_agent is Technical Trinity",
+        "detected_languages contains python",
+        "workflow_bundle is quick-slice-deliver",
+        "harness_constraint_gate.required is true",
+        "team_engine_gate.required is true",
+        "progress_anchor_recommended is .vidt/delivery/current-slice.md"
+      ],
+      "categories": [
+        "backend-stack",
+        "quick-slice",
+        "team-engine-lite",
+        "boundary-guard",
+        "regression"
+      ],
+      "runner": "route"
+    },
+    {
+      "id": 127,
+      "prompt": "Build a FastAPI endpoint with Pydantic validation and pytest coverage.",
+      "expected_output": "Python request should route to Technical Trinity and use the python profile (FastAPI / Pydantic / pytest / ruff).",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains python",
+        "language_routing.python is Technical Trinity",
+        "workflow_bundle is quick-slice-deliver",
+        "harness_constraint_gate.required is true"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "python",
+        "quick-slice"
+      ],
+      "runner": "route"
+    },
+    {
+      "id": 128,
+      "prompt": "Implement a Go Gin handler with context timeouts and run go test ./...",
+      "expected_output": "Go request should route to Technical Trinity and use the go profile (Gin / context cancellation / go test).",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains go",
+        "language_routing.go is Technical Trinity",
+        "workflow_bundle is quick-slice-deliver",
+        "harness_constraint_gate.required is true"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "go",
+        "quick-slice"
+      ],
+      "runner": "route"
+    },
+    {
+      "id": 129,
+      "prompt": "Add a NestJS controller with DTO validation and run the TypeScript tests.",
+      "expected_output": "Node.js request should route to Technical Trinity and use the nodejs profile (NestJS / DTO validation / pnpm test).",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains nodejs",
+        "language_routing.nodejs is Technical Trinity",
+        "workflow_bundle is quick-slice-deliver",
+        "harness_constraint_gate.required is true"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "nodejs",
+        "quick-slice"
+      ],
+      "runner": "route"
+    },
+    {
+      "id": 130,
+      "prompt": "Implement an Axum route in Rust with Serde payloads and cargo test coverage.",
+      "expected_output": "Rust request should route to Technical Trinity and use the rust profile (Axum / Serde / cargo test).",
+      "files": [
+        "references/language-profiles.yaml",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "detected_languages contains rust",
+        "language_routing.rust is Technical Trinity",
+        "workflow_bundle is quick-slice-deliver",
+        "harness_constraint_gate.required is true"
+      ],
+      "categories": [
+        "backend-stack",
+        "language-routing",
+        "rust",
+        "quick-slice"
+      ],
+      "runner": "route"
+    },
+    {
+      "id": 131,
+      "prompt": "用 virtual-intelligent-dev-team 帮我写一本 50 万字的连载网文小说，要有多角色审核和流水线生产。",
+      "expected_output": "应识别为越界请求：该 skill 是复杂软件任务的有界工作循环路由器，8 个专家角色均为软件工程方向，不进行文学创作。应拒绝执行并建议用户使用 novel-forge/novel-studio skill。",
+      "files": [
+        "references/agent-catalog.md",
+        "references/CONTRIBUTING.md"
+      ],
+      "negative": true,
+      "categories": [
+        "negative"
+      ],
+      "expectations": [
+        "scope_boundary.status is out_of_scope",
+        "scope_boundary.recommended_skill is novel-studio",
+        "response_pack_json scope_boundary.status is out_of_scope",
+        "response_pack_json team_dispatch.workflow_bundle is decline-and-reroute"
+      ]
+    },
+    {
+      "id": 132,
+      "prompt": "帮我做点东西，用你们团队的力量。",
+      "expected_output": "应触发信息不足回退：任务描述完全缺失，无法判断属于哪个专家领域或是否在能力范围内。应要求用户明确具体的软件任务描述。",
+      "files": [
+        "references/agent-catalog.md"
+      ],
+      "negative": true,
+      "categories": [
+        "negative"
+      ],
+      "expectations": [
+        "scope_boundary.status is insufficient_information",
+        "scope_boundary.next_step contains concrete software task",
+        "clarifying_question is not null"
+      ]
+    },
+    {
+      "id": 133,
+      "prompt": "用 virtual-intelligent-dev-team 对三家竞品公司做一份完整的深度研究报告，含时间线和竞品截面。",
+      "expected_output": "应识别为跨 skill 误路由：系统性深度研究不属于软件开发任务范畴。应拒绝执行并建议用户使用 deep-research-forge skill。",
+      "files": [
+        "references/agent-catalog.md",
+        "references/CONTRIBUTING.md"
+      ],
+      "negative": true,
+      "categories": [
+        "negative"
+      ],
+      "expectations": [
+        "scope_boundary.status is out_of_scope",
+        "scope_boundary.recommended_skill is deep-research-forge",
+        "response_pack_json scope_boundary.status is out_of_scope",
+        "response_pack_json team_dispatch.workflow_bundle is decline-and-reroute"
+      ]
+    },
+    {
+      "id": 134,
+      "runner": "verify_action",
+      "check": "file-handoff",
+      "fixture": "missing-handoff",
+      "categories": [
+        "file-handoff",
+        "contract-output"
+      ],
+      "prompt": "Worker has finished the implementation without a handoff directory; verify before delivery.",
+      "expected_output": "file-handoff check should reject when .vidt/handoff directory does not exist.",
+      "files": [],
+      "expectations": [
+        "allowed is false",
+        "verify_action_json details.dir_exists is false"
+      ]
+    },
+    {
+      "id": 135,
+      "runner": "verify_action",
+      "check": "file-handoff",
+      "fixture": "invalid-handoff-metadata",
+      "categories": [
+        "file-handoff",
+        "contract-output"
+      ],
+      "prompt": "Worker has finished the implementation with malformed handoff metadata; verify before delivery.",
+      "expected_output": "file-handoff check should reject when handoff file exists but handoff metadata is missing or schema invalid.",
+      "files": [],
+      "expectations": [
+        "allowed is false",
+        "verify_action_json details.dir_exists is true",
+        "verify_action_json details.missing_handoff_meta length is not 0"
+      ],
+      "runtime_dependent": true
+    },
+    {
+      "id": 136,
+      "runner": "verify_action",
+      "check": "completion-evidence",
+      "fixture": "missing-completion-evidence",
+      "categories": [
+        "completion-evidence",
+        "contract-output"
+      ],
+      "prompt": "The task claims completion without a completion-evidence file; confirm delivery.",
+      "expected_output": "completion-evidence check should reject when evidence file does not exist.",
+      "files": [],
+      "expectations": [
+        "allowed is false",
+        "verify_action_json details.decision is missing"
+      ]
+    },
+    {
+      "id": 137,
+      "runner": "verify_action",
+      "check": "completion-evidence",
+      "fixture": "completion-same-model-review",
+      "categories": [
+        "completion-evidence",
+        "model-declaration",
+        "contract-output"
+      ],
+      "prompt": "The task claims completion after a same-model review; confirm delivery evidence.",
+      "expected_output": "completion-evidence check should block completion and flag a same-model self-review warning when worker_model equals verifier_model and status is passed.",
+      "files": [],
+      "expectations": [
+        "allowed is false",
+        "verify_action_json details.verification.warnings length is not 0"
+      ],
+      "runtime_dependent": true
+    },
+    {
+      "id": 138,
+      "runner": "verify_action",
+      "check": "lead-prejudgment",
+      "categories": [
+        "lead-prejudgment",
+        "contract-output"
+      ],
+      "prompt": "Lead dispatches work to Worker without any dispatch text.",
+      "expected_output": "lead-prejudgment check should allow when dispatch text is empty (no prejudgment detected).",
+      "files": [],
+      "expectations": [
+        "allowed is true",
+        "verify_action_json details.dispatch_length is 0",
+        "verify_action_json details.hits length is 0"
+      ]
+    },
+    {
+      "id": 139,
+      "runner": "verify_action",
+      "check": "lead-prejudgment",
+      "fixture": "lead-prejudgment",
+      "categories": [
+        "lead-prejudgment",
+        "negative"
+      ],
+      "prompt": "Lead dispatches work to Worker while prejudging that the result should be fine and can ship.",
+      "expected_output": "lead-prejudgment check should reject when dispatch text contains prejudgment language like 'should be fine' or 'can ship'.",
+      "files": [
+        "scripts/verify_action.py",
+        "references/execution-quality-guardrails.md"
+      ],
+      "expectations": [
+        "allowed is false",
+        "verify_action_json details.hits length is not 0"
+      ],
+      "negative": true,
+      "runtime_dependent": true
+    },
+    {
+      "id": 140,
+      "runner": "verify_action",
+      "check": "breaker-status",
+      "fixture": "breaker-closed",
+      "breaker_layer": "verifier",
+      "categories": [
+        "circuit-breaker",
+        "contract-output"
+      ],
+      "prompt": "Verify the closed circuit breaker before executing the next iteration cycle.",
+      "expected_output": "breaker-status check should allow when circuit breaker is in closed state.",
+      "files": [],
+      "expectations": [
+        "allowed is true",
+        "verify_action_json details.breaker_state is closed"
+      ],
+      "runtime_dependent": true
+    },
+    {
+      "id": 141,
+      "runner": "verify_action",
+      "check": "breaker-status",
+      "fixture": "breaker-open",
+      "breaker_layer": "verifier",
+      "categories": [
+        "circuit-breaker",
+        "negative"
+      ],
+      "prompt": "Verify the open circuit breaker before executing the next iteration cycle.",
+      "expected_output": "breaker-status check should block when circuit breaker is in open state after consecutive failures.",
+      "files": [
+        "scripts/verify_action.py",
+        "references/circuit-breaker-protocol.md"
+      ],
+      "expectations": [
+        "allowed is false",
+        "verify_action_json details.breaker_state is open"
+      ],
+      "negative": true,
+      "runtime_dependent": true
+    },
+    {
+      "id": 142,
+      "runner": "verify_action",
+      "check": "yagni",
+      "categories": [
+        "yagni",
+        "contract-output"
+      ],
+      "prompt": "Worker requested review without providing a diff file.",
+      "expected_output": "yagni check should allow when no diff file is provided (no unrequested abstractions detected).",
+      "files": [],
+      "expectations": [
+        "allowed is true",
+        "verify_action_json details.diff_exists is false",
+        "verify_action_json details.hits length is 0"
+      ]
+    },
+    {
+      "id": 143,
+      "runner": "verify_action",
+      "check": "yagni",
+      "fixture": "yagni-abstraction",
+      "categories": [
+        "yagni",
+        "negative"
+      ],
+      "prompt": "Worker submitted a diff containing an unrequested interface and factory abstraction for review.",
+      "expected_output": "yagni check should reject when diff contains unrequested abstractions like new interface or factory class.",
+      "files": [
+        "scripts/verify_action.py",
+        "references/yagni-guardrail.md"
+      ],
+      "expectations": [
+        "allowed is false",
+        "verify_action_json details.hits length is not 0"
+      ],
+      "negative": true,
+      "runtime_dependent": true
+    },
+    {
+      "id": 144,
+      "runner": "verify_action",
+      "check": "spec-violation",
+      "categories": [
+        "spec-violation",
+        "contract-output"
+      ],
+      "prompt": "Worker output ready for spec compliance check.",
+      "expected_output": "spec-violation check should pass when no worker output is provided (no violations detectable).",
+      "files": [],
+      "expectations": [
+        "allowed is true",
+        "verify_action_json details.verdict is pass",
+        "verify_action_json details.output_exists is false"
+      ]
+    },
+    {
+      "id": 145,
+      "runner": "verify_action",
+      "check": "spec-violation",
+      "fixture": "java-spec-violation",
+      "categories": [
+        "spec-violation",
+        "negative"
+      ],
+      "prompt": "Implement this Java service update and check the worker output for spec compliance.",
+      "expected_output": "spec-violation check should return spec_violation verdict when worker output contains banned patterns like java.util.Date or force push.",
+      "files": [
+        "scripts/verify_action.py",
+        "references/execution-quality-guardrails.md"
+      ],
+      "expectations": [
+        "verify_action_json details.verdict is spec_violation"
+      ],
+      "negative": true,
+      "runtime_dependent": true
+    },
+    {
+      "id": 200,
+      "runner": "verify_action",
+      "check": "contract-lock",
+      "categories": [
+        "contract-lock",
+        "contract-output",
+        "p1-5"
+      ],
+      "prompt": "Worker is ready to start implementation, verify contract lock.",
+      "expected_output": "contract-lock check should allow (skip) when no contract-spec path is provided.",
+      "files": [
+        "references/contract-lock-protocol.md",
+        "assets/contract-spec-template.json"
+      ],
+      "expectations": [
+        "allowed is true",
+        "verify_action_json details.spec_exists is false"
+      ]
+    },
+    {
+      "id": 201,
+      "runner": "route",
+      "categories": [
+        "contract-lock",
+        "p1-5"
+      ],
+      "prompt": "Review this API contract for backward compatibility and breaking changes.",
+      "expected_output": "Explicit review keeps Code Audit Council as semantic lead and attaches API Contract Sentinel for contract semantics.",
+      "files": [
+        "references/contract-lock-protocol.md"
+      ],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "assistant_agents contains API Contract Sentinel"
+      ]
+    },
+    {
+      "id": 202,
+      "runner": "route",
+      "categories": [
+        "layer-reinforcement",
+        "p1-6"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Seven-layer reinforcement should expose acceptance_gates in team_engine_gate.",
+      "files": [
+        "references/layer-reinforcement-protocol.md",
+        "references/circuit-breaker-config.json"
+      ],
+      "expectations": [
+        "team_engine_gate.acceptance_gates exists",
+        "team_engine_gate.max_cycles exists"
+      ]
+    },
+    {
+      "id": 203,
+      "runner": "route",
+      "categories": [
+        "layer-reinforcement",
+        "p1-6"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Seven-layer reinforcement should expose state_machine and work_order_contract in team_engine_gate.",
+      "files": [
+        "references/layer-reinforcement-protocol.md"
+      ],
+      "expectations": [
+        "team_engine_gate.state_machine exists",
+        "team_engine_gate.work_order_contract exists"
+      ]
+    },
+    {
+      "id": 204,
+      "runner": "route",
+      "categories": [
+        "state-schema",
+        "p1-7"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "State schema should expose state_machine contract in team_engine_gate.",
+      "files": [
+        "references/state-schema-spec.md"
+      ],
+      "expectations": [
+        "team_engine_gate.state_machine exists"
+      ]
+    },
+    {
+      "id": 205,
+      "runner": "route",
+      "categories": [
+        "state-schema",
+        "p1-7"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "State schema should expose work_order_contract in team_engine_gate.",
+      "files": [
+        "references/state-schema-spec.md"
+      ],
+      "expectations": [
+        "team_engine_gate.work_order_contract exists"
+      ]
+    },
+    {
+      "id": 206,
+      "runner": "route",
+      "categories": [
+        "team-engine-lite-subgraph",
+        "p1-8"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Team Engine Lite subgraph should reference team-engine-lite-protocol.md.",
+      "files": [
+        "references/team-engine-lite-protocol.md",
+        "references/verifier-extraction-guide.md"
+      ],
+      "expectations": [
+        "team_engine_gate.reference is references/team-engine-lite-protocol.md",
+        "team_engine_gate.runtime_claim is soft_orchestration_only"
+      ]
+    },
+    {
+      "id": 207,
+      "runner": "route",
+      "categories": [
+        "team-engine-lite-subgraph",
+        "p1-8"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Team Engine Lite subgraph should keep soft_orchestration_only runtime claim.",
+      "files": [
+        "references/verifier-extraction-guide.md"
+      ],
+      "expectations": [
+        "team_engine_gate.runtime_claim is soft_orchestration_only"
+      ]
+    },
+    {
+      "id": 208,
+      "runner": "route",
+      "categories": [
+        "failure-path",
+        "p1-9"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Failure path design should prevent producer self-pass.",
+      "files": [
+        "references/failure-runbook.md"
+      ],
+      "expectations": [
+        "team_engine_gate.producer_can_self_pass is false",
+        "team_engine_gate.leader_accept_requires_cycle_report is true"
+      ]
+    },
+    {
+      "id": 209,
+      "runner": "route",
+      "categories": [
+        "failure-path",
+        "p1-9"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Failure path design should require remediation patch on verifier fail.",
+      "files": [
+        "references/failure-runbook.md",
+        "references/iteration-state-machine.md"
+      ],
+      "expectations": [
+        "team_engine_gate.verifier_fail_requires_remediation_patch is true"
+      ]
+    },
+    {
+      "id": 210,
+      "runner": "route",
+      "categories": [
+        "workspace-journal",
+        "p1-10"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Workspace journal should preserve progress anchor for resume.",
+      "files": [
+        "references/workspace-journal-protocol.md",
+        "references/memory-model.md"
+      ],
+      "expectations": [
+        "progress_anchor_recommended is not null"
+      ]
+    },
+    {
+      "id": 211,
+      "runner": "route",
+      "categories": [
+        "workspace-journal",
+        "p1-10"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Workspace journal should preserve resume artifacts for replay.",
+      "files": [
+        "references/workspace-journal-protocol.md",
+        "references/project-memory-lite.md"
+      ],
+      "expectations": [
+        "resume_artifacts exists"
+      ]
+    },
+    {
+      "id": 212,
+      "runner": "route",
+      "categories": [
+        "complexity-ladder",
+        "p1-12"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Complexity ladder should not alter workflow bundle routing.",
+      "files": [
+        "references/complexity-ladder.md"
+      ],
+      "expectations": [
+        "workflow_bundle is quick-slice-deliver"
+      ]
+    },
+    {
+      "id": 213,
+      "runner": "route",
+      "categories": [
+        "complexity-ladder",
+        "p1-12"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "A Java refactor should preserve the language specialist as lead while the complexity ladder only shapes execution depth.",
+      "files": [
+        "references/complexity-ladder.md"
+      ],
+      "expectations": [
+        "lead_agent is Java Virtuoso"
+      ]
+    },
+    {
+      "id": 214,
+      "runner": "route",
+      "categories": [
+        "debt-ledger",
+        "p1-13"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Debt ledger should not alter team engine gate requirements.",
+      "files": [
+        "assets/debt-ledger-template.json",
+        "scripts/track_debt.py"
+      ],
+      "expectations": [
+        "team_engine_gate.required is true"
+      ]
+    },
+    {
+      "id": 215,
+      "runner": "route",
+      "categories": [
+        "debt-ledger",
+        "p1-13"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Debt ledger should preserve harness constraint gate for known-shortcut tracking.",
+      "files": [
+        "references/completion-evidence.schema.json",
+        "references/worker-verifier-cycle-protocol.md"
+      ],
+      "expectations": [
+        "harness_constraint_gate.required is true"
+      ]
+    },
+    {
+      "id": 216,
+      "runner": "route",
+      "categories": [
+        "hook-injection",
+        "p1-19"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Hook injection should output hook_directives in route result.",
+      "files": [
+        "references/hook-injection-protocol.md"
+      ],
+      "expectations": [
+        "hook_directives exists"
+      ]
+    },
+    {
+      "id": 217,
+      "runner": "route",
+      "categories": [
+        "hook-injection",
+        "p1-19"
+      ],
+      "prompt": "Refactor this Java helper function.",
+      "expected_output": "Hook injection should populate spec_files in hook_directives.",
+      "files": [
+        "references/hook-injection-protocol.md",
+        "scripts/route_request.py"
+      ],
+      "expectations": [
+        "hook_directives.spec_files exists",
+        "hook_directives.inject_target is worker"
+      ]
+    },
+    {
+      "id": 218,
+      "runner": "verify_action",
+      "check": "observability-schema",
+      "categories": [
+        "observability",
+        "p2-16"
+      ],
+      "prompt": "Verify observability telemetry schema and health report",
+      "expected_output": "emit_telemetry self-test passes; health report schema_version is layer-health-report/v1.",
+      "files": [
+        "scripts/emit_telemetry.py",
+        "scripts/inspect_decision_log.py",
+        "references/observability-protocol.md"
+      ],
+      "expectations": [
+        "allowed is true",
+        "details.emit_self_test_exit is 0",
+        "details.health_schema_version is layer-health-report/v1"
+      ]
+    },
+    {
+      "id": 219,
+      "runner": "verify_action",
+      "check": "observability-schema",
+      "categories": [
+        "observability",
+        "p2-16"
+      ],
+      "prompt": "Verify observability protocol is referenced and layers complete",
+      "expected_output": "SKILL.md references observability-protocol.md; health report has 7 layers.",
+      "files": [
+        "SKILL.md",
+        "references/observability-protocol.md"
+      ],
+      "expectations": [
+        "allowed is true",
+        "details.skill_md_references_protocol is true",
+        "details.protocol_exists is true",
+        "details.health_layer_count is 7"
+      ]
+    },
+    {
+      "id": 220,
+      "runner": "verify_action",
+      "check": "observability-schema",
+      "categories": [
+        "observability",
+        "p2-16"
+      ],
+      "prompt": "Verify intent drift probe and SLO violation detection are wired",
+      "expected_output": "Observability schema valid: telemetry self-test passed, health report schema correct, protocol referenced.",
+      "files": [
+        "scripts/emit_telemetry.py",
+        "references/observability-protocol.md",
+        "references/circuit-breaker-config.json"
+      ],
+      "expectations": [
+        "allowed is true",
+        "details.emit_self_test_exit is 0",
+        "details.health_schema_version is layer-health-report/v1"
+      ]
+    },
+    {
+      "id": 221,
+      "runner": "stress_scenarios",
+      "categories": [
+        "stress-scenarios",
+        "p2-15"
+      ],
+      "prompt": "Run all 12 stress scenarios and verify every scenario executes without error",
+      "expected_output": "run_stress_scenarios reports total_scenarios=12, scenarios_passed=12, scenarios_failed=0.",
+      "files": [
+        "scripts/run_stress_scenarios.py",
+        "evals/stress-scenarios/frontend-backend-contract-mismatch.json",
+        "evals/stress-scenarios/worker-self-pass.json",
+        "evals/stress-scenarios/lead-skips-verifier.json",
+        "evals/stress-scenarios/verifier-always-pass.json",
+        "evals/stress-scenarios/baseline-deleted.json",
+        "evals/stress-scenarios/json-corrupt.json",
+        "evals/stress-scenarios/resume-plan-drift.json"
+      ],
+      "expectations": [
+        "stress_scenarios_json ok is true",
+        "stress_scenarios_json total_scenarios is 12",
+        "stress_scenarios_json scenarios_passed is 12",
+        "stress_scenarios_json scenarios_failed is 0"
+      ],
+      "runtime_dependent": true
+    },
+    {
+      "id": 222,
+      "runner": "stress_scenarios",
+      "categories": [
+        "stress-scenarios",
+        "p2-15",
+        "trace-summary"
+      ],
+      "prompt": "Verify trace_summary is non-empty and complete for all 12 stress scenarios (machine-validated, not self-reported)",
+      "expected_output": "trace_incomplete=0; every scenario.trace_summary.complete is true with real file paths and caller lists.",
+      "files": [
+        "scripts/run_stress_scenarios.py"
+      ],
+      "expectations": [
+        "stress_scenarios_json trace_incomplete is 0",
+        "stress_scenarios_json scenarios trace_summary.complete is true",
+        "stress_scenarios_json scenarios trace_summary.all_files_exist is true",
+        "stress_scenarios_json scenarios trace_summary.caller_count >= 1"
+      ],
+      "runtime_dependent": true
+    },
+    {
+      "id": 223,
+      "runner": "stress_scenarios",
+      "categories": [
+        "stress-scenarios",
+        "p2-15",
+        "fix-scope"
+      ],
+      "prompt": "Verify fix_scope root-cause ratio meets 80% threshold (root-cause fix over symptom fix)",
+      "expected_output": "fix_scope_root_cause_ratio >= 0.8; at least 10 of 12 scenarios marked root-cause.",
+      "files": [
+        "scripts/run_stress_scenarios.py"
+      ],
+      "expectations": [
+        "stress_scenarios_json fix_scope_root_cause_ratio >= 0.8",
+        "stress_scenarios_json root_cause_ratio_ok is true"
+      ],
+      "runtime_dependent": true
+    },
+    {
+      "id": 224,
+      "runner": "stress_scenarios",
+      "categories": [
+        "stress-scenarios",
+        "p2-15",
+        "crash-point-collection"
+      ],
+      "prompt": "Verify crash points are collected and vulnerabilities_found is reported across all stress scenarios",
+      "expected_output": "vulnerabilities_found is 0 for current release; every scenario has status=passed with exec_summary non-empty.",
+      "files": [
+        "scripts/run_stress_scenarios.py"
+      ],
+      "expectations": [
+        "stress_scenarios_json ok is true",
+        "stress_scenarios_json vulnerabilities_found is 0",
+        "stress_scenarios_json scenarios status is passed",
+        "stress_scenarios_json scenarios exec_summary is not empty"
+      ],
+      "runtime_dependent": true
+    },
+    {
+      "id": 225,
+      "runner": "route",
+      "categories": [
+        "multi-session",
+        "p2-14",
+        "multi-agent"
+      ],
+      "prompt": "Please use multi-agent subagents to implement this parallel refactor with independent Worker and Verifier agents.",
+      "expected_output": "Route emits three-tier runtime_claim: candidate_runtime_claim=real_subagent_runtime, candidate_multi_session_claim=single_backend_multi_session, session_circuit_breaker present.",
+      "files": [
+        "scripts/route_request.py",
+        "references/real-subagent-runtime-protocol.md"
+      ],
+      "expectations": [
+        "real_subagent_runtime.eligible is true",
+        "real_subagent_runtime.runtime_claim is soft_orchestration_only",
+        "real_subagent_runtime.candidate_runtime_claim is real_subagent_runtime",
+        "real_subagent_runtime.candidate_multi_session_claim is single_backend_multi_session",
+        "real_subagent_runtime.session_circuit_breaker.applicable_tier is single_backend_multi_session",
+        "real_subagent_runtime.tier_selection_algorithm is not empty"
+      ]
+    },
+    {
+      "id": 226,
+      "runner": "route",
+      "categories": [
+        "multi-session",
+        "p2-14",
+        "lightweight-route",
+        "negative"
+      ],
+      "prompt": "Fix this simple typo in the README file.",
+      "expected_output": "Simple single-domain fix does not trigger multi-agent eligibility; all three tiers default to soft_orchestration_only.",
+      "files": [
+        "scripts/route_request.py"
+      ],
+      "expectations": [
+        "real_subagent_runtime.eligible is false",
+        "real_subagent_runtime.runtime_claim is soft_orchestration_only",
+        "real_subagent_runtime.candidate_runtime_claim is soft_orchestration_only",
+        "real_subagent_runtime.candidate_multi_session_claim is soft_orchestration_only"
+      ],
+      "negative": true
+    },
+    {
+      "id": 227,
+      "runner": "route",
+      "categories": [
+        "multi-session",
+        "p2-14",
+        "circuit-breaker"
+      ],
+      "prompt": "Use parallel agents to spawn multiple subagents for this complex multi-file refactor with verification.",
+      "expected_output": "Session circuit-breaker fields (kill / restart / isolate_context / escalation) are populated; fallback chain includes multi_session_unavailable downgrade path.",
+      "files": [
+        "scripts/route_request.py",
+        "references/real-subagent-runtime-protocol.md"
+      ],
+      "expectations": [
+        "real_subagent_runtime.eligible is true",
+        "real_subagent_runtime.session_circuit_breaker.failure_threshold is 3",
+        "real_subagent_runtime.session_circuit_breaker.kill is not empty",
+        "real_subagent_runtime.session_circuit_breaker.restart is not empty",
+        "real_subagent_runtime.session_circuit_breaker.isolate_context is not empty",
+        "real_subagent_runtime.session_circuit_breaker.escalation is not empty",
+        "real_subagent_runtime.fallback.multi_session_unavailable is not empty",
+        "real_subagent_runtime.fallback.session_killed is not empty"
+      ]
+    },
+    {
+      "id": 228,
+      "runner": "route",
+      "categories": [
+        "hook-injection",
+        "frontend",
+        "regression"
+      ],
+      "prompt": "Redesign this React dashboard and align the frontend states with the API contract.",
+      "expected_output": "Frontend ownership stays with World-Class Product Architect and hook directives contain only resolvable current spec references.",
+      "files": [
+        "scripts/route_request.py",
+        "references/hook-injection-protocol.md",
+        "references/language-profiles.yaml"
+      ],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "hook_directives.spec_sections contains routing-rules.json#frontend-profile",
+        "hook_directives.spec_files contains references/execution-quality-guardrails.md"
+      ]
+    },
+    {
+      "id": 229,
+      "runner": "route",
+      "categories": [
+        "review",
+        "audit-fix-deliver",
+        "change-localization"
+      ],
+      "prompt": "Audit these review findings, pinpoint the exact change site and call chain for each one, then fix them in batched order.",
+      "expected_output": "Audit-to-fix should route to Code Audit Council with the audit-fix-deliver bundle and activate change-localization to converge on exact files and call chains before patching.",
+      "files": [
+        "scripts/route_request.py",
+        "references/change-localization-protocol.md"
+      ],
+      "expectations": [
+        "lead_agent is Code Audit Council",
+        "workflow_bundle is audit-fix-deliver",
+        "micro_practice_names contains change-localization",
+        "response_pack_json micro_practices.names contains change-localization"
+      ]
+    },
+    {
+      "id": 230,
+      "runner": "route",
+      "categories": [
+        "planning",
+        "system-map",
+        "project-knowledge-pyramid"
+      ],
+      "prompt": "We are onboarding to this large unfamiliar codebase. Plan the migration first: build a project knowledge map, then plan before coding.",
+      "expected_output": "Onboarding to a large unfamiliar repo should route to World-Class Product Architect with capture-project-knowledge and activate the project knowledge pyramid alongside system-map.",
+      "files": [
+        "scripts/route_request.py",
+        "references/project-knowledge-pyramid-protocol.md",
+        "references/system-map-protocol.md"
+      ],
+      "expectations": [
+        "lead_agent is World-Class Product Architect",
+        "needs_pre_development_planning is true",
+        "workflow_bundle is capture-project-knowledge",
+        "micro_practice_names contains system-map",
+        "micro_practice_names contains project-knowledge-pyramid",
+        "response_pack_json micro_practices.names contains project-knowledge-pyramid"
+      ]
+    },
+    {
+      "id": 231,
+      "runner": "route",
+      "categories": [
+        "git-workflow",
+        "worktree",
+        "worktree-state-placement"
+      ],
+      "prompt": "并行开发两个需求，各自用独立 worktree 隔离改动，保持状态隔离",
+      "expected_output": "Parallel work in isolated worktrees routes to Git Workflow Guardian with govern-change-safely, activates the using-git-worktrees process skill, and injects the state-root bootstrap command so state directories stay in the main repo.",
+      "files": [
+        "scripts/route_request.py",
+        "references/using-git-worktrees-playbook.md",
+        "references/worktree-state-placement-protocol.md"
+      ],
+      "expectations": [
+        "lead_agent is Git Workflow Guardian",
+        "needs_worktree is true",
+        "workflow_bundle is govern-change-safely",
+        "process_skills contains using-git-worktrees",
+        "process_plan first state_root is not null"
+      ]
+    },
+    {
+      "id": 232,
+      "runner": "route",
+      "categories": [
+        "worktree",
+        "negative"
+      ],
+      "prompt": "我有两个任务在 todo list 里，帮我理一下优先级",
+      "expected_output": "Project-management phrasing with common words like 'two tasks' must not trigger worktree mode; it is a single planning question, not parallel isolated development.",
+      "files": [
+        "scripts/route_request.py",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "needs_worktree is false"
+      ],
+      "negative": true
+    },
+    {
+      "id": 233,
+      "runner": "route",
+      "categories": [
+        "worktree",
+        "negative"
+      ],
+      "prompt": "帮我评估同时推进两个需求的优先级，不改代码。",
+      "expected_output": "Planning-only wording and an explicit no-code boundary must not create a worktree workflow.",
+      "files": [
+        "scripts/route_request.py",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "needs_worktree is false",
+        "process_skills is empty"
+      ],
+      "negative": true
+    },
+    {
+      "id": 234,
+      "runner": "route",
+      "categories": [
+        "worktree",
+        "negative"
+      ],
+      "prompt": "We should not use a worktree; keep this one task in the main checkout.",
+      "expected_output": "Explicit worktree negation must override the literal worktree keyword.",
+      "files": [
+        "scripts/route_request.py",
+        "references/routing-rules.json"
+      ],
+      "expectations": [
+        "needs_worktree is false"
+      ],
+      "negative": true
+    },
+    {
+      "id": 235,
+      "runner": "route",
+      "categories": [
+        "change-localization",
+        "negative"
+      ],
+      "prompt": "帮我分析产品市场定位，不需要改代码。",
+      "expected_output": "Product positioning is not code change localization.",
+      "files": [
+        "scripts/route_request.py",
+        "references/change-localization-protocol.md"
+      ],
+      "expectations": [
+        "micro_practice_names length is 0"
+      ],
+      "negative": true
+    },
+    {
+      "id": 236,
+      "runner": "route",
+      "categories": [
+        "worktree",
+        "bounded-iteration",
+        "state-placement"
+      ],
+      "prompt": "并行开发多个候选，分别放进 worktree，多轮优化并对比基线直到稳定。",
+      "expected_output": "When worktree and bounded iteration are both active, every durable iteration command uses STATE_ROOT.",
+      "files": [
+        "scripts/route_request.py",
+        "references/worktree-state-placement-protocol.md",
+        "references/iteration-protocol.md"
+      ],
+      "expectations": [
+        "needs_worktree is true",
+        "needs_iteration is true",
+        "process_plan first state_root is not null"
+      ]
+    },
+    {
+      "id": 237,
+      "runner": "route",
+      "categories": [
+        "worktree",
+        "boundary-guard"
+      ],
+      "prompt": "使用 git worktree 隔离开发，不改代码到主仓，最后提 PR。",
+      "expected_output": "The main-checkout boundary narrows where code may change; it must not negate the explicit isolated-worktree request.",
+      "files": [
+        "scripts/route_request.py",
+        "references/routing-rules.json",
+        "references/worktree-state-placement-protocol.md"
+      ],
+      "expectations": [
+        "needs_worktree is true",
+        "process_skills contains using-git-worktrees"
+      ]
+    }
+  ]
+}

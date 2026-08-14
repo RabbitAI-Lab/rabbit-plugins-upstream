@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -27,10 +28,13 @@ try:
     from jsonschema import Draft202012Validator, FormatChecker
 except ModuleNotFoundError as exc:  # pragma: no cover - exercised in a clean environment
     missing = getattr(exc, "name", "PyYAML/jsonschema")
-    print(
-        f"缺少运行依赖 {missing}。请先执行：python -m pip install -r scripts/requirements.txt",
-        file=sys.stderr,
+    english_startup = any(value == "en-US" for value in sys.argv)
+    message = (
+        f"Missing runtime dependency {missing}. Run: python -m pip install -r scripts/requirements.txt"
+        if english_startup else
+        f"缺少运行依赖 {missing}。请先执行：python -m pip install -r scripts/requirements.txt"
     )
+    print(message, file=sys.stderr)
     raise SystemExit(4) from exc
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -53,10 +57,15 @@ from validators.validate_coding_agent_contract import (
     has_any,
 )
 from validators.validate_prd_quality import LEVELS, TERMS
+from validators.validate_prd_semantics import run_semantic_checks
+from gate_handoff_checks import HandoffChecks
+from gate_prd_checks import PRDChecks
+from gate_prototype_checks import PrototypeChecks, _balanced_javascript
 
 
 ROOT = SCRIPT_DIR.parent
 REGISTER_SCHEMA = ROOT / "schemas" / "requirement-register.schema.json"
+INTAKE_SCHEMA = ROOT / "schemas" / "requirement-intake.schema.json"
 HANDOFF_SCHEMA = ROOT / "schemas" / "agent-handoff.schema.json"
 ACCEPTANCE_SCHEMA = ROOT / "schemas" / "acceptance-run.schema.json"
 MAIN_SECTION_ALIASES = (
@@ -70,7 +79,7 @@ MAIN_SECTION_ALIASES = (
 )
 ANNEX_SECTION_ALIASES = (
     ("字段字典", (r"字段字典", r"field dictionary")),
-    ("规则/状态", (r"规则与状态机", r"rules?.+state")),
+    ("规则/状态", (r"规则与状态", r"rules?.+state")),
     ("API/事件", (r"api", r"接口", r"event.+integration")),
     ("机器验收", (r"机器可读验收", r"machine-readable acceptance", r"structured acceptance")),
     ("双向追溯", (r"双向追溯", r"bidirectional trace")),
@@ -97,21 +106,37 @@ STAGE_ORDER = {
 NOT_PROVEN_BY_STATIC_GATE = (
     "业务与领域规则已经客户或权威来源确认",
     "原型在真实浏览器中的交互、视觉、可访问性与多端适配",
-    "视觉与美学方向已经用户确认（DEC-AESTHETIC-* 或等效记录）",
+    "视觉权威与视觉锁已经确认（存量基线、绿地默认或 DEC-AESTHETIC-*）",
     "代码实现、数据迁移、安全、性能、部署与运行稳定性",
     "验收用例已经实际执行并形成签认证据",
 )
+NOT_PROVEN_BY_STATIC_GATE_EN = (
+    "customer or authoritative-source confirmation of business and domain rules",
+    "prototype interaction, visual quality, accessibility and responsive behavior in a real browser",
+    "confirmed visual authority and visual lock (existing baseline, greenfield default or DEC-AESTHETIC-*)",
+    "implementation, data migration, security, performance, deployment and runtime stability",
+    "executed acceptance cases with signed evidence",
+)
 
 
-def not_proven_for(gate: "Gate") -> list[str]:
+def not_proven_for(gate: "Gate", language: str = "zh-CN") -> list[str]:
     """Keep static-gate boundaries honest while closing claims backed by valid ARUN evidence."""
-    items = list(NOT_PROVEN_BY_STATIC_GATE)
+    english = language.casefold().startswith("en")
+    items = list(NOT_PROVEN_BY_STATIC_GATE_EN if english else NOT_PROVEN_BY_STATIC_GATE)
     if gate.metrics.get("prototype_browser_evidence"):
-        items.remove("原型在真实浏览器中的交互、视觉、可访问性与多端适配")
-        items.append("浏览器 ARUN 已证明其记录范围内的交互结果；未覆盖的视觉、可访问性与多端适配仍未证明")
+        items.remove(NOT_PROVEN_BY_STATIC_GATE_EN[1] if english else NOT_PROVEN_BY_STATIC_GATE[1])
+        items.append(
+            "The browser ARUN proves recorded interactions only; uncovered visual, accessibility and responsive behavior remains unproven"
+            if english else
+            "浏览器 ARUN 已证明其记录范围内的交互结果；未覆盖的视觉、可访问性与多端适配仍未证明"
+        )
     if gate.metrics.get("acceptance_run_conclusive"):
-        items.remove("验收用例已经实际执行并形成签认证据")
-        items.append("已提供的 ARUN 已执行并形成可解析签认证据；未纳入该记录的验收范围仍未证明")
+        items.remove(NOT_PROVEN_BY_STATIC_GATE_EN[4] if english else NOT_PROVEN_BY_STATIC_GATE[4])
+        items.append(
+            "The supplied ARUN has executable signed evidence; acceptance scope outside that record remains unproven"
+            if english else
+            "已提供的 ARUN 已执行并形成可解析签认证据；未纳入该记录的验收范围仍未证明"
+        )
     return items
 
 
@@ -147,6 +172,107 @@ FINDING_GUIDANCE: dict[str, tuple[str, str]] = {
     "REQ-SCHEMA": (
         "需求登记文件不符合 JSON Schema。",
         "按 finding.ref 定位字段，并参考 requirement-register-template.yaml 修复结构。",
+    ),
+    "INTAKE-SCHEMA": (
+        "输入是单条需求 intake 卡，但不符合 intake 合同；登记册与 intake 卡是两种不同工件。",
+        "按 finding.ref 定位字段，参考 requirement-intake-template.yaml 补齐 intake 字段；"
+        "若要提交多条需求登记册，改用 requirement-register-template.yaml 并提供 requirements 列表。",
+    ),
+    "PROTO-DEMO-SCAFFOLDING-VISIBLE": (
+        "原型可见文本残留验收演示脚手架，会被客户误读为产品功能。",
+        "删除 finding.ref 指示的演示文案（验收场景/验收样本/E2E CONSOLE/体验身份/继承预览等），只保留真实业务内容。",
+    ),
+    "PROTO-NESTED-PRODUCT-IFRAME": (
+        "原型用本地 iframe 嵌套另一个 HTML 页面，静态门禁无法证明嵌套页的交互合同。",
+        "把嵌套页内容并入当前原型的 page-VIEW-* 结构，或作为独立原型文件一并提交门禁。",
+    ),
+    "PROTO-IFRAME-UNSAFE-SCHEME": (
+        "iframe 使用 data/javascript/file 等不可审计或可执行的高风险地址。",
+        "移除该 iframe；外部系统只允许 HTTPS，并按远程集成合同声明 INT-*、降级和浏览器安全属性。",
+    ),
+    "PROTO-INSECURE-REMOTE-IFRAME": (
+        "远程 iframe 使用明文 HTTP，传输内容和凭据边界不可接受。",
+        "改用 HTTPS；若对方不支持 HTTPS，移除嵌入并设计明确的外部跳转或降级路径。",
+    ),
+    "PROTO-REMOTE-IFRAME-UNDECLARED": (
+        "远程 iframe 没有声明集成归属、失败降级和最小浏览器安全边界。",
+        "补齐 data-integration-ref=INT-*、data-fallback、title、sandbox 和 referrerpolicy；L2+ 缺任一项均阻断。",
+    ),
+    "PROTO-REMOTE-IFRAME-UNVERIFIED": (
+        "远程 iframe 的静态合同完整，但门禁无法证明外部内容、登录态、网络可达性和运行时交互。",
+        "在目标网络和角色登录态下执行浏览器 ARUN-*，记录成功、失败降级和证据；静态 GAP 不得冒充已验收。",
+    ),
+    "PRD-STATE-SEMANTIC-POLLUTION": (
+        "状态机表的当前状态/下一状态列写入了 API/FLD/ACT 等工程 ID，状态语义被污染。",
+        "状态列只写业务状态名（如 draft、active）；工程 ID 移回动作/规则/接口列或附录。",
+    ),
+    "PRD-DUPLICATE-STABLE-ID-DEFINITION": (
+        "同一个稳定 ID 在一个或多个权威定义表中被重复定义，开发与测试无法判断哪一行生效。",
+        "只保留一处定义；其他位置改为引用，确属不同对象时分配新的稳定 ID。",
+    ),
+    "PRD-DANGLING-REF": (
+        "正文引用了全文没有定义位的稳定 ID，按 ID 追溯会断链。",
+        "在标题、表格首列、列表项或 ID（…）注解中补该 ID 的定义位；若为笔误则修正引用。",
+    ),
+    "PRD-ID-PREFIX-COLLISION": (
+        "截断式 ID 生成规则作用到同文档 code 枚举后多对一，生成的关联号不再唯一。",
+        "改用完整 code 或保证截断后唯一；按 finding 给出的碰撞组逐一核对。",
+    ),
+    "PRD-STATE-COUNT-MISMATCH": (
+        "文中“N 态”措辞与对应 STM-* 状态机表覆盖的状态数不一致。",
+        "同步措辞或状态机表，使二者一致。",
+    ),
+    "PRD-GUARD-CONTRADICTION": (
+        "同一动作的许可状态集与守卫拒绝状态集显式互斥，其余状态可能得到相反结论。",
+        "对齐规则与守卫的状态集合，明确允许、拒绝和非法转换结果。",
+    ),
+    "PRD-ENUM-NOT-DEFINED": (
+        "基数表述与枚举数量不符，或枚举值在状态机/规则中没有语义定义。",
+        "同步基数与枚举清单，并为每个业务枚举值补状态机或规则语义。",
+    ),
+    "PRD-NO-FRONTMATTER": (
+        "输入不是带 YAML frontmatter 的 Markdown，机器可校验性已经丢失。",
+        "先在 Markdown + frontmatter 形态完成基线，再导出 docx/PDF 分发副本。",
+    ),
+    "HANDOFF-BINDING-TERM-MISSING": (
+        "PRD 声明的绑定词没有同时出现在 PRD 正文和原型可见文本中，跨端用词不一致。",
+        "让 finding.ref 指示的绑定词原样出现在 PRD 正文和原型可见文案中，或在评审后收窄 binding_terms 声明。",
+    ),
+    "PRD-CONFIRMED-OPEN-UNKNOWN-CONFLICT": (
+        "同一主题同时登记为已确认决策和未关闭未知项，基线语义自相矛盾。",
+        "二选一：关闭对应 UNK-* 并同步 open_p0_unknown_ids，或撤回该决策条目并重新登记为开放未知项。",
+    ),
+    "PRD-UNKNOWN-METADATA-DRIFT": (
+        "同一未知项在机器 frontmatter 与人类正文中的优先级、状态或阻断阶段不一致。",
+        "以责任人最新确认结果为准，同步 unknowns、open_p0_unknown_ids 与正文未知项表后重跑门禁。",
+    ),
+    "HANDOFF-AESTHETIC-UNDECIDED": (
+        "L3/L4 交接没有声明视觉权威与视觉锁，跨页面风格可能漂移。",
+        "存量小迭代记录 visual_authority=existing；绿地记录 greenfield_default；品牌化方案可引用 DEC-AESTHETIC-*，并提供 design_lock_ref。",
+    ),
+    "HANDOFF-STEP-NOT-IN-PRD": (
+        "implementation_step_refs 引用了 PRD 中不存在的 STEP-*，交接包无法回到权威基线。",
+        "删除幽灵引用或在 PRD 中补齐经评审的 STEP-* 实施卡，再同步 manifest 与工作包。",
+    ),
+    "HANDOFF-PACKET-STEP-MISSING": (
+        "manifest 声明了 STEP-*，但工作包正文没有该步骤，Coding Agent 无法取得实施语义。",
+        "在对应 packet 正文显式引用 STEP-* 并保留其入口、处理、守卫、结果、恢复和验收语义。",
+    ),
+    "HANDOFF-STEP-INCOMPLETE": (
+        "PRD 的实施步骤卡缺少可独立实现和验收的核心语义。",
+        "按 finding.message 补缺失字段；确实无事件、无状态变化或无需恢复时也要显式写“无”及责任边界。",
+    ),
+    "HANDOFF-STEP-CONTRACT-MISSING": (
+        "交接状态已声明开发就绪，但 packet 没有 implementation_step_refs。",
+        "为每个开发就绪 packet 列出其实现的 STEP-*；若尚未形成完整实施卡，降回 review_ready。",
+    ),
+    "HANDOFF-PRD-STEP-NOT-PACKETED": (
+        "PRD 已定义实施步骤，但开发就绪交接包没有覆盖全部步骤。",
+        "把 finding.ref 对应 STEP-* 分配到一个明确 owner 的 packet，或经评审从本次范围移除并重建基线。",
+    ),
+    "STAGE0-DISPOSITION-MISSING": (
+        "Stage 0 台账的页面类条目缺少 disposition，存量页面处置方式未定。",
+        "为该条目补 disposition：adopt_page / inherit_layout / rebuild_interaction / reuse_component / discard。",
     ),
     "STAGE0-LEGACY-INVENTORY": (
         "Stage 0 台账仍是旧版按 roles/views/actions 等分栏保存的结构，缺少当前逐项审计合同。",
@@ -188,6 +314,50 @@ FINDING_GUIDANCE: dict[str, tuple[str, str]] = {
         "原型动作没有可观察的分发路径。",
         "将 data-action 绑定到唯一处理器，并产生页面、弹窗、状态或数据结果。",
     ),
+    "PROTO-ORPHAN-HANDLER": (
+        "动作注册表保留了没有源模板入口的处理器，存量交互可能在迭代中丢失。",
+        "恢复对应 data-action 控件、删除确认无用的死代码，或将批准移除记录到原型锁；不要只让处理器留在脚本中。",
+    ),
+    "PROTO-UNREACHABLE-VIEW": (
+        "页面、弹窗或抽屉被显式隐藏，但没有静态可发现的入口或路由。",
+        "为该表面增加稳定 data-action/data-view 路由并验证可达性，或经批准删除该死页面。",
+    ),
+    "PROTO-REVIEW-UIACTION-NAMESPACE": (
+        "评审开关等纯界面动作错误占用了业务 ACT-* 命名空间。",
+        "将其改为 UIACT-REVIEW-*，并保证切换前后业务动作、状态、字段、指标和表单值不变。",
+    ),
+    "PROTO-METRIC-ID-SEMANTIC-COLLISION": (
+        "同一个 METRIC-* 被多个业务含义复用，公式、来源和验收无法一一追溯。",
+        "不同业务含义分配不同 METRIC-*；同一指标重复展示时使用相同 data-metric-label 和同一口径定义。",
+    ),
+    "PROTO-METRIC-LABEL-MISSING": (
+        "重复指标卡没有足够的语义标签，静态门禁无法证明它们是否为同一指标。",
+        "为重复 data-metric 增加稳定 data-metric-label，或为不同含义分配不同 METRIC-*。",
+    ),
+    "PROTO-DYNAMIC-METRIC-ID-REUSE": (
+        "动态指标工厂用一个固定 METRIC-* 承载多个运行时标签，运行后会把不同口径压成一个 ID。",
+        "让工厂接收并输出每个指标自己的稳定 METRIC-*，或改为按已定义指标配置渲染。",
+    ),
+    "PROTO-UNKNOWN-CONTRACT-INCOMPLETE": (
+        "原型只显示 UNK-* 或“待确认”，却没有把未知项绑定到可关闭的责任合同。",
+        "为每个 data-unk/注册表项补 priority、owner、blocks_stage、affected_refs 和 fallback；评审前按依赖批量向责任人澄清。",
+    ),
+    "PROTO-REVIEW-LINKAGE-MISSING": (
+        "评审编号与右侧说明卡没有稳定双向关联。",
+        "两侧使用相同 data-review-id，或在目标卡上声明同值 data-review-target，并补浏览器双向定位证据。",
+    ),
+    "PROTO-REVIEW-SELECTION-NOT-SYNCED": (
+        "评审编号点击后没有可验证的左右同步选中状态。",
+        "处理器读取 data-review-id，同时更新两侧 aria-current/选中样式，并用 ARUN-* 证明点击、滚动和框选。",
+    ),
+    "PROTO-REVIEW-LENS-COSMETIC": (
+        "共识/前端/后端/测试镜头只有按钮外观变化，没有角色所需内容差异。",
+        "用 data-review-role 标记控件、data-review-lens 标记对应内容；镜头只改变密度，不得改变事实。",
+    ),
+    "PROTO-DYNAMIC-CLASS-POLLUTION": (
+        "业务描述被动态拼进 CSS class，可能造成样式失效、选择器污染或未转义内容进入 DOM。",
+        "class 只保留固定语义 token；把说明写入转义后的 textContent/单元格，并核对表头与数据列顺序。",
+    ),
     "PROTO-JS-SYNTAX": (
         "静态检查发现 JavaScript 语法错误。",
         "修复对应脚本块并检查文档尾部完整性。",
@@ -207,6 +377,72 @@ PREFIX_GUIDANCE: tuple[tuple[str, str, str], ...] = (
     ("REQ-", "需求生命周期记录不完整或不一致。", "修复对应字段并保留稳定 ID、来源、决策和审计历史。"),
 )
 
+EN_FINDING_GUIDANCE: dict[str, tuple[str, str]] = {
+    "GATE-MISSING-INPUT": ("The selected gate is missing a required input.", "Provide the input named by the finding and rerun the same command."),
+    "GATE-NOT-FILE": ("An input path is not a readable file.", "Correct the path, confirm the file exists, and rerun the same command."),
+    "REQ-PARSE": ("The requirement register is not readable UTF-8 YAML.", "Repair YAML syntax or use the PRD profile for a Markdown artifact."),
+    "REQ-SCHEMA": ("The requirement register violates its JSON Schema.", "Use finding.ref to repair the field against the requirement-register template."),
+    "INTAKE-SCHEMA": ("The requirement intake card violates its contract.", "Use finding.ref and the requirement-intake template to repair the missing or invalid field."),
+    "PRD-DANGLING-REF": ("A stable ID is referenced but has no definition site in the PRD.", "Define the ID at an authoritative location or correct the reference."),
+    "PRD-ID-PREFIX-COLLISION": ("A truncated ID rule maps multiple enum values to the same ID.", "Use the full code or another collision-free stable-ID rule."),
+    "PRD-STATE-COUNT-MISMATCH": ("A stated state count differs from the referenced state machine.", "Align the claim and the state-machine rows."),
+    "PRD-GUARD-CONTRADICTION": ("An action's allow set conflicts with its guard reject set.", "Align the allowed, rejected and illegal transition sets."),
+    "PRD-ENUM-NOT-DEFINED": ("A cardinality or enum contract is incomplete or inconsistent.", "Align counts and define every business enum in a rule or state machine."),
+    "PRD-DUPLICATE-STABLE-ID-DEFINITION": ("A stable ID is defined more than once across authoritative PRD tables.", "Keep one definition; turn other occurrences into references or assign a new stable ID."),
+    "PRD-NO-FRONTMATTER": ("The input is not Markdown with YAML front matter.", "Baseline in Markdown + front matter before exporting distribution copies."),
+    "PRD-UNKNOWN-METADATA-DRIFT": ("The same unknown conflicts across machine and human projections.", "Synchronize priority, status and blocking stage in front matter, the open P0 index and the human unknown table."),
+    "HANDOFF-STEP-NOT-IN-PRD": ("A packet references a STEP-* that is absent from the PRD baseline.", "Remove the ghost reference or baseline the complete STEP-* card before handoff."),
+    "HANDOFF-PACKET-STEP-MISSING": ("The manifest declares a STEP-* that is absent from the packet body.", "Reference the STEP-* in the packet and preserve its implementation semantics."),
+    "HANDOFF-STEP-INCOMPLETE": ("A PRD implementation step lacks a required implementation facet.", "Complete the facet named in the finding; explicitly state none when it is genuinely not applicable."),
+    "HANDOFF-STEP-CONTRACT-MISSING": ("A ready-for-implementation packet has no implementation_step_refs.", "List every implemented STEP-* or return the packet to review_ready."),
+    "HANDOFF-PRD-STEP-NOT-PACKETED": ("A PRD STEP-* is not covered by any ready implementation packet.", "Assign it to an owned packet or remove it from scope through an approved baseline change."),
+    "PRD-STRUCTURE": ("The document does not contain a verifiable unified-PRD structure.", "Add real business content using the unified PRD template; do not copy empty headings."),
+    "PRD-TOO-THIN": ("The artifact lacks details required by its delivery level.", "Complete the applicable business, interaction, exception and acceptance contracts without inventing values."),
+    "PRD-LANGUAGE-DRIFT": ("The document structure does not match its declared language.", "Align headings, body text, tables, questions, diagrams and tests with document_language; keep IDs and machine names unchanged."),
+    "PRD-MODULE-SLICE-INCOMPLETE": ("A module slice is not locally complete for implementation and testing.", "Complete goals, flows, UI/data, rules, states, metrics, recovery, acceptance and unknowns in the same module section."),
+    "PROTO-NO-PAGE-ANCHOR": ("The prototype has no stable page anchor.", "Add a unique data-testid=\"page-VIEW-*\" to every page root."),
+    "PROTO-NO-REGION-ANCHOR": ("A complex prototype has no stable region anchors.", "Add unique data-testid=\"region-REG-*\" anchors to its key business regions."),
+    "PROTO-IFRAME-UNSAFE-SCHEME": ("The iframe uses an executable or unauditable URL scheme.", "Remove it; external integrations must use HTTPS and an explicit INT-* contract."),
+    "PROTO-INSECURE-REMOTE-IFRAME": ("The remote iframe uses plaintext HTTP.", "Use HTTPS or replace the embed with an explicit external navigation/fallback path."),
+    "PROTO-REMOTE-IFRAME-UNDECLARED": ("The remote iframe lacks ownership, fallback or browser-security attributes.", "Add data-integration-ref, data-fallback, title, sandbox and referrerpolicy."),
+    "PROTO-REMOTE-IFRAME-UNVERIFIED": ("The remote iframe is declared but its runtime content and availability remain unverified.", "Execute a browser ARUN-* in the target network and role session, including fallback evidence."),
+    "PROTO-UNHANDLED-ACTION": ("A prototype action has no observable dispatch path.", "Bind the data-action to one handler and produce a visible page, modal, state or data result."),
+    "PROTO-ORPHAN-HANDLER": ("The action registry contains a handler with no source control.", "Restore its data-action control, remove confirmed dead code, or record the approved removal."),
+    "PROTO-UNREACHABLE-VIEW": ("A hidden page, modal or drawer has no discoverable route.", "Add a stable data-action/data-view route or remove the approved dead surface."),
+    "PROTO-REVIEW-UIACTION-NAMESPACE": ("A review-only UI action uses the business ACT-* namespace.", "Rename it to UIACT-REVIEW-* without changing business state or data."),
+    "PROTO-METRIC-ID-SEMANTIC-COLLISION": ("One METRIC-* ID is reused for multiple business meanings.", "Assign unique IDs to distinct metrics; repeated displays of one metric must share one semantic label and caliber."),
+    "PROTO-METRIC-LABEL-MISSING": ("A repeated metric ID has no stable semantic label.", "Add data-metric-label or split distinct meanings into separate METRIC-* IDs."),
+    "PROTO-DYNAMIC-METRIC-ID-REUSE": ("A dynamic metric factory reuses one fixed METRIC-* for multiple runtime labels.", "Pass a stable metric ID per defined metric or render from a metric-definition map."),
+    "PROTO-UNKNOWN-CONTRACT-INCOMPLETE": ("A prototype labels an UNK-* without an owned and closable lifecycle contract.", "Add priority, owner, blocks_stage, affected_refs and fallback to every data-unk or registry entry; clarify material unknowns before review."),
+    "PROTO-REVIEW-LINKAGE-MISSING": ("Review markers and note cards have no stable bidirectional link.", "Share data-review-id on both sides or use a matching data-review-target, then execute a browser ARUN-* proof."),
+    "PROTO-REVIEW-SELECTION-NOT-SYNCED": ("Review marker clicks do not expose a synchronized selection state.", "Read data-review-id, update aria-current on both sides, and prove click, scroll and highlight behavior in a browser."),
+    "PROTO-REVIEW-LENS-COSMETIC": ("Role lenses change controls but have no role-specific content projection.", "Bind data-review-role controls to matching data-review-lens content without changing shared facts."),
+    "PROTO-DYNAMIC-CLASS-POLLUTION": ("Business text is interpolated into a CSS class.", "Keep class names as fixed semantic tokens and write escaped descriptions through textContent."),
+    "PROTO-JS-SYNTAX": ("The prototype contains invalid JavaScript.", "Repair the referenced script and verify closing script/body/html tags."),
+}
+EN_PREFIX_GUIDANCE: tuple[tuple[str, str, str], ...] = (
+    ("CUSTOM-", "A project-local validation rule is invalid or unmet.", "Repair the declarative YAML rule; local Python validators are not executed."),
+    ("CUST-", "A project-local requirement rule is unmet.", "Repair the referenced artifact contract or have the rule owner revise the local rule."),
+    ("AUTH-", "Requirement authority or write ownership is unresolved.", "Create a scoped DEC-CONFLICT-* owned by the accountable decision maker."),
+    ("HANDOFF-", "The handoff package is inconsistent with the requirement baseline.", "Align baseline hashes, owners, stable IDs and acceptance references without inventing rules."),
+    ("AI-", "An AI capability lacks an applicable runtime governance contract.", "Add input/output, version, permissions, human gate, fallback, evaluation and observability references."),
+    ("ACCEPTANCE-", "The acceptance record is invalid or contradicts its conclusion.", "Repair execution context, actual results, evidence, defects and sign-off against the schema."),
+    ("PROTO-CSS-", "CSS pollution may hide or break interactive state.", "Scope visibility styles to their component and data-state; remove global !important pollution."),
+    ("PROTO-", "The prototype lacks a testable interaction or state contract.", "Repair the referenced element using stable data-testid/data-action/data-state/data-field and a visible result."),
+    ("PRD-", "The PRD lacks a requirement contract needed at this stage.", "Complete confirmed rules, stable IDs, exceptions and acceptance at the referenced location; do not invent values."),
+    ("REQ-", "The requirement lifecycle record is incomplete or inconsistent.", "Repair the referenced field while preserving stable IDs, sources, decisions and audit history."),
+)
+
+
+def finding_code_match(code: str) -> str:
+    """Return exact/family/unknown without pretending an unknown code is known."""
+    normalized = code.strip().upper()
+    if normalized in FINDING_GUIDANCE or normalized in EN_FINDING_GUIDANCE:
+        return "exact"
+    if any(normalized.startswith(prefix) for prefix, _cause, _fix in PREFIX_GUIDANCE):
+        return "family"
+    return "unknown"
+
 
 def guidance_for(code: str) -> tuple[str, str]:
     """Return bounded, deterministic repair guidance for one finding code."""
@@ -221,7 +457,31 @@ def guidance_for(code: str) -> tuple[str, str]:
     )
 
 
+def english_guidance_for(code: str) -> tuple[str, str]:
+    if code in EN_FINDING_GUIDANCE:
+        return EN_FINDING_GUIDANCE[code]
+    for prefix, cause, fix in EN_PREFIX_GUIDANCE:
+        if code.startswith(prefix):
+            return cause, fix
+    return (
+        "The artifact violates a deterministic delivery contract.",
+        "Use code, artifact and ref to repair only the bounded issue, then rerun the same gate command.",
+    )
+
+
 REPAIR_EXAMPLES: tuple[tuple[str, str], ...] = (
+    ("INTAKE-SCHEMA", "cp references/templates/requirement-intake-template.yaml intake.yaml，补齐 artifact: requirement_intake、stage: intake、source_refs: [SRC-*]、value_evidence 等必填字段。"),
+    ("PROTO-DEMO-SCAFFOLDING-VISIBLE", "删除 <div>验收场景</div> 这类演示文案块，改为真实业务空态文案，如 <p>暂无待办事项</p>。"),
+    ("PROTO-NESTED-PRODUCT-IFRAME", "移除 <iframe src=\"child.html\">，把 child.html 的页面迁移为当前文件内的 <section data-testid=\"page-VIEW-CHILD-001\">。"),
+    ("PROTO-REMOTE-IFRAME-UNDECLARED", "<iframe src=\"https://partner.example/app\" data-integration-ref=\"INT-PARTNER-001\" data-fallback=\"外部系统不可用时显示重试与跳转\" title=\"合作方系统\" sandbox referrerpolicy=\"no-referrer\"></iframe>"),
+    ("PRD-STATE-SEMANTIC-POLLUTION", "| 待处理 | 复检 | 复检中 | —— 下一状态列写业务状态名；API-RISK-RECHECK 移入“动作/接口”列。"),
+    ("PRD-DUPLICATE-STABLE-ID-DEFINITION", "在权威定义表中只保留一行 VIEW-RISK-LIST-001；其他章节写“参见 VIEW-RISK-LIST-001”，不要再次填写一行定义。"),
+    ("HANDOFF-BINDING-TERM-MISSING", "PRD 正文写“上传道路运输经营许可证后进入审核”，原型对应区域可见文案同样写“道路运输经营许可证”。"),
+    ("PRD-CONFIRMED-OPEN-UNKNOWN-CONFLICT", "关闭冲突项：unknowns 中该 key 的 status 改为 closed 并从 open_p0_unknown_ids 移除；或删除 decisions 中同 key 条目改登 UNK-*。"),
+    ("HANDOFF-AESTHETIC-UNDECIDED", "存量小迭代写 visual_authority: existing 与 design_lock_ref: prototype.html#design-lock；绿地可写 greenfield_default；品牌化方案再引用 DEC-AESTHETIC-*。"),
+    ("HANDOFF-STEP-", "STEP-REPORT-07：入口与责任、输入与权威源、处理与口径、守卫与状态、双结果、事件与责任交接、失败与恢复、追溯与验收八项逐一写明；不适用项显式写“无”。"),
+    ("HANDOFF-PRD-STEP-NOT-PACKETED", "在 packet implementation_step_refs 中加入 STEP-REPORT-07，并在 packet 正文引用它；或通过 CHG-* 从本次基线移除。"),
+    ("STAGE0-DISPOSITION-MISSING", "为 type: view 的条目补 disposition: inherit_layout（或 adopt_page/rebuild_interaction/reuse_component/discard）。"),
     ("PRD-LANGUAGE", "document_language: zh-CN；将英文结构标题改为中文，保留 REQ/API/字段名原样。"),
     ("PRD-MODULE-SLICE", "### 7.1 授权管理 MOD-AUTH-001；就近写目标、路径、VIEW/FLD/ACT、RULE/STM、METRIC、恢复、AC 与 UNK。"),
     ("PRD-DATA-SUBMISSION", "activated_facets: [data_submission]；补来源映射、校验、提交状态、重试/幂等、审计、口径/时效和对账。"),
@@ -232,6 +492,10 @@ REPAIR_EXAMPLES: tuple[tuple[str, str], ...] = (
     ("PROTO-BROWSER-EVIDENCE", "python scripts/ai_delivery_spec_cli.py gate --profile prototype --prototype app.html --level L3 --acceptance-run acceptance/ARUN-PROTOTYPE-001.yaml"),
     ("PROTO-DYNAMIC-ANCHOR", "在模板源码直接写 data-action=\"ACT-COURSE-SAVE\"，不要用 'data-' + 'action' 拼接。"),
     ("PROTO-UNHANDLED-ACTION", "actionRegistry['ACT-COURSE-SAVE'] = saveCourse，并让处理器更新 data-state 或页面数据。"),
+    ("PROTO-ORPHAN-HANDLER", "actionRegistry['ACT-COURSE-SAVE'] 存在时，源模板也应有 data-action=\"ACT-COURSE-SAVE\"；若功能已批准删除，则同时删除处理器并记录 approved_removals。"),
+    ("PROTO-UNREACHABLE-VIEW", "为隐藏抽屉增加 data-testid=\"drawer-VIEW-DETAIL\"，并由 data-action=\"ACT-DETAIL-OPEN\" 的处理器显式打开。"),
+    ("PROTO-REVIEW-UIACTION-NAMESPACE", "把 data-action=\"ACT-REVIEW-TOGGLE\" 改为 data-action=\"UIACT-REVIEW-TOGGLE\"。"),
+    ("PROTO-DYNAMIC-CLASS-POLLUTION", "使用 class=\"sev sev-high\"；通过 cell.textContent = description 写入已转义说明，不把 description 拼入 class。"),
     ("STAGE0-", "为反推项使用 INV-*，保留 source_ref/location；推断项绑定 review_batch_ref，由责任人批量确认。"),
     ("GATE-", "按 finding.ref 修正输入或配置，然后复制 RETRY 命令重跑。"),
 )
@@ -242,6 +506,64 @@ def repair_example_for(code: str) -> str:
         if code.startswith(prefix):
             return example
     return "按 finding.ref 只修复该项，保留稳定 ID 与来源证据，再重跑门禁。"
+
+
+def english_repair_example_for(code: str) -> str:
+    examples = (
+        ("PRD-LANGUAGE", "Set document_language: en-US, translate human-facing headings and tables, and keep REQ/API/field names unchanged."),
+        ("PRD-DUPLICATE-STABLE-ID-DEFINITION", "Keep one VIEW-RISK-LIST-001 definition row; elsewhere write 'See VIEW-RISK-LIST-001' instead of defining it again."),
+        ("PRD-MODULE-SLICE", "Complete MOD-AUTH-001 with goal, paths, VIEW/FLD/ACT, RULE/STATE, METRIC, recovery, AC and UNK references."),
+        ("PROTO-NO-REGION-ANCHOR", '<section data-testid="region-REG-COURSE-FILTERS">...</section>'),
+        ("PROTO-UNHANDLED-ACTION", "Bind actionRegistry['ACT-COURSE-SAVE'] = saveCourse and update a visible data-state or page value."),
+        ("PROTO-ORPHAN-HANDLER", 'If ACT-COURSE-SAVE remains registered, keep a source control with data-action="ACT-COURSE-SAVE" or record its approved removal.'),
+        ("PROTO-UNREACHABLE-VIEW", 'Open data-testid="drawer-VIEW-DETAIL" from data-action="ACT-DETAIL-OPEN", or remove the approved dead drawer.'),
+        ("PROTO-REVIEW-UIACTION-NAMESPACE", 'Rename data-action="ACT-REVIEW-TOGGLE" to data-action="UIACT-REVIEW-TOGGLE".'),
+        ("PROTO-DYNAMIC-CLASS-POLLUTION", 'Use class="severity severity-high" and assign the description through cell.textContent.'),
+        ("HANDOFF-STEP-", "Complete all eight STEP-* facets; explicitly state none when a facet is not applicable, then align the manifest and packet body."),
+        ("HANDOFF-PRD-STEP-NOT-PACKETED", "Assign the STEP-* to one owned packet or remove it through an approved baseline change."),
+        ("GATE-", "Repair the input or option named by finding.ref, then copy the RETRY command."),
+    )
+    for prefix, example in examples:
+        if code.startswith(prefix):
+            return example
+    return "Repair only finding.ref, preserve stable IDs and source evidence, and rerun the gate."
+
+
+def _contains_cjk(value: str) -> bool:
+    return bool(re.search(r"[\u4e00-\u9fff]", value))
+
+
+def _english_message(item: Finding) -> str:
+    if not _contains_cjk(item.message):
+        return item.message
+    if item.message.startswith("存量基线已存在"):
+        return f"Inherited baseline issue {item.code}; this run did not introduce a new regression."
+    location = item.ref or Path(item.artifact).name
+    return f"{item.code} contract failed at {location}."
+
+
+def localized_finding(item: Finding, language: str) -> dict[str, Any]:
+    zh_message = item.message if _contains_cjk(item.message) else f"{item.cause} 技术明细：{item.message}"
+    en_cause, en_fix = english_guidance_for(item.code)
+    en_message = _english_message(item)
+    en_example = english_repair_example_for(item.code)
+    english = language.casefold().startswith("en")
+    record = asdict(item)
+    record.update({
+        "message": en_message if english else zh_message,
+        "cause": en_cause if english else item.cause,
+        "how_to_fix": en_fix if english else item.how_to_fix,
+        "repair_example": en_example if english else item.repair_example,
+        "message_zh": zh_message,
+        "cause_zh": item.cause,
+        "fix_zh": item.how_to_fix,
+        "repair_example_zh": item.repair_example,
+        "message_en": en_message,
+        "cause_en": en_cause,
+        "fix_en": en_fix,
+        "repair_example_en": en_example,
+    })
+    return record
 
 
 def markdown_headings(raw: str) -> list[tuple[int, str, int]]:
@@ -314,13 +636,15 @@ def _module_slices(raw: str) -> dict[str, str]:
     return slices
 
 
-class Gate:
+class Gate(PRDChecks, PrototypeChecks, HandoffChecks):
     def __init__(self) -> None:
         self._cache: dict[Path, str] = {}
         self.read_counts: Counter[str] = Counter()
         self.findings: list[Finding] = []
         self.metrics: dict[str, Any] = {}
         self.prototype_acceptance_refs: set[str] = set()
+        self.prototype_baseline_signatures: Counter[tuple[str, str, str]] = Counter()
+        self.prototype_inherited_findings = 0
 
     def read(self, path: Path) -> str:
         key = path.resolve()
@@ -341,6 +665,13 @@ class Gate:
         related_refs: tuple[str, ...] = (),
         binding_source_refs: tuple[str, ...] = (),
     ) -> None:
+        signature = (code, ref, message)
+        if severity == "BLOCK" and code.startswith("PROTO-") and self.prototype_baseline_signatures[signature] > 0:
+            self.prototype_baseline_signatures[signature] -= 1
+            severity = "GAP"
+            message = f"存量基线已存在，本次未新增：{message}"
+            self.prototype_inherited_findings += 1
+            self.metrics["prototype_inherited_findings"] = self.prototype_inherited_findings
         cause, how_to_fix = guidance_for(code)
         self.findings.append(Finding(
             severity=severity,
@@ -367,55 +698,13 @@ class Gate:
             return {}
         return loaded if isinstance(loaded, dict) else {}
 
+    def _check_semantics(self, path: Path, raw: str) -> None:
+        for item in run_semantic_checks(raw):
+            self.add(item.severity, item.code, path, item.message, item.ref)
+
     @staticmethod
     def _tag_source(raw: str) -> str:
         return "\n".join(re.findall(r"<[A-Za-z][^>]*>", raw, re.S))
-
-    def _prototype_dependency(self, prototype: Path, uri: str, kind: str) -> Path | None:
-        """Resolve a local prototype dependency without leaving the prototype directory."""
-        parsed = urlsplit(uri)
-        if parsed.scheme in {"http", "https"} and parsed.netloc:
-            self.add(
-                "GAP", "PROTO-REMOTE-DEPENDENCY", prototype,
-                f"远程 {kind} 依赖不在本地静态检查范围内", uri,
-            )
-            return None
-        if parsed.scheme or parsed.netloc:
-            self.add("BLOCK", "PROTO-DEPENDENCY-URI", prototype, f"不支持的 {kind} 依赖 URI", uri)
-            return None
-        relative = Path(unquote(parsed.path))
-        if relative.is_absolute():
-            self.add("BLOCK", "PROTO-DEPENDENCY-ABSOLUTE", prototype, f"{kind} 依赖必须使用原型目录内的相对路径", uri)
-            return None
-        root = prototype.parent.resolve()
-        candidate = (root / relative).resolve()
-        try:
-            candidate.relative_to(root)
-        except ValueError:
-            self.add("BLOCK", "PROTO-DEPENDENCY-ESCAPE", prototype, f"{kind} 依赖越过原型根目录", uri)
-            return None
-        if not candidate.is_file():
-            self.add("BLOCK", "PROTO-DEPENDENCY-MISSING", prototype, f"本地 {kind} 依赖文件不存在", uri)
-            return None
-        return candidate
-
-    @staticmethod
-    def _page_contracts(raw: str) -> dict[str, tuple[dict[str, str], str]]:
-        markers = list(re.finditer(
-            r"<!--\s*PAGE-CONTRACT:\s*(VIEW-[A-Z0-9-]+)\s*(.*?)-->", raw, re.I | re.S
-        ))
-        contracts: dict[str, tuple[dict[str, str], str]] = {}
-        for index, marker in enumerate(markers):
-            end = markers[index + 1].start() if index + 1 < len(markers) else len(raw)
-            attrs: dict[str, str] = {}
-            tail = marker.group(2).strip().lstrip(";").strip()
-            for part in tail.split(";") if tail else []:
-                if "=" not in part:
-                    continue
-                key, value = part.split("=", 1)
-                attrs[key.strip().lower()] = value.strip()
-            contracts[marker.group(1).upper()] = (attrs, raw[marker.end():end])
-        return contracts
 
     @staticmethod
     def _yaml_document(path: Path, raw: str) -> tuple[dict[str, Any] | None, str | None]:
@@ -437,6 +726,20 @@ class Gate:
             document = yaml.safe_load(raw)
         except (OSError, UnicodeError, yaml.YAMLError) as exc:
             self.add("BLOCK", "REQ-PARSE", path, f"requirement register cannot be read as YAML: {exc}")
+            return
+        if not (isinstance(document, dict) and "requirements" in document):
+            # Single-requirement intake cards route to the intake contract instead of
+            # being rejected by the register schema's unrelated field list.
+            schema = json.loads(INTAKE_SCHEMA.read_text(encoding="utf-8"))
+            errors = sorted(
+                Draft202012Validator(schema, format_checker=FormatChecker()).iter_errors(document),
+                key=lambda item: tuple(str(part) for part in item.path),
+            )
+            for error in errors:
+                location = ".".join(str(part) for part in error.path) or "<root>"
+                self.add("BLOCK", "INTAKE-SCHEMA", path, error.message, location)
+            if not errors and isinstance(document, dict):
+                self.metrics["requirements"] = 1
             return
         schema = json.loads(REGISTER_SCHEMA.read_text(encoding="utf-8"))
         errors = sorted(
@@ -484,1538 +787,78 @@ class Gate:
                 self.add("BLOCK", "REQ-OPEN-EDGE", path, "dependency edge is not requirement-closed", f"{source}->{target}")
         self.metrics["requirements"] = len(requirements)
 
-    def _check_authority(self, path: Path, frontmatter: dict[str, Any]) -> None:
-        governance = frontmatter.get("governance") or {}
-        if not isinstance(governance, dict):
-            self.add("BLOCK", "AUTH-BAD-GOVERNANCE", path, "governance 必须是对象", "governance")
-            return
-        canonical = governance.get("canonical_authoring_surface")
-        legacy = frontmatter.get("authority_mode")
-        if legacy and canonical and str(legacy) != str(canonical):
-            self.add(
-                "BLOCK", "AUTH-LEGACY-CONFLICT", path,
-                "authority_mode 与 canonical_authoring_surface 冲突",
-                "governance.canonical_authoring_surface",
-                affected_consumers=("product", "architect", "coding_agent"),
-            )
-        binding_sources = governance.get("binding_sources") or []
-        if not isinstance(binding_sources, list):
-            self.add("BLOCK", "AUTH-BAD-BINDING-SOURCES", path, "binding_sources 必须是数组", "governance.binding_sources")
-            binding_sources = []
-        canonical_sources = list(frontmatter.get("canonical_candidates") or [])
-        canonical_sources.extend(
-            item for item in binding_sources
-            if isinstance(item, dict) and item.get("canonical") is True
-        )
-        conflicts = governance.get("source_conflicts") or frontmatter.get("source_conflicts") or []
-        unresolved = [
-            item for item in conflicts
-            if isinstance(item, dict) and str(item.get("status", "open")).lower() not in {"resolved", "closed", "superseded"}
-        ]
-        conflict_decisions = {
-            str(item.get("decision_ref", ""))
-            for item in conflicts if isinstance(item, dict) and item.get("decision_ref")
-        }
-        if len(canonical_sources) > 1 and not any(ref.startswith("DEC-CONFLICT-") for ref in conflict_decisions):
-            refs = tuple(
-                str(item.get("source_ref") if isinstance(item, dict) else item)
-                for item in canonical_sources
-            )
-            self.add(
-                "BLOCK", "AUTH-MULTIPLE-CANONICAL-SOURCES", path,
-                "同一基线存在多个 canonical 候选，且没有 DEC-CONFLICT-* 裁决",
-                ", ".join(refs),
-                affected_consumers=("product", "architect", "qa", "coding_agent"),
-                binding_source_refs=refs,
-            )
-        for item in unresolved:
-            conflict_id = str(item.get("id", "DEC-CONFLICT-MISSING"))
-            refs = tuple(str(ref) for ref in item.get("source_refs", []) or [])
-            self.add(
-                "BLOCK", "AUTH-UNRESOLVED-SOURCE-CONFLICT", path,
-                "来源冲突尚未由解释责任人裁决",
-                conflict_id,
-                affected_consumers=("product", "architect", "compliance"),
-                related_refs=tuple(str(ref) for ref in item.get("affected_refs", []) or []),
-                binding_source_refs=refs,
-            )
-        if canonical == "product_truth":
-            if not str(governance.get("decision_ref", "")).startswith("DEC-"):
-                self.add("BLOCK", "AUTH-TRUTH-NO-DECISION", path, "Product Truth 写入面缺少 DEC-*", "governance.decision_ref")
-            if not governance.get("projection_policy"):
-                self.add("BLOCK", "AUTH-TRUTH-NO-PROJECTION-POLICY", path, "Product Truth 写入面缺少投影同步规则", "governance.projection_policy")
-
-    @staticmethod
-    def _scope_intersects(affected: list[str], active: tuple[str, ...]) -> bool:
-        if not active or not affected:
-            return True
-        for left in affected:
-            prefix = str(left).rstrip("*")
-            for right in active:
-                right_prefix = str(right).rstrip("*")
-                if str(right).startswith(prefix) or str(left).startswith(right_prefix):
-                    return True
-        return False
-
-    def _check_unknowns(
-        self,
-        path: Path,
-        raw: str,
-        frontmatter: dict[str, Any],
-        *,
-        stage: str,
-        scope_refs: tuple[str, ...],
-    ) -> None:
-        open_ids_raw = frontmatter.get("open_p0_unknown_ids", [])
-        if not isinstance(open_ids_raw, list):
-            self.add(
-                "BLOCK", "PRD-BAD-P0-DISPOSITION", path,
-                "open_p0_unknown_ids 必须是数组；字符串或自由文本会导致 P0 状态不可判定",
-                "frontmatter.open_p0_unknown_ids",
-            )
-            return
-        open_ids = {str(item).upper() for item in open_ids_raw}
-        invalid_open_ids = sorted(item for item in open_ids if not re.fullmatch(r"UNK-[A-Z0-9-]+", item, re.I))
-        if invalid_open_ids:
-            self.add(
-                "BLOCK", "PRD-P0-UNKNOWN-ID-NOT-UNK", path,
-                "open_p0_unknown_ids 只能登记结构化 UNK-*；REV/DEC/GAP 不能代替阻塞未知项",
-                ", ".join(invalid_open_ids),
-                affected_consumers=("product", "qa", "coding_agent"),
-                related_refs=tuple(invalid_open_ids),
-            )
-        records: dict[str, dict[str, Any]] = {}
-        for item in frontmatter.get("unknowns", []) or []:
-            if isinstance(item, dict) and re.fullmatch(r"UNK-[A-Z0-9-]+", str(item.get("id", "")), re.I):
-                records[str(item["id"]).upper()] = item
-        # Support a compact Markdown unknown table without treating arbitrary prose as data.
-        for line in raw.splitlines():
-            if not line.lstrip().startswith("|") or not re.search(r"\bUNK-[A-Z0-9-]+\b", line, re.I):
-                continue
-            unknown_id = re.search(r"\bUNK-[A-Z0-9-]+\b", line, re.I).group(0).upper()
-            if unknown_id in records:
-                continue
-            lowered = line.lower()
-            priority = "P0" if re.search(r"\bP0\b", line, re.I) else "P1"
-            status = "blocked" if any(term in lowered for term in ("blocked", "阻塞", "open", "未关闭")) else "closed"
-            stage_match = next((name for name in STAGE_ORDER if name in lowered), None)
-            affected_refs = re.findall(r"\b(?:REQ|FLOW|VIEW|STATE|RULE|API|AC)-[A-Z0-9-]+\b", line, re.I)
-            records[unknown_id] = {
-                "id": unknown_id, "priority": priority, "status": status,
-                "blocks_stage": stage_match or "baseline", "affected_refs": affected_refs,
-            }
-        record_open = {
-            unknown_id for unknown_id, item in records.items()
-            if str(item.get("priority", "")).upper() == "P0"
-            and str(item.get("status", "open")).lower() in {"open", "blocked", "阻塞中", "未关闭"}
-        }
-        missing_records = sorted(open_ids - set(records))
-        if missing_records:
-            self.add(
-                "BLOCK", "PRD-P0-UNKNOWN-NOT-STRUCTURED", path,
-                "open_p0_unknown_ids 中的条目缺少 unknowns 结构化记录，无法判断责任人、阻断阶段与影响范围",
-                ", ".join(missing_records),
-                affected_consumers=("product", "architect", "qa", "coding_agent"),
-                related_refs=tuple(missing_records),
-            )
-        if record_open != open_ids:
-            self.add(
-                "BLOCK", "PRD-P0-UNKNOWN-INDEX-DRIFT", path,
-                "frontmatter 与结构化未知项表的未关闭 P0 ID 不一致",
-                f"frontmatter={sorted(open_ids)} records={sorted(record_open)}",
-                affected_consumers=("product", "qa", "coding_agent"),
-                related_refs=tuple(sorted(open_ids | record_open)),
-            )
-        current_rank = STAGE_ORDER.get(stage, STAGE_ORDER["baseline"])
-        for unknown_id in sorted(open_ids):
-            item = records.get(unknown_id, {})
-            blocks_stage = item.get("blocks_stage", "baseline")
-            if isinstance(blocks_stage, list):
-                ranks = [STAGE_ORDER.get(str(value), STAGE_ORDER["baseline"]) for value in blocks_stage]
-                block_rank = min(ranks) if ranks else STAGE_ORDER["baseline"]
-            else:
-                block_rank = STAGE_ORDER.get(str(blocks_stage), STAGE_ORDER["baseline"])
-            affected = [str(ref) for ref in item.get("affected_refs", []) or []]
-            if current_rank >= block_rank and self._scope_intersects(affected, scope_refs):
-                self.add(
-                    "P0_UNKNOWN", "PRD-OPEN-P0-UNKNOWN", path,
-                    f"P0 未知项阻断当前 {stage} 阶段",
-                    unknown_id,
-                    affected_consumers=("product", "architect", "qa", "coding_agent"),
-                    related_refs=(unknown_id, *affected),
-                )
-            else:
-                self.add(
-                    "GAP", "PRD-P0-UNKNOWN-NOT-YET-BLOCKING", path,
-                    f"P0 未知项尚未阻断当前 {stage} 阶段，但必须在 {blocks_stage} 前关闭",
-                    unknown_id,
-                    affected_consumers=("product",),
-                    related_refs=(unknown_id, *affected),
-                )
-
-        in_fence = False
-        for line_no, line in enumerate(raw.splitlines(), 1):
-            stripped = line.strip()
-            if stripped.startswith("```") or stripped.startswith("~~~"):
-                in_fence = not in_fence
-                continue
-            if in_fence or re.search(r"\bUNK-[A-Z0-9-]+\b", line, re.I) or "placeholder=" in line.lower():
-                continue
-            marker = re.search(r"\b(?:TBD|TODO|FIXME|STUB)\b|待补充|以后再说|暂未定义", line)
-            if marker:
-                severity = "BLOCK" if re.search(r"\bP0\b", line, re.I) else "GAP"
-                self.add(
-                    severity, "PRD-UNDECLARED-UNKNOWN", path,
-                    f"发现未登记未知项标记：{marker.group(0)}",
-                    f"line {line_no}",
-                    affected_consumers=("product", "qa", "coding_agent"),
-                )
-
-    def _check_triggered_contracts(
-        self, path: Path, raw: str, frontmatter: dict[str, Any], level: str
-    ) -> None:
-        lowered = raw.lower()
-        assurance = str(frontmatter.get("assurance_profile", "standard")).lower()
-        if assurance in {"high_risk", "safety_critical"}:
-            critical = re.compile(
-                r"资金|支付|结算|对账|退款|合规|监管|牌照|责任|赔偿|保险|担保|隐私|跨境|个人信息|AML|KYC|GDPR|PIPL",
-                re.I,
-            )
-            for line_no, line in enumerate(raw.splitlines(), 1):
-                rule_match = re.search(r"\bRULE-[A-Z0-9-]+\b", line, re.I)
-                if not rule_match or not critical.search(line):
-                    continue
-                if not re.search(r"\b(?:SRC|DEC|ASSUMPTION)-[A-Z0-9-]+\b|明确假设", line, re.I):
-                    rule_id = rule_match.group(0).upper()
-                    self.add(
-                        "BLOCK", "PRD-HIGH-RISK-RULE-NO-SOURCE", path,
-                        "高风险规则必须绑定 SRC/DEC 或显式假设",
-                        f"{rule_id}@line {line_no}",
-                        affected_consumers=("product", "architect", "compliance", "qa", "coding_agent"),
-                        related_refs=(rule_id,),
-                    )
-        ai_runtime = frontmatter.get("ai_runtime") is True or str(frontmatter.get("ai_runtime", "")).lower() == "yes"
-        if ai_runtime:
-            ai_terms = {
-                "input/output schema": ("input schema", "output schema", "输入 schema", "输出 schema", "输入输出 schema"),
-                "version": ("模型版本", "提示版本", "prompt version", "model version"),
-                "tool permission": ("工具权限", "tool permission", "tool scope"),
-                "human gate": ("人工门", "人工审核", "human gate", "human review"),
-                "fallback": ("回退", "降级", "fallback"),
-                "evaluation": ("评测", "eval"),
-                "observability": ("观测", "observability", "trace"),
-            }
-            for label, terms in ai_terms.items():
-                if not any(term in lowered for term in terms):
-                    self.add(
-                        "BLOCK", "AI-RUNTIME-MISSING-CONTRACT", path,
-                        f"AI Runtime 合同缺少 {label}", label,
-                        affected_consumers=("product", "architect", "qa", "coding_agent"),
-                    )
-        lineage = frontmatter.get("lineage") is True or str(frontmatter.get("lineage", "")).lower() == "yes"
-        if lineage:
-            for label, terms in {
-                "source": ("来源", "source"),
-                "transformation": ("转换", "transform"),
-                "owner": ("责任人", "owner"),
-                "impact": ("影响", "impact"),
-            }.items():
-                if not any(term in lowered for term in terms):
-                    self.add("BLOCK", "PRD-LINEAGE-MISSING-CONTRACT", path, f"数据血缘合同缺少 {label}", label)
-
-    def _check_testability(
-        self, path: Path, raw: str, frontmatter: dict[str, Any], level: str
-    ) -> None:
-        if level not in {"L2", "L3", "L4"}:
-            return
-        req_ids = {item.upper() for item in re.findall(r"\bREQ-[A-Z0-9-]+\b", raw, re.I)}
-        mapped: set[str] = set()
-        for line in raw.splitlines():
-            if re.search(r"\bAC-[A-Z0-9-]+\b", line, re.I):
-                mapped.update(item.upper() for item in re.findall(r"\bREQ-[A-Z0-9-]+\b", line, re.I))
-        for req_id in sorted(req_ids - mapped):
-            self.add(
-                "BLOCK", "PRD-REQ-NO-STRUCTURED-AC", path,
-                "实现范围 REQ 没有绑定结构化 AC",
-                req_id,
-                affected_consumers=("product", "qa", "coding_agent"),
-                related_refs=(req_id,),
-            )
-        headings = markdown_headings(raw)
-        for index, (_level, title, start) in enumerate(headings):
-            stm = re.search(r"\bSTM-[A-Z0-9-]+\b", title, re.I)
-            if not stm:
-                continue
-            end = headings[index + 1][2] if index + 1 < len(headings) else len(raw)
-            block = raw[start:end].lower()
-            required = {
-                "from/to": ("当前状态", "下一状态", "->", "→"),
-                "action": ("动作", "action"),
-                "guard/role": ("守卫", "允许角色", "guard", "role"),
-                "failure": ("失败", "拒绝", "异常", "failure", "error"),
-            }
-            missing = []
-            if not (("当前状态" in block and "下一状态" in block) or "->" in block or "→" in block):
-                missing.append("from/to")
-            for label in ("action", "guard/role", "failure"):
-                if not any(term in block for term in required[label]):
-                    missing.append(label)
-            if missing:
-                stm_id = stm.group(0).upper()
-                self.add(
-                    "BLOCK", "PRD-STATE-CONTRACT-INCOMPLETE", path,
-                    "状态机缺少 " + ", ".join(missing), stm_id,
-                    affected_consumers=("backend", "qa", "coding_agent"),
-                    related_refs=(stm_id,),
-                )
-        page_contracts = self._page_contracts(raw)
-        workflow = any(
-            "workflow" in {item.strip().lower() for item in attrs.get("surfaces", "").split(",")}
-            for attrs, _block in page_contracts.values()
-        ) or frontmatter.get("workflow") is True
-        if workflow:
-            has_flow = bool(re.search(r"\bFLOW-[A-Z0-9-]+\b", raw, re.I))
-            has_e2e = bool(re.search(r"端到端验收|e2e acceptance|E2E-[A-Z0-9-]+", raw, re.I))
-            if not (has_flow and has_e2e):
-                self.add(
-                    "BLOCK", "PRD-WORKFLOW-NO-E2E", path,
-                    "workflow 页面必须绑定端到端 FLOW 和 E2E 验收",
-                    affected_consumers=("product", "qa", "coding_agent"),
-                )
-
-    def _check_module_slices_and_facets(
-        self, path: Path, raw: str, frontmatter: dict[str, Any], level: str
-    ) -> None:
-        if level not in {"L2", "L3", "L4"}:
-            return
-        document_lowered = raw.lower()
-        appendix_pos = _heading_position(
-            raw, (r"^第四部分", r"^附录\s*A(?:\b|[：:])", r"engineering.+annex")
-        )
-        main = raw[:appendix_pos] if appendix_pos >= 0 else raw
-        module_ids = {item.upper() for item in re.findall(r"\bMOD-[A-Z0-9-]+\b", main, re.I)}
-        slices = _module_slices(main)
-        self.metrics["module_ids"] = len(module_ids)
-        self.metrics["module_slices"] = len(slices)
-        for module_id in sorted(module_ids - set(slices)):
-            self.add(
-                "BLOCK", "PRD-MODULE-SLICE-MISSING", path,
-                "模块 ID 没有独立纵向规格章节", module_id,
-                affected_consumers=("product", "frontend", "backend", "qa", "coding_agent"),
-                related_refs=(module_id,),
-            )
-        for module_id, block in slices.items():
-            lowered = block.lower()
-            groups = {
-                "目标/边界/入口/结果": (
-                    ("目标", "outcome", "goal"), ("边界", "不负责", "scope", "non-goal"),
-                    ("入口", "前置", "entry", "precondition"), ("结果", "出口", "success result"),
-                ),
-                "主路径/异常/恢复": (
-                    ("主路径", "用户故事", "journey", "main path"),
-                    ("异常", "失败", "exception", "failure"), ("恢复", "重试", "recovery", "retry"),
-                ),
-                "页面/动作": (
-                    ("view-", "页面", "screen", "ui 不适用", "ui not applicable"),
-                    ("act-", "动作", "action"),
-                ),
-                "字段/数据/权限": (
-                    ("fld-", "字段", "field"), ("数据", "来源", "data", "source"),
-                    ("权限", "角色", "permission", "role"),
-                ),
-                "规则/状态/事件": (
-                    ("rule-", "规则", "rule"),
-                    ("stm-", "state-", "状态", "无状态", "stateless"),
-                    ("evt-", "api-", "事件", "集成", "无外部集成", "event", "integration", "no external integration"),
-                ),
-                "指标/数据质量": (
-                    ("metric-", "指标口径", "指标不适用", "metric", "no metric"),
-                    ("公式", "去重", "刷新", "数据质量", "不展示指标", "formula", "dedup", "freshness", "data quality"),
-                ),
-                "验收/未决项": (
-                    ("ac-", "验收", "acceptance"),
-                    ("unk-", "rev-", "未决", "未知项", "无未决项", "unknown", "open issue", "no open issue"),
-                ),
-            }
-            missing = [
-                label for label, requirements in groups.items()
-                if any(not any(term in lowered for term in alternatives) for alternatives in requirements)
-            ]
-            if missing:
-                self.add(
-                    "BLOCK", "PRD-MODULE-SLICE-INCOMPLETE", path,
-                    "模块纵向切片缺少 " + "、".join(missing), module_id,
-                    affected_consumers=("product", "frontend", "backend", "qa", "coding_agent"),
-                    related_refs=(module_id,),
-                )
-
-        facets = frontmatter.get("activated_facets", []) or []
-        if not isinstance(facets, list):
-            self.add("BLOCK", "PRD-BAD-ACTIVATED-FACETS", path, "activated_facets 必须是数组", "frontmatter.activated_facets")
-            return
-        facets = {str(item).lower() for item in facets}
-        allowed = {"ui", "stateful", "data_submission", "integration", "batch_io", "high_risk"}
-        unknown = sorted(facets - allowed)
-        if unknown:
-            self.add("BLOCK", "PRD-BAD-ACTIVATED-FACETS", path, "未知条件规格: " + ", ".join(unknown))
-        if "data_submission" in facets:
-            required = {
-                "来源与映射": ("来源映射", "字段映射", "source mapping", "mapping"),
-                "校验": ("校验", "validation"),
-                "提交状态": ("提交状态", "上报状态", "submission state", "reporting state"),
-                "重试与幂等": ("重试", "retry"),
-                "幂等": ("幂等", "idempotency"),
-                "审计": ("审计", "audit"),
-                "口径与时效": ("指标口径", "计算口径", "metric caliber", "formula"),
-                "刷新/时效": ("刷新", "时效", "延迟", "freshness", "latency"),
-                "对账/更正": ("对账", "更正", "reconciliation", "correction"),
-            }
-            missing = [label for label, terms in required.items() if not any(term in document_lowered for term in terms)]
-            if missing:
-                self.add(
-                    "BLOCK", "PRD-DATA-SUBMISSION-CONTRACT-INCOMPLETE", path,
-                    "数据上报/统计口径规格缺少 " + "、".join(missing), "activated_facets.data_submission",
-                    affected_consumers=("product", "backend", "qa", "coding_agent"),
-                )
-
-    def check_prd(
-        self,
-        path: Path,
-        level: str,
-        *,
-        stage: str = "baseline",
-        scope_refs: tuple[str, ...] = (),
-    ) -> None:
+    def check_register_sidecar(self, path: Path) -> None:
+        """Validate only current-schema requirement registers; legacy drafts stay advisory."""
         try:
-            raw = self.read(path)
-        except (OSError, UnicodeError) as exc:
-            self.add("BLOCK", "PRD-READ", path, f"PRD cannot be read: {exc}")
+            document = yaml.safe_load(self.read(path))
+        except (OSError, UnicodeError, yaml.YAMLError) as exc:
+            self.add("INFO", "REQ-REGISTER-SIDECAR-SKIP", path, f"侧车产物无法按 YAML 解析，跳过登记册语义校验：{exc}")
             return
-        lowered = raw.lower()
-        frontmatter = self._frontmatter(raw)
-        if level == "auto":
-            declared_level = str(frontmatter.get("delivery_level", frontmatter.get("level", "L2"))).upper()
-            level = declared_level if declared_level in LEVELS else "L2"
-            self.metrics["resolved_level"] = level
-            self.metrics["level_source"] = "frontmatter" if declared_level in LEVELS else "fallback_L2"
-
-        # Human-first language and reading contract.
-        h1_count = len(re.findall(r"(?m)^#\s+[^#\n]", raw))
-        if h1_count != 1:
-            self.add("BLOCK", "PRD-ONE-H1", path, f"unified PRD needs exactly one H1 title; found {h1_count}")
-        declared_language = str(frontmatter.get("document_language", "")).strip()
-        if not declared_language:
-            self.add(
-                "BLOCK", "PRD-LANGUAGE-NOT-DECLARED", path,
-                "frontmatter 必须声明 document_language，并与用户当前请求语言一致",
-                "frontmatter.document_language",
-                affected_consumers=("business", "product", "engineering", "qa", "coding_agent"),
-            )
-        elif frontmatter.get("bilingual") is not True:
-            expected = "zh" if declared_language.lower().startswith("zh") else "en"
-            structural = [(level, title) for level, title, _pos in markdown_headings(raw) if level <= 3]
-            drifted = [title for _level, title in structural if _heading_language(title) not in {expected, "neutral", "mixed"}]
-            h1_drift = bool(structural and structural[0][0] == 1 and structural[0][1] in drifted)
-            self.metrics["document_language"] = declared_language
-            self.metrics["heading_language_drift"] = len(drifted)
-            if h1_drift or len(drifted) >= 2:
-                self.add(
-                    "BLOCK", "PRD-LANGUAGE-DRIFT", path,
-                    f"声明 {declared_language}，但关键标题出现 {len(drifted)} 处语言漂移",
-                    "; ".join(drifted[:4]),
-                    affected_consumers=("business", "product", "engineering", "qa", "coding_agent"),
-                )
-            elif drifted:
-                self.add(
-                    "GAP", "PRD-LANGUAGE-DRIFT", path,
-                    f"声明 {declared_language}，仍有 1 处标题语言漂移",
-                    drifted[0],
-                    affected_consumers=("business", "product"),
-                )
-
-        if level in {"L2", "L3", "L4"}:
-            section_contract = MAIN_SECTION_ALIASES
-        elif level == "L1":
-            section_contract = (
-                ("目标/范围", (r"目标", r"范围", r"goal", r"scope")),
-                ("角色/用户故事", (r"角色", r"用户故事", r"role", r"user stor")),
-                ("流程/异常", (r"流程", r"异常", r"flow", r"exception")),
-                ("验收", (r"验收", r"acceptance")),
-            )
-        else:
-            section_contract = (
-                ("目标/范围", (r"目标", r"范围", r"goal", r"scope")),
-                ("验收", (r"验收", r"acceptance")),
-            )
-        for label, aliases in section_contract:
-            if not _has_heading(raw, aliases):
-                self.add("BLOCK", "PRD-HUMAN-PATH", path, f"human reading path misses {label}", label)
-
-        # L0/L1 cards stay compact; L2+ use one unified PRD with exact annexes.
-        if level in {"L2", "L3", "L4"}:
-            for label, aliases in ANNEX_SECTION_ALIASES:
-                if not _has_heading(raw, aliases):
-                    self.add("BLOCK", "PRD-ENGINEERING-ANNEX", path, f"engineering annex misses {label}", label)
-        appendix_pos = _heading_position(
-            raw,
-            (r"^第四部分", r"^附录\s*A(?:\b|[：:])", r"工程与\s*AI\s*Coding\s*附录", r"engineering.+ai.+annex"),
-        )
-        journey_pos = _heading_position(raw, (r"角色旅程", r"用户旅程", r"role journey"))
-        if level in {"L2", "L3", "L4"} and (appendix_pos < 0 or journey_pos < 0 or appendix_pos <= journey_pos):
-            self.add("BLOCK", "PRD-READING-ORDER", path, "engineering annex must follow role journeys and module narrative")
-        main = raw[:appendix_pos] if appendix_pos >= 0 else raw
-        nonblank = [line for line in main.splitlines() if line.strip()]
-        table_lines = [line for line in nonblank if line.lstrip().startswith("|")]
-        if nonblank and len(table_lines) / len(nonblank) > 0.55:
-            self.add("BLOCK", "PRD-TABLE-DOMINATED", path, "human main body is table-dominated; add readable journey/rule explanations")
-        requirement_ids = set(re.findall(r"\bREQ-[A-Z0-9-]+\b", raw, re.I))
-        trace_pos = _heading_position(raw, (r"双向追溯", r"bidirectional trace"), last=True)
-        trace_text = raw[trace_pos:] if trace_pos >= 0 else ""
-        traced = set(re.findall(r"\bREQ-[A-Z0-9-]+\b", trace_text, re.I))
-        if level in {"L2", "L3", "L4"}:
-            for req_id in sorted(requirement_ids - traced):
-                self.add("BLOCK", "PRD-UNTRACED-REQ", path, "requirement is absent from the trace annex", req_id)
-        if level in {"L2", "L3", "L4"} and trace_text and (
-            not re.search(r"\bAC-[A-Z0-9-]+\b", trace_text, re.I)
-            or not re.search(r"反向|reverse", trace_text, re.I)
-        ):
-            self.add("BLOCK", "PRD-NO-REVERSE-TRACE", path, "trace annex must bind AC IDs and declare reverse lookup")
-        if level in {"L2", "L3", "L4"} and not has_any(lowered, ("两套 prd", "一份", "one prd", "one baseline")):
-            self.add("BLOCK", "PRD-NO-ONE-BASELINE", path, "document does not declare one-baseline semantics")
-        if level in {"L2", "L3", "L4"}:
-            if not has_any(lowered, ("30 秒摘要", "30秒摘要", "30-second summary", "executive summary")):
-                self.add("BLOCK", "PRD-NO-QUICK-SUMMARY", path, "统一 PRD 缺少 30 秒摘要")
-            if not has_any(lowered, ("任务式阅读导航", "任务阅读导航", "reading map", "reader task map")):
-                self.add("BLOCK", "PRD-NO-READING-MAP", path, "统一 PRD 缺少按角色/任务定位的阅读导航")
-
-        # Requirement quality contract (reuses validate_prd_quality vocabulary).
-        for key in LEVELS[level]:
-            if not any(term in lowered for term in TERMS[key]):
-                self.add("BLOCK", "PRD-MISSING-CONTRACT", path, f"missing {key} requirement contract", key)
-        if level in {"L2", "L3", "L4"}:
-            for pattern, label in (
-                (r"req-[a-z0-9-]+", "REQ"), (r"role-[a-z0-9-]+", "ROLE"),
-                (r"flow-[a-z0-9-]+", "FLOW"), (r"(?:view|page)-[a-z0-9-]+", "VIEW/PAGE"),
-                (r"act-[a-z0-9-]+", "ACT"), (r"ac-[a-z0-9-]+", "AC"),
-            ):
-                if not re.search(pattern, lowered):
-                    self.add("BLOCK", "PRD-MISSING-ID", path, f"missing stable {label} IDs", label)
-
-        # AI-coding annex contract (same areas/IDs/AC semantics, one in-memory scan).
-        if level in {"L0", "L1"}:
-            required_areas = {"goal": ("目标", "goal"), "scope": ("范围", "scope"), "acceptance": ("验收", "ac-")}
-        else:
-            required_areas = dict(BASE_AREAS)
-        for area, terms in required_areas.items():
-            if not has_any(lowered, terms):
-                self.add("BLOCK", "PRD-CODING-AREA", path, "AI-coding contract area is absent", area)
-        if level in {"L2", "L3", "L4"}:
-            heading_count = len(re.findall(r"(?m)^#{2,4}\s+\S", raw))
-            table_rows = len(re.findall(r"(?m)^\s*\|(?:[^\n|]+\|){2,}\s*$", raw))
-            if heading_count < 14:
-                self.add("BLOCK", "PRD-TOO-THIN", path, f"full unified PRD has {heading_count} section headings; need at least 14")
-            if table_rows < 8:
-                self.add("BLOCK", "PRD-NO-PRECISE-MAPPING", path, f"contract has {table_rows} table rows; need at least 8")
-            for label, pattern in ID_RULES.items():
-                if not re.search(pattern, raw, flags=re.I):
-                    self.add("BLOCK", "PRD-MISSING-ID", path, f"missing stable {label}", label)
-            for terms in STRUCTURED_AC_FIELDS:
-                if not has_any(lowered, terms):
-                    self.add("BLOCK", "PRD-AC-FIELD", path, f"structured acceptance misses {terms[0]}", terms[0])
-            api_not_applicable = bool(re.search(r"(?:api|接口)[^\n]{0,80}(?:不适用|not applicable)", lowered))
-            if not api_not_applicable:
-                if not re.search(r"/(?:api|openapi)/|\b(?:get|post|put|patch|delete)\s+[`/]", lowered):
-                    self.add("BLOCK", "PRD-API-ROUTE", path, "applicable API contract lacks method/path or explicit engineering-owned path decision")
-                for label, terms in {
-                    "request fields/body": ("request fields", "请求字段", "request body"),
-                    "response fields/body": ("response fields", "成功响应", "response body", "统一响应"),
-                    "error/idempotency": ("错误码", "业务错误", "error code", "幂等", "idempotency"),
-                }.items():
-                    if not has_any(lowered, terms):
-                        self.add("BLOCK", "PRD-API-CONTRACT", path, f"API contract misses {label}", label)
-            if not has_any(lowered, ("异常", "失败", "failure")):
-                self.add("BLOCK", "PRD-NO-FAILURE", path, "contract misses failure behavior")
-            for failure in analyze_prd_structure(raw, full_prd=True):
-                self.add("BLOCK", "PRD-STRUCTURE", path, failure)
-        self._check_authority(path, frontmatter)
-        self._check_unknowns(path, raw, frontmatter, stage=stage, scope_refs=scope_refs)
-        self._check_triggered_contracts(path, raw, frontmatter, level)
-        self._check_testability(path, raw, frontmatter, level)
-        self._check_module_slices_and_facets(path, raw, frontmatter, level)
-
-        if level in {"L3", "L4"}:
-            if STAGE_ORDER.get(stage, STAGE_ORDER["baseline"]) >= STAGE_ORDER["baseline"]:
-                acceptance_plan = frontmatter.get("acceptance_plan")
-                if not isinstance(acceptance_plan, dict):
-                    self.add(
-                        "BLOCK", "PRD-NO-ACCEPTANCE-PLAN", path,
-                        "L3/L4 基线必须声明验收计划，定义谁验、验什么、如何判定和留什么证据",
-                        "frontmatter.acceptance_plan",
-                        affected_consumers=("product", "qa", "delivery", "customer"),
-                    )
-                else:
-                    required_plan_fields = {
-                        "owner": bool(acceptance_plan.get("owner")),
-                        "scope_refs/scope_rule": bool(acceptance_plan.get("scope_refs") or acceptance_plan.get("scope_rule")),
-                        "pass_rule": bool(acceptance_plan.get("pass_rule")),
-                        "evidence_types": isinstance(acceptance_plan.get("evidence_types"), list) and bool(acceptance_plan.get("evidence_types")),
-                        "signoff_roles": isinstance(acceptance_plan.get("signoff_roles"), list) and bool(acceptance_plan.get("signoff_roles")),
-                    }
-                    for field, present in required_plan_fields.items():
-                        if not present:
-                            self.add(
-                                "BLOCK", "PRD-INCOMPLETE-ACCEPTANCE-PLAN", path,
-                                f"验收计划缺少 {field}", f"frontmatter.acceptance_plan.{field}",
-                                affected_consumers=("product", "qa", "delivery", "customer"),
-                            )
-            source_refs = frontmatter.get("source_refs")
-            if not isinstance(source_refs, list) or not source_refs:
-                self.add("BLOCK", "PRD-NO-SOURCE-SCOPE", path, "L3/L4 handoff must declare non-empty source_refs in frontmatter")
-                source_refs = []
-            if not has_any(lowered, ("来源登记", "source register")):
-                self.add("BLOCK", "PRD-NO-SOURCE-REGISTER", path, "L3/L4 handoff needs a source register with authority and disposition")
-            for source_ref in [str(item).upper() for item in source_refs]:
-                if len(re.findall(rf"\b{re.escape(source_ref)}\b", raw, re.I)) < 2:
-                    self.add("BLOCK", "PRD-UNRESOLVED-SOURCE", path, "frontmatter source_ref is not resolved in the source register/body", source_ref)
-            if "open_p0_unknown_ids" not in frontmatter:
-                self.add("BLOCK", "PRD-NO-P0-DISPOSITION", path, "L3/L4 handoff must declare open_p0_unknown_ids, using [] when all are closed")
-
-            ac_refs = {item.upper() for item in re.findall(r"\bAC-[A-Z0-9-]+\b", raw, re.I)}
-            machine_ac_defs = {
-                item.upper()
-                for item in re.findall(r"(?m)^\s*(?:-\s+)?id:\s*['\"]?(AC-[A-Z0-9-]+)\b", raw, re.I)
-            }
-            for ac_id in sorted(ac_refs - machine_ac_defs):
-                self.add("BLOCK", "PRD-AC-NO-MACHINE-DEFINITION", path, "referenced AC has no exact machine-readable definition", ac_id)
-            in_fence = False
-            for line_no, line in enumerate(raw.splitlines(), 1):
-                stripped = line.lstrip()
-                if stripped.startswith("```") or stripped.startswith("~~~"):
-                    in_fence = not in_fence
-                    continue
-                if in_fence:
-                    continue
-                loose_ids = re.finditer(
-                    r"\b(?:REQ|ROLE|FLOW|VIEW|REG|ACT|FLD|STM|STATE|RULE|API|EVT|INT|AC|TEST|EVD|CHG|REV|REL|METRIC)-[A-Z0-9-]+(?:\*|\.\.|…)[A-Z0-9-]*",
-                    line,
-                    re.I,
-                )
-                for loose in loose_ids:
-                    self.add(
-                        "BLOCK", "PRD-NONEXACT-ID", path,
-                        "基线中的稳定 ID 必须逐项精确书写；正文、表格和机器附录均不得使用通配符或范围缩写",
-                        f"line {line_no}: {loose.group(0)}",
-                    )
-            module_ids = {item.upper() for item in re.findall(r"\bMOD-[A-Z0-9-]+\b", raw, re.I)}
-            if len(module_ids) > 1:
-                if not has_any(lowered, ("跨模块逐边契约", "cross-module edge contract")):
-                    self.add("BLOCK", "PRD-NO-CROSS-MODULE-EDGE-CONTRACT", path, "multi-module L3/L4 handoff must specify every cross-module edge")
-                if not has_any(lowered, ("后继可达性", "successor reachability")):
-                    self.add("BLOCK", "PRD-NO-SUCCESSOR-REACHABILITY", path, "created/converted objects need an authorized reachable next action")
-            declared_views = frontmatter.get("page_contract_view_ids", [])
-            if not isinstance(declared_views, list) or not declared_views:
-                self.add("BLOCK", "PRD-NO-PAGE-CONTRACT-SCOPE", path, "L3 direct-implementation PRD must declare page_contract_view_ids in frontmatter")
-                declared_views = []
-            managed_views = frontmatter.get("managed_relation_view_ids", [])
-            if not isinstance(managed_views, list):
-                self.add("BLOCK", "PRD-MANAGED-RELATION-SCOPE", path, "managed_relation_view_ids must be a list when present")
-                managed_views = []
-            contracts = self._page_contracts(raw)
-            blocks = {view: block for view, (_attrs, block) in contracts.items()}
-            core_surfaces = {
-                "purpose/entry": ("页面目标", "purpose", "入口"),
-                "region layout": ("区域布局", "layout"),
-                "actions/permissions": ("动作", "权限", "action"),
-                "states/exceptions": ("状态", "异常", "exception"),
-                "prototype binding": ("原型绑定", "prototype binding"),
-            }
-            surface_contracts = {
-                "metrics": {"metric caliber": ("指标口径", "metric")},
-                "list": {
-                    "filters": ("筛选", "filter"),
-                    "columns/tree/canvas": ("列表列", "列", "树", "画布", "column"),
-                    "pagination/batch": ("分页", "pagination"),
-                },
-                "form": {"fields/controls": ("字段与控件", "控件", "field")},
-                "drawer_form": {"fields/controls": ("字段与控件", "控件", "field")},
-                "import": {"import": ("导入", "预检", "import")},
-                "export": {"export": ("导出", "export")},
-                "composer": {"composer": ("拖拽", "层级", "资源池", "排序", "composer")},
-                "workflow": {"workflow": ("待办", "退回", "撤回", "审批", "workflow")},
-                "preview": {"preview": ("预览", "preview")},
-            }
-            allowed_surfaces = set(surface_contracts) | {"detail", "resource_pool", "hierarchy", "assessment_insert"}
-            for view in [str(item).upper() for item in declared_views]:
-                attrs, block = contracts.get(view, ({}, ""))
-                if not block:
-                    self.add("BLOCK", "PRD-MISSING-PAGE-CONTRACT", path, "declared view has no PAGE-CONTRACT block", view)
-                    continue
-                lowered_block = block.lower()
-                primary = attrs.get("primary", attrs.get("profile", "")).lower()
-                layout = attrs.get("layout", "single").lower()
-                surfaces = {
-                    item.strip().lower() for item in attrs.get("surfaces", "").split(",") if item.strip()
-                }
-                if not attrs:  # v5.2 compatibility: infer only explicitly applicable legacy surfaces.
-                    legacy = block.lower()
-                    metric_na = bool(re.search(r"(?:指标口径|metrics?)\s*(?:[:：—-]\s*)?(?:不适用|not applicable)", legacy))
-                    field_na = bool(re.search(r"(?:字段|字段与控件)\s*(?:[:：—-]\s*)?(?:不适用|不存在可编辑业务字段|not applicable)", legacy))
-                    import_na = bool(re.search(r"(?:导入|import)\s*(?:[:：—-]\s*)?(?:不适用|not applicable)", legacy))
-                    export_na = bool(re.search(r"(?:导出|export)\s*(?:[:：—-]\s*)?(?:不适用|not applicable)", legacy))
-                    if not metric_na and ("指标口径" in legacy or re.search(r"\bMETRIC-[A-Z0-9-]+\b", block, re.I)):
-                        surfaces.add("metrics")
-                    if any(term in legacy for term in ("筛选", "列表", "树", "画布", "filter", "column")):
-                        surfaces.add("list")
-                    if not field_na and any(term in legacy for term in ("字段与控件", "表单", "field", "form")):
-                        surfaces.add("form")
-                    if not import_na and any(term in legacy for term in ("导入", "import")):
-                        surfaces.add("import")
-                    if not export_na and any(term in legacy for term in ("导出", "export")):
-                        surfaces.add("export")
-                    if any(term in legacy for term in ("拖拽", "资源池", "composer")):
-                        surfaces.add("composer")
-                    if any(term in legacy for term in ("审批", "待办", "workflow")):
-                        surfaces.add("workflow")
-                    if any(term in legacy for term in ("预览", "preview")):
-                        surfaces.add("preview")
-                if primary and primary in surface_contracts:
-                    surfaces.add(primary)
-                if primary and primary not in allowed_surfaces:
-                    self.add("BLOCK", "PRD-PAGE-BAD-PRIMARY", path, "primary 不是支持的页面表面", view)
-                unknown_surfaces = sorted(surfaces - allowed_surfaces)
-                if unknown_surfaces:
-                    self.add("BLOCK", "PRD-PAGE-BAD-SURFACE", path, "存在不支持的 surfaces: " + ", ".join(unknown_surfaces), view)
-                if layout not in {"single", "composite", "builder", "portal"}:
-                    self.add("BLOCK", "PRD-PAGE-BAD-LAYOUT", path, "layout 只能是 single/composite/builder/portal", view)
-                if layout == "composite" and len(surfaces) < 2:
-                    self.add("BLOCK", "PRD-PAGE-COMPOSITE-TOO-THIN", path, "composite 页面至少声明两个 surfaces", view)
-                builder_required = {"composer", "resource_pool", "hierarchy"}
-                if layout == "builder" and not builder_required.issubset(surfaces):
-                    missing = sorted(builder_required - surfaces)
-                    self.add("BLOCK", "PRD-PAGE-BUILDER-INCOMPLETE", path, "builder 页面缺少 " + ", ".join(missing), view)
-                required_surfaces = dict(core_surfaces)
-                for surface in surfaces:
-                    required_surfaces.update(surface_contracts.get(surface, {}))
-                for label, terms in required_surfaces.items():
-                    if not any(term.lower() in lowered_block for term in terms):
-                        self.add("BLOCK", "PRD-INCOMPLETE-PAGE-CONTRACT", path, f"page contract misses {label}", view)
-                if "metrics" in surfaces and not (
-                    re.search(r"\bMETRIC-[A-Z0-9-]+\b", block, re.I)
-                    and has_any(lowered_block, ("公式", "分子", "分母", "去重", "时间窗口"))
-                ):
-                    self.add("BLOCK", "PRD-METRIC-NO-CALIBER", path, "已激活 metrics 的页面必须提供 METRIC ID 和明确口径", view)
-                def concrete_ids(prefix: str) -> set[str]:
-                    values: set[str] = set()
-                    for found in re.finditer(rf"\b{prefix}-[A-Z0-9-]+", block, re.I):
-                        value = found.group(0).upper()
-                        if value.endswith("-") or (found.end() < len(block) and block[found.end()] == "*"):
-                            continue
-                        values.add(value)
-                    return values
-
-                field_not_applicable = "form" not in surfaces and "drawer_form" not in surfaces or bool(re.search(
-                    r"(?:字段|字段与控件)\s*(?:[:：—-]\s*)?(?:不适用|不存在可编辑业务字段|not applicable)",
-                    lowered_block,
-                ))
-                if not field_not_applicable and len(concrete_ids("FLD")) < 2:
-                    self.add("BLOCK", "PRD-PAGE-NO-FIELDS", path, "four-lens handoff needs concrete stable FLD contracts for the view", view)
-                read_only = attrs.get("read_only", "no").lower() in {"yes", "true", "1"}
-                minimum_actions = 1 if read_only else 2
-                if len(concrete_ids("ACT")) < minimum_actions:
-                    self.add("BLOCK", "PRD-PAGE-NO-ACTIONS", path, "four-lens handoff needs at least two concrete ACT contracts or an explicit read-only decision", view)
-                if not concrete_ids("AC"):
-                    self.add("BLOCK", "PRD-PAGE-NO-AC", path, "QA lens needs a concrete AC linked inside the page contract", view)
-                api_trace = any(
-                    view.lower() in line.lower() and ("/api/" in line.lower() or re.search(r"\bAPI-[A-Z0-9-]+\b", line, re.I))
-                    for line in raw.splitlines()
-                )
-                if not api_trace:
-                    self.add("BLOCK", "PRD-PAGE-NO-API-TRACE", path, "backend/Coding Agent lens needs an explicit view-to-API or no-write mapping", view)
-            for extra in sorted(set(blocks) - {str(item).upper() for item in declared_views}):
-                self.add("GAP", "PRD-UNDECLARED-PAGE-CONTRACT", path, "PAGE-CONTRACT block is not declared in page_contract_view_ids", extra)
-            declared_set = {str(item).upper() for item in declared_views}
-            managed_set = {str(item).upper() for item in managed_views}
-            for view in sorted(managed_set - declared_set):
-                self.add("BLOCK", "PRD-MANAGED-RELATION-UNDECLARED-VIEW", path, "managed relation view must also be a declared page contract", view)
-            if managed_set and not has_any(lowered, ("角色—工作面闭环矩阵", "角色-工作面闭环矩阵", "role-work-surface")):
-                self.add("BLOCK", "PRD-NO-ROLE-WORK-SURFACE-MATRIX", path, "managed relations require a role-to-work-surface closure matrix")
-            relation_terms = {
-                "stable REL ID": ("REL-",),
-                "inventory": ("台账", "inventory"),
-                "source/inheritance": ("来源", "继承", "source", "inherit"),
-                "batch behavior": ("批量", "batch"),
-                "preflight": ("预检", "preflight"),
-                "partial failure": ("部分失败", "partial failure"),
-                "idempotency": ("幂等", "idempot"),
-                "API": ("/api/", "API-"),
-            }
-            for view in sorted(managed_set & declared_set):
-                block = blocks.get(view, "")
-                lowered_block = block.lower()
-                for label, terms in relation_terms.items():
-                    if not any(term.lower() in lowered_block for term in terms):
-                        self.add("BLOCK", "PRD-INCOMPLETE-MANAGED-RELATION", path, f"managed relation contract misses {label}", view)
-            self.metrics["prd_page_contracts"] = len(blocks)
-        self.metrics.update({"prd_headings": len(re.findall(r"(?m)^#{1,4}\s+\S", raw)), "prd_requirement_ids": len(requirement_ids)})
-
-    def check_stage0(self, path: Path) -> None:
-        try:
-            raw = self.read(path)
-        except (OSError, UnicodeError) as exc:
-            self.add("BLOCK", "STAGE0-READ", path, f"Stage 0 台账无法读取：{exc}")
-            return
-        document, error = self._yaml_document(path, raw)
-        if error or document is None:
-            self.add("BLOCK", "STAGE0-PARSE", path, error or "Stage 0 台账无效")
-            return
-        items = document.get("items") or []
-        if not isinstance(items, list) or not items:
-            legacy_sections = [
-                key for key in (
-                    "roles", "views", "actions", "states", "objects", "fields",
-                    "metrics", "handoffs", "defect_candidates", "unknowns",
-                )
-                if isinstance(document.get(key), list) and document.get(key)
-            ]
-            if legacy_sections:
-                self.add(
-                    "BLOCK", "STAGE0-LEGACY-INVENTORY", path,
-                    "检测到旧版分栏台账；不能静默升级为当前事实。请迁移为逐项 items 后重跑",
-                    ",".join(legacy_sections),
-                )
-            else:
-                self.add("BLOCK", "STAGE0-NO-INVENTORY", path, "Stage 0 台账必须包含非空 items")
-            return
-        allowed = {"confirmed", "inferred", "unknown", "defect_candidate"}
-        baseline_refs_raw = document.get("baseline_requirement_refs") or []
-        baseline_refs = {str(item).upper() for item in baseline_refs_raw} if isinstance(baseline_refs_raw, list) else set()
-        if baseline_refs_raw and (
-            not isinstance(baseline_refs_raw, list)
-            or any(not re.fullmatch(r"REQ-[A-Z0-9-]+", item, re.I) for item in baseline_refs)
-        ):
-            self.add(
-                "BLOCK", "STAGE0-BAD-BASELINE-REFS", path,
-                "baseline_requirement_refs 必须是精确 REQ-* 数组", "baseline_requirement_refs",
-            )
-        batches_raw = document.get("review_batches") or []
-        batches = {
-            str(item.get("id")): item
-            for item in batches_raw
-            if isinstance(item, dict) and item.get("id")
-        } if isinstance(batches_raw, list) else {}
-        if batches_raw and not isinstance(batches_raw, list):
-            self.add("BLOCK", "STAGE0-BAD-REVIEW-BATCHES", path, "review_batches 必须是数组", "review_batches")
-        for batch_id, batch in batches.items():
-            if not re.fullmatch(r"RBATCH-[A-Z0-9-]+", batch_id, re.I) or not batch.get("owner"):
-                self.add(
-                    "BLOCK", "STAGE0-INCOMPLETE-REVIEW-BATCH", path,
-                    "确认批次必须使用 RBATCH-* 并声明 owner", batch_id,
-                )
-        open_core_unknowns = 0
-        inferred_pending = 0
-        for index, item in enumerate(items):
-            ref = str(item.get("id", f"items[{index}]")) if isinstance(item, dict) else f"items[{index}]"
-            if not isinstance(item, dict):
-                self.add("BLOCK", "STAGE0-BAD-ITEM", path, "台账记录必须是对象", ref)
-                continue
-            missing = [key for key in ("id", "type", "source_ref", "source_location", "classification") if not item.get(key)]
-            if missing:
-                self.add("BLOCK", "STAGE0-INCOMPLETE-ITEM", path, "台账记录缺少 " + ", ".join(missing), ref)
-                continue
-            classification = str(item.get("classification")).lower()
-            if classification not in allowed:
-                self.add("BLOCK", "STAGE0-BAD-CLASSIFICATION", path, "classification 不在允许集合", ref)
-            if classification == "unknown" and item.get("core_behavior") is True:
-                open_core_unknowns += 1
-                unknown = item.get("unknown") or {}
-                if not (
-                    isinstance(unknown, dict)
-                    and re.fullmatch(r"UNK-[A-Z0-9-]+", str(unknown.get("id", "")), re.I)
-                    and str(unknown.get("priority", "")).upper() == "P0"
-                    and unknown.get("blocks_stage")
-                    and unknown.get("owner")
-                ):
-                    self.add(
-                        "BLOCK", "STAGE0-CORE-UNKNOWN-NOT-OWNED", path,
-                        "核心行为 UNKNOWN 必须登记 UNK-*、P0、blocks_stage 和 owner", ref,
-                        affected_consumers=("product", "architect", "qa"),
-                    )
-            if baseline_refs and not re.fullmatch(r"INV-[A-Z0-9-]+", str(item.get("id", "")), re.I):
-                self.add(
-                    "BLOCK", "STAGE0-REVERSE-ID-COLLISION", path,
-                    "已有需求基线时，反推观察项必须使用 INV-*，不得另造 REQ-* 与正向基线争夺语义",
-                    ref,
-                )
-            if baseline_refs and classification in {"confirmed", "inferred"}:
-                mapping_status = str(item.get("mapping_status", "")).lower()
-                target_refs = {str(value).upper() for value in item.get("target_refs", []) or []}
-                if mapping_status not in {"mapped", "unmapped", "not_applicable"}:
-                    self.add(
-                        "BLOCK", "STAGE0-MISSING-BASELINE-MAPPING", path,
-                        "反推项必须声明 mapping_status=mapped/unmapped/not_applicable", ref,
-                    )
-                elif mapping_status == "mapped":
-                    if not target_refs:
-                        self.add("BLOCK", "STAGE0-MAPPED-WITHOUT-TARGET", path, "mapped 反推项缺少 target_refs", ref)
-                    for target in sorted(target_refs - baseline_refs):
-                        self.add("BLOCK", "STAGE0-ORPHAN-TARGET-REF", path, "target_refs 不在声明的正向需求基线中", f"{ref}->{target}")
-                elif mapping_status == "unmapped" and item.get("core_behavior") is True:
-                    unknown = item.get("unknown") or {}
-                    if not (
-                        isinstance(unknown, dict)
-                        and re.fullmatch(r"UNK-[A-Z0-9-]+", str(unknown.get("id", "")), re.I)
-                        and unknown.get("owner")
-                    ):
-                        self.add(
-                            "BLOCK", "STAGE0-UNMAPPED-CORE-NOT-OWNED", path,
-                            "未映射的核心行为必须登记有 owner 的 UNK-*，不得直接升级为新需求", ref,
-                        )
-            if classification == "inferred":
-                inferred_pending += 1
-                batch_ref = str(item.get("review_batch_ref", ""))
-                if not batch_ref:
-                    self.add(
-                        "GAP", "STAGE0-INFERRED-NO-REVIEW-BATCH", path,
-                        "推断项未进入责任人确认批次，无法批量确认或否决", ref,
-                    )
-                elif batch_ref not in batches:
-                    self.add(
-                        "BLOCK", "STAGE0-ORPHAN-REVIEW-BATCH", path,
-                        "review_batch_ref 未解析到 review_batches", f"{ref}->{batch_ref}",
-                    )
-            if classification == "defect_candidate" and item.get("target_requirement_ref"):
-                self.add(
-                    "BLOCK", "STAGE0-DEFECT-PROMOTED", path,
-                    "缺陷候选未经 DEC/CHG 不得直接升级为目标需求", ref,
-                    related_refs=(str(item.get("target_requirement_ref")),),
-                )
-        candidates = document.get("canonical_candidates") or []
-        conflict_ref = str(document.get("conflict_decision_ref", ""))
-        if len(candidates) > 1 and not conflict_ref.startswith("DEC-CONFLICT-"):
-            self.add(
-                "BLOCK", "STAGE0-MULTIPLE-BASELINES", path,
-                "多版本 PRD/原型必须通过 DEC-CONFLICT-* 选择基线或划分范围",
-                ", ".join(map(str, candidates)),
-            )
-        if str(document.get("inventory_status", "")).lower() == "inventory_complete" and any(
-            finding.artifact == str(path) and finding.severity == "BLOCK" for finding in self.findings
-        ):
-            self.add("BLOCK", "STAGE0-FALSE-COMPLETE", path, "存在未闭合台账问题却声明 inventory_complete")
-        if str(document.get("target_status", "")).lower() == "baseline_ready" and inferred_pending:
-            self.add(
-                "BLOCK", "STAGE0-INFERRED-NOT-CONFIRMED", path,
-                "仍有 inferred 项时不得声明 baseline_ready；应由对应 review batch 批量确认、否决或转为未知项",
-                f"inferred={inferred_pending}",
-            )
-        self.metrics.update({
-            "stage0_items": len(items),
-            "stage0_core_unknowns": open_core_unknowns,
-            "stage0_inferred_pending": inferred_pending,
-            "stage0_review_batches": len(batches),
-            "stage0_baseline_refs": len(baseline_refs),
-        })
-
-    def check_agent_handoff(self, path: Path) -> None:
-        try:
-            raw = self.read(path)
-        except (OSError, UnicodeError) as exc:
-            self.add("BLOCK", "HANDOFF-READ", path, f"Agent 交接清单无法读取：{exc}")
-            return
-        document, error = self._yaml_document(path, raw)
-        if error or document is None:
-            self.add("BLOCK", "HANDOFF-PARSE", path, error or "Agent 交接清单无效")
-            return
-        if HANDOFF_SCHEMA.is_file():
-            schema = json.loads(HANDOFF_SCHEMA.read_text(encoding="utf-8"))
-            for schema_error in sorted(
-                Draft202012Validator(schema).iter_errors(document),
-                key=lambda item: tuple(str(part) for part in item.path),
-            ):
-                location = ".".join(str(part) for part in schema_error.path) or "<root>"
-                self.add("BLOCK", "HANDOFF-SCHEMA", path, schema_error.message, location)
-        baseline = document.get("baseline") or {}
-        baseline_hash = str(baseline.get("hash", "")) if isinstance(baseline, dict) else ""
-        ready = str(document.get("status", "draft")) == "ready_for_implementation"
-        requirement_ref = str(baseline.get("requirement_ref", "")) if isinstance(baseline, dict) else ""
-        requirement_path = path.parent / requirement_ref
-        if requirement_ref and requirement_path.is_file():
-            requirement_raw = self.read(requirement_path)
-            if baseline_hash != self._sha256(requirement_raw):
-                self.add("BLOCK", "HANDOFF-REQUIREMENT-HASH-DRIFT", path, "需求基线文件与 baseline.hash 不一致", requirement_ref)
-        elif ready:
-            self.add("BLOCK", "HANDOFF-REQUIREMENT-NOT-LOCAL", path, "开发交接的需求基线文件不可访问", requirement_ref or "baseline.requirement_ref")
-        elif requirement_ref:
-            self.add("GAP", "HANDOFF-REQUIREMENT-NOT-LOCAL", path, "草稿清单的需求基线文件不在当前目录", requirement_ref)
-        engineering_ref = str(document.get("engineering_baseline_ref", ""))
-        if ready and not engineering_ref:
-            self.add(
-                "BLOCK", "HANDOFF-NO-ENGINEERING-BASELINE", path,
-                "开发交接缺少 engineering_baseline_ref",
-                affected_consumers=("architect", "frontend", "backend", "qa", "coding_agent"),
-            )
-        elif engineering_ref and not (path.parent / engineering_ref).is_file():
-            self.add("GAP", "HANDOFF-ENGINEERING-BASELINE-NOT-LOCAL", path, "工程基线引用不在当前交接目录，接收方需确认可访问", engineering_ref)
-        packet_ids: set[str] = set()
-        for packet in document.get("packets", []) or []:
-            if not isinstance(packet, dict):
-                continue
-            packet_id = str(packet.get("id", "<unknown>"))
-            packet_ids.add(packet_id)
-            if packet.get("baseline_hash") != baseline_hash:
-                self.add("BLOCK", "HANDOFF-PACKET-BASELINE-DRIFT", path, "工作包 baseline_hash 与清单不一致", packet_id)
-            packet_path = path.parent / str(packet.get("path", ""))
-            if not packet_path.is_file():
-                self.add("BLOCK", "HANDOFF-PACKET-NOT-FILE", path, "工作包文件不存在", str(packet_path))
-                continue
-            packet_raw = self.read(packet_path)
-            expected_hash = packet.get("content_sha256")
-            if expected_hash and expected_hash != self._sha256(packet_raw):
-                self.add("BLOCK", "HANDOFF-PACKET-HASH-DRIFT", path, "工作包内容哈希已漂移", packet_id)
-            if packet_id not in packet_raw:
-                self.add("BLOCK", "HANDOFF-PACKET-ID-MISSING", path, "工作包正文未声明自身 ID", packet_id)
-            if not any(str(ref) in packet_raw for ref in packet.get("scope_refs", []) or []):
-                self.add("BLOCK", "HANDOFF-PACKET-SCOPE-MISSING", path, "工作包正文没有任何声明的 scope_refs", packet_id)
-            if not any(str(ref) in packet_raw for ref in packet.get("acceptance_refs", []) or []):
-                self.add("BLOCK", "HANDOFF-PACKET-AC-MISSING", path, "工作包正文没有任何 acceptance_refs", packet_id)
-            kind = str(packet.get("kind", "")).lower()
-            expected_prefix = {"mod": "MOD-", "xct": "XCT-", "edge": "EDGE-"}.get(kind)
-            if expected_prefix and not packet_id.startswith(expected_prefix):
-                self.add("BLOCK", "HANDOFF-PACKET-KIND-MISMATCH", path, "工作包 ID 前缀与 kind 不一致", packet_id)
-            if kind == "mod" and "qa_projection" not in packet_raw.lower() and "qa 投影" not in packet_raw.lower():
-                self.add("BLOCK", "HANDOFF-MOD-NO-QA-PROJECTION", path, "MOD 工作包缺少 qa_projection", packet_id)
-            if kind == "xct":
-                lowered_packet = packet_raw.lower()
-                affected_modules = set(re.findall(r"\bMOD-[A-Z0-9-]+\b", packet_raw, re.I))
-                if len(affected_modules) < 2:
-                    self.add("BLOCK", "HANDOFF-XCT-INCOMPLETE", path, "XCT 工作包必须明确影响至少两个 MOD-* 模块", packet_id)
-                for label, terms in {
-                    "影响模块": ("影响模块", "affected modules", "module scope"),
-                    "全局不变量": ("全局不变量", "invariant"),
-                    "执行点": ("执行点", "生效点", "enforcement point"),
-                    "例外与失败处理": ("例外", "异常", "失败", "exception", "failure"),
-                }.items():
-                    if not any(term in lowered_packet for term in terms):
-                        self.add("BLOCK", "HANDOFF-XCT-INCOMPLETE", path, f"XCT 工作包缺少 {label}", packet_id)
-            if kind == "edge":
-                lowered_packet = packet_raw.lower()
-                for label, terms in {
-                    "producer/consumer": ("producer", "consumer", "生产者", "消费者"),
-                    "payload/version": ("payload", "字段映射", "版本"),
-                    "idempotency/failure": ("幂等", "idempot", "失败", "补偿"),
-                    "permission/E2E": ("权限", "permission", "e2e", "ac-"),
-                }.items():
-                    if not any(term in lowered_packet for term in terms):
-                        self.add("BLOCK", "HANDOFF-EDGE-INCOMPLETE", path, f"EDGE 工作包缺少 {label}", packet_id)
-        for envelope in document.get("handoffs", []) or []:
-            if not isinstance(envelope, dict):
-                continue
-            affected = set(map(str, envelope.get("affected_packets", []) or []))
-            missing = sorted(affected - packet_ids)
-            if missing:
-                self.add("BLOCK", "HANDOFF-ENVELOPE-ORPHAN-PACKET", path, "HANDOFF 引用不存在的工作包", ", ".join(missing))
-            if envelope.get("intent") in {"proposal", "request"} and envelope.get("ack_status") == "applied" and not envelope.get("decision_refs"):
-                self.add("BLOCK", "HANDOFF-UNAPPROVED-PROPOSAL", path, "proposal/request 未绑定 DEC/CHG 不得标记 applied", str(envelope.get("handoff_id", "")))
-        self.metrics.update({"handoff_packets": len(packet_ids), "handoff_envelopes": len(document.get("handoffs", []) or [])})
-
-    def check_manifest_prd_binding(self, prd_path: Path, manifest_path: Path) -> None:
-        """Ensure a combined handoff does not pair a manifest with another PRD."""
-        document, error = self._yaml_document(manifest_path, self.read(manifest_path))
-        if error or document is None:
-            return
-        baseline = document.get("baseline") or {}
-        if not isinstance(baseline, dict):
-            return
-        expected_hash = self._sha256(self.read(prd_path))
-        if str(baseline.get("hash", "")) != expected_hash:
-            self.add(
-                "BLOCK", "HANDOFF-PRD-HASH-DRIFT", manifest_path,
-                "交接清单与本次提供的 PRD 不是同一内容基线",
-                str(baseline.get("requirement_ref", "")),
-                affected_consumers=("architect", "frontend", "backend", "qa", "coding_agent"),
-            )
-
-    def check_prototype(self, path: Path, level: str) -> None:
-        try:
-            raw = self.read(path)
-        except (OSError, UnicodeError) as exc:
-            self.add("BLOCK", "PROTO-READ", path, f"prototype cannot be read: {exc}")
-            return
-        # Restrict attribute discovery to actual HTML-like opening tags. Raw
-        # regex over the whole document also matches JavaScript selectors such
-        # as `[data-testid="page-X"]` and falsely reports duplicate pages.
-        tag_source = self._tag_source(raw)
-        testids = re.findall(r"\bdata-testid\s*=\s*['\"]([^'\"]+)['\"]", tag_source, re.I)
-        actions = sorted(set(re.findall(r"\bdata-action\s*=\s*['\"]([^'\"]+)['\"]", tag_source, re.I)))
-        states = sorted(set(re.findall(r"\bdata-state\s*=\s*['\"]([^'\"]+)['\"]", tag_source, re.I)))
-        fields = sorted(set(re.findall(r"\bdata-(?:field|bind)\s*=\s*['\"]([^'\"]+)['\"]", tag_source, re.I)))
-        metrics = sorted(set(re.findall(r"\bdata-metric\s*=\s*['\"]([^'\"]+)['\"]", tag_source, re.I)))
-        acceptance_refs = sorted(set(re.findall(r"\bdata-ac\s*=\s*['\"](AC-[A-Z0-9-]+)['\"]", tag_source, re.I)))
-        page_testids = [item for item in testids if item.lower().startswith("page-")]
-        region_testids = [item for item in testids if item.lower().startswith("region-")]
-        self.prototype_acceptance_refs.update(item.upper() for item in acceptance_refs)
-        if not page_testids:
-            self.add("BLOCK" if actions or level in {"L2", "L3", "L4"} else "GAP", "PROTO-NO-PAGE-ANCHOR", path, "no page-* data-testid root was found")
-        for duplicate in sorted(item for item, count in Counter(testids).items() if count > 1 and item.lower().startswith("page-")):
-            self.add("BLOCK", "PROTO-DUPLICATE-PAGE", path, "page data-testid must be unique", duplicate)
-        for duplicate in sorted(item for item, count in Counter(testids).items() if count > 1 and item.lower().startswith("region-")):
-            self.add("BLOCK", "PROTO-DUPLICATE-REGION", path, "region data-testid must be unique", duplicate)
-        if level in {"L2", "L3", "L4"}:
-            for action in actions:
-                if not re.fullmatch(r"ACT-[A-Z0-9-]+", action, re.I):
-                    self.add("BLOCK", "PROTO-UNSTABLE-ACTION", path, "data-action must bind a stable ACT-* ID", action)
-            for metric in metrics:
-                if not re.fullmatch(r"METRIC-[A-Z0-9-]+", metric, re.I):
-                    self.add("BLOCK", "PROTO-UNSTABLE-METRIC", path, "data-metric must bind a stable METRIC-* ID", metric)
-        if level in {"L3", "L4"}:
-            for region in region_testids:
-                if not re.fullmatch(r"region-REG-[A-Z0-9-]+", region, re.I):
-                    self.add("BLOCK", "PROTO-UNSTABLE-REGION", path, "region data-testid must bind a stable REG-* ID", region)
-            page_contracts = self._page_contracts(raw)
-            complex_contract = any(
-                attrs.get("layout", "").lower() in {"composite", "builder", "portal"}
-                or len({item.strip().lower() for item in attrs.get("surfaces", "").split(",") if item.strip()}) > 1
-                for attrs, _block in page_contracts.values()
-            )
-            complex_markup = len(page_testids) > 1 or bool(re.search(r"<table\b", raw, re.I) and re.search(r"<(?:form|input|select|textarea)\b", raw, re.I))
-            if page_testids and (complex_contract or complex_markup) and not region_testids:
-                self.add(
-                    "BLOCK", "PROTO-NO-REGION-ANCHOR", path,
-                    "L3/L4 复合页、组装器、门户或多视图原型至少需要一个稳定 REG-* 区域锚点",
-                    affected_consumers=("product", "ux", "frontend", "qa", "coding_agent"),
-                )
-        if not actions:
-            self.add("GAP", "PROTO-NO-ACTIONS", path, "no data-action controls were found; confirm this is intentionally static")
-
-        script_blocks = []
-        module_script = False
-        local_dependencies: set[str] = set()
-        for attrs, body in re.findall(r"<script\b([^>]*)>(.*?)</script>", raw, re.I | re.S):
-            type_match = re.search(r"\btype\s*=\s*['\"]([^'\"]+)['\"]", attrs, re.I)
-            script_type = type_match.group(1).lower() if type_match else "text/javascript"
-            if script_type in {"text/javascript", "application/javascript", "module"}:
-                src_match = re.search(r"\bsrc\s*=\s*['\"]([^'\"]+)['\"]", attrs, re.I)
-                if src_match:
-                    dependency = self._prototype_dependency(path, src_match.group(1), "JavaScript")
-                    if dependency is not None:
-                        try:
-                            script_blocks.append(self.read(dependency))
-                            local_dependencies.add(str(dependency.resolve()))
-                        except (OSError, UnicodeError) as exc:
-                            self.add("BLOCK", "PROTO-DEPENDENCY-READ", path, f"本地 JavaScript 依赖无法读取：{exc}", src_match.group(1))
-                else:
-                    script_blocks.append(body)
-                module_script = module_script or script_type == "module"
-        scripts = "\n".join(script_blocks)
-        split_anchor_pattern = re.compile(
-            r"(?:data-\s*['\"]\s*\+\s*['\"](?:action|testid|state|field|metric)|"
-            r"['\"]data-['\"]\s*\+\s*['\"](?:action|testid|state|field|metric)['\"])",
-            re.I,
-        )
-        split_anchors = split_anchor_pattern.findall(scripts)
-        script_action_candidates = sorted(set(re.findall(r"\bACT-[A-Z0-9-]+\b", scripts, re.I)) - set(actions))
-        if split_anchors:
-            severity = "BLOCK" if level in {"L2", "L3", "L4"} else "GAP"
-            self.add(
-                severity, "PROTO-DYNAMIC-ANCHOR-CONSTRUCTION", path,
-                f"发现 {len(split_anchors)} 处 data-* 锚点名称由字符串拼接生成；静态门禁无法证明其完整性",
-                re.sub(r"\s+", " ", split_anchors[0])[:120],
-                affected_consumers=("frontend", "qa", "coding_agent"),
-                related_refs=tuple(item.upper() for item in script_action_candidates[:50]),
-            )
-        if level in {"L2", "L3", "L4"} and re.search(
-            r"(?:setAttribute\s*\(\s*['\"]data-action|dataset\.action\s*=)", scripts, re.I
-        ):
-            self.add(
-                "BLOCK", "PROTO-RUNTIME-ACTION-RETROFIT", path,
-                "data-action 必须在视图模板源码中可静态枚举，不能在运行时补挂",
-            )
-        if level in {"L3", "L4"}:
-            metric_like_tags = [
-                tag for tag in re.findall(r"<[A-Za-z][^>]*>", raw, re.S)
-                if re.search(r"\bclass\s*=\s*['\"][^'\"]*\b(?:metric|metric-card|stat-card|kpi)\b", tag, re.I)
-                and not re.search(r"\bdata-metric\s*=", tag, re.I)
-            ]
-            if metric_like_tags:
-                self.add("BLOCK", "PROTO-METRIC-NO-ID", path, f"{len(metric_like_tags)} displayed metric elements have no stable data-metric", re.sub(r"\s+", " ", metric_like_tags[0])[:120])
-            inline_handlers = re.findall(r"\bon(?:click|change|input|submit|dragstart|drop)\s*=", raw, re.I)
-            if inline_handlers:
-                self.add("BLOCK", "PROTO-INLINE-HANDLER", path, f"L3 prototype contains {len(inline_handlers)} inline event handlers; use one explicit action registry")
-            missing_action_controls = []
-            missing_ac_controls = []
-            for tag in re.findall(r"<(?:button|a)\b[^>]*>", raw, re.I | re.S):
-                if re.search(r"\bdisabled\b", tag, re.I):
-                    continue
-                if not re.search(r"\bdata-action\s*=", tag, re.I):
-                    missing_action_controls.append(re.sub(r"\s+", " ", tag)[:120])
-                elif not re.search(r"\bdata-ac\s*=\s*['\"]AC-[A-Z0-9-]+['\"]", tag, re.I):
-                    missing_ac_controls.append(re.sub(r"\s+", " ", tag)[:120])
-            if missing_action_controls:
-                self.add("BLOCK", "PROTO-CONTROL-NO-ACTION", path, f"{len(missing_action_controls)} button/link controls have no stable data-action", missing_action_controls[0])
-            if missing_ac_controls:
-                self.add("BLOCK", "PROTO-ACTION-NO-AC", path, f"{len(missing_ac_controls)} action controls have no data-ac trace", missing_ac_controls[0])
-            function_names = re.findall(r"\bfunction\s+([A-Za-z_$][\w$]*)\s*\(", scripts)
-            duplicates = sorted(name for name, count in Counter(function_names).items() if count > 1)
-            for name in duplicates[:10]:
-                self.add("BLOCK", "PROTO-DUPLICATE-FUNCTION", path, "duplicate function declaration indicates stacked prototype overrides", name)
-        inline_action_tags = {
-            action
-            for tag in re.findall(r"<[^>]+\bdata-action\s*=\s*['\"][^'\"]+['\"][^>]*>", raw, re.I | re.S)
-            for action in re.findall(r"\bdata-action\s*=\s*['\"]([^'\"]+)['\"]", tag, re.I)
-            if re.search(r"\bonclick\s*=", tag, re.I)
-        }
-        has_listener = bool(re.search(r"addEventListener\s*\(\s*['\"](?:click|change|submit|input)['\"]", scripts, re.I))
-        reads_action = bool(re.search(r"dataset\.action|getAttribute\s*\(\s*['\"]data-action['\"]|closest\s*\(\s*['\"]\[data-action\]", scripts, re.I))
-        for action in actions:
-            dispatch_evidence = bool(re.search(
-                rf"(?:case\s+['\"]{re.escape(action)}['\"]|(?:action|actionId)\s*===?\s*['\"]{re.escape(action)}['\"]|['\"]{re.escape(action)}['\"]\s*:|\.set\s*\(\s*['\"]{re.escape(action)}['\"]|\[\s*['\"]{re.escape(action)}['\"]\s*\]\s*=)",
-                scripts,
-                re.I,
-            ))
-            if action not in inline_action_tags and not (has_listener and reads_action and dispatch_evidence):
-                self.add("BLOCK", "PROTO-UNHANDLED-ACTION", path, "no static event-handler evidence for data-action", action)
-
-        durable_result = bool(re.search(
-            r"\.(?:textContent|innerHTML|value)\s*=|insertAdjacentHTML|appendChild|replaceChildren|classList\.(?:add|remove|toggle)|setAttribute\s*\(|\b(?:render|navigate|showModal)\w*\s*\(|location\.(?:href|assign)|history\.pushState",
-            scripts,
-            re.I,
-        ))
-        transient_result = bool(re.search(r"\b(?:alert|toast|notify)\s*\(", scripts, re.I))
-        if actions and not durable_result and not transient_result:
-            self.add("BLOCK", "PROTO-NO-VISIBLE-RESULT", path, "actions have no static visible-result mechanism")
-        elif actions and transient_result and not durable_result:
-            self.add("GAP", "PROTO-TRANSIENT-ONLY", path, "only transient feedback is visible; core state changes need a durable result")
-        state_result = bool(states) and bool(re.search(
-            r"setAttribute\s*\(\s*['\"]data-state|dataset\.state\s*=|\b(?:globalState|state|entities)\b\s*[.\[]|\btransition\s*\(",
-            scripts,
-            re.I,
-        ))
-        if actions and level in {"L2", "L3", "L4"} and not state_result:
-            self.add("GAP", "PROTO-NO-DOMAIN-STATE", path, "static scan found no explicit data-state/domain-state mutation; bind core actions to a durable domain result or prove them in browser evidence")
-
-        external_css: list[str] = []
-        for tag in re.findall(r"<link\b[^>]*>", raw, re.I | re.S):
-            if not re.search(r"\brel\s*=\s*['\"][^'\"]*stylesheet[^'\"]*['\"]", tag, re.I):
-                continue
-            href = re.search(r"\bhref\s*=\s*['\"]([^'\"]+)['\"]", tag, re.I)
-            if not href:
-                continue
-            dependency = self._prototype_dependency(path, href.group(1), "CSS")
-            if dependency is not None:
-                try:
-                    external_css.append(self.read(dependency))
-                    local_dependencies.add(str(dependency.resolve()))
-                except (OSError, UnicodeError) as exc:
-                    self.add("BLOCK", "PROTO-DEPENDENCY-READ", path, f"本地 CSS 依赖无法读取：{exc}", href.group(1))
-        css_scan_source = raw
-        if external_css:
-            css_scan_source += "\n<style>\n" + "\n".join(external_css) + "\n</style>"
-        for css_finding in scan_prototype_css(css_scan_source):
-            self.add("BLOCK", "PROTO-CSS-" + css_finding["kind"].upper(), path, css_finding["detail"], css_finding["selector"])
-
-        if scripts.strip():
-            node = shutil.which("node")
-            if node:
-                command = [node, "--check"]
-                if module_script:
-                    command.insert(1, "--input-type=module")
-                # Node consumes JavaScript as UTF-8.  Do not inherit the Windows
-                # runner's narrow locale (for example cp1252), otherwise a valid
-                # prototype containing Chinese text can fail before Node starts.
-                checked = subprocess.run(
-                    command,
-                    input=scripts,
-                    text=True,
-                    encoding="utf-8",
-                    capture_output=True,
-                    timeout=15,
-                )
-                if checked.returncode:
-                    detail = next((line.strip() for line in checked.stderr.splitlines() if "SyntaxError" in line), "JavaScript syntax check failed")
-                    self.add("BLOCK", "PROTO-JS-SYNTAX", path, detail)
-            elif not _balanced_javascript(scripts):
-                self.add("BLOCK", "PROTO-JS-DELIMITERS", path, "JavaScript has unbalanced delimiters")
-            else:
-                self.add("GAP", "PROTO-JS-CHECK-LIMITED", path, "Node.js is unavailable; only delimiter syntax was checked")
-        self.metrics.update({
-            "prototype_pages": len(page_testids),
-            "prototype_regions": len(region_testids),
-            "prototype_actions": len(actions),
-            "prototype_dynamic_action_candidates": len(script_action_candidates) if split_anchors else 0,
-            "prototype_action_inventory_total": len(set(actions) | (set(script_action_candidates) if split_anchors else set())),
-            "prototype_states": len(states),
-            "prototype_fields": len(fields),
-            "prototype_metrics": len(metrics),
-            "prototype_acceptance_refs": len(self.prototype_acceptance_refs),
-            "prototype_local_dependencies": len(local_dependencies),
-        })
-
-    def check_acceptance_run(self, path: Path) -> tuple[set[str], bool, bool]:
-        """Validate one ARUN and return evidenced ACs, browser environment, conclusion."""
-        try:
-            raw = self.read(path)
-        except (OSError, UnicodeError) as exc:
-            self.add("BLOCK", "ACCEPTANCE-READ", path, f"验收记录无法读取：{exc}")
-            return set(), False, False
-        document, error = self._yaml_document(path, raw)
-        if error or document is None:
-            self.add("BLOCK", "ACCEPTANCE-PARSE", path, error or "验收记录无效")
-            return set(), False, False
-        schema = json.loads(ACCEPTANCE_SCHEMA.read_text(encoding="utf-8"))
-        schema_errors = sorted(
+        schema = json.loads(REGISTER_SCHEMA.read_text(encoding="utf-8"))
+        errors = sorted(
             Draft202012Validator(schema, format_checker=FormatChecker()).iter_errors(document),
             key=lambda item: tuple(str(part) for part in item.path),
         )
-        for schema_error in schema_errors:
-            location = ".".join(str(part) for part in schema_error.path) or "<root>"
-            self.add("BLOCK", "ACCEPTANCE-SCHEMA", path, schema_error.message, location)
-
-        evidence_failures = validate_evidence_refs(document, path)
-        for failure in evidence_failures:
-            self.add("BLOCK", "ACCEPTANCE-EVIDENCE-INVALID", path, failure)
-
-        evidenced: set[str] = set()
-        mandatory_incomplete: list[str] = []
-        for item in document.get("items", []) or []:
-            if not isinstance(item, dict):
-                continue
-            item_id = str(item.get("id", "<unknown>"))
-            if item.get("mandatory") and item.get("result") != "pass":
-                mandatory_incomplete.append(item_id)
-            if item.get("result") != "pass":
-                continue
-            if not str(item.get("actual_result", "")).strip() or not item.get("evidence_refs"):
-                self.add("BLOCK", "ACCEPTANCE-PASS-NO-EVIDENCE", path, "pass 项必须填写实际结果和证据引用", item_id)
-                continue
-            acceptance_ref = str(item.get("acceptance_ref", "")).upper()
-            if acceptance_ref and not evidence_failures:
-                evidenced.add(acceptance_ref)
-
-        conclusion = str(document.get("conclusion", "pending"))
-        sign_offs = document.get("sign_offs", []) or []
-        if conclusion == "accepted" and mandatory_incomplete:
-            self.add("BLOCK", "ACCEPTANCE-INCOMPLETE-CONCLUSION", path, "accepted 仍包含未通过的 mandatory 项", ", ".join(mandatory_incomplete))
-        if conclusion == "accepted_with_conditions" and not document.get("conditions"):
-            self.add("BLOCK", "ACCEPTANCE-CONDITION-MISSING", path, "accepted_with_conditions 缺少条件、责任人和完成标准")
-        if conclusion in {"accepted", "accepted_with_conditions"} and not sign_offs:
-            self.add("BLOCK", "ACCEPTANCE-SIGNOFF-MISSING", path, "接受结论缺少签署记录")
-        elif conclusion in {"accepted", "accepted_with_conditions"}:
-            missing_signoff_evidence = [
-                str(item.get("actor", "<unknown>"))
-                for item in sign_offs
-                if isinstance(item, dict) and not str(item.get("evidence_ref", "")).strip()
-            ]
-            if missing_signoff_evidence:
-                self.add(
-                    "BLOCK", "ACCEPTANCE-SIGNOFF-NO-EVIDENCE", path,
-                    "接受结论的每条签署记录都必须绑定可解析证据",
-                    ", ".join(missing_signoff_evidence),
-                )
-            rejecting_signers = [
-                str(item.get("actor", "<unknown>"))
-                for item in sign_offs
-                if isinstance(item, dict) and item.get("decision") == "reject"
-            ]
-            if rejecting_signers:
-                self.add(
-                    "BLOCK", "ACCEPTANCE-SIGNOFF-CONFLICT", path,
-                    "接受结论与拒绝签署相冲突",
-                    ", ".join(rejecting_signers),
-                )
-
-        environment = str(document.get("environment", "")).lower()
-        browser_markers = ("browser", "浏览器", "chrome", "edge", "firefox", "safari", "webkit", "playwright")
-        browser_environment = any(marker in environment for marker in browser_markers)
-        conclusive = (
-            conclusion in {"accepted", "accepted_with_conditions"}
-            and not mandatory_incomplete
-            and bool(sign_offs)
-            and not schema_errors
-            and not evidence_failures
-            and all(str(item.get("evidence_ref", "")).strip() for item in sign_offs if isinstance(item, dict))
-            and not any(item.get("decision") == "reject" for item in sign_offs if isinstance(item, dict))
-        )
-        self.metrics.update({
-            "acceptance_run_items": self.metrics.get("acceptance_run_items", 0) + len(document.get("items", []) or []),
-            "acceptance_run_evidenced_acs": self.metrics.get("acceptance_run_evidenced_acs", 0) + len(evidenced),
-        })
-        return evidenced, browser_environment, conclusive
-
-    def check_handoff(self, prd_path: Path, prototype_paths: list[Path], level: str) -> None:
-        """Cross-check the one PRD baseline against one or more prototype projections."""
-        try:
-            prd = self.read(prd_path)
-            prototype_raw = [(path, self.read(path)) for path in prototype_paths]
-        except (OSError, UnicodeError) as exc:
-            self.add("BLOCK", "HANDOFF-READ", prd_path, f"handoff artifact cannot be read: {exc}")
+        if errors:
+            first = errors[0]
+            location = ".".join(str(part) for part in first.path) or "<root>"
+            self.add(
+                "INFO", "REQ-REGISTER-SIDECAR-SKIP", path,
+                f"侧车产物不符合当前登记册 schema（可能为旧格式草稿），跳过登记册语义校验：{location}: {first.message}",
+            )
             return
+        run_sidecar_validator(self, "validate_requirement_register.py", path, "REQ-REGISTER-SIDECAR")
 
-        frontmatter = self._frontmatter(prd)
-        declared_views = {str(item).upper() for item in frontmatter.get("page_contract_view_ids", []) if item}
-        prd_actions = {item.upper() for item in re.findall(r"\bACT-[A-Z0-9-]+\b", prd, re.I)}
-        prd_ac_refs = {item.upper() for item in re.findall(r"\bAC-[A-Z0-9-]+\b", prd, re.I)}
-        prd_metric_refs = {item.upper() for item in re.findall(r"\bMETRIC-[A-Z0-9-]+\b", prd, re.I)}
-        machine_ac_defs = {
-            item.upper()
-            for item in re.findall(r"(?m)^\s*(?:-\s+)?id:\s*['\"]?(AC-[A-Z0-9-]+)\b", prd, re.I)
-        }
-        prototype_views: set[str] = set()
-        prototype_actions: set[str] = set()
-        prototype_acs: set[str] = set()
-        prototype_metrics: set[str] = set()
-        for path, raw in prototype_raw:
-            tags = self._tag_source(raw)
-            prototype_views.update(item.upper() for item in re.findall(r"\bdata-view\s*=\s*['\"](VIEW-[A-Z0-9-]+)['\"]", tags, re.I))
-            prototype_views.update(item.upper() for item in re.findall(r"\bdata-testid\s*=\s*['\"]page-(VIEW-[A-Z0-9-]+)['\"]", tags, re.I))
-            prototype_actions.update(item.upper() for item in re.findall(r"\bdata-action\s*=\s*['\"](ACT-[A-Z0-9-]+)['\"]", tags, re.I))
-            if re.search(
-                r"(?:data-\s*['\"]\s*\+\s*['\"]action|['\"]data-['\"]\s*\+\s*['\"]action['\"])",
-                raw,
-                re.I,
-            ):
-                # Include literal candidates in the cross-artifact inventory, but
-                # check_prototype still blocks because their rendered presence is unproven.
-                prototype_actions.update(item.upper() for item in re.findall(r"\bACT-[A-Z0-9-]+\b", raw, re.I))
-            prototype_acs.update(item.upper() for item in re.findall(r"\bdata-ac\s*=\s*['\"](AC-[A-Z0-9-]+)['\"]", tags, re.I))
-            prototype_metrics.update(item.upper() for item in re.findall(r"\bdata-metric\s*=\s*['\"](METRIC-[A-Z0-9-]+)['\"]", tags, re.I))
 
-        for action in sorted(prototype_actions - prd_actions):
-            self.add("BLOCK", "HANDOFF-PROTOTYPE-ACTION-NOT-IN-PRD", prd_path, "prototype action is absent from the PRD baseline", action)
-        for ac_id in sorted(prototype_acs - prd_ac_refs):
-            self.add("BLOCK", "HANDOFF-PROTOTYPE-AC-NOT-IN-PRD", prd_path, "prototype AC is absent from the PRD baseline", ac_id)
-        if level in {"L3", "L4"}:
-            for ac_id in sorted(prototype_acs - machine_ac_defs):
-                self.add("BLOCK", "HANDOFF-PROTOTYPE-AC-NOT-MACHINE-DEFINED", prd_path, "prototype AC has no machine-readable PRD definition", ac_id)
-            for view in sorted(prototype_views - declared_views):
-                self.add("BLOCK", "HANDOFF-UNDECLARED-PROTOTYPE-VIEW", prd_path, "prototype exposes a view outside the declared PRD scope", view)
-            for view in sorted(declared_views - prototype_views):
-                self.add("BLOCK", "HANDOFF-DECLARED-VIEW-NOT-PROTOTYPED", prd_path, "declared implementation view is absent from all supplied prototypes", view)
-            for metric in sorted(prototype_metrics - prd_metric_refs):
-                self.add("BLOCK", "HANDOFF-PROTOTYPE-METRIC-NOT-IN-PRD", prd_path, "prototype metric is absent from the PRD caliber contract", metric)
-        self.metrics.update({
-            "handoff_prototypes": len(prototype_paths),
-            "handoff_views": len(prototype_views),
-            "handoff_actions": len(prototype_actions),
-            "handoff_acceptance_refs": len(prototype_acs),
-            "handoff_metrics": len(prototype_metrics),
-        })
-
-    def check_custom_rules(self, custom_root: Path, artifacts: dict[str, list[Path]]) -> None:
-        """Load local declarative regex rules; never execute project Python code."""
-        rule_dir = custom_root / "validators"
-        if not rule_dir.is_dir():
-            return
-        loaded_rules = 0
-        for rule_file in sorted(rule_dir.glob("*.yaml")):
+def resolve_output_language(gate: Gate, requested: str) -> str:
+    if requested != "auto":
+        return requested
+    for path, raw in gate._cache.items():
+        metadata = Gate._frontmatter(raw)
+        if not metadata and path.suffix.casefold() in {".yaml", ".yml", ".json"}:
             try:
-                document = yaml.safe_load(rule_file.read_text(encoding="utf-8")) or {}
-            except (OSError, UnicodeError, yaml.YAMLError) as exc:
-                self.add("BLOCK", "CUSTOM-RULE-PARSE", rule_file, f"本地校验规则不可读：{exc}")
-                continue
-            rules = document.get("rules", []) if isinstance(document, dict) else []
-            if not isinstance(rules, list):
-                self.add("BLOCK", "CUSTOM-RULE-SHAPE", rule_file, "本地校验文件的 rules 必须是数组")
-                continue
-            for index, rule in enumerate(rules):
-                ref = f"{rule_file.name}:rules[{index}]"
-                if not isinstance(rule, dict):
-                    self.add("BLOCK", "CUSTOM-RULE-SHAPE", rule_file, "规则必须是对象", ref)
-                    continue
-                code = str(rule.get("id", ""))
-                artifact_kind = str(rule.get("artifact", "")).lower()
-                assertion = str(rule.get("assertion", "")).lower()
-                severity = str(rule.get("severity", "GAP")).upper()
-                pattern = rule.get("pattern")
-                unsafe_pattern = isinstance(pattern, str) and bool(re.search(
-                    r"\\[1-9]|\(\?<=[^)]|\(\?<!|\([^)]*[+*][^)]*\)\s*(?:[+*]|\{)", pattern
-                ))
-                if (
-                    not re.fullmatch(r"CUST-[A-Z0-9-]+", code, re.I)
-                    or artifact_kind not in {*artifacts, "all"}
-                    or assertion not in {"must_match", "must_not_match"}
-                    or severity not in {"BLOCK", "GAP"}
-                    or not isinstance(pattern, str)
-                    or len(pattern) > 500
-                    or unsafe_pattern
-                ):
-                    self.add(
-                        "BLOCK", "CUSTOM-RULE-CONTRACT", rule_file,
-                        "规则需声明 CUST-*、有效 artifact、must_match/must_not_match、BLOCK/GAP 和不含反向引用/嵌套量词的短 pattern",
-                        ref,
-                    )
-                    continue
-                try:
-                    compiled = re.compile(pattern, re.I | re.M)
-                except re.error as exc:
-                    self.add("BLOCK", "CUSTOM-RULE-REGEX", rule_file, f"正则无效：{exc}", ref)
-                    continue
-                target_kinds = list(artifacts) if artifact_kind == "all" else [artifact_kind]
-                loaded_rules += 1
-                for target_kind in target_kinds:
-                    for target in artifacts.get(target_kind, []):
-                        raw = self.read(target)
-                        matched = bool(compiled.search(raw))
-                        failed = assertion == "must_match" and not matched or assertion == "must_not_match" and matched
-                        if failed:
-                            self.add(
-                                severity, code.upper(), target,
-                                str(rule.get("message") or f"本地规则 {code} 未通过"),
-                                str(rule.get("ref") or ref),
-                                affected_consumers=tuple(str(item) for item in rule.get("affected_consumers", []) or []),
-                            )
-        self.metrics["custom_validator_rules"] = loaded_rules
+                loaded = json.loads(raw) if path.suffix.casefold() == ".json" else yaml.safe_load(raw)
+                metadata = loaded if isinstance(loaded, dict) else {}
+            except (json.JSONDecodeError, yaml.YAMLError):
+                metadata = {}
+        declared = str(metadata.get("document_language", "")).casefold()
+        if declared.startswith("en"):
+            return "en-US"
+        if declared.startswith("zh"):
+            return "zh-CN"
+        html_lang = re.search(r"<html\b[^>]*\blang\s*=\s*['\"]([^'\"]+)", raw, re.I)
+        if html_lang:
+            return "en-US" if html_lang.group(1).casefold().startswith("en") else "zh-CN"
+    combined = "\n".join(gate._cache.values())
+    cjk_count = len(re.findall(r"[\u4e00-\u9fff]", combined))
+    english_words = len(re.findall(r"\b[A-Za-z]{3,}\b", combined))
+    return "en-US" if english_words >= 20 and cjk_count < 20 else "zh-CN"
 
 
-def _balanced_javascript(source: str) -> bool:
-    """Small fallback only; Node syntax checking is preferred when available."""
-    stack: list[str] = []
-    pairs = {")": "(", "]": "[", "}": "{"}
-    quote = ""
-    escaped = False
-    for char in source:
-        if quote:
-            if escaped:
-                escaped = False
-            elif char == "\\":
-                escaped = True
-            elif char == quote:
-                quote = ""
-            continue
-        if char in "'\"`":
-            quote = char
-        elif char in "([{":
-            stack.append(char)
-        elif char in ")]}":
-            if not stack or stack.pop() != pairs[char]:
-                return False
-    return not quote and not stack
-
-
-def result_payload(gate: Gate, profile: str, retry_command: str = "") -> dict[str, Any]:
+def result_payload(gate: Gate, profile: str, retry_command: str = "", output_language: str = "zh-CN") -> dict[str, Any]:
     blocks = sum(item.severity == "BLOCK" for item in gate.findings)
     p0_unknowns = sum(item.severity == "P0_UNKNOWN" for item in gate.findings)
     gaps = sum(item.severity == "GAP" for item in gate.findings)
     code = 2 if blocks else 3 if p0_unknowns else 1 if gaps else 0
-    rendered_findings = []
-    for item in gate.findings:
-        record = asdict(item)
-        localized_message = item.message if re.search(r"[\u4e00-\u9fff]", item.message) else f"{item.cause} 技术明细：{item.message}"
-        record.update({
-            "message_zh": localized_message,
-            "cause_zh": item.cause,
-            "fix_zh": item.how_to_fix,
-            "repair_example_zh": item.repair_example,
-        })
-        rendered_findings.append(record)
+    rendered_findings = [localized_finding(item, output_language) for item in gate.findings]
     consumed_browser_evidence = bool(gate.metrics.get("prototype_browser_evidence"))
-    coverage = "确定性静态门禁；不调用浏览器、LLM 或子 Agent"
+    english = output_language.casefold().startswith("en")
+    coverage = (
+        "Deterministic static gate; it does not invoke a browser, LLM or sub-agent"
+        if english else "确定性静态门禁；不调用浏览器、LLM 或子 Agent"
+    )
     if consumed_browser_evidence:
-        coverage += "；已校验外部真实浏览器 ARUN 的结构、证据与签署"
+        coverage += (
+            "; external real-browser ARUN structure, evidence and sign-off were validated"
+            if english else "；已校验外部真实浏览器 ARUN 的结构、证据与签署"
+        )
     return {
         "status": STATUSES[code],
         "profile": profile,
+        "output_language": output_language,
         "summary": {"blockers": blocks, "p0_unknowns": p0_unknowns, "gaps": gaps, "findings": len(gate.findings)},
         "coverage": coverage,
-        "not_proven": not_proven_for(gate),
+        "not_proven": not_proven_for(gate, output_language),
         "retry_command": retry_command,
         "metrics": {**gate.metrics, "input_read_counts": dict(gate.read_counts)},
         "findings": rendered_findings,
@@ -2023,20 +866,66 @@ def result_payload(gate: Gate, profile: str, retry_command: str = "") -> dict[st
     }
 
 
+def diagnostic_roots(findings: list[Finding], limit: int) -> tuple[list[tuple[Finding, int]], int]:
+    """Compact by code while preferring a concrete representative over a template ref."""
+    first: dict[str, Finding] = {}
+    counts: dict[str, int] = {}
+    order: list[str] = []
+    for item in findings:
+        if item.code not in first:
+            first[item.code] = item
+            order.append(item.code)
+        elif _representative_ref_score(item.ref) > _representative_ref_score(first[item.code].ref):
+            first[item.code] = item
+        counts[item.code] = counts.get(item.code, 0) + 1
+    selected = order[:max(limit, 0)]
+    return [(first[code], counts[code]) for code in selected], len(order)
+
+
+def _representative_ref_score(ref: str) -> int:
+    """Rank a real stable reference above blank, shell or interpolation examples."""
+    value = str(ref or "").strip()
+    if not value:
+        return 0
+    if re.search(r"\$\{[^}]+\}|<[^>]+>|\{[^{}]+\}", value):
+        return 1
+    return 2
+
+
+def run_sidecar_validator(gate: Gate, script: str, path: Path, code: str, extra: list[str] | None = None) -> None:
+    result = subprocess.run(
+        [sys.executable, str(VALIDATOR_DIR / script), str(path), *(extra or [])],
+        capture_output=True, text=True, encoding="utf-8", errors="replace",
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+    )
+    if result.returncode == 0:
+        return
+    lines = [line.removeprefix("FAIL: ") for line in result.stdout.splitlines() if line.startswith("FAIL: ")]
+    if not lines:
+        lines = [line for line in (result.stdout.strip() or result.stderr.strip()).splitlines() if line]
+    for line in lines[:10] or [f"{script} 校验失败"]:
+        gate.add("BLOCK", code, path, line)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Lightweight, non-generative final quality gate")
     parser.add_argument("--profile", choices=["requirement", "prd", "prototype", "handoff", "full", "stage0", "agent_handoff"], required=True)
     parser.add_argument("--requirement", type=Path, help="requirement register YAML")
+    parser.add_argument("--register", type=Path, action="append", help="profile=requirement 的侧车需求登记册；提供时执行登记册语义校验")
+    parser.add_argument("--review-record", type=Path, help="profile=prd baseline 阶段可选评审记录 YAML；提供时执行签署闭合校验")
     parser.add_argument("--prd", type=Path, help="unified PRD Markdown")
     parser.add_argument("--prototype", type=Path, action="append", help="HTML prototype; repeat for admin/H5/multi-surface handoff")
+    parser.add_argument("--prototype-baseline", type=Path, help="Optional previous HTML baseline; inherited prototype blockers become gaps, new regressions still block")
     parser.add_argument("--inventory", type=Path, help="Stage 0 brownfield inventory YAML")
     parser.add_argument("--manifest", type=Path, help="Agent handoff manifest YAML")
     parser.add_argument("--acceptance-run", type=Path, action="append", help="Executed ARUN-* YAML; repeat when prototype AC evidence is split")
     parser.add_argument("--level", choices=["auto", *LEVELS], default="L2")
     parser.add_argument("--stage", choices=list(STAGE_ORDER), default="baseline")
     parser.add_argument("--scope-ref", action="append", default=[], help="Limit stage/P0 evaluation to one stable-ID scope; repeat as needed")
+    parser.add_argument("--domain", action="append", default=[], help="当前工件适用的领域 ID；用于隔离 custom 规则，可重复")
     parser.add_argument("--format", choices=["concise", "json"], default="concise")
-    parser.add_argument("--diagnostics", choices=["first", "summary", "full"], default="full")
+    parser.add_argument("--language", choices=["auto", "zh-CN", "en-US"], default="auto", help="Human-readable gate diagnostics; auto reads document_language or HTML lang")
+    parser.add_argument("--diagnostics", choices=["first", "roots", "summary", "full"], default="roots")
     parser.add_argument("--max-findings", type=int, default=20)
     parser.add_argument("--custom-root", type=Path, help="项目本地私有扩展目录；默认自动发现当前目录 custom/")
     args = parser.parse_args()
@@ -2051,6 +940,24 @@ def main() -> int:
     }[args.profile]
     gate = Gate()
     prototype_level = "L2" if args.level == "auto" else args.level
+    if args.prototype_baseline:
+        if not args.prototype_baseline.is_file():
+            gate.add("BLOCK", "GATE-NOT-FILE", args.prototype_baseline, "prototype baseline does not exist or is not a file", "prototype-baseline")
+        else:
+            baseline_gate = Gate()
+            baseline_gate.check_prototype(args.prototype_baseline, prototype_level)
+            gate.prototype_baseline_signatures = Counter(
+                (item.code, item.ref, item.message)
+                for item in baseline_gate.findings
+                if item.severity == "BLOCK" and item.code.startswith("PROTO-")
+            )
+            baseline_raw = baseline_gate.read(args.prototype_baseline)
+            gate.metrics.update({
+                "prototype_baseline": str(args.prototype_baseline),
+                "prototype_baseline_sha256": gate._sha256(baseline_raw),
+                "prototype_baseline_blockers": sum(gate.prototype_baseline_signatures.values()),
+                "prototype_inherited_findings": 0,
+            })
     for name in required:
         value = getattr(args, name)
         values = value if name == "prototype" and isinstance(value, list) else [value]
@@ -2082,6 +989,36 @@ def main() -> int:
             gate.check_stage0(args.inventory)
     valid_prd = args.prd if args.prd and args.prd.is_file() else None
     valid_prototypes = [path for path in (args.prototype or []) if path.is_file()]
+    for register in args.register or []:
+        if not register.is_file():
+            gate.add("BLOCK", "GATE-NOT-FILE", register, "input does not exist or is not a file", "register")
+        else:
+            gate.check_register_sidecar(register)
+    if args.review_record:
+        if not args.review_record.is_file():
+            gate.add("BLOCK", "GATE-NOT-FILE", args.review_record, "input does not exist or is not a file", "review-record")
+        else:
+            run_sidecar_validator(gate, "validate_review_record.py", args.review_record, "REVIEW-RECORD-SIDECAR")
+    if args.profile in {"prd", "full"} and valid_prd:
+        ledgers = sorted(valid_prd.parent.glob("*ledger*.y*ml"))
+        if ledgers:
+            run_sidecar_validator(gate, "validate_traceability_ledger.py", ledgers[0], "TRACE-LEDGER-SIDECAR")
+        else:
+            gate.add("INFO", "TRACE-LEDGER-SKIP", valid_prd, "未在 PRD 同目录发现追溯矩阵 ledger 侧车，跳过双向追溯闭合校验")
+    if args.profile in {"prototype", "handoff", "full"}:
+        for prototype_path in valid_prototypes:
+            marker = re.search(r'data-ia-skeleton="([^"]+)"', gate.read(prototype_path))
+            if not marker:
+                gate.add("INFO", "PROTO-IA-SKELETON-SKIP", prototype_path, "原型未声明 IA skeleton 标记，跳过 IA 骨架校验")
+                continue
+            skeleton = prototype_path.parent / marker.group(1)
+            if not skeleton.is_file():
+                gate.add("BLOCK", "PROTO-IA-SKELETON-NOT-FILE", prototype_path, "IA skeleton 标记引用的文件不存在", marker.group(1))
+            else:
+                run_sidecar_validator(
+                    gate, "validate_ia_skeleton.py", skeleton, "PROTO-IA-SKELETON",
+                    extra=["--level", prototype_level],
+                )
     if args.profile in {"handoff", "full"} and valid_prd and valid_prototypes:
         gate.check_handoff(valid_prd, valid_prototypes, prototype_level)
     if args.profile in {"handoff", "full"} and valid_prd and args.manifest and args.manifest.is_file():
@@ -2131,9 +1068,10 @@ def main() -> int:
             "stage0": [args.inventory] if args.inventory and args.inventory.is_file() else [],
             "handoff": [args.manifest] if args.manifest and args.manifest.is_file() else [],
         }
-        gate.check_custom_rules(custom_root, artifact_map)
+        gate.check_custom_rules(custom_root, artifact_map, active_domains=tuple(args.domain))
     retry_command = "python scripts/quality_gate.py " + subprocess.list2cmdline(sys.argv[1:])
-    payload = result_payload(gate, args.profile, retry_command)
+    output_language = resolve_output_language(gate, args.language)
+    payload = result_payload(gate, args.profile, retry_command, output_language)
     if args.format == "json":
         # ASCII escaping keeps JSON deterministic even when callers force a legacy
         # console encoding; message_zh remains lossless after JSON decoding.
@@ -2144,23 +1082,37 @@ def main() -> int:
             f"{payload['status']} profile={args.profile} blockers={summary['blockers']} "
             f"p0_unknowns={summary['p0_unknowns']} gaps={summary['gaps']}"
         )
-        print("NOT_PROVEN: " + "；".join(payload["not_proven"]))
-        if args.diagnostics == "first":
-            limit = 1
-        elif args.diagnostics == "summary":
-            limit = min(max(args.max_findings, 0), 12)
+        english = output_language.casefold().startswith("en")
+        print("NOT_PROVEN: " + ("; " if english else "；").join(payload["not_proven"]))
+        labels = ("Cause", "Fix", "Example") if english else ("原因", "修复", "示例")
+        if args.diagnostics == "roots":
+            roots, unique_count = diagnostic_roots(gate.findings, args.max_findings)
+            for item, count in roots:
+                ref = f" [{item.ref}]" if item.ref else ""
+                localized = localized_finding(item, output_language)
+                print(f"{item.severity} {item.code} x{count}{ref}: {localized['message']}")
+                print(f"  {labels[0]}: {localized['cause']}")
+                print(f"  {labels[1]}: {localized['how_to_fix']}")
+                print(f"  {labels[2]}: {localized['repair_example']}")
+            print(
+                f"ROOT_GROUPS shown={len(roots)} unique={unique_count} "
+                f"repeated_findings_compacted={len(gate.findings) - len(roots)}"
+            )
+            hidden_groups = unique_count - len(roots)
+            if hidden_groups > 0:
+                print(f"... {hidden_groups} additional root groups; rerun with --format json")
         else:
-            limit = max(args.max_findings, 0)
-        for item in gate.findings[:limit]:
-            ref = f" [{item.ref}]" if item.ref else ""
-            localized = item.message if re.search(r"[\u4e00-\u9fff]", item.message) else f"{item.cause} 技术明细：{item.message}"
-            print(f"{item.severity} {item.code}{ref}: {localized}")
-            print(f"  原因: {item.cause}")
-            print(f"  修复: {item.how_to_fix}")
-            print(f"  示例: {item.repair_example}")
-        hidden = len(gate.findings) - limit
-        if hidden > 0:
-            print(f"... {hidden} additional findings; rerun with --format json")
+            limit = 1 if args.diagnostics == "first" else min(max(args.max_findings, 0), 12) if args.diagnostics == "summary" else max(args.max_findings, 0)
+            for item in gate.findings[:limit]:
+                ref = f" [{item.ref}]" if item.ref else ""
+                localized = localized_finding(item, output_language)
+                print(f"{item.severity} {item.code}{ref}: {localized['message']}")
+                print(f"  {labels[0]}: {localized['cause']}")
+                print(f"  {labels[1]}: {localized['how_to_fix']}")
+                print(f"  {labels[2]}: {localized['repair_example']}")
+            hidden = len(gate.findings) - limit
+            if hidden > 0:
+                print(f"... {hidden} additional findings; rerun with --format json")
         if gate.findings:
             print(f"RETRY: {payload['retry_command']}")
     return int(payload["exit_code"])

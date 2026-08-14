@@ -1,42 +1,49 @@
-## Description: <br>
-Estimates first-year value for one major-US credit card by combining welcome bonus value, annual earn, statement credits, and annual fee, with optional user-provided spending details. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Estimate first-year value for one major-US credit card given an optional spending breakdown.
 
-## Publisher: <br>
-[jiahongc](https://clawhub.ai/user/jiahongc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jiahongc](https://clawhub.ai/user/jiahongc)
 
-## Use Case: <br>
-External users use this agent skill to estimate the first-year value of a specific major-US credit card, including welcome bonus, annual earn, statement credits, annual fee, and confidence notes from issuer-first research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credit-card offers, fees, point valuations, and statement credits can change or conflict across sources. <br>
-Mitigation: Use issuer-first research, cite fetched sources, flag uncertain claims, and treat the result as an estimate rather than financial advice. <br>
-Risk: User prompts may include unnecessary personal financial details. <br>
-Mitigation: Use spending categories and approximate amounts only; avoid account numbers and other sensitive personal financial information. <br>
-Risk: Optional Brave Search use requires a search API key when configured. <br>
-Mitigation: Provide BRAVE_API_KEY only in trusted environments and fall back to built-in web search when the key or curl is unavailable. <br>
+## Use Case:
 
+Consumers and personal-finance reviewers use this skill to compare the estimated first-year value of a specific major-US credit card from a spend profile, welcome offer, earning rates, credits, and annual fee.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/jiahongc/card-value) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Condensed Markdown report with spend profile, welcome bonus, annual earn, credits, net first-year value, confidence notes, and sources.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses current web lookups; optional Brave Search API key and curl support may be used when configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Credit-card offers, annual fees, earning rates, credits, and redemption assumptions can change and may make estimates stale or incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify important application decisions against the issuer's current terms and treat the skill output as informational comparison guidance.
+
+## Reference(s):
+
+- [Card Value Skill Page](https://clawhub.ai/jiahongc/skills/card-value)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown sections with compact net-value math and confidence notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses hidden YAML for sources when available; estimates are informational and should be checked against current issuer terms.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

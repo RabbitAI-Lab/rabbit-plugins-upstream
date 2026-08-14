@@ -1,8 +1,8 @@
 # 百炼®标书开放 API 契约参考
 
-> **契约兼容标注（skill biaoshu-bailian 2.2.0）**
+> **契约兼容标注（skill biaoshu-bailian 2.2.1）**
 > - 适配后端 API：`/api/open/v1`
-> - 契约核对日期：2026-07-23（净化线移除 experience/feedback 与 skill/version 版本检查端点；凭证仅经本地 config.json、不读环境变量）（后端字段/枚举变化时更新此处并 bump 版本）
+> - 契约核对日期：2026-08-10（`max_total_pages` 同步到 500；余额门槛/扣积分说明细化）（后端字段/枚举变化时更新此处并 bump 版本）
 > - 关键枚举快照：`risk_level ∈ {high, review, tip}` · `result_type ∈ {suspected, detected}` · `priority ∈ {high, medium, low}`
 > - 渲染兼容策略：`report.py` 同时兼容文档值（高/中/低）与实测值、证据多形态、缺字段不崩——契约小幅漂移只需 PATCH，不触发 MAJOR。
 
@@ -42,7 +42,8 @@
 - **上传方式**：本 skill 一律 `multipart/form-data` 直传本地文件（后端另有 `file_url` 入参，**本 skill 不使用**，也不做任何远程抓取）。
 - **限流**：每 App Key 默认 60 req/min、同时进行任务 ≤ 3；超限 429。
 - **统一错误体**：`{ "error": { "code": "...", "message": "..." } }`
-- **计费**：仅在 ③生成（正文逐条 + 导出）发生一次；①解读、②抽包不扣费，仅受限流约束。
+- **计费**：实际扣积分只发生在 ③生成（正文逐条 + 导出）；①解读、②抽包、④合规审查本身不扣积分。
+- **余额门槛**：通过开放 API / Skill 提交时，①解读、③生成、④合规审查都要求 `wallet_balance >= 1` 才能发起；②抽包与各类查询接口不受该门槛限制。
 - **结果时效**：任务结果与 .docx 默认保留约 7 天，过期取结果返回 404 `result_expired`。⚠️ 这意味着**结果在此期间留存于百炼®标书服务器**（第三方存储）；上传文件与历史数据以账户身份存于平台，用户可登录官网查看管理——向用户交代结果时请一并说明。
 
 ## 9 个端点详情
@@ -66,7 +67,7 @@
 ```json
 {"service":"bid_document",
  "result":{"packages":[...],"is_multi_package":true,"package_count":2,
-           "suggested_pages":50,"max_total_pages":300}}
+           "suggested_pages":50,"max_total_pages":500}}
 ```
 - 把 `packages` 给用户挑选，收集选中的 `package_ids`。
 - `is_multi_package=false` 时可跳过选包，generate 不带 `package_ids`。
@@ -102,12 +103,18 @@
 `phone_bound`（bool）；另有 `bind_url` / `recharge_url`（**均携带明文 `bind_key=<app_key>`**）。
 🔒 **本 skill 不使用也不转发这些带 Key 的链接**（防凭证经会话记录/截图/链接预览泄露）——积分不足一律引导用户自行登录官网充值（不含参数的普通链接）。
 
-### 积分前置闸门（提交时 402）
+### 余额门槛 vs 实际扣积分（提交时 402）
 
 积分余额 < 1 时，`POST /interpretations`、`POST /bid-documents/{pid}/generate`、
-`POST /projects/{pid}/compliance-reviews` 三个计费入口在**提交时**直接返回 402
-`insufficient_balance`（错误体含上述引导字段），充值或绑定手机号领积分后方可操作；
-抽包（packages）与查询类接口不受限。skill 侧提交前也会先调 `GET /me` 预检余额。
+`POST /projects/{pid}/compliance-reviews` 三个提交入口都会在**提交时**直接返回 402
+`insufficient_balance`（错误体含上述引导字段）；充值后方可操作。
+
+这和“是否实际扣积分”是两件事：
+- **余额门槛**：解读 / 生成 / 合规三个入口都要求余额大于 0 才能提交。
+- **实际扣积分**：仍只有生成会真实消耗积分；解读、抽包、合规审查本身不扣积分。
+- **不受门槛限制**：抽包（packages）、`GET /me`、任务查询、结果获取等查询类接口不受该门槛限制。
+
+skill 侧提交前也会先调 `GET /me` 做预检，优先把这层差异解释给用户，避免把“余额不足拦截”误说成“这一步会扣积分”。
 
 ## 错误码速查
 

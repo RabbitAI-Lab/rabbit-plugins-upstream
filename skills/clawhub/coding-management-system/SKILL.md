@@ -1,148 +1,191 @@
 ---
 name: cms-project-governance
-description: Turn a vague idea, business problem, project direction, or new requirement into a clear outcome, minimal useful scope, acceptance evidence, sized plan, and controlled AI delivery. Use for non-technical requirement guidance, Small/Medium/Large sizing, Lite/Standard/Full governance, Milestones, Programs, Work Orders, QA acceptance, direction checks, drift recovery, target rebaseline, roadmap review, or reducing project-document overhead. Do not use for ordinary coding loops whose target and acceptance are already authorized; use agent-loop-engineering.
+description: Turn vague or changing goals and legacy CMS project records into one compact, conflict-checked delivery state with clear outcomes, right-sized scope, bounded autonomy, alignment checks, delivery-class-aware evidence, and independent QA control. Use for non-technical requirement guidance, Legacy Bootstrap, Small/Medium/Large sizing, Lite/Standard/Full governance, Controller-Developer-QC routing, Milestones, Work Orders, QA acceptance, drift recovery, target rebaseline, roadmap review, or reducing token and document overhead. For already-authorized ordinary coding loops, use agent-loop-engineering.
 ---
 
 # CMS Project Governance
 
-Version: 2.0.0
+Version: 2.1.0
 
-Use this skill as the human-facing control plane for AI-assisted software delivery. Help the user decide what outcome matters, authorize the smallest useful delivery, keep long-running work aligned, and separate implementation claims from acceptance.
+Use this skill as the control plane for AI-assisted software delivery. Convert intent and accumulated project records into one current authorization, let execution proceed proactively inside that boundary, and keep completion claims no stronger than their evidence.
 
 Respond in the user's language. Use plain language before technical language.
 
 ## Language Files
 
-- For English work, use this file and load references from `{baseDir}/references/en/`.
-- 中文任务请先读取 `{baseDir}/SKILL.zh-CN.md`，并只加载 `{baseDir}/references/zh-CN/` 中需要的参考文件。
-- Keep machine-readable frontmatter keys and state enum values in English in both languages so governance and execution remain interoperable.
+- For English work, use this file and load only needed files from `{baseDir}/references/en/`.
+- For Chinese work, first read `{baseDir}/SKILL.zh-CN.md` and load only needed files from `{baseDir}/references/zh-CN/`.
+- Keep machine-readable keys and enum values in English.
 
 ## Core Principles
 
 1. The user owns purpose, priorities, and consequential decisions.
-2. The AI owns requirement analysis, options, recommendations, decomposition, and process guidance.
-3. Do not require a non-technical user to design architecture, select a framework, or invent tests.
-4. Governance should reduce uncertainty and rework, not maximize documents.
-5. A Milestone is a coherent user-observable capability, not a short task or timed stage.
-6. `Developer Complete` is not accepted work.
-7. Evidence outranks status text.
-8. Local compliance does not excuse global goal drift.
-9. Use the lightest governance profile that controls the actual risk.
-10. Keep Owner authority, Controller authority, Developer authority, and QA authority distinct.
+2. The AI should resolve ordinary reversible implementation choices without shifting them to a non-technical user.
+3. Governance reduces uncertainty, drift, token cost, and rework; it does not maximize documents.
+4. One current fact has one authoritative home.
+5. A Milestone is a coherent user-observable capability, not a short task, test failure, or timed stage.
+6. `Developer Complete`, `Stage Verified`, `Runtime Verified`, and `Accepted` are distinct claims.
+7. Contract or document acceptance is not runtime feature acceptance.
+8. Evidence outranks status text; conflicting evidence uses the weaker result.
+9. Local compliance does not excuse global goal drift.
+10. Use the lightest governance profile that controls actual risk.
 
 ## Relationship To Agent Loop Engineering
 
-- This skill discovers, sizes, authorizes, reviews, and accepts work.
-- `agent-loop-engineering` executes an authorized coding target through bounded loops.
-- The handoff is one `Docs/ACTIVE_PACKET.md` using contract version `2.0`.
-- Either skill may work alone. When both are installed, this skill owns target and acceptance authority; the execution skill owns implementation evidence.
+- This skill discovers, sizes, bootstraps, authorizes, aligns, and accepts work.
+- `agent-loop-engineering` executes authorized work through Bounded Autopilot.
+- Both use one `Docs/ACTIVE_PACKET.md` with contract version `2.0` and 2.1 policy fields.
+- This skill owns target and final QA authority; execution owns implementation and stage evidence.
+- In a one-agent prompt, `QC` means Stage Reviewer. Standard/Full final acceptance remains independent.
 
-Read `{baseDir}/references/en/execution-contract.md` before creating or reviewing an Active Packet.
+Read `{baseDir}/references/en/execution-contract.md`.
 
 ## Choose One Mode
 
-Choose exactly one authority mode for the current request. Do not mix modes in one pass.
+Choose one authority mode per pass:
 
-| User need | Mode | Read |
+| Need | Mode | Reference |
 | --- | --- | --- |
-| "I have an idea but do not know how to build it" | Goal Discovery | `references/en/goal-discovery.md` |
-| Turn a clear goal into a right-sized delivery | Planning and Sizing | `references/en/planning-and-sizing.md` |
-| Create a Milestone, Program, or authorized Work Order | Dispatch | `references/en/governance-profiles.md`, `references/en/controller-qa.md` |
-| Review only the latest delivery or handoff | Delivery Review / QA | `references/en/controller-qa.md` |
-| Check whether current work still serves the original purpose | Direction Alignment | `references/en/alignment-and-rebaseline.md` |
-| Assess a new requirement against the current target | Target Rebaseline | `references/en/alignment-and-rebaseline.md` |
-| Audit the whole project or clarify the finish line | Audit / Roadmap | `references/en/alignment-and-rebaseline.md` |
+| Idea or problem is still vague | Goal Discovery | `goal-discovery.md` |
+| Convert a clear outcome into bounded work | Planning and Sizing | `planning-and-sizing.md` |
+| Old CMS files exist but no reliable current packet | Legacy Bootstrap | `legacy-bootstrap.md` |
+| Authorize a Milestone, Program, or Work Order | Dispatch | `governance-profiles.md`, `controller-qa.md` |
+| Review the latest stage or delivery | Stage Review / Delivery QA | `controller-qa.md` |
+| Check whether work still serves the outcome | Direction Alignment | `alignment-and-rebaseline.md` |
+| Assess a requirement that may change target | Target Rebaseline | `alignment-and-rebaseline.md` |
+| Audit the whole project or define finish line | Audit / Roadmap | `alignment-and-rebaseline.md` |
 
-Mode boundaries:
+Do not mix a whole-project audit, latest-delivery QA, and target rebaseline in one authority pass.
 
-- Goal Discovery may produce an Intent Brief. It must not start implementation.
-- Planning and Dispatch may authorize work. They must not implement it.
-- Delivery Review / QA judges the latest authorized scope. It is not a whole-project audit.
-- Direction Alignment checks drift. It must not silently rewrite the target.
-- Target Rebaseline changes target or Non-Goals only with Owner authority.
-- Audit / Roadmap is read-only unless the user separately authorizes state updates.
+## Legacy Bootstrap
+
+When no valid Active Packet exists:
+
+1. locate `Docs` or `docs` case-insensitively;
+2. index names, sizes, and timestamps without reading all bodies;
+3. read only canonical current-state files and files they explicitly link;
+4. identify current target, acceptance, active Work Order, latest effective state, and one next action;
+5. detect contradictory routes, duplicate current assignments, superseding QA decisions, missing authority, and claim-class mismatch;
+6. compute an authority fingerprint;
+7. draft one compact Active Packet when coherent;
+8. write only with explicit `--write` and only inside the resolved workspace.
+
+Use:
+
+```text
+node {baseDir}/../agent-loop-engineering/scripts/bootstrap-active-packet.mjs --workspace <project-path> --json
+```
+
+If the skills are installed separately, locate the same script inside the installed `agent-loop-engineering` skill. If conflicts exist, write nothing and return one consolidated Owner decision request.
+
+Preserve legacy history. After migration, stop expanding duplicate STATUS, NEXT_ACTIONS, PENDING, COMPLETED, per-stage dispatch, and per-stage handoff files unless a regulated process explicitly requires them.
+
+Read `{baseDir}/references/en/legacy-bootstrap.md`.
 
 ## Universal Workflow
 
 ```text
-Idea or problem
-  -> clarify desired outcome
-  -> define simplest useful workflow
-  -> expose assumptions and boundaries
-  -> define observable success
-  -> Ready for Planning
-  -> classify Small / Medium / Large
+Idea, request, or legacy state
+  -> discover or bootstrap one desired outcome
+  -> define minimum useful scope and Non-Goals
+  -> classify delivery claims and evidence
+  -> size Small / Medium / Large
   -> choose Lite / Standard / Full
-  -> create Active Packet
-  -> authorize execution
-  -> direction checks
-  -> QA decision
+  -> create or refresh Active Packet
+  -> Bounded Autopilot execution
+  -> stage review and repair as needed
+  -> alignment checks
+  -> independent final QA when required
   -> accept, repair, split, rebaseline, or stop
 ```
 
-Do not demand perfect requirements. Proceed with reversible uncertainty when assumptions are explicit. Stop only when an unknown can change the core target, create material risk, or waste substantial work.
+Proceed with reversible uncertainty when assumptions are explicit. Stop only when an unknown can change the core target, create material risk, cross a protected boundary, or waste substantial work.
 
-## Readiness And Delivery States
+## State And Claim Dimensions
 
 Keep these dimensions separate:
 
-| Dimension | Allowed values |
+| Dimension | Values |
 | --- | --- |
 | Goal readiness | `Concept`, `Direction`, `Ready for Planning`, `Ready for Execution`, `Owner Decision Required` |
-| Execution | `Ready`, `In Progress`, `Ready for Review`, `Needs Fix`, `Blocked`, `Invalid State` |
+| Execution | `Ready`, `In Progress`, `Ready for Independent Acceptance`, `Needs Fix`, `Blocked`, `Invalid State` (`Ready for Review` is legacy input) |
 | Alignment | `Aligned`, `At Risk`, `Locally Compliant, Globally Misaligned`, `Owner Review Required` |
+| Stage review | `Not Reviewed`, `Passed`, `Needs Fix`, `Blocked` |
 | QA decision | `Not Reviewed`, `Accepted`, `Accepted With Risk`, `Failed`, `Blocked`, `Not Required` |
 | Project | `Active`, `Needs Fix`, `Blocked`, `Accepted`, `Accepted With Risk`, `Invalid State` |
+| Delivery class | `Runtime`, `Contract`, `Governance`, `Artifact`, `Mixed` |
 
-Do not use one field to hide another. For example, a green implementation check may coexist with `alignment_state: Locally Compliant, Globally Misaligned`.
+Do not describe a Contract milestone as implemented runtime, a screenshot as interaction proof, a build as usability proof, or Stage Reviewer approval as independent acceptance.
+
+## Autonomy And Acceptance
+
+For `acceptance_mode: Layered`:
+
+- Controller may authorize several bounded stages in one Packet.
+- Developer proceeds without asking after each successful loop.
+- Stage Reviewer may pass a stage or return `Needs Fix` on the same Packet and Work Order.
+- Standard/Full terminal state is `Ready for Independent Acceptance`.
+- Independent QA receives criteria, diff, commands, raw evidence, limits, and target link, not the Developer's desired verdict.
+
+Lite may self-accept only when `qa_required: false`, work is local and reversible, automatic and functional evidence pass, and no material limit remains.
+
+Repeated risk is a governance signal: the same material risk carried twice, or three consecutive formal `Accepted With Risk` decisions, triggers Direction Alignment before further expansion.
+
+Read `{baseDir}/references/en/controller-qa.md`.
+
+## Alignment And Resizing
+
+Run a lightweight target-link check every stage. Run formal alignment at stages 3, 6, and 10, or immediately on authority fingerprint change, scope growth over 20 percent, repeated no-progress failure, user-flow failure behind green checks, or a new protected-boundary idea.
+
+Direction Alignment does not rewrite the target. Target changes require a separate Rebaseline decision and then a separate Planning/Dispatch pass.
+
+Work expected to exceed 20 hours must be split into independently valuable Programs or returned for Owner rebaseline. Do not authorize an unreviewed 30-40 hour run.
+
+## Compact Reading And Documents
+
+Normal governance reads:
+
+1. Active Packet;
+2. linked authority files only when fingerprint changed;
+3. current Work Order or delivery delta;
+4. required evidence;
+5. last three to five loop records.
+
+Audit mode may read broadly but must remain read-only and use an explicit context budget. Do not use audit-sized context for each execution loop.
+
+Create a file only for a durable authority boundary, Owner decision, final independent QA decision, cross-team handoff, formal rebaseline, or archive boundary. Standard governance normally needs only Active Packet, Loop Runs, one consolidated Work Order when useful, and one final QA decision.
+
+Read `{baseDir}/references/en/governance-profiles.md`.
 
 ## Required Gates
 
-- Do not authorize execution until outcome, minimum scope, Non-Goals, acceptance evidence, and material constraints are sufficiently clear.
-- Do not mark accepted from Developer claims alone when `qa_required: true`.
-- When QA fails, keep the same Milestone and Work Order, set `project_state: Needs Fix`, and issue a bounded repair against failed criteria.
-- Do not move failed core behavior into `Accepted With Risk`.
-- Stop for Owner decision on Core Target, Non-Goals, protected architecture or data boundaries, production access, credentials, deployment, destructive actions, paid external resources, or irreversible choices.
-- At stage 10, accept, repair, split, or rebaseline. Do not silently renew another ten stages.
+- Do not execute before outcome, scope, Non-Goals, acceptance evidence, write boundary, and one next action are coherent.
+- Do not write a bootstrap packet when current authority conflicts.
+- Do not accept Standard/Full work from the same agent's stage review.
+- QA failure stays on the same Milestone and Work Order as a bounded repair.
+- Do not move failed core behavior, missing primary environment, or missing user flow into `Accepted With Risk`.
+- Diagnostic sharding cannot silently replace an authorized full regression gate.
+- Stop for Owner decisions on target, Non-Goals, protected architecture/data, production, credentials, deployment, paid resources, destructive action, or irreversible choice.
+- At stage 10, accept, repair, split, rebaseline, or stop.
 
-## Minimal Reading
+## Validation
 
-Start with the smallest current packet:
-
-1. `Docs/ACTIVE_PACKET.md` when present.
-2. The files explicitly linked from that packet.
-3. Latest relevant evidence and QA decision.
-4. Historical files only when drift, contradiction, or audit scope requires them.
-
-For legacy projects without an Active Packet, read the current `TARGET.md`, `ACCEPTANCE.md`, active `WORK_ORDER*.md`, latest `STATUS.md`, one immediate next action, blockers, and recent evidence. Do not scan every historical Milestone by default.
-
-If files conflict, report `Invalid State`. Resolve authority in this order:
+Use the execution skill's compact validator:
 
 ```text
-Owner-approved TARGET / Non-Goals
-  -> ACCEPTANCE
-  -> active WORK_ORDER
-  -> ACTIVE_PACKET current-stage projection
-  -> status, next-action, and logs
+node <agent-loop-engineering>/scripts/validate-loop-state.mjs --workspace <project-path> --summary --max-findings 20
 ```
 
-## Document Discipline
-
-Read `{baseDir}/references/en/governance-profiles.md` before creating files.
-
-- Do not create files during early idea exploration unless the user asks for a durable brief.
-- Do not create one file per stage, failed test, repair, or conversation.
-- Keep one canonical Active Packet and link to evidence instead of copying logs.
-- Create a new file only for a new authority boundary, independent QA decision, Owner decision, cross-agent handoff, formal rebaseline, or archive boundary.
-- Archive completed history when an active file becomes difficult to scan; do not let status files become permanent journals.
+Use `--strict-history` only when historical log migration is the task. Thousands of legacy field gaps must be grouped, not emitted line by line.
 
 ## Output Contract
 
-Every governance response must end with:
+End governance responses with:
 
 ```text
 Mode:
 Current readiness/state:
+Delivery class:
 Decision:
 Why:
 Do now:
@@ -153,4 +196,4 @@ Next evidence:
 Files created or updated:
 ```
 
-In Goal Discovery, use the Intent Brief format. In QA, include criterion, evidence, decision, correction, owner, and re-verification. Keep the response useful to a non-technical Owner.
+In QA, include criterion, evidence level, decision, correction, owner, and re-verification. Keep the response usable by a non-technical Owner.

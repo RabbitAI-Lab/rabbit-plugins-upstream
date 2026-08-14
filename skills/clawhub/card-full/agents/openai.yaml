@@ -1,0 +1,4 @@
+interface:
+  display_name: "Card Full"
+  short_description: "Compact full report for one US credit card"
+  default_prompt: "Use $card-full to give me the full picture on Chase Sapphire Preferred."

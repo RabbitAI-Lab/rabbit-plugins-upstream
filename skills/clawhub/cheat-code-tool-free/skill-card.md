@@ -1,44 +1,58 @@
-## Description: <br>
-Cheat Code Tool Free helps an AI agent perform external knowledge lookups for current technical documentation, API specifications, and domain knowledge beyond its training data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+能力扩展工具免费版 helps an AI agent query external structured knowledge for current technical documentation, API specifications, and domain knowledge when its training data may be incomplete or stale.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent retrieve structured external knowledge when its built-in training data may be stale or incomplete. Typical use cases include checking current technical documentation, API specifications, standards, and domain facts before composing an answer. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The documented authority and triggers are broader than a user may expect for a read-only external lookup helper. <br>
-Mitigation: Use the skill only for explicit user-directed lookup requests and review proposed actions before execution. <br>
-Risk: External lookup requests may send user-provided content to a knowledge service. <br>
-Mitigation: Use a least-privilege token and avoid sending sensitive, regulated, or confidential content. <br>
-Risk: The artifact mentions create/export operations and callback URLs without clear behavior guarantees. <br>
-Mitigation: Treat create/export and callback behavior as undefined unless the publisher provides clearer documentation. <br>
+## Use Case:
 
+Developers and agent builders use this skill to let an agent request external technical knowledge, especially for recent framework behavior, standards comparisons, and implementation guidance outside the model's training data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cheat-code-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Artifact skill definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a knowledge-service token and network access; free edition documentation describes single-query usage and daily query limits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill requests broad read, write, and command execution authority for a knowledge lookup workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install with the minimum permissions needed for the intended workflow, and deny local file or command execution unless those capabilities are explicitly required and constrained.
+
+Risk: External knowledge queries can expose secrets, proprietary code, or sensitive prompts to a third-party service.
+
+Mitigation: Use the skill only for explicit technical lookups and remove credentials, proprietary code, and confidential data before sending queries.
+
+Risk: Returned external knowledge may be stale, incomplete, or inconsistent with authoritative sources.
+
+Mitigation: Review the returned information, prefer cited authoritative sources, and verify critical technical or security decisions before acting on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cheat-code-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON examples with inline shell commands and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may guide external API queries and returns structured result text with execution metadata in examples.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

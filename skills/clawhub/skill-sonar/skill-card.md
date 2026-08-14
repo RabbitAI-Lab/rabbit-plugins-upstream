@@ -1,44 +1,58 @@
-## Description: <br>
-Lifecycle guard. Route to preflight or runtime. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lifecycle guard for skill-augmented coding agents covering preflight and runtime phases.
 
-## Publisher: <br>
-[yxf203](https://clawhub.ai/user/yxf203) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yxf203](https://clawhub.ai/user/yxf203)
 
-## Use Case: <br>
-Developers and agent users use this skill to route safety work between preflight skill review and runtime action checks. It helps review skill artifacts, triage tool use, and produce advisory guard responses before higher-risk actions proceed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The guard may slow workflows with additional warnings, replanning, or confirmation prompts. <br>
-Mitigation: Use it where stricter skill review and runtime safety checks are desired, and expect confirmation steps for sensitive files, tool use, code execution, external calls, deletion, and memory writes. <br>
-Risk: The guard is advisory and does not by itself provide sandboxing, rollback, or technical enforcement. <br>
-Mitigation: Pair the guidance with normal environment controls, review diffs or dry runs before state changes, and keep explicit user authorization for high-risk actions. <br>
+## Use Case:
 
+Developers and agents use SKILL Sonar to review candidate skills before installation and to route active skill use through advisory runtime guards for inputs, plans, tools, execution, memory, and outputs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yxf203/skill-sonar) <br>
-- [Skill route](artifact/SKILL.md) <br>
-- [Preflight guard](artifact/preflight/preflight-guard.md) <br>
-- [Runtime guard](artifact/runtime/runtime-guard.md) <br>
-- [Triage checklist](artifact/runtime/checklists/triage-checklist.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown safety guidance and guard decision summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory output; security evidence shows no automatic execution, credential use, installation scripts, or external data transfer.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter: 1.0.0) <br>
+Risk: The skill can add friction around tool calls, file writes, credentials, deletion, external network effects, and other high-impact actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the documented risk levels so low-risk reads stay silent while R2 and R3 actions receive targeted review or user confirmation.
+
+Risk: The guard is advisory markdown, so its protections depend on the agent loading and following the relevant guard files.
+
+Mitigation: Pair the skill with a host or review process that requires loading the preflight or runtime guard for the matching skill lifecycle step.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/yxf203/skills/skill-sonar)
+- [Skill route](artifact/SKILL.md)
+- [Preflight guard](artifact/preflight/preflight-guard.md)
+- [Runtime guard](artifact/runtime/runtime-guard.md)
+- [Runtime checklists](artifact/runtime/checklists/)
+- [Runtime stage guards](artifact/runtime/stages/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown guidance with short guard-response lines and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory only; R0 actions remain silent and R1+ actions use a structured guard response.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

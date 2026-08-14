@@ -1,6 +1,6 @@
 ---
 name: gpt
-description: Call the GPT API (the GPT-5 series — chat, reasoning, and Codex models) and OpenAI text embeddings through RunAPI using the official OpenAI SDK, Anthropic SDK, Gemini contents clients, or compatible clients. Use when the user asks for OpenAI / GPT chat, streaming completions, vision input, tool use / function calling, reasoning effort, the Responses API, embeddings, semantic search vectors, Codex coding tasks, Anthropic or Gemini protocol compatibility, or when they want to point an existing LLM SDK setup at RunAPI as the base URL.
+description: Call GPT generation and OpenAI text embedding models through RunAPI using OpenAI-compatible clients. Use for chat, Responses, embeddings, streaming, tools, vision, or an existing compatibility client that needs the conditional reference.
 documentation: https://runapi.ai/models/gpt.md
 provider_page: https://runapi.ai/providers/openai.md
 catalog: https://runapi.ai/models.md
@@ -9,247 +9,60 @@ metadata:
     homepage: https://runapi.ai/models/gpt
     primaryEnv: OPENAI_API_KEY
     requires:
-      env:
-      - OPENAI_API_KEY
-      - OPENAI_BASE_URL
+      env: [OPENAI_API_KEY, OPENAI_BASE_URL]
     envVars:
-    - name: OPENAI_API_KEY
-      required: true
-      description: RunAPI API key used by OpenAI-compatible SDKs.
-    - name: OPENAI_BASE_URL
-      required: true
-      description: Set to https://runapi.ai/v1 for GPT on RunAPI.
+    - {name: OPENAI_API_KEY, required: true, description: RunAPI API key used by OpenAI-compatible clients.}
+    - {name: OPENAI_BASE_URL, required: true, description: Set to https://runapi.ai/v1 for GPT on RunAPI.}
 ---
 
 # GPT on RunAPI
 
-Use the official **OpenAI SDK** (Python, TypeScript, Ruby) -- or any
-OpenAI-compatible HTTP client -- and switch the base URL to
-`https://runapi.ai/v1`. The endpoints speak the standard OpenAI protocol:
-**Chat Completions** (`POST /v1/chat/completions`), the **Responses API**
-(`POST /v1/responses`), and **Embeddings** (`POST /v1/embeddings`). No client
-code changes beyond `base_url` and `api_key`.
+Use OpenAI-compatible clients at `https://runapi.ai/v1` as the primary protocol.
 
-## Setup
+## Primary protocol recipe
 
-```dotenv
-OPENAI_API_KEY=YOUR_RUNAPI_TOKEN
-OPENAI_BASE_URL=https://runapi.ai/v1
-```
+### Authenticate
 
-Get a RunAPI API Key at <https://runapi.ai/api_keys>.
+Set `OPENAI_API_KEY` to a RunAPI API key and `OPENAI_BASE_URL` to `https://runapi.ai/v1`.
 
-| Language | Init |
-|---|---|
-| Python | `OpenAI(api_key=..., base_url="https://runapi.ai/v1")` |
-| TypeScript | `new OpenAI({ apiKey: ..., baseURL: "https://runapi.ai/v1" })` |
-| Ruby | `OpenAI::Client.new(access_token: ..., uri_base: "https://runapi.ai/v1")` |
-| curl | `POST https://runapi.ai/v1/chat/completions` (or `/v1/responses`, `/v1/embeddings`) |
-
-## Pick the right endpoint
-
-Chat, reasoning, and Codex models are reachable through every conversational
-surface — Chat Completions, Responses, Anthropic-compatible `/v1/messages`, and
-Gemini `contents` — so pick whichever protocol your client already speaks.
-Embedding models (`text-embedding-*`) are reachable **only** through
-`/v1/embeddings`.
-
-## Core recipe — Chat Completions
+### Send request
 
 ```python
 from openai import OpenAI
-
 client = OpenAI(api_key="YOUR_RUNAPI_TOKEN", base_url="https://runapi.ai/v1")
-
-response = client.chat.completions.create(
-    model="gpt-5.4",
-    messages=[{"role": "user", "content": "Explain quantum computing simply."}],
-    reasoning_effort="high",
-)
-print(response.choices[0].message.content)
+response = client.responses.create(model="gpt-5.5", input="Summarize this review.")
+print(response.output_text)
 print(response.usage)
 ```
 
-```typescript
-import OpenAI from "openai";
+Use `client.chat.completions.create` for `gpt-5.2`, which does not accept
+Responses. Use Responses for `gpt-5.*-pro`. Use `client.embeddings.create` only
+with the three embedding model IDs below. For streaming Responses, set
+`stream=True` and consume through one usage-bearing `response.completed`
+followed by `[DONE]`.
 
-const client = new OpenAI({
-  apiKey: "YOUR_RUNAPI_TOKEN",
-  baseURL: "https://runapi.ai/v1",
-});
+For `gpt-5.6-luna`, `gpt-5.6-sol`, and `gpt-5.6-terra`, start with text input,
+sync or SSE transport, parameterized custom functions, and automatic prompt
+caching. `gpt-5.3-codex-spark` has the same verified subset with parameterless
+custom functions. Add reasoning controls, multimodal input, hosted tools, or
+continuation state only when the current RunAPI contract verifies that shape.
 
-const response = await client.chat.completions.create({
-  model: "gpt-5.4",
-  messages: [{ role: "user", content: "Explain quantum computing simply." }],
-});
-```
+### Verify result
 
-## Core recipe — Responses API
+Responses require final output, `response.completed`, and `usage`. Chat requires
+final assistant content, `finish_reason`, and `usage`. Embeddings require one
+numeric vector per input and response `usage`.
 
-```python
-import httpx
+### Stop boundaries
 
-response = httpx.post(
-    "https://runapi.ai/v1/responses",
-    headers={"x-api-key": "YOUR_RUNAPI_TOKEN"},
-    json={
-        "model": "gpt-5.4",
-        "input": "Explain the theory of relativity.",
-        "reasoning": {"effort": "medium"},
-    },
-)
-print(response.json())
-```
+Correct a rejected shape once using the current error and endpoint contract.
+Retry transport once only before any response or Usage and when replay is safe.
+Record a terminal error and stop without changing model, endpoint, or protocol.
+Keep embedding models on `/v1/embeddings`.
 
-The Responses API takes `input` (string or structured), `reasoning.effort`
-(`"low"` / `"medium"` / `"high"`), and optional `include` for thinking blocks.
-For `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, and
-`gpt-5.3-codex-spark`, use the consistently available subset below when the
-request must not depend on advanced Responses capabilities.
+## Compatibility protocols
 
-## Core recipe — Embeddings
-
-```python
-response = client.embeddings.create(
-    model="text-embedding-3-small",
-    input=["search document", "query text"],
-    encoding_format="float",
-)
-print(response.data[0].embedding)
-print(response.usage)
-```
-
-```typescript
-const response = await client.embeddings.create({
-  model: "text-embedding-3-small",
-  input: ["search document", "query text"],
-  encoding_format: "float",
-});
-console.log(response.data[0].embedding);
-```
-
-## Streaming
-
-```python
-stream = client.chat.completions.create(
-    model="gpt-5.4",
-    messages=[{"role": "user", "content": "Write a haiku about coding."}],
-    stream=True,
-)
-for chunk in stream:
-    delta = chunk.choices[0].delta.content
-    if delta:
-        print(delta, end="", flush=True)
-```
-
-```typescript
-const stream = await client.chat.completions.create({
-  model: "gpt-5.4",
-  messages: [{ role: "user", content: "Write a haiku about coding." }],
-  stream: true,
-});
-
-for await (const chunk of stream) {
-  process.stdout.write(chunk.choices[0].delta.content ?? "");
-}
-```
-
-Streaming runs through a regional edge proxy so the request does not hold a
-Rails/Puma thread. Long generations should always stream.
-
-## Vision / multimodal
-
-```json
-{
-  "model": "gpt-5.4",
-  "messages": [
-    {
-      "role": "user",
-      "content": [
-        { "type": "text", "text": "What is in this image?" },
-        { "type": "image_url", "image_url": { "url": "https://runapi.ai/img.jpg" } }
-      ]
-    }
-  ]
-}
-```
-
-Standard OpenAI multimodal block — works on both Chat Completions and
-Responses (Responses also accepts structured `input` items). Keep requests for
-the four consistently available subset models text-only.
-
-## Tool use / function calling / web search
-
-```json
-{
-  "model": "gpt-5.4",
-  "messages": [
-    { "role": "user", "content": "Find the latest news on RunAPI." }
-  ],
-  "tools": [
-    { "type": "function", "function": { "name": "web_search" } }
-  ]
-}
-```
-
-Use `web_search` only when hosted tools are available for the selected model.
-Custom function tools use the standard OpenAI `tools` schema.
-
-### Consistently available Responses subset
-
-| Models | Input and transport | Function tools | Prompt caching |
-|---|---|---|---|
-| `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna` | Text, sync, SSE | Parameterized custom functions | Automatic |
-| `gpt-5.3-codex-spark` | Text, sync, SSE | Parameterless custom functions | Automatic |
-
-For these models, omit `previous_response_id`, `conversation`, `store`,
-`background`, `include`, reasoning items and item references, explicit reasoning
-controls, explicit cache controls, multimodal input, and hosted tools such as
-`web_search`. A request outside this subset may return `request_conflict` before
-usage is reserved. In sync responses and the final `response.completed` event,
-preserve
-`usage.input_tokens_details.cached_tokens` and
-`usage.output_tokens_details.reasoning_tokens` when present. SSE emits one such
-terminal event followed by `[DONE]`.
-
-## List models
-
-```bash
-curl https://runapi.ai/v1/models -H "Authorization: Bearer YOUR_RUNAPI_TOKEN"
-```
-
-Returns OpenAI-compatible model objects. If the API Key has
-`allowed_models` restrictions, only permitted models are returned.
-
-## Protocol compatibility
-
-GPT generation models are also available through RunAPI's
-Anthropic-compatible `/v1/messages` and Gemini `contents` client surfaces. Use
-these protocol paths when an existing agent runtime already expects that
-request shape; for new GPT app code, prefer the OpenAI-compatible setup above.
-
-```bash
-curl -X POST "https://runapi.ai/v1/messages" \
-  -H "x-api-key: YOUR_RUNAPI_TOKEN" \
-  -H "anthropic-version: 2023-06-01" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "gpt-5.4",
-    "max_tokens": 1024,
-    "messages": [{"role": "user", "content": "Draft a concise answer."}]
-  }'
-```
-
-```bash
-curl -X POST \
-  "https://runapi.ai/v1beta/models/gpt-5.4:streamGenerateContent" \
-  -H "x-goog-api-key: YOUR_RUNAPI_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"contents":[{"role":"user","parts":[{"text":"Hello, GPT!"}]}]}'
-```
-
-Embeddings remain available only on `/v1/embeddings`; do not send embedding
-models to generation endpoints or compatibility surfaces.
+Load [compatibility protocols](references/compatibility-protocols.md) only when an existing client requires Anthropic Messages or Gemini contents.
 
 ## Supported models
 
@@ -264,7 +77,6 @@ models to generation endpoints or compatibility surfaces.
 | `gpt-5.3-codex` | Code generation |
 | `gpt-5.3-codex-spark` | Faster Codex variant; text and parameterless functions in the consistently available Responses subset |
 | `gpt-5.2` | Cost-effective |
-| `gpt-5.2-pro` | Reasoning |
 | `gpt-5.6-luna` | Text and parameterized functions in the consistently available Responses subset |
 | `gpt-5.6-sol` | Text and parameterized functions in the consistently available Responses subset |
 | `gpt-5.6-terra` | Text and parameterized functions in the consistently available Responses subset |
@@ -272,33 +84,8 @@ models to generation endpoints or compatibility surfaces.
 | `text-embedding-3-small` | Efficient vectors |
 | `text-embedding-ada-002` | Legacy-compatible vectors |
 
-## Connect Codex CLI itself
+## References
 
-```bash
-export OPENAI_BASE_URL=https://runapi.ai/v1
-export OPENAI_API_KEY=YOUR_RUNAPI_TOKEN
-codex
-```
-
-## Agent rules
-
-- Pro models (`gpt-5.*-pro`) reject Chat Completions — always use Responses
-  for them. Other models accept either endpoint.
-- Embedding models only work on `/v1/embeddings`; do not send them to Chat
-  Completions or Responses.
-- Default GPT-native integrations to OpenAI-compatible endpoints. Use
-  Anthropic-compatible or Gemini `contents` paths only for existing clients
-  that require those request shapes.
-- Use streaming for any response longer than a few hundred tokens. Do not
-  hold the agent on a long blocking request.
-- Omit explicit reasoning controls for the consistently available subset on
-  `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, and
-  `gpt-5.3-codex-spark`.
-- Pricing, rate limits, quotas — link to <https://runapi.ai/models/gpt.md>,
-  not this skill file.
-
-## Routing
-
-- Model page: <https://runapi.ai/models/gpt.md>
-- Provider page: <https://runapi.ai/providers/openai.md>
-- Catalog: <https://runapi.ai/models.md>
+- <https://runapi.ai/models/gpt.md>
+- <https://runapi.ai/providers/openai.md>
+- <https://runapi.ai/models.md>

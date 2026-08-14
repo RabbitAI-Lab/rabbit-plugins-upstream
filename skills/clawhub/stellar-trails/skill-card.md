@@ -1,47 +1,58 @@
-## Description: <br>
-Stellar Trails provides an always-on six-phase workflow framework for agent tasks, with traceability IDs, entry and exit gates, scope commitment, and enforcement checks that scale by task complexity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Activates on every task to provide a six-phase workflow with traceability IDs, entry and exit gates, scope commitment, mandatory progress prints, and adaptive complexity handling for coding, documents, charts, data processing, planning, and questions.
 
-## Publisher: <br>
-[hoshiyomix](https://clawhub.ai/user/hoshiyomix) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[hoshiyomix](https://clawhub.ai/user/hoshiyomix)
 
-## Use Case: <br>
-Developers and agent users use this skill to impose structured planning, implementation, verification, and delivery discipline across coding, document, data, visualization, and multi-step analysis tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may start a local HTTP server as part of its workflow setup. <br>
-Mitigation: Review server binding behavior before installation and disable the local server setup in sensitive or restricted workspaces. <br>
-Risk: The skill may change files under `.zscripts` and `/home/user_skills` and persist task history to local worklogs. <br>
-Mitigation: Install only in workspaces where those paths are expected to be modified, and review file changes after activation. <br>
-Risk: The skill may use a GitHub PAT for git or CI workflows. <br>
-Mitigation: Use a scoped token, avoid exposing credentials in shared workspaces, and remove credential setup if it is not required. <br>
-Risk: The skill includes auto-update behavior. <br>
-Mitigation: Review or remove auto-update steps when deterministic execution or change control is required. <br>
+## Use Case:
 
+Developers and agent users use this skill to impose a structured task workflow with phase gates, traceable scope decisions, verification checkpoints, and delivery reporting across coding and non-coding tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/hoshiyomix/skills/stellar-trails) <br>
-- [AskUserQuestion Gate Template](artifact/references/askuserquestion-gate.md) <br>
-- [SADC Subagent Delegation Template](artifact/references/sadc-subagent-delegation.md) <br>
-- [Workflow Phases](artifact/procedure/phases.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with workflow checklists, inline shell commands, and task reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to run setup commands, manage local workflow files, and produce structured phase reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-9.9.1 (source: server release metadata and SKILL.md metadata) <br>
+Risk: The skill can start a local background service and write runtime logs as part of ordinary activation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it in an isolated development workspace, review the startup behavior, and disable or stop the local service when it is not needed.
+
+Risk: The skill can use a stored GitHub PAT and alter global git identity and credential settings.
+
+Mitigation: Provide credentials only when GitHub operations are required, prefer least-privilege temporary tokens, and inspect or reset global git configuration before sensitive work.
+
+Risk: The skill can self-update, modify installed skill files, and keep persistent work records.
+
+Mitigation: Review or disable self-update and persistent logging behavior before use in shared or sensitive repositories, and audit generated worklog and skill archive changes.
+
+## Reference(s):
+
+- [Stellar Trails ClawHub release](https://clawhub.ai/hoshiyomix/skills/stellar-trails)
+- [AskUserQuestion Gate Template](references/askuserquestion-gate.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, file paths, workflow reports, and generated or modified artifacts when task scope requires them]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce task plans, phase reports, verification notes, worklog entries, local service commands, and repository changes depending on the user's request.]
+
+## Skill Version(s):
+
+9.11.6 (source: skill metadata and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

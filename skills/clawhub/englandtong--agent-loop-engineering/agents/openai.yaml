@@ -1,6 +1,6 @@
-﻿interface:
+interface:
   display_name: "Agent Loop Engineering"
-  short_description: "Run bounded coding loops with evidence and stop gates"
-  default_prompt: "Use $agent-loop-engineering to execute this authorized coding goal through bounded stages, verify real behavior, persist concise evidence, and stop on scope, safety, or direction gates."
+  short_description: "Run low-context autonomous coding loops"
+  default_prompt: "Use $agent-loop-engineering to run this authorized goal through bounded Controller, Developer, and Stage Reviewer loops; repair failures proactively, verify real behavior, keep compact evidence, and stop before independent final acceptance or a true authority gate."
 policy:
   allow_implicit_invocation: true

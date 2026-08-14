@@ -1,43 +1,58 @@
-## Description: <br>
-Use when the user encounters VolcEngine errors or needs local troubleshooting for OpenAPI, Python SDK, CLI, IAM, billing, compute, networking, storage, database, CDN, media, AI, security, or VKE cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when the user encounters VolcEngine errors or needs local troubleshooting for OpenAPI, Python SDK, CLI, IAM, billing, compute, networking, storage, database, CDN, media, AI, security, or VKE cases.
 
-## Publisher: <br>
-[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team)
 
-## Use Case: <br>
-Developers and cloud operations engineers use this skill to triage VolcEngine failures, collect minimal local context, route issues to the right product domain, and propose read-only diagnostic checks before any confirmed change. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may operate in environments with VolcEngine credentials and sensitive account context. <br>
-Mitigation: Use least-privilege temporary credentials where possible, avoid secret-value or token-minting permissions unless explicitly needed, and mask AccessKeyId values while never printing SecretKey or SessionToken values. <br>
-Risk: Some troubleshooting paths can lead to commands that reveal API keys, role credentials, workload tokens, SecretValue, user data, or full console output. <br>
-Mitigation: Require manual approval before any command that could reveal sensitive values, and prefer read-only Describe/List/Get/Query/Lookup/Check operations. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to triage VolcEngine service, API, CLI, SDK, identity, billing, networking, storage, media, AI, security, and VKE failures from local evidence. It emphasizes read-only diagnostics, minimal context collection, credential redaction, and explicit user confirmation before any sensitive or write action.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/volc-sdk-team/volcengine-troubleshooting) <br>
-- [Getting Started](references/getting-started.md) <br>
-- [OpenAPI Quick Check](references/openapi-quick-check.md) <br>
-- [Domain Troubleshooting Guides](references/domain-guides/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only diagnostic posture by default; credentials and sensitive account details should be masked or omitted.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Some reference tables can steer an agent toward retrieving secrets or running disruptive diagnostic actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege VolcEngine credentials, review actions before installation or execution, and require explicit user confirmation plus a redaction/no-log plan before any sensitive retrieval or disruptive diagnostic.
+
+Risk: Troubleshooting output may expose credentials, tokens, account identifiers, billing details, object contents, kubeconfigs, or secret values if raw command output is shared.
+
+Mitigation: Do not print SecretKey, SessionToken, full AccessKeyId, full phone numbers, bill details, object contents, kubeconfigs, or secret values; summarize only the minimum evidence needed for the current issue.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/volc-sdk-team/skills/volcengine-troubleshooting)
+- [Publisher profile](https://clawhub.ai/user/volc-sdk-team)
+- [Skill entrypoint](artifact/SKILL.md)
+- [Getting Started](artifact/references/getting-started.md)
+- [OpenAPI Quick Check](artifact/references/openapi-quick-check.md)
+- [Domain troubleshooting guides](artifact/references/domain-guides/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with diagnostic explanations, read-only CLI commands, and optional script snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should redact secrets, avoid raw sensitive data, and present write or disruptive actions only as proposals requiring explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata, released 2026-08-14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

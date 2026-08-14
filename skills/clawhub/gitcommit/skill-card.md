@@ -1,40 +1,58 @@
-## Description: <br>
-Generate precise git commit messages following Conventional Commits with auto language detection, scope inference, and multi-module support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when the user explicitly asks to prepare, review, or create a Git commit, including "提交", "提交代码", "帮我提交", "commit", "git commit", "确认提交", or requests a commit message.
 
-## Publisher: <br>
-[wlykan](https://clawhub.ai/user/wlykan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wlykan](https://clawhub.ai/user/wlykan)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect repository changes, infer Conventional Commit type and scope, and draft commit messages or user-approved git commit commands that match project language and style. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads git status, diffs, and recent commit history, which may expose private code or secrets to the agent context. <br>
-Mitigation: Use it only in repositories where sharing change context with the agent is acceptable, and review diffs for secrets or private data before requesting commit assistance. <br>
-Risk: Generated git add and git commit commands may include unintended files or produce an inaccurate commit message. <br>
-Mitigation: Review the proposed file list, grouping, scope, and commit text before approving any command execution. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect repository changes, group them by business intent, draft Conventional Commit messages, and execute commits only after explicit confirmation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wlykan/gitcommit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with git commit messages and optional bash command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include grouped git add and git commit proposals for explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: A proposed commit plan could group unrelated changes or use a misleading commit message.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the generated file groups, rationale, and commit messages before giving explicit confirmation.
+
+Risk: Sensitive files, binary files, or mixed staged and unstaged changes may be present in the worktree.
+
+Mitigation: Confirm exclusions, large or binary file handling, and mixed-state files before allowing the skill to stage or commit anything.
+
+Risk: Repository state can change between plan review and execution.
+
+Mitigation: The skill rechecks repository status and invalidates the prior confirmation if paths, content, staged state, or rules changed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wlykan/skills/gitcommit)
+- [Publisher profile](https://clawhub.ai/user/wlykan)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown plan with commit messages, file groupings, risk notes, and optional execution results after confirmation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Git status summaries, changed-path coverage counts, commit hashes, and remaining worktree state; secret values are not exposed.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

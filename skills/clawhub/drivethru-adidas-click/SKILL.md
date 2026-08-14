@@ -1,7 +1,7 @@
 ---
 name: drivethru-adidas-click
 description: Browser-driven adidas Click B2B toolkit — places purchase orders and runs live inventory / wholesale-pricing checks on the adidas Click portal with Playwright, since adidas exposes no public ordering API. Ordering accepts style number, color, size, quantity, a purchase-order number, and a ship-to address, drives the cart/checkout, and (on confirm) submits the order. Checks reuse the same flow but never buy — inventory reads product pages (no cart), pricing fills a throwaway "DO NOT BUY" cart, reads the priced checkout, and deletes it. Use whenever the user needs to place/draft a PO on adidas Click, or check live stock levels or wholesale pricing.
-version: 0.5.1
+version: 0.7.0
 emoji: 👟
 homepage: https://b2bportal.adidas-group.com
 metadata:
@@ -67,9 +67,18 @@ Playwright is imported lazily, so the skill loads without it. The Playwright
 separate ~150 MB download that pip/uv doesn't fetch, and for which OpenClaw has
 no install-time hook) is **installed automatically on the first run** if missing
 — so no manual `python -m playwright install chromium` is needed. That first run
-therefore includes a one-time browser download. If the auto-install fails (e.g.
-no network, or missing system libraries), the tool returns a clear
-`config_error` pointing at the manual command.
+therefore includes a one-time browser download.
+
+> **Host system libraries.** Chromium also needs OS-level shared libraries
+> (`libglib-2.0.so.0`, `libnss3`, …). On a missing-libraries launch failure the
+> tool best-effort runs `playwright install-deps` (needs root), then retries. If
+> the host still lacks them it returns a `config_error` listing the required apt
+> packages. Installing system libraries needs root, so on a locked-down agent
+> host this must be handled by the **environment** — the OpenClaw environment's
+> setup script or base image should install Chromium's deps (`python -m
+> playwright install --with-deps chromium`, or the apt packages the error
+> lists). The skill can fetch the browser binary at runtime, but it cannot
+> install OS packages without root.
 
 > **Build status — full order flow implemented.** The skill drives a purchase
 > order end to end: login → add line quantities to the active cart → checkout
@@ -111,8 +120,8 @@ selectors from prose — the flow lives in the captured
 
 | Action | Risk | stdin JSON (key fields) |
 | --- | --- | --- |
-| `create-purchase-order` | **high — portal write (browser)** | `{purchase_order: {po_number, lines: [{style, size, quantity}], ship_to?, delivery_location_id?, ship_method?, on_insufficient_stock?, spread_delivery?}, confirm}` |
-| `check-inventory-pricing` | **medium — read-only intent, but a pricing check briefly creates then deletes a throwaway cart (browser)** | `{check: "inventory"\|"pricing"\|"both", lines: [{style, size?, quantity?}], po_number?}` |
+| `create-purchase-order` | **high — portal write (browser)** | `{purchase_order: {po_number, lines: [{style, size, quantity}], ship_to?, delivery_location_id?, ship_method?, on_insufficient_stock?, on_missing_product?, spread_delivery?}, confirm}` |
+| `check-inventory-pricing` | **medium — read-only intent, but a pricing check briefly creates then deletes a throwaway cart (browser)** | `{check: "inventory"\|"pricing"\|"both", lines: [{style, size?, quantity?}], po_number?, on_missing_product?}` |
 
 Run `python3 scripts/adidas.py` with no action to print the action list.
 
@@ -132,6 +141,8 @@ The order can be passed nested under `purchase_order` or as top-level fields:
     "delivery_location_id": null,
     "ship_method": null,
     "spread_delivery": false,
+    "on_insufficient_stock": "pause",
+    "on_missing_product": "pause",
     "notes": null
   },
   "confirm": false
@@ -194,6 +205,54 @@ and the three choices, wait for their answer, then resume:
 `spread_delivery` is the lower-level knob behind `order`: on a per-line spread
 prompt, `false` (default) declines (single delivery), `true` accepts.
 
+## Missing / unlisted product handling (read this)
+
+A style adidas has **no product listing** for — a mistyped or wrong article
+number, a base style missing its color code, or an article this account simply
+is not offered — is **not an error by default**: it comes back as an escalation
+so the caller can ask the user, exactly like the out-of-stock pause. Behavior is
+set by `on_missing_product`:
+
+- **`pause`** (default) — **nothing is ordered** (even with `confirm: true`).
+  The result is `status: "needs_confirmation"` with a `missing_products` list and
+  a `message`. Stop and ask the user.
+- **`skip`** — drop the missing style's line(s) and order the rest (the dropped
+  lines come back with `quantity: 0` and a `not offered …` note).
+- **`error`** — the pre-0.7 behavior: fail the run with an `api_error`.
+
+Each `missing_products` entry is
+`{style, sizes, requested, reason, detail}`. **`reason` matters:**
+
+| `reason` | Meaning | How to treat it |
+| --- | --- | --- |
+| `not_found` | The portal said so (a "no results" page, or it bounced off the product URL). | The style is genuinely not on this account. |
+| `unresolved` | The product page never rendered a size table **and** never said the product was missing. | **Unconfirmed, not proven absent** — could be a slow page or a portal change. Worth one retry before telling the user the style doesn't exist. |
+
+**Agent guidance:** on a `needs_confirmation` result, message the user with the
+`missing_products` details and these choices, then resume:
+
+1. **Correct the article number** → edit `lines` and re-run. adidas article
+   numbers encode the colorway (`JW4306`), so a bare style without the color
+   code will not resolve — this is the most common cause.
+2. **Drop it and order the rest** → re-run with `on_missing_product: "skip"`.
+3. **Substitute** a different article → edit `lines` and re-run.
+
+If the user pre-authorized a choice ("just skip anything adidas doesn't carry"),
+set the flag up front and skip the pause. Do **not** re-run the same unchanged
+style expecting a different answer on a `not_found` reason.
+
+A check (`check-inventory-pricing`) never aborts on a missing style: the other
+lines are still read and priced, the missing ones come back as
+`status: "not_found"` lines, and the result's status becomes
+`needs_confirmation` (default) so the caller escalates — `on_missing_product:
+"skip"` downgrades that to a warning instead.
+
+> **Timing.** A missing product is detected by polling the product page and
+> bailing on the portal's own "no results" tell, capped at 15s — it does not sit
+> on the full 30s selector timeout per bad style. A wrong **size** on a style
+> that *does* exist is different: that raises immediately with the list of sizes
+> the style offers, because the product page loaded fine.
+
 The result reports `total_quantity` (summed pieces, on dry runs too) and, on a
 placed order (`confirm: true`), each line's net `line_total` and `unit_price`
 (net ÷ quantity) plus the order `order_total` (net wholesale), read from the
@@ -249,14 +308,20 @@ does not stop on short/out-of-stock lines: a `pause` policy is upgraded to
 `order` so every orderable line still gets priced. Sizes that are flatly *not
 available* (the portal's "X" cell) are reported with no price.
 
-**Result** (`status: "checked"`): a `lines` list of
+**Never dies on an unlisted style.** A style adidas has no product page for is
+reported as a `not_found` line plus a `missing_products` entry; every other line
+is still read and priced. See "Missing / unlisted product handling" above.
+
+**Result** (`status: "checked"`, or `needs_confirmation` when a style was not
+found): a `lines` list of
 `{style, size, color, requested_quantity, available, available_count, status
-("in_stock"|"backorder"|"unavailable"), in_stock, unit_price, line_total, note}`,
-plus `order_total` (summed net, pricing only), `total_quantity`, `po_number` (the
-marker used, `null` for inventory-only), and `cart_deleted` (`true`/`false` once a
-pricing check tried to remove its cart; `null` when no cart was made). If the
-throwaway cart could not be auto-deleted (e.g. it was the account's only cart), a
-`warning` says so and names it — remove it in the portal.
+("in_stock"|"backorder"|"unavailable"|"not_found"), in_stock, unit_price,
+line_total, note}`, plus `order_total` (summed net, pricing only),
+`total_quantity`, `missing_products`, `po_number` (the marker used, `null` for
+inventory-only), and `cart_deleted` (`true`/`false` once a pricing check tried to
+remove its cart; `null` when no cart was made). If the throwaway cart could not
+be auto-deleted (e.g. it was the account's only cart), a `warning` says so and
+names it — remove it in the portal.
 
 ## Credentials
 
@@ -345,9 +410,13 @@ change fixes an IP-reputation block.
 
 Failures print `{"error": {...}}` and exit non-zero:
 
-- `config_error` (exit 2) — missing/invalid credentials or an un-captured step.
+- `config_error` (exit 2) — missing/invalid credentials, a bad policy value, or
+  an un-captured step.
 - `api_error` — the portal rejected an action or a page did not match
-  expectations. Includes `surface`, `operation`, `retryable`.
+  expectations. Includes `surface`, `operation`, `retryable`. Note that a style
+  adidas does not carry is **not** an `api_error` by default — it comes back as
+  a `needs_confirmation` result (see "Missing / unlisted product handling"), and
+  only becomes an `api_error` under `on_missing_product: "error"`.
 - `connection_error` — network / browser-launch / navigation failure
   (`retryable: true`).
 - `validation_error` — bad input JSON or a missing required field.

@@ -1,43 +1,55 @@
-## Description: <br>
-Longmemo Elite helps agents maintain long-term workspace memory across sessions using write-ahead logging, hybrid retrieval, tiered storage, and cost controls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+精英长记忆 provides a long-term memory workflow for AI agents using WAL-style state updates, hybrid retrieval, tiered storage, cost controls, and memory hygiene across sessions.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent operators use this skill to set up durable memory practices for cross-session project work, multi-agent collaboration, preference retention, and recall of prior decisions or lessons. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Conversation-derived memory may persist private, regulated, or secret information in workspace files. <br>
-Mitigation: Do not store secrets, regulated data, or private user details, and review memory files before committing or sharing a repository. <br>
-Risk: Optional cloud backup and automatic extraction can sync or derive memory through third-party services. <br>
-Mitigation: Keep cloud backup and automatic extraction disabled unless the provider and data types have been explicitly approved. <br>
-Risk: The skill can encourage agents to create and maintain durable memory records without enough user control. <br>
-Mitigation: Install only when durable workspace memory is desired, and require human review of retained memory records. <br>
+## Use Case:
 
+Developers and agent builders use this skill to configure persistent memory across sessions, retrieve prior decisions and preferences, and manage memory cost, hygiene, and storage layers for AI agent workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/longmemo-elite) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with JSON configuration examples and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update workspace memory files and configuration when used by an agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill may retain conversation details locally or in external memory services across broad agent-use scenarios.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Decide which storage layers are allowed before use, keep Mem0 and SuperMemory disabled unless external services are explicitly approved, and avoid storing secrets or regulated data.
+
+Risk: Long-term memory files, daily logs, vector stores, Git notes, and backups can accumulate sensitive or stale context.
+
+Mitigation: Periodically review, delete, or prune SESSION-STATE.md, MEMORY.md, daily logs, vector stores, Git notes, and exported backups.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/longmemo-elite)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+- [Skill homepage](https://skillhub.cn/skill/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON configuration examples and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May lead the agent to create or update memory files, vector stores, Git notes, exported backups, and optional external memory-service records.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

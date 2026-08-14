@@ -1,45 +1,60 @@
-## Description: <br>
-Generate customized speech that highly restores the timbre by uploading reference audio using Kling Audio Clone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate customized speech that highly restores the timbre by uploading reference audio using Kling Audio Clone.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke dLazy's Kling Audio Clone service for custom voice generation from reference audio. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reference audio is uploaded to a third-party voice-cloning service. <br>
-Mitigation: Use the skill only with audio you have rights or consent to submit, and avoid sensitive or private voice samples unless the service terms and data handling are acceptable. <br>
-Risk: The skill stores or uses a dLazy API key for authenticated service calls. <br>
-Mitigation: Store credentials only in the documented local config or per-invocation environment variable, rotate or revoke keys when access changes, and avoid sharing logs that may expose credentials. <br>
-Risk: The current documentation has inconsistent examples and output type details. <br>
-Mitigation: Run `dlazy kling-audio-clone -h` and verify required arguments, response shape, and async behavior before relying on the skill in an automated workflow. <br>
+## Use Case:
 
+External users and developers use this skill to create cloned custom speech through the dLazy CLI by submitting reference audio to the hosted Kling Audio Clone service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-audio-clone) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses dLazy API credentials and may return hosted media URLs or asynchronous task identifiers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Voice-related content is uploaded to dLazy services for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only upload audio that the user has permission to clone, and avoid sensitive voice samples unless the user accepts the service exposure.
+
+Risk: API keys may be saved in the local dLazy CLI configuration.
+
+Mitigation: Use the per-run DLAZY_API_KEY environment variable instead of saved credentials on shared machines or when local credential persistence is a concern.
+
+Risk: The security verdict is suspicious because file-permission guarantees for saved credentials are weaker than claimed.
+
+Mitigation: Review the skill and local credential storage behavior before installing or using it in sensitive environments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-audio-clone)
+- [dLazy CLI homepage](https://github.com/dlazyai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON CLI responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return generated media URLs or an asynchronous task identifier for polling.]
+
+## Skill Version(s):
+
+1.3.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

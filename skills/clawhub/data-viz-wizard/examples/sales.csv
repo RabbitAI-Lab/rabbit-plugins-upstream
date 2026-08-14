@@ -1,0 +1,25 @@
+date,region,product,revenue,units,market_share
+2025-01-15,North,Widget Pro,45200,150,23.5%
+2025-01-15,South,Widget Pro,38100,120,19.8%
+2025-01-15,East,Widget Pro,52300,175,27.1%
+2025-01-15,West,Widget Pro,41000,135,21.3%
+2025-02-15,North,Widget Pro,48900,163,24.2%
+2025-02-15,South,Widget Pro,41500,130,20.5%
+2025-02-15,East,Widget Pro,56200,188,28.0%
+2025-02-15,West,Widget Pro,44800,148,22.1%
+2025-03-15,North,Widget Pro,52100,174,25.1%
+2025-03-15,South,Widget Pro,45200,142,21.7%
+2025-03-15,East,Widget Pro,61300,205,29.5%
+2025-03-15,West,Widget Pro,48100,159,23.2%
+2025-04-15,North,Widget Pro,55800,186,26.0%
+2025-04-15,South,Widget Pro,48900,154,22.8%
+2025-04-15,East,Widget Pro,65400,218,30.5%
+2025-04-15,West,Widget Pro,51400,170,24.0%
+2025-05-15,North,Widget Pro,59200,197,27.0%
+2025-05-15,South,Widget Pro,52100,165,23.8%
+2025-05-15,East,Widget Pro,69800,233,31.8%
+2025-05-15,West,Widget Pro,54900,182,25.0%
+2025-06-15,North,Widget Pro,63100,210,28.0%
+2025-06-15,South,Widget Pro,55800,175,25.0%
+2025-06-15,East,Widget Pro,74200,247,33.2%
+2025-06-15,West,Widget Pro,58300,194,26.2%

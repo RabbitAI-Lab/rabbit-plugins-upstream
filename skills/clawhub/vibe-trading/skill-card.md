@@ -1,39 +1,60 @@
-## Description: <br>
-Vibe Trading is a finance research toolkit for agent-assisted backtesting, factor analysis, options pricing, trade-journal analysis, shadow-account reports, and market-data workflows across multiple asset classes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Professional finance research toolkit — backtesting (9 engines + benchmark comparison panel), factor analysis, Alpha Zoo (462 pre-built alphas across qlib158/alpha101/gtja191/academic/fundamental), options pricing, 89 finance skills, 30 multi-agent swarm teams, Trade Journal analyzer, and Shadow Account (extract → backtest → render) across 24 market-data sources (tushare, yfinance, okx, binance, akshare, baostock, tencent, mootdx, ccxt, futu, mt5, local, eastmoney, sina, stooq, yahoo, pykrx, india_broker, qveris, longbridge, plus optional-key finnhub/alphavantage/tiingo/fmp).
 
-## Publisher: <br>
-[warren618](https://clawhub.ai/user/warren618) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[warren618](https://clawhub.ai/user/warren618)
 
-## Use Case: <br>
-Developers, analysts, and traders use this skill to connect an agent to Vibe Trading finance tools for market data, backtesting, factor analysis, options analysis, trade-journal review, and multi-agent research workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Optional external MCP server loading can broaden what the agent is able to run or access. <br>
-Mitigation: Use only trusted external MCP servers and prefer explicit enabledTools allowlists instead of wildcards. <br>
-Risk: Finance connectors and research workflows may involve market-data, broker, or LLM credentials. <br>
-Mitigation: Use trusted credentials only, keep generated configuration and strategy files inside a controlled workspace, and review connector settings before use. <br>
+## Use Case:
 
+Developers, analysts, and finance researchers use this skill to run market-data workflows, backtests, factor analysis, options analysis, trade-journal review, and multi-agent investment research from an agent.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown or structured text with optional JSON, code/configuration snippets, shell commands, and generated report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce research reports, backtest metrics, strategy files, and connector/account readouts depending on selected tools and configured credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.12 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill can access market data, local strategy files, trade journals, and optional broker/account integrations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only where those data sources and account integrations are appropriate for the user or environment.
+
+Risk: External MCP servers and wildcard tool exposure can expand the actions available to the agent.
+
+Mitigation: Keep external MCP servers allowlisted and avoid wildcard tools for unreviewed servers.
+
+Risk: Live broker write access or eToro execute-write can place real trades.
+
+Mitigation: Do not enable live broker writes or eToro execute-write unless the user deliberately wants the agent to place real trades.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/warren618/skills/vibe-trading)
+- [Interactive Brokers MCP endpoint](https://api.ibkr.com/v1/api/mcp)
+- [eToro Public API MCP](https://mcp.public-api.etoro.com)
+- [eToro Public API MCP skill](https://mcp.public-api.etoro.com/skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline code blocks, JSON configuration snippets, command examples, and generated reports.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May access market data, local strategy files, trade journals, optional broker/account integrations, and optional external MCP servers depending on user configuration.]
+
+## Skill Version(s):
+
+0.1.13 (source: frontmatter and server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

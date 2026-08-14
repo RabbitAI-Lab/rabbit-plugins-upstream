@@ -1,46 +1,64 @@
-## Description: <br>
-CMS Project Governance helps users turn vague ideas, business problems, project directions, or requirements into clear outcomes, right-sized scope, acceptance evidence, governed plans, and controlled AI delivery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns changing goals and legacy CMS project records into a compact, conflict-checked delivery state with aligned scope, bounded autonomy, evidence-aware delivery claims, and independent QA control.
 
-## Publisher: <br>
-[englandtong](https://clawhub.ai/user/englandtong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[englandtong](https://clawhub.ai/user/englandtong)
 
-## Use Case: <br>
-External users, developers, and project owners use this skill to clarify software-delivery goals, choose an appropriate governance profile, authorize work through an Active Packet, and review delivery evidence before acceptance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Planning or QA guidance may be incorrect or misaligned with the user's intended outcome. <br>
-Mitigation: Review generated Active Packets, acceptance criteria, QA decisions, protected boundaries, and Owner decisions before letting an execution skill act on them. <br>
-Risk: Authorized governance work may create or update project documentation under Docs. <br>
-Mitigation: Inspect proposed document changes and confirm the scope, boundaries, and evidence requirements before treating them as authoritative. <br>
+## Use Case:
 
+Developers, project owners, and delivery leads use this skill to convert vague goals or legacy CMS records into a current authorization, right-sized governance profile, clear evidence requirements, and QA-ready delivery state.
 
-## Reference(s): <br>
-- [CMS Project Governance on ClawHub](https://clawhub.ai/englandtong/skills/cms-project-governance) <br>
-- [Execution Contract](references/en/execution-contract.md) <br>
-- [Goal Discovery](references/en/goal-discovery.md) <br>
-- [Planning And Sizing](references/en/planning-and-sizing.md) <br>
-- [Governance Profiles](references/en/governance-profiles.md) <br>
-- [Controller QA](references/en/controller-qa.md) <br>
-- [Alignment, Rebaseline, Audit, And Roadmap](references/en/alignment-and-rebaseline.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown with structured governance sections and optional project documentation files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update scoped project governance documents under Docs when authorized by the user.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md) <br>
+Risk: The skill may propose project-local governance document updates or Node commands, including commands with --write.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed commands before execution, confirm the workspace boundary, and use write mode only when the target project state is trusted and intended.
+
+Risk: Incorrect or incomplete evidence could lead to overstated delivery or acceptance claims.
+
+Mitigation: Keep delivery class, runtime evidence, stage review, and independent QA decisions separate, and require independent final QA for Standard or Full governance.
+
+Risk: The skill references the separate agent-loop-engineering skill for execution and validation commands.
+
+Mitigation: Confirm that the referenced agent-loop-engineering installation is present and trusted before relying on its scripts.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/englandtong/skills/coding-management-system)
+- [Goal Discovery 2.1](artifact/references/en/goal-discovery.md)
+- [Planning And Sizing 2.1](artifact/references/en/planning-and-sizing.md)
+- [Legacy Bootstrap 2.1](artifact/references/en/legacy-bootstrap.md)
+- [Governance Profiles And Files 2.1](artifact/references/en/governance-profiles.md)
+- [Controller, Stage Reviewer, And Independent QA 2.1](artifact/references/en/controller-qa.md)
+- [Alignment, Rebaseline, Audit, And Finish Line 2.1](artifact/references/en/alignment-and-rebaseline.md)
+- [Execution Contract 2.1](artifact/references/en/execution-contract.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration, Shell commands]
+
+**Output Format:** [Markdown guidance with structured state fields, templates, and occasional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May draft or update project governance artifacts only within an authorized workspace boundary.]
+
+## Skill Version(s):
+
+2.1.0 (source: artifact/SKILL.md and evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

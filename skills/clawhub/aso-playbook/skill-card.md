@@ -1,44 +1,57 @@
-## Description: <br>
-Beginner-friendly App Store Optimization guide covering keyword research, screenshot design, rating management, and A/B testing for iOS and Android. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Beginner-friendly App Store Optimization guide covering keyword research, screenshot design, rating management, and A/B testing for iOS and Android.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-Developers, indie app makers, and small teams use this skill to draft practical ASO guidance for keyword research, store screenshots, review prompts, localization, and A/B testing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: ASO performance claims may be interpreted as guaranteed ranking or conversion outcomes. <br>
-Mitigation: Treat the content as advisory guidance and validate recommendations against current store analytics before acting. <br>
-Risk: The skill links to public ClawHub and X pages outside the local artifact. <br>
-Mitigation: Review external links before following them or using linked content in a workflow. <br>
+## Use Case:
 
+External developers, indie app builders, and small mobile teams use this skill to plan ASO work for keywords, screenshots, ratings, localization, and A/B tests. It helps structure evidence capture before claiming growth outcomes from App Store Connect or Play Console data.
 
-## Reference(s): <br>
-- [English ASO playbook](references/en/README.md) <br>
-- [Japanese ASO playbook](references/ja/README.md) <br>
-- [Korean ASO playbook](references/ko/README.md) <br>
-- [Aso Playbook on ClawHub](https://clawhub.ai/gingiris-1031/aso-playbook) <br>
-- [Related Gingiris ASO Growth skill](https://clawhub.ai/skill/gingiris-aso-growth) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands] <br>
-**Output Format:** [Markdown guidance with install command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces advisory ASO recommendations, not measured performance guarantees.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: server release evidence) <br>
+Risk: ASO performance numbers or uplift claims may be treated as guaranteed outcomes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate decisions with the user's own App Store Connect or Play Console exports, including conversion, retention, revenue, storefront, version, and campaign-overlap evidence.
+
+Risk: Rating, review, search, install, or chart tactics could violate official storefront policies if misapplied.
+
+Mitigation: Use official experiments, authentic-user review prompts, and transparent paid acquisition; avoid bought reviews, artificial installs, account farms, and enforcement-evasion packages.
+
+## Reference(s):
+
+- [ASO Playbook on ClawHub](https://clawhub.ai/gingiris-1031/skills/aso-playbook)
+- [English ASO Basics Reference](references/en/README.md)
+- [Japanese ASO Basics Reference](references/ja/README.md)
+- [Korean ASO Basics Reference](references/ko/README.md)
+- [Gingiris ASO Growth](https://clawhub.ai/gingiris-1031/skills/gingiris-aso-growth)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text]
+
+**Output Format:** [Markdown guidance, checklists, and ASO analysis notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Does not run code or request special access; performance claims should be validated against the user's own store data.]
+
+## Skill Version(s):
+
+1.3.1 (source: server release metadata; artifact _meta.json lists 1.2.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

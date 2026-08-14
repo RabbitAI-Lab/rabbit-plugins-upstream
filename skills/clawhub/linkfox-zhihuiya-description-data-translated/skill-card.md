@@ -1,45 +1,64 @@
-## Description: <br>
-Retrieves translated patent description/specification text from the Zhihuiya data service for a single patent in Chinese, English, or Japanese. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves translated Zhihuiya/PatSnap patent description text in Chinese, English, or Japanese by patent ID or publication number.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and agents use this skill to retrieve translated patent specification text for a single known patent by patent ID or publication number, with optional family-member substitution when the original description is unavailable. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Patent queries and returned descriptions may contain confidential information sent to the LinkFox gateway. <br>
-Mitigation: Use only an intended LinkFox API key and avoid submitting confidential patent data unless approved for that service. <br>
-Risk: Full API responses are saved and cached locally, which can retain translated patent text beyond the immediate interaction. <br>
-Mitigation: Review local LinkFox session data and cache files after use, and remove sensitive saved responses when retention is not needed. <br>
-Risk: The artifact describes automatic feedback reporting and onboarding-skill installation paths. <br>
-Mitigation: Require user approval before installing additional skills or sending feedback that may include user intent, interaction details, or patent content. <br>
-Risk: Each API call can consume paid credits, and repeated patent requests can create unexpected cost. <br>
-Mitigation: Process one patent per request, rely on the 24-hour cache for duplicate parameters, and obtain explicit consent before making multiple calls. <br>
+## Use Case:
 
+External users and patent-focused agents use this skill to retrieve translated patent specification text for known patent IDs or publication numbers. It supports single or batch lookups and can optionally fall back to a patent family member when the requested description is unavailable.
 
-## Reference(s): <br>
-- [智慧芽-说明书翻译 API Reference](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-description-data-translated) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples; API responses are JSON and may be summarized in stdout with full JSON saved to local files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Single patent per request; supports en, cn, and jp translations; uses a 24-hour cache and writes full responses under LinkFox session data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill includes account, credential, and SMS-code flows for LinkFox authentication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use onboarding commands only when the user intends to create or access a LinkFox account, and avoid sharing SMS codes or API keys outside the configured environment variables.
+
+Risk: The skill can guide paid credit purchases and render payment QR codes.
+
+Mitigation: Confirm plan details, payment method, price, and destination endpoint with the user before creating or paying an order.
+
+Risk: Patent lookup calls consume credits, and batch requests may consume credits quickly.
+
+Mitigation: Warn the user before paid or repeated queries, respect the documented cache behavior, and avoid automatic retries or broad follow-up searches without user approval.
+
+Risk: Full API responses are persisted locally and may contain patent query results or account-related metadata.
+
+Mitigation: Review saved files before sharing the workspace and remove response files when the data is no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-description-data-translated)
+- [API reference](artifact/references/api.md)
+- [Authentication and billing onboarding](artifact/references/onboarding.md)
+- [Zhihuiya description translation endpoint](https://tool-gateway.linkfox.com/zhihuiya/descriptionDataTranslated)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API responses and saved response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The main script caches identical requests for 24 hours, saves full responses under a local linkfox session directory, prints small responses inline, and summarizes large responses unless --inline is used.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

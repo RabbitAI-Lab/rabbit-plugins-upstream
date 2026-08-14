@@ -1,7 +1,7 @@
 ---
 name: gitlab-agent
-description: An agent for interacting with GitLab. Supports gitlab.com and self-hosted instances. Requires no GitLab DUO.
-metadata: { "openclaw": { "requires": { "bins": ["glab"] }, "primaryEnv": "GITLAB_TOKEN" } }
+description: "Operate assigned GitLab work with owner-verified project access and guarded MR delivery."
+metadata: { "openclaw": { "requires": { "bins": ["glab", "jq"] }, "primaryEnv": "GITLAB_TOKEN" } }
 ---
 # GitLab Agent Skill
 
@@ -22,6 +22,21 @@ Repeat and fullfill your `GitLab Agent` tasks.
 * Complete tasks successfully in GitLab.
 * If you think work needs to be done, do it without asking.
 
+## Security Gate
+
+Skip the security gate for `owner`. Otherwise, the security gate is mandatory.
+
+Before reading or working an existing issue, work item, or merge request beyond the minimum fields needed to identify its project and assignment:
+
+1. Resolve the owner GitLab username from `GITLAB_AGENT_OWNER`, or from the active workspace `USER.md` field `GitLab Username` when the environment variable is unset.
+2. Resolve the target project path from the object's GitLab URL.
+3. Run `{baseDir}/scripts/check-project-access.sh <project-path> <owner-username> <issue|merge_request> <iid>`.
+4. Continue only when the script succeeds. The script removes `workflow::forbidden` after an allowed check.
+5. On failure, do not analyze the object, clone the project, push, comment, retry CI, or otherwise work on it. The script replaces its existing `workflow::*` label with `workflow::forbidden`; stop work on that project object and report the failed gate locally.
+6. Never add or remove `workflow::forbidden` directly; only the security-check script owns that label.
+
+The check fails closed when the current GitLab user has no active project membership, membership data is incomplete, or the membership was not created by the configured owner.
+
 ## Assignment Gate
 
 Before working an existing issue, work item, or merge request, check the current GitLab user and the assignees on that object.
@@ -30,7 +45,7 @@ Before working an existing issue, work item, or merge request, check the current
 * If the ticket assigment origin was a gateway channel (like a human request, or a bot request). If you can`t assign it to yourself. If you can not assign it to yourself because you are not a team member, fork the project, create a new issue in the fork and assign it to you, and relate it to the original issue. Then work on the new issue. Clean up the forked issue after the original issue is resolved.
 * Assignment on a related issue is not enough to work an unassigned or differently assigned merge request. Check the object you are changing.
 * Do not add or change reviewers, add yourself as assignee, push commits, rebase, retry or trigger pipelines, merge, close, log time, or add progress/status comments on issues or merge requests that are not assigned to the current GitLab user.
-* Label hygiene is allowed on unassigned issues and merge requests. You may add or correct `size::*`, `type::*`, and `workflow::*` labels when the correct label state is clear.
+* Label hygiene is allowed on unassigned issues and merge requests. You may add or correct `size::*`, `type::*`, and `workflow::*` labels when the correct label state is clear, except that `workflow::forbidden` is owned exclusively by the security-check script.
 
 ## Status Comment Relevance Gate
 
@@ -40,6 +55,12 @@ Before posting an issue, work item, or merge request status comment, compare the
 * Stay silent when the only available comment would repeat a routine no-op state. Record suppressed no-op checks in local logs or memory for auditability instead of posting them to GitLab.
 
 ## GitLab Agent Tasks
+
+### Discover active work across projects
+
+* Run `{baseDir}/scripts/list-active-items.sh` to fetch all open issues and merge requests assigned to the current GitLab user across projects.
+* The script excludes objects labeled `workflow::forbidden` so denied work does not re-enter the active queue.
+* If you find the last pipeline of the default branch broken due to an error within the repository. Create a new task for you to fixing.
 
 ### Check your assigned issues and tasks in GitLab
 
@@ -71,6 +92,7 @@ Before posting an issue, work item, or merge request status comment, compare the
 * Manage the workflow status labels according to the current state of the work.
 * If you see an additional commit by a team member, do not simply revert. Analyse the changes and think about if you need to do something in addition.
 * On each commit
+  * Add `Generated-By: <current model>` to the commit message.
   * Push with `git push origin <branch> -o ci.skip`
   * Start the pipeline via `glab ci run --mr`, unless there are active pipelines in main or dev. Never use more than X `[setting: 2 # AGENTS.md -> active-pipelines]` pipelines for your work. Add `workflow::paused`, if you delay the pipeline start and revisit later.
 * After merge or close, update the items and labels to reflect the final state `workflow::done`.
@@ -126,7 +148,13 @@ Rules apply to all GitLab items.
 
 ## Labels
 
-If the labels are missing, make a merge request to add them via the [label](https://ci-tools.xrow.de/Components/label) component and its default settings.
+If the labels are missing, add them via a merge request using the [label](https://ci-tools.xrow.de/Components/label) component.
+
+```yaml
+include:
+  - component: $CI_SERVER_FQDN/xrow-public/ci-tools/common@stable
+  - component: $CI_SERVER_FQDN/xrow-public/ci-tools/label@stable
+```
 
 ### Size Labels
 
@@ -158,13 +186,14 @@ Use the labels in your merge requests to set the current status of the work. Onl
 | GitLab label            | Common name | Meaning                                                                                                      |
 | ----------------------- | ----------- | ------------------------------------------------------------------------------------------------------------ |
 | `workflow::backlog`     | Backlog     | Not yet started. Initial state.                                                                              |
+| `workflow::forbidden`   | Forbidden   | Project access failed the owner membership security gate; only the gate script manages this label.          |
 | `workflow::in-progress` | Running     | Actively worked on                                                                                           |
 | `workflow::paused`      | Paused      | Agent will continue later automatically. Temporarily paused for one hour to one day.                         |
 | `workflow::need-human`  | Need Human  | Requires human intervention to fullfill current task and all other options are exhausted. Explain why. Its status is not blocked or paused. |
 | `workflow::blocked`     | Blocked     | Currently blocked by a dependency or issue                                                                   |
 | `workflow::review`      | Review      | When DoD has been checked and reviewer was assigned                                                             |
 | `workflow::done`        | Done        | Completed , final state, everything done and closed                                                          |
-| `workflow::stale`       | Stale       | No activity for at least 30 days and may need attention                                                      |
+| `workflow::stale`       | Stale       | No change in status for 2 Weeks and may need attention                                                      |
 
 #### Agent workflow by label
 
@@ -175,7 +204,9 @@ config:
     curve: linear
 ---
 graph TD
-    create((New Work Item / MR)) --> workflow::backlog
+    create((New Work Item / MR)) --> security{Owner membership verified?}
+    security -- no --> workflow::forbidden
+    security -- yes --> workflow::backlog
     workflow::backlog --> workflow::in-progress
     workflow::in-progress --> workflow::review
     workflow::review --> workflow::done
@@ -202,7 +233,7 @@ Additional rules
 * When you add or update OpenClaw skills, follow the [Creating skills](https://docs.openclaw.ai/tools/creating-skills) guidance. Reference helper scripts from the skill body with `{baseDir}/...` instead of hardcoding workspace-specific skill paths.
 * Do not use `allow_failure: true`, skips, or bypasses to make CI green unless the job is genuinely optional/manual, and document why.
 * Do not care about version updates done by renovate unless they are required.
-* Do not modify the `AGENTS.md` file.
+* Only modify the `AGENTS.md` file, if requested by a maintainer.
 
 ## How to use the `glab` CLI to interact with GitLab
 
@@ -518,7 +549,7 @@ Before enabling it:
     "message": "Read skill gitlab-agent and run.",
     "thinking": "high",
     "timeoutSeconds": 3600,
-    "model": "openai/gpt-5.5"
+    "model": "openai/gpt-5.6-sol"
   },
   "delivery": {
     "mode": "none",

@@ -1,43 +1,60 @@
-## Description: <br>
-Automatically detects and counts livestock or poultry individuals from barn or passage camera images/videos, outputting total headcount with confidence for fast inventory. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automatically detects and counts livestock or poultry individuals from barn or passage camera images/videos, outputting total headcount with confidence for fast inventory. | 自动识别并统计畜禽数量，实现快速存栏盘点。
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Farm operators and agents use this skill to submit livestock barn, passage, or enclosure images and videos for inventory counts, per-area counts, confidence information, and report links. It can also retrieve prior cloud reports associated with the current identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Barn images, videos, and generated identity information are sent to the vendor cloud service for analysis and report lookup. <br>
-Mitigation: Use only with data you are allowed to share with the vendor service, and review organizational data-handling requirements before deployment. <br>
-Risk: The skill can create or reuse a local identity and keep backend tokens in workspace data for future report access. <br>
-Mitigation: Avoid shared workspaces for this skill, or separate and clear the workspace data directory between users. <br>
+## Use Case:
 
+External users and developers use this skill to count livestock or poultry from barn, pen, or passage camera images and videos. It returns inventory counts, partition counts, confidence, and report links for fast livestock inventory workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-livestock-counting-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Livestock counting API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text containing livestock counts, confidence details, structured analysis, history listings, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save the returned report text to a local output file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter says 1.0.2) <br>
+Risk: The skill sends barn images or videos and identity-linked requests to external lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media approved for external processing and confirm that users understand the cloud-service dependency before deployment.
+
+Risk: The skill can create or reuse a local default identity and query cloud report history automatically.
+
+Mitigation: Review identity handling and report-access behavior in the target environment, and restrict execution to users authorized to view the associated reports.
+
+Risk: Service tokens may be stored in a local workspace database.
+
+Mitigation: Run the skill in a controlled workspace, protect local storage, and rotate or revoke tokens according to the service operator's policy.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-livestock-counting-analysis)
+- [API 接口文档](references/api_doc.md)
+- [API接口文档](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown and JSON-style structured analysis reports with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include total livestock count, partition counts, confidence, analysis time, and report links.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

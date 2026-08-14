@@ -48,10 +48,20 @@ except ImportError:
     print("❌ 缺少依赖，请先安装：python3 -m pip install tencentcloud-sdk-python", file=sys.stderr)
     sys.exit(1)
 
-DEFAULT_REGION = "ap-guangzhou"
+FALLBACK_REGION = "ap-guangzhou"
 
 
-def get_client(region: str = DEFAULT_REGION):
+def default_region() -> str:
+    """获取默认地域。
+
+    必须在调用时（而非 import 时）读取环境变量：.env 的加载发生在
+    main() / get_credential() 内，若在模块级求值会早于 .env 加载，
+    导致用户在 .env 中配置的 TENCENTCLOUD_REGION 被忽略。
+    """
+    return os.getenv("TENCENTCLOUD_REGION", FALLBACK_REGION)
+
+
+def get_client(region: str = None):
     """创建 VOD 客户端。若环境变量缺失则尝试从 dotenv 文件自动加载。"""
     secret_id = os.environ.get("TENCENTCLOUD_SECRET_ID", "")
     secret_key = os.environ.get("TENCENTCLOUD_SECRET_KEY", "")
@@ -75,6 +85,10 @@ def get_client(region: str = DEFAULT_REGION):
         print("   TENCENTCLOUD_SECRET_KEY", file=sys.stderr)
         sys.exit(1)
     cred = credential.Credential(secret_id, secret_key)
+    # region 兜底必须放在 dotenv 加载之后：此时 .env 中的
+    # TENCENTCLOUD_REGION 才已进入 os.environ
+    if region is None:
+        region = default_region()
     return vod_client.VodClient(cred, region)
 
 
@@ -346,8 +360,8 @@ def build_parser():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    parser.add_argument("--region", default=DEFAULT_REGION,
-                        help=f"地域（默认 {DEFAULT_REGION}）")
+    parser.add_argument("--region", default=default_region(),
+                        help=f"地域（默认 {default_region()}）")
     parser.add_argument("--sub-app-id", type=int,
                         default=int(os.environ.get("TENCENTCLOUD_VOD_SUB_APP_ID", 0)) or None,
                         help="VOD 子应用 ID（2023年12月后开通的用户必须填写，也可通过环境变量 TENCENTCLOUD_VOD_SUB_APP_ID 设置）")

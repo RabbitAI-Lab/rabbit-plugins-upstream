@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes seedling tray images or videos with AI object detection to count emerged seedlings and estimate germination rate for incubators, greenhouse trays, home pots, and seed-company tests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes seedling tray images or videos to identify emerged seedlings, count germinated seeds, estimate germination rate, and return a structured report.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze seed tray images or videos, estimate germinated seed counts and rates, and retrieve cloud-hosted history reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Seed tray media may be uploaded to or processed by a cloud-backed service. <br>
-Mitigation: Use the skill only with media approved for external cloud processing and avoid private or sensitive media unless that processing is acceptable. <br>
-Risk: The skill can use or create an internal identity and store authentication tokens locally. <br>
-Mitigation: Review identity and token storage behavior before installation, and avoid shared workspaces unless local credential persistence is acceptable. <br>
-Risk: The skill can fetch account-associated history reports. <br>
-Mitigation: Confirm the account context and report-retention expectations before using history-report features. <br>
+## Use Case:
 
+External users and developers use this skill to analyze seedling tray or planting-pot media, estimate germinated seed counts and germination rate, and retrieve prior germination analysis reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-seed-germination-rate-prediction-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands] <br>
-**Output Format:** [Markdown text with JSON payloads and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save analysis output to a file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; SKILL.md frontmatter says 1.0.5) <br>
+Risk: The skill uploads seed tray media or media URLs to the Life Emergence backend for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media that is appropriate for third-party processing, and review retention, deletion, and account controls before using sensitive or production data.
+
+Risk: The skill can create or reuse a backend-linked identity automatically and store tokens or profile data in a local workspace database.
+
+Mitigation: Run the skill in a controlled workspace, restrict access to local state files, and clear local credentials or profile data when the workflow is no longer needed.
+
+Risk: The skill can retrieve cloud report history without a separate confirmation step.
+
+Mitigation: Limit use to users authorized to view the associated reports, and review report-history access behavior before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-seed-germination-rate-prediction-analysis)
+- [API interface documentation](references/api_doc.md)
+- [Analysis API error documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON]
+
+**Output Format:** [Structured report text or JSON, with Markdown tables for history listings and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs visual counting estimates, germination-rate calculations, status messages, and cloud report links when available.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence; artifact frontmatter: 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,5 @@
 ## Description: <br>
-Automatically update Clawdbot and all installed skills once daily. <br>
+Sets up a daily scheduled update check for SkillHub and installed skills, then reports the update summary. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,35 +7,34 @@ This skill is ready for commercial/non-commercial use. <br>
 [thcjp](https://clawhub.ai/user/thcjp) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and operators use this skill to configure daily update checks for Clawdbot and installed skills, receive update summaries, and run manual update or troubleshooting commands. <br>
+Developers and SkillHub users use this skill to configure unattended daily update checks for SkillHub and installed skills, with a summary of what changed. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can configure unattended daily updates that change the agent and installed skills without strong confirmation, scoping, or rollback guidance. <br>
-Mitigation: Install only when unattended updates are intended; review or narrow trigger wording, require explicit confirmation before creating the cron job, and keep a documented way to disable the job and recover from a broken update. <br>
+Risk: The skill can configure a persistent scheduled job that updates SkillHub and installed skills without per-update review. <br>
+Mitigation: Use it only when unattended updates are intentional; run the dry-run command first and confirm the cron entry before enabling it. <br>
+Risk: Automatic updates may introduce skill changes that have not been reviewed for the local environment. <br>
+Mitigation: Use a notification-only or allowlisted update process when tighter control over skill changes is required. <br>
 
 
 ## Reference(s): <br>
-- [Auto Updater on ClawHub](https://clawhub.ai/thcjp/skills/auto-updater) <br>
-- [Clawdbot Updating Guide](https://docs.clawd.bot/install/updating) <br>
-- [SkillHub CLI](https://docs.clawd.bot/tools/clawdhub) <br>
-- [Cron Jobs](https://docs.clawd.bot/cron) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/auto-updater) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
+**Output Type(s):** [markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline bash and JSON code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires command execution capability and creates persistent scheduled automation when the user chooses to install the cron job.] <br>
+**Other Properties Related to Output:** [Produces setup and troubleshooting guidance for scheduled SkillHub updates.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

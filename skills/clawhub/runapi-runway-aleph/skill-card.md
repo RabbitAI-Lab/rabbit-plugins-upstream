@@ -1,43 +1,63 @@
-## Description: <br>
-Generate and edit video with Runway Aleph through RunAPI. Use when the user asks an agent to create, edit, or transform video with Runway Aleph. Default to the RunAPI CLI for one-off generation; use SDKs only when the user is integrating RunAPI into an app or backend. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit video with Runway Aleph through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers, engineers, and content-production agents use this skill to route one-off Runway Aleph video generation or editing tasks through the RunAPI CLI, and to identify SDK options when integrating RunAPI into an application or backend. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Video inputs, prompts, and request files may be sent to RunAPI and Runway cloud services. <br>
-Mitigation: Review request.json before submission and confirm provider pricing, retention, and privacy terms before processing sensitive or proprietary media. <br>
-Risk: The skill depends on the external runapi CLI and authentication state. <br>
-Mitigation: Install the CLI from the documented RunAPI Homebrew tap, use runapi login or a scoped RUNAPI_API_KEY where possible, and avoid embedding credentials in request files or logs. <br>
+## Use Case:
 
+Developers, creative operators, and agents use this skill to create, edit, or transform video with Runway Aleph through RunAPI. It guides one-off CLI generation and SDK-based application integration while requiring contract discovery, request validation, and deliverable verification.
 
-## Reference(s): <br>
-- [Runway Aleph model documentation](https://runapi.ai/models/runway-aleph.md) <br>
-- [RunAPI Runway provider page](https://runapi.ai/providers/runway.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [Runway Aleph homepage](https://runapi.ai/models/runway-aleph) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Code, Guidance] <br>
-**Output Format:** [Markdown with shell and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [References the runapi CLI, optional RUNAPI_API_KEY authentication, request.json inputs, asynchronous polling, and SDK package names.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release metadata) <br>
+Risk: RunAPI requests may create paid video generation or editing jobs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review request files and authentication state before submitting work, and avoid replacement submissions unless the user authorizes another paid request.
+
+Risk: Video editing may require uploading user-provided source media to RunAPI.
+
+Mitigation: Use only media the user has approved for upload and prefer environment authentication or a known CLI configuration for credentials.
+
+Risk: A successful task status alone may not prove the requested media deliverable is usable.
+
+Mitigation: Download every requested media result and verify each file is non-empty with the expected video MIME type before reporting completion.
+
+## Reference(s):
+
+- [RunAPI Runway Aleph Model Page](https://runapi.ai/models/runway-aleph)
+- [RunAPI Runway Aleph Model Documentation](https://runapi.ai/models/runway-aleph.md)
+- [Runway Provider Overview](https://runapi.ai/providers/runway.md)
+- [RunAPI Model Catalog](https://runapi.ai/models.md)
+- [Runway Aleph SDK Integration](https://github.com/runapi-ai/runway-aleph-sdk)
+- [ClawHub Skill Page](https://clawhub.ai/runapi-ai/skills/runapi-runway-aleph)
+- [RunAPI Publisher Profile](https://clawhub.ai/user/runapi-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with shell commands, JSON request files, SDK integration notes, and downloaded media deliverables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires RunAPI authentication for execution and validates generated media files before completion.]
+
+## Skill Version(s):
+
+0.2.9 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
