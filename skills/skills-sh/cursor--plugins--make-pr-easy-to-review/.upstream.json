@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/make-pr-easy-to-review",
+  "repo": "cursor/plugins",
+  "skillId": "make-pr-easy-to-review",
+  "branch": "main",
+  "pushedAt": "2026-08-13T22:02:02Z",
+  "contentHash": "af7b0d81873f83e5fa8b855e693efc3caae5038ca6fe2bdaf534aead746be3a7",
+  "fetchedAt": "2026-08-14T08:42:58.548Z"
+}

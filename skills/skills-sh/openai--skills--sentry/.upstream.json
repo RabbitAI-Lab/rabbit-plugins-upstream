@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/sentry",
+  "repo": "openai/skills",
+  "skillId": "sentry",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "80ba5489686379efa2f0467b55bcb7091d2827a2afc5f5c2e793ba62d7fb46ff",
+  "fetchedAt": "2026-08-14T08:42:47.797Z"
+}

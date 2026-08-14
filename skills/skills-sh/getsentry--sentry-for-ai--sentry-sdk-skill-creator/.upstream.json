@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-sdk-skill-creator",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-sdk-skill-creator",
+  "branch": "main",
+  "pushedAt": "2026-08-14T00:44:59Z",
+  "contentHash": "2c5d4b347ae3f0b2a75abebbf5e8ceb1cb9f890089a3f043322224a7cec9cfee",
+  "fetchedAt": "2026-08-14T08:43:38.945Z"
+}

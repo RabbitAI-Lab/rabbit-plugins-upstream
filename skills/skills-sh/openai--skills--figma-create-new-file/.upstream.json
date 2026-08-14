@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/figma-create-new-file",
+  "repo": "openai/skills",
+  "skillId": "figma-create-new-file",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "2f7e835603650206c49aa7255ae57e1f4711e19f447f29d82899102355fdd897",
+  "fetchedAt": "2026-08-14T08:42:47.863Z"
+}
