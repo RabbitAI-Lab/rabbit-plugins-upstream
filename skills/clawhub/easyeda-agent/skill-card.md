@@ -1,52 +1,71 @@
-## Description: <br>
-EasyEDA Agent automates EasyEDA Pro schematic and PCB workflows through the local easyeda-agent CLI, daemon, and connector, including board design, inspection, part placement, routing checks, DRC/layout linting, and artifact export. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+EasyEDA Agent helps agents design, clean up, verify, and export EasyEDA Pro schematics and PCBs through local EasyEDA automation workflows, references, and helper scripts.
 
-## Publisher: <br>
-[zhoushoujianwork](https://clawhub.ai/user/zhoushoujianwork) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhoushoujianwork](https://clawhub.ai/user/zhoushoujianwork)
 
-## Use Case: <br>
-External developers and electronics engineers use this skill to guide agents through EasyEDA Pro schematic and PCB design, inspection, validation, and manufacturing artifact export using the local easyeda-agent tooling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can alter live EasyEDA schematic and PCB projects. <br>
-Mitigation: Work from backups, inspect proposed changes, approve destructive actions explicitly, and review EasyEDA check, DRC, and layout-lint results before accepting outputs. <br>
-Risk: Helper or recovery paths may have weak safeguards. <br>
-Mitigation: Use recovery actions only when the EasyEDA daemon or connector is stuck, and confirm project state is saved before running them. <br>
-Risk: Workflow state and lint baselines can retain local design data. <br>
-Mitigation: Store generated baselines and workflow files in an appropriate local project area and remove sensitive design artifacts before sharing logs or reports. <br>
+## Use Case:
 
+Developers and electronics engineers use this skill to automate or guide EasyEDA Pro schematic and PCB work, including design from scratch, safe refactoring, part selection, wiring and layout checks, DRC, BOM and netlist export, and delivery summaries.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhoushoujianwork/skills/easyeda-agent) <br>
-- [EasyEDA Agent Connector Marketplace](https://jlc-ext.com/item/zhoushoujian/easyeda-agent-connector) <br>
-- [EasyEDA Design Flow](artifact/references/design-flow.md) <br>
-- [EasyEDA Schematic](artifact/references/schematic.md) <br>
-- [EasyEDA PCB](artifact/references/pcb.md) <br>
-- [EasyEDA Action Reference](artifact/references/actions.md) <br>
-- [Environment Setup](artifact/references/environment-setup.md) <br>
-- [PCB Design Rules](artifact/references/pcb-design-rules.md) <br>
-- [Part Selection](artifact/references/part-selection.md) <br>
-- [Standard Parts Catalog](artifact/references/standard-parts.json) <br>
-- [JLCPCB Fabrication Rule Fallback](artifact/references/fab-rules-jlcpcb.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON snippets, and file or artifact paths.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include EasyEDA CLI commands, design-check summaries, DRC/layout-lint status, and exported BOM, netlist, or manufacturing artifact paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.18.0 (source: server release metadata) <br>
+Risk: The skill can modify and save EasyEDA schematic and PCB projects through local automation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use health checks, inspect-before-mutate behavior, explicit save checkpoints, and DRC/check/layout gates before accepting design changes.
+
+Risk: Raw debug execution can bypass typed EasyEDA actions when used.
+
+Mitigation: Prefer typed EasyEDA actions and allow debug.exec_js only when a typed action is missing and the user explicitly accepts that path.
+
+Risk: Part lookup and selection can depend on live JLC/LCSC service results and current availability.
+
+Mitigation: Review selected LCSC C-numbers, BOM output, stock-sensitive choices, and manufacturing constraints before ordering or fabrication.
+
+Risk: Local workflow, audit, lint, snapshot, BOM, netlist, and manufacturing files may persist project details.
+
+Mitigation: Review generated local files and paths before sharing, committing, or submitting issue reports.
+
+## Reference(s):
+
+- [EasyEDA Agent ClawHub Page](https://clawhub.ai/zhoushoujianwork/skills/easyeda-agent)
+- [EasyEDA Agent Project Documentation](https://github.com/zhoushoujianwork/easyeda-agent)
+- [EasyEDA Agent Connector Plugin](https://jlc-ext.com/item/zhoushoujian/easyeda-agent-connector)
+- [Design Flow](references/design-flow.md)
+- [Schematic Workflow](references/schematic.md)
+- [PCB Workflow](references/pcb.md)
+- [Typed Actions Reference](references/actions.md)
+- [PCB Design Rules](references/pcb-design-rules.md)
+- [Environment Setup](references/environment-setup.md)
+- [JLCPCB Fabrication Rule Fallbacks](references/fab-rules-jlcpcb.json)
+- [Standard Parts Catalog](references/standard-parts.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Code, Configuration, Files]
+
+**Output Format:** [Markdown guidance with EasyEDA CLI commands, JSON/YAML configuration references, and script/code outputs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update EasyEDA project state and local workflow, audit, lint, BOM, netlist, image, and manufacturing artifact files when used by an agent.]
+
+## Skill Version(s):
+
+0.25.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

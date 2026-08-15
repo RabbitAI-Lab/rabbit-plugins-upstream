@@ -18,7 +18,7 @@ description: 提供 TikTok 视频号达人 OAuth 授权、已授权账号列表�
 
 ### ❌ 边界与限制
 
-- **模块独立**：本 skill 令牌仅适用于 `/tiktokVideo/*`，不可用于 `/tiktokShop/developerProxy`。TikTok Shop 卖家授权（`erp` / `affiliate`）请用 `linkfox-tiktok-auth`，两者授权数据**不互通**。
+- **模块独立**：本 skill 令牌仅适用于 `/tiktokVideo/*`，不可用于 `/tiktokShop/developerProxy`。TikTok Shop 卖家授权（`erp` / `affiliate`）请用 `linkfox-tiktok-shop-auth`，两者授权数据**不互通**。
 - **令牌有效期**：`accessToken` 较短，过期需用 `refreshToken` 续签；`refreshToken` 过期须重新走授权流程。
 - **授权链接时效**：`authorizeUrl` 有效期约 1 小时，过期需重新获取。
 - **用户隔离**：用户只能查看/管理自己授权的账号。
@@ -145,7 +145,7 @@ description: 提供 TikTok 视频号达人 OAuth 授权、已授权账号列表�
 
 本文档描述 **TikTok 视频上传模块（`/tiktokVideo`）** 的授权与令牌管理接口。底层经 LinkFox 网关转发至紫鸟开放平台 `tiktok-auth/auth/creator-url` 与 `tiktok-auth/auth/refresh?appType=creator`。业务调用（视频上传等）通过 `/tiktokVideo/developerProxy` 完成，不在本 skill 范围内。
 
-> **与 TikTok Shop 模块的区别**：本模块使用独立路由前缀 `/tiktokVideo`、独立数据表，固定 `appType=creator`（达人端），无需传 `appType` 参数。TikTok Shop 授权（`/tiktokShop/*`，含 `appType=erp/creator/affiliate`）由 `linkfox-tiktok-auth` 负责，两者数据不互通。
+> **与 TikTok Shop 模块的区别**：本模块使用独立路由前缀 `/tiktokVideo`、独立数据表，固定 `appType=creator`（达人端），无需传 `appType` 参数。TikTok Shop 授权（`/tiktokShop/*`，含 `appType=erp/creator/affiliate`）由 `linkfox-tiktok-shop-auth` 负责，两者数据不互通。
 
 ## 调用规范
 
@@ -154,7 +154,7 @@ description: 提供 TikTok 视频号达人 OAuth 授权、已授权账号列表�
 - **Content-Type**：`application/json`
 - **认证方式**：Header `Authorization: <api_key>`，API key 读取环境变量 `LINKFOXAGENT_API_KEY`（如未配置 按 SKILL.md 的 **## 解决认证和积分问题** 处理）
 - **User-Agent**：`LinkFox-Skill/1.0`
-- **超时**：60s
+- **超时**：150s
 - **用户鉴权**：以下接口均需 LinkFox 用户 Token；OAuth 回调端点不在本 skill 内
 
 ## 接口列表

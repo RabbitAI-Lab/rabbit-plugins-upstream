@@ -633,10 +633,12 @@ class ZhanfuClient:
         timeout: float = API_TIMEOUT,
     ) -> dict[str, Any]:
         assert_action_supported(action)
+        # OpenBrowser / GetBrowserWebDriver 等接口要求 browserId 为字符串，禁止 JSON 数字
+        bid = "" if browser_id in (None, "") else str(browser_id)
         payload = {
             "module": "WebDriverModule",
             "action": action,
-            "browserId": browser_id,
+            "browserId": bid,
             "args": args,
         }
         last_err: Optional[Exception] = None
@@ -937,8 +939,9 @@ def start_zhanfu(exe_path: str, api_port: int) -> None:
     """冷启动站斧 WebDriver 模式。
 
     Windows: 站斧.exe --multip --run_type=web_driver --ipc_type=http --httpport=...
-    macOS:   open -a 站斧.app --args --run_type=web_driver --ipc_type=http --httpport=...
-             （对齐官方 Playwright demo；Mac 启动参数不含 --multip）
+             （四项缺一不可，禁止减少）
+    macOS:   open -a 站斧.app --args --multip --run_type=web_driver --ipc_type=http --httpport=...
+             （四项缺一不可，禁止减少；与 Windows 相同）
     """
     if is_mac():
         # exe_path 为 .app 路径或应用名「站斧」
@@ -946,11 +949,13 @@ def start_zhanfu(exe_path: str, api_port: int) -> None:
             exe_path.endswith(".app") and os.path.isdir(exe_path)
         ):
             raise FileNotFoundError(f"未找到站斧.app: {exe_path}")
+        # macOS：四项参数禁止减少（含 --multip）
         cmd = [
             "open",
             "-a",
             exe_path,
             "--args",
+            "--multip",
             "--run_type=web_driver",
             "--ipc_type=http",
             f"--httpport={api_port}",
@@ -960,6 +965,7 @@ def start_zhanfu(exe_path: str, api_port: int) -> None:
     else:
         if not os.path.isfile(exe_path):
             raise FileNotFoundError(f"未找到站斧: {exe_path}")
+        # Windows：四项参数禁止减少
         args = [
             exe_path,
             "--multip",

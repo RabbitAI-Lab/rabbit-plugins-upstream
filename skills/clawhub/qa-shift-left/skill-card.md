@@ -1,43 +1,52 @@
-## Description: <br>
-Guides QA and engineering teams through shift-left testing activities across requirements, design, and development to produce early testing checklists, quality gates, and intervention records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA engineers and development teams shift testing earlier by reviewing requirement testability, planning development-stage test design, and identifying quality risks before release.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA engineers, developers, and delivery teams use this skill during requirements, design, and development to create shift-left testing plans, early activity checklists, quality gates, and team enablement actions.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Broad activation phrases could invoke the skill when early QA planning is not intended.
+
+Mitigation: Review activation phrases before deployment and scope use to explicit shift-left testing, requirements review, or early QA planning requests.
+
+Risk: The skill permits Bash use for project-local test or inspection commands.
+
+Mitigation: Allow Bash only for explicit, project-local test or inspection commands and review commands before execution.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, QA engineers, and project teams use this skill during requirements, design, and active development to plan shift-left testing, assess testability, define early quality gates, and document phased intervention activities. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording may activate the skill during unrelated QA conversations. <br>
-Mitigation: Use explicit invocation or narrow trigger wording when installing it in contexts with many QA skills. <br>
-Risk: The skill declares Bash access even though the artifact is primarily a document-review and planning aid. <br>
-Mitigation: Avoid granting Bash unless the operating environment needs it; use read-only document review for checklist generation where possible. <br>
-Risk: Shift-left recommendations can become misleading if source requirements, timelines, or quality targets are incomplete. <br>
-Mitigation: Review generated checklists and quality gates with product, engineering, and QA owners before treating them as project controls. <br>
+**Output Format:** [Markdown checklists and planning guidance]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-shift-left) <br>
-- [Publisher profile](https://clawhub.ai/user/kokxi) <br>
+**Other Properties Related to Output:** [Produces shift-left plans, early testing activity lists, quality gates, and team enablement recommendations.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown checklists and structured planning notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes traceability to requirements review IDs when available.] <br>
+1.6.3 (source: frontmatter and server-resolved release metadata)
 
-## Skill Version(s): <br>
-1.6.0 (source: SKILL.md frontmatter and server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,14 @@
+# Component Patterns — {STYLE_TITLE}
+
+> Extracted from: {SOURCE_DESC} | Evidence quality: {EVIDENCE_QUALITY_LEVEL}
+
+Each component documents: visual description, token references (always semantic or component tokens, never primitives), variants, states, and evidence grade.
+
+## Token Reference Rules
+
+- ✅ Reference semantic tokens: `color.action.primary`, `color.bg.surface`, `space.container.padding`
+- ✅ Reference component tokens: `button.height.default`
+- ❌ Do NOT reference primitive tokens directly: `color.blue.500`, `space.4`
+- ❌ Do NOT use raw values: `#165DFF`, `16px`
+
+{COMPONENT_SECTIONS}

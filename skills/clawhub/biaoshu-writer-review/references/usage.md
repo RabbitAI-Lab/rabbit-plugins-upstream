@@ -48,7 +48,7 @@ python3 scripts/zcm.py compliance <project_id> 投标文件.docx --report html -
 
 ## 第 1 步：凭证
 
-凭证默认存在 **skill 内 `config.json`**（权限 600，含真实 Key——**绝不上传发布包/提交仓库**，发布包不含配置文件）。读取优先级：环境变量 > skill 内 config.json（旧版 `~/.zcm/config.json` 仍可读，兼容已有安装）。`ZCM_CONFIG` 可改凭证文件路径。
+凭证默认存在 **skill 内 `config.json`**（权限 600，含真实 Key——**绝不上传发布包/提交仓库**，发布包不含配置文件）。App Key 只从 **skill 内 config.json** 读取（路径固定，不经环境变量、无旧目录回退、不可重定向）。
 
 **只需 App Key 一项**，由用户**自行到官网获取**（本 skill 不代注册、不收集手机号/验证码）。获取全路径（转述时逐步骤完整给出，链接原样显示完整 URL）：
 打开官网 https://biaoshu.zhiliaobiaoxun.com/ → 手机号 + 短信验证码注册并登录（新用户赠积分）→ 点**左侧菜单『Skill 接入 → 获取 APP Key』**，在弹出面板中查看/复制 App Key（首次打开自动生成，形如 `bk_live_xxxxx`，重置后旧 Key 立即失效）。
@@ -84,6 +84,7 @@ python3 scripts/zcm.py interpret /path/招标文件.pdf      # 仅本地路径
 python3 scripts/zcm.py packages <project_id>
 ```
 - 把返回的 `packages` 呈现给用户挑选，收集选中的 `package_ids`。
+- `max_total_pages` 当前上限为 **500**；用户想指定页数时，以抽包结果里的上限为准。
 - `is_multi_package=false` → 跳过选包，第 4 步不带 `--package-ids`。
 
 ## 第 4 步：生成成品标书
@@ -98,6 +99,7 @@ python3 scripts/zcm.py generate <project_id> --package-ids 11,12 --total-pages 8
 ```
 - 存放目录优先级：`-o` > `ZCM_OUTPUT_DIR` > `login` 存的 `output_dir` > 默认 `biaoshu-bailian-files/`。
 - 自动轮询（默认超时 3600s，`--timeout` 可调）。完成后打印**成品完整路径**+所在目录，**两项都告诉用户**。
+- **跟用户解释积分时分两层说**：解读 / 合规 / 生成三个入口提交前都会先看余额，余额 < 1 会被拦住；但**真正扣积分的只有生成**。不要把“余额门槛”说成“解读/合规也扣积分”。
 - ⏱ **生成可能耗时 >10 分钟**（实测 30 页约 15 分钟）。脚本本身轮询不会超时，但**前端/工具调用常有 ~10 分钟上限**会把命令杀掉——**注意：后端任务不受影响、仍在跑，切勿重新提交（会重复扣费）**。长任务推荐：`generate <pid> --no-wait` 拿 `job_id`，再用 `progress-stream <job_id>`（配合 Monitor 后台实时播报）续查到终态，最后 `result <job_id> -o <路径>` 下载并打印全路径。万一命令被杀，用同一 `job_id` 续查即可，不要重发 generate。
 
 ## 第 5 步：合规审查
@@ -150,4 +152,4 @@ python3 scripts/zcm.py report --job <JOB_ID> --name 招标文件.pdf --format bo
 - **幂等**：网络重试给提交命令加 `--idempotency-key <UUID>`，避免重复建任务/重复扣费。
 - **续接已有 project**：用户解读后直接说「帮我生成」，沿用 `project_id` 从第 3 步继续，不重传。
 - **错误处理**：脚本已把 401/402/404/422/429 转中文。常见——402 余额不足让用户充值；整层 404 多为开放 API 总开关未开，让管理员开启；429 退避重试。完整对照见 [api.md](api.md)。
-- **积分不足（402）**：脚本只打印**不含凭证参数的官网充值链接**，照原样转达即可；错误体里带 `bind_key` 的 `recharge_url`/`bind_url` 一律不转发（见第 1 步「凭证保护」）。
+- **积分不足（402）**：先区分“余额门槛”与“实际扣积分”——开放 API / Skill 下，解读、生成、合规提交前都要余额 > 0；但真实扣积分仍只有生成。脚本只打印**不含凭证参数的官网充值链接**，照原样转达即可；错误体里带 `bind_key` 的 `recharge_url`/`bind_url` 一律不转发（见第 1 步「凭证保护」）。

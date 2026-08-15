@@ -2,7 +2,7 @@
 name: edic-design-system
 slug: edic-design-system
 displayName: EDIC 设计系统
-version: 1.9.1
+version: 1.10.0
 description: >-
   Generate UI components, full pages, documents, emails, and assets that
   strictly follow the EDIC design system (Editorial × Olive Green, OKLch
@@ -186,7 +186,31 @@ h4 1.5 · h3 1.875 · h2 2.25 · h1 3 · display 3.75 · hero 4.5.
 ### Accessibility
 - **无障碍**: `ds-sr-only` `ds-skip` `#ds-main`
 
+## Page composition rules
+
+Before writing a single component, establish the page skeleton:
+
+1. **Pick the scene** — consult `references/RECIPES.md`. Match the user's goal
+   to a recipe (landing page / blog / docs / résumé / report). If no recipe fits,
+   compose from `references/PATTERNS.md` patterns.
+
+2. **Set section rhythm** — alternate `ds-section` (paper bg) with
+   `ds-section--alt` (surface bg). Never stack two `--alt` sections back-to-back.
+
+3. **One landmark per role** — one `<header>`, one `<main id="ds-main">`, one
+   `<footer>`. Use `<section>` for content blocks inside `<main>`.
+
+4. **Heading hierarchy** — one `<h1>` per page. Sections start with `<h2>`,
+   sub-sections with `<h3>`. Never skip a level.
+
+5. **Reveal cadence** — add `ds-reveal` to section-level elements. Stagger
+   child items with `style="--d: 0.Xs"` in 0.05–0.1 s increments. Cap at ~0.4 s.
+
+6. **Skip link** — every page must open with
+   `<a href="#ds-main" class="ds-skip">跳到主内容</a>`.
+
 ## Output expectations
+
 - Produce complete, runnable HTML fragments assuming `styles.css` (and optional
   `scripts.js`) are linked.
 - If the host has no stylesheet, include a minimal `<style>` but still use OKLch
@@ -194,6 +218,24 @@ h4 1.5 · h3 1.875 · h2 2.25 · h1 3 · display 3.75 · hero 4.5.
 - Use semantic structure (`header/main/section/nav/footer`) with correct heading order.
 - Default to light theme and guarantee the same markup works under `[data-theme="dark"]`.
 - When unsure, favor the more restrained, more whitespace, more editorial option.
+- **For email output:** use inline sRGB styles only — no `var(--ds-*)`, no `oklch()`.
+  Use olive accent `#5a6e2a` ≈ `oklch(52% 0.08 115)`. See Pattern 10 in `PATTERNS.md`.
+
+## Self-check before finalizing output
+
+Run through this checklist mentally before returning any HTML:
+
+- [ ] Every color comes from `var(--ds-*)` — no bare hex/rgb/hsl.
+- [ ] Every spacing value uses `var(--ds-space-*)` — no bare `px`/`rem`.
+- [ ] Every font-size uses `var(--ds-text-*)` — no bare `px`/`rem`.
+- [ ] Every font-family uses `var(--ds-font-*)`.
+- [ ] Dark mode: no `#000` background; warm grey `oklch(15% 0.008 75)` via `var(--ds-color-bg)`.
+- [ ] BEM: every modifier class is paired with its base class (`ds-btn ds-btn--primary`).
+- [ ] Inline `style=` only for genuinely runtime-dynamic values (`--d`, widths, heights).
+- [ ] Icon-only buttons have `aria-label`; decorative SVGs have `aria-hidden="true"`.
+- [ ] One `<h1>` on the page; heading levels never skip.
+- [ ] `<a href="#ds-main" class="ds-skip">` present on full-page output.
+- [ ] `prefers-reduced-motion` override present for any custom animation > 150ms.
 
 ## Example: token-driven card
 ```html
@@ -204,6 +246,16 @@ h4 1.5 · h3 1.875 · h2 2.25 · h1 3 · display 3.75 · hero 4.5.
   <a class="ds-btn ds-btn--primary ds-mt-4" href="#">阅读全文</a>
 </article>
 ```
+
+## Reference files
+
+Load these on demand when you need precise values, complex structure, or full-page guidance:
+
+- [Scene recipes — complete page builds step-by-step (docs, landing, blog, résumé, report)](references/RECIPES.md)
+- [Page-level patterns — 10 section templates (hero, features, pricing, timeline, dashboard, email)](references/PATTERNS.md)
+- [Component HTML examples — glass card, docs layout, navbar, toast, accordion, modal, tabs, dropdown](references/EXAMPLES.md)
+- [Complete token values — spacing, radius, shadow, blur, motion, type scale](references/TOKENS.md)
+- [Anti-patterns & correct replacements — color, spacing, inline style, BEM, a11y, motion](references/ANTI-PATTERNS.md)
 
 ## Reference
 - Website: https://edic.cgartlab.com/

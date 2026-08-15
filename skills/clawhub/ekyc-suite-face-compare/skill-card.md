@@ -1,47 +1,62 @@
-## Description: <br>
-eKYC Suite Face Compare compares two consented face images for KYC and eKYC selfie verification and returns a structured 0-100 similarity score from the configured eKYC Suite Cloud backend. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+eKYC Suite Face Compare compares two consented face images for KYC selfie verification and returns a structured 0-100 similarity score through an operator-configured eKYC Suite Cloud backend.
 
-## Publisher: <br>
-[carochen112233-commits](https://clawhub.ai/user/carochen112233-commits) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[carochen112233-commits](https://clawhub.ai/user/carochen112233-commits)
 
-## Use Case: <br>
-Agent developers, fintech onboarding teams, compliance engineers, and identity-verification builders use this skill to compare two authorized face images as one signal in human-reviewed KYC onboarding and selfie-to-document checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill processes biometric face images by sending them to the configured eKYC Suite Cloud endpoint. <br>
-Mitigation: Use it only with user authorization for biometric processing, defined retention and access policies, and an operator-controlled HTTPS endpoint. <br>
-Risk: A similarity score can be over-relied on as proof of identity. <br>
-Mitigation: Treat the score as one verification signal, apply deployment-specific thresholds and retry rules, and route uncertain or high-impact outcomes to human review. <br>
-Risk: Optional attribution environment variables are forwarded as request headers when set. <br>
-Mitigation: Keep optional source, client, workspace, and install context values free of sensitive data that should not be sent to the backend. <br>
+## Use Case:
 
+External developers, fintech onboarding teams, compliance engineers, and identity-verification builders use this skill to add human-reviewed face comparison for consented KYC onboarding, selfie-to-document matching, and applicant checks.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-face-compare) <br>
-- [Related npm MCP Package](https://www.npmjs.com/package/@wefi-ai/ekyc-suite-face-compare-mcp) <br>
-- [Parent eKYC Suite Skill](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite) <br>
-- [eKYC Suite AI Guardian](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-ai-guardian) <br>
-- [eKYC Suite Document OCR](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-document-ocr) <br>
-- [eKYC Suite Media Labeling](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-media-labeling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [JSON result with concise explanatory text or Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a similarity score and available backend response metadata; the score should be treated as a verification signal rather than standalone legal identity proof.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: frontmatter and server release metadata) <br>
+Risk: Biometric images are sensitive and are sent to a configured cloud backend.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only after user authorization for biometric processing, with a trusted HTTPS endpoint and defined retention and access policies.
+
+Risk: A similarity score can be misused as standalone identity proof or a fully automated high-impact decision.
+
+Mitigation: Treat the score as one review signal, apply deployment-specific thresholds and retry rules, and keep consequential decisions in a human-reviewed workflow.
+
+Risk: Misconfigured endpoint or credential handling could send media to the wrong backend or prevent secure processing.
+
+Mitigation: Configure EKYC_CLOUD_ENDPOINT as a trusted HTTPS URL, provide EKYC_CLOUD_API_KEY through environment controls, and review optional attribution headers before deployment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-face-compare)
+- [Related MCP Package](https://www.npmjs.com/package/@wefi-ai/ekyc-suite-face-compare-mcp)
+- [eKYC Suite Parent Skill](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite)
+- [eKYC Suite AI Guardian](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-ai-guardian)
+- [eKYC Suite Document OCR](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-document-ocr)
+- [eKYC Suite Media Labeling](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-media-labeling)
+
+## Skill Output:
+
+**Output Type(s):** [json, shell commands, guidance]
+
+**Output Format:** [JSON response with a 0-100 similarity score and backend metadata; documentation may include Markdown and shell command examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires EKYC_CLOUD_ENDPOINT and EKYC_CLOUD_API_KEY; accepts two consented face-image inputs as local paths, public HTTPS URLs, or base64 strings.]
+
+## Skill Version(s):
+
+1.0.16 (source: frontmatter, changelog, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

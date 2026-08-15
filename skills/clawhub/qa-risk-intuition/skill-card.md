@@ -1,40 +1,54 @@
-## Description: <br>
-Identifies testing areas that may look simple but carry high risk, then helps prioritize limited QA resources with risk levels and mitigation suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA practitioners identify testing areas that may look simple but carry high risk, prioritize limited testing resources, and attach probability, impact, and mitigation guidance to each risk point.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill to triage test focus when time is limited, requirements are changing, or a feature may hide business, data, integration, or technical risk. It produces prioritized risk areas, a probability-impact matrix, and mitigation suggestions for test planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may frame broad testing requests through a risk-assessment lens even when the user needs a general test plan. <br>
-Mitigation: Use it when risk prioritization is desired, and choose a general test-planning skill when the goal is comprehensive test design. <br>
-Risk: A risk assessment can miss high-risk areas if the requirements or scenario tree are incomplete. <br>
-Mitigation: Supplement the requirement decomposition and scenario context, then rerun the risk assessment before relying on the priority list. <br>
+## Use Case:
 
+Developers, QA engineers, and release reviewers use this skill to assess feature or change risk, rank high-risk testing areas, and decide where to focus test depth and resources.
 
-## Reference(s): <br>
-- [Risk Signals Radar and Checklist](references/risk-signals.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown risk assessment report with risk matrix tables and mitigation suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Each risk point is expected to include a unique risk ID and a linked requirement ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Broad trigger wording may cause the skill to produce broader risk analysis than a narrow test-case request requires.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Scope the request to the feature, change set, or module under review, and review the resulting priorities before using them to allocate test effort.
+
+Risk: Risk rankings can be misleading when requirements, scenario trees, or historical defect data are incomplete.
+
+Mitigation: Provide current requirements and known defect history where available, then validate high-risk classifications with the QA or release owner.
+
+## Reference(s):
+
+- [risk-signals.md](references/risk-signals.md)
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-risk-intuition)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown risk assessment report with tables, risk matrix, prioritized areas, and mitigation suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Risk points are expected to include traceable IDs, requirement links, probability and impact ratings, and suggested testing depth.]
+
+## Skill Version(s):
+
+1.6.3 (source: server release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

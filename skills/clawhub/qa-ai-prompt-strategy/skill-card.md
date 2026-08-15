@@ -1,40 +1,49 @@
-## Description: <br>
-Selects structured prompt patterns that help agents generate deeper, more useful QA test cases from testing goals and context. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA practitioners choose structured AI prompt patterns that generate deeper, more specific test cases from an existing testing context.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, testers, and agent operators use this skill to choose prompt templates for functional, exception, boundary, concurrency, security, performance, multi-perspective, and adversarial test-case generation. It is especially useful when prior AI-generated test cases are too generic or shallow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate for broad prompt-improvement requests outside a QA test-case workflow. <br>
-Mitigation: Confirm the user's goal is QA test-case generation before applying these templates. <br>
-Risk: Generated prompts can produce shallow or poorly targeted test cases when the input context is incomplete. <br>
-Mitigation: Return to context engineering and add missing functional, risk, and constraint details before regenerating the prompt. <br>
+## Use Case:
 
+QA engineers, test designers, and developers use this skill to transform product or requirement context into higher-quality AI prompts for generating executable, verifiable test cases across functional, edge, security, performance, and multi-perspective scenarios.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-ai-prompt-strategy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prompt templates with role definitions, output-format specifications, and constraint lists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces optimized prompts rather than executing tests or modifying files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may activate for broad prompt-improvement requests, not only explicit test-case generation requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the selected prompt strategy against the current QA task and confirm that the generated prompt remains scoped to the intended testing context.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-ai-prompt-strategy)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown prompt templates and checklist guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces optimized prompts with role definitions, output format specifications, and constraint lists.]
+
+## Skill Version(s):
+
+1.6.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

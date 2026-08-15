@@ -1,53 +1,68 @@
-## Description: <br>
-AI-Shifu Course Creator helps agents create, edit, optimize, deploy, manage, and analyze AI-Shifu courses, Teaching Prompts, Course Prompts, and MarkdownFlow course artifacts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps AI-Shifu course authors create, edit, optimize, deploy, publish, manage, and analyze MarkdownFlow-based Teaching Prompts and Course Prompts across the course lifecycle.
 
-## Publisher: <br>
-[heshaofu2](https://clawhub.ai/user/heshaofu2) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heshaofu2](https://clawhub.ai/user/heshaofu2)
 
-## Use Case: <br>
-Course authors, operators, and developers use this skill to turn source material into AI-Shifu course artifacts, update existing platform courses, publish or manage courses, and query live-course analytics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Stored account access may be reused for course mutations, publishing or archive actions, image uploads, and learner or order analytics. <br>
-Mitigation: Install only when that account authority is acceptable, and require explicit user confirmation before existing-course import, publish or archive, bulk deletion, or broad learner analytics queries. <br>
-Risk: Existing-course import can replace course structure and content, which may delete and recreate outlines and change platform state. <br>
-Mitigation: Confirm the intended target course and destructive import scope before execution, then verify the resulting course state after the operation. <br>
-Risk: Learner analytics can expose sensitive course, learner, order, revenue, or progress information. <br>
-Mitigation: Limit analytics queries to the requested course and question, avoid exposing raw learner identifiers, and summarize only the minimum necessary results. <br>
+## Use Case:
 
+Course authors, operators, and administrators use this skill to turn source material into AI-Shifu courses, revise existing courses, publish live course updates, and review learner, revenue, credit, and engagement analytics.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heshaofu2/skills/ai-shifu-course-creator) <br>
-- [Platform Authentication](references/authentication.md) <br>
-- [Course Design Intake](references/course-design-intake.md) <br>
-- [Orchestration Workflow](references/orchestration-workflow.md) <br>
-- [Teaching Prompt](references/teaching-prompt.md) <br>
-- [Course Prompt](references/course-prompt.md) <br>
-- [MarkdownFlow Spec](references/markdownflow.md) <br>
-- [New Course Deployment](references/deployment-workflow.md) <br>
-- [Course Management](references/course-management.md) <br>
-- [Course Analytics](references/analytics/workflow.md) <br>
-- [Privacy & Presentation](references/analytics/privacy-and-presentation.md) <br>
-- [CLI Reference](references/cli/cli-reference.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, MarkdownFlow prompt content, local course files, and shell command recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or update AI-Shifu course directories, Teaching Prompts, Course Prompts, course descriptions, analytics reports, and CLI command sequences.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Authenticated course-management commands can publish, modify, reorder, archive, or otherwise affect live AI-Shifu courses.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review target course identifiers, generated import files, and publish steps before platform mutations; use the local or artifact-only route when platform changes are not intended.
+
+Risk: Analytics workflows can query learner progress, revenue, ratings, credit use, and learner-linked records.
+
+Mitigation: Use the documented privacy presentation rules, avoid exposing raw learner identifiers, and run only the analytics needed for the user's stated purpose.
+
+Risk: The CLI sends default usage telemetry tied to a platform user id or persistent anonymous id.
+
+Mitigation: Set AI_SHIFU_SKILL_TELEMETRY=off before running CLI commands for privacy-sensitive or offline work.
+
+Risk: Saved authentication tokens may be present in local skill files or shared workspaces.
+
+Mitigation: Avoid storing tokens in shared workspaces and use the skill's verification and SMS login flow rather than reading tokens directly.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heshaofu2/skills/ai-shifu-course-creator)
+- [Skill router](artifact/SKILL.md)
+- [Course design intake](artifact/references/course-design-intake.md)
+- [Deployment workflow](artifact/references/deployment-workflow.md)
+- [Analytics overview](artifact/references/analytics/overview.md)
+- [Analytics privacy and presentation](artifact/references/analytics/privacy-and-presentation.md)
+- [CLI reference](artifact/references/cli/cli-reference.md)
+- [Session controls](artifact/references/session-controls.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline MarkdownFlow content, JSON/DSL bodies, shell commands, course files, and concise operational reports.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or modify local course directories and invoke AI-Shifu CLI commands for authentication, publishing, management, image upload, and analytics.]
+
+## Skill Version(s):
+
+1.2.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

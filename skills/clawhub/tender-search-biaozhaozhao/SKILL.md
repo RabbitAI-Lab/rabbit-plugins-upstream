@@ -198,8 +198,8 @@ metadata: { "openclaw": {"requires": {"env":["ZLBX_API_KEY"]},"primaryEnv": "ZLB
 | `provinces` | list[str] | 否 | 省份列表 |
 | `cities` | list[str] | 否 | 城市列表 |
 | `counties` | list[str] | 否 | 区县列表 |
-| `min_amount` | float | 否 | 最低金额（元） |
-| `max_amount` | float | 否 | 最高金额（元） |
+| `min_amount` | float | 否 | 最低金额，**单位万元**（服务端会 ×10000 转成元再过滤） |
+| `max_amount` | float | 否 | 最高金额，**单位万元** |
 | `page` | int | 否 | 页码，默认 1 |
 | `page_size` | int | 否 | 每页数量，默认 20 |
 
@@ -1485,7 +1485,7 @@ A: **金额筛选**：不同工具使用不同参数名
 
 | 工具 | 金额参数 | 单位 |
 |------|---------|------|
-| search_bids | `min_amount`, `max_amount` | 元 |
+| search_bids | `min_amount`, `max_amount` | **万元** |
 | query_bids_advanced | `min_money`, `max_money` | 元 |
 | get_top_brands | `min_price`, `max_price` | 元 |
 

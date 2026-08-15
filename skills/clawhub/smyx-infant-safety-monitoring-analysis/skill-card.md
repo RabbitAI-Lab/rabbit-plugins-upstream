@@ -1,44 +1,59 @@
-## Description: <br>
-Monitors infant images or videos with visual AI to identify high-risk behaviors such as rolling over, mouth/nose obstruction, climbing, fence crossing, and fall risks, then returns safety warnings and care suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitors infant behavior via visual AI, automatically identifying high-risk actions like rolling over, mouth/nose obstruction, climbing, or falling from bed, and triggers instant safety warnings.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External caregivers, parents, and developers use this skill to analyze infant image or video inputs for safety hazards and retrieve structured reports or historical report lists. Results are advisory and do not replace real-time human supervision or professional care. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive infant image or video inputs and sends inputs or URLs to a cloud service. <br>
-Mitigation: Install only when the publisher is trusted, obtain appropriate consent for child media, and avoid submitting unnecessary or highly sensitive footage. <br>
-Risk: The skill can silently create or reuse an internal identity and store returned service tokens locally. <br>
-Mitigation: Review account linkage and token storage before deployment, restrict execution to trusted environments, and clear local credentials when access should end. <br>
-Risk: The skill can query cloud-stored historical reports. <br>
-Mitigation: Confirm that cloud retention, access control, and report-sharing behavior match the deployment's privacy expectations. <br>
+## Use Case:
 
+External users and developers use this skill to analyze infant activity videos or media URLs for safety risks, generate structured monitoring reports, and retrieve cloud-backed report history.
 
-## Reference(s): <br>
-- [婴儿智能安全看护分析 API 文档](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-safety-monitoring-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown safety report or structured JSON, with optional report links and saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call cloud APIs for analysis and historical report retrieval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter says 1.0.11) <br>
+Risk: The skill sends infant videos, images, or provided media URLs to the Life Emergence cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media the user is authorized to process, minimize identifying details in filenames or URLs, and confirm privacy requirements before deployment.
+
+Risk: Analysis reports and history retrieval are tied to automatically managed local identity and token state.
+
+Mitigation: Review whether persistent local identity storage and account-linked history are allowed in the deployment environment, and manage or remove local identity state according to policy.
+
+Risk: Infant safety outputs are advisory and can be affected by media quality or cloud-service behavior.
+
+Mitigation: Treat the report as caregiver decision support, not as a replacement for real-time supervision or professional care.
+
+## Reference(s):
+
+- [Infant safety monitoring API documentation](artifact/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-safety-monitoring-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, guidance]
+
+**Output Format:** [Markdown-style text with structured JSON analysis content and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud-generated safety scores, risk warnings, care suggestions, history listings, and report export URLs.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

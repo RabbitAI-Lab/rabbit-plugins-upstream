@@ -1,44 +1,63 @@
-## Description: <br>
-Measures fish fry body length from images or videos that include a known-size reference object, then reports growth rate, population statistics, growth curves, recommendations, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Through fixed cameras of fry tanks, this skill analyzes images or videos with a known-size reference object to measure fry body length, estimate growth rate, plot growth curves, and report measurement reliability.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External aquaculture operators, ornamental fish breeders, lab teams, and developers use this skill to analyze reference-calibrated fry tank media, measure body length in millimeters, track growth rate over time, and review cloud-backed historical reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send images, videos, URLs, and account-linked context to remote services. <br>
-Mitigation: Review the remote-service workflow before installing, use only approved media, and deploy only where users accept the cloud analysis and history-query behavior. <br>
-Risk: The skill can silently create or reuse an internal identity and persist user or token data locally. <br>
-Mitigation: Manage the workspace as sensitive, limit access to generated local data and credentials, and clear stored identity material according to the operator's retention policy. <br>
-Risk: Fish length and growth-rate results can be misleading if the reference object is missing, not on the same plane as the fry, or captured from a non-vertical angle. <br>
-Mitigation: Require a known-size reference object, strict top-down capture, confidence checks, and an unreliable-measurement result when calibration or posture conditions are not met. <br>
+## Use Case:
 
+Aquaculture operators, ornamental fish breeders, laboratory staff, and agent developers use this skill to analyze fry tank media, convert pixel measurements into millimeters using a reference object, review growth trends, and retrieve account-linked historical reports.
 
-## Reference(s): <br>
-- [API documentation](references/api_doc.md) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-fry-growth-measurement-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like text reports from a command-line wrapper] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured measurements, growth statistics, recommended actions, report links, and cloud history tables when the remote service returns them.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill sends selected local media or URLs to Life Emergence cloud services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media that the user is authorized to upload, avoid sensitive scenes, and confirm that cloud processing is acceptable before deployment.
+
+Risk: The skill can silently create or reuse an internal account identity and query account-linked history.
+
+Mitigation: Deploy only where account identity handling, history access, retention, and deletion controls have been reviewed and documented.
+
+Risk: Service tokens may be stored in a local workspace SQLite database.
+
+Mitigation: Restrict workspace access, rotate tokens when needed, and prefer a release that makes token storage and cleanup behavior explicit.
+
+Risk: Image quality, missing reference objects, perspective distortion, or bent fish posture can make body-length and growth estimates unreliable.
+
+Mitigation: Require clear top-down media with a same-plane reference object and treat low-confidence or obstructed inputs as measurement-unreliable.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-fry-growth-measurement-analysis)
+- [API Interface Documentation](references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON reports with measurement statistics, growth curves, alert levels, recommendations, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires clear fry tank media with a same-plane reference object; unreliable images should return a measurement-unreliable result rather than growth conclusions.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

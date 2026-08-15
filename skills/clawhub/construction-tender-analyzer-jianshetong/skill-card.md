@@ -1,46 +1,65 @@
-## Description: <br>
-工程建设招投标分析-建设通，当搜索词包含工程、施工、建筑、市政、监理、设计等建筑业专属词汇时触发，聚焦工程项目金额、中标单位资质背景，重点提取建筑类项目核心字段并进行业绩汇总。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+工程建设招投标分析-建设通，当搜索词包含工程、施工、建筑、市政、监理、设计等建筑业专属词汇时触发，聚焦工程项目金额、中标单位资质背景，重点提取建筑类项目核心字段并进行业绩汇总。
 
-## Publisher: <br>
-[pkuycl](https://clawhub.ai/user/pkuycl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pkuycl](https://clawhub.ai/user/pkuycl)
 
-## Use Case: <br>
-External users and agents use this skill to query Jianshetong/ZLBX tender APIs for construction procurement search, bid detail retrieval, company tender history, competitor analysis, and market intelligence. It is most useful when an agent needs structured summaries of project amounts, purchasing entities, winning bidders, qualifications, and related business opportunities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive ZLBX_API_KEY for third-party API access. <br>
-Mitigation: Use a dedicated limited API key, store it only in the agent environment, and rotate or revoke it if exposed. <br>
-Risk: The API scope is broader than construction tender summaries and can query company contacts, market intelligence, and lead-generation data. <br>
-Mitigation: Enable the skill only for workflows that need this broader procurement intelligence and require confirmation before contact lookups, company matching, or lead-generation queries. <br>
-Risk: Submitting confidential strategy, deal terms, or sensitive business context to the third-party service may expose private information. <br>
-Mitigation: Limit prompts and API parameters to the minimum tender, company, region, date, and product filters needed for the task. <br>
+## Use Case:
 
+External users and business analysts use this skill to search construction bidding notices, retrieve bid details, summarize engineering project amounts, and analyze company bidding performance. It also supports market views such as top purchasers, suppliers, brands, price trends, and expiring project opportunities.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pkuycl/construction-tender-analyzer-jianshetong) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
-- [ZLBX API key application page](https://ai.zhiliaobiaoxun.com/?ch=s33) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON request examples and structured API response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and calls third-party HTTP APIs; responses may include company, contact, tender, bid, and market intelligence data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The security summary flags under-disclosed account auto-registration, device fingerprint collection, and credential persistence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, configure ZLBX_API_KEY directly when possible, and approve auto-registration only when comfortable sending device-derived identifiers to the provider and storing the returned API key locally.
+
+Risk: The skill can perform contact lookup and broad company-intelligence workflows.
+
+Mitigation: Use contact lookup, company expansion, competitor discovery, and supplier recommendations only when the user explicitly requests that broader business-intelligence behavior.
+
+Risk: API credentials are required for normal use and may be read from the environment or local agent configuration.
+
+Mitigation: Do not ask users to paste API keys into chat, prefer environment or agent configuration, and avoid exposing stored credentials in responses.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pkuycl/skills/construction-tender-analyzer-jianshetong)
+- [Publisher profile](https://clawhub.ai/user/pkuycl)
+- [API account reference](references/api-account.md)
+- [API company reference](references/api-company.md)
+- [API market reference](references/api-market.md)
+- [API search reference](references/api-search.md)
+- [Auto-registration reference](references/auto-register.md)
+- [Jianshetong API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名})
+- [Jianshetong account portal](https://ai.zhiliaobiaoxun.com/?ch=s33)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown narrative with JSON request examples, command snippets, and structured analysis summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses ZLBX_API_KEY or a locally stored API key to call the Jianshetong tender-analysis API; responses may include tender records, company profiles, market aggregates, account balance data, and contact information.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

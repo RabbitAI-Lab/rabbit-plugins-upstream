@@ -1,43 +1,62 @@
-## Description: <br>
-Write, rewrite, or audit natural, genre-aware prose with long-form continuity, explicit reference-style matching, physical and relationship consistency, deterministic AI-pattern linting, and protected fact verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Advanced Human Writing & AI Humanizer helps agents humanize AI-shaped text, rewrite prose naturally, edit fiction, and audit long-form continuity across model-supported languages.
 
-## Publisher: <br>
-[whh110112](https://clawhub.ai/user/whh110112) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[whh110112](https://clawhub.ai/user/whh110112)
 
-## Use Case: <br>
-External users and developers use this skill to draft, continue, revise, lint, audit, and verify prose across fiction, webnovels, essays, news, self-media, and academic writing while preserving supplied facts and continuity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Referenced supporting files and commands are not included in the submitted artifact, so parts of the workflow may not work unless those resources are supplied elsewhere. <br>
-Mitigation: Confirm required README, docs, module files, and command implementations are available before relying on the full workflow. <br>
-Risk: Drafts, sources, and continuity ledgers may contain sensitive or unpublished writing material processed by the agent. <br>
-Mitigation: Provide only material appropriate for the agent environment and review outputs before sharing or publication. <br>
-Risk: Writing, audit, or verification guidance can still introduce incorrect edits or misleading conclusions. <br>
-Mitigation: Use deterministic linting and source verification where applicable, then perform human review for factual and editorial decisions. <br>
+## Use Case:
 
+External users, developers, and writing agents use this skill to improve AI-assisted drafts, preserve meaning during rewrites, compile writing instructions, and audit continuity, voice, protected content, and source grounding.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/whh110112/skills/human-writing-skills) <br>
-- [Server-resolved GitHub provenance](https://github.com/whh110112/human-writing-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and plain text with optional command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce drafts, revisions, audits, lint findings, verification notes, and workflow guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: The toolkit may read drafts and related files selected by the user.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in environments where those drafts and context files may be processed.
+
+Risk: Fix and pipeline workflows may write generated or staged audit outputs.
+
+Mitigation: Use preview or explicit output modes first, choose output directories deliberately, and preserve originals before applying changes.
+
+Risk: Humanizing text can be misused to misrepresent authorship or bypass disclosure requirements.
+
+Mitigation: Use the skill as editing assistance and follow applicable authorship, academic, workplace, or publication disclosure rules.
+
+## Reference(s):
+
+- [README](README.md)
+- [Multi-Stage Audit Pipeline](docs/audit-pipeline.md)
+- [Fidelity, Statistics, and Conservative Fixes](docs/editing-tools.md)
+- [Deterministic Writing-Pattern Linter](docs/pattern-linter.md)
+- [Protected Content Verification](docs/protected-content.md)
+- [Reference Style Alignment](docs/reference-style.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and plain text instructions, with optional code, configuration snippets, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce staged audit files or conservative fix previews when the executable layer is used]
+
+## Skill Version(s):
+
+0.10.7 (source: server release and pyproject.toml)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

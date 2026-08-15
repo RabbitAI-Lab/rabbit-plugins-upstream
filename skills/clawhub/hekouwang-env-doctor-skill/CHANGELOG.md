@@ -1,5 +1,26 @@
 # 更新日志
 
+## v1.2.2 · 2026-08-12
+
+ClawHub 分类：`development`
+
+## v1.2.1 · 2026-08-12
+
+P2：doctor-suite 互链 + 商业化可发现性。
+
+- `scripts/run-all-doctors.sh`、`references/doctor-suite.md`
+- README：30 秒验收、免费/付费表、@huiyonghkw CTA
+- summary 补英文 SEO 关键词
+
+## v1.2.0 · 2026-08-12
+
+AI 开发机快扫 + 体检器家族互链。
+
+- `scripts/scan.sh`：`--profile ai-dev` 快扫档（跳过大户发现，强化 Agent 宿主目录）
+- 新增 `AI_AGENTS` 节：`.claude` / `.cursor` / `.codex` 体积、skills 数量、MCP 配置有无
+- `references/rules.md` **v1.1**：第七节 AI 开发与 Agent 宿主（Claude/Cursor/Codex、npx 缓存、Playwright、uv）
+- 报告互链：`md-doctor`（配置）· `skill-doctor`（技能）· 本器只管环境
+
 ## v1.1.0 · 2026-07-18
 
 新增清理选择器。

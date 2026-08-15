@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云 Temu 商品搜索"
+  short_description: "搜索和分析 Temu 商品，评估销量、价格、趋势与同款竞争"
+  default_prompt: "使用 $geekbi-temu-product-search-skill 搜索并分析 Temu 商品机会。"

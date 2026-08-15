@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/tencentmap-map-assistant-skill",
   "slug": "tencentmap-map-assistant-skill",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1783581531650,
-  "contentHash": "a3e3cae722b500affaee8e9f728068a1f94ae18620ea8c3d6e41cc87821da6c3",
-  "fetchedAt": "2026-07-26T18:17:46.367Z"
+  "version": "1.5.2",
+  "updatedAt": 1786524728363,
+  "contentHash": "7c3a7f89d31b6d2098f887ee46b4896a7817e5bb4a296c1308c331ef1cb4502d",
+  "fetchedAt": "2026-08-15T08:06:05.443Z"
 }

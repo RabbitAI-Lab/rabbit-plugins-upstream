@@ -24,6 +24,8 @@ when_to_use: |
 
 Stars don't come from a great repo — they come from **a great repo placed in front of the right developers, in the right order**. This is the staged decision framework used to take AFFiNE from 0 to 60K stars.
 
+Case-number and citation boundaries: `references/podcast-evidence.md`.
+
 ---
 
 ## English Version
@@ -210,6 +212,13 @@ Expectation setting: copying the SOP does not guarantee 6,000 stars in a week, b
 - ❌ Reddit 只发一次就跑（社群反感，易被 ban）。
 - ❌ README 太多 emoji / badge（降低可信度）。
 - ❌ 把 Show HN 当一锤子买卖（要回一整天评论）。
+
+### 2026 实验记录与生态分发
+
+- 每次渠道动作都写一行实验记录：`日期 / 假设 / 渠道 / 素材 / UTM / 24h结果 / 7d结果 / 下一步`。Star 只作领先指标，同时看安装、首次成功运行、回访和付费意向。
+- README、Demo 视频、最短可运行路径是同一条激活链；任何一步超过 3 分钟，都先修激活再放大流量。
+- 把项目提交到真实相关的 Awesome Lists、包管理器、模板市场和上下游集成目录；逐站遵守投稿规则，不批量灌水、不买链接。
+- 案例数字必须标注日期、样本范围和 `self-reported` / 可验证来源，避免把历史平台规律写成永久算法事实。
 
 ### 开源 Day One 四件套（一周准备期最小集）
 

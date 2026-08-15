@@ -2,9 +2,16 @@
 name: sanctifai-trust-proof-of-human
 description: Integrate SanctifAI Trust Proof-of-Human attestations. Use when an app needs cryptographic proof a human performed a task or human-in-the-loop verification.
 homepage: https://trust.sanctifai.com
+version: 1.3.0
+updated: 2026-08-14
 ---
 
 # SanctifAI Trust — Proof of Human
+
+**Version 1.3.0 · Last updated 2026-08-15.** This skill and its
+[`reference.md`](reference.md) share one version; the [changelog](#changelog) is
+at the end. If a copy of this file (e.g. an external mirror) shows a different
+version, the lower one is stale.
 
 SanctifAI Trust turns a unit of human work into a verifiable **Proof of Human**
 attestation: a person confirms presence with WebAuthn (Touch ID / Windows Hello /
@@ -47,6 +54,10 @@ wizard that starts a **free 7-day trial** and provisions what you need:
 - **1 tenant** (with Tenant ID)
 - **1 default API key** (`sk_live_…`) — copy it during setup; it is shown once
 - Plan limits on the trial: **1 tenant**, **10 users**, **100 attestations**
+
+The attestation quota is counted per **calendar month in UTC** — it resets at
+`00:00 UTC` on the 1st, not on your signup/subscription anniversary. Track your
+own usage against that window if you meter against the plan.
 
 After signup, open **Console → Tenants → Manage** to create additional API keys or
 copy your Tenant ID. Store both values in your backend environment (`.env` /
@@ -137,6 +148,7 @@ commitments and selected metadata.
 | `human_fp` | Yes | Yes (`humanFingerprint`) | Yes | Pseudonymous WebAuthn / passkey fingerprint |
 | `bond_eligible` | Yes | Yes | Yes | Whether attestation may back a bond product |
 | `rp_id` / `origin` | RP ID on cert | No | Yes | Domain binding and allowlist enforcement |
+| `idempotency_key` | No | No | Yes | **Required** — UUID (`crypto.randomUUID()`) that de-dupes retries; add it on the backend. Missing/non-UUID → `400` |
 | `taskData` / `resultData` | **No** (hashed only) | **No** | **No** raw copy | Hashed client-side; plaintext never sent |
 
 Optional `customer_id` (UUID) may appear on the certificate if supplied — still
@@ -194,8 +206,16 @@ A complete embedded integration **enrolls the reviewer, then attests**:
 6. Display participation_id, certificate_url, and the qr_url QR image.
 ```
 
-Skipping step 1 is the most common one-shot failure: `presence/verify` returns
-`No WebAuthn credentials found` until the reviewer has enrolled a passkey.
+Skipping step 1 is the most common one-shot failure: for a reviewer who hasn't
+enrolled, `presence/options` returns **`404 No WebAuthn credentials found`**. Treat
+that 404 as the trigger to run enrollment inline (step 1), then retry the presence
+flow — no separate "is enrolled?" check needed.
+
+> **`registration/verify` needs more than the credential.** Send `tenant_id`,
+> `user_id`, `rp_id`, and `challenge_id` **alongside** `credential` — and the
+> `credential` must include `clientExtensionResults`
+> (`cred.getClientExtensionResults?.() ?? {}`). Omitting any required field is a
+> `400`. Full enrollment example in [reference.md](reference.md).
 
 **Backend** (server-side; holds `TRUST_API_KEY`):
 
@@ -344,6 +364,13 @@ Sanity-check the wiring **without** completing a real attestation:
 If any of these returns HTML, a 401/403, or a CORS error, fix the base URL, API
 key, or origin allowlist **before** going further — don't prompt the user yet.
 
+A **`400` is not a credential verdict.** Auth is checked only after the body
+validates, so a bogus key with an invalid body returns the same `400` as a real
+key with an invalid body. Confirm the key with a valid body: `valid body + real
+key → 200`, `valid body + bogus key → 401`. You haven't verified the key until
+you've seen the `200`. (And a `307 → /login` means the base URL is right but the
+**path** is wrong — see reference.md troubleshooting.)
+
 ## UI acceptance criteria
 
 A complete UI shows, after a successful attestation:
@@ -368,3 +395,29 @@ A successful call returns JSON with a non-empty `participation_id` and a
   for proxied enrollment, error/troubleshooting tables, CORS/same-origin-proxy
   guidance, response shapes.
 - Docs: https://trust.sanctifai.com
+
+## Changelog
+
+This skill shares one version with [`reference.md`](reference.md). Record which
+version you built against; a version mismatch between the published copy and a
+mirror means one is stale.
+
+- **1.3.0 — 2026-08-15.** No change to this skill's guidance; `reference.md`
+  gained the `excludeCredentials`-now-populated note and a consistent error
+  envelope (`code` + `error` on every family). Version kept in lockstep.
+- **1.2.0 — 2026-08-14.** No change to this skill's guidance; `reference.md`
+  gained the `GET /api/v1/participations` **list** endpoint, the per-tenant
+  **rate-limit contract**, the v1 read error shape, an advanced-`POST`-create
+  note, and a `bond_eligible` default fix. The former internal `docs/api/*`
+  reference was retired in favour of `reference.md` as the single published
+  contract. Version bumped to keep the set in lockstep.
+- **1.1.0 — 2026-08-14.** Reset window stated (calendar month, UTC). Smoke-test
+  note that a `400` is not a credential verdict (real-key/bogus-key pair) and the
+  `307 → /login` path hint. Full detail — the `GET /api/v1/participations` read
+  endpoints, Origin-allowlist validation in the proxy, the two error-envelope
+  shapes, `display_name`/QR/`excludeCredentials` clarifications — landed in
+  `reference.md` at the same version.
+- **1.0.0 — 2026-08-11.** Baseline after TRU-85: `idempotency_key` required (UUID,
+  backend-generated); full `registration/verify` body incl.
+  `clientExtensionResults`; `404 No WebAuthn credentials found` attributed to
+  `presence/options` as the enrollment trigger.

@@ -1,0 +1,25 @@
+name: pdf_to_word
+version: 1.0.1
+description: PDF 转 Word 服务，支持将 PDF / 图片异步转换为可编辑的 Word 文件。
+author: SCNet
+license: MIT
+tags:
+  - OCR
+  - 文档转换
+  - PDF转Word
+
+required_env_vars:
+  - SCNET_API_KEY
+
+optional_env_vars:
+  - SCNET_API_BASE
+  - SCNET_POLL_INTERVAL
+  - SCNET_MAX_POLL_TIME
+
+primary_credential: SCNET_API_KEY
+
+homepage: https://github.com/SCNet-sugon/pdf_to_word.git
+
+dependencies:
+  - python3
+  - requests

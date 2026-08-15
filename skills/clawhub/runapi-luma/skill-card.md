@@ -1,43 +1,62 @@
-## Description: <br>
-Generate and edit video with Luma through RunAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit video with Luma through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-External users and developers use this skill to ask an agent to create, edit, or transform video with Luma through RunAPI. The skill is suited for one-off CLI-driven video tasks and for identifying when SDK integration is the better path. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, request JSON, task metadata, and input media may be sent to RunAPI/Luma for video generation or editing. <br>
-Mitigation: Avoid submitting confidential, regulated, private, or copyrighted media unless the user has permission and accepts the provider's retention and data-use policies. <br>
-Risk: RunAPI authentication through RUNAPI_API_KEY, CLI login, or saved CLI configuration grants access to the user's RunAPI account. <br>
-Mitigation: Use only user-approved credentials, avoid exposing tokens in logs or generated files, and prefer scoped or disposable keys where available. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to create, edit, or transform video with Luma through RunAPI while validating request contracts, task status, and media deliverables.
 
-## Reference(s): <br>
-- [RunAPI Luma model documentation](https://runapi.ai/models/luma.md) <br>
-- [RunAPI Luma homepage](https://runapi.ai/models/luma) <br>
-- [RunAPI Luma provider comparison](https://runapi.ai/providers/luma.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include request JSON guidance and RunAPI task identifiers when an agent executes CLI workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release evidence) <br>
+Risk: The skill can use RunAPI credentials and make network requests to create potentially billable Luma generation tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm authentication, inspect request.json before submission when cost matters, submit exactly once, and do not create a replacement paid task without user authorization.
+
+Risk: Referenced local media can be uploaded to RunAPI for generation or editing.
+
+Mitigation: Review media paths and request fields before submission, and use only inputs the user intends to send to RunAPI.
+
+Risk: A successful task status alone may not prove that the requested video deliverable is usable.
+
+Mitigation: Validate the complete result contract, download every requested media URL, and require non-empty files with the expected video MIME type or family.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-luma)
+- [RunAPI Luma homepage](https://runapi.ai/models/luma)
+- [RunAPI Luma model documentation](https://runapi.ai/models/luma.md)
+- [RunAPI Luma provider documentation](https://runapi.ai/providers/luma.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI Luma SDK](https://github.com/runapi-ai/luma-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with shell commands and JSON request/result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce downloaded video files after RunAPI task completion and deliverable verification.]
+
+## Skill Version(s):
+
+0.2.9 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

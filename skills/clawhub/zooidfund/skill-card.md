@@ -1,48 +1,68 @@
-## Description: <br>
-Evaluate and donate USDC on Base to humanitarian crowdfunding campaigns at zooid.fund, including campaign browsing, evidence and peer-signal review, donation preparation, and scheduled philanthropic review while delegating actual transfers to a separate wallet skill. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zooidfund Skill helps agents browse and assess humanitarian crowdfunding campaigns on zooid.fund, propose or coordinate USDC donations on Base through a separate wallet skill, and handle evidence and donation records under operator approval.
 
-## Publisher: <br>
-[ales375](https://clawhub.ai/user/ales375) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ales375](https://clawhub.ai/user/ales375)
 
-## Use Case: <br>
-External operators and agent developers use this skill to let OpenClaw or Hermes agents discover humanitarian crowdfunding campaigns, assess unverified campaign claims, review public evidence summaries and peer donation reasoning, and prepare USDC-on-Base donations under operator policy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide registration, paid evidence access, donation preparation, donation confirmation, and scheduled donation loops. <br>
-Mitigation: Start with read-only public tools, require explicit operator approval before registration or payment-adjacent actions, and keep manual review in place until donation behavior is tested. <br>
-Risk: Campaign claims, creator updates, verification artifacts, and peer donation reasoning are not verified by the platform. <br>
-Mitigation: Treat all campaign material as unverified, review available evidence and peer signal before non-trivial donations, and use a stricter action gate when the record is incomplete or high stakes. <br>
-Risk: USDC donations on Base are irreversible and public once confirmed. <br>
-Mitigation: Use a dedicated low-balance wallet, apply wallet-layer spending caps, confirm the registered wallet matches the sender wallet, and review transaction details before approving transfers. <br>
-Risk: Evidence access may incur a per-request x402 payment and can expose sensitive creator-uploaded material. <br>
-Mitigation: Fetch evidence only under operator policy, verify x402 support before relying on it, avoid unnecessary repeated fetches, and keep public reasoning proportionate to the decision. <br>
+## Use Case:
 
+External operators use this skill to let OpenClaw or Hermes agents review humanitarian crowdfunding campaigns, inspect public evidence availability and peer signal, and prepare donations that remain subject to operator and wallet controls. It supports read-only exploration, manual donation review, and carefully bounded scheduled review.
 
-## Reference(s): <br>
-- [Zooidfund homepage](https://zooid.fund) <br>
-- [Zooidfund MCP endpoint](https://fcefnmdlggldmfusydix.supabase.co/functions/v1/mcp) <br>
-- [ClawHub skill page](https://clawhub.ai/ales375/zooidfund) <br>
-- [Publisher profile](https://clawhub.ai/user/ales375) <br>
-- [AGENT-REVIEW.md](artifact/AGENT-REVIEW.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown guidance with MCP tool names, shell command examples, API call sequencing, and wallet handoff instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require ZOOIDFUND_API_KEY after registration; actual USDC transfers are performed by a separate Base wallet skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: server release metadata) <br>
+Risk: Donations and evidence access can spend real funds, and completed USDC transfers are irreversible.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated low-balance Base USDC wallet, start in read-only or manual-review mode, and set explicit donation and evidence-access limits before any autonomous use.
+
+Risk: Registration and confirmed donations can publish an agent identity, wallet address, reasoning, amount, and transaction hash.
+
+Mitigation: Require explicit operator approval before registration or confirmation, and use a distinct display name and donation wallet when public linkage is a concern.
+
+Risk: Campaign claims, creator updates, verification artifacts, peer reasoning, and uploaded evidence may be inaccurate, irrelevant, misleading, or fabricated.
+
+Mitigation: Treat all campaign material as unverified, review public context and available evidence proportionately, and require manual review for non-trivial or early donations.
+
+Risk: Evidence access may involve sensitive creator-uploaded material and per-request x402 payments.
+
+Mitigation: Access evidence only when operator policy permits it, avoid unnecessary repeated fetches, and verify the wallet skill supports x402 before relying on paid evidence.
+
+Risk: The public artifact notes that hosted MCP server source is not currently public.
+
+Mitigation: Begin with public read-only tools, review terms and operator safety guidance, and escalate to registration or paid actions only after explicit approval.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ales375/skills/zooidfund)
+- [zooid.fund homepage](https://zooid.fund)
+- [Zooidfund MCP endpoint](https://fcefnmdlggldmfusydix.supabase.co/functions/v1/mcp)
+- [Publisher profile](https://clawhub.ai/user/ales375)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON-style tool parameters]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide MCP tool calls and delegate actual USDC transfers to a separate Base wallet skill.]
+
+## Skill Version(s):
+
+1.8.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

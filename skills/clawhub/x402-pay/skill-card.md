@@ -1,49 +1,57 @@
-## Description: <br>
-A skill for making HTTP 402 (x402) USDC micropayments on Base, discovering paid x402 services, checking prices and balances, and funding wallets through supported flows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to discover x402-protected services, preview prices, fund a Base wallet, and make confirmed USDC micropayments for HTTP 402 resources.
 
-## Publisher: <br>
-[pivortex](https://clawhub.ai/user/pivortex) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pivortex](https://clawhub.ai/user/pivortex)
 
-## Use Case: <br>
-Developers and external agent users use this skill when an agent needs to access x402-protected HTTP resources, preview payment requirements, check wallet funding, or make user-approved paid API calls. It is also used to guide wallet setup and cross-chain funding for Base USDC payments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can help an agent spend real crypto funds or sign payment transactions. <br>
-Mitigation: Use a dedicated low-balance wallet, keep wallet-level spend limits and allowlists enabled, and review every command, price, recipient, and transaction before approval. <br>
-Risk: A paid endpoint price or funding quote may exceed the user's intended spend. <br>
-Mitigation: Preview the live price before payment, pass the confirmed value as the hard payment cap, and rely on the included fail-closed checks when price requirements cannot be verified. <br>
-Risk: Broad private-key environment variables may expose funds that were intended for other tools. <br>
-Mitigation: Prefer managed wallet flows or the namespaced X402_PRIVATE_KEY variable, and confirm with the user before using generic private-key aliases. <br>
-Risk: Cross-chain funding can fail, expire, or refund to the wrong destination. <br>
-Mitigation: Confirm the refund address, chain, memo requirement, quote deadline, and funding amount before sending any deposit. <br>
+## Use Case:
 
+Developers and agent operators use this skill to let an agent access paid x402 APIs while checking price, balance, wallet configuration, and transaction results. It is intended for workflows where human approval and wallet-level controls govern payment and funding actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pivortex/x402-pay) <br>
-- [Project homepage](https://github.com/NearDeFi/agent-payments-skill) <br>
-- [Detecting wallets](references/detecting-wallets.md) <br>
-- [Wallet flows](references/wallet-flows.md) <br>
-- [NEAR Intents funding](references/near-intents-funding.md) <br>
-- [Onramp funding](references/onramp-funding.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May report service details, decoded prices, wallet balances, funding quotes, response bodies, and transaction hashes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and frontmatter) <br>
+Risk: The skill can spend real USDC for paid API calls and wallet funding.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit command approvals, wallet-level spend limits, and preferably a dedicated low-balance wallet before approving payment or funding actions.
+
+Risk: Payment or funding actions can target the wrong service, price, deposit address, refund destination, or transaction result if reviewed carelessly.
+
+Mitigation: Review the service URL, decoded price, max-price cap, deposit address, refund destination, and transaction result before approving execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pivortex/skills/x402-pay)
+- [Project homepage](https://github.com/NearDeFi/agent-payments-skill)
+- [Detecting wallets](references/detecting-wallets.md)
+- [Wallet flows](references/wallet-flows.md)
+- [NEAR Intents funding](references/near-intents-funding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include decoded prices, wallet balances, payment commands, funding instructions, response bodies, and transaction hashes.]
+
+## Skill Version(s):
+
+2.0.0 (source: SKILL.md frontmatter, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

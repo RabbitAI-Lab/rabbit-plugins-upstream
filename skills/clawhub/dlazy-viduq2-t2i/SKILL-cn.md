@@ -1,11 +1,11 @@
 ---
 name: dlazy-viduq2-t2i
 version: 1.3.5
-description: 使用 Vidu Q2 生成高质量图像，支持丰富的文生图与图生图指令。
+description: "使用 Vidu Q2 生成高质量图像，支持丰富的文生图与图生图指令。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy viduq2-t2i -h 查看帮助信息。"}}
 ---
 
-# dlazy-viduq2-t2i
+# 文生图 Vidu Q2
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

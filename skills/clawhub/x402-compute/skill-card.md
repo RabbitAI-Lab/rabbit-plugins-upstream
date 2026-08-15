@@ -1,48 +1,72 @@
-## Description: <br>
-x402 Compute helps agents browse, provision, manage, resize, extend, and destroy Singularity Cloud Network GPU/VPS instances, AI Machines, SGL Grid inference, and node-operator workflows using x402, MPP, or preloaded credits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+x402 Compute helps agents browse, provision, manage, and tear down paid Singularity Cloud Network compute, AI Machines, grid inference, Agent Pods, processors, and related wallet/API-key flows.
 
-## Publisher: <br>
-[ivaavimusic](https://clawhub.ai/user/ivaavimusic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivaavimusic](https://clawhub.ai/user/ivaavimusic)
 
-## Use Case: <br>
-Developers and operators use this skill to provision paid GPU/VPS compute, deploy private OpenAI-compatible LLM endpoints, consume SGL Grid inference, or run grid nodes from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can spend wallet funds and manage cloud servers. <br>
-Mitigation: Use a dedicated low-balance wallet, confirm spend and target instance before execution, and avoid unattended confirmation flags unless the cost and lifecycle action are known. <br>
-Risk: The skill handles sensitive wallet keys, API keys, and root-access material. <br>
-Mitigation: Keep secrets out of logs, prefer SSH keys over password fallback, delete any one-time password files immediately, and scope API keys to the intended workflow. <br>
-Risk: Runtime installers or dependency changes can introduce supply-chain exposure. <br>
-Mitigation: Pin or review dependencies and inspect the node installer before running remote install commands. <br>
+## Use Case:
 
+External developers and agent operators use this skill to manage paid GPU/VPS infrastructure, deploy private OpenAI-compatible LLM endpoints, consume or provide grid inference, operate hosted Agent Pods, and publish paid processors.
 
-## Reference(s): <br>
-- [x402 Compute Documentation](https://docs.x402layer.cc/agentic-access/x402-compute) <br>
-- [x402 Compute Cloud App](https://cloud.x402compute.cc) <br>
-- [ClawHub Skill Page](https://clawhub.ai/ivaavimusic/skills/x402-compute) <br>
-- [AI Machines Reference](references/ai-machines.md) <br>
-- [x402Compute API Reference](references/api-reference.md) <br>
-- [SGL Grid Node Operator Reference](references/node-operator.md) <br>
-- [OpenWallet / OWS Reference](references/openwallet-ows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, environment-variable guidance, API request examples, and operational checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce commands or configuration that manage paid cloud resources, wallet-backed payments, API keys, SSH access, and server lifecycle actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.10.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can spend funds on paid compute, extensions, credits, grid operations, hosted agents, and processor workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use dedicated low-balance wallets, keep spend caps enabled, and require explicit confirmation before provisioning, extending, auto-renewing, or sending wallet payments.
+
+Risk: The skill handles sensitive wallet keys, API keys, managed agent keys, and one-time passwords.
+
+Mitigation: Prefer COMPUTE_API_KEY or OWS for routine management, avoid primary custody keys, keep credentials out of logs and transcripts, and revoke or rotate keys after use.
+
+Risk: Destroy, resize, wallet-send, and background-service actions can have irreversible operational or financial effects.
+
+Mitigation: Review target instance or pod details, confirm destructive actions explicitly, and verify irreversible disk-growth or wallet-send parameters before execution.
+
+Risk: Some workflows reference remote installers or external command-line tools.
+
+Mitigation: Verify remote installers and package sources before execution, and prefer pinned or locally installed wallet tooling for sensitive operations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/ivaavimusic/skills/x402-compute)
+- [x402 Compute Documentation](https://docs.x402layer.cc/agentic-access/x402-compute)
+- [Cloud Network App](https://cloud.x402compute.cc)
+- [x402Compute API Reference](references/api-reference.md)
+- [AI Machines](references/ai-machines.md)
+- [Agent Pods](references/agent-pods.md)
+- [SGL Grid Node Operator](references/node-operator.md)
+- [OpenWallet / OWS](references/openwallet-ows.md)
+- [SGL Processors](references/processors.md)
+- [Compute API Base](https://compute.x402layer.cc)
+- [Grid API Base](https://grid.x402compute.cc)
+- [Staking App](https://staking.x402layer.cc)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Code, Guidance]
+
+**Output Format:** [Markdown with inline shell commands, configuration snippets, JSON examples, and concise operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide API calls and local script execution for paid compute, wallet signing, API-key management, and hosted agent workflows.]
+
+## Skill Version(s):
+
+1.17.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

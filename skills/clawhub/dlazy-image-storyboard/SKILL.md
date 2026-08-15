@@ -1,7 +1,7 @@
 ---
 name: dlazy-image-storyboard
 version: 1.3.6
-description: A professional storyboard skill for film, advertising, short video, and educational narrative scenarios, built around a strict 'plan first, render later' flow.
+description: "A professional storyboard skill for film, advertising, short video, and educational narrative scenarios, built around a strict 'plan first, render later' flow."
 triggers:
   - Storyboard Workflow Director
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当你需要使用此技能时，请严格遵循此技能提供的指南进行规划和执行。你可以通过调用 dlazy CLI 的各类生成模型（如 dlazy seedream-4.5 等）来完成实际的图片渲染。注意：Windows PowerShell 中不允许使用 `&` 或 `&&` 进行命令串联或后台运行，请单独且同步地执行命令。"}}
@@ -65,7 +65,7 @@ name: 'image-storyboard'
 description: 'A professional storyboard skill that turns user creative briefs into industry-standard storyboards, covering film, advertising, short video, and educational narrative scenarios.'
 ---
 
-# Storyboard Workflow Director
+# 分镜图工作流 Image Storyboard
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

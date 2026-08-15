@@ -1,41 +1,58 @@
-## Description: <br>
-Query EpidBot (Brazilian public health data AI assistant) via its REST API. Use when you need epidemiological data analysis, plots, reports, DATASUS queries, plot management, report downloads, code snippets, or dataset uploads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Interact with EpidBot - AI-powered assistant for Brazilian public health data (DATASUS/SINAN)
 
-## Publisher: <br>
-[fccoelho](https://clawhub.ai/user/fccoelho) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fccoelho](https://clawhub.ai/user/fccoelho)
 
-## Use Case: <br>
-External users, developers, and public-health analysts use this skill to query EpidBot via REST for Brazilian epidemiological analysis, generated plots and reports, code snippets, and uploaded dataset management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dataset publishing and update or delete operations can change or remove user content if used without confirmation. <br>
-Mitigation: Only run upload, publish, PATCH, DELETE, or bulk-delete actions after explicit user confirmation and after verifying exact dataset, plot, or report IDs. <br>
-Risk: Use with sensitive datasets or valuable EpidBot content can expose private information or cause unintended changes. <br>
-Mitigation: Review the skill before installing or using it with sensitive datasets, and keep API keys and private dataset contents out of shared outputs. <br>
+## Use Case:
 
+Developers, analysts, and public health teams use EpidBot to query, download, analyze, and visualize public health data and related international, environmental, genomic, and literature sources through the EpidBot API.
 
-## Reference(s): <br>
-- [EpidBot API base URL](https://epidbot.kwar-ai.com.br) <br>
-- [ClawHub skill page](https://clawhub.ai/fccoelho/skills/epidbot) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown API guidance with JSON examples and HTTP request and response snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EPIDBOT_API_KEY and EPIDBOT_API_URL; chat responses are asynchronous and may include server-hosted image references.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata) <br>
+Risk: Prompts, uploaded files, query results, and request bodies are transmitted to the third-party EpidBot service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is comfortable sending the relevant content to EpidBot before invoking endpoints.
+
+Risk: Uploaded files or queries may contain personally identifiable or regulated health information.
+
+Mitigation: Use data minimization, prefer de-identified or aggregated data, and confirm consent, legal basis, or a data-sharing agreement before upload.
+
+Risk: Publishing a dataset can make private data visible to all EpidBot users.
+
+Mitigation: Require explicit confirmation that the dataset contains no sensitive, identifiable, or regulated data before using the publish endpoint.
+
+## Reference(s):
+
+- [EpidBot homepage](https://kwar-ai.com.br/epidbot)
+- [ClawHub EpidBot skill page](https://clawhub.ai/fccoelho/skills/epidbot)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires EPIDBOT_API_KEY and EPIDBOT_BASE_URL; API responses may include job status, text, images, reports, datasets, and errors.]
+
+## Skill Version(s):
+
+2.4.1 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,60 @@
-## Description: <br>
-Identifies strangers in surveillance images or video through face comparison and returns structured recognition results, warnings, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies strangers appearing in surveillance areas through facial comparison; supports video stream and image detection, suitable for stranger warnings in residential communities, units, access control, and other scenarios. | 陌生人识别技能，通过人脸比对识别监控区域出现的陌生人员，支持视频流和图片检测，适用于小区、单位、门禁等场景的陌生人预警
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Security operators, facilities teams, and developers use this skill to analyze surveillance images or video for unknown faces, compare detections against a known-person database, and review structured warnings or historical reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Biometric surveillance images, videos, or URLs may be sent to the provider's cloud service. <br>
-Mitigation: Use only media the operator is authorized to process, and confirm consent, lawful basis, retention, and deletion responsibilities before deployment. <br>
-Risk: The skill can create or reuse local identity state and store service tokens in the workspace data directory. <br>
-Mitigation: Run it only in controlled workspaces, restrict access to workspace data, and remove or rotate local identity and token files when no longer needed. <br>
-Risk: Face recognition output may be inaccurate or incomplete for consequential security decisions. <br>
-Mitigation: Treat reports as decision support, require human review before action, and document escalation procedures for uncertain matches. <br>
+## Use Case:
 
+Security operators, facilities teams, and agent users use this skill to compare faces in surveillance images or video against a known-person database, identify unknown people, enroll known faces when authorized, and retrieve cloud-stored stranger recognition reports.
 
-## Reference(s): <br>
-- [API Reference](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-stranger-recognition-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Files] <br>
-**Output Format:** [Markdown reports with optional JSON payloads and saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return recognition summaries, warning details, historical report tables, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The skill handles biometric media and face recognition results through a cloud-based workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with clear authorization and consent, define retention and deletion controls, and review service endpoint governance before production use.
+
+Risk: The skill can enroll people into a face database and retrieve cloud-linked report history.
+
+Mitigation: Restrict enrollment and history access to authorized users, audit report access, and confirm that report history is scoped to the intended identity.
+
+Risk: The security verdict is suspicious because local identity creation and token persistence have limited user control or scoping.
+
+Mitigation: Review local account and token storage behavior, avoid exposing internal identity values, and require deployment-specific security approval.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-stranger-recognition-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Documentation](references/api_doc.md)
+- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-formatted structured reports with optional file output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can output stranger recognition results, enrollment results, historical report lists, report links, warnings, and execution guidance.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter lists 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

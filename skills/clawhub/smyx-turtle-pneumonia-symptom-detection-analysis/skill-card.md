@@ -1,46 +1,63 @@
-## Description: <br>
-Through fixed enclosure cameras, the skill analyzes turtle mouth and nasal media to identify frequent open-mouth breathing in non-feeding states, visible mucus, and nasal discharge that may warrant a pneumonia risk warning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes turtle enclosure camera images or videos to identify visual signs associated with abnormal open-mouth breathing, mucus, nasal discharge, and related pneumonia-risk warnings.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, animal-care operators, and developers use this skill to analyze turtle enclosure images or videos for visual respiratory warning signs and to produce structured risk reports, recommendations, report links, or historical report tables. The output is a visual risk assessment aid and is not a veterinary diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends turtle enclosure media or video URLs to the Life Emergence backend for analysis. <br>
-Mitigation: Use only media and URLs that are appropriate for cloud processing, and avoid URLs that contain embedded access tokens or other sensitive values. <br>
-Risk: The skill can create or reuse a cloud-linked identity and persists login tokens and identity records locally. <br>
-Mitigation: Review and manage the workspace data directory before and after use, especially in shared environments. <br>
-Risk: Historical report queries are served from the cloud and can reveal prior analysis records associated with the linked identity. <br>
-Mitigation: Run history queries only in contexts where the linked identity and its report history are intended to be used. <br>
-Risk: The skill provides visual health risk warnings that could be mistaken for a veterinary diagnosis. <br>
-Mitigation: Treat results as visual screening guidance only and consult a qualified reptile veterinarian for diagnosis and treatment decisions. <br>
+## Use Case:
 
+External turtle keepers, breeders, veterinary staff, and developers use this skill to submit turtle camera media or URLs for respiratory-sign analysis, risk-level reporting, care guidance, and cloud history lookup.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-turtle-pneumonia-symptom-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON-like structured report with shell command examples and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May query cloud-hosted analysis and history APIs and may save requested output to a file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter states 1.0.6) <br>
+Risk: Turtle videos, images, or URLs may be sent to remote Life Emergence endpoints for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only media you are permitted to share, and avoid private enclosure footage unless remote processing is acceptable.
+
+Risk: The skill can create or reuse a local identity and store service tokens in the workspace data directory.
+
+Mitigation: Review or clear `data/smyx-api-key.txt` and the local SQLite database when identity linkage or token reuse is not desired.
+
+Risk: The skill can query cloud report history tied to the local identity.
+
+Mitigation: Use an isolated workspace or identity when report history should not be linked to another user or session.
+
+Risk: The output is a visual respiratory-risk warning and not a veterinary diagnosis.
+
+Mitigation: Treat results as screening guidance and consult a professional reptile veterinarian for diagnosis or treatment decisions.
+
+## Reference(s):
+
+- [Turtle pneumonia symptom API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-turtle-pneumonia-symptom-detection-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown and JSON structured analysis reports, with optional saved text output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include report links and historical report tables returned by the remote service.]
+
+## Skill Version(s):
+
+1.0.8 (source: ClawHub server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

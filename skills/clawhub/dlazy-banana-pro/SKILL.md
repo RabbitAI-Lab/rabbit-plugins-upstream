@@ -1,11 +1,11 @@
 ---
 name: dlazy-banana-pro
 version: 1.2.8
-description: Generate/edit images with Nano Banana Pro. Supports text-to-image and image-to-image. 使用 Nano Banana Pro 生成/编辑图片，支持文生图与图生图。
+description: "Generate/edit images with Nano Banana Pro. Supports text-to-image and image-to-image. 使用 Nano Banana Pro 生成/编辑图片，支持文生图与图生图。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy banana-pro -h for help."}}
 ---
 
-# dlazy-banana-pro
+# 图像生成 Nano Banana Pro
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

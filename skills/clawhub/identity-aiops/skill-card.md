@@ -1,47 +1,62 @@
-## Description: <br>
-Identity Aiops helps agents operate Keycloak or authentik identity providers for user, event, client, MFA, login-failure, stale-access, and governed account or OAuth administration workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identity AIops helps agents operate Keycloak and authentik identity providers for realm, user, session, event, OAuth client, MFA, and access-risk analysis, with governed identity write workflows.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Identity, security, and platform operators use this skill to inspect Keycloak or authentik tenants, analyze login failures, stale access, OAuth client configuration, and MFA coverage, and perform audited account or client changes when the connected account is authorized. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact identity and OAuth administration without an in-tool approval gate. <br>
-Mitigation: Install it only where agent-driven identity administration is intended, start with view-only Keycloak or authentik permissions, and grant manage-users or manage-clients only for controlled sessions. <br>
-Risk: Audit approval environment variables are recorded as annotations but are not enforcement controls. <br>
-Mitigation: Use account permissions and the agent's operating instructions as the enforcement layer, and do not rely on approval annotations to block writes. <br>
-Risk: Client-secret rotation and session revocation can cause immediate operational impact and may not be reversible. <br>
-Mitigation: Use dry runs where available, stage dependent deployments before rotating secrets, and review audit and undo records after state-changing operations. <br>
+## Use Case:
 
+Developers, identity administrators, and operations teams use this skill to inspect Keycloak or authentik environments, triage login and access issues, audit OAuth clients and MFA coverage, and perform controlled account or client remediation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/identity-aiops) <br>
-- [Project homepage](https://github.com/AIops-tools/Identity-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON or configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May describe identity-provider API observations, RCA findings, dry-run write plans, audit implications, and follow-up commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: evidence.release.version) <br>
+Risk: A connected identity account with write permissions can allow immediate account, session, or client changes without a tool-enforced approval gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privilege Keycloak service account or authentik token, preferably view-only for observation workflows, and grant write permissions only when remediation is intentionally required.
+
+Risk: Client secret rotation, redirect URI replacement, session revocation, and user enable or disable actions can disrupt authentication flows or user access.
+
+Mitigation: Use dry-run previews where available, review audit and undo behavior before execution, and stage dependent application changes before rotating secrets or replacing redirect URIs.
+
+Risk: Local identity configuration, encrypted secrets, audit logs, and undo data under ~/.identity-aiops can expose sensitive operational context if poorly protected.
+
+Mitigation: Protect ~/.identity-aiops, keep the encrypted secret store and master password secure, and review audit and undo retention according to local policy.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/identity-aiops)
+- [Project homepage](https://github.com/AIops-tools/Identity-AIops)
+- [Capabilities reference](references/capabilities.md)
+- [Setup and security guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+- [CLI reference](references/cli-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and text guidance with inline shell commands, configuration examples, and normalized JSON from tool or CLI operations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include identity-provider observations, heuristic analyses, dry-run previews, audit context, undo guidance, and truncation indicators.]
+
+## Skill Version(s):
+
+0.7.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

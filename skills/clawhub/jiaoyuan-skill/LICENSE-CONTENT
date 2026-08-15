@@ -1,0 +1,23 @@
+# 内容授权：CC BY 4.0 / Content License: CC BY 4.0
+
+本项目中的原创提炼内容（`patterns/`、`cases/` 目录下的思维模式提炼文本，以及 `cores.md`、`dna.md`、`tensions.md`、`SKILL.md` 中的原创方法提炼）采用
+[Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/) 授权。
+
+The original extracted content in this project (the thinking-pattern texts under `patterns/` and `cases/`, and the original methodology in `cores.md`, `dna.md`, `tensions.md`, and `SKILL.md`) is licensed under
+[Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
+
+你可以自由地 / You are free to:
+- 共享、复制、再分发这些内容 / share, copy, and redistribute the content
+- 改编、再创作、用于商业或非商业用途 / adapt, remix, and use it for any commercial or non-commercial purpose
+
+但必须 / Under the following terms:
+- 署名（注明来源：教员 · 思维模式引擎 / jiaoyuan.skill）/ Attribution — credit "Jiaoyuan · Mindset Engine / jiaoyuan.skill"
+- 说明是否做了修改 / Indicate if changes were made
+
+完整法律文本见 / Full legal text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+## 授权边界说明 / Scope of Each License
+
+- 代码与脚本（SKILL.md 的结构、脚本、测试）：MIT（见 `LICENSE`）/ Code & scripts: MIT (see `LICENSE`)
+- 原创提炼内容（`patterns/`、`cases/` 等）：CC BY 4.0（见本文件）/ Original extracted content: CC BY 4.0 (this file)
+- 语料原文（`corpus/`）：版权与公有领域状态见 `corpus/版本说明.md` / Original corpus texts (`corpus/`): see `corpus/版本说明.md`

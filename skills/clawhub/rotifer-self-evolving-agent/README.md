@@ -11,7 +11,7 @@ Install from ClawHub:
 
 Or manually:
 ```bash
-cp -r rotifer-openclaw-skill/ ~/.openclaw/workspace/skills/rotifer-self-evolving-agent/
+cp -r rotifer-self-evolving-agent/ ~/.openclaw/workspace/skills/rotifer-self-evolving-agent/
 ```
 
 ## Usage

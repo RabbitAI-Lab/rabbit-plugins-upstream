@@ -1,6 +1,6 @@
 ---
 name: producer
-description: Generate FUZZ music from exact lyrics or instrumental briefs with Producer through RunAPI. Use the RunAPI CLI for one-off work and the language SDKs for application integration.
+description: "Generate FUZZ music from exact lyrics or instrumental briefs with Producer through RunAPI. Use the RunAPI CLI for one-off work and the language SDKs for application integration."
 documentation: https://runapi.ai/models/producer.md
 provider_page: https://runapi.ai/providers/producer.md
 catalog: https://runapi.ai/models.md
@@ -18,74 +18,105 @@ metadata:
     envVars:
     - name: RUNAPI_API_KEY
       required: false
-      description: Optional RunAPI API key; prefer environment auth or saved CLI config.
+      description: Optional RunAPI API key; agents should prefer environment auth or saved CLI config. Browser login is interactive fallback only.
 ---
 
-# Producer On RunAPI
+# Producer on RunAPI
 
-Use the RunAPI CLI for one-off requests and manual verification. Use the target language SDK for applications, workers, libraries, and production integrations; never shell out to the CLI as an application runtime.
+## Choose route
 
-## Critical: Integration Runtime
+- For a one-off artifact or result, use the registered `producer` service in the `runapi` CLI. If the installed command catalog does not list it, stop and report the missing service instead of inventing a command.
+- For an app, backend, worker, library, webhook pipeline, or production codebase, go directly to **Integrate with SDK**. Never shell out to the CLI as the production runtime.
 
-- Integration work (app, backend, worker, library, Rails service, Node service, Go service, webhook pipeline, or production codebase) uses the **SDK integration path** for the target language.
-- One-off generation, manual smoke tests, debugging, or user-requested CLI runs use the **CLI path** with the `runapi` binary. For full CLI-specific agent guidance, see https://github.com/runapi-ai/cli-skill.
-- Never shell out to the `runapi` CLI as the production runtime integration layer.
+## Discover contract
 
-## SDK integration path
+Authenticate, then inspect the installed command catalog and the selected operation's current contract:
 
-When integrating Producer into an app, backend, worker, library, Rails service, Node service, Go service, webhook pipeline, or production workflow, start by checking the current SDK package and official usage. Confirm install commands, client methods (`create`, `get`, `run`), request fields, response shape, and error classes before using CLI help or raw HTTP examples. Use a RunAPI SDK package:
-
-- JavaScript / TypeScript: @runapi.ai/producer
-- Python: runapi-producer
-- Ruby: runapi-producer
-- Go: github.com/runapi-ai/producer-sdk/go
-- Java: ai.runapi:runapi-producer
-- PHP: runapi-ai/producer
-
-## Music modes
-
-- exact_lyrics: provide lyrics and a prompt describing the music style and production.
-- instrumental: provide a prompt and omit lyrics.
-
-Both modes support `fuzz-2.0`, `fuzz-2.0-pro`, `fuzz-2.0-raw`, `fuzz-1.1-pro`, `fuzz-1.0-pro`, `fuzz-1.0`, `fuzz-1.1`, and `fuzz-0.8`.
-
-## Variants
-
-- [FUZZ 2.0](https://runapi.ai/models/producer/fuzz-2.0.md)
-- [FUZZ 2.0 Pro](https://runapi.ai/models/producer/fuzz-2.0-pro.md)
-- [FUZZ 2.0 Raw](https://runapi.ai/models/producer/fuzz-2.0-raw.md)
-- [FUZZ 1.1 Pro](https://runapi.ai/models/producer/fuzz-1.1-pro.md)
-- [FUZZ 1.0 Pro](https://runapi.ai/models/producer/fuzz-1.0-pro.md)
-- [FUZZ 1.0](https://runapi.ai/models/producer/fuzz-1.0.md)
-- [FUZZ 1.1](https://runapi.ai/models/producer/fuzz-1.1.md)
-- [FUZZ 0.8](https://runapi.ai/models/producer/fuzz-0.8.md)
-
-## CLI path
-
-The `runapi` binary is the one-off and manual testing runtime dependency. For full CLI-specific agent guidance, see https://github.com/runapi-ai/cli-skill. Run `runapi auth status` first. Prefer `RUNAPI_API_KEY` or import a token with `printf '%s' "$RUNAPI_API_KEY" | runapi auth import-token --token -`. Use browser login only when the user explicitly requests an interactive login.
-
-Inspect current fields before creating a request:
-
-~~~shell
+```shell
+runapi auth status > auth.json
+jq -e '.authenticated == true' auth.json
 runapi producer --help
-runapi producer text-to-music --help
-~~~
+runapi producer <operation> --help
+curl --fail --location https://runapi.ai/docs/api/producer/<operation>.md --output contract.md
+```
 
-text-to-music is asynchronous. Run it directly to create and poll, or add --async and wait separately.
+If authentication is false, stop before submitting. Ask the user to provide a valid `RUNAPI_API_KEY`, or import a user-provided key from stdin with `runapi auth import-token --token -`; use interactive browser login only when the user explicitly requests it. Choose `<operation>` only from service help. Treat command help as authoritative for the installed operation, model, and top-level field roster. Treat its API Reference as authoritative for the complete request schema, nested fields, conditional rules, task behavior, and response variants. If the two surfaces disagree, stop and report the contract mismatch instead of guessing.
 
-~~~shell
-runapi producer text-to-music --input-file text-to-music.json
-runapi producer text-to-music --async --input-file text-to-music.json
-runapi wait <task-id> --service producer --action text-to-music
-~~~
+## Build request
 
-## Result Handling
+Create `request.json` as valid JSON using only fields accepted by the discovered operation contract. For the chosen model and values, evaluate every applicable conditional rule as a set: satisfy every required field, omit every forbidden field, and stop on unresolved contradictions.
 
-Completed tasks return an audios array. Each result may include an audio URL, cover image URL, title, duration, lyrics, and the public model name. Generated media URLs are temporary; download and store them in durable storage.
+Traverse nested objects and arrays before execution. Close every relationship stated by the discovered contract, including uniqueness constraints and cross-references between nested values.
+
+For a discovered local media input, including file-typed fields and top-level media URL fields, put an agent-readable local file path directly in `request.json`. The CLI consumes file fields as declared and uploads local paths in top-level media URL fields. Use `runapi files create` only when the user needs a reusable URL, provides Base64, or the discovered contract explicitly requires a separate upload.
+
+Validate the file before sending it:
+
+```shell
+jq empty request.json
+```
+
+## Execute
+
+Submit exactly once and persist the task response before waiting:
+
+```shell
+runapi producer <operation> --async --input-file request.json > task.json
+task_id="$(jq -er '.id' task.json)"
+```
+
+For a one-off result, immediately wait for that same task and save the complete JSON response. This blocking wait is the default:
+
+```shell
+runapi wait "$task_id" --service producer --action <operation> > result.json
+```
+
+Only when the user explicitly asks for background execution, polling, or webhook integration may you stop after validating `task.json`. Report the task id and do not claim that the deliverable is complete.
+
+## Verify
+
+A success status is not the deliverable. Read and validate the complete response according to the discovered result contract. Preserve the complete non-media result in the exact requested format, including JSON, text, SRT, or VTT.
+
+For every requested media deliverable listed anywhere in the response, download all of them rather than returning only the first URL. Before downloading, derive its expected MIME type or family from response metadata when present, then the selected output format, then an unambiguous result field such as `videos`, `images`, or `audios` in the API Reference. The Catalog-declared fallback families for this skill are `audio/*`. Stop only when no single expected type or family can be established from those sources.
+
+For every downloaded file, require both a non-empty file and the expected MIME type or family:
+
+```shell
+curl --fail --location <deliverable-url> --output <downloaded-file>
+for file in <downloaded-files>; do
+  expected_mime=<expected-MIME-or-family-pattern-for-this-file>
+  test -s "$file"
+  [[ "$(file --brief --mime-type "$file")" == $expected_mime ]]
+done
+```
+
+Do not report completion when any requested deliverable is missing, empty, or has an unexpected MIME type. Record `Skill Conformance` separately from `Task Outcome` so a service failure does not hide whether this recipe was followed.
+
+## Recover or stop
+
+- Correct a request shape at most once, and only when the discovered contract or returned validation error identifies the correction.
+- Retry a transient transport failure at most once, and only when evidence confirms that no task was created, no billing occurred, and retrying is safe.
+- If waiting times out or loses transport after `task.json` exists, preserve the error and rerun `runapi wait` for that same task at most once. Never submit a replacement task.
+- On a terminal RunAPI or service failure, preserve the task/error evidence and stop. Keep the selected model and capability, and do not submit another paid request without user authorization.
+- If the contract is missing a fact required to build or verify the request, stop and report the contract gap. Do not turn a product defect into a permanent skill workaround.
+
+## Integrate with SDK
+
+Use this route only for application or production-code integration. Open the current RunAPI SDK reference below, select the package for the target language and `Producer`, and confirm its install command, client methods, request types, response types, and error classes before coding. Build the request from the same discovered product contract and apply the same deliverable verification and stop rules. Do not invoke `runapi` as a subprocess from production code.
 
 ## References
 
-- Model overview: https://runapi.ai/models/producer.md
-- Producer model details and pricing: https://runapi.ai/models/producer/fuzz-2.0.md
-- Provider page: https://runapi.ai/providers/producer.md
-- Full catalog: https://runapi.ai/models.md
+- Model overview, pricing, and rate limits: https://runapi.ai/models/producer.md
+- Provider overview: https://runapi.ai/providers/producer.md
+- Full model catalog: https://runapi.ai/models.md
+- SDK integration: https://github.com/runapi-ai/producer-sdk
+
+## Variants
+- `fuzz-0.8`: https://runapi.ai/models/producer/fuzz-0.8.md
+- `fuzz-1.0`: https://runapi.ai/models/producer/fuzz-1.0.md
+- `fuzz-1.0-pro`: https://runapi.ai/models/producer/fuzz-1.0-pro.md
+- `fuzz-1.1`: https://runapi.ai/models/producer/fuzz-1.1.md
+- `fuzz-1.1-pro`: https://runapi.ai/models/producer/fuzz-1.1-pro.md
+- `fuzz-2.0`: https://runapi.ai/models/producer/fuzz-2.0.md
+- `fuzz-2.0-pro`: https://runapi.ai/models/producer/fuzz-2.0-pro.md
+- `fuzz-2.0-raw`: https://runapi.ai/models/producer/fuzz-2.0-raw.md

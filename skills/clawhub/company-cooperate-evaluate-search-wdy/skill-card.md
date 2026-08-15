@@ -1,46 +1,60 @@
-## Description: <br>
-Uses WenDaoYun enterprise data to assess whether a company is suitable as a customer, supplier, partner, collaborator, or investment target. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluates whether a company is suitable as a customer, supplier, partner, or investment target using WenDaoYun company data.
 
-## Publisher: <br>
-[rose-develop](https://clawhub.ai/user/rose-develop) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rose-develop](https://clawhub.ai/user/rose-develop)
 
-## Use Case: <br>
-Business, procurement, sales, compliance, and investment users can ask for a company cooperation assessment. The skill searches for the target company, waits for user confirmation, then summarizes cooperation risk, key signals, limitations, and recommended next actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unauthorized or unnecessary use of enterprise due-diligence data. <br>
-Mitigation: Confirm the user is authorized to query and use WenDaoYun enterprise data for the stated due-diligence purpose before relying on results. <br>
-Risk: Exposure of the WenDaoYun API key. <br>
-Mitigation: Keep WENDAOYUN_API_KEY private, store it as an environment variable, and rotate it through the WenDaoYun platform if disclosure is suspected. <br>
-Risk: A fuzzy search result may identify the wrong company. <br>
-Mitigation: Show candidate companies and wait for explicit user confirmation before calling the detailed cooperation-evaluation endpoint. <br>
-Risk: A cooperation decision may be misleading if based only on available WenDaoYun data. <br>
-Mitigation: State that the assessment is for reference only, include evidence limitations, and recommend follow-up checks or materials where risk remains. <br>
+## Use Case:
 
+Business users and agents use this skill to search for a company, confirm the target entity, and produce a cooperation-risk assessment for customer, supplier, partnership, or investment decisions.
 
-## Reference(s): <br>
-- [fuzzy-search-org API reference](references/fuzzy-search-org.md) <br>
-- [get-cooperate-evaluate API reference](references/get-cooperate-evaluate.md) <br>
-- [WenDaoYun API key portal](https://open.wintaocloud.com/home) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown assessment with a conclusion, key signals, limitations, and next actions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires WENDAOYUN_API_KEY and user confirmation before detailed company lookup; avoids long raw data dumps unless requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: ClawHub release evidence) <br>
+Risk: The WenDaoYun API key is sensitive and could be exposed if pasted into prompts, logs, or shared output.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep WENDAOYUN_API_KEY private in the environment and revoke it in the WenDaoYun platform if exposure is suspected.
+
+Risk: Company search and evaluation queries are sent to WenDaoYun and may consume API quota.
+
+Mitigation: Use the skill only for intended company-risk lookups, confirm the target company before detailed calls, and monitor quota usage.
+
+Risk: The cooperation assessment can be incomplete, stale, or unsuitable as the sole basis for a business decision.
+
+Mitigation: Treat the generated assessment as advisory and review the cited signals, limitations, and any supplementary materials before acting.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/rose-develop/skills/company-cooperate-evaluate-search-wdy)
+- [WenDaoYun API key portal](https://open.wendaoyun.com/home)
+- [fuzzy-search-org reference](references/fuzzy-search-org.md)
+- [get-cooperate-evaluate reference](references/get-cooperate-evaluate.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with concise conclusions, key signals, limitations, and next actions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a user-confirmed target company before detailed evaluation and avoids verbose raw data unless requested.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

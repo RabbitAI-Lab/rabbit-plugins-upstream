@@ -1,45 +1,56 @@
-## Description: <br>
-Cloud-powered image compression and resize for JPG, PNG, WebP, and HEIC images using Pixmind's API and Tencent Cloud COS imageMogr2. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cloud-powered image compression and resize for JPG, PNG, WebP, HEIC, and related formats using the Pixmind API and Tencent Cloud COS imageMogr2.
 
-## Publisher: <br>
-[fuyunzhishang](https://clawhub.ai/user/fuyunzhishang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fuyunzhishang](https://clawhub.ai/user/fuyunzhishang)
 
-## Use Case: <br>
-Developers, designers, and content operators use this skill to compress, resize, convert, and batch-process images for websites, social sharing, email, thumbnails, and archival workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uploads user-selected images to Pixmind/Tencent Cloud for processing. <br>
-Mitigation: Use it only for images acceptable to send to that provider and avoid confidential, regulated, or sensitive personal material unless provider terms and policy allow it. <br>
-Risk: The skill requires a Pixmind API key. <br>
-Mitigation: Use a dedicated, revocable key through PIXMIND_API_KEY and rotate it if exposed. <br>
-Risk: Recursive batch processing can upload more files than intended. <br>
-Mitigation: Review folder scope before running batch commands with recursive processing. <br>
+## Use Case:
 
+External users and developers use this skill to compress, resize, and convert local or URL-based images, including batch-selected folders, through a cloud image-processing API while preserving originals.
 
-## Reference(s): <br>
-- [Pixmind](https://www.pixmind.io) <br>
-- [Pixmind API Keys](https://www.pixmind.io/api-keys) <br>
-- [Tencent Cloud COS imageMogr2](https://cloud.tencent.com/document/product/460/36540) <br>
-- [ClawHub Skill Page](https://clawhub.ai/fuyunzhishang/pixmind-image-compress) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and concise status summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create compressed image files in a local output directory when the generated command is executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Selected images, including batch-selected folders, are uploaded to Pixmind/Tencent-backed cloud processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only when external processing is acceptable, and avoid sensitive, regulated, or private images unless that transfer is approved.
+
+Risk: The skill requires a Pixmind API key for authenticated API calls.
+
+Mitigation: Keep PIXMIND_API_KEY protected in the environment or secret manager, and do not paste it into prompts, logs, or source files.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fuyunzhishang/skills/pixmind-image-compress)
+- [Pixmind](https://www.pixmind.io)
+- [Pixmind API Platform keys](https://www.pixmind.io/api-platform/dashboard/keys)
+- [Tencent Cloud COS imageMogr2 documentation](https://cloud.tencent.com/document/product/460/36540)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, files]
+
+**Output Format:** [Markdown with inline shell commands and CLI output summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires PIXMIND_API_KEY and may save compressed image files to the configured output directory.]
+
+## Skill Version(s):
+
+1.1.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

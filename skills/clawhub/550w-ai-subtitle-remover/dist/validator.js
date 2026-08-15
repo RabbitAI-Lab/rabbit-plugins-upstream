@@ -15,13 +15,13 @@ function getFileExtension(filename) {
     return filename.slice(lastDot).toLowerCase();
 }
 function validateCredential(userNo, apiKey) {
-    if (userNo == null || userNo.trim().length === 0) {
+    if (typeof userNo !== "string" || userNo.trim().length === 0) {
         return validationError("userNo 不能为空");
     }
     if (userNo.trim().length > types_1.MAX_CREDENTIAL_LENGTH) {
         return validationError(`userNo 长度不能超过 ${types_1.MAX_CREDENTIAL_LENGTH} 个字符`);
     }
-    if (apiKey == null || apiKey.trim().length === 0) {
+    if (typeof apiKey !== "string" || apiKey.trim().length === 0) {
         return validationError("apiKey 不能为空");
     }
     if (apiKey.trim().length > types_1.MAX_CREDENTIAL_LENGTH) {
@@ -32,10 +32,11 @@ function validateCredential(userNo, apiKey) {
 function validateFile(file) {
     if (!file)
         return validationError("文件不能为空");
-    if (!file.name || file.name.trim().length === 0)
+    if (typeof file.name !== "string" || file.name.trim().length === 0)
         return validationError("文件名不能为空");
-    if (file.size > types_1.MAX_FILE_SIZE) {
-        return validationError(`文件大小超限，最大支持 1GB，当前文件大小为 ${file.size} 字节`);
+    const size = Number(file.size ?? file.data?.length);
+    if (Number.isFinite(size) && size > types_1.MAX_FILE_SIZE) {
+        return validationError(`文件大小超限，最大支持 1GB，当前文件大小为 ${size} 字节`);
     }
     const ext = getFileExtension(file.name);
     if (!types_1.SUPPORTED_VIDEO_EXTENSIONS.includes(ext)) {
@@ -43,9 +44,24 @@ function validateFile(file) {
     }
     return null;
 }
+function validateImageFile(file) {
+    if (!file)
+        return validationError("图片文件不能为空");
+    if (typeof file.name !== "string" || file.name.trim().length === 0)
+        return validationError("图片文件名不能为空");
+    const size = Number(file.size ?? file.data?.length);
+    if (Number.isFinite(size) && size > types_1.MAX_IMAGE_FILE_SIZE)
+        return validationError("图片大小不能超过 50MB");
+    const ext = getFileExtension(file.name);
+    if (!types_1.SUPPORTED_IMAGE_EXTENSIONS.includes(ext)) {
+        return validationError(`不支持的图片格式 "${ext}"，支持 JPG、PNG、BMP、WebP、AVIF、TIFF、SVG`);
+    }
+    return null;
+}
 function validateUrl(url) {
-    if (url == null || url.trim().length === 0)
+    if (typeof url !== "string" || url.trim().length === 0)
         return validationError("videoUrl 不能为空");
+    url = url.trim();
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
         return validationError("videoUrl 必须以 http:// 或 https:// 开头");
     }
@@ -55,8 +71,8 @@ function validateUrl(url) {
     return null;
 }
 function validateResolution(width, height) {
-    if (width * height > types_1.MAX_RESOLUTION) {
-        return validationError(`视频分辨率超限，最大支持 ${types_1.MAX_RESOLUTION} 像素（当前 ${width}×${height}=${width * height} 像素）`);
+    if (Math.max(width, height) > 1920 || Math.min(width, height) > 1080) {
+        return validationError(`视频分辨率超限，要求最大边不超过 1920 且最小边不超过 1080（当前 ${width}×${height}）`);
     }
     return null;
 }
@@ -80,24 +96,11 @@ function validateDimension(value, fieldName) {
     }
     return null;
 }
-function validateCoordinates(x1, y1, x2, y2, width, height) {
-    if (x1 === 0 && y1 === 0 && x2 === 0 && y2 === 0)
-        return null;
-    if (x2 <= x1)
-        return validationError(`坐标范围错误：x2(${x2}) 必须大于 x1(${x1})`);
-    if (y2 <= y1)
-        return validationError(`坐标范围错误：y2(${y2}) 必须大于 y1(${y1})`);
-    if (x2 > width)
-        return validationError(`坐标范围错误：x2(${x2}) 不能超过视频宽度(${width})`);
-    if (y2 > height)
-        return validationError(`坐标范围错误：y2(${y2}) 不能超过视频高度(${height})`);
-    return null;
-}
 function validateTaskId(taskId) {
-    if (taskId == null || typeof taskId !== "string" || taskId.length === 0) {
+    if (typeof taskId !== "string" || taskId.trim().length === 0) {
         return validationError("taskId 不能为空");
     }
-    if (taskId.length > types_1.MAX_TASK_ID_LENGTH) {
+    if (taskId.trim().length > types_1.MAX_TASK_ID_LENGTH) {
         return validationError(`taskId 长度不能超过 ${types_1.MAX_TASK_ID_LENGTH} 个字符`);
     }
     return null;
@@ -133,9 +136,9 @@ function validateSubmitTask(params) {
     const resolutionError = validateResolution(params.width, params.height);
     if (resolutionError)
         return resolutionError;
-    const coordError = validateCoordinates(params.x1, params.y1, params.x2, params.y2, params.width, params.height);
-    if (coordError)
-        return coordError;
+    if (params.removeAudio != null && typeof params.removeAudio !== "boolean") {
+        return validationError("removeAudio 必须为 boolean");
+    }
     return null;
 }
 function validateEstimateCredits(params) {
@@ -157,6 +160,16 @@ function validate(action, params) {
         case "taskDetail": return validateTaskId(params.taskId);
         case "taskList": return null;
         case "queryCredits": return null;
+        case "removeVideoWatermark": return validateUrl(params.videoUrl);
+        case "removeImageWatermark": {
+            const fileError = validateImageFile(params.file);
+            if (fileError)
+                return fileError;
+            if (params.sync != null && typeof params.sync !== "boolean")
+                return validationError("sync 必须为 boolean");
+            return null;
+        }
+        case "imageWatermarkTaskDetail": return validateTaskId(params.taskId);
         case "estimateCredits": return validateEstimateCredits(params);
         case "workflow": {
             if (params.file)

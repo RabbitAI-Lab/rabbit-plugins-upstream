@@ -21,36 +21,30 @@ async function executeWorkflow(params, client) {
             width: uploadResult.width,
             height: uploadResult.height,
             duration: uploadResult.duration,
-            x1: params.x1 ?? 0,
-            y1: params.y1 ?? 0,
-            x2: params.x2 ?? 0,
-            y2: params.y2 ?? 0,
-            ...(params.mode != null && { mode: params.mode }),
             ...(params.fileName != null && { fileName: params.fileName }),
+            ...(params.callbackUrl != null && { callbackUrl: params.callbackUrl }),
+            ...(params.removeAudio != null && { removeAudio: params.removeAudio }),
         };
     }
     else {
         submitParams = { ...params };
         delete submitParams.file;
-        if (submitParams.x1 == null)
-            submitParams.x1 = 0;
-        if (submitParams.y1 == null)
-            submitParams.y1 = 0;
-        if (submitParams.x2 == null)
-            submitParams.x2 = 0;
-        if (submitParams.y2 == null)
-            submitParams.y2 = 0;
-        const needsProbe = submitParams.width == null || submitParams.height == null || submitParams.duration == null;
-        if (needsProbe) {
-            const metadata = await (0, video_probe_1.probeVideoUrl)(submitParams.videoUrl, client);
-            if (metadata) {
-                if (submitParams.width == null)
-                    submitParams.width = metadata.width;
-                if (submitParams.height == null)
-                    submitParams.height = metadata.height;
-                if (submitParams.duration == null)
-                    submitParams.duration = metadata.duration;
-            }
+        delete submitParams.x1;
+        delete submitParams.y1;
+        delete submitParams.x2;
+        delete submitParams.y2;
+        delete submitParams.mode;
+        try {
+            const metadata = await (0, video_probe_1.probeVideoUrl)(submitParams.videoUrl);
+            submitParams.width = metadata.width;
+            submitParams.height = metadata.height;
+            submitParams.duration = metadata.duration;
+        }
+        catch (error) {
+            return {
+                code: types_1.ErrorCode.INVALID_PARAMS,
+                message: error?.message || "无法预检远程视频，已停止提交",
+            };
         }
     }
     const submitResult = await (0, submit_task_1.submitTask)(submitParams, client);

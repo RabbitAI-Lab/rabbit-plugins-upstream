@@ -1,43 +1,61 @@
-## Description: <br>
-Analyzes top-down lawn images, videos, or URLs to estimate yellowing, weed coverage, bare soil, and an overall lawn health score with maintenance-oriented guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses top-down lawn images or videos to estimate yellowing, weed coverage, bare soil, a 0-100 health score, and care recommendations through a configured cloud analysis service.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Support lawn managers, homeowners, golf course operators, park teams, and sports-field maintainers by turning supported lawn media into structured health assessment results, report links, and care direction. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-No deployment geography restriction is stated in the evidence; use only where ClawHub, the publisher service, and local data-handling requirements permit this workflow. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security evidence says the skill uses a cloud workflow for lawn images or videos, submitted URLs, account identifiers, report history, and locally stored service tokens. <br>
-Mitigation: Install only when that data can be handled by the publisher's external services, and review identity and data-retention behavior before use. <br>
-Risk: The security evidence says the skill silently creates or reuses an identity and exposes historical reports. <br>
-Mitigation: Use a dedicated workspace for sensitive projects, avoid shared machines for report retrieval, and clear local identity or token state when access should not persist. <br>
-Risk: The server security verdict is suspicious. <br>
-Mitigation: Review the ClawHub security summary before installation and run the skill in a constrained environment until the external-service and token-storage behavior is acceptable. <br>
+## Use Case:
 
+External grounds managers, municipal landscaping teams, sports-field staff, golf-course staff, and homeowners use this skill to evaluate lawn imagery for yellowing, weed density, bare soil, and maintenance direction.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-lawn-health-assessment-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Structured lawn assessment report with yellowing ratio, weed coverage, bare-soil signals, health score, care guidance, report links, and optional historical report listings.] <br>
-**Output Parameters:** [Accepts a local media path or network URL, optional detail level, optional output path, and a list mode for cloud report history.] <br>
-**Other Properties Related to Output:** [Uses a publisher cloud workflow for analysis and history retrieval; outputs may include report export links and service-returned structured data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 <br>
+Risk: Lawn images or videos, media URLs, and account-linked report history are sent to the configured cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the publisher is trusted, avoid sensitive property imagery, and use a separate workspace when possible.
+
+Risk: The skill stores local identity and token state for reuse.
+
+Mitigation: Review or clear data/smyx-common-claw.db and data/smyx-api-key.txt if persistent identity or token reuse is not wanted.
+
+Risk: History-report queries retrieve cloud report history beyond a single image assessment.
+
+Mitigation: Use history queries only when account-linked cloud report retrieval is expected.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-lawn-health-assessment-analysis)
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [API interface reference](references/api_doc.md)
+- [Common analysis API reference](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON analysis report with metrics, recommendations, report links, and optional saved result file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts a local lawn image/video file path or public media URL; documented formats include jpg, png, mp4, avi, and mov with a 10 MB maximum file size.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

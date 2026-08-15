@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cargo-diagnostics",
   "slug": "cargo-diagnostics",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1783647794538,
-  "contentHash": "34d3c18df112f8c826923609821613aebab9c2dcdce59282ec73fcd9fbbed242",
-  "fetchedAt": "2026-07-26T18:17:16.556Z"
+  "version": "1.2.0",
+  "updatedAt": 1786756133003,
+  "contentHash": "b95dc4c3a8e5e6c788b9765d466f7aa2f0cbbaa51548db406620a23b52384faa",
+  "fetchedAt": "2026-08-15T07:51:02.675Z"
 }

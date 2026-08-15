@@ -1,9 +1,8 @@
 ---
 name: cue-margin-trading
 description: >
-  用 Cue 跑「融资融券」场景的深度研究：多源公开数据交叉、结论带来源。
-  Run Cue deep research for the "Margin Trading" scenario.
-  触发 Triggers: 融资融券、行情与交易 / margin trading, margin balance, securities lending
+  用 Cue 跑「融资融券」场景的深度研究：横向比对各主要券商的两融政策（折算率、标的覆盖、保证金、集中度），识别竞对抢客与风险收缩信号。覆盖两融竞对情报、两融竞对监测日报、ETF 与科技两融对比、单券两融政策对比、优质资产抢客雷达、两融风险收缩预警等核心搭子，研判杠杆吸引力强弱，支撑券商经纪业务的客户持仓沟通与展业。
+
 license: MIT
 metadata:
   source: cuecue.cn/playbook

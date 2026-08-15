@@ -1,40 +1,54 @@
-## Description: <br>
-Qa Output Validation performs a final anti-hallucination check on generated test cases by verifying requirement IDs, consistency, executability, and source traceability before final output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Validates generated test cases before final delivery by checking factual grounding, consistency, executability, and traceability, then returns a pass/fail validation report with issues that must be corrected.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and development teams use this skill as a final quality gate after AI-generated test cases are produced. It checks whether cases are grounded in the requirement decomposition, internally consistent, executable, and traceable before release or reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad requests to verify or check quality. <br>
-Mitigation: Use it as a final QA gate for generated test cases and confirm that the requested validation scope matches the available source materials. <br>
-Risk: Recommendations to delete or mark test cases could remove valid coverage if the source material is incomplete. <br>
-Mitigation: Review deletion or marking recommendations manually, confirm source traceability, and back up source data before changing test assets. <br>
+## Use Case:
 
+Developers, QA engineers, and agents use this skill as a final quality gate after generating test cases and before returning them to a user. It checks whether test cases are grounded in the provided requirements, internally consistent, executable, and traceable to source inputs.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-output-validation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown validation report with pass/fail status, check results, issue tables, and traceability notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Issue lists are tied to original test case IDs and the skill does not assign new unique IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Validation findings may incorrectly flag valid test cases or suggest removing cases whose source was not immediately visible.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the validation report against the original requirements and back up source data before changing or deleting test cases.
+
+Risk: The skill may trigger on broad requests to verify output quality and influence downstream test-case changes.
+
+Mitigation: Treat the report as a QA gate requiring human or workflow confirmation before applying corrections.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-output-validation)
+- [Publisher profile](https://clawhub.ai/user/kokxi)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown validation report with pass/fail status, check results, issue tables, traceability notes, and correction guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The report should preserve source traceability for each test case and identify issues without directly deleting test cases.]
+
+## Skill Version(s):
+
+1.6.3 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

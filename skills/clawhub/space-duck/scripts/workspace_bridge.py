@@ -603,6 +603,8 @@ def _resolve_spaceduck_id() -> str:
 def run_server(bind: str, workspace_dir: pathlib.Path, beak_key: str,
                *, no_self_pulse: bool = False,
                api_base: str = 'https://beak.spaceduckling.com') -> None:
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base({'api_base': api_base})
     BridgeHandler.workspace = Workspace(workspace_dir)
     BridgeHandler.beak_key = beak_key
     host, port = bind.rsplit(':', 1) if ':' in bind else ('0.0.0.0', bind)
@@ -923,6 +925,8 @@ def cmd_status(args) -> int:
             print('# warn: cannot report — missing beak_key or spaceduck_id',
                   file=sys.stderr)
             return 0
+        from _apiguard import check_api_base  # [HARDEN-071]
+        check_api_base({'api_base': args.api})
         try:
             req = urllib.request.Request(
                 f'{args.api}/beak/me/duck/{sd}/bridge-status',

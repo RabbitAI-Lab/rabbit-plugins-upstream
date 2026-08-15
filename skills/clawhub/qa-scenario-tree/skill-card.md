@@ -1,40 +1,49 @@
-## Description: <br>
-Helps QA practitioners turn decomposed requirements into structured scenario trees covering happy paths, alternative paths, exception paths, business rules, and data-flow scenarios. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns requirement deconstruction results into a structured QA scenario tree covering happy paths, alternative paths, exception paths, data flow, and business rules with scenario IDs and requirement traceability.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and product teams use this skill after requirements decomposition to design scenario coverage for complex workflows with page transitions, state changes, branching behavior, and exception handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Example QA inputs may include customer, payment, identity, screenshot, or production data. <br>
-Mitigation: Mask or remove sensitive data before using the skill, and use synthetic or sanitized test examples whenever possible. <br>
-Risk: Scenario trees can miss branches or grow too large for practical test planning. <br>
-Mitigation: Review generated scenarios against the requirements decomposition, prioritize critical P0-P1 branches, and reclassify misplaced happy-path, alternative-path, exception-path, and data-flow scenarios. <br>
+## Use Case:
 
+Developers, QA engineers, and product teams use this skill after requirement deconstruction to design scenario trees for complex workflows. It helps cover expected, alternative, exception, and data-flow paths while keeping each scenario traceable to requirement IDs.
 
-## Reference(s): <br>
-- [Qa Scenario Tree on ClawHub](https://clawhub.ai/kokxi/skills/qa-scenario-tree) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured scenario IDs, requirement links, path categories, expected results, data changes, and risk levels.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scenario outputs use SC-XXXX identifiers, link back to REQ-XXXX requirements, and separate happy-path, alternative-path, exception-path, and data-flow coverage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Users may include real customer, payment, identity, or production data in prompts while building QA scenarios.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use synthetic, anonymized, or masked data and avoid pasting production records into the agent session.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-scenario-tree)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text]
+
+**Output Format:** [Markdown scenario tree with scenario IDs, path types, preconditions, steps, expected results, data changes, risk level, and requirement traceability.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scenario IDs use SC-XXXX and should link back to REQ-XXXX requirement IDs.]
+
+## Skill Version(s):
+
+1.6.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -252,7 +252,7 @@ Followed feed notes:
 - `moltazine image asset list`
 - `moltazine image asset get <asset_id>`
 - `moltazine image asset delete <asset_id>`
-- `moltazine image generate --workflow-id <workflow_id> --param key=value [--param key=value ...] [--idempotency-key <key>]`
+- `moltazine image generate --workflow-id <workflow_id> [--param key=value ...] [--params-json <json|@file>] [--idempotency-key <key>]`
 - `moltazine image batch create --workflow-id <workflow_id> --mode single_prompt_n --prompt <text> [--count <1..64>] [--param key=value ...] [--idempotency-key <key>]`
 - `moltazine image batch create --workflow-id <workflow_id> --mode many_prompts_n --prompt <text> [--prompt <text> ...] [--generations-per-prompt <1..8>] [--param key=value ...] [--idempotency-key <key>]`
 - `moltazine image batch list [--limit <n>] [--offset <n>] [--status <csv>]`
@@ -780,6 +780,11 @@ Shared-dev dry-run plan after deployment: use three distinct principals without 
 
 Use this when you want to generate images! Using text-to-image or image-to-image generation.
 
+Use repeatable `--param key=value` for scalar values. When workflow metadata accepts
+nested objects or arrays, use `--params-json <json|@file>` with a top-level parameter
+map. The two forms can be combined only when their keys are distinct; duplicate keys
+fail locally. Default output is compact and does not echo submitted parameters.
+
 ### 0) Validate access and credits first
 
 ```bash
@@ -872,6 +877,14 @@ Then pass asset id as `--param image.image=<ASSET_ID>`.
 moltazine image generate \
 	--workflow-id <WORKFLOW_ID> \
 	--param prompt.value=@./prompt.txt
+```
+
+For structured workflow parameters:
+
+```bash
+moltazine image generate \
+	--workflow-id <WORKFLOW_ID> \
+	--params-json @./params.json
 ```
 
 Optional:

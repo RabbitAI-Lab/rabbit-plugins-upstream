@@ -1,46 +1,63 @@
-## Description: <br>
-Queries Jungle Scout ASIN sales estimates through LinkFox to return daily estimated Amazon unit sales and last known price across 10 marketplaces for a requested date range. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries day-level Amazon ASIN sales estimates and last known prices from Jungle Scout data across ten marketplaces.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon sellers, e-commerce analysts, and developers use this skill to estimate daily sales for a specific ASIN, monitor competitors, evaluate demand, and summarize historical sales trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and sends ASIN/date queries plus session metadata to LinkFox services. <br>
-Mitigation: Install only when that data sharing is acceptable, use a dedicated or scoped API key where possible, and avoid including sensitive business context in query text. <br>
-Risk: The security summary notes mismatched local data storage behavior and retained full results. <br>
-Mitigation: Review the generated LinkFox data directory after use, remove result files that should not be retained, and limit workspace access to authorized users. <br>
-Risk: A configured LINKFOX_TOOL_GATEWAY can change the destination that receives tool requests. <br>
-Mitigation: Leave LINKFOX_TOOL_GATEWAY unset unless the destination is explicitly trusted. <br>
-Risk: Automatic feedback-reporting instructions may send user comments or task context to a separate LinkFox feedback service. <br>
-Mitigation: Review or disable feedback reporting before use if that transfer is not acceptable. <br>
+## Use Case:
 
+External Amazon sellers, e-commerce operators, and analysts use this skill to estimate daily sales for a specific ASIN over a date range, monitor competitors, validate product demand, and summarize sales trends.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-sales-estimates) <br>
-- [Jungle Scout ASIN sales estimate API reference](references/api.md) <br>
-- [LinkFox API key guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses, saved JSON result files, tables, trend summaries, and optional shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key, consumes 63.75 credits per call, supports one ASIN per request, requires endDate before the current date, and may cache results for 24 hours.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The skill includes LinkFox account onboarding paths for phone/SMS login, API-key generation, plan listing, billing order creation, and payment QR rendering.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer self-service API-key setup when possible, and review any billing plan or order details before authorizing payment.
+
+Risk: Generated API keys and account details may be exposed if copied into logs, shared transcripts, or shell history.
+
+Mitigation: Keep generated keys out of logs and rotate or remove credentials if they are exposed.
+
+Risk: Full sales-estimate responses and cache files are saved under local linkfox data directories.
+
+Mitigation: Review saved response and cache directories after use, and delete files that are no longer needed.
+
+Risk: Endpoint environment variables can redirect LinkFox API calls away from the default services.
+
+Mitigation: Avoid overriding LinkFox endpoint environment variables unless the destination is intentional and trusted.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-sales-estimates)
+- [Jungle Scout ASIN Sales Estimate API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries with optional JSON responses, saved JSON data files, shell commands, and configuration guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full query responses are saved locally; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

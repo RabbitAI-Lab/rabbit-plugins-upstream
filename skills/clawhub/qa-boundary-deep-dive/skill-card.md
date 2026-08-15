@@ -1,40 +1,53 @@
-## Description: <br>
-Systematically identifies boundary conditions across input, state, time, and resource dimensions, then labels each condition with risk level and expected result. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Boundary Deep Dive helps QA practitioners systematically identify input, state, time, and resource boundary conditions, assign risk levels, and define expected results for test coverage.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and test designers use this skill to deepen boundary testing after scenario mapping or equivalence-class analysis. It produces a traceable boundary checklist for systems with input fields, state transitions, timing constraints, or resource limits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad Chinese-language mentions of boundaries. <br>
-Mitigation: Confirm the user wants boundary-condition analysis or narrow the trigger wording before applying it in workflows where generic boundary discussion is common. <br>
-Risk: Examples and outputs may involve sensitive order, payment, screenshot, identity, phone, customer, or financial data. <br>
-Mitigation: Use masked or synthetic data in prompts and review generated examples before sharing or storing them. <br>
+## Use Case:
 
+QA engineers, developers, and test designers use this skill when they need deeper boundary-value coverage after scenario analysis or equivalence-class testing. It turns system behavior into structured boundary checks across inputs, state transitions, timing, and resource limits.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-boundary-deep-dive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown boundary analysis with structured identifiers, linked scenario IDs, risk levels, and expected results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Boundary items use BD-XXXX identifiers and may reference SC-XXXX scenario IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release metadata) <br>
+Risk: QA prompts may include real customer, payment, identity, credential, or production data while exploring boundary cases.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use anonymized or masked test data and avoid pasting sensitive production information into prompts.
+
+Risk: Boundary-analysis guidance can miss domain-specific constraints or produce expected results that do not match product requirements.
+
+Mitigation: Review generated boundary cases against current requirements, state models, timeout rules, and resource limits before using them as test authority.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-boundary-deep-dive)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown boundary-analysis report with tables and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Boundary items are expected to include IDs, linked scenario IDs, risk levels, and expected results when the provided system context supports them.]
+
+## Skill Version(s):
+
+1.6.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

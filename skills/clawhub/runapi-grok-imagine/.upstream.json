@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-grok-imagine",
   "slug": "runapi-grok-imagine",
   "ownerHandle": null,
-  "version": "0.2.9",
-  "updatedAt": 1784313772104,
-  "contentHash": "539af5a37ac70f9e383eadc952a0f6e859675c8f114b1995985be518464d6078",
-  "fetchedAt": "2026-07-26T18:11:53.318Z"
+  "version": "0.2.11",
+  "updatedAt": 1786515002367,
+  "contentHash": "c2f243a069cfc168c9b8b6ecb5c8d7ef39f012f7d2bc7d16cd50011e2149a62b",
+  "fetchedAt": "2026-08-15T08:06:35.004Z"
 }

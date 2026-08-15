@@ -1,40 +1,57 @@
-## Description: <br>
-Seed-stage growth playbook focused on channel selection and prioritization for founders with product-market fit and limited resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Startup Growth Playbook helps seed-stage founders with product-market fit select and sequence growth channels under limited resources.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-External founders and startup operators use this skill to compare acquisition channels, decide whether growth is ready to scale after product-market fit, and sequence channel investments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The playbook includes external social, consulting, and paid-product links that lead to third-party services. <br>
-Mitigation: Users should evaluate those links independently before making purchases or sharing business details. <br>
-Risk: Growth-channel guidance may not fit every startup's market, runway, or customer acquisition economics. <br>
-Mitigation: Validate recommendations against current CAC, LTV, runway, and product-market-fit signals before committing resources. <br>
+## Use Case:
 
+External founders and startup operators use this skill to score acquisition channels, choose a first growth motion, define stage gates, and decide when to scale, repair activation, or stop.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gingiris-1031/startup-growth-playbook) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown guidance and prioritization frameworks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable playbook content; no commands, API calls, or credential handling are indicated by the security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.4 (source: server release evidence) <br>
+Risk: Growth benchmarks and channel advice may be treated as universally applicable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use them as planning priors and replace them with startup-specific cohort, activation, retention, CAC, LTV, and runway data.
+
+Risk: Users may expose confidential startup metrics while asking the agent to plan growth.
+
+Mitigation: Share only the metrics needed for planning and avoid confidential data unless intentionally using it in the session.
+
+## Reference(s):
+
+- [Startup Growth Playbook - English reference](references/en/README.md)
+- [Startup Growth Playbook - Japanese reference](references/ja/README.md)
+- [Startup Growth Playbook - Korean reference](references/ko/README.md)
+- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/startup-growth-playbook)
+- [Related Gingiris B2B growth skill](https://clawhub.ai/gingiris-1031/skills/gingiris-b2b-growth)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown guidance with structured channel scoring, stage gates, and experiment cards]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable code; business planning priors should be replaced with user-specific cohort data.]
+
+## Skill Version(s):
+
+1.2.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

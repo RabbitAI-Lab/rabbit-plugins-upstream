@@ -1,39 +1,52 @@
-## Description: <br>
-Reviews AI-generated test cases before release by sampling and checking business validity, scenario completeness, and executability, then produces corrections and prompt-optimization feedback. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+QA Expert Review guides final human review of AI-generated test cases through sampling, scoring, correction notes, learning points, and prompt optimization feedback before release.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA reviewers, testers, and delivery teams use this skill when AI-generated test cases are ready for final review before release. It supports sampling strategy selection, quality scoring, issue classification, correction recommendations, and feedback for improving future prompts.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill may activate on broad test-review phrases and produce Chinese-language reports.
+
+Mitigation: Invoke it for final QA test-case review workflows and specify the desired report language or review scope when needed.
+
+Risk: Review findings or prompt optimization suggestions may be incomplete or misleading if the supplied test cases or requirements are incomplete.
+
+Mitigation: Have a qualified QA reviewer verify sampled findings against the source requirements before using the report for release decisions.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, test leads, and release reviewers use this skill to perform final expert review of AI-generated test cases before they are accepted for use. It supports sampling strategy selection, issue classification, correction recommendations, and prompt-improvement feedback loops. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Broad QA or final-review trigger phrases may activate the skill outside its intended test-case review context. <br>
-Mitigation: Use it only when reviewing AI-generated test cases or related requirements and correction history. <br>
-Risk: Review guidance could introduce incorrect or misleading QA recommendations if accepted without review. <br>
-Mitigation: Have a qualified reviewer validate findings before changing release-ready test suites, correction records, or prompt libraries. <br>
+**Output Format:** [Markdown review report with structured issue tables, correction suggestions, learning points, and prompt optimization recommendations.]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Produces a single review workflow response; no code execution, network access, or credential handling was identified in security evidence.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown review report with tables, correction items, learning points, and prompt-optimization recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include review IDs, sampling rates, issue lists, traceability IDs, corrections, and follow-up learning points.] <br>
+1.6.3 (source: SKILL.md frontmatter and release evidence)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
