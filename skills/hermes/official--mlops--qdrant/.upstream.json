@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/mlops/qdrant",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "a0b08f5972a517d244bd42d59905d0eeefc82deda0c6ef6364e29307f5d6de31",
-  "fetchedAt": "2026-07-26T17:03:57.015Z"
+  "pushedAt": "2026-08-15T07:46:59Z",
+  "contentHash": "b3494abbee00edc83e905cb6b80d75c59457cce7e081a189eb98c1ee861347b8",
+  "fetchedAt": "2026-08-15T07:48:28.334Z"
 }

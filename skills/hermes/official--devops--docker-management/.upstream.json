@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/devops/docker-management",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "eb95e33dd5dc50157bc475844d836e6b94c3a3a9649c6f57b854387b0ec9c7e1",
-  "fetchedAt": "2026-07-26T17:03:56.975Z"
+  "pushedAt": "2026-08-15T07:46:59Z",
+  "contentHash": "28aab3b84c65f58981ccf5e3fb4f8721756afe19d7442c1f573e64bbfc802fb2",
+  "fetchedAt": "2026-08-15T07:48:28.292Z"
 }
