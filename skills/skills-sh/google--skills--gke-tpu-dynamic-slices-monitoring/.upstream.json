@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-tpu-dynamic-slices-monitoring",
+  "repo": "google/skills",
+  "skillId": "gke-tpu-dynamic-slices-monitoring",
+  "branch": "main",
+  "pushedAt": "2026-08-14T19:19:17Z",
+  "contentHash": "f62c2f21b2bc8b254487e61b04e9d2174273365224f6da6e7cee25d7127e5261",
+  "fetchedAt": "2026-08-15T07:49:43.857Z"
+}

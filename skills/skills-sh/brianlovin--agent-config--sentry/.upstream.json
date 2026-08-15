@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/brianlovin/agent-config/sentry",
+  "repo": "brianlovin/agent-config",
+  "skillId": "sentry",
+  "branch": "main",
+  "pushedAt": "2026-03-25T17:52:51Z",
+  "contentHash": "54c0fb115bf29cc8aa05303977a9dea8e8aae6f6e233262080a90a83bdc10ac1",
+  "fetchedAt": "2026-08-15T07:48:15.938Z"
+}
