@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/typing-exclusion-worker",
+  "repo": "getsentry/skills",
+  "skillId": "typing-exclusion-worker",
+  "branch": "main",
+  "pushedAt": "2026-08-13T09:30:11Z",
+  "contentHash": "4dda10173af8d3577e700d0007c47cccfc8134bb97429b7fb31403163ccc3f0c",
+  "fetchedAt": "2026-08-15T07:48:09.274Z"
+}
