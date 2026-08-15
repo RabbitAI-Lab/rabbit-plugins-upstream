@@ -1,38 +1,53 @@
-## Description: <br>
-Helps QA teams create risk-based regression testing plans from change scope, risk level, historical test cases, and time constraints. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA teams create risk-based regression testing plans by selecting smoke, core, or full regression scope from change impact, risk, and time constraints.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and release teams use this skill to choose smoke, core, or full regression coverage and prioritize test cases when release scope, risk, or available time changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Regression recommendations may affect release decisions or coverage priorities under time pressure. <br>
-Mitigation: Review the plan with project and development owners before using it to block a release or reduce coverage. <br>
+## Use Case:
 
+QA engineers, developers, and release teams use this skill to choose an efficient regression scope, prioritize historical test cases, and expose uncovered release risk when time is constrained.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-regression-testing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured regression planning sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include a regression plan, selected test cases, risk-based priorities, execution strategy, and traceability IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may activate during broad regression-testing discussions and inspect workspace files provided for planning.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide only the files or change descriptions needed for regression planning, and avoid unnecessary sensitive workspace inputs.
+
+Risk: Regression plans may misclassify release risk or be used as an unsupported release blocker.
+
+Mitigation: Have project managers and developers confirm risk ratings, release windows, and any blocking decisions before acting on the plan.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-regression-testing)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown regression plan with selected test cases, risk-based priorities, execution strategy, time estimates, and uncovered-risk notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses original test case IDs where available and labels regression levels as smoke, core, or full.]
+
+## Skill Version(s):
+
+1.6.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

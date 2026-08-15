@@ -1,46 +1,67 @@
-## Description: <br>
-Guides an agent to query LinkFox/Jiimore Amazon niche-market review data by keyword and summarize consumer sentiment, pain points, review topics, and demand signals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries Jiimore-powered Amazon niche review data from a keyword and helps agents summarize consumer sentiment, customer pain points, and positive or negative review themes.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Amazon sellers, e-commerce operators, and market researchers use this skill to retrieve niche-level review sentiment for a keyword and identify customer pain points, positive themes, and product improvement opportunities. It is intended for supported Amazon marketplaces and should not be used for individual ASIN review analysis or unrelated advertising, pricing, or sales-forecasting tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with marketplace data limited to Amazon US, JP, and DE. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends keywords, API credentials, and session or app metadata to LinkFox-configured endpoints. <br>
-Mitigation: Use only trusted LinkFox gateway settings, avoid sensitive keywords unless necessary, and confirm the API key is intended for this data-sharing context. <br>
-Risk: The skill stores full API responses and cached responses locally, which may retain market research data longer than expected. <br>
-Mitigation: Review saved LinkFox data locations after use and delete response or cache files that should not remain in the workspace. <br>
-Risk: Onboarding and feedback flows may involve remote downloads or submissions outside the main review-query workflow. <br>
-Mitigation: Require explicit user approval before any onboarding download or feedback submission. <br>
-Risk: Each API call consumes LinkFox credits, and repeated or exploratory queries may create unexpected cost. <br>
-Mitigation: Explain credit use before additional searches and reuse cached same-parameter results when appropriate. <br>
+## Use Case:
 
+External Amazon sellers, ecommerce operators, and market researchers use this skill to inspect niche-level review topics, sentiment, and customer pain points for Amazon marketplace keywords.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-jiimore-get-niche-review-from-keyword) <br>
-- [Jiimore Amazon Niche Review API Reference](references/api.md) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global; marketplace data queries are limited to the United States, Japan, and Germany.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON parameters, shell commands, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full responses are saved locally as JSON; small responses may also print in full, while larger responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill uses a paid LinkFox integration and each niche review lookup consumes credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user understands the credit cost before repeated or exploratory calls, and rely on the built-in cache for identical requests within the same 24-hour window.
+
+Risk: Authentication and onboarding flows may ask for phone/SMS login, generate API keys, and create payment orders.
+
+Mitigation: Prefer self-service account setup, avoid sharing one-time codes in chat when possible, and store API keys in a secret manager instead of plain shell profiles.
+
+Risk: The lookup script writes full API responses to local session files.
+
+Mitigation: Review saved JSON files before sharing them and remove local response files when they contain sensitive business or account information.
+
+Risk: Endpoint override environment variables can change where credentials and request data are sent.
+
+Mitigation: Do not set LinkFox endpoint override variables unless the destination is fully trusted and intentionally configured.
+
+Risk: The skill can send feedback to a separate LinkFox feedback endpoint.
+
+Mitigation: Keep feedback content minimal and avoid including secrets, personal data, or confidential marketplace research.
+
+## Reference(s):
+
+- [Jiimore Amazon Niche Review API Reference](artifact/references/api.md)
+- [Authentication and Credits Onboarding](artifact/references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-jiimore-get-niche-review-from-keyword)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown summaries and tables with saved JSON response files and inline shell commands when setup or billing actions are needed.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The lookup script caches matching requests for 24 hours, saves full responses locally, prints small responses inline, and summarizes larger responses unless full inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

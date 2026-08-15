@@ -1,49 +1,61 @@
-## Description: <br>
-Tencent Map Assistant lets agents use Tencent Maps services for travel planning, POI search, routing, geocoding, IP location, weather lookup, and web map or mini-program guide generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+腾讯地图·地图助手 Skill，一句自然语言调用腾讯地图全套能力，开箱即用。提供 AI 旅游攻略、地点搜索（含评分/人均/营业时间）、关键词提示、路线规划（驾车/步行/公交/骑行）、地址解析与逆解析、行政区划、IP 定位、距离计算、天气查询，并可将行程或多 POI 渲染成网页地图或生成腾讯地图小程序指南。涉及找地点、规划路线、旅游行程、查天气、坐标转换等出行场景时使用。
 
-## Publisher: <br>
-[tencent-adm](https://clawhub.ai/user/tencent-adm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tencent-adm](https://clawhub.ai/user/tencent-adm)
 
-## Use Case: <br>
-Developers and agent users use this skill to answer location and trip-planning requests with Tencent Maps data, including POI search, routes, addresses, weather, travel guides, QR-code mini-program guides, and generated HTML maps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Map searches, routes, travel-guide text, IP-location lookups, and temporary-key phone verification data are sent to Tencent services. <br>
-Mitigation: Use the skill only when that data sharing is acceptable, and avoid submitting sensitive location or personal data unless the user has approved it. <br>
-Risk: The temp-key flow stores the phone number and key in plaintext under ~/.tencentmap/tempkey.json, and formal keys may be saved in the skill .env file. <br>
-Mitigation: Use restrictive file permissions, avoid shared machines for key setup, rotate or remove keys when no longer needed, and prefer environment variables for managed deployments. <br>
-Risk: Generated HTML maps can include a Tencent Maps API key in the JSAPI script URL. <br>
-Mitigation: Apply key restrictions in the Tencent console and do not publish generated maps with unrestricted or private keys. <br>
+## Use Case:
 
+External users and developers use this skill to access Tencent Maps capabilities through an agent, including travel itinerary generation, POI search, route planning, geocoding, reverse geocoding, administrative district lookup, IP location, distance calculation, weather lookup, and map or mini-program guide generation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tencent-adm/skills/tencentmap-map-assistant-skill) <br>
-- [Publisher Profile](https://clawhub.ai/user/tencent-adm) <br>
-- [Skill Definition](artifact/SKILL.md) <br>
-- [README](artifact/README.md) <br>
-- [Temporary Key Guide](artifact/tempkey-guide.md) <br>
-- [Agent Notes](artifact/references/agent-notes.md) <br>
-- [Tencent Maps JSAPI GL Guide](artifact/references/jsapi-guide/README.md) <br>
-- [Tencent Location Service WebService Overview](https://lbs.qq.com/service/webService/webServiceGuide/webServiceOverview) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, JSON-like API results, generated HTML map files, QR-code image files, and local configuration files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call Tencent services, save temporary or formal map keys locally, and generate map or travel-guide artifacts in the workspace.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill can request a phone-number-based Tencent Maps API key or reuse an existing Tencent Maps key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated Tencent Maps key with limited scope, monitor quota usage, and rotate or delete saved keys when access is no longer needed.
+
+Risk: Phone-linked API keys may be stored locally in plaintext under ~/.tencentmap/tempkey.json.
+
+Mitigation: Review local file permissions, avoid shared machines for key setup, and remove the saved key file if the skill is uninstalled or access should be revoked.
+
+Risk: Location, route, weather, trip, and POI queries are sent to Tencent Maps services.
+
+Mitigation: Avoid submitting sensitive personal, regulated, or confidential location data unless sharing it with Tencent Maps services is acceptable.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/tencent-adm/skills/tencentmap-map-assistant-skill)
+- [Tencent Maps API Reference](references/api_reference.md)
+- [Agent Notes](references/agent-notes.md)
+- [Error Codes](references/error-codes.md)
+- [JSAPI Guide](references/jsapi-guide/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown and text with optional Python snippets, shell commands, generated files, and HTML map artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call Tencent Maps services, create or reuse API keys, and produce travel guide Markdown, QR-code image references, or HTML map visualizations.]
+
+## Skill Version(s):
+
+1.5.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

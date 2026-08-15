@@ -37,7 +37,7 @@ agent-desktop snapshot --root @e12 --snapshot <snapshot_id> -i
 **Output structure:**
 ```json
 {
-  "version": "2.1",
+  "version": "2.3",
   "ok": true,
   "command": "snapshot",
   "data": {
@@ -105,6 +105,7 @@ agent-desktop snapshot --root @e3 --snapshot <snapshot_id> -i
 - Combine `--max-depth 5` to limit deep trees (e.g., Xcode)
 - Use `--skeleton` first to get a high-level map, then `--root` to drill into specific regions
 - Combine `--skeleton` with `-i` and `--compact` for the most token-efficient initial overview
+- For a Chromium-based app's web contents (Slack, VS Code, Discord, and similar), `launch --cdp` plus a CDP client is a faster alternative to skeleton traversal on a fresh launch — see `references/commands-system.md`
 - Keep `snapshot_id` when commands must resolve against a specific snapshot instead of the latest snapshot pointer
 
 ## find
@@ -122,11 +123,20 @@ agent-desktop find --app "App" --role button --name "OK" --exact
 agent-desktop find --app "App" --description "Closes the dialog"
 agent-desktop find --app "App" --native-id "submitButton"
 agent-desktop find --app "App" --state enabled --state focused=false
+agent-desktop find --root @s8f3k2p9:e4 --role textfield --value "README.md" --first
+agent-desktop find --app "Finder" --surface menubar --name "Go to Folder…" --exact --first
 ```
+
+Scope the search before widening the query. `--root` searches one ref's subtree
+and `--surface` searches an overlay; both return a single ref instead of the
+whole tree, which is the difference between a few hundred bytes and a full
+menu-bar dump.
 
 | Flag | Description |
 |------|-------------|
 | `--app` | Application name |
+| `--root REF` | Search only inside this ref's subtree instead of the whole window. Pair with `--snapshot` for a legacy bare `@eN` ref |
+| `--surface` | Search an overlay instead of the window (`menubar`, `menu`, `sheet`, `alert`, `popover`, ...). A menu bar belongs to the application, so several open windows are not ambiguous here. Cannot be combined with `--root`, which already carries its own surface |
 | `--role` | Role to match against the live tree (button, textfield, checkbox, scrollarea, window, ...). Case-insensitive; `textarea`/`textbox`/`searchfield` fold to `textfield`. When a role filter matches nothing, the response carries `roles_present` — the roles actually in the searched tree — so you can tell "none on screen" from a wrong role name and retry |
 | `--name` | Accessible name or label |
 | `--value` | Current value |

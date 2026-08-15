@@ -1,43 +1,61 @@
-## Description: <br>
-Analyzes tomato or chili flower and fruit images or videos to count open flowers and young fruits, compute fruit-set rate, and return grower-facing guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered tool that analyzes tomato or chili flower and fruit-cluster images or videos to count open flowers and young fruits, calculate fruit-set rate, and return a structured report with practical pollination and growing guidance.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External growers, horticulture operators, and agent developers use this skill to analyze tomato or chili flower/fruit media, estimate fruit-set rates, receive pollination or environment adjustment guidance, and view prior analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded media or URLs are sent to lifeemergence cloud services for analysis. <br>
-Mitigation: Use only media and URLs suitable for third-party cloud processing; avoid sensitive images or private/internal URLs unless publisher disclosures meet your consent, retention, deletion, and permission requirements. <br>
-Risk: The skill silently creates or reuses an identity, stores tokens locally, and queries cloud report history tied to that identity. <br>
-Mitigation: Review local identity and token storage before installation, run the skill in an isolated workspace, and avoid using it where silent cloud history linkage is unacceptable. <br>
+## Use Case:
 
+External growers, home gardening users, greenhouse operators, and agent workflows use this skill to analyze tomato or chili flower-cluster media, estimate flower and young-fruit counts, calculate fruit-set rate, and surface guidance for pollination and growing-condition adjustments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-flowering-fruit-set-rate-analysis-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [API接口文档](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON text, including structured analysis reports, report links, and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local image/video paths or public media URLs; documented media limit is 10 MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Uploaded images, videos, and URL-sourced media are processed by configured LifeEmergence cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media and URLs that are acceptable for cloud processing, and confirm the publisher's retention, account, and deletion controls before handling sensitive content.
+
+Risk: The skill can silently create or reuse a persistent account identity and store generated identity and token data locally for report history.
+
+Mitigation: Install in a workspace where persistent local identity storage is acceptable, review stored workspace data periodically, and avoid sharing workspaces across unrelated users.
+
+Risk: Fruit-set analysis and recommendations may affect growing decisions but are derived from image or video quality and cloud model output.
+
+Mitigation: Treat results as decision support, use clear close-range media, and have a human review important cultivation or production decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-flowering-fruit-set-rate-analysis-analysis)
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API interface notes](references/api_doc.md)
+- [Shared analysis API notes](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, guidance]
+
+**Output Format:** [Markdown or JSON structured analysis report with detected counts, fruit-set rate, recommendations, and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save output to a file when requested; history lookup returns a structured report list from the configured cloud service.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter lists 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

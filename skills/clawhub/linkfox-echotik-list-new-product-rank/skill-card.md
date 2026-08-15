@@ -1,44 +1,60 @@
-## Description: <br>
-Queries EchoTik data so agents can retrieve and present daily TikTok Shop new-product rankings across 16 regional markets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents query EchoTik TikTok Shop new product rankings to surface trending new products across 16 regional markets.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, analysts, and developers use this skill to look up TikTok Shop new-product ranking data for product scouting, trend analysis, and competitive intelligence. The skill is scoped to daily EchoTik ranking snapshots and presents product metrics such as sales, revenue, price, creator coverage, live activity, ratings, and image URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a LinkFox API key, makes paid external API calls, and may share query parameters and session metadata with the configured LinkFox tool gateway. <br>
-Mitigation: Install only when this access is acceptable, confirm cost before repeated calls, and review or constrain LINKFOX_TOOL_GATEWAY. <br>
-Risk: Full product-ranking responses are retained on disk in local linkfox cache and output folders. <br>
-Mitigation: Clear the linkfox cache and output folders when the ranking data should not persist. <br>
-Risk: Feedback reporting can send user-provided feedback content to the LinkFox feedback API. <br>
-Mitigation: Avoid including secrets, private business data, or unnecessary sensitive details in feedback. <br>
+## Use Case:
 
+External e-commerce sellers and analysts use this skill to query daily TikTok Shop new product rankings, compare product performance, and identify emerging product trends by market.
 
-## Reference(s): <br>
-- [EchoTik-TikTok新品榜 API Reference](references/api.md) <br>
-- [ClawHub skill release page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-list-new-product-rank) <br>
-- [LinkFox EchoTik API endpoint](https://tool-gateway.linkfox.com/echotik/listNewProductRank) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON API parameters, tabular result summaries, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key, consumes 4.5 credits per lookup, caches identical parameter calls for 24 hours, and writes full API responses to local linkfox data folders.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill requires LinkFox API access and handles API keys.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer self-service API-key setup, avoid storing keys in shared shell profiles, and review any environment variables that can override LinkFox endpoint URLs.
+
+Risk: Queries and onboarding flows can consume paid credits or initiate billing actions.
+
+Mitigation: Confirm each paid query, plan selection, and order with the user before continuing.
+
+Risk: Full API responses and feedback reports can disclose or retain user and query data.
+
+Mitigation: Treat saved local response files and automatic feedback submission as data disclosure and retention points, and avoid sharing sensitive task details.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-list-new-product-rank)
+- [EchoTik TikTok New Product Ranking API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown tables and summaries, shell commands, configuration steps, and saved JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full API responses under a local linkfox session directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cloudq",
   "slug": "cloudq",
   "ownerHandle": null,
-  "version": "1.8.0",
-  "updatedAt": 1784520630360,
-  "contentHash": "7782b86b4ea37632f42249d944cb4340595d7a846e1b45b342f63ead7615c685",
-  "fetchedAt": "2026-07-26T18:10:26.336Z"
+  "version": "1.9.0",
+  "updatedAt": 1786414510251,
+  "contentHash": "84ce3e82de70ea047574a4c1af1f6033a775c0017a9c0fc1775e152fcc041d48",
+  "fetchedAt": "2026-08-15T08:10:32.201Z"
 }

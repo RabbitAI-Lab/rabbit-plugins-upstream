@@ -1,45 +1,61 @@
-## Description: <br>
-Searches WeChat Official Account hot articles by keyword and returns ranked popular article results, recommendations, and trend context for content ideation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches WeChat Official Account hot articles through Redfox, ranks results by relevance, popularity, and recency, and helps content creators find topic ideas and trends.
 
-## Publisher: <br>
-[yuanyi-github](https://clawhub.ai/user/yuanyi-github) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yuanyi-github](https://clawhub.ai/user/yuanyi-github)
 
-## Use Case: <br>
-External content creators, WeChat operators, brand teams, and self-media teams use this skill to search recent high-read WeChat articles, compare topic trends, and gather content inspiration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports a credential-like API key exposure. <br>
-Mitigation: Rotate or remove the exposed key before deployment and require users to provide REDFOX_API_KEY through their environment instead of plaintext files, prompts, logs, or generated output. <br>
-Risk: Search terms are sent to redfox.hk for article lookup. <br>
-Mitigation: Use the skill only when users trust RedFoxHub with the submitted keywords and understand that queries leave the local agent environment. <br>
-Risk: The subscription flow can create recurring scheduled tasks from searches. <br>
-Mitigation: Enable subscription/calendar behavior only after explicit user confirmation of the keyword, schedule, and desired recurrence. <br>
+## Use Case:
 
+External content creators, WeChat account operators, brand teams, and self-media learners use this skill to search recent 5,000+ read WeChat articles, compare hot topics, and plan content. Agents use it to run a Redfox-backed query, interpret structured results, and present concise Markdown tables and subscription prompts.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/yuanyi-github/skills/wechat-search-redfox) <br>
-- [gzh_trend_data_format.md](references/gzh_trend_data_format.md) <br>
-- [RedFoxHub API Key Settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
-- [RedFox WeChat Hot Article API](https://redfox.hk/story/api/gzh/search/hotArticle) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown tables and guidance based on JSON API results, with optional HTML report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REDFOX_API_KEY and may create scheduled subscription reminders when enabled by the user.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The skill sends WeChat search keywords and date ranges to Redfox using REDFOX_API_KEY.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when that data sharing is acceptable, obtain the key from Redfox, keep it in environment configuration, and avoid exposing it in code, prompts, logs, or output files.
+
+Risk: The subscription flow can create recurring calendar reminders for future pushes.
+
+Mitigation: Confirm the desired schedule before creating a subscription and understand how to cancel recurring reminders before relying on them.
+
+Risk: Article metrics are not real-time and are limited to the indexed recent 30-day, 5,000+ read data scope described by the artifact.
+
+Mitigation: Tell users the update cadence and data scope when presenting results, and avoid describing the returned metrics as live engagement data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/yuanyi-github/skills/wechat-search-redfox)
+- [Publisher profile](https://clawhub.ai/user/yuanyi-github)
+- [Data format reference](references/gzh_trend_data_format.md)
+- [Redfox API key settings](https://redfox.hk/settings/api-keys?source=clawhub)
+- [Redfox hot article API endpoint](https://redfox.hk/story/api/gzh/search/hotArticle)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown tables and prompts for users, JSON from the query script, and optional HTML report files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires REDFOX_API_KEY; can query single or comma-separated keywords and date ranges up to the recent 30-day data window described by the artifact.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,62 @@
-## Description: <br>
-Generate and edit images with Ideogram V3 through RunAPI, using the RunAPI CLI for one-off tasks and RunAPI SDKs for application integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images with Ideogram V3 through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to generate, edit, or remix images with Ideogram V3 through RunAPI. It helps route one-off creative requests to CLI commands and integration work to the appropriate SDK packages. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and uploaded images are sent to RunAPI/Ideogram when the skill is used for generation or editing. <br>
-Mitigation: Review RunAPI pricing and data-handling terms before use, and avoid sensitive images or private creative material unless that use is approved. <br>
-Risk: The CLI can authenticate with RUNAPI_API_KEY or saved RunAPI credentials. <br>
-Mitigation: Store API keys in approved secret storage, avoid committing credentials, and prefer runapi login or scoped environment configuration where appropriate. <br>
+## Use Case:
 
+Developers, engineers, and agent users use this skill to create, edit, or transform images with Ideogram V3 through RunAPI. It supports one-off CLI generation and SDK-oriented integration work when the user is building an application or backend.
 
-## Reference(s): <br>
-- [RunAPI Ideogram V3 homepage](https://runapi.ai/models/ideogram-v3) <br>
-- [Ideogram V3 model overview, pricing, and rate limits](https://runapi.ai/models/ideogram-v3.md) <br>
-- [Ideogram provider comparison](https://runapi.ai/providers/ideogram.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [Ideogram V3 text-to-image action](https://runapi.ai/models/ideogram-v3/text-to-image.md) <br>
-- [Ideogram V3 edit action](https://runapi.ai/models/ideogram-v3/edit.md) <br>
-- [Ideogram V3 remix action](https://runapi.ai/models/ideogram-v3/remix.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code] <br>
-**Output Format:** [Markdown guidance with shell command examples and SDK package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the runapi CLI for the CLI path; authentication can use runapi login, saved CLI configuration, or RUNAPI_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release evidence) <br>
+Risk: Prompts and selected input media are processed by the external RunAPI service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user is comfortable sending that content to RunAPI, and avoid submitting sensitive media or prompts unless authorized.
+
+Risk: RunAPI API keys or saved CLI login state can authorize paid or private service access.
+
+Mitigation: Prefer environment authentication or saved CLI configuration, treat credentials as sensitive, and use browser login only when the user explicitly requests it.
+
+Risk: A failed or timed-out generation task could lead to duplicate paid submissions if retried incorrectly.
+
+Mitigation: Persist the task response, wait on the same task ID, and submit another paid request only with user authorization.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-ideogram-v3)
+- [RunAPI Ideogram V3 homepage](https://runapi.ai/models/ideogram-v3)
+- [Model overview, pricing, and rate limits](https://runapi.ai/models/ideogram-v3.md)
+- [Ideogram provider overview](https://runapi.ai/providers/ideogram.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [SDK integration](https://github.com/runapi-ai/ideogram-v3-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code, files]
+
+**Output Format:** [Markdown guidance with shell commands, JSON request and response files, optional SDK code, and downloaded image files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [For media deliverables, the skill requires complete response validation and non-empty downloaded files with the expected image MIME type.]
+
+## Skill Version(s):
+
+0.2.10 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

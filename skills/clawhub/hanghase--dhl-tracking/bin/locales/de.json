@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "name": "Deutsch",
+    "code": "de",
+    "fallback": "en"
+  },
+  "setup.welcome": "DHL-Tracking-Setup (erster Lauf)",
+  "setup.no_interactive_title": "HINWEIS: Keine interaktive Shell erkannt (OpenClaw-exec-Wrapper).",
+  "setup.no_interactive_body": "Setup wird mit Defaults initialisiert:",
+  "setup.defaults_notifyOn": "  notifyOn = silent (kein Auto-Refresh; du startest refresh manuell)",
+  "setup.rehint": "Du kannst das jederzeit aendern via:",
+  "setup.rehint_cmd": "  dhl-track.ps1 setup",
+  "setup.question_notify": "Wie moechtest du benachrichtigt werden, wenn sich der Status einer Sendung aendert?",
+  "setup.notify_opt_1": "  1 = bei jeder User-Message (live)",
+  "setup.notify_opt_2": "  2 = im taeglichen Daily-Digest (21:00 Telegram)",
+  "setup.notify_opt_3": "  3 = via Heartbeat-Cron (3-4x/Tag, silent bis echte Aenderung)",
+  "setup.notify_opt_4": "  4 = still (kein Ping, nur Daten in store.json)",
+  "setup.prompt_notify": "Auswahl (1/2/3/4)",
+
+  "add.already_present": "Sendung {0} ist schon in der Liste.",
+  "add.no_plz": "PLZ fehlt. Fuer nationale Sendungen ist die PLZ Pflicht (DHL lehnt sonst mit 406 ab).",
+  "add.no_plz_hint": "Oder internationale Sendung? Dann --international setzen.",
+  "add.querying": "Query DHL fuer {0}...",
+  "add.no_data": "Keine Daten von DHL erhalten. Nummer falsch oder PLZ stimmt nicht?",
+  "add.added_line1": "Hinzugefuegt: {0} | {1} | {2}",
+  "add.added_progress": "  Fortschritt: {0}/{1} | Letzter Status: {2}",
+  "add.added_preferred": "  Wunsch-Zustelltag: {0} (Zeitfenster {1} bis {2})",
+
+  "refresh.empty": "Keine Sendungen in der Liste.",
+  "refresh.summary": "Geprueft: {0} Sendung(en), {1} Aenderung(en)",
+  "refresh.separator": "---",
+  "refresh.change_title": "AENDERUNG: {0} | {1}",
+  "refresh.change_old": "  alt:    {0}",
+  "refresh.change_new": "  neu:    {0} ({1})",
+
+  "show.empty": "Keine Sendungen in der Liste.",
+  "show.separator": "---",
+  "show.header": "{0} | {1}",
+  "show.recipient": "  Empf:    {0}, {1}",
+  "show.status": "  Status:  {0} ({1})",
+  "show.progress": "  Fortschritt: {0}/{1}",
+  "show.last_checked": "  Zuletzt geprueft: {0}",
+  "show.intl_tag": "  [international]",
+
+  "remove.empty": "Liste leer.",
+  "remove.done": "{0} -> {1} Sendung(en)",
+
+  "errors.dhl_error": "DHL ERROR ({0}): {1}"
+}

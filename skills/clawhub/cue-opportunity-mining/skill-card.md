@@ -1,47 +1,60 @@
-## Description: <br>
-Cue Opportunity Mining uses Cue to run deep research for opportunity-mining scenarios, cross-referencing public data sources and returning conclusions with source links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+商机挖掘 uses Cue deep research to identify corporate opportunity signals from public data, including capital activity, enterprise lists, customer events, supply-chain relationships, dividends, and visit briefs.
 
-## Publisher: <br>
-[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu)
 
-## Use Case: <br>
-External users and business researchers use this skill to run Cue deep research for lead generation, company due diligence, industry-chain research, public-data opportunity analysis, and related business-development workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may fetch or update an external Cue runner before execution. <br>
-Mitigation: Review or pin the cue-skills runner source before use in controlled environments. <br>
-Risk: Business, company, or client queries are sent through online Cue research flows and may rely on a stored Cue API key. <br>
-Mitigation: Review sensitive queries and credential handling before approving a run. <br>
-Risk: Deep research runs consume Cue credits. <br>
-Mitigation: Require explicit confirmation before each credit-consuming run. <br>
-Risk: The output is based on public data and may be incomplete for diligence, legal, underwriting, or compliance decisions. <br>
-Mitigation: Treat reports as research inputs and verify conclusions against authoritative sources before acting on them. <br>
+## Use Case:
 
+Commercial, banking, business development, and enterprise sales users use this skill to run Cue research workflows that turn public business signals into opportunity lists, account briefs, and marketing drafts. It supports diligence and outreach planning, but does not replace legal review, underwriting, or final business decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wangxiaoxu/skills/cue-opportunity-mining) <br>
-- [Cue playbook API](https://cuecue.cn/api/playbook) <br>
-- [Cue runner source](https://github.com/sensedeal/cue-skills) <br>
-- [Cue runner mirror](https://gitee.com/sensedeal/cue-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown research guidance and reports with source links, plus inline shell commands for runner setup when needed.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user confirmation before credit-consuming research runs; may return an empty result instead of fabricating content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release evidence) <br>
+Risk: The skill asks the agent to fetch and run unpinned external runner code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the runner repository before use, pin a trusted revision when possible, and avoid automatic updates in controlled environments.
+
+Risk: The runner uses a local Cue API key and may consume Cue credits during deep research runs.
+
+Mitigation: Confirm each paid run with the user before execution and ensure the local Cue configuration is appropriate for the workspace.
+
+Risk: Business research from public sources may be incomplete, stale, or unsuitable for regulated decisions.
+
+Mitigation: Keep source links in the final report and require human review before diligence, legal, underwriting, or customer-action decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wangxiaoxu/skills/cue-opportunity-mining)
+- [Cue playbook API](https://cuecue.cn/api/playbook)
+- [Cue skills runner repository](https://github.com/sensedeal/cue-skills)
+- [Cue skills runner mirror](https://gitee.com/sensedeal/cue-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown report with source links and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include sourced business-research findings, opportunity lists, account briefs, and run-status guidance.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

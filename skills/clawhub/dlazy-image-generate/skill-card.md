@@ -1,45 +1,60 @@
-## Description: <br>
-Image generation skill that selects an appropriate dLazy CLI image model based on the prompt. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Image generation skill that automatically selects an appropriate dLazy CLI image model based on the user's prompt.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creators use this skill to generate, edit, upscale, vectorize, or segment images through the dLazy CLI and hosted image-generation APIs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media inputs may be sent to dLazy API and file-hosting endpoints. <br>
-Mitigation: Use only approved content, avoid sensitive inputs unless dLazy is approved for that data, and review dLazy service terms before use. <br>
-Risk: The dLazy CLI can store an API key in the local user configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-command authentication when persistence is not desired, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
-Risk: Image-generation requests may consume dLazy credits. <br>
-Mitigation: Confirm account authorization and available credits before running large or repeated generation jobs. <br>
+## Use Case:
 
+External users and developers use this skill to generate, edit, upscale, segment, vectorize, or transform images through dLazy CLI image models from natural-language prompts and optional media inputs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-generate) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON, Files] <br>
-**Output Format:** [Markdown guidance with dlazy CLI commands and JSON command output URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce hosted media URLs on files.dlazy.com and may upload local media files when supplied as inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: Prompts and media files explicitly passed to the CLI may be sent to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid passing sensitive prompts or local media files unless the user has approved sending them to the hosted service.
+
+Risk: Authentication stores a dLazy API key locally for future CLI use.
+
+Mitigation: Use per-invocation authentication or npx when persistence is not desired, and rotate or revoke the API key from the dLazy dashboard if needed.
+
+Risk: A global CLI install persists tooling on the user's machine.
+
+Mitigation: Use the pinned npx invocation when the user does not want a persistent global CLI installation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-generate)
+- [dLazy CLI homepage](https://github.com/dlazyai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and JSON command output from the CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may return generated media URLs hosted by dLazy and may chain CLI commands using JSON envelope output.]
+
+## Skill Version(s):
+
+1.3.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

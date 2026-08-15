@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-route"
+  short_description: "判断任务边界、复用证据并路由合适的 WorkFn Skill"
+  default_prompt: "使用 $zayn-route 判断当前任务的目标与边界，复用已有证据，并选择下一步最合适的 Skill。"

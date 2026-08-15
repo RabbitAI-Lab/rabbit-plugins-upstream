@@ -2,6 +2,34 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [1.3.2] - 2026-08-12
+
+### 变更
+- ClawHub 分类：`development`
+
+## [1.3.1] - 2026-08-12
+
+### 新增
+- `scripts/run-all-doctors.sh`：hekouwang-doctor-suite 三件套一键体检
+- `references/doctor-suite.md`：套件说明与免费/付费对照
+
+### 变更
+- `check.py`：无 `HEKOUWANG_CONTENT_FACTORY` 时提示付费报告卡 CTA
+- README：30 秒验收 + 三件套互链；summary 补英文 SEO 关键词
+
+## [1.3.0] - 2026-08-12
+
+### 新增
+- **`check.py` 支持 AGENTS.md**：根目录优先体检 `AGENTS.md`，其次 `CLAUDE.md` / `CLAUDE.local.md`；
+  子目录扫描同时认两份本地配置。
+- **#0b 双文件去重**：根目录 `AGENTS.md` + `CLAUDE.md` 同时存在且都不是薄指针 → WARN（双倍上下文费）。
+- **#4c Skill 路由**：正文应把细则指针到 `.agents/skills/`（或 `.cursor/skills/`），别堆在常驻正文。
+- 报告标题改为 **AGENT CONFIG DOCTOR**；JSON 输出增加 `root_configs` 字段。
+
+### 文档
+- `SKILL.md` 触发词补 `AGENTS.md` / `agents.md` / `运行时配置体检`；评分表扩至 12 项。
+- 新增测试夹具 `tests/fixtures/good-agents/`、`tests/fixtures/dual/`。
+
 ## [1.2.2] - 2026-07-09
 
 ### 文档

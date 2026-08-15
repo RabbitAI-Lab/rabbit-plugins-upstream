@@ -1,47 +1,66 @@
-## Description: <br>
-Privora connects AI agents to a token-authenticated investment workflow platform for A-share, Hong Kong stock, gold, fund, and financial-report data, with Python backtesting, paper trading, portfolio attribution, cloud alerts, and workflow orchestration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Privora gives AI agents a Bearer-token workflow backend for multi-asset market data, Python backtesting, paper-trading workflows, portfolio attribution, cloud alerts, and process orchestration.
 
-## Publisher: <br>
-[guangfuwu](https://clawhub.ai/user/guangfuwu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[guangfuwu](https://clawhub.ai/user/guangfuwu)
 
-## Use Case: <br>
-External users and developers use this skill to let AI agents query Privora market and portfolio data, run quantitative backtests, operate paper-trading workflows, configure alerts, and retrieve analysis for operator review. It is aimed at investment research workflows, not autonomous real-money trading or regulated financial advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bearer tokens can grant access to financial workflow data and state-changing Privora actions. <br>
-Mitigation: Use a dedicated least-privilege token, start with read-only scopes, set LG_AGENT_BASE_URL explicitly, and rotate the token if exposed. <br>
-Risk: Workflow execution, webhook triggers, alert changes, portfolio writes, and paper-trading actions can create persistent records or external side effects. <br>
-Mitigation: Require operator confirmation before these actions and reserve autonomous use for read-only or explicitly idempotent operations. <br>
-Risk: Investment analysis, backtests, paper-trading output, and alerts may be incomplete or misleading if treated as advice. <br>
-Mitigation: Treat outputs as analytical inputs for operator review; verify data freshness, strategy assumptions, and execution boundaries before decisions. <br>
+## Use Case:
 
+External users, developers, and AI-agent operators use this skill to connect an agent to Privora for investment research workflows: market-data lookup, portfolio analysis, backtesting, paper-trading process flows, alerting, and workflow orchestration. Outputs are analysis and automation support for operator review, not investment advice.
 
-## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/guangfuwu/skills/privora-cn-quant) <br>
-- [Privora Product Homepage](https://privora.cn) <br>
-- [Privora Marketplace](https://privora.cn/marketplace) <br>
-- [Privora Token Management](https://privora.cn/profile/tokens) <br>
-- [Privora Public Skill Version](https://privora.cn/api/public/agent/skill-version) <br>
-- [Privora Public Capabilities Catalog](https://privora.cn/api/public/agent/capabilities) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, API calls, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LG_AGENT_BASE_URL and LG_AGENT_TOKEN for authenticated Privora calls; anonymous preview is limited to documented public marketplace and preview endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.45 (source: frontmatter and server release evidence) <br>
+Risk: The skill can guide agents toward broad write, process, scheduler, alert, webhook, portfolio, or paper-trading authority when those scopes are granted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with a dedicated read-only or low-scope token, add scopes only for the active workflow, and require explicit human confirmation before state-changing calls or webhook triggers.
+
+Risk: Bearer tokens authorize access to decrypted account data through the API boundary, so token exposure can expose private portfolio information.
+
+Mitigation: Use dedicated tokens with minimum scope, store them only in the agent environment, and rotate or revoke them immediately after suspected exposure.
+
+Risk: Paper-trading token guidance is inconsistent in the evidence and may not match the platform's current issuance flow.
+
+Mitigation: Do not rely on self-minted paper-trading tokens unless Privora confirms the issuance flow; prefer documented process-bound paper-trading workflows.
+
+Risk: The skill's outputs concern market data, backtests, alerts, and simulated trading, which can be mistaken for investment advice or live-trading instructions.
+
+Mitigation: Treat outputs as analysis for operator review, validate data freshness and assumptions, and keep real-money trading outside autonomous agent execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/guangfuwu/skills/privora-cn-quant)
+- [Privora product home](https://privora.cn)
+- [Privora data coverage](https://privora.cn/features/realtime-minute-data-coverage)
+- [Privora token management](https://privora.cn/profile/tokens)
+- [Privora agent skills catalog](https://privora.cn/agent/skills)
+- [Privora agent skill execution endpoint](https://privora.cn/agent/skills/execute)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, Python snippets, API call examples, and JSON response patterns]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires LG_AGENT_BASE_URL and LG_AGENT_TOKEN for authenticated Privora calls; anonymous preview paths are documented for limited public discovery.]
+
+## Skill Version(s):
+
+1.0.48 (source: server release metadata and SKILL.md frontmatter, updated 2026-08-11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

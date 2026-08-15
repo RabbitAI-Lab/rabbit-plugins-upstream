@@ -1,20 +1,7 @@
 ---
 name: developer-marketing-playbook
 description: |
-  Engineers don't click your ads, ignore your webinars, and can smell a "growth hack" from a commit away. Marketing to developers means earning trust in the channels they already live in. This playbook covers DevRel, docs, and community as acquisition — for founders selling to people who read the source.
-
-  What's inside:
-  • DevRel program design — roles, metrics, and the activities that actually drive adoption
-  • Docs as a growth engine — how great documentation becomes your best acquisition channel
-  • API developer experience — DX improvements that cut time-to-first-API-call
-  • Community funnels — the Discord/Slack → contributor → champion → customer pipeline
-  • Hackathon ROI — when they work, how to run them, and how to measure impact
-
-  🇨🇳 开发者营销手册 — DevRel 项目、文档即增长引擎、API 体验、社区漏斗、hackathon ROI。面向卖给工程师的创始人。
-  🇯🇵 開発者マーケティング — DevRel、ドキュメント=獲得チャネル、API DX、コミュニティファネル、ハッカソンROI。
-  🇰🇷 개발자 마케팅 — DevRel, 문서=획득 채널, API DX, 커뮤니티 퍼널, 해커톤 ROI.
-
-  Triggers: "developer marketing" | "DevRel" | "developer relations" | "developer advocacy" | "docs as marketing" | "API developer experience" | "developer community" | "dev tool marketing" | "developer adoption" | "hackathon" | "开发者营销" | "开发者关系" | "开发者社区" | "開発者マーケ" | "개발자 마케팅"
+  Complete developer marketing playbook covering DevRel programs, documentation as marketing, API developer experience, community building, and hackathon strategy. For dev-tool founders who need to reach engineers. Follow @WeiYipei on X.
 source: https://github.com/Gingiris-1031/gingiris-skills/tree/main/skills/developer-marketing-playbook
 tags:
   - developer-marketing
@@ -57,6 +44,34 @@ Engineers don't respond to traditional marketing. Here's what actually works.
 - **API experience**: DX improvements that reduce time-to-first-API-call
 - **Community funnels**: Discord/Slack → contributor → champion → customer pipeline
 - **Hackathon ROI**: When hackathons work, how to run them, and measuring impact
+
+## Developer acquisition operating system
+
+### Stage 1 — reconstruct category history
+
+Use Wayback snapshots for the competitor's first site, beta site and first major launch. For each stage record positioning, page depth, use cases, navigation/pricing changes, and when SEO/community investment began. This prevents copying a mature competitor's current channel mix into a zero-to-one product.
+
+### Stage 2 — benchmark the best channel operator
+
+Do not benchmark every channel against the same competitor. Use the category leader for site/positioning, then select the strongest operator per channel. Track official, founder, DevRel and creator accounts; separate beta cadence, launch-week bursts and steady-state programs.
+
+Required research row:
+
+`brand | channel | date | format | category | URL | content framework | views/engagement | campaign membership | CTA`
+
+### Stage 3 — convert docs into adoption
+
+Measure docs on `landing → quick start → first successful call/deploy → second session`, not pageviews alone. Every launch packet must include a tested quick start, error recovery, deploy path, reference docs, examples and a community/support next step.
+
+### Stage 4 — ecosystem campaign
+
+For an enterprise/open-source campaign, coordinate README, comparison article, ecosystem partners/sponsors, relevant backlinks, community posts and DevRel follow-up. Report impressions and stars separately from activated developers and qualified accounts.
+
+### Stage 5 — interview and iterate
+
+Run 1:1 interviews with activated and bounced developers. Ask them to screen-share the workflow, identify the first "aha", and show what they already pay for. If acquisition rises but activation stays below target, pause distribution and fix the product/docs path.
+
+Source framework: Iris competitor-research wiki and open-source global-operations deck supplied for this skill update.
 
 ## Related Gingiris Skills
 - Full version: https://clawhub.ai/gingiris-1031/skills/gingiris-opensource

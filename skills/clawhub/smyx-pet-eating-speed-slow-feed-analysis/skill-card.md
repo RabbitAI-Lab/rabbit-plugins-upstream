@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes pet food-bowl videos or video URLs to estimate eating start and end times, eating speed, and non-diagnostic slow-feeding intervention guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet food-bowl videos or video URLs through cloud APIs to estimate feeding duration and speed, produce structured reports and report links, and suggest slow-feeding interventions without diagnosing disease.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze pet feeding videos, estimate feeding duration and speed, and generate slow-feeding recommendations, structured reports, or report links. The skill is intended for pet behavior and health-management support, not disease diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet feeding videos or URLs are processed by external LifeEmergence services. <br>
-Mitigation: Use non-sensitive videos, confirm permission to submit the media, and avoid uploading household footage that should not leave the user's environment. <br>
-Risk: The skill may silently create or reuse an internal identity and store authentication tokens in a workspace SQLite database. <br>
-Mitigation: Review or clear workspace data files and stored credentials when identity reuse across runs is not desired. <br>
-Risk: Cloud history lookup can return reports associated with the internally resolved identity. <br>
-Mitigation: Run history queries only for authorized users and review report links before sharing results. <br>
+## Use Case:
 
+External pet-care users and developers use the skill to submit local or network feeding videos for eating-speed analysis, slow-feed intervention recommendations, and cloud history report retrieval.
 
-## Reference(s): <br>
-- [Pet Eating Speed API Documentation](artifact/references/api_doc.md) <br>
-- [Shared Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-eating-speed-slow-feed-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON-style structured analysis report with command-line invocation examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include eating timestamps, eating-speed estimates, risk labels, intervention suggestions, historical report summaries, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact SKILL.md frontmatter says 1.0.6) <br>
+Risk: Pet or home feeding videos, video URLs, and account-linked identity data are sent to configured Lifeemergence cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with videos and account contexts approved for those cloud services.
+
+Risk: The skill may create a local workspace database that caches tokens and retrieves prior reports automatically.
+
+Mitigation: Review local workspace storage and token handling before deployment, and clear cached data when it is no longer needed.
+
+Risk: The security scanner marked the release suspicious because identity, local tokens, and cloud history are handled silently.
+
+Mitigation: Require an installation review focused on identity handling, token storage, and cloud history access.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-eating-speed-slow-feed-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Pet eating speed API documentation](artifact/references/api_doc.md)
+- [Common analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, guidance]
+
+**Output Format:** [Markdown and JSON analysis reports with report links and optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local video files, video URLs, pet type selection, report detail levels, and historical report listing.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata; artifact frontmatter says 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

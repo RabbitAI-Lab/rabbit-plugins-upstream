@@ -1,50 +1,67 @@
-## Description: <br>
-面向招投标决策场景，识别废标风险、控标信号、限制性条款、采购方历史供应商格局、竞争开放度和报价参考，并输出投标决策分析报告。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+废标风险与控标信号识别助手，用于评估具体招标项目的限制性信号、竞争开放度、采购方供应商格局、同类项目对比和投标决策建议。
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Procurement and sales teams use this skill to evaluate a specific bidding opportunity before deciding whether and how to bid. It compares public bidding records, buyer history, likely competitors, restrictive signals, and price anchors to produce a risk-aware decision report. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist an API key locally for the vendor service. <br>
-Mitigation: Use a pre-provisioned ZLBX_API_KEY when possible, review local credential storage before installation, and rotate or revoke the key if the workstation is shared. <br>
-Risk: The auto-registration flow sends a MAC-derived device hash to the vendor service after user consent. <br>
-Mitigation: Require explicit user approval before auto-registration and skip the flow by configuring ZLBX_API_KEY or ~/.zlbx/config.json in advance. <br>
-Risk: Generated HTML reports may contain signed links that grant access to source bidding records. <br>
-Mitigation: Share exported reports only with trusted recipients and remove sensitive signed links before broader distribution. <br>
-Risk: Bid-risk conclusions can affect commercial decisions and may involve real companies or public agencies. <br>
-Mitigation: Treat outputs as decision support, keep factual evidence separate from inferred signals, and independently review material recommendations before acting. <br>
+## Use Case:
 
+External procurement, sales, and bid teams use this skill to decide whether to pursue a specific bid, estimate pricing posture, identify likely competitors, and document red-line risk signals from public bidding data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/bid-risk-redline-checker) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Analysis workflow](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration workflow](references/auto-register.md) <br>
-- [Zhiliaobiaoxun API endpoint family](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
-- [Manual account and recharge portal](https://ai.zhiliaobiaoxun.com/?ch=s80) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown decision report in chat, with optional self-contained HTML report file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cited bidding records and signed source-record links returned by the API; complete analysis normally uses about 12-25 API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill persists or uses a vendor API key and stores auto-registered credentials under ~/.zlbx/config.json.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a preconfigured ZLBX_API_KEY where possible, protect the local config file, and avoid entering or displaying API keys in chat.
+
+Risk: Auto-registration collects limited device-derived attributes after consent.
+
+Mitigation: Confirm user consent before registration and use an existing API key to bypass the auto-registration path when privacy review requires it.
+
+Risk: Generated reports may include signed vendor links that can bypass login for the referenced report or source records.
+
+Mitigation: Treat generated HTML reports and signed links as sensitive and avoid broad redistribution.
+
+Risk: Procurement risk conclusions could be misleading if data is incomplete or phrased as an accusation.
+
+Mitigation: Keep conclusions tied to cited public data, mark data gaps, and use signal-based language rather than definitive misconduct claims.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/bid-risk-redline-checker)
+- [Workflow reference](artifact/references/workflow.md)
+- [API quick reference](artifact/references/api-quick.md)
+- [Report template](artifact/references/report-template.md)
+- [Auto-registration reference](artifact/references/auto-register.md)
+- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名})
+- [Zhiliaobiaoxun registration portal](https://ai.zhiliaobiaoxun.com/?ch=s84)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown procurement risk report, optional self-contained HTML report file, and concise operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based vendor registration; full analysis estimates 12-25 API calls and lightweight analysis estimates 5-8 API calls.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

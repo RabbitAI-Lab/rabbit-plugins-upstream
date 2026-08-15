@@ -1,43 +1,63 @@
-## Description: <br>
-Host HTML/Markdown pages and share PDF, Word, or PowerPoint docs as ShareOne short links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Host HTML/Markdown pages and share PDF, Word, or PowerPoint docs as ShareOne short links, with support for passwords, watermarks, comments, downloads, and updates.
 
-## Publisher: <br>
-[beep879](https://clawhub.ai/user/beep879) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[beep879](https://clawhub.ai/user/beep879)
 
-## Use Case: <br>
-Agents and developers use this skill to publish HTML, Markdown, text, PDF, Word, and PowerPoint content to ShareOne, then manage passwords, watermarks, comments, downloads, refreshes, settings, and deletion for those shares. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish selected local files or conversation-derived text to a publicly reachable ShareOne link. <br>
-Mitigation: Confirm the exact content and intended visibility before publishing, and use passwords or other restrictions for sensitive shares. <br>
-Risk: The skill handles ShareOne API keys, which may be exposed if pasted into normal chat or captured in logs. <br>
-Mitigation: Avoid sharing API keys in ordinary chat, rotate any key that appears in transcripts or logs, and use the documented credential flow. <br>
+## Use Case:
 
+Developers, content authors, and agent users use this skill to publish generated pages, documents, or conversation text to ShareOne and manage the resulting links. It also supports updating existing shares, downloading share contents, managing comments, and changing share settings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/beep879/skills/shareone) <br>
-- [Publishing text and HTML pages workflow](artifact/workflows/publish-text-page.md) <br>
-- [Publishing binary documents workflow](artifact/workflows/publish-binary-file.md) <br>
-- [Environment and credentials workflow](artifact/workflows/environment-and-credentials.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and terminal command guidance with ShareOne URLs and status messages] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May generate or update public ShareOne links and may instruct the agent to handle API-key based credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.7 (source: server release metadata and frontmatter) <br>
+Risk: The skill can upload selected files or conversation text to ShareOne, which can expose sensitive or unintended content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Preview sensitive content before publishing, avoid uploading private data unless the user explicitly requests it, and use passwords or watermarks when appropriate.
+
+Risk: The skill can store or print ShareOne API keys, which is risky in shared or logged environments.
+
+Mitigation: Use trusted environments, redact API-key output from logs, prefer temporary keys when possible, and delete stored credentials when they are no longer needed.
+
+Risk: Owner credentials can update, download, administer, or delete shares with limited confirmation.
+
+Mitigation: Confirm destructive actions such as share deletion, keep credentials scoped to the intended account, and review high-impact share changes before execution.
+
+Risk: Persistent page data can store shared visitor-readable data when explicitly enabled.
+
+Mitigation: Enable persistent data storage only on explicit request, keep sensitive values in private browser storage, and avoid placing secrets in shared page data.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/beep879/skills/shareone)
+- [ShareOne Service](https://shareone.app)
+- [Persistent Page Data Example](templates/page-storage-dropzone.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, files, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, plus script outputs such as JSON, status tokens, ShareOne URLs, and saved-file paths.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May use ShareOne API credentials and may upload, update, download, administer, or delete ShareOne shares depending on the user's request.]
+
+## Skill Version(s):
+
+1.2.8 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

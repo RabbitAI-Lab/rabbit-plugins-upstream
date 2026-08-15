@@ -1,41 +1,54 @@
-## Description: <br>
-Generates professional PDF quotations, training proposals, and business documents from natural language, Markdown, or structured data, with Chinese and English content support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates professional PDF quotations, training proposals, and business documents from natural-language, Markdown, or structured inputs, with support for Chinese and English content.
 
-## Publisher: <br>
-[mebusw](https://clawhub.ai/user/mebusw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mebusw](https://clawhub.ai/user/mebusw)
 
-## Use Case: <br>
-Developers, consultants, and business users use this skill to collect quotation, training outline, proposal, customer, pricing, and branding details, then generate structured document data and a polished PDF quotation or proposal. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may save customer details, pricing, quotation data, rendered HTML, and PDFs in a local output folder. <br>
-Mitigation: Avoid entering sensitive customer or pricing information unless local storage is acceptable, and review or clean the output folder according to the user's data-handling requirements. <br>
-Risk: The workflow depends on referenced rendering scripts and templates being present in the user's environment. <br>
-Mitigation: Verify that the Python rendering script, Jinja2 template, logo asset, and Playwright PDF path exist before relying on generated documents. <br>
+## Use Case:
 
+External users, business teams, and consultants use this skill to turn quotation or training-proposal details into branded PDF business documents. It helps collect required customer, pricing, payment, validity, outline, and branding data before rendering the document locally.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mebusw/skills/jackyshen-gen-quotation) <br>
-- [Server-resolved GitHub provenance](https://github.com/mebusw/jackyshen-gen-quotation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with structured JSON data and shell commands for generating local HTML and PDF files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local quotation data, rendered HTML, and Playwright-rendered PDF files in an output folder.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Generated documents and intermediate output files may contain customer names, pricing, payment terms, or bank account details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an appropriate workspace for sensitive business documents and clean up generated output files when they are no longer needed.
+
+Risk: Quotation and proposal content can affect commercial commitments if customer, pricing, tax, validity, or payment details are inaccurate.
+
+Mitigation: Review generated documents for business and legal accuracy before sharing them externally.
+
+## Reference(s):
+
+- [Server-resolved source repository](https://github.com/mebusw/jackyshen-gen-quotation)
+- [ClawHub skill page](https://clawhub.ai/mebusw/skills/jackyshen-gen-quotation)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance plus structured JSON data rendered to local HTML and PDF files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces quotation or proposal PDFs in an output directory and may also write intermediate HTML preview files.]
+
+## Skill Version(s):
+
+0.1.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

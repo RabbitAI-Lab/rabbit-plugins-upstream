@@ -7,6 +7,7 @@
 const {
     CREDENTIAL_MODE_SUDOWORK_PROXY,
     detectCredentialMode,
+    extractShareRef,
     printShareOneScriptError,
     requestShareOneJson,
     resolveDirectApiKey,
@@ -15,20 +16,6 @@ const {
 function usage() {
     console.error('Usage: node comment_resolve.js <share_link_or_ref> <comment_id> --reply "<回复内容>" [--note "<处理说明>"] [--api-key <key>]');
     console.error('       node comment_resolve.js <share_link_or_ref> <comment_id> --dismiss --note "<原因>" [--reply "<回复内容>"] [--api-key <key>]');
-}
-
-function extractShareRef(value) {
-    const raw = String(value || '').trim();
-    if (!raw) return null;
-    try {
-        const parsed = raw.includes('://') ? new URL(raw) : null;
-        const path = parsed ? parsed.pathname : raw.split('?')[0].split('#')[0];
-        const parts = path.split('/').filter(Boolean);
-        if (parts.length === 0) return raw;
-        return parts[parts.length - 1] || raw;
-    } catch (_) {
-        return raw;
-    }
 }
 
 const args = process.argv.slice(2);
@@ -121,6 +108,11 @@ if (dismiss && !note) {
             highlighter_data: parent.highlighter_data,
             content: reply,
             author_role: 'agent',
+            // Agent replies now require an explicit state (server-enforced). This
+            // legacy resolve/dismiss script maps to the closest state; the status
+            // PUT below still finalizes to resolved/dismissed. For nuanced replies
+            // (esp. disagreement that should stay open) prefer comment_reply.js.
+            state: dismiss ? 'open-disagree' : 'resolved-agree',
         });
         console.log(`REPLY_POSTED:${posted && posted.id !== undefined ? posted.id : ''}`);
     }

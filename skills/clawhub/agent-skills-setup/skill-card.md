@@ -1,48 +1,65 @@
-## Description: <br>
-Migrates AI assistant context between IDEs, including MCP servers, rules, skills, commands, agents, hooks, and memory, with dry-run previews, format conversion, backup-first merging, secret redaction, and verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use only when a user names two supported IDEs or agent products, identifies specific skills, instructions, prompts, commands, or MCP objects, and asks to plan or perform a migration.
 
-## Publisher: <br>
-[luckycat133](https://clawhub.ai/user/luckycat133) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[luckycat133](https://clawhub.ai/user/luckycat133)
 
-## Use Case: <br>
-Developers and engineers use this skill when they explicitly need to migrate, copy, convert, or synchronize AI assistant context between supported IDEs and agent runtimes. It helps inventory source settings, preview conversion plans, redact credentials, apply approved changes, and verify destination configuration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify IDE and agent configuration files during migration. <br>
-Mitigation: Run dry-runs first, review target directories and planned changes, and only use --yes when the destination changes are understood. <br>
-Risk: Using overwrite or replacement sync modes can rewrite or delete destination skill and configuration files. <br>
-Mitigation: Prefer the default backup strategy, keep timestamped backups, and avoid overwrite modes unless the target contents are disposable. <br>
-Risk: MCP, config, and project migrations may contain credentials or connection strings. <br>
-Mitigation: Treat these migrations as opt-in, expect secrets to be blanked, and re-enter credentials through the target IDE or a secret manager after migration. <br>
-Risk: OpenClaw installation downloads and runs an external installer. <br>
-Mitigation: Set and verify OPENCLAW_INSTALL_SHA256 before allowing the installer to run, and do not proceed when the checksum is missing or mismatched. <br>
+## Use Case:
 
+Developers and engineers use this skill to inventory, plan, apply, verify, or roll back migrations of agent and IDE skills, instructions, prompts, commands, and MCP configuration between supported products after explicit review.
 
-## Reference(s): <br>
-- [Agent Skills Setup on ClawHub](https://clawhub.ai/luckycat133/skills/agent-skills-setup) <br>
-- [IDE Registry](artifact/references/ide-registry.md) <br>
-- [IDE Paths](artifact/references/ide-paths.json) <br>
-- [OpenClaw Reference](artifact/references/openclaw.md) <br>
-- [Publishing Reference](artifact/references/publishing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, configuration snippets, migration plans, and verification summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local file changes and installer commands; write operations require explicit confirmation and should be previewed first.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.7 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Generated plans for user-scope skills, instructions, or MCP configuration can affect how future agents run.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the saved plan, diff or rebuild manifest, and target paths before approval; approve apply or rollback only when the saved plan exactly matches the intended migration.
+
+Risk: Migrating credentials, OAuth/session state, runtime metadata, approval grants, chat history, databases, or generated memory can expose sensitive data or produce unsafe configuration.
+
+Mitigation: Do not move those objects; use the bundled secret scanning and redaction behavior and manually reconstruct configuration when conversion is unclear.
+
+Risk: Mismatched product profiles or stale target state can cause incorrect writes or partial migrations.
+
+Mitigation: Use profile-aware planning, verify source and target hashes before applying, preserve backups and manifests, and run verification against the checksummed manifest.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/luckycat133/skills/agent-skills-setup)
+- [IDE reference index](artifact/references/ide-registry.md)
+- [Registry v2](artifact/references/registry-v2.json)
+- [Migration safety and conflicts](artifact/references/migration-safety.md)
+- [Object migration](artifact/references/object-migration.md)
+- [MCP migration](artifact/references/mcp-migration.md)
+- [MCP transport](artifact/references/mcp-transport.md)
+- [Verification and evidence](artifact/references/verification.md)
+- [Documentation freshness checks](artifact/references/doc-freshness-checks.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with optional JSON plan, manifest, and verification outputs from bundled shell and Python tools]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include migration plans, diffs, rebuild manifests, checksums, verification results, rollback commands, and manual follow-ups.]
+
+## Skill Version(s):
+
+0.8.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

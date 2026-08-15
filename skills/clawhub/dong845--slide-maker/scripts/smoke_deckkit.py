@@ -77,6 +77,21 @@ ok("accent_one", lambda: dk.accent_one(["a", "b", "c"], 1, C("C0362C")))
 ok("cover", lambda: dk.cover(S(), "Title", issue_label="No 1", subtitle="sub"))
 ok("colophon (list credits)", lambda: dk.colophon(S(), "tag", credits=["a", "b"], tooling="x"))
 ok("sources_page", lambda: dk.sources_page(S(), [f"ref {i}" for i in range(6)]))
+ok("source_note", lambda: dk.source_note(S(), ["Crunchbase", "PitchBook"], as_of="30 July 2026"))
+ok("source_note (lifts clear of a footer)", lambda: (dk.footer(last(), "tag", 3),
+                                                     dk.source_note(last(), "Company filings")))
+raises("source_note (empty provenance)", lambda: dk.source_note(last(), ["", "  "]))
+ok("sankey (1->N->1 circulation)", lambda: dk.sankey(S(), 0.6, 1.2, 11.0, 4.0,
+    [("Chips", "LabA", 100), ("Chips", "LabB", 30), ("Cash", "LabA", 13),
+     ("LabA", "Compute", 113), ("LabB", "Compute", 30)],
+    value_fmt="${:.0f}B", col_labels=["out", "labs", "back"]))
+ok("sankey (2 columns, no middle labels)", lambda: dk.sankey(S(), 0.6, 1.2, 11.0, 4.0,
+    [("Budget", "R&D", 60), ("Budget", "Sales", 40)]))
+raises("sankey (zero-value link)", lambda: dk.sankey(S(), 0.6, 1.2, 11.0, 4.0, [("a", "b", 0)]))
+raises("sankey (cyclic graph)", lambda: dk.sankey(S(), 0.6, 1.2, 11.0, 4.0,
+                                                  [("a", "b", 5), ("b", "a", 5)]))
+raises("sankey (gutters eat the whole width)", lambda: dk.sankey(S(), 0.6, 1.2, 2.2, 4.0,
+                                                                 [("a", "b", 5)]))
 ok("part_eyebrow/page_marker", lambda: (dk.part_eyebrow(S(), 0.7, 0.5, "x"), dk.page_marker(last(), 2, 8)))
 ok("specimen_card", lambda: dk.specimen_card(S(), 1, 1, 2, 2.5, "Aa", "Sans"))
 ok("specimen_card (small h)", lambda: dk.specimen_card(last(), 4, 1, 1, 0.5, "Aa", "tiny"))
@@ -433,6 +448,171 @@ def _waterfall():
 ok("dc.waterfall (floating step bars + dashed connectors)", _waterfall)
 raises("waterfall rejects an empty item list", lambda: dc.waterfall(os.path.join(TMP, "_x.png"), []))
 
+# --- sample data / two-dimension / profile / overlap: the four forms added after the reference-deck
+# --- comparison. Each carries a hard refusal, and a refusal that stops firing is a silent regression.
+_G18 = [("A", [0.80 + 0.01 * i for i in range(18)]),
+        ("B", [0.85 + 0.008 * i for i in range(18)])]
+ok("dc.distribution (auto -> box at n=18)",
+   lambda: dc.distribution(os.path.join(TMP, "_d1.png"), _G18, highlight=1, value_label="Dice",
+                           ref=0.88, ref_label="prior"))
+ok("dc.distribution (auto -> mean+/-error at n=4, ci95)",
+   lambda: dc.distribution(os.path.join(TMP, "_d2.png"),
+                           [("A", [.81, .84, .79, .86]), ("B", [.88, .91, .87, .90])], err="ci95"))
+raises("distribution refuses n<2 as a distribution",
+       lambda: dc.distribution(os.path.join(TMP, "_x.png"), [("A", [0.8, 0.9])]))
+raises("distribution refuses an unnamed error measure",
+       lambda: dc.distribution(os.path.join(TMP, "_x.png"), [("A", [1, 2, 3, 4, 5])], err="stdev"))
+raises("distribution refuses an empty group",
+       lambda: dc.distribution(os.path.join(TMP, "_x.png"), [("A", [])]))
+ok("dc.marimekko (width=size, height=share)",
+   lambda: dc.marimekko(os.path.join(TMP, "_mk.png"),
+                        [("Cloud", 190, [46, 30, 24]), ("Devices", 62, [18, 22, 60])],
+                        ["A", "B", "Others"], highlight=0, width_label="B"))
+raises("marimekko refuses a non-positive segment size",
+       lambda: dc.marimekko(os.path.join(TMP, "_x.png"), [("X", 0, [1, 2])], ["a", "b"]))
+raises("marimekko refuses a negative share",
+       lambda: dc.marimekko(os.path.join(TMP, "_x.png"), [("X", 5, [3, -1])], ["a", "b"]))
+ok("dc.radar (5 axes, 2 series, zero-anchored)",
+   lambda: dc.radar(os.path.join(TMP, "_rd.png"), ["a", "b", "c", "d", "e"],
+                    [("x", [1, 2, 3, 4, 5]), ("y", [5, 4, 3, 2, 1])], axis_range=(0, 5), highlight=1))
+raises("radar refuses 9 axes (use small_multiples)",
+       lambda: dc.radar(os.path.join(TMP, "_x.png"), [f"a{i}" for i in range(9)], [("s", [1] * 9)]))
+# EVERY scaffold sigs.py hands out must RUN. A scaffold that does not is worse than none: it gets
+# copied once, fails, and teaches that the tool cannot be trusted — after which the author hand-rolls
+# the form, which is the exact behaviour the scaffolds exist to prevent. Two of the first twenty-two
+# were wrong (segmented_bar takes a plain value list; eval_matrix cells are criteria x options and
+# 0..4 in ball mode) and only executing them found it.
+def _every_scaffold_runs():
+    import sigs as _sigs
+    bad = []
+    # The designed_charts scaffolds write a PNG to a RELATIVE path (that is what makes them
+    # copy-pasteable), so run them inside TMP and put the cwd back afterwards.
+    cwd = os.getcwd()
+    # image_grid's scaffold names realistic files (gt_c1.png ...) because that is what makes it
+    # copy-pasteable into an MRI results slide. Materialise them in TMP so the scaffold can RUN —
+    # a scaffold that cannot execute is worse than none: it gets copied once, fails, and teaches
+    # that the tool is not to be trusted. Square, because image_grid locks one aspect ratio.
+    try:
+        from PIL import Image as _SmkIm
+        for _p in ("gt_c1.png", "zf_c1.png", "ours_c1.png",
+                   "gt_c2.png", "zf_c2.png", "ours_c2.png"):
+            _SmkIm.new("RGB", (256, 256), (28, 30, 36)).save(os.path.join(TMP, _p))
+    except Exception:
+        pass
+    for name, code in sorted(_sigs.EXAMPLES.items()):
+        p = dk.blank_deck(10, 5.625)
+        sl = p.slides.add_slide(p.slide_layouts[6])
+        try:
+            os.chdir(TMP)
+            exec(compile(code, f"<scaffold:{name}>", "exec"), {"dk": dk, "s": sl, "dc": dc})
+        except Exception as e:
+            bad.append(f"{name}: {type(e).__name__}: {e}")
+        finally:
+            os.chdir(cwd)
+        # RUNNING is not the same as being RIGHT. The tier_stack scaffold passed this suite for
+        # months while painting "('Visitors', '12k')" onto the band — tiers are label STRINGS and
+        # values= is a separate kwarg, so a 2-tuple gets str()'d straight onto the slide. Nothing
+        # raised, lint_layout reported no faults, and the bug was then copied into two new
+        # scaffolds. A shape-level assertion is what "it executed" cannot give you.
+        for sh in sl.shapes:
+            if not getattr(sh, "has_text_frame", False):
+                continue
+            t = sh.text_frame.text
+            if "('" in t or '("' in t or "', '" in t:
+                bad.append("{}: rendered Python source onto the slide: {!r}".format(name, t[:60]))
+    assert not bad, "scaffolds that do not run, or draw their own source: " + " | ".join(bad[:3])
+
+
+def _scaffolds_cover_the_form_components():
+    import sigs as _sigs, component_audit as _ca
+    missing = sorted(set(_ca.FORM_GUARANTEE) - set(_sigs.EXAMPLES))
+    assert not missing, f"form components with no runnable scaffold: {missing}"
+
+
+ok("every sigs.py scaffold actually runs", _every_scaffold_runs)
+ok("every form component has a scaffold", _scaffolds_cover_the_form_components)
+
+# sigs.py is the one-lookup call-contract tool. It must resolve real names, REFUSE unknown ones
+# (a typo reading as "no such helper" is how a helper gets hand-rolled), and cover BOTH modules.
+def _sigs(*args):
+    import subprocess
+    return subprocess.run(
+        [sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "sigs.py"), *args],
+        capture_output=True, text=True)
+
+
+def _sigs_resolves_deckkit():
+    r = _sigs("text")
+    assert r.returncode == 0, f"sigs failed on a real helper: {r.stderr[:120]}"
+    assert "deckkit.text(" in r.stdout, "signature line missing"
+
+
+def _sigs_resolves_designed_charts():
+    assert "designed_charts.distribution(" in _sigs("distribution").stdout
+
+
+def _sigs_always_prints_contracts():
+    assert "SIXTH item" in _sigs("box").stdout, "run-tuple contract missing"
+    assert "RGBColor" in _sigs("box").stdout, "colour-type contract missing"
+
+
+def _sigs_refuses_a_typo():
+    r = _sigs("sankeyy")
+    assert r.returncode == 1, "an unknown helper name exited 0 — a typo would read as 'no such helper'"
+    assert "did you mean sankey" in r.stderr, f"no near-miss suggestion: {r.stderr[:120]}"
+
+
+ok("sigs resolves a deckkit helper", _sigs_resolves_deckkit)
+ok("sigs resolves a designed_charts helper", _sigs_resolves_designed_charts)
+ok("sigs prints the call-shape contracts every time", _sigs_always_prints_contracts)
+ok("sigs REFUSES an unknown name and suggests the near miss", _sigs_refuses_a_typo)
+
+# TOFU GATE: matplotlib draws a hollow box for a glyph the font lacks and only WARNS, so a caption
+# or a caller-supplied label can ship as ▯▯▯ with every gate green — radar's own range note did
+# exactly that. Both directions matter: the gate is worthless if it stops firing, and unusable if
+# it fires on text the font can actually draw.
+# U+E000 (Private Use Area) is unmapped in every font, so this assertion is platform-STABLE. The
+# obvious test — CJK text with a Latin font — is not: it passes on macOS (Times New Roman exists, so
+# matplotlib resolves it and drops the CJK) and would fail on a CI box where that face is absent and
+# the stack falls through to Noto CJK, which draws the glyphs fine. Same code path, portable input.
+raises("a glyph the resolved font cannot draw is refused, not shipped as tofu",
+       lambda: dc.distribution(os.path.join(TMP, "_x.png"),
+                               [("label" + chr(0xE000), [1, 2, 3, 4, 5])]))
+raises("the tofu gate covers CALLER-supplied labels in any recipe, not just captions",
+       lambda: dc.marimekko(os.path.join(TMP, "_x.png"), [("seg" + chr(0xE000), 10, [5, 5])],
+                            ["x", "y"]))
+ok("plain ASCII chart text still saves",
+   lambda: dc.distribution(os.path.join(TMP, "_tf.png"), [("before-after", [1, 2, 3, 4, 5])]))
+ok("radar's own range note carries no symbol glyph",
+   lambda: dc.radar(os.path.join(TMP, "_tf2.png"), ["a", "b", "c"], [("s", [1, 2, 3])],
+                    axis_range=(0, 3)))
+# A polar axis MIRRORS a negative radius onto the opposite spoke and runs a too-large one off the
+# ring — the drawn shape stops matching the data while still looking plausible.
+raises("radar refuses a value below the declared range",
+       lambda: dc.radar(os.path.join(TMP, "_x.png"), ["a", "b", "c"], [("s", [-5, 1, 2])],
+                        axis_range=(0, 3)))
+raises("radar refuses a value above the declared range",
+       lambda: dc.radar(os.path.join(TMP, "_x.png"), ["a", "b", "c"], [("s", [1, 2, 7])],
+                        axis_range=(0, 3)))
+ok("radar accepts values exactly on both bounds",
+   lambda: dc.radar(os.path.join(TMP, "_rb.png"), ["a", "b", "c"], [("s", [0, 1.5, 3])],
+                    axis_range=(0, 3)))
+raises("radar refuses 4 overlaid series",
+       lambda: dc.radar(os.path.join(TMP, "_x.png"), ["a", "b", "c"],
+                        [("1", [1, 2, 3]), ("2", [1, 2, 3]), ("3", [1, 2, 3]), ("4", [1, 2, 3])]))
+ok("venn (3 sets, all 7 zones labelled)",
+   lambda: dk.venn(S(), 0.6, 1.1, 5.2, 4.0, ["A", "B", "C"],
+                   zones={"1": "one", "2": "two", "3": "three", "12": "ab", "13": "ac",
+                          "23": "bc", "123": "all"}))
+ok("venn (2 sets)", lambda: dk.venn(S(), 0.6, 1.1, 5.0, 3.8, ["Fast", "Right"],
+                                    zones={"1": "rush", "2": "late", "12": "spot"}))
+raises("venn refuses 4 sets", lambda: dk.venn(S(), 0.6, 1.1, 5, 3.8, ["a", "b", "c", "d"]))
+raises("venn refuses a zone that is not a region",
+       lambda: dk.venn(S(), 0.6, 1.1, 5, 3.8, ["a", "b"], zones={"123": "x"}))
+raises("venn refuses a zone label too long for its lens",
+       lambda: dk.venn(S(), 0.6, 1.1, 5, 3.8, ["A", "B", "C"],
+                       zones={"12": "a label far too long to fit inside a narrow lens region"}))
+
 # --- box/connector kit: every node() shape + all three arrowhead variants ---
 def _node_kit():
     s2 = S()
@@ -773,7 +953,13 @@ def _quiet_region_contract():
         "~/Downloads/slides_skill_test/tokyo-first-timers/assets/opt/hero_cover.jpg"))
     if not imgs:
         return
-    fx, fy, fw, fh, lum = quiet_region(imgs[0])
+    # macOS TCC can leave ~/Downloads LISTABLE but not READABLE, so the file globs fine and then
+    # Image.open raises PermissionError. That reported a FAILURE for an optional local fixture --
+    # noise that trains you to ignore the smoke output. Absent and unreadable are the same here.
+    try:
+        fx, fy, fw, fh, lum = quiet_region(imgs[0])
+    except (PermissionError, OSError):
+        return
     assert 0 <= fx <= 1 and 0 <= fy <= 1 and 0 < fw <= 1 and 0 < fh <= 1
     # ink-zone coherence: the region must not average dark sky with cream ground into an
     # unusable mid-lum (the exact failure the constraint was added for)
@@ -818,6 +1004,286 @@ def _iso_components():
     except ValueError:
         pass
 ok("iso 2.5D suite (prism · faithful bars · aligned stack · guards)", _iso_components)
+
+def _structural_tokens():
+    """set_geometry is a NO-OP at its defaults and reaches every rounded component at radius=0.
+
+    The guarantee that matters is the first one: 55 components pass round=True through box(), so
+    if the default ever stopped being byte-identical, every deck ever built with this library
+    would restyle at once.
+    """
+    import zipfile, hashlib, tempfile
+
+    def digest():
+        prs = dk.blank_deck(); sl = dk.add_slide(prs)
+        dk.box(sl, 0.5, 0.5, 3, 1.5, fill="EEEEEE", round=True)
+        dk.chip(sl, 0.5, 2.4, 2.5, 0.9, "Chip", "sub", dk.BLUE)
+        dk.hrule(sl, 0.5, 4.6, 6)
+        f = tempfile.mktemp(suffix=".pptx"); prs.save(f)
+        with zipfile.ZipFile(f) as z:
+            return hashlib.sha256(b"".join(z.read(n) for n in sorted(z.namelist())
+                                           if n.startswith("ppt/slides/"))).hexdigest()
+
+    base = digest()
+    dk.set_geometry(radius=1.0, rule_w=1.0)
+    assert digest() == base, "set_geometry at its DEFAULTS must be byte-identical"
+    dk.set_geometry(radius=0, rule_w=3.0)
+    assert digest() != base, "radius=0 / rule_w=3 must actually change the deck"
+    dk.set_geometry(radius=1.0, rule_w=1.0)
+    assert digest() == base, "restoring the defaults must restore the rendering"
+
+    for bad in (-1, 5, "thick"):
+        try:
+            dk.set_geometry(radius=bad); assert False, "set_geometry must reject radius=%r" % (bad,)
+        except (ValueError, TypeError):
+            pass
+    try:
+        dk.set_geometry(rule_w=0); assert False, "rule_w=0 would delete every rule, not thin it"
+    except ValueError:
+        pass
+    dk.set_geometry(radius=1.0, rule_w=1.0)
+
+    # every preset must CARRY its structure, or the register is prose again
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import presets as _pr
+    for nm in _pr.names():
+        pp = _pr.preset(nm)
+        assert "radius" in pp and "rule_w" in pp, "preset %s carries no structural tokens" % nm
+        assert 0 <= pp["radius"] <= 4 and 0.2 <= pp["rule_w"] <= 6, "preset %s out of range" % nm
+    assert _pr.preset("brutalist")["radius"] == 0, "brutalist guard says NO rounded corners"
+    assert _pr.preset("ink_wash")["radius"] == 0, "east-asian register: no rounded SaaS cards"
+    assert _pr.preset("brutalist")["rule_w"] > _pr.preset("swiss")["rule_w"], \
+        "brutalist THICK rules must outweigh swiss hairlines"
+    _pr.apply("brutalist")
+    assert dk.RADIUS_SCALE == 0 and dk.RULE_W_SCALE == 3.0, "presets.apply must set geometry too"
+    dk.set_geometry(radius=1.0, rule_w=1.0)
+    dk.set_palette(accents=list(dk.ACCENTS))
+def _image_grid():
+    """The comparison grid: labels from the REAL rect, one AR for the whole grid, loud refusals."""
+    import tempfile
+    from PIL import Image as _Im
+    d = tempfile.mkdtemp()
+
+    def img(nm, w=256, h=256):
+        p = os.path.join(d, nm)
+        _Im.new("RGB", (w, h), (30, 30, 34)).save(p)
+        return p
+
+    rows = [[img("r%dc%d.png" % (r, c)) for c in range(3)] for r in range(2)]
+    prs = dk.blank_deck(); sl = dk.add_slide(prs)
+    bx, by, bw, bh = dk.content_band(sl)
+    ux, uy, gw, gh = dk.image_grid(sl, bx, by, bw, bh, rows, ["A", "B", "C"],
+                                   row_labels=["one", "two"],
+                                   metrics=[["1.0", "2.0", "3.0"], ["4.0", "5.0", "6.0"]],
+                                   highlight_col=2, caption="cap")
+    assert gw <= bw + 1e-6 and gh <= bh + 1e-6, "the grid must fit the region it was given"
+    dk.lint_layout(prs, verbose=False, strict=True)
+
+    # square cells from square sources: contain and cover coincide, so NOTHING is letterboxed
+    pics = [sh for sh in sl.shapes if sh.shape_type == 13]
+    assert len(pics) == 6, "expected one picture per cell, got %d" % len(pics)
+    ars = {round((q.width / 914400.0) / (q.height / 914400.0), 2) for q in pics}
+    assert ars == {1.0}, "cells must carry the sources' own aspect ratio, got %s" % ars
+
+    bad = [
+        (dict(images=["flat.png"], col_labels=["A"]), "nested rows"),
+        (dict(images=[rows[0], rows[1][:2]], col_labels=["A", "B", "C"]), "ragged"),
+        (dict(images=rows, col_labels=["A", "B"]), "col_labels is required"),
+        (dict(images=rows, col_labels=["A", "B", "C"], row_labels=["x"]), "row_labels"),
+        (dict(images=rows, col_labels=["A", "B", "C"], metrics=[["1"]]), "cell-for-cell"),
+        (dict(images=[r * 3 for r in rows * 3], col_labels=["A"] * 9), "contact sheet"),
+        (dict(images=rows, col_labels=["A", "B", "C"], metric_size=14), "BODY type tier"),
+        (dict(images=rows, col_labels=["A", "B", "C"],
+              metrics=[["PSNR 34.6 dB / SSIM 0.913 / wall-motion kappa 0.81"] * 3] * 2),
+         "wraps"),
+    ]
+    for kw, needle in bad:
+        try:
+            dk.image_grid(sl, bx, by, bw, bh, **kw)
+            assert False, "image_grid must refuse: " + needle
+        except (ValueError, FileNotFoundError) as e:
+            assert needle in str(e), "wrong refusal for %r: %s" % (needle, e)
+
+    # a mixed aspect ratio cannot align rows AND columns -> refuse, do not fudge
+    odd = [[img("o0.png"), img("o1.png")], [img("o2.png"), img("wide.png", 512, 256)]]
+    try:
+        dk.image_grid(sl, bx, by, bw, bh, odd, ["A", "B"])
+        assert False, "image_grid must refuse mixed aspect ratios"
+    except ValueError as e:
+        assert "aspect ratio" in str(e)
+
+    # too small to read the artefact -> refuse rather than ship thumbnails
+    try:
+        dk.image_grid(sl, bx, by, 2.0, 1.2, rows, ["A", "B", "C"])
+        assert False, "image_grid must refuse sub-floor cells"
+    except ValueError as e:
+        assert "floor" in str(e)
+
+    # nothing is drawn by a refusal
+    prs2 = dk.blank_deck(); s2 = dk.add_slide(prs2)
+    before = len(s2.shapes)
+    try:
+        dk.image_grid(s2, bx, by, bw, bh, rows, ["A", "B"])
+    except ValueError:
+        pass
+    assert len(s2.shapes) == before, "a refusal must not leave a half-drawn slide"
+def _design_strategy_escapes():
+    """Two moves ordinary editorial design makes, which the gates used to refuse outright.
+
+    Both directions matter more than usual here: the point is NOT to loosen a floor, it is to let a
+    COMPOSITION through while an ACCIDENT still fails. If the accident stops failing, the change was
+    a regression dressed as a feature.
+    """
+    import io, contextlib
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import lint_deck as _ld
+
+    def build(fn):
+        prs = dk.blank_deck(); sl = dk.add_slide(prs); fn(sl)
+        try:
+            with contextlib.redirect_stdout(io.StringIO()):
+                dk.lint_layout(prs, verbose=False, strict=True)
+            return True
+        except Exception:
+            return False
+
+    def giant(sl, declare):
+        big = dk.text(sl, 0.4, 1.2, 9.2, 2.4,
+                      [[("SCALE", 150, dk.TINT, True, False, dk.DISPLAY or dk.FONT)]], space_after=0)
+        if declare:
+            dk.overlap_intent(big, "the display word is the ground the caption rides — scale contrast")
+        dk.text(sl, 1.2, 2.6, 5.0, 0.5,
+                [[("a caption riding the giant", 13, dk.DEEP, False, False, dk.FONT)]], space_after=0)
+
+    def collision(sl):
+        # Deliberately a NEAR-TOTAL overlap. TEXT_OVERLAP deflates each ink box by that run's
+        # font-substitution slack, to keep the "never fabricates when fonts are substituted"
+        # promise — so a marginal collision detects differently on a machine with the deck's fonts
+        # than without. A fixture that must fail everywhere has to clear that slack by a mile.
+        blk = [[("Body copy that is long enough to fill several lines of the block it sits in, "
+                 "twice over, so the ink rectangles genuinely coincide.", 15, dk.DEEP, False,
+                 False, dk.FONT)]]
+        dk.text(sl, 1.0, 2.0, 5.0, 1.6, blk, space_after=0)
+        dk.text(sl, 1.05, 2.05, 5.0, 1.6, blk, space_after=0)
+
+    assert not build(lambda sl: giant(sl, False)), "an UNdeclared overlap must still be refused"
+    assert build(lambda sl: giant(sl, True)), "a DECLARED composed overlap must build"
+    assert not build(collision), "an accidental text collision must still fail after the escape"
+    for bad in ("", "because", 42):
+        try:
+            prs = dk.blank_deck(); sl = dk.add_slide(prs)
+            t = dk.text(sl, 1, 1, 3, 1, [[("x", 20, dk.DEEP, False, False, dk.FONT)]])
+            dk.overlap_intent(t, bad)
+            assert False, "overlap_intent must demand a real reason, got %r" % (bad,)
+        except (ValueError, TypeError):
+            pass
+
+    # COMPOSED vs LEFTOVER whitespace — the same void, judged by whether a protagonist earns it
+    def hero(sl):
+        dk.text(sl, 0.7, 1.3, 8.6, 1.6,
+                [[("Four times faster than the clinical protocol", 60, dk.DEEP, True, False, dk.FONT)]],
+                space_after=0)
+        dk.text(sl, 0.7, 3.3, 5.4, 0.5,
+                [[("at eight-fold undersampling on held-out subjects", 15, dk.SLATE, False, False,
+                   dk.FONT)]], space_after=0)
+
+    def crowd(sl):
+        dk.text(sl, 0.6, 0.45, 8.8, 0.4,
+                [[("Section overview of the current status", 18, dk.DEEP, True, False, dk.FONT)]],
+                space_after=0)
+        for k in range(8):
+            dk.text(sl, 0.6 + (k % 4) * 2.2, 1.15 + (k // 4) * 0.5, 2.0, 0.35,
+                    [[("workstream %d ongoing" % (k + 1), 13, dk.SLATE, False, False, dk.FONT)]],
+                    space_after=0)
+
+    def voids(fn):
+        prs = dk.blank_deck()
+        c = dk.add_slide(prs)
+        dk.text(c, 0.6, 2.2, 8.8, 1.0, [[("Cover", 40, dk.DEEP, True, False, dk.FONT)]])
+        for _ in range(3):
+            fn(dk.add_slide(prs))
+        z = dk.add_slide(prs)
+        dk.text(z, 0.6, 2.2, 8.8, 1.0, [[("Closing", 36, dk.DEEP, True, False, dk.FONT)]])
+        f = os.path.join(TMP, "voidprobe.pptx"); prs.save(f)
+        st = {}
+        with contextlib.redirect_stdout(io.StringIO()):
+            _ld.lint(f, mode="presented", static_ok=True, stats_out=st)
+        return [w.split(":")[0] for w in st.get("warns", [])
+                if w.startswith(("UNDERFILLED", "DEAD BOTTOM"))]
+
+    assert not voids(hero), "a 60pt protagonist with two objects earns its air — got %s" % voids(hero)
+    assert voids(crowd), "flat type with nine peers and the same void is LEFTOVER, and must warn"
+ok("design-strategy escapes (declared overlap · composed vs leftover void)",
+   _design_strategy_escapes)
+
+ok("image_grid (real-rect labels · one AR · 11 refusals · nothing drawn on refuse)", _image_grid)
+
+ok("structural tokens (set_geometry no-op at default · reaches box · presets carry them)",
+   _structural_tokens)
+
+def _mono_measurement():
+    """measure_text must PASS font= through to the metric, and code_block must say when a line
+    will clip. Both were silent: measure_text always measured in FONT, so a mono line came back
+    short (Helvetica 4.04in vs Courier 5.44in for one command string), and code_block sets
+    word_wrap=False so the overrun leaves the panel with every geometry check still green.
+
+    The plumbing is asserted by INTERCEPTING the measurer rather than by comparing two faces'
+    widths. A CI runner has neither Helvetica nor Courier installed, so both fall back to DejaVu
+    Sans and measure identically — a width comparison there passes 0.373 vs 0.373 and proves
+    nothing, which is exactly how the first version of this check failed. Whether font= REACHES
+    _measure_lines is true or false on every machine."""
+    import io, contextlib
+    seen = []
+    real = dk._measure_lines
+
+    def spy(runs, size_pt, avail_in, font=None):
+        seen.append(font)
+        return real(runs, size_pt, avail_in, font=font)
+
+    old_font, old_mono = dk.FONT, dk.MONO
+    dk._measure_lines = spy
+    try:
+        dk.FONT, dk.MONO = "Helvetica", "Courier New"
+        line = "python3 scripts/render_deck.py deck.pptx render --fast"
+        seen.clear(); dk.measure_text([(line, False)], 4.5, 12, font=dk.MONO)
+        assert seen and seen[-1] == dk.MONO, (
+            "measure_text(font=MONO) must hand MONO to the measurer, got %r" % (seen[-1:],))
+        seen.clear(); dk.measure_text([(line, False)], 4.5, 12)
+        assert seen and seen[-1] is None, (
+            "measure_text with no font= must not invent one, got %r" % (seen[-1:],))
+        # When the two faces really are distinct on this machine, the consequence must show up too.
+        dk._measure_lines = real
+        if not dk._font_substituted(dk.FONT) and not dk._font_substituted(dk.MONO):
+            wide = dk.measure_text([(line, False)], 4.5, 12, font=dk.MONO)
+            narrow = dk.measure_text([(line, False)], 4.5, 12)
+            assert wide > narrow, (
+                "with both faces installed, a monospace line must reserve more height than the "
+                "proportional default — got %.3f vs %.3f" % (wide, narrow))
+
+        prs = dk.blank_deck(10, 5.625)
+        s = dk.add_slide(prs)
+        # size the panel from the face this machine resolves, so the clip is real everywhere
+        need = dk.measure_text([(line, False)], 99.0, 12, font=dk.MONO)  # unused width -> 1 line
+        del need
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            dk.code_block(s, 0.5, 1.0, 2.0, line)
+        assert "CLIP" in buf.getvalue(), (
+            "code_block must warn when a line overruns a non-wrapping panel, got %r"
+            % buf.getvalue())
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            dk.code_block(s, 0.5, 3.0, 9.5, "a = 1\nb = 2")
+        assert "CLIP" not in buf.getvalue(), (
+            "code_block must stay silent when every line fits, got %r" % buf.getvalue())
+    finally:
+        dk._measure_lines = real
+        dk.FONT, dk.MONO = old_font, old_mono
+
+
+ok("mono measurement (measure_text font= reaches the metric · code_block clip is spoken)",
+   _mono_measurement)
+
 
 print(f"\nsmoke_deckkit: {len(fails)} failure(s)" + ("" if not fails else " — " + "; ".join(n for n, _ in fails)))
 sys.exit(1 if fails else 0)

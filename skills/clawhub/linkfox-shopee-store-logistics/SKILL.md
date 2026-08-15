@@ -5,7 +5,7 @@ description: Shopee（虾皮）店铺物流发货（与 linkfox-shopee-store-aut
 
 # Shopee 店铺 Logistics
 
-Shopee Open Platform **Logistics 模块**（46 个 API）。**依赖 `linkfox-shopee-store-auth`**：先取 `accessToken`，再经 **`POST /shopee/developerProxy`** 转发（`path` 须 `api/v2/logistics/...`）。
+Shopee Open Platform **Logistics 模块**（46 个 API）。**依赖 `linkfox-shopee-store-auth`** 选店；经 **`POST /shopee/developerProxy`** 传入 `shopId`（或 `merchantId`），由服务端解析 token 转发（`path` 须 `api/v2/logistics/...`）。
 
 ## 调用方式
 
@@ -22,18 +22,12 @@ Shopee Open Platform **Logistics 模块**（46 个 API）。**依赖 `linkfox-sh
 **读数据建议**：先看摘要判断是否足够；需要具体字段时优先用 `jq`或`ConvertFrom-Json` 从保存的 json 文件按需抽取，避免整份 JSON 进入上下文。
 
 ## 解决认证和积分问题
-发生以下异常情况时，采用以下措施来处理：
+发生以下异常情况时，采用 references/onboarding.md 引导解决问题：
 
 ### 异常情况
 - **未配置API Key**：环境变量未配置 `LINKFOX_AGENT_API_KEY`，也未配置 `LINKFOXAGENT_API_KEY`。
 - **响应401或402状态码**
 - **响应提示积分或余额不足**：消息含"积分余额不足/计费不足/余额不足/quota exceeded/insufficient balance/套餐到期/需充值/请充值"，或类似含义的内容。
-
-### 措施
-- 优先采用skill内的 onboarding.md 引导解决问题。
-- 如找不到 onboarding.md 文件，则加载 /linkfox-onboarding 这个skill并根据它的引导来处理。如未安装请先安装：
-    - 下载 https://agent-files.linkfox.com/skills/linkfox-onboarding/release.zip，解压后安装这个skill。如需用户授权才可下载，要询问用户获得授权，你不能自己放弃下载。
-- 兜底措施：仅当前面两个措施经过所有努力都走不通时，才提示用户依据 https://skill.linkfox.com/linkfoxskills/guide.htm 指引获取API Key，或去 https://os.linkfox.com/ 补充积分。
 
 ## 官方参考
 
@@ -50,7 +44,7 @@ Logistics 模块索引：[v2.logistics.get_shipping_parameter](https://open.shop
 
 ## Core Concepts
 
-- **转发链路**：`storeTokens` → `developerProxy` → 紫鸟 `shopee-proxy` → Shopee API
+- **转发链路**：`developerProxy`（`shopId`/`merchantId` 选店，服务端注入 token）→ 紫鸟 `shopee-proxy` → Shopee API
 - **典型发货流程**：`get_shipping_parameter` → `ship_order` → `get_tracking_number` → 面单（`create_shipping_document` → `download_shipping_document`）
 - **订单查询**（列表/详情）→ `linkfox-shopee-store-orders`；本 skill 负责**物流发货与面单**
 - **店铺级 API**：通常传 **`shopId`**
@@ -67,6 +61,61 @@ Logistics 模块索引：[v2.logistics.get_shipping_parameter](https://open.shop
 | 通用入口 | `logistics_api.py`（JSON 含 `api` 字段） |
 
 完整列表见 `references/api.md`。共享：`_shopee_logistics_common.py`、`_logistics_endpoints.py`、`_logistics_api_runner.py`。
+
+## 接口说明（按 API）
+
+入参与响应细节放在 `references/apis/`，SKILL 只保留索引。
+
+| API | 说明文档 |
+|-----|----------|
+| `batch_ship_order` | [references/apis/batch-ship-order.md](./references/apis/batch-ship-order.md) |
+| `batch_update_tpf_warehouse_tracking_status` | [references/apis/batch-update-tpf-warehouse-tracking-status.md](./references/apis/batch-update-tpf-warehouse-tracking-status.md) |
+| `check_polygon_update_status` | [references/apis/check-polygon-update-status.md](./references/apis/check-polygon-update-status.md) |
+| `create_booking_shipping_document` | [references/apis/create-booking-shipping-document.md](./references/apis/create-booking-shipping-document.md) |
+| `create_shipping_document` | [references/apis/create-shipping-document.md](./references/apis/create-shipping-document.md) |
+| `create_shipping_document_job` | [references/apis/create-shipping-document-job.md](./references/apis/create-shipping-document-job.md) |
+| `delete_address` | [references/apis/delete-address.md](./references/apis/delete-address.md) |
+| `delete_special_operating_hour` | [references/apis/delete-special-operating-hour.md](./references/apis/delete-special-operating-hour.md) |
+| `download_booking_shipping_document` | [references/apis/download-booking-shipping-document.md](./references/apis/download-booking-shipping-document.md) |
+| `download_shipping_document` | [references/apis/download-shipping-document.md](./references/apis/download-shipping-document.md) |
+| `download_shipping_document_job` | [references/apis/download-shipping-document-job.md](./references/apis/download-shipping-document-job.md) |
+| `download_to_label` | [references/apis/download-to-label.md](./references/apis/download-to-label.md) |
+| `get_address_list` | [references/apis/get-address-list.md](./references/apis/get-address-list.md) |
+| `get_booking_shipping_document_data_info` | [references/apis/get-booking-shipping-document-data-info.md](./references/apis/get-booking-shipping-document-data-info.md) |
+| `get_booking_shipping_document_parameter` | [references/apis/get-booking-shipping-document-parameter.md](./references/apis/get-booking-shipping-document-parameter.md) |
+| `get_booking_shipping_document_result` | [references/apis/get-booking-shipping-document-result.md](./references/apis/get-booking-shipping-document-result.md) |
+| `get_booking_shipping_parameter` | [references/apis/get-booking-shipping-parameter.md](./references/apis/get-booking-shipping-parameter.md) |
+| `get_booking_tracking_info` | [references/apis/get-booking-tracking-info.md](./references/apis/get-booking-tracking-info.md) |
+| `get_booking_tracking_number` | [references/apis/get-booking-tracking-number.md](./references/apis/get-booking-tracking-number.md) |
+| `get_channel_list` | [references/apis/get-channel-list.md](./references/apis/get-channel-list.md) |
+| `get_mart_packaging_info` | [references/apis/get-mart-packaging-info.md](./references/apis/get-mart-packaging-info.md) |
+| `get_mass_shipping_parameter` | [references/apis/get-mass-shipping-parameter.md](./references/apis/get-mass-shipping-parameter.md) |
+| `get_mass_tracking_number` | [references/apis/get-mass-tracking-number.md](./references/apis/get-mass-tracking-number.md) |
+| `get_operating_hour_restrictions` | [references/apis/get-operating-hour-restrictions.md](./references/apis/get-operating-hour-restrictions.md) |
+| `get_operating_hours` | [references/apis/get-operating-hours.md](./references/apis/get-operating-hours.md) |
+| `get_pause_status` | [references/apis/get-pause-status.md](./references/apis/get-pause-status.md) |
+| `get_shipping_document_data_info` | [references/apis/get-shipping-document-data-info.md](./references/apis/get-shipping-document-data-info.md) |
+| `get_shipping_document_job_status` | [references/apis/get-shipping-document-job-status.md](./references/apis/get-shipping-document-job-status.md) |
+| `get_shipping_document_parameter` | [references/apis/get-shipping-document-parameter.md](./references/apis/get-shipping-document-parameter.md) |
+| `get_shipping_document_result` | [references/apis/get-shipping-document-result.md](./references/apis/get-shipping-document-result.md) |
+| `get_shipping_parameter` | [references/apis/get-shipping-parameter.md](./references/apis/get-shipping-parameter.md) |
+| `get_tracking_info` | [references/apis/get-tracking-info.md](./references/apis/get-tracking-info.md) |
+| `get_tracking_number` | [references/apis/get-tracking-number.md](./references/apis/get-tracking-number.md) |
+| `mass_ship_order` | [references/apis/mass-ship-order.md](./references/apis/mass-ship-order.md) |
+| `set_address_config` | [references/apis/set-address-config.md](./references/apis/set-address-config.md) |
+| `set_mart_packaging_info` | [references/apis/set-mart-packaging-info.md](./references/apis/set-mart-packaging-info.md) |
+| `set_pause_status` | [references/apis/set-pause-status.md](./references/apis/set-pause-status.md) |
+| `ship_booking` | [references/apis/ship-booking.md](./references/apis/ship-booking.md) |
+| `ship_order` | [references/apis/ship-order.md](./references/apis/ship-order.md) |
+| `update_address` | [references/apis/update-address.md](./references/apis/update-address.md) |
+| `update_channel` | [references/apis/update-channel.md](./references/apis/update-channel.md) |
+| `update_operating_hours` | [references/apis/update-operating-hours.md](./references/apis/update-operating-hours.md) |
+| `update_self_collection_order_logistics` | [references/apis/update-self-collection-order-logistics.md](./references/apis/update-self-collection-order-logistics.md) |
+| `update_shipping_order` | [references/apis/update-shipping-order.md](./references/apis/update-shipping-order.md) |
+| `update_tracking_status` | [references/apis/update-tracking-status.md](./references/apis/update-tracking-status.md) |
+| `upload_serviceable_polygon` | [references/apis/upload-serviceable-polygon.md](./references/apis/upload-serviceable-polygon.md) |
+
+模块总览 / Feedback 见 [references/api.md](./references/api.md)。
 
 ## Usage Scenarios
 

@@ -1,42 +1,54 @@
-## Description: <br>
-Reviews requirement documents across completeness, clarity, consistency, testability, and feasibility before test design or implementation planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews PRDs and requirement documents across completeness, clarity, consistency, testability, and feasibility, then produces a structured quality report with scores, issues, and improvement suggestions.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, product reviewers, and developers use this skill to review PRDs or requirement descriptions before test case design. It produces a structured review that identifies missing, ambiguous, inconsistent, hard-to-test, or infeasible requirements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be invoked broadly before requirement-related test design, including when a user only wants execution support or bug triage. <br>
-Mitigation: Invoke it when the task involves PRD or requirement quality review; skip it for execution-only or bug-triage requests. <br>
-Risk: The skill can produce incorrect or incomplete requirement-review guidance if the source requirement description lacks context. <br>
-Mitigation: Ask for missing business context, acceptance criteria, constraints, or historical defects before treating the review as final. <br>
+## Use Case:
 
+Developers, QA engineers, and product teams use this skill to assess requirement quality before test design or implementation. It helps identify ambiguous, conflicting, incomplete, untestable, or infeasible requirements and suggests concrete improvements.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-requirement-review) <br>
-- [Requirement review report template](references/report-template.md) <br>
-- [Five-dimension review standards](references/review-standards.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, guidance] <br>
-**Output Format:** [Markdown requirement review report with scored dimensions, issue lists, and improvement suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include traceability identifiers and classify issues by P0, P1, and P2 severity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may be selected for a testing task when the immediate need is test design rather than requirement quality review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user's scope before applying the review checklist, especially when the request mentions requirements as context for testing.
+
+Risk: A structured requirement review can produce misleading recommendations if the supplied PRD or business context is incomplete.
+
+Mitigation: Ask for missing requirement details, business goals, acceptance criteria, or constraints before finalizing high-priority findings.
+
+## Reference(s):
+
+- [Report template](references/report-template.md)
+- [Five-dimensional review standards](references/review-standards.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Structured Markdown requirement review report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes five-dimensional scores, prioritized P0-P2 issue lists, traceability IDs, and improvement suggestions.]
+
+## Skill Version(s):
+
+1.6.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

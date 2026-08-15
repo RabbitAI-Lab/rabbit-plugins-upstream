@@ -1,46 +1,64 @@
-## Description: <br>
-Searches and analyzes Qianlima-style procurement and tendering data for bid discovery, company analysis, market aggregation, and trend reporting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+招投标大数据搜索 - 招标千里眼 helps agents search, aggregate, and analyze tendering, procurement, company, supplier, buyer, brand, and market trend data using the Zhiliaobiaoxun API.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External users, analysts, and business development teams use this skill to search Chinese procurement notices, inspect company bid activity, compare suppliers and purchasers, and summarize market trends from tendering data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends procurement queries, company names, and contact lookup requests to a third-party Qianlima/ZLBX API. <br>
-Mitigation: Use it only when the user is comfortable sharing those queries with the service, and avoid confidential strategy or sensitive company research unless approved. <br>
-Risk: Company matching and contact lookups may affect privacy or return entities outside the intended scope. <br>
-Mitigation: Ask the agent to confirm company matches or contact lookup scope when privacy, compliance, or entity precision matters. <br>
-Risk: The skill requires a sensitive API credential. <br>
-Mitigation: Store ZLBX_API_KEY in environment or approved agent configuration storage and do not paste it into prompts or generated documents. <br>
+## Use Case:
 
+External users, developers, and business analysts use this skill to query Chinese tendering and bidding data, compare purchasers and suppliers, inspect company procurement activity, analyze competitors, and produce market summaries from API results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/tender-search-qianlima) <br>
-- [Bid search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [ZLBX API key setup](https://ai.zhiliaobiaoxun.com/?ch=s22) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, API Calls, Markdown, Configuration guidance] <br>
-**Output Format:** [Markdown reports, tables, charts, and JSON-backed API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends procurement queries, company names, and related search terms to the Qianlima/ZLBX API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence) <br>
+Risk: Queries and analysis requests are sent to Zhiliaobiaoxun services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when sending procurement or market-analysis queries to that vendor is acceptable.
+
+Risk: If no API key is configured, the skill can initiate account auto-registration that sends platform, CPU architecture, and a hashed MAC address to the vendor.
+
+Mitigation: Prefer manually configuring ZLBX_API_KEY or ~/.zlbx/config.json before use for clearer control over account creation and device-identification data.
+
+Risk: Auto-registration can store a persistent API key under ~/.zlbx/config.json.
+
+Mitigation: Review local credential storage and remove or rotate the key according to the user's credential-management policy.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/liu-jiapeng/skills/tender-search-qianlima)
+- [API Key and Account Portal](https://ai.zhiliaobiaoxun.com/?ch=s22)
+- [Zhiliaobiaoxun API Base](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名})
+- [Tender Search API Reference](references/api-search.md)
+- [Company Analysis API Reference](references/api-company.md)
+- [Market Analysis API Reference](references/api-market.md)
+- [Account API Reference](references/api-account.md)
+- [Automatic Registration Flow](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, API Calls, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown summaries, tables, charts, JSON request examples, and shell or configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or local account configuration; may call external Zhiliaobiaoxun services.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

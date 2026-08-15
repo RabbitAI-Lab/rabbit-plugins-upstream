@@ -1,46 +1,64 @@
-## Description: <br>
-Mercado Libre（美客多）选品数据查询与分析，通过 LinkFox 网关统一调用蓝鲸商品、官链、关键词、类目、趋势、店铺、评论、汇率与套餐用量工具。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mercado Libre（美客多）选品数据查询与分析，通过 LinkFox 网关统一调用蓝鲸 24 个商品、官链、关键词、类目、趋势、店铺、评论、汇率与套餐用量工具，覆盖墨西哥、巴西、阿根廷、智利、哥伦比亚站点。当用户提到 Mercado Libre、美客多、蓝鲸选品、Lanjing、美客多选品、商品搜索、类目趋势、关键词热搜、流量词反查、店铺查询、评论查询、汇率、套餐用量时触发此技能。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-E-commerce analysts, marketplace operators, and agents use this skill to query Mercado Libre product, catalog, keyword, category, trend, seller, review, exchange-rate, and plan-usage data through the LinkFox gateway. It supports research and operational product-selection workflows across Mexico, Brazil, Argentina, Chile, and supported Colombia tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global use; data tools target Mercado Libre sites in Mexico, Brazil, Argentina, Chile, and supported Colombia workflows. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a LinkFox API key for paid Mercado Libre data calls. <br>
-Mitigation: Use a scoped LinkFox API key, confirm credit cost before repeated paid calls, and keep the gateway pointed at the official LinkFox endpoint unless an alternate endpoint is fully trusted. <br>
-Risk: Complete API responses are saved locally and may include sensitive business research data. <br>
-Mitigation: Review saved response files before sharing the workspace, delete sensitive local outputs when no longer needed, and avoid printing raw responses unless required for diagnostics. <br>
-Risk: A configurable gateway can receive authorization headers and request payloads. <br>
-Mitigation: Keep LINKFOX_TOOL_GATEWAY at the official LinkFox gateway for normal use and only override it in trusted environments. <br>
+## Use Case:
 
+External users and commerce analysts use this skill to query and summarize Mercado Libre product, catalog, keyword, category, trend, seller, review, exchange-rate, and plan-usage data through LinkFox. It is intended for product-selection research across the documented Latin American marketplace sites.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-lanjing-mercado-product-selection) <br>
-- [LinkFox gateway API reference](references/api.md) <br>
-- [Lanjing Mercado Libre tool reference](references/lanjing-mercado-tool-reference.md) <br>
-- [LinkFox API key and credits guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
-- [LinkFox tool gateway](https://tool-gateway.linkfox.com) <br>
+### Deployment Geography for Use:
 
+Global; Mercado Libre data coverage is documented for Mexico, Brazil, Argentina, Chile, and Colombia.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json files, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON payload examples, shell command examples, and saved JSON response files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Calls may use a 24-hour local cache, paid tools may consume LinkFox credits, and full API responses are saved locally while large responses are summarized in stdout.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Mercado Libre query data and related parameters are sent to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when LinkFox is trusted for this data, avoid unnecessary sensitive business inputs, and keep LINKFOX_* endpoint variables pointed at trusted HTTPS LinkFox hosts.
+
+Risk: The skill includes phone-based onboarding and API key issuance flows.
+
+Mitigation: Treat generated API keys as sensitive credentials, share only masked account details in conversation, and store environment variables securely.
+
+Risk: Paid calls and payment order creation can incur user cost.
+
+Mitigation: Confirm before paid tool calls or payment orders, use the documented free tools when sufficient, and rely on returned cost and package information before continuing.
+
+Risk: Full API responses may be written to local linkfox/ session files.
+
+Mitigation: Treat local response files as sensitive, limit unnecessary raw output, and protect or remove stored responses according to the user's data handling needs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-lanjing-mercado-product-selection)
+- [Lanjing Mercado Libre Product Selection API reference](artifact/references/api.md)
+- [Lanjing Mercado XP-MCP Tool Reference](artifact/references/lanjing-mercado-tool-reference.md)
+- [LinkFox authentication and billing onboarding](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses or response summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full LinkFox responses may be persisted under a local linkfox/ session data directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,58 @@
-## Description: <br>
-Use AgentMesh Job Agent for resume-driven job discovery, signed review and automatic selected delivery on Boss直聘, 猎聘, 智联招聘 and 51Job. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use AgentMesh Job Agent for resume-driven job discovery, signed review, user-confirmed delivery and audit on Boss直聘, 猎聘, 智联招聘 and 51Job.
 
-## Publisher: <br>
-[jiyangnan](https://clawhub.ai/user/jiyangnan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jiyangnan](https://clawhub.ai/user/jiyangnan)
 
-## Use Case: <br>
-External users and job seekers use this skill to drive AgentMesh Job Agent for resume analysis, job discovery, signed review, and delivery of selected applications or greetings across supported recruiting platforms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically send real job applications and platform greetings after a round starts without a final per-platform confirmation. <br>
-Mitigation: Review selected jobs carefully before delivery begins, and start rounds only when automatic delivery of selected items is acceptable. <br>
-Risk: The skill may use the user's resume, API key, browser login sessions, and recruiting-platform accounts. <br>
-Mitigation: Use accounts and resumes intended for this workflow, keep credential setup under user control, and stop when the CLI reports required user action. <br>
+## Use Case:
 
+Job seekers and their assisting agents use this skill to operate the AgentMesh Job Agent CLI for resume analysis, job discovery, signed review, delivery confirmation, and audit across supported job platforms while keeping the user in control of credentials and final sends.
 
-## Reference(s): <br>
-- [Job Agent homepage](https://jobagent.agentmesh360.com/) <br>
-- [AgentMesh360 app](https://agentmesh360.com/app/) <br>
-- [ClawHub skill page](https://clawhub.ai/jiyangnan/skills/job-agent) <br>
-- [Publisher profile](https://clawhub.ai/user/jiyangnan) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown instructions with CLI command blocks and concise status/reporting text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to run the jobagent CLI, relay required user prompts, and report audit and delivery results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.7 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The CLI can preserve and use browser sessions, API keys, resumes, cloud credits, and job-platform state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated account or profile where possible, inspect commands before execution, and keep explicit user approval in the loop for purchases, updates, retries, recovery commands, and application delivery.
+
+Risk: Automatic update, retry, and workflow-continuation behavior can advance the job workflow after a command completes.
+
+Mitigation: Follow only signed CLI next-step guidance, stop on user-action prompts, and review status, preview, and audit output before continuing.
+
+Risk: Application delivery actions can affect external job-platform accounts.
+
+Mitigation: Require the displayed delivery preview and authorization identifiers before any send command, and preserve the audit trail for attempted, delivered, failed, and skipped jobs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jiyangnan/skills/job-agent)
+- [AgentMesh Job Agent homepage](https://jobagent.agentmesh360.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and structured confirmation guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes CLI command sequences, status interpretation, user-action prompts, and audit-report guidance.]
+
+## Skill Version(s):
+
+0.5.25 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

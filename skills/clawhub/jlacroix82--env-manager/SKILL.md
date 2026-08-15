@@ -1,6 +1,6 @@
 ---
 name: env-manager
-description: Scaffolds dev project files (package.json, Dockerfile, Cargo.toml, etc.) for Python, Node, Docker, Go, and Rust. Returns a list of toolchain commands for the calling agent to run. Writes files only inside the agent workspace.
+description: Scaffolds dev project files (package.json, Dockerfile, Cargo.toml, etc.) for Python, Node, Docker, Go, and Rust, AND tracks project service/port inventory and runtime state (metadata only — no process control). Returns a list of toolchain commands for the calling agent to run. Writes scaffold files and JSON state (environments/ports/services) only inside the agent workspace.
 ---
 
 # Env Manager
@@ -26,7 +26,7 @@ For each language (`python`, `node`, `docker`, `go`, `rust`), it:
 - It does not start any system process.
 - It does not modify files outside the agent workspace.
 - It does not touch `ENV_DIR` from the environment or accept a `--dir` flag for runtime path redirection.
-- It does not provide its own network or file-system scanning.
+- It does not perform network scanning or file-system traversal. Note: it DOES maintain service/port inventory and runtime-state metadata (services.json, ports.json) inside the workspace — `startService`/`stopService` only toggle a `running` flag; they never signal or control a real OS process.
 
 ## Important: file writes happen on every call
 

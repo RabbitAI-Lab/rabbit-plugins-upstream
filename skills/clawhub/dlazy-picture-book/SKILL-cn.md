@@ -25,7 +25,7 @@ metadata:
   }
 ---
 
-# dlazy-picture-book
+# 绘本生成 Picture Book
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

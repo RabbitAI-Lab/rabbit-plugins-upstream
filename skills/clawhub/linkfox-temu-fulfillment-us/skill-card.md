@@ -1,46 +1,67 @@
-## Description: <br>
-Helps agents work with Temu US fulfillment workflows, including Buy-Shipping labels, cooperative warehouse fulfillment, self-fulfilled shipments, tracking, scan forms, shipment documents, and related Partner US API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supports Temu US fulfillment workflows through LinkFox, including buy-shipping labels, cooperative warehouse fulfillment, seller self-fulfilled shipments, scan forms, pickup reservations, and tracking.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and developers use this skill to prepare and execute Temu US fulfillment tasks such as buying labels, confirming shipments, managing pickup reservations, downloading labels or scan forms, coordinating cooperative warehouse fulfillment, and checking tracking data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform live fulfillment actions that affect Temu shipping and order records. <br>
-Mitigation: Use only with authorized Temu accounts, prefer test data first, and require explicit user confirmation before shipment creation, confirmation, cancellation, pickup changes, warehouse authorization, or label purchase/download. <br>
-Risk: Access tokens and saved API responses may contain sensitive account, order, address, tracking, or label data. <br>
-Mitigation: Treat tokens like passwords, avoid pasting them into logs or chat, restrict local file access, and delete saved response files when they are no longer needed. <br>
+## Use Case:
 
+External sellers, operators, and developers use this skill to prepare and manage Temu US fulfillment actions such as purchasing shipping labels, confirming shipments, creating scan forms, managing pickup reservations, and checking tracking information through LinkFox gateway scripts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-fulfillment-us) <br>
-- [API reference](references/api.md) <br>
-- [Partner US fulfillment catalog](references/partner-us-catalog.md) <br>
-- [Access token guide](references/access-token.md) <br>
-- [Authorization flow](references/authorization-flow.md) <br>
-- [Fulfillment API index](references/apis/README.md) <br>
-- [Temu Partner US documentation](https://partner-us.temu.com/documentation) <br>
+### Deployment Geography for Use:
 
+United States
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Files, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance, shell commands, and JSON responses or saved JSON files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved as local JSON files; small responses may also be printed to stdout, while larger responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Credential and token exposure through LinkFox API keys, Temu access tokens, and local token storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege Temu and LinkFox credentials, avoid shared machines, restrict access to saved token files, and treat all access tokens and API keys as sensitive.
+
+Risk: High-impact fulfillment, shipping, billing, and token-generation actions may affect orders, labels, pickups, scan forms, payments, or account access.
+
+Mitigation: Confirm every label purchase, fulfillment submit or cancel, shipment confirmation, pickup reservation, scan form creation, payment order, and token-generation step before execution.
+
+Risk: Saved full API responses can contain sensitive order identifiers, labels, tracking data, or business records.
+
+Mitigation: Review where response files are written, limit workspace access, remove sensitive saved files when no longer needed, and disable automatic persistence if it is not required.
+
+Risk: Generic proxy and onboarding/payment scripts broaden the actions available to the agent beyond a single fulfillment task.
+
+Mitigation: Remove or disable the generic proxy, onboarding/payment scripts, plaintext token store, and automatic full-response persistence when they are not needed for the deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-fulfillment-us)
+- [Temu fulfillment API reference](references/api.md)
+- [Fulfillment API index](references/apis/README.md)
+- [Partner US catalog](references/partner-us-catalog.md)
+- [Temu accessToken authorization and storage](references/access-token.md)
+- [LinkFox onboarding and account setup](references/onboarding.md)
+- [Temu Partner US documentation](https://partner-us.temu.com/documentation?menu_code=fd19c5c9a430407a8c587d7f3e492c4a&sub_menu_code=085d46b8a6604228b371e0706ac4af7d)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with bash snippets and JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full API responses under a local linkfox session data directory; large responses print summaries unless --inline is used.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

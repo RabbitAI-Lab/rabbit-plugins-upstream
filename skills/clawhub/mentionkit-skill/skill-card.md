@@ -1,45 +1,63 @@
-## Description: <br>
-Query and manage Mentionkit social monitoring workflows to review brand mentions, find reply opportunities, shortlist lead-generation conversations, inspect source links, and create tracked keywords. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query and manage Mentionkit social monitoring workflows to review brand mentions, find reply opportunities, shortlist lead conversations, inspect source links, and create tracked keywords.
 
-## Publisher: <br>
-[shash7](https://clawhub.ai/user/shash7) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shash7](https://clawhub.ai/user/shash7)
 
-## Use Case: <br>
-External users and developers use this skill to work with Mentionkit social monitoring data through MCP when available, or the Public API v1 for narrower scripting and basic data access. It supports mention review, opportunity shortlisting, source inspection, keyword creation through MCP, and concise confidence summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authenticated Mentionkit actions can affect a live workspace, especially keyword creation through MCP write scope. <br>
-Mitigation: Use MCP write actions only with the intended workspace and token scope, and do not invent project values, platform settings, subreddit lists, banned words, or classifier prompts. <br>
-Risk: Mention source fetches can fail while still returning a response envelope, which could lead to overconfident review conclusions. <br>
-Mitigation: Check fetch status before treating a source as verified and lower confidence when source inspection fails. <br>
-Risk: The skill depends on Mentionkit MCP or API access and may be unusable without workspace credentials or internet connectivity. <br>
-Mitigation: Confirm the MCP server connection or API key before relying on the workflow, and fall back to API v1 only for its documented narrower data access. <br>
+## Use Case:
 
+Developers and operators use this skill to connect agents to Mentionkit MCP or API workflows for social mention review, lead discovery, source verification, keyword tracking, and simple scripted data access.
 
-## Reference(s): <br>
-- [Server-resolved GitHub provenance](https://github.com/shash7/mentionkit-skill) <br>
-- [Mentionkit skill page](https://clawhub.ai/shash7/skills/mentionkit-skill) <br>
-- [Mentionkit API OpenAPI JSON](https://api.mentionkit.com/openapi.json) <br>
-- [Mentionkit API OpenAPI YAML](https://api.mentionkit.com/openapi.yaml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, API calls, markdown] <br>
-**Output Format:** [Markdown with inline shell commands and API request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call Mentionkit MCP tools or Public API v1 when the required workspace access, MCP connection, internet access, and API key are available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: The skill can guide an agent to access Mentionkit workspace data through MCP or the public API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for intended Mentionkit workspaces and use read-only API or MCP access when possible.
+
+Risk: MCP write scope can allow keyword creation, keyword reactivation, or mention review state updates.
+
+Mitigation: Grant write scope only when those actions are intended, and require explicit project choices before mutating a workspace.
+
+Risk: A source URL fetch can fail during mention review, reducing confidence in the underlying mention.
+
+Mitigation: Treat failed fetches as unverified and lower confidence instead of presenting the source as confirmed.
+
+## Reference(s):
+
+- [Source repository](https://github.com/shash7/mentionkit-skill)
+- [ClawHub skill page](https://clawhub.ai/shash7/skills/mentionkit-skill)
+- [Mentionkit](https://mentionkit.com)
+- [Mentionkit OpenAPI JSON](https://api.mentionkit.com/openapi.json)
+- [Mentionkit OpenAPI YAML](https://api.mentionkit.com/openapi.yaml)
+- [Mentionkit MCP Tools Reference](artifact/references/MCP-TOOLS.md)
+- [Mentionkit Public API v1 Reference](artifact/references/API-V1.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with API examples and workflow steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide agents to call Mentionkit MCP tools or the Mentionkit Public API v1 when credentials and access are available.]
+
+## Skill Version(s):
+
+0.1.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

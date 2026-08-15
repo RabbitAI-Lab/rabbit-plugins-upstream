@@ -1,35 +1,68 @@
-## Description: <br>
-Cargo Orchestration is an agent skill release on ClawHub; local source evidence was unavailable to characterize its behavior further. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents execute Cargo connector actions, run workflows and batches, message AI agents, build or edit node graphs, and query orchestration runtime tables.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and operators can use this skill when they need agent guidance related to cargo orchestration workflows. The available workspace evidence does not identify more specific tasks or execution capabilities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
+Developers and Cargo workspace operators use this skill to run and monitor Cargo orchestration tasks, including single actions, multi-step workflows, segment or file batches, AI agent messages, node graph drafts, and SQL queries over run and batch data.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+Global
 
-## Skill Version(s): <br>
-1.5.1 (source: target metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Bulk batches, CRM updates, enrichment, webhooks, or outreach workflows can affect many records, consume credits, or use third-party data.
+
+Mitigation: Confirm the active workspace, test on a small sample, review affected record counts and credit cost, and ensure third-party data use is approved before full execution.
+
+Risk: Workflow or node graph changes may trigger live operations against connected Cargo tools and integrations.
+
+Mitigation: Prefer built-in actions and template expressions, inspect output schemas before wiring downstream steps, and review a node diagram before deploying or approving a workflow.
+
+## Reference(s):
+
+- [Cargo skills repository](https://github.com/getcargohq/cargo-skills)
+- [Cargo CLI - Orchestration](SKILL.md)
+- [Action examples](references/examples/actions.md)
+- [Tool examples](references/examples/tools.md)
+- [Play examples](references/examples/plays.md)
+- [AI agent examples](references/examples/agents.md)
+- [Orchestration templates](references/examples/templates.md)
+- [Orchestration query examples](references/examples/queries.md)
+- [Segment data examples](references/examples/segments.md)
+- [Creating nodes](references/nodes.md)
+- [Diagramming a node graph](references/node-diagram.md)
+- [Node selection guidance](references/node-selection.md)
+- [Filter syntax](references/filter-syntax.md)
+- [Async polling reference](references/polling.md)
+- [Response shapes](references/response-shapes.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces Cargo CLI commands and operational guidance; command results are JSON when executed by the CLI.]
+
+## Skill Version(s):
+
+1.7.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

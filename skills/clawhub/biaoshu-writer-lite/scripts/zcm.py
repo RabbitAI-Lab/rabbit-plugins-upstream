@@ -4,10 +4,9 @@
 封装「提交 → 轮询 → 取结果」异步模型，零第三方依赖（仅标准库）。
 凭证通过本地凭证文件 config.json 传入；可选环境变量仅覆盖路径/地址（不含凭证）：
   ZCM_BASE     Base URL，默认生产 https://biaoshu.zhiliaobiaoxun.com/api/open/v1
-  ZCM_CONFIG   凭证文件路径，默认 skill 内 config.json（含 app_key/可选 base/output_dir）
   ZCM_OUTPUT_DIR  成品标书 .docx 存放目录；未设时默认 skill 同级的 biaoshu-bailian-files/
 
-App Key 只从 skill 内 config.json 读取（旧版 ~/.zcm/config.json 仍可读，兼容已有安装）。
+App Key 只从 skill 内 config.json 读取。
 凭证文件权限 600。config.json 含真实 Key，**勿上传发布包**（发布包不含配置文件）。
 App Key 仅能在官网自助注册获取（本 skill 不代注册）。
 用 login 显式保存凭证、logout 清除。
@@ -44,9 +43,9 @@ import uuid
 DEFAULT_BASE = "https://biaoshu.zhiliaobiaoxun.com/api/open/v1"
 
 # skill 版本（单一事实来源）。适配的后端 API 版本与契约快照见 references/api.md 顶部。
-SKILL_VERSION = "2.2.0"
+SKILL_VERSION = "2.2.1"
 API_TARGET = "/api/open/v1"
-CONTRACT_SNAPSHOT = "2026-07-20"
+CONTRACT_SNAPSHOT = "2026-08-10"
 
 # 渠道码：开发线留空（不带渠道）；发布/装配变体时按平台 excel 注入（ClawHub 基线 s113，变体 s81–s114）。
 # 非空时官网链接追加 ?ch=。
@@ -102,28 +101,19 @@ def log(msg):
 
 
 def creds_path():
-    """凭证文件：默认 skill 内 config.json；ZCM_CONFIG 可覆盖路径。"""
-    env = os.environ.get("ZCM_CONFIG", "").strip()
-    return env or os.path.join(skill_dir(), "config.json")
-
-
-def _user_creds_path():
-    """旧位置 ~/.zcm/config.json（ZCM_HOME 可改目录），仅作只读回退（兼容已有安装）。"""
-    home = os.environ.get("ZCM_HOME", "").strip() or os.path.join(
-        os.path.expanduser("~"), ".zcm")
-    return os.path.join(home, "config.json")
+    """凭证文件：固定为 skill 内 config.json（不可由环境变量重定向）。"""
+    return os.path.join(skill_dir(), "config.json")
 
 
 def load_creds_file():
-    """读凭证：先 skill 内 config.json，再回退旧版 ~/.zcm/config.json（兼容已有安装）。"""
-    for p in (creds_path(), _user_creds_path()):
-        try:
-            with open(p, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                if isinstance(data, dict):
-                    return data
-        except (FileNotFoundError, ValueError, OSError):
-            continue
+    """读凭证：仅 skill 内 config.json。"""
+    try:
+        with open(creds_path(), "r", encoding="utf-8") as f:
+            data = json.load(f)
+            if isinstance(data, dict):
+                return data
+    except (FileNotFoundError, ValueError, OSError):
+        pass
     return {}
 
 

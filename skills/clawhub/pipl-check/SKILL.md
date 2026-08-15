@@ -1,159 +1,132 @@
 ---
 name: pipl-check
 description: |
-  个人信息保护合规审计自查工具。
-  依据《小型个人信息处理者个人信息保护简化措施规定》（国家互联网信息办公室、公安部令第25号，2026-09-01施行）
-  附件1的24项审计事项与附件2影响评估，引导企业逐项自查并输出PDF/Markdown报告。
-
-  Use when: 需要进行PIPL合规自查、填写官方合规审计自查表、
-  个人信息保护影响评估、企业内部合规评估、小型个人信息处理者合规审计。
-
-  🎉 v1.1.0：PDF报告严格匹配官方模版格式、字体加大、表头浅色打印友好、
-  子项分行排列、列宽优化、商业级PDF输出
-
-  触发关键词：PIPL、个人信息保护法、合规审计、自查表、
-  简化措施规定、小型个人信息处理者、24项审计、
-  影响评估、附件2、个人信息保护影响评估
-
-  适用范围：《小型个人信息处理者个人信息保护简化措施规定》（国家互联网信息办公室、公安部令第25号）
-  运行模式：纯本地，无网络请求 ❎
-  外部依赖：Python标准库 + reportlab（可选，用于PDF生成）
+  PIPL Compliance Check — based on 《个人信息保护法》(PIPL, 2021-11-01 施行) 及配套规则,
+  覆盖 8 大维度 25 项核心合规检查（告知同意/处理原则/数据安全/敏感个人信息/个人权利/
+  自动化决策/跨境传输/合规治理）。免费安装；评分运行于 CQDev 云端合规引擎。
+  无 Key 时自动匿名试用（5 次真实云端评分 / 7 天窗口），额度用尽后引导注册。
+  Use when: the user explicitly asks to run the PIPL Check skill, or asks for a
+  个人信息保护法(PIPL)合规评估 / 中国个保法合规检查.
+  Trigger: pipl-check, run pipl check, PIPL compliance check, 个保法检查, 个人信息保护法合规评估
+  Pricing: Free skill; cloud scoring is free (anonymous trial 5 runs, then register for a free API Key with 100 calls)
+  ⚠️ Cloud scoring sends your 25 answers to compliancehub.cn; use --non-interactive for a fully offline preview that never contacts the cloud. Without a Key the skill runs an anonymous trial (up to 5 scored runs) using a local random anon_id; registering gives a free Key with 100 calls.
+  🔐 API Key: get a free API Key (100 free calls) at compliancehub.cn/account.html (register in the browser; the Key is shown instantly). Provide it via the COMPLIANCEHUB_API_KEY environment variable, or save it to ~/.config/compliancehub/pipl-check.key (mode 0600). Registration is done on the website — the terminal no longer collects credentials.
+  💡 Free preview: --non-interactive lists the 25 check items without a Key
+  Locale: zh-CN（交互默认中文，英文可按需提供）（交互与提示以中文为主，法律条款名称保留中文原文以确保准确）。
+permissions:
+  network:
+    - "https://compliancehub.cn"
+  filesystem:
+    write:
+      - "~/.config/compliancehub"
+  env:
+    - "COMPLIANCEHUB_API_KEY"
 ---
 
-# 📋 pipl-check
+# 🔒 PIPL Check — 个人信息保护法合规检查（免费 · 云端评分）
 
-## ⚠️ 重要法律声明
+## Overview
+PIPL Check 是面向处理中国境内自然人个人信息主体的**免费**合规自检（云端评分），
+覆盖 8 大维度 25 项核心检查：告知同意、处理原则、数据安全、敏感个人信息、个人权利、
+自动化决策、跨境传输、合规治理。评分运行于 CQDev 云端合规引擎。
 
-### 免责条款
+## How it works (free + cloud)
+> ⚠️ **Your answers leave this machine.** When you run a *scored* check, your responses to the
+> 25 compliance questions are transmitted to the CQDev cloud at `compliancehub.cn`
+> for scoring. Those answers can cover sensitive details — consumer-data practices, service
+> providers, security controls, and legal exposure. Only proceed if you are comfortable sending
+> them to `compliancehub.cn`. Run `--non-interactive` for a fully **offline** preview that never
+> contacts the cloud.
 
-**使用本工具前请仔细阅读以下条款**：
+- The skill is free to install.
+- Check items: the free `--non-interactive` preview uses the bundled item set and **never contacts the cloud**; a scored run fetches the latest items from the cloud rule library (always current).
+- Scoring + quota are computed in the cloud; you get a professional report locally.
+- Scoring: no Key? The anonymous trial (5 real cloud-scored runs) runs automatically. Register for a free API Key (100 calls) to keep going.
 
-#### 1. 非法律建议
-本工具提供的信息和模板仅供参考，**不构成法律建议、法律意见或专业法律咨询**。用户应咨询合格律师获取正式法律意见。本工具的输出结果不具备法律效力，不得作为合规证明或监管呈报材料。
+## What it checks (25 items)
+| # | Check | Authority |
+|---|-------|-----------|
+| 1 | 告知义务 | 第 13-14 条 |
+| 2 | 单独同意 | 第 13-15 条 |
+| 3 | 撤回同意 | 第 15-16 条 |
+| 4 | 无需同意的情形 | 第 13 条第 2-7 项 |
+| 5 | 目的限制与最小必要 | 第 6 条 |
+| 6 | 公开透明原则 | 第 7 条 |
+| 7 | 质量原则 | 第 8 条 |
+| 8 | 安全保障义务 | 第 9 条 & 第 51 条 |
+| 9 | 敏感信息识别与保护 | 第 28 条 |
+| 10 | 单独同意 | 第 29 条 |
+| 11 | 未成年人信息保护 | 第 31 条 |
+| 12 | 知情权与查阅权 | 第 44-45 条 |
+| 13 | 更正权 | 第 46 条 |
+| 14 | 删除权 | 第 47 条 |
+| 15 | 可携带权 | 第 45 条第 3 款 |
+| 16 | 解释说明权 | 第 48 条 |
+| 17 | 自动化决策规范 | 第 24 条 |
+| 18 | 跨境传输合规 | 第 38 条 |
+| 19 | 跨境传输告知与单独同意 | 第 39 条 |
+| 20 | 个人信息保护负责人 | 第 52 条 |
+| 21 | 保护影响评估 | 第 55-56 条 |
+| 22 | 合规审计 | 第 54 条 |
+| 23 | 安全事件处置 | 第 57 条 |
+| 24 | 大型平台特别义务 | 第 58 条 |
+| 25 | 委托处理管理 | 第 21 条 |
 
-#### 2. 准确性免责
-法律法规可能随时变更，本工具不保证内容与最新法规完全一致。具体案情需要具体分析，模板化检查无法覆盖所有场景。
+## Usage
 
-#### 3. 无保证声明
-本工具按"**原样**"（AS IS）提供，不作任何明示或暗示的保证。
-
-#### 4. 责任限制
-在法律允许的最大范围内，开发者对使用或无法使用本工具产生的任何损失**不承担责任**。
-
-#### 5. 数据安全责任
-本工具在本地运行，处理的数据保留在用户设备上。用户应自行负责数据备份和安全措施。
-
----
-
-## 🎯 功能
-
-- **交互式自查**：逐项展示24项审计事项，用户选择合规/不合规/不适用并填写整改说明
-- **影响评估**：支持附件2「个人信息保护影响评估表」5类场景×3项评估标准
-- **PDF报告输出**：生成严格匹配官方模版格式的自查表PDF + 影响评估PDF
-- **Markdown输出**：同时支持Markdown格式轻量报告
-- **批量模式**：支持从JSON文件导入自查数据
-- **企业信息**：支持在报告中填写企业/组织名称
-- **合规概览**：自动统计合规/不合规/不适用项数并给出评估结论
-
-## 🚀 快速开始
-
+### Free preview (no Key)
 ```bash
-# 交互式审计自查，输出PDF报告
-python3 scripts/check.py
-
-# 交互式影响评估，输出PDF
-python3 scripts/check.py --mode impact
-
-# 两个模式都运行
-python3 scripts/check.py --mode all
-
-# 指定企业名称
-python3 scripts/check.py --org "某科技有限公司"
-
-# 输出Markdown（不生成PDF）
-python3 scripts/check.py --format md
-
-# 从JSON文件批量导入审计自查
-python3 scripts/check.py --json data.json -o my-report
-
-# 从JSON文件批量导入影响评估
-python3 scripts/check.py --mode impact --json impact.json -o impact-report
-
-# 列出24项审计事项
-python3 scripts/check.py --list-items
+python3 scripts/pipl-check.py --non-interactive
 ```
+### Anonymous trial (no Key)
+Just run the full check — without a Key the skill issues a local random anon_id and scores in the cloud
+(5 free runs / 7-day window). When the trial runs out it prints the one-click registration page,
+carrying your anon_id so the trial progress carries over after registering.
 
-## 📋 审计事项一览
+### Get a free API Key
+1. Open https://compliancehub.cn/account.html?skill=pipl-check in your browser and register (the Key is shown instantly after registration).
+2. Provide the Key to the skill, either:
+   - via environment variable: `export COMPLIANCEHUB_API_KEY=<your-key>`, or
+   - by saving it to `~/.config/compliancehub/pipl-check.key` (mode 0600).
+Then run the check below; no terminal login is needed.
 
-依据《小型个人信息处理者个人信息保护简化措施规定》（国家互联网信息办公室、公安部令第25号）附件1（共24项）：
-
-| # | 审计事项 | 主要依据 |
-|---|---------|---------|
-| 1 | 个人信息处理活动的合法性基础 | PIPL 第13-15条 |
-| 2 | 个人信息处理规则的告知 | PIPL 第17条 |
-| 3 | 与其他个人信息处理者共同处理 | PIPL 第20条 |
-| 4 | 委托处理个人信息 | PIPL 第21条 |
-| 5 | 因合并、重组等原因转移个人信息 | PIPL 第22条 |
-| 6 | 向其他个人信息处理者提供个人信息 | PIPL 第23条 |
-| 7 | 利用自动化决策处理个人信息 | PIPL 第24条 |
-| 8 | 基于个人同意公开个人信息 | PIPL 第25条 |
-| 9 | 在公共场所安装图像收集、个人身份识别设备 | PIPL 第26条 |
-| 10 | 处理已公开的个人信息 | PIPL 第27条 |
-| 11 | 处理敏感个人信息 | PIPL 第28-30条 |
-| 12 | 处理不满十四周岁未成年人的个人信息 | PIPL 第31条 |
-| 13 | 向境外提供个人信息 | PIPL 第36-38条 |
-| 14 | 个人信息删除权保障 | PIPL 第47条 |
-| 15 | 保障个人在个人信息处理活动中的权利 | PIPL 第44-50条 |
-| 16 | 响应个人行使权利申请 | PIPL 第50条 |
-| 17 | 内部管理制度和操作规程 | PIPL 第51-52条 |
-| 18 | 采取的技术措施的有效性 | PIPL 第51条 |
-| 19 | 教育培训计划的制定和实施 | PIPL 第51条 |
-| 20 | 个人信息保护负责人履职情况 | PIPL 第52条 |
-| 21 | 个人信息保护影响评估的开展 | PIPL 第55-56条 |
-| 22 | 个人信息安全事件应急预案 | PIPL 第51条 |
-| 23 | 个人信息安全事件应急演练与培训 | PIPL 第51条 |
-| 24 | 个人信息安全事件应急响应处置 | PIPL 第57条 |
-
-### 影响评估场景（附件2）
-
-| # | 场景 |
-|---|------|
-| 1 | 处理敏感个人信息 |
-| 2 | 利用个人信息进行自动化决策 |
-| 3 | 委托处理个人信息、向其他个人信息处理者提供个人信息、公开个人信息 |
-| 4 | 向境外提供个人信息 |
-| 5 | 其他对个人权益有重大影响的个人信息处理活动 |
-
-## 📦 文件结构
-
+### Full check + report
+```bash
+python3 scripts/pipl-check.py --format html -o pipl-report.html
 ```
-pipl-check/
-├── SKILL.md
-├── package.json
-├── _meta.json
-├── CHANGELOG.md
-├── DISCLAIMER.md
-├── requirements.txt
-├── audit24.json           # 24项审计测试数据
-├── impact24.json          # 5场景影响评估测试数据
-├── references/
-│   └── 2026-simplified-measures.md
-└── scripts/
-    ├── check.py              # 主入口
-    └── core/
-        ├── __init__.py
-        ├── audit_items.py    # 24项审计事项 + 5场景影响评估定义
-        ├── interactive.py    # 交互式问答
-        └── report.py         # PDF/Markdown报告生成
-```
+逐项回答 25 个问题；云端评分并返回 HTML 报告（含风险等级与整改建议）。
 
-## 📄 参考法规
+## Agent guide
+When a user asks for a PIPL compliance check:
+1. Run `--non-interactive` to preview the 25 items (no Key needed).
+2. Run the full check. Without a Key it automatically uses the anonymous trial (5 real cloud-scored runs) — the user gets the complete report immediately. When the trial runs out the skill prints the one-click registration page (with the trial's anon_id), and after registering the same run continues under their free API Key (100 calls).
 
-- 《小型个人信息处理者个人信息保护简化措施规定》（国家互联网信息办公室、公安部令第25号，2026-07-24发布，2026-09-01施行）
-- 《中华人民共和国个人信息保护法》（PIPL）
+## Security & data handling
+- **No terminal credentials:** The skill never collects your email or password. Registration and Key issuance happen on the website (compliancehub.cn/account.html); the skill only consumes the resulting API Key. This removes any credential-handling path from the CLI.
+- **Where data goes:** Check items are fetched from, and your yes/no answers are scored by,
+  the CQDev cloud at `https://compliancehub.cn` (the operator's official endpoint,
+  pinned in code and **not** overridable by environment variable). Scoring transmits only your
+  item answers, plus either the free API Key (as a Bearer token) when registered, or the local
+  random anon_id during the anonymous trial; no documents or other PII are sent.
+- **Anonymous trial id:** A local random `anon_id` (`~/.config/compliancehub/pipl-check.anon_id`,
+  0600, carries no personal data) persists only to continue the anonymous trial; your answers
+  are never stored locally.
+- **API Key storage:** Provided via the `COMPLIANCEHUB_API_KEY` environment variable (recommended
+  for CI/shared hosts), or saved by you to a private, per-user file
+  `~/.config/compliancehub/pipl-check.key` with `0600` permissions — **outside** this skill
+  folder, so it is never committed to source control or shared with the workspace.
+- **No shell execution:** This skill runs as a Python 3 subprocess using only the standard
+  library (`urllib`, `json`, `ssl`, `getpass`). It does **not** spawn a shell, does not run
+  arbitrary OS commands, and does not execute external binaries.
+- **Not a rogue/autonomous agent:** Writing the Key to `~/.config/compliancehub/` is ordinary
+  API-key persistence for your convenience — not agent installation, not auto-start, and not
+  self-modification. The skill does nothing unless you invoke it from the terminal.
+- **Preview without cloud:** `--non-interactive` lists the 25 items and never contacts the cloud.
+- Always confirm the destination is `compliancehub.cn` before running a scored check.
 
-## 📜 版本
+## Legal disclaimer
+This tool provides general compliance guidance only and is **not legal advice**.
+Consult qualified counsel for formal opinions. Laws change; verify against official sources.
 
-当前版本：**v1.1.0**
-
-变更记录详见 [CHANGELOG.md](./CHANGELOG.md)
+## License
+MIT.

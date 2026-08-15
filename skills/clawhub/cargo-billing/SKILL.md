@@ -1,8 +1,8 @@
 ---
 name: cargo-billing
-description: Pull usage metrics, check subscription status, view invoices, and manage credits using the Cargo CLI. Use when the user wants billing analytics, usage reports, credit usage, cost analysis, subscription details, or invoice history for their Cargo workspace.
-version: "1.0.2"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+description: "Understand what Cargo is costing — remaining credits, usage broken down by workflow, connector, or agent, subscription state, and invoice history. Triggers: \"how many credits do I have left\", \"what did that cost\", \"why is my bill so high\", \"am I about to run out\", \"will this fit in our budget\", \"show me my invoices\", \"how much have I spent this month\", \"what plan am I on\", \"what do I get for free\", \"how many free credits\", \"can I afford this run\", \"add a card\", \"update my payment method\", \"why was my card declined\". Needs a token with admin access. Skip when: attributing spend to specific nodes or cutting a play cost — use cargo-diagnostics."
+version: "1.1.0"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -26,11 +26,18 @@ Billing and credit management: pulling usage metrics, checking subscription stat
 > See `references/troubleshooting.md` for common errors and how to fix them.
 > See `references/examples/usage-metrics.md` for usage metric and subscription examples.
 
-## Prerequisites
+## Bootstrap
 
-See [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) for install, login (`--oauth` / `--token`), JSON output conventions, and error shapes. Verify the session with `cargo-ai whoami` before running any of the commands below.
+Already signed in (`cargo-ai whoami` returns a workspace)? Skip to the next section.
 
-**Admin-only:** every command in this skill requires a token with admin access on the workspace. Non-admin tokens return `{"errorMessage":"forbidden"}`.
+```bash
+npm install -g @cargo-ai/cli            # no global install? prefix every command with `npx @cargo-ai/cli`
+cargo-ai login --email you@company.com  # emailed code, no browser; creates the account on first use
+                                        # alternatives: --oauth (browser) · --token <api-token> (CI)
+cargo-ai whoami                         # confirm the active workspace before any write
+```
+
+Every command prints JSON to stdout; failures exit non-zero with `{"errorMessage": "..."}`. Anything that creates a run or a batch is async — pass `--wait-until-finished` or poll the matching `get`. **Admin-only:** every command in this skill requires a token with admin access on the workspace. Non-admin tokens return `{"errorMessage":"forbidden"}`. When the full skill bundle is installed, [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) adds the CLI version pin, token scopes, and the admin-only surface.
 
 ## Discover resources first
 
@@ -51,6 +58,7 @@ cargo-ai billing usage get-metrics --from <YYYY-MM-DD> --to <YYYY-MM-DD>
 cargo-ai billing usage get-metrics --from <YYYY-MM-DD> --to <YYYY-MM-DD> --group-by workflow_uuid
 cargo-ai billing subscription get
 cargo-ai billing subscription get-invoices
+cargo-ai billing subscription update-payment-method --card-number <number> --card-exp <MM/YYYY> --card-cvc <cvc>
 cargo-ai billing subscription create-portal-session
 ```
 
@@ -144,12 +152,62 @@ Available filters: `--workflow-uuid`, `--model-uuid`, `--connector-uuid`, `--int
 cargo-ai billing subscription get                    # current plan, credits used/available, period dates
 cargo-ai billing subscription get-invoices            # invoice history (amounts in cents)
 cargo-ai billing subscription get-credit-card         # card on file
+cargo-ai billing subscription update-payment-method   # add or replace the card (see below)
 cargo-ai billing subscription create-portal-session   # Stripe portal URL for self-service billing
 ```
 
 Remaining credits = `subscriptionAvailableCreditsCount - subscriptionCreditsUsedCount` from `subscription get`.
 
 **Note:** Invoice amounts are returned in cents. Divide by 100 for the dollar value.
+
+### The free tier
+
+A new account starts with **100 free credits and no card on file**. When `subscription get` shows a fresh or near-fresh balance, answer cost questions against that budget rather than as an abstract number — "you've used 12 of your 100 free credits" is the useful answer to "how am I doing?", and it is also the honest one when the user is deciding whether to keep going.
+
+What 100 credits buys, as ballpark anchors (per-action costs in [`../cargo-gtm/references/credits-cost-table.md`](../cargo-gtm/references/credits-cost-table.md)):
+
+| Work | Cost | 100 credits ≈ |
+|---|---|---|
+| Source leads — `salesNavigator.searchLeads` | 0.02/record | ~5,000 leads |
+| Enrich from a LinkedIn URL + verified email — `aiArk.enrichPerson` | 0.1 | ~1,000 people |
+| Verify an email — `waterfall.verifyEmail` | 0.1 | ~1,000 checks |
+| Full contact enrichment — `waterfall.enrichContact` | 2 | ~50 contacts |
+| Find a phone — `FullEnrich.findPhone` | 6 | ~16 numbers |
+
+The [quickstart demo](../cargo-quickstart/SKILL.md) spends about **0.5**. Phone lookups are the fastest way to burn a free tier, so phone is the **guarded lever**: the escalation tier runs 3–7 credits/record, ~10× email, and never belongs in a default chain — it enters a plan only on explicit user request, on qualified leads only. Full spend rules in [`../cargo-gtm/references/cost-discipline.md`](../cargo-gtm/references/cost-discipline.md).
+
+### Adding a card
+
+A workspace holds exactly one card. `update-payment-method` sets it, whether or not one is already on file, and takes the details three ways.
+
+```bash
+# Card details — no browser, nothing to hand off
+cargo-ai billing subscription update-payment-method \
+  --card-number 4242424242424242 --card-exp 12/2030 --card-cvc 123
+
+# Same, but keeps the number out of shell history and the process list
+echo '{"number":"4242424242424242","expMonth":12,"expYear":2030,"cvc":"123"}' \
+  | cargo-ai billing subscription update-payment-method --card-stdin
+
+# No card details — prints a Stripe-hosted form URL and waits for the card to land
+cargo-ai billing subscription update-payment-method
+```
+
+**Prefer `--card-stdin`.** Anything passed as a flag is visible in shell history and to any process that can read the process list. Card details go from your machine straight to Stripe in exchange for a token; they never reach the Cargo API, and no output prints them.
+
+**Never invent card details, and never reuse a number from elsewhere in the conversation.** Ask the user for them, or use the no-argument form and hand them the URL.
+
+The no-argument form is the fallback when you have no details to submit: it prints a URL that opens directly on the card form, then polls until the card changes (`--timeout`, `--poll-interval`, `--no-open`). Relay that URL to the user — it works over SSH and in sandboxes.
+
+Either way the card is verified against the issuer before it becomes the default, so a card that cannot be charged fails here rather than silently at the next renewal.
+
+| Failure | What it means | What to do |
+|---|---|---|
+| `cardDeclined` + `declineCode` | The issuer refused the verification | Read `declineCode`. On a spend-limited virtual card, `insufficient_funds` or a limit code means the budget or merchant restrictions rule us out — ask the cardholder to raise it |
+| `authenticationRequired` | The card wants 3-D Secure, which needs the cardholder present | Re-run with no arguments and hand the user the hosted-form URL |
+| `paymentMethodNotFound` | The details did not resolve to a usable card | Re-check the number and expiry with the user |
+
+Card updates are rate-limited to **10 per hour per workspace** (shared with setup intents). Retrying a declined card burns that budget — fix the cause rather than looping.
 
 ## Help
 

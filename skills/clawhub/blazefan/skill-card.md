@@ -1,40 +1,58 @@
-## Description: <br>
-炽风 guides agents through Linux fan-speed diagnosis and control using sensor checks, safer sysfs paths first, and lower-level EC methods only when needed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+🔥💛 通用 EC 风扇调速方法论。不认品牌，只认接口。探 EC→定方案→控风扇。
 
-## Publisher: <br>
-[fslong520](https://clawhub.ai/user/fslong520) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fslong520](https://clawhub.ai/user/fslong520)
 
-## Use Case: <br>
-Developers and advanced Linux users can use this skill when diagnosing overheating systems and selecting a fan-control approach. It helps them inspect sensor data, identify safer fan interfaces first, and prepare commands or scripts for manual testing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Root-level writes to low-level fan or EC controls can destabilize hardware or create unsafe thermal behavior. <br>
-Mitigation: Use read-only detection and vendor-supported tools first, avoid trial EC writes without device-specific validation and recovery access, and monitor temperatures continuously. <br>
-Risk: Persistent fan overrides or autostarted control loops can preserve unsafe settings after testing. <br>
-Mitigation: Do not enable autostart until the configuration has been safely tested, fan response has been verified, and a recovery path is available. <br>
+## Use Case:
 
+Developers and Linux power users use this skill to diagnose EC-exposed fan-control interfaces and choose a sysfs, EC register, I/O port, nbfc-linux, or Clevo-based fan-control approach for overheated systems. It can also guide creation of a root-run control loop and systemd service after hardware-specific validation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fslong520/skills/blazefan) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Code, Configuration guidance] <br>
-**Output Format:** [Markdown with inline bash and C code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include root-level hardware-control commands that require human review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill can lead users toward persistent root-level hardware-control changes and raw EC writes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read-only diagnostics, sysfs, or vendor-supported tools first; enable EC write support only after verifying the exact hardware registers and having a recovery plan.
+
+Risk: A systemd fan-control loop can continue overriding firmware fan behavior after reboot.
+
+Mitigation: Enable the service only intentionally, verify ec_sys write support after reboot, observe fan and temperature behavior, and disable the service if behavior is unstable.
+
+Risk: Wrong EC registers or competing fan tools can produce misleading or conflicting fan-control behavior.
+
+Mitigation: Use differential register testing and RPM or audible validation, traverse all detected fans, and avoid running multiple fan-control tools at the same time.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fslong520/skills/blazefan)
+- [nbfc-linux documentation](https://github.com/nbfc-linux/nbfc-linux)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, code snippets, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance is hardware-dependent and expects user validation before privileged fan-control changes.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,7 @@
 const http = require('http');
 const https = require('https');
+const net = require('net');
+const tls = require('tls');
 const fs = require('fs');
 const path = require('path');
 
@@ -117,14 +119,87 @@ function stripAuthHeaders(headers) {
     return next;
 }
 
+// --- Proxy support -------------------------------------------------------
+// Node's built-in http/https clients ignore HTTPS_PROXY/HTTP_PROXY/NO_PROXY
+// (unlike curl/git/python-requests). In proxy-only-egress environments
+// (corporate VPN + Clash/Verge system proxy) direct DNS is blocked, so every
+// command fails with ENOTFOUND even though the proxy is reachable. Honor the
+// standard env vars: tunnel HTTPS via CONNECT, proxy plain HTTP via absolute
+// URI. localhost and NO_PROXY hosts stay DIRECT — so the local Sudowork auth
+// proxy (127.0.0.1) is never itself re-proxied.
+
+function shouldBypassProxy(host) {
+    const h = String(host || '').toLowerCase().replace(/^\[|\]$/g, '');
+    if (h === 'localhost' || h === '127.0.0.1' || h === '::1') return true;
+    const noProxy = (process.env.NO_PROXY || process.env.no_proxy || '')
+        .split(',').map(s => s.trim().toLowerCase().replace(/^\[|\]$/g, '')).filter(Boolean);
+    return noProxy.some(entry => entry === '*' || h === entry ||
+        h.endsWith('.' + entry.replace(/^\./, '')) || (entry.startsWith('.') && h.endsWith(entry)));
+}
+
+function resolveProxyUrl(target) {
+    const raw = target.protocol === 'https:'
+        ? (process.env.HTTPS_PROXY || process.env.https_proxy || process.env.HTTP_PROXY || process.env.http_proxy)
+        : (process.env.HTTP_PROXY || process.env.http_proxy);
+    if (!raw || shouldBypassProxy(target.hostname)) return null;
+    try { return new URL(raw); } catch (_) { return null; }
+}
+
+function proxyAuthHeader(proxyUrl) {
+    if (!proxyUrl.username) return null;
+    const creds = decodeURIComponent(proxyUrl.username) + ':' + decodeURIComponent(proxyUrl.password || '');
+    return 'Basic ' + Buffer.from(creds).toString('base64');
+}
+
+// https.Agent that reaches the origin through an HTTP CONNECT tunnel.
+function connectTunnelAgent(proxyUrl) {
+    const auth = proxyAuthHeader(proxyUrl);
+    return new (class extends https.Agent {
+        createConnection(opts, cb) {
+            const host = opts.host || opts.hostname;
+            const port = Number(opts.port) || 443;
+            const sock = net.connect(Number(proxyUrl.port) || 80, proxyUrl.hostname);
+            let settled = false;
+            const fail = (err) => { if (!settled) { settled = true; sock.destroy(); cb(err); } };
+            sock.once('error', fail);
+            sock.once('connect', () => {
+                let line = `CONNECT ${host}:${port} HTTP/1.1\r\nHost: ${host}:${port}\r\n`;
+                if (auth) line += `Proxy-Authorization: ${auth}\r\n`;
+                sock.write(line + '\r\n');
+            });
+            let buf = Buffer.alloc(0);
+            const onData = (chunk) => {
+                buf = Buffer.concat([buf, chunk]);
+                if (buf.indexOf('\r\n\r\n') === -1) return;
+                sock.removeListener('data', onData);
+                const statusLine = buf.slice(0, buf.indexOf('\r\n')).toString();
+                if (!/^HTTP\/\d(?:\.\d)? 200/.test(statusLine)) {
+                    return fail(new Error(`Proxy CONNECT failed: ${statusLine}`));
+                }
+                // Verify the origin cert by default (secure), but don't hardcode
+                // rejectUnauthorized — leaving it to the TLS default lets standard
+                // env vars work: NODE_EXTRA_CA_CERTS for a corporate MITM-proxy CA
+                // (common in these environments), and forward an explicit ca/flag
+                // if the caller set one.
+                const tlsOpts = { socket: sock, servername: host };
+                if (opts.ca) tlsOpts.ca = opts.ca;
+                if (opts.rejectUnauthorized !== undefined) tlsOpts.rejectUnauthorized = opts.rejectUnauthorized;
+                const tlsSock = tls.connect(tlsOpts, () => { settled = true; cb(null, tlsSock); });
+                tlsSock.once('error', fail);
+            };
+            sock.on('data', onData);
+        }
+    })();
+}
+
 function requestBuffer(url, options = {}, body = null, redirectsLeft = MAX_REDIRECTS) {
     return new Promise((resolve, reject) => {
         const target = new URL(url);
-        const client = target.protocol === 'https:' ? https : http;
-        const req = client.request(target, {
-            method: options.method || 'GET',
-            headers: options.headers || {},
-        }, (res) => {
+        const isHttps = target.protocol === 'https:';
+        const client = isHttps ? https : http;
+        const proxyUrl = resolveProxyUrl(target);
+
+        const handleResponse = (res) => {
             // Follow redirects — Node's http client does not auto-follow, so a
             // bare `curl` would succeed where this used to surface the 3xx as an
             // error (e.g. an infra http->https / trailing-slash 301 on a DELETE).
@@ -159,7 +234,28 @@ function requestBuffer(url, options = {}, body = null, redirectsLeft = MAX_REDIR
                 error.responseText = text;
                 reject(error);
             });
-        });
+        };
+
+        const reqOptions = {
+            method: options.method || 'GET',
+            headers: { ...(options.headers || {}) },
+        };
+        let req;
+        if (proxyUrl && !isHttps) {
+            // Plain-HTTP target: ask the proxy for the absolute URL.
+            const auth = proxyAuthHeader(proxyUrl);
+            req = client.request({
+                hostname: proxyUrl.hostname,
+                port: Number(proxyUrl.port) || 80,
+                path: target.href,
+                method: reqOptions.method,
+                headers: { ...reqOptions.headers, host: target.host, ...(auth ? { 'proxy-authorization': auth } : {}) },
+            }, handleResponse);
+        } else {
+            // HTTPS (tunnelled via CONNECT when proxied) or direct.
+            if (proxyUrl) reqOptions.agent = connectTunnelAgent(proxyUrl);
+            req = client.request(target, reqOptions, handleResponse);
+        }
 
         req.on('error', reject);
         if (options.timeoutMs) {
@@ -401,7 +497,42 @@ function printShareOneScriptError(error) {
     console.error(`ERROR:${error.message}`);
 }
 
+// Agent comment-reply lifecycle states — the single skill-side source of truth.
+// The SERVER (`AGENT_REPLY_STATES` in backend/routers/comments.py) is the
+// authoritative validator (422 on an invalid/missing state); this mirror exists
+// so comment_reply.js / comment_resolve.js never hardcode the state strings in
+// more than one place. Keys are the wire values; values are the human hint.
+const AGENT_REPLY_STATES = {
+    'resolved-agree': '同意并已处理 → 评论收敛为 resolved',
+    'open-disagree': '不同意（在 --content 里写清理由），但保持 open，把关闭权交回提出者（AI 不 dismiss）',
+    'open-need-input': '需要人类进一步澄清 → 保持 open',
+};
+
+// Extract the trailing share ref (slug or 16-char share_id) from a full URL, a
+// `/s/<ref>` path, a raw-file `/file/<ref>` path, an API `/api/.../shares/<ref>`
+// path, or a bare ref. Shared by every script that accepts a
+// `<share_link_or_ref>` positional arg.
+function extractShareRef(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return null;
+    try {
+        const parsed = raw.includes('://') ? new URL(raw) : null;
+        const path = parsed ? parsed.pathname : raw.split('?')[0].split('#')[0];
+        const parts = path.split('/').filter(Boolean);
+        if (parts.length === 0) return raw;
+        if (parts[0] === 'file' && parts.length >= 2) return parts[1];
+        if (parts[0] === 'api' && parts.includes('shares')) {
+            const index = parts.indexOf('shares');
+            return parts[index + 1] || raw;
+        }
+        return parts[parts.length - 1] || raw;
+    } catch (_) {
+        return raw;
+    }
+}
+
 module.exports = {
+    AGENT_REPLY_STATES,
     CREDENTIAL_MODE_DIRECT,
     CREDENTIAL_MODE_DIRECT_FALLBACK,
     CREDENTIAL_MODE_SUDOWORK_PROXY,
@@ -412,6 +543,7 @@ module.exports = {
     deleteLocalApiKey,
     deleteSudoworkApiKey,
     detectCredentialMode,
+    extractShareRef,
     getBaseUrl,
     getCredentialPathCandidates,
     getCredentialsPath,

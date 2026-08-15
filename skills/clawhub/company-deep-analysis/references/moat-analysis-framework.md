@@ -20,6 +20,7 @@
 |----------|---------|---------|
 | 消费品 / 品牌 / 零售 | §1 消费品牌护城河 | Aaker《Building Strong Brands》+ Keller《Strategic Brand Management》 |
 | 互联网 / 平台 / 电商 / 社交 / 内容 / 游戏 / SaaS / 工具 | §2 平台与网络效应护城河 | Helmer《7 Powers》+ Thompson《Aggregation Theory》 |
+| 通讯 / 支付 / 交易所 / 系统软件 | §2 平台与网络效应护城河（网络经济 / 转换成本 / 生态绑定子集） | Helmer《7 Powers》+ 网络效应理论 |
 | 制造 / 重资产 / 材料 / 能源 / 汽车零部件 | §3 制造业护城河 | Porter《Competitive Advantage》+ Clark & Fujimoto《Product Development Performance》 |
 | 金融 / 银行 / 保险 / 券商 / 资管 | §4 金融业护城河 | Damodaran《Investment Valuation》+ 巴菲特 1995 致股东信 |
 | 医药 / 生物科技 / 医疗器械 | §5 医药护城河 | Christensen《The Innovator's Prescription》+ 专利组合经典 |

@@ -194,14 +194,16 @@ All browser-based tools (`fetch`, `bulk_fetch`, `stealthy_fetch`, `bulk_stealthy
 Start the server (stdio transport, used by most MCP clients):
 
 ```bash
-scrapling mcp
+scrapling-mcp
 ```
+
+**Note:** The `scrapling-mcp` command was added in v0.4.13 as a shortcut that maps directly to `scrapling mcp`, making it easier to add Scrapling to MCP registries and clients that expect a single command. On older versions, use the `scrapling` command with `mcp` as the first argument instead.
 
 Or with Streamable HTTP transport:
 
 ```bash
-scrapling mcp --http
-scrapling mcp --http --host 127.0.0.1 --port 8000
+scrapling-mcp --http
+scrapling-mcp --http --host 127.0.0.1 --port 8000
 ```
 
 Docker alternative:
@@ -218,7 +220,7 @@ Browser-based tools (`fetch`, `bulk_fetch`, `stealthy_fetch`, `bulk_stealthy_fet
 To configure it once for the whole MCP server, pass the executable path when starting the server:
 
 ```bash
-scrapling mcp --executable-path "/path/to/chromium"
+scrapling-mcp --executable-path "/path/to/chromium"
 ```
 
 In a Claude Desktop configuration, add the option to the server arguments:
@@ -227,9 +229,8 @@ In a Claude Desktop configuration, add the option to the server arguments:
 {
   "mcpServers": {
     "ScraplingServer": {
-      "command": "/Users/<MyUsername>/.venv/bin/scrapling",
+      "command": "/Users/<MyUsername>/.venv/bin/scrapling-mcp",
       "args": [
-        "mcp",
         "--executable-path",
         "/path/to/chromium"
       ]
@@ -240,4 +241,58 @@ In a Claude Desktop configuration, add the option to the server arguments:
 
 You can also set the `SCRAPLING_EXECUTABLE_PATH` environment variable before starting the server. Tool calls can still pass `executable_path` directly when a single request or session needs a different browser executable. The `scrapling extract fetch` and `scrapling extract stealthy-fetch` CLI commands support the same `--executable-path` option and environment variable fallback.
 
-The MCP server name when registering with a client is `ScraplingServer`. The command is the path to the `scrapling` binary and the argument is `mcp`.
+The MCP server name when registering with a client is `ScraplingServer`. The command is the path to the `scrapling-mcp` binary with no arguments (or the `scrapling` binary with `mcp` as the argument on versions before 0.4.13).
+
+## Connecting to remote browsers
+
+`open_session` doesn't have to launch a browser locally. Pass a `cdp_url` and it connects to an already-running browser through the Chrome DevTools Protocol, whether that browser is on the same machine, another host, or a managed browser provider. Both session types (`dynamic` and `stealthy`) accept it, and the `session_id` you get back is used with the fetch and screenshot tools as usual.
+
+The URL can be a WebSocket endpoint (`ws://`/`wss://`), which is what managed browser providers hand out, or the HTTP endpoint of a browser started with `--remote-debugging-port=9222`, reached as `cdp_url="http://localhost:9222"`.
+
+**Notes:**
+
+- The browser is already running, so options that only apply while launching one are ignored for CDP sessions: `headless`, `real_chrome`, and `executable_path` (including the server-wide default).
+- Everything else still applies (`locale`, `useragent`, `proxy`, `cookies`, `timezone_id`, and so on), as each session creates its own browser context on the remote browser.
+
+## Authentication
+
+The stdio transport is only reachable by the program that started it, but with Streamable HTTP anyone who can reach the port can call every tool, including fetching any URL from the machine running the server. If the server listens on anything other than localhost, give it a token:
+
+```bash
+scrapling-mcp --http --auth-token "$(openssl rand -hex 32)"
+```
+
+Clients then have to send that token in an `Authorization` header, and any request without it is rejected with a `401`:
+
+```json
+{
+  "mcpServers": {
+    "ScraplingServer": {
+      "url": "https://your-server.example.com/mcp",
+      "headers": {
+        "Authorization": "Bearer <your-token>"
+      }
+    }
+  }
+}
+```
+
+Passing the token on the command line leaves it in the shell history and the process list, so prefer the `SCRAPLING_MCP_AUTH_TOKEN` environment variable:
+
+```bash
+export SCRAPLING_MCP_AUTH_TOKEN="<your-token>"
+scrapling-mcp --http
+```
+
+When the server listens on a public address, also tell it which host names to accept, which turns on protection against DNS-rebinding attacks. The option can be repeated:
+
+```bash
+scrapling-mcp --http --allowed-host 'your-server.example.com:8000'
+```
+
+**Notes:**
+
+- Authentication applies to the Streamable HTTP transport only. It's ignored with stdio, and the server logs a warning to say so.
+- Plain HTTP sends the token in cleartext, so put the server behind a reverse proxy that terminates TLS before exposing it to the internet.
+- This is a single shared key, not per-client credentials, so every client uses the same token and rotating it means restarting the server.
+- Starting with `--http` and no token still works for local use, but logs a warning that it's unauthenticated.

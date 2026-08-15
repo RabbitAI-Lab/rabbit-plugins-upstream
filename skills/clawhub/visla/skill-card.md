@@ -1,43 +1,59 @@
-## Description: <br>
-Creates AI-generated videos from text scripts, URLs, PPT/PDF documents, ideas, visual resources, or speech using Visla, and supports account credit, avatar, and voice checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates AI-generated videos from text scripts, URLs, PPT/PDF documents, or AI-generated visuals (AIGC) using Visla.
 
-## Publisher: <br>
-[visla-admin](https://clawhub.ai/user/visla-admin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[visla-admin](https://clawhub.ai/user/visla-admin)
 
-## Use Case: <br>
-External users and developers use this skill to generate Visla videos from scripts, URLs, documents, ideas, images, video, or speech, and to check Visla account credits, avatars, and voices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends selected scripts, URLs, documents, images, videos, or audio to Visla for processing. <br>
-Mitigation: Use it only with content approved for Visla processing and avoid confidential or regulated files unless policy allows it. <br>
-Risk: The skill requires Visla API credentials and can read saved credentials after user approval. <br>
-Mitigation: Use a dedicated Visla API key when possible, never echo secrets in normal chat output, and approve saved-credential access only when expected. <br>
-Risk: Video generation can take several minutes and may time out before completion. <br>
-Mitigation: Run with a timeout of at least 30 minutes when possible and use the returned project UUID to continue checking status if a timeout occurs. <br>
+## Use Case:
 
+Developers, creators, and operators use this skill to ask an agent to create Visla videos from scripts, URLs, documents, media, speech, ideas, or AIGC storyboard and motion-video workflows. It also supports account, avatar, voice, style, and project-status checks needed to configure and monitor video creation.
 
-## Reference(s): <br>
-- [Visla API Key and Secret](https://www.visla.us/visla-api) <br>
-- [ClawHub skill page](https://clawhub.ai/visla-admin/skills/visla) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown status updates, command invocations, JSON configuration examples, and video download links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses Visla API credentials and may upload user-selected scripts, URLs, documents, images, videos, or audio to Visla for processing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: Selected scripts, URLs, documents, images, audio, and video files are sent to Visla for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for content that may be processed under the user's Visla account terms, and avoid uploading confidential material unless those terms and internal policies allow it.
+
+Risk: The skill requires Visla API credentials and can optionally read saved credentials from ~/.config/visla/.credentials.
+
+Mitigation: Use dedicated Visla API credentials, avoid exposing secrets in responses, and deny saved-credential access when credentials should be supplied only through environment variables, CLI arguments, or direct input.
+
+Risk: Local file inputs can include documents or media with sensitive content.
+
+Mitigation: Process only files explicitly selected by the user; the artifact documents path traversal, system-directory, extension, and format checks before file reads or uploads.
+
+## Reference(s):
+
+- [Visla API](https://www.visla.us/visla-api)
+- [ClawHub skill page](https://clawhub.ai/visla-admin/skills/visla)
+- [ClawHub publisher profile](https://clawhub.ai/user/visla-admin)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Text]
+
+**Output Format:** [Markdown with CLI commands, progress updates, project identifiers, status summaries, and download links when Visla returns them.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses VISLA_API_KEY and VISLA_API_SECRET credentials; video generation may run for several minutes and AIGC workflows can take longer.]
+
+## Skill Version(s):
+
+2.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

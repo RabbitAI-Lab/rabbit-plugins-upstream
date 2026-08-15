@@ -65,7 +65,7 @@ name: 'idea2video'
 description: 'One-click pipeline that turns a single idea into a complete video-production plan: produces a plan template for the user to review/adjust, then expands it into canvas shapes and applies them via drawToCanvas.'
 ---
 
-# Idea → Video Generation Plan
+# 创意转视频 Idea to Video
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

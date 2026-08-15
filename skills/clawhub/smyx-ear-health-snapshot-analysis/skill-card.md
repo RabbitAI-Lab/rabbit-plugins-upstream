@@ -1,45 +1,54 @@
-## Description: <br>
-Analyzes pet ear, head-shaking, or scratching media to produce visual ear-health observations, abnormality alerts, suggested owner or veterinary follow-up, and cloud report links without providing a medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet ear images or videos to identify visible ear-canal redness, discharge, earwax buildup, and related abnormality alerts without providing a medical diagnosis.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External pet owners, boarding centers, and pet-hospital intake teams use this skill to submit pet ear videos, images, local files, or URLs for structured visual observations of redness, discharge, earwax accumulation, and related risk prompts. The output is for health reference and pre-screening, not diagnosis or treatment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet media, URLs, and report queries are sent to the LifeEmergence/SMYX cloud service. <br>
-Mitigation: Use the skill only with media and URLs that are acceptable to process through that third-party service. <br>
-Risk: The skill can create or reuse a workspace identity and persist local identity or token data. <br>
-Mitigation: Use a dedicated workspace or account when possible, and review or remove smyx-api-key.txt and smyx-common-claw.db if identity reuse is not desired. <br>
-Risk: The output is visual health reference material and may be mistaken for veterinary diagnosis. <br>
-Mitigation: Treat findings as pre-screening observations and seek a veterinarian for medical diagnosis or treatment decisions. <br>
+## Use Case:
 
+External pet owners, boarding centers, and veterinary pre-screening teams use this skill to turn pet ear media into structured visual observations, risk prompts, recommendations, and report links. It can also retrieve cloud-hosted history for prior ear-health analysis reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-ear-health-snapshot-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown-style text containing structured JSON analysis, status messages, report-list output, and report export links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the returned analysis text to a user-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+Risk: Pet media or video URLs are sent to lifeemergence.com services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media appropriate for remote processing, disclose the external service dependency, and avoid submitting sensitive or unrelated recordings.
+
+Risk: The skill can create or reuse backend identity, store backend tokens locally, and retrieve cloud history without explicit per-use confirmation.
+
+Mitigation: Review authentication and retention behavior before installation, clear local workspace credentials when no longer needed, and prefer versions that expose identity, deletion, and history lookup controls.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON/plain text reports emitted by shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include structured observations, abnormality alerts, recommendations, report links, and optional saved output files.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata; artifact frontmatter lists 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

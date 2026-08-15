@@ -142,7 +142,8 @@ SMART MONEY  (wrapped in {isPreview, previewReason, data}; free key returns a pr
   GET /api/v1/analyst/{T}/actions?lookbackDays=N          Recent rating changes for one ticker.
   GET /api/v1/analyst/{T}/estimates                       EPS band at data.estimates[0].{estimateLow/Mean/High,
                                                           numberOfAnalysts} + data.surprises[]; no revenue.
-  GET /api/v1/analyst/activity?lookbackDays=N             Market-wide actions (filter actionType client-side).
+  GET /api/v1/analyst/activity?lookbackDays=N             Market-wide actions; add &actionTypes=UPGRADE,DOWNGRADE,INITIATE
+                                                          for real rating changes (~83% of raw rows are REITERATE).
 
 AI INSIGHTS  (wrapped; batch, carry generatedAt)
   GET /api/v1/insights/stock/{T}         Per-stock signals ranked by importance; data[0].insightText is the headline. Free preview top 3.
@@ -157,7 +158,7 @@ NEWS & STORIES
   GET /api/v1/documents/stories/{id}                Story detail (PublicStoryDetailDto; aspectPerspectives[], bullishView/bearishView).
   GET /api/v1/documents/search?query=...            Topical document search.
 
-SUPPORTING  (price, prices, chart are real-time; profile, popular, calendar, market-summary are reference or batch)
+SUPPORTING  (price, prices, chart are 15-minute delayed; profile, popular, calendar, market-summary are reference or batch)
   GET /api/v1/stocks/price?ticker={T}                       Flat (no wrapper): currentPrice, changePercent at root.
   GET /api/v1/stocks/prices?tickers=A,B,C                   Batch quotes.
   GET /api/v1/stocks/{T}/profile                            name, sector, industry (flat at root; no profile key).
@@ -198,7 +199,7 @@ Find tickers where insider buying, congressional purchases, and analyst upgrades
 
 1. `GET /api/v1/insider/cluster-buys?lookbackDays=7`.
 2. `GET /api/v1/politicians/activity?lookbackDays=7`, keeping rows with `transactionType == "PURCHASE"`.
-3. `GET /api/v1/analyst/activity?lookbackDays=7`, filtering client-side to `actionType == "UPGRADE"` (there is no server-side type filter).
+3. `GET /api/v1/analyst/activity?lookbackDays=7&actionTypes=UPGRADE` (server-side filter; also accepts a CSV like `UPGRADE,DOWNGRADE,INITIATE`).
 
 All three are wrapped: read `.data`. Intersect the three ticker lists and report names appearing in two or more buckets, ranked by total signal count, with a one-liner each: "$NVDA: 4 insiders bought, 1 congressional purchase, 2 analyst upgrades (7d)." If a 7-day bucket returns an empty array (common on quiet weeks; `isPreview:false`, disclosure lag, not an error), widen that specific call to `lookbackDays=30` and note the wider window rather than showing a blank result. For one ticker's full flow, run `insider/trades/{T}`, `politicians/filings/{T}`, `institutional/quarters` then `institutional/holders/{T}?reportDate={Q}`, and `analyst/{T}/actions`. Present as observed positioning, never as advice.
 
@@ -223,11 +224,11 @@ Surface names where perception and price disagree; a bullish gap (price down, se
 2. For each candidate, in parallel: `GET /api/v1/stocks/chart?ticker={T}&timeframe=1M` (a bare array of intraday bars; filter to `timestamp >= now-7d` and compare the first versus last bar for the 7-day move) and `GET /api/v2/metrics/entity/{T}/metric/sentiment` (server default 7-day window; measure the trend across the returned series).
 3. Rank by the absolute gap between the price move and the sentiment move; report the top few in each direction.
 
-Frame the result as an observed divergence, not a signal to act: "Bullish divergence: $TSLA price -8% while sentiment +0.11 over 7d. Bearish divergence: $COIN price +14% while sentiment -0.09." Keep the real-time price and the batch sentiment labeled with their own freshness; do not blend them into one implied "now."
+Frame the result as an observed divergence, not a signal to act: "Bullish divergence: $TSLA price -8% while sentiment +0.11 over 7d. Bearish divergence: $COIN price +14% while sentiment -0.09." Keep the delayed price and the batch sentiment labeled with their own freshness; do not blend them into one implied "now."
 
 ## Pitfalls
 
-- **Batch, not real time.** Sentiment, the SentiSense Score, mentions, share of voice, news clustering, and AI insights are batch metrics computed on a schedule; only quote, price, and chart points are real time. State a batch value with its `generatedAt` age and never label it "real time."
+- **Nothing here is real time.** Sentiment, the SentiSense Score, mentions, share of voice, news clustering, and AI insights are batch metrics computed on a schedule; quote, price, and chart points are the fresher class but carry a 15-minute delay. State a batch value with its `generatedAt` age, annotate price with `priceAsOf` where present, and never label either "real time."
 - **Empty smart-money windows are normal.** The 7-day insider and congressional feeds often return empty arrays on quiet weeks (disclosure lag, `isPreview:false`, not an error). Widen that specific call to `lookbackDays=30` and note the wider window rather than showing a blank result.
 - **Preview gating is data, not failure.** On the free tier, preview-gated endpoints return `isPreview:true` with a real truncated slice (for example the top 3 insights, the current earnings week, a sliced holder list). Render the slice as the answer and tag it `(preview)`. Mention PRO only when the truncation is materially limiting the answer.
 - **Wrap versus flat differs by endpoint.** Reading `.data` on a flat endpoint (or the reverse) yields nothing. Flat: `stocks/price`, `stocks/prices`, `stocks/chart`, `stocks/popular`, `stocks/{T}/profile`, `market-mood`, the `sentiment`, `sentisense`, `mentions`, and `social_dominance` series, and `institutional/quarters`. Wrapped under `.data`: `insider/*`, `politicians/*`, `institutional/holders`, `analyst/*`, `insights/*`, and `calendar/earnings`. When unsure, accept both.
@@ -248,7 +249,7 @@ Confirm the skill is wired correctly before trusting a synthesis:
 4. **Envelope check.** Confirm `institutional/quarters` parses as a bare array and `insider/cluster-buys?lookbackDays=30` parses as `{ isPreview, data }` with `data` an array (an empty array on a quiet window is a valid result, not a failure).
 5. **Freshness is surfaced.** Any batch value presented to the user carries its `generatedAt`; if a synthesis omits the age on a sentiment or insight figure, or describes a batch surface as real time, it is not verified.
 
-A run passes when every quoted number traces to a `200` response read this turn, batch and real-time surfaces are labeled distinctly, and the output reads as educational context rather than a recommendation.
+A run passes when every quoted number traces to a `200` response read this turn, batch and delayed-price surfaces are labeled distinctly with their own ages, and the output reads as educational context rather than a recommendation.
 
 ---
 

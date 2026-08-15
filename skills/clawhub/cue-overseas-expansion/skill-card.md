@@ -1,45 +1,60 @@
-## Description: <br>
-Run Cue deep research for the Overseas Expansion Leads scenario, cross-referencing public sources and returning conclusions with source links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用 Cue 跑「出海企业线索」场景的深度研究：锁定指定区域内有 ODI 备案、实际出海动作的跨境企业，按开户、结算、发债、并购等需求精准匹配商机，覆盖跨境制裁与海外执法筛查、跨境法规调研、出海企业资质尽调底稿、出海企业跨境业务线索、目的地国营商准入扫描等核心场景，产出可回查、可派单的出海商机清单与合规底稿。
 
-## Publisher: <br>
-[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu)
 
-## Use Case: <br>
-Developers, analysts, and business teams use this skill to run Cue-based research for overseas expansion leads, sanctions screening, export-control checks, regulatory disclosure review, and related due diligence. It helps produce source-linked research reports from public data, while requiring user confirmation before credit-consuming runs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may fetch or update live runner code under ~/.cue and run it with access to the user's Cue account key. <br>
-Mitigation: Review the runner repository before first use, prefer a pinned and reviewed runner version, and avoid installing if this local account access is not acceptable. <br>
-Risk: Deep research runs can consume Cue account credits. <br>
-Mitigation: Require explicit user confirmation before each credit-spending run and clearly identify the selected research module and subject. <br>
-Risk: Research results cover public data and may be incomplete or unsuitable as a substitute for legal, insurance, or formal due-diligence review. <br>
-Mitigation: Keep source links attached, do not fabricate missing results, and route high-stakes decisions through qualified review. <br>
+## Use Case:
 
+Business development, compliance, diligence, and cross-border operations teams use this skill to run Cue public-data research for overseas expansion lead discovery, sanctions and enforcement screening, regulatory research, qualification diligence, and market-entry checks. The expected result is a source-linked research report or lead list that can be reviewed and assigned for follow-up.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wangxiaoxu/skills/cue-overseas-expansion) <br>
-- [Cue playbook API](https://cuecue.cn/api/playbook) <br>
-- [Cue runner repository](https://github.com/sensedeal/cue-skills) <br>
-- [Cue runner mirror](https://gitee.com/sensedeal/cue-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and source-linked research report text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May initiate Cue research runs that consume account credits after explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The workflow can clone or update an external Cue runner before executing research.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the Cue runner source and repository provenance before installation or execution in controlled environments.
+
+Risk: The workflow can use local Cue account credentials, make network requests, and spend Cue credits.
+
+Mitigation: Confirm account context and credit spend with the user before running research, and avoid executing it without explicit approval.
+
+Risk: Research outputs are based on public data and may not be sufficient for legal, diligence, underwriting, or compliance decisions.
+
+Mitigation: Preserve source links, review the report before use, and route high-impact decisions to qualified reviewers.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wangxiaoxu/skills/cue-overseas-expansion)
+- [Cue playbook API](https://cuecue.cn/api/playbook)
+- [Cue skills repository](https://github.com/sensedeal/cue-skills)
+- [Cue skills mirror](https://gitee.com/sensedeal/cue-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown report with source links and inline shell commands when setup or execution guidance is needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Cue templates, requires user confirmation before spending credits, and should preserve source links in returned reports.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

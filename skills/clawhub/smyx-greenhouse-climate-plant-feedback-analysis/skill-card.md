@@ -1,44 +1,60 @@
-## Description: <br>
-Analyzes smart greenhouse plant imagery with optional environmental sensor context to produce plant stress findings and prioritized climate-control actions such as irrigation, shading, fan, wet-curtain, and heating commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes smart greenhouse plant imagery with environmental sensor context to produce structured climate-control recommendations for irrigation, shading, ventilation, cooling, and heating.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Greenhouse operators and agricultural engineers use this skill to submit plant images, videos, or URLs and receive structured plant-state analysis, prioritized climate-control actions, resource-use suggestions, and cloud history report links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Greenhouse images, videos, URLs, and analysis requests may be sent to an external lifeemergence cloud service. <br>
-Mitigation: Use only media and URLs approved for external processing, and avoid private camera footage or sensitive operational data unless the publisher documents retention and handling practices. <br>
-Risk: Reports are tied to an automatically managed identity and can be queried from cloud history. <br>
-Mitigation: Confirm how identity creation, token storage, and report history are managed before installation, and restrict use to environments where this linkage is acceptable. <br>
-Risk: The output proposes greenhouse control actions that may be unsuitable for local equipment or crop conditions. <br>
-Mitigation: Treat recommendations as decision support and require local controller safeguards or human review before executing irrigation, shading, ventilation, wet-curtain, or heating actions. <br>
+## Use Case:
 
+Greenhouse operators, agritech developers, and facilities teams use this skill to analyze plant images or videos, optionally with environmental sensor context, and receive structured plant-stress assessments, prioritized control recommendations, and report links.
 
-## Reference(s): <br>
-- [Greenhouse API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-greenhouse-climate-plant-feedback-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with command examples and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report links and prioritized greenhouse control actions; does not provide PID values or valve-opening percentages.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence; artifact frontmatter says 1.0.5) <br>
+Risk: Greenhouse media, URLs, identity metadata, and report-history queries are sent to configured remote services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run the skill only in environments where those data transfers are approved, and restrict inputs to media and URLs suitable for the configured backend service.
+
+Risk: The skill can create or reuse a backend identity and store authentication tokens in a workspace SQLite database.
+
+Mitigation: Use an isolated workspace, protect the workspace data directory, and remove or rotate stored identity data and tokens when the skill is no longer needed.
+
+Risk: Generated control recommendations could cause operational harm if connected directly to irrigation, shading, ventilation, cooling, or heating equipment.
+
+Mitigation: Keep recommendations advisory unless an operator-approved local safety controller, bounded limits, validation checks, and emergency override are in place.
+
+## Reference(s):
+
+- [Greenhouse Climate Plant Feedback Analysis API documentation](artifact/references/api_doc.md)
+- [SMYX analysis API error reference](artifact/skills/smyx_analysis/references/api_doc.md)
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-greenhouse-climate-plant-feedback-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-like structured text with report links and optional file output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local media paths, media URLs, detail-level selection, and cloud report-history listing.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter says 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
