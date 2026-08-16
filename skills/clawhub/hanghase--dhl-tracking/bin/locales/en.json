@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "name": "English",
+    "code": "en",
+    "fallback": "en"
+  },
+  "setup.welcome": "DHL Tracking setup (first run)",
+  "setup.no_interactive_title": "NOTE: No interactive shell detected (OpenClaw exec wrapper).",
+  "setup.no_interactive_body": "Setup will be initialized with defaults:",
+  "setup.defaults_notifyOn": "  notifyOn = silent (no auto-refresh; you run refresh manually)",
+  "setup.rehint": "You can change this any time via:",
+  "setup.rehint_cmd": "  dhl-track.ps1 setup",
+  "setup.question_notify": "How would you like to be notified when a shipment status changes?",
+  "setup.notify_opt_1": "  1 = on every user message (live)",
+  "setup.notify_opt_2": "  2 = in the daily Telegram digest (21:00)",
+  "setup.notify_opt_3": "  3 = via heartbeat cron (3-4x/day, silent until real change)",
+  "setup.notify_opt_4": "  4 = silent (no ping, data only in store.json)",
+  "setup.prompt_notify": "Choice (1/2/3/4)",
+
+  "add.already_present": "Shipment {0} is already in the list.",
+  "add.no_plz": "ZIP missing. For national shipments the ZIP is required (DHL returns 406 otherwise).",
+  "add.no_plz_hint": "International shipment? Then use --international.",
+  "add.querying": "Querying DHL for {0}...",
+  "add.no_data": "No data received from DHL. Wrong number or ZIP mismatch?",
+  "add.added_line1": "Added: {0} | {1} | {2}",
+  "add.added_progress": "  Progress: {0}/{1} | Last status: {2}",
+  "add.added_preferred": "  Preferred delivery day: {0} (window {1} to {2})",
+
+  "refresh.empty": "No shipments in the list.",
+  "refresh.summary": "Checked: {0} shipment(s), {1} change(s)",
+  "refresh.separator": "---",
+  "refresh.change_title": "CHANGE: {0} | {1}",
+  "refresh.change_old": "  old:    {0}",
+  "refresh.change_new": "  new:    {0} ({1})",
+
+  "show.empty": "No shipments in the list.",
+  "show.separator": "---",
+  "show.header": "{0} | {1}",
+  "show.recipient": "  Recipient: {0}, {1}",
+  "show.status": "  Status:  {0} ({1})",
+  "show.progress": "  Progress: {0}/{1}",
+  "show.last_checked": "  Last checked: {0}",
+  "show.intl_tag": "  [international]",
+
+  "remove.empty": "List empty.",
+  "remove.done": "{0} -> {1} shipment(s)",
+
+  "errors.dhl_error": "DHL ERROR ({0}): {1}"
+}

@@ -1,13 +1,15 @@
 ---
 name: linggen
 description: >-
-  Linggen — durable cross-host memory plus browser control over one
-  local MCP server. Memory: three-tier model (core + long-term +
+  Linggen — durable cross-host memory plus browser control, over two
+  local MCP servers: `ling-mem` for memory, the Linggen engine for
+  browser, X and agents. Memory: three-tier model (core + long-term +
   episodic staging) of who the user is, not a log of what was done;
   same `ling-mem` daemon and store in Claude Code, Codex, and
-  OpenClaw. Browser: agent control of the user's own Chrome with
-  per-site permission prompts, and logged-in X session reads.
-license: Apache-2.0
+  OpenClaw, and reachable over the LAN from a second machine
+  (`/linggen:config`). Browser: agent control of the user's own Chrome
+  with per-site permission prompts, and logged-in X session reads.
+license: MIT-0
 homepage: https://linggen.dev
 allowed-tools:
   - Read
@@ -59,24 +61,27 @@ on Claude Code, `${PLUGIN_ROOT}/skills/linggen/` on Codex.
 
 ## First use — ensure the Linggen binaries are installed
 
-This skill has two required binaries: **`ling-mem`** (the memory CLI and
-daemon — every memory op shells out to it) and **`ling`** (the Linggen
-engine — serves the `linggen` MCP tools on `127.0.0.1:9898`: `memory_*`,
-`browser_*`, `x_*`, `agent_run`). The Claude Code / Codex plugin's
+This skill has two required binaries: **`ling-mem`** (the memory daemon —
+serves `memory_*` on `127.0.0.1:9528/mcp`, and the CLI every Bash-only
+channel shells out to) and **`ling`** (the Linggen engine — serves
+`browser_*`, `x_*`, `agent_run` and the dream tools on
+`127.0.0.1:9527/mcp`). Each tool is served in exactly one place: the
+engine does not proxy memory. The Claude Code / Codex plugin's
 session-start hook installs both automatically (the engine in the
-background, disclosed in the session context). On channels without hooks
+background, disclosed in the session context) — unless `~/.linggen/client.json`
+points off-machine, in which case this host is a *client* of another machine's
+Linggen and installs nothing. `/linggen:config` is how that is set. On channels without hooks
 (skills.sh, ClawHub, manual), **you install them — run these checks
 before your first op; each is a no-op when already satisfied:**
 
 ```bash
-command -v ling-mem >/dev/null 2>&1 || \
-  bash <(curl -fsSL https://raw.githubusercontent.com/linggen/linggen-memory/main/plugins/linggen/scripts/install-bin.sh) --version '^1'
+bash scripts/bootstrap.sh
 ```
 
-```bash
-command -v ling >/dev/null 2>&1 || [ -x "$HOME/.local/bin/ling" ] || \
-  { curl -fsSL https://linggen.dev/install.sh | bash; }
-```
+(Resolve the path relative to this skill's directory, as above. The script
+checks for both binaries and is a fast no-op when they're present; it also
+labels the install's distribution channel from its own on-disk location —
+a local marker file only, nothing phones home.)
 
 Run them yourself — don't ask first, but **tell the user what's
 happening** when the engine install actually runs (one line: one-time,
@@ -102,10 +107,12 @@ change when you switch agents.
 | Add    | `ling-mem add "..." --type <t> --from <user\|agent\|derived> [--context ...] [--tag ...] [--source-session <id>]` — pass the host session id on live captures so a later `scan` of the day skips sessions that already contributed |
 | Update | `ling-mem edit <id> [--content ...] [--context ...] [--tag ...]` (or the back-compat alias `ling-mem update <id> ...`) |
 | Delete | `ling-mem delete <id> --yes` |
-| Days   | `ling-mem days [--pending]` — per-day dream state (pending / remembered / forgotten); `--pending` = the dream worklist, oldest first |
+| Days   | `ling-mem days [--undreamed]` — per-day verb flags (scanned / dreamed) + `first_unscanned` / `first_undreamed`; `--undreamed` = the dream worklist, oldest first |
 | Stamp  | `ling-mem remember-day <date> --judged N --promoted K` — mark a day judged after a remember pass |
 | Sweep  | `ling-mem sweep [--dry-run]` — the forget stage: evict judged episodic rows past TTL; never touches un-judged rows |
 | Chains | `ling-mem chains [--kind cited\|marker] [--derived-only] [--limit N] [--offset N]` — condense scan: stale same-subject chains in long-term memory (read-only; judgment is yours) |
+| Issues | `ling-mem issues [--status open\|all]` — the review queue: items a dream audit could not solve with confidence (facts only; you are the solver — see the Solve mode) |
+| Close issue | `ling-mem issue-resolve <id> [--outcome resolved\|dismissed] [--note "..."]` — close one review item after solving it |
 
 **Anchor relative time in every saved row** — substitute today's date in before writing (e.g. if today is 2026-07-07: "turned 3 last month" → "turned 3 in 2026-06, as of 2026-07-07"); relative words rot silently.
 
@@ -287,9 +294,10 @@ mode's references.
 
 | Mode | Detection cue (look at the first user message) | What to load |
 |:---|:---|:---|
-| **Dream** | Message says `/linggen dream` (all pending days) or `/linggen dream <YYYY-MM-DD>` (one day). User-triggered — or wired to the host's own scheduler for a nightly pass. | `Read references/dream-flow.md` (the canonical remember/forget runbook) and `references/routing-rules.md`. |
+| **Dream** | Message says `/linggen dream` (all undreamed days) or `/linggen dream <YYYY-MM-DD>` (one day). User-triggered — or wired to the host's own scheduler for a nightly pass. | `Read references/dream-flow.md` (the canonical remember/forget runbook) and `references/routing-rules.md`. |
 | **Scan** | Message says `/linggen scan <YYYY-MM-DD>` — stage that day's session logs (backfill), see the verb table. | `Read references/dream-flow.md` (its Scan section) and `references/extractor-prompt.md` (what to stage). |
-| **Condense** | Message says `/linggen condense` — collapse stale chains in long-term memory. | `Read references/condense-flow.md` (the canonical condense runbook). |
+| **Solve** | Message says `/linggen solve` — drain the review queue (items a dream audit queued for the user). | The Solve runbook below; `references/routing-rules.md` for write decisions. |
+| **Status** | Message says `/linggen status` — one glanceable block: versions + updates, store size, upkeep. | Nothing extra: the host command carries the full recipe (fetches + render); its data = `memory_dream_status` + `ling-mem status`/`stats` + engine/bridge probes. |
 | **Chat** | **Anything else** — bare `/linggen`, `/linggen list`, `/linggen search foo`, plain `"show all memory"`, free-form questions. | Body of this SKILL.md is the entry. `Read references/routing-rules.md` only when making save / dedup decisions. |
 
 **Chat mode is the default.** When in doubt, you are in chat mode.
@@ -305,15 +313,46 @@ first.
 
 | Verb | Action |
 |:---|:---|
-| `dream` | **Remember all pending days, oldest first, then sweep.** Worklist via `ling-mem days --pending`; per day: list its episodic rows → cluster → promote durable signal to semantic → `ling-mem remember-day` stamp. Never deletes; the final `ling-mem sweep` ages out judged rows past TTL. See `references/dream-flow.md`. |
+| `dream` | **Remember all undreamed days, oldest first, then sweep.** Worklist via `ling-mem days --undreamed`; per day: list its episodic rows → cluster → promote durable signal to semantic → `ling-mem remember-day` stamp. Never deletes; the final `ling-mem sweep` ages out judged rows past TTL. See `references/dream-flow.md`. |
 | `dream <YYYY-MM-DD>` | **Remember one day.** Same procedure, one day. |
-| `scan <YYYY-MM-DD>` | **Stage one day's session logs (backfill).** Run `scripts/scan.sh <date>`; `list --day <date>` the day's existing rows and skip any scanned session whose id is already among their `source_session`s (that's what makes re-scanning safe); encode the remaining keepers into episodic with the day's `occurred_at`; stamp with `ling-mem harvest-day <date>` (scan stamp only — the day goes pending and dream judges it later). Nothing new: still stamp, report `CLEAN`. |
+| `scan <YYYY-MM-DD>` | **Stage one day's session logs (backfill).** Run `scripts/scan.sh <date>`; `list --day <date>` the day's existing rows and skip any scanned session whose id is already among their `source_session`s (that's what makes re-scanning safe); encode the remaining keepers into episodic with the day's `occurred_at`; stamp with `ling-mem harvest-day <date>` (scan stamp only — the day stays undreamed and dream judges it later). Nothing new: still stamp, report `CLEAN`. |
 | `add "<content>" [--type ...] [--tier core] [--context ...]` | Insert a new memory row. Defaults to `--tier semantic`. |
 | `search "<query>" [--limit N] [--context ...]` | Semantic search across `semantic` + `episodic`. |
 | `list [--type ...] [--tier ...] [--limit N]` | Paginated listing. |
 | `delete <id>` | Remove a specific row by id. |
 | `update <id> --content "<new>"` | Edit a row in-place (content / contexts / tags). |
-| `condense` | **Collapse stale same-subject chains in long-term memory** — stage 4, the only pass over semantic-at-rest. Scan via `ling-mem chains --derived-only` (cited = pre-confirmed id-citation chains; `--kind marker` = provisional-state candidates to confirm); collapse each into one current-truth row (add the survivor first, then delete members). Back up first (`ling-mem export`), supervise early runs. See `references/condense-flow.md`. |
+| `solve` | **Drain the review queue** — see the Solve runbook below. |
+| `status` | **Glanceable install status** — binary versions + cached update probes, store size (`ling-mem stats`), and upkeep: `scanned_days`/`dreamed_days`/`total_days` counts, `first_unscanned` / `first_undreamed`, open issues, last run (from `memory_dream_status` or `ling-mem days`). |
+
+### Solve runbook — `/linggen solve`
+
+The review queue holds what a dream audit could NOT solve with
+confidence: uncertain merges (`chain`), status claims likely overtaken
+by the world (`stale-status`), and conflicts needing the user's pick
+(`contradiction`). The daemon only bookkeeps; **you are the solver**,
+with this session's model, tools, and user.
+
+1. **Back up, then list.** `ling-mem export` first (one snapshot per
+   solve session), then `ling-mem issues --format json` (or the
+   `memory_issues` MCP tool). Empty → say so, done.
+2. **Per item, gather evidence at solve time.** Fetch the rows
+   (`ling-mem get <row_id>`). For `stale-status`: check the WORLD —
+   `git log --oneline --since=<row date>` in the named repo, working
+   tree, file existence. The row was written before the world moved;
+   your evidence decides what's true now.
+3. **Apply the confidence rule.** Evidence is conclusive AND every
+   affected row is your own note (`from=derived`) → solve directly, no
+   ask: one `memory_add` with `replace_ids` (or CLI add-then-delete)
+   writing current truth. Evidence is ambiguous, OR any affected row is
+   user-voice (`from=user`) → **ask the user, ONE item per question**
+   (AskUserQuestion on Claude Code; plain numbered options elsewhere) —
+   never batch the whole queue into one wall of questions. User-voice
+   fixes carry `user_directed:true` after their answer.
+4. **Close as you go.** After each item:
+   `ling-mem issue-resolve <id> --outcome resolved --note "<what you did>"`
+   (or `memory_issue_resolve`). Not worth fixing → `--outcome dismissed`.
+5. **Report one line per item** — `SOLVED <id> <what changed>` /
+   `DISMISSED <id> <why>` — then a closing count.
 
 ### Chat-mode rules
 
@@ -323,7 +362,7 @@ The user is reading text in a conversation panel:
   table. If the user asked to list memory, run the recipe in
   *Listing & searching memory* above and render the result inline.
 - For hands-on row-level CRUD, point the user at the daemon-served
-  data browser at `127.0.0.1:9888` (run `ling-mem start` first).
+  data browser at `127.0.0.1:9528` (run `ling-mem start` first).
 
 ## Memory hygiene — see it, solve it
 
@@ -344,6 +383,17 @@ the change: their current message states it as settled (a command
 "update X to Y", a declaration "my X is now Y", a commitment "from
 now on, X") or they just answered your ask. A hedged reflection ("X
 feels about right to me") never qualifies — ask first.
+
+**Status rows are perishable — supersede at write time.** A
+status-bearing row ("in progress", "OPEN:", "not committed",
+"shipped", "dormant") is a claim about the world, and the world moves.
+When you capture a status change (shipped / fixed / dormant /
+abandoned), search the subject first and write the new status
+replacing the prior status row(s) on that subject (`replace_ids` over
+MCP; add-then-delete via CLI) — never leave "in progress" beside its
+own outcome. Own-notes only; a user-voice predecessor follows the
+merge law. The dream audit's review queue is the backstop for what
+slips through — write-time supersede is the real fix.
 
 | You see | Action |
 |:---|:---|
@@ -435,7 +485,7 @@ identity.
 ## Data browser
 
 Row-level CRUD (filter, edit-in-place, batch delete) lives at
-`http://127.0.0.1:9888` when the daemon is running. Direct the user
+`http://127.0.0.1:9528` when the daemon is running. Direct the user
 there for hands-on cleanup. Run `ling-mem start` if not already
 running.
 
@@ -518,7 +568,7 @@ linggen-browser extension) — one **visible** controlled tab:
 - A `no_bridge` error means the linggen-browser extension isn't connected;
   ask the user to install or enable it.
 - If the `linggen` MCP server itself is unreachable (nothing listening on
-  `127.0.0.1:9898`), the engine may still be installing in the background
+  `127.0.0.1:9527`), the engine may still be installing in the background
   (plugin channels; progress in `~/.linggen/engine-install.log`) — wait and
   retry. If the `ling` binary is genuinely absent, run the engine install
   from the First-use section and tell the user (one-time, ~100MB). Memory

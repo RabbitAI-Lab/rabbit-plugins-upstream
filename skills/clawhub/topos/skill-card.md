@@ -1,44 +1,63 @@
-## Description: <br>
-Structural code quality metrics, lattice verification, and refactor loops for agent-written code. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluate and improve code with Topos for complexity reduction, security checks, refactor verification, and PLATINUM/GOLD quality goals.
 
-## Publisher: <br>
-[krv-labs](https://clawhub.ai/user/krv-labs) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[krv-labs](https://clawhub.ai/user/krv-labs)
 
-## Use Case: <br>
-Developers and AI coding agents use this skill to assess local repositories, identify structural code quality issues, verify refactors, and optimize toward SILVER or GOLD lattice medals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installation uses an external install script and an npm package dependency. <br>
-Mitigation: Review the install script and npm package source before installation. <br>
-Risk: The tool reads local project code and git state and can write dependency graph artifacts. <br>
-Mitigation: Use it only on repositories that are acceptable for local analysis and review generated artifacts before committing them. <br>
-Risk: Topos scores are advisory structural signals rather than proof of functional correctness or full security assurance. <br>
-Mitigation: Run normal tests, linters, security tooling, and code review before accepting refactors. <br>
+## Use Case:
 
+Developers and AI coding agents use this skill to measure and improve local repository structure, reduce complexity, verify refactors, and optimize toward Topos medal goals. It supports CLI and MCP-assisted code-quality loops.
 
-## Reference(s): <br>
-- [Topos documentation](https://docs.krv.ai/topos/) <br>
-- [Topos agent contract](https://docs.krv.ai/topos/agents.html) <br>
-- [ClawHub listing](https://clawhub.ai/krv-labs/skills/topos) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, json, shell commands, guidance] <br>
-**Output Format:** [CLI tables and ranked file lists, markdown reports, and MCP structured payloads with agent_contract fields.] <br>
-**Output Parameters:** [Medal verdict, pillar scores, ranked refactor targets, and assessment status.] <br>
-**Other Properties Related to Output:** [May write .gitnexus dependency graph artifacts when dependency graph generation is used; source edits are performed only if the agent acts on the guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 0.4.2) <br>
+Risk: Installation relies on a remote shell installer and a global npm package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and npm package source before installation, and use CLI-only mode when MCP integration is not needed.
+
+Risk: Running `topos install --all` can register MCP servers with supported agent harnesses.
+
+Mitigation: Run MCP registration only when that integration is intentional, then verify the result with `topos status`.
+
+Risk: Dependency graph generation can create `.gitnexus` artifacts and may involve project configuration side effects.
+
+Mitigation: Run Topos in a Git repository, review generated artifacts before committing, and keep project configuration changes under normal code review.
+
+Risk: Topos structural quality and SECURE signals are advisory and do not prove functional correctness or complete security.
+
+Mitigation: Run project tests, linters, and dedicated security tooling before accepting refactors or treating SECURE results as sufficient assurance.
+
+## Reference(s):
+
+- [Topos documentation](https://docs.krv.ai/topos/)
+- [Topos agent contract](https://docs.krv.ai/topos/agents.html)
+- [ClawHub listing](https://clawhub.ai/krv-labs/skills/topos)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [CLI tables, ranked file lists, Markdown reports, shell commands, and MCP structured JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write .gitnexus graph artifacts when dependency graph generation is enabled; source files are changed only if the agent applies edits based on guidance.]
+
+## Skill Version(s):
+
+1.0.11 (source: ClawHub release metadata; artifact frontmatter version is 0.5.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,8 +1,6 @@
 # company-deep-analysis 数据采集依赖
-akshare>=1.12.0     # 财务三表（A股/港股主力数据源）
-requests>=2.32.0    # 联网抓取（行情/财务/研报/新闻/公告）
+requests>=2.28.0    # 联网抓取（行情/财务/研报/新闻/公告）
 pandas>=2.0.0       # 财务表格解析、清洗、时间序列
-lxml>=5.0.0         # pandas 解析 HTML 的首选引擎
+lxml>=4.9.0         # pandas 解析 HTML 的首选引擎
 html5lib>=1.1       # lxml 失败时回退的备用引擎
-yfinance>=0.2.30    # 港股行情/财务容错（可选，AKShare 失败时启用）
 # matplotlib 为可选增强（图表渲染），非核心分析流程必需，已移至 SKILL.md optional_pip

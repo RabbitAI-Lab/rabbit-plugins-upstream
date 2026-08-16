@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云 Temu 类目搜索"
+  short_description: "搜索和分析 Temu 类目，判断市场规模、供需与品类机会"
+  default_prompt: "使用 $geekbi-temu-category-search-skill 搜索并分析 Temu 类目机会。"

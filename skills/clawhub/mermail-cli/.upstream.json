@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/mermail-cli",
   "slug": "mermail-cli",
   "ownerHandle": null,
-  "version": "1.2.1",
-  "updatedAt": 1784559248478,
-  "contentHash": "34730592d693eae72e03acfc55e92262975910d26c3416796672c6dd91c1f957",
-  "fetchedAt": "2026-07-26T18:09:55.415Z"
+  "version": "1.2.11",
+  "updatedAt": 1786689395841,
+  "contentHash": "c439b0383e88b5b84c7b579a1c8fe447b43ceee7ca709eadf4d12ad5fec9842b",
+  "fetchedAt": "2026-08-16T07:59:45.045Z"
 }

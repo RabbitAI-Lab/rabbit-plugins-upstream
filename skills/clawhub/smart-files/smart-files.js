@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
- * Smart Files v1.2.3 — Content-aware file management for OpenClaw agents
- * SECURITY REMEDIATION: Fixed --force flag propagation in watch mode (issue #7)
- * Added --quiet mode to suppress content snippets for sensitive directory scanning
- * Removed: test/ and tests/ directories from published bundle
+ * Smart Files v2.2.0 — Content-aware file management for OpenClaw agents
+ * SECURITY REMEDIATION (2026-07-31):
+ *   - Content snippets are now opt-in via --snippets (hidden by default)
+ *   - --force flag now propagates to watch mode (workspace boundary enforced)
+ *   - Permissions declared in clawhub.yaml; journaling documented
  */
 
 const fs = require('fs');
@@ -238,7 +239,7 @@ function organizeFiles(rootDir = null) {
   const files = collectFiles(searchRoot);
   const categories = {
     code: { exts: ['.js', '.ts', '.py', '.html', '.css', '.json', '.yaml', '.yml', '.xml', '.sh', '.bash', '.zsh', '.rb', '.go', '.rs', '.c', '.cpp', '.h', '.java', '.kt', '.swift', '.php', '.sql', '.md', '.txt'], dir: 'code' },
-    data: { exts: ['.csv', '.tsv', '.json', '.jsonl', '.xml', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.conf', '.env', '.sql'], dir: 'data' },
+    data: { exts: ['.csv', '.tsv', '.json', '.jsonl', '.xml', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.conf', '.sql'], dir: 'data' },
     docs: { exts: ['.pdf', '.doc', '.docx', '.rtf', '.odt', '.tex', '.epub'], dir: 'docs' },
     media: { exts: ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.webp', '.bmp', '.mp4', '.avi', '.mov', '.mkv', '.mp3', '.wav', '.flac', '.ogg', '.m4a'], dir: 'media' },
     archives: { exts: ['.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz'], dir: 'archives' },
@@ -273,7 +274,13 @@ function organizeFiles(rootDir = null) {
 
 // ─── INFO MODE ─────────────────────────────────────────────────────────────
 
-function fileInfo(filepath) {
+function fileInfo(filepath, force = false) {
+  // Enforce workspace boundary: refuse out-of-workspace paths unless --force
+  const resolved = path.resolve(filepath);
+  if (!resolved.startsWith(WORKSPACE) && !force) {
+    return { error: `Refusing out-of-workspace path: ${resolved}. Use --force to override.` };
+  }
+  filepath = resolved;
   try {
     const stat = fs.statSync(filepath);
     const ext = path.extname(filepath).toLowerCase();
@@ -432,6 +439,9 @@ function watchDirectory(dir, interval = 30, forceFlag = false, journal = null) {
   const scopedDir = forceFlag ? path.resolve(dir) : resolveDir(dir, false);
   
   console.log(`[smart-files] Watching: ${scopedDir} (every ${interval}s)`);
+  console.log(`[smart-files] ⚠️ Watch mode PERSISTS file paths, hashes, sizes, and timestamps to ${JOURNAL_FILE} on every change (journal capped at 1000 entries).`);
+  console.log(`[smart-files]    Delete the journal file to clear history; it is recreated on the next change event.`);
+  console.log(`[smart-files]    Contents are metadata only — file contents are never written to the journal.`);
   console.log(`[smart-files] Press Ctrl+C to stop\n`);
   
   const scan = () => {
@@ -489,13 +499,15 @@ const args = process.argv.slice(2);
 
 // Parse flags and mode
 let searchQuery = null, rootDir = null, force = false, quiet = false;
+let showSnippets = false; // opt-in: snippets hidden by default
 let mode = 'status';
 let watchDir = null, watchInterval = 30;
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--dir' && i + 1 < args.length) rootDir = resolveDir(args[i + 1], force);
   if (args[i] === '--force') force = true;
   if (args[i] === '--quiet') quiet = true;
-  if (args[i] === '--search') mode = 'search';
+  if (args[i] === '--snippets') showSnippets = true;
+  if (args[i] === '--search') { mode = 'search'; searchQuery = args[i + 1]; }
   if (args[i] === '--dedup') mode = 'dedup';
   if (args[i] === '--organize') mode = 'organize';
   if (args[i] === '--info') mode = 'info';
@@ -507,20 +519,18 @@ for (let i = 0; i < args.length; i++) {
     watchDir = args[i + 1];
     watchInterval = parseInt(args[i + 2]) || 30;
   }
-  if (args[i] === '--search' && i + 1 < args.length) searchQuery = args[i + 1];
 }
 
 switch (mode) {
   case 'search': {
-    const searchQuery = args[2];
     if (!searchQuery) {
-      console.log('Usage: smart-files.js --search <query> [--dir <path>] [--quiet]');
+      console.log('Usage: smart-files.js --search <query> [--dir <path>] [--snippets] [--quiet]');
     } else {
       const results = searchFiles(searchQuery, rootDir);
       console.log(`[smart-files] Found ${results.length} matches for "${searchQuery}":\n`);
       for (const r of results.slice(0, 20)) {
         console.log(`  ${r.score > 0.8 ? '✅' : '🔍'} ${r.score.toFixed(2)} — ${r.path}`);
-        if (r.snippet && !quiet) console.log(`     "${r.snippet}"`);
+        if (showSnippets && r.snippet) console.log(`     "${r.snippet}"`);
       }
       if (results.length > 20) console.log(`  ... and ${results.length - 20} more`);
     }
@@ -552,7 +562,7 @@ switch (mode) {
     if (!file) {
       console.log('Usage: smart-files.js --info <file>');
     } else {
-      const info = fileInfo(file);
+      const info = fileInfo(file, force);
       if (info.error) {
         console.log(`[smart-files] Error: ${info.error}`);
       } else {
@@ -616,6 +626,7 @@ switch (mode) {
     console.log('  --watch <dir> [interval]  → Continuous filesystem monitoring');
     console.log('  --dir <path>              → Override workspace root');
     console.log('  --quiet                   → Suppress content snippets from output');
+    console.log('  --snippets                → Show matched content in search results (opt-in)');
     console.log('  --force                   → Override workspace boundary (use with caution)');
     break;
   case 'watch': {

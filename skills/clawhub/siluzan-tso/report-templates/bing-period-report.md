@@ -8,17 +8,17 @@
 
 数据块（Bing 实际支持的 9 类业务维度 + 总览）：总览、设备、地域、受众（年龄/性别）、系列、广告组、广告、关键词、搜索字词。
 
-| CLI `--sections` | 落盘形状（生产实测） | 报告 `tables.*` / KPI |
-| --- | --- | --- |
-| `overview` | 对象：`currentPeriod` / `previousPeriod` / `balance` / `averageDailyCost` … | → `meta` + `kpis`（环比、余额、日均） |
-| `device` | `{ devices: Row[] }` | → `tables.devices[]` |
-| `geographic` | `{ countries: Row[] }` | → `tables.geographic[]` |
-| `audience-merged`（或 `age-audience`/`gender-audience`） | `{ data: { ageAudience.audience[], genderAudience.audience[] } }` | → `tables.audienceAge[]` / `audienceGender[]` |
-| `campaigns` | **根节点数组** | → `tables.campaigns[]`；**本期 KPI 优先由此累加** |
-| `ad-groups` | **根节点数组** | → `tables.adGroups[]`（含 `qualityScore`） |
-| `ads` | **根节点数组** | → `tables.ads[]` |
-| `keywords` | **根节点数组**（默认 limit=100） | → `tables.keywords[]` |
-| `search-terms` | **根节点数组**（默认 limit=100） | → `tables.searchTerms[]` |
+| CLI `--sections`                                         | 落盘形状（生产实测）                                                        | 报告 `tables.*` / KPI                             |
+| -------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------- |
+| `overview`                                               | 对象：`currentPeriod` / `previousPeriod` / `balance` / `averageDailyCost` … | → `meta` + `kpis`（环比、余额、日均）             |
+| `device`                                                 | `{ devices: Row[] }`                                                        | → `tables.devices[]`                              |
+| `geographic`                                             | `{ countries: Row[] }`                                                      | → `tables.geographic[]`                           |
+| `audience-merged`（或 `age-audience`/`gender-audience`） | `{ data: { ageAudience.audience[], genderAudience.audience[] } }`           | → `tables.audienceAge[]` / `audienceGender[]`     |
+| `campaigns`                                              | **根节点数组**                                                              | → `tables.campaigns[]`；**本期 KPI 优先由此累加** |
+| `ad-groups`                                              | **根节点数组**                                                              | → `tables.adGroups[]`（含 `qualityScore`）        |
+| `ads`                                                    | **根节点数组**                                                              | → `tables.ads[]`                                  |
+| `keywords`                                               | **根节点数组**（默认 limit=100）                                            | → `tables.keywords[]`                             |
+| `search-terms`                                           | **根节点数组**（默认 limit=100）                                            | → `tables.searchTerms[]`                          |
 
 > Bing **没有** Google 的 `daily-metrics` / `dimension-summary`；报告模板也不渲染这两章。
 
@@ -26,12 +26,12 @@
 
 ## 标准四步流程（默认 · 交付 HTML）
 
-| 步骤             | 执行者       | 动作                                                                                                                                                      |
-| ---------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **1. 拉数**      | Agent 调 CLI | `bing-analysis -a <id> --start <s> --end <e> --json-out ./snap-bing`（见下方「日期规则」，全 11 维或 `--sections` 指定子集）                              |
-| **2. 分析**      | Agent        | 用 **node/python 脚本**读落盘 JSON（勿用 Read 打开业务 `*.json`），把网关原始字段映射为下方 `tables.*` 契约，完成聚合与洞察                               |
+| 步骤             | 执行者       | 动作                                                                                                                                        |
+| ---------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. 拉数**      | Agent 调 CLI | `bing-analysis -a <id> --start <s> --end <e> --json-out ./snap-bing`（见下方「日期规则」，全 11 维或 `--sections` 指定子集）                |
+| **2. 分析**      | Agent        | 用 **node/python 脚本**读落盘 JSON（勿用 Read 打开业务 `*.json`），把网关原始字段映射为下方 `tables.*` 契约，完成聚合与洞察                 |
 | **3. 写 JSON**   | Agent        | 撰写 `bing-period-report.json`：仅 `meta.accountId` + `narrative`（9 个分析小节）为必填；`kpis`/`tables` 可省略由 `--snapshot-dir` 自动合并 |
-| **4. 渲染 HTML** | CLI          | `bing-analysis render` — **校验 narrative 9 个分析小节必含字段**，缺项报错不生成 HTML；**禁止** Agent 手写/拼接 HTML                                      |
+| **4. 渲染 HTML** | CLI          | `bing-analysis render` — **校验 narrative 9 个分析小节必含字段**，缺项报错不生成 HTML；**禁止** Agent 手写/拼接 HTML                        |
 
 ```bash
 # 步骤 1
@@ -67,10 +67,10 @@ siluzan-tso bing-analysis render \
 
 `render` 传 `--snapshot-dir` 时，CLI 自动补全：
 
-1. `meta` / `kpis`（含余额、日均、环比；本期 KPI 优先 campaigns 累加）
-2. `tables.*`（按上表落盘形状映射；Agent 已填字段不覆盖）
+1. `meta`（仅补空字段）
+2. **`kpis` / `tables.*` 一律以 CLI 快照覆盖**（有对应 section 时；本期 KPI 优先 campaigns 累加）——数值口径不以 Agent 预填为准
 
-Agent 只需撰写 `narrative`；**禁止手写 HTML**。`ctr` / `conversionRate` 落盘已为 0~1 小数。
+Agent 只需撰写 `narrative`；**禁止手写 HTML**，也**禁止**自填 `kpis`/`tables` 数值（尤其 `ctr` 须为 CLI 落盘的 0~1 小数）。
 
 ---
 

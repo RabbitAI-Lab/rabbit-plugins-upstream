@@ -1,44 +1,67 @@
-## Description: <br>
-Secrets Manager is an encrypted local secret store for OpenClaw agents that uses AES-256-GCM authenticated encryption, per-secret random IVs, a chmod 0600 master-key file, rotation and audit commands, and opt-in plaintext output controls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Encrypted local secret store for OpenClaw agents that uses AES-256-GCM authenticated encryption to store, retrieve, list, rotate, audit, and delete secrets without writing plaintext secrets to disk.
 
-## Publisher: <br>
-[jlacroix82](https://clawhub.ai/user/jlacroix82) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jlacroix82](https://clawhub.ai/user/jlacroix82)
 
-## Use Case: <br>
-Developers and agent operators use this skill to store, retrieve, rotate, audit, and inject local secrets for OpenClaw workflows without external dependencies. It is intended for local file-based secret management, not as a replacement for a production vault or OS keychain. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Default --inject can leave a plaintext resolved command in /tmp/secrets-inject-*.sh even though documentation and output imply automatic cleanup. <br>
-Mitigation: Avoid default --inject for important credentials, or remove the generated /tmp/secrets-inject-*.sh file immediately after use. <br>
-Risk: The skill is a local file-based secrets store with master-key material stored in .master-key. <br>
-Mitigation: Protect and back up .master-key, restrict access to the secrets directory, and use a real vault or OS keychain for production credentials. <br>
-Risk: Raw retrieval and explicit inject-to-stdout modes can expose plaintext secrets to logs, terminal history, CI output, or agent transcripts. <br>
-Mitigation: Use masked output by default and reserve --get --raw or --inject-stdout --confirm-expose for tightly controlled private processes. <br>
+## Use Case:
 
+Developers and agents use this skill to manage local encrypted secrets, including storing, retrieving masked values, rotating credentials, auditing stale or weak secrets, and deleting entries. It is intended for trusted single-user or single-agent environments where filesystem permissions and master-key handling are acceptable controls.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jlacroix82/skills/secrets-manager) <br>
-- [Publisher profile](https://clawhub.ai/user/jlacroix82) <br>
-- [Artifact README](artifact/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [CLI text output, chmod-0600 shell script files for command injection, and JavaScript module return values] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stores encrypted secret records and master-key material as local files; raw secret output and resolved injected commands can expose plaintext when explicitly requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.9 (source: server release metadata and artifact clawhub.yaml) <br>
+Risk: A user or agent with access to the same process and files can read stored secrets because the skill has no per-secret access-control boundary.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in trusted single-user or single-agent environments and rely on restrictive filesystem permissions for the secrets directory and master key.
+
+Risk: Losing .master-key makes encrypted secrets unrecoverable.
+
+Mitigation: Back up .master-key securely and store the backup separately from routine logs or shared workspaces.
+
+Risk: Using SECRETS_MASTER_KEY in shared, logged, containerized, or CI environments can expose the master key.
+
+Mitigation: Prefer the file-based .master-key on a trusted host and avoid setting SECRETS_MASTER_KEY where environment variables may be observed or logged.
+
+Risk: Raw secret output can leak through terminal scrollback, logs, transcripts, or redirected files.
+
+Mitigation: Use masked output by default and use raw output only with explicit confirmation when piping directly to a private consuming process.
+
+Risk: Deleting a secret is irreversible without a backup of the encrypted store.
+
+Mitigation: Back up secrets.json before deleting secrets that may need recovery.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jlacroix82/skills/secrets-manager)
+- [README.md](artifact/README.md)
+- [SKILL.md](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, files, guidance]
+
+**Output Format:** [Plain text CLI output with masked values by default, optional raw stdout only with explicit confirmation, and local encrypted JSON storage files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Stores encrypted secrets and the master key under the configured secrets directory with restrictive file permissions where supported.]
+
+## Skill Version(s):
+
+1.1.18 (source: server release metadata and clawhub.yaml)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

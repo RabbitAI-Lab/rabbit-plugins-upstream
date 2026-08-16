@@ -36,7 +36,7 @@ EOF
             exit 0
             ;;
         --version)
-            echo "zotero-enhanced read_note.sh v1.3.8"
+            echo "zotero-enhanced read_note.sh v1.3.7"
             exit 0
             ;;
         --format)

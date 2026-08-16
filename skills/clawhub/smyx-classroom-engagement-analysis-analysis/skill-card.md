@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes fixed-camera classroom images or video to estimate aggregate student engagement, anonymous low-engagement seat coordinates, heatmaps, alerts, teacher suggestions, and history reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates classroom engagement analysis from fixed-camera classroom media, including emotion distribution, class engagement score, anonymous seat-level low-engagement cues, heatmaps, alerts, and teacher-facing suggestions.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Teachers, smart-classroom operators, and education-technology developers use this skill to analyze classroom video or images for group engagement trends, low-engagement seat locations, confusion hotspots, and teaching suggestions. It can also query previously generated classroom engagement reports from the remote service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends classroom video or image inputs to a remote service for analysis, which can involve minors and sensitive classroom context. <br>
-Mitigation: Use only with explicit school and parent consent, documented data-retention terms, and verified service-operator controls for storage, access, and deletion. <br>
-Risk: Server evidence states that the skill creates and stores a reusable internal user identity and report history despite strong anonymity claims. <br>
-Mitigation: Confirm where user identifiers, report history, videos, heatmaps, and tokens are stored, who can access them, and how local and cloud records can be deleted before deployment. <br>
-Risk: Engagement and emotion analysis can be inaccurate or misleading if used as an assessment of individual students. <br>
-Mitigation: Use outputs only as real-time teaching support, keep reminders anonymous at the seat-coordinate or group level, and prohibit use for student performance evaluation, parent communication, or public ranking. <br>
+## Use Case:
 
+External educators, school staff, and smart-classroom developers use this skill to analyze classroom video or image inputs for group-level engagement feedback and historical report lookup. It is intended as a real-time teaching aid, not a student identity, performance, ranking, or psychological assessment tool.
 
-## Reference(s): <br>
-- [API Reference](references/api_doc.md) <br>
-- [Additional API Error Reference](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-classroom-engagement-analysis-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured text with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include engagement scores, emotion distributions, anonymous seat coordinates, heatmap image URLs, alerts, teacher suggestions, and historical report records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Classroom media and identifiers may be uploaded to LifeEmergence/Open API cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit school and parent consent, a clear retention policy, and acceptance of cloud processing.
+
+Risk: The skill can silently create or reuse a local internal user identity and query cloud history tied to that identity.
+
+Mitigation: Run in a controlled workspace, disclose account linkage to administrators, and segregate or clear local skill data between deployments.
+
+Risk: Account tokens may be stored in a local workspace SQLite database.
+
+Mitigation: Protect the workspace, restrict file access, rotate tokens after testing, and avoid running the skill from shared machines.
+
+## Reference(s):
+
+- [API Documentation](references/api_doc.md)
+- [Base Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-classroom-engagement-analysis-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, guidance]
+
+**Output Format:** [Markdown text with structured JSON report content and optional saved output file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local mp4, avi, or mov files up to 10 MB or URL inputs; history queries return cloud report records with report links.]
+
+## Skill Version(s):
+
+1.0.8 (source: SKILL.md frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

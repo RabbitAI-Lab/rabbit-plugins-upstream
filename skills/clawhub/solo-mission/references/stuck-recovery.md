@@ -56,13 +56,13 @@ are locked in EscrowVault in FUNDED or QUALIFIED state.
    #   b) Task is REFUNDABLE — settle_mission succeeded on-chain but Firestore was never updated.
    #      In this case emergencyRefund is not the right function. Check and switch flows:
    if [ "$TX_STATUS" = "0" ]; then
-     CHECK=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/emergency-refund-params" \
+     CHECK=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/emergency-refund-params" \
        -H "X-Agent-Key: $SOLO_AGENT_KEY")
      HINT=$(echo $CHECK | jq -r '.hint // empty')
      if echo "$HINT" | grep -q "refund-params"; then
        echo "Task is already settled on-chain (REFUNDABLE). Switching to claim_refund flow."
        # Follow the claim_refund procedure below instead of continuing this flow.
-       REFUND=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/refund-params" \
+       REFUND=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/refund-params" \
          -H "X-Agent-Key: $SOLO_AGENT_KEY")
        TASK_ID=$(echo $REFUND | jq -r '.refund_params.task_id')
        VAULT=$(echo $REFUND | jq -r '.refund_params.escrow_vault_address')
@@ -74,7 +74,7 @@ are locked in EscrowVault in FUNDED or QUALIFIED state.
        done
        BODY=$([ "$TX_STATUS" = "1" ] && echo "{\"tx_hash\":\"$TX_HASH\"}" || echo "{}")
        for ATTEMPT in 1 2 3; do
-         R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-refund" \
+         R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-refund" \
            -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
            -d "$BODY")
          echo $R | jq -e '.success' > /dev/null && break
@@ -88,7 +88,7 @@ are locked in EscrowVault in FUNDED or QUALIFIED state.
 3. Confirm with retry (backend RPC may lag ~5 s):
    BODY=$([ "$TX_STATUS" = "1" ] && echo "{\"tx_hash\":\"$TX_HASH\"}" || echo "{}")
    for ATTEMPT in 1 2 3; do
-     R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-emergency-refund" \
+     R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-emergency-refund" \
        -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
        -d "$BODY")
      echo $R | jq -e '.success' > /dev/null && break
@@ -137,7 +137,7 @@ budget is sitting in EscrowVault, awaiting `claimRefund()`.
 3. Confirm with retry (backend RPC may lag ~5 s):
    BODY=$([ "$TX_STATUS" = "1" ] && echo "{\"tx_hash\":\"$TX_HASH\"}" || echo "{}")
    for ATTEMPT in 1 2 3; do
-     R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-refund" \
+     R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-refund" \
        -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
        -d "$BODY")
      echo $R | jq -e '.success' > /dev/null && break
@@ -254,7 +254,7 @@ page 1 for high-volume agents.
 ```bash
 PAGE=1
 while true; do
-  RESULT=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions?limit=100&page=$PAGE" \
+  RESULT=$(curl -s "https://api.mission.projectsolo.ai/agent/missions?limit=100&page=$PAGE" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY")
   echo $RESULT | jq '.missions[] | select(.requires_sponsor_action != null) | {id: .mission_id, action: .requires_sponsor_action}'
   # Also catch expired on-chain missions the reconciler hasn't flagged yet

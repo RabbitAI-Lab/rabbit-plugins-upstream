@@ -1,48 +1,73 @@
-## Description: <br>
-HyperFrames routes video, animation, and motion-graphics requests into the right workflow, resumes existing projects, and manages project inspection, validation, preview, rendering, publishing, and batch rendering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HyperFrames routes requests to create, edit, animate, inspect, validate, render, publish, or batch-render videos, animations, motion graphics, slideshows, captioned clips, Remotion migrations, and HTML-based HyperFrames compositions from inputs such as URLs, pull requests, Figma designs, briefs, footage, or music.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill as the entry point for creating, editing, validating, rendering, and publishing HyperFrames video projects from briefs, URLs, GitHub PRs, Figma inputs, existing footage, or music. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run npx-based HyperFrames commands and install or refresh related workflow skills. <br>
-Mitigation: Review command summaries, keep projects under version control, and run HyperFrames validation after upgrades or workflow changes. <br>
-Risk: Site capture, Figma or GitHub inputs, media generation, and publishing can use networked services when requested. <br>
-Mitigation: Confirm external inputs and publishing intent before use, and avoid sending sensitive material to networked services unless approved. <br>
-Risk: Project edits, renders, and publishing actions may create or update video project artifacts. <br>
-Mitigation: Inspect diffs, previews, and validation results before treating generated output as final or public. <br>
+## Use Case:
 
+Developers, creators, and teams use this skill as the HyperFrames entry point for video and motion work, including routing fresh briefs, resuming projects, selecting workflow skills, and producing checked compositions or renders.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes) <br>
-- [Publisher profile](https://clawhub.ai/user/heygen-com) <br>
-- [HyperFrames entry point](SKILL.md) <br>
-- [Intent interview](references/intent-interview.md) <br>
-- [Capability menu](references/capability-menu.md) <br>
-- [Skill lifecycle](references/skill-lifecycle.md) <br>
-- [Workflow route contracts](references/routes/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, code, configuration, and project artifact descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include workflow routing decisions, project file changes, validation summaries, preview or render commands, and publishing guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.19 (source: server release metadata) <br>
+Risk: Website capture, media reuse, brand assets, and published links can expose or reuse source material in ways the user did not intend.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm source pages, media, brand assets, and final publish links are safe to expose or reuse before capture or publish.
+
+Risk: The skill installs or updates related HyperFrames workflow skills and can run render-affecting CLI commands.
+
+Mitigation: Install only when HyperFrames should manage the project, review and scan the skill before deployment, and surface update or validation failures instead of proceeding from memory.
+
+Risk: Incorrect routing or generated video guidance could produce misleading captions, edits, product narratives, or code-change explanations.
+
+Mitigation: Review the selected route, confirmed brief, storyboard or preview, and final render before external use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes)
+- [HyperFrames entry point](artifact/SKILL.md)
+- [Intent interview](artifact/references/intent-interview.md)
+- [Capability menu](artifact/references/capability-menu.md)
+- [Skill lifecycle](artifact/references/skill-lifecycle.md)
+- [Route briefs](artifact/references/route-briefs.md)
+- [Workflow catalog](artifact/references/workflow-catalog.md)
+- [Route: embedded captions](artifact/references/routes/embedded-captions.md)
+- [Route: faceless explainer](artifact/references/routes/faceless-explainer.md)
+- [Route: general video](artifact/references/routes/general-video.md)
+- [Route: motion graphics](artifact/references/routes/motion-graphics.md)
+- [Route: music to video](artifact/references/routes/music-to-video.md)
+- [Route: pull request to video](artifact/references/routes/pr-to-video.md)
+- [Route: product launch video](artifact/references/routes/product-launch-video.md)
+- [Route: Remotion to HyperFrames](artifact/references/routes/remotion-to-hyperframes.md)
+- [Route: slideshow](artifact/references/routes/slideshow.md)
+- [Route: talking head recut](artifact/references/routes/talking-head-recut.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and project file instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update HyperFrames project files, briefs, HTML compositions, media assets, render outputs, and public publish links depending on the selected workflow.]
+
+## Skill Version(s):
+
+1.0.22 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

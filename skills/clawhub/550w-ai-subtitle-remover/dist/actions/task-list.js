@@ -16,7 +16,15 @@ async function taskList(params, client) {
         total: apiResponse.total,
         page,
         size,
-        list: apiResponse.list || [],
+        list: (apiResponse.list || []).map((item) => {
+            const publicItem = { ...item };
+            delete publicItem.x1;
+            delete publicItem.y1;
+            delete publicItem.x2;
+            delete publicItem.y2;
+            delete publicItem.mode;
+            return publicItem;
+        }),
     };
 }
 //# sourceMappingURL=task-list.js.map

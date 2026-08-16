@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/mentionkit-skill",
   "slug": "mentionkit-skill",
   "ownerHandle": null,
-  "version": "0.1.0",
-  "updatedAt": 1782783616935,
-  "contentHash": "9d80c54f3e071c6ebea03ec07848ff769e0e64325f98f1b49753ea66bf9630a1",
-  "fetchedAt": "2026-07-26T18:22:20.048Z"
+  "version": "0.1.1",
+  "updatedAt": 1786586561317,
+  "contentHash": "8d99d5efba3e0b10cb75b40ad5e477aab0c6d94a2e01e69b8f49a0edaa9bedd4",
+  "fetchedAt": "2026-08-16T08:06:37.753Z"
 }

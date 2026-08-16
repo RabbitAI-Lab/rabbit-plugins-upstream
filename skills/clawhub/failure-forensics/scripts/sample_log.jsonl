@@ -1,0 +1,6 @@
+{"timestamp": "2024-01-15T10:23:01Z", "tool": "terminal", "args": {"command": "git clone https://github.com/example/repo.git"}, "result": {"success": true, "output": "Cloning into 'repo'..."}, "duration_ms": 3400}
+{"timestamp": "2024-01-15T10:23:10Z", "tool": "terminal", "args": {"command": "cd repo && npm install"}, "result": {"success": false, "error": "EACCES: permission denied, open '/usr/lib/node_modules/lodash'"}, "duration_ms": 1200}
+{"timestamp": "2024-01-15T10:23:15Z", "tool": "terminal", "args": {"command": "sudo npm install"}, "result": {"success": false, "error": "sudo: a password is required"}, "duration_ms": 100}
+{"timestamp": "2024-01-15T10:23:20Z", "tool": "web_search", "args": {"query": "npm EACCES permission denied fix"}, "result": {"success": true}, "duration_ms": 800}
+{"timestamp": "2024-01-15T10:23:30Z", "tool": "terminal", "args": {"command": "npm install --prefix ~/.local"}, "result": {"success": false, "error": "ConnectionRefusedError: connect ECONNREFUSED 127.0.0.1:443"}, "duration_ms": 5000}
+{"timestamp": "2024-01-15T10:23:40Z", "tool": "terminal", "args": {"command": "curl https://registry.npmjs.org/"}, "result": {"success": false, "error": "curl: (7) Failed to connect to registry.npmjs.org port 443: Connection timed out"}, "duration_ms": 30000}

@@ -1,6 +1,6 @@
 ---
 name: api-gateway
-description: Smart proxy for external API calls with retry, caching, rate limiting, and fallback providers. PERSISTS: API keys (chmod 0600 plaintext in keys.json), request/response cache metadata, and request logs. Network: outbound HTTPS only, with a strict provider-domain allowlist. Caches metadata by default; full response bodies are opt-in per provider.
+description: Smart proxy for external API calls with retry, caching, rate limiting, and fallback providers. PERSISTS: API keys (chmod 0600 plaintext in keys.json), request/response cache metadata, and request logs. Network: outbound HTTPS only, with a strict provider-domain allowlist. Caches metadata by default; full response bodies are opt-in per provider. Cache and rate-limit keys are SHA-256 digests, so request bodies and endpoint URLs are never written to disk in plaintext.
 ---
 
 # API Gateway ⚡
@@ -26,21 +26,21 @@ API Gateway is a local Node.js HTTP client wrapper that gives one call:
 `--call <provider> <endpoint>` sends HTTPS requests and, for configured providers, attaches a `Authorization: Bearer <key>` header. **The provider allowlist is strict: it is a domain-match check, not a `string.includes()` check.** A URL like `https://attacker.com/api?provider=openai` will NOT receive the key because the hostname must match the provider's registered allowlist entry. Review the allowlist in `--keys` output before adding sensitive keys.
 
 ### API Keys Stored in Plaintext on Disk
-API keys saved via `--keys add` are written to `memory/api-gateway/keys.json` in plaintext, with file permissions set to `0600` (owner read/write only). The key is NEVER echoed back. Anyone with shell access to the workspace as the same user can still read it. For higher assurance, prefer environment variables: `OPENAI_API_KEY=sk-...` and pass `provider=env:OPENAI` to use the env var without disk storage.
+API keys saved via `--keys add` are written to `memory/api-gateway/keys.json` in plaintext, with file permissions set to `0600` (owner read/write only). The key is NEVER echoed back. Anyone with shell access to the workspace as the same user can still read it. For higher assurance, prefer environment variables: `OPENAI_API_KEY=sk-...` — API Gateway auto-detects any `PROVIDER_API_KEY` variable (e.g. `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) and uses it without disk storage. It does NOT read arbitrary `env:NAME` references — only the `PROVIDER_API_KEY` pattern — so unrelated secrets are never pulled in.
 
 ### Persistent Data Files (Disclosed Up Front)
 The following files persist in `memory/api-gateway/` after any operation:
 - `keys.json` — API key storage, chmod 0600
-- `cache.json` — **Metadata-only by default** (status code, timestamp, headers, body length). Full response body caching is opt-in per provider via `--cache-full <provider>`.
-- `request-log.json` — Provider name, status class (2xx/4xx/5xx), timestamp. Endpoints and query strings are NOT stored.
-- `rate-limits.json` — Per-provider rate-limit state
+- `cache.json` — **Metadata-only by default** (status code, timestamp, response headers, response body *length*). The full response **body** is NOT stored unless you explicitly enable it per provider via `--cache-full <provider>`. **Cache keys are provider name + a SHA-256 digest of the endpoint path and request body** — the endpoint and the body themselves are never written to this file.
+- `request-log.json` — Provider name, status class (2xx/4xx/5xx), timestamp. Endpoint URLs, query strings, and request/response **bodies are NOT written here.** (Note: if *you* pass a URL or prompt inside a request body to `--call`, that body travels to the provider but is never persisted to the log or cache by this skill.)
+- `rate-limits.json` — Per-provider rate-limit state, keyed by provider name + a SHA-256 digest of the endpoint path. The endpoint itself is not written to this file.
 - `circuit-state.json` — Per-provider circuit-breaker state
 - `fallbacks.json` — Fallback provider mappings
 
 All of these are intended, documented, and necessary for the skill's features. Default retention is unlimited unless cleared with `--cache --clear` and `--log --clear`.
 
 ### Zero External Dependencies
-This skill uses only Node.js built-ins (`http`, `https`, `fs`, `path`). There is no `package.json` to install, no transitive dependencies, no `npm install` step. The code you read is the code that runs.
+This skill uses only Node.js built-ins (`http`, `https`, `fs`, `path`, `os`, `crypto`). There is no `package.json` to install, no transitive dependencies, no `npm install` step. The code you read is the code that runs.
 
 ## Quick Start
 
@@ -137,7 +137,8 @@ If you add a key WITHOUT `--allow-domain`, the key is still saved but the skill 
 
 ### Response Caching (Metadata-Only by Default)
 - 5-minute TTL
-- Cache key = provider + endpoint + body hash
+- Cache key = provider name + SHA-256 digest of (endpoint path, request body). The endpoint and body are hashed, never stored — so nothing you send is readable in `cache.json`.
+- Request bodies are hashed with sorted object keys, so logically identical bodies hit the same entry regardless of field order
 - **Default behavior**: caches `{status, headers (redacted), timestamp, bodyLength}`. Body content is NOT stored.
 - **Opt-in full caching**: `--cache-full <provider>` enables full response body caching for that provider.
 - Auto-evicts expired entries
@@ -192,13 +193,12 @@ When making API calls:
 
 1. **Use the gateway** — `--call <provider> <endpoint> [body]` instead of direct fetch
 2. **Add keys with allowlist** — `--keys add <provider> <key> --allow-domain <domain>` before first use
-3. **Prefer env vars in CI** — `PROVIDER_API_KEY` env vars bypass disk storage entirely
+- **Prefer env vars in CI** — `PROVIDER_API_KEY` env vars bypass disk storage entirely. API Gateway auto-detects any `PROVIDER_API_KEY` environment variable (e.g. `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) and uses it without disk storage. It does NOT read arbitrary environment variables — only the documented `PROVIDER_API_KEY` pattern — so unrelated secrets are never exposed to requests or local processing.
 4. **Set fallbacks** — `--fallback primary secondary` for critical providers
 5. **Check cache/log** — `--cache` / `--log` during heartbeats to monitor usage
 6. **Dry run** — `--call --dry-run` before executing important calls
 
 ## Security Notes
-
 - Keys stored as plain text in JSON with chmod 0600 (POSIX)
 - For higher assurance, use environment variables (`PROVIDER_API_KEY`)
 - For production, integrate with a secrets manager
@@ -206,6 +206,14 @@ When making API calls:
 - Request log stores only provider + status class + timestamp (no endpoints)
 - Allowlist is a strict domain match, not a string contains
 - Code has zero external dependencies (no npm install)
+- ⚠️ **DATA LEAVES TO A THIRD PARTY:** every `--call` sends your request (URL, headers, body, prompts) to the provider endpoint YOU specify — a separate external service. Responses come back from that provider and may be retained by them per their own policy. This skill is NOT a transparent pass-through; it centralizes collection, storage, and forwarding of potentially sensitive data. Only call endpoints you trust.
+- ⚠️ **SENSITIVE DATA IN LOGS/CACHE (default vs opt-in):**
+  - The **request log** stores only provider name + status class + timestamp. It does NOT store endpoint URLs, query strings, or request/response bodies. (If you put a secret in a request body, that body goes to the provider but is never written to the request log.)
+  - **`cache.json` is metadata-only by default** (status, timestamp, response headers, body *length*). The full response **body** is written to disk ONLY when you explicitly enable `--cache-full <provider>`.
+  - **Cache and rate-limit keys are hashed, not stored.** The key is the provider name plus a SHA-256 digest of the endpoint path and request body. Your prompts, payloads, and endpoint URLs are therefore not recoverable from `cache.json` or `rate-limits.json`. (Prior to v1.1.10 these keys embedded the endpoint and the full request body in plaintext; v1.1.10 purges any such legacy entries from disk the first time it loads them.)
+  - So by default, endpoints/bodies you pass are NOT persisted locally in readable form by this skill. The only local exposure path is `--cache-full`, which stores complete responses. Clear caches after sensitive work (`--log --clear`, `--cache --clear`) and never use `--cache-full` for sensitive providers.
+- ⚠️ **FULL-BODY CACHING WRITES COMPLETE RESPONSES TO DISK:** `--cache-full <provider>` stores the ENTIRE response body (which may contain secrets, tokens, personal data, or proprietary content) in `cache.json`. This is a local data-exposure risk if the host/workspace is shared or later exfiltrated. Never use `--cache-full` with sensitive providers; prefer the default metadata-only cache.
+- ⚠️ **HTTPS ONLY:** API Gateway refuses to send any request over plain HTTP (it would expose bearer credentials on the wire). Set `API_GATEWAY_ALLOW_HTTP=1` only for non-credential plaintext endpoints.
 
 ## What This Skill Does NOT Do
 
@@ -214,6 +222,7 @@ When making API calls:
 - Does NOT read environment variables silently — only the documented `PROVIDER_API_KEY` pattern
 - Does NOT send Authorization headers to URLs outside the allowlist
 - Does NOT cache full response bodies unless explicitly opted in per provider
+- Does NOT write request bodies or endpoint URLs to disk — cache and rate-limit keys are SHA-256 digests
 - Does NOT log full endpoint URLs or query strings
 
 ## Design Principles

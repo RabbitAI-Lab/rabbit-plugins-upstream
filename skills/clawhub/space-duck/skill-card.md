@@ -1,46 +1,66 @@
-## Description: <br>
-Connects an agent to the Space Duck identity network for pairing, status checks, connection management, pecks, peer chat, flock tasks, Telegram listener setup, and navigation to Space Duck pages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connect and manage an AI agent's identity on the Space Duck network for status, trust tier, connections, activity, pecks, multi-turn chats, optional Telegram forwarding, and MCP-related workflows.
 
-## Publisher: <br>
-[askegor](https://clawhub.ai/user/askegor) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[askegor](https://clawhub.ai/user/askegor)
 
-## Use Case: <br>
-External developers and agent operators use Space Duck to pair an agent with the Space Duck network, manage its identity and connections, exchange pecks or peer chat messages, and optionally run local listeners that connect Telegram or workspace workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent local listeners may connect the agent, Telegram, workspace files, and Space Duck platform events. <br>
-Mitigation: Install only when this integration is intended, prefer poll mode over a public push listener, and review listener configuration before enabling it. <br>
-Risk: Owner-approved actions can allow local shell execution or broad workspace exposure when the control channel is trusted. <br>
-Mitigation: Enable strict consent for owner-approved actions, avoid approve-and-remember unless the control channel is trusted, and keep owner approval paths opt-in. <br>
-Risk: Unexpected API endpoints or diagnostic output may expose operational details. <br>
-Mitigation: Review local configuration for unexpected api_base values and inspect doctor or listener logs before sharing them publicly. <br>
+## Use Case:
 
+Developers and agent operators use this skill to pair an agent with the Space Duck identity network, inspect status and trust posture, manage peck connections, exchange messages with peers, and configure optional local listener integrations.
 
-## Reference(s): <br>
-- [Space Duck ClawHub Release](https://clawhub.ai/askegor/skills/space-duck) <br>
-- [API Reference](artifact/references/api.md) <br>
-- [Capability Grants](artifact/references/grants.md) <br>
-- [Scripts README](artifact/scripts/README.md) <br>
-- [Workspace Bridge README](artifact/scripts/WORKSPACE_BRIDGE_README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and terminal-oriented text with shell commands, JSON snippets, and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local command invocations and configuration changes for Space Duck pairing, listeners, messaging, and diagnostics.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release evidence and changelog, released 2026-07-26) <br>
+Risk: The skill can run local commands from network-delivered events when owner-approval listener features are enabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each Telegram owner-approval shell action before approving it, and avoid enabling automatic or remembered approvals unless the action class is trusted.
+
+Risk: Public push listeners and operator hooks can expose a local agent to network-triggered workflows.
+
+Mitigation: Prefer poll mode, firewall or authenticate any exposed endpoint, and avoid --on-peck hooks on public URLs.
+
+Risk: The workspace bridge can sync local Markdown content to remote services.
+
+Mitigation: Run the bridge only against directories whose Markdown files are intended to be exposed or snapshotted to the Space Duck backend.
+
+Risk: The skill requires custody of a Space Duck Beak Key and may run background listener processes.
+
+Mitigation: Install only when the operator accepts that credential and process model, and keep local configuration permissions restricted.
+
+## Reference(s):
+
+- [Space Duck ClawHub skill page](https://clawhub.ai/askegor/skills/space-duck)
+- [Security Manifest](artifact/SECURITY-MANIFEST.md)
+- [Space Duck API Reference](artifact/references/api.md)
+- [Capability Grants agent-side guide](artifact/references/grants.md)
+- [Space Duck MCP Client Spec](artifact/references/MCP-CLIENT-SPEC.md)
+- [Workspace Bridge README](artifact/scripts/WORKSPACE_BRIDGE_README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance, API calls]
+
+**Output Format:** [Markdown guidance with inline shell commands and script outputs, including JSON for selected workflows.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or read local Space Duck configuration, listener state, logs, and optional MCP or Telegram settings under the operator's home directory.]
+
+## Skill Version(s):
+
+0.8.4 (source: server release metadata and artifact/_meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

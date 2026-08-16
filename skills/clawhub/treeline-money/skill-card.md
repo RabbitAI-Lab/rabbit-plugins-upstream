@@ -1,48 +1,63 @@
-## Description: <br>
-Chat with your finances from Treeline Money. Query balances, spending, budgets, and transactions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chat with your finances from Treeline Money. Query balances, spending, budgets, and transactions.
 
-## Publisher: <br>
-[zack-schrag](https://clawhub.ai/user/zack-schrag) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zack-schrag](https://clawhub.ai/user/zack-schrag)
 
-## Use Case: <br>
-External users and agents use this skill to inspect local Treeline Money finance data, answer questions about balances, spending, budgets, and transactions, and guide imports or sync workflows with user confirmation for data-changing actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read a user's local finance database through the Treeline CLI. <br>
-Mitigation: Install only if the user is comfortable with that access, and avoid sharing account or transaction details outside the conversation unless explicitly requested. <br>
-Risk: Sync, import, restore, tagging, demo-mode changes, write-enabled SQL, and saved user skills can change local data or persist finance-related context. <br>
-Mitigation: Require explicit user approval before those actions and use dry-run or read-only previews where available. <br>
-Risk: Reusable skill files can preserve sensitive finance details or secrets. <br>
-Mitigation: Avoid saving secrets or overly sensitive details in reusable skill files. <br>
+## Use Case:
 
+External users and agents use this skill to answer personal-finance questions from a local Treeline Money database, including balances, spending, budgets, transactions, imports, backups, and health checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zack-schrag/skills/treeline-money) <br>
-- [Treeline Money](https://treeline.money) <br>
-- [Bank Sync documentation](https://treeline.money/docs/integrations/bank-sync/) <br>
-- [CSV Import documentation](https://treeline.money/docs/integrations/csv-import/) <br>
-- [Treeline CLI download for macOS](https://github.com/treeline-money/treeline/releases/latest/download/tl-macos-arm64) <br>
-- [Treeline CLI download for Linux](https://github.com/treeline-money/treeline/releases/latest/download/tl-linux-x64) <br>
-- [Treeline CLI download for Windows](https://github.com/treeline-money/treeline/releases/latest/download/tl-windows-x64.exe) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, SQL examples, and JSON-oriented CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the Treeline CLI (`tl`) with local finance data; read-only commands may run autonomously while write actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-26.7.201 (source: server release evidence) <br>
+Risk: The skill can expose sensitive local financial summaries and transaction data to the agent during normal use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with Treeline Money data you intend the agent to read, keep responses concise, and do not share transaction descriptions or account details outside the conversation unless explicitly requested.
+
+Risk: Sync, import, backup restore, tag, compact, demo toggle, and write-enabled SQL actions can change local financial data or database state.
+
+Mitigation: Confirm those actions with the user first, prefer dry-run or read-only commands when available, and run SQL without write access unless writes are explicitly approved.
+
+Risk: Encrypted databases require a local unlock step that could involve credentials or keychain access.
+
+Mitigation: Have the user unlock the database outside the chat through the desktop app or their own terminal, and do not ask the agent to handle credentials.
+
+## Reference(s):
+
+- [Treeline Money](https://treeline.money)
+- [Treeline Bank Sync documentation](https://treeline.money/docs/integrations/bank-sync/)
+- [Treeline CSV Import documentation](https://treeline.money/docs/integrations/csv-import/)
+- [Treeline AI Agents Query Cookbook](https://docs.treeline.money/ai-agents/query-cookbook/)
+- [Treeline CLI macOS download](https://github.com/treeline-money/treeline/releases/latest/download/tl-macos-arm64)
+- [Treeline CLI Linux download](https://github.com/treeline-money/treeline/releases/latest/download/tl-linux-x64)
+- [Treeline CLI Windows download](https://github.com/treeline-money/treeline/releases/latest/download/tl-windows-x64.exe)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, code, guidance]
+
+**Output Format:** [Markdown with concise text, bullet lists, SQL snippets, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses JSON CLI output when available and favors mobile-readable summaries over tables.]
+
+## Skill Version(s):
+
+26.8.1401 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

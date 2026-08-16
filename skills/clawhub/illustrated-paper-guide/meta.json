@@ -1,0 +1,15 @@
+{
+  "name": "Illustrated Paper Guide",
+  "slug": "illustrated-paper-guide",
+  "version": "v1.0.0",
+  "platforms": ["claude-code", "openclaw", "codex"],
+  "entry_point": "SKILL.md",
+  "description": "Turn academic papers into source-grounded, illustrated study guides with reading checkpoints and durable Q&A write-back.",
+  "triggers": [
+    "read this paper",
+    "paper study guide",
+    "explain this figure",
+    "turn this PDF into notes",
+    "make a reading checklist"
+  ]
+}

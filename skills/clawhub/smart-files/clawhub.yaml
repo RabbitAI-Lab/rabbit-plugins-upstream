@@ -1,8 +1,14 @@
 slug: smart-files
 name: smart-files
 owner: jlacroix82
-description: Secure file search, dedup, organize, and rename for workspace files. Watch mode is opt-in with explicit warnings. Content-aware but privacy-first — never scans binary files, respects size limits, and can suppress content snippets.
-version: 99.0.1
+description: >-
+  Content-aware file management for workspace files: search (content snippets
+  opt-in via --snippets), dedup, organize, rename, file metadata inspection, and
+  continuous watch mode. Watch mode persists a journal (paths/hashes/sizes/
+  timestamps/change events) to memory/smart-files-journal.json and can monitor
+  paths outside the workspace when --force is passed. All file mutations
+  (organize/rename) require --force and are dry-run by default.
+version: 2.2.2
 type: skill
 author: OpenClaw
 license: MIT
@@ -16,3 +22,17 @@ keywords:
   - privacy
 entry: SKILL.md
 dependencies: []
+permissions:
+  - name: filesystem.read
+    description: Recursively read file contents from workspace for search, dedup, info, cleanup, and status operations
+  - name: filesystem.write
+    description: Persist watch-mode journal to memory/smart-files-journal.json; organize/rename modify files via copy+unlink (requires --force outside dry-run)
+  - name: filesystem.watch
+    description: Continuously monitor a directory and persist file paths/hashes/sizes/timestamps/change events to the journal
+  - name: filesystem.external_path
+    description: Scan paths outside the workspace root when --force is passed (explicit opt-in per invocation)
+  - name: environment.read
+    description: Read SMART_FILES_WORKSPACE environment variable to override the workspace root
+capabilities:
+  - filesystem
+  - environment

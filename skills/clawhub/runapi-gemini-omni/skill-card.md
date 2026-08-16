@@ -1,47 +1,62 @@
-## Description: <br>
-Create Gemini Omni voice resources, character resources, and Flash Preview or multimodal text-to-video tasks through RunAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create Gemini Omni voice resources, character resources, and Flash Preview or multimodal text-to-video tasks through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to create or manage Gemini Omni audio voices, character resources, and video generation tasks through RunAPI. It guides one-off CLI use and SDK-based application integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, uploaded inputs, and generated assets may be sent to an external RunAPI provider. <br>
-Mitigation: Use this skill only for intended RunAPI Gemini Omni work and review data handling requirements before sending sensitive content. <br>
-Risk: RUNAPI_API_KEY or saved CLI authentication could be exposed or stored in an unsafe location. <br>
-Mitigation: Prefer environment-managed credentials or vetted saved CLI config, and review local credential storage before use. <br>
-Risk: RunAPI-generated file URLs are temporary and may expire before downstream systems retrieve them. <br>
-Mitigation: Download generated media and store it in durable storage within the documented seven-day window. <br>
+## Use Case:
 
+Developers and agents use this skill to create or manage Gemini Omni voice, character, Flash Preview, and multimodal text-to-video tasks through RunAPI. It is suited for one-off media generation via the RunAPI CLI and for SDK-based integration into applications or backend workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/runapi-ai/skills/runapi-gemini-omni) <br>
-- [RunAPI Gemini Omni Homepage](https://runapi.ai/models/gemini-omni) <br>
-- [RunAPI Gemini Omni Documentation](https://runapi.ai/models/gemini-omni.md) <br>
-- [Gemini Omni Flash Preview](https://runapi.ai/models/gemini-omni/flash-preview.md) <br>
-- [RunAPI Google Provider](https://runapi.ai/providers/google.md) <br>
-- [RunAPI Model Catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with shell and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide agents to generate or manage audio, character, image, video, and related media assets through RunAPI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: server release evidence) <br>
+Risk: The skill submits external RunAPI jobs that may involve paid task execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each request and obtain authorization before submitting paid tasks.
+
+Risk: Selected local media files may be uploaded for processing.
+
+Mitigation: Confirm that the selected files are intended for RunAPI processing before authentication and submission.
+
+Risk: Generated media URLs may not match the requested deliverable type.
+
+Mitigation: Download every requested media deliverable and verify each file is non-empty and has the expected MIME type before reporting completion.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-gemini-omni)
+- [RunAPI Gemini Omni homepage](https://runapi.ai/models/gemini-omni)
+- [RunAPI Gemini Omni documentation](https://runapi.ai/models/gemini-omni.md)
+- [RunAPI Google provider overview](https://runapi.ai/providers/google.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [Gemini Omni SDK integration](https://github.com/runapi-ai/gemini-omni-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, JSON, code, files]
+
+**Output Format:** [Markdown guidance with shell commands and JSON request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce RunAPI task requests, status checks, and verified downloaded audio or video files.]
+
+## Skill Version(s):
+
+0.3.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

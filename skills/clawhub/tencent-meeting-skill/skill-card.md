@@ -1,53 +1,64 @@
-## Description: <br>
-Tencent Meeting helps agents schedule, update, cancel, inspect, and troubleshoot Tencent Meeting sessions, participants, recordings, transcripts, smart minutes, and recording permission requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+腾讯会议 helps agents schedule, manage, inspect, and control Tencent Meeting sessions, including invitees, waiting rooms, recordings, transcripts, smart minutes, and recording-permission requests.
 
-## Publisher: <br>
-[wemeeting](https://clawhub.ai/user/wemeeting) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wemeeting](https://clawhub.ai/user/wemeeting)
 
-## Use Case: <br>
-Employees and external collaborators use this skill to manage Tencent Meeting workflows, including creating or changing meetings, reviewing attendees, retrieving recordings or transcripts, and applying for recording access when permission is missing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Tencent Meeting token enables meeting management and access to recordings or transcripts through Tencent's MCP service. <br>
-Mitigation: Use a token appropriate for the intended account and install the skill only where that level of meeting and recording access is acceptable. <br>
-Risk: Meeting changes, cancellations, feedback reports, and recording permission requests can affect real meetings or expose sensitive meeting context. <br>
-Mitigation: Review the skill's confirmation prompts before these actions, and require explicit user approval for sensitive operations. <br>
-Risk: Feedback or troubleshooting flows may involve privacy-sensitive meeting details. <br>
-Mitigation: Redact personal identifiers, meeting topics, links, participant details, and other private content before reporting or sharing feedback. <br>
-Risk: Tool calls may include client OS, agent, and model metadata. <br>
-Mitigation: Deploy only in environments where sending this client metadata with Tencent Meeting MCP calls is acceptable. <br>
-Risk: Local update preferences can change when or whether users see version update prompts. <br>
-Mitigation: Follow the documented update preference flow and respect confirmation prompts before optional updates unless the user has preauthorized automatic updates. <br>
+## Use Case:
 
+Employees and external Tencent Meeting users can use this skill to have an agent create, update, cancel, search, and inspect meetings; manage invitees and in-meeting controls; and retrieve recordings, transcripts, smart minutes, participant exports, and recording permission flows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wemeeting/tencent-meeting-skill) <br>
-- [Tencent Meeting homepage](https://meeting.tencent.com/) <br>
-- [Tencent Meeting MCP token endpoint](https://mcp.meeting.tencent.com/mcp/wemeet-open/v1) <br>
-- [API references](references/api_references.md) <br>
-- [Error dictionary](references/error_dictionary.md) <br>
-- [Feedback rules](references/feedback_rules.md) <br>
-- [Privacy policy](references/privacy_policy.md) <br>
-- [Version management](references/version_management.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured tool-call guidance with shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses Tencent Meeting token configuration and may include trace identifiers returned by Tencent Meeting MCP calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: release evidence) <br>
+Risk: The skill can create, modify, cancel, inspect, and control meetings using the configured Tencent Meeting account token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the publisher and integration are trusted, and require user confirmation before destructive meeting changes or in-meeting control actions.
+
+Risk: The skill can access recordings, transcripts, smart minutes, participant information, and contact lookup results where the token permits.
+
+Mitigation: Limit use to intended meeting workflows, follow the bundled privacy rules for sensitive information, and avoid using contact lookup for general people search.
+
+Risk: The TENCENT_MEETING_TOKEN grants sensitive account access.
+
+Mitigation: Treat TENCENT_MEETING_TOKEN as a secret and keep the configured MCP endpoint set to the Tencent HTTPS URL.
+
+## Reference(s):
+
+- [Tencent Meeting](https://meeting.tencent.com/)
+- [Tencent Meeting Skill Token](https://meeting.tencent.com/ai-skill)
+- [Tencent Meeting MCP Endpoint](https://mcp.meeting.tencent.com/mcp/wemeet-open/v1)
+- [API References](references/api_references.md)
+- [Error Dictionary](references/error_dictionary.md)
+- [Feedback Rules](references/feedback_rules.md)
+- [Privacy Policy](references/privacy_policy.md)
+- [Version Management](references/version_management.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API Calls, Shell commands, Configuration instructions, Markdown]
+
+**Output Format:** [Markdown guidance with JSON tool-call arguments and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3 and TENCENT_MEETING_TOKEN; configured for the Tencent Meeting HTTPS MCP endpoint.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

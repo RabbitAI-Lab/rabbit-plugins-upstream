@@ -1,46 +1,56 @@
-## Description: <br>
-支持通过AI生成符合公众号规范的图文（文章和贴图），并推送到公众号草稿箱，兼容其它SKILL生成的图文、图片进行推送。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill is a migration notice that redirects users from wechat-mp-push to @lihengdao/aigc-web-push for website content generation and push workflows.
 
-## Publisher: <br>
-[lihengdao](https://clawhub.ai/user/lihengdao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lihengdao](https://clawhub.ai/user/lihengdao)
 
-## Use Case: <br>
-External creators and agents use this skill to draft WeChat Official Account articles or image-card posts, save the required account configuration, and push generated HTML or public image URLs to a WeChat draft box. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The pcloud QR authorization wizard and API receive WeChat account identifiers and unpublished draft content. <br>
-Mitigation: Install and use the skill only when that service is trusted for the account and content involved, and keep config.json private. <br>
-Risk: The documented cleanupDrafts action can clear account drafts if invoked for the wrong account or without clear intent. <br>
-Mitigation: Do not invoke cleanupDrafts unless the user explicitly asks to clear drafts and has confirmed the target account and deletion scope. <br>
-Risk: Pushing to the wrong AppID can send draft content to an unintended WeChat account. <br>
-Mitigation: Verify the target AppID or selected account before each push, especially when multiple accounts are present in config.json. <br>
-Risk: The push script may report timeout responses as successful background work, which can lead to duplicate pushes if retried immediately. <br>
-Mitigation: After a timeout, check WeChat service notifications or the draft box before retrying. <br>
+## Use Case:
 
+Developers and agents use this release to recognize that wechat-mp-push is deprecated and to route installation or setup guidance to @lihengdao/aigc-web-push instead.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/lihengdao/wechat-mp-push) <br>
-- [WeChat MP Push configuration wizard](https://app.pcloud.ac.cn/design/wechat-mp-push.html) <br>
-- [OpenClaw documentation](https://docs.openclaw.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTML content, JSON configuration, and shell command invocations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can submit generated HTML or image URL payloads to a WeChat draft workflow and returns JSON status from the push script.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.6 (source: server release evidence and package.json) <br>
+Risk: The release redirects users to a replacement skill that was not assessed as part of this artifact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the @lihengdao/aigc-web-push skill independently before installing, configuring, or relying on it.
+
+Risk: Users may continue depending on a deprecated skill that no longer contains active push behavior.
+
+Mitigation: Treat this release as a migration notice and move any active workflow to the referenced replacement after review.
+
+## Reference(s):
+
+- [wechat-mp-push ClawHub listing](https://clawhub.ai/lihengdao/skills/wechat-mp-push)
+- [Replacement skill on ClawHub](https://clawhub.ai/lihengdao/skills/aigc-web-push)
+- [Replacement skill repository](https://github.com/lihengdao/AIGC-Web-Push)
+- [Replacement skill configuration guide](https://app.pcloud.ac.cn/design/aigc-web-push.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown migration notice with an inline installation command]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable behavior is included in this release; it points users to a replacement skill.]
+
+## Skill Version(s):
+
+3.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

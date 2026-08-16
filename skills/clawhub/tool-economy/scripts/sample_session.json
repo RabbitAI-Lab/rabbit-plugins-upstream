@@ -1,0 +1,74 @@
+[
+  {
+    "turn": 1,
+    "tool": "read_file",
+    "args": {"path": "src/main.py"},
+    "calls_in_turn": 1
+  },
+  {
+    "turn": 2,
+    "tool": "read_file",
+    "args": {"path": "src/utils.py"},
+    "calls_in_turn": 1
+  },
+  {
+    "turn": 3,
+    "tool": "read_file",
+    "args": {"path": "src/config.py"},
+    "calls_in_turn": 1
+  },
+  {
+    "turn": 4,
+    "tool": "search_files",
+    "args": {"pattern": "TODO", "target": "content"},
+    "calls_in_turn": 1
+  },
+  {
+    "turn": 5,
+    "tool": "read_file",
+    "args": {"path": "src/main.py"},
+    "calls_in_turn": 1
+  },
+  {
+    "turn": 6,
+    "tool": "patch",
+    "args": {"path": "src/main.py", "old_string": "def old():", "new_string": "def new():"},
+    "calls_in_turn": 1
+  },
+  {
+    "turn": 7,
+    "tool": "cat",
+    "args": {"command": "cat src/utils.py"},
+    "calls_in_turn": 1
+  },
+  {
+    "turn": 8,
+    "tool": "grep",
+    "args": {"command": "grep -rn import src/"},
+    "calls_in_turn": 1
+  },
+  {
+    "turn": 9,
+    "tool": "terminal",
+    "args": {"command": "python3 -m pytest"},
+    "calls_in_turn": 1
+  },
+  {
+    "turn": 10,
+    "tool": "read_file",
+    "args": {"path": "src/main.py"},
+    "calls_in_turn": 1
+  },
+  {
+    "turn": 11,
+    "tool": "search_files",
+    "args": {"pattern": "def ", "target": "content"},
+    "calls_in_turn": 1
+  },
+  {
+    "turn": 12,
+    "tool": "search_files",
+    "args": {"pattern": "def ", "target": "content"},
+    "calls_in_turn": 1
+  }
+]

@@ -53,17 +53,23 @@ node skills/smart-files/smart-files.js --cleanup .
 node skills/smart-files/smart-files.js --search <query> [--dir <path>]
 ```
 
-Searches file **content** (not just filenames) for the query string. Returns ranked results with sanitized snippets.
+Searches file **content** (not just filenames) for the query string. Returns ranked results.
+
+Content snippets are **hidden by default** — only paths and match scores are shown:
 
 ```
 [smart-files] Found 3 matches for "api key":
   ✅ 1.00 — /path/to/project/config.json
-     "...API_KEY": [REDACTED],
   🔍 0.75 — /path/to/project/src/auth.js
-     "...const API_KEY = process.env..."
 ```
 
-⚠️ **Privacy**: Sensitive patterns (API keys, tokens, PEM keys, passwords) are automatically redacted from snippets. This is a best-effort filter — do not rely on it as a security boundary when scanning directories containing secrets.
+To show matched content snippets, add `--snippets`:
+
+```bash
+node skills/smart-files/smart-files.js --search "api key" --snippets
+```
+
+⚠️ **Privacy**: Without `--quiet`, matched content is read from disk into memory. Snippets are **not redacted** — they print raw text as-is. Do not rely on snippet output as a security boundary when scanning directories containing secrets.
 
 ---
 
@@ -213,18 +219,39 @@ Default rules organize into: Pictures, Documents, Videos, Audio, Code, Uncategor
 | Protection | Details |
 |------------|---------|
 | **Read-only by default** | `--search`, `--dedup`, `--organize`, `--info`, `--cleanup`, `--status` never modify files |
-| **Snippet sanitization** | API keys, tokens, PEM keys, and credential assignments are automatically redacted |
+| **Content snippets hidden** (opt-in) | Snippets only shown with `--snippets`; paths and scores always displayed |
 | **Binary detection** | Null-byte check + binary extension filter |
 | **Oversized file skip** | Configurable MAX_SCAN_SIZE (10MB default) |
 | **No shell execution** | Pure Node.js `fs` ops — no `child_process` |
-| **Watch safety gate** | `--watch` defaults to dry-run; `--force` required for mutations, with 5-second abort window |
+| **Watch safety gate** | Defaults to dry-run; `--force` required for mutations |
 | **Skip directories** | `.git`, `node_modules`, `.npm`, `.cache` excluded by default |
 | **Workspace awareness** | Detects and warns when scanning outside workspace |
 
+### Watch Mode Journal ⚠️
+
+Watch mode persists a journal file to track changes:
+
+- **Location:** `<workspace>/memory/smart-files-journal.json`
+  (override with `SMART_FILES_WORKSPACE` env var)
+- **Contents:** File paths, SHA-256 hashes, sizes, modification times, and change events (new/modified/removed)
+- **Not stored:** File contents — only hashes and metadata
+- **Size limit:** Journal entries capped at 1000; oldest dropped first on overflow
+- **To clear the journal:** Delete `memory/smart-files-journal.json` manually
+- **To disable persistence:** Watch mode always persists change events to the journal (that is its purpose). Deleting the file clears history, but the next change event recreates it. If you need zero disk writes, do not use watch mode — use one-shot commands (`--search`, `--status`) instead.
+
+```bash
+# Clear the watch-mode journal
+cp memory/smart-files-journal.json memory/smart-files-journal.backup && > memory/smart-files-journal.json
+
+# Or remove entirely
+rm -f memory/smart-files-journal.json
+```
+
 ### What's NOT Protected
 
-- **Best-effort redaction only**: Search snippet sanitization is pattern-based. It catches common formats (OpenAI keys, GitHub tokens, PEM keys) but is not a security boundary. Do not scan directories containing sensitive credentials.
-- **Content exposure**: Search results, including snippets, are printed to stdout and may enter agent context. Anyone with terminal access or log access can see them.
+- **No snippet redaction**: Snippets print raw file content as-is — no pattern-based filtering occurs.
+- **Content exposure**: When `--snippets` is used, matched content is printed to stdout and may enter agent context. Anyone with terminal access or log access can see them.
+- **Watch-mode journal**: File paths, hashes, sizes, and timestamps are persisted to disk (`memory/smart-files-journal.json`). Delete the file to clear; entries capped at 1000.
 - **No encryption**: File content is not encrypted at rest or in transit. Smart Files is a local file analysis tool, not a secrets vault.
 
 ---
@@ -234,7 +261,7 @@ Default rules organize into: Pictures, Documents, Videos, Audio, Code, Uncategor
 ```javascript
 const SF = require('./skills/smart-files/smart-files.js');
 
-// Search files (sanitized snippets)
+// Search files — each result includes path, score, and raw content snippet
 const results = SF.searchFiles('api key', '/path/to/scan');
 
 // Find duplicates
@@ -255,9 +282,8 @@ const status = SF.showStatus('/path/to/scan');
 // Path validation
 const inWorkspace = SF.isPathWithinWorkspace('/some/path');
 
-// Snippet sanitization
-const sanitized = SF.sanitizeSnippet('API_KEY=sk-abc123def456');
-// → 'API_KEY=[REDACTED]'
+// Snippets are raw — no redaction applied
+// Results include: { path, name, size, score, snippet }
 
 // Formatting helpers
 SF.formatBytes(1024);                    // "1 KB"

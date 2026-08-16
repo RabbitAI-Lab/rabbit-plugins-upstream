@@ -1,43 +1,60 @@
-## Description: <br>
-AI-native lending service for autonomous agents to request loans, repay with USDC on Base, and check credit scores. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-native lending on Base MAINNET for autonomous agents. Check credit, request USDC loans (EIP-712 signed), and repay autonomously. Real money.
 
-## Publisher: <br>
-[rsoft-latam](https://clawhub.ai/user/rsoft-latam) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[rsoft-latam](https://clawhub.ai/user/rsoft-latam)
 
-## Use Case: <br>
-Agents and developers use this skill to interact with RSoft Agentic Bank: checking rates and creditworthiness, requesting Base Sepolia USDC loans, repaying through the payment skill, and confirming repayment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The repayment flow asks the agent to send USDC to an address returned by RSoft's API. <br>
-Mitigation: Use a dedicated testnet wallet with limited funds and review the returned pay_to address and repayment_amount before authorizing payment. <br>
-Risk: Wallet addresses, request IDs, and transaction hashes are sent to RSoft's API, and retention or sharing practices are not explained in the evidence. <br>
-Mitigation: Review RSoft's data practices before using the service with sensitive identifiers or operational wallets. <br>
-Risk: The skill depends on a separately installed payment skill and a funded Base Sepolia wallet. <br>
-Mitigation: Verify the payment skill separately and keep only the funds needed for the intended testnet workflow in the wallet. <br>
+## Use Case:
 
+External developers and autonomous-agent operators use this skill to check creditworthiness, request signed USDC loans, track loan status, and repay loans on Base mainnet. It is intended for agents that can use wallet-based payments and understand real-money lending consequences.
 
-## Reference(s): <br>
-- [RSoft Agentic Bank Homepage](https://rsoft-agentic-bank.com/) <br>
-- [ClawHub Skill Page](https://clawhub.ai/rsoft-latam/rsoft-agentic-bank) <br>
-- [BaseScan Sepolia Explorer](https://sepolia.basescan.org/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, API calls, configuration] <br>
-**Output Format:** [Markdown instructions with shell command examples and REST API calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl and a payment skill wallet configured for Base Sepolia.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.7.0 (source: release metadata and skill frontmatter) <br>
+Risk: The skill can help an agent request and repay real USDC loans on Base mainnet.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for real-money lending use cases, review every loan amount before signing, and use a wallet with limited funds.
+
+Risk: Incorrect repayment details could create loss, failed repayment, or default consequences.
+
+Mitigation: Verify the destination address, exact repayment amount, request ID, transaction hash, and repayment endpoint before running commands.
+
+Risk: A signature request authorizes loan origination from the borrowing wallet.
+
+Mitigation: Inspect every EIP-712 signing payload and deadline before signing with the wallet private key.
+
+## Reference(s):
+
+- [RSoft Agentic Bank homepage](https://rsoft-agentic-bank.com/)
+- [RSoft Agentic Bank docs](https://rsoft-agentic-bank.com/docs)
+- [ClawHub skill page](https://clawhub.ai/rsoft-latam/skills/rsoft-agentic-bank)
+- [BaseScan](https://basescan.org/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands can call external lending APIs and on-chain payment tools; review before execution.]
+
+## Skill Version(s):
+
+2.0.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

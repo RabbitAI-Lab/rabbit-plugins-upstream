@@ -1,50 +1,64 @@
-## Description: <br>
-Story Setup deploys a web-fiction writing toolbox across Claude Code, OpenCode, Codex, ZCode, OpenClaw, Reasonix, and generic agent environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Story Setup deploys online-fiction writing project infrastructure for Claude Code, OpenCode, Codex, ZCode, OpenClaw, Reasonix, and generic agent workflows.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers, writing teams, and developers use this skill to set up project-level story-writing agents, commands, rules, hooks, and reference material for supported CLI and file-based agent environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill installs persistent project-level automation that can change future agent behavior. <br>
-Mitigation: Install only when the project needs this writing toolbox, review the selected target platforms, and inspect hook and configuration changes before trusting them. <br>
-Risk: Browser-CDP features can interact with an existing logged-in Chrome session. <br>
-Mitigation: Disable or avoid browser-CDP use unless the user explicitly accepts authenticated browser control in that environment. <br>
-Risk: Automatic update behavior and managed hooks can introduce unexpected changes after setup. <br>
-Mitigation: Consider disabling the automatic update check and re-review managed hooks, commands, and config files after upgrades. <br>
+## Use Case:
 
+Developers, writers, and writing-tool maintainers use this skill to initialize or refresh a story-writing workspace with agents, hooks, commands, templates, and reference material across supported agent CLIs. It is intended for dedicated writing projects where automated project configuration is acceptable.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/worldwonderer/skills/story-setup) <br>
-- [OpenClaw Metadata Source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Skill Definition](SKILL.md) <br>
-- [Upgrade Notes](UPGRADING.md) <br>
-- [Agent Reference Bundle](references/agent-references/) <br>
-- [Hook Templates](references/templates/hooks/) <br>
-- [Codex Hook Configuration](references/codex/hooks/hooks.json) <br>
-- [OpenCode Plugin Template](references/opencode/plugin.ts) <br>
-- [ZCode Hook Configuration](references/zcode/hooks/hooks.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code, shell, and configuration file instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or merge project-level agent, hook, rule, command, and reference files depending on the selected target environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.14 (source: ClawHub release metadata; artifact frontmatter reports 1.2.7) <br>
+Risk: The skill installs persistent hooks and broad command routing into writing projects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in a dedicated writing workspace and review generated hook and configuration changes before relying on them.
+
+Risk: Some generated configurations can affect files such as .claude/settings.local.json, .codex/hooks.json, .zcode/config.json, opencode.json, and .git/hooks/pre-commit.
+
+Mitigation: Inspect those files after setup or upgrade and confirm that managed sections match the intended target agent environments.
+
+Risk: Browser-CDP and cover-generation workflows may use browser login state or external APIs when invoked separately.
+
+Mitigation: Run those workflows only when the user has approved the browser or external-service access needed for the writing task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-setup)
+- [Metadata source link](https://github.com/worldwonderer/oh-story-claudecode)
+- [Upgrade guide](UPGRADING.md)
+- [Agent reference materials](references/agent-references/)
+- [Claude Code deployment templates](references/templates/)
+- [Codex adapter files](references/codex/)
+- [OpenCode adapter files](references/opencode/)
+- [ZCode adapter files](references/zcode/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with generated or merged project files, shell commands, hooks, agent definitions, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces workspace changes for selected agent environments and reports deployment or upgrade actions.]
+
+## Skill Version(s):
+
+1.1.19 (source: server release evidence; artifact frontmatter reports 1.2.7)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

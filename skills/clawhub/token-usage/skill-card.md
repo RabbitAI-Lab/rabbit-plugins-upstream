@@ -1,45 +1,60 @@
-## Description: <br>
-Track, aggregate, and report OpenClaw token usage and costs across sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Track, aggregate, and report OpenClaw token usage and costs across sessions.
 
-## Publisher: <br>
-[space-cadet](https://clawhub.ai/user/space-cadet) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[space-cadet](https://clawhub.ai/user/space-cadet)
 
-## Use Case: <br>
-Developers and operators use this skill to review OpenClaw token usage, estimate costs, compare model or session activity, and monitor budget trends from local session logs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads local OpenClaw session logs to compute usage and cost reports. <br>
-Mitigation: Install and run it only in environments where reading local session logs is acceptable. <br>
-Risk: Session archive commands can compress or move local session files. <br>
-Mitigation: Review archive commands before execution and keep backups or retention requirements in mind. <br>
-Risk: The pricing updater and SQLite ingestion helper can update local pricing files or usage.db. <br>
-Mitigation: Run those maintenance helpers only when local pricing data or the usage database should be updated. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect local OpenClaw and Codex session logs, answer token-usage questions, compare model/session activity, and estimate costs for budgeting or optimization.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/space-cadet/skills/token-usage) <br>
-- [Skill Homepage](https://github.com/space-cadet/openclaw-tools/tree/main/skills/token-usage) <br>
-- [OpenRouter Models API](https://openrouter.ai/api/v1/models) <br>
-- [Kimi Pricing Documentation](https://platform.kimi.com/docs/pricing/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown reports, terminal summaries, and optional JSON exports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Cost values are estimates based on local pricing data and may differ from actual billing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.4 (source: server release evidence) <br>
+Risk: Local session logs may reveal usage patterns, model names, session IDs, and cron job labels.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the reporting commands only in environments where the operator is allowed to read those local OpenClaw/Codex session logs.
+
+Risk: The optional pricing updater contacts OpenRouter and updates bundled local pricing files.
+
+Mitigation: Avoid running the pricing updater unless network access and local pricing-file changes are intended.
+
+Risk: Cost outputs are estimates and may differ from actual billing.
+
+Mitigation: Use generated cost reports for monitoring and comparison, and verify billing decisions against provider invoices or current provider pricing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/space-cadet/skills/token-usage)
+- [Project homepage](https://github.com/space-cadet/openclaw-token-usage)
+- [OpenRouter models API](https://openrouter.ai/api/v1/models)
+- [Kimi pricing documentation](https://platform.kimi.com/docs/pricing/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON reports with shell command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include daily, weekly, model, session, cron-job, token, cache, and estimated-cost summaries.]
+
+## Skill Version(s):
+
+2.4.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

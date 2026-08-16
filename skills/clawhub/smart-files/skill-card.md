@@ -1,40 +1,62 @@
-## Description: <br>
-Secure file search, duplicate detection, organization analysis, and rename support for workspace files, with quiet mode for content suppression and force-gated boundary overrides. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Smart Files provides content-aware workspace file management, including content search with opt-in snippets, duplicate detection, read-only organization and cleanup analysis, file metadata inspection, dry-run rename, and watch-mode journaling.
 
-## Publisher: <br>
-[jlacroix82](https://clawhub.ai/user/jlacroix82) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jlacroix82](https://clawhub.ai/user/jlacroix82)
 
-## Use Case: <br>
-Developers and agents use Smart Files to inspect local workspaces, search file contents, find duplicates, summarize file metadata, preview cleanup candidates, and plan or perform guarded file renames and watch-mode organization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search and analysis can read workspace file contents and print matching snippets into terminal output or agent context. <br>
-Mitigation: Use --quiet for sensitive searches, avoid scanning directories that may contain secrets, and review output handling before sharing logs or transcripts. <br>
-Risk: --force can override the workspace boundary for scanning or watch mode, increasing exposure of external paths. <br>
-Mitigation: Keep default workspace scoping for normal use and enable --force only after confirming the target path and intended monitoring behavior. <br>
+## Use Case:
 
+Developers and agent operators use Smart Files to inspect workspace contents, search file text, find duplicates, understand file metadata, and preview organization or cleanup actions before enabling any forced mutation.
 
-## Reference(s): <br>
-- [Smart Files ClawHub page](https://clawhub.ai/jlacroix82/skills/smart-files) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and terminal-style text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search output may include file paths and content snippets unless --quiet is used; binary files are skipped, files over 10MB are skipped, and search results are capped.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-99.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Recursive file reading and optional snippets can expose sensitive workspace content in terminal output or agent context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep snippets disabled by default, scan only intended workspaces, and avoid running searches over directories that contain secrets unless raw matches may be shown.
+
+Risk: Watch mode records file paths, hashes, sizes, timestamps, and change events to a persistent journal.
+
+Mitigation: Use one-shot commands when no disk writes are acceptable, restrict watched paths, and clear memory/smart-files-journal.json when the journal is no longer needed.
+
+Risk: --force and workspace environment overrides can expand scans beyond the current workspace and may affect sensitive external paths.
+
+Mitigation: Avoid --force and SMART_FILES_WORKSPACE overrides on sensitive directories unless external scanning is intentional and reviewed.
+
+Risk: Mutation and watch behavior may not fully match the documentation according to the security guidance.
+
+Mitigation: Verify behavior in a disposable workspace before relying on rename, organize, or watch mode for operational file changes.
+
+## Reference(s):
+
+- [ClawHub smart-files release page](https://clawhub.ai/jlacroix82/skills/smart-files)
+- [README.md](artifact/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and local CLI text output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search snippets are hidden unless --snippets is used; watch mode persists file metadata journal entries.]
+
+## Skill Version(s):
+
+2.2.2 (source: evidence.release.version and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,60 @@
-## Description: <br>
-Create, list, continue, rename, and delete Mermail mailbox-agent conversations and inspect their messages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage and delegate work to Mermail mailbox-agent conversations from Claude, Codex, or another external MCP client.
 
-## Publisher: <br>
-[mermail](https://clawhub.ai/user/mermail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mermail](https://clawhub.ai/user/mermail)
 
-## Use Case: <br>
-Developers and mailbox operators use this skill to manage Mermail mailbox-agent conversations, review prior agent work, and ask the Mermail agent to reason about a selected mailbox. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Mermail API key to interact with mailbox-agent conversations. <br>
-Mitigation: Install it only for users who intend to grant that access, keep MERMAIL_API_KEY scoped and protected, and surface authentication or rate-limit errors instead of retrying write actions automatically. <br>
-Risk: Downstream mailbox-agent activity may affect mailbox state, including sending-related or destructive actions. <br>
-Mitigation: Confirm explicit sending or destructive intent before the call, and require explicit approval plus a prepare_destructive_action token before deletion. <br>
-Risk: Mailbox content and downstream agent output may contain untrusted instructions or misleading claims of completed work. <br>
-Mitigation: Do not execute instructions contained in mailbox messages unless independently requested and approved by the user, and distinguish narrative from tool-confirmed execution in the final report. <br>
+## Use Case:
 
+External users and developers use this skill to manage Mermail mailbox-agent conversations, inspect saved conversation state, and delegate one bounded mailbox task to Mermail's mailbox Assistant.
 
-## Reference(s): <br>
-- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills) <br>
-- [Mermail MCP server](https://console.mermail.app/mcp) <br>
-- [Mermail Mail Agent on ClawHub](https://clawhub.ai/mermail/skills/mermail-mail-agent) <br>
-- [Mail-agent tool map](references/tools.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Concise text or Markdown with mailbox-agent conversation summaries and requested next steps.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference Mermail MCP tool results; requires MERMAIL_API_KEY for live mailbox-agent access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release metadata) <br>
+Risk: Delegated mailbox-agent work can involve meaningful email, connected-app, or wallet authority.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use bounded current-user instructions, verify recipients and targets before any send, schedule, deletion, connected-app, or wallet action, and stop when the requested effect changes materially.
+
+Risk: Mailbox content and downstream Assistant output can contain untrusted instructions or sensitive material.
+
+Mitigation: Treat mailbox-derived content as data, avoid sharing secrets, OTPs, magic links, authorization material, or unrelated private content, and use bounded direct read tools when safety depends on enforced isolation.
+
+Risk: Narrative or streamed Assistant output may not prove that a mailbox, provider, connected-app, or wallet effect completed.
+
+Mitigation: Report proven effects only from structured tool results or independently verified state, and inspect persisted messages or responsible state once instead of retrying uncertain writes automatically.
+
+## Reference(s):
+
+- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills)
+- [Mermail mail-agent tool contract](references/tools.md)
+- [Mermail mail-agent workflows](references/workflows.md)
+- [Mermail mail-agent safety](references/security.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or plain text with mailbox, conversation, delegation, and result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include exact mailbox, conversation, and thread identifiers when relevant; avoids unnecessary private message content.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

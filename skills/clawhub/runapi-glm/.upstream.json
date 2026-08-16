@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-glm",
   "slug": "runapi-glm",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1784801297868,
-  "contentHash": "3588099e83d8ee12c624c1e5fd5c0eb03e37192df75b6084c5cbcf83a639d8ce",
-  "fetchedAt": "2026-07-26T18:07:10.835Z"
+  "version": "0.3.2",
+  "updatedAt": 1786520065013,
+  "contentHash": "e34c6f8f86d51191359f82a797eb53f04f9587940da7da963e134cdd9f34dd2c",
+  "fetchedAt": "2026-08-16T08:08:53.702Z"
 }

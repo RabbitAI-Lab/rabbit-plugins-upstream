@@ -1,47 +1,56 @@
-## Description: <br>
-Supports generating WeChat Official Account articles and image-card posts, then pushing HTML or public image URLs to a selected account's draft box through QR-based configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This deprecated skill now only directs agents to migrate to the replacement @lihengdao/aigc-web-push skill.
 
-## Publisher: <br>
-[lihengdao](https://clawhub.ai/user/lihengdao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lihengdao](https://clawhub.ai/user/lihengdao)
 
-## Use Case: <br>
-Content creators, operators, and agents use this skill to create WeChat Official Account posts in the required HTML format, configure one or more accounts through a QR authorization flow, and push prepared content to a chosen account's draft box. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores account-linked WeChat configuration locally in config.json. <br>
-Mitigation: Keep config.json private, store only configuration produced by the QR authorization flow, and remove or rotate it when account access should no longer be available. <br>
-Risk: Draft content and push actions are sent through the pcloud.ac.cn service. <br>
-Mitigation: Use the skill only when that third-party processing is acceptable, and avoid sending confidential drafts unless the user has approved that exposure. <br>
-Risk: Publishing and draft cleanup actions can affect the selected WeChat account. <br>
-Mitigation: Review the target AppID before each push and invoke cleanupDrafts only when the user explicitly intends to clear drafts for that account. <br>
-Risk: Timeout responses may still represent background success, which can lead to duplicate pushes if retried immediately. <br>
-Mitigation: Check WeChat service notifications or the draft box before retrying after a timeout. <br>
+## Use Case:
 
+Developers and operators use this package as a migration notice for an older Weixin public-account push skill. It points them to the maintained @lihengdao/aigc-web-push replacement instead of continuing to rely on the deprecated package.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/lihengdao/weixin-mp-push) <br>
-- [Publisher profile](https://clawhub.ai/user/lihengdao) <br>
-- [WeChat configuration wizard](https://app.pcloud.ac.cn/design/weixin-mp-push.html) <br>
-- [OpenClaw documentation](https://docs.openclaw.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTML content requirements, JSON configuration examples, shell commands, and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local config.json and HTML files, then call a third-party service to push drafts to WeChat Official Account accounts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.6 (source: package.json and server release evidence) <br>
+Risk: Users may treat the linked replacement skill as already reviewed because this deprecated package is clean.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the replacement skill's permissions, configuration guidance, publisher context, and security posture before installing it or connecting accounts.
+
+Risk: Users may continue relying on the deprecated weixin-mp-push package even though it is no longer maintained.
+
+Mitigation: Use this package only as a migration notice and move to the maintained replacement workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/lihengdao/skills/weixin-mp-push)
+- [Replacement ClawHub skill](https://clawhub.ai/lihengdao/skills/aigc-web-push)
+- [Replacement GitHub repository](https://github.com/lihengdao/AIGC-Web-Push)
+- [Replacement configuration guide](https://app.pcloud.ac.cn/design/aigc-web-push.html)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown text with an inline installation command]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill is a migration notice and does not define executable agent behavior.]
+
+## Skill Version(s):
+
+3.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

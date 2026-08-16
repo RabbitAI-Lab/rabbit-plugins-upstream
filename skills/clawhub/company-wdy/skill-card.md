@@ -1,47 +1,66 @@
-## Description: <br>
-Company Search WDY helps agents query WenDaoYun company information APIs for basic company data, operating details, financial information, public opinion signals, and risk indicators. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WenDaoYun company information lookup skill that helps agents search companies and query basic, operational, financial, public-opinion, and risk indicators through the WenDaoYun API.
 
-## Publisher: <br>
-[rose-develop](https://clawhub.ai/user/rose-develop) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rose-develop](https://clawhub.ai/user/rose-develop)
 
-## Use Case: <br>
-Developers and analysts use this skill to look up company records and risk-related data through WenDaoYun. The skill first searches for matching companies, waits for the user to confirm the selected company, and then routes the requested detail lookup to the relevant API interface. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The WenDaoYun API key is sensitive and may be exposed if pasted into prompts, shared logs, or unprotected configuration. <br>
-Mitigation: Store WENDAOYUN_API_KEY as an environment variable, avoid displaying it in agent responses, and revoke the key in the WenDaoYun platform if exposure is suspected. <br>
-Risk: Company names, identifiers, and lookup intent may be sent to the external WenDaoYun API. <br>
-Mitigation: Use the skill only when WenDaoYun's pricing, privacy terms, and data handling are acceptable for the queried company information. <br>
-Risk: A fuzzy search can return multiple companies, and querying details for the wrong entity can produce misleading results. <br>
-Mitigation: Show the first search results and wait for explicit user confirmation of the selected company before requesting detailed records. <br>
+## Use Case:
 
+External users and developers use this skill to search for a company, confirm the intended entity, and retrieve business, legal-risk, finance, public-notice, and regulatory records from WenDaoYun. It is useful when an agent needs structured company intelligence while preserving user confirmation before detailed lookups.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/rose-develop/skills/company-wdy) <br>
-- [WenDaoYun Open Platform](https://open.wintaocloud.com/home) <br>
-- [WenDaoYun API invoke endpoint](https://h5.wintaocloud.com/prod-api/api/invoke) <br>
-- [Skill usage and routing instructions](artifact/SKILL.md) <br>
-- [Company fuzzy search API reference](artifact/references/fuzzy-search-org.md) <br>
-- [Company risk API reference](artifact/references/get-risk.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown or plain text with optional shell command snippets and structured company information summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires WENDAOYUN_API_KEY and waits for user confirmation before detailed company lookups.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill depends on a user-provided WenDaoYun API key stored in WENDAOYUN_API_KEY.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the key as sensitive, store it only in the environment, and rotate it if exposed.
+
+Risk: Two route-table entries are marked pending and lack reference files, so those lookups may not work.
+
+Mitigation: Use implemented routes with matching reference files until the pending route documentation is added.
+
+Risk: Company searches can return similarly named entities.
+
+Mitigation: Require the user to confirm the selected company before calling detailed information endpoints.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/rose-develop/skills/company-wdy)
+- [rose-develop ClawHub profile](https://clawhub.ai/user/rose-develop)
+- [WenDaoYun Open Platform](https://open.wendaoyun.com/home)
+- [Skill workflow and route table](artifact/SKILL.md)
+- [Company fuzzy search reference](artifact/references/fuzzy-search-org.md)
+- [Company risk reference](artifact/references/get-risk.md)
+- [Administrative punishment reference](artifact/references/get-punishments.md)
+- [Judgment document reference](artifact/references/get-judge-doc.md)
+- [Enforcement information reference](artifact/references/get-execute-info.md)
+- [Import and export credit reference](artifact/references/get-import-export-credit.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown text with API request guidance, environment-variable setup commands, and summarized query results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires WENDAOYUN_API_KEY and uses read-only GET requests against WenDaoYun endpoints.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

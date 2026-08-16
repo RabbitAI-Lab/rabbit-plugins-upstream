@@ -1,55 +1,58 @@
-## Description: <br>
-WenDaoYun company information lookup skill for querying Chinese enterprise basic information, operations, finance, public opinion, and risk indicators through the WenDaoYun API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents query WenDaoYun for Chinese company basic information, operating information, financial information, public opinion information, and risk indicators.
 
-## Publisher: <br>
-[rose-develop](https://clawhub.ai/user/rose-develop) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rose-develop](https://clawhub.ai/user/rose-develop)
 
-## Use Case: <br>
-External users and agents use this skill to search for Chinese companies, confirm the intended company, and retrieve WenDaoYun records for legal, operating, financial, public-opinion, customer, supplier, employment, and risk-review workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Company names, identifiers, and detailed lookup requests are sent to WenDaoYun. <br>
-Mitigation: Use the skill only when WenDaoYun is an acceptable service for the lookup, and avoid sending unnecessary sensitive context. <br>
-Risk: A leaked API key could allow unauthorized WenDaoYun usage. <br>
-Mitigation: Keep WENDAOYUN_API_KEY private, configure it through the environment, and revoke or rotate the key if exposure is suspected. <br>
-Risk: Detailed legal, risk, customer, supplier, or employment queries may be run against the wrong company. <br>
-Mitigation: Review the search results and confirm the exact company before requesting detailed endpoints. <br>
-Risk: API calls may consume paid quota or daily allowance. <br>
-Mitigation: Review WenDaoYun costs, quotas, and remaining allowance before running detailed or repeated lookups. <br>
+## Use Case:
 
+External users and analysts can use this skill to search for a Chinese company, confirm the intended entity, and retrieve WenDaoYun company records such as legal, operational, financial, customs, employment, customer, supplier, and risk information.
 
-## Reference(s): <br>
-- [WenDaoYun Open Platform](https://open.wintaocloud.com/home) <br>
-- [WenDaoYun API Base Endpoint](https://h5.wintaocloud.com/prod-api/api/invoke) <br>
-- [Skill Source](artifact/SKILL.md) <br>
-- [fuzzy-search-org - Company Fuzzy Search](artifact/references/fuzzy-search-org.md) <br>
-- [get-risk - Enterprise Risk Information](artifact/references/get-risk.md) <br>
-- [get-punishments - Administrative Penalties](artifact/references/get-punishments.md) <br>
-- [get-execute-info - Enforcement Information](artifact/references/get-execute-info.md) <br>
-- [get-dishonest-debtors - Dishonest Debtor Information](artifact/references/get-dishonest-debtors.md) <br>
-- [get-customer - Customer Query Information](artifact/references/get-customer.md) <br>
-- [get-supplier - Supplier Query](artifact/references/get-supplier.md) <br>
-- [get-employment-info - Enterprise Recruitment Information](artifact/references/get-employment-info.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/rose-develop/skills/china-company-search-wendaoyun) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with API result summaries and inline shell configuration commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a user-provided WENDAOYUN_API_KEY and company confirmation before detailed lookups.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.29 (source: server release metadata) <br>
+Risk: The WenDaoYun API key is sensitive and may authorize API usage if exposed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Store WENDAOYUN_API_KEY in the environment or a secrets manager, do not paste it into chat or logs, and rotate it through WenDaoYun if it is exposed.
+
+Risk: Company names, identifiers, and search keywords are sent to WenDaoYun when the skill performs lookups.
+
+Mitigation: Use the skill only when sending those query terms to WenDaoYun is acceptable for the user's workflow and data-handling requirements.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/rose-develop/skills/china-company-search-wendaoyun)
+- [WenDaoYun API portal](https://open.wendaoyun.com/home)
+- [WenDaoYun API invoke base URL](https://h5.wintaocloud.com/prod-api/api/invoke)
+- [Enterprise fuzzy search reference](references/fuzzy-search-org.md)
+- [Enterprise risk information reference](references/get-risk.md)
+- [Enterprise risk index reference](references/get-risk-index.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown text with API request guidance and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires WENDAOYUN_API_KEY for live WenDaoYun API queries.]
+
+## Skill Version(s):
+
+1.2.31 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

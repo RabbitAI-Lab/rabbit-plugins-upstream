@@ -18,11 +18,6 @@
  *   --audit                           → Check for exposure risks
  *   --audit --expired                 → Only expired
  *   --audit --stale                   → Only expiring soon
- *   --inject <command>                → Substitute {{secrets}} into command
- *                                        By default: writes resolved command to a temp file
- *                                        and prints the file path (does NOT print secrets)
- *                                        Use --inject-stdout to print resolved command
- *                                        (⚠️ REQUIRES --confirm-expose flag)
  *   --status                          → Secrets status overview
  *
  * Security model:
@@ -31,7 +26,11 @@
  *   - Per-secret random 12-byte IV
  *   - All write files use atomic temp+rename, chmod 0600 on secrets.json + .master-key
  *   - secrets.json includes auth tag → tampering causes decrypt to return null
- *   - NEVER print raw secret or substituted command unless explicitly confirmed
+ *   - --get --raw prints the plaintext secret to stdout ONLY when both --raw
+ *     AND --confirm-expose are supplied. Without --confirm-expose the raw value
+ *     is returned programmatically but never printed (no secret leakage to logs).
+ *     Never redirect raw output into /tmp — pipe directly to the consuming
+ *     process or to a protected file in a private directory.
  *
  * Permissions: filesystem (memory/secrets/), env (SECRETS_DIR override, SECRETS_MASTER_KEY override)
  */
@@ -39,22 +38,23 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const os = require('os');
 
-const WORKSPACE = (() => {
+// ─── Workspace / data paths (lazy, so --dir / SECRETS_DIR is honored) ──────
+// These are functions (not module-load constants) so that a --dir override or
+// SECRETS_DIR env var set during argument parsing takes effect for the whole
+// session. Resolving them once at module load would make --dir a no-op.
+function getWorkspace() {
   if (process.env.SECRETS_DIR) return process.env.SECRETS_DIR;
-  let dir = __dirname;
-  for (let i = 0; i < 10; i++) {
-    if (fs.existsSync(path.join(dir, 'MEMORY.md'))) return dir;
-    dir = path.resolve(dir, '..');
-  }
+  // Deterministic fixed root: the grandparent of this file's directory
+  // (skills/secrets-manager/ -> repo root). No upward walk for markers.
   return path.resolve(__dirname, '..', '..');
-})();
+}
 
-const DATA_DIR = path.join(WORKSPACE, 'memory', 'secrets');
-const SECRETS_FILE = path.join(DATA_DIR, 'secrets.json');
-const MASTER_KEY_FILE = path.join(DATA_DIR, '.master-key');
-const PERMS_FILE = path.join(DATA_DIR, 'permissions.json');
+function getDataDir() {
+  return path.join(getWorkspace(), 'memory', 'secrets');
+}
+function getSecretsFile() { return path.join(getDataDir(), 'secrets.json'); }
+function getMasterKeyFile() { return path.join(getDataDir(), '.master-key'); }
 
 // ─── ATOMIC FILE WRITE WITH CHMOD ──────────────────────────────────────────
 
@@ -82,32 +82,44 @@ function loadJSON(file, fallback) {
   } catch { return fallback || {}; }
 }
 
-// ─── MASTER KEY MANAGEMENT ────────────────────────────────────────────────
+// ─── SECRET STORAGE HELPERS ─────────────────────────────────────────────────
 
-function getMasterKey() {
-  // 1. Check env var override
+// ─── MASTER KEY MANAGEMENT ────────────────────────────────────────────────
+//
+// Two distinct accessors:
+//   - loadMasterKey(): READ-ONLY. Returns the key from SECRETS_MASTER_KEY env
+//     or from .master-key on disk. NEVER creates a file. Returns null if no key
+//     exists yet. Used by decrypt() so read-only paths (--get/--audit/--status)
+//     have no filesystem side effects.
+//   - ensureMasterKey(): WRITE. Same as loadMasterKey but, if no key exists,
+//     generates a new one and writes .master-key (chmod 0600). Used ONLY by
+//     encrypt() (store/rotate), so a key is created exactly when we first store.
+
+function loadMasterKey() {
   if (process.env.SECRETS_MASTER_KEY) {
     const envKey = Buffer.from(process.env.SECRETS_MASTER_KEY, 'hex');
     if (envKey.length === 32) return envKey;
   }
-  
-  // 2. Load from .master-key
-  if (fs.existsSync(MASTER_KEY_FILE)) {
-    const stored = fs.readFileSync(MASTER_KEY_FILE, 'utf8').trim();
+  if (fs.existsSync(getMasterKeyFile())) {
+    const stored = fs.readFileSync(getMasterKeyFile(), 'utf8').trim();
     const key = Buffer.from(stored, 'hex');
     if (key.length === 32) return key;
   }
-  
-  // 3. Generate new master key (first-run)
+  return null; // no key yet — caller decides what to do
+}
+
+function ensureMasterKey() {
+  const existing = loadMasterKey();
+  if (existing) return existing;
   const newKey = crypto.randomBytes(32);
-  writeSecure(MASTER_KEY_FILE, newKey.toString('hex'));
+  writeSecure(getMasterKeyFile(), newKey.toString('hex'));
   return newKey;
 }
 
 // ─── ENCRYPTION (AES-256-GCM) ─────────────────────────────────────────────
 
 function encrypt(plaintext) {
-  const key = getMasterKey();
+  const key = ensureMasterKey();
   const iv = crypto.randomBytes(12); // 96-bit IV for GCM
   const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
   const ct = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
@@ -122,7 +134,8 @@ function encrypt(plaintext) {
 function decrypt(enc) {
   if (!enc || !enc.iv || !enc.ct || !enc.tag) return null;
   try {
-    const key = getMasterKey();
+    const key = loadMasterKey();
+    if (!key) return null; // no master key present — cannot decrypt
     const iv = Buffer.from(enc.iv, 'base64');
     const ct = Buffer.from(enc.ct, 'base64');
     const tag = Buffer.from(enc.tag, 'base64');
@@ -158,7 +171,7 @@ function storeSecret(name, value) {
     console.log('Usage: secrets-manager.js --store <name> <value>');
     return null;
   }
-  const secrets = loadJSON(SECRETS_FILE, {});
+  const secrets = loadJSON(getSecretsFile(), {});
   const enc = encrypt(value);
   
   secrets[name] = {
@@ -173,19 +186,19 @@ function storeSecret(name, value) {
     retired: secrets[name]?.retired || null
   };
   
-  writeJSONSecure(SECRETS_FILE, secrets);
+  writeJSONSecure(getSecretsFile(), secrets);
   console.log(`[secrets-manager] Stored: ${name} (masked: ${maskValue(value)})`);
   return true;
 }
 
 // ─── GET ───────────────────────────────────────────────────────────────────
 
-function getSecret(name, raw = false) {
+function getSecret(name, raw = false, confirmed = false) {
   if (!name) {
-    console.log('Usage: secrets-manager.js --get <name>');
+    console.log('Usage: secrets-manager.js --get <name> [--raw --confirm-expose]');
     return null;
   }
-  const secrets = loadJSON(SECRETS_FILE, {});
+  const secrets = loadJSON(getSecretsFile(), {});
   if (!secrets[name]) {
     console.log(`[secrets-manager] Secret not found: ${name}`);
     return null;
@@ -198,6 +211,11 @@ function getSecret(name, raw = false) {
   }
   
   if (raw) {
+    if (!confirmed) {
+      console.log(`[secrets-manager] ❌ Refusing to print raw secret (leaks credentials to logs).`);
+      console.log(`[secrets-manager]    Re-run with BOTH --raw AND --confirm-expose to explicitly allow it.`);
+      return value; // return value for programmatic use, but do NOT print it
+    }
     console.log(`[secrets-manager] ⚠️ Printing raw secret to stdout. This may leak credentials to logs.`);
     console.log(value);
   } else {
@@ -209,7 +227,7 @@ function getSecret(name, raw = false) {
 // ─── LIST ──────────────────────────────────────────────────────────────────
 
 function listSecrets() {
-  const secrets = loadJSON(SECRETS_FILE, {});
+  const secrets = loadJSON(getSecretsFile(), {});
   const entries = Object.entries(secrets);
   
   if (entries.length === 0) {
@@ -238,10 +256,14 @@ function deleteSecret(name) {
     console.log('Usage: secrets-manager.js --delete <name>');
     return;
   }
-  const secrets = loadJSON(SECRETS_FILE, {});
+  const secrets = loadJSON(getSecretsFile(), {});
   if (secrets[name]) {
+    // IRREVERSIBLE: permanently destroys the encrypted secret. No confirmation
+    // prompt and no undo — operators must back up .master-key and secrets.json
+    // first. Loss of the encrypted value is unrecoverable.
+    console.log(`[secrets-manager] ⚠️ WARNING: --delete is IRREVERSIBLE. The encrypted secret '${name}' will be permanently destroyed with no recovery (unless you have a backup of secrets.json).`);
     delete secrets[name];
-    writeJSONSecure(SECRETS_FILE, secrets);
+    writeJSONSecure(getSecretsFile(), secrets);
     console.log(`[secrets-manager] Deleted: ${name}`);
   } else {
     console.log(`[secrets-manager] Not found: ${name}`);
@@ -255,7 +277,7 @@ function rotateSecret(name) {
     console.log('Usage: secrets-manager.js --rotate <name>');
     return;
   }
-  const secrets = loadJSON(SECRETS_FILE, {});
+  const secrets = loadJSON(getSecretsFile(), {});
   if (!secrets[name]) {
     console.log(`[secrets-manager] Not found: ${name}`);
     return;
@@ -276,13 +298,13 @@ function rotateSecret(name) {
   secrets[name].updated = getToday();
   secrets[name].rotationCount = (secrets[name].rotationCount || 0) + 1;
   
-  writeJSONSecure(SECRETS_FILE, secrets);
+  writeJSONSecure(getSecretsFile(), secrets);
   console.log(`[secrets-manager] ✅ Rotated: ${name} (new value generated — not printed for security)`);
   console.log(`[secrets-manager]   Previous encrypted value archived. Rotate again to discard archive.`);
 }
 
 function rotateAllSecrets() {
-  const secrets = loadJSON(SECRETS_FILE, {});
+  const secrets = loadJSON(getSecretsFile(), {});
   const entries = Object.entries(secrets);
   if (entries.length === 0) {
     console.log('[secrets-manager] No secrets to rotate.');
@@ -299,7 +321,7 @@ function rotateAllSecrets() {
 // ─── AUDIT ─────────────────────────────────────────────────────────────────
 
 function auditSecrets(filter = null) {
-  const secrets = loadJSON(SECRETS_FILE, {});
+  const secrets = loadJSON(getSecretsFile(), {});
   const findings = { expired: [], expiring: [], weak: [], patterns: [] };
   
   for (const [name, secret] of Object.entries(secrets)) {
@@ -322,7 +344,8 @@ function auditSecrets(filter = null) {
       findings.weak.push({ name, length: value.length });
     }
     if (/^(password|admin|root|test|demo|secret|key|token)/i.test(value)) {
-      findings.patterns.push({ name, pattern: value.substring(0, 10) + '...' });
+      // Flag the secret NAME only — never print any plaintext value during audit.
+      findings.patterns.push({ name, pattern: '(weak-prefix pattern matched)' });
     }
   }
   
@@ -362,59 +385,16 @@ function auditSecrets(filter = null) {
   }
 }
 
-// ─── INJECT (default: safe — write to temp file) ──────────────────────────
-
-function injectSecrets(command, secrets, options = {}) {
-  const { stdoutMode = false, confirmExpose = false } = options;
-  let result = command;
-  let injected = 0;
-  
-  for (const [name, secret] of Object.entries(secrets)) {
-    const placeholder = `{{${name}}}`;
-    if (result.includes(placeholder)) {
-      const value = decrypt(secret);
-      if (value === null) {
-        console.log(`[secrets-manager] ⚠️ Skipped ${placeholder}: decrypt failed (tampered or wrong key)`);
-        continue;
-      }
-      result = result.replace(new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), value);
-      injected++;
-    }
-  }
-  
-  if (stdoutMode) {
-    if (!confirmExpose) {
-      console.log(`[secrets-manager] ❌ Refusing to print resolved command to stdout (leaks secrets to logs).`);
-      console.log(`[secrets-manager]    Re-run with --confirm-expose to acknowledge the risk.`);
-      return null;
-    }
-    console.log(`[secrets-manager] ⚠️ Resolved command below contains ${injected} secret value(s) in plaintext:`);
-    console.log(result);
-    return result;
-  } else {
-    // Default: write to a private temp file (chmod 0600) and print path
-    const tmpFile = path.join(os.tmpdir(), `secrets-inject-${process.pid}-${Date.now()}.sh`);
-    writeSecure(tmpFile, '#!/bin/sh\n' + result + '\n');
-    console.log(`[secrets-manager] ✅ Injected ${injected} secret(s) into: ${tmpFile}`);
-    console.log(`[secrets-manager]    Run with: sh ${tmpFile}`);
-    console.log(`[secrets-manager]    File mode 0600, removed automatically on next rotate/delete.`);
-    console.log(`[secrets-manager]    To print to stdout instead, use --inject-stdout --confirm-expose`);
-    return tmpFile;
-  }
-}
-
 // ─── STATUS ────────────────────────────────────────────────────────────────
 
 function showStatus() {
-  const secrets = loadJSON(SECRETS_FILE, {});
-  const perms = loadJSON(PERMS_FILE, {});
-  const masterKeyExists = fs.existsSync(MASTER_KEY_FILE);
+  const secrets = loadJSON(getSecretsFile(), {});
+  const masterKeyExists = fs.existsSync(getMasterKeyFile());
   
   console.log('[secrets-manager] Status:\n');
   console.log(`  Encryption: AES-256-GCM (authenticated)`);
-  console.log(`  Master key: ${masterKeyExists ? '✅ present (' + MASTER_KEY_FILE + ')' : '❌ MISSING'}`);
+  console.log(`  Master key: ${masterKeyExists ? '✅ present (' + getMasterKeyFile() + ')' : '❌ MISSING'}`);
   console.log(`  Total secrets: ${Object.keys(secrets).length}`);
-  console.log(`  Permissions rules: ${Object.keys(perms).length}`);
   
   if (Object.keys(secrets).length > 0) {
     const expired = Object.entries(secrets).filter(([_, s]) => {
@@ -434,7 +414,6 @@ function parseCLI() {
     positional: [],
     flags: {
       raw: false,
-      injectStdout: false,
       confirmExpose: false
     }
   };
@@ -448,16 +427,14 @@ function parseCLI() {
     else if (arg === '--delete') { result.mode = 'delete'; break; }
     else if (arg === '--rotate') { result.mode = 'rotate'; break; }
     else if (arg === '--audit') { result.mode = 'audit'; break; }
-    else if (arg === '--inject' || arg === '--inject-stdout') { result.mode = 'inject'; break; }
     else if (arg === '--status') { result.mode = 'status'; break; }
-    // --confirm-expose, --raw, --all, --expired, --stale, --dir are sub-flags
+    // --raw, --all, --expired, --stale, --dir are sub-flags
   }
   
   // Pass 2: collect flags + positionals (don't reset mode)
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     if (arg === '--raw') result.flags.raw = true;
-    else if (arg === '--inject-stdout') result.flags.injectStdout = true;
     else if (arg === '--confirm-expose') result.flags.confirmExpose = true;
     else if (arg === '--all' && result.mode === 'rotate') result.mode = 'rotate-all';
     else if (arg === '--expired' && result.mode === 'audit') result.mode = 'audit-expired';
@@ -466,16 +443,7 @@ function parseCLI() {
       process.env.SECRETS_DIR = args[++i];
     }
     else if (!arg.startsWith('--')) {
-      // For --inject, the whole rest is the command (positional[0])
-      if (result.mode === 'inject') {
-        if (result.positional.length === 0) {
-          result.positional.push(arg);
-        } else {
-          result.positional[0] += ' ' + arg;
-        }
-      } else {
-        result.positional.push(arg);
-      }
+      result.positional.push(arg);
     }
     // Skip mode-flag args (already handled in pass 1)
   }
@@ -501,9 +469,9 @@ function runCLI() {
     case 'get': {
       const name = positional[0];
       if (!name) {
-        console.log('Usage: secrets-manager.js --get <name> [--raw]');
+        console.log('Usage: secrets-manager.js --get <name> [--raw --confirm-expose]');
       } else {
-        getSecret(name, flags.raw);
+        getSecret(name, flags.raw, flags.confirmExpose);
       }
       break;
     }
@@ -528,20 +496,6 @@ function runCLI() {
     case 'audit-stale':
       auditSecrets('stale');
       break;
-    case 'inject': {
-      const cmd = positional[0];
-      if (!cmd) {
-        console.log('Usage: secrets-manager.js --inject <command with {{secret_name}} placeholders>');
-        console.log('       secrets-manager.js --inject-stdout --confirm-expose <command>  (prints to stdout, leaks to logs)');
-      } else {
-        const secrets = loadJSON(SECRETS_FILE, {});
-        injectSecrets(cmd, secrets, {
-          stdoutMode: flags.injectStdout,
-          confirmExpose: flags.confirmExpose
-        });
-      }
-      break;
-    }
     default:
       showStatus();
       break;
@@ -558,11 +512,11 @@ module.exports = {
   rotateSecret,
   rotateAllSecrets,
   auditSecrets,
-  injectSecrets,
   showStatus,
   encrypt,
   decrypt,
-  getMasterKey,
+  ensureMasterKey,
+  loadMasterKey,
   maskValue
 };
 

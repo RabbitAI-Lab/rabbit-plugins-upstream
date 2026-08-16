@@ -1,44 +1,59 @@
-## Description: <br>
-GitHub README Writing System helps agents draft, rewrite, and review README files using guidance for taglines, first-screen structure, section copy, Claude Code integration, anti-patterns, and pre-publish checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GitHub README Writing System helps agents write or revise README files with guidance on taglines, first-screen structure, quick starts, trust signals, AI-agent integration, and pre-publish checks.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-Developers, maintainers, and open-source project authors use this skill to write or improve a specific GitHub README, including the tagline, first screen, quick start, feature copy, AI-agent integration notes, and pre-publish review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated README content could include inaccurate marketing claims, badges, links, star prompts, or install commands. <br>
-Mitigation: Review generated changes for accuracy and appropriateness before publishing them to a project repository. <br>
+## Use Case:
 
+Developers, maintainers, and documentation teams use this skill to draft, rewrite, or review a specific GitHub README so the project is easier to understand, evaluate, install, and share.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gingiris-1031/gr-readme) <br>
-- [Claude Code Skills](https://docs.anthropic.com/en/docs/claude-code/skills) <br>
-- [Claude Code Memory](https://docs.anthropic.com/en/docs/claude-code/memory) <br>
-- [Anthropic Prompt Engineering Overview](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview) <br>
-- [AFFiNE README](https://github.com/toeverything/AFFiNE) <br>
-- [Dify README](https://github.com/langgenius/dify) <br>
-- [InsForge README](https://github.com/insforgehq/insforge) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with draft README text, inline code blocks, shell commands, configuration snippets, and review notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose README edits or new README sections that require human review before publication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and auto changelog) <br>
+Risk: Promotional README copy can overstate public claims, social proof, or star requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review final marketing claims, badges, star requests, and social-proof language against project evidence before publishing.
+
+Risk: Suggested external images, links, badges, or setup commands may be inappropriate for the target repository if accepted without review.
+
+Mitigation: Test setup commands and links, inspect external assets, and confirm badges reflect current project status before merging README changes.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gingiris-1031/skills/gr-readme)
+- [Claude Code Skills](https://docs.anthropic.com/en/docs/claude-code/skills)
+- [Claude Code Memory](https://docs.anthropic.com/en/docs/claude-code/memory)
+- [Prompt engineering overview](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview)
+- [AFFiNE README case reference](https://github.com/toeverything/AFFiNE)
+- [Dify README case reference](https://github.com/langgenius/dify)
+- [InsForge README case reference](https://github.com/insforgehq/insforge)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown prose, checklists, tables, inline code blocks, and repository file edits]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include README drafts, README rewrites, review notes, setup-command suggestions, badge/link guidance, and pre-publish checklist items.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,63 @@
-## Description: <br>
-Generate and edit images with Recraft through RunAPI for one-off CLI tasks or SDK integrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images with Recraft through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agent users use this skill to route Recraft image generation, upscaling, background removal, and image-editing requests through the RunAPI CLI or SDKs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can rely on RUNAPI_API_KEY or a saved RunAPI CLI login, which are sensitive credentials. <br>
-Mitigation: Keep API keys and saved CLI credentials out of prompts, logs, generated files, and version control; rotate credentials if exposed. <br>
-Risk: Image prompts, source images, or edited outputs may be sent to an external RunAPI/Recraft service. <br>
-Mitigation: Review RunAPI and Recraft terms, pricing, rate limits, and data handling before sending private or regulated content. <br>
+## Use Case:
 
+Developers and external users use this skill to guide agents through Recraft image generation and editing with RunAPI, including request setup, task submission, result retrieval, and deliverable verification.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/runapi-recraft) <br>
-- [RunAPI Recraft homepage](https://runapi.ai/models/recraft) <br>
-- [RunAPI Recraft model overview, pricing, and rate limits](https://runapi.ai/models/recraft.md) <br>
-- [RunAPI Recraft provider comparison](https://runapi.ai/providers/recraft.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [Recraft crisp upscale variant](https://runapi.ai/models/recraft/crisp-upscale.md) <br>
-- [Recraft remove background variant](https://runapi.ai/models/recraft/remove-background.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and SDK package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include RunAPI CLI commands, request-file guidance, asynchronous polling steps, authentication guidance, and SDK package references.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release evidence) <br>
+Risk: The skill uses a third-party CLI that may handle RunAPI authentication, upload selected media, create billable tasks, and save request or result files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only for intended RunAPI/Recraft work, prefer environment or saved CLI authentication, and review requests before task submission.
+
+Risk: A missing service, stale operation contract, or contract mismatch can lead to invalid requests or unintended task behavior.
+
+Mitigation: Inspect installed CLI help and current RunAPI operation documentation before execution, and stop instead of guessing when the contract is unavailable or inconsistent.
+
+Risk: A successful task status may still omit a requested deliverable or return an unexpected media type.
+
+Mitigation: Verify the complete response, download every requested media deliverable, and require non-empty files with the expected MIME type before reporting completion.
+
+## Reference(s):
+
+- [RunAPI Recraft homepage](https://runapi.ai/models/recraft)
+- [RunAPI Recraft model documentation](https://runapi.ai/models/recraft.md)
+- [RunAPI Recraft provider documentation](https://runapi.ai/providers/recraft.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI Recraft SDK integration](https://github.com/runapi-ai/recraft-sdk)
+- [Recraft crisp upscale variant](https://runapi.ai/models/recraft/crisp-upscale.md)
+- [Recraft remove background variant](https://runapi.ai/models/recraft/remove-background.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON file conventions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce request, task, result, and downloaded media files in the working directory.]
+
+## Skill Version(s):
+
+0.2.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

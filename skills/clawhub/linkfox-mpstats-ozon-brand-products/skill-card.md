@@ -1,43 +1,64 @@
-## Description: <br>
-This skill queries LinkFox MPSTATS data for Ozon Russia products under an exact brand display name, returning per-SKU sales, revenue, price, rating, inventory, turnover, and lost-profit metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MPSTATS Ozon 俄罗斯站按品牌下钻商品列表，按 Ozon 品牌展示名返回该品牌下商品的销量、销售额、价格、评分、库存、周转、损失销售额等指标，并支持数值筛选、排序和货币换算。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External marketplace operators, analysts, and agents use this skill to inspect the SKU-level product structure of a single Ozon brand and compare sales, revenue, pricing, ratings, stock, and lost-profit signals. It is suited to brand competitor audits, bestseller review, and currency-normalized marketplace analysis when the exact brand display name is known. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and can make paid LinkFox API calls. <br>
-Mitigation: Install and run it only when the user accepts LinkFox credential use and possible credit consumption; confirm additional paid lookups before retrying or broadening a query. <br>
-Risk: The skill stores full marketplace-analysis API responses on disk. <br>
-Mitigation: Review saved JSON files before sharing a workspace or committing generated outputs, and remove cached or session data when it is no longer needed. <br>
-Risk: The security summary notes automatic feedback reporting and onboarding-install behavior that may be broader than expected. <br>
-Mitigation: Review or disable feedback reporting and onboarding installation behavior before deployment in environments with strict data-sharing or software-installation controls. <br>
+## Use Case:
 
+External marketplace analysts and e-commerce operators use this skill to inspect all Ozon Russia products under a specific brand and compare SKU-level sales, revenue, price, stock, rating, and lost-sales metrics.
 
-## Reference(s): <br>
-- [MPSTATS Ozon Brand Products API Reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-mpstats-ozon-brand-products) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API results or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are persisted as JSON files; large responses are summarized in stdout unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill sends analytics requests and may handle account, API-key, phone/SMS login, and billing-order data during onboarding.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when that LinkFox data sharing is acceptable, and review authentication and billing flows before use.
+
+Risk: Endpoint environment variables can redirect requests if overridden.
+
+Mitigation: Verify LINKFOX_* endpoint environment variables point to trusted LinkFox hosts before running the scripts.
+
+Risk: Saved API response files may contain marketplace analysis data that could be committed accidentally.
+
+Mitigation: Run the skill in an appropriate workspace and exclude generated linkfox response directories from commits when needed.
+
+Risk: Automatic feedback reporting can share task context or skill behavior observations.
+
+Mitigation: Review or disable feedback reporting behavior if the deployment should minimize outbound data sharing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-mpstats-ozon-brand-products)
+- [MPSTATS Ozon brand products API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples and optional saved JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may save complete API responses under a workspace linkfox data directory and print either full JSON or a compact summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,6 +1,6 @@
 ---
 name: ekyc-suite
-version: 1.1.17
+version: 1.1.24
 description: |
   eKYC Suite 是面向 AI Agent 的 ClawHub KYC 身份核验 Skill。
   它基于用户授权上传的图片或视频，提供远程 KYC onboarding、人脸比对、face liveness detection、selfie verification、KYC document OCR、Deepfake 检测和媒体风险复核。

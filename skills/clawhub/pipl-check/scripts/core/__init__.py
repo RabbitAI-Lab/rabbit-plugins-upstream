@@ -1,1 +1,0 @@
-"""pipl-check core modules"""

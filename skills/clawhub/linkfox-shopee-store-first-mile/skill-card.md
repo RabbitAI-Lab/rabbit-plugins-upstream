@@ -1,47 +1,60 @@
-## Description: <br>
-Provides agent workflows and Python scripts for Shopee FirstMile store logistics, including unbound-order lookup, tracking-number generation, binding and unbinding, waybills, channels, transit warehouses, and courier-delivery first-mile endpoints. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use Shopee Open Platform FirstMile workflows through LinkFox to manage first-mile tracking numbers, waybills, channels, transit warehouses, and bind or unbind actions for authorized Shopee stores.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Shopee sellers, commerce operators, and developers use this skill to manage cross-border FirstMile logistics for authorized stores, including finding unbound orders, generating or binding first-mile tracking numbers, retrieving waybills, and checking channel or warehouse information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change Shopee first-mile logistics state by generating, binding, or unbinding tracking numbers. <br>
-Mitigation: Require explicit user approval before any generate, bind, or unbind operation, especially when working with real stores. <br>
-Risk: Full API responses are always saved locally and may include store, order, tracking, or waybill details. <br>
-Mitigation: Use the skill only in workspaces where local response storage is acceptable, avoid --inline unless necessary, and delete the linkfox output tree after sensitive work. <br>
-Risk: The local storage location can be broader than the documentation suggests. <br>
-Mitigation: Check the configured workspace and linkfox data directory before use, and review saved output paths after each run. <br>
-Risk: The skill depends on LinkFox authentication and a companion Shopee store auth skill. <br>
-Mitigation: Run dependency checks first, use only the needed LinkFox API key, and avoid exposing unrelated credentials in the execution environment. <br>
+## Use Case:
 
+External cross-border e-commerce operators and developers use this skill to inspect and operate Shopee FirstMile logistics for authorized stores, including generating tracking numbers, binding or unbinding orders, retrieving waybills, and checking channels or warehouses.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-first-mile) <br>
-- [FirstMile API reference](artifact/references/api.md) <br>
-- [Shopee FirstMile API documentation](https://open.shopee.com/documents/v2/v2.first_mile.get_unbind_order_list?module=96&type=1) <br>
-- [LinkFox API key and credit guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python command examples and JSON request parameters; runtime output is saved JSON plus either full JSON or a concise text summary.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox authentication and the companion Shopee store auth skill. Full API responses are saved under a linkfox data directory, small responses are printed inline, and large responses are summarized unless --inline is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can handle LinkFox account setup, API keys, and billing or payment order creation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated API key and manually verify any payment, recharge, or account setup action before proceeding.
+
+Risk: FirstMile bind and unbind operations can change logistics state for Shopee orders.
+
+Mitigation: Confirm the intended store, order, and tracking details before executing generate, bind, or unbind actions.
+
+Risk: Full API responses may be saved locally and can include sensitive order or tracking data.
+
+Mitigation: Run the skill in a trusted workspace, restrict access to saved response files, and clean retained data when it is no longer needed.
+
+## Reference(s):
+
+- [Skill API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [Shopee FirstMile API index](https://open.shopee.com/documents/v2/v2.first_mile.get_unbind_order_list?module=96&type=1)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-first-mile)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, JSON files, API calls, Guidance]
+
+**Output Format:** [Markdown guidance with Python command examples, JSON API responses, and saved response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may be printed inline for small results or summarized after the full response is saved locally.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

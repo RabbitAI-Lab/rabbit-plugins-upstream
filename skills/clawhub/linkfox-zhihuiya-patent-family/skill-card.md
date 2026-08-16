@@ -1,46 +1,64 @@
-## Description: <br>
-查询智慧芽（PatSnap）专利家族信息，帮助用户按单个专利 ID 或公开号查看 Simple Family、INPADOC Family 和 PatSnap Family 成员。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过专利ID或公开号查询智慧芽（PatSnap）的专利家族信息。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve factual patent family and equivalent-patent data for a known single patent. It supports comparison of Simple Family, INPADOC Family, and PatSnap Family membership without providing legal opinions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Patent research data may be sensitive and full API responses are saved locally. <br>
-Mitigation: Review the local output path before use and avoid running the skill in workspaces where saved patent data should not persist. <br>
-Risk: The configured LinkFox gateway receives patent lookup requests and API credentials. <br>
-Mitigation: Confirm the configured gateway is trusted and use the documented LinkFox API key environment variables. <br>
-Risk: The skill can automatically submit feedback containing user intent and result-quality details to a separate feedback service. <br>
-Mitigation: Review feedback submission behavior before installation and avoid automatic feedback submission when that information should not leave the workspace. <br>
-Risk: The API consumes credits and each request supports only one patent. <br>
-Mitigation: Confirm user consent before additional lookups, especially when checking multiple patents. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve factual patent family members and equivalents from Zhihuiya (PatSnap) by patent ID or publication number. It supports Simple Family, INPADOC Family, and PatSnap Family lookup, including batch requests up to 100 patents.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-patent-family) <br>
-- [智慧芽专利家族查询 API 参考](references/api.md) <br>
-- [LinkFox API Key Guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Markdown, Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON responses and saved JSON files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts one patentId or patentNumber per request; full responses are saved locally and large responses are summarized.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The skill handles patent queries, API keys, phone-number login, SMS verification, billing, and payment flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when the LinkFox and PatSnap workflow is trusted; prefer obtaining an API key directly, avoid sharing phone numbers or SMS codes with the agent unless necessary, and confirm billing actions before purchase or lookup.
+
+Risk: Gateway and account endpoints can be redirected through environment variables.
+
+Mitigation: Verify gateway and account environment variables point to official LinkFox domains before running account, billing, or patent lookup commands.
+
+Risk: Patent queries, feedback, and response data may be transmitted to third-party services and persisted in local JSON files.
+
+Mitigation: Avoid sending confidential patent research or sensitive feedback unless that transmission and storage are intended; review generated JSON files before sharing them.
+
+Risk: Patent family lookups consume credits and may become costly for batch requests or repeated attempts.
+
+Mitigation: Warn users about credit consumption before making calls, rely on the built-in cache for duplicate requests, and ask for confirmation before additional billable lookups.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-patent-family)
+- [Publisher profile](https://clawhub.ai/user/linkfox-ai)
+- [智慧芽专利家族查询 API 参考](references/api.md)
+- [解决认证和积分问题](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with API call instructions, shell commands, and JSON response files or summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The lookup script persists full JSON responses under a linkfox session data directory, prints full JSON for small responses, and prints a compact summary for larger responses unless --inline is used.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
