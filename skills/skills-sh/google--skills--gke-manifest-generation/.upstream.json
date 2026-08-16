@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-manifest-generation",
+  "repo": "google/skills",
+  "skillId": "gke-manifest-generation",
+  "branch": "main",
+  "pushedAt": "2026-08-14T19:19:17Z",
+  "contentHash": "b42e33a25f4556de8cac29ff37923ddbf4248ecb2649934ab6e97b8dadd3dc8a",
+  "fetchedAt": "2026-08-16T07:50:42.241Z"
+}

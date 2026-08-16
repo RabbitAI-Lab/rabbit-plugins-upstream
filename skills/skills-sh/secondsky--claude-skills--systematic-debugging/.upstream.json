@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/systematic-debugging",
+  "repo": "secondsky/claude-skills",
+  "skillId": "systematic-debugging",
+  "branch": "main",
+  "pushedAt": "2026-08-10T14:37:58Z",
+  "contentHash": "ff6a0feec5fc3bdd8a6aaea79a8a986c7984f09eaeff3dcdb6d0f7be6bc4ffb4",
+  "fetchedAt": "2026-08-16T07:51:39.224Z"
+}

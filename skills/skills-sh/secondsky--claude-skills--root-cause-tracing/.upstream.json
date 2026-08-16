@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/root-cause-tracing",
+  "repo": "secondsky/claude-skills",
+  "skillId": "root-cause-tracing",
+  "branch": "main",
+  "pushedAt": "2026-08-10T14:37:58Z",
+  "contentHash": "ccbe13c7ece2c1ba32309f27622ebc522895ea4365a902d19422e5a3f3cbfb3c",
+  "fetchedAt": "2026-08-16T07:51:39.451Z"
+}

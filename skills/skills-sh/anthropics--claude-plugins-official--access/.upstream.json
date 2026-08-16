@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/access",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "access",
+  "branch": "main",
+  "pushedAt": "2026-08-16T07:34:57Z",
+  "contentHash": "3c51e1cef9a5a9e14de32b5a455b462b726d51fd974eddcec460de6cb82ffc74",
+  "fetchedAt": "2026-08-16T07:50:43.500Z"
+}
