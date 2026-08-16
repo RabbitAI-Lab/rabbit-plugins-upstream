@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/control-cli",
+  "repo": "cursor/plugins",
+  "skillId": "control-cli",
+  "branch": "main",
+  "pushedAt": "2026-08-13T22:02:02Z",
+  "contentHash": "3e0e7327e452ed4540e1e3e131b1657eb1dad517f5398b59ad9d80f3b9b7c609",
+  "fetchedAt": "2026-08-16T07:50:56.624Z"
+}

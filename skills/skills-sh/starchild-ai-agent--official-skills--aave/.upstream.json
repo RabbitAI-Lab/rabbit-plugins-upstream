@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/aave",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "aave",
+  "branch": "main",
+  "pushedAt": "2026-08-16T04:06:37Z",
+  "contentHash": "ccc0ec147485043ed4ee6346437cb94fee4cc45c15a0e5ea7f05feff345bba39",
+  "fetchedAt": "2026-08-16T07:50:50.527Z"
+}

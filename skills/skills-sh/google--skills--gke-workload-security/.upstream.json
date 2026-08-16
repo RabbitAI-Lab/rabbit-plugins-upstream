@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-workload-security",
+  "repo": "google/skills",
+  "skillId": "gke-workload-security",
+  "branch": "main",
+  "pushedAt": "2026-08-14T19:19:17Z",
+  "contentHash": "c60b962a13a687905f96b5dcc7608ba490f8c6a61d2b8f738668351523caf605",
+  "fetchedAt": "2026-08-16T07:50:42.199Z"
+}

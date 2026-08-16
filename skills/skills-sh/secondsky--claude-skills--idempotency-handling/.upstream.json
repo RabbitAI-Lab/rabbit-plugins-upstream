@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/idempotency-handling",
+  "repo": "secondsky/claude-skills",
+  "skillId": "idempotency-handling",
+  "branch": "main",
+  "pushedAt": "2026-08-10T14:37:58Z",
+  "contentHash": "e0f8d74cbcded52acc035a3018f7178b3953c0e59cd1fe5bcc714825c7be516b",
+  "fetchedAt": "2026-08-16T07:51:40.250Z"
+}
