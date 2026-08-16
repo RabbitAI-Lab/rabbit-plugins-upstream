@@ -171,7 +171,7 @@ python scripts/authorized_stores.py --payload-env PAYLOAD --inline
 - API key 读取顺序：`LINKFOX_AGENT_API_KEY`，然后 `LINKFOXAGENT_API_KEY`（如未配置 按 SKILL.md 的 **## 解决认证和积分问题** 处理）
 - User-Agent：`LinkFox-Skill/2.0`
 - 透传 Header：`SESSION_ID`、`MODE_ID`、`APP_NAME`
-- 超时：120s
+- 超时：150s
 - 输出保存：小响应默认不落盘；大响应、`--save` 或 `LINKFOX_SKILL_SAVE_RESPONSE=1` 时保存脱敏完整响应；`--no-save` 或 `LINKFOX_SKILL_NO_SAVE=1` 可禁止保存
 - 缓存策略：不做 24h 响应缓存。授权、价格、库存、订单状态和物流以实时返回为准，高风险写操作不得缓存或自动重放。
 

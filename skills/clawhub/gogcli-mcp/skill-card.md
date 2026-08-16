@@ -1,38 +1,54 @@
-## Description: <br>
-Provides guidance for Google Workspace automation through gogcli-backed MCP servers for Docs, Sheets, Slides, Drive, and Classroom. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gogcli-mcp helps agents route Google Workspace automation requests through gogcli-based MCP servers for Docs, Sheets, Slides, Drive, and Classroom.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agent users use this skill to configure gogcli MCP packages and route Google Workspace automation tasks to the appropriate Docs, Sheets, Slides, Drive, or Classroom toolset. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can help an agent use a gogcli-authenticated Google account for broad Workspace automation, including document, file, classroom, and permission-changing actions. <br>
-Mitigation: Install only the sub-packages needed, set GOG_ACCOUNT when multiple accounts exist, and review sensitive or permission-changing actions before allowing execution. <br>
+## Use Case:
 
+Developers and external users use this skill to configure agents for Google Workspace automation through a locally authenticated gogcli account. It is intended for document, spreadsheet, presentation, Drive, and Classroom workflows where the user can confirm the target account and resources.
 
-## Reference(s): <br>
-- [gogcli](https://github.com/chrischall/gogcli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration snippets and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MCP server configuration, package selection guidance, and gogcli authentication commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.17.0 (source: ClawHub release evidence) <br>
+Risk: The skill can guide agents to operate through a locally authenticated Google Workspace account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only when that account should be available to agents, and set or verify the intended account before use.
+
+Risk: Workspace actions such as edits, uploads, downloads, permission changes, grading, or roster updates can affect real user data.
+
+Mitigation: Confirm the target document, sheet, Drive item, class, account, and requested action before executing those operations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/gogcli-mcp)
+- [gogcli project reference](https://github.com/chrischall/gogcli)
+
+## Skill Output:
+
+**Output Type(s):** [Configuration instructions, Shell commands, Guidance]
+
+**Output Format:** [Markdown with JSON and bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should be reviewed against the authenticated Google account and target Workspace resource before execution.]
+
+## Skill Version(s):
+
+2.25.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

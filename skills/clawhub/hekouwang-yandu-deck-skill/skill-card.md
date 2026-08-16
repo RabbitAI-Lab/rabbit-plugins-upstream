@@ -1,46 +1,67 @@
-## Description: <br>
-YanDu DECK turns article topics into swipeable, auto-playing keynote-style web decks with self-hosted fonts and Cloudflare Pages publishing support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+YanDu DECK helps an agent turn articles or topics into one-screen-per-idea, swipeable, auto-playing keynote-style HTML decks, localize fonts, configure optional comments, and publish the result to Cloudflare Pages.
 
-## Publisher: <br>
-[huiyonghkw](https://clawhub.ai/user/huiyonghkw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huiyonghkw](https://clawhub.ai/user/huiyonghkw)
 
-## Use Case: <br>
-Content creators and developers use this skill to convert articles or topics into immersive one-screen-per-idea web decks, update the YanDu DECK site, adjust deck themes, and prepare Cloudflare Pages releases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish to a live Cloudflare Pages site and change local project files during build and release work. <br>
-Mitigation: Run with --build-only first, review generated files and Cloudflare settings, then deploy only after confirming the target project. <br>
-Risk: Deployment and comment-board setup depend on site-specific Cloudflare, D1, analytics, and Wrangler configuration. <br>
-Mitigation: Review CF_PROJECT, wrangler.toml, database identifiers, comment behavior, and analytics tokens before publishing. <br>
-Risk: The security scan guidance warns against allowing the script to perform an unreviewed global Wrangler installation. <br>
-Mitigation: Install and authenticate Wrangler separately, then run the publishing workflow from a reviewed local environment. <br>
+## Use Case:
 
+External developers and content producers use this skill to convert long-form articles or presentation topics into immersive web decks and to package the templates, publishing script, Cloudflare Pages configuration, and optional D1-backed comments workflow needed to ship them.
 
-## Reference(s): <br>
-- [Hekouwang Yandu Deck Skill on ClawHub](https://clawhub.ai/huiyonghkw/skills/hekouwang-yandu-deck-skill) <br>
-- [YanDu DECK live site](https://hekouwang.pages.dev) <br>
-- [Token Flip Reference](references/换肤-token-flip.md) <br>
-- [Comment Board D1 Reference](references/留言板-D1.md) <br>
-- [System Notes](references/系统说明.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code, shell commands, and configuration edits] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or modify HTML templates, Python scripts, Cloudflare Pages configuration, D1 schema, and deployment-ready site files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: frontmatter and server evidence) <br>
+Risk: The skill can publish generated decks as public Cloudflare Pages sites.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the publishing script in build-only mode first and inspect the generated dist output for private or unintended material before deployment.
+
+Risk: The artifact includes a hardcoded Cloudflare analytics beacon token.
+
+Mitigation: Replace the analytics token with one controlled by the deployer or remove the beacon before publishing.
+
+Risk: Leaving placeholder Cloudflare D1 or wrangler.toml values unchanged can bind comments to the wrong project or database.
+
+Mitigation: Fill in the deployer's own Cloudflare Pages and D1 values and verify the binding before enabling the comments feature.
+
+Risk: The publishing script can install Wrangler globally when it is missing.
+
+Mitigation: Prefer installing and pinning Wrangler separately, then review the script behavior before allowing any global tool installation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/huiyonghkw/skills/hekouwang-yandu-deck-skill)
+- [Repository homepage](https://github.com/huiyonghkw/hekouwang-yandu-deck-skill)
+- [Live YanDu DECK site](https://hekouwang.pages.dev)
+- [Mobile safe-area and comments notes](references/mobile-and-comments.md)
+- [Theme token flip guide](references/%E6%8D%A2%E8%82%A4-token-flip.md)
+- [Cloudflare Pages Functions and D1 comments guide](references/%E7%95%99%E8%A8%80%E6%9D%BF-D1.md)
+- [YanDu DECK system notes](references/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with HTML, JavaScript, Python, shell command, TOML, and SQL snippets or file templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are intended for agent-assisted deck creation, local build review, Cloudflare Pages publishing, and optional comments setup; deployment should be explicitly reviewed before running.]
+
+## Skill Version(s):
+
+1.3.2 (source: frontmatter and changelog, released 2026-08-12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

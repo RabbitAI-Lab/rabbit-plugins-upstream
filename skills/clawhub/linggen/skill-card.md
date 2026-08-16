@@ -1,50 +1,69 @@
-## Description: <br>
-Linggen gives agents durable local memory across supported hosts and browser control through a local MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Linggen gives agents durable cross-session memory and local browser/X control through ling-mem and Linggen services.
 
-## Publisher: <br>
-[linggen](https://clawhub.ai/user/linggen) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[linggen](https://clawhub.ai/user/linggen)
 
-## Use Case: <br>
-Developers and external users use Linggen to give Claude Code, Codex, OpenClaw, Linggen, and standalone CLI workflows shared durable memory. The skill also guides controlled browser and X interactions through the user's local Linggen MCP server. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First use may install remote binaries for the memory CLI and Linggen engine. <br>
-Mitigation: Install only in environments where remote first-use installation is acceptable, and review update or install prompts before allowing the agent to proceed. <br>
-Risk: Durable memory can persist personal or session-derived data across tools, and recalled memories can enter the configured LLM context. <br>
-Mitigation: Avoid saving secrets, review stored memory regularly, and use delete or forget workflows for records that should not persist. <br>
-Risk: Browser and X control surfaces can interact with the user's logged-in local sessions. <br>
-Mitigation: Keep per-site permission prompts enabled and require explicit confirmation for payments, credentials, deletes, posting, and other sensitive actions. <br>
-Risk: Backfill workflows can read local session logs before writing selected durable memories. <br>
-Mitigation: Run scan and dream workflows only when intended, rely on the artifact's secret-filtering safeguards, and review resulting memory rows for sensitivity. <br>
+## Use Case:
 
+External users and developers use Linggen to let assistants recall durable user facts across sessions, manage memory records, and operate local browser/X integrations with user permissions.
 
-## Reference(s): <br>
-- [Linggen homepage](https://linggen.dev) <br>
-- [ClawHub skill page](https://clawhub.ai/linggen/skills/linggen) <br>
-- [Routing rules](references/routing-rules.md) <br>
-- [Dream flow](references/dream-flow.md) <br>
-- [Extractor prompt](references/extractor-prompt.md) <br>
-- [Condense flow](references/condense-flow.md) <br>
-- [Shared memory design](doc/shared-memory-design.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Local CLI and MCP workflows; list, search, and get outputs are expected to omit embedding vectors.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: ClawHub release evidence) <br>
+Risk: Remote installer scripts run on the user's machine during setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or manually pin installers before use, and install only from trusted Linggen release channels.
+
+Risk: Durable local memories and recalled facts may be sent to the user's configured LLM as prompt context.
+
+Mitigation: Avoid storing secrets or sensitive facts, review saved memories regularly, and delete records that should not be recalled.
+
+Risk: Optional transcript backfill can read local agent session history into the memory workflow.
+
+Mitigation: Disable scan/backfill workflows when transcript reuse is not desired and rely on explicit memory adds instead.
+
+Risk: Browser and X controls can interact with logged-in sessions on the user's machine.
+
+Mitigation: Use browser permission prompts, keep actions visible to the user, and disable browser/X integrations when not needed.
+
+## Reference(s):
+
+- [Linggen homepage](https://linggen.dev)
+- [README](README.md)
+- [Shared memory design](doc/shared-memory-design.md)
+- [Routing rules](references/routing-rules.md)
+- [Dream flow](references/dream-flow.md)
+- [Condense flow](references/condense-flow.md)
+- [Extractor prompt](references/extractor-prompt.md)
+- [Linggen memory source and binary releases](https://github.com/linggen/linggen-memory)
+- [Skill source](https://github.com/linggen/skills/tree/main/linggen)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON CLI output when listing or searching memory]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke local CLI or MCP tools, write durable local memory rows, and surface recalled facts in agent responses.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

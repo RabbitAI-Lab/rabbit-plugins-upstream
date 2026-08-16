@@ -1,44 +1,58 @@
-## Description: <br>
-Generate and edit images with Qwen Image through RunAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images with Qwen Image through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to generate, remix, or edit images with Qwen Image through RunAPI, choosing CLI commands for one-off tasks and SDK guidance for application integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated or edited image requests go through RunAPI and may involve provider billing, rate limits, authentication, and temporary output URLs. <br>
-Mitigation: Use an API key or saved CLI authentication only when appropriate for the workspace, check RunAPI pricing and limits, and persist needed outputs outside temporary URLs. <br>
-Risk: Using the CLI as an application runtime integration path can create brittle production workflows. <br>
-Mitigation: Use the documented SDK integration path for application, backend, worker, library, webhook, or production codebase integrations. <br>
+## Use Case:
 
+Developers and agents use this skill to generate, edit, or transform images with Qwen Image through RunAPI, using the CLI for one-off artifacts and SDK guidance for application integrations.
 
-## Reference(s): <br>
-- [RunAPI Qwen Image model page](https://runapi.ai/models/qwen-image) <br>
-- [RunAPI Qwen Image documentation](https://runapi.ai/models/qwen-image.md) <br>
-- [RunAPI Alibaba provider page](https://runapi.ai/providers/alibaba.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [RunAPI CLI skill](https://github.com/runapi-ai/cli-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown guidance with shell command and SDK package examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include RunAPI CLI or SDK instructions, authentication guidance, and generated image handling guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Prompts and media inputs may be uploaded to RunAPI while generating or editing images.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm trust in RunAPI before use, avoid private media unless upload is acceptable, and use a scoped API key where possible.
+
+Risk: A paid async image task could be duplicated if failures are handled by resubmitting instead of waiting on the original task.
+
+Mitigation: Submit once, persist the task id, wait on that task, and retry only when evidence confirms that no task was created and no billing occurred.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-qwen-image)
+- [RunAPI Qwen Image model overview](https://runapi.ai/models/qwen-image.md)
+- [RunAPI Qwen Image homepage](https://runapi.ai/models/qwen-image)
+- [Alibaba provider overview](https://runapi.ai/providers/alibaba.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI Qwen Image SDK](https://github.com/runapi-ai/qwen-image-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Code, Files]
+
+**Output Format:** [Markdown guidance with shell commands, JSON request and response files, SDK integration code, and downloaded image files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses RUNAPI_API_KEY or saved RunAPI CLI authentication when available; validates generated media files before reporting completion.]
+
+## Skill Version(s):
+
+0.1.2 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

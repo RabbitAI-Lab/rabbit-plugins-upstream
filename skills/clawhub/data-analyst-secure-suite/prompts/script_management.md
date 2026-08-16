@@ -134,20 +134,33 @@ Note:
 - This call is local only (127.0.0.1), AI cannot see credentials
 - Token file path: `~/.mgc/database/mgc_black_box/.mgc_token`
 
-## Security Features
+### Locating Scripts by Name (Recommended Workflow, v1.4.10+)
 
-- Credentials decrypted locally
-- AI cannot see credential content
-- Internal script calls do not expose credentials
-- Authorization required before access
+Before running a script, locate it with **mgc_find** (fuzzy search by name):
 
-    # Use credential to establish connection (example)
-    conn = connect_to_database(credential)
+```python
+# Fuzzy search for a script by name
+matches = mgc_find(
+    info_owner="query_monthly",  # partial name; substring match by default
+    info_type="script",
+)
+# Returns metadata list (info_type, info_owner, ext01..ext03) — never plain text.
+# After locating the exact (info_type, info_owner), pass it to mgc_run.
 
-    # User's own analysis logic
-    result = conn.execute("SELECT SUM(amount) FROM sales WHERE month='2024-06'")
-    return result
+# Match modes (optional match_mode parameter):
+#   substring (default) — partial name match (e.g. "query" matches "query_monthly_orders")
+#   prefix             — name starts with value (e.g. "query_" matches "query_monthly_*")
+#   suffix             — name ends with value
+#   exact              — exact name match
 ```
+
+**Security features**:
+- `mgc_find` never returns script plain_text — only metadata
+- AI must still obtain user authorization before applying the located script
+
+---
+
+# How to Safely Apply Scripts (Zero-Exposure)
 
 ---
 
@@ -159,12 +172,23 @@ Script application must be completed via MGC; AI cannot see script content.
 
 ## Standard Application Method (Requires User Authorization)
 
+> **v1.4.7+**: Use the dedicated `mgc_run` tool for script execution (preferred).
+> The legacy `mgc_get(action="run")` still works for backward compatibility, but new code should use `mgc_run`.
+
 ```python
+# Preferred (v1.4.7+): dedicated run tool
+result = mgc_run(
+    info_type="script",
+    info_owner="analysis_monthly_summary",
+    ext02=input_data   # If passing previous step result (JSON string)
+)
+
+# Legacy (still supported):
 result = mgc_get(
     info_type="script",
     info_owner="analysis_monthly_summary",
     action="run",
-    ext02=input_data   # If passing previous step result
+    ext02=input_data
 )
 ```
 
@@ -189,9 +213,24 @@ Scripts can be securely shared with team members or external nodes via sealing.
 sealed_script = mgc_seal(
     info_type="script",
     info_owner="analysis_monthly_summary",
-    ext04=recipient_public_key
+    ext04=recipient_public_key  # MUST be a multi-line PEM (see note below)
 )
 ```
+
+> **Important — `ext04` format**: The `recipient_public_key` MUST be a multi-line
+> PEM public key with **real newline characters** between the header, each base64
+> line, and the footer. Do NOT pass it as a single concatenated line.
+>
+> The canonical way to fetch the recipient's public key is:
+>
+> ```python
+> pub_key = mgc_get(info_type="__NODE_PUB__", info_owner="__NODE_PUB__")
+> # Pass pub_key verbatim as ext04 to mgc_seal.
+> ```
+>
+> If you get a `pre boundary` / `PEM` error from `mgc_seal`, the key was almost
+> certainly passed as a single line — fetch it again with the above pattern and
+> pass the multi-line string through unchanged.
 
 ## Security Features
 

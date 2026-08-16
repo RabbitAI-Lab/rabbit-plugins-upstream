@@ -1,41 +1,59 @@
-## Description: <br>
-Discovers AWS-hosted AI agent and MCP-relevant assets, emits canonical agent-bom inventory JSON, and optionally scans or exports that inventory under operator control. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover AWS-hosted AI agent and MCP-relevant assets from the operator's environment, emit canonical agent-bom inventory JSON, and scan it without giving agent-bom long-lived cloud credentials.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers, security engineers, and cloud operators use this skill to inventory AWS Bedrock, ECS, SageMaker, Lambda, EKS, Step Functions, EC2, and related agentic infrastructure as canonical agent-bom inventory without handing over long-lived cloud credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: AWS discovery can expose sensitive account, resource, and workload metadata in generated inventory files. <br>
-Mitigation: Use read-only AWS profiles or short-lived roles, choose the narrowest required regions and services, and review generated inventory before sharing or exporting it. <br>
-Risk: Using broad or long-lived AWS credentials could expand the impact of accidental disclosure or misuse. <br>
-Mitigation: Prefer AWS SSO, WebIdentity, or STS assumed-role credentials and do not paste or print access key values. <br>
+## Use Case:
 
+Developers, platform engineers, and security engineers use this skill to inventory selected AWS AI agent and workload services with operator-approved read-only AWS credentials, produce canonical agent-bom inventory JSON, and optionally run local scans or exports.
 
-## Reference(s): <br>
-- [agent-bom GitHub repository](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON] <br>
-**Output Format:** [Markdown guidance with bash commands and generated JSON inventory files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes inventory or scan/export files only to operator-selected paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: frontmatter and server release metadata) <br>
+Risk: AWS discovery can expose cloud account, service, and infrastructure metadata.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only operator-approved read-only AWS profiles or short-lived roles and limit service scope to the intended inventory.
+
+Risk: Generated inventory files may contain sensitive operational details even when credential patterns are redacted.
+
+Mitigation: Write inventory to an operator-selected local path, review it before sharing, and only approve exports when the destination and retained data are understood.
+
+Risk: Optional scans, exports, or handoffs can move inventory data beyond the local workflow.
+
+Mitigation: Use discover-only mode by default and require explicit operator approval for scans, exports, destinations, authentication, and retained evidence classes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-discover-aws)
+- [agent-bom repository](https://github.com/msaad00/agent-bom)
+- [agent-bom PyPI package](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands; generated inventory and optional scan/export outputs are JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes inventory only to an operator-selected path; scan and export handoffs are optional and operator-approved.]
+
+## Skill Version(s):
+
+0.100.0 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

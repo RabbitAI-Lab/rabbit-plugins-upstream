@@ -1,44 +1,59 @@
-## Description: <br>
-解析TikTok视频地址，返回该视频的无水印/含水印下载地址、播放地址与封面地址，用于保存带货视频素材或离线分析。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Resolves a TikTok video URL into available no-watermark download, watermarked download, playback, and cover image URLs for saving or offline analysis.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and e-commerce operators use this skill to resolve a specific TikTok video URL into no-watermark or watermarked download links, a playback URL, and cover image URLs for saving promotional video material or offline analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill calls LinkFox with the user's API key and TikTok URL and consumes credits. <br>
-Mitigation: Confirm the user has configured an appropriate LinkFox API key, explain credit consumption before repeated calls, and avoid speculative retries without user approval. <br>
-Risk: The skill saves full API responses locally, which can retain TikTok URLs and returned media links. <br>
-Mitigation: Tell users where responses are stored and clean the local LinkFox cache or result files when retained data is no longer needed. <br>
-Risk: The security review flags external feedback reporting and a fallback install/download path as behavior users should review before installing. <br>
-Mitigation: Review the feedback flow and onboarding fallback before use, and avoid automatic feedback reporting unless it is acceptable for the user's data handling requirements. <br>
+## Use Case:
 
+External sellers, e-commerce operators, and agents use this skill to resolve a specific TikTok video link into returned media URLs and cover images when those fields are available.
 
-## Reference(s): <br>
-- [EchoTik TikTok 视频下载 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-get-video-download-url) <br>
-- [Publisher profile](https://clawhub.ai/user/linkfox-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API results and local JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a TikTok video URL and a LinkFox API key; returned media URLs may expire and download URLs may be absent for restricted videos.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: TikTok URLs are sent to LinkFox and full API responses are stored locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only links appropriate to share with LinkFox, review generated files under the local linkfox directory, and remove stored responses when they are no longer needed.
+
+Risk: Authentication, API-key generation, credit, and payment flows may expose account or billing information if handled carelessly.
+
+Mitigation: Prefer self-service API-key setup, do not share phone numbers or API keys in transcripts, and verify payment actions before displaying or scanning any QR code.
+
+Risk: Returned download and playback URLs may be unavailable for some videos or expire after resolution.
+
+Mitigation: Check returned fields before presenting links, fall back to playback links when direct downloads are absent, and re-resolve expired URLs.
+
+## Reference(s):
+
+- [EchoTik TikTok Video Download API Reference](artifact/references/api.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-get-video-download-url)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, files, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API responses and locally saved response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a TikTok video URL and a LinkFox API key; full responses are persisted under a local linkfox session directory, with large responses summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

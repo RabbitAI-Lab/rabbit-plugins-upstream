@@ -7,7 +7,7 @@ export declare class ApiClient {
     upload(endpoint: string, params: Record<string, string>, file: {
         name: string;
         data: any;
-    }, timeout: number): Promise<ApiResponse>;
+    }, timeout: number, fieldName?: string): Promise<ApiResponse>;
     private parseResponse;
     private handleError;
 }

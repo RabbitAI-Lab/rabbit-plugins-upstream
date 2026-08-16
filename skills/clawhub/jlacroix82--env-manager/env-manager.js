@@ -37,26 +37,42 @@ const path = require('path');
 // the command and runs it (or not) using its own shell tool.
 
 const DEFAULT_ACCEPTED_BINARIES = [
-  'python3', 'node', 'npm', 'docker', 'go',
-  'rustc', 'pip3', 'lsof', 'which', 'mkdir',
-  'mvn', 'gradle', 'cargo', 'ruby', 'pip',
-  'make', 'gcc', 'g++', 'clang', 'cmake',
-  'java', 'javac', 'dotnet', 'go1',
-  'perl', 'php', 'lua', 'tclsh',
+  // Declared scope: Python / Node / Docker / Go / Rust scaffolding only.
+  'python3', 'pip3',          // Python
+  'node', 'npm',              // Node
+  'docker',                   // Docker
+  'go',                       // Go
+  'rustc', 'cargo',           // Rust
+  // Read-only inspection helpers (no execution of project code).
+  'lsof', 'which', 'mkdir',
 ];
 
 // ─── Workspace helpers ─────────────────────────────────────────────────────
 //
 // The workspace root is fixed: the parent directory of this skill. There is
 // no runtime path redirection via environment variable or CLI flag. This
-// keeps the file-write surface predictable and auditable.
-
+// Workspace root resolution.
+//
+// The skill writes only inside <workspace>/memory/environments. To keep the
+// file-write surface predictable and auditable, the root is resolved
+// DETERMINISTICALLY — it does NOT walk up the directory tree looking for
+// markers (which could escape into an unintended, broader directory in
+// symlinked or unexpectedly nested deployments).
+//
+// Resolution order:
+//   1. ENV_MANAGER_WORKSPACE env var (explicit override, must be absolute)
+//   2. Otherwise: the project root that contains this skill — i.e. the
+//      grandparent of this file's directory (skills/env-manager/ -> repo root).
+//      This is fixed and does not search upward beyond two levels.
 function getWorkspace() {
-  let dir = __dirname;
-  for (let i = 0; i < 10; i++) {
-    if (fs.existsSync(path.join(dir, 'MEMORY.md'))) return dir;
-    dir = path.resolve(dir, '..');
+  if (process.env.ENV_MANAGER_WORKSPACE) {
+    const o = path.resolve(process.env.ENV_MANAGER_WORKSPACE);
+    if (!path.isAbsolute(o)) {
+      throw new Error('ENV_MANAGER_WORKSPACE must be an absolute path');
+    }
+    return o;
   }
+  // Fixed: two levels up from this file — no upward walk.
   return path.resolve(__dirname, '..', '..');
 }
 

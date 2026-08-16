@@ -1,7 +1,7 @@
 ---
 name: rsoft-agentic-bank
-description: AI-native lending service for autonomous agents. Request loans, repay with USDC on Base, and check credit scores — all autonomously.
-version: 1.7.0
+description: AI-native lending on Base MAINNET for autonomous agents. Check credit, request USDC loans (EIP-712 signed), and repay autonomously. Real money.
+version: 2.0.0
 requires:
   bins:
     - curl
@@ -14,71 +14,102 @@ metadata:
 
 # RSoft Agentic Bank
 
-Official skill for **RSoft Agentic Bank** — an AI-native lending service for autonomous agents on Base (Coinbase L2).
+Official skill for **RSoft Agentic Bank** — an AI-native lending service for autonomous agents on **Base mainnet** (Coinbase L2).
 
-Agents can request USDC loans, receive funds on-chain, and repay autonomously using the payment skill.
+Agents can check their creditworthiness, request USDC loans, receive funds on-chain, and repay autonomously. Every repaid loan earns a bank-signed, portable **ERC-8004 reputation mark** — verifiable on-chain credit history.
+
+> ⚠️ **REAL MONEY.** This bank operates on Base MAINNET with real USDC. Defaults are recorded on-chain against your agent's reputation. Borrow only what your agent can repay.
 
 ## Prerequisites
 
-- **Payment skill** must be installed and configured for `base-sepolia` with a funded wallet (USDC + small ETH for gas).
-- If the payment skill is not installed, run:
+- **Payment skill** installed and configured for **Base mainnet** with a funded wallet (a few cents of ETH for gas; USDC arrives when the loan disburses).
+- If the payment skill is not installed:
 ```bash
 npx clawhub install payment
 ```
-- Configure for Base Sepolia:
+- Configure for Base mainnet:
 ```bash
-~/.openclaw/skills/payment/scripts/payment-config set network.name "base-sepolia" network.chain_id 84532 network.rpc_url "https://sepolia.base.org" payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" payment.default_token_symbol "USDC" payment.default_token_decimals 6
+~/.openclaw/skills/payment/scripts/payment-config set network.name "base" network.chain_id 8453 network.rpc_url "https://mainnet.base.org" payment.default_token "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" payment.default_token_symbol "USDC" payment.default_token_decimals 6
 ```
 - If you don't have a wallet yet:
 ```bash
 ~/.openclaw/skills/payment/scripts/create-wallet
 ```
-- Fund your wallet with USDC and a small amount of ETH for gas on Base Sepolia.
 
 ## Setup: Know Your Wallet Address
 
-Before using the bank, get your wallet address:
 ```bash
 ~/.openclaw/skills/payment/scripts/get-address
 ```
 Use the `address` field as your `agent_id` in all bank commands.
 
-## Base URL
+## Base URLs
 
 ```
-https://7mavs5vu7ggbhtxvbavdgs26qa0cbawg.lambda-url.us-east-1.on.aws
+Reads & repay (free, no key):  https://7mavs5vu7ggbhtxvbavdgs26qa0cbawg.lambda-url.us-east-1.on.aws
+Loan origination (API key):    https://rsoft-agentic-bank.com/api/v1
 ```
 
 ## Available Commands
 
-### 1. Check Interest Rates
+### 1. Check Interest Rates (free)
 
-Query current lending rates:
 ```bash
 curl -s https://7mavs5vu7ggbhtxvbavdgs26qa0cbawg.lambda-url.us-east-1.on.aws/api/interest-rates
 ```
 
-### 2. Check Credit Score
+### 2. Check Credit Score (free)
 
-Check your creditworthiness (replace `{agent_id}` with your wallet address):
+Replace `{agent_id}` with your wallet address:
 ```bash
 curl -s https://7mavs5vu7ggbhtxvbavdgs26qa0cbawg.lambda-url.us-east-1.on.aws/api/creditworthiness/{agent_id}
 ```
 
-### 3. Request a Loan
+### 3. Request a Loan (API key + your signature)
 
-Request USDC financing (minimum 5 USDC). Replace `{agent_id}` with your wallet address:
+Two things are required — both are security features, not red tape:
+
+1. **A pilot API key.** Message [@RSoft-Agentic-Bank on Moltbook](https://www.moltbook.com/u/RSoft-Agentic-Bank) to get one. Export it as `BANK_API_KEY`.
+2. **Your wallet's EIP-712 signature.** The bank only originates loans signed by the borrowing wallet itself — nobody (including this skill) can borrow in your name.
+
+**Step 3a — sign the loan terms** with the same private key your payment skill uses (`PRIVATE_KEY` env var):
 ```bash
-curl -s -X POST -H "Content-Type: application/json" -d '{"agent_id": "{agent_id}", "amount": 5}' https://7mavs5vu7ggbhtxvbavdgs26qa0cbawg.lambda-url.us-east-1.on.aws/api/loans
+# npm install ethers  (once)
+node -e '
+const { Wallet } = require("ethers");
+const w = new Wallet(process.env.PRIVATE_KEY);
+const domain = { name: "RSoft Agentic Bank", version: "1", chainId: 8453,
+                 verifyingContract: "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432" };
+const types = { LoanRequest: [
+  { name: "agentWallet",     type: "address" },
+  { name: "loanAmountUsdc6", type: "uint256" },
+  { name: "nonce",           type: "string"  },
+  { name: "deadline",        type: "uint256" } ] };
+const amount = 5.0;                                   // USDC, min 5
+const nonce = "oc-" + Date.now();
+const deadline = Math.floor(Date.now() / 1000) + 900; // 15 min
+const message = { agentWallet: w.address,
+                  loanAmountUsdc6: Math.round(amount * 1e6), nonce, deadline };
+w.signTypedData(domain, types, message).then(sig => console.log(JSON.stringify(
+  { agent_wallet: w.address, loan_amount: amount, nonce, deadline, signature: sig })));'
 ```
-The bank evaluates risk with AI and, if approved, sends USDC directly to your wallet on Base Sepolia.
 
-### 4. Check Wallet Balance
-
-Verify that the loan was received:
+**Step 3b — submit the signed request** (use the JSON printed above as the body):
 ```bash
-~/.openclaw/skills/payment/scripts/get-address
+curl -s -X POST -H "Content-Type: application/json" -H "X-API-Key: $BANK_API_KEY" \
+  -d '{"agent_wallet": "<your 0x…>", "loan_amount": 5, "nonce": "<nonce>", "deadline": <deadline>, "signature": "0x…"}' \
+  https://rsoft-agentic-bank.com/api/v1/loan/request
 ```
+Save the `request_id`. The bank's 5-agent pipeline evaluates risk and, if approved, sends real USDC to your wallet on Base within seconds.
+
+**Step 3c — track it** (free, no key):
+```bash
+curl -s https://rsoft-agentic-bank.com/api/v1/loan/status/{request_id}
+```
+
+### 4. Verify the Loan Arrived
+
+Check your wallet on [BaseScan](https://basescan.org/) (search your address) or with your payment skill's balance command.
 
 ### 5. Repay a Loan (3 steps — do all 3 in order)
 
@@ -88,19 +119,19 @@ curl -s https://7mavs5vu7ggbhtxvbavdgs26qa0cbawg.lambda-url.us-east-1.on.aws/api
 ```
 Save the `request_id`, `repayment_amount`, and `pay_to` from the response.
 
-**Step 2: Send USDC payment on-chain**
+**Step 2: Send USDC payment on-chain — the EXACT amount**
 ```bash
 ~/.openclaw/skills/payment/scripts/pay --to <pay_to> --amount <repayment_amount>
 ```
-Use the `pay_to` and `repayment_amount` values from Step 1. Save the transaction hash from the output.
+Pay **exactly** `repayment_amount` — not more, not less. Save the transaction hash from the output.
 
 **Step 3: Confirm repayment with the bank**
 
-WARNING: The URL is `/api/repay` — do NOT change it to `/api/loans/repay` or any other URL.
+WARNING: The URL is `/api/repay` — do NOT change it to any other URL.
 ```bash
 curl -s -X POST -H "Content-Type: application/json" -d '{"request_id": "<request_id>", "tx_hash": "<tx_hash>"}' https://7mavs5vu7ggbhtxvbavdgs26qa0cbawg.lambda-url.us-east-1.on.aws/api/repay
 ```
-Use the `request_id` from Step 1 and the `tx_hash` from Step 2.
+Safety net: if your agent dies after Step 2, the bank auto-detects exact treasury payments within ~10 minutes. An agent that paid is never marked in default.
 
 ## Full Workflow Example
 
@@ -108,28 +139,36 @@ Use the `request_id` from Step 1 and the `tx_hash` from Step 2.
 1. Get your wallet address         → get-address
 2. Check interest rates            → curl /api/interest-rates
 3. Check your credit score         → curl /api/creditworthiness/{wallet}
-4. Request a loan                  → curl POST /api/loans
-5. Verify loan received            → get-address (check balance)
-6. Check repayment info            → curl /api/repay-info/{wallet}
-7. Send USDC to bank               → pay --to {pay_to} --amount {amount}
-8. Confirm repayment               → curl POST /api/repay
+4. Sign the loan terms             → node signing snippet (step 3a)
+5. Request the loan                → curl POST /api/v1/loan/request (with key + signature)
+6. Verify USDC received            → BaseScan / balance
+7. Check repayment info            → curl /api/repay-info/{wallet}
+8. Send EXACT USDC to bank         → pay --to {pay_to} --amount {repayment_amount}
+9. Confirm repayment               → curl POST /api/repay
 ```
 
 ## Important Notes
 
-- **Network:** Base Sepolia (testnet) — all transactions use test USDC.
-- **Minimum loan:** 5 USDC.
-- **Currency:** USDC (6 decimals) on Base Sepolia.
-- **Gas:** Your wallet needs a small amount of ETH on Base Sepolia for transaction fees.
-- **One active loan at a time.** Repay before requesting a new loan.
-- All transactions are verifiable on [BaseScan Sepolia](https://sepolia.basescan.org/).
+- **Network:** Base MAINNET — real USDC (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`), real consequences.
+- **Loan size:** 5 USDC minimum. Your ceiling starts at the $5 floor and climbs the credit ladder with each repaid loan ($5 → $10 → $25 → …).
+- **One active loan at a time.** Repay before requesting a new one. An unpaid default blocks new loans until you cure it (repay in full via the same repay flow).
+- **Gas:** your wallet needs a small amount of ETH on Base for transaction fees.
+- All transactions are verifiable on [BaseScan](https://basescan.org/).
+
+## MCP Server (recommended for MCP-capable agents)
+
+If your agent speaks MCP, skip the curls — the same bank is one config line away, no API key needed:
+```
+https://7mavs5vu7ggbhtxvbavdgs26qa0cbawg.lambda-url.us-east-1.on.aws/mcp
+```
+Tools: `get_creditworthiness`, `request_loan` (carries your EIP-712 signature), `get_repayment_info`, `confirm_repayment`. Full docs: [rsoft-agentic-bank.com/docs](https://rsoft-agentic-bank.com/docs).
 
 ## Verification
 
 - **Official Website:** [rsoft-agentic-bank.com](https://rsoft-agentic-bank.com/)
 - **Publisher:** RSoft Latam
-- **Protocol:** REST API via curl + payment skill for on-chain transfers
-- **Network:** Base Sepolia (Coinbase L2)
+- **Protocol:** REST API via curl + payment skill for on-chain transfers; MCP server for tool-native agents
+- **Network:** Base mainnet (Coinbase L2)
 
 ---
 *Developed by RSoft Latam — Empowering the Agentic Economy.*

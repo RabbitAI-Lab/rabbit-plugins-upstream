@@ -1,37 +1,53 @@
-## Description: <br>
-Helps QA teams manage the full bug lifecycle, including severity and priority classification, state transitions, closure criteria, timelines, metrics, and trend analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides bug lifecycle management guidance covering submission-to-closure workflow, severity and priority grading, state transition criteria, timelines, metrics, and trend analysis.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and engineering teams use this skill to standardize defect handling from report intake through confirmation, assignment, repair, verification, reopening, and closure. It also supports defect metrics and trend analysis for retrospectives and quality reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bug lifecycle work can involve production incidents, customer identifiers, payment details, screenshots, or logs. <br>
-Mitigation: Redact or mask sensitive production, customer, and financial data before using the skill. <br>
+## Use Case:
 
+QA engineers, test leads, and development teams use this skill to standardize bug triage, lifecycle state transitions, severity and priority classification, closure checks, and defect trend analysis.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured lifecycle fields and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code or network behavior; intended to produce reviewable QA process guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Bug examples may contain customer, payment, identity, or production evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Redact or mask sensitive production, customer, payment, and identity data before using it in examples.
+
+Risk: Broad bug-management wording may activate the skill when the user only wants a narrow bug report or quick triage.
+
+Mitigation: Confirm whether lifecycle and process guidance is wanted when the request is ambiguous.
+
+## Reference(s):
+
+- [qa-bug-lifecycle on ClawHub](https://clawhub.ai/kokxi/skills/qa-bug-lifecycle)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text]
+
+**Output Format:** [Markdown guidance with structured bug lifecycle fields, checklists, and tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include lifecycle state, severity level, priority level, state history, timelines, next actions, and closure criteria.]
+
+## Skill Version(s):
+
+1.6.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

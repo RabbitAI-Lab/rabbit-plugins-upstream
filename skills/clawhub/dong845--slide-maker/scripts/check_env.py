@@ -49,6 +49,58 @@ def check_module(mod, label, fix_pkg, optional=False, note=""):
         print(line)
 
 
+def check_save_locations():
+    """Can we actually WRITE a deck where the user will want it?
+
+    macOS TCC grants a process access per-directory, and it can revoke mid-session: ~/Downloads
+    stays listable while open() raises PermissionError. Measured on one build, that cost six
+    round-trips of diagnosis in the middle of authoring — the deck was written, the save failed,
+    and the failure looked like a bug in the build rather than a sandbox boundary.
+
+    So probe by actually creating and deleting a file, not by reading permission bits: os.access()
+    consults the mode bits, which is exactly the thing TCC does not express.
+    """
+    import tempfile
+    home = os.path.expanduser("~")
+    cands = [("~/Downloads", os.path.join(home, "Downloads")),
+             ("~/Desktop", os.path.join(home, "Desktop")),
+             ("~/Documents", os.path.join(home, "Documents")),
+             ("cwd", os.getcwd())]
+    usable = []
+    seen = set()
+    for label, d in cands:
+        if not os.path.isdir(d):
+            continue
+        try:                              # cwd is frequently one of the named dirs; listing the same
+            key = os.path.realpath(d)     # place twice reads as two options when there is one
+        except OSError:
+            key = d
+        if key in seen:
+            continue
+        seen.add(key)
+        probe = None
+        try:
+            fd, probe = tempfile.mkstemp(prefix=".slide-maker-probe-", dir=d)
+            os.close(fd)
+            usable.append(label)          # the CREATE is the test; cleanup is not part of the verdict
+        except Exception as e:
+            print("  [blocked] {:<12} not writable ({}) — do not offer it as a save location"
+                  .format(label, type(e).__name__))
+        finally:
+            # best-effort, and deliberately outside the verdict: a cleanup failure would otherwise
+            # report a perfectly writable directory as blocked AND strand the probe file there.
+            if probe:
+                try:
+                    os.unlink(probe)
+                except OSError:
+                    pass
+    if usable:
+        print("  [ok]  writable save locations: {}".format(", ".join(usable)))
+    else:
+        print("  [MISSING]  no writable save location among {} — ask the user for a path you CAN "
+              "write, before building".format(", ".join(l for l, _ in cands)))
+
+
 def main():
     print("slide-maker environment check:")
     print("  install python deps: {}".format(PIP_REQ))
@@ -62,9 +114,14 @@ def main():
     # Chromium-family browser. cairosvg importing cleanly is NOT enough: it dies at call time
     # when libcairo is missing, so probe the native lib too.
     rasterizer = None
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     try:
-        import cairosvg  # noqa: F401
-        rasterizer = "cairosvg"
+        # Resolve it the way icons.py does, not with a bare import: icons._cairosvg() also
+        # teaches cairocffi where a Homebrew/MacPorts libcairo lives, and a check that answers
+        # differently from the code under test is worse than no check.
+        from icons import _cairosvg
+        if _cairosvg() is not None:
+            rasterizer = "cairosvg"
     except Exception:
         pass
     if not rasterizer:
@@ -72,14 +129,22 @@ def main():
         if _sh.which("rsvg-convert"):
             rasterizer = "rsvg-convert"
     if not rasterizer:
-        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         try:
             from icons import _find_chrome
             if _find_chrome():
                 rasterizer = "headless Chrome/Edge"
         except Exception:
             pass
-    if rasterizer:
+    if rasterizer == "headless Chrome/Edge":
+        # Green, but it is the SLOWEST backend by two orders of magnitude — measured on a real
+        # 5-icon run: 5.05s per icon through Chrome vs 0.016s through cairosvg, identical output
+        # (ink coverage within 0.0002). A deck with a dozen icons pays a full minute for nothing,
+        # and the old check reported this as plain [ok] with no way to know.
+        print("  [ok]  SVG rasterizer (headless Chrome/Edge)  ->  WORKS, but ~300x slower than "
+              "cairosvg (~5s vs ~0.02s per icon). For faster builds: "
+              "macOS: brew install cairo | Ubuntu: sudo apt install libcairo2 | "
+              "then pip install cairosvg")
+    elif rasterizer:
         print("  [ok]  SVG rasterizer ({})".format(rasterizer))
     else:
         print("  [MISSING]  SVG rasterizer (icons will FAIL)  ->  "
@@ -104,6 +169,8 @@ def main():
               "Ubuntu: sudo apt install libreoffice | "
               "Windows: winget install TheDocumentFoundation.LibreOffice | "
               "else https://www.libreoffice.org/download")
+
+    check_save_locations()
 
 
 if __name__ == "__main__":

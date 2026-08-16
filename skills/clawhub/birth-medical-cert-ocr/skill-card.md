@@ -1,45 +1,61 @@
-## Description: <br>
-This skill invokes Scnet's remote OCR service to extract structured data from birth medical certificates when the user explicitly requests that document type, and it is not intended for general OCR. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recognizes only birth medical certificates and extracts newborn, birth, parent, medical institution, issue date, and certificate number fields using Scnet's remote OCR service.
 
-## Publisher: <br>
-[scnet-sugon](https://clawhub.ai/user/scnet-sugon) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[scnet-sugon](https://clawhub.ai/user/scnet-sugon)
 
-## Use Case: <br>
-Developers and agent users use this skill to send an authorized birth medical certificate image or PDF to Scnet OCR and receive structured identity, birth, parent, medical institution, and certificate fields. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Birth-certificate images and extracted family, identity, and medical data are sent to Scnet's remote OCR service. <br>
-Mitigation: Use the skill only with legal authority or guardian consent, confirm that remote processing is acceptable, and delete local images and cached results after use. <br>
-Risk: The release needs review because its metadata and code may allow broader OCR use than the narrow birth-certificate description claims. <br>
-Mitigation: Keep agent triggers limited to explicit birth-medical-certificate requests and prefer a version that hardcodes or validates BIRTH_CERTIFICATE before upload. <br>
-Risk: The Scnet API key can expose account access if pasted into chat or stored loosely. <br>
-Mitigation: Store SCNET_API_KEY in a protected local environment file or environment variable and avoid sharing it in prompts, logs, or transcripts. <br>
+## Use Case:
 
+Developers, operators, and agents use this skill when a user explicitly asks to extract structured fields from a birth medical certificate image. It should not be used for general OCR or for other document types.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/scnet-sugon/skills/birth-medical-cert-ocr) <br>
-- [Sugon-Scnet OCR API documentation summary](references/api-docs.md) <br>
-- [Birth certificate field summary](assets/templates/fields-summary.md) <br>
-- [Scnet website](https://www.scnet.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [json, text, guidance] <br>
-**Output Format:** [JSON on stdout with plain-text setup and error messages] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCNET_API_KEY; sends input files to Scnet's OCR API; documented rate limit is 10 QPS.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Birth medical certificate images contain highly sensitive personal and medical information and are sent to Scnet's remote OCR service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when authorized to process the document, review Scnet's privacy and retention terms, and delete local document copies when no longer needed.
+
+Risk: The Scnet API key could be exposed if pasted into chat or stored with broad local permissions.
+
+Mitigation: Keep the API key in the skill-local config with restrictive permissions and do not paste credentials into conversations.
+
+Risk: Using the skill for general OCR or other document types can create unsupported data handling and accuracy expectations.
+
+Mitigation: Limit use to explicit birth medical certificate requests and the BIRTH_CERTIFICATE OCR type.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/scnet-sugon/skills/birth-medical-cert-ocr)
+- [Sugon-Scnet OCR API docs summary](references/api-docs.md)
+- [Birth certificate field summary](assets/templates/fields-summary.md)
+- [Scnet website](https://www.scnet.cn)
+- [Scnet OCR API endpoint](https://api.scnet.cn/api/llm/v1/ocr/recognize)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [JSON array on stdout with friendly text errors on stderr]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns the API data array after removing confidence fields; supports only the BIRTH_CERTIFICATE OCR type.]
+
+## Skill Version(s):
+
+1.0.5 (source: SKILL.md frontmatter, skill.yaml, ClawHub release metadata, CHANGELOG released 2026-08-12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

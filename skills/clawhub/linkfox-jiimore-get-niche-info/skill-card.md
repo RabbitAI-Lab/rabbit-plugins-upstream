@@ -1,43 +1,60 @@
-## Description: <br>
-Queries Jiimore data for Amazon niche market intelligence, including market metrics, reviews, competition, pricing, inventory, and growth trends for a supplied niche ID. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries and analyzes Jiimore Amazon niche market intelligence, including market metrics, buyer reviews, competition, pricing, and growth trends.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon marketplace sellers and ecommerce analysts use this skill to retrieve and summarize Jiimore niche-market intelligence for a known nicheId in the US, Japan, or Germany marketplaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and may make paid Jiimore API calls. <br>
-Mitigation: Confirm credential use and expected credit cost before running; avoid repeated calls without user approval and use the built-in cache where appropriate. <br>
-Risk: Full market-data responses are persisted to local linkfox session and cache files. <br>
-Mitigation: Run the skill only in an appropriate workspace and periodically delete generated linkfox data or cache files when the market data is sensitive. <br>
-Risk: Security evidence flags remote onboarding installation behavior and automatic feedback reporting for review. <br>
-Mitigation: Review or remove the onboarding download path and feedback-reporting behavior before deploying the skill in controlled environments. <br>
+## Use Case:
 
+External Amazon sellers and ecommerce analysts use this skill to retrieve and summarize niche-level Jiimore market data for a known Amazon niche ID, including demand, pricing, competition, launches, inventory health, reviews, and profitability signals.
 
-## Reference(s): <br>
-- [Jiimore niche market API reference](references/api.md) <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-jiimore-get-niche-info) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses or saved JSON files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key; full responses are persisted under linkfox session data, and responses over 8 KB are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill can handle API keys, phone/SMS onboarding data, billing orders, and payment QR codes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the self-service LinkFox website for account and billing steps when possible, and independently verify payment URLs or QR codes before paying.
+
+Risk: Full Jiimore API responses and payment QR images may remain on disk under LinkFox directories, including fallback locations.
+
+Mitigation: Run the skill only in workspaces where persistent LinkFox output is acceptable, and remove saved response or QR files after use when they are no longer needed.
+
+Risk: Jiimore requests consume credits, and repeated calls can create additional cost.
+
+Mitigation: Confirm the niche ID and marketplace before calling, use the same-session cache for repeated identical requests, and ask before making additional paid calls.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-jiimore-get-niche-info)
+- [Jiimore Niche Market API Reference](artifact/references/api.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance, Files]
+
+**Output Format:** [Markdown guidance, shell commands, and JSON API responses printed to stdout or saved as local files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full responses are saved under LinkFox session directories; small responses may print inline, large responses print summaries, and repeated identical requests can use a 24-hour local cache.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

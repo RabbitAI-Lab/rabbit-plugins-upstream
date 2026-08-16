@@ -22,7 +22,7 @@ On **Linggen**, use the built-in `Memory_query` / `Memory_write` tools
 (Chat-tier, ungated — zero permission prompts across a pass full of
 writes): verbs `days`, `list` (+`day`), `add`, `remember_day`,
 `harvest_day` (the scan stamp), `sweep`.
-On **other hosts**, the CLI is 1:1: `ling-mem days [--pending]`,
+On **other hosts**, the CLI is 1:1: `ling-mem days [--undreamed]`,
 `ling-mem list --tier episodic --day <date>`, `ling-mem add`,
 `ling-mem remember-day <date>`, `ling-mem harvest-day <date>`,
 `ling-mem sweep`. Always pipe CLI list/search output through
@@ -50,16 +50,22 @@ never write them.
   `SWEEP removed=<n>` → one final totals sentence. Never print a
   status line for a call you didn't make.
 
-## `dream` (no argument) — remember all pending days
+## `dream` (no argument) — remember all undreamed days
 
-1. Fetch the worklist: `days` with `pending_only` (CLI:
-   `ling-mem days --pending`). Empty → run **Forget** below, reply
-   that memory is up to date, done.
-2. Take the **oldest** pending day → run **Remember one day** below.
+0. **Snapshot + in-flight check.** `ling-mem export` once (a store
+   backup before any judged writes — the engine does the same before
+   its mission runs). If the `memory_dream_status` MCP tool is
+   reachable and reports `in_flight: true`, the Linggen engine is
+   already dreaming — stop and say so; never run two dreams at once.
+1. Fetch the worklist: `days` with `undreamed_only` (CLI:
+   `ling-mem days --undreamed`). Empty → run **Forget** below, then
+   **Audit** below, reply that memory is up to date, done.
+2. Take the **oldest** undreamed day → run **Remember one day** below.
 3. Repeat from 1. If the same day comes back with an undropped
    `unjudged` count, **stop and report** ("stalled") instead of
    looping.
-4. When no days remain: run **Forget**, then report totals.
+4. When no days remain: run **Forget**, then **Audit**, then report
+   totals.
 
 ## `dream <YYYY-MM-DD>` — remember one day
 
@@ -72,8 +78,13 @@ never write them.
 
 Backfill staging, always user-triggered, idempotent:
 
-1. Run `Bash bash ~/.linggen/skills/linggen/scripts/scan.sh <date>`
-   (zero-LLM session walk → `.scan-output.jsonl`).
+1. Run `Bash bash <skill-dir>/scripts/scan.sh <date>` (zero-LLM session
+   walk → `.scan-output.jsonl`). `<skill-dir>` is this skill's own
+   directory — the one holding this `references/`, resolved per
+   SKILL.md (the plugin cache on Claude Code,
+   `${PLUGIN_ROOT}/skills/linggen/` on Codex). Never hard-code an
+   absolute path: the skill is not installed under `~/.linggen/skills`
+   on these hosts.
 2. **Skip covered sessions.** `list` the day's existing rows
    (`tier=episodic` + that `day`, and note promoted twins may live in
    semantic) and collect their `source_session` ids. Drop every
@@ -85,7 +96,7 @@ Backfill staging, always user-triggered, idempotent:
    set to the session time.
 4. Stamp scanned — `harvest_day` verb (CLI:
    `ling-mem harvest-day <date>`). This does **not** mark the day
-   remembered: new rows make it *pending*, and the next dream (nightly
+   remembered: new rows clear its `dreamed` flag, and the next dream (nightly
    or the day's dream button) judges them. Nothing new staged → still
    stamp, report `CLEAN`.
 
@@ -108,7 +119,10 @@ Backfill staging, always user-triggered, idempotent:
      preference, decision-with-reasoning, re-hit gotcha, state change
      like a shipped milestone, run learning): `add` with the row's
      content **verbatim**, its `type`/`from`/`contexts`, `occurred_at`
-     carried forward (else `created_at`), `source_session` if present.
+     carried forward (else `created_at`), `source_session` if present,
+     `cwd` if present. `cwd` is WHERE the memory came from — carrying
+     it is what keeps the promoted row findable from that project; a
+     row with no `cwd` gets none, never this session's own directory.
      Never pass `id`. Omit tier (defaults semantic); `tier=core` only
      for a narrow universal about the person. Search-first: a quick
      semantic `search` on the gist — but a hit with `tier=episodic`
@@ -136,7 +150,7 @@ Backfill staging, always user-triggered, idempotent:
 5. **Stamp.** `{"verb":"remember_day","date":"<date>","judged":<seen>,"promoted":<adds>}`
    (CLI: `ling-mem remember-day <date> --judged N --promoted K`).
    Never skip the stamp, even with zero promotions — it's what moves
-   the day out of pending.
+   the day marked dreamed.
 
 ## Forget (the sweep)
 
@@ -145,6 +159,31 @@ self-guarding: evicts only rows that are past the episodic TTL **and**
 on a remembered day **and** created before that day's stamp. Un-judged
 rows are untouchable — an undreamed day keeps its rows forever until
 someone remembers it. Safe to call anytime; `--dry-run` previews.
+
+## Audit (after the sweep, clean-worklist runs only)
+
+Confidence decides what happens to long-term staleness: solve what you
+can prove, queue the rest for the user. Two capped passes:
+
+1. **Condense cited chains** —
+   `ling-mem chains --kind cited --derived-only --limit 10`.
+   Pre-confirmed id-citation chains of your own notes: collapse each
+   into ONE current-truth row (`replace_ids` over MCP; CLI: add the
+   survivor, then delete members). See `references/condense-flow.md`
+   for drafting rules.
+2. **Queue what you can't solve** —
+   `ling-mem chains --kind marker --limit 5` (no `--derived-only`:
+   queueing is bookkeeping, not merging). Per candidate: skip rows
+   younger than ~14 days (write-time supersede gets first chance);
+   otherwise queue via
+   `ling-mem issue-add --kind <k> --row <id> [--row <id>] "<note>"` —
+   `chain` for an uncertain merge (note: subject + both gists),
+   `stale-status` for a provisional claim with no completing neighbor
+   (note: the claim + "verify against git/files at solve time"),
+   `contradiction` when user-voice rows disagree. `already queued` is
+   success — the daemon dedups per (kind, row_ids). **Never merge
+   marker or subject clusters in a dream** — solving queued items is
+   `/linggen solve`, with the user present.
 
 ## Reporting (Linggen dashboard)
 

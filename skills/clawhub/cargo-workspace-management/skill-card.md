@@ -1,53 +1,72 @@
-## Description: <br>
-Manage workspace users, API tokens, folders, roles, and submit reports to workspace management using the Cargo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Cargo workspace users, API tokens, folders, roles, workspace files, reports, and session records using the Cargo CLI.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers, operators, and workspace administrators use this skill to manage Cargo workspace members, roles, API tokens, folders, files, session records, and workspace-management reports from the Cargo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Workspace administration commands can require broad Cargo permissions. <br>
-Mitigation: Use the skill only with a Cargo workspace and account where the operator is comfortable granting the needed administrative authority. <br>
-Risk: API tokens and uploaded workspace files can expose sensitive access or data. <br>
-Mitigation: Avoid unnecessary sensitive file uploads, create narrowly justified tokens, and store token values in a secrets manager immediately after creation. <br>
-Risk: Session hooks can record session titles, summaries, and transcript-derived activity. <br>
-Mitigation: Decline or disable the hooks unless the user explicitly wants that activity recorded. <br>
-Risk: The installer path includes piping a remote script into a shell. <br>
-Mitigation: Prefer a reviewed, pinned, or package-managed installer path before deployment. <br>
+## Use Case:
 
+Developers, operators, and workspace admins use this skill to ask an agent for Cargo CLI commands and guidance for managing users, roles, API tokens, folders, files, reports, and session records in a Cargo workspace.
 
-## Reference(s): <br>
-- [Response shapes](artifact/references/response-shapes.md) <br>
-- [Troubleshooting](artifact/references/troubleshooting.md) <br>
-- [User management examples](artifact/references/examples/users.md) <br>
-- [API token examples](artifact/references/examples/tokens.md) <br>
-- [Folder examples](artifact/references/examples/folders.md) <br>
-- [Report examples](artifact/references/examples/reports.md) <br>
-- [Session tracking examples](artifact/references/examples/sessions.md) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Cargo installer](https://api.getcargo.io/install.sh) <br>
-- [ClawHub skill page](https://clawhub.ai/cargo-ai/skills/cargo-workspace-management) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown] <br>
-**Output Format:** [Markdown guidance with Cargo CLI commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the Cargo CLI and authenticated Cargo workspace access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill guides workspace administration actions that use the active Cargo credentials and may change users, roles, tokens, folders, files, reports, or sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when Cargo workspace administration is intended, verify the active account with `cargo-ai whoami`, and use appropriately scoped admin credentials for write operations.
+
+Risk: The skill promotes Claude Code session hooks that can record session metadata and transcript-derived summaries in Cargo.
+
+Mitigation: Enable the session hooks only with explicit consent and when session metadata and summaries are acceptable to store in Cargo.
+
+Risk: API token creation returns a token value once, and mishandling it can expose workspace access.
+
+Mitigation: Store generated tokens immediately in a secrets manager, avoid logging token values, and rotate or remove tokens that may be exposed.
+
+Risk: Uploaded files and report descriptions may contain sensitive workspace or customer data.
+
+Mitigation: Review files before upload and redact secrets, personal data, and unnecessary identifiers from report descriptions.
+
+Risk: The referenced installer pattern downloads and executes a remote shell script.
+
+Mitigation: Inspect or otherwise verify the installer before execution instead of piping it directly to `sh`.
+
+## Reference(s):
+
+- [Cargo skills repository](https://github.com/getcargohq/cargo-skills)
+- [Response shapes](references/response-shapes.md)
+- [Troubleshooting](references/troubleshooting.md)
+- [User management examples](references/examples/users.md)
+- [API token examples](references/examples/tokens.md)
+- [Folder examples](references/examples/folders.md)
+- [Report examples](references/examples/reports.md)
+- [Session tracking examples](references/examples/sessions.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline Cargo CLI commands and JSON response references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands act through the installed @cargo-ai/cli and the active Cargo credentials.]
+
+## Skill Version(s):
+
+1.2.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

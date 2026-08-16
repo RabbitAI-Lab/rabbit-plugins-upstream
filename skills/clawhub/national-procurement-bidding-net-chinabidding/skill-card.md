@@ -1,48 +1,63 @@
-## Description: <br>
-全国采购与招标信息查询与分析助手，帮助用户检索招标、中标、采购意向和合同公告，并分析企业画像、竞争对手、采购单位、中标单位、品牌、价格趋势和市场机会。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search and analyze China procurement and bidding notices, company profiles, competitors, partners, top purchasers, top suppliers, top brands, market aggregates, and price trends.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Procurement, sales, bidding, and market analysts use this skill to search nationwide Chinese procurement and bidding notices, review company participation, identify competitors or potential suppliers, and analyze pricing and market trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic registration can send local device and user identifiers to a remote service. <br>
-Mitigation: Prefer a manually supplied ZLBX_API_KEY; enable automatic registration only after explicit user consent and data-minimization review. <br>
-Risk: The skill may store an API key in ~/.zlbx/config.json. <br>
-Mitigation: Restrict local file access, avoid shared machines, and rotate or remove the key when it is no longer needed. <br>
-Risk: Quota exhaustion can produce login or recharge links tied to the service account. <br>
-Mitigation: Verify the zhiliaobiaoxun domain and user intent before following payment, recharge, or auto-login links. <br>
-Risk: Procurement contacts and company relationship data may include sensitive business or personal information. <br>
-Mitigation: Use retrieved data only for authorized procurement analysis and follow applicable privacy and data-handling obligations. <br>
+## Use Case:
 
+External users, procurement teams, sales teams, and analysts use this skill to query Chinese procurement and bidding data, investigate companies and competitors, and summarize national market activity.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/national-procurement-bidding-net-chinabidding) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
-- [SKILL 自动注册详细流程](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON API request examples and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call zhiliaobiaoxun APIs, store an API key in ~/.zlbx/config.json, and generate login or recharge links when automatic registration is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Procurement queries, company searches, and contact lookups are sent to a third-party procurement data provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that provider may receive the query contents, and review company and contact results before relying on or exporting them.
+
+Risk: First use without an API key can trigger an opt-in registration flow that sends platform, CPU architecture, and a MAC-address hash, then stores an API key in ~/.zlbx/config.json.
+
+Mitigation: Prefer configuring ZLBX_API_KEY before use; if auto-registration is used, obtain user consent before collecting device features and protect the local config file.
+
+Risk: Broad routing for procurement-related prompts can lead the agent to expand company names, retrieve contacts, or surface quota and recharge links during normal analysis.
+
+Mitigation: Review company-name expansions, contact lookups, and quota prompts before sharing results or acting on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/national-procurement-bidding-net-chinabidding)
+- [Publisher profile](https://clawhub.ai/user/zhiliaobiaoxun)
+- [Bid search API reference](references/api-search.md)
+- [Company analysis API reference](references/api-company.md)
+- [Market analysis API reference](references/api-market.md)
+- [Account API reference](references/api-account.md)
+- [Auto-registration reference](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown responses with JSON API request examples and occasional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include procurement records, company and contact summaries, aggregate tables, price trends, account status, quota guidance, and links returned by the provider.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

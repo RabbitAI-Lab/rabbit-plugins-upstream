@@ -1,52 +1,69 @@
-## Description: <br>
-A Stellar USDC wallet skill for AI agents that pays for 402-gated APIs through MPP Router or x402 facilitators, checks balances, manages USDC trustlines, swaps XLM to USDC, and sends or bridges USDC cross-chain via Rozo. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Stellar USDC wallet skill for AI agents that can pay 402-gated APIs, check balances, manage USDC trustlines, swap XLM to USDC, pay Stellar deposit addresses with memos, and bridge or send USDC across supported chains.
 
-## Publisher: <br>
-[shawnmuggle](https://clawhub.ai/user/shawnmuggle) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[shawnmuggle](https://clawhub.ai/user/shawnmuggle)
 
-## Use Case: <br>
-Developers and agent operators use this skill to give agents a limited Stellar hot wallet for paid API calls, balance checks, trustline setup, XLM-to-USDC swaps, and cross-chain USDC transfers. It is intended for users who can manage wallet credentials and verify payment details before signing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: This skill can move real USDC from a Stellar hot wallet. <br>
-Mitigation: Use a fresh limited-balance wallet, test with --network testnet where supported, and manually verify destination chain, address, amount, memo, and fees before confirming a transaction. <br>
-Risk: Mainnet is the default network for normal wallet operations. <br>
-Mitigation: Pass --network testnet while prototyping and avoid funding the wallet with more than the session requires. <br>
-Risk: Automated payment flags can bypass per-payment confirmation. <br>
-Mitigation: Avoid --yes and --max-auto on mainnet unless the transaction is independently verified, and keep any session automation limit low. <br>
-Risk: A paid API challenge can direct funds to an unexpected recipient or amount. <br>
-Mitigation: Use --expect-pay-to, --expect-amount, and --expect-asset for paid API calls so mismatched payment challenges abort before signing. <br>
-Risk: Wallet credentials are sensitive and can be misused if exposed. <br>
-Mitigation: Store keys in a mode-600 secret file or Stellar CLI identity, never paste secrets into chat or untrusted UIs, and keep main-wallet secrets out of local dotenv files. <br>
+## Use Case:
 
+Developers and external agent users use this skill to let an AI agent operate a limited Stellar USDC hot wallet for paid API calls, balance readiness checks, trustline setup, direct Stellar payments, and supported cross-chain USDC transfers.
 
-## Reference(s): <br>
-- [MPP Router](https://www.mpprouter.dev/) <br>
-- [Skill Repository](https://github.com/mpprouter/stellar-agent-wallet-skill) <br>
-- [Mainnet checklist](references/mainnet-checklist.md) <br>
-- [x402 Stellar exact scheme wire format](references/x402-exact-spec.md) <br>
-- [@stellar/mpp charge mode wire format](references/mpp-charge-spec.md) <br>
-- [Sponsored mode](references/sponsored-mode.md) <br>
-- [SDK API cheatsheet](references/sdk-api-cheatsheet.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and JSON-capable command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May generate or use a local Stellar secret file, signed transaction XDR, payment receipts, balance summaries, and cross-chain payment status details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.7.6 (source: server release metadata; artifact frontmatter and package.json report 1.7.0) <br>
+Risk: The skill can move real funds from a Stellar hot wallet.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for this purpose, use a fresh limited-balance wallet, and verify recipient, amount, memo, and chain before approving mainnet transactions.
+
+Risk: A plaintext secret file or shared/synced folder can expose wallet funds.
+
+Mitigation: Keep secrets out of shared locations, prefer a Stellar CLI identity when practical, and treat file-backed keys as expendable hot-wallet keys.
+
+Risk: User-supplied 402 URLs or changed payment challenges can redirect funds.
+
+Mitigation: Use testnet while evaluating and pass expectation flags such as expected recipient, amount, asset, memo, and chain before signing.
+
+Risk: Automation flags can bypass or reduce prompts for some payments.
+
+Mitigation: Avoid --yes for mainnet, keep any session-only auto-payment limit low, and review transaction details independently.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/shawnmuggle/skills/stellar-agentic-wallet)
+- [MPP Router homepage](https://www.mpprouter.dev/)
+- [Source repository](https://github.com/mpprouter/stellar-agent-wallet-skill)
+- [Two 402 dialects, one Stellar payment](references/402-dialects-showcase.md)
+- [Mainnet checklist](references/mainnet-checklist.md)
+- [@stellar/mpp charge mode wire format](references/mpp-charge-spec.md)
+- [SDK API cheatsheet](references/sdk-api-cheatsheet.md)
+- [Sponsored mode](references/sponsored-mode.md)
+- [x402 Stellar exact scheme wire format](references/x402-exact-spec.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON-capable command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce signed Stellar transaction submissions, payment receipts, balances, readiness checks, explorer links, and setup instructions.]
+
+## Skill Version(s):
+
+1.8.5 (source: server release metadata and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -44,8 +44,8 @@ Detailed documentation is split into focused reference files. Read them as neede
 |-----------|----------|
 | `references/commands-observation.md` | snapshot, find, get, is, screenshot, list-surfaces — all flags, output examples |
 | `references/commands-interaction.md` | click, type, set-value, select, toggle, scroll, drag, keyboard, mouse — choosing the right command |
-| `references/commands-system.md` | launch, close, windows, clipboard, wait, batch, session, status, permissions, version |
-| `references/workflows.md` | 12 common patterns: forms, menus, dialogs, scroll-find, drag-drop, async wait, anti-patterns |
+| `references/commands-system.md` | launch (including `--cdp` for Chromium web contents), close, windows, clipboard, wait, batch, session, status, permissions, version |
+| `references/workflows.md` | 16 common patterns: forms, menus, dialogs, scroll-find, drag-drop, async wait, anti-patterns |
 | `references/macos.md` | macOS permissions/TCC, AX API internals, smart activation chain, surfaces, Notification Center, troubleshooting |
 
 ## The Observe-Act Loop (Progressive Skeleton Traversal)
@@ -77,7 +77,7 @@ Use **progressive skeleton traversal** as the default approach. It reduces token
 - Surface snapshots (menus, sheets, alerts) — these are already focused
 
 **When skeleton shines:**
-- Dense Electron apps (Slack, VS Code, Discord, Notion)
+- Dense Electron apps (Slack, VS Code, Discord, Notion) that are **already running** — for one you are launching fresh, `launch --cdp` plus a CDP client (agent-browser preferred) reads the web contents faster than any skeleton walk (see principle 15)
 - Any app where full snapshot exceeds ~50 refs
 - Multi-region workflows (sidebar + main content + toolbar)
 
@@ -102,8 +102,8 @@ Use **progressive skeleton traversal** as the default approach. It reduces token
 
 Every command returns a JSON envelope on stdout:
 
-**Success:** `{ "version": "2.1", "ok": true, "command": "snapshot", "data": { ... } }`
-**Error:** `{ "version": "2.1", "ok": false, "command": "click", "error": { "code": "STALE_REF", "message": "...", "suggestion": "..." } }`
+**Success:** `{ "version": "2.3", "ok": true, "command": "snapshot", "data": { ... } }`
+**Error:** `{ "version": "2.3", "ok": false, "command": "click", "error": { "code": "STALE_REF", "message": "...", "suggestion": "..." } }`
 
 The `error` object may also carry an optional `details` object (e.g. the actionability report on an actionability failure, candidate summaries on `AMBIGUOUS_TARGET`, or the last observed state on a `wait` `TIMEOUT`). Parse errors leniently — `details` and future fields are additive, so do not reject responses with unknown keys.
 
@@ -144,6 +144,8 @@ agent-desktop snapshot --app "App" -i                       # Full tree (simple 
 agent-desktop snapshot --app "App" --surface menu -i        # Surface snapshot
 agent-desktop screenshot --app "App" out.png                # PNG screenshot
 agent-desktop find --app "App" --role button                # Search elements
+agent-desktop find --root @s8f3k2p9:e3 --role button        # Search one region only
+agent-desktop find --app "App" --surface menubar --name "Save" --first  # Search a menu
 agent-desktop get @e1 --snapshot <snapshot_id> --property text       # Read element property
 agent-desktop is @e1 --snapshot <snapshot_id> --property enabled     # Check element state
 agent-desktop list-surfaces --app "App"                     # Available surfaces
@@ -184,7 +186,9 @@ agent-desktop --headed mouse-move --xy 100,200  # Move cursor
 
 ### App & Window
 ```
-agent-desktop launch "System Settings"          # Launch and wait
+agent-desktop launch "System Settings"          # Launch; returns once running
+agent-desktop launch "TextEdit" --activate       # Also bring it forward and wait for a window
+agent-desktop launch "Obsidian" --cdp            # Fresh launch + verified Chrome DevTools Protocol port for web contents
 agent-desktop close-app "TextEdit"              # Quit gracefully
 agent-desktop close-app "TextEdit" --force      # Force quit; SIGKILL if SIGTERM does not exit
 agent-desktop list-windows --app "Finder"       # List windows
@@ -253,16 +257,18 @@ agent-desktop skills get desktop --full         # Load this skill + all referenc
 
 ## Key Principles for Agents
 
-1. **Skeleton first, drill second.** Start with `--skeleton -i --compact` for dense apps. Drill into regions with `--root @ref`. Full snapshot only for simple apps.
+1. **Skeleton first, drill second.** Start with `--skeleton -i --compact` for dense apps. Drill into regions with `--root @ref`. Full snapshot only for simple apps. For a Chromium app you are launching fresh, prefer `launch --cdp` + a CDP client for the web contents instead (principle 15).
 2. **Use `-i --compact` flags.** Filters to interactive elements and collapses empty wrappers, minimizing tokens.
 3. **Refs are snapshot-scoped.** Keep `snapshot_id` for deterministic multi-step use; re-drill the affected region after any UI-changing action. Scoped invalidation keeps other refs intact.
 4. **Prefer refs over coordinates.** `click @s8f3k2p9:e5` > `agent-desktop --headed mouse-click --xy 500,300`.
 5. **Use `wait` for async UI.** After launch/dialog triggers, wait for expected state.
 6. **Check permissions first.** Run `permissions` on first use; screenshots also need Screen Recording.
 7. **Handle errors.** Branch on `error.code` only — `error.message` and `error.suggestion` text is informational and may change between versions.
-8. **Use `find` for targeted searches.** Faster than any snapshot when you know role/name.
-9. **Use surfaces for overlays.** `snapshot --surface menu` for menus, `--surface sheet` for dialogs. Never `--skeleton` for surfaces — they're already focused.
-10. **Batch for performance.** Multiple commands in one invocation.
-11. **Headless by default.** Ref actions use semantic AX paths and block silent focus stealing, cursor movement, keyboard synthesis, and pasteboard insertion. Use `--headed` only when exact-window focus or physical delivery is intended; raw coordinates never imply focus.
-12. **Start a session once per run.** `session start` creates the manifest; pass its returned ID through `AGENT_DESKTOP_SESSION` for the run or `--session <id>` for one command. It does not activate later processes implicitly.
-13. **Trace hard failures.** With an active trace-enabled session, segments are written automatically. Add `--trace /tmp/agent-desktop.jsonl` only when you need a single override file (CI, one-offs). Check `status` when unsure whether tracing is active.
+8. **Use `find` for targeted searches, and scope it.** Faster than any snapshot when you know role/name. Narrow it with `--root @ref` for one region or `--surface menubar` for a menu — an unscoped find on a dense tree returns hundreds of refs and can exhaust its budget.
+9. **Use surfaces for overlays.** `snapshot --surface menu` for menus, `--surface sheet` for dialogs. Never `--skeleton` for surfaces — they're already focused. Reach one item inside an overlay with `find --surface`, not a full surface snapshot.
+10. **Read `data.surfaces` after acting.** An action that opens a sheet, menu, or alert reports it there. Target that overlay next instead of searching windows for what changed.
+11. **Batch for performance.** Multiple commands in one invocation.
+12. **Headless by default.** Ref actions use semantic AX paths and block silent focus stealing, cursor movement, keyboard synthesis, and pasteboard insertion. Use `--headed` only when exact-window focus or physical delivery is intended; raw coordinates never imply focus.
+13. **Start a session once per run.** `session start` creates the manifest; pass its returned ID through `AGENT_DESKTOP_SESSION` for the run or `--session <id>` for one command. It does not activate later processes implicitly.
+14. **Trace hard failures.** With an active trace-enabled session, segments are written automatically. Add `--trace /tmp/agent-desktop.jsonl` only when you need a single override file (CI, one-offs). Check `status` when unsure whether tracing is active.
+15. **Chromium-app strategy.** The accessibility path is the default, and the only option for already-running apps and for native surfaces (menus, dialogs, windows). `launch --cdp` plus a CDP client (agent-browser preferred; any CDP client works) is the opt-in fast path for a Chromium app's web contents, when a fresh launch is acceptable.

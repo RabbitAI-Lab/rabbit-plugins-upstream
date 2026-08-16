@@ -1,45 +1,60 @@
-## Description: <br>
-Identifies common abnormal pet behaviors in uploaded or linked pet video, including scratching, biting, destructive chewing, jumping, digging, chasing, and separation anxiety, and returns structured behavior reports and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies common abnormal pet behaviors in pet media, including scratching, biting, destructive chewing, jumping, digging, chasing, and separation anxiety, and returns a structured report for pet owners.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Pet owners, trainers, and agents assisting them use this skill to submit pet monitoring videos or URLs for behavior recognition and to retrieve cloud-hosted report history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet videos or video URLs are sent to lifeemergence.com cloud services for processing. <br>
-Mitigation: Install and use the skill only where that cloud processing model is acceptable for the video content and workspace. <br>
-Risk: The skill may silently create or reuse an external account identity and store authentication state in a local SQLite database. <br>
-Mitigation: Review the identity linkage and local state behavior before deployment, and use it only where persistent service tokens and report association are acceptable. <br>
-Risk: The scanner verdict is suspicious because the cloud analysis purpose is coherent but account and token handling provide limited user control. <br>
-Mitigation: Review the skill before installing and restrict it to environments where the external account linkage and cloud report history model have been approved. <br>
+## Use Case:
 
+External users and agents use this skill to analyze pet monitoring videos or video URLs, identify common behavior patterns, and retrieve current or historical behavior-analysis reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-behavior-detection-analysis) <br>
-- [Pet Behavior Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown or JSON report text with optional saved output file and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts a pet video file path or video URL, and can list cloud report history linked to the workspace identity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence; artifact frontmatter says 1.0.9) <br>
+Risk: Pet videos, image or video URLs, account-linked identifiers, cloud history, and API tokens may be sent to or managed by the configured cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after reviewing the publisher's data-retention claims, restrict access to the workspace data directory, and avoid using private home-monitoring media unless this data handling is acceptable.
+
+Risk: Health or medical-style report content may be mistaken for professional veterinary diagnosis.
+
+Mitigation: Treat analysis output as informational and consult a qualified veterinarian or pet behavior professional before making care decisions.
+
+Risk: The skill can create or reuse a local identity database and cache account tokens for cloud API calls.
+
+Mitigation: Review and rotate stored credentials when appropriate, remove local identity data before sharing the workspace, and run the skill in an isolated environment for sensitive media.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-behavior-detection-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Pet analysis API documentation](artifact/references/api_doc.md)
+- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands]
+
+**Output Format:** [Markdown report text or JSON, with optional file output when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include report export links; local uploads are limited to mp4, avi, or mov files up to 10 MB.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter says 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,58 @@
-## Description: <br>
-Analyzes driver face video from an in-cabin DMS camera to detect eye state, blink rate, prolonged eye closure, microsleep indicators, and fatigue warning signals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes driver face video from an in-cabin DMS camera to report eye open/closed state, blink rate, eye-closure duration, microsleep indicators, and fatigue warnings.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, fleet operators, and safety engineers use this skill to analyze driver-facing video or image inputs for blink-rate, eye-closure, PERCLOS, and fatigue-warning indicators. It can also return cloud-hosted history and report links for prior fatigue analysis jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Driver face video and identity-linked report history may be sent to the LifeEmergence cloud service. <br>
-Mitigation: Use the skill only with documented driver or employee consent, approved data-processing terms, and a retention policy for local files and cloud reports. <br>
-Risk: The skill silently manages user identity and tokens while supporting historical report lookup. <br>
-Mitigation: Run it in a controlled workspace or service account, restrict history access to authorized users, and review where tokens and reports are stored before deployment. <br>
-Risk: Fatigue warnings can be unreliable when driver eyes are obscured, lighting is poor, frame rate is low, or video quality is insufficient. <br>
-Mitigation: Treat outputs as auxiliary safety indicators, confirm camera quality before use, and require human driving judgment and safe-rest procedures after alerts. <br>
+## Use Case:
 
+External developers and fleet safety teams use this skill to analyze driver face videos or video URLs for blink-rate, eye-closure, PERCLOS, and fatigue-warning reports. It is intended as an auxiliary safety signal, not a medical diagnosis or a substitute for driver judgment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-driver-blink-fatigue-detection-analysis) <br>
-- [Driver fatigue detection API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown text with structured JSON-style analysis results and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report history, exported report URLs, fatigue-level indicators, warning types, and recommended driver-safety actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter says 1.0.5) <br>
+Risk: Driver face video or video URLs may be sent to external services and linked to persistent local or remote identity state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain driver consent, verify the service operator, retention policy, and deletion process, and use only approved media sources.
+
+Risk: Fatigue warnings may be unreliable when the driver's eyes are obscured, lighting is poor, glare is severe, or the video does not meet the documented frame-rate and visibility requirements.
+
+Mitigation: Use compliant DMS camera footage with stable eye visibility and treat results as auxiliary safety guidance requiring human judgment.
+
+Risk: The security evidence reports a suspicious verdict because the skill handles remote media and persistent account or token state.
+
+Mitigation: Review service endpoints, account and token handling, and deployment controls before installation.
+
+## Reference(s):
+
+- [API 接口文档](references/api_doc.md)
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-driver-blink-fatigue-detection-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown reports and JSON-style structured analysis from shell or API execution]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include fatigue metrics, warning types, recommended actions, report links, or a saved output file path.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

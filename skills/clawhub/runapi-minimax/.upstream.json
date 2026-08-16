@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-minimax",
   "slug": "runapi-minimax",
   "ownerHandle": null,
-  "version": "0.1.0",
-  "updatedAt": 1782293804625,
-  "contentHash": "474b5e1d9ee4a13e2715bfb366b203a4b0b3ea993e521e15ffb365078b65e0ea",
-  "fetchedAt": "2026-07-26T18:24:11.793Z"
+  "version": "0.1.2",
+  "updatedAt": 1786520243680,
+  "contentHash": "55d1565ccb1e781294b11780e305e92fb1c2ea1507e5ca528e0658cc6a3234a4",
+  "fetchedAt": "2026-08-16T08:08:52.273Z"
 }

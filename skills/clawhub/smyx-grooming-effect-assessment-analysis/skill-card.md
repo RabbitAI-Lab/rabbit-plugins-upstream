@@ -1,44 +1,60 @@
-## Description: <br>
-AI-powered pet grooming effect assessment: detects mat residue area, dandruff coverage, and coat smoothness from post-grooming images, then outputs a 0-100 grooming score with targeted re-grooming suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes post-grooming pet images or videos to estimate mat residue, dandruff coverage, coat smoothness, and a 0-100 grooming quality score with follow-up grooming suggestions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External pet owners, pet salons, and care teams use this skill to assess post-grooming pet images or videos for remaining mats, dandruff coverage, coat smoothness, and follow-up grooming needs. The output is a visual grooming-quality assessment and is not a medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images or videos may be processed by the vendor cloud service. <br>
-Mitigation: Use only with media that is appropriate for vendor cloud processing and disclose the cloud-processing behavior before deployment. <br>
-Risk: The skill may create or reuse a local account identity, store tokens in the workspace database, and query prior cloud reports automatically. <br>
-Mitigation: Prefer deployment controls that require explicit consent for account creation, token storage, media upload, and history lookup. <br>
-Risk: The security verdict is suspicious because user control over account creation, history lookup, and media upload is not clear. <br>
-Mitigation: Review the skill before execution, restrict it to trusted workspaces, and verify that identity, token, and upload behavior match local policy. <br>
+## Use Case:
 
+Pet owners and grooming service staff use this skill to evaluate grooming quality from pet media, receive structured analysis, and review report links or report history. It is for visual grooming-effect assessment and does not provide medical diagnosis or treatment advice.
 
-## Reference(s): <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with scores, observations, recommendations, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports image, video, local file, and URL inputs; historical report lookup returns Markdown tables from the cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence; artifact frontmatter reports 1.0.5) <br>
+Risk: Pet images or videos, media URLs, report history requests, and identity-linked metadata are sent to the provider's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media and URLs appropriate for provider processing, and review the provider's retention and privacy expectations before installation.
+
+Risk: The skill can silently create or reuse an online identity and store service tokens in a local workspace database.
+
+Mitigation: Install only after review, protect the workspace data directory, and remove local identity or token state when the skill is no longer trusted or needed.
+
+Risk: The skill's outputs are visual grooming-effect assessments and may be mistaken for veterinary advice.
+
+Mitigation: Treat results as grooming quality guidance only and route health concerns to a qualified veterinarian.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-grooming-effect-assessment-analysis)
+- [API reference](references/api_doc.md)
+- [Analysis API reference](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON-like structured text with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud-generated report history and exported report image links.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -25,10 +25,10 @@ TikTok 选品与带货视频一站式 AI 工具集，整合 **3 类底层工具�
 ### ❌ 边界与限制
 - **API Key 必需**：所有工具均需环境变量 `LINKFOX_AGENT_API_KEY`（或 `LINKFOXAGENT_API_KEY`）；各工具独立计费、独立限频，数据时效与区域覆盖随数据源而异。
 - **计费约束**：同一会话同一参数组合默认只调用一次（脚本带本地缓存）；失败或空结果不得自动换关键词、翻页或改区域连续试探；需继续检索时先向用户说明会产生额外消耗（计费规则见 `skills-version.json` 与 references 内 api.md 的 `costToken` 字段：EchoTik 5 项 fixed≈4.5/9000 token，FastMoss 2 项 fixed≈10.5/21000 token，TikTok 官方 3 项免费）。
-- **TikTok 官方模块隔离**：`linkfox-tiktok-video` / `linkfox-tiktok-video-products` 仅走 `/tiktokVideo/developerProxy`，path 须以 `affiliate_creator` / `video` / `creator` 开头（否则 errcode 1005）；不可用于 `/tiktokShop/*`（TikTok Shop 卖家模块用 `linkfox-tiktok-auth`）。令牌 `ttsAccessToken` 由 `linkfox-tiktok-video-auth` 授权后经 `/tiktokVideo/accountTokens` 取得，固定 creator 达人端。
+- **TikTok 官方模块隔离**：`linkfox-tiktok-video` / `linkfox-tiktok-video-products` 仅走 `/tiktokVideo/developerProxy`，path 须以 `affiliate_creator` / `video` / `creator` 开头（否则 errcode 1005）；不可用于 `/tiktokShop/*`（TikTok Shop 卖家模块用 `linkfox-tiktok-shop-auth`）。令牌 `ttsAccessToken` 由 `linkfox-tiktok-video-auth` 授权后经 `/tiktokVideo/accountTokens` 取得，固定 creator 达人端。
 - **TikTok 官方依赖链**：可购物视频发布需先 `linkfox-tiktok-video-auth` 授权取令牌，再 `linkfox-tiktok-video-products` 取 `product_id`，最后 `linkfox-tiktok-video` 预检/发布；`check_auth_dependency.py` 探测 `linkfox-tiktok-video-auth` 是否安装（exit 42=未安装/未授权，需先完成授权）。
 - **大文件上传限制**：≤10MB 走 `upload_shoppable_video_file`（multipart，网关暂不支持）；>10MB 走大文件分片三步（Initialize → PUT 分片 → Bind，详见 `references/large-file-upload.md`，Step 1/3 可经 proxy，Step 2 分片 PUT 不经网关）。
-- **不在范围内**：TikTok Shop 小店 ERP（商品/订单/财务，用 `linkfox-tiktok-auth` + 业务 skill）、TikTok Shop 可购物视频（`/tiktokShop/developerProxy`，用 `linkfox-tiktok-creator`）、TikTok 广告投放、物流与供应链、非电商任务、与平台或卖家的直接沟通。
+- **不在范围内**：TikTok Shop 小店 ERP（商品/订单/财务，用 `linkfox-tiktok-shop-auth` + 业务 skill）、TikTok Shop 可购物视频（`/tiktokShop/developerProxy`，用 `linkfox-tiktok-creator`）、TikTok 广告投放、物流与供应链、非电商任务、与平台或卖家的直接沟通。
 
 ## 工具选择指南
 
@@ -42,7 +42,7 @@ TikTok 选品与带货视频一站式 AI 工具集，整合 **3 类底层工具�
 | 商品详情 / 多周期销量 GMV（"这个 productId 卖得怎么样"） | `linkfox-echotik-batch-product-detail`（1d/7d/15d/30d/60d/90d/累计+直播+达人） | — |
 | 商品带货视频（"这个商品有哪些带货视频 / 视频销量"） | `linkfox-echotik-product-video`（播放/互动/视频销量/GMV） | — |
 | 视频下载 / 去水印（"下载这个 TikTok 视频"） | `linkfox-echotik-get-video-download-url`（无水印/含水印/播放/封面） | — |
-| 视频号授权 / 绑定视频号 / 刷新令牌 | `linkfox-tiktok-video-auth`（OAuth+令牌） | TikTok Shop 卖家授权用 `linkfox-tiktok-auth`（不互通） |
+| 视频号授权 / 绑定视频号 / 刷新令牌 | `linkfox-tiktok-video-auth`（OAuth+令牌） | TikTok Shop 卖家授权用 `linkfox-tiktok-shop-auth`（不互通） |
 | 达人能带什么货 / 橱窗商品 / 取 product_id | `linkfox-tiktok-video-products`（店铺商品+橱窗/直播袋） | — |
 | 发布可购物视频 / 视频挂车（"发一个带商品的 TikTok 视频"） | `linkfox-tiktok-video`（预检→发布→查状态） | 需先 `linkfox-tiktok-video-auth` 授权 + `linkfox-tiktok-video-products` 取 product_id |
 | 达人主页 / 档案 | `linkfox-tiktok-video`（get_creator_profile，独立功能） | — |
@@ -190,9 +190,11 @@ TikTok 选品与带货视频一站式 AI 工具集，整合 **3 类底层工具�
 5. **错误处理与协同**：查询失败时根据响应 `errcode`/`errmsg` 或 TikTok `body.code`/`message` 说明原因并建议修正（TikTok 官方 path 未在白名单返回 errcode 1005、缺参 1002、上游异常 1003；HTTP 401/402 按下方认证积分处理）；连续使用多工具时将各工具发现汇总为连贯分析，标注数据来源与时间窗。
 
 ## 解决认证和积分问题
+发生以下异常情况时，采用 references/onboarding.md 引导解决问题：
 
-异常情况：未配置 `LINKFOX_AGENT_API_KEY`/`LINKFOXAGENT_API_KEY`；响应 401 或 402；消息含"积分余额不足/quota exceeded/insufficient balance/套餐到期/需充值"等。
+**注意**：你是workbuddy，并且渠道是workbuddy，使用 onboarding 引导登录注册时 channel **必须**为 workbuddy。这非常重要！
 
-措施：优先用 skill 内 onboarding.md 引导；找不到则加载 /linkfox-onboarding skill（未安装先下载 https://agent-files.linkfox.com/skills/linkfox-onboarding/release.zip 解压安装）。
-
-**注意**：你是workbuddy，并且渠道是workbuddy，使用linkfox-onboarding登录注册时**必须**传递channel为 workbuddy。这非常重要！
+### 异常情况
+- **未配置API Key**：环境变量未配置 `LINKFOX_AGENT_API_KEY`，也未配置 `LINKFOXAGENT_API_KEY`。
+- **响应401或402状态码**
+- **响应提示积分或余额不足**：消息含"积分余额不足/计费不足/余额不足/quota exceeded/insufficient balance/套餐到期/需充值/请充值"，或类似含义的内容。

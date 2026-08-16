@@ -1,39 +1,52 @@
-## Description: <br>
-Chinese-language QA guidance skill for evaluating software testability across controllability, observability, isolation, automation, and diagnosability, then producing assessment reports, improvement suggestions, refactoring guidance, and best practices. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps QA and engineering teams assess system testability across controllability, observability, isolation, automation, and diagnostics, then produce improvement recommendations and advocacy strategies.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA engineers, test architects, and development teams use this skill when a feature is hard to test, lacks useful logs, cannot be mocked, or needs an architecture review focused on testability improvements.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill may activate during broad architecture or testing discussions and produce recommendations that affect system design.
+
+Mitigation: Review recommendations through normal engineering review before applying them.
+
+Risk: The skill may recommend test-only interfaces or test data cleanup practices.
+
+Mitigation: Confirm test-only interfaces are controlled appropriately and apply cleanup only to non-critical test data.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill when features are difficult to test or architecture reviews need testability advocacy. It helps assess testability gaps and turn them into traceable improvement suggestions and implementation guidance. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may suggest cleanup of test data as part of improving data-layer testability. <br>
-Mitigation: Review cleanup suggestions before applying them and limit any cleanup to non-critical test data. <br>
-Risk: Guidance may omit some testability issues for complex systems. <br>
-Mitigation: Supplement the assessment with code review when gaps are suspected, then rerun the improvement planning step. <br>
+**Output Format:** [Markdown assessment report with improvement recommendations]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Includes traceable recommendation IDs and sections for testability assessment, improvement suggestions, refactoring guidance, and best practices.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured assessment sections and traceable suggestion IDs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a testability assessment, improvement suggestions, refactoring guidance, and best-practice recommendations.] <br>
+1.6.3 (source: server evidence and frontmatter)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

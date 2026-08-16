@@ -1,43 +1,55 @@
-## Description: <br>
-Run AEO audits, preview branch audits, changed-page sitemap audits, local/private preview audits with explicit opt-in, sitemap origin rewriting, static-output audits, regression comparisons, site fixes, schema validation, and llms.txt generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Run AEO audits, preview branch audits, changed-page sitemap audits, local/private preview audits with explicit opt-in, sitemap origin rewriting, static-output audits, regression comparisons, site fixes, schema validation, and llms.txt generation.
 
-## Publisher: <br>
-[arberx](https://clawhub.ai/user/arberx) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[arberx](https://clawhub.ai/user/arberx)
 
-## Use Case: <br>
-Developers, site owners, and marketing teams use Aeo to audit public, staging, local, or static websites for answer-engine optimization, schema quality, AI access files, and regressions, then generate prioritized fixes and related files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run a networked npm audit tool against public, staging, localhost, private, or static site targets. <br>
-Mitigation: Audit local or private targets only for systems the user controls, and require explicit opt-in before using local/private access. <br>
-Risk: The skill can propose or apply AEO-related file and code changes. <br>
-Mitigation: Review proposed fixes before allowing writes, preserve existing site behavior, and rerun the audit when practical. <br>
-Risk: Untrusted target URLs, paths, or flags could make shell execution unsafe if passed through directly. <br>
-Mitigation: Validate URLs or local paths, quote each argument, pass flags as literal tokens, and reject shell metacharacters or newlines. <br>
+## Use Case:
 
+Developers, site maintainers, and marketing engineering teams use this skill to audit websites or built site output for AI answer readiness, schema quality, auxiliary AI access files, and release regressions. It can guide command execution, summarize audit findings, compare reports, and propose or write targeted site files when requested.
 
-## Reference(s): <br>
-- [Aeo homepage](https://ainyc.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/arberx/skills/aeo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown summaries with JSON or agent-format audit results, shell commands, code/configuration changes, and generated llms.txt or robots.txt files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a networked npm audit tool and may write llms.txt, llms-full.txt, or robots.txt when the user requests generation or fixes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.0 (source: server release metadata) <br>
+Risk: Commands for fix, llms, monitor, local/private targets, and output-file flags can read project content, write public-facing files, or save comparison results.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed commands before execution, require explicit opt-in for local/private targets, and confirm file writes or output paths before running those modes.
+
+Risk: Generated llms.txt, llms-full.txt, robots.txt, schema, or site fixes may affect public crawler and AI access behavior.
+
+Mitigation: Inspect generated files and proposed site changes before publishing or deploying them.
+
+## Reference(s):
+
+- [Canonry](https://canonry.ai)
+- [AEO audit repository](https://github.com/Canonry/aeo-audit)
+- [ClawHub skill page](https://clawhub.ai/arberx/skills/aeo)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with command snippets, JSON audit summaries, and generated text or configuration files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write llms.txt, llms-full.txt, robots.txt, and comparison or report files when the user requests those modes.]
+
+## Skill Version(s):
+
+5.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

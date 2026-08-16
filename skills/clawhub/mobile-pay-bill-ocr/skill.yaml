@@ -14,8 +14,12 @@ optional_env_vars:
 
 primary_credential: SCNET_API_KEY
 
-# 增加项目主页，解决 missing homepage 警告
-homepage: https://github.com/SCNet-sugon/mobile_pay_bill_ocr.git  # 请替换为实际仓库地址
+permissions:
+  - filesystem:read
+  - shell:exec
+  - network:api.scnet.cn
+
+homepage: https://github.com/SCNet-sugon/mobile_pay_bill_ocr.git
 dependencies:
   - python3
   - requests

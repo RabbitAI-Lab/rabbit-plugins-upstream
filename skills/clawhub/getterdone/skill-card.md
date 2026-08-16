@@ -1,49 +1,65 @@
-## Description: <br>
-GetterDone lets an agent hire paid human workers for physical-world tasks or specialized human work, then review submitted proof before releasing payment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hire a human gig worker via USD bounty for tasks an AI agent cannot do alone, including physical presence work, on-site verification, mystery shopping, deliveries, and specialized human work such as writing, design, translation, proofreading, or video.
 
-## Publisher: <br>
-[getterdone](https://clawhub.ai/user/getterdone) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[getterdone](https://clawhub.ai/user/getterdone)
 
-## Use Case: <br>
-External users and developers use GetterDone when an AI agent needs human help for physical errands, on-site verification, delivery, photography, or specialized work such as writing, design, translation, proofreading, and video. The skill guides setup, task posting, proof review, approval, dispute, and worker rating flows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid actions can spend user funds or release escrow to a worker. <br>
-Mitigation: Require explicit confirmation for task creation, approval, and dispute actions unless the owner has deliberately opted into autonomous review; keep per-task and daily spending caps low. <br>
-Risk: Task instructions, locations, and attachments may expose sensitive information to workers. <br>
-Mitigation: Review each task and attachment for sensitive details before posting or uploading, and redact or cancel when the user has not approved disclosure. <br>
-Risk: A compromised or floating MCP server dependency could increase supply-chain or credential risk. <br>
-Mitigation: Install only from trusted GetterDone sources, pin the MCP server version for production, and use the scoped, revocable GETTERDONE_API_KEY. <br>
-Risk: Automated proof checks are syntactic and may miss semantic failures. <br>
-Mitigation: Use human review by default; for autonomous review, require strict review criteria and the agent's own proof evaluation before approving or disputing. <br>
-Risk: Webhook tunnels can expose a local development endpoint. <br>
-Mitigation: Avoid tunnels unless intentionally needed for local development, and use stable HTTPS infrastructure for production webhook handling. <br>
+## Use Case:
 
+External users and autonomous agent operators use GetterDone when a task needs real-world human action or specialized human judgment. The skill helps an agent set up credentials, post paid bounties, monitor task progress, review submitted proof, and approve or dispute worker submissions.
 
-## Reference(s): <br>
-- [GetterDone platform](https://getterdone.ai) <br>
-- [Agent registration](https://getterdone.ai/register-agent) <br>
-- [GetterDone MCP server package](https://www.npmjs.com/package/@getterdone/mcp-server) <br>
-- [GetterDone skill document API](https://getterdone.ai/api/docs/spec?doc=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls, Markdown] <br>
-**Output Format:** [Markdown instructions with inline code, shell commands, JSON configuration examples, and MCP tool calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires GETTERDONE_API_KEY; paid task creation, approval, and dispute actions default to explicit user confirmation, with an opt-in autonomous review path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.24.1 (source: frontmatter and release evidence) <br>
+Risk: The skill can initiate paid third-party human work through marketplace tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation for paid actions by default, keep low per-task and daily spending caps, and use non-recurring funding unless autonomous operation is intentional.
+
+Risk: Task descriptions, locations, and attachments may expose private details to workers.
+
+Mitigation: Review and redact addresses, files, photos, account details, and other sensitive information before creating tasks or uploading attachments.
+
+Risk: Using an unpinned or spoofed MCP server package could increase supply-chain risk.
+
+Mitigation: Pin the GetterDone MCP server version and verify the GetterDone domain and npm package identity before installation.
+
+Risk: Proof review has financial consequences and automated checks may not determine whether the work semantically satisfies the task.
+
+Mitigation: Review proof promptly within the dispute window, wait for media checks when applicable, and approve or dispute based on the actual task requirements.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/getterdone/skills/getterdone)
+- [GetterDone Platform](https://getterdone.ai)
+- [Agent Registration](https://getterdone.ai/register-agent)
+- [GetterDone Terms of Service](https://getterdone.ai/legal/terms)
+- [GetterDone Acceptable Use Policy](https://getterdone.ai/legal/acceptable-use)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON snippets, and tool-call examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires GETTERDONE_API_KEY for paid marketplace actions; normal paid actions require user confirmation unless autonomous review is explicitly enabled.]
+
+## Skill Version(s):
+
+1.31.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

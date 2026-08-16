@@ -1,0 +1,7 @@
+interface:
+  display_name: "USA Business Migration Planner"
+  short_description: "Helps with People repeatedly need a practical, repeatable way..."
+  default_prompt: "Use $usa-business-migration-planner to help me People repeatedly need a practical, repeatable way to handle [OpenAI Pro 号池] GPT-5.6 Sol 输入约 ¥0.425/MTok｜实际人民币成本约 0.125."
+
+policy:
+  allow_implicit_invocation: true

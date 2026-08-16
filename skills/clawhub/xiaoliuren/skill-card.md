@@ -1,38 +1,57 @@
-## Description: <br>
-Provides Chinese-language Xiao Liu Ren divination charting and interpretation using numeric, lunar-date, or direct palace inputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language Xiaoliuren divination support for casting, charting, and interpreting readings from numbers, time inputs, or selected palaces.
 
-## Publisher: <br>
-[tianmingwangluo](https://clawhub.ai/user/tianmingwangluo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tianmingwangluo](https://clawhub.ai/user/tianmingwangluo)
 
-## Use Case: <br>
-External users and agent builders use this skill to let an AI agent calculate Xiao Liu Ren divination charts, explain palace relationships, and provide culturally framed guidance in Chinese. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake divination output for professional health, legal, financial, safety, or other high-stakes advice. <br>
-Mitigation: Present results as cultural or entertainment-oriented guidance and direct users to qualified professionals for high-stakes decisions. <br>
+## Use Case:
 
+External users and agent developers use this skill to answer Xiaoliuren divination requests, including chart generation and interpretation for questions about trends, relationships, travel, finances, health, or lost items. The skill is limited to the Xiaoliuren tradition and excludes other divination or astrology systems.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tianmingwangluo/xiaoliuren) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a divination chart, calculation details, interpretation, and practical advice; no files, credentials, network access, or system access are required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: Users may treat divination guidance about health, money, legal matters, or major life choices as professional advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Frame outputs as entertainment or cultural reference and direct users to qualified professionals for consequential decisions.
+
+Risk: Divination outputs can create false confidence when presented as certain predictions.
+
+Mitigation: Present readings as trend-oriented possibilities and preserve the skill's one-question, one-reading posture.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tianmingwangluo/skills/xiaoliuren)
+- [Publisher profile](https://clawhub.ai/user/tianmingwangluo)
+- [README](README.md)
+- [Validation examples](examples.md)
+- [道传小六壬在线排盘](https://www.xiao6ren.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with tables and explanatory prose]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language divination output; no code execution, credential access, or privileged data handling.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

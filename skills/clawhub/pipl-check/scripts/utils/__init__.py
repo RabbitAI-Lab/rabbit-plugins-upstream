@@ -1,1 +1,0 @@
-"""pipl-check utility modules"""

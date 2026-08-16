@@ -270,9 +270,13 @@ def get_api_base():
 
 
 def get_api_key():
+    """
+获取配置在环境变量的API Key。
+如果获取不到，按 SKILL.md 的 **## 解决认证和积分问题** 处理。
+"""
     key = os.environ.get("LINKFOX_AGENT_API_KEY") or os.environ.get("LINKFOXAGENT_API_KEY")
     if not key:
-        print("API Key not configured. Set LINKFOX_AGENT_API_KEY.", file=sys.stderr)
+        print("API Key 未配置", file=sys.stderr)
         sys.exit(1)
     return key
 
@@ -290,7 +294,7 @@ def _post(url, params):
     }
     req = Request(url, data=data, headers=headers, method="POST")
     try:
-        with urlopen(req, timeout=30) as response:
+        with urlopen(req, timeout=150) as response:
             return json.loads(response.read().decode("utf-8"))
     except HTTPError as e:
         body = e.read().decode("utf-8") if e.fp else ""

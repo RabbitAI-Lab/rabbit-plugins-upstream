@@ -123,6 +123,26 @@ Note:
 - This call is local only (127.0.0.1), AI cannot see credentials
 - Token file path: `~/.mgc/database/mgc_black_box/.mgc_token`
 
+### Locating Credentials by Name (Recommended Workflow, v1.4.10+)
+
+Before fetching a credential, locate it with **mgc_find** (fuzzy search by name):
+
+```python
+# Fuzzy search for a credential by name
+matches = mgc_find(
+    info_owner="db_warehouse",   # partial name; substring match by default
+    info_type="credential",
+)
+# Returns metadata list — never the credential plain_text.
+# After locating the exact (info_type, info_owner), the script internally
+# calls mgc_get to retrieve and decrypt.
+```
+
+**Security features**:
+- `mgc_find` never returns credential plain_text — only metadata
+- After locating, the script still goes through `mgc_get` (local decryption)
+- All access still requires user authorization
+
 ## Security Features
 
 - Credentials decrypted locally

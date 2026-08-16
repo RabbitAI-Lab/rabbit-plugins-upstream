@@ -1,39 +1,52 @@
-## Description: <br>
-Helps QA teams coach new testers and raise team testing capability through pair testing, knowledge sharing, checklists, reusable templates, training materials, and progress evaluation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA teams turn testing experience into shared team capability through pair testing, knowledge sharing, checklists, templates, training materials, mentorship guidance, and progress metrics.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA leads, senior testers, and team mentors use this skill to assess testing capability gaps, create coaching plans, standardize checklists and templates, and help new or unevenly skilled team members improve before project work is handed off.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill may activate on broad training or mentoring requests where the user did not specifically ask for QA team coaching.
+
+Mitigation: Confirm that the user wants QA team coaching before applying the skill to ambiguous training or mentoring requests.
+
+Risk: Example checklists and review processes could be mistaken for authorization to change team standards.
+
+Mitigation: Treat generated checklists, templates, and review processes as coaching proposals that require team approval before adoption.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA leads, mentors, and testing teams use this skill to assess team capability gaps, design coaching plans, create training materials, and establish review and progress metrics for new or growing testers. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Generic terms such as training, newcomer, mentoring, or team growth may invoke the skill even when QA coaching was not intended. <br>
-Mitigation: Confirm the requested coaching context before relying on generated plans, checklists, or templates. <br>
-Risk: Generated checklists, review standards, or training materials could influence team workflow if adopted without review. <br>
-Mitigation: Review and approve proposed materials and process changes before applying them in a real team workflow. <br>
+**Output Format:** [Markdown guidance with structured coaching plans, skill matrices, training material lists, mentorship guides, progress metrics, and checklists]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Plans are expected to include traceable coaching identifiers such as COACH-XXXX.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with structured coaching plans, skill matrices, training-material lists, mentorship guides, and progress metrics] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Each coaching plan is expected to include a COACH-XXXX traceability identifier.] <br>
+1.6.3 (source: frontmatter and release evidence)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

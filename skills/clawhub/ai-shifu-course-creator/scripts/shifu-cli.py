@@ -11,13 +11,21 @@ import shutil
 import sys
 import time
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
 from dotenv import load_dotenv, set_key
 
 from skill_update import DEV_CACHE_FILE, check_for_update
+
+# Usage tracking is strictly optional: a broken tracker must never take the
+# CLI down with it.
+try:
+    from usage_tracker import track
+except Exception:  # noqa: BLE001 - fail-open: any tracker breakage must not take the CLI down
+    def track(event_name):
+        return None
 
 # ── Constants ──────────────────────────────────────────────────────────────────
 ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
@@ -284,12 +292,19 @@ def safe_join_path(base_dir, filename):
 
 
 def fmt_time(ts):
-    """Format an ISO timestamp for display, return '' if missing."""
+    """Format a backend timestamp for display in the local timezone.
+
+    Backend timestamps are UTC; values without an explicit offset are
+    interpreted as UTC, then converted to the machine-local timezone.
+    Returns '' if missing.
+    """
     if not ts:
         return ""
     try:
-        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-        return dt.strftime("%Y-%m-%d %H:%M")
+        dt = datetime.fromisoformat(str(ts).strip().replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone().strftime("%Y-%m-%d %H:%M")
     except Exception:
         return ts[:16] if len(ts) >= 16 else ts
 
@@ -331,7 +346,7 @@ SYNC_MANIFEST_NAME = ".shifu-sync.json"
 
 def _now_iso():
     """UTC timestamp, second precision, Z-suffixed — matches image-manifest style."""
-    return datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _mask_phone(phone):
@@ -1489,10 +1504,17 @@ def _tts_model_options(tts_config):
 
 
 def _filter_tts_voices_for_model(provider, voices, model):
-    if _tts_provider_name(provider) != "volcengine":
-        return voices
     model_key = _string_tts_value(model)
     if not model_key:
+        return voices
+    # Providers whose voices declare a resource_id (volcengine resources,
+    # tencent TextToVoice tiers) require the voice to match the selected
+    # model; providers without the annotation keep their full list. This
+    # mirrors the platform editor's filterTtsVoicesForModel behavior.
+    has_resource_annotations = any(
+        _string_tts_value(v.get("resource_id")) for v in voices
+    )
+    if not has_resource_annotations:
         return voices
     return [
         v for v in voices
@@ -1513,7 +1535,12 @@ def _select_platform_tts_defaults(speed, tts_config):
     """Mirror the platform editor's default provider/model/voice selection."""
     providers = _tts_providers_by_name(tts_config)
     model_options = _tts_model_options(tts_config)
-    default_model_option = model_options[0] if model_options else None
+    # Prefer the option the platform declares as default (is_default); older
+    # backends without the marker fall back to the first option.
+    default_model_option = next(
+        (o for o in model_options if o.get("is_default")),
+        model_options[0] if model_options else None,
+    )
     provider = ""
     model = ""
 
@@ -1622,6 +1649,72 @@ def cmd_set_tts(args):
                   f"{COURSE_CONFIG_NAME} was left unchanged. Run "
                   "`pull --course-dir <dir>` to resync.", file=sys.stderr)
 
+        _update_course_manifest_after_push(base_url, token, shifu_bid,
+                                           course_dir, manifest)
+
+
+def cmd_set_avatar(args):
+    """Upload and bind a JPG/PNG teacher avatar to a course."""
+    src_path = Path(args.file).expanduser().resolve()
+    if src_path.suffix.lower() not in {".jpg", ".jpeg", ".png"}:
+        print("Error: teacher avatar must be a JPG or PNG file.", file=sys.stderr)
+        sys.exit(1)
+
+    from image_utils import prepare_image  # local import keeps Pillow optional
+    try:
+        prepared = prepare_image(src_path)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if prepared.original_width != prepared.original_height:
+        print(
+            "Warning: teacher avatars are displayed in a square frame; "
+            f"this image is {prepared.original_width}x{prepared.original_height} "
+            "and may be cropped. A 1:1 image is recommended.",
+            file=sys.stderr,
+        )
+
+    base_url, token = resolve_auth(args)
+    shifu_bid = args.shifu_bid
+    course_dir = getattr(args, "course_dir", None)
+    manifest = _load_sync(course_dir) if course_dir else None
+
+    # Check the local revision before uploading so a known conflict does not
+    # leave an unused resource behind.
+    intended_meta = {"avatar": "<pending local upload>"}
+    _check_course_meta_conflict(base_url, token, shifu_bid, course_dir, manifest,
+                                intended_meta)
+
+    remote_url = api_upload(
+        base_url, token, prepared.filename, prepared.data, prepared.mime,
+    )
+    if not isinstance(remote_url, str) or not remote_url.startswith("https://"):
+        print("Error: image upload did not return a valid resource URL.",
+              file=sys.stderr)
+        sys.exit(1)
+
+    api(base_url, token, "post", f"/shifus/{shifu_bid}/detail",
+        json={"avatar": remote_url})
+    fresh_detail = api_safe(base_url, token, "get",
+                            f"/shifus/{shifu_bid}/detail")
+    if not isinstance(fresh_detail, dict) or fresh_detail.get("avatar") != remote_url:
+        print(
+            "Error: the image was uploaded, but the course avatar could not be "
+            "verified. The course may be unchanged; run `show` or check the "
+            "admin page before retrying.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    print(f"Set course {shifu_bid} teacher avatar")
+    print(f"  Resource URL: {remote_url}")
+    print(f"  Source: {prepared.original_width}x{prepared.original_height}, "
+          f"{prepared.original_bytes} bytes")
+    print(f"  Uploaded: {len(prepared.data)} bytes ({prepared.mime})")
+
+    if manifest and manifest.get("shifu_bid") == shifu_bid:
+        _write_course_config(course_dir, _course_config_from_detail(fresh_detail))
         _update_course_manifest_after_push(base_url, token, shifu_bid,
                                            course_dir, manifest)
 
@@ -2229,7 +2322,7 @@ def _build_import_json(course_dir, title=None, description=None,
 
     import_data = {
         "version": "1.0",
-        "exported_at": datetime.now().isoformat(),
+        "exported_at": _now_iso(),
         "shifu": {
             "shifu_bid": shifu_bid,
             "title": title,
@@ -2648,7 +2741,7 @@ def cmd_upload_image(args):
                 "local": local_rel,
                 "remote": remote_url,
                 "alt": alt,
-                "uploaded_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "uploaded_at": _now_iso(),
                 "bytes": len(file_bytes),
                 "original_bytes": original_bytes,
                 "mime": mime,
@@ -2665,7 +2758,7 @@ def cmd_upload_image(args):
             "source_url": args.url,
             "remote": remote_url,
             "alt": alt,
-            "uploaded_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "uploaded_at": _now_iso(),
         })
 
 
@@ -2846,6 +2939,15 @@ def build_parser():
     p.add_argument("--course-dir", default=None,
                    help=f"Also refresh local {COURSE_CONFIG_NAME} and sync manifest")
 
+    # ── set-avatar ──
+    p = sub.add_parser("set-avatar", parents=[parent_parser],
+                       help="Upload and set a course teacher avatar (JPG/PNG)")
+    p.add_argument("shifu_bid", help="Course BID")
+    p.add_argument("--file", required=True,
+                   help="Local JPG or PNG teacher-avatar path")
+    p.add_argument("--course-dir", default=None,
+                   help=f"Also refresh local {COURSE_CONFIG_NAME} and sync manifest")
+
     # ── delete-lesson ──
     p = sub.add_parser("delete-lesson", parents=[parent_parser],
                        help="Delete a lesson")
@@ -2981,6 +3083,7 @@ def main():
         "rename-lesson": cmd_rename_lesson,
         "set-access": cmd_set_access,
         "set-tts": cmd_set_tts,
+        "set-avatar": cmd_set_avatar,
         "delete-lesson": cmd_delete_lesson,
         "reorder": cmd_reorder,
         "import": cmd_import,
@@ -2996,6 +3099,13 @@ def main():
 
     handler = commands.get(args.command)
     if handler:
+        # check-update runs once per session (session-controls.md), so it
+        # doubles as the session-start marker; every other command reports
+        # its own name. Only the command name is sent, never its arguments.
+        if args.command == "check-update":
+            track("skill_start")
+        else:
+            track(f"cli_{args.command}")
         handler(args)
     else:
         parser.print_help()

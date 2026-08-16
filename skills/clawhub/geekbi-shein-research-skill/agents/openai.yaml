@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云SHEIN数据分析与市场调研"
+  short_description: "整合商品、图搜同款、店铺、类目、关键词和评论数据完成 SHEIN 选品调研"
+  default_prompt: "使用 $geekbi-shein-research-skill 分析 SHEIN 市场机会并给出有数据依据的选品建议。"

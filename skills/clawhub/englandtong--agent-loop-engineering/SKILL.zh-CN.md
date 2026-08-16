@@ -1,195 +1,230 @@
 # Agent Loop Engineering 中文执行协议
 
-版本：2.0.0
+版本：2.1.1
 
-本 Skill 是 AI 编码工作的执行层。它接收一个已获授权、可以验收的目标，通过有边界的实现、验证、修复和记录持续推进，直到工作可交给 QA、需要修复，或触发真实停止条件。
+本 Skill 是已授权软件工作的执行层。只要仍能在范围内产生有效进展，默认继续推进。对于普通、可逆、项目目录内的技术选择，应遵循现有项目模式自主决定、诊断、修复和验证，不要求 Owner 逐轮监督。
 
-机器可读的 frontmatter 字段和状态枚举必须保留英文，以便与 `cms-project-governance` 和校验脚本互通。
+使用用户的语言回复。持久状态必须事实化、精简，不保存隐藏推理。
 
-## 入口门禁
+## 语言与兼容
 
-只有以下内容足够清楚时才开始编码：
+- 中文任务使用本文件，只加载 `{baseDir}/references/zh-CN/` 中当前需要的文件。
+- 英文任务使用 `{baseDir}/SKILL.md` 和 `references/en/`。
+- 两种语言的机器字段和枚举值保持英文。
+- `contract_version` 继续使用 `"2.0"`，2.1 通过新增策略字段向后兼容。
 
-- 用户可感知的期望结果；
-- 当前范围和 Non-Goals；
-- 可观察的验收标准；
-- 允许修改与受保护边界；
-- 必须提供的证据；
-- 当前唯一下一步。
+## 入口与迁移
 
-优先使用 contract version `2.0` 的 `Docs/ACTIVE_PACKET.md`。执行前读取 `{baseDir}/references/zh-CN/execution-loop.md`。
+开始执行前必须明确：
 
-如果用户只有概念、方向或问题，不要自行猜出完整技术目标。优先使用 `cms-project-governance` 的目标发现模式；如果没有安装，每轮最多询问三个会影响结果、风险或成本的问题，并为可逆的不确定项推荐默认方案。
+- 用户可见的目标结果；
+- 当前范围与 Non-Goals；
+- 带交付类别的可观察验收标准；
+- 允许修改和保护边界；
+- 所需证据；
+- 唯一下一步。
 
-## 权限边界
-
-在受治理项目中：
-
-- Owner 或 Controller 负责期望结果、Non-Goals 和重大决策；
-- Controller 负责规模、阶段计划和工单范围；
-- Developer 或执行 Agent 负责实现、执行状态和证据；
-- QA 负责验收。
-
-不能从聊天、日志、状态备注或实现便利中扩大范围。受治理工作完成实现后，只能设置 `execution_state: Ready for Review`，不能自行签署 QA 或项目验收。
-
-只有 Lite 独立任务明确设置 `qa_required: false`，且修改低风险、可回退、自动和功能验证都通过、没有 Owner 门禁时，同一个 Agent 才能自验收。
-
-## 必需状态
-
-推荐的 v2 状态文件：
-
-- `Docs/ACTIVE_PACKET.md`
-- `Docs/LOOP_RUNS.jsonl`
-
-明确的独立任务可使用：
-
-- `{baseDir}/templates/zh-CN/ACTIVE_PACKET.md`
-- `{baseDir}/templates/zh-CN/LOOP_RUNS.example.jsonl`
-
-旧项目的 `TARGET.md`、`ACCEPTANCE.md`、`WORK_ORDER.md`、`LOOP_STATE.md`、`STATUS.md`、`NEXT_ACTIONS.md`、`PENDING.md`、`EVALUATION.md` 和 `LOOP_RUNS.jsonl` 可以继续读取，不强制立即迁移。参见 `{baseDir}/references/zh-CN/migration.md`。
-
-文件发生冲突时，设置 `execution_state: Invalid State` 并停止。权限优先级：
+优先使用 `Docs/ACTIVE_PACKET.md`。旧项目没有 Packet 时，先调用 `cms-project-governance` 的 Legacy Bootstrap，或运行：
 
 ```text
-Owner 已批准的 TARGET / Non-Goals
-  -> ACCEPTANCE
-  -> 当前 WORK_ORDER
-  -> ACTIVE_PACKET
-  -> 日志、状态、下一步和聊天
+node {baseDir}/scripts/bootstrap-active-packet.mjs --workspace <项目路径> --language zh-CN --json
 ```
 
-## 阶段与循环
+Bootstrap 默认只读，只有显式增加 `--write` 才允许写入。目标、工单、判定或权限存在冲突时，设为 `Invalid State` 并停止，不得猜测。
 
-每个已授权目标最多十个阶段：
+旧项目规则见 `{baseDir}/references/zh-CN/migration.md`。
 
-| 规模 | 单阶段上限 | 复核边界 |
+## 权限与目录边界
+
+- Owner 决定目的、Non-Goals 和重大选择。
+- Controller 决定规模、授权阶段、工单范围和对齐结论。
+- Developer 负责实现与执行证据。
+- Stage Reviewer 负责阶段检查和退回修复。
+- Standard / Full 的最终验收由 Independent QA 决定。
+
+用户在单 Agent 流程中所说的 `QC`，映射为 `Stage Reviewer`，不是独立终验。
+
+必须解析项目根目录和所有候选写入路径的真实路径。设置 `write_scope: "."`、`outside_write_policy: Deny` 后，禁止通过普通路径、符号链接或 junction 在项目目录外新增、修改、移动或删除文件。
+
+## 2.1 Packet 策略
+
+新 Packet 使用：
+
+```yaml
+contract_version: "2.0"
+autonomy_mode: "Bounded"
+acceptance_mode: "Layered"
+delivery_class: "Runtime"
+context_profile: "Compact"
+write_scope: "."
+outside_write_policy: "Deny"
+authority_fingerprint: "sha256:..."
+agent_strategy: "Isolated"
+max_parallel_agents: 3
+context_return_policy: "SummaryAndEvidence"
+shared_authority_mode: "FingerprintAndExcerpt"
+single_writer: true
+```
+
+`delivery_class` 可为 `Runtime`、`Contract`、`Governance`、`Artifact`、`Mixed`。Contract 或 Governance 交付不得表述成运行功能已可用；Mixed 必须逐条标明验收项类别。
+
+`Layered` 表示同一个执行 Agent 可以做阶段检查和返修，但新 Standard / Full 最终只能进入 `Ready for Independent Acceptance`。`Ready for Review` 只作为旧状态兼容输入。只有另一个 Agent、任务或人工评审者读取任务局部证据后，才能签署最终 QA。
+
+完成和证据规则见 `{baseDir}/references/zh-CN/evidence-and-completion.md`。
+
+## 有界自主循环
+
+当 `autonomy_mode: Bounded` 时执行：
+
+```text
+Controller 阶段派发
+  -> Developer 开发和聚焦验证
+  -> Stage Reviewer 检查验收项、diff 和原始证据
+  -> 通过：完成对齐并继续下一个已授权阶段
+  -> 不通过：同一 Packet / Work Order 进入 Needs Fix
+  -> Developer 返修和复验
+  -> 终局阶段：Ready for Independent Acceptance
+```
+
+普通、可逆、符合项目惯例的实现选择不询问 Owner，采用保守默认并记录重要假设。只有涉及目标、Non-Goals、受保护架构或数据、生产行为、费用、凭证、破坏性影响或验收权限时才请求决定。
+
+检查失败后：
+
+1. 生成 failure signature；
+2. 只读最相关的日志和源码；
+3. 形成新的证据化假设；
+4. 在范围内做有界修复；
+5. 重跑聚焦检查和受影响回归；
+6. 有真实进展就继续。
+
+相同 failure signature 连续两次没有新证据、范围收窄、根因或通过行为时才停止。原样重复同一命令不算进展。
+
+具体循环见 `{baseDir}/references/zh-CN/execution-loop.md`。
+
+## 阶段与对齐
+
+最多授权十个阶段：
+
+| 规模 | 单阶段上限 | 总复核时域 |
 | --- | ---: | ---: |
 | Small | 30 分钟 | 5 小时 |
 | Medium | 60 分钟 | 10 小时 |
 | Large | 120 分钟 | 20 小时 |
 
-阶段是有时间上限的成果检查点；Loop 是阶段内部的一次“实现—验证—评估”循环。不能为每个阶段或 Loop 创建一份文件。
+阶段是结果检查点，不是文件。每个阶段做一次轻量目标链接检查；在阶段 3、6、10 以及以下情况立即做正式对齐：
 
-第 3、6、10 阶段结束时进行正式方向对齐。执行 Agent 提供用户价值、目标关联和证据，Controller 或 Owner 决定重大方向变化。
+- authority fingerprint 改变；
+- 范围增长超过 20%；
+- 自动检查全绿但核心用户流程失败；
+- 无法用一句话说明当前工作与目标的关系；
+- 出现受保护边界或新产品方向。
 
-第 10 阶段必须停止并返回以下之一：
+阶段 10 必须返回 `Ready for Independent Acceptance`、`Needs Fix`、`Blocked`、`Invalid State` 或拆分/重基线建议，禁止静默再开十阶段。
 
-- `Ready for Review`
-- 带有界修复项的 `Needs Fix`
-- `Blocked`
-- `Locally Compliant, Globally Misaligned`
-- 拆分或重基线建议
+## 证据与验证成本
 
-不能静默开始下一组十个阶段。
+无证据不完成。Runtime 声明通常需要：
 
-## 单次 Loop
+1. 自动验证；
+2. 功能或用户流程验证；
+3. 要求时的目标环境验证；
+4. Standard / Full 最终独立证据。
 
-```text
-读取当前 Active Packet
-  -> 确认阶段目标和唯一下一步
-  -> 只检查相关代码与证据
-  -> 实现最小而完整的修改
-  -> 运行针对性自动验证
-  -> 运行功能或用户流程验证
-  -> 检查差异与风险
-  -> 更新状态并追加一条 Loop 记录
-  -> 继续、送审、修复或停止
-```
+验证顺序：
 
-详细规则见 `{baseDir}/references/zh-CN/execution-loop.md`。
+- 每轮先跑聚焦复现或测试；
+- 集成点和修复后跑受影响回归；
+- 终验、验收明确要求或重大风险触发时才跑全量回归；
+- 没有新假设或改动时，不反复运行同一昂贵测试。
 
-默认规则：
+成功命令只记录命令、退出码、简短结果、时间和证据路径。失败命令保留有用尾部和原始日志路径，不把完整 stdout 复制进状态。
 
-- 始终只保留一个立即下一步；
-- 优先交付用户可感知的垂直切片；
-- 不顺手清理无关代码；
-- 可行时先复现缺陷再修复；
-- 验证失败后先诊断，再扩大修改；
-- 连续两次核心验证失败且没有新进展证据时停止；
-- 修复后重跑受影响回归；
-- 不能用耗时、文件数或代码量证明完成。
+证据冲突时采用较弱结论。Build 和单元测试不能覆盖失败的真实用户流程。
 
-## 证据门禁
+## Compact 上下文
 
-没有证据就不能完成。
+`context_profile: Compact` 默认只读取：
 
-至少需要两类证据：
+1. Active Packet；
+2. 当前 Work Order 或唯一动作；
+3. 受影响源码和测试；
+4. 验证配置；
+5. 最近三条 Loop。
 
-1. 自动证据：测试、类型检查、构建、lint、静态检查、Schema 验证等；
-2. 功能证据：真实命令、API、浏览器流程、产物检查、用户工作流或目标环境 smoke。
+authority fingerprint 未变化时，不重复读取 TARGET、ACCEPTANCE 或 Work Order。除非诊断明确冲突，不加载历史 Milestone、Handoff、QA 文件或完整日志。
 
-自动证据与功能证据冲突时，以较差结果为准。构建成功不能覆盖用户流程失败。
+按规模使用软上限：Small 6 个文件 / 30,000 字符，Medium 10 / 60,000，Large 16 / 100,000。只有明确证据需要时才能超过，并记录原因、先压缩再继续。这些限制用于控制上下文，不是完成证据。
 
-声明 `Ready for Review`、独立完成或带风险完成前，读取 `{baseDir}/references/zh-CN/evidence-and-completion.md`。
+安全与上下文详见 `{baseDir}/references/zh-CN/safety-and-context.md`。
+
+## 隔离型委派
+
+只有任务可分离且预计产生大量读取或工具输出时，才用子 Agent 隔离上下文。小型、高耦合工作留在主 Loop。每个 Worker 只接收有界任务包、不重叠写入范围、authority fingerprint、必要摘录和结构化回传契约；禁止发送完整父对话。
+
+每个 Packet 只有一个协调写者，通常同时活跃的 Worker 不超过三个。优先隔离日志分析、大范围只读调查、嘈杂验证和独立 QA。并行 Developer 必须使用不重叠 Work Order，并有已授权集成阶段。
+
+阅读 `{baseDir}/references/zh-CN/isolated-delegation.md`。只有当前 Host 需要时，才读取 `{baseDir}/references/zh-CN/host-cost-controls.md` 的会话、缓存、附件、压缩和回退适配。
 
 ## 状态写回
 
-每个 Loop 结束时：
+每轮结束：
 
-1. 更新 `execution_state`；
-2. 只有阶段成果完成或正式放弃时才推进阶段编号；
-3. 更新验收项与简短证据链接；
-4. 保留阻塞、假设和决策；
-5. 保持一个下一步；
-6. 向 `Docs/LOOP_RUNS.jsonl` 追加一条 JSON 记录。
+1. 更新执行与阶段状态；
+2. 只更新受影响验收项和精简证据链接；
+3. 保留阻塞和重要假设；
+4. 保持唯一下一步；
+5. 向 `Docs/LOOP_RUNS.jsonl` 追加一个对象。
 
-不要把同一状态复制到多个文件。不要保存大日志、完整聊天、密钥、隐私数据或隐藏推理。
+新记录使用 `record_version: "2.1"`，可包含 `role`、`progress_delta`、`stage_review`、`failure_signature`、`context_stats`。禁止在多个 Markdown 重复写同一状态；优先使用 Packet 和 Loop Log，不创建逐阶段 Dispatch、Handoff 或 QA 文件。
 
-## 停止门禁
+## 硬停止门禁
 
-以下情况必须先停止：
+以下操作前必须停止：
 
-- 密钥、凭据、OAuth 会话或账号登录；
+- 密钥、凭证、账户登录或可复用 Session；
 - 生产数据或未脱敏客户数据；
-- 付费外部资源或生产部署；
-- 系统级安装、管理员权限、驱动或主机配置；
-- 破坏性 Git、历史重写、删除、迁移、覆盖或不可逆操作；
-- 技术栈替换或受保护架构变化；
-- 与 Target 或 Non-Goals 冲突；
-- 缺少决策权限；
-- 阶段、失败或上下文预算耗尽。
+- 付费资源、公开或生产部署；
+- 系统级安装、提权、驱动或主机安全设置；
+- 破坏性 Git、迁移、覆盖、reset、force push 或不可逆删除；
+- 受保护架构、数据边界、技术栈、目标或 Non-Goal 变更；
+- 项目真实根目录外的任何写入；
+- 权限不足或阶段、失败、上下文预算耗尽。
 
-项目规则可以更严格，配置开关不能绕过硬停止。参见 `{baseDir}/references/zh-CN/safety-and-context.md`。
+可以用分片诊断长时间或超时测试，但除非 Controller / Owner 正式修改验收门禁，分片不得替代原有全量门禁。
 
-## 自动化与多 Agent
+## 自动化与交接
 
-外层 Runner 可以重复启动单次 Loop，但必须：
+外层 Runner 只能在单写者锁、每轮重新加载状态、预算受控的条件下重复执行；任何终局或无效状态必须停止。不得发明范围、自动回答 Owner 门禁、验收治理工作或隐藏失败。
 
-- 每次从磁盘重新读取状态；
-- 使用单写锁；
-- 遇到非 Continue 状态立即停止；
-- 执行时间、阶段和失败预算；
-- 不能自动替人批准；
-- 原始日志与精简 Docs 状态分开保存。
+Stage Reviewer 和 Independent QA 应收到验收项、diff、命令和原始证据，不应把 Developer 希望得到的结论当作证据。
 
-多个 Agent 不能并发写同一 Active Packet 或日志。参见 `{baseDir}/references/zh-CN/automation-and-handoff.md`。
+详见 `{baseDir}/references/zh-CN/automation-and-handoff.md`。
 
-## 可选校验器
+## 校验
 
-环境有 Node.js 时，可只读检查状态：
+执行不修改项目的精简校验：
 
 ```text
-node {baseDir}/scripts/validate-loop-state.mjs --workspace <项目路径>
+node {baseDir}/scripts/validate-loop-state.mjs --workspace <项目路径> --summary --max-findings 20
 ```
 
-使用 `--json` 输出机器可读结果。校验器通过只代表状态一致，不代表产品正确。
+需要机器输出时加 `--json`；只有审查旧日志迁移本身时才使用 `--strict-history`。校验通过只证明状态一致，不证明产品正确。
 
 ## 用户报告
 
-每个用户可感知的工作周期结束后报告：
+只报告当前增量：
 
 ```text
 执行状态：
-阶段：
-与目标的关联：
-已完成工作：
+阶段与角色：
+目标链接：
+进展增量：
 自动验证：
 功能验证：
+阶段审查：
 风险或阻塞：
-修改文件：
 下一步：
-需要的治理或 QA 动作：
+是否需要独立 QA：
 ```
 
-当前权限不允许时，不得声称项目已验收。
-
+没有当前验收权限时，不得声称最终 Accepted。

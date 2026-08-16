@@ -1,44 +1,60 @@
-## Description: <br>
-Detects fire and smoke in video scenes, supporting video stream and image analysis for fire early warning scenarios such as security surveillance, forest fire prevention, and industrial parks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects fire and smoke in images or video streams for early warning use cases such as security surveillance, forest-fire prevention, and industrial monitoring.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, developers, and operations teams use this skill to analyze video streams, images, local files, or media URLs for fire and smoke indicators and receive structured detection reports, alerts, recommendations, and report links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Surveillance or facility media may be uploaded to the lifeemergence.com cloud service for analysis. <br>
-Mitigation: Use only media that is approved for that provider, and confirm retention, access, and data handling expectations before processing sensitive footage. <br>
-Risk: The skill silently creates or reuses cloud-linked identity state and stores local user or token data. <br>
-Mitigation: Review local identity and token storage, use scoped accounts, and clear stored state on shared or decommissioned environments. <br>
-Risk: Cloud history retrieval and exported report links may expose operational detection history. <br>
-Mitigation: Verify account separation and access controls before querying history, and avoid sharing exported report links outside approved channels. <br>
+## Use Case:
 
+External users and developers can use this skill to submit surveillance images, videos, or media URLs for fire and smoke detection, receive structured analysis results, and query cloud-hosted historical reports tied to the active account identity.
 
-## Reference(s): <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fire-smoke-detection-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, files] <br>
-**Output Format:** [Markdown or JSON analysis report with optional saved output file and cloud report link] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include fire and smoke detection status, risk level, sensitivity, region details, alert messages, history tables, and exported report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter states 1.0.9) <br>
+Risk: Local media files or URL references may be sent to a remote service for fire and smoke analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with media approved for cloud processing, and avoid sensitive camera footage unless the remote service and retention behavior are trusted.
+
+Risk: The skill may automatically create or reuse an internal account identity and store account tokens in the workspace.
+
+Mitigation: Run it in an isolated workspace, review account binding before installation, and clear local token or account data when the workspace is no longer trusted.
+
+Risk: Cloud history retrieval can expose prior analysis reports associated with the active account identity.
+
+Mitigation: Restrict who can run history queries and review report lists before sharing results outside the authorized audience.
+
+## Reference(s):
+
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](references/api_doc.md)
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fire-smoke-detection-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands]
+
+**Output Format:** [Markdown text and JSON analysis reports, with optional report links and saved output files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include fire or smoke detection results, risk labels, region details, recommendations, report export links, and cloud history lists.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata; artifact frontmatter states 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
