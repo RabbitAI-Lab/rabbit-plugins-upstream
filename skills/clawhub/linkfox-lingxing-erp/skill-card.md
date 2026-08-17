@@ -1,54 +1,70 @@
-## Description: <br>
-领星ERP helps agents use Lingxing ERP OpenAPI documentation and CLI scripts to query Amazon, advertising, sales, inventory, finance, FBA, purchase, customer service, logistics, warehouse, and multi-platform ERP data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This LinkFox skill helps agents query Lingxing ERP OpenAPI data across advertising, sales, products, finance, inventory, FBA, purchasing, customer service, and multi-platform operations using Lingxing credentials.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Lingxing ERP data and run documented OpenAPI calls for ecommerce operations, reporting, inventory, finance, and fulfillment workflows. It is intended for users who already have authorized Lingxing API credentials and need agent-assisted command generation, parameter guidance, and JSON response handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access broad Lingxing ERP data and includes high-impact ERP actions. <br>
-Mitigation: Install only when the publisher is trusted, use least-privilege Lingxing API credentials, and avoid invoking write-capable APIs unless the action is explicitly intended. <br>
-Risk: Access tokens and full ERP API responses may persist locally. <br>
-Mitigation: Store response files outside project repositories, delete saved responses and token cache files after use, and avoid committing ERP data or credentials. <br>
-Risk: The server security verdict is suspicious. <br>
-Mitigation: Review the security summary and guidance before installation, and limit use to environments where broad Lingxing ERP access is required. <br>
+## Use Case:
 
+External developers and ecommerce operators use this skill to prepare and run Lingxing ERP OpenAPI queries for operational reporting and analysis across ads, orders, listings, inventory, finance, FBA, purchasing, service, and multi-platform datasets.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-lingxing-erp) <br>
-- [Publisher profile: linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
-- [Lingxing OpenAPI host](https://openapi.lingxing.com) <br>
-- [领星 OpenAPI 调用说明](references/api.md) <br>
-- [领星新广告-报告接口参考](references/newad-report.md) <br>
-- [领星销售查询接口参考](references/sale-full.md) <br>
-- [领星订单 / Listing / 运营操作接口参考](references/sale-ops.md) <br>
-- [领星财务接口参考](references/finance.md) <br>
-- [领星统计报表接口参考](references/statistics.md) <br>
-- [领星仓库接口参考](references/warehouse.md) <br>
-- [领星FBA接口参考](references/fba.md) <br>
-- [领星多平台 V2 接口参考](references/multiplatform-v2.md) <br>
-- [领星多平台广告接口参考](references/multiplatform-ads.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist full ERP responses to local files when the response I/O helper is used; users should clean up saved files after use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The security evidence flags under-disclosed LinkFox login, API-key, and payment flows in addition to Lingxing ERP querying.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when LinkFox is intentionally trusted, and review the LinkFox onboarding and billing scripts before using any SMS, API-key, plan, or payment workflow.
+
+Risk: The skill can persist Lingxing tokens, QR/payment files, and large ERP responses locally.
+
+Mitigation: Keep generated files outside source repositories, remove cached tokens, QR files, and persisted ERP response files after use, and avoid committing output that may contain PII, pricing, or credential-sensitive data.
+
+Risk: Endpoint override environment variables and API credentials affect where requests are sent and what account data can be accessed.
+
+Mitigation: Control endpoint override environment variables, scope Lingxing credentials to the minimum needed permissions, and follow Lingxing IP allowlist and credential-rotation practices.
+
+## Reference(s):
+
+- [Lingxing OpenAPI host](https://openapi.lingxing.com)
+- [API usage overview](references/api.md)
+- [Product APIs](references/product.md)
+- [Advertising base data APIs](references/basedata.md)
+- [Advertising report APIs](references/newad-report.md)
+- [Sales operations APIs](references/sale-ops.md)
+- [Full sales APIs](references/sale-full.md)
+- [Finance APIs](references/finance.md)
+- [Statistics APIs](references/statistics.md)
+- [FBA APIs](references/fba.md)
+- [Amazon source data APIs](references/sourcedata.md)
+- [Warehouse APIs](references/warehouse.md)
+- [Customer service APIs](references/service.md)
+- [Onboarding and billing flow notes](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, API calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May persist large ERP responses to local files for later field extraction; persisted files may contain sensitive business data and are not automatically deleted.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

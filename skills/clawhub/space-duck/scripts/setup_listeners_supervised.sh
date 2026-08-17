@@ -163,6 +163,16 @@ cmd_install() {
     warn "supervisord already running (PID $(cat "$SUP_PID")) — use --restart to bounce, or --status to inspect"
     exit 0
   fi
+  # [HARDEN-071] The pidfile guard alone races: two same-second invocations
+  # (e.g. heal path + manual start) each see no pidfile and both launch a
+  # daemon on the same conf/socket (field incident: dual supervisord PIDs
+  # 519/521, listener crash-loop on :8788). Also catch pidfile-less daemons.
+  local other_sup
+  other_sup="$(pgrep -f "supervisord.*${SUP_CONF}" 2>/dev/null || true)"
+  if [[ -n "$other_sup" ]]; then
+    warn "A supervisord using $SUP_CONF is already running (PID(s): $other_sup) but the pidfile is missing/stale."
+    die "Refusing to start a second daemon. Kill it first (kill -TERM $other_sup) or use --restart."
+  fi
   # Stale PID file? Clean up.
   rm -f "$SUP_PID" "$SUP_SOCK"
 
@@ -170,10 +180,16 @@ cmd_install() {
   local pre_existing
   pre_existing="$(pgrep -fa 'telegram_listener\.py\|peck_listener\.py' 2>/dev/null | grep -v supervisord || true)"
   if [[ -n "$pre_existing" ]]; then
-    warn "Found existing listener processes — supervisord will spawn alongside, you may have duplicates:"
+    # [HARDEN-071] duplicates restart-loop on 'Address already in use'
+    # and flood the .err logs — abort instead of spawning alongside.
+    warn "Found existing listener processes — installing supervisord alongside WILL create duplicates:"
     echo "$pre_existing" | sed 's/^/    /'
-    warn "Stop them first with: pkill -f 'telegram_listener.py|peck_listener.py'"
-    info "Continuing anyway (idempotency)..."
+    warn "Stop them first: pkill -f 'telegram_listener.py|peck_listener.py'"
+    if [[ "${SPACEDUCK_ALLOW_DUP_LISTENERS:-}" == "1" ]]; then
+      warn "SPACEDUCK_ALLOW_DUP_LISTENERS=1 set — continuing anyway."
+    else
+      die "Aborting to avoid duplicate listeners (set SPACEDUCK_ALLOW_DUP_LISTENERS=1 to override)."
+    fi
   fi
 
   # Write supervisord config

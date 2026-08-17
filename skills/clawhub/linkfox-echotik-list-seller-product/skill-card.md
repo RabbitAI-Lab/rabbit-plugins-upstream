@@ -1,45 +1,58 @@
-## Description: <br>
-Queries a TikTok Shop seller's EchoTik product list by sellerId and returns product titles, prices, sales and GMV metrics, ratings, reviews, commissions, listing dates, sales channels, and categories. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lists the in-store products for a TikTok Shop seller by sellerId and returns product-level sales, GMV, price, rating, review, commission, listing, channel, and category metrics.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketers, and e-commerce analysts use this skill to inspect a known TikTok Shop store's active product catalog and compare product performance by sales, GMV, price, reviews, and commission rate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends sellerId queries, API credentials, and session/application metadata to LinkFox services. <br>
-Mitigation: Confirm this data sharing is acceptable before installation, keep the LinkFox API key in environment variables, and avoid placing credentials or sensitive seller context in prompts or logs. <br>
-Risk: Calls consume LinkFox credits and repeated pagination or retries can increase cost. <br>
-Mitigation: Confirm cost expectations before high-volume use, prefer the built-in cache for repeated identical queries, and ask before making extra paid calls. <br>
-Risk: Full API responses are written locally, and scanner guidance notes review-worthy storage behavior. <br>
-Mitigation: Run the skill from an appropriate writable workspace, review saved `linkfox/` response and cache files for sensitive data, and delete retained outputs when they are no longer needed. <br>
-Risk: The artifact includes an automatic feedback API path that can transmit user feedback content to LinkFox. <br>
-Mitigation: Review feedback content before sending it and avoid including secrets, private business data, or unrelated user context. <br>
+## Use Case:
 
+Cross-border e-commerce sellers, marketers, and analysts use this skill to inspect a known TikTok Shop seller's current product catalog and compare product performance by sales, GMV, price, rating, reviews, commission, channel, and category.
 
-## Reference(s): <br>
-- [EchoTik seller product API reference](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-list-seller-product) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Files, Guidance] <br>
-**Output Format:** [JSON response saved to a local file, with either full JSON or a concise stdout summary for large responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a sellerId and a LinkFox API key; pageSize must be a multiple of 10 up to 100; calls consume LinkFox credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill calls LinkFox/EchoTik services with an API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain and manage API keys directly through the provider, scope them to the intended workflow, and avoid sharing saved outputs that may expose business analytics.
+
+Risk: The bundled onboarding flow can support phone/SMS login and payment-order steps.
+
+Mitigation: Confirm account recovery and any paid action with the user before creating orders or transmitting phone-based login details.
+
+Risk: Full seller product results are persisted locally in the workspace.
+
+Mitigation: Run the skill only in a workspace where saved seller analytics and cache files are acceptable, and remove local result files when they are no longer needed.
+
+## Reference(s):
+
+- [EchoTik Seller Product API Reference](artifact/references/api.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, shell commands, configuration]
+
+**Output Format:** [Markdown summaries and tables, JSON API responses, saved JSON files, and shell commands for API access or account setup]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full responses are saved under a local linkfox data directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -6,6 +6,8 @@ from decimal import Decimal, ROUND_HALF_UP
 from typing import Optional
 from zoneinfo import ZoneInfo
 
+from .estimate_frame_contract import estimate_frame_available
+
 
 def beijing_date_string() -> str:
     return datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d")
@@ -19,6 +21,38 @@ def normalize_observed_day(value, *, today: str | None = None) -> str:
         return ""
     normalized = parsed.isoformat()
     return normalized if normalized <= (today or beijing_date_string()) else ""
+
+
+_MISSING = object()
+
+
+def parse_confirm_days(value) -> int | None:
+    """Parse the same integer 1..30 settlement contract used by the App."""
+    if isinstance(value, bool) or value is None:
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(number) or not number.is_integer():
+        return None
+    parsed = int(number)
+    return parsed if 1 <= parsed <= 30 else None
+
+
+def _estimate_confirm_days(fund: dict, estimate: dict) -> int | None:
+    candidate = _MISSING
+    for source, keys in (
+        (estimate, ("confirm_days", "confirmDays")),
+        (fund, ("confirmDays", "confirm_days")),
+    ):
+        for key in keys:
+            if key in source and source[key] is not None:
+                candidate = source[key]
+                break
+        if candidate is not _MISSING:
+            break
+    return 1 if candidate is _MISSING else parse_confirm_days(candidate)
 
 
 def resolve_official_attribution_date(fund: dict, estimate: dict) -> str:
@@ -50,15 +84,7 @@ def resolve_official_attribution_date(fund: dict, estimate: dict) -> str:
     if display_date >= nav_date:
         return display_date
 
-    try:
-        confirm_days = int(
-            estimate.get("confirm_days")
-            or estimate.get("confirmDays")
-            or fund.get("confirmDays")
-            or 1
-        )
-    except (TypeError, ValueError):
-        confirm_days = 1
+    confirm_days = _estimate_confirm_days(fund, estimate)
     if confirm_days == 1:
         return nav_date
 
@@ -234,15 +260,94 @@ def calc_change_profit(shares: float, base_nav: float, change_percent, current_n
     return r2(shares * base_nav * percent / 100)
 
 
+def uses_official_change_fallback(base_nav: float, change_percent, current_nav) -> bool:
+    """Whether the official percentage is a total-return adjustment, not raw NAV movement."""
+    if not math.isfinite(base_nav) or base_nav <= 0:
+        return False
+    percent = (
+        to_float(str(change_percent).replace("%", ""), float("nan"))
+        if change_percent is not None and not isinstance(change_percent, bool)
+        else float("nan")
+    )
+    nav = to_float(current_nav, float("nan"))
+    if not math.isfinite(percent) or not math.isfinite(nav) or nav <= 0:
+        return False
+    return abs(((nav - base_nav) / base_nav) * 100 - percent) > 0.05
+
+
+def transaction_amount_on_date(transactions: list[dict], transaction_type: str, target_date: str) -> float:
+    if not target_date:
+        return 0.0
+    total = 0.0
+    for transaction in transactions:
+        if (
+            transaction.get("status") == "CONFIRMED"
+            and transaction.get("type") == transaction_type
+            and tx_effective_date(transaction) == target_date
+        ):
+            total = r2(total + to_float(transaction.get("amount")))
+    return total
+
+
+def reinvested_shares_on_date(transactions: list[dict], target_date: str) -> float:
+    if not target_date:
+        return 0.0
+    total = 0.0
+    for transaction in transactions:
+        if (
+            transaction.get("status") != "CONFIRMED"
+            or transaction.get("type") != "DIVIDEND_REINVEST"
+            or tx_effective_date(transaction) != target_date
+        ):
+            continue
+        shares = to_float(transaction.get("shares"))
+        if shares <= 0:
+            amount = to_float(transaction.get("amount"))
+            nav = to_float(transaction.get("nav"))
+            shares = amount / nav if amount > 0 and nav > 0 else 0.0
+        total = r6(total + shares)
+    return total
+
+
+def resolve_official_valuation_anchor(fund: dict, estimate: dict) -> dict:
+    """Choose the newest observed official NAV without treating an estimate as official."""
+    today = beijing_date_string()
+    snapshot_nav = to_float(fund.get("lastNav"))
+    snapshot_date = normalize_observed_day(fund.get("lastNavDate"), today=today)
+    live_nav = to_float(estimate.get("dwjz"))
+    live_date = normalize_observed_day(
+        estimate.get("last_nav_date") or estimate.get("lastNavDate"),
+        today=today,
+    )
+
+    use_live = live_nav > 0 and bool(live_date) and (
+        not snapshot_date or live_date >= snapshot_date
+    )
+    if use_live:
+        return {
+            "nav": live_nav,
+            "date": live_date,
+            "source": "market_official_anchor",
+            "freshened": not snapshot_date or live_date > snapshot_date or live_nav != snapshot_nav,
+            "snapshot_date": snapshot_date,
+        }
+    return {
+        "nav": snapshot_nav if snapshot_nav > 0 else 0.0,
+        "date": snapshot_date,
+        "source": "portfolio_snapshot" if snapshot_nav > 0 else "unavailable",
+        "freshened": False,
+        "snapshot_date": snapshot_date,
+    }
+
+
 def calc_fund_stats(fund: dict, estimate: Optional[dict] = None) -> dict:
     has_current_estimate = isinstance(estimate, dict) and bool(estimate)
     estimate = estimate if isinstance(estimate, dict) else {}
     shares = to_float(fund.get("holdingShares"))
     safe_shares = shares if shares > 0 else 0.0
     cost_per_share = to_float(fund.get("holdingCost"))
-    official_nav = to_float(fund.get("lastNav"))
-    if official_nav <= 0:
-        official_nav = 0.0
+    valuation_anchor = resolve_official_valuation_anchor(fund, estimate)
+    official_nav = valuation_anchor["nav"]
     valuation_available = official_nav > 0
 
     fallback_cost_total = r2(safe_shares * cost_per_share) if safe_shares > 0 and cost_per_share > 0 else 0.0
@@ -275,7 +380,7 @@ def calc_fund_stats(fund: dict, estimate: Optional[dict] = None) -> dict:
     holding_return_rate = ratio_pct(holding_profit, cost_total) if valuation_available else None
 
     source = (
-        str(estimate.get("source") or fund.get("source") or "")
+        str(estimate.get("source") or "")
         if has_current_estimate
         else "unavailable"
     )
@@ -284,72 +389,107 @@ def calc_fund_stats(fund: dict, estimate: Optional[dict] = None) -> dict:
         if source == "official_published"
         else ""
     )
-    unavailable_sources = {"reset", "timeout", "unavailable"}
     current_estimated_nav = to_float(estimate.get("estimatedNav") or estimate.get("nav"))
     current_previous_nav = to_float(estimate.get("prev_dwjz") or estimate.get("prevNav"))
     current_change_percent = estimate.get("estimatedChangePercent")
     if current_change_percent is None:
         current_change_percent = estimate.get("gszzl")
-    parsed_change_percent = (
-        to_float(str(current_change_percent).replace("%", ""), float("nan"))
-        if current_change_percent is not None and not isinstance(current_change_percent, bool)
-        else float("nan")
+    estimate_freshness = str(
+        estimate.get("freshness")
+        or ("stale" if estimate.get("stale") is True else "")
+        or ""
+    ).strip().lower()
+    stale_frame = source != "official_published" and (
+        estimate.get("stale") is True
+        or estimate.get("estimateStale") is True
+        or estimate_freshness == "stale"
     )
-    has_valid_change_percent = math.isfinite(parsed_change_percent)
-    estimate_available = has_current_estimate and source not in unavailable_sources and (
-        current_previous_nav > 0
-        and (current_estimated_nav > 0 or has_valid_change_percent)
-    )
+    estimate_available = has_current_estimate and estimate_frame_available(estimate)
     displayed_day_attributable = estimate_available and (
         source != "official_published" or bool(official_attribution_date)
     )
-    estimated_nav = current_estimated_nav or to_float(fund.get("estimatedNav"))
+    estimated_nav = current_estimated_nav
     if estimated_nav <= 0:
         estimated_nav = 0.0
     estimated_change_percent = (
         current_change_percent
         if current_change_percent is not None
-        else fund.get("estimatedChangePercent")
+        else None
     )
-    estimate_freshness = str(
-        estimate.get("freshness")
-        or ("stale" if estimate.get("stale") is True else "")
-        or (fund.get("estimateFreshness") if has_current_estimate else "")
-        or ""
+    estimate_stale = stale_frame
+    estimate_display_date = normalize_observed_day(
+        estimate.get("display_date") or estimate.get("displayDate")
     )
-    estimate_stale = estimate_available and (
-        estimate.get("stale") is True or estimate_freshness == "stale"
+    target_nav_date = normalize_observed_day(
+        estimate.get("target_nav_date") or estimate.get("targetNavDate")
     )
-    today_profit = (
+    latest_official_nav_date = normalize_observed_day(
+        estimate.get("last_nav_date")
+        or estimate.get("lastNavDate")
+        or fund.get("lastNavDate")
+    )
+    last_nav_publish_date = normalize_observed_day(
+        estimate.get("last_nav_publish_date")
+        or estimate.get("lastNavPublishDate")
+        or fund.get("lastNavPublishDate")
+    )
+    effective_date = (
+        official_attribution_date
+        if source == "official_published"
+        else estimate_display_date
+        or normalize_observed_day(fund.get("displayDate"))
+        or beijing_date_string()
+    )
+    dividend_event_date = (
+        normalize_observed_day(
+            estimate.get("last_nav_date")
+            or estimate.get("lastNavDate")
+            or fund.get("lastNavDate")
+        )
+        if source == "official_published"
+        else effective_date
+    )
+    cash_dividend_today = (
+        transaction_amount_on_date(transactions, "DIVIDEND_CASH", dividend_event_date)
+        if displayed_day_attributable
+        else 0.0
+    )
+    reinvested_shares_today = (
+        reinvested_shares_on_date(transactions, dividend_event_date)
+        if displayed_day_attributable
+        else 0.0
+    )
+    official_fallback = displayed_day_attributable and uses_official_change_fallback(
+        current_previous_nav,
+        current_change_percent,
+        current_estimated_nav,
+    )
+    market_shares = (
+        max(0.0, r6(safe_shares - reinvested_shares_today))
+        if official_fallback
+        else safe_shares
+    )
+    market_day_profit = (
         0.0
         if source == "reset" or not displayed_day_attributable
         else calc_change_profit(
-            safe_shares,
+            market_shares,
             current_previous_nav,
             current_change_percent,
             current_estimated_nav,
         )
     )
+    today_profit = r2(market_day_profit + (0.0 if official_fallback else cash_dividend_today))
     day_base_market_value = (
-        r2(safe_shares * current_previous_nav)
-        if displayed_day_attributable and safe_shares > 0 and current_previous_nav > 0
+        r2(market_shares * current_previous_nav)
+        if displayed_day_attributable and market_shares > 0 and current_previous_nav > 0
         else 0.0
     )
-
-    effective_date = (
-        official_attribution_date
-        if source == "official_published"
-        else estimate.get("display_date") or fund.get("displayDate") or beijing_date_string()
+    estimated_market_value = (
+        r2(safe_shares * estimated_nav)
+        if estimate_available and estimated_nav > 0
+        else None
     )
-    cash_dividend_today = 0.0
-    for transaction in transactions:
-        if (
-            transaction.get("status", "") == "CONFIRMED"
-            and transaction.get("type", "") == "DIVIDEND_CASH"
-            and (transaction.get("confirmDate") or transaction.get("date")) == effective_date
-        ):
-            cash_dividend_today = r2(cash_dividend_today + to_float(transaction.get("amount")))
-    today_profit = r2(today_profit + cash_dividend_today)
     return {
         "marketValue": market_value,
         "currentMarketValue": market_value,
@@ -367,12 +507,30 @@ def calc_fund_stats(fund: dict, estimate: Optional[dict] = None) -> dict:
         "dayBaseMarketValue": day_base_market_value,
         "currentNav": official_nav,
         "lastNav": official_nav if official_nav > 0 else None,
+        "valuationNavDate": valuation_anchor["date"] or None,
+        "portfolioSnapshotNavDate": valuation_anchor["snapshot_date"] or None,
+        "valuationSource": valuation_anchor["source"],
+        "valuationFreshenedFromMarketData": valuation_anchor["freshened"],
         "valuationAvailable": valuation_available,
-        "estimatedNav": estimated_nav if estimated_nav > 0 else None,
-        "estimatedChangePercent": estimated_change_percent,
+        "estimatedMarketValue": estimated_market_value,
+        "estimatedNav": estimated_nav if estimate_available and estimated_nav > 0 else None,
+        "estimatedChangePercent": estimated_change_percent if estimate_available else None,
         "displayedDayAttributable": displayed_day_attributable,
         "estimateSource": source,
         "estimateAvailable": estimate_available,
         "estimateFreshness": estimate_freshness or None,
         "estimateStale": estimate_stale,
+        # Date roles are deliberately separate: target/latest NAV are D days;
+        # returnAttributionDate is the reliable user-visible G day.
+        "estimateDisplayDate": (
+            effective_date
+            if estimate_available and effective_date
+            else None
+        ),
+        "targetNavDate": target_nav_date or None,
+        "latestOfficialNavDate": latest_official_nav_date or None,
+        "lastNavPublishDate": last_nav_publish_date or None,
+        "returnAttributionDate": (
+            effective_date if displayed_day_attributable else None
+        ),
     }

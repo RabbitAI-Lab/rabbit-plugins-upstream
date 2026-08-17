@@ -1,46 +1,59 @@
-## Description: <br>
-Conducts cross-border ecommerce keyword research and produces structured SEO placement reports for Amazon, Shopify, and TikTok Shop through Yufluent's cloud service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates cloud-backed cross-border ecommerce keyword research and SEO placement reports for Amazon, Shopify, and TikTok Shop.
 
-## Publisher: <br>
-[metahuan](https://clawhub.ai/user/metahuan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[metahuan](https://clawhub.ai/user/metahuan)
 
-## Use Case: <br>
-External sellers, ecommerce operators, and agents use this skill to turn product details, seed keywords, competitor terms, market, language, and platform choices into SEO keyword and placement reports for Amazon, Shopify, or TikTok Shop. Reports are intended for human review against seller platform data before publication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product details and keyword inputs are sent to Yufluent's cloud service using TOKENAPI_KEY. <br>
-Mitigation: Review data-sharing expectations before use and avoid sending confidential product information unless the deployment policy permits it. <br>
-Risk: TOKENAPI_KEY is required for cloud execution and could be exposed if committed or shared. <br>
-Mitigation: Keep the key private, use environment variables or a local .env file, and do not commit secrets to source control. <br>
-Risk: SEO placement reports may be misleading if applied without platform-specific validation. <br>
-Mitigation: Human reviewers should compare recommendations with Brand Analytics, ad search terms, Shopify Search, or other seller platform data before publishing listings. <br>
-Risk: Dependency hygiene can drift for the requests package in controlled deployments. <br>
-Mitigation: Pin or update requests to a reviewed patched version as part of deployment review. <br>
+## Use Case:
 
+External ecommerce sellers and agents use this skill to collect product, market, platform, and seed keyword details and request structured SEO keyword reports for listing placement across Amazon, Shopify, and TikTok Shop.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/metahuan/skills/yufluentcn-seo-pro) <br>
-- [Yufluent console](https://claw.changzhiai.com) <br>
-- [Yufluent OpenClaw guide](https://claw.changzhiai.com/app/openclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [JSON SEO reports with optional saved files and explanatory Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires TOKENAPI_KEY; sends product and keyword inputs to Yufluent's cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.3 (source: server release metadata) <br>
+Risk: Product, market, platform, and keyword inputs are sent to the Yufluent cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with data approved for that service and avoid including confidential product plans or customer data in prompts.
+
+Risk: Generated SEO keyword recommendations may be incomplete, misleading, or unsuitable for a specific marketplace policy.
+
+Mitigation: Review the report against seller analytics, advertising search terms, platform rules, and product facts before publishing listing changes.
+
+Risk: The skill requires a Yufluent TOKENAPI_KEY.
+
+Mitigation: Store the token in an environment variable or managed secret store, keep it out of shared artifacts, and rotate it if exposed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/metahuan/skills/yufluentcn-seo-pro)
+- [Yufluent SEO Pro homepage](https://www.changzhiai.com/skills/seo-pro)
+- [OpenClaw integration](https://claw.changzhiai.com/app/openclaw)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Structured JSON report, optionally saved to a file, with concise guidance for human review.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires TOKENAPI_KEY and sends product, market, platform, and keyword inputs to the Yufluent cloud service.]
+
+## Skill Version(s):
+
+1.2.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,65 @@
-## Description: <br>
-Book hotels with live prices and availability, including destination or hotel search, room-rate comparison, availability checks, reservations, booking lookup or cancellation, and WeChat Pay or Alipay payment initiation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and book hotels with live room rates and real-time availability, including property comparison, room and policy review, reservation creation, order management, cancellation, and payment by Stripe, WeChat Pay, or Alipay.
 
-## Publisher: <br>
-[tourmind](https://clawhub.ai/user/tourmind) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[tourmind](https://clawhub.ai/user/tourmind)
 
-## Use Case: <br>
-External users use this skill when they explicitly want to search live hotel inventory, compare rates, create or manage a reservation, cancel a booking, or initiate payment. The agent should collect location, check-in date, check-out date, and guest count before making API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores and reuses a persistent user_key.txt while sending authentication and booking details to a plain HTTP API. <br>
-Mitigation: Use only in a private environment, avoid shared machines, and delete user_key.txt when finished or when switching users. <br>
-Risk: Live booking workflows or evals can create reservations, cancellations, or payment flows. <br>
-Mitigation: Run booking actions only after explicit user intent and confirmation, and do not run evals against a live account unless real reservations are intended. <br>
-Risk: Hotel prices, room availability, and cancellation fees can be wrong if stale or fabricated data is used. <br>
-Mitigation: Use only live API responses, verify price and availability before booking, and report exact API errors rather than substituting recommendations from memory. <br>
+## Use Case:
 
+External users and travel-focused agents use this skill to search hotels, compare live room rates and cancellation terms, verify availability, create reservations, manage bookings, and start payment workflows through TourMind.
 
-## Reference(s): <br>
-- [Hotel Booking AI Parameter Reference](references/parameter_guide.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/tourmind/skills/hotel-booking-ai) <br>
-- [AgentAuth Dashboard](https://aauth-170125614655.asia-northeast1.run.app/dashboard) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, API Calls, Guidance, Configuration] <br>
-**Output Format:** [Markdown or plain text with JSON API request and response handling] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include hotel options, live prices, booking references, cancellation status, payment links, and exact API errors.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: frontmatter and release evidence) <br>
+Risk: The skill may store a TourMind user_key.txt credential locally for booking, order, cancellation, and payment operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Installers should protect the local credential file, avoid committing it, and remove or refresh it when authorization fails or access is no longer needed.
+
+Risk: The security scan summary flags broad self-update authority from remote release sources.
+
+Mitigation: Avoid the in-skill self-update path unless the release source is independently verified, and review file changes before replacing an installed skill.
+
+Risk: Hotel rates, inventory, taxes, fees, and cancellation terms are time-sensitive and can change before booking.
+
+Mitigation: Use the skill's final availability and price verification step before creating a booking, and show only terms returned by TourMind APIs.
+
+Risk: Booking and payment actions can affect real reservations and charges.
+
+Mitigation: Require explicit user confirmation, guest legal name, contact email, selected room, checked rate, order identifier, and payment method before order or payment API calls.
+
+## Reference(s):
+
+- [Hotel Booking AI on ClawHub](https://clawhub.ai/tourmind/skills/hotel-booking-ai)
+- [TourMind publisher profile](https://clawhub.ai/user/tourmind)
+- [Hotel Booking AI ToC API and Field Reference](references/parameter_guide.md)
+- [TourMind Skill API](https://api.tourmind.com)
+- [TourMind AgentAuth dashboard](https://aauth-170125614655.asia-northeast1.run.app/dashboard)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown hotel recommendations, room details, booking status, payment links, and setup guidance with inline shell commands where needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include hotel and room images, live-price tables, cancellation summaries, read-only result links, order identifiers, and payment URLs.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata; artifact SKILL.md declares 1.0.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

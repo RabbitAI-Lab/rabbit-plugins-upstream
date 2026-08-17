@@ -23,9 +23,9 @@
 
 根据媒体与用户意图，选择 `report-templates/` 下对应的 `*.md`：
 
-| 意图                                                                                  | Google                                                                                             | Meta                                                                               | TikTok                    | Bing                    |
-| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------- | ----------------------- |
-| 周期分析 / 月报 / 周报                                                                | `google-period-report.md`                                                                          | `meta-period-report.md`                                                            | `tiktok-period-report.md` | `bing-period-report.md` |
+| 意图                                                                                  | Google                                                                                             | Meta                                                                               | TikTok                    | Bing                    | Yandex                      |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------- | ----------------------- | --------------------------- |
+| 周期分析 / 月报 / 周报                                                                | `google-period-report.md`                                                                          | `meta-period-report.md`                                                            | `tiktok-period-report.md` | `bing-period-report.md` | `yandex-period-report.md`   |
 | OKKI 周报 / 固定话术发客户（Google）                                                  | `okki-weekly-google-client.md`                                                                     | —                                                                                  | —                         | —                       |
 | **询盘分析** / 固定运营触发（Goog账户询盘分析 / 我给你询盘信息分析Google账号XXX效果） | `google-inquiry-analysis.md`（**严格 3 个月** + 用户上传询盘资料 + 8 Sheet xlsx；见 SKILL **P7**） | —                                                                                  | —                         | —                       |
 | 深度诊断 / 健康检查                                                                   | `google-account-diagnosis-report.md`                                                               | `meta-account-diagnosis-report.md`（`facebook-analysis diagnosis-render` 出 HTML） | 同周期，注明能力受限      | 同周期                  |
@@ -59,7 +59,7 @@
 
 ### 步骤 4：拉取数据
 
-- **`google-analysis` / `facebook-analysis` / `tiktok-analysis` / `bing-analysis` / `report …` 账户分析子命令**：统一 **`--json-out <目录>`** 落盘，再由脚本读 **`manifest-<accountId>.json` / `report-manifest-<accountId>.json`**（清单文件名见 stdout 摘要的 `manifestFile`）与各 **`<section>-<accountId>.json`**（见 `references/analytics/account-analytics.md`）。
+- **`google-analysis` / `facebook-analysis` / `tiktok-analysis` / `bing-analysis` / `yandex-analysis` / `report …` 账户分析子命令**：统一 **`--json-out <目录>`** 落盘，再由脚本读 **`manifest-<accountId>.json` / `report-manifest-<accountId>.json`**（清单文件名见 stdout 摘要的 `manifestFile`）与各 **`<section>-<accountId>.json`**（见 `references/analytics/account-analytics.md`）。
 - **`stats`、`ad campaigns` 等辅助命令**：按 `references/core/tips.md` 与各命令文档做结构化拉数。
 - 仅执行与**本次报告维度**对应的命令（默认 + 用户追加）。
 - 数据失败/缺失：在对应章节写 `[ 数据不可用：{原因} ]`，不写推测。
@@ -83,6 +83,7 @@
 - **Google 周期报告**：产出 `google-period-report.json`（见 `google-period-report.md`，仅 `meta` + `narrative` 为必填）。
 - **TikTok 周期报告**：产出 `tiktok-period-report.json`（见 `tiktok-period-report.md`，`meta` 可由 `--snapshot-dir` 自动合并）。
 - **Bing 周期报告**：产出 `bing-period-report.json`（见 `bing-period-report.md`，`meta`/`kpis` 可由 `--snapshot-dir` 自动合并）。
+- **Yandex 周期报告**：产出 `yandex-period-report.json`（见 `yandex-period-report.md`，`meta`/`kpis`/`tables` 可由 `--snapshot-dir` 自动合并）。
 - **其余场景**（OKKI、询盘等未接入 render 的模板）：可直接组织 Markdown/HTML 正文。
 
 ### 步骤 5b：生成终稿（按媒体与格式）
@@ -94,6 +95,7 @@
 | **Google 周期报告**       | `google-analysis render` → **HTML**（必做）                       | **周期/定制 Sheet**：`google-period-report-excel.md`（P4，先 outline 后脚本）；**不**默认 `render` |
 | **TikTok 周期报告**       | `tiktok-analysis render` → **HTML**（必做）                       | Agent 脚本写 xlsx；**不**默认 `render`                                                             |
 | **Bing 周期报告**         | `bing-analysis render` → **HTML**（必做）                         | Agent 脚本写 xlsx；**不**默认 `render`                                                             |
+| **Yandex 周期报告**       | `yandex-analysis render` → **HTML**（必做）                       | Agent 脚本按 `yandex-period-report-excel.md` 写 xlsx；**不**默认 `render`                          |
 | **Google 诊断/OKKI/询盘** | 按 `report-template*.html` 写 HTML（默认 `report-template.html`） | **诊断**：同左；**OKKI**：P6；**询盘**：P7                                                         |
 | **网站诊断**              | `website-diagnosis render` → HTML                                 | —                                                                                                  |
 

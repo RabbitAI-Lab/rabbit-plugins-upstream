@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/lance-format",
   "slug": "lance-format",
   "ownerHandle": null,
-  "version": "0.11.1",
-  "updatedAt": 1784746200796,
-  "contentHash": "49cb8f841d25328e71fb11692091a75478f1ed7111f6ee42767fd0b34b9d2779",
-  "fetchedAt": "2026-07-26T18:07:49.761Z"
+  "version": "0.15.0",
+  "updatedAt": 1786534919450,
+  "contentHash": "308f93b2144cf66d098292c523fe4e1d4757387a32d213bf8c3de3a8d34db852",
+  "fetchedAt": "2026-08-17T08:45:50.254Z"
 }

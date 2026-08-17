@@ -1,49 +1,67 @@
-## Description: <br>
-Fix Plan helps agents maintain fix_plan.md and checklist.md trackers, including item schema, priority triage, deferred plan stubs, GitHub state sync, completed-item archiving, and issue draft lifecycle cleanup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages fix_plan.md and checklist.md schemas, lifecycle steps, priority and blocker triage, sync, archival, and completion criteria for agent work trackers.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to keep project tracker files compact, structured, and synchronized with GitHub issue and pull request state. It is intended for task-list housekeeping, deferred plan capture, completed-work archiving, and issue draft cleanup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Cleanup flows can rewrite fix_plan.md or checklist.md and archive or delete tracker entries. <br>
-Mitigation: Use explicit tracker paths, run cleanup with --dry-run first, and review the backup and resulting diff before accepting archive or delete flows. <br>
-Risk: Archive and RAG receiver flows can store detailed work history, operational metadata, or sensitive tracker content outside the active file. <br>
-Mitigation: Enable only trusted --archive or --rag receivers, and redact secrets, private logs, and sensitive incident details before dispatch. <br>
-Risk: GitHub sync can change tracker item state based on gh CLI results. <br>
-Mitigation: Run sync against the intended repository with an authenticated gh session and review the sync report before committing tracker updates. <br>
+## Use Case:
 
+Developers and agent operators use this skill to keep fix_plan.md and checklist.md trackers structurally consistent, synchronized with external issue state, and cleanly archived as work completes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/fix-plan) <br>
-- [Skill overview](artifact/SKILL.md) <br>
-- [Format guide](artifact/format.md) <br>
-- [Priority guide](artifact/priority.md) <br>
-- [Move and archive guide](artifact/move.md) <br>
-- [GitHub sync guide](artifact/sync.md) <br>
-- [Issue drafts lifecycle](artifact/issue-drafts.md) <br>
-- [Changelog](artifact/CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with tracker edits and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update local tracker files and archive completed or draft entries when invoked with the documented cleanup flows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.3 (source: server release metadata and CHANGELOG.md, released 2026-07-23) <br>
+Risk: The skill can edit and archive tracker files automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review target tracker paths before running mutation topics, use documented dry-run or backup paths where available, and inspect archive output before relying on cleanup results.
+
+Risk: The skill may query GitHub or Plane and can expose issue or task metadata through those integrations.
+
+Mitigation: Run sync only in workspaces where those external trackers are approved, and verify the relevant credentials and tracker URLs before use.
+
+Risk: Configured RAG or vector routing may send detailed task bodies outside the active tracker.
+
+Mitigation: Enable RAG dispatch only with an approved receiver and avoid it for sensitive markdown artifacts unless the destination is authorized.
+
+Risk: Credential-output helper paths and workspace profile JSON can surface sensitive environment-derived details.
+
+Mitigation: Avoid running workspace_profile.py --json in sensitive environments and keep Plane tokens out of shared logs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/fix-plan)
+- [CHANGELOG.md](artifact/CHANGELOG.md)
+- [format.md](artifact/format.md)
+- [priority.md](artifact/priority.md)
+- [sync.md](artifact/sync.md)
+- [move.md](artifact/move.md)
+- [completion-criteria.md](artifact/completion-criteria.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline commands and optional file edits]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May edit tracker files, archive completed entries, and report synchronized issue state when invoked with the relevant topic.]
+
+## Skill Version(s):
+
+0.6.2 (source: server release metadata and changelog, released 2026-08-12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

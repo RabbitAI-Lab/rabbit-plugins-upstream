@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# 缓存和输出
+cache/
+html/
+
+# 含密钥的配置已加密, 可安全提交
+# config.yaml
+
+# OS
+.DS_Store
+Thumbs.db

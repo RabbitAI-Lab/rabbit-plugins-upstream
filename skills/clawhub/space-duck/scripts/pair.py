@@ -358,6 +358,40 @@ def _poll_until_bound(code):
     sys.exit(1)
 
 
+def _ask_auto_update_consent():
+    """[AUTOUP-075] One-time consent for automatic skill updates.
+
+    "auto"  — the duck self-updates when Spaceduckling ships a new skill
+              version (daily version check + update-trigger pecks).
+    "ask"   — default: owner gets a notification and updates manually.
+
+    Env override for non-interactive installs: SPACEDUCK_AUTO_UPDATE=auto|ask.
+    Consent lives only in the duck's local config.json — the platform never
+    sets it and never executes on this box.
+    """
+    env = (os.environ.get('SPACEDUCK_AUTO_UPDATE') or '').strip().lower()
+    if env in ('auto', 'ask'):
+        return env
+    # [AUTOUP-077] Re-pair must not silently reset a prior consent choice:
+    # keep the existing auto_update value when one is already on disk.
+    for d in _writable_dirs():
+        try:
+            prior = json.loads((d / 'config.json').read_text())
+            prev = str(prior.get('auto_update') or '').lower()
+            if prev in ('auto', 'ask'):
+                return prev
+        except (OSError, ValueError):
+            continue
+    if not sys.stdin.isatty():
+        return 'ask'
+    try:
+        ans = input('🦆 Approve automatic skill updates from Spaceduckling? '
+                    '[y/N] ').strip().lower()
+    except (EOFError, KeyboardInterrupt):
+        return 'ask'
+    return 'auto' if ans in ('y', 'yes') else 'ask'
+
+
 def _write_config(bound, webhook_url, workspace_dir=''):
     # 2026-05-17 — capture workspace_dir at pair time so sync.py
     # defaults to the agent's actual working directory instead of cwd
@@ -376,6 +410,7 @@ def _write_config(bound, webhook_url, workspace_dir=''):
         'api_base': API_BASE,
         'openclaw_webhook_url': webhook_url or bound.get('webhook_url', ''),
         'workspace_dir': workspace_dir,
+        'auto_update': _ask_auto_update_consent(),  # [AUTOUP-075]
     }
     body = json.dumps(config, indent=2)
     written = []

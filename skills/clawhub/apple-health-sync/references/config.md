@@ -15,6 +15,7 @@ Required local state:
 - `config/config.json` is created by `scripts/onboarding.py`.
 - Protocol `v4` uses `config/secrets/private_key.pem`.
 - Protocol `v5` uses `config/secrets/signing_private_key_v5.pem` and `config/secrets/encryption_private_key_v5.pem`.
+- `onboarding.py --rotate` archives the current identity under `config/key-backups/<UTC timestamp>/`, then always creates new keys and a new user ID. Keeping the previous user ID during rotation is not supported.
 
 Legacy note:
 
@@ -84,6 +85,12 @@ Typical user config fields:
   "json_path": "/Users/<user>/.apple-health-sync/config/health_data.ndjson",
   "qr_payload_path": "/Users/<user>/.apple-health-sync/config/registration-qr.json",
   "qr_png_path": "/Users/<user>/.apple-health-sync/config/registration-qr.png",
+  "last_rotation_at": "<UTC timestamp>",
+  "last_rotation_backup_path": "/Users/<user>/.apple-health-sync/config/key-backups/<UTC timestamp>",
+  "last_fetch_attempt_at": "<UTC timestamp>",
+  "last_fetch_success_at": "<UTC timestamp>",
+  "last_unlink_attempt_at": "<UTC timestamp>",
+  "last_unlink_success_at": "<UTC timestamp>",
   "last_validation_raw_days": 7,
   "last_validation_stored_days": 7,
   "last_validation_dropped_days": 0
@@ -98,6 +105,27 @@ Protocol behavior:
 - `v4` keeps the legacy RSA keypair and RSA-OAEP encrypted server rows.
 - `v5` uses Ed25519 for challenge signatures and X25519 + ChaCha20-Poly1305 for encrypted day payloads.
 - `fetch_health_data.py` can read mixed history: legacy RSA rows from the old tables plus `v5` rows from `*_v2`.
+
+## Rotation backups
+
+`onboarding.py --rotate` creates a private identity archive before replacing any keys. The archive contains:
+
+- the previous `config.json` and legacy `runtime.json` when present;
+- all recognized RSA, Ed25519, and X25519 public/private key files that exist;
+- the previous QR JSON/PNG artifacts when present;
+- a manifest with the previous and replacement user IDs, protocol version, fingerprint, file list, and SHA-256 checksums.
+
+The backup directory uses mode `0700`; every archived file uses `0600`, including public keys, because the archive also contains private identity material. A configured identity must have its complete protocol-specific key set before rotation. Missing required artifacts or any copy-verification failure aborts rotation. Backups are never pruned automatically.
+
+Rotation always starts a new server identity. Existing encrypted rows remain bound to the archived user ID and require the archived encryption private key. The active SQLite database is retained and may therefore continue to contain locally decrypted rows for previous user IDs.
+
+## Operation timestamps
+
+- `last_fetch_attempt_at` and `last_unlink_attempt_at` record the most recent invocation, including failed calls.
+- `last_fetch_success_at` and `last_unlink_success_at` change only after a successful operation.
+- Deprecated `last_fetch_at` and `last_unlink_at` remain as success-only compatibility aliases.
+- `last_fetch_status`, `last_fetch_error`, `last_unlink_status`, and `last_unlink_error` describe the most recent attempt.
+- On the next operation, a legacy `last_*_at` value is migrated to `last_*_success_at` only when its stored status is `ok`; an error-associated legacy timestamp is discarded because no successful time can be inferred from it.
 
 ## Storage behavior
 
@@ -121,6 +149,9 @@ Protocol behavior:
 - Drop all string values to prevent persisted prompt-style instructions
 - Enforce depth, node, list, dict, and payload-size limits
 - Accept the `workouts[*].heart_rate_samples` array through a dedicated strict validator; each point contains only `start_offset_ms`, `end_offset_ms`, and `bpm`, and valid arrays are never silently truncated at the generic 512-item limit
+- Accept `workout_timing`, `workout_events`, `speed_samples`, and `distance_intervals` only through dedicated all-or-nothing validators with fixed fields, enumerated event/source values, finite numbers, and valid time ranges; always discard the retired `workout_activities` field
+- Accept `workouts[*].route_points` only through a dedicated all-or-nothing validator; coordinates must be in range and optional altitude, accuracy, speed, and course values must be finite and valid
+- Permit up to 65,536 points in each high-resolution workout series; oversized or malformed series are rejected instead of partially truncated
 - Merge overlapping v5 scopes with `history` as the base and `recent` winning per day category
 - Fail closed when all decrypted day payloads are rejected
 

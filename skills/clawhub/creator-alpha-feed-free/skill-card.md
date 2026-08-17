@@ -1,43 +1,57 @@
-## Description: <br>
-Creator Alpha Feed Free helps AI content creators collect AI-related X feed content, rank useful items, and write a daily Markdown report into an Obsidian vault. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+每日采集 X 平台 AI 内容，进行基础三档排名，并将选题日报写入 Obsidian，适合个人创作者快速发现内容选题。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Personal AI content creators use this skill to gather recent AI-related X posts from a home feed, whitelist accounts, and keyword searches, then generate ranked daily topic material in Obsidian. It is suited to recurring content discovery and lightweight archiving workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may operate through a logged-in X browser session and collect feed-derived content into local reports. <br>
-Mitigation: Run it only with a browser session and feed sources you trust, and review collected content and links before relying on the report. <br>
-Risk: The skill writes generated reports to a local Obsidian vault path. <br>
-Mitigation: Use only a vault path you are comfortable writing to, confirm the configured directory before execution, and keep backups for important notes. <br>
-Risk: Providing callback_url can send completion information to an external endpoint. <br>
-Mitigation: Leave callback_url unset unless you fully trust and control the destination endpoint. <br>
+## Use Case:
 
+External personal creators and content operators use this skill to collect AI-related X posts, rank promising items, and maintain an Obsidian daily idea archive.
 
-## Reference(s): <br>
-- [Skill homepage](https://skillhub.cn) <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/creator-alpha-feed-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, text, configuration guidance] <br>
-**Output Format:** [Markdown report with status text, summaries, ranked links, and execution notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes timestamped reports to an Obsidian vault path when configured; may also return failure codes and diagnostic messages.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill can browse a logged-in X feed during content collection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only after an explicit collection request and review whether the active browser session should be used for that task.
+
+Risk: The skill writes local files into an Obsidian vault or fallback workspace path.
+
+Mitigation: Confirm the target vault path before execution and keep backups or version control for the destination folder.
+
+Risk: Broad SEO-related activation wording could trigger the skill for tasks that do not require X collection.
+
+Mitigation: Use precise prompts such as collecting an AI content daily report, and avoid invoking it for general SEO advice.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/creator-alpha-feed-free)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Guidance]
+
+**Output Format:** [Markdown Obsidian daily reports with ranked summaries and source links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes dated reports to an Obsidian vault path and may fall back to a workspace mirror if the vault is not writable.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

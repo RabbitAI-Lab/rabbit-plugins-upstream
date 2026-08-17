@@ -6,9 +6,13 @@ from pathlib import Path
 from fetch_health_data import (
     DROP_VALUE,
     MAX_HEART_RATE_SAMPLES_PER_WORKOUT,
+    MAX_WORKOUT_ROUTE_POINTS_PER_WORKOUT,
     merge_scope_payloads,
+    record_fetch_failure,
+    record_fetch_success,
     sanitize_decrypted_payload,
     sanitize_workout_heart_rate_samples,
+    sanitize_workout_route_points,
     write_ndjson,
     write_sqlite,
 )
@@ -80,6 +84,140 @@ class FetchHealthDataTests(unittest.TestCase):
 
         self.assertIs(sanitized, DROP_VALUE)
 
+    def test_sanitizer_keeps_detailed_time_pace_and_more_than_512_route_points(self) -> None:
+        route_points = [
+            {
+                "timestamp_offset_ms": index * 1_000,
+                "latitude": 50.0 + index / 1_000_000,
+                "longitude": 8.0 + index / 1_000_000,
+                "altitude_meters": 120.5,
+                "horizontal_accuracy_meters": 3.0,
+                "speed_meters_per_second": 3.5,
+                "course_degrees": 180.0,
+            }
+            for index in range(600)
+        ]
+        speed_samples = [
+            {
+                "source": "running",
+                "start_offset_ms": index * 5_000,
+                "end_offset_ms": (index + 1) * 5_000,
+                "speed_meters_per_second": 3.5,
+                "pace_seconds_per_kilometer": 285.71,
+            }
+            for index in range(600)
+        ]
+        payload = {
+            "2026-08-06": {
+                "workouts": [
+                    {
+                        "duration_seconds": 3_000,
+                        "workout_timing": {
+                            "elapsed_duration_ms": 3_060_000,
+                            "active_duration_ms": 3_000_000,
+                            "paused_duration_ms": 60_000,
+                        },
+                        "workout_events": [
+                            {"type": "lap", "start_offset_ms": 0, "end_offset_ms": 300_000}
+                        ],
+                        "workout_activities": [
+                            {
+                                "activity_type": "running",
+                                "start_offset_ms": 0,
+                                "end_offset_ms": 3_060_000,
+                                "active_duration_ms": 3_000_000,
+                            }
+                        ],
+                        "speed_samples": speed_samples,
+                        "distance_intervals": [
+                            {
+                                "source": "walking_running",
+                                "start_offset_ms": 0,
+                                "end_offset_ms": 300_000,
+                                "duration_ms": 300_000,
+                                "distance_meters": 1_000.0,
+                                "speed_meters_per_second": 3.333,
+                                "pace_seconds_per_kilometer": 300.0,
+                            }
+                        ],
+                        "route_points": route_points,
+                    }
+                ]
+            }
+        }
+
+        sanitized, metrics = sanitize_decrypted_payload(payload)
+        workout = sanitized["2026-08-06"]["workouts"][0]
+
+        self.assertEqual(len(workout["speed_samples"]), 600)
+        self.assertEqual(len(workout["route_points"]), 600)
+        self.assertEqual(workout["workout_events"][0]["type"], "lap")
+        self.assertEqual(workout["workout_timing"]["paused_duration_ms"], 60_000)
+        self.assertNotIn("workout_activities", workout)
+        self.assertEqual(metrics["stored_days"], 1)
+
+    def test_sanitizer_rejects_entire_malformed_route_series(self) -> None:
+        payload = {
+            "2026-08-06": {
+                "workouts": [
+                    {
+                        "duration_seconds": 60,
+                        "route_points": [
+                            {"timestamp_offset_ms": 0, "latitude": 50.0, "longitude": 8.0},
+                            {"timestamp_offset_ms": 1_000, "latitude": 95.0, "longitude": 8.0},
+                        ],
+                    }
+                ]
+            }
+        }
+
+        sanitized, _ = sanitize_decrypted_payload(payload)
+
+        workout = sanitized["2026-08-06"]["workouts"][0]
+        self.assertNotIn("route_points", workout)
+        self.assertEqual(workout["duration_seconds"], 60)
+
+    def test_sanitizer_rejects_entire_malformed_speed_series(self) -> None:
+        payload = {
+            "2026-08-06": {
+                "workouts": [
+                    {
+                        "duration_seconds": 60,
+                        "speed_samples": [
+                            {
+                                "source": "running",
+                                "start_offset_ms": 0,
+                                "end_offset_ms": 5_000,
+                                "speed_meters_per_second": 3.5,
+                                "pace_seconds_per_kilometer": 285.71,
+                            },
+                            {
+                                "source": "running",
+                                "start_offset_ms": 10_000,
+                                "end_offset_ms": 5_000,
+                                "speed_meters_per_second": 3.5,
+                                "pace_seconds_per_kilometer": 285.71,
+                            },
+                        ],
+                    }
+                ]
+            }
+        }
+
+        sanitized, _ = sanitize_decrypted_payload(payload)
+
+        workout = sanitized["2026-08-06"]["workouts"][0]
+        self.assertNotIn("speed_samples", workout)
+        self.assertEqual(workout["duration_seconds"], 60)
+
+    def test_sanitizer_rejects_entire_oversized_route_series(self) -> None:
+        valid_point = {"timestamp_offset_ms": 0, "latitude": 50.0, "longitude": 8.0}
+        points = [valid_point] * (MAX_WORKOUT_ROUTE_POINTS_PER_WORKOUT + 1)
+
+        sanitized = sanitize_workout_route_points(points)
+
+        self.assertIs(sanitized, DROP_VALUE)
+
     def test_recent_scope_overlays_history_per_day_category(self) -> None:
         history = {
             "2026-07-20": {
@@ -126,6 +264,48 @@ class FetchHealthDataTests(unittest.TestCase):
         write_ndjson(json_path, {"user_id": "ahs_private", "payload": {}})
 
         self.assertEqual(stat.S_IMODE(json_path.stat().st_mode), 0o600)
+
+    def test_fetch_failure_preserves_last_success_timestamp(self) -> None:
+        state = {
+            "last_fetch_at": "2026-08-09T22:20:00+00:00",
+            "last_fetch_success_at": "2026-08-09T22:20:00+00:00",
+        }
+
+        record_fetch_failure(state, "2026-08-11T08:00:00+00:00", "HTTP 401")
+
+        self.assertEqual(state["last_fetch_attempt_at"], "2026-08-11T08:00:00+00:00")
+        self.assertEqual(state["last_fetch_success_at"], "2026-08-09T22:20:00+00:00")
+        self.assertEqual(state["last_fetch_at"], "2026-08-09T22:20:00+00:00")
+        self.assertEqual(state["last_fetch_status"], "error")
+
+    def test_fetch_failure_discards_legacy_attempt_timestamp_without_known_success(self) -> None:
+        state = {
+            "last_fetch_at": "2026-08-11T07:00:00+00:00",
+            "last_fetch_status": "error",
+        }
+
+        record_fetch_failure(state, "2026-08-11T08:00:00+00:00", "HTTP 401")
+
+        self.assertNotIn("last_fetch_at", state)
+        self.assertNotIn("last_fetch_success_at", state)
+        self.assertEqual(state["last_fetch_attempt_at"], "2026-08-11T08:00:00+00:00")
+
+    def test_fetch_success_updates_attempt_and_success_timestamps(self) -> None:
+        state = {"last_fetch_error": "old failure"}
+
+        record_fetch_success(
+            state,
+            "2026-08-11T08:00:00+00:00",
+            "2026-08-11T08:00:02+00:00",
+            2,
+            {"raw_days": 7, "stored_days": 6, "dropped_days": 1},
+        )
+
+        self.assertEqual(state["last_fetch_attempt_at"], "2026-08-11T08:00:00+00:00")
+        self.assertEqual(state["last_fetch_success_at"], "2026-08-11T08:00:02+00:00")
+        self.assertEqual(state["last_fetch_at"], "2026-08-11T08:00:02+00:00")
+        self.assertEqual(state["last_fetch_status"], "ok")
+        self.assertNotIn("last_fetch_error", state)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+interface:
+  display_name: "TLMNT Mini App Doctor"
+  short_description: "Check Farcaster Mini Apps before release"
+  default_prompt: "Use $tlmnt-mini-app-doctor to check this public Farcaster Mini App URL safely."

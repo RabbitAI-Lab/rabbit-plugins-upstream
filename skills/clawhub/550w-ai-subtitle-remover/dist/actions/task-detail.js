@@ -12,11 +12,11 @@ async function taskDetail(params, client) {
     if (apiResponse.code !== types_1.ErrorCode.SUCCESS) {
         return (0, error_handler_1.mapApiError)(apiResponse);
     }
-    const { taskId, status, width, height, duration, x1, y1, x2, y2, mode, cost, createTime, updateTime, resultUrl, failReason } = apiResponse;
+    const { taskId, status, width, height, duration, cost, createTime, updateTime, resultUrl, failReason } = apiResponse;
     const response = {
         code: types_1.ErrorCode.SUCCESS,
         message: "查询成功",
-        taskId, status, width, height, duration, x1, y1, x2, y2, mode, cost, createTime, updateTime,
+        taskId, status, width, height, duration, cost, createTime, updateTime,
     };
     switch (status) {
         case "success":

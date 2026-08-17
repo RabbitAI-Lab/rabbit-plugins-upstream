@@ -1,52 +1,73 @@
-## Description: <br>
-Query and manage EVE Online characters via the ESI (EVE Swagger Interface) REST API for character data, wallet balance, assets, skills, contracts, market orders, mail, industry jobs, killmails, planetary interaction, loyalty points, and related EVE account management tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query EVE Online ESI for public and authenticated character data, manage local OAuth2/PKCE tokens, and run read-only PI, market, route, wallet, assets, skills, industry, mail, and related API lookups with explicit opt-in for state-changing calls.
 
-## Publisher: <br>
-[burnshall-ui](https://clawhub.ai/user/burnshall-ui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[burnshall-ui](https://clawhub.ai/user/burnshall-ui)
 
-## Use Case: <br>
-External EVE Online players and OpenClaw users use this skill to authenticate with EVE SSO, query ESI character and universe data, monitor planetary interaction, inspect market data, and configure alerts or reports. Developers can also use its scripts and JSON schema as a reusable ESI query and dashboard configuration helper. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The local agent may access private EVE character data such as wallet, assets, location, mail, contracts, and killmails. <br>
-Mitigation: Grant only the minimum EVE SSO scopes needed for the task and review data requests before using authenticated endpoints. <br>
-Risk: OAuth access and refresh tokens can expose an EVE account if pasted, logged, committed, or stored in an unsafe location. <br>
-Mitigation: Use the local token store or environment-variable references, keep token files private, and do not paste, log, or commit real tokens. <br>
-Risk: The raw ESI helper can make token-authorized account changes when write scopes are granted. <br>
-Mitigation: Avoid write scopes unless account changes are intended and review endpoint paths, HTTP methods, and request bodies before execution. <br>
-Risk: Telegram or Discord alert delivery can disclose EVE account information to configured channels. <br>
-Mitigation: Configure notifications only for trusted bots, webhooks, and channels that should receive the selected alerts or reports. <br>
+## Use Case:
 
+External EVE Online players, developers, and agents use this skill to authenticate characters, query ESI data, inspect account and universe state, and validate dashboard configuration for alerts, reports, market tracking, planetary interaction, industry, route, and status workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/burnshall-ui/eve-esi) <br>
-- [EVE SSO OAuth2 Authentication](references/authentication.md) <br>
-- [EVE ESI Character Endpoints Reference](references/endpoints.md) <br>
-- [Dashboard Config Schema](config/schema.json) <br>
-- [Example Dashboard Config](config/example-config.json) <br>
-- [EVE ESI API Explorer](https://developers.eveonline.com/api-explorer) <br>
-- [EVE Developer Portal](https://developers.eveonline.com/applications) <br>
-- [EVE ESI Swagger Spec](https://esi.evetech.net/latest/swagger.json) <br>
-- [OpenClaw Docs](https://docs.openclaw.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON configuration, and JSON API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Authenticated outputs depend on granted EVE SSO scopes; optional notifications may use Telegram or Discord channels configured by the user.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+Risk: OAuth access and refresh tokens can expose private EVE account data if copied into shell history, logs, config files, CI output, or chat transcripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the local token store and --char flow, avoid manual token handling, use --token-stdin only when a token must be passed, and never paste tokens into configs or shared text.
+
+Risk: Over-broad EVE SSO scopes can grant access to sensitive wallet, mail, asset, location, clone, implant, contract, and activity data.
+
+Mitigation: Ask the user which scope profile or exact scopes to grant, prefer the narrowest profile that answers the task, and use public endpoints without authentication when possible.
+
+Risk: Some ESI methods can change account state, including mail, fittings, contacts, market orders, or planetary interaction operations.
+
+Mitigation: Rely on the skill's read-only default and require explicit user intent plus --allow-write before any state-changing request.
+
+Risk: Telegram or Discord notifications can move configured alert text into third-party systems.
+
+Mitigation: Send only the alert content the user has configured and avoid including raw wallet figures, asset inventories, mail, tokens, or other sensitive account data in outbound notifications.
+
+## Reference(s):
+
+- [Skill README](README.md)
+- [EVE SSO OAuth2 Authentication](references/authentication.md)
+- [EVE ESI Character Endpoints Reference](references/endpoints.md)
+- [Dashboard Config Schema](config/schema.json)
+- [Endpoint Presets](config/esi_endpoints.json)
+- [EVE ESI API Explorer](https://developers.eveonline.com/api-explorer)
+- [EVE Developer Portal](https://developers.eveonline.com/applications)
+- [EVE ESI OpenAPI 3.1 Specification](https://esi.evetech.net/meta/openapi.json)
+- [EVE ESI Compatibility Dates](https://esi.evetech.net/meta/compatibility-dates)
+- [EVE ESI Changelog](https://esi.evetech.net/meta/changelog)
+- [EVE SSO Authorization Server Metadata](https://login.eveonline.com/.well-known/oauth-authorization-server)
+- [Revoke EVE Third-Party Access](https://community.eveonline.com/support/third-party/)
+- [ClawHub Skill Page](https://clawhub.ai/burnshall-ui/skills/eve-esi)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON API or configuration output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [ESI results may be paginated; state-changing non-GET calls require explicit --allow-write.]
+
+## Skill Version(s):
+
+1.3.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,60 @@
-## Description: <br>
-Create, inspect, update, select, and delete Mermail task triagers and review recent triager runs for mailbox automation workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create, inspect, update, and delete Mermail task triagers and review recent triager runs for mailbox automation, task extraction, triager debugging, and triager-linked agent conversations.
 
-## Publisher: <br>
-[mermail](https://clawhub.ai/user/mermail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mermail](https://clawhub.ai/user/mermail)
 
-## Use Case: <br>
-Developers and operators use this skill to configure Mermail mailbox task triage automation, inspect recent triager runs, update default triagers, and open triager-linked agent conversations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent triager configuration changes can affect ongoing mailbox automation. <br>
-Mitigation: Review proposed trigger instructions, outputs, integrations, default-status changes, and deletion requests before approval. <br>
-Risk: Deleting or replacing triagers without diagnosis can disrupt active triage workflows. <br>
-Mitigation: Inspect recent triager runs, require explicit approval for destructive or default-changing actions, and verify the resulting triager list before claiming success. <br>
+## Use Case:
 
+Developers and Mermail workspace operators use this skill to configure safe mailbox triage automation, troubleshoot recent triager runs, and prepare human-reviewed task extraction or auto-draft workflows.
 
-## Reference(s): <br>
-- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills) <br>
-- [Triage tool map](references/tools.md) <br>
-- [Mermail MCP server](https://console.mermail.app/mcp) <br>
-- [ClawHub skill page](https://clawhub.ai/mermail/skills/mermail-automate-triage) <br>
-- [Publisher profile](https://clawhub.ai/user/mermail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, configuration, API calls] <br>
-**Output Format:** [Markdown guidance with MCP tool calls and configuration summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MERMAIL_API_KEY and access to the Mermail MCP server.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+Risk: Inbound mailbox content can carry untrusted instructions, malicious active content, or misleading sender claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require clean scan status, bounded sanitized content, sender authentication checks, and metadata-only attachment handling unless a specific attachment task is approved.
+
+Risk: A triager change could unintentionally broaden sender scope, outputs, integrations, recipients, or external effects.
+
+Mitigation: Show the exact configuration diff, keep automation disabled during review, use a minimum allowlist, and preserve existing configuration unless the user explicitly approves the change.
+
+Risk: Deletion, sending, credential use, OTP or magic-link handling, or other high-impact effects could occur without adequate confirmation.
+
+Mitigation: Require fresh human confirmation for high-impact effects, bind destructive deletion to a single-use approval token, and keep default triager selection out of scope.
+
+## Reference(s):
+
+- [Mermail AI Skills Documentation](https://docs.mermail.app/ai/skills)
+- [Triager Security Boundary](references/security.md)
+- [Triage Tool Map](references/tools.md)
+- [Mermail MCP Server](https://console.mermail.app/mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown with structured status reports, configuration diffs, and approval prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Mermail MCP access and MERMAIL_API_KEY; destructive deletion requires explicit approval.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,49 +1,61 @@
-## Description: <br>
-Temu Global promotion skill for querying Partner Global promotion activities, candidate goods, enrolled goods, operation results, goods enrollment, goods updates, signed file downloads, and LinkFox/Temu token guidance through LinkFox gateway scripts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Temu 全球站电商促销 API skill that routes Partner Global Promotion activity query, candidate goods, enrollment, operation status, and goods update calls through the LinkFox gateway.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Temu sellers, commerce operators, and their agents use this skill to work with Temu Global promotion campaigns through LinkFox, including promotion discovery, candidate item review, enrollment, update, operation status checks, signed downloads, and token setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles LinkFox API keys and Temu seller access tokens, including optional local token storage. <br>
-Mitigation: Use it only in trusted workspaces, avoid inline raw token output, restrict access to token files, and review where tokens are stored before use. <br>
-Risk: Enrollment, update, deactivate, signed file download, and generic proxy calls can affect live promotion operations. <br>
-Mitigation: Require explicit user confirmation for these operations and verify activity, goods, SKU, price, quantity, and operation type parameters before execution. <br>
-Risk: Full API responses may be saved locally and can contain sensitive commerce or account data. <br>
-Mitigation: Review saved response locations, limit sharing of generated JSON files, and prefer summarized output unless full response details are needed. <br>
-Risk: The generic proxy can call broader Temu API types than the promotion-specific wrappers. <br>
-Mitigation: Prefer the promotion-specific scripts when possible and use generic proxy calls only for a clearly identified Temu API type and purpose. <br>
+## Use Case:
 
+External Temu sellers, marketplace operators, and agent users use this skill to work with Partner Global promotion activities: querying available campaigns, finding candidate goods, enrolling goods, checking operation results, and updating enrolled promotion goods. It is intended for LinkFox-authenticated workflows that also require Temu seller access tokens or stored token keys.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-promotion-global) <br>
-- [API reference](references/api.md) <br>
-- [Access token guidance](references/access-token.md) <br>
-- [Authorization flow](references/authorization-flow.md) <br>
-- [Partner Global catalog](references/partner-global-catalog.md) <br>
-- [Promotion API index](references/apis/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown guidance, shell command examples, and JSON API responses saved to local files or printed to stdout.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses may be persisted locally by the scripts; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill can use LinkFox and Temu API credentials to call promotion APIs, including mutating enrollment, update, and deactivation operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege Temu access tokens, confirm the target store and promotion payload before execution, and require review before mutating calls are run.
+
+Risk: Temu access tokens may be stored locally and full API responses are saved on disk.
+
+Mitigation: Keep token storage paths and generated response directories protected, avoid pasting secrets into chat or shell history, and remove saved response files when they are no longer needed.
+
+Risk: Generic proxy and signed file-download scripts provide broader authority than the six dedicated promotion scripts.
+
+Mitigation: Prefer dedicated promotion scripts for normal work and use generic proxy or file-download scripts only when their broader access is intentional.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-promotion-global)
+- [API reference](references/api.md)
+- [Partner Global Promotion catalog](references/partner-global-catalog.md)
+- [Access token guide](references/access-token.md)
+- [Partner Global documentation](https://partner-global.temu.com/documentation?menu_code=7289390cfd724be4a196f11ebe45a896)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON request examples, shell commands, and saved JSON API response files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full API responses under a linkfox session data directory and print either full JSON or a summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

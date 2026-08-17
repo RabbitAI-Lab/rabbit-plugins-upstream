@@ -14,7 +14,7 @@ from urllib.parse import urlparse
 
 import requests
 
-CLIENT_VERSION = "1.0.9"
+CLIENT_VERSION = "1.0.18"
 MAX_RAW_BYTES = 20 * 1024 * 1024
 LABEL_PATTERN = re.compile(r"^[AB][0-9]{2}(,[AB][0-9]{2}){0,4}$")
 
@@ -44,7 +44,7 @@ def media_input(value):
     return value
 
 
-def call_cloud(file_input, labels, file_type, do_live, do_compare):
+def call_cloud(file_input, labels, file_type):
     if not LABEL_PATTERN.fullmatch(labels):
         raise ValueError("Use 1-5 comma-separated label codes such as A02,A14.")
     endpoint, api_key = cloud_config()
@@ -72,8 +72,6 @@ def call_cloud(file_input, labels, file_type, do_live, do_compare):
             "file": media_input(file_input),
             "labels": labels,
             "type": file_type,
-            "doLive": do_live,
-            "doCompare": do_compare,
         },
         headers=headers,
         timeout=120,
@@ -93,11 +91,9 @@ def main():
     parser.add_argument("--file", required=True)
     parser.add_argument("--labels", required=True)
     parser.add_argument("--type", choices=["image", "video"], default="image")
-    parser.add_argument("--do-live", choices=["0", "1"], default="1")
-    parser.add_argument("--do-compare", choices=["0", "1"], default="1")
     args = parser.parse_args()
     try:
-        result = call_cloud(args.file, args.labels, args.type, args.do_live, args.do_compare)
+        result = call_cloud(args.file, args.labels, args.type)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         if isinstance(result, dict) and result.get("success") is False:
             sys.exit(2)

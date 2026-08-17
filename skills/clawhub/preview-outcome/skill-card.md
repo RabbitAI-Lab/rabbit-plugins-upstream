@@ -1,40 +1,55 @@
-## Description: <br>
-Create a shareable RooQuiz preview personality or outcome test and return a short-lived browser link, with no account, login, or API key required. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create a shareable RooQuiz preview personality or outcome test whose options vote for result types, then return a short-lived browser link without requiring an account, login, or API key.
 
-## Publisher: <br>
-[rooquiz](https://clawhub.ai/user/rooquiz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rooquiz](https://clawhub.ai/user/rooquiz)
 
-## Use Case: <br>
-Developers, agents, and quiz creators use this skill to assemble RooQuiz outcome-test JSON, submit it to the public preview endpoint, and hand back a temporary browser-openable preview link. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Quiz content is sent to RooQuiz's external public preview service. <br>
-Mitigation: Do not include secrets, personal data, regulated information, or confidential business material unless sharing it with that service is acceptable. <br>
+## Use Case:
 
+Developers, creators, and agents use this skill to create temporary RooQuiz personality or archetype quiz previews, validate the required outcome-quiz JSON shape, and return a browser-openable preview link.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/rooquiz/skills/preview-outcome) <br>
-- [RooQuiz preview form API](https://preview.rooquiz.com/api/preview-forms) <br>
-- [RooQuiz browser preview host](https://quizster.app) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with JSON payloads, HTTP request examples, and preview links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces short-lived preview links for RooQuiz outcome tests; links expire automatically.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release evidence) <br>
+Risk: Quiz titles, questions, answers, and result text are sent to RooQuiz's public preview service and exposed through a shareable temporary link.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not include private, confidential, regulated, or sensitive information in preview quiz content.
+
+Risk: The skill creates temporary previews rather than permanently published forms.
+
+Mitigation: Recreate or publish the quiz through the appropriate RooQuiz workflow when a durable form is required.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/rooquiz/skills/preview-outcome)
+- [RooQuiz preview creation endpoint](https://preview.rooquiz.com/api/preview-forms)
+- [RooQuiz preview link base](https://quizster.app)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with JSON examples, HTTP request examples, shell commands, and a preview URL]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces short-lived RooQuiz preview links and does not require credentials.]
+
+## Skill Version(s):
+
+0.1.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

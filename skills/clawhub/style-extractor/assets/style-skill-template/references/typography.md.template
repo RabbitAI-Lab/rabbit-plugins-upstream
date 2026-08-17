@@ -1,0 +1,48 @@
+# Typography — {STYLE_TITLE}
+
+> Extracted from: {SOURCE_DESC} | Evidence quality: {EVIDENCE_QUALITY_LEVEL}
+
+## Primitive: Font Families
+
+| Token | Stack | Evidence | Notes |
+|-------|-------|----------|-------|
+{FONT_FAMILY_ROWS}
+
+## Primitive: Font Size Scale
+
+| Token | Size (px) | Size (rem) | Evidence |
+|-------|-----------|------------|----------|
+{FONT_SIZE_ROWS}
+
+## Primitive: Font Weight Scale
+
+| Token | Weight | Evidence |
+|-------|--------|----------|
+{FONT_WEIGHT_ROWS}
+
+## Primitive: Line Height Scale
+
+| Token | Value | Evidence |
+|-------|-------|----------|
+{LINE_HEIGHT_ROWS}
+
+## Semantic: Text Roles
+
+| Token | Family | Size | Weight | Leading | Letter-Spacing | Evidence | Usage |
+|-------|--------|------|--------|---------|-----------------|----------|-------|
+{TEXT_ROLE_ROWS}
+
+## CSS Variables
+
+```css
+:root {
+  /* === Primitive: Font Families === */
+{FONT_FAMILY_CSS}
+
+  /* === Primitive: Font Sizes === */
+{FONT_SIZE_CSS}
+
+  /* === Semantic: Text Roles === */
+{TEXT_ROLE_CSS}
+}
+```

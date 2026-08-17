@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## [1.10.0] - 2026-08-10
+
+### Changed
+- 版本号 1.9.1 → 1.10.0
+- 文档排版与结构规范化：修复 `SKILL.md` 未闭合代码块（「精准提示词模板」标题此前被吞进代码块）；`SKILL.md` 顶层章节标题统一 emoji 前缀（与 README 一致）；`README.md` 与 `SKILL.md` 重复的 5 个章节（尉缭子十原则、搜索资料规范、精准提示词模板、ZeroToken 强化模式、退出条件）精简为摘要 + 锚点链接，单一信息源；修复 `docs/unicode-encoding-spec.md` 死链引用
+- 搜索资料规范放宽：Chrome MCP 搜索引擎**不限百度**（百度只是默认，网络可用时 Bing / Google / 知乎等按检索效果自由选择）；Chrome MCP 不可用时允许使用当前网络可用的其他搜索方式（含 `web_fetch`），不再因首选方案不可用而放弃搜索。同步更新 `README.md`、`SKILL.md`
+- 落地「Unicode 安全编码规范」（新增 `docs/unicode-encoding-spec.md`，15 条硬性规定 + 项目执行细则；AGENTS.md 增加编码规范约束）
+- 所有 Python 脚本：控制台输出优先 `sys.stdout.reconfigure(encoding='utf-8')`（Python 3.7+），不再把中文替换成 `?`；写模式 `open()` 显式 `newline='\n'`，避免 Windows 文本模式把 LF 写成 CRLF
+- `scripts/batch_edit.py` / `scripts/verify_output.py`：去除 `errors='replace'` 静默损坏，非 UTF-8/UTF-16/GB18030 文件显式抛错提示先检查原编码
+- `scripts/init_env.ps1` 转为 UTF-8 with BOM（Windows PowerShell 5.1 解析中文必需）；清理未使用变量
+- `.reasonix/skills/mcp-streamable-connect/mcp-bridge.js`：HTTP `Content-Type` 显式声明 `charset=utf-8`
+- SKILL.md「安全文件读写模板」更新（写/追加显式 `newline='\n'`），替换字符示例改为文字描述（U+FFFD）
+
+### Added
+- 新增 `scripts/audit_encoding.py` 全项目编码审计工具（UTF-8 / BOM / 替换字符 / 混合换行检测）
+
+## [1.9.1] - 2026-08-08
+
+### Changed
+- 版本号 1.9.0 → 1.9.1
+
+## [1.9.0] - 2026-08-07
+
+### Added
+- SKILL.md 核心原则之后新增「AI 编程总纲（尉缭子十原则）」章节 — 以《尉缭子》兵法治编程纪律：先谋后动、统一方案、职责明确、不得越权、唯一命令、禁止旧令、严格执行、最小改动、可追溯、验证先于结束
+- 十原则以「原则 + 要求 + 违反示例」表格精炼呈现，并给出与 B/C/E 任务模式的对应关系及可直接用作 System Prompt 的总纲引文
+- 核心理念：省 token 是效率（ZeroToken），尉缭子是秩序（权限边界、单一指令、责任明确、执行一致）
+
 ## [1.8.2] - 2026-07-24
 
 ### Added

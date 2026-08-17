@@ -2,22 +2,34 @@
 
 > 国央企/党政机关公文与报告写作专用 WorkBuddy Skill
 
-[![Version](https://img.shields.io/badge/version-1.1.0-blue)](https://github.com)
+[![Version](https://img.shields.io/badge/version-1.3.0-blue)](https://github.com)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-WorkBuddy-orange)](https://www.codebuddy.cn)
 
+> 🚀 已上线 ClawHub，即搜即装。24 小时内同步至 WorkBuddy Skill 市场，届时可直接在 WorkBuddy 内搜索「gov-report-writing」一键安装。
+
 ## 简介
 
-`gov-report-writing` 是一个专为国央企和党政机关公文写作场景设计的 WorkBuddy Skill。它内置了 GB/T 9704-2012 国标公文格式规范、8 种常用报告模板框架以及公文专用措辞词汇库，能够将一份标准公文从"调格式 + 写内容 + 润色"的 2 小时工作压缩到几分钟。
+`gov-report-writing` 是一个专为国央企和党政机关公文写作场景设计的 WorkBuddy Skill。它内置了 GB/T 9704-2012 国标公文格式规范（含企业级扩展）、26+ 种模板框架（8 类工作模板 + 7 种行政公文 + 10 种专题模板 + 信函式文件）以及公文专用措辞词汇库，能够将一份标准公文从"调格式 + 写内容 + 润色"的 2 小时工作压缩到几分钟。
 
 ## 核心功能
 
 | 功能 | 说明 |
 |------|------|
 | 📐 国标排版 | 严格遵循 GB/T 9704-2012，自动设置页边距、字体、字号、行距、层级标题格式 |
-| 📋 8 种模板 | 年度总结 / 述职报告 / 党建报告 / 调研报告 / 工作方案 / 会议纪要 / 通知公告 / 汇报材料 |
+| 📋 25+ 种模板 | 8类工作模板 + 7种行政公文 + 10种专题模板（民主生活会/务虚会/党课/心得/述职述廉/组织生活会/表态发言/先进事迹/整改方案/巡视汇报） |
 | ✍️ 公文用语 | 内置政治术语校验、口语→公文替换规则、常用句式库 |
-| 🔒 安全红线 | 执行前自动识别涉密信号，占位符机制保护敏感信息 |
+| 🔒 安全红线 | 执行前自动识别敏感信号，占位符机制保护敏感信息 |
+
+## 效果演示
+
+> 📹 使用演示（点击播放）
+
+![gov-report-writing 使用演示](./assets/demo.gif)
+
+*演示场景：在 WorkBuddy 中输入「帮我写一份年度工作总结」→ 自动识别报告类型 → 套用模板 → 按国标格式输出 Word 文档。全程约 30 秒。*
+
+---
 
 ## 安装
 
@@ -29,7 +41,7 @@ npx clawhub install gov-report-writing
 
 ### 方式二：手动安装
 
-1. 下载 [gov-report-writing.zip](https://github.com/your-org/gov-report-writing/releases)
+1. 下载 [gov-report-writing.zip](https://github.com/Mogician11111/gov-report-writing/releases)
 2. 解压到 WorkBuddy 技能目录：
 
 ```bash
@@ -67,10 +79,14 @@ gov-report-writing/
 ├── SKILL.md                          # 核心技能文件（三阶段工作流程）
 ├── LICENSE                           # MIT 开源许可证
 ├── README.md                         # 本文件
-└── references/
-    ├── gb-t9704-format.md            # GB/T 9704-2012 国标公文格式完整规范
-    ├── report-templates.md           # 8 种常用报告模板框架与写作要点
-    └── vocabulary-guide.md           # 公文专用词汇、政治术语、措辞规范
+├── references/
+│   ├── gb-t9704-format.md            # GB/T 9704-2012 国标格式规范（含信函/纪要/联合行文/企业扩展）
+│   ├── report-templates.md           # 25+ 种报告模板框架与写作要点
+│   ├── vocabulary-guide.md           # 公文词汇、政治术语、52 项表述检查清单
+│   ├── ai-traces.md                  # AI 痕迹 12 类检测规则
+│   └── policy-database.md            # 常用政策文件速查库
+└── scripts/
+    └── format_check.py               # 格式自动检查脚本
 ```
 
 ## 支持的文档类型
@@ -85,6 +101,24 @@ gov-report-writing/
 | 会议纪要 | 纪要、会议、决议 | 客观实录、不评论 |
 | 通知公告 | 通知、公告、通报 | 简洁明了、一事一文 |
 | 汇报材料 | 汇报、向上级 | 突出亮点、建议有针对性 |
+| 函 | 商洽、询问、答复、函告 | 一事一函、平等对等 |
+| 请示 | 请示、审批、申请 | 一事一请、缘由充分 |
+| 批复 | 批复、批示 | 态度明确、针对请示 |
+| 报告（行政） | 报送、答复、汇报 | 客观汇报、不夹带请示 |
+| 议案 | 审议、提请 | 政府→人大、严格法定 |
+| 决定 | 决定、奖惩、变更 | 权威果断 |
+| 意见 | 意见、建议、处理办法 | 见解明确、多向灵活 |
+| 民主生活会发言 | 民主生活会、对照检查、批评 | 诚恳具体、触及思想 |
+| 务虚会发言 | 务虚会、思路、设想 | 思想碰撞、前瞻创新 |
+| 党课讲稿 | 党课、讲稿、宣讲 | 理论通俗化、感染力 |
+| 心得体会 | 心得体会、学习感受 | 真情实感、结合实际 |
+| 述职述廉报告 | 述职述廉、述廉 | 述廉专章、如实报告 |
+| 组织生活会对照检查 | 组织生活会、检视剖析 | 见人见事见思想 |
+| 任前表态发言 | 表态、就职、任职 | 诚恳朴实、3-5分钟 |
+| 先进事迹材料 | 先进事迹、榜样 | 事例驱动、细节说话 |
+| 整改方案 | 整改方案、整改 | 表格化、责任到人 |
+| 巡视汇报材料 | 巡视汇报、巡视 | 实事求是、数据支撑 |
+| 信函式文件 | 信函、便函、函件 | 双线版式、平行对等 |
 
 ## 安全特性
 
@@ -117,7 +151,7 @@ gov-report-writing/
 
 ### 贡献方向
 
-- 📝 补充更多报告模板（函、请示、批复等 15 种行政公文）
+- 📝 补充更多报告模板（目前已覆盖 25+ 种）
 - 🛠 增加格式检查脚本（`scripts/format_check.py`）
 - 🎨 优化模板措辞和示例
 - 🐛 修复格式规范错误

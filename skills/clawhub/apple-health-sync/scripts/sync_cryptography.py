@@ -98,9 +98,9 @@ def generate_legacy_rsa_keys(
             secure_public_key_file(public_key_path)
             return "existing"
         if not rotate:
-            raise RuntimeError("Only one key file exists. Fix manually or run with --rotate.")
-        private_key_path.unlink(missing_ok=True)
-        public_key_path.unlink(missing_ok=True)
+            raise RuntimeError(
+                "Only one legacy key file exists. Restore the complete key set from backup before continuing."
+            )
 
     private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     atomic_write_bytes(
@@ -283,9 +283,9 @@ def generate_v5_keys(
             secure_public_key_file(encryption_public_path)
             return "existing"
         if not rotate:
-            raise RuntimeError("Only part of the v5 key set exists. Fix manually or run with --rotate.")
-        for path in existing_paths:
-            path.unlink(missing_ok=True)
+            raise RuntimeError(
+                "Only part of the v5 key set exists. Restore the complete key set from backup before continuing."
+            )
 
     signing_private = ed25519.Ed25519PrivateKey.generate()
     signing_public = signing_private.public_key()

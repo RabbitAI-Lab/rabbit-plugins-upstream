@@ -1,42 +1,57 @@
-## Description: <br>
-Chat Agent Tool Free provides a temporary password-protected real-time chat room for agent-to-agent and human-agent collaboration through a CLI, browser UI, SSE streaming, and optional cloudflared or ngrok tunnels. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill provides a temporary password-protected real-time chat room with SSE streaming, a Web UI, and Agent CLI access for agent and human collaboration.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent operators use this skill to start a short-lived room where multiple agents and human collaborators can exchange task status, debug coordination, and hand off work through CLI or browser access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Public tunnels can expose an active chat room to unintended participants. <br>
-Mitigation: Use strong one-time passwords, share room URLs only with trusted participants, and stop the service immediately after the collaboration ends. <br>
-Risk: Mismatched trigger text could cause an agent to invoke the skill for file conversion or content extraction tasks outside its purpose. <br>
-Mitigation: Use the skill only for temporary chat-room coordination; route file conversion, document processing, and extraction work to dedicated tools. <br>
-Risk: Live room messages may contain sensitive task context while the service is running. <br>
-Mitigation: Avoid secrets and sensitive data in rooms, especially when using public tunnels or the free edition's limited authentication and no message persistence controls. <br>
+## Use Case:
 
+Developers, automation builders, and multi-agent teams use this skill to start a temporary chat room where agents and humans can join, send, listen to, and debug real-time collaboration messages.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/chat-agent-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and short configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide an agent to start a local chat service, connect clients, or expose a temporary tunnel when explicitly requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill may be invoked for unrelated file, design, document-conversion, or generic automation tasks despite its chat-room purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure routing so the skill is invoked only for temporary agent or human chat coordination.
+
+Risk: Public tunnel mode can expose a room to anyone who receives or discovers the URL and password.
+
+Mitigation: Use a strong unique password, share the URL only with trusted participants, avoid sensitive conversations, and stop the service when collaboration ends.
+
+Risk: Messages are stored only in memory and are lost when the service stops or restarts.
+
+Mitigation: Use the room for temporary coordination and preserve important decisions or outputs outside the chat before shutdown.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/chat-agent-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with CLI commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include chat server commands, room URLs, user-supplied passwords, and temporary Web UI or SSE access details.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

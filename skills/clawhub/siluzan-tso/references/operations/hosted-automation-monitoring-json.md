@@ -22,10 +22,10 @@ siluzan-tso balance-scan -m Google [--threshold-days <n>] [--min-balance <n>] [-
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 账户                                                       | `data.items[].mediaCustomerId`、`data.items[].name`、`data.items[].advertiserName`                                                                           |
 | 余额（主币种金额，与平台余额接口一致）                     | **`data.items[].balance`**（由 `remainingAccountBudget` 计算而来）                                                                                           |
-| 近 7 日估算日均消耗                                        | **`data.items[].dailySpend`** = 近 7 日总消耗 / 7（窗口为 **[T-7, T-1]**，即截至昨天的 7 个自然日，**不含当天**，避免拉到当天未结算数据）                    |
+| 近 7 日估算日均消耗                                        | **`data.items[].dailySpend`** = 近 7 日总消耗 / 7（窗口为 **[T-7, T-1]**，北京时间截至昨天的 7 个自然日，**不含当天**；Google 请求带 `+08:00`）              |
 | 按余额÷日均估算的续航天数                                  | **`data.items[].remainingDays`** = `balance / dailySpend`（消耗过低 < `minDailySpend` 时为 `null`）                                                          |
 | 建议充值额（按 `meta.thresholds.targetDaysForTopup` 目标） | **`data.items[].recommendedTopup`**                                                                                                                          |
-| 命中原因（阈值逻辑）                                       | **`data.items[].hitReason`**：`low-days` \| `low-balance` \| `both`                                                                                          |
+| 命中原因（阈值逻辑）                                       | **`data.items[].hitReason`**：`low-days` \| `low-balance` \| `both` \| `none`（已检查但未触阈值）。`data.items` 含全部已检查账户；预警筛 `hitReason !== "none"`。`meta.hitCount` 为触阈值条数 |
 | 币种 / 状态 / OAuth                                        | `data.items[].currencyCode`、`data.items[].status`、`data.items[].invalidOAuthToken`                                                                         |
 | 本轮扫描元数据                                             | **`meta`**：`scannedAccounts`、`validAccounts`、`hitCount`、`thresholds`（含 `days`、`minBalance`、`minDailySpend`、`targetDaysForTopup`）、`generatedAt` 等 |
 

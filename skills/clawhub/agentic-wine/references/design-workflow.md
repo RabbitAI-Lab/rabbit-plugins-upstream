@@ -8,7 +8,7 @@ Decision: the target is coherent enough to search for fruit, or it must be revis
 
 ## 2. Admit vineyard and vintage
 
-Use only co-creation lots. Assess parcel identity, farming record, harvest state, disease pressure, weather, yield, maturity and certification eligibility.
+Use only registered co-creation parcels. Assess parcel identity, farming record, harvest state, disease pressure, weather, yield, maturity and certification eligibility.
 
 Required vintage measurements:
 
@@ -66,13 +66,24 @@ Confirm final alcohol, pH, TA, VA, residual sugar, free/total SO2, CO2 pressure 
 
 Release only when every critical value has an evidence status: measured, calculated, target, estimated or missing. Missing critical safety or legal evidence blocks release.
 
-## Four-gate graph
+## The nine gates
 
-The operational path can be displayed as four connected gate families:
+The stages above map onto the Method's decision sequence. Use the gate codes when
+writing a route, so the brief, the constructor and the Vintage Record agree.
 
-1. Reception chooses admissible material and extraction.
-2. Microbial succession selects the biological route.
-3. Fermentation follows and corrects the trajectory.
-4. Bottling/release commits the wine to still, ancestral or tirage-based realization.
+| Gate | Stage above |
+|---|---|
+| G0 | 1. Define the target |
+| G1 | Ranked parcel candidates from registered inventory |
+| G2 | Vineyard plan written for the intended wine |
+| G3 | 2. Admit vineyard and vintage — harvest window |
+| G4 | 3. Reception and extraction |
+| G5 | 4. Microbial succession — route commitment |
+| G6 | 5. Active fermentation |
+| G7 | 6. Product branch — endpoint, assemblage, bottling |
+| G8 | 7. Maturation and 8. Release |
 
-Alternative branches remain visible because a measurement can force redirection.
+Each gate ends in one state: pass, conditional pass, hold, redirect or stop.
+Alternative branches stay visible, because a measurement can force redirection,
+and the record keeps the rejected candidates with the constraint that excluded
+each one.

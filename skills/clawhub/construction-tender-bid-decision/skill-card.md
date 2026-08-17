@@ -1,52 +1,68 @@
-## Description: <br>
-面向施工、市政、装修、园林、公路和房建等工程项目，帮助投标团队基于知了标讯历史招中标数据评估是否投标、潜在竞争者、报价区间、资质门槛和废标风险。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+建筑工程投标决策分析助手，用于评估施工、市政、装修、园林、公路、房建、基建等工程项目是否值得投标，并基于招中标历史数据分析采购方、竞争者、报价参考、资质门槛和废标风险。
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-投标、商务和项目团队可用此技能对具体工程类招标项目做投标决策分析，形成是否参与、竞争格局、报价参考、资质门槛、废标风险和后续行动建议。它适合需要基于公开招中标历史数据快速评估施工项目机会和风险的商业场景。 <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can auto-register an account, collect device-derived identifiers, and write credentials to ~/.zlbx/config.json. <br>
-Mitigation: Prefer a user-provided ZLBX_API_KEY when available; if no key exists, obtain explicit consent before registration and collect only the documented platform, architecture, and hashed MAC values. <br>
-Risk: Generated HTML reports and citation links may contain signed access URLs and commercially sensitive bid-analysis conclusions. <br>
-Mitigation: Treat reports as sensitive business documents, share them only with intended recipients, and preserve API-returned links without exposing unnecessary additional records. <br>
-Risk: Bid recommendations based on incomplete public tender data could mislead business decisions or create reputational risk when discussing real organizations. <br>
-Mitigation: Separate facts from inferences, state data gaps and confidence, avoid accusatory language, and require numeric claims, company names, and amounts to come from returned data. <br>
-Risk: Full analysis consumes paid API credits and may exceed the expected budget for broad investigations. <br>
-Mitigation: Tell the user the expected credit range before analysis, use the quick mode when requested, and pause for approval before exceeding the documented call budget. <br>
+## Use Case:
 
+External construction bidding teams and agents use this skill to turn a specific engineering tender notice, title, or file into a bid/no-bid decision report with buyer history, likely competitors, pricing references, qualification risks, and action guidance. It can also generate a shareable HTML report from the completed analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/construction-tender-bid-decision) <br>
-- [Publisher profile](https://clawhub.ai/user/dragonzu) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Bid decision workflow](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration flow](references/auto-register.md) <br>
-- [ZLBX API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [ZLBX account portal](https://ai.zhiliaobiaoxun.com/?ch=s69) <br>
-- [ZLBX business intelligence portal](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, HTML, guidance, configuration] <br>
-**Output Format:** [Markdown bid-decision report with an optional self-contained HTML report and concise setup or account guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved auto-registration. Complete analysis uses about 12-25 API calls; quick analysis uses about 5-8 API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill stores API credentials locally and uses them for vendor API calls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an account key intended for this service, keep generated configuration files private, and remove the local key if the skill is no longer used.
+
+Risk: Automatic registration collects platform, CPU architecture, and a hashed MAC address for device de-duplication.
+
+Mitigation: Skip automatic registration by preconfiguring ZLBX_API_KEY, or decline registration and use the manual account portal.
+
+Risk: Generated reports may include signed sk links that can bypass login for referenced platform pages.
+
+Mitigation: Review reports before sharing and remove or redact access-bearing links when the recipient should not receive that access.
+
+Risk: HTML reports are written to a user home-directory report folder by default.
+
+Mitigation: Check the output path and file permissions before storing sensitive tender analysis or distributing the report.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/construction-tender-bid-decision)
+- [Publisher Profile](https://clawhub.ai/user/dragonzu)
+- [Workflow Guide](references/workflow.md)
+- [API Quick Reference](references/api-quick.md)
+- [Report Template](references/report-template.md)
+- [Auto-Registration Guide](references/auto-register.md)
+- [Zhiliao Biaoxun API Endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名})
+- [Zhiliao Biaoxun Account Portal](https://ai.zhiliaobiaoxun.com/?ch=s75)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown decision reports, optional self-contained HTML report files, configuration guidance, and internal API request guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full analysis is documented as about 12-25 API calls; quick analysis is documented as about 5-8 API calls. HTML reports are written under the user's home directory by default.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

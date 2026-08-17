@@ -1,40 +1,64 @@
-## Description: <br>
-Calls Shopee Open Platform Public APIs through LinkFox scripts for partner shops, merchants, OAuth token exchange, token refresh, resend-code tokens, and IP range lookup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance and Python scripts for calling six Shopee Open Platform Public APIs through LinkFox's developer proxy, including authorized shop and merchant listing, OAuth token exchange and refresh, resend-code token retrieval, and Shopee IP range lookup.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and e-commerce operators use this skill to call Shopee Public module endpoints for authorized shop and merchant lookup, token exchange and refresh, resend-code token retrieval, and Shopee IP range discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review says token-related API requests and responses are saved locally in full without redaction or retention controls. <br>
-Mitigation: Use only in trusted workspaces, avoid shared machines, inspect generated linkfox data files after use, and delete saved token-related responses when they are no longer needed. <br>
+## Use Case:
 
+Developers and e-commerce operators use this skill to call Shopee Public module endpoints from an agent workflow for partner shop or merchant discovery, token exchange and refresh, resend-code token retrieval, and Shopee IP allowlist lookup. It also guides users through LinkFox API key setup, dependency checks, and billing/authentication remediation when gateway calls fail.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-public) <br>
-- [Shopee Public API Reference](references/api.md) <br>
-- [Shopee Open Platform Public API index](https://open.shopee.com/documents/v2/v2.public.get_shops_by_partner?module=104&type=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with Python shell commands and saved JSON API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes complete API responses to a local linkfox session data directory and prints full JSON or a summary based on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server evidence) <br>
+Risk: The skill handles Shopee and LinkFox tokens, phone-login onboarding, billing orders, and locally stored API responses.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in workspaces where local response storage is acceptable, avoid pasting real tokens into chat or logs, and review saved response files according to workspace data-handling policy.
+
+Risk: Custom LinkFox gateway or login URL environment variables can redirect API, login, or token traffic.
+
+Mitigation: Keep the default LinkFox endpoints unless the replacement destination is fully trusted and intentionally configured.
+
+Risk: Onboarding and billing helpers may initiate account setup, plan selection, payment order creation, or order-status checks.
+
+Mitigation: Prefer self-service account setup at the LinkFox site when possible and have the user review plan, payment method, and order details before continuing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-public)
+- [Publisher profile](https://clawhub.ai/user/linkfox-ai)
+- [Public module API reference](artifact/references/api.md)
+- [Onboarding and auth guidance](artifact/references/onboarding.md)
+- [Shopee get_shops_by_partner documentation](https://open.shopee.com/documents/v2/v2.public.get_shops_by_partner?module=104&type=1)
+- [Shopee get_access_token documentation](https://open.shopee.com/documents/v2/v2.public.get_access_token?module=104&type=1)
+- [Shopee refresh_access_token documentation](https://open.shopee.com/documents/v2/v2.public.refresh_access_token?module=104&type=1)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with Python shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are saved under a local linkfox session directory; small responses print as JSON, large responses print summaries unless --inline is used.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

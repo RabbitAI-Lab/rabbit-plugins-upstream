@@ -1,49 +1,67 @@
-## Description: <br>
-Routes agents to the right Cargo CLI skill and explains setup, workflows, UUID conventions, async polling, use cases, and common gotchas for Cargo workspaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Router for the Cargo CLI skill bundle that helps agents choose the right Cargo skill, distinguish declarative workspace-as-code from imperative CLI work, follow UUID and slug flows, poll asynchronous runs and batches, and avoid common command pitfalls.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and GTM operators use this router when working with Cargo CLI skills to choose the right capability skill, bootstrap workspaces, stitch tasks together, and manage Cargo workspace workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks agents to refresh tools and skills and may use lifecycle hooks that affect local tooling or session records. <br>
-Mitigation: Prefer the npm or OpenClaw install path, inspect any curl-to-shell installer before use, and confirm the active workspace before writes. <br>
-Risk: The skill can send session or report data to Cargo services when the user consents. <br>
-Mitigation: Ask before sharing, omit secrets and record-level data, and skip reporting when the user declines. <br>
-Risk: Cargo CLI access can affect workspace resources through token creation, deploys, removals, deletes, or paid actions. <br>
-Mitigation: Watch prompts carefully and require explicit user confirmation before sensitive, destructive, or paid operations. <br>
+## Use Case:
 
+Developers, operators, and agent users use this skill as the entry point for Cargo CLI work: selecting the right Cargo capability skill, setting up and authenticating the CLI, running workspace workflows, and understanding cross-skill identifiers, polling, cost, and reporting conventions.
 
-## Reference(s): <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Cargo skill on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo) <br>
-- [Glossary](references/glossary.md) <br>
-- [Interaction conventions](references/interaction.md) <br>
-- [Cargo CLI prerequisites](references/prerequisites.md) <br>
-- [End-to-end use cases](references/use-cases.md) <br>
-- [UUID flow between skills](references/uuid-flow.md) <br>
-- [Common gotchas](references/gotchas.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and CLI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires @cargo-ai/cli and a Cargo account; Cargo commands generally return JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.15.0 (source: frontmatter and release evidence) <br>
+Risk: Cargo CLI access can modify workspace state, perform admin-scoped operations, deploy or delete resources, and run paid or bulk workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the active workspace, require explicit user approval before paid runs, bulk batches, default-branch writes, deploys, deletes, token changes, or user and role changes, and start with small samples before full enrollment.
+
+Risk: The skill supports session reporting and session sharing, which can send session context outside the local workspace.
+
+Mitigation: Review report content before sending and decline session sharing unless the user explicitly consents.
+
+Risk: API tokens and login codes can grant workspace access and may be shown only once.
+
+Mitigation: Keep tokens in a secrets manager, avoid exposing codes in shell history, and use workspace-scoped tokens with the least privilege needed.
+
+Risk: The artifact includes a request flow for starring the publisher's GitHub repository.
+
+Mitigation: Treat repository starring as a user endorsement and perform it only after explicit user approval.
+
+## Reference(s):
+
+- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills)
+- [Cargo CLI prerequisites](references/prerequisites.md)
+- [Interaction conventions](references/interaction.md)
+- [End-to-end use cases](references/use-cases.md)
+- [UUID flow between skills](references/uuid-flow.md)
+- [Common gotchas](references/gotchas.md)
+- [Glossary](references/glossary.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown with inline shell command examples and routing tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance may include Cargo CLI commands, skill routing decisions, workflow sequencing, polling steps, cost checkpoints, and safety gates.]
+
+## Skill Version(s):
+
+1.20.1 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

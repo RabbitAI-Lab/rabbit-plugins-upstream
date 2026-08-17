@@ -1,47 +1,60 @@
-## Description: <br>
-Run Cue deep research for legal and industry research scenarios, using multiple public sources to produce source-linked conclusions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用 Cue 跑「法律合规」场景的深度研究：快速检索国内法律法规与行政令原文，梳理立法背景与合规要点，覆盖企业合规风险体检、监管问询答复案例库、疑难法律实操案例库、国内法规调研、法律实务问题研判、监管处罚雷达、诉讼文书起草等核心搭子，并产出带法条与类案依据、可逐条回查的合规体检与法律实务底稿。
 
-## Publisher: <br>
-[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangxiaoxu](https://clawhub.ai/user/wangxiaoxu)
 
-## Use Case: <br>
-External users and developers use this skill to run Cue-backed legal and industry research across public sources for regulatory research, due diligence, sanctions exposure checks, litigation case review, domestic regulation lookup, and comparative law analysis. The skill guides setup, live template selection, credit confirmation, execution, and source-preserving report delivery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on an external Cue runner cloned into the user's home directory. <br>
-Mitigation: Install only after reviewing the runner source and keeping the dependency up to date from the documented repository or mirror. <br>
-Risk: The Cue runner may read the user's Cue API key from local configuration. <br>
-Mitigation: Use a dedicated Cue account or scoped credentials where possible and avoid running the workflow on systems where that access is inappropriate. <br>
-Risk: Deep research runs consume Cue credits. <br>
-Mitigation: Require explicit user confirmation of the selected template, subject, and credit consumption before each run. <br>
-Risk: Research output may be incomplete, unavailable, or unsuitable as legal advice. <br>
-Mitigation: Preserve source links, report empty results honestly, and require qualified review before relying on the output for legal, diligence, or compliance decisions. <br>
+## Use Case:
 
+Employees, external legal and compliance practitioners, and developers can use this skill to run Cue-backed public legal and compliance research for disclosure, regulatory, diligence, case-law, enforcement, and drafting workflows. Outputs should be treated as sourced research drafts that require professional legal review.
 
-## Reference(s): <br>
-- [Cue playbook API](https://cuecue.cn/api/playbook) <br>
-- [cue-skills GitHub repository](https://github.com/sensedeal/cue-skills) <br>
-- [cue-skills Gitee mirror](https://gitee.com/sensedeal/cue-skills) <br>
-- [ClawHub skill page](https://clawhub.ai/wangxiaoxu/skills/cue-legal-research) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and source-linked research reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May launch a long-running Cue research job, consume credits after confirmation, and return empty results when no report is available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill can clone or update the Cue runner under ~/.cue before executing research.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the runner source and confirm the local installation or update path before running setup commands.
+
+Risk: Legal research subjects or questions are sent to Cue and may consume Cue credits.
+
+Mitigation: Obtain explicit user confirmation before each credit-consuming run and avoid sending confidential information unless the user has approved that disclosure.
+
+Risk: Generated legal and compliance reports may be incomplete or unsuitable as final advice.
+
+Mitigation: Treat outputs as sourced drafts, preserve source links, and require professional legal review before relying on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wangxiaoxu/skills/cue-legal-research)
+- [Cue playbook API](https://cuecue.cn/api/playbook)
+- [Cue skills runner repository](https://github.com/sensedeal/cue-skills)
+- [Cue skills runner Gitee mirror](https://gitee.com/sensedeal/cue-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with sourced legal and compliance research plus inline shell commands for runner setup and execution]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Cue account API key, user confirmation before credit-consuming runs, and preservation of source links in returned reports.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

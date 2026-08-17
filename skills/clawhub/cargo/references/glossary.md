@@ -241,7 +241,7 @@ The pattern of repeatedly calling `run get`, `batch get`, or `message get` until
 A role / title shape that's part of the ICP. Example personas: "Head of RevOps at a B2B SaaS", "Founder at a seed-stage fintech". Used as filters for `salesNavigator.searchLeads`, `peopleDataLabs.searchPeople`, etc. Captured as `persona/<slug>.md` in the context repo with role, KPIs, pains, motivations, preferred channels, and common objections.
 
 **priority stack**
-The 6 default credits-based providers used as the spine of every recipe in `cargo-gtm/`: **salesNavigator** (sourcing), **cargo** native (firmographic + signal intelligence), **waterfall** (multi-source enrichment + verification + job-change signal), **FullEnrich** (premium contact lookup), **theirStack** (tech-stack + hiring intent), **peopleDataLabs** (heavyweight backfill). See `cargo-gtm/SKILL.md` for the full stack reference and per-provider playbooks.
+The 8 default credits-based providers used as the spine of every recipe in `cargo-gtm/`: **salesNavigator** (sourcing), **cargo** native (firmographic + signal intelligence), **aiArk** (LinkedIn-anchored enrich + cheapest per-record search), **waterfall** (multi-source enrichment + verification + job-change signal), **FullEnrich** (premium contact lookup), **apolloio** (1-credit niche-coverage enrich), **theirStack** (tech-stack + hiring intent), **peopleDataLabs** (heavyweight backfill). See `cargo-gtm/SKILL.md` for the full stack reference and per-provider playbooks.
 
 **proof**
 An atomic proof point — one metric, quote, case fact, or benchmark — stored as `proof/<slug>.md` in the context repo. Cross-referenced from plays, objections, and decks. Keep proof entries atomic (one fact per file) so they can be filtered in the knowledge graph.
@@ -288,7 +288,7 @@ A checked-out, executable copy of the **context repository** that backs every `c
 A filtered, live view of records in a model. Defined by a filter condition. Used as the trigger population for plays and as a data source for batch runs. Listed via `segmentation segment list`.
 
 **segmentUuid**
-The UUID of a segment. Used in `batch create --data '{"kind":"segment","segmentUuid":"..."}'`. Note: `segment fetch` and `segment download` require `--model-uuid`, not `--segment-uuid`.
+The UUID of a segment. Used in `batch create --data '{"kind":"segment","segmentUuid":"..."}'` — but only for a **standalone** segment from `segmentation segment list`. The `segmentUuid` returned by `play list` is the play's internally generated segment and is rejected by `batch create`; trigger a play with `{"kind":"filter","modelUuid":"<play.modelUuid>","filter":{"conjonction":"and","groups":[]}}` instead. Note: `segment fetch` and `segment download` require `--model-uuid`, not `--segment-uuid`.
 
 **slug**
 A human-readable string identifier used throughout the platform. Node slugs identify nodes within a graph (e.g. `enrich_company`). Integration slugs identify integration types (e.g. `clearbit`). Column slugs identify model columns. Slugs use only `[a-zA-Z0-9_]`. In the **context repository**, slugs are kebab-case filenames without the `.md` extension and are referenced as `domain/slug`.

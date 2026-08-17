@@ -1,50 +1,65 @@
-## Description: <br>
-Provides LinkFox gateway scripts and guidance for Temu US Ads API workflows, including ad creation, modification, details, reports, operation logs, goods eligibility, and ROAS prediction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides LinkFox gateway scripts and references for Temu US ecommerce advertising APIs, including ad creation and modification, ROAS prediction, reports, logs, detail queries, file download, and token guidance.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Temu sellers, ecommerce operators, and developers use this skill to call LinkFox-mediated Temu US Ads APIs for campaign setup, budget or ROAS changes, reporting, operation logs, and related ad diagnostics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can proxy Temu seller and advertising requests through LinkFox, including broad custom Temu API types. <br>
-Mitigation: Install and run it only in workspaces where LinkFox is trusted with Temu seller and ads access, and review each command before execution. <br>
-Risk: Advertising actions can create ads, delete or pause ads, and change budget or ROAS settings. <br>
-Mitigation: Require user confirmation for write actions and budget or ROAS changes, and prefer read-only detail, goods eligibility, report, or log queries when diagnosing. <br>
-Risk: Temu access tokens may be passed in command JSON or saved in a local plaintext token store. <br>
-Mitigation: Prefer short-lived direct token use when possible, protect any token store path, avoid printing or sharing raw tokens, and rotate tokens if exposure is suspected. <br>
-Risk: Full API responses are persisted locally and may contain sensitive seller, campaign, report, or business data. <br>
-Mitigation: Use a controlled workspace, clean up saved linkfox response files after use, and avoid adding those files to source control or shared logs. <br>
+## Use Case:
 
+External sellers, operators, and developers use this skill to manage Temu US advertising workflows through LinkFox gateway scripts. It supports creating and modifying ads, checking eligible goods, querying ad reports/details/logs, predicting ROAS, downloading signed files, and setting up LinkFox and Temu tokens.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-ads-us) <br>
-- [API Reference](references/api.md) <br>
-- [Temu Access Token Authorization](references/access-token.md) <br>
-- [Authorization Flow](references/authorization-flow.md) <br>
-- [Partner US Ads Catalog](references/partner-us-catalog.md) <br>
-- [Ads API Documentation Index](references/apis/README.md) <br>
-- [Temu Partner US Ads Documentation](https://partner-us.temu.com/documentation?menu_code=1e72b5cceef545ec8f9652b9e56dd054) <br>
+### Deployment Geography for Use:
 
+United States (Temu US site)
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python command examples and JSON API responses saved to local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Small responses may print full JSON to stdout; larger responses are summarized after the full response is written under a linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill handles LinkFox API keys, Temu access tokens, and Temu seller advertising data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when LinkFox is trusted for the relevant Temu seller data, treat all API keys and access tokens as secrets, and avoid exposing tokens in prompts, logs, or shared files.
+
+Risk: Generic proxy and file-download scripts can forward broad Temu requests or retrieve signed resources.
+
+Mitigation: Prefer the task-specific advertising scripts when possible, review the request body and Temu API type before execution, and use generic proxy or file-download scripts only when necessary.
+
+Risk: The skill can make live advertising changes such as creating ads, changing status, budgets, or ROAS settings.
+
+Mitigation: Require explicit user approval before campaign creation, modification, budget changes, ROAS changes, payment-order creation, or other operations that could affect spend.
+
+Risk: Full responses and local Temu access tokens may be retained on disk.
+
+Mitigation: Review and clean local files under the linkfox response directory and ~/.linkfox, and use secure file permissions or an alternate token store path where appropriate.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-ads-us)
+- [API reference](references/api.md)
+- [Temu access token guide](references/access-token.md)
+- [Partner US Ads catalog](references/partner-us-catalog.md)
+- [Temu Partner US Ads documentation](https://partner-us.temu.com/documentation?menu_code=1e72b5cceef545ec8f9652b9e56dd054&sub_menu_code=7bc9231776304158a895e41a816b7805)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, shell command examples, JSON API responses, and local JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full gateway responses under a local linkfox session data directory; small responses print JSON directly and large responses print summaries unless --inline is used.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -16,7 +16,8 @@
 #   • Auto-discover every Space Duck artefact on the box
 #   • Categorise findings: ✓ healthy / ⚠ known degraded / ✗ broken
 #   • Suggest the next action for each ⚠ or ✗
-#   • Output is safe to share publicly (no secrets, no full URLs with tokens)
+#   • Output carries no secrets/tokens and no full URLs with tokens, but it
+#     DOES include host/process/log-tail context — glance before sharing widely
 #
 # Doctrine:
 #   • Read-only. NEVER mutates state. Doctor diagnoses, never treats.
@@ -259,7 +260,10 @@ section "Bridge tunnel"
 TUNNEL_PROC=$(pgrep -fa 'cloudflared\|tryclou' 2>/dev/null | head -1 || true)
 if [[ -n "$TUNNEL_PROC" ]]; then
   ok "Tunnel process running"
-  row "${C_DIM}${TUNNEL_PROC:0:140}${C_RESET}"
+  # [HARDEN-074] Redact before printing: named-tunnel cmdlines can carry
+  # --token <JWT> and full tunnel URLs — both violate "safe to paste publicly".
+  TUNNEL_SAFE=$(echo "$TUNNEL_PROC" | sed -E 's/(--token[= ])[^ ]+/\1<redacted>/g; s|https?://[^ ]+|<url-redacted>|g')
+  row "${C_DIM}${TUNNEL_SAFE:0:140}${C_RESET}"
   if echo "$TUNNEL_PROC" | grep -q 'trycloudflare\|quick'; then
     warn "Quick tunnel detected — URL is ephemeral (will change on restart)"
     hint "Production: switch to named cloudflared tunnel or owner DNS"
@@ -295,6 +299,6 @@ echo "  ${C_GREEN}✓ healthy: $HEALTH_OK${C_RESET}"
 echo "  ${C_YELLOW}⚠ warnings: $HEALTH_WARN${C_RESET}"
 echo "  ${C_RED}✗ failures: $HEALTH_FAIL${C_RESET}"
 echo
-echo "${C_DIM}This report contains no secrets and is safe to paste publicly.${C_RESET}"
+echo "${C_DIM}This report contains no secrets or tokens, but includes host/process/log context — review before sharing widely.${C_RESET}"
 echo
 exit 0

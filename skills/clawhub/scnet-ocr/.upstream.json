@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/scnet-ocr",
   "slug": "scnet-ocr",
   "ownerHandle": null,
-  "version": "1.0.6",
-  "updatedAt": 1780450766552,
-  "contentHash": "994fc67e4359fe6483a8a22ecc2344a63334a81a202468990c39455e3f8d1424",
-  "fetchedAt": "2026-07-26T18:36:15.923Z"
+  "version": "1.0.8",
+  "updatedAt": 1786442082570,
+  "contentHash": "86484a975f57d4d4d64a4e1f64ece61ee0838bd4c8d601cba7f73eb9f49b1d03",
+  "fetchedAt": "2026-08-17T08:49:31.844Z"
 }

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "siluzan-tso/google-period-report.schema.json",
   "title": "GooglePeriodReport",
-  "description": "Google Ads 周期分析报告 JSON（对齐 google-period-report.md 8 默认维度；供 google-analysis render 注入 HTML）。Agent 只需撰写 narrative 字段，kpis/charts/tables 可省略由 --snapshot-dir 从 google-analysis 落盘快照自动合并。",
+  "description": "Google Ads 周期分析报告 JSON（对齐 google-period-report.md 8 默认维度；供 google-analysis render 注入 HTML）。Agent 只需撰写 narrative；kpis/charts/tables 由 --snapshot-dir 从 google-analysis 快照合并。render 校验要求合并后 kpis.cost/impressions/clicks 至少一项为有效数字，否则拒绝出 HTML（避免执行摘要卡片全「—」）。",
   "type": "object",
   "required": ["meta", "narrative"],
   "properties": {
@@ -21,7 +21,7 @@
     },
     "kpis": {
       "type": "object",
-      "description": "账户级 KPI（执行摘要 KPI 网格）；可省略，由 --snapshot-dir 从 overview 合并",
+      "description": "账户级 KPI（执行摘要 KPI 网格）；Agent 可省略，但 render 时须经 --snapshot-dir 合并出 cost/impressions/clicks",
       "properties": {
         "cost": { "type": "number" },
         "impressions": { "type": "number" },

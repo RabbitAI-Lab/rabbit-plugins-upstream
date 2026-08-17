@@ -1,44 +1,61 @@
-## Description: <br>
-Provides agent-facing commands and Python helpers for querying authorized Shopee store payment, escrow, payout, wallet, income report, and installment APIs through LinkFox. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents work with authorized Shopee store payment workflows, including escrow, payouts, wallet transactions, installments, and income reports through LinkFox-provided scripts and API references.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Shopee merchants and operators use this skill to retrieve settlement, escrow, payout, wallet transaction, income report, and installment-payment data for an already-authorized Shopee store. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive Shopee merchant payment and settlement data and saves full API responses locally. <br>
-Mitigation: Run it only in protected workspaces, review where the linkfox output directory is created, and remove or restrict access to saved financial JSON files when they are no longer needed. <br>
-Risk: The skill uses LinkFox API credentials and authorized Shopee store access to query merchant payment data. <br>
-Mitigation: Limit use to stores the user is authorized to access and protect LINKFOX_AGENT_API_KEY or LINKFOXAGENT_API_KEY values from logs, shared shells, and committed files. <br>
-Risk: The skill may send feedback to LinkFox automatically when behavior, results, or user sentiment indicate a reportable event. <br>
-Mitigation: Review feedback behavior before installation and avoid including sensitive merchant financial details in any feedback content. <br>
+## Use Case:
 
+External operators and developers managing authorized Shopee stores use this skill to query payment settlement, escrow, payout, wallet, installment, billing, and income-report information.
 
-## Reference(s): <br>
-- [Shopee payment API reference](references/api.md) <br>
-- [Shopee Open Platform Payment module](https://open.shopee.com/documents/v2/v2.payment.get_escrow_detail?module=97&type=1) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-payment) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, files, guidance] <br>
-**Output Format:** [JSON responses saved to local files, with stdout JSON or summaries depending on response size.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are persisted under a linkfox session data directory; --inline prints full responses to stdout.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill handles sensitive Shopee payment, account, credential, and billing data through LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when comfortable sending that data through LinkFox, and treat API keys, phone codes, and payment data as secrets.
+
+Risk: The skill can run set_* installment operations that may change store or item installment status.
+
+Mitigation: Explicitly confirm the intended store, item, and status before running any set_* operation.
+
+Risk: Saved response files may retain financial or account data after the task is complete.
+
+Mitigation: Delete saved linkfox response files when they are no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-payment)
+- [Shopee Payment API index](https://open.shopee.com/documents/v2/v2.payment.get_escrow_detail?module=97&type=1)
+- [Payment module API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [Payment endpoint references](references/apis/)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Files, Shell commands, Guidance]
+
+**Output Format:** [JSON files and stdout JSON or summaries, with Markdown guidance for setup and troubleshooting]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are saved under a linkfox session data directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

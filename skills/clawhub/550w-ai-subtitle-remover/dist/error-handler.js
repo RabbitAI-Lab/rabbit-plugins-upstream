@@ -14,7 +14,7 @@ function mapApiError(apiResponse) {
     }
     switch (code) {
         case types_1.ErrorCode.AUTH_FAILED:
-            return createErrorResponse(code, `鉴权失败: ${message}。请检查 userNo 和 apiKey 是否正确配置，如需重新获取凭证请访问 ${types_1.CREDENTIAL_APPLY_URL}`);
+            return createErrorResponse(code, `请求未通过: ${message}。请根据提示检查凭证或积分余额，如需管理账号请访问 ${types_1.CREDENTIAL_APPLY_URL}`);
         case types_1.ErrorCode.INVALID_PARAMS:
             return createErrorResponse(code, `参数错误: ${message}`);
         case types_1.ErrorCode.BUSINESS_REJECTED:

@@ -1,46 +1,62 @@
-## Description: <br>
-Helps agents manage Amazon seller authorization by generating OAuth authorization links, listing authorized stores, refreshing access tokens, and retrieving store tokens for downstream workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Amazon Seller store authorization by generating authorization links, listing authorized stores, refreshing token status, and confirming seller and region context for downstream workflows.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External e-commerce operators and agents use this skill to authorize Amazon seller stores, inspect authorized store records, and prepare store tokens before invoking downstream Amazon workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Amazon seller access and refresh tokens may be retrieved, passed to downstream components, and saved locally. <br>
-Mitigation: Install only when the publisher is trusted, keep local response files access-controlled, and avoid exposing full token outputs in shared logs or transcripts. <br>
-Risk: The security evidence marks token handling as too broad and under-disclosed for automatic installation. <br>
-Mitigation: Require human review before installation and prefer a release that documents permissions, redacts tokens, restricts API hosts, and makes token handoff explicit. <br>
-Risk: The gateway host can be configured through environment variables, which may redirect credential-bearing API calls. <br>
-Mitigation: Verify `LINKFOX_TOOL_GATEWAY`, `STORE_API_BASE_URL`, and `SPAPI_BASE_URL` before running scripts, and use only approved HTTPS endpoints. <br>
+## Use Case:
 
+External developers and ecommerce operators use this skill to connect Amazon Seller accounts to LinkFox, manage authorized stores, refresh authorization state, and prepare sellerId plus region selectors for downstream Amazon workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-auth) <br>
-- [Amazon Store Authorization Skill README](README.md) <br>
-- [Amazon store authorization API reference](references/api.md) <br>
-- [Amazon store authorization flow](references/authorization-flow.md) <br>
-- [Amazon store authorization quick start](references/quick-start.md) <br>
+### Deployment Geography for Use:
 
+Global; marketplace operations are scoped by the skill's NA, EU, and FE region codes.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts write API responses to local JSON files and print either full small responses or summaries for larger responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: release evidence) <br>
+Risk: The skill handles sensitive Amazon access tokens, refresh tokens, LinkFox API keys, and local response files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in a trusted workspace, avoid exposing tokens in chat or logs, prefer status metadata over raw token values, and review saved linkfox response files before sharing or committing them.
+
+Risk: The onboarding flow can perform LinkFox login, API key issuance, plan selection, and payment order creation.
+
+Mitigation: Run onboarding and payment commands only after explicit user intent, confirm LinkFox endpoints and environment variables, and treat payment selection as a separate sensitive action.
+
+Risk: The server security verdict is suspicious because the skill includes token handling, account login, payment flows, feedback reporting, and local response storage.
+
+Mitigation: Review the artifact before installing, confirm the LinkFox endpoints are controlled, and avoid automatic retries or repeated paid actions without user confirmation.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-auth)
+- [Amazon Store Authorization Skill README](artifact/README.md)
+- [Amazon Store Authorization API Reference](artifact/references/api.md)
+- [Amazon Store Authorization Flow](artifact/references/authorization-flow.md)
+- [Amazon Store Authorization Quick Start](artifact/references/quick-start.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON, Configuration]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save full API responses to local linkfox session files and print summaries for large responses; token query and refresh scripts strip raw token fields before display.]
+
+## Skill Version(s):
+
+1.0.7 (source: evidence.release.version; artifact _meta.json reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
