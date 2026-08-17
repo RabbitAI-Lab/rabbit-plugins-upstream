@@ -299,6 +299,27 @@ brew install curl jq poppler zip
 
 ## Changelog
 
+### v1.3.10 (2026‑08‑10)
+- **Bug fix**: Alnum fallback path only applied `_filter_year` + `_filter_issue`, missing `_filter_abstract`, `_filter_keywords`, and `grep -v` exclusions. Now applies the full filter set, matching the CJK branch (review #2).
+- **Improvement**: WebDAV `trap` documented as known limitation (overwrites existing EXIT traps; acceptable for standalone script, review #1).
+- **Note**: Issues #3 (awk byte/char), #4 (version header skip), #5 (BSD fallback CJK Extension B coverage) acknowledged as low-priority; not blocking.
+
+### v1.3.9 (2026‑08‑10)
+- **Bug fix (critical)**: CJK detection `grep '[一-龥]'` is locale-sensitive — fails in `C.UTF-8` (error) and silently matches nothing in `zh_CN.UTF-8`. Replaced with `grep -P '[\x{4E00}-\x{9FFF}]'` (codepoint-based, collation-independent) with BSD grep fallback probe.
+- **Bug fix**: Filter patterns `年.*期` / `第.*期` too greedy — killed legitimate titles like "青少年时期心理健康研究". Tightened to `^[0-9０-９]{2,4}.*年` and `第[0-9０-９一二三四五六七八九十]+[期卷]`.
+- **Bug fix**: Fullwidth space variants `摘　要` (U+3000) / `关 键 词` not covered. Now using `摘[[:space:]　]*要` / `关[[:space:]　]*键`.
+- **Improvement**: Alnum fallback path now applies same header filters as CJK branch (was only scanning 5 lines unfiltered — another regression path to grabbing issue headers).
+- **Improvement**: Added `|| true` to `title=$(...)` pipelines for explicit pipefail safety (was safe by accident due to function ending with `echo`).
+- **Improvement**: WebDAV upload failure now exits non-zero instead of printing "Success!". Added `trap 'rm -f ...' EXIT` for cleanup on failure/Ctrl-C.
+- **Improvement**: `TMP_DIR` now uses `${TMPDIR:-/tmp}` instead of hardcoded `/tmp`.
+- **Improvement**: Header version comment updated to match `--version` output.
+
+### v1.3.8 (2026‑08‑10)
+- **Bug fix (critical)**: WebDAV upload failed with exit code 3 — `mktemp` creates an empty 0-byte file, then `zip -j` treats it as an invalid existing archive and fails. Replaced `mktemp` with `$TMP_DIR/${ATTACH_KEY}.prop` and `$TMP_DIR/${ATTACH_KEY}.zip` (with `rm -f` guard), which also fixes a secondary bug where files were uploaded with random mktemp names instead of the required `<ATTACH_KEY>.zip`/`<ATTACH_KEY>.prop` filenames.
+- **Bug fix**: Chinese paper title extraction grabbed issue headers (e.g. "２０２１年第４期") instead of the actual title. Added `extract_title_from_pdf()` function with CJK-aware filtering: skips date/issue/volume markers, abstracts, keywords, author bios, and fund project notes; strips trailing footnote markers (＊).
+- **Improvement**: WebDAV curl uploads now report HTTP status codes instead of failing silently with `-f`.
+- **Improvement**: WebDAV upload URL uses explicit filename (`$WEBDAV_BASE_URL/${ATTACH_KEY}.prop`) instead of relying on curl's trailing-slash filename appending behavior.
+
 ### v1.3.6 (2026‑06‑11)
 
 - **Security fixes** (CRITICAL): Fixed CRLF injection in multipart form data (`add_to_zotero_universal.sh`) — filename sanitized, all attachment JSON payloads use `jq --arg` instead of raw string interpolation

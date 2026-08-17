@@ -1,47 +1,63 @@
-## Description: <br>
-Provides agent-facing guidance and Python entry points for Shopee Open Platform Push operations through LinkFox, including push callback configuration, current configuration lookup, lost push message retrieval, and consumed-message confirmation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents configure and inspect Shopee Open Platform Push callbacks, retrieve lost push messages, and confirm consumed lost push messages through LinkFox's Shopee gateway.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and ecommerce operators use this skill to configure Shopee Push webhooks, inspect app push settings, retrieve lost push messages, and confirm consumed replay messages through LinkFox-managed Shopee API access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform state-changing Shopee Push operations such as setting webhook configuration and confirming consumed lost messages. <br>
-Mitigation: Confirm the target shop or merchant, request body, and intended state change before running POST operations. <br>
-Risk: Full API responses are retained locally in plaintext and may contain webhook, shop, merchant, or message data. <br>
-Mitigation: Store generated linkfox data files outside source control, review them for sensitive contents, and delete or protect them according to local data handling requirements. <br>
-Risk: The skill requires LinkFox API credentials and Shopee merchant access. <br>
-Mitigation: Use least-privilege credentials where available and avoid sharing command output or saved response files that contain merchant data. <br>
+## Use Case:
 
+Developers and e-commerce operators use this skill to manage Shopee store Push configuration, replay missed Push messages, and troubleshoot authentication or balance issues needed to complete those workflows.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-push) <br>
-- [API reference](references/api.md) <br>
-- [Shopee Push set_app_push_config documentation](https://open.shopee.com/documents/v2/v2.push.set_app_push_config?module=105&type=1) <br>
-- [Shopee Push get_app_push_config documentation](https://open.shopee.com/documents/v2/v2.push.get_app_push_config?module=105&type=1) <br>
-- [Shopee Push get_lost_push_message documentation](https://open.shopee.com/documents/v2/v2.push.get_lost_push_message?module=105&type=1) <br>
-- [Shopee Push confirm_consumed_lost_push_message documentation](https://open.shopee.com/documents/v2/v2.push.confirm_consumed_lost_push_message?module=105&type=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON, Files] <br>
-**Output Format:** [Markdown guidance with Python command examples and JSON API responses saved to local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved under a local linkfox session data directory; small responses may also be printed to stdout, while larger responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill uses a LinkFox API key and calls LinkFox/Shopee gateway services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the operator accepts those external service calls, keep API keys out of shared logs or transcripts, and rotate exposed credentials.
+
+Risk: The skill can save complete API responses locally, which may include operational or account data.
+
+Mitigation: Review the generated linkfox output directory, limit access to saved response files, and remove files that are no longer needed.
+
+Risk: The artifact includes onboarding, SMS login, API-token generation, and billing/payment recovery flows beyond core Push operations.
+
+Mitigation: Run those flows only when authentication or balance errors require them, and review payment-order details before sharing or acting on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-push)
+- [Shopee Push API reference](artifact/references/api.md)
+- [set_app_push_config](artifact/references/apis/set-app-push-config.md)
+- [get_app_push_config](artifact/references/apis/get-app-push-config.md)
+- [get_lost_push_message](artifact/references/apis/get-lost-push-message.md)
+- [confirm_consumed_lost_push_message](artifact/references/apis/confirm-consumed-lost-push-message.md)
+- [Shopee Open Platform Push documentation](https://open.shopee.com/documents/v2/v2.push.set_app_push_config?module=105&type=1)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses or response summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts may save full API responses in a local linkfox session directory and print either full JSON or a concise summary to stdout.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

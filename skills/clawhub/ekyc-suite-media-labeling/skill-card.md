@@ -1,47 +1,58 @@
-## Description: <br>
-eKYC Suite Media Labeling is a focused KYC media-review skill for AI agents that returns selected portrait and scene labels from consented images or videos. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+eKYC Suite Media Labeling helps agents request selected portrait, behavior, and scene labels from consented KYC images or videos through a configured cloud labeling service.
 
-## Publisher: <br>
-[carochen112233-commits](https://clawhub.ai/user/carochen112233-commits) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[carochen112233-commits](https://clawhub.ai/user/carochen112233-commits)
 
-## Use Case: <br>
-KYC onboarding, fraud review, identity operations, and human-review teams use this skill to request selected media-risk labels for consented images or videos. The labels are review signals for authorized workflows and are not final high-impact decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends user-supplied KYC media to an operator-configured cloud endpoint. <br>
-Mitigation: Use only authorized media, configure an HTTPS endpoint with approved retention and access controls, and confirm the endpoint policy before deployment. <br>
-Risk: The security summary says liveness and comparison-related processing are enabled by default even though the public positioning is narrow media labeling. <br>
-Mitigation: Disable or remove comparison and liveness behavior unless that processing is explicitly approved for the workflow. <br>
-Risk: Media labels may be ambiguous or inappropriate as final decision inputs. <br>
-Mitigation: Treat returned labels as review signals, request clearer media when needed, and escalate sensitive or ambiguous results to an authorized human reviewer. <br>
+## Use Case:
 
+KYC onboarding, fraud review, identity operations, and human-review teams use this skill when an agent needs narrow media-review labels for consented images or videos without open-ended captioning, face comparison, document OCR, or final automated decisioning.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-media-labeling) <br>
-- [Related npm MCP package](https://www.npmjs.com/package/@wefi-ai/ekyc-suite-media-labeling-mcp) <br>
-- [Parent eKYC Suite skill](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite) <br>
-- [eKYC Suite Face Compare skill](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-face-compare) <br>
-- [eKYC Suite AI Guardian skill](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-ai-guardian) <br>
-- [eKYC Suite Document OCR skill](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-document-ocr) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration, guidance] <br>
-**Output Format:** [JSON label results from a Python CLI, with Markdown usage guidance in the skill text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EKYC_CLOUD_ENDPOINT and EKYC_CLOUD_API_KEY; accepts 1-5 supported label codes and an image or video input.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: frontmatter and server release evidence) <br>
+Risk: KYC images and videos may contain sensitive personal data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Process only user-authorized media under an appropriate retention policy and confirm the configured cloud service is approved for the data.
+
+Risk: Media labels can be incomplete, ambiguous, or unsuitable for final identity decisions.
+
+Mitigation: Treat labels as review signals and escalate sensitive or ambiguous results to an authorized human reviewer.
+
+Risk: The client sends selected media to an operator-configured HTTPS endpoint.
+
+Mitigation: Configure EKYC_CLOUD_ENDPOINT and EKYC_CLOUD_API_KEY intentionally, and verify downstream retention, access control, and processing terms before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-media-labeling)
+- [Related npm MCP package](https://www.npmjs.com/package/@wefi-ai/ekyc-suite-media-labeling-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, text, guidance]
+
+**Output Format:** [JSON label results or JSON error objects]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts one image or video input and 1-5 requested label codes; outputs should be treated as review signals rather than definitive facts.]
+
+## Skill Version(s):
+
+1.0.19 (source: release evidence, SKILL.md frontmatter, CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

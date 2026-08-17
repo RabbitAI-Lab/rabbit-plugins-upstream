@@ -11,6 +11,7 @@
 - Meta / Facebook Ads 账户分析
 - TikTok 账户分析
 - Bing（BingV2）账户分析
+- Yandex 账户分析
 - 报告模板
 
 ---
@@ -21,14 +22,14 @@
 
 涉及"今天/当天/今日消耗""实时消耗排行"等问题时，**必须**先按此表确认接口口径，否则今天消耗会被误判为 0。
 
-| 命令 / 接口                                                                                                                                                                           | 时效性                                                                                                                                                              | 能否查"今天"                      | 典型用途                                               |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------ |
-| `google-analysis --sections overview`（Google 网关 `OverviewSectionData`）                                                                                                            | **实时**                                                                                                                                                            | ✅ 可查当天                       | 当天/今日消耗、当天高消耗账号排行                      |
-| `google-analysis --sections campaign-types`（`types-summary`）                                                                                                                        | **实时**                                                                                                                                                            | ✅ 可查当天                       | 当天系列类型分布                                       |
-| `google-analysis` 其他维度（`campaigns` / `keywords` / `devices` / ...）                                                                                                              | 实时（受 Google Ads API 同步延迟影响）                                                                                                                              | 可查当天，但当天可能尚未结算      | 周期分析、报告                                         |
-| `stats -m Google` / `balance-scan -m Google` / `accounts-digest -m Google` / `list-accounts -m Google` 合并消耗（TSO `account-spend-overview`，2026-05 起）                           | **后端自动分流**：窗口完全在历史 → `database` 模式（含余额/状态/币种/账户名 + 当期消耗）；窗口含今天 → `googleCombined` 模式（仅实时消耗，无余额/状态/币种/账户名） | ✅ 可查当天（含今天时切实时聚合） | 历史回溯、巡检、余额续航估算；含今天时也能给出实时消耗 |
-| `stats` / `balance-scan` / `accounts-digest` / `list-accounts` 的 **TikTok / Yandex / BingV2 / Kwai / MetaAd** 合并消耗（TSO `accountsoverview`；MetaAd OAuth 户走 `FacebookAds` 段） | **每日同步昨天**                                                                                                                                                    | ❌ 查今天会全为 0                 | 历史回溯、巡检、余额续航估算（口径为"截至昨天"）       |
-| `balance`（`GetMediaAccountInfo`）                                                                                                                                                    | 实时                                                                                                                                                                | —                                 | 仅当前余额，不反映消耗                                 |
+| 命令 / 接口                                                                                                                                                                           | 时效性                                                                                                                                                 | 能否查"今天"                      | 典型用途                                         |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------- | ------------------------------------------------ |
+| `google-analysis --sections overview`（Google 网关 `OverviewSectionData`）                                                                                                            | **实时**；请求起止为 **YYYY-MM-DD**（不附加时区）                                                                                                      | ✅ 可查当天                       | 当天/今日消耗、当天高消耗账号排行                |
+| `google-analysis --sections campaign-types`（`types-summary`）                                                                                                                        | **实时**                                                                                                                                               | ✅ 可查当天                       | 当天系列类型分布                                 |
+| `google-analysis` 其他 range 维度（`campaigns` / `keywords` / `devices` / `geographic` / `daily-metrics` / …）                                                                        | 实时（受 Google Ads API 同步延迟影响）；**一律 YYYY-MM-DD**（不附加时区；与 `stats` 的 UTC+8 不同）                                                    | 可查当天，但当天可能尚未结算      | 周期分析、报告                                   |
+| `stats -m Google` / `balance-scan -m Google` / `accounts-digest -m Google` / `list-accounts -m Google` 合并消耗（TSO `account-spend-overview`，2026-05 起）                           | **后端自动分流**：窗口完全在历史 → `database`；含今天 → `googleCombined`。**凡走本接口的请求起止一律东八区墙钟**（`…T00:00:00+08:00` ~ `…T23:59:59+08:00`） | ✅ 可查当天（含今天时切实时聚合） | 历史回溯、巡检、周报 KPI、余额续航估算           |
+| `stats` / `balance-scan` / `accounts-digest` / `list-accounts` 的 **TikTok / Yandex / BingV2 / Kwai / MetaAd** 合并消耗（TSO `accountsoverview`；MetaAd OAuth 户走 `FacebookAds` 段） | **每日同步昨天**                                                                                                                                       | ❌ 查今天会全为 0                 | 历史回溯、巡检、余额续航估算（口径为"截至昨天"） |
+| `balance`（`GetMediaAccountInfo`）                                                                                                                                                    | 实时                                                                                                                                                   | —                                 | 仅当前余额，不反映消耗                           |
 
 **选用规则**：
 
@@ -45,7 +46,7 @@
 > 线性步骤见 `playbooks.md`：单户画像 **P1**、Google 周期 **P4**、Meta 周期 **P4-FB**、多账户批处理 **P5**、OKKI **P6**、询盘 **P7**。
 > 「使用 okki 周报模板」→ **P6**（勿按默认 8 维追问）。Google 周期 Excel（非 OKKI/询盘）→ **P4** + `report-templates/google-period-report-excel.md`。
 
-拉数落盘：`google-analysis … --json-out <dir>`（Google）或 `report <media>-*` 命令；目录内生成 `<section>-<accountId>.json` + `manifest-<accountId>.json`（Meta/TikTok/Bing 为 `report-manifest-<accountId>.json`）。读盘协议、交付自检与报告首行标注统一见 `references/core/agent-conventions.md` §三、§七。
+拉数落盘：`google-analysis … --json-out <dir>`（Google）或 `yandex-analysis` / `bing-analysis` / `facebook-analysis` / `tiktok-analysis`；目录内生成 `<section>-<accountId>.json` + `manifest-<accountId>.json`（Meta/TikTok/Bing/Yandex 为 `report-manifest-<accountId>.json`）。读盘协议、交付自检与报告首行标注统一见 `references/core/agent-conventions.md` §三、§七。
 
 ---
 
@@ -64,7 +65,7 @@ CLI 出口的所有 JSON / 表格金额已统一为**元**，关键字段：
 | `ad campaigns --json-out ./snap`                    | `budget`（元，与 `--budget` 写参同口径）                                                                                                  |
 | `ad groups --json-out ./snap`                       | `maxCPCAmountYuan`、`targetCpaAmountYuan`                                                                                                 |
 | `google-analysis campaigns` 落盘 `campaigns-*.json` | `budgetAmountYuan`、`campaignTargetCpaYuan`、`maximizeConversionsTargetCpaYuan`；同行 `spend` / `averageCpc` / `costPerConversion` 也是元 |
-| `keyword -k … --json-out ./snap`                 | `averageCpc`、`lowTopOfPageBid`、`highTopOfPageBid`；根级与每条 `bidAmountCurrency`（有 `-a` 为账户币；无 `-a` 为 USD）                   |
+| `keyword -k … --json-out ./snap`                    | `averageCpc`、`lowTopOfPageBid`、`highTopOfPageBid`；根级与每条 `bidAmountCurrency`（有 `-a` 为账户币；无 `-a` 为 USD）                   |
 | `balance` 等账户余额接口                            | 余额字段为`remainingAccountBudget`（元）                                                                                                  |
 
 旧字段 `budgetAmount`（分）、`maxCPCAmountDisplay`、`*Micros`（微元）**已不再落盘**，下游脚本无需做单位换算。金额保留 2 位小数，带货币代码（如 `￥50.00 CNY`、`$50.00 USD`），`currencyCode` 从响应读取，跨币种账户分表；细则见 `references/accounts/currency.md`。
@@ -96,22 +97,22 @@ siluzan-tso google-analysis -a <id> --exclude materials,gold-account --json-out 
 
 ### 选项
 
-| 选项                        | 说明                                                                                                       |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `-a, --account <id>`        | Google `mediaCustomerId`（必填）                                                                           |
-| `--json-out <dir>`          | 必填；每维一个 `<section>-<accountId>.json` + `manifest-<accountId>.json`                                  |
-| `--sections <list>`         | 仅执行指定维度（逗号分隔）；省略=全部 25 个                                                                |
-| `--exclude <list>`          | 排除指定维度；与 `--sections` 可叠加                                                                       |
-| `--start` / `--end`         | 统计区间（YYYY-MM-DD）；省略=近 7 天截至昨天；`final-urls`/`campaign-types` 自动忽略                       |
-| `--concurrency <n>`         | 并发数，默认 5，上限 16                                                                                    |
-| `--limit <n>`               | 透传给 `keywords`/`search-terms`（默认 **0**=不封顶；`orderByCost=true`）                                  |
-| `--level <lvl>`             | 透传给 `extensions`（Account/Campaign/Ad Group）                                                           |
-| `--audience-type <type>`    | 透传给 `audience`（SystemDefined/UserDefined）                                                             |
-| `--no-order-by-cost`        | 透传给 `keywords`/`search-terms`                                                                           |
-| `--cost-greater <n>`        | 仅 **`geo-matched` / `campaign-geo` / `campaign-geo-matched`**：网关 `costGreater`（整数，单位以后端为准） |
-| `--click-greater <n>`       | 仅 **`geo-matched` / `campaign-geo` / `campaign-geo-matched`**：网关 `clickGreater`                        |
-| `--conversions-greater <n>` | 仅 **`geo-matched` / `campaign-geo` / `campaign-geo-matched`**：网关 `conversionsGreater`                  |
-| `--verbose`                 | 打印详细错误                                                                                               |
+| 选项                        | 说明                                                                                                                                                                     |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `-a, --account <id>`        | Google `mediaCustomerId`（必填）                                                                                                                                         |
+| `--json-out <dir>`          | 必填；每维一个 `<section>-<accountId>.json` + `manifest-<accountId>.json`                                                                                                |
+| `--sections <list>`         | 仅执行指定维度（逗号分隔）；省略=全部 25 个                                                                                                                              |
+| `--exclude <list>`          | 排除指定维度；与 `--sections` 可叠加                                                                                                                                     |
+| `--start` / `--end`         | 统计区间（YYYY-MM-DD，**只传年月日**；默认区间按 UTC+8 日历）。与 `stats -m Google`（会加成 `+08:00`）不同；省略=近 7 天截至昨天；`final-urls`/`campaign-types` 自动忽略 |
+| `--concurrency <n>`         | 并发数，默认 5，上限 16                                                                                                                                                  |
+| `--limit <n>`               | 透传给 `keywords`/`search-terms`（默认 **0**=不封顶；`orderByCost=true`）                                                                                                |
+| `--level <lvl>`             | 透传给 `extensions`（Account/Campaign/Ad Group）                                                                                                                         |
+| `--audience-type <type>`    | 透传给 `audience`（SystemDefined/UserDefined）                                                                                                                           |
+| `--no-order-by-cost`        | 透传给 `keywords`/`search-terms`                                                                                                                                         |
+| `--cost-greater <n>`        | 仅 **`geo-matched` / `campaign-geo` / `campaign-geo-matched`**：网关 `costGreater`（整数，单位以后端为准）                                                               |
+| `--click-greater <n>`       | 仅 **`geo-matched` / `campaign-geo` / `campaign-geo-matched`**：网关 `clickGreater`                                                                                      |
+| `--conversions-greater <n>` | 仅 **`geo-matched` / `campaign-geo` / `campaign-geo-matched`**：网关 `conversionsGreater`                                                                                |
+| `--verbose`                 | 打印详细错误                                                                                                                                                             |
 
 ### 维度列表（25 个）
 
@@ -210,10 +211,10 @@ const data = d.record ?? d.items; // record 非空=汇总维度；否则=列表�
 
 `items[]` 每行额外包含：`conversionsValue`、`conversionsValuePerCost`（`spend ≤ 0` 时为 0）、`campaignTargetCpaYuan`、`maximizeConversionsTargetCpaYuan`、`manualCpcEnhancedCpcEnabled`、`percentCpcEnhancedCpcEnabled`。所有金额字段（`*Yuan` 后缀）已统一为元，可直接展示，无需换算。
 
-| 字段 | 含义 |
-| ---- | ---- |
+| 字段                                  | 含义                                             |
+| ------------------------------------- | ------------------------------------------------ |
 | `campaignStatus` / `campaignStatusV2` | 网关原始枚举（`Enabled` / `Paused` / `Removed`） |
-| `campaignStatusDisplay` | CLI 注入的中文状态文案；**报告状态列读此字段** |
+| `campaignStatusDisplay`               | CLI 注入的中文状态文案；**报告状态列读此字段**   |
 
 日预算字段为 `budgetAmountYuan`（元），脚本可直接 `row.budgetAmountYuan`；网关原始 `budgetAmount`（分）已不再落盘。
 
@@ -356,15 +357,55 @@ siluzan-tso bing-analysis -a <mediaCustomerId> --start 2026-03-01 --end 2026-03-
 
 ### 点击率 / 转化率口径（必读）
 
-Bing 的 `ctr` / `conversionRate` 为 0~1 小数**（`0.007434` = 0.74%），与 Google `schemaVersion ≥ 2` 一致。
+Bing 的 `ctr` / `conversionRate` 为 0~1 小数\*\*（`0.007434` = 0.74%），与 Google `schemaVersion ≥ 2` 一致。
 
-| 场景 | 正确写法 | 错误写法 |
-| ---- | -------- | -------- |
-| 报告 HTML 展示 | `(ctr * 100).toFixed(2) + '%'` | `ctr.toFixed(2) + '%'`（会显示 74% 而非 0.74%） |
-| Excel 0~1 列 | 直接写 JSON 数值 | 再 ÷100 |
-| 脚本校验 | `clicks / impressions` 与 `ctr` 应一致（允许四舍五入） | 心算或凭印象 |
+| 场景           | 正确写法                                               | 错误写法                                        |
+| -------------- | ------------------------------------------------------ | ----------------------------------------------- |
+| 报告 HTML 展示 | `(ctr * 100).toFixed(2) + '%'`                         | `ctr.toFixed(2) + '%'`（会显示 74% 而非 0.74%） |
+| Excel 0~1 列   | 直接写 JSON 数值                                       | 再 ÷100                                         |
+| 脚本校验       | `clicks / impressions` 与 `ctr` 应一致（允许四舍五入） | 心算或凭印象                                    |
 
 各 `overview-*.outline.txt` 等文件头部含 `//` 硬提示，Agent **须先读 outline** 再写报告。
+
+---
+
+## Yandex 账户分析
+
+> **网关**：直打 YandexAPI `{yandexApiUrl}/yandex-analysis/*`（从 TSO `apiBaseUrl` 推导：`tso-api-ci` → `yandexapi-ci.mysiluzan.com`；可用 `SILUZAN_YANDEX_API` 覆盖）。
+>
+> **日期**：`start`/`end` 不能晚于今天；省略默认近 7 天（含今天）。**search-terms** 仅支持近 **180 天**（Direct 限制），超窗网关/CLI 均会拒绝。
+>
+> **账户 ID**：Yandex Client-Login / mediaCustomerId（如 `porg-xxx`，与 `list-accounts -m Yandex` 一致），**不是**纯数字。
+>
+> **金额**：已从 micros 转为账户币种小数（`/1e6`）。`ctr` / `conversionRate` 为 **0~1 小数**（先读 outline）。
+
+与 `bing-analysis` 同架构：`yandex-analysis -a … --json-out …`（省略子命令名默认执行 `run`）；周期报告默认 **HTML**：`yandex-analysis render`（见 `report-templates/yandex-period-report.md`）。用户要 Excel → `yandex-period-report-excel.md`（Agent 脚本，无 excel 子命令）。
+
+| 选项                       | 说明                                                                                                                                     |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `--sections` / `--exclude` | `overview` `daily` `search` `campaigns` `keywords` `search-terms` `geo` `devices`（8 个）；别名：`geographic`→`geo`，`device`→`devices`，`search-queries`→`search-terms` |
+| `--limit`                  | 仅 `campaigns` / `keywords` / `search-terms` / `geo`：默认 100，最大 10000                                                               |
+| `--start` / `--end`        | 同传或同省略；不能晚于今天；省略=近 7 天（含今天）                                                                                     |
+| `--concurrency`            | 默认 5，上限 16                                                                                                                          |
+
+```bash
+mkdir -p ./snap-yandex
+
+# 全 8 维
+siluzan-tso yandex-analysis -a <porg-xxx> --json-out ./snap-yandex
+
+# 总览 + 系列 + 关键词
+siluzan-tso yandex-analysis -a <porg-xxx> --start 2026-07-01 --end 2026-07-31 \
+  --sections overview,campaigns,keywords --limit 50 --json-out ./snap-yandex
+
+# 周期报告 HTML（Agent 写完 narrative JSON 后）
+siluzan-tso yandex-analysis render \
+  --data ./yandex-period-report.json \
+  --snapshot-dir ./snap-yandex \
+  --out ./yandex-period-report.html
+```
+
+`search` / `campaigns` / `keywords` / `geo` / `devices` 在 Direct 侧过滤 `AdNetworkType=SEARCH`。无 Metrica / 写操作。报告模板：`report-templates/yandex-period-report.md`（8 个分析章节必写总结+建议；周趋势读落盘 `daily.weekly[]`，**禁止**自行按 `date` 聚周）。
 
 ---
 
@@ -381,6 +422,8 @@ Bing 的 `ctr` / `conversionRate` 为 0~1 小数**（`0.007434` = 0.74%），与
 | `meta-period-report.md`              | Meta（Facebook）周期报告                                                                                        |
 | `tiktok-period-report.md`            | TikTok 周期报告                                                                                                 |
 | `bing-period-report.md`              | Bing 周期报告                                                                                                   |
+| `yandex-period-report.md`            | Yandex 周期报告（HTML：`yandex-analysis render`）                                                               |
+| `yandex-period-report-excel.md`      | Yandex 周期报告 Excel（Agent 脚本）                                                                             |
 | `website-diagnosis-report.md`        | 网站/落地页诊断（`website-diagnosis`，见 P8）；**默认交付 HTML**（`website-diagnosis render`，禁止仅 Markdown） |
 | `README.md`                          | 索引与规则                                                                                                      |
 

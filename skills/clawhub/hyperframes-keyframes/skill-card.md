@@ -1,47 +1,63 @@
-## Description: <br>
-Use when a HyperFrames composition needs seek-safe 2D/3D keyframes, GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, text trails, 3D depth, or hyperframes keyframes diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when a HyperFrames composition needs seek-safe 2D/3D keyframes, GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, text trails, 3D depth, or `hyperframes keyframes` diagnostics.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and engineers use this skill to author seek-safe HyperFrames animation keyframes and verify visible 2D, 3D, text, SVG, mask, path, and runtime behavior before rendering. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated keyframe or animation edits may change visual behavior, timing, continuity, or final frames in the active project. <br>
-Mitigation: Review generated changes and verify them with hyperframes lint, hyperframes check, hyperframes keyframes, focused shots, and snapshots before rendering or committing. <br>
-Risk: Diagnostic commands may produce output that needs interpretation before it is used to make further code changes. <br>
-Mitigation: Review command output and rerun the smallest failing diagnostic after fixes. <br>
+## Use Case:
 
+Developers and video engineers use this skill to author and verify deterministic HyperFrames keyframes for 2D, 3D, SVG, text, mask, path, and timeline-based animation work.
 
-## Reference(s): <br>
-- [Keyframe Mechanism Reference](references/keyframe-patterns.md) <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes-keyframes) <br>
-- [GSAP keyframes](https://gsap.com/resources/keyframes/) <br>
-- [GSAP timeline](https://gsap.com/docs/v3/GSAP/Timeline/) <br>
-- [Anime.js documentation](https://animejs.com/documentation/) <br>
-- [MDN CSS animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations) <br>
-- [MDN @keyframes](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes) <br>
-- [Three.js AnimationMixer](https://threejs.org/docs/#api/en/animation/AnimationMixer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with code snippets and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance emphasizes deterministic, seek-safe animation code and HyperFrames diagnostics.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The agent may edit composition keyframes in ways that produce inaccurate, misleading, or poorly seekable animation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated animation code and verify first frame, proof poses, final-minus-hold, and exact final with HyperFrames diagnostics before rendering.
+
+Risk: `npx` diagnostics may invoke local project tooling.
+
+Mitigation: Run commands only in trusted project workspaces and review CLI output before accepting final animation changes.
+
+Risk: Animation behavior can become nondeterministic if runtime motion depends on timers, autoplay, random values, or asynchronous timeline construction.
+
+Mitigation: Use finite, synchronously registered timelines or animations and avoid Date.now, performance.now, unseeded Math.random, timers, hover or scroll triggers, and infinite loops for render-critical motion.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes-keyframes)
+- [Keyframe Mechanism Reference](references/keyframe-patterns.md)
+- [GSAP keyframes](https://gsap.com/resources/keyframes/)
+- [GSAP timeline](https://gsap.com/docs/v3/GSAP/Timeline/)
+- [Anime.js documentation](https://animejs.com/documentation/)
+- [MDN CSS animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations)
+- [Three.js AnimationMixer](https://threejs.org/docs/#api/en/animation/AnimationMixer)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline code and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces seek-safe animation implementation guidance and HyperFrames diagnostic commands for local verification.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

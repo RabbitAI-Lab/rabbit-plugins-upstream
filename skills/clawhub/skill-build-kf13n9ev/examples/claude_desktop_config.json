@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "opc-events": {
+      "command": "npx",
+      "args": ["-y", "@opc/skill-content-events"],
+      "env": {
+        "OPC_API_BASE": "https://mrkjai.com",
+        "OPC_API_KEY": "opc_user_xxx..."
+      }
+    }
+  }
+}

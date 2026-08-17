@@ -1,0 +1,12 @@
+{
+  "name": "omnipub-content-engine",
+  "display_name": "全平台内容同步发布引擎",
+  "description": "AI 驱动的内容生命周期管理技能，覆盖选题→生成→查证→图表→文末→风格→信息图→GEO→发布→复盘完整闭环。支持微信公众号+今日头条双平台，Gate制度人工把关，GEO闭环AI可见度，数据归因迭代。",
+  "author": "心明增长实验室",
+  "version": "1.0.0",
+  "category": "content",
+  "tags": ["公众号", "头条", "内容发布", "GEO", "选题", "复盘", "多平台"],
+  "platforms": ["wechat", "toutiao"],
+  "language": "zh-CN",
+  "license": "MIT"
+}

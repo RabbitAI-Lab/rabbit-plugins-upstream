@@ -8,12 +8,13 @@
 | `--sort`     | `-s` | 排序方式     | 0 = 综合排序 / 1 = 最多点赞 / 2 = 最新发布             | 否   |   0    |
 | `--time`     | `-t` | 时间范围     | 0 = 全部 / 1 = 一天内 / 7 = 七天内 / 180 = 半年内      | 否   |   0    |
 | `--duration` | `-d` | 视频时长     | 0 = 不限 / 1 = 1分钟以下 / 2 = 1-5分钟 / 3 = 5分钟以上 | 否   |   0    |
+| `--content`  | `-c` | 内容类型     | 0 = 不限 / 1 = 视频 / 2 = 图文                         | 否   |   0    |
 | `--limit`    | `-l` | 获取数量     | 1-10000 条                                             | 否   |   10   |
 | `--help`     | `-h` | 显示帮助信息 |                                                        | 否   |        |
 
 ```bash
 # **基础语法**
-node src/douyin/search-cli.js --keyword <关键词> --sort <排序方式> --time <时间范围> --duration <视频时长> --limit <获取数量>
+node src/douyin/search-cli.js --keyword <关键词> --sort <排序方式> --time <时间范围> --duration <视频时长> --content <内容类型> --limit <获取数量>
 
 # **使用示例**
 
@@ -33,15 +34,15 @@ node src/douyin/search-cli.js --keyword "AI 教程" --duration 3
 node src/douyin/search-cli.js --keyword "AI 教程" --sort 2 --time 180 --limit 20
 ```
 
-## 🦸 抖音抖人作品获取
+## 🦸 抖音博主作品获取
 
-| 参数      | 缩写 | 作用                 | 可选值     | 必填 | 默认值 |
-| :-------- | :--: | :------------------- | :--------- | :--- | :----: |
-| `--url`   | `-u` | 抖人主页URL或sec_uid |            | 是   |        |
-| `--limit` | `-l` | 获取作品数量         | 1-10000 条 | 否   |   10   |
-| `--help`  | `-h` | 显示帮助信息         |            | 否   |        |
+| 参数      | 缩写 | 作用                     | 可选值     | 必填 | 默认值 |
+| :-------- | :--: | :----------------------- | :--------- | :--- | :----: |
+| `--url`   | `-u` | 抖音博主主页URL或sec_uid |            | 是   |        |
+| `--limit` | `-l` | 获取作品数量             | 1-10000 条 | 否   |   10   |
+| `--help`  | `-h` | 显示帮助信息             |            | 否   |        |
 
-> **💡"抖人主页URL"说明**
+> **💡"抖音博主主页URL"说明**
 >
 > - PC端 ( 格式：<https://www.douyin.com/user/MS4wLjABxxx> )
 > - 移动端 ( 格式：<https://v.douyin.com/xxx> )
@@ -53,7 +54,7 @@ node src/douyin/post-cli.js --url "https://www.douyin.com/user/MS4wLjABxxx"
 
 # **使用示例**
 
-# 获取抖人 MS4wLjABxxx 已发布的20条作品
+# 获取抖音博主 MS4wLjABxxx 已发布的20条作品
 node src/douyin/post-cli.js --url "https://www.douyin.com/user/MS4wLjABxxx" --limit 20
 ```
 

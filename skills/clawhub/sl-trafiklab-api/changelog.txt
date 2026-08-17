@@ -1,2 +1,2 @@
-- chore: bump version to 3.4.1
-- docs: clarify route saving workflow with specific constraints and remove PII
+- Merge pull request #2 from patello/fix/site-departures-filtered-truncation
+- fix: filter line/direction locally to bypass API response cap

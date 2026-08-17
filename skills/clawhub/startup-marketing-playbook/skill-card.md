@@ -1,41 +1,55 @@
-## Description: <br>
-Provides organic, zero-budget startup marketing guidance for SEO, community participation, social media, word-of-mouth, and guerrilla tactics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Marketing playbook for bootstrapped startups with zero budget, covering organic-only SEO, community, social media, word-of-mouth, and guerrilla tactics.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-Founders, startup teams, and growth practitioners use this skill to plan organic marketing tactics when paid acquisition is unavailable or undesirable. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation triggers may cause the skill to appear for marketing-adjacent prompts where the user did not explicitly request a startup marketing playbook. <br>
-Mitigation: Use the skill when organic startup marketing guidance is desired, and prefer more explicit skills for narrow or unrelated marketing tasks. <br>
-Risk: Community and social-media tactics can become spammy or violate platform rules if applied without judgment. <br>
-Mitigation: Apply tactics in ways that respect platform rules, community norms, and anti-spam expectations. <br>
+## Use Case:
 
+External founders, growth teams, and operators use this skill to plan zero-budget organic marketing programs for bootstrapped startups, especially B2B SaaS, developer-tool, and open-source products. It also flags how to recalibrate metrics and channels for 2C products.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/startup-marketing-playbook) <br>
-- [Publisher profile](https://clawhub.ai/user/gingiris-1031) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static playbook content; no executable code or credential access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: Marketing advice may lead users to collect prospect lists or contact people in public channels without enough care.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Apply the playbook responsibly: disclose affiliation, personalize outreach, respect community rules, and follow applicable privacy and anti-spam requirements.
+
+Risk: Community participation can become spammy or misleading if the tactics are applied as bulk promotion.
+
+Mitigation: Use value-first participation, avoid impersonation, and do not paste identical promotional copy across communities.
+
+## Reference(s):
+
+- [English README](references/en/README.md)
+- [Japanese README](references/ja/README.md)
+- [Korean README](references/ko/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown guidance and checklist-style playbook content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable code or automated external actions.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

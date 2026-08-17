@@ -1,0 +1,14 @@
+[
+  {"date": "2026-01-01", "region": "North", "revenue": 15420, "units": 142, "conversion": 3.2, "satisfaction": 4.5},
+  {"date": "2026-01-08", "region": "North", "revenue": 18200, "units": 168, "conversion": 3.8, "satisfaction": 4.6},
+  {"date": "2026-01-15", "region": "North", "revenue": 16300, "units": 155, "conversion": 3.4, "satisfaction": 4.4},
+  {"date": "2026-01-01", "region": "South", "revenue": 22100, "units": 198, "conversion": 4.1, "satisfaction": 4.7},
+  {"date": "2026-01-08", "region": "South", "revenue": 24500, "units": 210, "conversion": 4.5, "satisfaction": 4.8},
+  {"date": "2026-01-15", "region": "South", "revenue": 23800, "units": 205, "conversion": 4.3, "satisfaction": 4.6},
+  {"date": "2026-01-01", "region": "East", "revenue": 12900, "units": 120, "conversion": 2.8, "satisfaction": 4.2},
+  {"date": "2026-01-08", "region": "East", "revenue": 14500, "units": 135, "conversion": 3.1, "satisfaction": 4.3},
+  {"date": "2026-01-15", "region": "East", "revenue": 13200, "units": 125, "conversion": 2.9, "satisfaction": 4.1},
+  {"date": "2026-01-01", "region": "West", "revenue": 19800, "units": 180, "conversion": 3.9, "satisfaction": 4.6},
+  {"date": "2026-01-08", "region": "West", "revenue": 21500, "units": 195, "conversion": 4.2, "satisfaction": 4.7},
+  {"date": "2026-01-15", "region": "West", "revenue": 20200, "units": 185, "conversion": 4.0, "satisfaction": 4.5}
+]

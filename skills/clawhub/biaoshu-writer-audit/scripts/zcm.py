@@ -43,9 +43,9 @@ import uuid
 DEFAULT_BASE = "https://biaoshu.zhiliaobiaoxun.com/api/open/v1"
 
 # skill 版本（单一事实来源）。适配的后端 API 版本与契约快照见 references/api.md 顶部。
-SKILL_VERSION = "2.2.0"
+SKILL_VERSION = "2.2.1"
 API_TARGET = "/api/open/v1"
-CONTRACT_SNAPSHOT = "2026-07-20"
+CONTRACT_SNAPSHOT = "2026-08-10"
 
 # 渠道码：开发线留空（不带渠道）；发布/装配变体时按平台 excel 注入（ClawHub 基线 s113，变体 s81–s114）。
 # 非空时官网链接追加 ?ch=。

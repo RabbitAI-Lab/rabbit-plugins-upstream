@@ -10,6 +10,18 @@ import sys
 from rhino_client import RhinoClient
 
 
+_BEAM_STYLE_INVENTORY_HELPER = '''
+def _get_all_beam_style_ids(va):
+    # VisualARQ 3.7.2 uses the historical singular method name. Retain the
+    # plural alias for older installations that exposed it instead.
+    if hasattr(va, "GetAllBeamStyle"):
+        return va.GetAllBeamStyle()
+    if hasattr(va, "GetAllBeamStyleIds"):
+        return va.GetAllBeamStyleIds()
+    raise Exception("VisualARQ beam-style inventory API is unavailable")
+'''
+
+
 def check_visualarq() -> dict:
     """Check if VisualARQ is installed and available."""
     code = '''
@@ -51,7 +63,7 @@ print("RESULT:" + json.dumps(result))
 
 def get_info() -> dict:
     """Get VisualARQ object types, styles, and levels information."""
-    code = '''
+    code = _BEAM_STYLE_INVENTORY_HELPER + '''
 import clr
 try:
     clr.AddReference("VisualARQ.Script")
@@ -115,7 +127,7 @@ try:
     
     # Get beam styles
     try:
-        beam_style_ids = va.GetAllBeamStyleIds()
+        beam_style_ids = _get_all_beam_style_ids(va)
         if beam_style_ids:
             for style_id in beam_style_ids:
                 name = va.GetBeamStyleName(style_id)
@@ -678,7 +690,7 @@ print("RESULT:" + json.dumps(result))
 def create_beam(style_name: str, start: list, end: list, 
                 layer: str = None, name: str = None) -> dict:
     """Create a beam."""
-    code = '''
+    code = _BEAM_STYLE_INVENTORY_HELPER + '''
 import clr
 try:
     clr.AddReference("VisualARQ.Script")
@@ -688,7 +700,7 @@ try:
     
     # Find beam style by name
     style_id = None
-    beam_style_ids = va.GetAllBeamStyleIds()
+    beam_style_ids = _get_all_beam_style_ids(va)
     if beam_style_ids:
         for bs_id in beam_style_ids:
             if va.GetBeamStyleName(bs_id) == "{style_name}":

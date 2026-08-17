@@ -74,9 +74,12 @@ python3 "<scripts_dir>/wxpublic_list.py" "<app_id>" "<secure_key>" "<name>" "<st
 ```json
 {
   "urls": ["https://mp.weixin.qq.com/s/...", ...],
+  "date": ["2026-08-04", ...],
   "count": 3
 }
 ```
+
+`date` 中每一项是对应文章的发布时间（`yyyy-MM-dd`），与 `urls` 按相同下标一一对应。例如 `urls[0]` 的发布日期为 `date[0]`。
 
 解析 stdout 中的 JSON：
 - 如果包含 `"error"` 字段：
@@ -97,16 +100,27 @@ mkdir -p "<output_dir>/images"
 
 > 告知用户：`[4/5] 正在并行抓取 <count> 篇文章并下载图片，请稍候...`
 
-调用 `scripts/wxpublic_fetch.py`，将 `output_dir` 作为第一个参数，所有 URL 依次作为后续参数传入。
+必须先将第二步返回的 `urls` 与 `date` 按下标绑定为清单，写入 `<output_dir>/.wxpublic-articles.json`：
+
+```json
+[
+  {"index": 0, "url": "https://mp.weixin.qq.com/s/...", "date": "2026-08-04"}
+]
+```
+
+不得只传 URL 后再按并发完成顺序对应日期；每个清单项的 `date` 必须来自同下标的 `date[index]`。
+
+调用 `scripts/wxpublic_fetch.py`，将该清单传入。
 
 脚本位于本 SKILL.md 所在目录下的 `scripts/wxpublic_fetch.py`。执行前先解析出绝对路径。
 
 ```bash
-python3 "<scripts_dir>/wxpublic_fetch.py" "<output_dir>" "<url1>" "<url2>" ...
+python3 "<scripts_dir>/wxpublic_fetch.py" "<output_dir>" --manifest "<output_dir>/.wxpublic-articles.json"
 ```
 
 - url2md 并发 **5** 线程，图片下载并发 **8** 线程。
-- 从输出中解析 `SAVED:<path>` 收集成功路径，`FAILED:<url> | <reason>` 收集失败信息。
+- 每篇文章调用 html2md 失败时自动重试 **1 次**；第二次仍失败才记录为失败。
+- 从输出中解析 `RESULT:<json>`。每条结果包含 `index`、`url`、`date`、`ok`、`path` 和 `error`，并已按 `index` 输出。使用 `ok=true` 且 `path` 非空的记录收集成功路径，保留其 `date`；对 `ok=false` 使用同一条记录的 `url` 和 `error`。
 
 ### 第五步：汇总报告
 
@@ -118,15 +132,15 @@ python3 "<scripts_dir>/wxpublic_fetch.py" "<output_dir>" "<url1>" "<url2>" ...
 ✓ 已保存 N 篇文章到 <output_dir>
 
 保存的文件：
-1. /path/to/article1.md
-2. /path/to/article2.md
+1. 2026-08-04 | /path/to/article1.md
+2. 2026-08-03 | /path/to/article2.md
 ...
 
 （如有跳过）以下文章处理失败：
 - https://mp.weixin.qq.com/s/... （原因）
 ```
 
-**重要**：将所有保存的 `.md` 文件路径列表存入对话上下文，方便用户后续直接问"帮我总结这些文章"或"这些文章讲了什么"时，能直接读取对应文件内容作答。
+**重要**：将所有成功记录的 `.md` 文件路径与 `date`、`url` 一起存入对话上下文，便于用户后续直接问"帮我总结这些文章"或"这些文章讲了什么"时，能直接读取对应文件内容作答。
 
 ---
 

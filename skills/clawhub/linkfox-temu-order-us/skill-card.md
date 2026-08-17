@@ -1,46 +1,67 @@
-## Description: <br>
-Provides LinkFox gateway guidance, scripts, and API references for Temu US order management tasks including order lists, details, shipping information, order amounts, combined shipments, customizations, and SN or IMEI verification uploads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Temu 美国站-订单 helps agents call LinkFox gateway scripts for Temu Partner US order list, order detail, shipping address, amount, combined-shipment, customization, and SN/IMEI verification upload workflows.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Temu sellers, operators, and developers use this skill to query and process Temu US order data through LinkFox, including shipping details, order amounts, combined shipment candidates, customization content, and verification uploads. It is intended for order and fulfillment workflows that need guided API calls or runnable helper scripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Temu seller and order APIs through LinkFox and may handle sensitive order or shipping data. <br>
-Mitigation: Use only the minimum required LinkFox and Temu credentials, prefer short-lived tokens when possible, and run the skill only in trusted workspaces. <br>
-Risk: The artifact stores full order responses locally and can store plaintext Temu tokens. <br>
-Mitigation: Avoid inline output for sensitive responses, restrict access to the working directory and the ~/.linkfox token store, and inspect or clean saved response files after use. <br>
-Risk: Generic proxy utilities allow broader Temu API access than the named order workflow scripts. <br>
-Mitigation: Prefer the specific us_order_* scripts for normal order workflows and use the generic proxy only when broad Temu API access is intentional. <br>
+## Use Case:
 
+External sellers, operators, and developers use this skill to retrieve and manage Temu US order and shipping data through LinkFox-mediated Partner US API calls. It supports order lookup, address retrieval or decryption, reconciliation amounts, combined shipment groups, customization data, and verification uploads.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-order-us) <br>
-- [API Reference](references/api.md) <br>
-- [Temu Access Token Guide](references/access-token.md) <br>
-- [Partner US Catalog](references/partner-us-catalog.md) <br>
-- [Per-Interface API References](references/apis/README.md) <br>
+### Deployment Geography for Use:
 
+United States (Temu Partner US workflows)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON API examples; scripts may emit JSON summaries or saved JSON response files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts write complete responses under a local linkfox output directory and may print full responses to stdout for small responses or when inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill handles LinkFox API keys and Temu access tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when LinkFox is trusted, keep credentials out of shared transcripts and logs, rotate exposed tokens, and restrict access to environment variables and ~/.linkfox token files.
+
+Risk: Order workflows can expose customer PII including decrypted addresses, phone numbers, SN/IMEI values, and saved response files.
+
+Mitigation: Run only for authorized business purposes, request the minimum data needed, avoid pasting sensitive output into unrelated contexts, and delete local response files when no longer required.
+
+Risk: Generic proxy, payment, and onboarding commands may perform broader account or billing actions than a narrow order lookup.
+
+Mitigation: Use the generic proxy and payment/onboarding commands only when explicitly needed, review parameters before execution, and confirm any action that can affect account balance or billing.
+
+Risk: The security verdict is suspicious due to sensitive-data handling, broad gateway forwarding, and persistent local storage.
+
+Mitigation: Review the skill and its arguments before deployment, scan updates before installing, and regularly inspect or remove local linkfox output folders and token stores.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-order-us)
+- [API reference](references/api.md)
+- [Access token guidance](references/access-token.md)
+- [Partner US order catalog](references/partner-us-catalog.md)
+- [Order API index](references/apis/README.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [Temu Partner US documentation](https://partner-us.temu.com/documentation)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON request or response data.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full JSON responses to local linkfox output folders and may print JSON or summaries to stdout; --inline can force full stdout output.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

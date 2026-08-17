@@ -97,6 +97,25 @@ knowledge = mgc_get(
 )
 ```
 
+## Locating Knowledge Entries (Recommended Workflow, v1.4.10+)
+
+Before reading knowledge, locate it with **mgc_find** (fuzzy search by name):
+
+```python
+# Fuzzy search for knowledge by name
+matches = mgc_find(
+    info_owner="framework",   # partial name; substring match by default
+    info_type="prompt",
+)
+# Returns metadata list — never the knowledge plain_text.
+# After locating the exact (info_type, info_owner), call mgc_get to read.
+```
+
+**Security features**:
+- `mgc_find` never returns knowledge plain_text — only metadata
+- After locating, `mgc_get` decrypts locally
+- All access still requires user authorization
+
 ## Security Features
 
 - AI cannot see knowledge plaintext

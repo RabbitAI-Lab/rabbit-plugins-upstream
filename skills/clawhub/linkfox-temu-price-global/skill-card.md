@@ -1,49 +1,71 @@
-## Description: <br>
-Temu Global pricing API skill for non-US/EU marketplaces that routes LinkFox gateway calls for price orders, recommended prices, SKU supply-price lists, and batch SKU price updates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Temu 全球站（非 US/EU）价格/供货价 API，经 LinkFox 网关转发 5 个接口（定价单、推荐价、SKU 供货价列表、批量改价等），默认 site=global。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Temu sellers, commerce operators, and developer agents use this skill to query and update non-US/EU Temu Global product pricing through LinkFox gateway scripts. It supports price-order lookup, recommended and estimated supply prices, SKU supply-price lists, and controlled batch SKU price changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles Temu seller access tokens and LinkFox gateway credentials. <br>
-Mitigation: Use dedicated least-privilege credentials, run only on trusted machines, keep token files out of shared workspaces, and rotate or revoke tokens when access is no longer needed. <br>
-Risk: Batch SKU price-change calls can modify live marketplace prices. <br>
-Mitigation: Require manual review of goods IDs, SKU IDs, currency, and new supplier prices before calling the batch price-change endpoint. <br>
-Risk: Gateway responses and downloaded files may be stored locally. <br>
-Mitigation: Review saved files under local LinkFox paths, remove sensitive outputs after use, and avoid pasting stored responses containing secrets into unrelated prompts or tools. <br>
-Risk: Broad proxy and file-download behavior can reach external Temu and LinkFox services. <br>
-Mitigation: Use only the documented Temu Global pricing operations, verify requested endpoints and parameters, and inspect downloaded files before opening or sharing them. <br>
+## Use Case:
 
+External Temu sellers and agents use this skill to query and update Global-region product supply prices through LinkFox's Temu gateway. It helps inspect pricing orders, recommended prices, SKU supply prices, base price recommendations, and batch SKU price changes for semi-managed Temu stores.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-price-global) <br>
-- [API gateway reference](references/api.md) <br>
-- [Temu access token guide](references/access-token.md) <br>
-- [Price API index](references/apis/README.md) <br>
-- [Partner Global catalog](references/partner-global-catalog.md) <br>
-- [Temu Partner Global documentation](https://partner-global.temu.com/documentation?menu_code=fb16b05f7a904765aac4af3a24b87d4a) <br>
+### Deployment Geography for Use:
 
+Global, excluding the US and EU Temu site flows described as separate skills
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands, Python script invocations, and JSON request/response payloads.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts save full gateway responses under local LinkFox session directories and may print summaries for large responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill can handle LinkFox and Temu credentials and can store Temu access tokens locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use narrowly scoped store keys, keep token store files out of source control, and avoid printing or sharing unmasked tokens.
+
+Risk: The skill can submit live Temu price-change requests through the LinkFox gateway.
+
+Mitigation: Require explicit user confirmation and review request payloads before running price-change scripts.
+
+Risk: The skill includes broad proxy and signed file-download helpers.
+
+Mitigation: Prefer the documented task-specific scripts and review destination URLs or API types before using generic proxy or file-download commands.
+
+Risk: The skill persists API responses and session data in local linkfox directories.
+
+Mitigation: Treat generated response files as sensitive operational data and exclude linkfox output directories from commits and shared artifacts.
+
+Risk: Onboarding helpers can create payment orders for LinkFox plans.
+
+Mitigation: Ask for user approval before registration, billing, or payment-order actions and present any returned payment details without polling automatically.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-price-global)
+- [API reference](artifact/references/api.md)
+- [Access token guide](artifact/references/access-token.md)
+- [Onboarding and billing guide](artifact/references/onboarding.md)
+- [Partner Global catalog](artifact/references/partner-global-catalog.md)
+- [Price API document index](artifact/references/apis/README.md)
+- [Temu Partner Global documentation](https://partner-global.temu.com/documentation?menu_code=fb16b05f7a904765aac4af3a24b87d4a)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON request examples and shell command snippets; scripts emit JSON responses or summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [API responses are persisted under a local linkfox session data directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

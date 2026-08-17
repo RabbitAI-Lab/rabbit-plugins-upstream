@@ -197,7 +197,8 @@ function Install-PythonDeps {
     }
     else {
         Write-Host "⚠ poppler未安装，PDF支持不可用" -ForegroundColor Yellow
-        Write-Host "  可手动下载: https://github.com/oschwartz10612/poppler-windows/releases"
+        Write-Host "  推荐通过系统包管理器安装（安全可靠）：" -ForegroundColor Yellow
+        Write-Host "    winget install poppler   或   scoop install poppler" -ForegroundColor Gray
     }
 }
 

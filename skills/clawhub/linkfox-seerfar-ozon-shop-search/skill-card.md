@@ -1,43 +1,64 @@
-## Description: <br>
-Fetches product-level metrics for a specific Ozon shop or seller from Seerfar, including 30-day sales, price, rating, weight, fulfillment, seller type, return or cancellation rate, and shop-level 30-day sales. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves product lists and shop-level 30-day sales metrics for a specified Ozon seller or shop ID from Seerfar to support competitor shop analysis and bestseller discovery.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and e-commerce analysts use this skill to inspect a known Ozon seller's catalog, rank products by sales, price, rating, or listing time, and prepare competitor-shop product analysis from Seerfar data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A custom LINKFOX_TOOL_GATEWAY can receive the API key used by the skill. <br>
-Mitigation: Avoid setting LINKFOX_TOOL_GATEWAY unless the destination is controlled and trusted. <br>
-Risk: Full Ozon analytics responses may be persisted in the workspace or session data directory. <br>
-Mitigation: Use the skill only in workspaces where saving those responses is acceptable, and review saved files before sharing or committing workspace contents. <br>
-Risk: Authentication or quota recovery can involve an external onboarding-skill download. <br>
-Mitigation: Confirm the onboarding download before allowing installation, and prefer existing onboarding guidance when available. <br>
+## Use Case:
 
+External users and e-commerce analysts use this skill to inspect one Ozon shop's catalog by seller ID, including item prices, ratings, fulfillment model, seller type, return/cancellation rate, and 30-day sales. It is intended for competitor-shop product analysis, bestseller mining, and seller catalog review.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-shop-search) <br>
-- [Seerfar Ozon 店铺商品搜索 API 参考](artifact/references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, code, guidance] <br>
-**Output Format:** [Markdown tables and summaries, JSON API responses, and Python or curl command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may be saved as JSON under a linkfox session data directory; the API uses paginated requests with a maximum pageSize of 20 and consumes LinkFox credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The security summary reports sensitive account, API-key, billing, feedback, and local-retention behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only in a trusted workspace, review onboarding and feedback behavior before use, and avoid sharing API keys, phone numbers, SMS codes, or payment actions without explicit user consent.
+
+Risk: Endpoint override environment variables can redirect outbound requests.
+
+Mitigation: Set endpoint override variables only when the destination is controlled and expected; otherwise rely on the documented default LinkFox endpoints.
+
+Risk: Full search results are saved locally and may include commercially sensitive shop analysis data.
+
+Mitigation: Treat saved JSON files as retained user data, store them in an appropriate workspace, and delete them when they are no longer needed.
+
+Risk: The skill consumes paid credits and may trigger billing flows during quota resolution.
+
+Mitigation: Warn users before repeated calls or pagination and require explicit approval before starting recharge or paid-order steps.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-shop-search)
+- [Seerfar Ozon shop search API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON files, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown tables and summaries with saved JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The search script caches identical requests for 24 hours, saves full responses under a linkfox session directory, and summarizes large responses unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

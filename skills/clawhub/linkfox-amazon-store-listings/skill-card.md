@@ -1,50 +1,71 @@
-## Description: <br>
-Manages Amazon store listings through LinkFox by retrieving, searching, creating, updating, deleting listings, checking listing restrictions, and fetching product type definitions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Amazon store listings through LinkFox by retrieving, searching, updating, creating, deleting listings, checking listing restrictions, and fetching product type definitions.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon sellers, marketplace operators, and their agents use this skill to inspect listings, validate listing constraints, and make controlled listing changes through LinkFox-authenticated SP-API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify or delete live Amazon listings through PATCH, PUT, and DELETE operations. <br>
-Mitigation: Require explicit user confirmation before mutation operations, especially deletion, and review SKU, sellerId, marketplaceIds, productType, and patch or attributes payloads before execution. <br>
-Risk: Full API responses are saved locally and may contain seller, listing, or operational data. <br>
-Mitigation: Review saved response paths, avoid committing LinkFox response files, and apply local retention and access controls appropriate for seller data. <br>
-Risk: Use requires local agent access to LinkFox and Amazon seller listing credentials. <br>
-Mitigation: Install only in environments trusted to access those credentials and scope credential availability to the intended task and workspace. <br>
+## Use Case:
 
+External Amazon sellers, operators, and developers use this skill to inspect and manage Amazon listing data, validate listing restrictions, and obtain product type definitions before creating or changing listings.
 
-## Reference(s): <br>
-- [Amazon Listings API reference](references/api.md) <br>
-- [Amazon getListingsItem](https://developer-docs.amazon.com/sp-api/reference/getlistingsitem) <br>
-- [Amazon searchListingsItems](https://developer-docs.amazon.com/sp-api/reference/searchlistingsitems) <br>
-- [Amazon patchListingsItem](https://developer-docs.amazon.com/sp-api/reference/patchlistingsitem) <br>
-- [Amazon putListingsItem](https://developer-docs.amazon.com/sp-api/reference/putlistingsitem) <br>
-- [Amazon deleteListingsItem](https://developer-docs.amazon.com/sp-api/reference/deletelistingsitem) <br>
-- [Amazon getListingsRestrictions](https://developer-docs.amazon.com/sp-api/reference/getlistingsrestrictions) <br>
-- [Amazon searchDefinitionsProductTypes](https://developer-docs.amazon.com/sp-api/reference/searchdefinitionsproducttypes) <br>
-- [Amazon getDefinitionsProductType](https://developer-docs.amazon.com/sp-api/reference/getdefinitionsproducttype) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [JSON files with stdout summaries and Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved to a LinkFox session data directory; small responses may also be printed inline.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The skill can perform high-impact listing changes through PATCH, PUT, and DELETE operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit review of sellerId, SKU, marketplace, and payload before any agent-initiated write or delete action.
+
+Risk: Generated LinkFox response files may contain sensitive Amazon seller listing or account data.
+
+Mitigation: Treat saved files under ./linkfox/ as sensitive business data and clean them up according to the user's data handling policy.
+
+Risk: Credentials and gateway configuration affect access to Amazon seller data and LinkFox account onboarding.
+
+Mitigation: Use a dedicated, minimally scoped API key and leave gateway URL override environment variables unset unless the endpoint is trusted.
+
+Risk: Account and payment onboarding may be triggered for authentication or billing failures.
+
+Mitigation: Review onboarding prompts before providing phone, payment, or account information.
+
+## Reference(s):
+
+- [Amazon Store Listings API Reference](artifact/references/api.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-listings)
+- [Amazon SP-API getListingsItem](https://developer-docs.amazon.com/sp-api/reference/getlistingsitem)
+- [Amazon SP-API searchListingsItems](https://developer-docs.amazon.com/sp-api/reference/searchlistingsitems)
+- [Amazon SP-API patchListingsItem](https://developer-docs.amazon.com/sp-api/reference/patchlistingsitem)
+- [Amazon SP-API putListingsItem](https://developer-docs.amazon.com/sp-api/reference/putlistingsitem)
+- [Amazon SP-API deleteListingsItem](https://developer-docs.amazon.com/sp-api/reference/deletelistingsitem)
+- [Amazon SP-API getListingsRestrictions](https://developer-docs.amazon.com/sp-api/reference/getlistingsrestrictions)
+- [Amazon SP-API searchDefinitionsProductTypes](https://developer-docs.amazon.com/sp-api/reference/searchdefinitionsproducttypes)
+- [Amazon SP-API getDefinitionsProductType](https://developer-docs.amazon.com/sp-api/reference/getdefinitionsproducttype)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON, files, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON stdout, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full responses under ./linkfox/<date>/<session>/data/ and summarize responses larger than 8 KB unless --inline is used.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

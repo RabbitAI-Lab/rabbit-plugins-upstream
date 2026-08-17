@@ -1,43 +1,66 @@
-## Description: <br>
-Generate and edit video with Wan through RunAPI, using the RunAPI CLI for one-off generation and SDKs for app or backend integrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit video with Wan through RunAPI for agents that need to create, edit, or transform video.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-External developers and agent users use this skill to route Wan video and image generation or editing tasks through RunAPI. It provides CLI guidance for one-off tasks and SDK package guidance for application integrations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, uploaded media, and generation requests are sent to RunAPI. <br>
-Mitigation: Use the skill only when RunAPI/Wan is intended, and avoid sending sensitive prompts or media unless that use is permitted by the user's policy. <br>
-Risk: Authentication may rely on RUNAPI_API_KEY, runapi login, or saved CLI configuration. <br>
-Mitigation: Prefer a scoped RunAPI account or API key for this workflow and avoid exposing credentials in shared logs, prompts, or configuration files. <br>
+## Use Case:
 
+Developers and agents use this skill to generate, edit, or transform Wan video outputs through RunAPI. For one-off tasks it guides CLI execution; for application work it directs SDK integration.
 
-## Reference(s): <br>
-- [RunAPI Wan homepage](https://runapi.ai/models/wan) <br>
-- [RunAPI Wan model documentation](https://runapi.ai/models/wan.md) <br>
-- [RunAPI Alibaba provider comparison](https://runapi.ai/providers/alibaba.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference the runapi CLI, RUNAPI_API_KEY, saved CLI authentication, and RunAPI SDK package names.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: release evidence) <br>
+Risk: RunAPI task submission may incur cost.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the selected operation and request before submitting; submit once and preserve the task response.
+
+Risk: Referenced local media may be uploaded to RunAPI.
+
+Mitigation: Review file paths before execution and include only media the user intends to send.
+
+Risk: Authentication depends on an API key or saved CLI credentials.
+
+Mitigation: Check authentication before submitting and request a valid RUNAPI_API_KEY or saved CLI auth when needed.
+
+Risk: Generated deliverables may be missing, empty, or the wrong media type.
+
+Mitigation: Download every requested deliverable and verify non-empty files with the expected MIME type before reporting completion.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-wan)
+- [RunAPI Wan homepage](https://runapi.ai/models/wan)
+- [RunAPI Wan model documentation](https://runapi.ai/models/wan.md)
+- [Alibaba provider overview](https://runapi.ai/providers/alibaba.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI Wan SDK](https://github.com/runapi-ai/wan-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Code]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce request JSON, task/result JSON, downloaded media files, and SDK integration guidance depending on the user's task.]
+
+## Skill Version(s):
+
+0.2.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

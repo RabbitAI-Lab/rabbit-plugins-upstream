@@ -2,7 +2,7 @@
 name: shareone
 slug: shareone
 displayName: ShareOne
-version: 1.2.7
+version: 1.2.10
 summary: Host HTML pages and share PDF/Word/PPT docs with short links
 tags: [shareone, publish, sharing, hosting, html, upload]
 description: Host HTML/Markdown pages and share PDF, Word, or PowerPoint docs as ShareOne short links. Use when publishing pages/docs, adding passwords/watermarks, comments, downloads, or updates.
@@ -10,7 +10,7 @@ license: MIT
 metadata:
   slug: shareone
   display-name: ShareOne
-  version: 1.2.7
+  version: 1.2.10
   summary: Host HTML pages and share PDF/Word/PPT docs with short links
   tags:
     - shareone
@@ -80,7 +80,7 @@ node /path/to/shareone-skill/scripts/ensure_credentials.js
 3. **刷新 remote-url auto-follow 分享的源内容（用户说“我 push 了”“拉一下最新源”“刷新这个远程链接”）**
    → 先读 `workflows/environment-and-credentials.md`，再读 `workflows/refresh-remote.md`。remote 页面刷新是懒的、只在打开渲染页时触发，下载/`/file` 只服务缓存；本条用 `refresh_share.js` 显式强制 refetch。仅对绑定了远程 URL 的分享有效；非 remote-bound 返回 `NOT_REMOTE_BOUND`，此时应改走第 4 或第 8 条（改设置 / 重新发布内容）。
 
-4. **用户提供已有 ShareOne 链接、`share_id` 或 slug，且只要求修改水印、访问密码、自定义短链接或评论开关（不改内容本身）**
+4. **用户提供已有 ShareOne 链接、`share_id` 或 slug，且只要求修改水印、访问密码、自定义短链接、评论开关或数据存储开关（不改内容本身）**
    → 先读 `workflows/environment-and-credentials.md`，再读 `workflows/update-share-settings.md`，最后读 `workflows/result-and-errors.md`。
    这是元数据更新：不要按文件类型路由，不要下载源文件，不要使用 `publish.js`，不要重新上传内容。对二进制文件链接（`/pdf/`、`/ppt/`、`/word/`）同样适用本条。
 
@@ -105,6 +105,7 @@ node /path/to/shareone-skill/scripts/ensure_credentials.js
 - 用户提供的目标可以是完整链接、`/s/<ref>` 等路径、裸 `share_id`（16 位字符串）或自定义短链 slug。服务端接口同时接受 `share_id` 和 slug，无需自行区分两者。
 - `/s/<share_id>` 是最终给用户访问的分享链接，**不是上传 API endpoint**。不要把 `/s/<share_id>` 当作发布地址，也不要直接向 `/s/<share_id>` PUT/POST 文件。
 - 路径前缀与内容类型的对应关系：`/s/`、`/md/` 是文本/HTML/Markdown 页面；`/pdf/`、`/ppt/`、`/word/` 是二进制文件。元数据更新时 `update_share_settings.js` 会按此前缀自动选择 endpoint，裸 `share_id` 或 slug 由脚本先试页面 endpoint、必要时回退文件 endpoint，整个过程不下载源文件。
+- 文本页里 `/s/<ref>` 与 `/md/<ref>` **等价**：前缀不绑定、也不校验内容类型，浏览路由一律按 ref 解析 share、按 share 真实 content-type 渲染。因此文本页可以就地把 content-type 从 md 升级成 html（`.md → .html`，如把 ASCII 图升级成 Mermaid），URL（含老的 `/md/<slug>`）一字不变、评论保留——见 `workflows/publish-text-page.md` §6b。升级用 `--share-id` 更新，**绝不 `--force-new`**。
 - 内容发布与更新统一使用 `publish.js`，脚本会按文件类型自动分发到文本通道或二进制直传通道（stderr 输出 `INFO:CHANNEL:text|binary`），不需要也不应该自行选择底层上传脚本。不要因为会话里存在旧的 `/s/<share_id>` 就把二进制文件改走文本页面 PUT；二进制文件传 `--share-id` 会被脚本拒绝（`ERROR:BINARY_NO_SHARE_ID`）。
 - 如果当前会话中已经为同一个文本/HTML 文件生成过 ShareOne 链接，可复用之前的 `share_id` 执行文本页面 PUT 更新；否则执行首次创建。
 - 非 owner 下载要求链接已开启允许下载；若脚本输出 `ERROR:DOWNLOAD_NOT_ALLOWED`，直接提示用户让链接 owner 先开启允许下载。
@@ -130,8 +131,10 @@ node /path/to/shareone-skill/scripts/ensure_credentials.js
 - 发布前必须完成凭据检查和必要的凭据配置。
 - 发布成功后必须直接使用脚本返回的 `share_url`，不要自行拼接分享链接；不要展示备用链接。
 - 只有当用户明确要求开启评论、允许讨论或协同模式时，才添加 `--allow-comments true`。默认不开启评论。
+- 只有当用户明确要求页面持久化数据（如保存游戏分数、表单状态）时，才添加 `--allow-data true`。默认不开启数据存储。
+- 页面持久化数据时，页面代码用自动注入的 `window.__SHAREONE__` SDK，**必须按敏感度二选一、无默认**：`putShared(key, value|File)` 存服务器·所有访客可读·跨设备（大文件自动走 blob，≤8MB）；`putPrivate(key, value|File)` 只存这台设备·私有·不上传。命名即风险（Shared=别人能看），敏感/隐私数据一律 `putPrivate`。现成的“公开 vs 敏感”拖拽上传参考页：`templates/page-storage-dropzone.html`；私有数据可留在本机就地推理（模型公开＋数据 `putPrivate`＋页面内计算，字节不出设备）的参考页：`templates/client-side-inference.html`；完整 SDK 见后端 `agent.md` §14。发布时若带 `--allow-data true`，命令行会在成功后打印一行 `HINT:PAGE_DATA_ENABLED` 提示该二选一与本地推理用法。
 - 自定义短链接（slug）：服务端会根据文件名自动生成可读的 slug（如 `quarterly-report`），客户端无需额外操作。只有用户明确要求“链接叫 xxx”、“自定义短链接 xxx”、“URL 后缀 xxx”时，才在发布命令添加 `--slug xxx` 覆盖自动生成；slug 冲突时把服务端提示反馈给用户，不要静默改名。
-- 评论处理必须形成闭环：认领、修改、重新发布、回复、关闭或 dismiss。
+- 评论处理必须形成闭环：认领、修改、重新发布，然后用 `comment_reply.js --state`（`--state` 必填）**明确表态**——`resolved-agree`（同意收敛）/ `open-disagree`（有异议但保持 open）/ `open-need-input`（需人类澄清）。AI **永不**单方面 dismiss 一条分歧：不同意用 `open-disagree`，`dismiss` 仅用于真正无关/无法处理的评论。
 
 ## 最终回复前检查清单
 

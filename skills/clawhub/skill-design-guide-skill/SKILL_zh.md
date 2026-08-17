@@ -1,4 +1,3 @@
----
 name: skill-design-guide
 display_name: "Skill 设计指南"
 description: >

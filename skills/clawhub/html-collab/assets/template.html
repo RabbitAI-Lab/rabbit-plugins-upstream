@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="generator" content="html-collab/0.2.0">
+  <meta name="generator" content="html-collab/0.3.0">
   <title>html-collab document</title>
   <!-- collab:llm-skip:start — engine styles, not document content -->
   <style id="collab-styles">
@@ -78,7 +78,12 @@ body {
   border-left: 1px solid #e0e0e0;
   background: #fafaf8;
   padding: 16px 12px;
-  overflow-y: auto;
+  overflow: visible;
+}
+
+#collab-comments-list {
+  position: relative;
+  min-height: 100%;
 }
 
 /* --- Article content --- */
@@ -170,11 +175,14 @@ body {
 
 /* --- Comment panel (in sidebar) --- */
 #collab-comment-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 0;
 }
 #collab-comment-text {
   width: 100%;
@@ -223,17 +231,20 @@ body {
 
 /* --- Comment bubbles in sidebar --- */
 .collab-comment-bubble {
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 10px 12px;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   font-size: 13px;
   cursor: pointer;
 }
 .collab-comment-bubble:hover { border-color: #2a6f4f; }
 .collab-comment-bubble.active { border-color: #2a6f4f; box-shadow: 0 0 0 2px #e8f4ee; }
+.collab-comment-bubble.editing { cursor: default; border-color: #2a6f4f; box-shadow: 0 0 0 2px #e8f4ee; }
 .collab-comment-quote {
   font-size: 11px;
   color: #888;
@@ -244,6 +255,30 @@ body {
 }
 .collab-comment-body { color: #333; }
 .collab-comment-meta { font-size: 11px; color: #aaa; margin-top: 6px; }
+.collab-comment-edit-text {
+  width: 100%;
+  min-height: 82px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 13px;
+  resize: vertical;
+  font-family: inherit;
+}
+.collab-comment-edit-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.collab-comment-edit-actions button {
+  padding: 5px 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 12px;
+}
+.collab-comment-update { background: #2a6f4f; color: #fff; border-color: #2a6f4f; }
 
 /* Delete button on comment bubbles */
 .collab-comment-delete {
@@ -334,7 +369,7 @@ body {
   },
   "meta": {
     "title": "",
-    "engineVersion": "0.2.0",
+    "engineVersion": "0.3.0",
     "originalCreated": "",
     "lastRevised": "",
     "model": "",
@@ -487,6 +522,7 @@ if (typeof module !== 'undefined' && module.exports) {
   let isDirty = false;
   let pendingCommentRange = null;   // Selection range when comment toolbar clicked
   let pendingCommentTarget = null;  // data-cid of targeted block
+  let commentLayoutFrame = null;
 
   // ── Auto-save ──────────────────────────────────────────────
   let autoSaveTimer = null;
@@ -526,6 +562,7 @@ if (typeof module !== 'undefined' && module.exports) {
     });
 
     document.addEventListener('selectionchange', onSelectionChange);
+    window.addEventListener('resize', scheduleCommentLayout);
   }
 
   // ── File access ────────────────────────────────────────────
@@ -663,6 +700,7 @@ if (typeof module !== 'undefined' && module.exports) {
     for (const comment of data.comments) {
       renderCommentBubble(comment);
     }
+    layoutCommentRail();
   }
 
   // ── Inline edit ────────────────────────────────────────────
@@ -845,6 +883,78 @@ if (typeof module !== 'undefined' && module.exports) {
     return null;
   }
 
+  function findCidElement(cid) {
+    if (!cid) return null;
+    return Array.from($('collab-content').querySelectorAll('[data-cid]'))
+      .find(el => el.dataset.cid === cid) || null;
+  }
+
+  function findCommentAnchor(comment) {
+    const mark = $('collab-content')
+      .querySelector(`.collab-highlight[data-comment-id="${comment.id}"]`);
+    return mark || findCidElement(comment.target);
+  }
+
+  function desiredCommentTop(anchor) {
+    const list = $('collab-comments-list');
+    if (!anchor || !list) return 0;
+    const listTop = list.getBoundingClientRect().top + window.scrollY;
+    const anchorTop = anchor.getBoundingClientRect().top + window.scrollY;
+    return Math.max(0, anchorTop - listTop);
+  }
+
+  function measuredHeight(el) {
+    return el.getBoundingClientRect().height || el.offsetHeight || 96;
+  }
+
+  function scheduleCommentLayout() {
+    if (commentLayoutFrame !== null) return;
+    commentLayoutFrame = window.requestAnimationFrame(() => {
+      commentLayoutFrame = null;
+      layoutCommentRail();
+    });
+  }
+
+  function layoutCommentRail() {
+    const list = $('collab-comments-list');
+    const content = $('collab-content');
+    const data = getCollabData(document);
+    if (!list || !content || !data) return;
+
+    const commentById = new Map(data.comments.map(comment => [comment.id, comment]));
+    const railItems = Array.from(list.children)
+      .filter(el => el.classList.contains('collab-comment-bubble') || el.id === 'collab-comment-panel')
+      .filter(el => el.id !== 'collab-comment-panel' || el.style.display !== 'none')
+      .map((el, index) => {
+        const comment = commentById.get(el.dataset.commentId);
+        const anchor = el.id === 'collab-comment-panel'
+          ? findCidElement(pendingCommentTarget)
+          : comment && findCommentAnchor(comment);
+        return { el, index, desiredTop: desiredCommentTop(anchor) };
+      })
+      .sort((a, b) => a.desiredTop - b.desiredTop || a.index - b.index);
+
+    let nextTop = 0;
+    for (const item of railItems) {
+      const top = Math.max(item.desiredTop, nextTop);
+      item.el.style.top = top + 'px';
+      nextTop = top + measuredHeight(item.el) + 10;
+    }
+
+    const contentBottom = content.getBoundingClientRect().bottom + window.scrollY;
+    const listTop = list.getBoundingClientRect().top + window.scrollY;
+    const contentHeight = Math.max(0, contentBottom - listTop);
+    list.style.minHeight = Math.max(contentHeight, nextTop, window.innerHeight - 76) + 'px';
+  }
+
+  function focusWithoutScrolling(el) {
+    try {
+      el.focus({ preventScroll: true });
+    } catch {
+      el.focus();
+    }
+  }
+
   // ── Comment panel ──────────────────────────────────────────
   function openCommentPanel() {
     const panel = $('collab-comment-panel');
@@ -852,8 +962,9 @@ if (typeof module !== 'undefined' && module.exports) {
     $('collab-comment-images').innerHTML = '';
     $('collab-comment-warning').style.display = 'none';
     panel.style.display = 'block';
-    $('collab-comments-list').prepend(panel);
-    $('collab-comment-text').focus();
+    $('collab-comments-list').appendChild(panel);
+    layoutCommentRail();
+    focusWithoutScrolling($('collab-comment-text'));
 
     panel._images = [];   // staged images for current comment
 
@@ -863,6 +974,7 @@ if (typeof module !== 'undefined' && module.exports) {
       panel.style.display = 'none';
       pendingCommentRange = null;
       pendingCommentTarget = null;
+      layoutCommentRail();
     };
   }
 
@@ -907,6 +1019,7 @@ if (typeof module !== 'undefined' && module.exports) {
     pendingCommentRange = null;
     pendingCommentTarget = null;
     renderCommentBubble(comment);
+    layoutCommentRail();
   }
 
   function renderCommentBubble(comment) {
@@ -914,19 +1027,99 @@ if (typeof module !== 'undefined' && module.exports) {
     const bubble = document.createElement('div');
     bubble.className = 'collab-comment-bubble';
     bubble.dataset.commentId = comment.id;
+    renderCommentBubbleContent(bubble, comment);
+    bubble.addEventListener('click', (e) => {
+      if (e.target.closest('button, textarea, input, a')) return;
+      startCommentEdit(comment.id);
+    });
+    list.appendChild(bubble);
+    layoutCommentRail();
+  }
+
+  function renderCommentBubbleContent(bubble, comment) {
+    const editedText = comment.editedAt
+      ? ` · edited ${new Date(comment.editedAt).toLocaleString()}`
+      : '';
+    const images = comment.images || [];
+    bubble.classList.remove('editing');
     bubble.innerHTML = `
       <button class="collab-comment-delete" aria-label="Delete comment" title="Delete comment">×</button>
       <div class="collab-comment-quote">${escapeHtml(comment.quote)}</div>
       <div class="collab-comment-body">${escapeHtml(comment.text)}</div>
-      ${comment.images.map(img =>
+      ${images.map(img =>
         `<img src="${escapeHtml(img.type === 'base64' ? img.data : img.url)}" alt="screenshot">`
       ).join('')}
-      <div class="collab-comment-meta">${new Date(comment.timestamp).toLocaleString()}</div>
+      <div class="collab-comment-meta">${new Date(comment.timestamp).toLocaleString()}${editedText}</div>
     `;
-    // Wire delete button imperatively after innerHTML (avoids inline onclick)
     bubble.querySelector('.collab-comment-delete')
       .addEventListener('click', (e) => { e.stopPropagation(); deleteComment(comment.id); });
-    list.appendChild(bubble);
+  }
+
+  function startCommentEdit(id) {
+    const data = getCollabData(document);
+    const comment = data.comments.find(c => c.id === id);
+    const bubble = $('collab-comments-list')
+      .querySelector(`.collab-comment-bubble[data-comment-id="${id}"]`);
+    if (!comment || !bubble || bubble.classList.contains('editing')) return;
+
+    const images = comment.images || [];
+    bubble.classList.add('editing');
+    bubble.innerHTML = `
+      <div class="collab-comment-quote">${escapeHtml(comment.quote)}</div>
+      <textarea class="collab-comment-edit-text">${escapeHtml(comment.text)}</textarea>
+      ${images.map(img =>
+        `<img src="${escapeHtml(img.type === 'base64' ? img.data : img.url)}" alt="screenshot">`
+      ).join('')}
+      <div class="collab-comment-edit-actions">
+        <button class="collab-comment-update">Update</button>
+        <button class="collab-comment-cancel-edit">Cancel</button>
+      </div>
+      <div class="collab-comment-meta">${new Date(comment.timestamp).toLocaleString()}</div>
+    `;
+
+    const textarea = bubble.querySelector('.collab-comment-edit-text');
+    const update = bubble.querySelector('.collab-comment-update');
+    const cancel = bubble.querySelector('.collab-comment-cancel-edit');
+
+    update.addEventListener('click', (e) => {
+      e.stopPropagation();
+      updateComment(id, textarea.value.trim());
+    });
+    cancel.addEventListener('click', (e) => {
+      e.stopPropagation();
+      renderCommentBubbleContent(bubble, comment);
+      layoutCommentRail();
+    });
+    textarea.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        updateComment(id, textarea.value.trim());
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        renderCommentBubbleContent(bubble, comment);
+        layoutCommentRail();
+      }
+    });
+
+    focusWithoutScrolling(textarea);
+    textarea.select();
+    layoutCommentRail();
+  }
+
+  function updateComment(id, text) {
+    const data = getCollabData(document);
+    const comment = data.comments.find(c => c.id === id);
+    const bubble = $('collab-comments-list')
+      .querySelector(`.collab-comment-bubble[data-comment-id="${id}"]`);
+    if (!comment || !bubble) return;
+
+    comment.text = text;
+    comment.editedAt = new Date().toISOString();
+    setCollabData(document, data);
+    renderCommentBubbleContent(bubble, comment);
+    markDirty();
+    layoutCommentRail();
   }
 
   function deleteComment(id) {
@@ -953,6 +1146,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
     // 4. Mark document dirty
     markDirty();
+    layoutCommentRail();
   }
 
   function escapeHtml(str) {

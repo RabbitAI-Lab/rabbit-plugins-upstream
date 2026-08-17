@@ -1,78 +1,79 @@
-# Controller 与 QA
+# Controller、阶段审查与独立 QA 2.1
 
-计划权限、实现权限和验收权限必须分开。
+派工、实现、阶段审查和最终验收的权限必须分开。
 
-## Dispatch
+## Controller 派工
 
-Dispatch 前：
+执行前，Controller 确认：
 
-1. 确认 Goal Readiness 是 `Ready for Execution`；
-2. 确认规模和治理档位；
-3. 创建或更新 Active Packet；
-4. 写明允许范围、受保护边界、验收标准、证据和停止条件；
-5. 设置 `execution_state: Ready`、`qa_decision: Not Reviewed` 和第一阶段成果。
+1. goal readiness 为 `Ready for Execution`；
+2. 交付类别、规模与治理级别明确；
+3. 范围、Non-Goals、写入边界和受保护边界一致；
+4. 每条验收标准都有合适的证据；
+5. 只授权一个阶段结果和一个 Next Action；
+6. 已理解 `autonomy_mode: Bounded` 与 `acceptance_mode: Layered`。
 
-Developer 可以不在每个 Loop 后询问而继续执行已授权阶段，但必须满足：
+只要持续产生有效进展、权限与方向未变化、没有触发停止条件，Developer 就可以跨已授权阶段自主继续。普通、可逆、项目内的技术选择不需要 Owner 批准。
 
-- 下一步仍在同一 Packet 内；
-- 证据显示有效进展；
-- 没有停止规则或 Owner 门禁；
-- 对齐仍是 `Aligned`；
-- 重复失败未达到上限。
+## 阶段审查
 
-Developer 可以设置 `execution_state: Ready for Review`，但 Standard 或 Full 中不能修改 QA 或项目验收。
+用户在单 Agent `Controller -> Developer -> QC` 循环中的 `QC`，映射为 Stage Reviewer。
 
-## 最新交付审查
+Stage Reviewer 只检查当前阶段：
 
-只检查：
+- 验收标准与目标连接；
+- 变更文件与范围；
+- 聚焦命令结果与受影响回归；
+- 行为声明所需的功能证据；
+- 失败签名与返修进展；
+- 重大风险与受保护边界。
 
-- Active Packet 和当前 Work Order；
-- 最新交付修改的文件；
-- 该交付影响的验收标准；
-- 提交的证据；
-- 必需的回归范围。
+阶段结论只能是 `Passed`、`Needs Fix` 或 `Blocked`。失败后在同一 Packet、同一 Work Order 返回 Developer，不创建新 Milestone。Standard/Full 的 Stage Reviewer 不能设置最终 QA 验收。
 
-不能把最新交付审查变成全项目审计。
+## 终端交接
 
-检查：
+所有 Standard/Full 授权阶段通过后，设置：
 
-1. 是否保持授权范围；
-2. Non-Goals 和受保护边界是否完整；
-3. 每个 Must Pass 是否有可复现证据；
-4. 自动检查与功能/用户流程证据是否一致；
-5. 跳过检查是否有明确且合理的原因；
-6. 已知风险是否可追踪且确实不阻塞；
-7. 结果是否仍服务用户可感知目标。
+```text
+execution_state: Ready for Independent Acceptance
+stage_review: Passed
+qa_decision: Not Reviewed
+project_state: Active
+```
 
-## QA 决策
+独立 QA 必须由另一个 Agent、任务或人工审查者承担。它检查标准、diff、原始证据、限制、目标连接和必要目标环境，不能把 Developer 的期望结论当成证据。
 
-- `Accepted`：Must Pass 和所需证据充分；
-- `Accepted With Risk`：核心结果可用，非阻塞边缘风险明确、有负责人和时限；
-- `Failed`：仍有可执行的实现或证据缺陷；
-- `Blocked`：验收需要 Owner 权限、不可用环境、凭据、受保护访问或其他硬门禁。
+## 独立 QA 决策
 
-`Accepted With Risk` 不能替代核心流程失败、主要环境缺失或功能证据缺失。
+- `Accepted`：所有 Must Pass 标准和所需证据充分。
+- `Accepted With Risk`：核心结果可用；非阻断风险明确、有负责人且有期限。
+- `Failed`：仍有可执行的实现或证据缺陷。
+- `Blocked`：验收需要当前无法取得的权限、环境、凭证或受保护访问。
 
-## QA 失败
+核心流程损坏、缺少主要环境、没有功能证据，或仅 Contract 实现却声称 Runtime 时，不得使用 `Accepted With Risk`。
 
-1. 保持相同 Milestone 和 Work Order；
-2. 设置 `qa_decision: Failed`；
-3. 设置 `execution_state: Needs Fix` 和 `project_state: Needs Fix`；
-4. 建立与失败标准 ID 关联的有界修复；
-5. 写明重新验证和受影响回归；
-6. 返回适当阶段，不能重置为新 Milestone。
+## 失败返修
 
-使用 `{baseDir}/templates/zh-CN/QA_DECISION.md`。
+阶段审查或 QA 失败时：
 
-## 自验收
+1. 保留同一 Milestone、Packet 与 Work Order；
+2. 将返修绑定到失败标准 ID；
+3. 在相应层设置 `Needs Fix`；
+4. 重试前必须有新诊断或进展增量；
+5. 重新运行聚焦验证与受影响回归；
+6. 返修通过阶段审查后，才重新进入独立 QA。
 
-只有 Lite 且满足以下条件才允许：
+## 风险连续携带规则
 
-- `qa_required: false`；
-- 修改局部、低风险、可回退；
-- 自动和功能证据都通过；
-- 没有重大已知限制；
-- Active Packet 明确允许独立执行。
+出现以下任一情况时，继续扩展前必须做 Direction Alignment：
 
-其他情况必须独立 QA。
+- 同一重大风险连续两次出现在当前审查中；
+- 连续三次独立决策为 `Accepted With Risk`。
 
+复核必须判断该风险是否仍非阻断、是否需要目标或架构授权，或是否反映系统性测试不足。
+
+## Lite 自验收
+
+只有 Lite 且 `qa_required: false`、工作本地可逆、自动与功能证据通过、没有重大限制时，才可自验收。
+
+`{baseDir}/templates/zh-CN/QA_DECISION.md` 只用于最终独立 QA，不用于日常阶段记录。

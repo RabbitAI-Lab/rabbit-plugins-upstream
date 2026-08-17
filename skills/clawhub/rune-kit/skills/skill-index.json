@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "generated": "2026-07-23T17:15:41.614Z",
-  "skillCount": 66,
+  "generated": "2026-08-16T06:33:00.474Z",
+  "skillCount": 67,
   "skills": {
     "adversary": {
       "layer": "L2",
@@ -35,7 +35,7 @@
     },
     "audit": {
       "layer": "L2",
-      "model": "sonnet",
+      "model": "opus",
       "group": "quality",
       "description": "Comprehensive project audit — security, dependencies, code quality, architecture, performance, infra, docs, and mesh analytics. Use when needing a full 8-dimension health-score snapshot before a major",
       "connections": [
@@ -112,21 +112,21 @@
     },
     "completion-gate": {
       "layer": "L3",
-      "model": "haiku",
+      "model": "sonnet",
       "group": "validation",
       "description": "Validates agent claims against evidence trail. Use when verifying an agent has actually done what it claims — auto-fires at workflow end. Catches 'done' without proof, 'tests pass' without output, 'fi",
       "connections": []
     },
     "constraint-check": {
       "layer": "L3",
-      "model": "haiku",
+      "model": "sonnet",
       "group": "validation",
       "description": "Meta-validator for HARD-GATEs. Use when auditing whether a skill's mandatory constraints were actually followed during a workflow (not just claimed). Called by cook, team, and audit for discipline com",
       "connections": []
     },
     "context-engine": {
       "layer": "L3",
-      "model": "haiku",
+      "model": "sonnet",
       "group": "state",
       "description": "Context window management. Auto-triggered when context is filling up. Triggers smart compaction and preserves critical information across compaction boundaries. Called by L1 orchestrators at context t",
       "connections": [
@@ -243,7 +243,7 @@
     },
     "debug": {
       "layer": "L2",
-      "model": "sonnet",
+      "model": "opus",
       "group": "development",
       "description": "Root cause analysis for bugs and unexpected behavior. Traces errors through code, uses structured reasoning, and hands off to fix when cause is found. Core of the debug↔fix mesh. When the diagnosed ca",
       "connections": [
@@ -269,7 +269,7 @@
     },
     "dependency-doctor": {
       "layer": "L3",
-      "model": "haiku",
+      "model": "sonnet",
       "group": "deps",
       "description": "Dependency health management. Detects package manager, checks outdated packages and vulnerabilities, and produces a prioritized update plan.",
       "connections": [
@@ -306,12 +306,25 @@
     },
     "design": {
       "layer": "L2",
-      "model": "sonnet",
+      "model": "opus",
       "group": "creation",
       "description": "Design system reasoning. Maps product domain to style, palette, typography, and platform-specific patterns. Generates .rune/design-system.md as the shared design contract for all UI-generating skills.",
       "connections": [
         "review"
       ]
+    },
+    "diagram": {
+      "layer": "L3",
+      "model": "sonnet",
+      "group": "media",
+      "description": "Use when a reader needs an editorial architecture, flowchart, sequence, state, ER, swimlane, loop, layer-stack, data-flow, or process diagram as self-contained HTML/SVG. Symptoms: 'draw the system', '",
+      "connections": [],
+      "signals": {
+        "emit": [
+          "media.diagram.composed"
+        ],
+        "listen": []
+      }
     },
     "doc-processor": {
       "layer": "L3",
@@ -334,6 +347,7 @@
       "description": "Auto-generate and maintain project documentation. Creates README, API docs, architecture docs, changelogs, and keeps them in sync with code changes. The \"docs are never outdated\" skill.",
       "connections": [
         "scout",
+        "diagram",
         "git"
       ],
       "signals": {
@@ -400,7 +414,7 @@
     },
     "hallucination-guard": {
       "layer": "L3",
-      "model": "haiku",
+      "model": "sonnet",
       "group": "validation",
       "description": "Verify AI-generated imports, API calls, and packages actually exist. Use when finishing AI-generated code that introduces new imports or external API calls — auto-fires after fix/cook to catch phantom",
       "connections": [
@@ -431,7 +445,7 @@
     },
     "incident": {
       "layer": "L2",
-      "model": "sonnet",
+      "model": "opus",
       "group": "delivery",
       "description": "Structured incident response. Use when user reports an outage, production error, or says 'incident', 'something is down', 'users are affected'. Triage severity, contain blast radius, root-cause, docum",
       "connections": [
@@ -446,7 +460,7 @@
     },
     "integrity-check": {
       "layer": "L3",
-      "model": "haiku",
+      "model": "sonnet",
       "group": "validation",
       "description": "Verify integrity of persisted state, skill outputs, and context bus data. Use when validating .rune/ files or sub-agent outputs against prompt injection, memory poisoning, identity spoofing, or advers",
       "connections": [
@@ -474,7 +488,7 @@
     },
     "launch": {
       "layer": "L1",
-      "model": "sonnet",
+      "model": "opus",
       "group": "orchestrator",
       "description": "Deploy + marketing orchestrator. Use when user says 'launch', 'ship to production', 'deploy and announce', or 'go live'. Runs the full pipeline — pre-flight tests, deployment, live verification, marke",
       "connections": [
@@ -638,7 +652,7 @@
     },
     "rescue": {
       "layer": "L1",
-      "model": "sonnet",
+      "model": "opus",
       "group": "orchestrator",
       "description": "Legacy refactoring orchestrator. Use when user says 'refactor', 'modernize', 'clean up this mess', 'rescue', or when dealing with old/messy/legacy code. Multi-session workflow — autopsy, safety net, i",
       "connections": [
@@ -654,7 +668,7 @@
     },
     "research": {
       "layer": "L3",
-      "model": "haiku",
+      "model": "sonnet",
       "group": "knowledge",
       "description": "Web search and external knowledge lookup. Gathers data on technologies, libraries, best practices, and competitor solutions.",
       "connections": []
@@ -722,7 +736,7 @@
     },
     "sast": {
       "layer": "L3",
-      "model": "haiku",
+      "model": "sonnet",
       "group": "validation",
       "description": "Static analysis tool runner. Wraps ESLint, Semgrep, Bandit, Clippy, and language-specific analyzers with unified severity output. Use when deeper code analysis needed beyond pattern matching.",
       "connections": []
@@ -833,7 +847,7 @@
     },
     "skill-router": {
       "layer": "L0",
-      "model": "haiku",
+      "model": "sonnet",
       "group": "orchestrator",
       "description": "Meta-enforcement layer that routes EVERY agent action through the correct skill. MUST check this routing table before ANY response involving code, files, or technical decisions. Default: route to rune",
       "connections": [
@@ -956,7 +970,7 @@
     },
     "verification": {
       "layer": "L3",
-      "model": "haiku",
+      "model": "sonnet",
       "group": "validation",
       "description": "Universal verification runner. Runs lint, type-check, tests, and build. Use after any code change to verify nothing is broken.",
       "connections": [],
@@ -979,7 +993,7 @@
     },
     "watchdog": {
       "layer": "L3",
-      "model": "sonnet",
+      "model": "haiku",
       "group": "monitoring",
       "description": "Post-deploy monitoring. Use when verifying a deployed app is healthy after deploy or launch — auto-fires from launch/deploy. Checks HTTP status, response times, error detection, and smoke test report.",
       "connections": [],
@@ -1095,10 +1109,12 @@
     "design": [
       "review"
     ],
+    "diagram": [],
     "doc-processor": [],
     "docs-seeker": [],
     "docs": [
       "scout",
+      "diagram",
       "git"
     ],
     "fix": [
@@ -1549,6 +1565,12 @@
         "deploy"
       ]
     },
+    "media.diagram.composed": {
+      "emitters": [
+        "diagram"
+      ],
+      "listeners": []
+    },
     "code.changed": {
       "emitters": [
         "fix"
@@ -1725,7 +1747,7 @@
         "production"
       ],
       "layer": "L1",
-      "model": "sonnet",
+      "model": "opus",
       "chain": [
         "launch",
         "verification",
@@ -1746,7 +1768,7 @@
         "messy"
       ],
       "layer": "L1",
-      "model": "sonnet",
+      "model": "opus",
       "chain": [
         "rescue",
         "autopsy",
@@ -1826,7 +1848,7 @@
         "fail"
       ],
       "layer": "L2",
-      "model": "sonnet",
+      "model": "opus",
       "chain": [
         "debug",
         "fix",
@@ -1953,7 +1975,7 @@
         "wireframe"
       ],
       "layer": "L2",
-      "model": "sonnet",
+      "model": "opus",
       "chain": [
         "design",
         "review"
@@ -1997,7 +2019,7 @@
         "codebase review"
       ],
       "layer": "L2",
-      "model": "sonnet",
+      "model": "opus",
       "chain": [
         "audit",
         "retro",
@@ -2033,6 +2055,7 @@
       "chain": [
         "docs",
         "scout",
+        "diagram",
         "git"
       ]
     },
@@ -2076,7 +2099,7 @@
         "postmortem"
       ],
       "layer": "L2",
-      "model": "sonnet",
+      "model": "opus",
       "chain": [
         "incident",
         "journal"

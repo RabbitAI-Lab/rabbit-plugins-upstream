@@ -1,42 +1,60 @@
-## Description: <br>
-Expose a local @moneydevkit/agent-wallet as a Nostr Wallet Connect (NIP-47) wallet-service (systemd user service). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Expose a local @moneydevkit/agent-wallet as a Nostr Wallet Connect (NIP-47) wallet-service for a systemd user service.
 
-## Publisher: <br>
-[kristapsk](https://clawhub.ai/user/kristapsk) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-ISC <br>
+## Publisher:
 
+[kristapsk](https://clawhub.ai/user/kristapsk)
 
-## Use Case: <br>
-Developers and operators use this skill to run a local Nostr Wallet Connect bridge for a self-custodial Bitcoin Lightning wallet, allowing NWC clients such as Stacker.News to request invoice creation and payment through @moneydevkit/agent-wallet. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The bridge can expose Bitcoin Lightning spending authority more broadly than users may expect. <br>
-Mitigation: Use only with a small isolated wallet, avoid sharing generated NWC URIs, and keep NWC connection state and logs protected. <br>
-Risk: Payment permissions may not enforce receive-only or send-only separation before payment execution. <br>
-Mitigation: Keep NWC_AUTO_REGISTER disabled and do not rely on receive-only or send-only separation until allow_methods enforcement is verified. <br>
+## Use Case:
 
+Developers and operators use this skill to run a self-hosted Nostr Wallet Connect bridge that lets NWC clients request invoices or payments from a local self-custodial Lightning wallet.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kristapsk/agent-wallet-nwc-bridge) <br>
-- [README.md](artifact/README.md) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration values] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local setup, operation, and wallet-bridge usage guidance; runtime files may include NWC connection secrets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server-resolved release metadata and package.json) <br>
+Risk: The bridge is a remotely reachable wallet control surface, and any valid NWC URI can authorize wallet queries, invoice creation, or spending.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep state.json and generated NWC URIs secret, use tiny budgets, and deploy only where the operator is prepared to manage wallet-access credentials.
+
+Risk: Auto-registration can add unknown Nostr pubkeys as authorized connections when enabled.
+
+Mitigation: Keep NWC_AUTO_REGISTER disabled for normal use and create explicit connections with known clients.
+
+Risk: The security evidence says the documented receive/send permission split is not enforced by the code.
+
+Mitigation: Do not rely on connection names as spending controls until allow_methods is checked before wallet actions; review permissions manually and limit funds at risk.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kristapsk/skills/agent-wallet-nwc-bridge)
+- [README.md](README.md)
+- [SKILL.md](SKILL.md)
+- [nwc.env.example](nwc.env.example)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JavaScript, systemd unit, and environment configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes operational security guidance for NWC secrets, budgets, and auto-registration.]
+
+## Skill Version(s):
+
+1.1.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

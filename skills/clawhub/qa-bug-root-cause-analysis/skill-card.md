@@ -1,41 +1,52 @@
-## Description: <br>
-Guides agents through structured QA bug root-cause analysis by classifying symptoms, tracing direct, indirect, and systemic causes, and producing fix and prevention recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA and engineering teams investigate recurring or production bugs by mapping symptoms to likely root-cause areas, validating hypotheses, and identifying fixes and prevention measures.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, QA engineers, and engineering leads use this skill to structure bug root-cause analysis from bug descriptions, execution logs, environment details, and optional reproduction steps. It supports post-incident analysis, recurring defect prevention, and test-design improvement.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Bug reports, execution logs, screenshots, payment details, customer identifiers, or credentials may contain sensitive production data.
+
+Mitigation: Provide only the debugging context needed for the specific issue and mask production data, customer identifiers, payment details, screenshots, and credentials before use.
+
+Risk: External monitoring or log systems may be involved during debugging.
+
+Mitigation: Use controlled environments and approved access paths, and avoid sharing unnecessary data from external systems.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, QA engineers, and incident reviewers use this skill to analyze recurring or production bugs, identify root causes, assess impact, and define fixes and prevention measures. It is suited for post-defect analysis when logs, environment details, reproduction steps, and bug descriptions are available. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases may activate the skill during general troubleshooting. <br>
-Mitigation: Confirm the user wants a formal QA root-cause analysis before applying the workflow to generic debugging requests. <br>
-Risk: Bug reports, logs, screenshots, and payment or customer examples can contain sensitive production data. <br>
-Mitigation: Mask production logs, customer identifiers, payment details, screenshots, credentials, and environment secrets before using the skill. <br>
+**Output Format:** [Markdown or structured text root-cause analysis with traceability identifiers, contributing factors, impact assessment, fix suggestions, and prevention measures.]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill release page](https://clawhub.ai/kokxi/skills/qa-bug-root-cause-analysis) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/kokxi) <br>
+**Other Properties Related to Output:** [May include ROOT and BUG identifiers and concise checklists for validation and prevention.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown with structured root-cause analysis fields, traceability IDs, tables, and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include ROOT-XXXX traceability, BUG-XXXX linkage, root cause, contributing factors, impact assessment, fix suggestions, prevention measures, and verification guidance.] <br>
+1.6.3 (source: frontmatter and server release evidence)
 
-## Skill Version(s): <br>
-1.6.0 (source: server release evidence and SKILL.md frontmatter) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

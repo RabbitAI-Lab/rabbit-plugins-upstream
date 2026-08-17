@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云 SHEIN 评论搜索"
+  short_description: "搜索和分析 SHEIN 商品评论，提炼卖点、痛点和改良方向"
+  default_prompt: "使用 $geekbi-shein-review-search-skill 搜索并分析 SHEIN 商品评论。"

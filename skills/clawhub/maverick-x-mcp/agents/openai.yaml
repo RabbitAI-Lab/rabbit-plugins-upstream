@@ -1,4 +1,4 @@
 interface:
-  display_name: "X"
-  short_description: "Work with X posts, users, timelines, and search"
-  default_prompt: "Use the X MCP tools to help the user work with posts, users, timelines, and search."
+  display_name: 'X'
+  short_description: 'Use X hosted MCP for posts, users, and search'
+  default_prompt: 'Discover the live X MCP catalog, then help with X posts, users, and search. Obtain explicit confirmation for the exact final content or destructive action immediately before any write.'

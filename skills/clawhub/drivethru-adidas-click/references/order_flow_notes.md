@@ -56,7 +56,7 @@ treats `"300+"`/blank as sufficient, exact numbers as the count). A line is
 **short** when its exact available count < requested. Then per
 `OrderRequest.on_insufficient_stock`:
 
-- **`pause`** (default) + any shortfall → raise `_InsufficientStockPause`; the
+- **`pause`** (default) + any shortfall → raise `_OrderPause`; the
   entry point returns `status="needs_confirmation"` with `out_of_stock`
   (`[{style, size, requested, available}]`) and a `message` listing the choices,
   and places **nothing** (even with `confirm: true`, because this happens before
@@ -72,6 +72,34 @@ re-runs with `on_insufficient_stock: "order"` / `"skip"`, or **substitutes** by
 editing `lines` and re-running. Pre-authorizing phrases in the user's prompt
 ("order anything out of stock" / "remove out-of-stock items") let the agent set
 the flag up front and skip the pause. See SKILL.md "Out-of-stock handling".
+
+### Missing-product decision point ✅ IMPLEMENTED
+
+Same shape, second axis: a style adidas serves **no product page** for is a
+decision for the caller, not a crash. `_open_product(style, missing_ok=True)`
+returns False and records the style in `driver.missing_products`
+(`[{style, sizes, requested, reason, detail}]`); `_prepare_lines` marks that
+style's lines `not_found`. Then per `OrderRequest.on_missing_product`:
+
+- **`pause`** (default) → the same `_OrderPause` (it carries both
+  `out_of_stock` and `missing_products`), so the entry point returns
+  `status="needs_confirmation"` and places **nothing**.
+- **`skip`** → drop those lines (quantity 0, `not offered …` note), order the
+  rest. All lines missing → the "No lines could be ordered" error names the
+  styles.
+- **`error`** → `missing_ok=False`, so `_open_product` raises `AdidasAPIError`
+  (the pre-0.7 behavior).
+
+`check_inventory_pricing` forces `skip` internally (a check reports what it can
+read and never aborts mid-run) and then re-escalates itself: if anything landed
+in `missing_products`, the result flips to `status="needs_confirmation"` unless
+the caller asked for `skip`. Its `add_lines` fallback also catches
+`AdidasAPIError` now, so a line that fails to resolve can never strand the
+throwaway `DO NOT BUY` cart.
+
+Detection details and the still-uncaptured not-found markup: see "Style adidas
+does not carry" under Step 2. See SKILL.md "Missing / unlisted product
+handling".
 
 ---
 
@@ -144,6 +172,47 @@ alternative to search),
   **adidas article numbers encode the color** (JW4306 = "M FLEECE CREW BLACK"),
   so there is **no color picker** — landing on the URL is landing on the color.
   `_open_product` uses this and waits for `#CartModule-SizeTable`.
+
+#### Style adidas does not carry (⚠️ tell NOT captured — text-matched)
+
+A style this account isn't offered (or a wrong article number) has **no size
+table to wait for**. The portal's empty/not-found product markup has **not been
+captured**, so — deliberately, rather than inventing a selector — `_open_product`
+decides with two signals it can trust:
+
+1. **URL**: after `goto`, the page is no longer under `/reorder/product/`
+   (the portal bounced it) → `reason: "not_found"`.
+2. **Text**: the visible body matches `_PRODUCT_MISSING_TELL_RE` ("no results",
+   "not found", "no longer available", …) once `_LOGGED_IN_MARKER` has painted
+   → `reason: "not_found"`.
+
+Neither firing within `_PRODUCT_WAIT_MS` (15s, polled every 400ms rather than
+one blocking `wait_for_selector`, so a bad style doesn't burn the full 30s
+timeout) gives `reason: "unresolved"` — reported as *unconfirmed*, never as
+"this style doesn't exist". A false positive is safe by construction: it can
+only route the style into the `on_missing_product` escalation, which places
+nothing and asks the user.
+
+**Next capture:** open a style the account isn't offered and record the real
+not-found page's id/markup, then swap the text match for that selector (keeping
+the text match as a fallback).
+
+### Step 2a — Availability date gate (✅ wired)
+
+Above the size table sits a draggable date-tab strip
+(`#DateTabs-DraggableTable`); the active tab is `#DateTabButton` and its inner
+text is a formatted date (e.g. `"Jul 31, 2026"`). This is the **earliest date
+the product can ship**, and the size-tile inventory numbers refer to _that_
+date. If it isn't today, the size table is describing future stock —
+**nothing is orderable now** regardless of what the tiles show.
+
+`_product_available_today()` reads `#DateTabButton`, parses `%b %d, %Y`, and
+compares to today's date. Both the order flow (`_prepare_lines`) and the
+inventory read (`read_inventory`) call it right after `_open_product` and
+before touching any tile; when it returns False, every requested line for that
+style is classified `unavailable` with a `"not available until {date}"` note
+and the size-tile read is skipped. Fail-open on a missing/unparseable date
+(logs a warning) so a portal shape change doesn't silently block every order.
 
 ### Step 2b — Size table (✅ mapping + inventory wired)
 

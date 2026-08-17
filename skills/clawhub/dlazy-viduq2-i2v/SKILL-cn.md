@@ -1,11 +1,11 @@
 ---
 name: dlazy-viduq2-i2v
 version: 1.3.5
-description: 使用 Vidu Q2 图生视频模型，将静态图片通过智能运镜转化为动态视频。
+description: "使用 Vidu Q2 图生视频模型，将静态图片通过智能运镜转化为动态视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy viduq2-i2v -h 查看帮助信息。"}}
 ---
 
-# dlazy-viduq2-i2v
+# 图生视频 Vidu Q2
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

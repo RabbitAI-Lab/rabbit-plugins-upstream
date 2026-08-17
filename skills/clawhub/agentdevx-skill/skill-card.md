@@ -1,43 +1,61 @@
-## Description: <br>
-Agentdevx Skill lets agents register and call APIs through the AgentDevX gateway with Ed25519 identity, encrypted credential injection, rate limiting, and audit logging. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Agentdevx Skill lets agents use AgentDevX to register APIs from OpenAPI specs with Ed25519 identity, encrypted credential injection, rate limiting, and audit logging.
 
-## Publisher: <br>
-[mirajmahmudul](https://clawhub.ai/user/mirajmahmudul) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mirajmahmudul](https://clawhub.ai/user/mirajmahmudul)
 
-## Use Case: <br>
-Developers and agent builders use this skill to give agents access to registered APIs through a hosted gateway with agent identity, credential routing, rate limiting, and audit logging. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill automatically registers the agent with AgentDevX and sends outbound requests to a third-party hosted gateway. <br>
-Mitigation: Install only where automatic third-party registration is acceptable, and review the AgentDevX dashboard and revocation process before use. <br>
-Risk: API calls, credentials stored in the vault, and memory contents may route through AgentDevX. <br>
-Mitigation: Avoid sensitive APIs or production credentials until the service trust boundary, dashboard controls, and account deletion process are reviewed. <br>
+## Use Case:
 
+Developers and agent builders use this skill to connect agents to the AgentDevX hosted gateway for API registration, MCP access, credential injection, persistent memory, and audited tool use.
 
-## Reference(s): <br>
-- [AgentDevX Gateway](https://agentdevx.onrender.com) <br>
-- [Smithery AgentDevX Server](https://smithery.ai/server/io.github.mirajmahmudul/agentdevx) <br>
-- [AgentDevX SDK](https://github.com/mirajmahmudul/agentdevx-sdk) <br>
-- [AgentDevX npm Package](https://www.npmjs.com/package/@agentdevx/install) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash and JSON code blocks; API responses depend on registered APIs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Routes requests through a third-party gateway; API response shape depends on the registered OpenAPI spec.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata; artifact frontmatter says 1.0.6) <br>
+Risk: The skill may automatically contact a third-party hosted gateway and create an account or token on first use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and invoke it only after accepting the external service interaction and reviewing the dashboard and revocation process.
+
+Risk: API calls, credentials, and stored memory may route through AgentDevX servers.
+
+Mitigation: Avoid private prompts, sensitive credentials, internal systems, or business-critical APIs unless the service's data handling meets the user's requirements.
+
+Risk: The external gateway can expand agent access to registered APIs.
+
+Mitigation: Review available tools and audit logs before granting access to high-impact APIs or credentials.
+
+## Reference(s):
+
+- [AgentDevX gateway](https://agentdevx.onrender.com)
+- [AgentDevX MCP server listing](https://smithery.ai/server/io.github.mirajmahmudul/agentdevx)
+- [AgentDevX SDK](https://github.com/mirajmahmudul/agentdevx-sdk)
+- [AgentDevX install package](https://www.npmjs.com/package/@agentdevx/install)
+- [ClawHub skill page](https://clawhub.ai/mirajmahmudul/skills/agentdevx-skill)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, API calls]
+
+**Output Format:** [Markdown with inline bash and JSON configuration blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct the agent to make outbound calls to the AgentDevX hosted gateway and configure an MCP server.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
