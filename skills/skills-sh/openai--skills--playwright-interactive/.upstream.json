@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/playwright-interactive",
+  "repo": "openai/skills",
+  "skillId": "playwright-interactive",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "cc0f29907d36161ebd951abcdc196199c8de0cddbbd34031b93090ebc2055767",
+  "fetchedAt": "2026-08-17T08:07:31.114Z"
+}

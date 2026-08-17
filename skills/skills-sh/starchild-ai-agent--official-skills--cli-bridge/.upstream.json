@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/cli-bridge",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "cli-bridge",
+  "branch": "main",
+  "pushedAt": "2026-08-16T11:50:03Z",
+  "contentHash": "d36de1ea71f202eadc285ef6ba1ed1e727b49af5c8b550e6acc66c358d1505b9",
+  "fetchedAt": "2026-08-17T08:07:38.147Z"
+}
