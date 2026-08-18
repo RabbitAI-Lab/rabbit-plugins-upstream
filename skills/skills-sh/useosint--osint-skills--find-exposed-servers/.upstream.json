@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/useosint/osint-skills/find-exposed-servers",
+  "repo": "useosint/osint-skills",
+  "skillId": "find-exposed-servers",
+  "branch": "main",
+  "pushedAt": "2026-08-03T00:38:10Z",
+  "contentHash": "97818895d83b9cbe09c0617e5b8e1bb51dd48365bcfcfbc8dda1662ec05036b7",
+  "fetchedAt": "2026-08-18T07:58:07.606Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google-gemini/gemini-cli/string-reviewer",
+  "repo": "google-gemini/gemini-cli",
+  "skillId": "string-reviewer",
+  "branch": "main",
+  "pushedAt": "2026-08-18T02:01:01Z",
+  "contentHash": "0d589998279a39725d53505ee914cdebdc3abb35eb49b310659e4eccf63604b9",
+  "fetchedAt": "2026-08-18T08:00:14.472Z"
+}
