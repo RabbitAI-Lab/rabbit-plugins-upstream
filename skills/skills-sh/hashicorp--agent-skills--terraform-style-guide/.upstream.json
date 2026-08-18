@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/terraform-style-guide",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "terraform-style-guide",
+  "branch": "main",
+  "pushedAt": "2026-08-10T15:37:47Z",
+  "contentHash": "381763131997a8706ba7d34707ee739ba2099ca9a0964a474c51af93a340d49b",
+  "fetchedAt": "2026-08-18T08:00:06.447Z"
+}

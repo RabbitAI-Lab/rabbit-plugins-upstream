@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/modelstudioai/cli/bailian-finetune",
+  "repo": "modelstudioai/cli",
+  "skillId": "bailian-finetune",
+  "branch": "main",
+  "pushedAt": "2026-08-18T06:34:38Z",
+  "contentHash": "4582abe7dc57601e7e58e41da3ad3998294e440ab7d06758dd8e925331cebadf",
+  "fetchedAt": "2026-08-18T07:58:16.145Z"
+}
