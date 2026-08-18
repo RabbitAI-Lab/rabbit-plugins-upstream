@@ -6,7 +6,7 @@ last-reviewed: 2026-07-09
 
 # rocketreach (RocketReach)
 
-Single-action person lookup: `lookupPerson` (1 credit) resolves a person **and their company** from flexible identifiers — name + employer, LinkedIn URL, email, or a US healthcare **NPI number** — returning contact channels (`emails`, `phones`, `recommended_email`, `current_work_email`), profile data, and `job_history` in one call. It's a 1-credit ENRICH fallback beside `apolloio.enrichPerson`; the priority stack (`cargo` native → `waterfall`) still leads ([`../references/alternatives.md`](../references/alternatives.md)). The NPI input is its genuinely distinctive angle: healthcare-provider lookups the generalist stack doesn't key on.
+Single-action person lookup: `lookupPerson` (1 credit) resolves a person **and their company** from flexible identifiers — name + employer, LinkedIn URL, email, or a US healthcare **NPI number** — returning contact channels (`emails`, `phones`, `recommended_email`, `current_work_email`), profile data, and `job_history` in one call. It's a 1-credit ENRICH fallback beside the priority stack's `apolloio.enrichPerson` (1) — and outside the stack, so reach for it only when Apollo has also missed; `cargo` native → `waterfall` still leads the default chain ([`../references/alternatives.md`](../references/alternatives.md)). The NPI input is its genuinely distinctive angle: healthcare-provider lookups the generalist stack doesn't key on.
 
 ## Credits-based actions
 
@@ -64,6 +64,13 @@ cargo-ai orchestration action execute \
 
 - `lookupPerson` — **ENRICH (person), 1-credit fallback rung** beside `apolloio.enrichPerson` (1), behind the stack's `cargo` (2) → `waterfall` (2) → `peopleDataLabs` (3) chain; promote it per-batch only when a pilot shows better niche coverage (healthcare especially).
 - Emails it surfaces flow to **VERIFY** before activation.
+
+## Recurring use
+
+No scheduled fit — `lookupPerson` is a per-record fallback lookup; there is nothing to poll.
+
+- **In-play gate:** run only where the priority stack already missed and the target contact columns (email, phone) are still empty; stamp an attempted-at column so misses don't retry at 1 credit every re-evaluation. The 250/min rate limit suits this residue-sized gating, not full-list sweeps.
+- **Time-sensitivity:** the person + company bundle is stable between job changes — a legitimate re-lookup is signal-triggered ([`../recipes/job-change-monitoring.md`](../recipes/job-change-monitoring.md)), and the `job_history` it returns can feed that very check. Play wrapper + cadence table: [`../recipes/save-as-play.md`](../recipes/save-as-play.md).
 
 ## Action shape
 

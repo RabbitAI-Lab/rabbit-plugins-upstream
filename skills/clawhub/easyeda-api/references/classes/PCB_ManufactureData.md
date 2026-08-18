@@ -5,7 +5,7 @@ PCB &amp; 封装 / 生产资料类
 ## Signature
 
 ```typescript
-declare class PCB_ManufactureData 
+export class PCB_ManufactureData 
 ```
 
 ## Remarks
@@ -242,6 +242,20 @@ Description
 </td></tr>
 <tr><td>
 
+[getIpc2581CFile(fileName, fileType, unit, oemNumber)](./PCB_ManufactureData.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 获取 IPC-2581C 文件
+
+
+</td></tr>
+<tr><td>
+
 [getIpcD356AFile(fileName)](./PCB_ManufactureData.md)
 
 
@@ -326,7 +340,7 @@ Description
 </td></tr>
 <tr><td>
 
-[getPdfFile(fileName, outputMethod, contentConfig, watermark)](./PCB_ManufactureData.md)
+[getPdfFile(fileName, outputMethod, contentConfig, watermark, graphPageConfig)](./PCB_ManufactureData.md)
 
 
 </td><td>
@@ -453,7 +467,7 @@ Description
 ## Signature
 
 ```typescript
-deleteBomTemplate(template: string): Promise<boolean>;
+public deleteBomTemplate(template: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -524,7 +538,7 @@ if (success) {
 ## Signature
 
 ```typescript
-get3DFile(fileName?: string, fileType?: 'step' | 'obj', element?: Array<'Component Model' | 'Via' | 'Silkscreen' | 'Wire In Signal Layer'>, modelMode?: 'Outfit' | 'Parts', autoGenerateModels?: boolean): Promise<File | undefined>;
+public get3DFile(fileName?: string, fileType?: 'step' | 'obj', element?: Array<'Component Model' | 'Via' | 'Silkscreen' | 'Wire In Signal Layer'>, modelMode?: 'Outfit' | 'Parts', autoGenerateModels?: boolean): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -687,7 +701,7 @@ const objFile = await eda.pcb_ManufactureData.get3DFile(
 ## Signature
 
 ```typescript
-get3DShellFile(fileName?: string, fileType?: 'stl' | 'step' | 'obj'): Promise<File | undefined>;
+public get3DShellFile(fileName?: string, fileType?: 'stl' | 'step' | 'obj'): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -782,7 +796,7 @@ if (stepShellFile) {
 ## Signature
 
 ```typescript
-getAltiumDesignerFile(fileName?: string): Promise<File | undefined>;
+public getAltiumDesignerFile(fileName?: string): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -855,7 +869,7 @@ if (adFile) {
 ## Signature
 
 ```typescript
-getAutoLayoutJsonFile(fileName?: string): Promise<File | undefined>;
+public getAutoLayoutJsonFile(fileName?: string): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -927,7 +941,7 @@ if (autoLayoutJson) {
 ## Signature
 
 ```typescript
-getAutoRouteJsonFile(fileName?: string): Promise<File | undefined>;
+public getAutoRouteJsonFile(fileName?: string): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -999,7 +1013,7 @@ if (autoRouteJson) {
 ## Signature
 
 ```typescript
-getAutoRouteJsonFileForJRouter(fileName?: string): Promise<File | undefined>;
+public getAutoRouteJsonFileForJRouter(fileName?: string): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -1061,10 +1075,7 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-getBomFile(fileName?: string, fileType?: 'xlsx' | 'csv', template?: string, filterOptions?: Array<{
-        property: string;
-        includeValue: boolean | string;
-    }>, statistics?: Array<string>, property?: Array<string>, columns?: Array<IPCB_BomPropertiesTableColumns>): Promise<File | undefined>;
+public getBomFile(fileName?: string, fileType?: 'xlsx' | 'csv', template?: string, filterOptions?: Array<{ property: string; includeValue: string | false | true }>, statistics?: Array<string>, property?: Array<string>, columns?: Array<IPCB_BomPropertiesTableColumns>): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -1140,7 +1151,7 @@ filterOptions
 
 </td><td>
 
-Array&lt;{ property: string; includeValue: boolean \| string; }&gt;
+Array&lt;{ property: string; includeValue: string \| false \| true }&gt;
 
 
 </td><td>
@@ -1260,7 +1271,7 @@ const csvBomFile = await eda.pcb_ManufactureData.getBomFile(
 ## Signature
 
 ```typescript
-getBomTemplateFile(template: string): Promise<File | undefined>;
+public getBomTemplateFile(template: string): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -1329,7 +1340,7 @@ if (templateFile) {
 ## Signature
 
 ```typescript
-getBomTemplates(): Promise<Array<string>>;
+public getBomTemplates(): Promise<Array<string>>;
 ```
 
 
@@ -1362,7 +1373,7 @@ templates.forEach((template, index) => {
 ## Signature
 
 ```typescript
-getDsnFile(fileName?: string): Promise<File | undefined>;
+public getDsnFile(fileName?: string): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -1434,10 +1445,7 @@ if (dsnFile) {
 ## Signature
 
 ```typescript
-getDxfFile(fileName?: string, layers?: Array<{
-        layerId: number;
-        mirror: boolean;
-    }>, objects?: Array<string>): Promise<File | undefined>;
+public getDxfFile(fileName?: string, layers?: Array<{ layerId: number; mirror: boolean }>, objects?: Array<string>): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -1481,7 +1489,7 @@ layers
 
 </td><td>
 
-Array&lt;{ layerId: number; mirror: boolean; }&gt;
+Array&lt;{ layerId: number; mirror: boolean }&gt;
 
 
 </td><td>
@@ -1531,7 +1539,7 @@ DXF 文件数据
 ## Signature
 
 ```typescript
-getFlyingProbeTestFile(fileName?: string): Promise<File | undefined>;
+public getFlyingProbeTestFile(fileName?: string): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -1600,18 +1608,7 @@ if (flyingProbeFile) {
 ## Signature
 
 ```typescript
-getGerberFile(fileName?: string, colorSilkscreen?: boolean, unit?: ESYS_Unit.MILLIMETER | ESYS_Unit.INCH, digitalFormat?: {
-        integerNumber: number;
-        decimalNumber: number;
-    }, other?: {
-        metallicDrillingInformation: boolean;
-        nonMetallicDrillingInformation: boolean;
-        drillTable: boolean;
-        flyingProbeTestingFile: boolean;
-    }, layers?: Array<{
-        layerId: number;
-        isMirror: boolean;
-    }>, objects?: Array<'Pad' | 'Via' | 'Track' | 'Text' | 'Image' | 'Dimension' | 'BoardOutline' | 'BoardCutout' | 'CopperFilled' | 'SolidRegion' | 'FPCStiffener' | 'Line' | 'PlaneZone' | 'ComponentProperty' | 'ComponentSilkscreen' | 'TearDrop'>): Promise<File | undefined>;
+public getGerberFile(fileName?: string, colorSilkscreen?: boolean, unit?: ESYS_Unit.MILLIMETER | ESYS_Unit.INCH, digitalFormat?: { integerNumber: number; decimalNumber: number }, other?: { metallicDrillingInformation: boolean; nonMetallicDrillingInformation: boolean; drillTable: boolean; flyingProbeTestingFile: boolean }, layers?: Array<{ layerId: number; isMirror: boolean }>, objects?: Array<'Pad' | 'Via' | 'Track' | 'Text' | 'Image' | 'Dimension' | 'BoardOutline' | 'BoardCutout' | 'CopperFilled' | 'SolidRegion' | 'FPCStiffener' | 'Line' | 'PlaneZone' | 'ComponentProperty' | 'ComponentSilkscreen' | 'TearDrop'>): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -1687,7 +1684,7 @@ digitalFormat
 
 </td><td>
 
-\{ integerNumber: number; decimalNumber: number; \}
+\{ integerNumber: number; decimalNumber: number \}
 
 
 </td><td>
@@ -1703,7 +1700,7 @@ other
 
 </td><td>
 
-\{ metallicDrillingInformation: boolean; nonMetallicDrillingInformation: boolean; drillTable: boolean; flyingProbeTestingFile: boolean; \}
+\{ metallicDrillingInformation: boolean; nonMetallicDrillingInformation: boolean; drillTable: boolean; flyingProbeTestingFile: boolean \}
 
 
 </td><td>
@@ -1719,7 +1716,7 @@ layers
 
 </td><td>
 
-Array&lt;{ layerId: number; isMirror: boolean; }&gt;
+Array&lt;{ layerId: number; isMirror: boolean }&gt;
 
 
 </td><td>
@@ -1802,7 +1799,7 @@ const gerberFile = await eda.pcb_ManufactureData.getGerberFile(
 ## Signature
 
 ```typescript
-getIdxFile(fileName?: string): Promise<File | undefined>;
+public getIdxFile(fileName?: string): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -1863,6 +1860,116 @@ if (idxFile) {
 }
 ```
 
+### getipc2581cfile
+
+# PCB\_ManufactureData.getIpc2581CFile() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+获取 IPC-2581C 文件
+
+## Signature
+
+```typescript
+public getIpc2581CFile(fileName?: string, fileType?: 'xml' | 'cvg' | '2581', unit?: ESYS_Unit.INCH | ESYS_Unit.MILLIMETER, oemNumber?: 'Device' | 'Manufacturer Part' | 'Supplier Part' | 'Comment'): Promise<File | undefined>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+fileName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ 文件名
+
+
+</td></tr>
+<tr><td>
+
+fileType
+
+
+</td><td>
+
+'xml' \| 'cvg' \| '2581'
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+unit
+
+
+</td><td>
+
+[ESYS\_Unit.INCH](../enums/ESYS_Unit.md) \| [ESYS\_Unit.MILLIMETER](../enums/ESYS_Unit.md)
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+oemNumber
+
+
+</td><td>
+
+'Device' \| 'Manufacturer Part' \| 'Supplier Part' \| 'Comment'
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;File \| undefined&gt;
+
+IPC-2581C 文件数据
+
+## Remarks
+
+可以使用 [SYS\_FileSystem.saveFile()](./SYS_FileSystem.md) 接口将文件导出到本地文件系统
+
 ### getipcd356afile
 
 # PCB\_ManufactureData.getIpcD356AFile() method
@@ -1874,7 +1981,7 @@ if (idxFile) {
 ## Signature
 
 ```typescript
-getIpcD356AFile(fileName?: string): Promise<File | undefined>;
+public getIpcD356AFile(fileName?: string): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -1946,7 +2053,7 @@ if (ipcFile) {
 ## Signature
 
 ```typescript
-getManufactureData(): Promise<File | undefined>;
+public getManufactureData(): Promise<File | undefined>;
 ```
 
 
@@ -1975,7 +2082,7 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-getNetlistFile(fileName?: string, netlistType?: ESYS_NetlistType): Promise<File | undefined>;
+public getNetlistFile(fileName?: string, netlistType?: ESYS_NetlistType): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -2079,17 +2186,7 @@ const padsNetlist = await eda.pcb_ManufactureData.getNetlistFile(
 ## Signature
 
 ```typescript
-getOpenDatabaseDoublePlusFile(fileName?: string, unit?: ESYS_Unit.INCH, otherData?: {
-        metallizedDrilledHoles?: boolean;
-        nonMetallizedDrilledHoles?: boolean;
-        drillTable?: boolean;
-        flyingProbeTestFile?: boolean;
-    }, layers?: Array<{
-        layerId: number;
-        mirror: boolean;
-    }>, objects?: Array<{
-        objectName: string;
-    }>): Promise<File | undefined>;
+public getOpenDatabaseDoublePlusFile(fileName?: string, unit?: ESYS_Unit.INCH | ESYS_Unit.MILLIMETER, otherData?: { metallizedDrilledHoles?: undefined | false | true; nonMetallizedDrilledHoles?: undefined | false | true; drillTable?: undefined | false | true; flyingProbeTestFile?: undefined | false | true }, layers?: Array<{ layerId: number; mirror: boolean }>, objects?: Array<{ objectName: string }>): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -2133,7 +2230,7 @@ unit
 
 </td><td>
 
-[ESYS\_Unit.INCH](../enums/ESYS_Unit.md)
+[ESYS\_Unit.INCH](../enums/ESYS_Unit.md) \| [ESYS\_Unit.MILLIMETER](../enums/ESYS_Unit.md)
 
 
 </td><td>
@@ -2149,7 +2246,7 @@ otherData
 
 </td><td>
 
-\{ metallizedDrilledHoles?: boolean; nonMetallizedDrilledHoles?: boolean; drillTable?: boolean; flyingProbeTestFile?: boolean; \}
+\{ metallizedDrilledHoles?: undefined \| false \| true; nonMetallizedDrilledHoles?: undefined \| false \| true; drillTable?: undefined \| false \| true; flyingProbeTestFile?: undefined \| false \| true \}
 
 
 </td><td>
@@ -2165,7 +2262,7 @@ layers
 
 </td><td>
 
-Array&lt;{ layerId: number; mirror: boolean; }&gt;
+Array&lt;{ layerId: number; mirror: boolean }&gt;
 
 
 </td><td>
@@ -2181,7 +2278,7 @@ objects
 
 </td><td>
 
-Array&lt;{ objectName: string; }&gt;
+Array&lt;{ objectName: string }&gt;
 
 
 </td><td>
@@ -2235,7 +2332,7 @@ if (odbFile) {
 ## Signature
 
 ```typescript
-getPadsFile(fileName?: string): Promise<File | undefined>;
+public getPadsFile(fileName?: string): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -2308,7 +2405,7 @@ if (padsFile) {
 ## Signature
 
 ```typescript
-getPcbInfoFile(fileName?: string): Promise<File | undefined>;
+public getPcbInfoFile(fileName?: string): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -2380,26 +2477,7 @@ if (pcbInfoFile) {
 ## Signature
 
 ```typescript
-getPdfFile(fileName?: string, outputMethod?: EPCB_PdfOutputMethod, contentConfig?: {
-        displayAttributesAsMenu: boolean;
-        showOutlineOnly: boolean;
-    }, watermark?: {
-        show?: boolean;
-        content?: string;
-        styleConfig?: {
-            color: string;
-            transparency: 'Opaque' | '75%' | '50%' | '25%';
-            font: string;
-            fontSize: string;
-            style: {
-                blood: boolean;
-                italic: boolean;
-                underline: boolean;
-            };
-            slope: 0 | 45 | 90;
-            denseness: 'Single' | 'Sparse' | 'Std' | 'Dense';
-        };
-    }): Promise<File | undefined>;
+public getPdfFile(fileName?: string, outputMethod?: EPCB_PdfOutputMethod, contentConfig?: { displayAttributesAsMenu: boolean; showOutlineOnly: boolean }, watermark?: { show?: undefined | false | true; content?: undefined | string; styleConfig?: undefined | { color: string; transparency: 'Opaque' | '75%' | '50%' | '25%'; font: string; fontSize: { unit: ESYS_Unit.MILLIMETER | ESYS_Unit.INCH | ESYS_Unit.MIL; value: number }; style: { bold: boolean; italic: boolean; underline: boolean }; slope: 0 | 45 | 90; denseness: 'Single' | 'Sparse' | 'Std' | 'Dense' } }, graphPageConfig?: Array<Record<string, any>>): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -2448,7 +2526,7 @@ outputMethod
 
 </td><td>
 
-_(Optional)_ 输出方式
+_(Optional)_ 输出方式 ADD since EDA v4.2
 
 
 </td></tr>
@@ -2459,12 +2537,12 @@ contentConfig
 
 </td><td>
 
-\{ displayAttributesAsMenu: boolean; showOutlineOnly: boolean; \}
+\{ displayAttributesAsMenu: boolean; showOutlineOnly: boolean \}
 
 
 </td><td>
 
-_(Optional)_ 内容配置
+_(Optional)_ 内容配置 ADD since EDA v4.2
 
 
 </td></tr>
@@ -2475,12 +2553,28 @@ watermark
 
 </td><td>
 
-{ show?: boolean; content?: string; styleConfig?: { color: string; transparency: 'Opaque' \| '75%' \| '50%' \| '25%'; font: string; fontSize: string; style: { blood: boolean; italic: boolean; underline: boolean; }; slope: 0 \| 45 \| 90; denseness: 'Single' \| 'Sparse' \| 'Std' \| 'Dense'; }; }
+{ show?: undefined \| false \| true; content?: undefined \| string; styleConfig?: undefined \| { color: string; transparency: 'Opaque' \| '75%' \| '50%' \| '25%'; font: string; fontSize: { unit: [ESYS\_Unit.MILLIMETER](../enums/ESYS_Unit.md) \| [ESYS\_Unit.INCH](../enums/ESYS_Unit.md) \| [ESYS\_Unit.MIL](../enums/ESYS_Unit.md)<!-- -->; value: number }; style: { bold: boolean; italic: boolean; underline: boolean }; slope: 0 \| 45 \| 90; denseness: 'Single' \| 'Sparse' \| 'Std' \| 'Dense' } }
 
 
 </td><td>
 
-_(Optional)_ 水印
+_(Optional)_ 水印 ADD since EDA v4.2
+
+
+</td></tr>
+<tr><td>
+
+graphPageConfig
+
+
+</td><td>
+
+Array&lt;Record&lt;string, any&gt;&gt;
+
+
+</td><td>
+
+_(Optional)_ 图页配置 ADD since EDA v4.2
 
 
 </td></tr>
@@ -2498,7 +2592,7 @@ PDF 文件数据（或压缩包）
 
 可以使用 [SYS\_FileSystem.saveFile()](./SYS_FileSystem.md) 接口将文件导出到本地文件系统
 
-`outputMethod`<!-- -->、`contentConfig`<!-- -->、`watermark` 参数暂不可用，等待后期规划
+REFACTOR since EDA v4.2
 
 ## Example
 
@@ -2525,7 +2619,7 @@ if (pdfFile) {
 ## Signature
 
 ```typescript
-getPickAndPlaceFile(fileName?: string, fileType?: 'xlsx' | 'csv', unit?: ESYS_Unit.MILLIMETER | ESYS_Unit.MIL): Promise<File | undefined>;
+public getPickAndPlaceFile(fileName?: string, fileType?: 'xlsx' | 'csv', unit?: ESYS_Unit.MILLIMETER | ESYS_Unit.MIL): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -2635,7 +2729,7 @@ if (pnpFile) {
 ## Signature
 
 ```typescript
-getTestPointFile(fileName?: string, fileType?: 'xlsx' | 'csv'): Promise<File | undefined>;
+public getTestPointFile(fileName?: string, fileType?: 'xlsx' | 'csv'): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -2724,7 +2818,7 @@ if (testPointFile) {
 ## Signature
 
 ```typescript
-place3DShellOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
+public place3DShellOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2757,11 +2851,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否启用交互式检查
-
-如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略；
-
-如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
+_(Optional)_ 是否启用交互式检查 如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略； 如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
 
 
 </td></tr>
@@ -2777,11 +2867,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 在非交互式检查时忽略警告
-
-如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料；
-
-如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
+_(Optional)_ 在非交互式检查时忽略警告 如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料； 如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
 
 
 </td></tr>
@@ -2793,7 +2879,7 @@ _(Optional)_ 在非交互式检查时忽略警告
 
 Promise&lt;boolean&gt;
 
-是否通过下单检查
+是否通过下单检查；在入参开发完成前，返回值没有实际作用，不会等待执行结果
 
 ## Remarks
 
@@ -2810,7 +2896,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-placeComponentsOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
+public placeComponentsOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2843,11 +2929,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否启用交互式检查
-
-如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略；
-
-如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
+_(Optional)_ 是否启用交互式检查 如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略； 如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
 
 
 </td></tr>
@@ -2863,11 +2945,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 在非交互式检查时忽略警告
-
-如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料；
-
-如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
+_(Optional)_ 在非交互式检查时忽略警告 如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料； 如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
 
 
 </td></tr>
@@ -2879,7 +2957,7 @@ _(Optional)_ 在非交互式检查时忽略警告
 
 Promise&lt;boolean&gt;
 
-是否通过下单检查
+是否通过下单检查；在入参开发完成前，返回值没有实际作用，不会等待执行结果
 
 ## Remarks
 
@@ -2896,7 +2974,7 @@ PCB 下单
 ## Signature
 
 ```typescript
-placePcbOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
+public placePcbOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2929,11 +3007,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否启用交互式检查
-
-如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略；
-
-如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
+_(Optional)_ 是否启用交互式检查 如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略； 如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
 
 
 </td></tr>
@@ -2949,11 +3023,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 在非交互式检查时忽略警告
-
-如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料；
-
-如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
+_(Optional)_ 在非交互式检查时忽略警告 如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料； 如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
 
 
 </td></tr>
@@ -2965,7 +3035,7 @@ _(Optional)_ 在非交互式检查时忽略警告
 
 Promise&lt;boolean&gt;
 
-是否通过下单检查
+是否通过下单检查；在入参开发完成前，返回值没有实际作用，不会等待执行结果
 
 ## Remarks
 
@@ -2982,7 +3052,7 @@ SMT 元件下单
 ## Signature
 
 ```typescript
-placeSmtComponentsOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
+public placeSmtComponentsOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
 ```
 
 ## Parameters
@@ -3015,11 +3085,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否启用交互式检查
-
-如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略；
-
-如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
+_(Optional)_ 是否启用交互式检查 如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略； 如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
 
 
 </td></tr>
@@ -3035,11 +3101,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 在非交互式检查时忽略警告
-
-如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料；
-
-如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
+_(Optional)_ 在非交互式检查时忽略警告 如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料； 如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
 
 
 </td></tr>
@@ -3051,7 +3113,7 @@ _(Optional)_ 在非交互式检查时忽略警告
 
 Promise&lt;boolean&gt;
 
-是否通过下单检查
+是否通过下单检查；在入参开发完成前，返回值没有实际作用，不会等待执行结果
 
 ## Remarks
 
@@ -3068,7 +3130,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-uploadBomTemplateFile(templateFile: File, template?: string): Promise<string | undefined>;
+public uploadBomTemplateFile(templateFile: File, template?: string): Promise<string | undefined>;
 ```
 
 ## Parameters

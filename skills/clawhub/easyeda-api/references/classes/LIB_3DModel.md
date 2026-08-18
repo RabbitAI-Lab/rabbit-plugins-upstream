@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class LIB_3DModel 
+export class LIB_3DModel 
 ```
 
 ## Methods
@@ -127,7 +127,7 @@ Description
 ## Signature
 
 ```typescript
-copy(modelUuid: string, libraryUuid: string, targetLibraryUuid: string, targetClassification?: ILIB_ClassificationIndex | Array<string>, newModelName?: string): Promise<string | undefined>;
+public copy(modelUuid: string, libraryUuid: string, targetLibraryUuid: string, targetClassification?: ILIB_ClassificationIndex | Array<string>, newModelName?: string): Promise<string | undefined>;
 ```
 
 ## Parameters
@@ -249,7 +249,7 @@ Promise&lt;string \| undefined&gt;
 ## Signature
 
 ```typescript
-create(libraryUuid: string, modelFile: Blob, classification?: ILIB_ClassificationIndex | Array<string>, unit?: ESYS_Unit.MILLIMETER | ESYS_Unit.CENTIMETER | ESYS_Unit.METER | ESYS_Unit.MIL | ESYS_Unit.INCH): Promise<string[] | undefined>;
+public create(libraryUuid: string, modelFile: Blob, classification?: ILIB_ClassificationIndex | Array<string>, unit?: ESYS_Unit.MILLIMETER | ESYS_Unit.CENTIMETER | ESYS_Unit.METER | ESYS_Unit.MIL | ESYS_Unit.INCH): Promise<Array<string> | undefined>;
 ```
 
 ## Parameters
@@ -330,7 +330,7 @@ unit
 
 </td><td>
 
-_(Optional)_
+_(Optional)_ 单位
 
 
 </td></tr>
@@ -340,9 +340,13 @@ _(Optional)_
 
 ## Returns
 
-Promise&lt;string\[\] \| undefined&gt;
+Promise&lt;Array&lt;string&gt; \| undefined&gt;
 
-3D 模型 UUID
+创建的所有 3D 模型的 UUID
+
+## Remarks
+
+传入的 `modelFile` 可以为多个模型文件的压缩包，EDA 将会自动提取多个模型
 
 ### delete
 
@@ -355,7 +359,7 @@ Promise&lt;string\[\] \| undefined&gt;
 ## Signature
 
 ```typescript
-delete(modelUuid: string, libraryUuid: string): Promise<boolean>;
+public delete(modelUuid: string, libraryUuid: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -429,7 +433,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-get(modelUuid: string, libraryUuid?: string): Promise<ILIB_3DModelItem | undefined>;
+public get(modelUuid: string, libraryUuid?: string): Promise<ILIB_3DModelItem | undefined>;
 ```
 
 ## Parameters
@@ -478,7 +482,7 @@ string
 
 </td><td>
 
-_(Optional)_ 库 UUID，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
+_(Optional)_ 库 UUID，默认为系统库，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
 
 
 </td></tr>
@@ -503,7 +507,7 @@ Promise&lt;[ILIB\_3DModelItem](../interfaces/ILIB_3DModelItem.md) \| undefined&g
 ## Signature
 
 ```typescript
-modify(modelUuid: string, libraryUuid: string, modelName?: string, classification?: ILIB_ClassificationIndex | Array<string> | null, description?: string | null): Promise<boolean>;
+public modify(modelUuid: string, libraryUuid: string, modelName?: string, classification?: ILIB_ClassificationIndex | Array<string> | null, description?: string | null): Promise<boolean>;
 ```
 
 ## Parameters
@@ -629,7 +633,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-search(key: string, libraryUuid?: string, classification?: ILIB_ClassificationIndex | Array<string>, itemsOfPage?: number, page?: number): Promise<Array<ILIB_3DModelSearchItem>>;
+public search(key: string, libraryUuid?: string, classification?: ILIB_ClassificationIndex | Array<string>, itemsOfPage?: number, page?: number): Promise<Array<ILIB_3DModelSearchItem>>;
 ```
 
 ## Parameters

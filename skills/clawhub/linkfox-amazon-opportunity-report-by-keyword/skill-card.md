@@ -1,46 +1,63 @@
-## Description: <br>
-Generates AI-powered Amazon US keyword opportunity reports covering market potential, product characteristics, reviews, customer profiles, search trends, and pricing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates AI-powered Amazon keyword market opportunity reports covering market potential, product characteristics, user reviews, customer profiles, search trends, and pricing analysis.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Amazon sellers and e-commerce researchers use this skill to generate keyword-level market opportunity reports for US marketplace product research and selection decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States marketplace data; usable globally where LinkFox and Amazon US market research are appropriate. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid LinkFox API calls may consume credits. <br>
-Mitigation: Confirm the user wants to continue before running report generation, especially when retrying after failures or empty results. <br>
-Risk: Full report JSON and session-linked metadata are saved locally. <br>
-Mitigation: Use the skill only for non-confidential product research unless local retention of report data is acceptable. <br>
-Risk: Feedback reporting can send broad user intent or result-quality details to LinkFox. <br>
-Mitigation: Review feedback content before reporting and avoid including confidential product, account, or strategy details. <br>
+## Use Case:
 
+External Amazon sellers and cross-border e-commerce operators use this skill to generate keyword-level market opportunity reports for product selection and market entry decisions. It is intended for decision support, not continuous monitoring.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-opportunity-report-by-keyword) <br>
-- [API reference](references/api.md) <br>
-- [LinkFox skills](https://skill.linkfox.com/) <br>
-- [LinkFox API key guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
-- [LinkFox account portal](https://os.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global use; Amazon marketplace coverage is currently limited to the United States.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown report from the API, with full JSON response saved locally and summarized on stdout for large responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key, supports the Amazon US marketplace only, uses a 24-hour local cache for repeated parameter combinations, and may consume paid LinkFox credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The skill requires LinkFox API credentials and may guide phone/SMS login for setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, prefer self-service API-key setup when possible, and only provide credentials or phone verification when comfortable with the LinkFox flow.
+
+Risk: Billing and payment-order flows may be used when credits are insufficient.
+
+Mitigation: Confirm the selected plan, payment method, QR code, and order details before paying.
+
+Risk: Saved response and cache files may contain sensitive business research.
+
+Mitigation: Clean up saved LinkFox response and cache files when they include sensitive keywords, reports, or business context.
+
+Risk: Endpoint environment variables can redirect LinkFox service calls.
+
+Mitigation: Avoid overriding LinkFox endpoint environment variables unless the target endpoint is trusted.
+
+## Reference(s):
+
+- [亚马逊商业洞察报告 API 参考](artifact/references/api.md)
+- [解决认证和积分问题](artifact/references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-opportunity-report-by-keyword)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown report content returned in JSON responses, with saved JSON files and optional shell command guidance for authentication or billing flows.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports are point-in-time snapshots for the US Amazon marketplace; large responses may be summarized while the full response is saved locally.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云 SHEIN 关键词搜索"
+  short_description: "搜索和分析 SHEIN 关键词，洞察需求趋势、供给和竞争"
+  default_prompt: "使用 $geekbi-shein-keyword-search-skill 搜索并分析 SHEIN 关键词机会。"

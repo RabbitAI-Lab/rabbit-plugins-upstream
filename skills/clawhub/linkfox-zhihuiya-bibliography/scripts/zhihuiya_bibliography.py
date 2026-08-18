@@ -76,7 +76,7 @@ def call_api(params):
         method="POST",
     )
     try:
-        with urlopen(req, timeout=120) as response:
+        with urlopen(req, timeout=150) as response:
             return json.loads(response.read().decode("utf-8"))
     except HTTPError as e:
         body = e.read().decode("utf-8") if e.fp else ""
@@ -325,17 +325,6 @@ def main():
     except json.JSONDecodeError as e:
         print(f"Invalid parameter format: {e}", file=sys.stderr)
         sys.exit(1)
-
-    # 单专利限制：patentId / patentNumber 仅允许传 1 个，禁止逗号分隔批量（本接口消耗积分多）
-    for _field in ("patentId", "patentNumber"):
-        _val = params.get(_field)
-        if isinstance(_val, str) and "," in _val:
-            print(
-                "本接口消耗积分多，仅支持传入 1 个专利（检测到逗号分隔的多个值，已拒绝）。"
-                "如需检测多个，必须经过用户明确同意，并分多次请求。",
-                file=sys.stderr,
-            )
-            sys.exit(1)
 
     cache_path = _cache_path(params)
     result = _load_cache(cache_path) if use_cache else None

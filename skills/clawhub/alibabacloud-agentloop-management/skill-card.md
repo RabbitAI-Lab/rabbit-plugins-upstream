@@ -1,47 +1,70 @@
-## Description: <br>
-Guides developers and operations engineers through AgentLoop APM and AI observability onboarding with Alibaba Cloud CLI commands, configuration snippets, and safety checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The skill helps agents route Alibaba Cloud AgentLoop requests for observability onboarding, Dataset management, pipeline building, evaluation, and stored experience recall.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Developers and operations engineers use this skill to onboard server-side applications, Kubernetes workloads, and AI frameworks into AgentLoop application monitoring. It helps collect required parameters, run Alibaba Cloud CLI checks, initialize APM resources, register services, and generate deployment-specific observability configuration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic installer commands and cloud CLI upgrades may change the local environment. <br>
-Mitigation: Review installer and upgrade commands before execution, prefer official manual installation paths when possible, and do not run curl-to-bash commands automatically. <br>
-Risk: Alibaba Cloud and Kubernetes permissions can allow service creation, deletion, addon installation, and workload patching. <br>
-Mitigation: Use a least-privilege RAM profile, limit cluster permissions to the target resources, and require explicit two-phase approval before Kubernetes or application mutations. <br>
-Risk: AgentLoop LicenseKey/authToken and kubeconfig output are sensitive credentials. <br>
-Mitigation: Treat these values as secrets, avoid logging them, and redact them from generated output and shared transcripts. <br>
+## Use Case:
 
+Developers and operations engineers use this skill to guide AgentLoop cloud workflows across application observability onboarding, Dataset lifecycle work, data pipelines, evaluation tasks, and experience recall. It is intended for users who can review and authorize Alibaba Cloud CLI operations under their own cloud identity.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sdk-team/skills/alibabacloud-agentloop-management) <br>
-- [Application Monitoring Module](artifact/references/apm.md) <br>
-- [AI Observability Module](artifact/references/ai.md) <br>
-- [RAM Policy Reference](artifact/references/ram-policies.md) <br>
-- [Alibaba Cloud CLI Installation](https://help.aliyun.com/document_detail/121541.html) <br>
-- [Alibaba Cloud CLI Update Guide](https://help.aliyun.com/zh/cli/update-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration, code] <br>
-**Output Format:** [Markdown with inline shell commands, JSON bodies, YAML references, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include two-phase execution plans for cluster or application mutations and reminders to protect secrets such as authToken, LicenseKey, and kubeconfig output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release metadata) <br>
+Risk: The skill can change local and Alibaba Cloud environments while operating AgentLoop resources with the user's cloud identity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when that level of AgentLoop operation is intended, and review proposed CLI or configuration changes before execution.
+
+Risk: The security review notes an unsafe automatic CLI installer path.
+
+Mitigation: Avoid `curl | bash`; review CLI install or upgrade steps through an approved process before running them.
+
+Risk: Recall, preview, AI pipeline nodes, and global dedup flows can send task, row, or processing data outward.
+
+Mitigation: Require explicit approval before outbound recall or preview, and avoid these flows for secrets, PII, or regulated data unless retention and provider controls are approved.
+
+Risk: Cloud credentials, APM license keys, or ContextStore API keys could be exposed in chat or logs if mishandled.
+
+Mitigation: Keep credentials out of chat and logs, report only status or variable names, and rely on configured identities rather than pasted secrets.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/sdk-team/skills/alibabacloud-agentloop-management)
+- [AgentLoop Skill Router](artifact/SKILL.md)
+- [Application Onboarding](artifact/references/onboarding.md)
+- [Application Monitoring](artifact/references/apm.md)
+- [AI Observability](artifact/references/ai.md)
+- [Dataset Management](artifact/references/dataset/dataset.md)
+- [Evaluation](artifact/references/evaluation/evaluation.md)
+- [Pipeline](artifact/references/pipeline/pipeline.md)
+- [Experience Recall](artifact/references/experience/experience.md)
+- [RAM Policies](artifact/references/ram-policies.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, configuration snippets, JSON examples, and generated code or command files when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent output may include proposed Alibaba Cloud CLI commands, local wrapper-script invocations, configuration changes, verification steps, and redacted status summaries.]
+
+## Skill Version(s):
+
+0.1.2 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

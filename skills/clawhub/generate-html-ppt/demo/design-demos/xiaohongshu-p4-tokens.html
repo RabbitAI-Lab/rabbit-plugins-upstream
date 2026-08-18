@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1440, initial-scale=1.0">
+    <title>P4: 高度全量增加精湛 UI 效果展 (Enhanced Height Masterpiece)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Fira+Code:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            width: 1080px; height: 1440px; overflow: hidden;
+            background: #060913;
+            font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+            color: #f8fafc;
+            position: relative;
+            padding: 45px 50px;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        /* Ambient Cyber Orbs & Grid */
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.035) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.035) 1px, transparent 1px);
+            background-size: 45px 45px; pointer-events: none;
+        }
+        .orb-1 {
+            position: absolute; top: -100px; right: -120px;
+            width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(79,70,229,0.45) 0%, transparent 70%);
+            filter: blur(85px);
+        }
+        .orb-2 {
+            position: absolute; bottom: -80px; left: -120px;
+            width: 750px; height: 750px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.4) 0%, transparent 70%);
+            filter: blur(90px);
+        }
+        .orb-3 {
+            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+            width: 600px; height: 600px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(124,58,237,0.28) 0%, transparent 70%);
+            filter: blur(95px);
+        }
+
+        .header-box { position: relative; z-index: 2; }
+        .tag-pill {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 20px; border-radius: 30px;
+            background: rgba(79,70,229,0.25); border: 1px solid rgba(99,102,241,0.5);
+            font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700;
+            color: #38bdf8; text-transform: uppercase; letter-spacing: 0.12em;
+            margin-bottom: 8px; box-shadow: 0 0 20px rgba(79,70,229,0.3);
+        }
+        .tag-dot { width: 7px; height: 7px; border-radius: 50%; background: #06b6d4; box-shadow: 0 0 8px #06b6d4; }
+
+        .section-title {
+            font-family: 'Outfit', 'Noto Sans SC', sans-serif;
+            font-size: 48px; font-weight: 900; line-height: 1.1;
+            letter-spacing: -0.02em; margin-bottom: 6px;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 40%, #38bdf8 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .section-desc { font-size: 19px; color: #94a3b8; line-height: 1.35; }
+
+        .master-container {
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column; gap: 16px;
+            margin: 4px 0;
+        }
+
+        /* 1. ROW 1 SPLIT: Glass Component Matrix (Left) + 3D Glass Stack (Right) - HEIGHT INCREASED */
+        .row-grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        .glass-card-sm {
+            background: rgba(30, 41, 59, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(28px); border-radius: 26px; padding: 22px 24px;
+            box-shadow: 0 18px 40px -10px rgba(0,0,0,0.4);
+            display: flex; flex-direction: column; justify-content: space-between; gap: 14px;
+            min-height: 175px;
+        }
+        .card-title-sm { font-family: 'Outfit', sans-serif; font-size: 15.5px; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.08em; }
+
+        /* Left Card UI Elements */
+        .gradient-action-btn {
+            padding: 13px; border-radius: 16px; text-align: center;
+            background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+            color: #fff; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 15px;
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.45);
+        }
+        .status-pulse-pill {
+            padding: 8px 14px; border-radius: 20px;
+            background: rgba(6, 182, 212, 0.18); border: 1px solid rgba(6, 182, 212, 0.45);
+            color: #38bdf8; font-weight: 700; font-size: 13.5px; display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .pulse-dot-cyan { width: 7px; height: 7px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 8px #38bdf8; }
+        
+        .alert-rose-tag {
+            padding: 7px 14px; border-radius: 18px; text-align: center;
+            background: rgba(225, 29, 72, 0.18); border: 1px solid rgba(225, 29, 72, 0.45);
+            color: #fb7185; font-weight: 700; font-size: 13px;
+        }
+
+        /* Right Card: 3D Multi-Layer Glass Stack - HEIGHT INCREASED */
+        .stack-box-3d {
+            position: relative; width: 100%; height: 110px; margin-top: 2px;
+        }
+        .stack-bg-violet {
+            position: absolute; top: 0; left: 10px; right: 10px; height: 80px;
+            background: rgba(124, 58, 237, 0.3); border: 1px solid rgba(192, 132, 252, 0.45);
+            border-radius: 20px; backdrop-filter: blur(14px); transform: scale(0.92) translateY(-8px);
+        }
+        .stack-fg-main {
+            position: absolute; top: 14px; left: 0; right: 0; height: 92px;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+            border: 1px solid rgba(6, 182, 212, 0.5); border-radius: 22px; padding: 16px 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .stack-fg-title { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 800; color: #fff; }
+        .stack-fg-sub { font-size: 13px; color: #94a3b8; margin-top: 3px; }
+        .cyan-glow-badge {
+            padding: 6px 14px; border-radius: 14px;
+            background: linear-gradient(135deg, #06b6d4, #10b981); color: #0f172a;
+            font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 17px;
+            box-shadow: 0 0 18px rgba(6, 182, 212, 0.7);
+        }
+
+        /* 2. ROW 2: ECharts Data Insights Neon Chart Showcase (84.6%) - HEIGHT INCREASED */
+        .chart-card-full {
+            background: rgba(30, 41, 59, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(28px); border-radius: 26px; padding: 22px 28px;
+            display: flex; align-items: center; justify-content: space-between; gap: 20px;
+            min-height: 145px;
+        }
+        .chart-info-box .title { font-family: 'Outfit', sans-serif; font-size: 16.5px; font-weight: 800; color: #38bdf8; letter-spacing: 0.08em; }
+        .chart-info-box .num {
+            font-family: 'Outfit', sans-serif; font-size: 44px; font-weight: 900; line-height: 1;
+            background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 4px 0;
+        }
+        .chart-info-box .sub { font-size: 13.5px; color: #94a3b8; font-weight: 600; }
+
+        .svg-chart-glow { width: 230px; height: 95px; flex-shrink: 0; }
+
+        /* 3. ROW 3: SPRING OVERSHOOT MOTION TRAJECTORY (175px 极客物理超越曲线) - HEIGHT INCREASED */
+        .physics-card-master {
+            background: rgba(30, 41, 59, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(28px); border-radius: 28px; padding: 22px 26px;
+            min-height: 240px;
+        }
+        .physics-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+        .physics-hdr-title { font-family: 'Outfit', sans-serif; font-size: 16.5px; font-weight: 800; color: #38bdf8; letter-spacing: 0.08em; }
+        .physics-hdr-tag { font-family: 'Outfit', sans-serif; font-size: 13.5px; font-weight: 800; color: #c084fc; background: rgba(124,58,237,0.25); padding: 4px 14px; border-radius: 12px; border: 1px solid rgba(192,132,252,0.4); }
+
+        .physics-svg-master { width: 100%; height: 165px; position: relative; }
+
+        .physics-ftr-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: #94a3b8; margin-top: 8px; }
+        .cyan-bold { color: #06b6d4; font-weight: 800; }
+        .purple-bold { color: #c084fc; font-weight: 800; }
+
+        /* 4. ROW 4: COLOR HARMONIC FREQUENCY SPECTRUM & TOKENS (光谱频段 Token 矩阵) - HEIGHT INCREASED */
+        .glass-card-spectrum {
+            background: rgba(30, 41, 59, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(28px); border-radius: 28px; padding: 22px 26px;
+            min-height: 170px;
+        }
+        .spectrum-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .spectrum-title { font-family: 'Outfit', sans-serif; font-size: 16.5px; font-weight: 800; color: #38bdf8; letter-spacing: 0.08em; }
+        .spectrum-tag { font-family: 'Fira Code', monospace; font-size: 13px; color: #c084fc; background: rgba(124,58,237,0.2); padding: 4px 12px; border-radius: 10px; border: 1px solid rgba(192,132,252,0.4); }
+
+        .spectrum-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+        .spec-item {
+            background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
+            min-height: 105px;
+        }
+        .spec-header { display: flex; align-items: center; justify-content: space-between; }
+        .spec-name { font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 800; color: #fff; }
+        .spec-swatch { width: 13px; height: 13px; border-radius: 50%; }
+        .sw-indigo { background: #4f46e5; box-shadow: 0 0 8px #4f46e5; }
+        .sw-cyan { background: #06b6d4; box-shadow: 0 0 8px #06b6d4; }
+        .sw-rose { background: #e11d48; box-shadow: 0 0 8px #e11d48; }
+        .sw-violet { background: #7c3aed; box-shadow: 0 0 8px #7c3aed; }
+
+        /* Frequency Audio/Color Waveform Bars - HEIGHT INCREASED TO 34px */
+        .wave-bars-container { display: flex; align-items: flex-end; gap: 4px; height: 34px; }
+        .w-bar { flex: 1; border-radius: 3px; }
+        .b-indigo { background: linear-gradient(180deg, #818cf8 0%, #4f46e5 100%); }
+        .b-cyan { background: linear-gradient(180deg, #67e8f9 0%, #06b6d4 100%); }
+        .b-rose { background: linear-gradient(180deg, #fda4af 0%, #e11d48 100%); }
+        .b-violet { background: linear-gradient(180deg, #c084fc 0%, #7c3aed 100%); }
+
+        .spec-token-code {
+            font-family: 'Fira Code', monospace; font-size: 11.5px; color: #94a3b8; background: rgba(0,0,0,0.45); padding: 4px 6px; border-radius: 6px; text-align: center;
+        }
+
+        .footer-bar {
+            position: relative; z-index: 2;
+            display: flex; align-items: center; justify-content: space-between;
+            padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .brand-text { font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800; color: #cbd5e1; }
+        .page-indicator { font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800; color: #06b6d4; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="orb-1"></div>
+    <div class="orb-2"></div>
+    <div class="orb-3"></div>
+
+    <!-- Header Section -->
+    <div class="header-box">
+        <div class="tag-pill">
+            <span class="tag-dot"></span> Design Tokens Visual Showcase
+        </div>
+        <h1 class="section-title">高保真 UI 视觉系统全景效果</h1>
+        <p class="section-desc">晶体组件、3D 堆叠、图表直出、超越轨迹与光谱频段 Token 矩阵。</p>
+    </div>
+
+    <!-- Master Showcase Container -->
+    <div class="master-container">
+        
+        <!-- 1. ROW 1: Glassmorphic Component Matrix (Left) + 3D Glass Card Stack (Right) -->
+        <div class="row-grid-2col">
+            <!-- Left: Glassmorphic Component Matrix -->
+            <div class="glass-card-sm">
+                <div class="card-title-sm">✦ GLASS COMPONENT MATRIX</div>
+                <div class="gradient-action-btn">Action Button ✦</div>
+                <div style="display: flex; gap: 8px;">
+                    <div class="status-pulse-pill" style="flex: 1.1;"><span class="pulse-dot-cyan"></span> Live Sync</div>
+                    <div class="alert-rose-tag" style="flex: 0.9;">✕ 0 断层</div>
+                </div>
+            </div>
+
+            <!-- Right: 3D Multi-Layer Glass Card Stack -->
+            <div class="glass-card-sm">
+                <div class="card-title-sm">✦ 3D GLASS CARD STACK</div>
+                <div class="stack-box-3d">
+                    <div class="stack-bg-violet"></div>
+                    <div class="stack-fg-main">
+                        <div>
+                            <div class="stack-fg-title">Scheme 1/2</div>
+                            <div class="stack-fg-sub">空间密度算法</div>
+                        </div>
+                        <div class="cyan-glow-badge">14x</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. ROW 2: ECharts Data Insights Neon Chart Visual (84.6%) -->
+        <div class="chart-card-full">
+            <div class="chart-info-box">
+                <div class="title">ECHARTS DATA INSIGHTS</div>
+                <div class="num">84.6%</div>
+                <div class="sub">自适应响应式矢量图表直出</div>
+            </div>
+            <div class="svg-chart-glow">
+                <svg width="230" height="95" viewBox="0 0 230 95" fill="none">
+                    <defs>
+                        <linearGradient id="cGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.6"/>
+                            <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+                        </linearGradient>
+                        <linearGradient id="lGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#4f46e5"/>
+                            <stop offset="50%" stop-color="#06b6d4"/>
+                            <stop offset="100%" stop-color="#10b981"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M10,75 Q50,12 90,42 T170,18 T215,8 L215,85 L10,85 Z" fill="url(#cGrad)"/>
+                    <path d="M10,75 Q50,12 90,42 T170,18 T215,8" stroke="url(#lGrad)" stroke-width="4.5" stroke-linecap="round"/>
+                    <circle cx="90" cy="42" r="5" fill="#06b6d4" stroke="#fff" stroke-width="2"/>
+                    <circle cx="170" cy="18" r="5" fill="#38bdf8" stroke="#fff" stroke-width="2"/>
+                    <circle cx="215" cy="8" r="6" fill="#10b981" stroke="#fff" stroke-width="2.5"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 3. ROW 3: SPRING OVERSHOOT MOTION TRAJECTORY (高振幅 165px 物理超越曲线) -->
+        <div class="physics-card-master">
+            <div class="physics-hdr">
+                <div class="physics-hdr-title">SPRING OVERSHOOT MOTION TRAJECTORY</div>
+                <div class="physics-hdr-tag">60FPS GPU ACCELERATED</div>
+            </div>
+            
+            <div class="physics-svg-master">
+                <svg width="100%" height="165" viewBox="0 0 940 165" fill="none">
+                    <defs>
+                        <linearGradient id="waveGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#4f46e5"/>
+                            <stop offset="35%" stop-color="#06b6d4"/>
+                            <stop offset="65%" stop-color="#c084fc"/>
+                            <stop offset="100%" stop-color="#10b981"/>
+                        </linearGradient>
+                        <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="5" result="blur"/>
+                            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                        </filter>
+                    </defs>
+
+                    <!-- Baseline 0.0x & Target Line 1.0x -->
+                    <line x1="30" y1="132" x2="910" y2="132" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+                    <text x="35" y="125" fill="#64748b" font-size="13" font-weight="700" font-family="Outfit">BASE 0.0x</text>
+
+                    <line x1="30" y1="70" x2="910" y2="70" stroke="rgba(6,182,212,0.45)" stroke-dasharray="7 5" stroke-width="2"/>
+                    <text x="825" y="60" fill="#06b6d4" font-size="14" font-weight="800" font-family="Outfit">TARGET 1.0x</text>
+
+                    <!-- Dynamic Taller Spring Overshoot Wave Curve -->
+                    <path d="M40,132 C140,132 210,10 340,10 C470,10 530,98 640,64 C730,38 800,70 880,70" stroke="url(#waveGrad)" stroke-width="5.5" stroke-linecap="round" filter="url(#glowFilter)"/>
+
+                    <!-- Peak Point Badge (PEAK OVERSHOOT 1.275x) -->
+                    <circle cx="340" cy="10" r="7.5" fill="#c084fc" stroke="#fff" stroke-width="2.5"/>
+                    <rect x="250" y="-12" width="180" height="26" rx="7" fill="rgba(124,58,237,0.85)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                    <text x="262" y="5" fill="#fff" font-size="12.5" font-weight="900" font-family="Outfit">PEAK OVERSHOOT 1.275x</text>
+
+                    <!-- Settlement Ball Endpoint -->
+                    <circle cx="880" cy="70" r="9" fill="#10b981" stroke="#fff" stroke-width="2.5"/>
+                    <circle cx="880" cy="70" r="18" fill="none" stroke="#10b981" stroke-width="2" stroke-opacity="0.6"/>
+                </svg>
+            </div>
+
+            <div class="physics-ftr-row">
+                <span>Curve: <span class="cyan-bold">cubic-bezier(0.175, 0.885, 0.32, 1.275)</span></span>
+                <span>Response: <span class="purple-bold">0.85s Spring Damping</span></span>
+            </div>
+        </div>
+
+        <!-- 4. ROW 4: COLOR HARMONIC FREQUENCY SPECTRUM & TOKENS (光谱频段 Token 矩阵 - 高度提升版) -->
+        <div class="glass-card-spectrum">
+            <div class="spectrum-header">
+                <div class="spectrum-title">COLOR HARMONIC FREQUENCY SPECTRUM & TOKENS</div>
+                <div class="spectrum-tag">CSS DESIGN TOKENS</div>
+            </div>
+
+            <div class="spectrum-grid">
+                <!-- Spectrum Item 1: Indigo -->
+                <div class="spec-item">
+                    <div class="spec-header">
+                        <span class="spec-name">Indigo</span>
+                        <div class="spec-swatch sw-indigo"></div>
+                    </div>
+                    <div class="wave-bars-container">
+                        <div class="w-bar b-indigo" style="height: 40%;"></div>
+                        <div class="w-bar b-indigo" style="height: 80%;"></div>
+                        <div class="w-bar b-indigo" style="height: 100%;"></div>
+                        <div class="w-bar b-indigo" style="height: 60%;"></div>
+                        <div class="w-bar b-indigo" style="height: 90%;"></div>
+                    </div>
+                    <div class="spec-token-code">--b-accent</div>
+                </div>
+
+                <!-- Spectrum Item 2: Cyan -->
+                <div class="spec-item">
+                    <div class="spec-header">
+                        <span class="spec-name">Cyan</span>
+                        <div class="spec-swatch sw-cyan"></div>
+                    </div>
+                    <div class="wave-bars-container">
+                        <div class="w-bar b-cyan" style="height: 70%;"></div>
+                        <div class="w-bar b-cyan" style="height: 100%;"></div>
+                        <div class="w-bar b-cyan" style="height: 85%;"></div>
+                        <div class="w-bar b-cyan" style="height: 45%;"></div>
+                        <div class="w-bar b-cyan" style="height: 95%;"></div>
+                    </div>
+                    <div class="spec-token-code">--b-accent-cyan</div>
+                </div>
+
+                <!-- Spectrum Item 3: Rose -->
+                <div class="spec-item">
+                    <div class="spec-header">
+                        <span class="spec-name">Rose Alert</span>
+                        <div class="spec-swatch sw-rose"></div>
+                    </div>
+                    <div class="wave-bars-container">
+                        <div class="w-bar b-rose" style="height: 90%;"></div>
+                        <div class="w-bar b-rose" style="height: 50%;"></div>
+                        <div class="w-bar b-rose" style="height: 75%;"></div>
+                        <div class="w-bar b-rose" style="height: 100%;"></div>
+                        <div class="w-bar b-rose" style="height: 65%;"></div>
+                    </div>
+                    <div class="spec-token-code">--b-rose</div>
+                </div>
+
+                <!-- Spectrum Item 4: Violet -->
+                <div class="spec-item">
+                    <div class="spec-header">
+                        <span class="spec-name">Violet Glass</span>
+                        <div class="spec-swatch sw-violet"></div>
+                    </div>
+                    <div class="wave-bars-container">
+                        <div class="w-bar b-violet" style="height: 60%;"></div>
+                        <div class="w-bar b-violet" style="height: 95%;"></div>
+                        <div class="w-bar b-violet" style="height: 40%;"></div>
+                        <div class="w-bar b-violet" style="height: 85%;"></div>
+                        <div class="w-bar b-violet" style="height: 100%;"></div>
+                    </div>
+                    <div class="spec-token-code">--b-violet</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Bar -->
+    <div class="footer-bar">
+        <div class="brand-text">Beautiful Modern System</div>
+        <div class="page-indicator">04 / 05</div>
+    </div>
+</body>
+</html>

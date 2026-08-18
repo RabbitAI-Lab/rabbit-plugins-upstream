@@ -11,14 +11,14 @@
 
 ## 标准四步流程（默认 · 交付 HTML）
 
-| 步骤             | 执行者       | 动作                                                                                                                                                                             |
-| ---------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **1. 拉数**      | Agent 调 CLI | `tiktok-analysis -a <id> --start <s> --end <e> --json-out ./snap-tiktok`（见下方「日期规则」，全 12 维或 `--sections` 指定子集）                                                 |
-| **2. 分析**      | Agent        | 用 **node/python 脚本**读落盘 JSON（勿用 Read 打开业务 `*.json`），做洞察与叙事；表格数字可由 `--snapshot-dir` 按类型自动映射                                                      |
-| **3. 写 JSON**   | Agent        | 撰写 `tiktok-period-report.json`：仅 `meta.accountId` + `narrative` 为必填；`kpis`/`tables` 可省略，由 `--snapshot-dir` 按网关类型自动合并                                         |
-| **4. 渲染 HTML** | CLI          | `tiktok-analysis render` — **校验 narrative 6 个分析小节必含字段**，缺项报错不生成 HTML；**禁止** Agent 手写/拼接 HTML                                                           |
+| 步骤             | 执行者       | 动作                                                                                                                                       |
+| ---------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **1. 拉数**      | Agent 调 CLI | `tiktok-analysis -a <id> --start <s> --end <e> --json-out ./snap-tiktok`（见下方「日期规则」，全 12 维或 `--sections` 指定子集）           |
+| **2. 分析**      | Agent        | 用 **node/python 脚本**读落盘 JSON（勿用 Read 打开业务 `*.json`），做洞察与叙事；表格数字可由 `--snapshot-dir` 按类型自动映射              |
+| **3. 写 JSON**   | Agent        | 撰写 `tiktok-period-report.json`：仅 `meta.accountId` + `narrative` 为必填；`kpis`/`tables` 可省略，由 `--snapshot-dir` 按网关类型自动合并 |
+| **4. 渲染 HTML** | CLI          | `tiktok-analysis render` — **校验 narrative 6 个分析小节必含字段**，缺项报错不生成 HTML；**禁止** Agent 手写/拼接 HTML                     |
 
-> `--snapshot-dir` 自动补全 `meta` / `kpis` / `tables.*`。网关形状见 `src/types/tiktok-analysis-api.ts`（对齐前端 `periodReport/tiktok.js`）：`campaigns` 为 `{ campaigns:[] }`；ad-groups/videos/audience 为 `{ data.list[].metrics }`（snake_case）；ads 为根数组。**本期 KPI 优先 campaigns 累加**。Agent 已填字段不覆盖。
+> `--snapshot-dir` 自动补全 `meta` / `kpis` / `tables.*`。网关形状见 `src/types/tiktok-analysis-api.ts`（对齐前端 `periodReport/tiktok.js`）：`campaigns` 为 `{ campaigns:[] }`；ad-groups/videos/audience 为 `{ data.list[].metrics }`（snake_case）；ads 为根数组。**本期 KPI 优先 campaigns 累加**。**数值一律以 CLI 快照覆盖**（`meta` 仅补空）；Agent 只写 `narrative`。
 
 ### JSON 契约（`tiktok-period-report.json`）
 

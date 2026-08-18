@@ -13,6 +13,44 @@
 | 思维导图 | @startmindmap | 思维发散与组织 |
 | 甘特图 | @startgantt | 项目进度规划 |
 
+## 主题速查（!theme）
+
+```
+@startuml
+!theme cyborg   ' 放到 @startuml 之后，图内容之前
+...
+@enduml
+```
+
+| 主题 | 风格 |
+|------|------|
+| `plain` | 默认/对照 |
+| `blueprint` | 蓝图（白底蓝线） |
+| `amiga` | 白字蓝底 |
+| `cyborg`/`superhero`/`united` | Bootswatch 暗色系列 |
+| `hacker` | 终端感 |
+| `crt-amber` | CRT 琥珀单色 |
+| `reddress-darkblue`/`reddress-lightblue` | 红裙深/浅蓝 |
+| `aws-orange` | AWS 配色 |
+| `Sunlust` | Solarized |
+| `mono` | 单色等宽 |
+
+画廊与预览：<https://the-lum.github.io/puml-themes-gallery/themes/>
+
+## 非 UML 图表速查
+
+| 类型 | 关键字 | 用途 |
+|------|--------|------|
+| JSON | `@startjson` | 数据结构 |
+| YAML | `@startyaml` | 数据结构 |
+| WBS | `@startwbs` | 工作分解结构 |
+| Salt | `@startsalt` | UI 线框原型 |
+| ER | `@startuml` + entity | 实体关系图 |
+| 网络图 | `@startuml` + nwdiag | 网络拓扑 |
+| 正则 | `@startregex` | 正则可视化 |
+| EBNF | `@startebnf` | 语法图 |
+| Archimate | `@startuml` + Archimate_* | 企业架构 |
+
 ## 箭头速查
 
 ### 时序图

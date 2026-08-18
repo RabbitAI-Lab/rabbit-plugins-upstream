@@ -457,6 +457,162 @@ projectstart 2024-01-01
 - `saturday are closed` / `sunday are closed` — 关闭日
 - `printscale daily/weekly/monthly/quarterly/yearly` — 尺度
 
+## 主题（!theme）
+
+PlantUML 内置了多套预设主题，用 `!theme` 指令即可一键切换整套配色/字体/形状，不用手动调 skinparam。
+
+```
+@startuml
+!theme cyborg
+class Foo
+@enduml
+```
+
+`!theme` 通常放在 `@startuml` 之后、图内容之前。
+
+### 常用内置主题
+
+| 主题 | 风格 |
+|------|------|
+| `plain` | 简单黑底白字（默认风格对照） |
+| `bluegray` | 蓝灰 |
+| `blueprint` | 蓝图风格（白底蓝线，仿蓝图复印） |
+| `amiga` | Amiga Workbench 1.x（白字蓝底） |
+| `mimeograph` | 油印风格（灰底紫字） |
+| `cyborg` / `superhero` / `united` / `minty` / `sandstone` / `sketchy` / `spacelab` / `materia` / `cerulean` | Bootswatch 风格系列 |
+| `hacker` | Jekyll hacker 风格（终端感） |
+| `crt-amber` | 单色 CRT 琥珀色（橙字黑底） |
+| `reddress-darkblue` / `reddress-lightblue` | Red Dress 红裙风格（深/浅蓝） |
+| `aws-orange` | AWS 配色 |
+| `cloudscape-design` | Cloudscape 设计配色 |
+| `carbon-gray` | Carbon 设计灰阶 |
+| `Sunlust` | Solarized 配色 |
+| `black-knight` / `metal` / `silver` / `lightgray` | 深色/金属/灰色系 |
+| `mars` / `toy` / `vibrant` | future-architect/puml-themes 系列 |
+| `mono` | 单色 + 等宽字体 |
+
+> 部分主题（如 `cyborg`、`sketchy`、`reddress-*` 等）有多个变体，可在主题详情页查看。完整主题画廊与预览：
+> <https://the-lum.github.io/puml-themes-gallery/themes/>
+
+### 主题变体与使用
+
+- 主题名区分大小写（如 `Sunlust`）。
+- 可指定皮肤变体：`!theme cyborg-outline` 等（具体变体名参考画廊详情页）。
+- 主题可叠加 `<style>` 进一步微调。
+- 不确定用哪个时，可先选对照主题 `plain`，再按需切换。
+
+### 主题 vs skinparam
+
+- `!theme`：一键整套预设外观，优先使用。
+- `skinparam`：细粒度参数覆盖（已废弃，仍可用），仅在主题基础上微调个别参数。
+- `<style>`：CSS 式样（主题的底层实现），高级自定义推荐方式。
+
+## 非 UML 图表
+
+PlantUML 不仅能画 UML，还支持大量非 UML 图表类型。当用户需要画结构/数据/界面/流程类图表时，优先考虑用 PlantUML 表达。完整列表见 <https://plantuml.com/zh/>。
+
+### 常用非 UML 图表语法
+
+**JSON / YAML 数据**（数据结构可视化）
+```
+@startjson
+{
+  "name": "张三",
+  "age": 30,
+  "tags": ["a", "b"],
+  "address": {"city": "北京"}
+}
+@endjson
+```
+```
+@startyaml
+name: 张三
+age: 30
+address:
+  city: 北京
+@endyaml
+```
+
+**WBS 分解图**（工作分解结构）
+```
+@startwbs
+* 项目
+** 阶段一
+*** 任务A
+*** 任务B
+** 阶段二
+@endwbs
+```
+
+**Salt 界面原型**（线框图）
+```
+@startsalt
+{
+  Login
+  [用户名] [______]
+  [密码]   [______]
+  [  登录  ] [ 取消 ]
+}
+@endsalt
+```
+
+**ER 实体关系图**
+```
+@startuml
+entity "用户" as user {
+  * id : int
+  * name : string
+}
+entity "订单" as order {
+  * id : int
+  * user_id : int
+}
+user ||--o{ order
+@enduml
+```
+
+**网络图 (nwdiag)**
+```
+@startuml
+nwdiag {
+  network 内网 {
+    server [address = "10.0.0.1"];
+    db     [address = "10.0.0.2"];
+  }
+}
+@enduml
+```
+
+**正则表达式图表**
+```
+@startregex
+A|B(CD)*E
+@endregex
+```
+
+**EBNF 语法图**
+```
+@startebnf
+digit = "0" | "1" | ... ;
+@endebnf
+```
+
+**Archimate 架构图**
+```
+@startuml
+Archimate_BusinessFunction
+Archimate_ApplicationComponent
+@enduml
+```
+
+### 非 UML 图表类型清单
+
+- 数据：JSON、YAML、EBNF、Regex、ER（实体关系）、信息工程图（IE）
+- 结构：网络图（nwdiag）、架构图（Archimate）、WBS、Files（文件树）、Chart
+- 界面：Salt（UI 线框模型）
+- 流程：SDL、Ditaa、甘特图、时序图（chronology）
+- 其他：AsciiMath / JLaTeXMath 数学公式
+
 ## skinparam 常用参数
 
 > 注意：skinparam 已废弃，建议迁移到 `<style>` CSS 样式。

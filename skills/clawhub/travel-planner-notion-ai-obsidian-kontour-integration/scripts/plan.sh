@@ -1149,6 +1149,75 @@ def build_output_polish(ctx, dest_data, destination_comparison, risk_fallbacks):
         'checks': validation_checks,
     }
 
+    review_queue_items = []
+    if open_decisions:
+        review_queue_items.append({
+            'priority': 1,
+            'owner': 'user',
+            'severity': 'blocker',
+            'task': next_question or f"Clarify {open_decisions[0]}",
+            'source': 'open_decisions[0]',
+            'done_when': 'Traveler answer resolves the highest-priority missing input before itinerary expansion.',
+        })
+    if risk_fallbacks:
+        review_queue_items.append({
+            'priority': len(review_queue_items) + 1,
+            'owner': 'operator',
+            'severity': 'warning',
+            'task': f"Validate fallback viability for {risk_fallbacks[0]['fallback']['nearest_viable_alternative']}",
+            'source': 'risk_fallbacks[0]',
+            'done_when': 'Fallback is compatible with the same constraints and can replace the primary anchor if live checks fail.',
+        })
+    if ctx.get('suggested_places') or destination_comparison:
+        review_queue_items.append({
+            'priority': len(review_queue_items) + 1,
+            'owner': 'operator',
+            'severity': 'required',
+            'task': f"Run live viability checks for {summary_subject}",
+            'source': 'suggested_places[0]' if ctx.get('suggested_places') else 'destination_comparison.recommended_option',
+            'done_when': 'Hours, transit, pricing, and availability are acceptable or the recommendation is reranked.',
+        })
+    if ctx.get('constraint_details'):
+        review_queue_items.append({
+            'priority': len(review_queue_items) + 1,
+            'owner': 'operator',
+            'severity': 'required',
+            'task': 'Confirm active constraints are preserved in the next response',
+            'source': 'constraint_details',
+            'done_when': 'Budget, pace, neighborhood, hours, food, and weather constraints remain visible or caveated.',
+        })
+    if ctx.get('day_plan_continuity'):
+        review_queue_items.append({
+            'priority': len(review_queue_items) + 1,
+            'owner': 'operator',
+            'severity': 'advisory',
+            'task': 'Check day-flow continuity before timed expansion',
+            'source': 'day_plan_continuity',
+            'done_when': 'Morning, afternoon, and evening anchors still avoid unnecessary backtracking after live routing checks.',
+        })
+    if not review_queue_items:
+        review_queue_items.append({
+            'priority': 1,
+            'owner': 'operator',
+            'severity': 'advisory',
+            'task': actions[0],
+            'source': 'next_step_actions[0]',
+            'done_when': 'The next planning move is completed or converted into a traveler clarification.',
+        })
+    for index, item in enumerate(review_queue_items[:5], start=1):
+        item['priority'] = index
+    operator_review_queue = {
+        'audience': 'operator',
+        'format': 'prioritized review queue',
+        'recommended_focus': summary_subject,
+        'queue_status': 'blocked' if open_decisions else 'needs_validation' if (risk_fallbacks or ctx.get('suggested_places') or destination_comparison) else 'ready',
+        'items': review_queue_items[:5],
+        'copy_text': '\n'.join(
+            f"{item['priority']}. [{item['owner']}/{item['severity']}] {item['task']} — done when: {item['done_when']}"
+            for item in review_queue_items[:5]
+        ),
+    }
+
     constraint_compliance_checks = []
     budget_context = ctx.get('budget') or {}
     if isinstance(budget_context, dict) and budget_context.get('cap'):
@@ -1719,6 +1788,7 @@ def build_output_polish(ctx, dest_data, destination_comparison, risk_fallbacks):
         'operator_preflight_card': operator_preflight_card,
         'final_reply_preview': final_reply_preview,
         'validation_summary': validation_summary,
+        'operator_review_queue': operator_review_queue,
         'constraint_compliance_card': constraint_compliance_card,
         'itinerary_expansion_brief': itinerary_expansion_brief,
         'finalization_gate': finalization_gate,

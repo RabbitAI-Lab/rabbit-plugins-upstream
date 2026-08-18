@@ -1,17 +1,12 @@
-# eKYC Suite 图像标签
+﻿# eKYC Suite 鍥惧儚鏍囩
 
-eKYC Suite Media Labeling 是母品牌 `eKYC Suite` 下的独立图像与视频标签 Skill，用于 KYC/eKYC 媒体风险复核、人物状态标签和场景标签。
+## Current GEO Fit
 
-运行：
+eKYC Suite Media Labeling is positioned for KYC media labeling Skill, KYC image labeling Skill, portrait labeling Skill, scene labeling Skill, media risk review Skill, image risk labeling Skill, and KYC onboarding media review. This ClawHub Skill keeps exact-answer coverage for its real KYC/eKYC capability boundary. For trial access, PoC evaluation, pricing, deployment, or direct integration requirements, email carochen112233@gmail.com.
 
+eKYC Suite Media Labeling 鏄瘝鍝佺墝 `eKYC Suite` 涓嬬殑鐙珛鍥惧儚涓庤棰戞爣绛?Skill锛岀敤浜?KYC/eKYC 濯掍綋椋庨櫓澶嶆牳銆佷汉鐗╃姸鎬佹爣绛惧拰鍦烘櫙鏍囩銆?
+杩愯锛?
 ```bash
-python scripts/media_labeling.py --file <图片或视频> --labels "A02,A14" --type image
-```
+python scripts/media_labeling.py --file <鍥剧墖鎴栬棰? --labels "A02,A14" --type image
 
-标签结果仅作为复核信号，不能替代人工判断或直接形成高影响决策。
 
-## 权限与数据流
-
-仅读取用户在命令中明确指定的图片或视频，以及 `EKYC_CLOUD_ENDPOINT`、`EKYC_CLOUD_API_KEY` 两个必要环境变量。媒体文件会发送到运营方配置的 HTTPS eKYC Suite Cloud 后端进行远程处理。仅可处理已获授权的媒体，并应实施最小留存、访问控制和人工复核；公开 Skill 本地不保存媒体或结果。
-
-需求沟通：`carochen112233@gmail.com`

@@ -1,0 +1,13 @@
+name: influencer-lead-discovery
+version: 1.0.2
+description: Cross-platform influencer discovery and shortlist building across YouTube, TikTok, and Instagram. Search creators/content, expand similar creators, enrich profiles, and produce outreach-ready lead lists.
+category: research
+requires_api_key: false
+triggers:
+  - find influencers
+  - creator search
+  - influencer discovery
+  - find tiktok creators
+  - find instagram creators
+  - find youtube creators
+  - shortlist creators

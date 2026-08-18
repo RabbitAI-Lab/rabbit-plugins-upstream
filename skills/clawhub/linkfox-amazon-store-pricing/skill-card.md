@@ -1,48 +1,72 @@
-## Description: <br>
-Helps agents query Amazon store Product Pricing data through LinkFox, including single-item and batch pricing, listing offers, item offers, featured offer expected price, and competitive summary results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+亚马逊店铺商品定价 skill that helps agents call Amazon SP-API Product Pricing operations through LinkFox, including pricing, competitive pricing, listing and item offers, batch offers, featured offer expected price, and competitive summary workflows.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Marketplace operators, sellers, and developers use this skill to retrieve Amazon store pricing and offer data by ASIN or SKU, compare competitive pricing, and inspect batch Product Pricing results. It requires LinkFox and Amazon store authorization and should be used only with seller data the user is authorized to access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles LinkFox API credentials, Amazon store access tokens, and seller pricing data. <br>
-Mitigation: Install only if you trust linkfox-ai and LinkFox with that access; verify the configured API key and gateway environment variables before use. <br>
-Risk: Full API responses may be saved locally and may contain sensitive business pricing information. <br>
-Mitigation: Review the LinkFox session data directory, restrict access to saved files, and delete response files after use when they contain sensitive data. <br>
+## Use Case:
 
+External sellers, operators, and developers use this skill to retrieve Amazon store pricing and offer data for ASIN and SKU workflows, including single-item, batch, FOEP, and competitive-summary queries. It is intended for authorized LinkFox and Amazon store contexts where the user understands account, billing, and local data persistence implications.
 
-## Reference(s): <br>
-- [Amazon Store Product Pricing API Reference](references/api.md) <br>
-- [Amazon SP-API getPricing](https://developer-docs.amazon.com/sp-api/reference/getpricing) <br>
-- [Amazon SP-API getCompetitivePricing](https://developer-docs.amazon.com/sp-api/reference/getcompetitivepricing) <br>
-- [Amazon SP-API getListingOffers](https://developer-docs.amazon.com/sp-api/reference/getlistingoffers) <br>
-- [Amazon SP-API getItemOffers](https://developer-docs.amazon.com/sp-api/reference/getitemoffers) <br>
-- [Amazon SP-API getItemOffersBatch](https://developer-docs.amazon.com/sp-api/reference/getitemoffersbatch) <br>
-- [Amazon SP-API getListingOffersBatch](https://developer-docs.amazon.com/sp-api/reference/getlistingoffersbatch) <br>
-- [Amazon SP-API getFeaturedOfferExpectedPriceBatch](https://developer-docs.amazon.com/sp-api/reference/getfeaturedofferexpectedpricebatch) <br>
-- [Amazon SP-API getCompetitiveSummary](https://developer-docs.amazon.com/sp-api/reference/getcompetitivesummary) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, files, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses saved as local files or printed to stdout] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full responses are saved under a LinkFox session data directory; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The release evidence marks the package suspicious because a pricing-focused skill includes account login and payment helpers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when LinkFox is trusted for the related Amazon account, store, and billing workflows, and prefer API-key setup through the dedicated auth skill or the official LinkFox site.
+
+Risk: SMS-code login and payment-order flows can affect account access or billing if invoked unintentionally.
+
+Mitigation: Do not enter SMS codes or initiate payment orders from this skill unless the user explicitly intended that onboarding or billing flow.
+
+Risk: Configurable LinkFox endpoint environment variables can redirect requests to non-default services.
+
+Mitigation: Do not set custom LinkFox endpoint variables unless the endpoint is controlled and trusted.
+
+Risk: Full pricing responses are saved locally by the scripts.
+
+Mitigation: Treat saved response files as sensitive store data and review the local linkfox session data directory before sharing or retaining outputs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-pricing)
+- [LinkFox Publisher Profile](https://clawhub.ai/user/linkfox-ai)
+- [Artifact API Reference](artifact/references/api.md)
+- [Artifact Onboarding Reference](artifact/references/onboarding.md)
+- [Amazon SP-API getPricing](https://developer-docs.amazon.com/sp-api/reference/getpricing)
+- [Amazon SP-API getCompetitivePricing](https://developer-docs.amazon.com/sp-api/reference/getcompetitivepricing)
+- [Amazon SP-API getListingOffers](https://developer-docs.amazon.com/sp-api/reference/getlistingoffers)
+- [Amazon SP-API getItemOffers](https://developer-docs.amazon.com/sp-api/reference/getitemoffers)
+- [Amazon SP-API getItemOffersBatch](https://developer-docs.amazon.com/sp-api/reference/getitemoffersbatch)
+- [Amazon SP-API getListingOffersBatch](https://developer-docs.amazon.com/sp-api/reference/getlistingoffersbatch)
+- [Amazon SP-API getFeaturedOfferExpectedPriceBatch](https://developer-docs.amazon.com/sp-api/reference/getfeaturedofferexpectedpricebatch)
+- [Amazon SP-API getCompetitiveSummary](https://developer-docs.amazon.com/sp-api/reference/getcompetitivesummary)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, shell commands, and JSON responses saved to local files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts write full pricing responses under a local linkfox session data directory and may print either full JSON or a summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.7 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,60 @@
-## Description: <br>
-Detects cats, dogs, and birds in home monitoring images or video streams and returns structured pet detection results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects cats, dogs, and birds in images or video streams for home pet monitoring.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and agent developers use this skill to detect cats, dogs, and birds in uploaded or URL-based home monitoring media, produce structured reports, and retrieve prior detection reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet or home monitoring images and videos may be sent to lifeemergence.com or open.lifeemergence.com services for analysis. <br>
-Mitigation: Review the provider's data-handling practices before installation and avoid submitting sensitive household footage unless that transfer is acceptable. <br>
-Risk: The skill automatically associates requests with a local or upstream identity and may persist account tokens locally. <br>
-Mitigation: Run the skill only in environments where that identity behavior is acceptable, protect local token storage, and rotate or remove stored credentials when access should end. <br>
-Risk: Historical report queries access prior cloud reports tied to the resolved identity. <br>
-Mitigation: Use history-listing features only for the intended account and confirm that cloud report access aligns with the user's consent and privacy expectations. <br>
+## Use Case:
 
+External users and developers use this skill to submit home pet monitoring images, video files, or media URLs for cat, dog, and bird detection, then review structured detection results and report links.
 
-## Reference(s): <br>
-- [API interface reference](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-detection-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration] <br>
-**Output Format:** [Markdown or JSON pet detection reports, with optional saved text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports basic, standard, and json detail levels; can list cloud-stored historical reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: frontmatter, release evidence) <br>
+Risk: Media files, submitted URLs, and report lookups are processed by the publisher's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media and URLs approved for third-party cloud processing, and review the publisher's handling terms before deployment.
+
+Risk: The skill automatically creates or reuses an internal identity and stores authentication tokens in workspace data.
+
+Mitigation: Run the skill in an isolated workspace, protect workspace data, and remove or rotate stored credentials when access should end.
+
+Risk: Bundled development configuration includes plain HTTP endpoints while the privacy statement describes HTTPS/TLS transport.
+
+Mitigation: Review configuration before use and require HTTPS endpoints for production or sensitive media.
+
+## Reference(s):
+
+- [API Interface Documentation](references/api_doc.md)
+- [Shared API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-detection-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files]
+
+**Output Format:** [Markdown or JSON structured pet detection report with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save report text to a user-specified output file.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter declares 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

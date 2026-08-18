@@ -23,13 +23,16 @@ metadata:
 
 本 skill 面向用户本地环境使用，目标是在不修改云上资源的前提下，帮助定位 VolcEngine 产品、OpenAPI、Python SDK、`ve`/`tosutil` CLI 和控制台操作失败的原因。主入口只保留必要的启动规则、场景路由和安全边界；本地工具检查与完整领域索引放在 `references/getting-started.md`，OpenAPI 报错、签名、鉴权、参数、限流以及 `ve`/`tosutil`/Python SDK 调用链路的快速检查放在 `references/openapi-quick-check.md`，具体产品域手册放在 `references/domain-guides/`。
 
+先把 `SKILL_ROOT` 解析为包含本 `SKILL.md` 的绝对目录。所有脚本和 reference 都从
+`${SKILL_ROOT}` 解析，不依赖仓库布局或当前工作目录。
+
 ## 开始前
 
 1. 先读取 `references/getting-started.md`，确认本地工具、环境变量、场景依赖和领域路由。
 2. 如用户允许执行本地体检，运行通用检查：
 
    ```bash
-   bash skills/volcengine-troubleshooting/scripts/common_check.sh
+   bash "${SKILL_ROOT}/scripts/common_check.sh"
    ```
 
 3. 优先用 `ve sts GetCallerIdentity` 验证当前身份链路，只报告是否可用和必要的身份摘要，不输出 SecretKey、SessionToken、完整 AccessKeyId、完整手机号、账单明细或对象内容。

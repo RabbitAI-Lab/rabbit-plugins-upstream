@@ -1,47 +1,64 @@
-## Description: <br>
-Helps agents search Amazon seller orders, retrieve order, buyer, address, item, and regulated-order details, and run shipment or verification status actions for Amazon SP-API Orders workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to search, inspect, and update Amazon SP-API Orders through LinkFox's developer proxy, including order details, buyer and address data, order items, shipment status, regulated order information, verification status, and shipment confirmation.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and developers use this skill to inspect Amazon store orders, retrieve buyer or order item details, and perform shipment or regulated-order status updates through guided agent workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read sensitive Amazon order, buyer, address, item, and regulated-order data. <br>
-Mitigation: Use it only from a private workspace, request buyer or address details only when needed, and keep access limited to trusted users. <br>
-Risk: The skill can change shipment or regulated-order verification state. <br>
-Mitigation: Require explicit human confirmation before running shipment confirmation, shipment status, or verification update scripts. <br>
-Risk: The skill saves complete API responses locally, which can retain sensitive order data. <br>
-Mitigation: Review saved linkfox data files for retention and remove sensitive outputs when they are no longer needed. <br>
+## Use Case:
 
+External Amazon sellers and store operators can use this skill through an agent to retrieve order lists and details, inspect buyer, address, item, and regulated-order data, and perform shipment or verification updates after confirming the action.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-orders) <br>
-- [Local API and Gateway Reference](references/api.md) <br>
-- [Amazon SP-API searchOrders](https://developer-docs.amazon.com/sp-api/reference/searchorders) <br>
-- [Amazon SP-API getOrder](https://developer-docs.amazon.com/sp-api/reference/getorder-3) <br>
-- [Amazon SP-API Restricted Data Token](https://developer-docs.amazon.com/sp-api/reference/createrestricteddatatoken) <br>
-- [Amazon SP-API confirmShipment](https://developer-docs.amazon.com/sp-api/reference/confirmshipment) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON script outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts save complete JSON responses locally and may print either full JSON or a summarized response depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill can access Amazon order data, buyer and address information, and other sensitive account data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when LinkFox is trusted for this data, avoid routing credentials to custom hosts, and protect or delete saved response files after use.
+
+Risk: The skill includes order-state-changing workflows such as shipment confirmation, shipment status updates, and regulated-order verification updates.
+
+Mitigation: Manually review the target order, request body, and intended business outcome before allowing an agent to run a state-changing command.
+
+Risk: Authentication, billing, and payment onboarding flows are bundled with the skill and may affect account access or spending.
+
+Mitigation: Confirm any account, billing, payment, or recharge action with the user before proceeding.
+
+## Reference(s):
+
+- [LinkFox Amazon Orders API and Gateway Usage](artifact/references/api.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-orders)
+- [Amazon SP-API searchOrders](https://developer-docs.amazon.com/sp-api/reference/searchorders)
+- [Amazon SP-API getOrder](https://developer-docs.amazon.com/sp-api/reference/getorder-3)
+- [Amazon SP-API getOrderItems](https://developer-docs.amazon.com/sp-api/reference/getorderitems)
+- [Amazon SP-API updateShipmentStatus](https://developer-docs.amazon.com/sp-api/reference/updateshipmentstatus)
+- [Amazon SP-API confirmShipment](https://developer-docs.amazon.com/sp-api/reference/confirmshipment)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [JSON files and stdout JSON or summaries, with Markdown guidance for setup and troubleshooting]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full responses under ./linkfox/<date>/<session>/data unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

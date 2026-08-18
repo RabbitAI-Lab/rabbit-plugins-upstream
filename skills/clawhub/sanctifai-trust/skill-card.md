@@ -1,43 +1,59 @@
-## Description: <br>
-Integrate SanctifAI Trust Proof-of-Human attestations. Use when an app needs cryptographic proof a human performed a task or human-in-the-loop verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Integrate SanctifAI Trust Proof-of-Human attestations. Use when an app needs cryptographic proof a human performed a task or human-in-the-loop verification.
 
-## Publisher: <br>
-[sanctifai](https://clawhub.ai/user/sanctifai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sanctifai](https://clawhub.ai/user/sanctifai)
 
-## Use Case: <br>
-Developers and engineers use this skill to integrate SanctifAI Trust attestations into applications that need proof a human completed or approved a task. It guides embedded REST API and extension-based integration paths that return a participation ID, certificate URL, QR URL, and optional verification URL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Trust API key could be exposed if embedded integration code places it in client-side JavaScript. <br>
-Mitigation: Keep TRUST_API_KEY only on the backend or in a secret manager, and mint browser sessions server-side. <br>
-Risk: Public certificate URLs or on-chain attestations could reveal sensitive metadata if identifiers or labels contain PII. <br>
-Mitigation: Use opaque internal identifiers and avoid names, emails, account numbers, government IDs, addresses, or other PII in certificate-visible fields. <br>
-Risk: Production attestations depend on an external SanctifAI service and tenant configuration. <br>
-Mitigation: Confirm the organization trusts SanctifAI Trust before production use, target the production API, and verify tenant origin allowlists before asking users to test. <br>
+## Use Case:
 
+Developers and engineers use this skill to integrate SanctifAI Trust attestations into applications that need proof a human approved, reviewed, signed off, or completed a task.
 
-## Reference(s): <br>
-- [SanctifAI Trust documentation](https://trust.sanctifai.com) <br>
-- [ClawHub skill page](https://clawhub.ai/sanctifai/skills/sanctifai-trust) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with JavaScript, HTML, environment variable, and API request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may produce backend API calls to SanctifAI Trust; no package install is required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The integration can send attestation metadata and hashes to SanctifAI Trust and may create public certificates or on-chain records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the data-sharing posture before use, keep raw task and result data client-side, and avoid personal or sensitive details in certificate-visible fields.
+
+Risk: Tenant API keys could be exposed if embedded integration is implemented in client-side code.
+
+Mitigation: Store API keys only on the backend or in the worker extension path, and mint presence sessions server-side for embedded integrations.
+
+Risk: Incorrect taxonomy codes, origin allowlists, or local API targets can cause integration failures.
+
+Mitigation: Use the fixed three-letter taxonomy codes, register production origins and RP IDs with the tenant, target https://trust.sanctifai.com unless explicitly confirmed otherwise, and run the documented smoke tests before user testing.
+
+## Reference(s):
+
+- [SanctifAI Trust documentation](https://trust.sanctifai.com)
+- [SanctifAI Trust pricing](https://sanctifai.com/trust/pricing)
+- [ClawHub skill page](https://clawhub.ai/sanctifai/skills/sanctifai-trust)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline code blocks and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces integration guidance for REST API calls, hosted script usage, WebAuthn flows, credential handling, taxonomy codes, and smoke tests.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release metadata; artifact frontmatter: 1.3.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

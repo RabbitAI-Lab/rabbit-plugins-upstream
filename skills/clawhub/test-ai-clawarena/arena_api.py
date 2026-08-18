@@ -25,7 +25,7 @@ try:
 except ImportError:  # Executed directly from an installed skill directory.
     from state_paths import runtime_state_home  # type: ignore[no-redef]
 
-DEFAULT_API_BASE = "https://clawarena.halochain.xyz/api/v1"
+DEFAULT_API_BASE = "https://dev-arenaclaw.halochain.xyz/api/v1"
 API_BASE = os.environ.get("CLAWARENA_API_BASE_URL", DEFAULT_API_BASE).rstrip("/")
 DEFAULT_TOKEN_PATH = runtime_state_home(
     API_BASE,
@@ -152,21 +152,6 @@ def build_parser() -> argparse.ArgumentParser:
         help="Read one newline-terminated JSON payload from stdin for process-tool transport.",
     )
 
-    reflection = subparsers.add_parser(
-        "reflection-context",
-        help="GET /agents/strategy-reflection/ for a finished match",
-    )
-    reflection.add_argument("--match-id", required=True, type=int, help="Finished match id")
-
-    save_prompt = subparsers.add_parser(
-        "save-strategy-prompt",
-        help="POST /agents/strategy-prompt/ with payload from stdin or --payload",
-    )
-    save_prompt.add_argument(
-        "--payload",
-        help="JSON payload string. Prefer stdin/heredoc for non-ASCII content.",
-    )
-
     return parser
 
 
@@ -256,37 +241,6 @@ def main() -> int:
         ok, result = api_request(
             "POST",
             f"{API_BASE}/agents/action/",
-            token=token,
-            payload=payload,
-            timeout=args.timeout,
-        )
-    elif args.command == "reflection-context":
-        token = load_token(token_path)
-        query = parse.urlencode({"match_id": args.match_id})
-        ok, result = api_request(
-            "GET",
-            f"{API_BASE}/agents/strategy-reflection/?{query}",
-            token=token,
-            timeout=args.timeout,
-        )
-    elif args.command == "save-strategy-prompt":
-        token = load_token(token_path)
-        try:
-            payload = load_json_payload(args.payload, label="strategy prompt payload")
-        except json.JSONDecodeError as exc:
-            emit_json(
-                {
-                    "error": "invalid_json",
-                    "detail": exc.msg,
-                    "line": exc.lineno,
-                    "column": exc.colno,
-                    "position": exc.pos,
-                }
-            )
-            return 0
-        ok, result = api_request(
-            "POST",
-            f"{API_BASE}/agents/strategy-prompt/",
             token=token,
             payload=payload,
             timeout=args.timeout,

@@ -1,44 +1,52 @@
-## Description: <br>
-Guides agents through requirements, technical design, and task planning before medium-to-large coding changes, especially when work spans modules or acceptance criteria are unclear. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through requirements, design, task planning, and confirmation before medium-to-large coding changes.
 
-## Publisher: <br>
-[binggg](https://clawhub.ai/user/binggg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[binggg](https://clawhub.ai/user/binggg)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and coding agents use this skill to structure larger implementation work into requirements, design, and task documents before execution. It is most useful when acceptance criteria, architecture, UI behavior, data modeling, or module boundaries need confirmation before coding.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill can delay implementation if applied to small, already-clear changes.
+
+Mitigation: Use the documented skip criteria for small bug fixes, one-file documentation updates, straightforward config changes, and precise low-risk tasks.
+
+Risk: Planning documents can encode incorrect assumptions when requirements are underspecified.
+
+Mitigation: Ask follow-up questions and require user confirmation between requirements, design, and task breakdown before implementation.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and engineering teams use this skill to have an agent clarify requirements, document design decisions, and prepare implementation tasks before starting substantial or ambiguous coding work. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance, configuration]
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can slow larger tasks by requiring requirements, design, and task confirmation before coding. <br>
-Mitigation: Apply it to medium-to-large or unclear work, and skip the full workflow for small, low-risk changes with clear acceptance criteria. <br>
-Risk: Planning documents can capture incorrect scope when the request is underspecified. <br>
-Mitigation: Ask follow-up questions for core product behavior and require confirmation before moving from requirements to design, tasks, and execution. <br>
+**Output Format:** [Markdown guidance and local specification documents]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/binggg/skills/spec-workflow-guide) <br>
-- [CloudBase main entry](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md) <br>
-- [Spec workflow raw source](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/spec-workflow/SKILL.md) <br>
-- [UI design sibling reference](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/ui-design/SKILL.md) <br>
-- [Data model sibling reference](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/data-model-creation/SKILL.md) <br>
+**Other Properties Related to Output:** [Produces requirements.md, design.md, and tasks.md guidance for agent workflows.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown planning documents and implementation checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce requirements.md, design.md, and tasks.md under a specs directory before implementation.] <br>
+1.18.30 (source: ClawHub release metadata)
 
-## Skill Version(s): <br>
-1.18.14 (source: ClawHub release evidence; artifact frontmatter reports 2.24.1) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

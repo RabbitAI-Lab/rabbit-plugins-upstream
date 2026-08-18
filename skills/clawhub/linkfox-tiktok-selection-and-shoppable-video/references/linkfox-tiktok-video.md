@@ -7,7 +7,7 @@ description: TikTok 视频上传 API 业务技能，支持可购物视频预检�
 
 TikTok **视频上传模块**业务 skill。经 LinkFox 网关 **`POST /tiktokVideo/developerProxy`** 转发至紫鸟 `tiktok-proxy/creator/{region}/{path}`，调用视频号相关开放接口。参数与响应字段详见 [references/api.md](references/api.md)。
 
-> 前置依赖：`linkfox-tiktok-video-auth` 提供达人授权与 `ttsAccessToken`；`linkfox-tiktok-video-products` 提供 `product_id` 选品。勿使用 `linkfox-tiktok-auth`（TikTok Shop 卖家模块）。
+> 前置依赖：`linkfox-tiktok-video-auth` 提供达人授权与 `ttsAccessToken`；`linkfox-tiktok-video-products` 提供 `product_id` 选品。勿使用 `linkfox-tiktok-shop-auth`（TikTok Shop 卖家模块）。
 
 ## 能力边界
 
@@ -27,7 +27,7 @@ TikTok **视频上传模块**业务 skill。经 LinkFox 网关 **`POST /tiktokVi
 - **封面可选**：发布时可用 `cover_timestamp_ms` 或视频首帧，无需单独封面上传接口。
 - **不含授权**：达人/视频号授权、刷新令牌用 `linkfox-tiktok-video-auth`。
 - **不含商品查询**：达人店铺/橱窗商品查询、选品、`product_id` 获取用 `linkfox-tiktok-video-products`。
-- **不在范围内**：TikTok Shop 小店 ERP（商品/订单/财务）用 `linkfox-tiktok-auth` + 对应业务 skill；TikTok Shop 可购物视频（`/tiktokShop/developerProxy`）用 `linkfox-tiktok-creator`；TikTok 选品/数据分析用 EchoTik 等。
+- **不在范围内**：TikTok Shop 小店 ERP（商品/订单/财务）用 `linkfox-tiktok-shop-auth` + 对应业务 skill；TikTok Shop 可购物视频（`/tiktokShop/developerProxy`）用 `linkfox-tiktok-creator`；TikTok 选品/数据分析用 EchoTik 等。
 
 ## 执行流程
 

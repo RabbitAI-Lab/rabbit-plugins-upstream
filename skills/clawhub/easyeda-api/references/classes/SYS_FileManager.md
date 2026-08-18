@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class SYS_FileManager 
+export class SYS_FileManager 
 ```
 
 ## Methods
@@ -182,6 +182,20 @@ Description
 </td></tr>
 <tr><td>
 
+[getSymbolFileBySymbolUuid(symbolUuid, libraryUuid, fileType)](./SYS_FileManager.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 使用符号 UUID 获取符号文件
+
+
+</td></tr>
+<tr><td>
+
 [importProjectByProjectFile(projectFile, fileType, props, saveTo, librariesImportSetting)](./SYS_FileManager.md)
 
 
@@ -237,7 +251,7 @@ Description
 ## Signature
 
 ```typescript
-extractLibInfo(data: File | Array<File>): Promise<any>;
+public extractLibInfo(data: File | Array<File>): Promise<any>;
 ```
 
 ## Parameters
@@ -293,7 +307,7 @@ Promise&lt;any&gt;
 ## Signature
 
 ```typescript
-extractProjectInfo(data: File): Promise<any>;
+public extractProjectInfo(data: File): Promise<any>;
 ```
 
 ## Parameters
@@ -351,13 +365,7 @@ Promise&lt;any&gt;
 ## Signature
 
 ```typescript
-getCbbFileByCbbUuid(cbbUuid: string, libraryUuid?: string, props?: {
-        fileName?: string;
-        password?: string;
-        fileType?: 'epro' | 'epro2';
-        templateSchematicUuid?: string;
-        templatePcbUuid?: string;
-    }): Promise<File | undefined>;
+public getCbbFileByCbbUuid(cbbUuid: string, libraryUuid?: string, props?: { fileName?: undefined | string; password?: undefined | string; fileType?: undefined | 'epro' | 'epro2'; templateSchematicUuid?: undefined | string; templatePcbUuid?: undefined | string }): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -406,7 +414,7 @@ string
 
 </td><td>
 
-_(Optional)_ 库 UUID，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
+_(Optional)_ 库 UUID，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取，如若不传入，则为系统库
 
 
 </td></tr>
@@ -417,7 +425,7 @@ props
 
 </td><td>
 
-{ fileName?: string; password?: string; fileType?: 'epro' \| 'epro2'; templateSchematicUuid?: string; templatePcbUuid?: string; }
+{ fileName?: undefined \| string; password?: undefined \| string; fileType?: undefined \| 'epro' \| 'epro2'; templateSchematicUuid?: undefined \| string; templatePcbUuid?: undefined \| string }
 
 
 </td><td>
@@ -451,7 +459,7 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-getDeviceFileByDeviceUuid(deviceUuid: string | Array<string>, libraryUuid?: string, fileType?: 'elibz' | 'elibz2'): Promise<File | undefined>;
+public getDeviceFileByDeviceUuid(deviceUuid: string | Array<string>, libraryUuid?: string, fileType?: 'elibz' | 'elibz2'): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -545,7 +553,7 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-getDocumentFile(fileName?: string, password?: string, fileType?: 'epro' | 'epro2'): Promise<File | undefined>;
+public getDocumentFile(fileName?: string, password?: string, fileType?: 'epro' | 'epro2'): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -641,16 +649,13 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-getDocumentFootprintSources(): Promise<Array<{
-        footprintUuid: string;
-        documentSource: string;
-    }>>;
+public getDocumentFootprintSources(): Promise<Array<{ footprintUuid: string; documentSource: string }>>;
 ```
 
 
 ## Returns
 
-Promise&lt;Array&lt;{ footprintUuid: string; documentSource: string; }&gt;&gt;
+Promise&lt;Array&lt;{ footprintUuid: string; documentSource: string }&gt;&gt;
 
 文档封装源码数据，数据获取失败将返回空数组
 
@@ -665,7 +670,7 @@ Promise&lt;Array&lt;{ footprintUuid: string; documentSource: string; }&gt;&gt;
 ## Signature
 
 ```typescript
-getDocumentSource(): Promise<string | undefined>;
+public getDocumentSource(): Promise<string | undefined>;
 ```
 
 
@@ -686,7 +691,7 @@ Promise&lt;string \| undefined&gt;
 ## Signature
 
 ```typescript
-getFootprintFileByFootprintUuid(footprintUuid: string | Array<string>, libraryUuid?: string, fileType?: 'elibz' | 'elibz2'): Promise<File | undefined>;
+public getFootprintFileByFootprintUuid(footprintUuid: string | Array<string>, libraryUuid?: string, fileType?: 'elibz' | 'elibz2'): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -735,7 +740,7 @@ string
 
 </td><td>
 
-_(Optional)_ 库 UUID，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
+_(Optional)_ 库 UUID，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取，如若不传入，则为系统库
 
 
 </td></tr>
@@ -782,7 +787,7 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-getPanelLibraryFileByPanelLibraryUuid(panelLibraryUuid: string | Array<string>, libraryUuid?: string, fileType?: 'elibz' | 'elibz2'): Promise<File | undefined>;
+public getPanelLibraryFileByPanelLibraryUuid(panelLibraryUuid: string | Array<string>, libraryUuid?: string, fileType?: 'elibz' | 'elibz2'): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -831,7 +836,7 @@ string
 
 </td><td>
 
-_(Optional)_ 库 UUID，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
+_(Optional)_ 库 UUID，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取，如若不传入，则为系统库
 
 
 </td></tr>
@@ -876,7 +881,7 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-getProjectFile(fileName?: string, password?: string, fileType?: 'epro' | 'epro2'): Promise<File | undefined>;
+public getProjectFile(fileName?: string, password?: string, fileType?: 'epro' | 'epro2'): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -972,7 +977,7 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-getProjectFileByProjectUuid(projectUuid: string, fileName?: string, password?: string, fileType?: 'epro' | 'epro2'): Promise<File | undefined>;
+public getProjectFileByProjectUuid(projectUuid: string, fileName?: string, password?: string, fileType?: 'epro' | 'epro2'): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -1073,6 +1078,102 @@ Promise&lt;File \| undefined&gt;
 
 注意：本接口需要启用 \*\*工程管理 &gt; 下载工程\*\* 权限，没有权限调用将始终 `throw Error`
 
+### getsymbolfilebysymboluuid
+
+# SYS\_FileManager.getSymbolFileBySymbolUuid() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+使用符号 UUID 获取符号文件
+
+## Signature
+
+```typescript
+public getSymbolFileBySymbolUuid(symbolUuid: string | Array<string>, libraryUuid?: string, fileType?: 'elibz' | 'elibz2'): Promise<File | undefined>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+symbolUuid
+
+
+</td><td>
+
+string \| Array&lt;string&gt;
+
+
+</td><td>
+
+符号 UUID 或符号 UUID 列表
+
+
+</td></tr>
+<tr><td>
+
+libraryUuid
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ 库 UUID，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取，如若不传入，则为系统库
+
+
+</td></tr>
+<tr><td>
+
+fileType
+
+
+</td><td>
+
+'elibz' \| 'elibz2'
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;File \| undefined&gt;
+
+符号文件数据，`undefined` 表示数据获取失败
+
+## Remarks
+
+可以使用 [SYS\_FileSystem.saveFile()](./SYS_FileSystem.md) 接口将文件导出到本地文件系统
+
+注意：本接口需要启用 \*\*团队库 &gt; 下载库\*\* 权限，没有权限调用将始终 `throw Error`
+
 ### importprojectbyprojectfile
 
 # SYS\_FileManager.importProjectByProjectFile() method
@@ -1084,27 +1185,7 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-importProjectByProjectFile(projectFile: File, fileType?: 'JLCEDA' | 'JLCEDA Pro' | 'EasyEDA' | 'EasyEDA Pro' | 'Allegro' | 'OrCAD' | 'EAGLE' | 'KiCad' | 'PADS' | 'LTspice', props?: {
-        importOption?: ESYS_ImportProjectImportOption;
-        schematicObjectStyle?: ESYS_ImportProjectSchematicObjectStyle;
-        associateFootprint?: boolean;
-        associate3DModel?: boolean;
-        importFootprintNotesLayer?: boolean;
-    }, saveTo?: {
-        operation: 'New Project';
-        newProjectOwnerTeamUuid: IDMT_TeamItem['uuid'];
-        newProjectOwnerFolderUuid?: IDMT_FolderItem['uuid'];
-        newProjectName?: string;
-        newProjectFriendlyName?: string;
-        newProjectDescription?: string;
-        newProjectCollaborationMode?: EDMT_ProjectCollaborationMode;
-    } | {
-        operation: 'Existing Project';
-        existingProjectUuid: IDMT_BriefProjectItem['uuid'];
-    }, librariesImportSetting?: {
-        ownerTeamUuid: IDMT_TeamItem['uuid'];
-        createDeviceForSingleSymbol?: boolean;
-    }): Promise<IDMT_BriefProjectItem | undefined>;
+public importProjectByProjectFile(projectFile: File, fileType?: 'JLCEDA' | 'JLCEDA Pro' | 'EasyEDA' | 'EasyEDA Pro' | 'Allegro' | 'OrCAD' | 'EAGLE' | 'KiCad' | 'PADS' | 'LTspice', props?: { importOption?: undefined | ESYS_ImportProjectImportOption.IMPORT_DOCUMENT | ESYS_ImportProjectImportOption.EXTRACT_LIBRARIES | ESYS_ImportProjectImportOption.IMPORT_DOCUMENT_EXTRACT_LIBRARIES; schematicObjectStyle?: undefined | ESYS_ImportProjectSchematicObjectStyle.USE_SYSTEM_THEME | ESYS_ImportProjectSchematicObjectStyle.USE_SOURCE_FILE_STYLE; associateFootprint?: undefined | false | true; associate3DModel?: undefined | false | true; importFootprintNotesLayer?: undefined | false | true }, saveTo?: { operation: 'New Project'; newProjectOwnerTeamUuid: string; newProjectOwnerFolderUuid?: undefined | string; newProjectName?: undefined | string; newProjectFriendlyName?: undefined | string; newProjectDescription?: undefined | string; newProjectCollaborationMode?: undefined | EDMT_ProjectCollaborationMode.STRICT | EDMT_ProjectCollaborationMode.FREE } | { operation: 'Existing Project'; existingProjectUuid: string }, librariesImportSetting?: { ownerTeamUuid: string; deviceClassification?: undefined | string[]; symbolClassification?: undefined | string[]; footprintClassification?: undefined | string[]; createDeviceForSingleSymbol?: undefined | false | true; updateExistingLibrariesWithTheSameName?: undefined | false | true }): Promise<IDMT_BriefProjectItem | undefined>;
 ```
 
 ## Parameters
@@ -1164,7 +1245,7 @@ props
 
 </td><td>
 
-{ importOption?: [ESYS\_ImportProjectImportOption](../enums/ESYS_ImportProjectImportOption.md)<!-- -->; schematicObjectStyle?: [ESYS\_ImportProjectSchematicObjectStyle](../enums/ESYS_ImportProjectSchematicObjectStyle.md)<!-- -->; associateFootprint?: boolean; associate3DModel?: boolean; importFootprintNotesLayer?: boolean; }
+{ importOption?: undefined \| [ESYS\_ImportProjectImportOption.IMPORT\_DOCUMENT](../enums/ESYS_ImportProjectImportOption.md) \| [ESYS\_ImportProjectImportOption.EXTRACT\_LIBRARIES](../enums/ESYS_ImportProjectImportOption.md) \| [ESYS\_ImportProjectImportOption.IMPORT\_DOCUMENT\_EXTRACT\_LIBRARIES](../enums/ESYS_ImportProjectImportOption.md)<!-- -->; schematicObjectStyle?: undefined \| [ESYS\_ImportProjectSchematicObjectStyle.USE\_SYSTEM\_THEME](../enums/ESYS_ImportProjectSchematicObjectStyle.md) \| [ESYS\_ImportProjectSchematicObjectStyle.USE\_SOURCE\_FILE\_STYLE](../enums/ESYS_ImportProjectSchematicObjectStyle.md)<!-- -->; associateFootprint?: undefined \| false \| true; associate3DModel?: undefined \| false \| true; importFootprintNotesLayer?: undefined \| false \| true }
 
 
 </td><td>
@@ -1180,7 +1261,7 @@ saveTo
 
 </td><td>
 
-{ operation: 'New Project'; newProjectOwnerTeamUuid: [IDMT\_TeamItem](../interfaces/IDMT_TeamItem.md)<!-- -->\['uuid'\]; newProjectOwnerFolderUuid?: [IDMT\_FolderItem](../interfaces/IDMT_FolderItem.md)<!-- -->\['uuid'\]; newProjectName?: string; newProjectFriendlyName?: string; newProjectDescription?: string; newProjectCollaborationMode?: [EDMT\_ProjectCollaborationMode](../enums/EDMT_ProjectCollaborationMode.md)<!-- -->; } \| { operation: 'Existing Project'; existingProjectUuid: [IDMT\_BriefProjectItem](../interfaces/IDMT_BriefProjectItem.md)<!-- -->\['uuid'\]; }
+{ operation: 'New Project'; newProjectOwnerTeamUuid: string; newProjectOwnerFolderUuid?: undefined \| string; newProjectName?: undefined \| string; newProjectFriendlyName?: undefined \| string; newProjectDescription?: undefined \| string; newProjectCollaborationMode?: undefined \| [EDMT\_ProjectCollaborationMode.STRICT](../enums/EDMT_ProjectCollaborationMode.md) \| [EDMT\_ProjectCollaborationMode.FREE](../enums/EDMT_ProjectCollaborationMode.md) } \| { operation: 'Existing Project'; existingProjectUuid: string }
 
 
 </td><td>
@@ -1196,7 +1277,7 @@ librariesImportSetting
 
 </td><td>
 
-{ ownerTeamUuid: [IDMT\_TeamItem](../interfaces/IDMT_TeamItem.md)<!-- -->\['uuid'\]; createDeviceForSingleSymbol?: boolean; }
+\{ ownerTeamUuid: string; deviceClassification?: undefined \| string\[\]; symbolClassification?: undefined \| string\[\]; footprintClassification?: undefined \| string\[\]; createDeviceForSingleSymbol?: undefined \| false \| true; updateExistingLibrariesWithTheSameName?: undefined \| false \| true \}
 
 
 </td><td>
@@ -1230,29 +1311,7 @@ Promise&lt;[IDMT\_BriefProjectItem](../interfaces/IDMT_BriefProjectItem.md) \| u
 ## Signature
 
 ```typescript
-importProjectByProjectFile(projectFile: File, fileType?: 'Altium Designer' | 'Protel', props?: {
-        importOption?: ESYS_ImportProjectImportOption;
-        viaSolderMaskExpansion?: ESYS_ImportProjectViaSolderMaskExpansion;
-        boardOutlineSource?: ESYS_ImportProjectBoardOutlineSource;
-        schematicObjectStyle?: ESYS_ImportProjectSchematicObjectStyle;
-        associateFootprint?: boolean;
-        associate3DModel?: boolean;
-        importFootprintNotesLayer?: boolean;
-    }, saveTo?: {
-        operation: 'New Project';
-        newProjectOwnerTeamUuid: IDMT_TeamItem['uuid'];
-        newProjectOwnerFolderUuid?: IDMT_FolderItem['uuid'];
-        newProjectName?: string;
-        newProjectFriendlyName?: string;
-        newProjectDescription?: string;
-        newProjectCollaborationMode?: EDMT_ProjectCollaborationMode;
-    } | {
-        operation: 'Existing Project';
-        existingProjectUuid: IDMT_BriefProjectItem['uuid'];
-    }, librariesImportSetting?: {
-        ownerTeamUuid: IDMT_TeamItem['uuid'];
-        createDeviceForSingleSymbol?: boolean;
-    }): Promise<IDMT_BriefProjectItem | undefined>;
+public importProjectByProjectFile(projectFile: File, fileType?: 'Altium Designer' | 'Protel', props?: { importOption?: undefined | ESYS_ImportProjectImportOption.IMPORT_DOCUMENT | ESYS_ImportProjectImportOption.EXTRACT_LIBRARIES | ESYS_ImportProjectImportOption.IMPORT_DOCUMENT_EXTRACT_LIBRARIES; viaSolderMaskExpansion?: undefined | ESYS_ImportProjectViaSolderMaskExpansion.ALL_COVER_OIL | ESYS_ImportProjectViaSolderMaskExpansion.FOLLOW_ORIGINAL_SETTING; boardOutlineSource?: undefined | ESYS_ImportProjectBoardOutlineSource.FROM_KEEPOUT_LAYER | ESYS_ImportProjectBoardOutlineSource.FROM_MECHANICAL_LAYER_1; schematicObjectStyle?: undefined | ESYS_ImportProjectSchematicObjectStyle.USE_SYSTEM_THEME | ESYS_ImportProjectSchematicObjectStyle.USE_SOURCE_FILE_STYLE; associateFootprint?: undefined | false | true; associate3DModel?: undefined | false | true; importFootprintNotesLayer?: undefined | false | true }, saveTo?: { operation: 'New Project'; newProjectOwnerTeamUuid: string; newProjectOwnerFolderUuid?: undefined | string; newProjectName?: undefined | string; newProjectFriendlyName?: undefined | string; newProjectDescription?: undefined | string; newProjectCollaborationMode?: undefined | EDMT_ProjectCollaborationMode.STRICT | EDMT_ProjectCollaborationMode.FREE } | { operation: 'Existing Project'; existingProjectUuid: string }, librariesImportSetting?: { ownerTeamUuid: string; deviceClassification?: undefined | string[]; symbolClassification?: undefined | string[]; footprintClassification?: undefined | string[]; createDeviceForSingleSymbol?: undefined | false | true; updateExistingLibrariesWithTheSameName?: undefined | false | true }): Promise<IDMT_BriefProjectItem | undefined>;
 ```
 
 ## Parameters
@@ -1312,7 +1371,7 @@ props
 
 </td><td>
 
-{ importOption?: [ESYS\_ImportProjectImportOption](../enums/ESYS_ImportProjectImportOption.md)<!-- -->; viaSolderMaskExpansion?: [ESYS\_ImportProjectViaSolderMaskExpansion](../enums/ESYS_ImportProjectViaSolderMaskExpansion.md)<!-- -->; boardOutlineSource?: [ESYS\_ImportProjectBoardOutlineSource](../enums/ESYS_ImportProjectBoardOutlineSource.md)<!-- -->; schematicObjectStyle?: [ESYS\_ImportProjectSchematicObjectStyle](../enums/ESYS_ImportProjectSchematicObjectStyle.md)<!-- -->; associateFootprint?: boolean; associate3DModel?: boolean; importFootprintNotesLayer?: boolean; }
+{ importOption?: undefined \| [ESYS\_ImportProjectImportOption.IMPORT\_DOCUMENT](../enums/ESYS_ImportProjectImportOption.md) \| [ESYS\_ImportProjectImportOption.EXTRACT\_LIBRARIES](../enums/ESYS_ImportProjectImportOption.md) \| [ESYS\_ImportProjectImportOption.IMPORT\_DOCUMENT\_EXTRACT\_LIBRARIES](../enums/ESYS_ImportProjectImportOption.md)<!-- -->; viaSolderMaskExpansion?: undefined \| [ESYS\_ImportProjectViaSolderMaskExpansion.ALL\_COVER\_OIL](../enums/ESYS_ImportProjectViaSolderMaskExpansion.md) \| [ESYS\_ImportProjectViaSolderMaskExpansion.FOLLOW\_ORIGINAL\_SETTING](../enums/ESYS_ImportProjectViaSolderMaskExpansion.md)<!-- -->; boardOutlineSource?: undefined \| [ESYS\_ImportProjectBoardOutlineSource.FROM\_KEEPOUT\_LAYER](../enums/ESYS_ImportProjectBoardOutlineSource.md) \| [ESYS\_ImportProjectBoardOutlineSource.FROM\_MECHANICAL\_LAYER\_1](../enums/ESYS_ImportProjectBoardOutlineSource.md)<!-- -->; schematicObjectStyle?: undefined \| [ESYS\_ImportProjectSchematicObjectStyle.USE\_SYSTEM\_THEME](../enums/ESYS_ImportProjectSchematicObjectStyle.md) \| [ESYS\_ImportProjectSchematicObjectStyle.USE\_SOURCE\_FILE\_STYLE](../enums/ESYS_ImportProjectSchematicObjectStyle.md)<!-- -->; associateFootprint?: undefined \| false \| true; associate3DModel?: undefined \| false \| true; importFootprintNotesLayer?: undefined \| false \| true }
 
 
 </td><td>
@@ -1328,7 +1387,7 @@ saveTo
 
 </td><td>
 
-{ operation: 'New Project'; newProjectOwnerTeamUuid: [IDMT\_TeamItem](../interfaces/IDMT_TeamItem.md)<!-- -->\['uuid'\]; newProjectOwnerFolderUuid?: [IDMT\_FolderItem](../interfaces/IDMT_FolderItem.md)<!-- -->\['uuid'\]; newProjectName?: string; newProjectFriendlyName?: string; newProjectDescription?: string; newProjectCollaborationMode?: [EDMT\_ProjectCollaborationMode](../enums/EDMT_ProjectCollaborationMode.md)<!-- -->; } \| { operation: 'Existing Project'; existingProjectUuid: [IDMT\_BriefProjectItem](../interfaces/IDMT_BriefProjectItem.md)<!-- -->\['uuid'\]; }
+{ operation: 'New Project'; newProjectOwnerTeamUuid: string; newProjectOwnerFolderUuid?: undefined \| string; newProjectName?: undefined \| string; newProjectFriendlyName?: undefined \| string; newProjectDescription?: undefined \| string; newProjectCollaborationMode?: undefined \| [EDMT\_ProjectCollaborationMode.STRICT](../enums/EDMT_ProjectCollaborationMode.md) \| [EDMT\_ProjectCollaborationMode.FREE](../enums/EDMT_ProjectCollaborationMode.md) } \| { operation: 'Existing Project'; existingProjectUuid: string }
 
 
 </td><td>
@@ -1344,7 +1403,7 @@ librariesImportSetting
 
 </td><td>
 
-{ ownerTeamUuid: [IDMT\_TeamItem](../interfaces/IDMT_TeamItem.md)<!-- -->\['uuid'\]; createDeviceForSingleSymbol?: boolean; }
+\{ ownerTeamUuid: string; deviceClassification?: undefined \| string\[\]; symbolClassification?: undefined \| string\[\]; footprintClassification?: undefined \| string\[\]; createDeviceForSingleSymbol?: undefined \| false \| true; updateExistingLibrariesWithTheSameName?: undefined \| false \| true \}
 
 
 </td><td>
@@ -1378,7 +1437,7 @@ Promise&lt;[IDMT\_BriefProjectItem](../interfaces/IDMT_BriefProjectItem.md) \| u
 ## Signature
 
 ```typescript
-setDocumentSource(source: string): Promise<boolean>;
+public setDocumentSource(source: string): Promise<boolean>;
 ```
 
 ## Parameters

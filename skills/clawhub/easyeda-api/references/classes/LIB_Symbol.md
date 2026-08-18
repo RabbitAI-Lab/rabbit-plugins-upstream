@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class LIB_Symbol 
+export class LIB_Symbol 
 ```
 
 ## Methods
@@ -140,6 +140,20 @@ Description
 </td></tr>
 <tr><td>
 
+[searchByProperties(properties, libraryUuid)](./LIB_Symbol.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 使用属性精确搜索符号
+
+
+</td></tr>
+<tr><td>
+
 [updateDocumentSource(symbolUuid, libraryUuid, documentSource)](./LIB_Symbol.md)
 
 
@@ -169,7 +183,7 @@ Description
 ## Signature
 
 ```typescript
-copy(symbolUuid: string, libraryUuid: string, targetLibraryUuid: string, targetClassification?: ILIB_ClassificationIndex | Array<string>, newSymbolName?: string): Promise<string | undefined>;
+public copy(symbolUuid: string, libraryUuid: string, targetLibraryUuid: string, targetClassification?: ILIB_ClassificationIndex | Array<string>, newSymbolName?: string): Promise<string | undefined>;
 ```
 
 ## Parameters
@@ -291,7 +305,7 @@ Promise&lt;string \| undefined&gt;
 ## Signature
 
 ```typescript
-create(libraryUuid: string, symbolName: string, classification?: ILIB_ClassificationIndex | Array<string>, symbolType?: ELIB_SymbolType, description?: string): Promise<string | undefined>;
+public create(libraryUuid: string, symbolName: string, classification?: ILIB_ClassificationIndex | Array<string>, symbolType?: ELIB_SymbolType, description?: string): Promise<string | undefined>;
 ```
 
 ## Parameters
@@ -413,7 +427,7 @@ Promise&lt;string \| undefined&gt;
 ## Signature
 
 ```typescript
-delete(symbolUuid: string, libraryUuid: string): Promise<boolean>;
+public delete(symbolUuid: string, libraryUuid: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -487,7 +501,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-get(symbolUuid: string, libraryUuid?: string): Promise<ILIB_SymbolItem | undefined>;
+public get(symbolUuid: string, libraryUuid?: string): Promise<ILIB_SymbolItem | undefined>;
 ```
 
 ## Parameters
@@ -536,7 +550,7 @@ string
 
 </td><td>
 
-_(Optional)_ 库 UUID，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
+_(Optional)_ 库 UUID，默认为系统库，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
 
 
 </td></tr>
@@ -561,11 +575,7 @@ Promise&lt;[ILIB\_SymbolItem](../interfaces/ILIB_SymbolItem.md) \| undefined&gt;
 ## Signature
 
 ```typescript
-getRenderImage(source: {
-        symbolUuid: string;
-        libraryUuid: string;
-        subPartName?: string;
-    }): Promise<Blob | undefined>;
+public getRenderImage(source: { symbolUuid: string; libraryUuid: string; subPartName?: undefined | string }): Promise<Blob | undefined>;
 ```
 
 ## Parameters
@@ -593,7 +603,7 @@ source
 
 </td><td>
 
-\{ symbolUuid: string; libraryUuid: string; subPartName?: string; \}
+\{ symbolUuid: string; libraryUuid: string; subPartName?: undefined \| string \}
 
 
 </td><td>
@@ -621,7 +631,7 @@ Promise&lt;Blob \| undefined&gt;
 ## Signature
 
 ```typescript
-modify(symbolUuid: string, libraryUuid: string, symbolName?: string, classification?: ILIB_ClassificationIndex | Array<string> | null, description?: string | null): Promise<boolean>;
+public modify(symbolUuid: string, libraryUuid: string, symbolName?: string, classification?: ILIB_ClassificationIndex | Array<string> | null, description?: string | null): Promise<boolean>;
 ```
 
 ## Parameters
@@ -747,7 +757,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-openInEditor(symbolUuid: string, libraryUuid: string, splitScreenId?: string): Promise<string | undefined>;
+public openInEditor(symbolUuid: string, libraryUuid: string, splitScreenId?: string): Promise<string | undefined>;
 ```
 
 ## Parameters
@@ -837,7 +847,7 @@ Promise&lt;string \| undefined&gt;
 ## Signature
 
 ```typescript
-search(key: string, libraryUuid?: string, classification?: ILIB_ClassificationIndex | Array<string>, symbolType?: ELIB_SymbolType, itemsOfPage?: number, page?: number): Promise<Array<ILIB_SymbolSearchItem>>;
+public search(key: string, libraryUuid?: string, classification?: ILIB_ClassificationIndex | Array<string>, symbolType?: ELIB_SymbolType, itemsOfPage?: number, page?: number): Promise<Array<ILIB_SymbolSearchItem>>;
 ```
 
 ## Parameters
@@ -964,6 +974,80 @@ Promise&lt;Array&lt;[ILIB\_SymbolSearchItem](../interfaces/ILIB_SymbolSearchItem
 
 搜索到的符号属性列表
 
+### searchbyproperties
+
+# LIB\_Symbol.searchByProperties() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+使用属性精确搜索符号
+
+## Signature
+
+```typescript
+public searchByProperties(properties: ILIB_SymbolPropertiesForSearch, libraryUuid?: string): Promise<Array<ILIB_SymbolSearchItem>>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+properties
+
+
+</td><td>
+
+[ILIB\_SymbolPropertiesForSearch](../interfaces/ILIB_SymbolPropertiesForSearch.md)
+
+
+</td><td>
+
+属性
+
+
+</td></tr>
+<tr><td>
+
+libraryUuid
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ 库 UUID，默认为系统库，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;Array&lt;[ILIB\_SymbolSearchItem](../interfaces/ILIB_SymbolSearchItem.md)<!-- -->&gt;&gt;
+
+搜索到的符号属性的列表
+
 ### updatedocumentsource
 
 # LIB\_Symbol.updateDocumentSource() method
@@ -975,7 +1059,7 @@ Promise&lt;Array&lt;[ILIB\_SymbolSearchItem](../interfaces/ILIB_SymbolSearchItem
 ## Signature
 
 ```typescript
-updateDocumentSource(symbolUuid: string, libraryUuid: string, documentSource: string): Promise<boolean | undefined>;
+public updateDocumentSource(symbolUuid: string, libraryUuid: string, documentSource: string): Promise<boolean | undefined>;
 ```
 
 ## Parameters

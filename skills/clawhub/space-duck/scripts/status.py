@@ -20,7 +20,10 @@ def load_config():
     if not CONFIG_PATH.exists():
         print('ERROR: No Space Duck config found. Run setup.py first.')
         sys.exit(1)
-    return json.loads(CONFIG_PATH.read_text())
+    cfg = json.loads(CONFIG_PATH.read_text())
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
+    return cfg
 
 def get_status(cfg):
     api   = cfg.get('api_base', 'https://beak.spaceduckling.com')
@@ -52,7 +55,9 @@ def get_status(cfg):
         with urllib.request.urlopen(req2, timeout=10) as r2:
             sd_data = json.loads(r2.read())
             spaceducks = sd_data.get('agents', sd_data.get('spaceducks', []))
-            # Find own entry for last_seen
+            # Find own entry for last_seen (fallback only — this list is the
+            # bond graph, so a solo duck never appears in it and last_seen stays
+            # unset. Authoritative read is the identity-scoped call below.)
             for sd in spaceducks:
                 if sd.get('spaceduck_id') == sdid:
                     ts = sd.get('last_seen')
@@ -60,6 +65,24 @@ def get_status(cfg):
                         last_seen_ts = int(ts)
     except Exception:
         pass
+
+    # ── 2b. Authoritative last_seen (identity-scoped) ─────────────────────────
+    # PULSE-01: /beak/pulse persists last_seen on the duck's OWN spaceducks row,
+    # but /beak/spaceducks lists only bonded ducks — a solo duck is never in it,
+    # so it read "Last pulse: —" forever. Read our own row directly instead.
+    if sdid:
+        try:
+            reqc = urllib.request.Request(
+                f"{api}/beak/duck/{sdid}/capabilities",
+                headers={'Accept': 'application/json'}
+            )
+            with urllib.request.urlopen(reqc, timeout=10) as rc:
+                cap_data = json.loads(rc.read())
+                ts = cap_data.get('last_seen')
+                if ts:
+                    last_seen_ts = int(ts)
+        except Exception:
+            pass
 
     # Liveness comes from trust_tier T2+ (T2 requires liveness)
     tier = status_data.get('trust_tier', '')

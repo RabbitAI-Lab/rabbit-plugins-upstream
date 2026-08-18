@@ -1,41 +1,54 @@
-## Description: <br>
-Applies modular monolith guidance with enforced internal boundaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies modular monolith with enforced internal boundaries.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and architecture teams use this skill to decide when a modular monolith fits a codebase and to plan module boundaries, public contracts, and enforcement checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may appear during broad architecture prompts even when a modular monolith is not the right fit. <br>
-Mitigation: Confirm the application needs bounded modules and service-like autonomy without distributed-system overhead before applying the guidance. <br>
-Risk: Architecture recommendations can become misleading if module boundaries and contracts are not enforced. <br>
-Mitigation: Review proposed boundaries with project owners and back them with dependency checks, contract documentation, or CI enforcement before relying on the pattern. <br>
+## Use Case:
 
+Developers and architects use this skill to evaluate when a modular monolith is appropriate and to plan module boundaries, public contracts, dependency checks, and future service extraction paths.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-modular-monolith) <br>
-- [Claude Night Market archetypes](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown] <br>
-**Output Format:** [Markdown guidance with bullet lists and architecture recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; no tools, secrets, code execution, data access, or persistence are required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Broad architecture triggers may activate the skill in discussions where modular monolith guidance is not the best fit.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the system is a monolith or a candidate for consolidated modular boundaries before applying the recommendations.
+
+Risk: Architecture advice can be misleading if accepted without reviewing local team structure, coupling, and operational constraints.
+
+Mitigation: Review recommendations with project owners and validate boundary rules through dependency checks before treating them as implementation policy.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-modular-monolith)
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown prose with architecture recommendations, adoption steps, deliverables, and risk notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory content only; no tools, credentials, or external actions are requested.]
+
+## Skill Version(s):
+
+1.9.18 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

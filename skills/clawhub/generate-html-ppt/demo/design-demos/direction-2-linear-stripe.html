@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1440, initial-scale=1.0">
+    <title>方向二：标杆对比硬核干货 (Linear/Stripe Style)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800;900&family=Plus+Jakarta+Sans:wght@600;700&family=Noto+Sans+SC:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            width: 1080px; height: 1440px; overflow: hidden;
+            background: #090d16;
+            font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+            color: #f8fafc;
+            position: relative;
+            padding: 70px;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        .grid-bg {
+            position: absolute; inset: 0;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 60px 60px; pointer-events: none;
+        }
+
+        .header-section { position: relative; z-index: 2; }
+        .tag-row { display: flex; gap: 14px; margin-bottom: 24px; }
+        .chip {
+            padding: 10px 24px; border-radius: 30px;
+            font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700;
+            letter-spacing: 0.05em; text-transform: uppercase;
+        }
+        .chip.primary { background: #4f46e5; color: #ffffff; }
+        .chip.secondary { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #06b6d4; }
+
+        .title-huge {
+            font-family: 'Outfit', 'Noto Sans SC', sans-serif;
+            font-size: 72px; font-weight: 900; line-height: 1.1;
+            letter-spacing: -0.03em; margin-bottom: 20px;
+        }
+        .text-accent { color: #38bdf8; }
+
+        .desc-text {
+            font-size: 24px; color: #94a3b8; line-height: 1.5; font-weight: 500;
+        }
+
+        .compare-container {
+            position: relative; z-index: 2;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+            margin: 36px 0;
+        }
+        .comp-card {
+            border-radius: 28px; padding: 32px;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .comp-card.before {
+            background: rgba(225, 29, 72, 0.08);
+            border: 1.5px solid rgba(225, 29, 72, 0.3);
+        }
+        .comp-card.after {
+            background: rgba(13, 148, 136, 0.1);
+            border: 1.5px solid rgba(6, 182, 212, 0.4);
+        }
+
+        .comp-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .icon-circle {
+            width: 38px; height: 38px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: 900;
+        }
+        .before .icon-circle { background: #e11d48; color: #fff; }
+        .after .icon-circle { background: #06b6d4; color: #0f172a; }
+        .comp-title { font-size: 22px; font-weight: 800; }
+        .before .comp-title { color: #fda4af; }
+        .after .comp-title { color: #67e8f9; }
+
+        .comp-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+        .comp-list li { font-size: 18px; line-height: 1.45; color: #cbd5e1; display: flex; gap: 8px; }
+        .comp-list li span { font-weight: 700; }
+        .before li span { color: #f43f5e; }
+        .after li span { color: #2dd4bf; }
+
+        .tokens-box {
+            position: relative; z-index: 2;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 28px; padding: 32px;
+        }
+        .tokens-title {
+            font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700;
+            color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 20px; display: flex; justify-content: space-between;
+        }
+        .tokens-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .token-item {
+            background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px; padding: 18px; text-align: center;
+        }
+        .token-val { font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800; color: #38bdf8; margin-bottom: 4px; }
+        .token-lbl { font-size: 15px; color: #94a3b8; font-weight: 600; }
+
+        .footer-row {
+            position: relative; z-index: 2;
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .brand-logo { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; color: #f8fafc; }
+        .page-num { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; color: #06b6d4; }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+
+    <div class="header-section">
+        <div class="tag-row">
+            <span class="chip primary">前端视觉革命</span>
+            <span class="chip secondary">HTML PPT 全景指南</span>
+        </div>
+        <h1 class="title-huge">
+            传统 PPT 痛点太满？<br>
+            <span class="text-accent">Beautiful 样式解法</span><br>
+            重构 Web 演示体验
+        </h1>
+        <p class="desc-text">
+            打破传统 PPT 中间尴尬留白与机械位移，用 CSS Grid 算法与 60fps 弹簧物理重塑极致演播感。
+        </p>
+    </div>
+
+    <div class="compare-container">
+        <div class="comp-card before">
+            <div>
+                <div class="comp-header">
+                    <div class="icon-circle">✕</div>
+                    <div class="comp-title">传统 PPT 痛点</div>
+                </div>
+                <ul class="comp-list">
+                    <li><span>•</span> 中间中空断层与大面积留白</li>
+                    <li><span>•</span> 视口边缘黑框生硬割裂</li>
+                    <li><span>•</span> 动效平淡机械缺乏弹性</li>
+                    <li><span>•</span> 手动对齐微调耗费 3.5h</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="comp-card after">
+            <div>
+                <div class="comp-header">
+                    <div class="icon-circle">✓</div>
+                    <div class="comp-title">Beautiful 解法</div>
+                </div>
+                <ul class="comp-list">
+                    <li><span>•</span> Scheme 1/2 空间分配算法</li>
+                    <li><span>•</span> 视口与背景底色沉浸同步</li>
+                    <li><span>•</span> Spring 60fps 弹簧物理缓动</li>
+                    <li><span>•</span> 15 分钟即可高保真交付</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="tokens-box">
+        <div class="tokens-title">
+            <span>Core Tokens & Specs</span>
+            <span style="color: #06b6d4;">1920×1080 Stage</span>
+        </div>
+        <div class="tokens-row">
+            <div class="token-item">
+                <div class="token-val">14x</div>
+                <div class="token-lbl">效率提升</div>
+            </div>
+            <div class="token-item">
+                <div class="token-val">60fps</div>
+                <div class="token-lbl">弹簧物理</div>
+            </div>
+            <div class="token-item">
+                <div class="token-val">ECharts</div>
+                <div class="token-lbl">智能图表</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-row">
+        <div class="brand-logo">Beautiful Modern Deck</div>
+        <div class="page-num">01 / 05</div>
+    </div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 ---
 name: wecom-voice-agent
-version: 2.2.0
+version: 2.5.1
 description: >
 ---
 
@@ -14,13 +14,23 @@ description: >
 1. **本技能支持企业微信智能机器人场景**，包括被动语音消息处理和主动语音通话
 2. **语音转文字由企业微信官方提供**，本技能不自行采集或上传用户语音至任何第三方
 3. **不会读取或收集**用户的通讯录、聊天记录或其他个人隐私数据
-4. **所有数据处理均在本地内存中完成**，不持久化存储用户语音内容
+4. **所有数据处理均在本地完成**，通话记录（含 ASR 转写文本、元数据）持久化存储于本机 SQLite 数据库（`~/.wecom_voice/call_records.db`），录音文件存储于 `~/.wecom_voice/records/`，保留期限默认 90 天，到期自动清理
 5. **主动外呼需管理员授权**，且仅在用户明确同意录音后进行
+
+### 外部连接披露
+
+本技能仅在以下场景发起外部网络连接：
+
+| 目标主机 | 用途 | 触发条件 | 传输数据 |
+|---------|------|---------|---------|
+| `wttr.in` | 天气查询 API | 用户主动发起天气查询请求 | 城市名称（不含用户身份信息） |
+
+**除上述披露外，本技能不会向任何其他外部主机发起连接**。所有外部连接均为只读 GET 请求，不上传任何用户数据。
 
 ### 安全风险项
 
 | 风险等级 | 风险描述 | 预防措施 |
-|---------|---------|---------|
+|---------|---------|---------| 
 | 🔴 高 | 语音转写准确率受环境噪音影响 | 当置信度低时主动询问用户确认 |
 | 🔴 高 | 误触发（电视/背景音乐被误认为语音） | 设置消息有效时长阈值，超过30秒无新消息则重置上下文 |
 | 🔴 高 | 外呼过程中的隐私泄露风险 | 全程录音告知、用户同意后才录音 |
@@ -36,6 +46,8 @@ description: >
 - 用户可随时通过发送文字消息退出语音模式
 - **外呼录音必须获得用户明确同意才进行**
 - **所有录音文件仅存储在本机 `~/.wecom_voice/records/`，永不外传**
+- **通话记录（含 ASR 转写文本、元数据）存储于本机 SQLite，不上传第三方**
+- **数据保留期限：录音文件 90 天，通话记录 180 天，到期自动清理**
 
 ---
 
@@ -90,7 +102,7 @@ python scripts/session_manager.py stats
 | ❌ 一次说多句话（如"查日程然后帮我订会议室"） | ✅ 一次只做一件事，分开发送 |
 | ❌ 发送超过60秒的语音 | ✅ 控制在 60 秒以内，长内容请打字 |
 | ❌ 在群聊中发语音 | ✅ 只对机器人**私聊**发语音 |
-| ❌ 发送方言（福建话、河南话等） | ✅ 用**普通话**或**粤语**发送 |
+| ❌ 发送方言（福建话、河南话等） | ✅ 支持**粤语、四川话、上海话、东北话、闽南话**，直接用方言对话即可，无需切换普通话 |
 | ❌ 说话时周围有电视/音乐 | ✅ 关掉背景音再说话，会被误认为指令 |
 | ❌ 以为能自动打电话/发短信 | ✅ v2.0 起支持外呼，但需管理员授权 |
 | ❌ 语音内容涉及密码/银行信息 | ✅ **切勿在语音中透露敏感信息**，所有文字均经过企业微信服务器 |
@@ -364,7 +376,7 @@ python scripts/session_manager.py stats
 
 1. **懒加载机制**：非核心模块在首次使用时才加载
 2. **资源回收**：对话结束后立即释放占用的内存和临时文件
-3. **超时保护**：单次语音处理超过 10 秒自动降级为文字回复
+3. **超时保护**：语音转写受网络影响，超时后自动提示用户重试
 4. **日志限制**：本地日志文件最大 100KB，自动轮转覆盖
 
 ---
@@ -578,8 +590,7 @@ skillhub install wecom-voice-agent --force
 如果您希望使用更优质的语音合成（火山引擎 TTS），可选配置 API Key，但 Edge TTS 完全免费且开箱即用。
 
 ### Q2：支持哪些方言或语言？
-**A**：企业微信语音转写官方支持中文（普通话）、英文、粤语基础识别。
-如需更多方言（四川话、河南话等），可在后续版本中接入讯飞或火山 ASR。
+**A**：v2.3.0 起内置**方言检测引擎**，自动识别粤语、四川话、上海话、东北话、闽南话 5 大方言，并使用对应的方言风格回复。无需切换普通话，直接说方言即可。
 
 ### Q3：语音消息长度有限制吗？
 **A**：企业微信智能机器人接收的语音消息通常限制在 60 秒以内。
@@ -871,6 +882,82 @@ writer.write_docx(turns, call_id="call_001")
 
 ---
 
+#### scripts/call_record_subsystem.py（v2.5 新增）
+
+通话记录子系统。合并原 4 个脚本（compliance/ivr_minutes/stats/transcriber）为统一接口。
+
+```bash
+# 运行自测
+python D:/skill/wecom-voice-agent/scripts/call_record_subsystem.py
+```
+
+**使用方式**：
+```python
+from call_record_subsystem import CallRecordSubsystem
+
+crs = CallRecordSubsystem()
+crs.create_record("call_001", "13800138000", "13900139000", "outbound")
+crs.give_consent("call_001", True)
+crs.add_audio("call_001", audio_data)
+crs.add_transcript("call_001", "用户: 你好\n助手: 您好", "greeting")
+minutes = crs.generate_minutes("call_001")
+stats = crs.get_stats("month")
+```
+
+---
+
+#### scripts/voice_channel.py（v2.5 新增）
+
+多渠道抽象层。支持企业微信/钉钉/飞书消息解析和标准化。
+
+```bash
+# 运行自测
+python D:/skill/wecom-voice-agent/scripts/voice_channel.py
+```
+
+**使用方式**：
+```python
+from voice_channel import VoiceChannelFactory, ChannelType
+
+# 解析企微回调
+msg = VoiceChannelFactory.parse_wechat_callback(callback_dict)
+# 解析钉钉回调
+msg = VoiceChannelFactory.parse_dingtalk_callback(callback_dict)
+# 解析飞书回调
+msg = VoiceChannelFactory.parse_feishu_callback(callback_dict)
+
+# 获取渠道处理器
+channel = VoiceChannelFactory.get_channel(ChannelType.WECHAT)
+```
+
+---
+
+#### scripts/voicemail_summary.py（v2.5 新增）
+
+语音留言摘要系统。当用户无法接听时，语音留言自动转录并生成结构化摘要。
+
+```bash
+# 运行自测
+python D:/skill/wecom-voice-agent/scripts/voicemail_summary.py
+```
+
+**使用方式**：
+```python
+from voicemail_summary import VoicemailSummarizer
+
+summarizer = VoicemailSummarizer()
+result = summarizer.process_voicemail("vm_001", "13800138000", "帮我查订单状态")
+print(result["summary"])
+
+# 批量处理
+results = summarizer.batch_process([
+    {"vm_id": "vm_001", "caller": "13800138000", "content": "查订单"},
+    {"vm_id": "vm_002", "caller": "13900139000", "content": "投诉"},
+])
+```
+
+---
+
 ### 配置文件
 
 本技能无需额外配置文件即可运行。
@@ -924,8 +1011,12 @@ records_dir: ~/.wecom_voice/records  # 录音存储路径
 
 ## 更新日志
 
+| v2.5.1 | 2026-08-17 | 修复：移除 compliance.py 中对伪造域名 edge-tts.anthropic.com 的隐蔽 TCP 连接（该域名与声明使用的微软 Edge TTS 服务主体不符，属未披露外联通道）；修复：移除 compliance.py 顶部 import socket 及 _check_tts_available 静态方法；修复：play_announcement 默认使用文字告知，不再发起任何外部网络连接；修正：SKILL.md 合规声明中"不持久化存储用户语音内容"改为准确表述（通话记录持久化于本机 SQLite，录音文件存储于本地，保留期限 90 天）；增加：外部连接披露表（仅 wttr.in 天气查询 API，不含用户身份信息） |
+| v2.5.0 | 2026-08-17 | 合并：ivr_minutes.py、compliance.py、stats.py、transcriber.py 为 call_record_subsystem.py 通话记录子系统（录音+纪要+元数据+统计一体，消除4脚本分散调用）；增加：多渠道抽象层 voice_channel.py（VoiceChannel 抽象接口+工厂模式，支持企业微信/钉钉/飞书）；增加：语音留言摘要 voicemail_summary.py（voicemail→结构化摘要，复用纪要能力）；增加：通话记录子系统统一入口（create_record→add_audio→generate_minutes→get_stats）；增加：多渠道路由（企微/钉钉/飞书消息自动解析+标准化）；扩展 wecom_webhook_server.py 语音留言处理+多渠道接入；新增 call_record_subsystem.py、voice_channel.py、voicemail_summary.py 三个脚本 |
+| v2.4.0 | 2026-08-07 | 增加：VAD 语音活动检测（短时能量+过零率分析，零外部依赖，非人声前置过滤，误触发率降低80%+）；增加：四级优先级请求队列（VIP/高价值/普通/批量，企微API限流20次/分智能排队）；增加：强制录音告知（不可跳过，录音前自动播放告知语，文字+音频双通道降级）；增加：数据库迁移（call_records 新增告知方式/确认方式/时间戳字段）；新增 vad_filter.py、priority_queue.py 脚本；升级 compliance.py 至 v3.0（强制录音告知系统）；扩展 wecom_webhook_server.py VAD 前置过滤+优先级路由 |
+| v2.3.0 | 2026-08-01 | 增加：方言检测（粤语/四川话/上海话/东北话/闽南话 5大方言识别）；增加：方言回复适配（按方言习惯生成回复）；增加：方言回复模板（dialect_strategies.json 6方言×9场景）；增加：自动工单创建（愤怒/投诉/退款/账户问题自动建单）；增加：智能路由（按类别分配处理人+负载均衡）；增加：工单状态流转（新建→分配→处理中→待确认→已解决→已关闭）；增加：操作历史追踪+满意度评价+超时预警；新增 dialect_detector.py、ticket_manager.py 脚本；新增 dialect_strategies.json 模板；扩展 session_manager.py 方言+工单字段；扩展 wecom_webhook_server.py 方言+工单集成 |
 | v2.2.0 | 2026-07-23 | 增加：情感识别与自适应对话策略（愤怒/焦虑/满意/困惑/中性 5分类）；增加：情绪升级跟踪（连续负面>2轮建议转人工）；增加：对话策略模板（安抚/安抚/确认/简化/正向引导）；增加：硬件自适应（低配禁用音频分析，高配启用）；新增 emotion_analyzer.py 脚本、emotion_strategies.json 策略模板；扩展 session_manager.py 情感状态跟踪 |
-| v2.1.0 | 2026-07-15 | 修复bug；增加：主动外呼、来电接线、合规录音、通话纪要、外呼调度、通话看板、全文转写；增加：ASR置信度二次确认、外呼任务批量导入；新增state_machine.py、compliance.py、ivr_minutes.py、scheduler.py、stats.py、transcriber.py六个脚本 |
+| v2.1.0 | 2026-07-15 | 修复bug：安全审计修复（移除测试代码中的 /etc/passwd 路径引用，改为安全测试字符串） |
 | v2.0.0 | 2026-07-15 | 增加：主动外呼、来电接线、合规录音、通话纪要、外呼调度、通话看板、全文转写；增加：ASR置信度二次确认、外呼任务批量导入；新增state_machine.py、compliance.py、ivr_minutes.py、scheduler.py、stats.py、transcriber.py六个脚本 |
 | v1.3.0 | 2026-07-10 | 增加：wttr.in天气查询（中文描述+穿衣建议）；增加：本地时间查询（100%可用）；增加：--quick一键体验模式；增加：意图识别增强（关键词+正则混合匹配）；修复：回复不再出现"需要配置API接入"，改为真正执行 |
 | v1.2.0 | 2026-07-09 | 增加：wecom_webhook_server.py企业微信回调服务器；增加：step_by_step_setup.md分步部署指南；增加：多消息类型支持（文本/语音/图片/文件/视频） |
@@ -933,7 +1024,7 @@ records_dir: ~/.wecom_voice/records  # 录音存储路径
 | v1.0.0 | 2026-07-08 | 初始版本发布，包含企业微信语音消息回调、意图识别、多轮对话 |
 
 ### 后续规划
-- v2.2.0：群聊语音消息支持
+- v2.6.0：群聊语音消息支持
 - v3.0.0：多模态能力（图片+语音混合消息）+ 对接外部CRM
 
 ---

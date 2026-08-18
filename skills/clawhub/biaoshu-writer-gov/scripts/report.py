@@ -5,6 +5,7 @@
 （zip + document.xml，带配色/字号/底纹）。字段口径依据《百炼®标书Skill服务.md》附录 A/B。
 被 zcm.py 的 `report` 子命令调用，也可独立运行：
     python3 report.py --in result.json --format both -o <目录> [--tender-name 招标文件名]
+Locale scope: zh-CN (Simplified Chinese) by design for mainland-China bidding workflows. The generated artifact keeps Chinese procurement terminology in report labels and headings; assistants may provide explanations in another language outside the artifact when needed.
 """
 from __future__ import annotations
 
@@ -51,7 +52,8 @@ _RISK_LABEL = {"high": "高风险", "review": "待复核", "tip": "提示", "oth
 _PRIORITY_ZH = {"high": "高", "medium": "中", "low": "低"}
 _DOCX_RISK_COLOR = {"high": "C0392B", "review": "B9770E", "tip": "0E7490", "other": "475569"}
 _LABEL = {"interpretation": "智能解读", "compliance": "合规审查"}
-
+# Locale scope: report artifacts currently ship with zh-CN labels because bidding terminology
+# and exported templates follow mainland-China procurement conventions.
 
 # ============================== 最小 .docx 生成 ==============================
 # block = (kind, text, opts)
@@ -373,7 +375,7 @@ class Report:
               "L.forEach(function(a,j){a.classList.toggle('on',j===idx);});}"
               "document.addEventListener('scroll',spy,{passive:true});"
               "window.addEventListener('resize',spy);spy();})();</script>")
-        return (f"<!DOCTYPE html><html lang='zh'><head><meta charset='utf-8'>"
+        return (f"<!DOCTYPE html><html lang='zh-CN'><head><meta charset='utf-8'>"
                 f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
                 f"<title>{esc(self.title)}</title><style>{_HTML_CSS}</style></head>"
                 f"<body><div class='shell'>"

@@ -10,15 +10,9 @@ Marvis 降级版：四代理塌缩为单 P8 + 脚本强制机械边界。
   verify <contract_path>           运行验收命令，写入 verifier_status
   gate <contract_path>             终审门控：验证全绿 + 无禁区触碰 + 合约未篡改
   report <contract_path>           生成交付报告
-  register <agent_id> <json_string> 注册 agent 到 active-agents.json
-  status                           列出当前活跃 agent（读 active-agents.json）
-  cleanup <agent_id> <reason>      释放 agent：从 active-agents.json 移除 + 清理 state 文件 + 写 teardown.jsonl
-  feedback <agent_id> <task_id> <score> <summary>
-                                   记录子 agent 评审反馈到 feedback.jsonl
 """
 
 import os
-from pathlib import Path
 import json
 import sys
 import hashlib
@@ -28,12 +22,7 @@ import time
 from datetime import datetime, timezone, timedelta
 
 tz = timezone(timedelta(hours=8))
-SKILL_ROOT = Path(__file__).resolve().parent.parent
-DATA_DIR = SKILL_ROOT / "data"
-HARNESS_STATE = DATA_DIR / "harness.md"
-ACTIVE_AGENTS_FILE = DATA_DIR / "active-agents.json"
-TEARDOWN_FILE = DATA_DIR / "teardown.jsonl"
-FEEDBACK_FILE = DATA_DIR / "feedback.jsonl"
+HARNESS_STATE = os.path.expanduser("~/.xuanzang/harness.md")
 
 # ─── 风险区定义 ───
 RISK_ZONES = [
@@ -42,7 +31,7 @@ RISK_ZONES = [
     (r'(^|[/\\])(\.ci|\.github/workflows|Jenkinsfile|\.gitlab-ci\.yml)', "🟡 CI 流水线"),
     (r'(^|[/\\])(hidden|private|secret|solution)([/\\]|$)', "🔴 隐藏答案/私密区"),
     (r'(^|[/\\])\.env($|\.)', "🔴 环境密钥"),
-    (r'(^|[/\\])xuanzang-skill[/\\]data[/\\]', "🔴 玄奘 治理资产(本引擎自身)"),
+    (r'\.xuanzang[/\\]', "🔴 玄奘 治理资产(本引擎自身)"),
     (r'(^|[/\\])(\.git[/\\]|\.gitignore|\.gitattributes)', "🟠 版本控制配置"),
     (r'(^|[/\\])\.(ssh|aws|kube)([/\\]|$)', "🔴 敏感配置"),
     (r'(^|[/\\])package-lock\.json$|(^|[/\\])yarn\.lock$|(^|[/\\])pnpm-lock\.yaml$', "🟠 依赖锁文件"),
@@ -78,11 +67,7 @@ def _read_meta():
         content = f.read()
     m = re.search(r"```json\n(.*?)\n```", content, re.DOTALL)
     if m:
-        try:
-            return json.loads(m.group(1))
-        except json.JSONDecodeError:
-            # 正则匹配到非 JSON 内容，回退为初始化空数据
-            return {"contracts": [], "violations": [], "stats": {"total": 0, "passed": 0, "failed": 0, "blocked": 0}}
+        return json.loads(m.group(1))
     return {"contracts": [], "violations": [], "stats": {"total": 0, "passed": 0, "failed": 0, "blocked": 0}}
 
 
@@ -179,8 +164,8 @@ def cmd_contract(name, json_str):
         "gate_result": None,
     }
 
-    # 写入合约文件（优先用户指定 → xuanzang-skill 的 temp/ 子目录）
-    temp_dir = data.get("temp_dir") or str(SKILL_ROOT / "temp")
+    # 写入合约文件
+    temp_dir = data.get("temp_dir") or os.path.join(os.getcwd(), "temp")
     os.makedirs(temp_dir, exist_ok=True)
     contract_path = os.path.join(temp_dir, f"{name}-contract.json")
     with open(contract_path, "w", encoding="utf-8") as f:
@@ -263,15 +248,6 @@ def cmd_scan_risk(contract_path):
     risk_flags = list(set(risk_flags))
 
     has_blocker = any(r["blocked"] for r in file_results)
-    # tampered 合约视为阻断级风险
-    if tampered:
-        has_blocker = True
-        risk_flags.append("🔴 合约已被篡改（完整性校验失败）")
-        file_results.append({
-            "file": contract_path,
-            "risk_zones": ["🔴 合约已被篡改"],
-            "blocked": True,
-        })
 
     result = {
         "files_scanned": len(files_to_scan),
@@ -422,13 +398,12 @@ def cmd_gate(contract_path):
         "detail": f"触碰的风险区: {risk_flags}" if risk_flags else "无风险区触碰",
     })
 
-    # 4. 禁止项自查 — forbidden 为空意味着任务无禁区声明，不扣分
-    # 逻辑：没有禁区 = 任务安全，不应判定为 FAIL。总是通过。
+    # 4. 禁止项自查
     forbidden = contract.get("forbidden", [])
     checks.append({
         "check": "禁止项已声明",
-        "passed": True,
-        "detail": f"已声明 {len(forbidden)} 项禁区" if forbidden else "无禁区声明（任务安全）",
+        "passed": len(forbidden) > 0,
+        "detail": f"已声明 {len(forbidden)} 项禁区" if forbidden else "未声明禁区",
     })
 
     all_passed = all(c["passed"] for c in checks)
@@ -489,192 +464,9 @@ def cmd_report(contract_path):
     }
 
 
-# ─── active-agents.json 管理 ─────────────────────────────
-
-def _ensure_active_agents():
-    os.makedirs(os.path.dirname(ACTIVE_AGENTS_FILE), exist_ok=True)
-    if not os.path.exists(ACTIVE_AGENTS_FILE):
-        with open(ACTIVE_AGENTS_FILE, "w", encoding="utf-8") as f:
-            json.dump({"agents": []}, f, ensure_ascii=False, indent=2)
-
-
-def cmd_register(agent_id, json_str):
-    """注册 agent 到 active-agents.json。"""
-    _ensure_active_agents()
-    try:
-        extra = json.loads(json_str)
-    except json.JSONDecodeError as e:
-        return {"error": f"JSON 解析失败: {e}"}
-
-    with open(ACTIVE_AGENTS_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    agent_entry = {
-        "agent_id": agent_id,
-        "registered_at": datetime.now(tz).isoformat(),
-    }
-    agent_entry.update(extra)
-
-    data.setdefault("agents", []).append(agent_entry)
-
-    with open(ACTIVE_AGENTS_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-
-    return {
-        "registered": True,
-        "agent_id": agent_id,
-        "total": len(data["agents"]),
-    }
-
-
-def cmd_status():
-    """列出当前活跃 agent 列表，计算 TTL 并标记 stale。"""
-    _ensure_active_agents()
-    with open(ACTIVE_AGENTS_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    agents = data.get("agents", [])
-    now = datetime.now(tz)
-    ttl_minutes = 30
-    active = []
-    stale = []
-    for a in agents:
-        reg_at = a.get("registered_at", "")
-        age_minutes = None
-        is_stale = False
-        if reg_at:
-            try:
-                reg_dt = datetime.fromisoformat(reg_at)
-                age_minutes = round((now - reg_dt).total_seconds() / 60, 1)
-                is_stale = age_minutes > ttl_minutes
-            except (ValueError, TypeError):
-                pass
-        entry = {**a, "age_minutes": age_minutes, "stale": is_stale}
-        if is_stale:
-            stale.append(entry)
-        else:
-            active.append(entry)
-    return {
-        "active_agents": active,
-        "stale_agents": stale,
-        "total": len(agents),
-        "ttl_minutes": ttl_minutes,
-    }
-
-
-def cmd_cleanup(agent_id, reason=""):
-    """
-    释放 agent：从 active-agents.json 移除 + 清理 state 文件 + 写入 teardown.jsonl。
-    调用时机：子 agent 完成/失败后，由 P8 调度层执行。
-    """
-    _ensure_active_agents()
-    with open(ACTIVE_AGENTS_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    agents = data.get("agents", [])
-    removed = [a for a in agents if a.get("agent_id") == agent_id]
-    agents = [a for a in agents if a.get("agent_id") != agent_id]
-    data["agents"] = agents
-
-    with open(ACTIVE_AGENTS_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-
-    # 清理 state 文件（如果存在）
-    state_file = DATA_DIR / f"agent-{agent_id}.state"
-    state_existed = state_file.exists()
-    if state_existed:
-        state_file.unlink()
-
-    # 写 teardown.jsonl（格式与 SKILL.md R6 一致）
-    teardown_entry = {
-        "agent": agent_id,
-        "reason": reason,
-        "ts": datetime.now(tz).isoformat(),
-    }
-    if removed:
-        teardown_entry["registered_at"] = removed[0].get("registered_at")
-    with open(TEARDOWN_FILE, "a", encoding="utf-8") as f:
-        f.write(json.dumps(teardown_entry, ensure_ascii=False) + "\n")
-
-    cmd_prune_logs(keep=200)  # 自动裁剪
-
-    return {
-        "cleanup": True,
-        "agent_id": agent_id,
-        "reason": reason,
-        "remaining": len(agents),
-        "state_cleaned": state_existed,
-    }
-
-
-def cmd_feedback(agent_id, task_id, score, summary):
-    """
-    记录子 agent 评审反馈到 feedback.jsonl。
-    score: 0-100 整数，"excellent"/"pass"/"fail" 等字符串也会接受。
-    格式与 SKILL.md §多角色派发标准 声明一致：
-    {"ts":"ISO8601","agent_id":"p7-xxx","task_id":"xxx","score":0-100,"summary":"一句话"}
-    """
-    try:
-        os.makedirs(os.path.dirname(FEEDBACK_FILE), exist_ok=True)
-        try:
-            score_val = int(score)
-        except ValueError:
-            score_val = score
-        entry = {
-            "ts": datetime.now(tz).isoformat(),
-            "agent_id": agent_id,
-            "task_id": task_id,
-            "score": score_val,
-            "summary": summary,
-        }
-        with open(FEEDBACK_FILE, "a", encoding="utf-8") as f:
-            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
-        cmd_prune_logs(keep=200)  # 自动裁剪
-        return {"feedback": True, "agent_id": agent_id, "score": score_val}
-    except (OSError, IOError) as e:
-        return {"feedback": False, "error": f"写入失败: {e}"}
-
-
-def cmd_teardown_all(reason="cascade"):
-    """级联释放全部活跃 agent（P10→P9→P8→P7 的脚本侧实现）。"""
-    _ensure_active_agents()
-    with open(ACTIVE_AGENTS_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    agents = data.get("agents", [])
-    results = []
-    for a in agents:
-        agent_id = a.get("agent_id", "")
-        r = cmd_cleanup(agent_id, reason)
-        results.append(r)
-    return {
-        "teardown_all": True,
-        "released": len(results),
-        "reason": reason,
-        "results": results,
-    }
-
-
-def cmd_prune_logs(keep=200):
-    """裁剪 teardown.jsonl 和 feedback.jsonl 只保留最近 N 条"""
-    result = {"keep": keep}
-    for label, fpath in [("teardown", TEARDOWN_FILE), ("feedback", FEEDBACK_FILE)]:
-        if not fpath.exists():
-            result[label] = {"pruned": 0, "remaining": 0}
-            continue
-        with open(fpath, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-        total = len(lines)
-        if total <= keep:
-            result[label] = {"pruned": 0, "remaining": total}
-        else:
-            with open(fpath, "w", encoding="utf-8") as f:
-                f.writelines(lines[-keep:])
-            result[label] = {"pruned": total - keep, "remaining": keep}
-    return result
-
-
 def main():
     if len(sys.argv) < 2:
-        print(json.dumps({"error": "用法: python harness-engine.py <load|contract|scan-risk|verify|gate|report|register|status|cleanup|feedback|teardown-all|prune-logs> [args...]"}, ensure_ascii=False))
+        print(json.dumps({"error": "用法: python harness-engine.py <load|contract|scan-risk|verify|gate|report> [args...]"}, ensure_ascii=False))
         sys.exit(1)
 
     command = sys.argv[1]
@@ -706,31 +498,8 @@ def main():
             print(json.dumps({"error": "用法: python harness-engine.py report <contract_path>"}, ensure_ascii=False))
             sys.exit(1)
         result = cmd_report(sys.argv[2])
-    elif command == "register":
-        if len(sys.argv) < 4:
-            print(json.dumps({"error": "用法: python harness-engine.py register <agent_id> '<json_string>'"}, ensure_ascii=False))
-            sys.exit(1)
-        result = cmd_register(sys.argv[2], sys.argv[3])
-    elif command == "status":
-        result = cmd_status()
-    elif command == "cleanup":
-        if len(sys.argv) < 4:
-            print(json.dumps({"error": "用法: python harness-engine.py cleanup <agent_id> <reason>"}, ensure_ascii=False))
-            sys.exit(1)
-        result = cmd_cleanup(sys.argv[2], sys.argv[3])
-    elif command == "feedback":
-        if len(sys.argv) < 6:
-            print(json.dumps({"error": "用法: python harness-engine.py feedback <agent_id> <task_id> <score> <summary>"}, ensure_ascii=False))
-            sys.exit(1)
-        result = cmd_feedback(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
-    elif command == "teardown-all":
-        reason = sys.argv[2] if len(sys.argv) > 2 else "cascade"
-        result = cmd_teardown_all(reason)
-    elif command == "prune-logs":
-        keep = int(sys.argv[2]) if len(sys.argv) > 2 else 200
-        result = cmd_prune_logs(keep)
     else:
-        print(json.dumps({"error": f"未知命令: {command}。可用: load / contract / scan-risk / verify / gate / report / register / status / cleanup / feedback / teardown-all / prune-logs"}, ensure_ascii=False))
+        print(json.dumps({"error": f"未知命令: {command}。可用: load / contract / scan-risk / verify / gate / report"}, ensure_ascii=False))
         sys.exit(1)
 
     print(json.dumps(result, ensure_ascii=False, indent=2))

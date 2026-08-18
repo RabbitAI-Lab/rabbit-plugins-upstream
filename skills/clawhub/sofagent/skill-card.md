@@ -1,43 +1,57 @@
-## Description: <br>
-Sofagent adds an agent governance and reflection layer for keeping work scoped, checking risky actions, recording task outcomes, and preserving lessons across sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SKILL helps frontline deployment engineers structure enterprise AI rollouts by constraining agent behavior, auditing changes, capturing lessons, and guiding phased discovery, quantification, delivery, and handoff.
 
-## Publisher: <br>
-[kongfangxun](https://clawhub.ai/user/kongfangxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kongfangxun](https://clawhub.ai/user/kongfangxun)
 
-## Use Case: <br>
-Developers and agent operators use this skill to add task gates, scope checks, reflection, and closure routines to agent sessions that involve complex work, multi-file changes, or higher-risk operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill changes agent behavior across a session and may influence task acceptance, execution, and closure decisions. <br>
-Mitigation: Review the injected guidance before deployment and confirm that its gates, escalation behavior, and completion criteria match the intended operating policy. <br>
-Risk: The skill may read and write persistent .sofagent memory, task logs, evaluation records, orchestration records, and knowledge files. <br>
-Mitigation: Set retention and sanitization controls before use on sensitive projects, and periodically review stored records for unnecessary or sensitive data. <br>
-Risk: The security scan notes under-scoped external and local tooling behavior. <br>
-Mitigation: Review configured scripts and disable or pin live GitHub or template lookup when supply-chain control is required. <br>
+## Use Case:
 
+Employees, deployment engineers, and enterprise AI teams use this skill to diagnose business workflows, define AI deployment nodes, apply agent operating constraints, run compliance-oriented audits, and preserve lessons for future sessions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kongfangxun/skills/sofagent) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/kongfangxun) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline bash or PowerShell commands and local file-record templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update .sofagent memory, task logs, evaluation records, orchestration records, and knowledge files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.9 (source: frontmatter and server release evidence) <br>
+Risk: Persistent business-knowledge storage and session reuse can expose sensitive enterprise information if logs, audit reports, ontology data, or summaries are retained too broadly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm storage locations before installation, enable redaction, set retention limits, and avoid use where broad local business data should not be indexed or reused.
+
+Risk: Automation, deployment actions, subagents, and operational controls have loose scoping and may perform impactful local actions.
+
+Mitigation: Require explicit approval for install, activation, USB writes, snapshot or model changes, and daemon sustain mode before running them in a real enterprise environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kongfangxun/skills/sofagent)
+- [Agency Agents Chinese templates](https://github.com/jnMetaCode/agency-agents-zh)
+- [Minimal-change engineer template](https://github.com/jnMetaCode/agency-agents-zh/blob/main/engineering/engineering-minimal-change-engineer.md)
+- [Code reviewer template](https://github.com/jnMetaCode/agency-agents-zh/blob/main/engineering/engineering-code-reviewer.md)
+- [DeepAgentsJS](https://github.com/langchain-ai/deepagentsjs)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with command examples and configuration/file-writing instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide agents to create or update local knowledge, audit, task, and configuration files.]
+
+## Skill Version(s):
+
+1.3.6 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

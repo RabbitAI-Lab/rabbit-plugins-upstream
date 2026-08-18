@@ -1,58 +1,69 @@
-## Description: <br>
-HyperFrames Core provides the composition contract for building one renderable HyperFrames project, covering DOM timing attributes, clips, tracks, sub-compositions, variables, media playback, deterministic rendering, validation, Tailwind projects, and plan formats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The HyperFrames Core skill guides agents in building one renderable HyperFrames video project with correct composition structure, timing attributes, media handling, deterministic rendering rules, validation, and related plan formats.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and engineers use this skill to author, edit, and validate HyperFrames video compositions and related planning files. It helps agents produce renderable HTML/CSS/JavaScript compositions, storyboard and script documents, validation commands, and project-scoped guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to edit composition, storyboard, brief, and script files and run local HyperFrames commands. <br>
-Mitigation: Use it only in intended HyperFrames projects, review project-scoped changes, and run the documented HyperFrames validation commands before rendering or delivery. <br>
-Risk: Non-Latin or multilingual visible text can render incorrectly if the project lacks matching shipped fonts. <br>
-Mitigation: Provide project-shipped fonts with the needed script coverage before rendering non-Latin text. <br>
-Risk: Incorrect timing, media ownership, duplicate IDs, or non-deterministic animation behavior can produce blank, inconsistent, or misleading video frames. <br>
-Mitigation: Follow the deterministic-rendering, media, and ID rules in the references and verify output with snapshots, preview, and HyperFrames checks. <br>
+## Use Case:
 
+Developers and agents use this skill to create, edit, validate, and render HyperFrames HTML video compositions, including storyboard, script, brief, sub-composition, Tailwind, and frame-worker workflows.
 
-## Reference(s): <br>
-- [Minimal Composition](references/minimal-composition.md) <br>
-- [Composition Patterns](references/composition-patterns.md) <br>
-- [Data Attributes Reference](references/data-attributes.md) <br>
-- [Tracks and Clips](references/tracks-and-clips.md) <br>
-- [Sub-Compositions](references/sub-compositions.md) <br>
-- [Variables and Media](references/variables-and-media.md) <br>
-- [Determinism, Animation Runtime, and Layout](references/determinism-rules.md) <br>
-- [Full-Screen Motion Pattern](references/full-screen-motion.md) <br>
-- [Storyboard Format](references/storyboard-format.md) <br>
-- [The Review Loop](references/review-loop.md) <br>
-- [Production Loop](references/production-loop.md) <br>
-- [Brief Contract](references/brief-contract.md) <br>
-- [Brief Format](references/brief-format.md) <br>
-- [Script Format](references/script-format.md) <br>
-- [Subagent Dispatch](references/subagent-dispatch.md) <br>
-- [Frame Worker Core Contract](references/frame-worker-core.md) <br>
-- [HyperFrames Tailwind](references/tailwind.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with HTML, CSS, JavaScript, JSON, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce project-scoped HyperFrames composition files, planning documents, frame-worker packets, and validation commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server release evidence) <br>
+Risk: A modified or third-party STORYBOARD.md can cause frame-packet generation to include unintended local Markdown content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use this skill with trusted HyperFrames projects, verify blueprint values against the expected catalog, and inspect generated .hyperframes/frame-packets before dispatch or rendering.
+
+Risk: Subagent or background worker execution can proceed beyond the user's intended scope if it is not explicitly controlled.
+
+Mitigation: Keep subagent/background worker use and final rendering as explicit user-controlled actions.
+
+## Reference(s):
+
+- [Brief contract](references/brief-contract.md)
+- [Brief format](references/brief-format.md)
+- [Composition Patterns](references/composition-patterns.md)
+- [Data Attributes Reference](references/data-attributes.md)
+- [Determinism, Animation Runtime, and Layout](references/determinism-rules.md)
+- [Frame worker core contract](references/frame-worker-core.md)
+- [Full-Screen Motion Pattern](references/full-screen-motion.md)
+- [Minimal Composition](references/minimal-composition.md)
+- [Production loop](references/production-loop.md)
+- [Review loop](references/review-loop.md)
+- [SCRIPT.md format](references/script-format.md)
+- [Storyboard format](references/storyboard-format.md)
+- [Sub-Compositions](references/sub-compositions.md)
+- [Subagent dispatch](references/subagent-dispatch.md)
+- [HyperFrames Tailwind](references/tailwind.md)
+- [Tracks and Clips](references/tracks-and-clips.md)
+- [Variables and Media](references/variables-and-media.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline code, HTML snippets, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce HyperFrames composition files, project plan files, validation commands, and bounded frame-packet guidance.]
+
+## Skill Version(s):
+
+1.0.17 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

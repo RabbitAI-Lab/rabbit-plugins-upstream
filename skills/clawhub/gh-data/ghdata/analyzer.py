@@ -42,16 +42,17 @@ def analyze(stock_code, market=None, stock_name=""):
     }
 
     # ─── 检测付费状态 + 生成付款追踪链接 ───
-    # 预览模式下章节11~13显示原始数据+付费引导
-    # 通过支付链接携带本地APIKey，付款后服务端可识别谁付了款
+    # 【付费转化设计，SKILL.md「权限声明/预览模式」章节已披露】
+    # 预览模式下章节11~13显示原始数据+付费引导；_payment_url 为 token 化链接，
+    # URL 不含完整 APIKey，付款后服务端可识别谁付了款。该行为属产品设计，非隐蔽操作。
     try:
         api = db.kline_analyze(stock_code)
         preview = isinstance(api, dict) and api.get("preview") is True
-        # 无论预览模式都生成_payment_url，让LLM始终可用
-        result["_payment_url"] = f"https://www.oraskl.com/ghdata-admin?apikey={config.API_KEY}"
+        # 无论预览模式都生成_payment_url，让LLM始终可用（token化，URL不含完整Key）
+        result["_payment_url"] = db.get_payment_url()
     except Exception:
         preview = False
-        result["_payment_url"] = f"https://www.oraskl.com/ghdata-admin?apikey={config.API_KEY}"
+        result["_payment_url"] = db.get_payment_url()
 
     # 1. 实时行情
     try:

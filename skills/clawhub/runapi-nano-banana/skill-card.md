@@ -1,48 +1,61 @@
-## Description: <br>
-Generate and edit images with Nano Banana through RunAPI, using the CLI for one-off tasks and SDKs for application or backend integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images with Nano Banana through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to generate or edit Nano Banana images through RunAPI. It guides one-off CLI usage and SDK-based application integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may call RunAPI over the network and use a RunAPI API key or saved CLI login. <br>
-Mitigation: Install it only when RunAPI-backed Nano Banana generation or editing is intended, and keep RUNAPI_API_KEY scoped to RunAPI. <br>
-Risk: RunAPI-generated file URLs are temporary and should not be treated as long-term assets. <br>
-Mitigation: Download generated images or other returned files into durable storage within the documented seven-day window. <br>
-Risk: Using the CLI as a production integration layer can create brittle application behavior. <br>
-Mitigation: Use the documented language SDK path for app, backend, worker, service, webhook, or other production workflow integration. <br>
+## Use Case:
 
+Developers, creators, and agent users use this skill to generate, edit, or transform images with Nano Banana through RunAPI. It supports one-off CLI workflows and SDK integration workflows for applications or backends.
 
-## Reference(s): <br>
-- [Nano Banana model documentation](https://runapi.ai/models/nano-banana.md) <br>
-- [RunAPI Google provider page](https://runapi.ai/providers/google.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [RunAPI Nano Banana homepage](https://runapi.ai/models/nano-banana) <br>
-- [RunAPI CLI skill](https://github.com/runapi-ai/cli-skill) <br>
-- [Publisher profile](https://clawhub.ai/user/runapi-ai) <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-nano-banana) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and SDK package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide use of the runapi CLI, RunAPI SDKs, RUNAPI_API_KEY, and temporary generated file URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.9 (source: server release evidence) <br>
+Risk: Using the skill can make authenticated RunAPI network calls, submit paid tasks, upload request media, and download generated images.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when RunAPI image generation or editing is intended, confirm authentication, review pricing, and avoid sensitive images unless the user accepts sending them to RunAPI.
+
+Risk: A service task can succeed without every requested media deliverable being usable.
+
+Mitigation: Validate the complete response, download every requested media deliverable, and require each file to be non-empty with the expected MIME type before reporting completion.
+
+Risk: RunAPI CLI help and API reference contracts may change or disagree.
+
+Mitigation: Inspect the current installed command help and API reference before building requests, and stop on contract mismatches instead of guessing.
+
+## Reference(s):
+
+- [RunAPI Nano Banana model page](https://runapi.ai/models/nano-banana)
+- [RunAPI Nano Banana model documentation](https://runapi.ai/models/nano-banana.md)
+- [RunAPI Google provider documentation](https://runapi.ai/providers/google.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI Nano Banana SDK](https://github.com/runapi-ai/nano-banana-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON request and response artifacts, and optional SDK integration code.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or verify downloaded image files when a RunAPI task returns media deliverables.]
+
+## Skill Version(s):
+
+0.2.11 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

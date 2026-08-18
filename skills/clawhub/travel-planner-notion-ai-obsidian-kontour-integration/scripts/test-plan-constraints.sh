@@ -229,6 +229,16 @@ assert polish["validation_summary"] == {
         },
     ],
 }, polish
+assert polish["operator_review_queue"]["audience"] == "operator", polish
+assert polish["operator_review_queue"]["format"] == "prioritized review queue", polish
+assert polish["operator_review_queue"]["recommended_focus"] == "Fushimi Inari", polish
+assert polish["operator_review_queue"]["queue_status"] == "blocked", polish
+assert [item["owner"] for item in polish["operator_review_queue"]["items"]] == ["user", "operator", "operator", "operator", "operator"], polish
+assert [item["severity"] for item in polish["operator_review_queue"]["items"]] == ["blocker", "warning", "required", "required", "advisory"], polish
+assert polish["operator_review_queue"]["items"][0]["task"] == "What type of stay should I assume?", polish
+assert polish["operator_review_queue"]["items"][1]["source"] == "risk_fallbacks[0]", polish
+assert polish["operator_review_queue"]["items"][2]["task"] == "Run live viability checks for Fushimi Inari", polish
+assert "[user/blocker] What type of stay should I assume?" in polish["operator_review_queue"]["copy_text"], polish
 assert polish["constraint_compliance_card"] == {
     "audience": "operator",
     "format": "constraint compliance checklist",
@@ -715,6 +725,12 @@ assert compare_polish["operator_digest"]["lines"] == [
 ], compare_polish
 assert compare_polish["operator_digest"]["markdown"].startswith("- Decision: Recommend Bangkok"), compare_polish
 assert compare_polish["operator_digest"]["routing_hint"].startswith("Ask the traveler first"), compare_polish
+assert compare_polish["operator_review_queue"]["recommended_focus"] == "Bangkok", compare_polish
+assert compare_polish["operator_review_queue"]["queue_status"] == "blocked", compare_polish
+assert [item["source"] for item in compare_polish["operator_review_queue"]["items"]] == ["open_decisions[0]", "destination_comparison.recommended_option", "constraint_details"], compare_polish
+assert compare_polish["operator_review_queue"]["items"][0]["severity"] == "blocker", compare_polish
+assert compare_polish["operator_review_queue"]["items"][1]["task"] == "Run live viability checks for Bangkok", compare_polish
+assert "[operator/required] Run live viability checks for Bangkok" in compare_polish["operator_review_queue"]["copy_text"], compare_polish
 assert compare_polish["reply_options"] == [
     {"label": "Answer destination", "value": "clarify:destination", "owner": "user", "reason": "Resolves the highest-priority missing decision before itinerary expansion."},
     {"label": "Compare around Bangkok", "value": "expand:comparison", "owner": "operator", "reason": "Turns the recommendation into a side-by-side user explanation with tradeoffs."},

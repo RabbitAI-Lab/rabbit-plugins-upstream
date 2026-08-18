@@ -1,44 +1,63 @@
-## Description: <br>
-Searches Kalodata-backed TikTok Shop video leaderboards and retrieves a selected video's engagement, GMV, advertising, creator, and product metrics by videoId. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Kalodata TikTok Shop video leaderboards and retrieves detailed video engagement, sales, GPM, and advertising metrics by video ID.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External commerce analysts, marketplace operators, and agent users use this skill to find high-performing TikTok shoppable videos and inspect a selected video's engagement, sales, advertising, and creator metrics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses credentials and external network calls. <br>
-Mitigation: Use only a trusted gateway configuration and a scoped Kalodata or LinkFox API key. <br>
-Risk: API responses and metadata may be written locally by default. <br>
-Mitigation: Run the skill in an appropriate workspace and review stored response files before sharing or committing project contents. <br>
-Risk: Each lookup consumes paid credits. <br>
-Mitigation: Confirm the requested region, date range, page, and videoId before making additional calls. <br>
+## Use Case:
 
+External e-commerce operators and analysts use this skill to discover high-performing TikTok Shop videos and inspect one selected video's performance metrics. It is also used to guide authentication, credit balance, and payment steps needed to call the LinkFox/Kalodata APIs.
 
-## Reference(s): <br>
-- [Kalodata-TikTok视频搜索与详情 API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-kalodata-tiktok-video) <br>
-- [Publisher Profile](https://clawhub.ai/user/linkfox-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses saved to local files, with stdout JSON or concise summaries depending on response size.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses authenticated external requests, 24-hour parameter caching, and session-organized local response files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: The skill sends API requests, account onboarding data, billing actions, and automatic feedback to LinkFox/Kalodata endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that data sharing is acceptable, and avoid submitting phone, SMS, or payment details unless registration or recharge is intended.
+
+Risk: Environment URL overrides can redirect requests away from the default LinkFox services.
+
+Mitigation: Use URL override environment variables only for destinations you control and trust.
+
+Risk: Saved response files may contain sensitive business analytics, creator identifiers, or billing-related outputs.
+
+Mitigation: Treat files in local linkfox output directories as sensitive business data and avoid sharing them broadly.
+
+Risk: Each API call consumes paid credits, and repeated searches or detail lookups can create unexpected costs.
+
+Mitigation: Warn users before additional paid calls, reuse the 24-hour cache when appropriate, and avoid automatic parameter probing after failures.
+
+## Reference(s):
+
+- [Kalodata TikTok Video API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-kalodata-tiktok-video)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON, files, guidance]
+
+**Output Format:** [Markdown guidance with JSON API responses, shell commands, and saved JSON data files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts call LinkFox/Kalodata APIs, cache matching requests for 24 hours, and save full responses under a local linkfox session directory.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

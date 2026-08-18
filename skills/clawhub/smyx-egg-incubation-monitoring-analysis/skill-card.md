@@ -1,44 +1,64 @@
-## Description: <br>
-Analyzes turtle or snake egg images or videos to identify shell, vascular, embryo, and quality signals and produce incubation monitoring reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes turtle or snake egg images, videos, or URLs to assess shell color, blood streaks, vascular signs, embryo silhouette, development stage, and incubation report outputs.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External reptile breeders, farm operators, and hobbyist keepers use this skill to review turtle or snake egg media, monitor fertilization and development signals, and retrieve incubation progress reports. The skill can support smart incubator or breeding-management workflows where users still make final husbandry decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Egg photos, videos, URLs, and history queries are sent to cloud services for analysis and report lookup. <br>
-Mitigation: Use only media intended for this service, avoid unrelated sensitive content, and confirm users understand that analysis and history retrieval rely on external services. <br>
-Risk: The skill creates or reuses a local identity and stores account tokens locally. <br>
-Mitigation: Review local token storage and account handling before deployment, and prefer a release that clearly documents identity creation, token retention, and user consent. <br>
-Risk: Incorrect incubation classifications could affect husbandry decisions. <br>
-Mitigation: Treat visual classifications as decision support and require users to combine reports with species guidance, temperature and humidity logs, and professional reptile breeding judgment. <br>
+## Use Case:
 
+External reptile breeders, smart incubator operators, and breeding-management app developers use this skill to analyze turtle or snake egg media and produce incubation progress reports. It is intended to support visual monitoring, historical report review, and non-invasive recommendations rather than replace species-specific husbandry manuals or professional review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-egg-incubation-monitoring-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON-like structured report text with optional report links and Markdown tables for history queries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include incubation stage classifications, alert levels, recommended actions, disclaimers, and report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+Risk: Cloud processing can send uploaded media or supplied URLs to remote service endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with media that is appropriate for the configured service, and verify the API URLs before running the skill.
+
+Risk: The skill can associate analyses with an internal identity and query historical reports.
+
+Mitigation: Review account handling and report-retention expectations before installation, especially in shared workspaces.
+
+Risk: Local workspace storage can contain account records or remote tokens.
+
+Mitigation: Treat the workspace data directory as sensitive and remove stored credentials or records when decommissioning the skill.
+
+Risk: Visual egg-development classifications may be wrong or unreliable when image quality, lighting, species context, or handling history is incomplete.
+
+Mitigation: Require clear non-invasive imagery, species and incubation context, and human review before acting on important breeding decisions.
+
+## Reference(s):
+
+- [Skill API documentation](references/api_doc.md)
+- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill page](https://clawhub.ai/18072937735/skills/smyx-egg-incubation-monitoring-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [analysis, markdown, json, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON analysis report with classifications, alert level, recommended actions, and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save output to a file and can query cloud-hosted historical incubation reports.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence; artifact frontmatter lists 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

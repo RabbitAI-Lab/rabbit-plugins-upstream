@@ -1,6 +1,6 @@
 ---
 name: mddoc
-version: 1.0.6
+version: 1.0.9
 description: 将 Markdown 内容转换为特定学术格式的 Word 文档 (.docx)。当用户想要将 Markdown 文件、粘贴的 Markdown 文本转换为格式化的 docx 文档时使用，特别是学术论文、技术报告、毕业论文等需要严格格式要求的场景。触发词包括：/mddoc、markdown转docx、md转word、生成格式化文档、学术格式转换。即使用户只说"把这个转成word"而内容是Markdown，也应使用此技能。
 ---
 
@@ -9,22 +9,19 @@ description: 将 Markdown 内容转换为特定学术格式的 Word 文档 (.doc
 ## 快速开始
 
 ```bash
-# 首次使用：创建虚拟环境并安装依赖
-python3 -m venv .venv
-source .venv/bin/activate
-pip install python-docx Pillow requests mistune
+# 1) 环境自检与准备（一次性，幂等）：创建/复用专用虚拟环境，仅缺失依赖时才安装
+#    专用环境位置：~/.cache/mddocx/venv（Windows: %LOCALAPPDATA%/mddocx/venv）
+python3 <skill-path>/scripts/setup_env.py
+#    输出最后一行 `READY <python>` 即就绪解释器路径
 
-# 后续使用：直接激活虚拟环境
-source .venv/bin/activate
-
-# 转换 Markdown 文件 → 输出到同目录
-python <skill-path>/scripts/md2docx.py paper.md
+# 2) 转换 Markdown 文件 → 输出到同目录（环境就绪后无需再检查）
+~/.cache/mddocx/venv/bin/python <skill-path>/scripts/md2docx.py paper.md
 
 # 指定输出路径
-python <skill-path>/scripts/md2docx.py paper.md -o /path/to/output.docx
+~/.cache/mddocx/venv/bin/python <skill-path>/scripts/md2docx.py paper.md -o /path/to/output.docx
 
 # 直接转换粘贴的文本
-python <skill-path>/scripts/md2docx.py --text "# 标题\n\n正文内容" -o out.docx
+~/.cache/mddocx/venv/bin/python <skill-path>/scripts/md2docx.py --text "# 标题\n\n正文内容" -o out.docx
 ```
 
 其中 `<skill-path>` = `/home/kkk/.claude/skills/mddoc`
@@ -32,11 +29,10 @@ python <skill-path>/scripts/md2docx.py --text "# 标题\n\n正文内容" -o out.
 ## 工作流程
 
 1. **读取输入** — 若用户粘贴 Markdown 文本则直接读取；若用户提供文件路径（含 `@` 引用）则读取该文件
-2. **检查并准备环境** — 按以下顺序检查，命中即跳过后续步骤：
-   - 若 `.venv/bin/python` 存在且能 `import docx, PIL, requests, mistune` → 直接使用
-   - 若 `.venv` 存在但缺依赖 → `source .venv/bin/activate && pip install python-docx Pillow requests mistune`
-   - 若 `.venv` 不存在 → `python3 -m venv .venv && source .venv/bin/activate && pip install python-docx Pillow requests mistune`
-3. **执行转换** — 优先使用内置脚本 `scripts/md2docx.py`；若 Markdown 结构特殊则参照下方格式规范编写自定义脚本
+2. **检查并准备环境** — 专用虚拟环境固定于 `~/.cache/mddocx/venv`（Windows: `%LOCALAPPDATA%/mddocx/venv`）：
+   - 若该环境存在且能 `import docx, PIL, requests, mistune` → 直接转换，不安装
+   - 环境缺失或依赖缺失时，才运行 `python3 <skill-path>/scripts/setup_env.py` 创建/安装（幂等，仅缺失时安装）
+3. **执行转换** — 用专用解释器 `~/.cache/mddocx/venv/bin/python` 运行内置脚本 `scripts/md2docx.py`；若 Markdown 结构特殊则参照下方格式规范编写自定义脚本
 4. **确定输出** — 文件路径输入→同目录；粘贴内容→当前目录；文件名=「题目.docx」（题目从第一个 `# 标题` 提取；若无 `#` 标题则使用输入文件名，`--text` 模式为「未命名文档.docx」）
 5. **验证** — 检查 outline level、图片嵌入、页眉、分页符
 
@@ -283,22 +279,29 @@ for cell in tb.rows[0].cells:
     btm.set(qn('w:space'),'0'); btm.set(qn('w:color'),'000000')
     tcB.append(btm); tcPr.append(tcB)
 
-# 表头行 — 居中、9pt、无缩进
-for j, txt in enumerate(header):
-    c = tb.rows[0].cells[j]; c.paragraphs[0].clear()
-    c.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
-    run = c.paragraphs[0].add_run(txt)
-    set_cn_font(run, '宋体', size_pt=9)
-    c.paragraphs[0].paragraph_format.first_line_indent = Pt(0)
+# header/data 为 mistune table_cell['children'] AST 列表（取 cell.get('children', [])）
+# 单元格内 **加粗**、*斜体*、$公式$ 由 walk_inline 渲染，公式字号跟随 9pt
+# 表头行 — 居中、9pt、垂直居中、无缩进
+for j, children in enumerate(header):
+    c = tb.rows[0].cells[j]
+    c.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+    p = c.paragraphs[0]; p.clear()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.first_line_indent = Pt(0)
+    p.paragraph_format.line_spacing = 1.0
+    _set_para_mark_size(p, 9)
+    walk_inline(p, children, '宋体', size_pt=9)
 
-# 数据行 — 左对齐、9pt、无缩进
+# 数据行 — 左对齐、9pt、垂直居中、无缩进
 for i, row in enumerate(data):
-    for j, txt in enumerate(row):
-        c = tb.rows[i+1].cells[j]; c.paragraphs[0].clear()
-        c.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
-        run = c.paragraphs[0].add_run(txt)
-        set_cn_font(run, '宋体', size_pt=9)
-        c.paragraphs[0].paragraph_format.first_line_indent = Pt(0)
+    for j, children in enumerate(row):
+        c = tb.rows[i+1].cells[j]
+        c.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+        p = c.paragraphs[0]; p.clear()
+        p.paragraph_format.first_line_indent = Pt(0)
+        p.paragraph_format.line_spacing = 1.0
+        _set_para_mark_size(p, 9)
+        walk_inline(p, children, '宋体', size_pt=9)
 
 add_empty(doc)  # 表格下方空一行
 ```
@@ -319,32 +322,135 @@ set_cn_font(r2, '黑体', size_pt=9)
 
 ### 列表
 
-有序列表用（1）、（2）、（3）序号；无序列表用 • 符号。按正文格式（首行缩进Pt(21)）。
+使用 Word 原生编号/项目符号（`w:numPr` XML），支持富文本 inline 和多级嵌套。列表段落遵守正文格式（首行缩进 Pt(21)、1.3 倍行距）。
 
 ```python
-# 有序列表 — (1)、(2)、(3) 格式
-for idx, item in enumerate(items, 1):
+# 有序列表 — numId=50, 多级格式: 1. → a) → i.
+# 无序列表 — numId=51, 多级符号: • → ◦ → ▪
+for item in list_node['children']:
     p = doc.add_paragraph()
-    p.paragraph_format.first_line_indent = Pt(21)
-    run = p.add_run(f'（{idx}）{item}')
-    set_cn_font(run, '宋体', size_pt=10.5)
+    p.paragraph_format.first_line_indent = Pt(21)  # 同正文
+    p.paragraph_format.line_spacing = 1.3
+    # 设置 Word 原生编号
+    numPr = OxmlElement('w:numPr')
+    ilvl = OxmlElement('w:ilvl'); ilvl.set(qn('w:val'), str(depth))
+    numId = OxmlElement('w:numId'); numId.set(qn('w:val'), '50')  # 50=有序, 51=无序
+    numPr.append(ilvl); numPr.append(numId)
+    p._element.get_or_add_pPr().append(numPr)
+    # walk_inline 渲染富文本（支持 **加粗**、*斜体*、$公式$）
+    walk_inline(p, item['children'][0]['children'], '宋体', size_pt=10.5)
+    # 嵌套子列表：递归调用 render_list(doc, child, depth+1)
 
-# 无序列表
-for item in items:
-    p = doc.add_paragraph()
-    p.paragraph_format.first_line_indent = Pt(21)
-    run = p.add_run(f'• {item}')
-    set_cn_font(run, '宋体', size_pt=10.5)
+# 列表编号定义（生成文档时需在 numbering.xml 中注入抽象编号）
+_ensure_list_numbering_defs(doc)  # 定义 numId=50(有序) 和 numId=51(无序)，各 3 级
 ```
+
+列表编号自动跨页连续（同一 `numId` 的段落由 Word 维护编号序列）。
+
+### 内联格式（加粗、斜体、行内公式等）
+
+段落内使用 `walk_inline()` 递归遍历 mistune inline AST，生成带格式的 runs 和 OMML 元素。格式状态（加粗/斜体/下划线）递归下传，同时作用于文本 run 和公式 OMML：
+
+```python
+def walk_inline(paragraph, children, base_cn='宋体', base_en='Times New Roman',
+                base_size=10.5, bold=False, italic=False, underline=False):
+    for child in children:
+        ct = child['type']
+        if ct == 'text':
+            if child.get('raw', ''):
+                run = paragraph.add_run(child['raw'])
+                set_cn_font(run, base_cn, en_font=base_en, size_pt=base_size, bold=bold)
+                if italic: run.font.italic = True
+                if underline: run.font.underline = True
+        elif ct == 'strong':  # **加粗** — 递归传 bold=True
+            walk_inline(paragraph, child['children'], base_cn, base_en, base_size,
+                        bold=True, italic=italic, underline=underline)
+        elif ct == 'emphasis':  # *斜体* — 递归传 italic=True
+            walk_inline(paragraph, child['children'], base_cn, base_en, base_size,
+                        bold=bold, italic=True, underline=underline)
+        elif ct == 'link':  # 链接 — 递归传 underline=True
+            walk_inline(paragraph, child['children'], base_cn, base_en, base_size,
+                        bold=bold, italic=italic, underline=True)
+        elif ct == 'inline_math':  # $...$
+            omml = latex_to_omml(child['raw'], display=False)
+            paragraph._element.append(apply_omml_style(omml, bold, italic))
+        elif ct == 'codespan':  # `代码`
+            run = paragraph.add_run(child.get('raw', ''))
+            set_cn_font(run, base_cn, en_font=base_en, size_pt=base_size)
+
+
+def apply_omml_style(omml, bold=False, italic=False):
+    """为公式内所有 m:r 添加 <m:sty m:val="b/i/bi"/>，使 **$x$**、*$x$* 嵌套公式生效"""
+    if not (bold or italic):
+        return omml
+    val = ('b' if bold else '') + ('i' if italic else '')
+    NSM = '{http://schemas.openxmlformats.org/officeDocument/2006/math}'
+    for r in omml.iter(f'{NSM}r'):
+        rPr = r.find(f'{NSM}rPr')
+        if rPr is None:
+            rPr = OxmlElement('m:rPr')
+            r.insert(0, rPr)
+        if rPr.find(f'{NSM}sty') is None:
+            sty = OxmlElement('m:sty')
+            sty.set(qn('m:val'), val)
+            rPr.append(sty)
+    return omml
+
+
+def _set_para_mark_size(paragraph, size_pt):
+    """设置段落标记字号（半磅），供行内公式 OMML 继承（如 9 → 9pt）"""
+    pPr = paragraph._element.get_or_add_pPr()
+    rPr = pPr.find(qn('w:rPr'))
+    if rPr is None:
+        rPr = OxmlElement('w:rPr')
+        pPr.append(rPr)
+    sz = rPr.find(qn('w:sz'))
+    if sz is None:
+        sz = OxmlElement('w:sz')
+        rPr.append(sz)
+    sz.set(qn('w:val'), str(int(size_pt * 2)))
+```
+
+`***加粗斜体***` → AST: `emphasis > strong` → 递归自然处理为 bold+italic。嵌套在加粗/斜体里的公式（`**$x$**`、`*$x$*`）由 `apply_omml_style()` 保留并上样式。
+
+### 标题样式清理
+
+生成前覆盖 Word 内置 Heading 1-6 样式，防止默认蓝色/Cambria/加粗干扰：
+
+```python
+def override_builtin_heading_styles(doc):
+    specs = {
+        'Heading 1': ('黑体', 16, True, WD_ALIGN_PARAGRAPH.CENTER),
+        'Heading 2': ('黑体', 14, False, WD_ALIGN_PARAGRAPH.LEFT),
+        'Heading 3': ('宋体', 12, False, WD_ALIGN_PARAGRAPH.LEFT),
+        'Heading 4': ('宋体', 10.5, False, WD_ALIGN_PARAGRAPH.LEFT),
+        'Heading 5': ('宋体', 10.5, False, WD_ALIGN_PARAGRAPH.LEFT),
+        'Heading 6': ('宋体', 10.5, False, WD_ALIGN_PARAGRAPH.LEFT),
+    }
+    for name, (cn_font, size_pt, bold, align) in specs.items():
+        style = doc.styles[name]
+        style.font.size = Pt(size_pt)
+        style.font.bold = bold
+        style.font.color.rgb = None  # 黑色
+        style.font.italic = False
+        style.font.underline = False
+        rPr = style.element.get_or_add_rPr()
+        rFonts = rPr.find(qn('w:rFonts'))
+        if rFonts is None:
+            rFonts = OxmlElement('w:rFonts'); rPr.insert(0, rFonts)
+        rFonts.set(qn('w:eastAsia'), cn_font)
+```
+
+调用位置：`generate_docx()` 中 `doc = Document()` 后立即执行。
 
 ### 代码块
 
-Times New Roman 字体、五号、左缩进、灰色背景(#D9D9D9)、上下各空一行。
+Times New Roman 字体、五号、无首行缩进、灰色背景(#D9D9D9)、上下各空一行。
 
 ```python
 add_empty(doc)
 p = doc.add_paragraph()
-p.paragraph_format.left_indent = Cm(1)
+set_first_line_indent_chars(p, 0)  # 代码块无首行缩进
 # 灰色背景
 pPr = p._element.get_or_add_pPr()
 shd = OxmlElement('w:shd')
@@ -514,23 +620,28 @@ set_cn_font(run_cont, '宋体', size_pt=10.5)
 - [ ] 表格：三线表(顶/底粗、表头格底线细、数据行无线)、居中
 - [ ] 表头行：居中、9pt、无缩进、tblHeader重复
 - [ ] 表题：10.5pt宋体加粗居中、表格上方
-- [ ] 列表：有序用（1）（2）（3）、无序用•、首行缩进
-- [ ] 代码块：Times New Roman、左缩进、灰色背景#D9D9D9、上下各空一行
+- [ ] 列表：有序用 Word 原生编号、无序用 Word 原生黑圆点、悬挂缩进、支持富文本 inline
+- [ ] 代码块：Times New Roman、无缩进、灰色背景#D9D9D9、上下各空一行
+- [ ] 加粗/斜体/加粗斜体：`**文本**` bold、`*文本*` italic、`***文本***` bold+italic
+- [ ] 分隔线：`---`（3+ 连续 `-`） → 分页符
 - [ ] 页眉：左"xxxxx"右题目、9pt黑体
 - [ ] 行内公式：$...$ 嵌于段落、OMML格式、WPS/Word可渲染
 - [ ] 行间公式：$$...$$ OMML居中、上下各空一行、编号(章-序号)右对齐、括号宋体数字TNR
 - [ ] 页码："第×页 共×页"、页脚边距1cm
+- [ ] 标题样式：Heading 1-6 已覆盖为学术格式（黑体/宋体、黑色）
+- [ ] 分隔线：`---` → 分页符
 - [ ] 续表：跨页表头重复、"续表xx"右上标注
 - [ ] 页边距：左3cm 右2cm 上2cm 下2cm
 - [ ] 全部黑色、无额外参数
 
 ## 注意事项
 
+- **解析器**：Markdown 解析使用 mistune 3.x（`renderer='ast'`），配合 `table` 和 `math` 插件。所有 block/inline 格式由 mistune AST 提供，不再手写解析器
 - **第一个 `#` 是题目**（不设 outline），后续 `#` 是一级标题（outline_level=1）；若无 `#` 标题仍可正常生成文档
 - **图片尺寸用 `Cm()`，不手算 EMU** — `add_picture(width=Cm(x))` 自动转换
 - **图片下载必设 User-Agent** — 否则 CDN/Wikipedia 返回 400
 - **图题编号自动生成** — alt text 作为描述文字，图/表编号独立逐章编序
-- **表题识别** — 表格前含"表"字的段落作为表题
+- **表题识别** — 表格前含"表"字的段落自动作为表题（lookahead 跳过空行），不渲染为独立段落
 - **outline_level 用 `set_outline()` 设置** — `paragraph_format.outline_level` 在部分python-docx版本不生效，统一用XML方式写入；读取时也从XML读取
 - **公式编号自动生成** — 图/表/公式独立逐章编序，编号格式统一为 `章-序号`
 - **不添加**：目录页、背景色

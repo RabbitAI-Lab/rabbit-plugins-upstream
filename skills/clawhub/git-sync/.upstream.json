@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/git-sync",
   "slug": "git-sync",
   "ownerHandle": null,
-  "version": "2.32.0",
-  "updatedAt": 1784623695194,
-  "contentHash": "6d2482524ef571268228ab9272dd3448f652d0cd935e736e176990bbe25721a7",
-  "fetchedAt": "2026-07-26T18:09:15.347Z"
+  "version": "2.45.7",
+  "updatedAt": 1786879567374,
+  "contentHash": "c10bf2e6b9f1c7ca4249a6ebd22c17490263179044b87dae1e7e66752e1232bd",
+  "fetchedAt": "2026-08-18T08:12:16.975Z"
 }

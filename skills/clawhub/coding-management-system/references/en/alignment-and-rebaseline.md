@@ -1,65 +1,50 @@
-# Alignment, Rebaseline, Audit, And Roadmap
+# Alignment, Rebaseline, Audit, And Finish Line 2.1
 
-Use the lightest review that answers the current question. Keep direction checks, target changes, and whole-project audits separate.
+Use one authority mode per pass. Direction checks do not silently rewrite targets, and audits do not sign acceptance.
 
-## Direction Alignment
+## Lightweight Stage Alignment
 
-At every stage, ask:
+At every stage record:
 
-1. What changed for the user or operator?
-2. Which target and acceptance criterion does it serve?
-3. Did assumptions, scope, or architecture move?
-4. Is the next action still the highest-value authorized action?
-5. What evidence could disprove premature completion?
+1. the user or operator change;
+2. the target and criterion served;
+3. scope, assumption, or architecture movement;
+4. evidence against premature completion;
+5. whether the next action is still the highest-value authorized action.
 
-Record a formal verdict after stages 3, 6, and 10:
+Keep this to a concise Loop delta.
+
+## Formal Alignment
+
+Run after stages 3, 6, and 10, and immediately when:
+
+- the authority fingerprint changes;
+- estimated scope grows by more than 20 percent;
+- a primary user flow fails behind green automatic checks;
+- the target link cannot be stated in one sentence;
+- the same failure signature produces no new evidence twice;
+- the same material risk is carried twice;
+- three consecutive final decisions are `Accepted With Risk`;
+- a new idea affects target, Non-Goals, protected architecture/data, release, or production behavior.
+
+Verdicts:
 
 - `Aligned - Continue`
-- `Aligned - Ready for Review`
+- `Aligned - Ready for Independent Acceptance`
 - `At Risk`
 - `Locally Compliant, Globally Misaligned`
 - `Owner Review Required`
 - `Blocked`
 
-Trigger alignment immediately when:
-
-- two consecutive core or QA failures occur;
-- scope grows by more than 20 percent;
-- a primary user flow fails despite green automatic checks;
-- the agent cannot explain the target link in one sentence;
-- a new idea changes Core Target, Non-Goals, architecture, data, release, or production behavior;
-- the result is technically correct but not useful for the original purpose.
-
-Direction Alignment does not rewrite the target.
+Formal alignment may resize, split, pause, or request an Owner decision. It does not authorize a target change by itself.
 
 ## Idea Intake
 
-Keep new ideas in one decision or backlog section. Classify each:
-
-- `Observation`
-- `Clarification`
-- `Improvement Candidate`
-- `Scope Change`
-- `Core Target Change`
-- `Conflict`
-
-Only a clarification that does not change acceptance or Non-Goals may affect active work immediately. Improvement candidates wait for the next planning boundary. Scope, target, and conflict items require Controller or Owner review.
+Classify new ideas as `Observation`, `Clarification`, `Improvement Candidate`, `Scope Change`, `Core Target Change`, or `Conflict`. Only a clarification that leaves acceptance and Non-Goals unchanged may enter active work immediately.
 
 ## Target Rebaseline
 
-Use when a new requirement may change target, Non-Goals, architecture/data boundaries, release strategy, or current acceptance.
-
-Compare:
-
-- previous target and reason;
-- new requirement;
-- user value gained;
-- current work invalidated or preserved;
-- acceptance changes;
-- cost and risk;
-- Owner decisions.
-
-Decision:
+Compare the previous target, new request, user value, work preserved or invalidated, acceptance changes, cost, risk, and Owner decisions. Return one of:
 
 - `No Target Change`
 - `Clarification Only`
@@ -68,31 +53,12 @@ Decision:
 - `Owner Decision Required`
 - `Reject / Defer`
 
-Do not code or dispatch during the rebaseline pass. After Owner approval, update target and acceptance, then run a separate Planning/Dispatch mode.
+Do not implement or dispatch during the rebaseline pass. After approval, update authority, regenerate the fingerprint, then run a separate Planning/Dispatch pass.
 
 ## Whole-Project Audit
 
-Whole-project audit is read-only by default. It may score architecture, code quality, delivery completeness, evidence health, risk debt, and governance consistency. It must not sign the latest delivery, rewrite target, or dispatch implementation.
+Audit is read-only by default and may use a broader explicit context budget. Separate verified facts, missing evidence, risk debt, contradictory claims, local success without global value, and Owner decisions. Contract consistency, artifact presence, and runtime usability must be scored separately.
 
-Separate:
+## Finish Line
 
-- verified current facts;
-- stale or missing evidence;
-- accepted risk debt;
-- misleading completion claims;
-- local success that does not support the global goal;
-- Owner decisions.
-
-## Roadmap And Finish Line
-
-Define:
-
-- original outcome;
-- current user-visible capability;
-- current-stage Must Finish;
-- Not Required Now;
-- work to stop expanding;
-- next independently valuable delivery;
-- explicit finish evidence.
-
-Do not make every small repair a Milestone. A Milestone closes only after acceptance of a coherent capability.
+Define the original outcome, current user-visible capability, Must Finish, Not Required Now, work to stop expanding, next independently valuable delivery, and final evidence. A Milestone closes only when a coherent capability receives the required acceptance.

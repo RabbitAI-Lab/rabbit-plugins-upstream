@@ -37,7 +37,7 @@
 - Preferred region, if any
 - Preferred or excluded varieties
 - Existing vineyard relationship
-- Co-creation inventory checked
+- Co-creation parcels checked
 - Vintage measurements available
 - Blend flexibility
 

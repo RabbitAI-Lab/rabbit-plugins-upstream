@@ -1,47 +1,67 @@
-## Description: <br>
-Searches and filters TikTok Shop product data using FastMoss, including keyword search, market and category filters, commission ranges, sales metrics, creator counts, and sorting across 15 supported markets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+FastMoss-TikTok商品搜索 helps agents search and filter TikTok Shop product data across supported markets using keyword, category, shop type, sales, GMV, commission, creator-count, and sorting filters.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketers, and e-commerce operators use this skill to search TikTok Shop products, compare sales and GMV metrics, identify commission opportunities, and inspect influencer-driven product performance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and can make paid external product-search requests. <br>
-Mitigation: Use a scoped API key where possible, control the relevant environment variables, and confirm cost-sensitive searches before repeated calls. <br>
-Risk: Full API responses are retained locally and may contain product, shop, or query details from the user's task. <br>
-Mitigation: Run the skill only in workspaces where local output paths are acceptable, review saved files, and remove retained responses when they are no longer needed. <br>
-Risk: Feedback behavior can send user sentiment or issue details to a separate LinkFox feedback endpoint. <br>
-Mitigation: Avoid sending sensitive feedback content and disable or review feedback-related use in sensitive workspaces. <br>
-Risk: Onboarding instructions may prompt installation of a related LinkFox onboarding skill when authentication or credits fail. <br>
-Mitigation: Review any additional skill before installation and require explicit user approval before downloading or installing related materials. <br>
+## Use Case:
 
+External sellers, marketers, and e-commerce analysts use this skill to retrieve TikTok Shop product-search results from FastMoss and compare product performance signals such as sales, GMV, commission rate, rating, shop type, and creator promotion counts.
 
-## Reference(s): <br>
-- [FastMoss-TikTok商品搜索 API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-fastmoss-product-search) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
-- [LinkFox API Key Guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries and tables, shell commands, and JSON API results saved to local files or printed to stdout] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are retained locally; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill uses a paid LinkFox/FastMoss integration and each product search can consume credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm expected credit cost with the user before repeated searches, pagination, or retries that could create additional charges.
+
+Risk: Authentication and onboarding flows may ask for a phone number, handle SMS login, generate an API key, and create payment orders.
+
+Mitigation: Use the onboarding flow only after explicit user consent, verify the selected plan and payment method, and do not poll payment status unless the user asks.
+
+Risk: API keys may be printed or stored in persistent environment configuration.
+
+Mitigation: Avoid persistent plaintext API-key storage on shared or managed machines and rotate credentials if they are exposed in logs or terminal history.
+
+Risk: Full product-search API responses are stored locally and may contain commercial research data.
+
+Mitigation: Review the local linkfox session output directory, avoid committing saved responses, and delete stored responses when they are no longer needed.
+
+Risk: The skill can send feedback to LinkFox when it detects praise, dissatisfaction, mismatch, or improvement opportunities.
+
+Mitigation: Keep feedback concise, avoid sensitive user or business data, and disclose feedback submission when it is material to the user's workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-fastmoss-product-search)
+- [FastMoss-TikTok商品搜索 API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries, JSON product-search responses, and setup or billing commands when authentication or credits are required.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may save full API responses under a local linkfox session directory and print a summary for large responses.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
