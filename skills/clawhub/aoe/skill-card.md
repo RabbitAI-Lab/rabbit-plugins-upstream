@@ -1,41 +1,54 @@
-## Description: <br>
-Manage AI coding agent sessions via Agent of Empires (aoe). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage AI coding agent sessions via Agent of Empires (aoe).
 
-## Publisher: <br>
-[njbrake](https://clawhub.ai/user/njbrake) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[njbrake](https://clawhub.ai/user/njbrake)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to launch, organize, monitor, and inspect AI coding-agent sessions running through Agent of Empires and tmux. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reduced-oversight launch options can skip normal agent approval prompts. <br>
-Mitigation: Review the skill before installation if agents should operate only with explicit approvals, and use reduced-oversight examples only in disposable or tightly sandboxed workspaces. <br>
-Risk: Forceful worktree deletion can remove local work. <br>
-Mitigation: Check git state and confirm the worktree contains nothing needed before using forceful worktree deletion. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to launch, organize, monitor, and capture output from AI coding agent sessions in tmux using aoe.
 
-## Reference(s): <br>
-- [Agent of Empires project homepage](https://github.com/agent-of-empires/agent-of-empires) <br>
-- [ClawHub skill page](https://clawhub.ai/njbrake/skills/aoe) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the aoe and tmux binaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.13.1 (source: server release evidence) <br>
+Risk: The skill includes examples that skip permission prompts or use force deletion, which can remove worktrees or reduce execution safeguards.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before execution, keep normal permission prompts enabled by default, and treat --force, cleanup, delete, and --delete-worktree operations as destructive.
+
+Risk: Autonomous agent sessions can modify project files or produce incorrect code without direct supervision.
+
+Mitigation: Run agents in sandboxed or disposable worktrees when possible and review captured session output and file changes before merging.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/njbrake/skills/aoe)
+- [Agent of Empires homepage](https://github.com/agent-of-empires/agent-of-empires)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline bash code blocks and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires aoe and tmux binaries.]
+
+## Skill Version(s):
+
+1.14.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

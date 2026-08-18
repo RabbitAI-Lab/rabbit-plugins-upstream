@@ -1,47 +1,30 @@
-# Examples
+# Examples 2.1
 
-## Small Standalone Repair
+## Autonomous CMS Prompt
 
-Goal: Fix one reproducible export defect.
+User:
 
-- Size: Small
-- Governance: Lite
-- Stage: baseline/reproduction, repair, regression, functional export check
-- Files: Active Packet and Loop Runs
-- Completion: self-accept only after automatic and exported-artifact evidence pass
+```text
+Follow CMS rules. Controller dispatches, Developer implements, QC verifies, and continue autonomously. Files inside this project may be changed; files outside it must not be changed or deleted.
+```
 
-Do not create a Program or Milestone.
+Interpretation:
 
-## Medium Governed Feature
+- use `autonomy_mode: Bounded`;
+- map QC to Stage Reviewer;
+- use `acceptance_mode: Layered`;
+- resolve project root and deny outside writes;
+- continue through authorized stages and repairs;
+- stop Standard/Full at independent acceptance.
 
-Goal: Add one user workflow spanning API and UI.
+## Stage Failure
 
-- Size: Medium
-- Governance: Standard
-- Stages 1-3: baseline and vertical slice
-- Stage 3: alignment check
-- Stages 4-6: integration and primary user flow
-- Stage 6: alignment check
-- Final: `Ready for Review`; independent QA decides acceptance
+Focused API test fails. Developer records a failure signature, narrows it to one validation branch, repairs that branch, reruns focused and affected regression, then Stage Reviewer checks raw evidence. Keep the same Packet and Work Order.
 
-Do not mark accepted from Developer evidence alone.
+## Full Suite Timeout
 
-## Long Run Starts Drifting
+Shard for diagnosis and resource isolation. Do not call the gate passed. If sharded acceptance is desired, Controller/Owner must formally change the criterion and authority fingerprint.
 
-At stage 6, tests pass but the delivered workflow no longer solves the Owner's original problem.
+## Contract Delivery
 
-- Set alignment recommendation to `Locally Compliant, Globally Misaligned`.
-- Stop feature expansion.
-- Preserve local evidence.
-- Ask governance to compare the original outcome, current behavior, and new assumptions.
-- Continue only after alignment or rebaseline.
-
-## Repeated Failure
-
-Two loops fail the same core check without narrowing the cause.
-
-- Stop broad edits.
-- Record failed commands and evidence.
-- Set `Needs Fix` when a bounded diagnostic action exists.
-- Set `Blocked` when environment or authority is missing.
-- Do not reset as a new Milestone.
+Types and schemas validate. Report `Contract Complete`, not "the product feature works". Runtime acceptance requires a separately classified runtime criterion and functional evidence.

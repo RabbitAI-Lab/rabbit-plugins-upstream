@@ -6,8 +6,6 @@
 
 ---
 
-
-
 - 1. 审计总览与流程
 - 2. 快速健康检查（5分钟诊断）
 - 3. 账户结构审计
@@ -33,9 +31,9 @@
 
 ## Contents / 何时 Read
 
-| 文件 | 何时 Read |
-| ---- | --------- |
-| [`google-ads-account-audit-quick.md`](google-ads-account-audit-quick.md) | 5 分钟健康检查、常见问题速查、CLI 审计命令序列 |
-| [`google-ads-account-audit-structure.md`](google-ads-account-audit-structure.md) | 账户结构、转化追踪、出价策略审计 |
-| [`google-ads-account-audit-assets.md`](google-ads-account-audit-assets.md) | 关键词/创意/地域设备/落地页/预算/竞争态势 |
-| [`google-ads-account-audit-report.md`](google-ads-account-audit-report.md) | 撰写审计报告章节（Critical/Warning/Opportunity） |
+| 文件                                                                             | 何时 Read                                        |
+| -------------------------------------------------------------------------------- | ------------------------------------------------ |
+| [`google-ads-account-audit-quick.md`](google-ads-account-audit-quick.md)         | 5 分钟健康检查、常见问题速查、CLI 审计命令序列   |
+| [`google-ads-account-audit-structure.md`](google-ads-account-audit-structure.md) | 账户结构、转化追踪、出价策略审计                 |
+| [`google-ads-account-audit-assets.md`](google-ads-account-audit-assets.md)       | 关键词/创意/地域设备/落地页/预算/竞争态势        |
+| [`google-ads-account-audit-report.md`](google-ads-account-audit-report.md)       | 撰写审计报告章节（Critical/Warning/Opportunity） |

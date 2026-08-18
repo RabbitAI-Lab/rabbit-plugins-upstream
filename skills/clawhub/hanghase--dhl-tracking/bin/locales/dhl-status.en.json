@@ -1,0 +1,30 @@
+{
+  "_meta": {
+    "description": "Top-20 common DHL shipment status strings (English source) translated to German. Applied during show/refresh when locale=de.",
+    "source": "https://www.dhl.de (DE)",
+    "fallback": "identity"
+  },
+  "The shipment has been handed over to DHL.": "Die Sendung wurde an DHL uebergeben.",
+  "The instruction data for this shipment have been provided by the sender to DHL electronically": "Die Sendungsdaten wurden vom Absender elektronisch an DHL uebermittelt.",
+  "The shipment has been processed in the parcel center of origin": "Die Sendung wurde im Paketzentrum des Absenders verarbeitet.",
+  "The shipment has been processed in the parcel center": "Die Sendung wurde im Paketzentrum verarbeitet.",
+  "The shipment is on its way to a DHL parcel center": "Die Sendung ist auf dem Weg zu einem DHL-Paketzentrum.",
+  "The shipment has arrived at the parcel center": "Die Sendung ist im Paketzentrum angekommen.",
+  "The shipment arrived in the region of recipient and will be transported to the delivery base in the next step.": "Die Sendung ist in der Region des Empfaengers angekommen und wird im naechsten Schritt zur Zustellbasis transportiert.",
+  "The shipment is being transported to the delivery base.": "Die Sendung wird zur Zustellbasis transportiert.",
+  "The shipment has reached the delivery base.": "Die Sendung hat die Zustellbasis erreicht.",
+  "The shipment is being loaded for delivery.": "Die Sendung wird fuer die Zustellung verladen.",
+  "The shipment is out for delivery.": "Die Sendung ist in der Zustellung.",
+  "The shipment has been delivered.": "Die Sendung wurde zugestellt.",
+  "The shipment was successfully delivered.": "Die Sendung wurde erfolgreich zugestellt.",
+  "The shipment has been picked up by the recipient.": "Die Sendung wurde vom Empfaenger abgeholt.",
+  "Storage based on requested delivery day (order by the recipient)": "Lagerung basierend auf dem gewuenschten Zustelltag (vom Empfaenger bestellt).",
+  "The shipment is being stored at the delivery depot because a specific delivery day has been requested (order by the recipient).": "Die Sendung wird im Zustelldepot gelagert, weil ein bestimmter Zustelltag gewuenscht wurde (vom Empfaenger bestellt).",
+  "The preferred day delivery on {0} was ordered by Recipient..": "Die Wunschtag-Zustellung am {0} wurde vom Empfaenger bestellt.",
+  "The shipment is held at the depot for the recipient.": "Die Sendung wird im Depot fuer den Empfaenger bereitgehalten.",
+  "A new preferred delivery day has been set.": "Ein neuer Wunsch-Zustelltag wurde festgelegt.",
+  "The recipient has been notified.": "Der Empfaenger wurde benachrichtigt.",
+  "The shipment could not be delivered.": "Die Sendung konnte nicht zugestellt werden.",
+  "The shipment is being returned to the sender.": "Die Sendung wird an den Absender zurueckgesendet.",
+  "The shipment has been returned to the sender.": "Die Sendung wurde an den Absender zurueckgesendet."
+}

@@ -1,7 +1,7 @@
 ---
 name: multi-agent-pro
-description: 支持多Agent流水线编排（采集→分析→报告），基于DAG调度实现跨技能状态共享、错误重试、断点续传、执行报告生成、HTML甘特图可视化、人工审批节点、历史执行对比、硬件自适应参数和版本更新提醒。v4.0新增动态工作流：if-else条件分支、switch多路分支、for-each动态节点生成、while-loop循环重试。AI即编排器，脚本提供基础设施。
-version: 4.0.0
+description: 支持多Agent流水线编排（采集→分析→报告），基于DAG调度实现跨技能状态共享、错误重断点续传、执行报告生成、HTML甘特图可视化、人工审批节点（含超时策略）、历史执行对比、硬件自适应参数和版本更新提醒。v5.2新增统一可视化命令（visualize --format md|html|both）、Self-Improving循环（evaluate节点质量评估+自动重试）、节点级成本追踪（token/cost聚合）。AI即编排器，脚本提供基础设施。
+version: 5.2.0
 ---
 
 
@@ -147,8 +147,10 @@ python scripts/dag_validator.py pipeline.json
 | `switch` | 多路分支节点，按值命中 `cases` / `default` 分支 |
 | `for-each` | 动态节点生成，按列表长度展开子节点并汇合 |
 | `while-loop` | 循环重试节点，条件为真则回环重跑循环体 |
+| `pipeline` | 子流水线引用节点，调用已注册的子流水线隔离执行 |
+| `evaluate` | Self-Improving 质量评估节点，质量不达标自动重试目标节点 |
 
-> 动态控制流完整示例见 `templates/control_flow_template.json`；控制流节点由引擎自动求值执行，不交给 AI。
+> 动态控制流完整示例见 `templates/control_flow_template.json`；子流水线示例见 `templates/sub_pipeline_template.json` 和 `templates/parent_pipeline_template.json`；控制流节点由引擎自动求值执行，不交给 AI。
 
 **验证内容**：
 1. Schema 结构完整性（必填字段检查）
@@ -442,6 +444,213 @@ python scripts/condition_evaluator.py "nodes.a.output_data.score >= 60" '{"nodes
 
 ---
 
+### 模块 13：子流水线嵌套 / 模块化复用 🆕
+
+**功能**：突破单一流水线限制，支持将已有流水线作为"积木"组装到更大的流水线中，实现逻辑复用。
+
+**触发词**：`子流水线`、`模块化`、`流水线引用`、`pipeline 节点`
+
+**核心概念**：
+- **子流水线注册**：将可复用的流水线（如"发票处理""合同审查"）注册到注册表
+- **pipeline 节点**：在父流水线中放置 `type: pipeline` 节点，引用子流水线
+- **参数传递**：父→子传参，子→父映射输出
+- **上下文隔离**：子流水线独立执行，内部节点不污染父上下文
+
+**1) 注册子流水线**
+
+```bash
+python scripts/pipeline_registry.py register templates/sub_pipeline_template.json --name invoice-pipeline-v1 --version 1.0
+```
+
+**2) 查看已注册的子流水线**
+
+```bash
+python scripts/pipeline_registry.py list
+```
+
+**3) 在父流水线中引用子流水线**
+
+```json
+{
+  "id": "invoice_step",
+  "name": "发票处理（子流水线）",
+  "type": "pipeline",
+  "pipeline_ref": "invoice-pipeline-v1",
+  "params": {
+    "file_path": "nodes.submit.output_data.invoice_file"
+  },
+  "outputs": {
+    "invoice_no": "nodes._terminal_.output_data.invoice_no",
+    "amount": "nodes._terminal_.output_data.amount"
+  },
+  "depends_on": ["submit"]
+}
+```
+
+字段说明：
+- `pipeline_ref`：子流水线注册名（必填）
+- `params`：传递给子流水线的参数（值支持表达式，在父上下文求值）
+- `outputs`：子流水线输出到父上下文的映射（键=父变量名，值=子上下文表达式）
+
+**执行流程**：
+1. 引擎检测到 `pipeline` 节点 → 从注册表加载子流水线
+2. 创建隔离 state 文件（子流水线独立运行）
+3. 用 `params` 表达式求值 → 注入子流水线首节点
+4. 逐步执行子流水线所有节点
+5. 子流水线完成后，用 `outputs` 表达式映射回父节点 `output_data`
+6. 父节点标记 completed，继续下游
+
+**预期效果**：从"每次都从零开始"变成"搭积木式组装"，效率大幅提升。
+
+---
+
+### 模块 14：统一可视化命令 🆕
+
+**功能**：用单一 `visualize` 命令替代原来的 `report` + `gantt` 命令，支持 MD/HTML/三种输出模式。
+
+**触发词**：`可视化`、`生成报告`、`甘特图`、`执行结果'
+
+**可运行命令**：
+
+```bash
+# 同时生成 MD 报告和 HTML 甘特图（默认 both）
+python scripts/orchestrator.py visualize state.json
+
+# 只生成 MD 报告
+python scripts/orchestrator.py visualize state.json --format md
+
+# 只生成 HTML 甘特图
+python scripts/orchestrator.py visualize state.json --format html
+
+# 指定输出路径
+python scripts/orchestrator.py visualize state.json --format both ./my_report
+```
+
+**输出模式**：
+| 模式 | 输出 | 说明 |
+|------|------|------|
+| `md` | `.md` 文件 | Markdown 执行报告（含成本概览） |
+| `html` | `.html` 文件 | HTML 甘特图（颜色编码时间轴） |
+| `both` | `.md` + `.html` | 两者同时生成 |
+
+**成本概览**（当节点包含 cost_data 时自动展示）：
+- 总 Token 消耗
+- 总费用（¥）
+- 节点成本分布表
+
+**向后兼容**：原 `report` 和 `gantt` 命令仍可用（自动映射到 visualize 的 md/html 模式）。
+
+---
+
+### 模块 15：Self-Improving 循环（质量评估 + 自动重试）🆕
+
+**功能**：在流水线中嵌入质量评估节点，当输出质量不达标时自动重跑上游节点，实现"自我改进"。
+
+**触发词**：`质量评估`、`自动重试`、`Self-Improving`、`evaluate 节点`
+
+**节点配置示例**：
+
+```json
+{
+  "id": "quality_check",
+  "type": "evaluate",
+  "quality_expr": "nodes.review.output_data.score >= 80",
+  "retry_targets": ["draft", "review"],
+  "max_eval_rounds": 3,
+  "depends_on": ["review"]
+}
+```
+
+**字段说明**：
+| 字段 | 必填 | 说明 |
+|------|------|------|
+| `quality_expr` | ✅ | 质量表达式（条件求值，AST 白名单） |
+| `retry_targets` | ✅ | 质量不达标时重跑的目标节点 id 列表 |
+| `max_eval_rounds` | ✅ | 最大评估轮次（防死循环） |
+
+**执行流程**：
+1. evaluate 节点完成 → 对 `quality_expr` 求值
+2. 质量达标 → 节点 completed，继续下游
+3. 质量不达标且未达上限 → 重置 `retry_targets` 为 pending，评估节点自身回到 pending，等重跑完再次评估
+4. 质量不达标且已达上限 → 接受当前结果，节点 completed（带警告）
+
+**安全说明**：
+- `max_eval_rounds` 硬上限 1000 轮（防死循环）
+- 评估轮次计数存储在 `eval_round` 字段
+
+---
+
+### 模块 16：执行回放 / Time Travel 🆕
+
+**功能**：在复杂流水线调试时，回到任意历史节点重新执行而不影响下游，大幅提升调试效率。
+
+**触发词**：`快照`、`执行回放`、`Time Travel`、`历史恢复`、`执行对比`
+
+**核心能力**：
+- **快照机制**：每个节点执行完自动保存上下文快照（输入、输出、执行时间、日志）
+- **增量存储**：只保存变化的字段，避免存储膨胀
+- **从快照恢复**：选任意历史快照点，从该点重新执行（上游保持不变，下游用新结果覆盖）
+- **执行对比**：对比两次执行的结果差异，快速定位问题节点
+
+**快照管理命令**：
+
+```bash
+# 列出当前执行的所有快照
+python scripts/orchestrator.py snapshot list state.json
+
+# 查看节点快照详情
+python scripts/orchestrator.py snapshot show state.json node_id
+
+# 从快照恢复（下游节点重置为 pending）
+python scripts/orchestrator.py snapshot restore state.json node_id
+
+# 对比两个节点的快照输出差异
+python scripts/orchestrator.py snapshot diff state.json node_id_1 node_id_2
+```
+
+**存储结构**：
+```
+.snapshots/<execution_id>/
+├── index.json            # 快照索引
+├── snap_<node_id>.json   # 每个节点的快照
+```
+
+**版本标识**：`execution_id`（一次流水线运行）+ `snapshot_id`（每个节点快照）
+
+**安全说明**：快照存储在本地 `.snapshots/` 目录，不上传任何服务器。
+
+---
+
+### 模块 17：成本追踪 🆕
+
+**功能**：自动追踪每个节点的 token 消耗和费用，在可视化报告中展示成本概览。
+
+**触发词**：`成本`、`token`、`费用`、`消耗`
+
+**工作原理**：
+- 节点完成时，如果 `output_data` 包含 `_cost` 字段，自动提取到 `cost_data`
+- `_cost` 字段格式：`{"tokens": 1500, "cost_rmb": 0.003, "model": "gpt-4"}`
+- 报告生成时自动汇总总 token/费用/节点分布
+
+**成本数据格式**：
+
+```json
+{
+  "tokens": 1500,
+  "cost_rmb": 0.003,
+  "model": "gpt-4"
+}
+```
+
+**报告展示**：
+- 总 Token 消耗
+- 总费用（¥）
+- 节点成本分布表（节点 id / Token / 费用 / 模型）
+
+**安全说明**：成本数据仅存储在本地 state.json，不上传任何服务器。
+
+---
+
 ## 统一入口命令速查
 
 ```bash
@@ -463,6 +672,9 @@ python scripts/orchestrator.py status state.json
 # 断点续传
 python scripts/orchestrator.py resume state.json
 
+# 生成可视化（MD/HTML/both）
+python scripts/orchestrator.py visualize state.json --format both
+
 # 生成 Markdown 执行报告
 python scripts/orchestrator.py report state.json
 
@@ -480,6 +692,18 @@ python scripts/orchestrator.py hardware
 
 # 检查更新
 python scripts/orchestrator.py check-update
+
+# 快照管理（执行回放 / Time Travel）
+python scripts/orchestrator.py snapshot list state.json
+python scripts/orchestrator.py snapshot show state.json node_id
+python scripts/orchestrator.py snapshot restore state.json node_id
+python scripts/orchestrator.py snapshot diff state.json node_id_1 node_id_2
+
+# 子流水线注册表
+python scripts/pipeline_registry.py register <pipeline.json> [--name 名称] [--version 1.0]
+python scripts/pipeline_registry.py list
+python scripts/pipeline_registry.py show <name>
+python scripts/pipeline_registry.py validate
 
 # 下游影响分析
 python scripts/orchestrator.py impact state.json node_id
@@ -557,7 +781,7 @@ A: 不会。硬件检测仅读取系统信息（CPU核数、内存大小），�
 | `references/examples.md` | 完整使用示例：3个端到端案例 |
 | `templates/pipeline_dag_template.json` | DAG 定义模板（含人工审批节点示例） |
 | `templates/control_flow_template.json` | 动态控制流模板（condition/switch/for-each/while-loop 完整示例） |
-| `templates/state_schema.json` | 状态文件 JSON Schema 规范 v4.0 |
+| `templates/state_schema.json` | 状态文件 JSON Schema 规范 v5.0 |
 | `tests/test_pipeline.json` | 测试用 DAG（含审批节点，用于自检） |
 | `tests/test_control_flow.json` | 控制流测试 DAG（四类控制节点端到端验证） |
 
@@ -581,6 +805,9 @@ A: 不会。硬件检测仅读取系统信息（CPU核数、内存大小），�
 
 | 版本 | 日期 | 更新内容 |
 |------|------|---------|
+| v5.2.0 | 2026-08-07 | 增加：统一可视化命令 visualize（--format md|html|both），整合执行报告与甘特图为单一入口，消除 report/gantt 命令重复代码；增加：evaluate 控制流节点（Self-Improving 循环），支持质量表达式评估 + 自动重试目标节点 + 最大轮次限制；增加：节点级成本追踪（cost_data 字段），在 complete_node 自动提取 _cost 字段，报告展示总 token/费用/节点分布；增加：HTML 甘特图费用概览区块，展示总消耗与节点成本分布；优化：dag_validator 校验 evaluate 节点字段与 retry_targets 引用完整性；优化：flow_controller 扩展 evaluate 类型调度，复用 while-loop 迭代模式；优化：state_store 持久化 quality_expr/retry_targets/max_eval_rounds 控制流字段 |
+| v5.1.0 | 2026-08-07 | 增加：统一状态恢复子系统 state_recovery，合并断点续传与快照恢复为单一入口，消除两套独立恢复代码；增加：快照保留策略（SNAPSHOT_MAX_AGE_DAYS=7天 / SNAPSHOT_MAX_COUNT=100次 / SNAPSHOT_MAX_SIZE_MB=100MB），按时间+数量+大小三维度自动淘汰旧快照；增加：审批节点超时策略（timeout_seconds + timeout_action），支持超时自动通过/拒绝，避免无人值守场景阻塞；增加：恢复前自动创建检查点（.recovery_checkpoints/），防止误操作不可逆；优化：dag_validator 校验 approval 节点 timeout_seconds 与 timeout_action 字段合法性 |
+| v5.0.0 | 2026-07-13 | 增加：pipeline 子流水线节点，支持将已注册流水线作为模块嵌套到父流水线并实现上下文隔离；增加：pipeline_registry 子流水线注册表，支持注册/列出/查看/校验子流水线；增加：snapshot_store 快照存储机制，首个快照存完整数据后续只存增量 diff；增加：snapshot 子命令（list/show/restore/diff），支持从任意历史节点恢复下游重跑的 Time Travel 执行回放；增加：sub_pipeline_template 与 parent_pipeline_template 示例模板展示子流水线注册与引用；优化：flow_controller 扩展 pipeline 类型调度，自动加载子流水线并注入参数映射输出；优化：state_store 节点完成自动保存快照，持久化 pipeline_ref/params/outputs 控制流字段；优化：dag_validator 校验 pipeline 节点字段与 pipeline_ref 引用完整性 |
 | v4.0.0 | 2026-07-13 | 增加：condition 条件分支节点，按表达式走 on_true/on_false 分支；增加：switch 多路分支节点，按值命中 cases/default；增加：for-each 动态节点生成，按列表长度展开子节点并自动重挂汇合依赖；增加：while-loop 循环重试节点，条件为真回环重跑循环体并设迭代上限防死循环；增加：condition_evaluator 表达式求值器，采用 AST 白名单禁止函数调用防注入；增加：flow_controller 控制流引擎自动求值路由；增加：control_flow_template 与 test_control_flow 示例及测试；优化：dag_validator 校验控制流节点字段与分支引用；优化：控制流求值失败标记终态失败避免调度器反复重取 |
 | v3.0.0 | 2026-07-13 | 增加：HTML甘特图可视化模块，支持颜色编码的DAG执行时间轴；增加：人工审批节点（type: approval），可在关键步骤暂停等用户确认；增加：历史执行对比功能，自动保存最近10次执行摘要并对比耗时/成功率/重试次数；增加：硬件自适应模块，自动检测CPU/内存并推荐最优流水线参数；增加：版本更新提醒功能，对比GitHub远程版本；增加：禁止文件类型清单；优化：all_done判定逻辑，支持skipped节点视为完成；优化：calc_duration提取为独立函数供历史模块复用 |
 | v2.0.1 | 2026-07-08 | 修复：状态文件并发写入potential问题；优化：atomic write安全性 |

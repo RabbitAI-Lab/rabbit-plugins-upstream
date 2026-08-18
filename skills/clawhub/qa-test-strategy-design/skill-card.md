@@ -1,39 +1,53 @@
-## Description: <br>
-Helps QA teams design layered, risk-based test strategies for new projects, iterations, refactors, and urgent fixes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teams design layered QA test strategies for new projects, iterations, refactors, or urgent fixes by defining risk-based scope, testing methods, entry and exit criteria, resource allocation, and tool choices.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill to turn risk assessments and requirement analysis into an actionable test strategy covering scope, layered test approach, resource allocation, and entry and exit criteria. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can be triggered by broad Chinese testing-planning phrases, which may produce a test strategy when the request is not actually about QA strategy. <br>
-Mitigation: Confirm that the user is asking for test strategy design before relying on the generated plan. <br>
-Risk: Generated release, CI/CD, and testing recommendations could be mistaken for approved operational actions. <br>
-Mitigation: Treat outputs as planning guidance only and review them before any release decision, pipeline change, or production action. <br>
+## Use Case:
 
+QA engineers, developers, and project teams use this skill to turn requirements, risk assessments, schedule constraints, and resource limits into a practical testing strategy. It produces guidance for what to test, what not to test, and why.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown strategy document with structured sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs risk matrices, strategy IDs, requirement traceability, scope definitions, test approach guidance, resource plans, and entry and exit criteria.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server evidence) <br>
+Risk: The skill may read workspace project materials while helping plan QA strategy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Installers should review activation scope and narrow trigger language if broad workspace analysis is not appropriate.
+
+Risk: The skill includes release assessment and CI/CD pipeline strategy references that could be mistaken for operational instructions.
+
+Mitigation: Treat generated recommendations as planning guidance and require authorized review before making release or pipeline changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-strategy-design)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown testing strategy document with risk matrix, layered test plan, scope definition, method selection, resource allocation, and entry/exit criteria.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Each strategy is expected to include traceability IDs for the strategy and related requirements.]
+
+## Skill Version(s):
+
+1.7.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

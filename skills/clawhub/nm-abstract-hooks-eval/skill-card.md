@@ -1,42 +1,54 @@
-## Description: <br>
-Evaluate hook security, performance, and SDK compliance for Claude/OpenClaw hook audits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluate hook security, performance, and SDK compliance for audits.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agent-tooling reviewers use this skill to audit Claude/OpenClaw hooks for security, performance, compliance, reliability, and maintainability before adopting or deploying hook behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Example hook guidance may be adapted into real hooks that observe or influence agent actions. <br>
-Mitigation: Review and scan any implemented hook code separately before deployment. <br>
-Risk: Broad trigger words may activate the skill during generic security or performance discussions. <br>
-Mitigation: Use the guidance in contexts where hook auditing is relevant and confirm applicability before acting on recommendations. <br>
+## Use Case:
 
+Developers and engineers use this skill to evaluate Claude Code hooks for security, performance, SDK compliance, reliability, and maintainability before deployment or audit review.
 
-## Reference(s): <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract) <br>
-- [SDK Hook Types](modules/sdk-hook-types.md) <br>
-- [Hook Evaluation Criteria](modules/evaluation-criteria.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with command examples and scoring criteria] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no installed executable behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The skill may activate on broad hook, security, or performance wording outside a specific hook-audit task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the audit scope before applying its guidance and ignore it for unrelated security or performance work.
+
+Risk: The artifact contains reference command examples, but the reviewed release is documentation-only and does not provide an executable scanner.
+
+Mitigation: Treat command examples as workflow guidance and verify any available commands with their help output before use.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-abstract-hooks-eval)
+- [Project Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with tables, code examples, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only evaluation framework; it does not execute scans or install hooks by itself.]
+
+## Skill Version(s):
+
+1.9.18 (source: release evidence; artifact frontmatter states 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

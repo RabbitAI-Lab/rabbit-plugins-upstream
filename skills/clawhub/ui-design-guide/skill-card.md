@@ -1,39 +1,54 @@
-## Description: <br>
-Use when users need visual direction, interface hierarchy, layout decisions, design specifications, or prototypes before implementing a Web or mini program UI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when users need visual direction, interface hierarchy, layout decisions, design specifications, or prototypes before implementing a Web or mini program UI.
 
-## Publisher: <br>
-[binggg](https://clawhub.ai/user/binggg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[binggg](https://clawhub.ai/user/binggg)
 
-## Use Case: <br>
-Developers and design-oriented coding agents use this skill to plan visual direction, interface hierarchy, layout, typography, color, and prototype implementation for web or mini program UIs before writing interface code. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can steer generated UIs toward specific aesthetics, fonts, icon libraries, and external media sources that may not fit a project's brand, licensing, accessibility, or delivery constraints. <br>
-Mitigation: Review generated UI choices against project brand rules, license requirements, accessibility standards, and implementation constraints before accepting code. <br>
+## Use Case:
 
+Developers and designers use this skill to define interface direction, visual hierarchy, layout strategy, typography, color, and prototype expectations before building Web or mini program UI.
 
-## Reference(s): <br>
-- [UI Design Activation Checklist](checklist.md) <br>
-- [ClawHub skill page](https://clawhub.ai/binggg/skills/ui-design-guide) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands] <br>
-**Output Format:** [Markdown guidance with design specifications, implementation recommendations, code examples, and self-audit shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Steers generated UI work toward explicit aesthetic choices, professional icon libraries, real media assets, and pre-submission design audits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.18.14 (source: server release metadata) <br>
+Risk: Asset-download guidance could lead an agent to fetch unsuitable or unlicensed remote assets.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm asset URLs are public, relevant, licensed for use, and saved only into intended project asset paths before allowing downloads.
+
+Risk: Design guidance may produce incorrect, inaccessible, or brand-inconsistent UI recommendations if accepted without review.
+
+Mitigation: Review generated design specifications and interface code against project requirements, accessibility expectations, and approved brand or design-system constraints.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/binggg/skills/ui-design-guide)
+- [UI Design Activation Checklist](artifact/checklist.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown design specifications and implementation guidance, often with code or shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct agents to produce design specifications before interface code and to perform visual self-audits.]
+
+## Skill Version(s):
+
+1.18.32 (source: server release metadata; artifact frontmatter reports 2.28.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

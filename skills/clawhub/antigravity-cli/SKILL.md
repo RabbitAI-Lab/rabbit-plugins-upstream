@@ -38,7 +38,7 @@ Load only the relevant reference:
 ## Gotchas
 
 - `--prompt` is an alias for `--print`; it does not keep the session interactive.
-- Model selection is normally handled inside the TUI with `/model`, not by inventing a model flag.
+- `--model` is supported on CLI for session model selection, and models can also be selected inside the TUI with `/model` or listed via `agy models`.
 - `agy --continue` resumes the most recent conversation; use `agy --conversation <id>` for a specific session.
 - Plugin management is under `agy plugin ...`; local Agent Skills live separately in skill paths.
 - Artifact review is interactive; for headless automation, design prompts to ask for patch summaries or command output instead of relying on the review panel.

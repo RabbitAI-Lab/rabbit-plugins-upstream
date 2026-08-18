@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1440, initial-scale=1.0">
+    <title>P2: 痛点对比卡片 (Dark Glassmorphism)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            width: 1080px; height: 1440px; overflow: hidden;
+            background: #0f172a;
+            font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+            color: #f8fafc;
+            position: relative;
+            padding: 85px 75px;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        .orb-1 {
+            position: absolute; top: -100px; left: -100px;
+            width: 600px; height: 600px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(225,29,72,0.3) 0%, transparent 70%);
+            filter: blur(80px);
+        }
+        .orb-2 {
+            position: absolute; bottom: -100px; right: -100px;
+            width: 650px; height: 650px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 70%);
+            filter: blur(80px);
+        }
+
+        .header-box { position: relative; z-index: 2; }
+        .tag-pill {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 24px; border-radius: 30px;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700;
+            color: #38bdf8; text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-family: 'Outfit', 'Noto Sans SC', sans-serif;
+            font-size: 60px; font-weight: 900; line-height: 1.15;
+            letter-spacing: -0.02em; margin-bottom: 16px;
+        }
+        .section-desc { font-size: 24px; color: #94a3b8; line-height: 1.5; }
+
+        .cards-container {
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column; gap: 32px;
+            margin: 32px 0;
+        }
+
+        .glass-card {
+            border-radius: 32px; padding: 40px;
+            backdrop-filter: blur(24px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-pain {
+            background: rgba(225, 29, 72, 0.08);
+            border: 1.5px solid rgba(225, 29, 72, 0.35);
+        }
+        .card-solution {
+            background: rgba(13, 148, 136, 0.12);
+            border: 1.5px solid rgba(6, 182, 212, 0.45);
+        }
+
+        .card-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .card-header-left { display: flex; align-items: center; gap: 16px; }
+        .badge-icon {
+            width: 48px; height: 48px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; font-weight: 900;
+        }
+        .pain-icon { background: rgba(225, 29, 72, 0.25); color: #fb7185; }
+        .sol-icon { background: rgba(6, 182, 212, 0.25); color: #38bdf8; }
+
+        .card-h3 { font-family: 'Outfit', 'Noto Sans SC', sans-serif; font-size: 30px; font-weight: 800; }
+        .pain-h3 { color: #f43f5e; }
+        .sol-h3 { color: #38bdf8; }
+
+        .stat-badge {
+            font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800;
+            padding: 8px 20px; border-radius: 20px;
+        }
+        .pain-badge { background: rgba(225,29,72,0.2); color: #fda4af; }
+        .sol-badge { background: rgba(6,182,212,0.2); color: #67e8f9; }
+
+        .items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .item-box {
+            background: rgba(15, 23, 42, 0.5); border-radius: 20px; padding: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .item-title { font-size: 20px; font-weight: 700; color: #f8fafc; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .item-desc { font-size: 16px; color: #94a3b8; line-height: 1.5; }
+
+        .footer-bar {
+            position: relative; z-index: 2;
+            display: flex; align-items: center; justify-content: space-between;
+            padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .brand-text { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; color: #cbd5e1; }
+        .page-indicator { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; color: #06b6d4; }
+    </style>
+</head>
+<body>
+    <div class="orb-1"></div>
+    <div class="orb-2"></div>
+
+    <div class="header-box">
+        <div class="tag-pill">Context & Pain Points</div>
+        <h1 class="section-title">传统 PPT 痛点 vs Beautiful 样式解法</h1>
+        <p class="section-desc">彻底打破 Web 演示文稿的僵硬与排版断层陷阱，重构专业级演播感受。</p>
+    </div>
+
+    <div class="cards-container">
+        <!-- Pain Card -->
+        <div class="glass-card card-pain">
+            <div class="card-header">
+                <div class="card-header-left">
+                    <div class="badge-icon pain-icon">✕</div>
+                    <div class="card-h3 pain-h3">传统 PPT 常见痛点</div>
+                </div>
+                <div class="stat-badge pain-badge">手动排版 3.5 Hours</div>
+            </div>
+            <div class="items-grid">
+                <div class="item-box">
+                    <div class="item-title"><span style="color: #f43f5e;">✕</span> 中间中空断层</div>
+                    <div class="item-desc">流式布局导致不同屏幕分辨率下中间大面积尴尬空白。</div>
+                </div>
+                <div class="item-box">
+                    <div class="item-title"><span style="color: #f43f5e;">✕</span> 黑框割裂视觉</div>
+                    <div class="item-desc">视口边缘与幻灯片画布背景色不匹配，边界感生硬。</div>
+                </div>
+                <div class="item-box">
+                    <div class="item-title"><span style="color: #f43f5e;">✕</span> 动效死板机械</div>
+                    <div class="item-desc">仅有线性平移，缺乏现代 App 界面的弹性物理回响。</div>
+                </div>
+                <div class="item-box">
+                    <div class="item-title"><span style="color: #f43f5e;">✕</span> 微调耗时冗长</div>
+                    <div class="item-desc">元素手动拖拽拉伸对齐，难以维护统一样式规范。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Solution Card -->
+        <div class="glass-card card-solution">
+            <div class="card-header">
+                <div class="card-header-left">
+                    <div class="badge-icon sol-icon">✓</div>
+                    <div class="card-h3 sol-h3">Beautiful Modern 原生解法</div>
+                </div>
+                <div class="stat-badge sol-badge">效率提升 14 倍 (15 Min)</div>
+            </div>
+            <div class="items-grid">
+                <div class="item-box">
+                    <div class="item-title"><span style="color: #38bdf8;">✓</span> Scheme 1/2 空间分配</div>
+                    <div class="item-desc">紧凑分组与连通桥模式，根据区块数动态优化布局。</div>
+                </div>
+                <div class="item-box">
+                    <div class="item-title"><span style="color: #38bdf8;">✓</span> Viewport 底色同步</div>
+                    <div class="item-desc">JS 动态提取当前页背景渲染屏幕视口，实现无缝沉浸。</div>
+                </div>
+                <div class="item-box">
+                    <div class="item-title"><span style="color: #38bdf8;">✓</span> Spring 60fps 缓动</div>
+                    <div class="item-desc">物理弹簧超越曲线，带来丝滑自然的高级交错动画。</div>
+                </div>
+                <div class="item-box">
+                    <div class="item-title"><span style="color: #38bdf8;">✓</span> 代码声明式渲染</div>
+                    <div class="item-desc">Design Tokens 统一驱动，0 拖拽即可保证100%精确排版。</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bar">
+        <div class="brand-text">Beautiful Modern System</div>
+        <div class="page-indicator">02 / 05</div>
+    </div>
+</body>
+</html>

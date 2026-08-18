@@ -1,45 +1,56 @@
-## Description: <br>
-Generates basic SBOM data for npm and pip projects and helps check packages and dependencies against OSV and related vulnerability data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+软件物料清单(SBOM)生成与依赖漏洞检查工具，支持基础 npm 和 pip 包扫描、SBOM 生成，以及 OSV/GHSA 漏洞查询，适合个人开发者日常使用。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and security-minded maintainers use this skill to inspect npm or pip dependencies, generate a lightweight SBOM, and identify known vulnerability matches before dependency updates or routine project security checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dependency names and versions from private projects may be sent to external OSV, npm, or PyPI services during lookups. <br>
-Mitigation: Review before use in private repositories and run only when sharing dependency metadata with those services is acceptable. <br>
-Risk: The skill can propose or run shell commands for package inspection, audit, and SBOM generation. <br>
-Mitigation: Review commands before execution, run in a controlled workspace, and install required tools such as jq, npm, or pip-audit deliberately. <br>
-Risk: The artifact's trigger text incorrectly mentions database and SQL tasks, which could cause off-purpose activation. <br>
-Mitigation: Correct the trigger text and restrict routine use to SBOM and dependency vulnerability tasks. <br>
+## Use Case:
 
+Developers and security-conscious project maintainers use this skill to inspect npm and pip dependencies, create a basic SBOM, and check known package vulnerabilities before updating or introducing dependencies.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/bom-vuln-intel-tool-free) <br>
-- [OSV API](https://api.osv.dev) <br>
-- [npm registry](https://registry.npmjs.org) <br>
-- [PyPI](https://pypi.org) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash and JSON snippets; generated SBOM and vulnerability results may be returned as text or JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires agent command execution; external lookups may contact OSV, npm registry, and PyPI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Package names and versions from private projects may be sent to public package and vulnerability services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or redact dependency names before running checks on private or embargoed projects.
+
+Risk: Generated shell commands may behave unexpectedly on unusual package names or project files.
+
+Mitigation: Inspect proposed commands before execution and run them in a controlled project workspace.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/bom-vuln-intel-tool-free)
+- [OSV API](https://api.osv.dev)
+- [npm Registry](https://registry.npmjs.org)
+- [PyPI JSON API](https://pypi.org)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May generate local SBOM JSON and vulnerability-check output when the agent runs the proposed commands.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

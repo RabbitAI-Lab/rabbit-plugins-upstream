@@ -1,40 +1,53 @@
-## Description: <br>
-Qa Combination Strategy helps QA teams reduce combination-test explosion with Pairwise, orthogonal testing, and risk-weighted matrices while identifying coverage gaps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA practitioners design efficient combination-testing coverage using pairwise testing, orthogonal arrays, decision tables, and risk-weighted combinations when exhaustive testing is impractical.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and developers use this skill to turn scenario trees, requirement decompositions, and optional risk assessments into smaller combination coverage plans for parameter-heavy features and environment matrices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Examples or inputs may include customer, payment, identity, financial, screenshot, or production data. <br>
-Mitigation: Use masked or synthetic inputs and avoid pasting real customer, payment, identity, financial, or production data. <br>
-Risk: Reduced combination matrices can miss important high-risk interactions if used without review. <br>
-Mitigation: Review generated matrices, prioritize high-risk combinations, and supplement Pairwise or orthogonal coverage with full coverage where risk warrants it. <br>
+## Use Case:
 
+QA engineers and developers use this skill to reduce combination explosion across input, environment, and state parameters while preserving meaningful pairwise, orthogonal, and high-risk coverage.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-combination-strategy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown with structured combination matrices, coverage gaps, traceability IDs, and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces COMBO and scenario-linked matrix entries for human review; use masked or synthetic test data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and release evidence) <br>
+Risk: QA planning inputs may contain production identifiers, payment details, screenshots, ID numbers, phone numbers, or customer data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Mask or anonymize sensitive production and customer data before using the skill.
+
+Risk: Combination-reduction strategies can miss important interactions when parameter identification or risk assessment is incomplete.
+
+Mitigation: Review generated matrices for high-risk business rules and add explicit full-coverage cases where needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-combination-strategy)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown with structured combination matrices, coverage notes, and test-case guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include combination matrix IDs, scenario traceability, pairwise and n-way combination analysis, and coverage gaps.]
+
+## Skill Version(s):
+
+1.6.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

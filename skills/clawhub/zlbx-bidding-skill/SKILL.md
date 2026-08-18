@@ -20,7 +20,7 @@ Headers:
 **API Key**: 
 - 从环境变量 `ZLBX_API_KEY`
 - 从Agent配置文件中读取。
-- 申请地址：https://ai.zhiliaobiaoxun.com/?ch=s01 → 手机号登录 → 复制 Key → 配置到环境变量 `ZLBX_API_KEY` 即可。（新用户限时赠200次额度）
+- 申请地址：https://ai.zhiliaobiaoxun.com/?ch=s20 → 手机号登录 → 复制 Key → 配置到环境变量 `ZLBX_API_KEY` 即可。（新用户限时赠200次额度）
 
 
 ---

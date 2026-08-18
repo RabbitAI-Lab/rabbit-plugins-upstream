@@ -43,7 +43,7 @@
 - **步骤**：
   1. 全量巡检：`balance-scan -m <媒体> --threshold-days 7 --json-out ./snap-p2`（可选 `--min-balance 100` / `--target-days 60`）。
   2. 已知子集：`balance-scan -m <媒体> -a id1,id2,id3 --json-out ./snap-p2-subset`（跳过翻页）。
-- **产物**：按 `remainingDays` 升序；`hitReason="none"` 表示未触阈值；消耗过低的僵尸账户不纳入预警。**禁止**逐账户 `balance`。
+- **产物**：`data.items` 为全部已检查账户（按 `remainingDays` 升序）；预警筛 `hitReason !== "none"`；`hitReason="none"` 表示未触阈值；消耗过低的僵尸账户 `remainingDays` 为 null、不纳入预警。**禁止**逐账户 `balance`。
 
 ---
 
@@ -156,7 +156,8 @@
 
 ## P8 · 网站诊断
 
-- **触发**：对某 URL 做网站/落地页诊断、投放前网站评分；话术含「网站诊断/检测/监测/质量**报告**」「落地页报告」「官网体检」（**非** Google 账户诊断、**非** 行业报告）。同义词见 `intent-routing.md` §二 P8。
+- **触发**：对某 URL 做网站/落地页诊断、投放前网站评分；话术含「网站诊断/检测/监测/质量**报告**」「落地页报告」「官网体检」「**是否符合（Google）广告投放要求**」「**能不能投 / 适不适合投广告**」（**非** Google 账户诊断、**非** 行业报告、**非** 生成搜索广告方案）。同义词见 `intent-routing.md` §零 / §二 P8。
+- **典型误路由**：用户说「诊断网站 https://… 是否符合 Google 广告投放要求」→ **仍是 P8**；须 `website-diagnosis collect --url …`，**禁止**因带「Google 广告」改走 W3，**禁止**只用 WebFetch/浏览器肉眼看页写结论。
 - **必读**：`references/analytics/website-diagnosis-guide.md` + `assets/website-diagnosis-rules.md` + `report-templates/website-diagnosis-report.md`。
 - **默认产物**：**HTML**（`website-diagnosis render`）；**禁止**仅 Markdown 摘要或纯 JSON 充当终稿。
 - **步骤**：

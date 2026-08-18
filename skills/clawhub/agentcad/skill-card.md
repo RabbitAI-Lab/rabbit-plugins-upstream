@@ -1,43 +1,59 @@
-## Description: <br>
-agentcad is a CAD tool for AI agents that executes build123d or CadQuery Python scripts and produces STEP files, PNG renders, mesh exports, and geometric metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CAD tool for AI agents that helps design, model, or build 3D objects by executing build123d Python scripts and producing STEP files, PNG renders, mesh exports, and geometric metrics.
 
-## Publisher: <br>
-[jdilla1277](https://clawhub.ai/user/jdilla1277) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[jdilla1277](https://clawhub.ai/user/jdilla1277)
 
-## Use Case: <br>
-Developers, designers, and AI agents use agentcad to create, inspect, iterate on, and export 3D CAD models from build123d or CadQuery scripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on local code execution through the agentcad CLI to generate and modify CAD models. <br>
-Mitigation: Review generated CAD scripts before execution and keep backups of important Fusion or CAD documents before using the workflow. <br>
-Risk: Installation or setup commands may run code from external package or repository sources. <br>
-Mitigation: Install from trusted package sources and review installer commands before running them. <br>
+## Use Case:
 
+Developers and AI-agent operators use this skill to generate, inspect, compare, and iterate on local 3D CAD models from Python-based CAD scripts.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/jdilla1277/skills/agentcad) <br>
-- [agentcad documentation](https://agentcad.dev) <br>
-- [agentcad PyPI package](https://pypi.org/project/agentcad/) <br>
-- [agentcad CLI source](https://github.com/jdilla1277/agentcad) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Code, Shell commands, Files, Analysis, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples; agentcad commands return JSON and produce CAD artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python 3.10-3.12 and the agentcad CLI on PATH.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill runs local CAD scripts through the agentcad CLI and can create local model, render, mesh, and review artifacts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use trusted scripts and projects, review generated geometry and metrics before relying on the result, and keep CAD outputs scoped to the intended workspace.
+
+Risk: Successful CAD runs may open local browser review artifacts by default.
+
+Mitigation: Use --no-view for unattended, automated, or high-volume runs where browser launch would be disruptive.
+
+Risk: Approximate comparison results are heuristic when exact 3D diffing times out.
+
+Mitigation: Use exact diffing with an increased timeout for decisions that require precise geometric difference measurements.
+
+## Reference(s):
+
+- [ClawHub Agentcad Skill Listing](https://clawhub.ai/jdilla1277/skills/agentcad)
+- [agentcad Documentation and Gallery](https://agentcad.dev)
+- [agentcad PyPI Package](https://pypi.org/project/agentcad/)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with Python and shell command snippets; agentcad CLI responses are JSON and generated CAD artifacts can include STEP, PNG, STL, GLB, OBJ, and HTML files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python 3.10-3.12 and the agentcad CLI; local browser review artifacts may open by default unless --no-view is used.]
+
+## Skill Version(s):
+
+0.4.1 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

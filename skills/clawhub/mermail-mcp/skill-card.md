@@ -1,42 +1,61 @@
-## Description: <br>
-Configure, verify, and troubleshoot the hosted Mermail MCP server in Codex, Claude Code, Cursor, or another MCP client. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Configure, verify, and recover the hosted Mermail MCP connection in Codex, Claude, Cursor, OpenClaw, or another external MCP client.
 
-## Publisher: <br>
-[mermail](https://clawhub.ai/user/mermail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mermail](https://clawhub.ai/user/mermail)
 
-## Use Case: <br>
-Developers and operators use this skill to configure Mermail MCP access, map MERMAIL_API_KEY to the x-api-key header, verify tool discovery, and troubleshoot common connection errors. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A Mermail API key can be exposed if copied into chat, committed configuration, command-line arguments, or shell history. <br>
-Mitigation: Store MERMAIL_API_KEY in a platform secret store or environment variable, use the narrowest workspace-scoped key available, and revoke any exposed key immediately. <br>
-Risk: Incorrect MCP header mapping or a stale client environment can prevent connection or tool discovery. <br>
-Mitigation: Map MERMAIL_API_KEY to the x-api-key header using the client-specific configuration, restart or reload the client after changes, and run the included connection check. <br>
+## Use Case:
 
+Developers and operators use this skill to configure Mermail MCP in agent clients, choose OAuth or API-key authentication, verify tool discovery, and diagnose connection or scope failures without exposing credentials or testing with writes.
 
-## Reference(s): <br>
-- [Platform configuration](references/platforms.md) <br>
-- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills) <br>
-- [Mermail MCP endpoint](https://console.mermail.app/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Configuration, Shell commands, Code] <br>
-**Output Format:** [Markdown with JSON and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MERMAIL_API_KEY and verifies discovery of 63 MCP tools.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+Risk: API keys, OAuth tokens, authorization headers, wallet credentials, OTPs, or magic links could be exposed while configuring or troubleshooting the connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth where supported, store API keys in a secret store or launch environment, reference MERMAIL_API_KEY instead of secret values, and redact credentials from diagnostics.
+
+Risk: Connectivity testing could accidentally perform email delivery, data deletion, external-provider writes, or wallet actions.
+
+Mitigation: Verify only with initialize, tools/list, and a bounded read-only workspace or mailbox list; route write and wallet operations to the relevant domain workflow.
+
+Risk: A wrong workspace, profile, or authentication mode could broaden access or hide expected tool boundaries.
+
+Mitigation: Keep each credential bound to the selected workspace, use the agent-inbox profile only for its limited workflow, and do not switch accounts, workspaces, keys, or profiles without the user's explicit choice.
+
+## Reference(s):
+
+- [Mermail AI Skills Documentation](https://docs.mermail.app/ai/skills)
+- [Mermail Agents](https://mermail.app/agents)
+- [Mermail MCP Platform Configuration](references/platforms.md)
+- [Mermail MCP Connection Safety](references/security.md)
+- [Mermail MCP Verification and Recovery](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration, Shell commands, Code]
+
+**Output Format:** [Markdown with JSON and shell snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Redacts secrets and separates connection status, verification evidence, failure class, and recovery action.]
+
+## Skill Version(s):
+
+1.2.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

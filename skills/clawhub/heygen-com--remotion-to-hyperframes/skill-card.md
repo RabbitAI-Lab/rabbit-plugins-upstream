@@ -1,45 +1,62 @@
-## Description: <br>
-Ports an existing Remotion React composition source into HyperFrames HTML for one-way migration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ports an existing Remotion (React) composition source to HyperFrames HTML for explicit one-way Remotion-to-HyperFrames migration requests.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and engineers use this skill when they explicitly need to migrate an existing Remotion video composition into HyperFrames HTML. It helps lint the Remotion source, map Remotion APIs to HyperFrames constructs, generate the HyperFrames composition, validate visual similarity, and document translation gaps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan flagged a silent self-update command that runs through npx before the skill is used. <br>
-Mitigation: Require explicit user confirmation or remove the self-update step before use, and review any dependency update behavior in a sandboxed environment. <br>
-Risk: The skill runs local linting, Remotion rendering, HyperFrames rendering, and SSIM comparison commands against user-provided projects. <br>
-Mitigation: Run translation and evaluation commands in an isolated workspace when handling untrusted Remotion sources, and review generated HTML and notes before deployment. <br>
+## Use Case:
 
+Developers and engineers use this skill to translate existing Remotion video compositions into HyperFrames HTML, GSAP timelines, validation commands, and migration notes. It is intended for explicit Remotion source migration requests and declines reverse or non-Remotion conversions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/remotion-to-hyperframes) <br>
-- [Remotion to HyperFrames API Map](artifact/references/api-map.md) <br>
-- [Remotion to HyperFrames Evaluation Guide](artifact/references/eval.md) <br>
-- [Escape Hatch Guidance](artifact/references/escape-hatch.md) <br>
-- [Translation Limitations](artifact/references/limitations.md) <br>
-- [HyperFrames Remotion interop PR](https://github.com/heygen-com/hyperframes/pull/214) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [code, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and generated HTML/Markdown files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces HyperFrames index.html output, optional TRANSLATION_NOTES.md, lint findings, and visual validation commands for Remotion-to-HyperFrames migrations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill includes a silent self-update step before use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or remove the self-update behavior before installation and pin the skill version used in production workflows.
+
+Risk: The workflow runs local package and rendering commands against user-provided Remotion projects.
+
+Mitigation: Run it in a disposable workspace or container, avoid untrusted projects, and pin package versions before executing render or diff commands.
+
+Risk: Generated output may depend on external CDN scripts.
+
+Mitigation: Vendor scripts locally or add integrity pinning for production releases.
+
+## Reference(s):
+
+- [Remotion to HyperFrames skill](https://clawhub.ai/heygen-com/skills/remotion-to-hyperframes)
+- [Remotion to HyperFrames API Map](artifact/references/api-map.md)
+- [Eval: how to validate a translation end-to-end](artifact/references/eval.md)
+- [When to bow out: the runtime interop pattern](artifact/references/escape-hatch.md)
+- [Translation limitations](artifact/references/limitations.md)
+- [Runtime interop pattern PR](https://github.com/heygen-com/hyperframes/pull/214)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with generated HTML, CSS, JavaScript, shell command snippets, and optional translation notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce index.html and TRANSLATION_NOTES.md for translated compositions; recommends runtime interop instead of translation when blocker patterns are detected.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

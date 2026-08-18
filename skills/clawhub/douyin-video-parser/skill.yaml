@@ -1,0 +1,27 @@
+name: douyin-video-parser
+version: "1.3.0"
+license: MIT
+author: 斑斑
+description: 丢个抖音链接，还你一份字幕稿和交互式 HTML 分析报告。faster-whisper 本地转写，需要联网下载视频和模型，不需要任何 API key。
+
+triggers:
+  - 抖音视频解析
+  - douyin-video-parser
+  - 抖音链接解析
+  - 抖音视频转文字
+  - 抖音字幕
+  - 抖音视频转写
+  - v.douyin.com
+  - douyin.com/video
+
+instructions: SKILL.md
+
+dependencies:
+  pip:
+    - faster-whisper
+
+files:
+  - skill.yaml
+  - scripts/transcribe.py
+  - SKILL.md
+  - LICENSE

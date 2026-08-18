@@ -1,117 +1,102 @@
 ---
 name: ai-subtitle-remover
-description: 上传视频或提供 URL，调用 550W AI 去字幕 API 擦除硬字幕/水印/台标/Logo，返回处理后视频
-metadata: { "openclaw": { "emoji": "🎬", "requires": { "env": ["SUBTITLE_REMOVER_USER_NO", "SUBTITLE_REMOVER_API_KEY"] }, "primaryEnv": "SUBTITLE_REMOVER_API_KEY" } }
+description: 使用 550W 处理视频去字幕、静音后去字幕、短视频去水印和图片去水印，并查询任务或积分。用户发送视频、图片、媒体直链或短视频分享链接并要求去字幕、去声音、去水印、查询进度或余额时使用。
+metadata: { "openclaw": { "primaryEnv": "SUBTITLE_REMOVER_API_KEY" } }
 ---
 
-# AI 视频去字幕
+# 550W 视频与图片处理
 
-## When to Use
+将用户的自然语言意图路由到确定性 Action。不要要求用户填写接口字段、宽高、时长或擦除区域。
 
-- 用户需要去除视频中的硬字幕、水印、台标或 Logo
-- 用户提供了本地视频文件或视频 URL，希望得到去字幕后的干净视频
-- 用户需要查询去字幕任务的处理进度或历史记录
-- 用户需要查询账户积分余额或预估处理费用
+## 首次配置
 
-## 凭证配置
+缺少凭证时，要求用户提供 550W 用户 ID 和 API-KEY，然后调用：
 
-首次使用前需要配置凭证：
-- **userNo**: 用户编号
-- **apiKey**: 调用密钥
-- 申请地址: https://qzm.550wai.cn
+```json
+{ "action": "configureCredentials", "params": { "userNo": "用户ID", "apiKey": "API-KEY" } }
+```
 
-## 支持的 Actions
+也支持环境变量 `SUBTITLE_REMOVER_USER_NO`、`SUBTITLE_REMOVER_API_KEY`。获取地址：<https://qzm.550wai.cn>。不要在后续回复、日志或错误信息中复述完整 API-KEY。
 
-| Action | 说明 |
-|--------|------|
-| uploadVideo | 上传本地视频文件，获取云端 URL |
-| submitTask | 提交去字幕任务，指定字幕区域 |
-| taskDetail | 查询任务处理状态和结果 |
-| taskList | 分页查询历史任务列表 |
-| queryCredits | 查询账户积分余额，支持消耗预估 |
-| workflow | 端到端工作流：上传→提交→轮询→返回结果 |
+## 执行方式
 
-## Workflow
+优先使用宿主平台注册的 Action。宿主未自动注册 Action 时，把单个 JSON 请求写入标准输入并运行：
 
-### 重要：调用规则
+```bash
+node {baseDir}/dist/550w-skill.cjs
+```
 
-**调用 workflow action 时，只传 `file` 或 `videoUrl` 一个参数即可。禁止传递 width、height、duration、x1、y1、x2、y2 参数。** Skill 内部会自动获取视频元信息并使用全屏去字幕模式。不要使用 ffprobe 或其他工具预先探测视频信息。
+处理本地文件时可以用 `params.filePath` 传绝对路径；不要把文件内容编码进对话。每次只发送一个请求，读取标准输出的单个 JSON 响应。
 
-正确调用示例：
+## 路由规则
+
+- 用户发送视频文件或可直接访问的视频文件 URL，并要求去字幕：调用 `workflow`。
+- 用户同时要求去掉声音：在 `workflow` 中传 `removeAudio: true`；否则不传，默认保留声音。
+- 用户发送短视频平台分享链接并要求无水印视频：调用 `removeVideoWatermark`，不要下载视频。
+- 用户发送图片并要求擦除水印或文字：调用 `removeImageWatermark`。
+- 用户询问去字幕进度：调用 `taskDetail`；询问历史任务：调用 `taskList`。
+- 用户询问图片任务进度：调用 `imageWatermarkTaskDetail`。
+- 用户询问余额：调用 `queryCredits`。
+- 输入类型或处理意图不明确时，只询问一个必要问题，不猜测付费操作。
+
+## 视频去字幕
+
+本地文件：
+
+```json
+{ "action": "workflow", "params": { "file": "<视频文件>" } }
+```
+
+远程视频直链：
+
 ```json
 { "action": "workflow", "params": { "videoUrl": "https://example.com/video.mp4" } }
 ```
-或：
+
+固定使用全屏擦除。不要询问、生成或传递 `x1`、`y1`、`x2`、`y2`；Skill 会在代码层强制使用全零坐标。
+
+本地文件由上传接口返回真实元信息。远程直链缺少元信息时使用本机 `ffprobe` 预检，可通过 `FFPROBE_PATH` 指定路径。预检失败时停止，不伪造参数、不继续提交。
+
+工作流会轮询最长 10 分钟。成功时返回 `resultUrl`；失败时返回原因；超时或连续查询失败时返回 `taskId`，不要重复提交。
+
+## 视频去水印
+
 ```json
-{ "action": "workflow", "params": { "file": <视频文件对象> } }
+{ "action": "removeVideoWatermark", "params": { "videoUrl": "https://example.com/share/video" } }
 ```
 
-错误调用示例（不要这样做）：
+成功时返回 `data.video`，并按实际响应展示封面或文案。不要下载、转存或再次处理返回媒体。
+
+## 图片去水印
+
+默认同步处理：
+
 ```json
-{ "action": "workflow", "params": { "videoUrl": "...", "width": 1920, "height": 1080, "duration": 60, "x1": 0, "y1": 0, "x2": 0, "y2": 0 } }
+{ "action": "removeImageWatermark", "params": { "file": "<图片文件>", "sync": true } }
 ```
 
-### 执行流程
+多张图片必须逐张串行调用，不能并发扩大处理池。异步返回 `processing` 时保存 `task.taskId`，再调用：
 
-1. 用户提供视频文件或视频 URL。
-2. 直接调用 `workflow` action，仅传 `file` 或 `videoUrl`。
-3. Skill 自动获取 width/height/duration，坐标默认全屏模式。
-4. Skill 自动完成上传（如需）、提交任务、轮询状态，最终返回去字幕后的视频下载地址。
-5. 如果任务在 10 分钟内未完成，返回 taskId 供后续手动查询。
+```json
+{ "action": "imageWatermarkTaskDetail", "params": { "taskId": "TASK_ID" } }
+```
 
-### 分步模式
+仅在 `task.status=success` 时提供 `task.resultUrl`；失败展示 `task.failReason`；过期则提示重新处理。
 
-1. 调用 `uploadVideo` 上传视频文件，获取 videoUrl。
-2. 调用 `submitTask` 提交去字幕任务，指定 videoUrl、宽高、时长和字幕区域坐标。
-3. 调用 `taskDetail` 轮询任务状态，直到 status 为 success 或 failed。
-4. 成功时从 resultUrl 下载去字幕后的视频。
+## 付费与重试约束
 
-## 参数约束
+- 去字幕按视频时长和分辨率计费；失败任务自动退还已扣积分。
+- 视频去水印成功一次扣 1 积分，失败不扣。
+- 图片去水印成功一张扣 10 积分，失败不扣。
+- 批量操作前先告知计费单位；除非用户已明确要求批量处理，否则不要自行扩展输入范围。
+- 网络超时不能证明提交失败。发生不确定结果时优先查询已有任务，绝不无条件重试付费提交。
+- 相同输入重复提交可能独立计费；不得通过重复提交“催促”任务。
 
-- **视频格式**: 仅支持 mp4、mov
-- **文件大小**: 最大 1GB
-- **分辨率**: width × height ≤ 2,073,600 像素
-- **时长**: 1~600 秒
-- **宽高**: 1~10000 像素
-- **字幕区域**: 全屏模式设 x1=y1=x2=y2=0；非全屏模式需满足 x2>x1, y2>y1, x2≤width, y2≤height
-- **videoUrl**: 必须以 http:// 或 https:// 开头，长度 ≤2048
+## 响应要求
 
-## 积分计费
+- 成功：说明完成的能力并提供结果链接；存在任务编号时一并返回。
+- 处理中：说明当前状态和任务编号。
+- 失败：展示可操作的失败原因，不泄露内部堆栈、凭证或实现信息。
+- 任何结果都必须回复用户，不得返回 `NO_REPLY`。
 
-- 720p 及以下（≤921,600 像素）: ⌈时长(秒) × 1.3⌉ 积分
-- 超过 720p（>921,600 像素）: ⌈时长(秒) × 1.6⌉ 积分
-- 任务失败时积分自动退还
-
-## 错误处理
-
-- **code=-100**: 鉴权失败，检查 userNo 和 apiKey 配置
-- **code=-200**: 参数不合法，根据 message 修正参数
-- **code=-300**: 业务拒绝（积分不足、任务不存在等）
-- **code=-500**: 服务异常，建议 30 秒后重试
-
-## 注意事项
-
-- 相同 videoUrl 重复提交会被视为独立任务并独立计费
-- workflow 模式最多轮询 10 分钟（20 次，每次间隔 30 秒）
-- 连续 3 次轮询失败时 workflow 会提前终止并返回 taskId
-- 查询接口超时 10 秒，上传接口超时 180 秒，提交接口超时 150 秒
-
-## 回复用户规范
-
-任务完成后，**必须**将结果告知用户：
-
-**成功时回复：**
-- 告知用户去字幕已完成
-- 提供去字幕后的视频下载链接（resultUrl）
-- 可选：告知消耗积分数
-
-**失败时回复：**
-- 告知用户任务失败
-- 提供失败原因（failReason）
-- 告知积分已自动退还
-
-**超时时回复：**
-- 告知用户任务仍在处理中
-- 提供 taskId 供后续查询
-
-**禁止回复 NO_REPLY。任何情况下都必须向用户展示处理结果。**
+需要字段限制、状态和错误码时读取 [API 契约](references/api-contract.md)。

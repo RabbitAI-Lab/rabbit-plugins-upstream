@@ -1,0 +1,107 @@
+types:
+  Person:
+    required: [name, role]
+    optional: [email, phone, notes, birthday, location, profession, reports_to, achievements_2025, marriage, number, series, status, team]
+  Organization:
+    required: [name]
+    optional: [type, members]
+  Project:
+    required: [name, status]
+    status_enum: [planned, identified, in_progress, on_track, at_risk, critical_path, near_zero, going_well, complete, superseded, disabled]
+    optional: [owner, owners, phase, timeline, budget_2027, headcount_end, new_hires, fte, risk, mitigation, scope, governance, interfaces, documents, note, target, review, review_note, url, path, stack, type, decision_needed, classification, governance_gap, governance_pillars, so_count, gp_count, section_count, pipeline, sites, features, w2_roles, admin, auth, budget_deadline, budget_misalignment, call_for_tender, contingency, deploy_date, firebase_project, from_version, to_version, incumbents, logo, need, port, service]
+  Task:
+    required: [title, status]
+    status_enum: [open, in_progress, blocked, done, disabled]
+  Document:
+    required: [name]
+    optional: [path, url, date, audience, purpose, notes, size, drive_path]
+  Event:
+    required: [name, date]
+    optional: [location, purpose, docs_sent, attendees, recurrence, end]
+  Skill:
+    required: [name, status]
+    status_enum: [active, disabled, archived]
+    optional: [path, cron, purpose, format, features, monitors, source, library, agent, level, medication, phone, sip_trunk, voice, pipeline, projects, stack, supabase_logging, supabase_table, tasks_synced, topics, target, collections, series, prefix, date]
+  Device:
+    required: [name, type]
+    optional: [location, integration, protocol, entity, features, rtsp, status, cost, purchase_date, date, notes, paired_device]
+  Service:
+    required: [name, status]
+    status_enum: [active, disabled, archived, configured]
+    optional: [url, version, description, notes, date, library_path, collections, series]
+  Tool:
+    required: [name, type]
+    optional: [path, url, projects, tables, feeds, bugs, workaround, integrated_with, replaces]
+  Infrastructure:
+    required: [name, status]
+    optional: [ip, url, tailscale, reverse_proxy, sites, security, setup_date, date, from_version, to_version, paired_device]
+  Concept:
+    required: [name]
+    optional: [axis1, axis2, budget, counterpart, rationale, reframed_from]
+  Location:
+    required: [name]
+    optional: [coordinates, type]
+  Pet:
+    required: [name]
+    optional: [species, owner, named_after]
+  BugFix:
+    required: [name, issue]
+    optional: [fix, date, notes]
+  SecurityEvent:
+    required: [name, date]
+    optional: [trigger, result, notes]
+  Integration:
+    required: [name, description]
+    optional: [date, status]
+  Feature:
+    required: [name]
+    optional: [device, method, scripts, status, limitation]
+  Software:
+    required: [name, purpose]
+    optional: [status, risk]
+  Configuration:
+    required: [name]
+    optional: [primary, fallbacks, embeddings, google_provider]
+
+relations:
+  reports_to:
+    from_types: [Person]
+    to_types: [Person]
+    cardinality: many_to_one
+  has_owner:
+    from_types: [Project, Task, Skill]
+    to_types: [Person]
+    cardinality: many_to_one
+  includes:
+    from_types: [Project]
+    to_types: [Project, Skill, Document]
+    cardinality: one_to_many
+  depends_on:
+    from_types: [Project, Task, Feature, Device]
+    to_types: [Project, Task, Device, Service, Infrastructure]
+    cardinality: many_to_many
+    acyclic: true
+  manages:
+    from_types: [Person]
+    to_types: [Project, Skill, Service]
+    cardinality: one_to_many
+  uses:
+    from_types: [Person, Project, Skill, Service, Infrastructure]
+    to_types: [Tool, Service, Device, Infrastructure, Skill, Project]
+    cardinality: many_to_many
+  integrated_with:
+    from_types: [Device, Service, Skill]
+    to_types: [Device, Service, Skill]
+    cardinality: many_to_many
+  located_at:
+    from_types: [Device, Person]
+    to_types: [Location]
+    cardinality: many_to_one
+  fixes:
+    from_types: [BugFix]
+    to_types: [Skill, Service, Infrastructure, Software]
+    cardinality: many_to_one
+  monitors:
+    from_types: [Skill, Service]
+    to_types: [Device, Service, Infrastructure]
+    cardinality: many_to_many

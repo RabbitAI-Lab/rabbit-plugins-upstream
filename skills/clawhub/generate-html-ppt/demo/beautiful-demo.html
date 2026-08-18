@@ -1,0 +1,551 @@
+ <!DOCTYPE html>
+ <html lang="zh-CN">
+ <head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Beautiful.ai 风格演示</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+ <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js" defer></script>
+ <style>
+   :root {
+     --b-bg: #f8fafc;
+     --b-bg-elevated: #ffffff;
+     --b-surface: rgba(255, 255, 255, 0.72);
+     --b-text: #0f172a;
+     --b-text-secondary: #475569;
+     --b-text-muted: #64748b;
+     --b-border: rgba(15, 23, 42, 0.08);
+     --b-border-strong: rgba(15, 23, 42, 0.14);
+     --b-accent: #4f46e5;
+     --b-accent-600: #4338ca;
+     --b-accent-light: #e0e7ff;
+     --b-accent-soft: rgba(79, 70, 229, 0.12);
+     --b-teal: #0d9488; --b-rose: #e11d48; --b-amber: #d97706; --b-violet: #7c3aed;
+     --font-display: 'Outfit', sans-serif;
+     --font-body: 'Plus Jakarta Sans', 'Noto Sans SC', 'PingFang SC', sans-serif;
+     --radius-sm: 12px; --radius-md: 20px; --radius-lg: 28px;
+     --shadow-sm: 0 1px 2px rgba(15,23,42,0.04);
+     --shadow-md: 0 4px 6px -1px rgba(15,23,42,0.05), 0 2px 4px -2px rgba(15,23,42,0.04);
+     --shadow-lg: 0 10px 15px -3px rgba(15,23,42,0.06), 0 4px 6px -4px rgba(15,23,42,0.04);
+     --shadow-xl: 0 20px 25px -5px rgba(15,23,42,0.08), 0 8px 10px -6px rgba(15,23,42,0.04);
+     --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+     --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+     --viewport-bg: var(--b-bg);
+   }
+   * { margin: 0; padding: 0; box-sizing: border-box; }
+   html, body { width: 100%; height: 100%; }
+   body { font-family: var(--font-body); background: var(--viewport-bg); overflow: hidden; color: var(--b-text); transition: background 0.7s var(--ease-smooth); }
+   .deck-viewport { position: fixed; inset: 0; overflow: hidden; background: var(--viewport-bg); transition: background 0.7s var(--ease-smooth); }
+   .deck { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; transform-origin: 0 0; }
+   .slide { position: absolute; inset: 0; width: 1920px; height: 1080px; display: flex; flex-direction: column; padding: 80px 120px; overflow: hidden; visibility: hidden; opacity: 0; pointer-events: none; background: var(--b-bg); transition: opacity 0.5s var(--ease-smooth), visibility 0s linear 0.5s; }
+   .slide.active { visibility: visible; opacity: 1; pointer-events: auto; z-index: 1; transition: opacity 0.5s var(--ease-smooth), visibility 0s; }
+   .slide.light { background: var(--b-bg); color: var(--b-text); }
+   .slide.dark { background: radial-gradient(ellipse 80% 60% at 20% 40%, rgba(99,102,241,0.22), transparent), radial-gradient(ellipse 60% 50% at 80% 20%, rgba(20,184,166,0.18), transparent), linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: #fff; --b-text: #fff; --b-text-secondary: rgba(255,255,255,0.82); --b-text-muted: rgba(255,255,255,0.6); --b-border: rgba(255,255,255,0.1); --b-border-strong: rgba(255,255,255,0.18); --b-surface: rgba(255,255,255,0.08); }
+   .slide.hero { padding-top: 60px; }
+   .slide.hero.light { background: radial-gradient(ellipse 80% 60% at 20% 40%, rgba(79,70,229,0.15), transparent), radial-gradient(ellipse 60% 50% at 80% 80%, rgba(13,148,136,0.12), transparent), linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); }
+
+   .kicker { font-family: var(--font-display); font-size: 18px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--b-accent); margin-bottom: 24px; }
+   .slide.dark .kicker { color: #818cf8; }
+   .h-hero { font-family: var(--font-display); font-size: clamp(72px, 7vw, 120px); font-weight: 800; line-height: 1.05; letter-spacing: -2px; margin-bottom: 24px; }
+   .h-xl { font-family: var(--font-display); font-size: 56px; font-weight: 800; line-height: 1.15; letter-spacing: -1px; margin-bottom: 16px; }
+   .h-lg { font-family: var(--font-display); font-size: 44px; font-weight: 700; line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 16px; }
+   .lead { font-size: 26px; line-height: 1.6; color: var(--b-text-secondary); font-weight: 400; max-width: 1100px; }
+   .caption { font-size: 15px; color: var(--b-text-muted); font-weight: 500; }
+   .em { color: var(--b-accent); font-weight: 700; }
+   .gradient-text { background: linear-gradient(135deg, var(--b-accent) 0%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+   .frame { width: 100%; height: 100%; display: grid; gap: 32px; }
+   .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px; }
+   .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+   .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+   .grid-6 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+   .grid-2-7-5 { display: grid; grid-template-columns: 7fr 5fr; gap: 48px; }
+   .grid-3-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+   @media (min-width: 1920px) { .grid-6 { grid-template-columns: repeat(6, 1fr); } }
+
+   .center { display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: center; }
+   .vstack { display: flex; flex-direction: column; gap: 32px; }
+   .hstack { display: flex; gap: 16px; align-items: center; }
+
+   .chrome { position: absolute; top: 40px; left: 120px; right: 120px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--b-text-muted); z-index: 10; }
+   .foot { position: absolute; bottom: 40px; left: 120px; right: 120px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 500; color: var(--b-text-muted); z-index: 10; }
+
+   .nav { position: fixed; bottom: calc(28px * var(--chrome-scale, 1)); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: calc(10px * var(--chrome-scale, 1)); z-index: 100; flex-wrap: wrap; justify-content: center; }
+   .nav .dot { width: calc(10px * var(--chrome-scale, 1)); height: calc(10px * var(--chrome-scale, 1)); border-radius: 50%; border: none; background: #cbd5e1; cursor: pointer; transition: all 0.3s var(--ease-out); padding: 0; }
+   .nav .dot.on { background: var(--b-accent); transform: scale(1.4); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); }
+   .page-num { position: fixed; bottom: calc(28px * var(--chrome-scale, 1)); right: calc(40px * var(--chrome-scale, 1)); font-size: calc(13px * var(--chrome-scale, 1)); font-weight: 600; color: var(--b-text-muted); z-index: 100; }
+   .nav-arrows { position: fixed; bottom: calc(28px * var(--chrome-scale, 1)); left: calc(40px * var(--chrome-scale, 1)); display: flex; gap: calc(10px * var(--chrome-scale, 1)); z-index: 100; }
+   .nav-arrows button, .fs-btn { width: calc(38px * var(--chrome-scale, 1)); height: calc(38px * var(--chrome-scale, 1)); border-radius: 50%; border: 1px solid var(--b-border-strong); background: var(--b-surface); backdrop-filter: blur(12px); color: var(--b-text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s var(--ease-out); padding: 0; }
+   .nav-arrows button:hover, .fs-btn:hover { border-color: var(--b-accent); color: var(--b-accent); transform: translateY(-2px); }
+   .nav-arrows button svg, .fs-btn svg { width: calc(16px * var(--chrome-scale, 1)); height: calc(16px * var(--chrome-scale, 1)); }
+   .fs-btn { position: fixed; top: calc(28px * var(--chrome-scale, 1)); left: calc(40px * var(--chrome-scale, 1)); z-index: 100; }
+
+   .b-card { background: var(--b-bg-elevated); border-radius: var(--radius-md); padding: 32px; box-shadow: var(--shadow-md); border: 1px solid var(--b-border); transition: transform 0.4s var(--ease-spring), box-shadow 0.4s var(--ease-out); display: flex; flex-direction: column; gap: 12px; height: 100%; }
+   .b-card:hover { transform: translateY(-6px) scale(1.01); box-shadow: var(--shadow-xl); }
+   .slide.dark .b-card { background: var(--b-surface); backdrop-filter: blur(16px); }
+   .b-card.glass { background: rgba(255,255,255,0.65); backdrop-filter: blur(20px); }
+   .slide.dark .b-card.glass { background: rgba(255,255,255,0.08); }
+   .b-card.teal { --b-accent: var(--b-teal); --b-accent-soft: rgba(13,148,136,0.12); }
+   .b-card.rose { --b-accent: var(--b-rose); --b-accent-soft: rgba(225,29,72,0.12); }
+   .b-card.violet { --b-accent: var(--b-violet); --b-accent-soft: rgba(124,58,237,0.12); }
+   .b-card h3 { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--b-text); line-height: 1.25; }
+   .b-card p { font-size: 18px; line-height: 1.65; color: var(--b-text-secondary); }
+   .icon-box { width: 56px; height: 56px; border-radius: var(--radius-sm); background: var(--b-accent-soft); color: var(--b-accent); display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 8px; }
+   .icon-box.teal { background: rgba(13,148,136,0.12); color: var(--b-teal); }
+   .icon-box.rose { background: rgba(225,29,72,0.12); color: var(--b-rose); }
+   .icon-box.violet { background: rgba(124,58,237,0.12); color: var(--b-violet); }
+
+   .cover-frame { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; z-index: 1; }
+   .cover-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; z-index: 0; }
+   .cover-orb.one { width: 600px; height: 600px; background: rgba(79,70,229,0.25); top: -100px; right: -100px; }
+   .cover-orb.two { width: 500px; height: 500px; background: rgba(13,148,136,0.2); bottom: -80px; left: -80px; }
+   .slide.dark .cover-orb.one { background: rgba(99,102,241,0.35); }
+   .slide.dark .cover-orb.two { background: rgba(45,212,191,0.25); }
+   .cover-logo { font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--b-text-muted); margin-bottom: 48px; }
+   .cover-logo span { color: var(--b-accent); }
+   .cover-title { font-family: var(--font-display); font-size: clamp(64px, 6.5vw, 110px); font-weight: 800; line-height: 1.08; letter-spacing: -2px; margin-bottom: 24px; }
+   .cover-sub { font-size: 28px; line-height: 1.6; color: var(--b-text-secondary); max-width: 1000px; margin-bottom: 64px; }
+   .cover-divider { width: 80px; height: 4px; border-radius: 2px; background: linear-gradient(135deg, var(--b-accent) 0%, #06b6d4 100%); margin: 24px 0 32px; }
+   .cover-stats { display: flex; gap: 64px; justify-content: center; }
+   .cover-stat { display: flex; flex-direction: column; align-items: center; padding: 0 32px; border-right: 1px solid var(--b-border); }
+   .cover-stat:last-child { border-right: none; }
+   .cover-stat .n { font-family: var(--font-display); font-size: 40px; font-weight: 800; background: linear-gradient(135deg, var(--b-accent) 0%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+   .cover-stat .l { font-size: 14px; color: var(--b-text-muted); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+   .stat-card { background: var(--b-bg-elevated); border: 1px solid var(--b-border); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-sm); text-align: left; transition: transform 0.35s var(--ease-spring), box-shadow 0.35s var(--ease-out); }
+   .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+   .slide.dark .stat-card { background: var(--b-surface); backdrop-filter: blur(12px); }
+   .stat-label { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--b-text-muted); margin-bottom: 8px; }
+   .stat-nb { font-family: var(--font-display); font-size: 46px; font-weight: 800; color: var(--b-text); line-height: 1.1; letter-spacing: -1px; }
+   .stat-nb .stat-unit { font-size: 24px; font-weight: 600; color: var(--b-text-secondary); margin-left: 4px; }
+   .stat-note { font-size: 15px; color: var(--b-text-muted); margin-top: 8px; font-weight: 500; }
+
+   .quote-block { background: var(--b-bg-elevated); border-left: 5px solid var(--b-accent); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 32px 40px; box-shadow: var(--shadow-md); position: relative; }
+   .slide.dark .quote-block { background: var(--b-surface); }
+   .quote-block::before { content: '"'; position: absolute; top: 10px; left: 24px; font-family: var(--font-display); font-size: 80px; color: var(--b-accent-soft); line-height: 1; pointer-events: none; }
+   .quote-text { font-family: var(--font-display); font-size: 32px; font-weight: 600; line-height: 1.5; color: var(--b-text); position: relative; z-index: 1; }
+   .quote-src { font-size: 16px; color: var(--b-text-muted); margin-top: 16px; font-weight: 600; }
+
+   .frame-img { display: block; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid var(--b-border); background: var(--b-bg-elevated); }
+   .frame-img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+   .frame-img.r-16x10 { aspect-ratio: 16 / 10; }
+   .img-cap { padding: 16px 20px; font-size: 14px; color: var(--b-text-muted); font-weight: 500; background: var(--b-bg-elevated); }
+
+   .pipeline { display: flex; gap: 24px; width: 100%; }
+   .pipeline-step { flex: 1; background: var(--b-bg-elevated); border: 1px solid var(--b-border); border-radius: var(--radius-md); padding: 24px; position: relative; box-shadow: var(--shadow-sm); transition: transform 0.35s var(--ease-spring), box-shadow 0.35s var(--ease-out); }
+   .slide.dark .pipeline-step { background: var(--b-surface); }
+   .pipeline-step:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+   .pipeline-step::after { content: ''; position: absolute; top: 50%; right: -28px; width: 16px; height: 16px; border-top: 3px solid var(--b-border-strong); border-right: 3px solid var(--b-border-strong); transform: translateY(-50%) rotate(45deg); z-index: 1; }
+   .pipeline-step:last-child::after { display: none; }
+   .pipeline-step .step-nb { width: 36px; height: 36px; border-radius: 50%; background: var(--b-accent-soft); color: var(--b-accent); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 16px; font-weight: 800; margin-bottom: 12px; }
+   .pipeline-step h3 { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+   .pipeline-step p { font-size: 16px; line-height: 1.6; color: var(--b-text-secondary); }
+
+   .smart-chart { width: 100%; min-height: 320px; border-radius: var(--radius-md); background: var(--b-bg-elevated); border: 1px solid var(--b-border); box-shadow: var(--shadow-md); overflow: hidden; }
+   .slide.dark .smart-chart { background: var(--b-surface); }
+   .smart-chart .echarts-container { width: 100%; height: 100%; min-height: 320px; }
+
+   .compare { display: grid; grid-template-columns: 1fr auto 1fr; gap: 32px; align-items: center; width: 100%; }
+   .compare-vs { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--b-accent) 0%, #06b6d4 100%); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 20px; font-weight: 800; box-shadow: 0 0 40px rgba(79,70,229,0.15); }
+   .compare-card { text-align: center; }
+   .compare-card .label { font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--b-text-muted); margin-bottom: 12px; }
+   .compare-card .value { font-family: var(--font-display); font-size: 52px; font-weight: 800; color: var(--b-text); line-height: 1; }
+   .tag { display: inline-flex; align-items: center; padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; background: var(--b-bg-elevated); border: 1px solid var(--b-border); color: var(--b-text-secondary); }
+   .tag.accent { background: var(--b-accent-soft); color: var(--b-accent-600); border-color: transparent; }
+
+   @keyframes springUp { 0% { opacity: 0; transform: translateY(45px) scale(0.94); } 60% { opacity: 1; transform: translateY(-6px) scale(1.015); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+   @keyframes springLeft { 0% { opacity: 0; transform: translateX(-60px); } 60% { opacity: 1; transform: translateX(8px); } 100% { opacity: 1; transform: translateX(0); } }
+   @keyframes springRight { 0% { opacity: 0; transform: translateX(60px); } 60% { opacity: 1; transform: translateX(-8px); } 100% { opacity: 1; transform: translateX(0); } }
+   @keyframes springScale { 0% { opacity: 0; transform: scale(0.85); } 60% { opacity: 1; transform: scale(1.03); } 100% { opacity: 1; transform: scale(1); } }
+   @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+   .anim { opacity: 0; }
+   .slide.active .anim { animation: springUp 0.85s var(--ease-spring) forwards; }
+   .slide.active .anim-left { animation-name: springLeft; }
+   .slide.active .anim-right { animation-name: springRight; }
+   .slide.active .anim-scale { animation-name: springScale; }
+   .slide.active .anim-float { animation: float 4s ease-in-out infinite; opacity: 1; }
+   .slide.active .d1 { animation-delay: 0.08s; }
+   .slide.active .d2 { animation-delay: 0.18s; }
+   .slide.active .d3 { animation-delay: 0.30s; }
+   .slide.active .d4 { animation-delay: 0.42s; }
+   .slide.active .d5 { animation-delay: 0.54s; }
+   .slide.active .d6 { animation-delay: 0.66s; }
+   .slide.active .d7 { animation-delay: 0.78s; }
+   .slide.active .d8 { animation-delay: 0.90s; }
+
+   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; } .anim { opacity: 1 !important; } }
+   @media print { html, body { width: 1920px; height: auto; overflow: visible; background: #fff; } .deck-viewport { position: static; overflow: visible; background: #fff; } .deck { position: static; width: auto; height: auto; overflow: visible; transform: none !important; } .slide { position: relative; inset: auto; visibility: visible; opacity: 1; pointer-events: auto; page-break-after: always; break-after: page; } .slide .anim { opacity: 1 !important; animation: none !important; } .nav, .nav-arrows, .page-num, .fs-btn { display: none !important; } }
+ </style>
+ </head>
+ <body class="theme-indigo">
+ <div class="deck-viewport">
+ <div class="deck" id="deck">
+
+ <!-- L01 Cover -->
+ <div class="slide hero light active" id="s1">
+   <div class="cover-orb one anim-float"></div>
+   <div class="cover-orb two anim-float" style="animation-delay:-2s"></div>
+   <div class="cover-frame">
+     <div class="cover-logo anim d1">BEAUTIFUL<span>DECK</span></div>
+     <div class="cover-title anim d2"><span class="gradient-text">智能排版， fluid 动效</span></div>
+     <div class="cover-sub anim d3">像 Beautiful.ai 一样优雅的网页 PPT 模板：12 种版式、弹簧动画、自动图表、数字增长。</div>
+     <div class="cover-divider anim d3"></div>
+     <div class="cover-stats anim d4">
+       <div class="cover-stat"><div class="n">12</div><div class="l">Layouts</div></div>
+       <div class="cover-stat"><div class="n">6</div><div class="l">Themes</div></div>
+       <div class="cover-stat"><div class="n">∞</div><div class="l">Ideas</div></div>
+     </div>
+   </div>
+ </div>
+
+ <!-- L02 Chapter -->
+ <div class="slide hero dark" id="s2">
+   <div class="cover-frame">
+     <div class="kicker anim d1">Act I</div>
+     <div class="h-hero anim d2">设计系统</div>
+     <div class="lead anim d3" style="max-width:800px">从网格、字体、颜色到组件，每一页都遵循统一的视觉语言。</div>
+   </div>
+ </div>
+
+ <!-- L03 3-Column Cards -->
+ <div class="slide light" id="s3">
+   <div class="chrome"><div>Design System</div><div>03 / 12</div></div>
+   <div class="frame vstack" style="justify-content:center">
+     <div>
+       <div class="kicker anim d1">Core Principles</div>
+       <div class="h-xl anim d2">让内容自己找到 <span class="em">最佳版式</span></div>
+       <div class="lead anim d3" style="max-width:900px">12 列网格、一致的字号层级、预置的间距系统，保证任何内容都能漂亮呈现。</div>
+     </div>
+     <div class="grid-3 anim d4">
+       <div class="b-card">
+         <div class="icon-box">✦</div>
+         <h3>12-Column Grid</h3>
+         <p>所有布局都基于 12 列网格，比例精准、对齐严谨，像设计软件一样可控。</p>
+       </div>
+       <div class="b-card teal">
+         <div class="icon-box teal">◎</div>
+         <h3>Spring Motion</h3>
+         <p>元素以弹簧物理曲线入场，带有轻微过冲，让翻页更具生命力。</p>
+       </div>
+       <div class="b-card violet">
+         <div class="icon-box violet">◈</div>
+         <h3>Premium Cards</h3>
+         <p>毛玻璃、柔和阴影、圆角面板，hover 时微微浮起，质感在线。</p>
+       </div>
+     </div>
+   </div>
+   <div class="foot"><div>Beautiful.ai 风格</div><div>03 / 12</div></div>
+ </div>
+
+ <!-- L04 Big Numbers -->
+ <div class="slide light" id="s4">
+   <div class="chrome"><div>Metrics</div><div>04 / 12</div></div>
+   <div class="frame vstack" style="justify-content:center">
+     <div>
+       <div class="kicker anim d1">Key Numbers</div>
+       <div class="h-xl anim d2">数据大声说话</div>
+     </div>
+     <div class="grid-6 anim d3">
+       <div class="stat-card"><div class="stat-label">Projects</div><div class="stat-nb count-up" data-value="64">0</div><div class="stat-note">过去 64 天上线</div></div>
+       <div class="stat-card"><div class="stat-label">Code Lines</div><div class="stat-nb count-up" data-value="110" data-suffix="K+">0</div><div class="stat-note">累计代码行数</div></div>
+       <div class="stat-card"><div class="stat-label">Stars</div><div class="stat-nb count-up" data-value="5166">0</div><div class="stat-note">GitHub 收藏</div></div>
+       <div class="stat-card"><div class="stat-label">Downloads</div><div class="stat-nb count-up" data-value="41" data-suffix="K+">0</div><div class="stat-note">总下载量</div></div>
+       <div class="stat-card"><div class="stat-label">Providers</div><div class="stat-nb count-up" data-value="19">0</div><div class="stat-note">接入平台数</div></div>
+       <div class="stat-card"><div class="stat-label">Commits</div><div class="stat-nb count-up" data-value="608" data-suffix="+">0</div><div class="stat-note">版本提交数</div></div>
+     </div>
+   </div>
+   <div class="foot"><div>数据页演示</div><div>04 / 12</div></div>
+ </div>
+
+ <!-- L05 Text + Image -->
+ <div class="slide light" id="s5">
+   <div class="chrome"><div>Visual Story</div><div>05 / 12</div></div>
+   <div class="frame grid-2-7-5" style="align-items:center">
+     <div class="vstack">
+       <div class="kicker anim d1">Narrative</div>
+       <div class="h-xl anim d2">左文右图，<span class="em">节奏分明</span></div>
+       <div class="lead anim d3">用文字建立论点，用图片提供证据。两者在同一视觉层级上自然呼吸。</div>
+       <div class="quote-block anim d4">
+         <div class="quote-text">好的幻灯片不是信息的搬运工，而是故事的导演。</div>
+         <div class="quote-src">— 演示设计原则</div>
+       </div>
+     </div>
+     <figure class="frame-img r-16x10 anim-right d3">
+       <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format&fit=crop" alt="Workspace">
+       <figcaption class="img-cap">Unsplash · Workspace</figcaption>
+     </figure>
+   </div>
+   <div class="foot"><div>图文混排</div><div>05 / 12</div></div>
+ </div>
+
+ <!-- L06 Image Grid -->
+ <div class="slide light" id="s6">
+   <div class="chrome"><div>Gallery</div><div>06 / 12</div></div>
+   <div class="frame vstack" style="justify-content:center">
+     <div>
+       <div class="kicker anim d1">Proof Points</div>
+       <div class="h-xl anim d2">图片网格，统一比例</div>
+     </div>
+     <div class="grid-3-3 anim d3">
+       <figure class="frame-img" style="height:22vh"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop" alt="Analytics"><figcaption class="img-cap">数据分析</figcaption></figure>
+       <figure class="frame-img" style="height:22vh"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&auto=format&fit=crop" alt="Dashboard"><figcaption class="img-cap">仪表盘</figcaption></figure>
+       <figure class="frame-img" style="height:22vh"><img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&auto=format&fit=crop" alt="Team"><figcaption class="img-cap">团队协作</figcaption></figure>
+       <figure class="frame-img" style="height:22vh"><img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&auto=format&fit=crop" alt="Meeting"><figcaption class="img-cap">会议沟通</figcaption></figure>
+       <figure class="frame-img" style="height:22vh"><img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&auto=format&fit=crop" alt="Strategy"><figcaption class="img-cap">战略规划</figcaption></figure>
+       <figure class="frame-img" style="height:22vh"><img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&auto=format&fit=crop" alt="Prototype"><figcaption class="img-cap">产品原型</figcaption></figure>
+     </div>
+   </div>
+   <div class="foot"><div>图片网格</div><div>06 / 12</div></div>
+ </div>
+
+ <!-- L07 Pipeline -->
+ <div class="slide light" id="s7">
+   <div class="chrome"><div>Workflow</div><div>07 / 12</div></div>
+   <div class="frame vstack" style="justify-content:center">
+     <div>
+       <div class="kicker anim d1">Process</div>
+       <div class="h-xl anim d2">四步流水线</div>
+     </div>
+     <div class="pipeline anim d3">
+       <div class="pipeline-step"><div class="step-nb">01</div><h3>发现</h3><p>梳理核心信息，确定演讲目标与受众。</p></div>
+       <div class="pipeline-step"><div class="step-nb">02</div><h3>结构</h3><p>用叙事弧线组织 slide，建立节奏。</p></div>
+       <div class="pipeline-step"><div class="step-nb">03</div><h3>设计</h3><p>匹配最佳版式，插入图表与图片。</p></div>
+       <div class="pipeline-step"><div class="step-nb">04</div><h3>演示</h3><p>一键全屏，键盘翻页，备注同步。</p></div>
+     </div>
+   </div>
+   <div class="foot"><div>流程页</div><div>07 / 12</div></div>
+ </div>
+
+ <!-- L08 Smart Charts -->
+ <div class="slide light" id="s8">
+   <div class="chrome"><div>Insights</div><div>08 / 12</div></div>
+   <div class="frame vstack" style="justify-content:center">
+     <div>
+       <div class="kicker anim d1">Smart Charts</div>
+       <div class="h-xl anim d2">数据自动可视化</div>
+     </div>
+     <div class="grid-2 anim d3" style="align-items:stretch;height:520px">
+       <div class="smart-chart" data-chart='{"type":"donut","data":[{"name":"直接访问","value":35},{"name":"社交媒体","value":45},{"name":"自然搜索","value":20}]}'></div>
+       <div class="smart-chart" data-chart='{"type":"bar","labels":["周一","周二","周三","周四","周五"],"series":[{"name":"访问量","data":[120,190,150,220,280]}]}'></div>
+     </div>
+   </div>
+   <div class="foot"><div>智能图表</div><div>08 / 12</div></div>
+ </div>
+
+ <!-- L09 Comparison -->
+ <div class="slide light" id="s9">
+   <div class="chrome"><div>Compare</div><div>09 / 12</div></div>
+   <div class="frame center">
+     <div class="kicker anim d1">Before vs After</div>
+     <div class="h-xl anim d2" style="margin-bottom:64px">效率提升 <span class="em">3 倍</span></div>
+     <div class="compare anim d3">
+       <div class="compare-card">
+         <div class="label">传统方式</div>
+         <div class="value">3h</div>
+         <p class="caption">手动排版 + 调动画</p>
+       </div>
+       <div class="compare-vs anim-scale d4">VS</div>
+       <div class="compare-card">
+         <div class="label">Beautiful Deck</div>
+         <div class="value" style="color:var(--b-accent)">1h</div>
+         <p class="caption">智能版式 + 自动动效</p>
+       </div>
+     </div>
+   </div>
+   <div class="foot"><div>对比页</div><div>09 / 12</div></div>
+ </div>
+
+ <!-- L10 Big Quote -->
+ <div class="slide dark" id="s10">
+   <div class="chrome"><div>Quote</div><div>10 / 12</div></div>
+   <div class="frame center">
+     <div class="quote-block anim d1" style="max-width:1100px">
+       <div class="quote-text">设计的本质是传递意义，而不是堆砌装饰。</div>
+       <div class="quote-src">— Beautiful Deck 设计哲学</div>
+     </div>
+   </div>
+   <div class="foot"><div>金句页</div><div>10 / 12</div></div>
+ </div>
+
+ <!-- L11 4-Column -->
+ <div class="slide light" id="s11">
+   <div class="chrome"><div>Features</div><div>11 / 12</div></div>
+   <div class="frame vstack" style="justify-content:center">
+     <div>
+       <div class="kicker anim d1">Features</div>
+       <div class="h-xl anim d2">四个核心能力</div>
+     </div>
+     <div class="grid-4 anim d3">
+       <div class="b-card glass"><h3>🎨 视觉一致</h3><p>全局变量控制颜色、字体、间距。</p></div>
+       <div class="b-card glass"><h3>⚡ 动效编排</h3><p>自动 stagger、方向入场、数字增长。</p></div>
+       <div class="b-card glass"><h3>📊 数据图表</h3><p>JSON 驱动，自动选择图表类型。</p></div>
+       <div class="b-card glass"><h3>🖨️ 打印友好</h3><p>支持导出 PDF，每页一张 16:9。</p></div>
+     </div>
+   </div>
+   <div class="foot"><div>特性页</div><div>11 / 12</div></div>
+ </div>
+
+ <!-- L12 Closing -->
+ <div class="slide hero dark" id="s12">
+   <div class="cover-frame">
+     <div class="h-hero anim d1">Thank You</div>
+     <div class="lead anim d2" style="max-width:800px">开始用 Beautiful Deck 讲述你的下一个故事。</div>
+     <div class="cover-divider anim d3"></div>
+     <div class="hstack anim d4" style="gap:32px">
+       <div class="tag accent">#BeautifulDeck</div>
+       <div class="tag accent">#HTMLPPT</div>
+     </div>
+   </div>
+ </div>
+
+ </div>
+ </div>
+
+ <button class="fs-btn" onclick="toggleFs()" aria-label="Toggle fullscreen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+ <div class="nav-arrows"><button onclick="go(-1)" aria-label="Previous slide"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><button onclick="go(1)" aria-label="Next slide"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button></div>
+ <div class="nav" id="nav"></div>
+ <div class="page-num" id="pageNum"></div>
+
+ <script>
+   const stage = document.getElementById('deck');
+   function fitStage() {
+     const f = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+     const x = (window.innerWidth - 1920 * f) / 2;
+     const y = (window.innerHeight - 1080 * f) / 2;
+     stage.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + f + ')';
+     const chromeScale = Math.max(1, f);
+     document.documentElement.style.setProperty('--chrome-scale', chromeScale);
+   }
+   fitStage();
+   window.addEventListener('resize', fitStage);
+
+   const slides = document.querySelectorAll('.slide');
+   const N = slides.length;
+   let cur = 0;
+   let isAnimating = false;
+   const nav = document.getElementById('nav');
+   for (let i = 0; i < N; i++) {
+     const d = document.createElement('button');
+     d.className = 'dot' + (i === 0 ? ' on' : '');
+     d.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+     d.onclick = () => jump(i);
+     nav.appendChild(d);
+   }
+
+   function updateViewportBg() {
+     const s = slides[cur];
+     const isDark = s.classList.contains('dark');
+     const isHero = s.classList.contains('hero');
+     let bg = 'var(--b-bg)';
+     if (isDark) {
+       bg = 'radial-gradient(ellipse 80% 60% at 20% 40%, rgba(99,102,241,0.22), transparent), radial-gradient(ellipse 60% 50% at 80% 20%, rgba(20,184,166,0.18), transparent), linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)';
+     } else if (isHero) {
+       bg = 'radial-gradient(ellipse 80% 60% at 20% 40%, rgba(79,70,229,0.15), transparent), radial-gradient(ellipse 60% 50% at 80% 80%, rgba(13,148,136,0.12), transparent), linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)';
+     }
+     document.documentElement.style.setProperty('--viewport-bg', bg);
+   }
+
+   function jump(i) {
+     if (N === 0 || i === cur || isAnimating) return;
+     const next = (i + N) % N;
+     isAnimating = true;
+     if (document.startViewTransition) {
+       const t = document.startViewTransition(() => { doSlideUpdate(next); return Promise.resolve(); });
+       t.finished.then(() => { isAnimating = false; }).catch(() => { isAnimating = false; });
+     } else {
+       doSlideUpdate(next);
+       setTimeout(() => { isAnimating = false; }, 500);
+     }
+   }
+
+   function doSlideUpdate(next) {
+     slides[cur].classList.remove('active');
+     nav.children[cur].classList.remove('on');
+     cur = next;
+     slides[cur].classList.add('active');
+     nav.children[cur].classList.add('on');
+     document.getElementById('pageNum').textContent = (cur + 1) + ' / ' + N;
+     history.replaceState(null, '', '#' + slides[cur].id);
+     updateViewportBg();
+     initSmartCharts();
+     animateNumbers();
+     setTimeout(resizeECharts, 50);
+   }
+
+   function go(d) { jump(cur + d); }
+   function toggleFs() { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }
+
+   document.addEventListener('keydown', e => {
+     if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(1); }
+     if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+     if (e.key === 'Home') { e.preventDefault(); jump(0); }
+     if (e.key === 'End') { e.preventDefault(); jump(N - 1); }
+     if (e.key === 'f' || e.key === 'F') toggleFs();
+   });
+   let tx = 0;
+   document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+   document.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1); });
+
+   function animateNumbers() {
+     const s = slides[cur];
+     s.querySelectorAll('.count-up').forEach(el => {
+       const target = parseFloat(el.dataset.value);
+       if (isNaN(target)) return;
+       const suffix = el.dataset.suffix || '';
+       const prefix = el.dataset.prefix || '';
+       const decimals = parseInt(el.dataset.decimals || '0');
+       const start = performance.now();
+       function step(now) {
+         const p = Math.min((now - start) / 1500, 1);
+         const eased = 1 - Math.pow(1 - p, 4);
+         el.textContent = prefix + (target * eased).toFixed(decimals) + suffix;
+         if (p < 1) requestAnimationFrame(step);
+       }
+       requestAnimationFrame(step);
+     });
+   }
+
+   const echartsInstances = [];
+   function initSmartCharts() {
+     if (typeof echarts === 'undefined') return;
+     document.querySelectorAll('.smart-chart').forEach(el => {
+       if (el.dataset.chartInited === 'true') return;
+       let config = null;
+       try { config = JSON.parse(el.dataset.chart); } catch(e) { return; }
+       if (!config || !config.type) return;
+       const container = document.createElement('div');
+       container.className = 'echarts-container';
+       container.style.height = '100%';
+       el.appendChild(container);
+       const accent = getComputedStyle(document.documentElement).getPropertyValue('--b-accent').trim() || '#4f46e5';
+       const isDark = slides[cur] && slides[cur].classList.contains('dark');
+       const textColor = isDark ? 'rgba(255,255,255,0.8)' : '#475569';
+       let option = { backgroundColor: 'transparent', animation: true, animationDuration: 1200, animationEasing: 'cubicOut' };
+       if (config.type === 'bar') {
+         option = { ...option, tooltip: { trigger: 'axis' }, grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true }, xAxis: { type: 'category', data: config.labels || [], axisLine: { lineStyle: { color: '#cbd5e1' } }, axisLabel: { color: textColor } }, yAxis: { type: 'value', splitLine: { lineStyle: { color: isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0' } }, axisLabel: { color: textColor } }, series: (config.series || []).map(s => ({ name: s.name || '', type: 'bar', data: s.data || [], itemStyle: { color: accent, borderRadius: [6, 6, 0, 0] }, barWidth: '40%' })) };
+       } else if (config.type === 'donut' || config.type === 'pie') {
+         const palette = [accent, '#0d9488', '#d97706', '#e11d48', '#7c3aed', '#64748b'];
+         option = { ...option, tooltip: { trigger: 'item' }, legend: { bottom: '5%', textStyle: { color: textColor } }, series: [{ type: 'pie', radius: ['45%', '70%'], center: ['50%', '45%'], avoidLabelOverlap: true, itemStyle: { borderRadius: 8, borderColor: isDark ? '#0f172a' : '#fff', borderWidth: 2 }, label: { show: true, color: textColor, formatter: '{b}\n{d}%' }, data: (config.data || []).map((d, i) => ({ value: d.value, name: d.name, itemStyle: { color: palette[i % palette.length] } })) }] };
+       }
+       const chart = echarts.init(container, null, { renderer: 'svg' });
+       chart.setOption(option);
+       echartsInstances.push(chart);
+       el.dataset.chartInited = 'true';
+     });
+   }
+   function resizeECharts() { initSmartCharts(); echartsInstances.forEach(c => { try { c.resize(); } catch(e) {} }); }
+
+   window.addEventListener('DOMContentLoaded', () => {
+     initSmartCharts();
+     setTimeout(animateNumbers, 300);
+   });
+
+   const hm = location.hash.match(/^#s(\d+)$/);
+   if (hm && N > 0) jump(Math.min(Math.max(parseInt(hm[1], 10) - 1, 0), N - 1));
+   else if (N > 0) { document.getElementById('pageNum').textContent = '1 / ' + N; updateViewportBg(); }
+ </script>
+ </body>
+ </html>

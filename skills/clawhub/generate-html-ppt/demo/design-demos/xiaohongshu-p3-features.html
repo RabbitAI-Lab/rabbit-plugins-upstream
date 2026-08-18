@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1440, initial-scale=1.0">
+    <title>P3: 核心技术能力拆解 (Dark Glassmorphism)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            width: 1080px; height: 1440px; overflow: hidden;
+            background: #0f172a;
+            font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+            color: #f8fafc;
+            position: relative;
+            padding: 85px 75px;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        .orb-1 {
+            position: absolute; top: -100px; right: -80px;
+            width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(124,58,237,0.3) 0%, transparent 70%);
+            filter: blur(80px);
+        }
+        .orb-2 {
+            position: absolute; bottom: 50px; left: -100px;
+            width: 650px; height: 650px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(79,70,229,0.35) 0%, transparent 70%);
+            filter: blur(80px);
+        }
+
+        .header-box { position: relative; z-index: 2; }
+        .tag-pill {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 24px; border-radius: 30px;
+            background: rgba(79,70,229,0.2); border: 1px solid rgba(99,102,241,0.4);
+            font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700;
+            color: #38bdf8; text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-family: 'Outfit', 'Noto Sans SC', sans-serif;
+            font-size: 60px; font-weight: 900; line-height: 1.15;
+            letter-spacing: -0.02em; margin-bottom: 16px;
+        }
+        .section-desc { font-size: 24px; color: #94a3b8; line-height: 1.5; }
+
+        .pillars-list {
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column; gap: 24px;
+            margin: 28px 0;
+        }
+
+        .pillar-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(24px);
+            border-radius: 28px; padding: 32px 36px;
+            display: flex; align-items: flex-start; gap: 28px;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+        }
+
+        .num-badge {
+            width: 56px; height: 56px; border-radius: 18px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 900; color: #fff;
+        }
+        .nb1 { background: linear-gradient(135deg, #4f46e5, #06b6d4); }
+        .nb2 { background: linear-gradient(135deg, #06b6d4, #10b981); }
+        .nb3 { background: linear-gradient(135deg, #e11d48, #f43f5e); }
+        .nb4 { background: linear-gradient(135deg, #7c3aed, #c084fc); }
+
+        .card-content { flex: 1; }
+        .card-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+        .card-title { font-family: 'Outfit', 'Noto Sans SC', sans-serif; font-size: 26px; font-weight: 800; color: #f8fafc; }
+        .card-tag { font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; }
+        .card-body { font-size: 18px; color: #cbd5e1; line-height: 1.6; }
+        .card-code {
+            margin-top: 10px; padding: 10px 16px; border-radius: 12px;
+            background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.08);
+            font-family: monospace; font-size: 15px; color: #38bdf8;
+        }
+
+        .footer-bar {
+            position: relative; z-index: 2;
+            display: flex; align-items: center; justify-content: space-between;
+            padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .brand-text { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; color: #cbd5e1; }
+        .page-indicator { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; color: #06b6d4; }
+    </style>
+</head>
+<body>
+    <div class="orb-1"></div>
+    <div class="orb-2"></div>
+
+    <div class="header-box">
+        <div class="tag-pill">Core Features</div>
+        <h1 class="section-title">4 大核心物理与排版能力拆解</h1>
+        <p class="section-desc">结合现代 App 动效与网页弹性渲染，重塑演示文稿的每一帧体验。</p>
+    </div>
+
+    <div class="pillars-list">
+        <div class="pillar-card">
+            <div class="num-badge nb1">01</div>
+            <div class="card-content">
+                <div class="card-title-row">
+                    <div class="card-title">Spring Physics 60fps 缓动</div>
+                    <div class="card-tag">Motion Engine</div>
+                </div>
+                <div class="card-body">超越传统线性平移动效，采用弹簧回弹曲线，带来极致流畅自然的微交互体验。</div>
+                <div class="card-code">transition: transform 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275);</div>
+            </div>
+        </div>
+
+        <div class="pillar-card">
+            <div class="num-badge nb2">02</div>
+            <div class="card-content">
+                <div class="card-title-row">
+                    <div class="card-title">Scheme 1/2 空间分配算法</div>
+                    <div class="card-tag">Density Control</div>
+                </div>
+                <div class="card-body">根据页面 2 区块/3 区块自动匹配对齐法则，引入管道连通桥彻底消除留白断层。</div>
+                <div class="card-code">Scheme 1: gap: 40px Top-Align | Scheme 2: .between Full Height</div>
+            </div>
+        </div>
+
+        <div class="pillar-card">
+            <div class="num-badge nb3">03</div>
+            <div class="card-content">
+                <div class="card-title-row">
+                    <div class="card-title">Glassmorphism 晶体质感</div>
+                    <div class="card-tag">Visual Surface</div>
+                </div>
+                <div class="card-body">多层高透毛玻璃表面搭配背景发光晕圈，高精边框与微光沉降媲美高端科技发布会。</div>
+                <div class="card-code">backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.14);</div>
+            </div>
+        </div>
+
+        <div class="pillar-card">
+            <div class="num-badge nb4">04</div>
+            <div class="card-content">
+                <div class="card-title-row">
+                    <div class="card-title">ECharts 原生智能集成</div>
+                    <div class="card-tag">Data Visualization</div>
+                </div>
+                <div class="card-body">只需在 HTML 中挂载 JSON 声明，图表引擎即可实现自适应自重绘与柱状/环形图无缝渲染。</div>
+                <div class="card-code">&lt;div class="smart-chart" data-chart='{"type":"bar"...}'&gt;</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bar">
+        <div class="brand-text">Beautiful Modern System</div>
+        <div class="page-indicator">03 / 05</div>
+    </div>
+</body>
+</html>

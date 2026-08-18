@@ -1,43 +1,66 @@
-## Description: <br>
-Github Flow guides agents through GitHub issue, pull request, review, merge, dependency, authentication, and publication workflows using GitHub CLI-first procedures. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GitHub Flow helps agents manage GitHub issue and pull request workflows, including issue drafting, PR creation, review posting, merge gates, auth handling, dependency tracking, push safeguards, and public-repository sanitization.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to convert plans into GitHub issues and PRs, manage review and merge flows, enforce public-repository hygiene, and handle GitHub CLI authentication and scope checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents through high-impact GitHub actions, including token refreshes, public posting, force-pushes, direct branch pushes, and merges. <br>
-Mitigation: Install only where agent-managed GitHub workflows are intended, and require explicit user confirmation before token refreshes, public posts, force-pushes, direct master pushes, or merges. <br>
-Risk: Hardcoded account mappings and scope rules can cause work to run under the wrong GitHub identity or with broader access than expected. <br>
-Mitigation: Replace the documented accounts and scope rules with the user's own policy, then verify gh CLI identity, repository owner, and token scope before live operations. <br>
-Risk: Home-directory and cache assumptions can affect how credentials or local workflow state are reused between agent runs. <br>
-Mitigation: Review local credential storage, cache dependencies, and gh CLI state before enabling the skill in shared or sensitive environments. <br>
+## Use Case:
 
+Developers and repository maintainers use this skill to turn plans and implementation results into GitHub issues and pull requests, coordinate review and merge workflows, and apply safeguards before publishing public repository content.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/github-flow) <br>
-- [Publisher profile](https://clawhub.ai/user/drumrobot) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and GitHub CLI/API examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires local GitHub repository context and configured gh CLI credentials for live GitHub operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.0 (source: server release metadata and CHANGELOG, released 2026-07-23) <br>
+Risk: The skill can guide broad GitHub repository operations, including authentication scope changes, PR creation, comments, review posting, merges, and local git cleanup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation for every remote write, review the target repository and account before execution, and avoid broad gh auth scope refreshes unless they are necessary.
+
+Risk: The security summary reports broad repository and credential authority with several under-scoped or contradictory safety gates.
+
+Mitigation: Treat gate checks as mandatory review points, verify CI and review evidence before merge actions, and pause when a gate or instruction conflicts.
+
+Risk: GH_TOKEN and private repository context can expose sensitive data if reused or published carelessly.
+
+Mitigation: Treat GH_TOKEN as sensitive, keep tokens out of generated text, and do not rely on private-repo exceptions for secrets or internal infrastructure data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/github-flow)
+- [Publisher profile](https://clawhub.ai/user/drumrobot)
+- [Skill manifest](artifact/SKILL.md)
+- [Changelog](artifact/CHANGELOG.md)
+- [License](artifact/LICENSE)
+- [Identity and auth guide](artifact/identity-auth.md)
+- [Pull request guide](artifact/pr.md)
+- [Merge guide](artifact/merge.md)
+- [Push guards guide](artifact/push-guards.md)
+- [Public repository sanitization guide](artifact/sanitize.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and small script or configuration snippets.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Output is intended for GitHub repositories and gh CLI workflows; remote writes should be explicitly confirmed before execution.]
+
+## Skill Version(s):
+
+0.8.3 (source: ClawHub release evidence and CHANGELOG.md, released 2026-08-17)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

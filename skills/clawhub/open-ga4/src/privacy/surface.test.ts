@@ -1,0 +1,129 @@
+import { readdir, readFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { describe, expect, it } from "vitest";
+
+/**
+ * Structural privacy guarantees, asserted against the built artifact rather
+ * than against intentions.
+ *
+ * The Data API has exactly three surfaces that return per-person rows:
+ * `properties.audienceExports`, `properties.audienceLists`, and the Admin API's
+ * `runAccessReport`. This skill does not call them. That claim is worth
+ * something only if it is checked, so it is checked here, against `lib/`,
+ * the committed compiled output, which is what actually ships to users.
+ */
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const libDir = path.resolve(here, "../../lib");
+const repoRoot = path.resolve(here, "../..");
+
+/** Hosts the skill actually opens a connection to. The runtime guarantee is
+ * enforced by assertAllowedUrl in ga4/http.ts and tested there; the scan
+ * below is defence in depth against a hardcoded URL reaching the bundle
+ * unreviewed. */
+const CONTACTED = ["analyticsadmin.googleapis.com", "analyticsdata.googleapis.com", "oauth2.googleapis.com"];
+
+/**
+ * Hosts that appear only as text shown to a human: a link in a "here is how
+ * to fix it" message, or the OAuth scope identifier. Never fetched. Adding to
+ * this list is a deliberate, reviewable decision: README.md's egress
+ * paragraph names every one of these verbatim, and the test below pins that
+ * paragraph to this exact array, so the two cannot silently drift apart.
+ */
+const REFERENCED_ONLY = [
+  "www.googleapis.com", // inside the analytics.readonly scope string
+  "console.cloud.google.com", // "enable the API here" link in errors.ts
+  "console.developers.google.com", // same link, as Google returns it in Help details
+  "analytics.google.com", // Property access management link in setup/state.ts's no_property_grant state
+];
+
+async function readLibSources(): Promise<Array<{ file: string; text: string }>> {
+  const out: Array<{ file: string; text: string }> = [];
+  async function walk(dir: string): Promise<void> {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        await walk(full);
+      } else if (entry.name.endsWith(".js")) {
+        out.push({ file: path.relative(libDir, full), text: await readFile(full, "utf8") });
+      }
+    }
+  }
+  await walk(libDir);
+  return out;
+}
+
+describe("the shipped bundle", () => {
+  it("never references a per-user Google Analytics surface", async () => {
+    const forbidden = ["audienceExport", "audienceList", "runAccessReport", "userDataRetention"];
+    const offenders: string[] = [];
+
+    for (const { file, text } of await readLibSources()) {
+      for (const term of forbidden) {
+        if (text.includes(term)) {
+          offenders.push(`${file} contains "${term}"`);
+        }
+      }
+    }
+
+    expect(offenders).toEqual([]);
+  });
+
+  it("requests no OAuth scope other than analytics.readonly", async () => {
+    const scopes = new Set<string>();
+    for (const { text } of await readLibSources()) {
+      for (const match of text.matchAll(/https:\/\/www\.googleapis\.com\/auth\/[\w.-]+/g)) {
+        scopes.add(match[0]);
+      }
+    }
+    expect([...scopes]).toEqual(["https://www.googleapis.com/auth/analytics.readonly"]);
+  });
+
+  it("mentions no URL that is neither contacted nor a documented signpost", async () => {
+    const allowed = new Set([...CONTACTED, ...REFERENCED_ONLY]);
+    const hosts = new Set<string>();
+    for (const { text } of await readLibSources()) {
+      for (const match of text.matchAll(/https:\/\/([a-z0-9.-]+\.[a-z]{2,})/gi)) {
+        hosts.add(match[1]!.toLowerCase());
+      }
+    }
+
+    expect([...hosts].filter((host) => !allowed.has(host))).toEqual([]);
+  });
+
+  it("keeps README.md's egress paragraph naming exactly these hosts", async () => {
+    // Pins the paragraph the README publishes verbatim to CONTACTED and
+    // REFERENCED_ONLY above, so the next addition to either array is
+    // impossible to make without updating that prose in the same change:
+    // the drift this repository has already suffered twice.
+    const readme = await readFile(path.join(repoRoot, "README.md"), "utf8");
+    const start = readme.indexOf("**An egress allowlist enforced in code.**");
+    const end = readme.indexOf("**Read-only by scope.**");
+    expect(start, "README.md's egress-allowlist bullet was not found").toBeGreaterThan(-1);
+    expect(end, "README.md's read-only-by-scope bullet was not found").toBeGreaterThan(start);
+    const paragraph = readme.slice(start, end);
+
+    const named = new Set<string>();
+    for (const match of paragraph.matchAll(/`([a-z0-9.-]+\.[a-z]{2,})`/gi)) {
+      named.add(match[1]!.toLowerCase());
+    }
+
+    expect(named).toEqual(new Set([...CONTACTED, ...REFERENCED_ONLY]));
+  });
+
+  it("writes nothing to disk outside the audit log", async () => {
+    const offenders: string[] = [];
+    for (const { file, text } of await readLibSources()) {
+      if (file.startsWith("privacy/audit")) {
+        continue;
+      }
+      for (const term of ["writeFile", "appendFile", "createWriteStream", "mkdir"]) {
+        if (text.includes(term)) {
+          offenders.push(`${file} calls ${term}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+});

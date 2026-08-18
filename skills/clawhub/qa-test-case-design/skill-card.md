@@ -1,44 +1,56 @@
-## Description: <br>
-Transforms completed QA analysis inputs into structured, prioritized, traceable test case designs with coverage notes and review guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps QA practitioners turn completed requirements, scenario, boundary, and combination analysis into structured, prioritized, traceable test cases.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and test leads use this skill after requirements, scenario, boundary, or combination analysis to turn those inputs into P0-P3 test case sets with traceability, coverage summaries, and review-ready expected results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases may activate the skill before enough upstream QA analysis is available. <br>
-Mitigation: Provide clear requirements and, when possible, completed scenario, boundary, or combination analysis before using the generated case design. <br>
-Risk: Generated test cases can miss product-specific details or include assumptions that do not match the target system. <br>
-Mitigation: Have a QA owner review the cases, fill in system-specific test steps, and verify traceability and coverage before execution. <br>
+## Use Case:
 
+QA engineers, testers, and product teams use this skill to convert finished requirements analysis into P0-P3 test case sets with coverage notes, traceability, and review guidance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-test-case-design) <br>
-- [Coverage and Quality Standards](references/coverage-and-quality.md) <br>
-- [Design Methods Reference](references/design-methods.md) <br>
-- [Output Template](references/output-template-full.md) <br>
-- [Review Standards](references/review-standards.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown reports and tables with structured test case fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Leaves test steps for the user to complete and emphasizes requirement-based design rather than code inspection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may activate for many test-case-related requests and could be used before requirements analysis is complete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it after requirements, scenarios, boundaries, and combinations have been analyzed, and provide that prior analysis as input.
+
+Risk: Generated test cases can be incomplete or mismatched to the actual system if the user supplies limited requirements.
+
+Mitigation: Review the generated cases against product requirements, fill in system-specific execution steps, and validate coverage before operational use.
+
+## Reference(s):
+
+- [Design Methods](references/design-methods.md)
+- [Coverage and Quality](references/coverage-and-quality.md)
+- [Review Standards](references/review-standards.md)
+- [Output Template Full](references/output-template-full.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown test case templates and QA review guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces prioritized P0-P3 test cases with traceability fields, coverage notes, risk reminders, and user-completed execution steps.]
+
+## Skill Version(s):
+
+1.7.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

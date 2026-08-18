@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class SCH_PrimitiveAttribute implements ISCH_PrimitiveAPI 
+export class SCH_PrimitiveAttribute implements ISCH_PrimitiveAPI 
 ```
 **Implements:** [ISCH\_PrimitiveAPI](../interfaces/ISCH_PrimitiveAPI.md)
 
@@ -28,6 +28,20 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+[createNetLabel(x, y, net)](./SCH_PrimitiveAttribute.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 创建网络标签
+
+
+</td></tr>
+<tr><td>
 
 [get(primitiveIds)](./SCH_PrimitiveAttribute.md)
 
@@ -103,6 +117,100 @@ Description
 
 ## 方法详情
 
+### createnetlabel
+
+# SCH\_PrimitiveAttribute.createNetLabel() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+创建网络标签
+
+## Signature
+
+```typescript
+public createNetLabel(x: number, y: number, net: string): Promise<ISCH_PrimitiveAttribute | undefined>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+x
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+坐标 X
+
+
+</td></tr>
+<tr><td>
+
+y
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+坐标 Y
+
+
+</td></tr>
+<tr><td>
+
+net
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+网络名称
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;[ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md) \| undefined&gt;
+
+网络标签属性图元
+
+## Remarks
+
+ADD since EDA v4
+
 ### get
 
 # SCH\_PrimitiveAttribute.get() method
@@ -114,7 +222,7 @@ Description
 ## Signature
 
 ```typescript
-get(primitiveIds: string): Promise<ISCH_PrimitiveAttribute | undefined>;
+public get(primitiveIds: string): Promise<ISCH_PrimitiveAttribute | undefined>;
 ```
 
 ## Parameters
@@ -172,7 +280,7 @@ Promise&lt;[ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md) \| undefined
 ## Signature
 
 ```typescript
-get(primitiveIds: Array<string>): Promise<Array<ISCH_PrimitiveAttribute>>;
+public get(primitiveIds: Array<string>): Promise<Array<ISCH_PrimitiveAttribute>>;
 ```
 
 ## Parameters
@@ -234,7 +342,7 @@ Promise&lt;Array&lt;[ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)<!--
 ## Signature
 
 ```typescript
-getAll(parentPrimitiveId?: string): Promise<Array<ISCH_PrimitiveAttribute>>;
+public getAll(parentPrimitiveId?: string): Promise<Array<ISCH_PrimitiveAttribute>>;
 ```
 
 ## Parameters
@@ -296,7 +404,7 @@ Promise&lt;Array&lt;[ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)<!--
 ## Signature
 
 ```typescript
-getAllPrimitiveId(parentPrimitiveId?: string): Promise<Array<string>>;
+public getAllPrimitiveId(parentPrimitiveId?: string): Promise<Array<string>>;
 ```
 
 ## Parameters
@@ -358,23 +466,7 @@ Promise&lt;Array&lt;string&gt;&gt;
 ## Signature
 
 ```typescript
-modify(primitiveId: string | ISCH_PrimitiveAttribute, property: {
-        x?: number | null;
-        y?: number | null;
-        rotation?: number | null;
-        color?: string | null;
-        fontName?: string | null;
-        fontSize?: number | null;
-        bold?: boolean | null;
-        italic?: boolean | null;
-        underLine?: boolean | null;
-        alignMode?: ESCH_PrimitiveTextAlignMode | null;
-        fillColor?: string | null;
-        key?: string;
-        value?: string;
-        keyVisible?: boolean | null;
-        valueVisible?: boolean | null;
-    }): Promise<ISCH_PrimitiveAttribute | undefined>;
+public modify(primitiveId: string | ISCH_PrimitiveAttribute, property: { x?: undefined | null | number; y?: undefined | null | number; rotation?: undefined | null | number; color?: undefined | null | string; fontName?: undefined | null | string; fontSize?: undefined | null | number; bold?: undefined | null | false | true; italic?: undefined | null | false | true; underLine?: undefined | null | false | true; alignMode?: undefined | null | ESCH_PrimitiveTextAlignMode.LEFT_TOP | ESCH_PrimitiveTextAlignMode.LEFT_MIDDLE | ESCH_PrimitiveTextAlignMode.LEFT_BOTTOM | ESCH_PrimitiveTextAlignMode.CENTER_TOP | ESCH_PrimitiveTextAlignMode.CENTER | ESCH_PrimitiveTextAlignMode.CENTER_BOTTOM | ESCH_PrimitiveTextAlignMode.RIGHT_TOP | ESCH_PrimitiveTextAlignMode.RIGHT_MIDDLE | ESCH_PrimitiveTextAlignMode.RIGHT_BOTTOM; fillColor?: undefined | null | string; key?: undefined | string; value?: undefined | string; keyVisible?: undefined | null | false | true; valueVisible?: undefined | null | false | true }): Promise<ISCH_PrimitiveAttribute | undefined>;
 ```
 
 ## Parameters
@@ -418,7 +510,7 @@ property
 
 </td><td>
 
-{ x?: number \| null; y?: number \| null; rotation?: number \| null; color?: string \| null; fontName?: string \| null; fontSize?: number \| null; bold?: boolean \| null; italic?: boolean \| null; underLine?: boolean \| null; alignMode?: [ESCH\_PrimitiveTextAlignMode](../enums/ESCH_PrimitiveTextAlignMode.md) \| null; fillColor?: string \| null; key?: string; value?: string; keyVisible?: boolean \| null; valueVisible?: boolean \| null; }
+{ x?: undefined \| null \| number; y?: undefined \| null \| number; rotation?: undefined \| null \| number; color?: undefined \| null \| string; fontName?: undefined \| null \| string; fontSize?: undefined \| null \| number; bold?: undefined \| null \| false \| true; italic?: undefined \| null \| false \| true; underLine?: undefined \| null \| false \| true; alignMode?: undefined \| null \| [ESCH\_PrimitiveTextAlignMode.LEFT\_TOP](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.LEFT\_MIDDLE](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.LEFT\_BOTTOM](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.CENTER\_TOP](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.CENTER](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.CENTER\_BOTTOM](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.RIGHT\_TOP](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.RIGHT\_MIDDLE](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.RIGHT\_BOTTOM](../enums/ESCH_PrimitiveTextAlignMode.md)<!-- -->; fillColor?: undefined \| null \| string; key?: undefined \| string; value?: undefined \| string; keyVisible?: undefined \| null \| false \| true; valueVisible?: undefined \| null \| false \| true }
 
 
 </td><td>

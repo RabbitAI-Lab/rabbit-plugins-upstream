@@ -1,0 +1,11 @@
+name: influencer-audience-fit-scoring
+version: 1.0.0
+description: Pre-campaign audience-fit analysis across YouTube, TikTok, and Instagram. Evaluate audience geography/language/age/gender/interests/behavior/follower authenticity/rating tiers, compare creators, and justify selection with score breakdowns.
+category: research
+requires_api_key: false
+triggers:
+  - audience fit
+  - audience analysis
+  - follower authenticity
+  - audience demographics
+  - creator comparison

@@ -1,49 +1,66 @@
-## Description: <br>
-Provides non-animation creative direction for HyperFrames videos, covering design specs, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns, and brand or style decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HyperFrames Creative provides non-animation creative direction for HyperFrames videos, including design specs, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns, and brand and style decisions.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and creative teams use this skill to plan the brand, pacing, style, narration, and frame composition of HyperFrames videos after the technical contract is in place. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run local scripts and process audio or video through ffmpeg. <br>
-Mitigation: Review commands before execution and run them only on trusted media in a controlled project workspace. <br>
-Risk: Preview or showcase HTML may start a localhost server and load Google Fonts or jsdelivr assets. <br>
-Mitigation: Use network controls in stricter environments and avoid opening preview HTML unless external asset access is acceptable. <br>
-Risk: Creative tooling may write design files, generated reports, or other project artifacts. <br>
-Mitigation: Review changed files before committing and pin HYPERFRAMES_SKILL_PKG_VERSION when bootstrapping dependencies outside the bundled CLI. <br>
+## Use Case:
 
+Developers, designers, and creative technologists use this skill to turn HyperFrames video requests into brand-aware visual direction, frame design specs, palettes, typography choices, narration structure, beat plans, and composition guidance. It is intended for non-animation creative planning after the HyperFrames technical contract is already in place.
 
-## Reference(s): <br>
-- [House Style](artifact/references/house-style.md) <br>
-- [Video Composition](artifact/references/video-composition.md) <br>
-- [Design Spec](artifact/references/design-spec.md) <br>
-- [Visual Style Library](artifact/references/visual-styles.md) <br>
-- [Beat Direction](artifact/references/beat-direction.md) <br>
-- [Audio-Reactive Animation](artifact/references/audio-reactive.md) <br>
-- [Typography](artifact/references/typography.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/hyperframes-creative) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with optional code blocks and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write design spec files, generate HTML/CSS direction, and provide local script commands for HyperFrames workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: ClawHub release metadata) <br>
+Risk: Creative preview files may contact third-party font or script services such as Google Fonts or jsDelivr when opened.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: For offline or stricter environments, vendor fonts and GSAP locally before using the preview files.
+
+Risk: Optional helper workflows may start a local web server or bootstrap npm packages after confirmation.
+
+Mitigation: Review helper commands before running them and avoid dynamic font-discovery or package-bootstrap workflows where external network access is not acceptable.
+
+## Reference(s):
+
+- [House Style](references/house-style.md)
+- [Video Composition](references/video-composition.md)
+- [Design Spec](references/design-spec.md)
+- [Visual Style Library](references/visual-styles.md)
+- [Beat Direction](references/beat-direction.md)
+- [Typography](references/typography.md)
+- [Composition Patterns](references/composition-patterns.md)
+- [Design Adherence](references/design-adherence.md)
+- [Audio-Reactive Animation](references/audio-reactive.md)
+- [Design Picker](references/design-picker.md)
+- [Prompt Expansion](references/prompt-expansion.md)
+- [Story Spine](references/story-spine.md)
+- [Narration and Script](references/narration.md)
+- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/hyperframes-creative)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with code snippets, design-token references, shell commands, and optional generated JSON or preview files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce frame-spec guidance, palette and typography recommendations, contrast reports, audio-band JSON, and design-picker previews when helper workflows are used.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

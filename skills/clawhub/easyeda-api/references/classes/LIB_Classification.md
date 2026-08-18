@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class LIB_Classification 
+export class LIB_Classification 
 ```
 
 ## Methods
@@ -152,14 +152,14 @@ Description
 
 > Warning: This API is now obsolete.
 >
-> - since EDA v3.2; dropped EDA v3.3
+> since EDA v3.2; dropped EDA v3.3
 
 创建一级分类
 
 ## Signature
 
 ```typescript
-createPrimary(libraryUuid: string, libraryType: ELIB_LibraryType, primaryClassificationName: string): Promise<ILIB_ClassificationIndex | undefined>;
+public createPrimary(libraryUuid: string, libraryType: ELIB_LibraryType, primaryClassificationName: string): Promise<ILIB_ClassificationIndex | undefined>;
 ```
 
 ## Parameters
@@ -246,14 +246,14 @@ Promise&lt;[ILIB\_ClassificationIndex](../interfaces/ILIB_ClassificationIndex.md
 
 > Warning: This API is now obsolete.
 >
-> - since EDA v3.2; dropped EDA v3.3
+> since EDA v3.2; dropped EDA v3.3
 
 创建二级分类
 
 ## Signature
 
 ```typescript
-createSecondary(libraryUuid: string, libraryType: ELIB_LibraryType, primaryClassificationUuid: string, secondaryClassificationName: string): Promise<ILIB_ClassificationIndex | undefined>;
+public createSecondary(libraryUuid: string, libraryType: ELIB_LibraryType, primaryClassificationUuid: string, secondaryClassificationName: string): Promise<ILIB_ClassificationIndex | undefined>;
 ```
 
 ## Parameters
@@ -356,14 +356,14 @@ Promise&lt;[ILIB\_ClassificationIndex](../interfaces/ILIB_ClassificationIndex.md
 
 > Warning: This API is now obsolete.
 >
-> - since EDA v3.2; dropped EDA v3.3
+> since EDA v3.2; dropped EDA v3.3
 
 删除指定索引的分类
 
 ## Signature
 
 ```typescript
-deleteByIndex(classificationIndex: ILIB_ClassificationIndex): Promise<boolean>;
+public deleteByIndex(classificationIndex: ILIB_ClassificationIndex): Promise<boolean>;
 ```
 
 ## Parameters
@@ -416,12 +416,16 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
+> Warning: This API is now obsolete.
+>
+> since EDA v3.2; dropped EDA v3.3
+
 删除指定 UUID 的分类
 
 ## Signature
 
 ```typescript
-deleteByUuid(libraryUuid: string, classificationUuid: string): Promise<boolean>;
+public deleteByUuid(libraryUuid: string, classificationUuid: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -488,19 +492,16 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
+> Warning: This API is now obsolete.
+>
+> since EDA v3.2; dropped EDA v3.3
+
 获取所有分类信息组成的树
 
 ## Signature
 
 ```typescript
-getAllClassificationTree(libraryUuid: string, libraryType: ELIB_LibraryType): Promise<Array<{
-        name: string;
-        uuid: string;
-        children?: Array<{
-            name: string;
-            uuid: string;
-        }> | undefined;
-    }>>;
+public getAllClassificationTree(libraryUuid: string, libraryType: ELIB_LibraryType): Promise<Array<{ name: string; uuid: string; children?: undefined | { name: string; uuid: string }[] }>>;
 ```
 
 ## Parameters
@@ -559,7 +560,7 @@ libraryType
 
 ## Returns
 
-Promise&lt;Array&lt;{ name: string; uuid: string; children?: Array&lt;{ name: string; uuid: string; }&gt; \| undefined; }&gt;&gt;
+Promise&lt;Array&lt;{ name: string; uuid: string; children?: undefined \| { name: string; uuid: string }\[\] }&gt;&gt;
 
 分类信息组成的树结构数据
 
@@ -571,14 +572,14 @@ Promise&lt;Array&lt;{ name: string; uuid: string; children?: Array&lt;{ name: st
 
 > Warning: This API is now obsolete.
 >
-> - since EDA v3.2; dropped EDA v3.3
+> since EDA v3.2; dropped EDA v3.3
 
 获取指定名称的分类的分类索引
 
 ## Signature
 
 ```typescript
-getIndexByName(libraryUuid: string, libraryType: ELIB_LibraryType, primaryClassificationName: string, secondaryClassificationName?: string): Promise<ILIB_ClassificationIndex | undefined>;
+public getIndexByName(libraryUuid: string, libraryType: ELIB_LibraryType, primaryClassificationName: string, secondaryClassificationName?: string): Promise<ILIB_ClassificationIndex | undefined>;
 ```
 
 ## Parameters
@@ -685,17 +686,14 @@ Promise&lt;[ILIB\_ClassificationIndex](../interfaces/ILIB_ClassificationIndex.md
 
 > Warning: This API is now obsolete.
 >
-> - since EDA v3.2; dropped EDA v3.3
+> since EDA v3.2; dropped EDA v3.3
 
 获取指定索引的分类的名称
 
 ## Signature
 
 ```typescript
-getNameByIndex(classificationIndex: ILIB_ClassificationIndex): Promise<{
-        primaryClassificationName: string;
-        secondaryClassificationName?: string | undefined;
-    } | undefined>;
+public getNameByIndex(classificationIndex: ILIB_ClassificationIndex): Promise<{ primaryClassificationName: string; secondaryClassificationName?: undefined | string } | undefined>;
 ```
 
 ## Parameters
@@ -738,7 +736,7 @@ classificationIndex
 
 ## Returns
 
-Promise&lt;{ primaryClassificationName: string; secondaryClassificationName?: string \| undefined; } \| undefined&gt;
+Promise&lt;{ primaryClassificationName: string; secondaryClassificationName?: undefined \| string } \| undefined&gt;
 
 两级分类的名称
 
@@ -748,15 +746,16 @@ Promise&lt;{ primaryClassificationName: string; secondaryClassificationName?: st
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
+> Warning: This API is now obsolete.
+>
+> since EDA v3.2; dropped EDA v3.3
+
 获取指定 UUID 的分类的名称
 
 ## Signature
 
 ```typescript
-getNameByUuid(libraryUuid: string, libraryType: ELIB_LibraryType, primaryClassificationUuid: string, secondaryClassificationUuid?: string): Promise<{
-        primaryClassificationName: string;
-        secondaryClassificationName?: string | undefined;
-    } | undefined>;
+public getNameByUuid(libraryUuid: string, libraryType: ELIB_LibraryType, primaryClassificationUuid: string, secondaryClassificationUuid?: string): Promise<{ primaryClassificationName: string; secondaryClassificationName?: undefined | string } | undefined>;
 ```
 
 ## Parameters
@@ -847,6 +846,6 @@ _(Optional)_ 二级分类 UUID，如若不指定，则只获取一级分类的�
 
 ## Returns
 
-Promise&lt;{ primaryClassificationName: string; secondaryClassificationName?: string \| undefined; } \| undefined&gt;
+Promise&lt;{ primaryClassificationName: string; secondaryClassificationName?: undefined \| string } \| undefined&gt;
 
 两级分类的名称

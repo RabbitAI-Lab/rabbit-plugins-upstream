@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautiful Modern 设计语言与 HTML PPT 全景展示</title>
+    <!-- Google Fonts: Outfit (Display) & Plus Jakarta Sans / Noto Sans SC (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js" defer></script>
+    <style>
+        /* === BEAUTIFUL MODERN DESIGN SYSTEM TOKENS === */
+        :root {
+            --b-bg-light: #f8fafc;
+            --b-bg-dark: #0f172a;
+            --b-surface-light: rgba(255, 255, 255, 0.85);
+            --b-surface-dark: rgba(30, 41, 59, 0.75);
+            --b-text-dark: #0f172a;
+            --b-text-light: #f8fafc;
+            --b-text-muted: #64748b;
+            --b-border-light: rgba(15, 23, 42, 0.08);
+            --b-border-dark: rgba(255, 255, 255, 0.12);
+
+            --b-accent: #4f46e5;
+            --b-accent-600: #4338ca;
+            --b-accent-cyan: #06b6d4;
+            --b-accent-light: #e0e7ff;
+            --b-accent-soft: rgba(79, 70, 229, 0.12);
+
+            --b-teal: #0d9488;
+            --b-rose: #e11d48;
+            --b-amber: #d97706;
+            --b-violet: #7c3aed;
+
+            --b-grad-accent: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+            --b-grad-dark: radial-gradient(ellipse 80% 60% at 20% 30%, rgba(99,102,241,0.25), transparent),
+                           radial-gradient(ellipse 60% 50% at 80% 80%, rgba(6,182,212,0.20), transparent),
+                           linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --b-grad-light: radial-gradient(ellipse 80% 60% at 20% 30%, rgba(79,70,229,0.08), transparent),
+                            radial-gradient(ellipse 60% 50% at 80% 80%, rgba(6,182,212,0.08), transparent),
+                            linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+
+            --viewport-bg: #0f172a;
+            --slide-bg: #0f172a;
+
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+
+            --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+            --radius-md: 24px;
+            --radius-lg: 32px;
+        }
+
+        /* === FIXED 16:9 STAGE BASE CSS === */
+        html, body {
+            width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+            background: var(--viewport-bg);
+            transition: background 0.5s var(--ease-smooth);
+            font-family: var(--font-body);
+            -webkit-font-smoothing: antialiased;
+        }
+        .deck-viewport {
+            position: fixed; inset: 0; overflow: hidden;
+            background: var(--viewport-bg);
+            transition: background 0.5s var(--ease-smooth);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .deck-stage {
+            position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+            overflow: hidden; transform-origin: 0 0;
+            background: var(--slide-bg);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+        }
+        .slide {
+            position: absolute; inset: 0; width: 1920px; height: 1080px;
+            overflow: hidden; display: block; visibility: hidden; opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            padding: 90px 110px; box-sizing: border-box;
+        }
+        .slide.active {
+            visibility: visible; opacity: 1; pointer-events: auto; z-index: 1;
+        }
+
+        /* Slide Theme Modes */
+        .slide.dark {
+            background: var(--b-grad-dark);
+            color: var(--b-text-light);
+            --card-bg: var(--b-surface-dark);
+            --card-border: var(--b-border-dark);
+            --text-color: var(--b-text-light);
+            --text-sub: #94a3b8;
+        }
+        .slide.light {
+            background: #ffffff;
+            color: var(--b-text-dark);
+            --card-bg: var(--b-surface-light);
+            --card-border: var(--b-border-light);
+            --text-color: var(--b-text-dark);
+            --text-sub: var(--b-text-muted);
+        }
+
+        /* Flexible Layout Rules */
+        .slide-content {
+            position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; gap: 36px;
+        }
+        .slide-content.between {
+            justify-content: space-between; gap: 0;
+        }
+        .slide-content.center {
+            justify-content: center; align-items: center; text-align: center;
+        }
+        .slide-content.center-group {
+            justify-content: center; gap: 36px;
+        }
+
+        /* Middle Bridge Feature Chips */
+        .hero-middle-bridge {
+            display: flex; gap: 16px; flex-wrap: wrap; margin-top: -8px; margin-bottom: 4px;
+        }
+        .hero-chip {
+            padding: 10px 22px; border-radius: 30px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px); font-size: 17px; font-weight: 600; color: #cbd5e1;
+            display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .hero-chip:hover {
+            background: rgba(79, 70, 229, 0.15); border-color: rgba(6, 182, 212, 0.4); color: #fff;
+            transform: translateY(-2px);
+        }
+        .chip-dot { color: var(--b-accent-cyan); font-size: 16px; }
+
+        /* Typography */
+        .display-hero {
+            font-family: var(--font-display);
+            font-size: 96px; font-weight: 800; line-height: 1.05;
+            letter-spacing: -0.03em; margin: 0 0 20px 0;
+            background: var(--b-grad-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .display-chapter {
+            font-family: var(--font-display);
+            font-size: 56px; font-weight: 700; line-height: 1.1; margin: 0 0 14px 0;
+            letter-spacing: -0.02em; color: var(--text-color);
+        }
+        .eyebrow-pill {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 22px; border-radius: 30px;
+            background: var(--b-accent-soft); border: 1px solid rgba(79, 70, 229, 0.3);
+            font-family: var(--font-display); font-size: 15px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.15em; color: var(--b-accent-cyan);
+            margin-bottom: 14px; width: fit-content;
+        }
+        .tagline {
+            font-family: var(--font-body); font-size: 24px; font-weight: 600;
+            color: #94a3b8; margin-bottom: 20px; letter-spacing: -0.01em;
+        }
+        .body-desc {
+            font-family: var(--font-body); font-size: 21px; line-height: 1.6;
+            color: var(--text-sub); max-width: 1200px; margin: 0;
+        }
+
+        /* Grid System */
+        .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+        .grid-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; }
+        .grid-4col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .grid-2-7-5 { display: grid; grid-template-columns: 7fr 5fr; gap: 40px; }
+
+        /* Glassmorphic Beautiful Cards */
+        .b-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md); padding: 32px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.35s var(--ease-spring), box-shadow 0.35s ease;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .b-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.22);
+        }
+        .b-card.accent-top { border-top: 4px solid var(--b-accent); }
+        .b-card.teal { --b-accent: var(--b-teal); border-top-color: var(--b-teal); }
+        .b-card.rose { --b-accent: var(--b-rose); border-top-color: var(--b-rose); }
+        .b-card.amber { --b-accent: var(--b-amber); border-top-color: var(--b-amber); }
+        .b-card.violet { --b-accent: var(--b-violet); border-top-color: var(--b-violet); }
+
+        .card-num-badge {
+            width: 44px; height: 44px; border-radius: 14px;
+            background: var(--b-grad-accent); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-display); font-size: 18px; font-weight: 700;
+            margin-bottom: 18px;
+        }
+        .icon-box {
+            width: 52px; height: 52px; border-radius: 14px;
+            background: var(--b-accent-soft); color: var(--b-accent);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; font-weight: 700; margin-bottom: 16px;
+        }
+        .icon-box.teal { background: rgba(13, 148, 136, 0.12); color: var(--b-teal); }
+        .icon-box.rose { background: rgba(225, 29, 72, 0.12); color: var(--b-rose); }
+        .icon-box.amber { background: rgba(217, 119, 6, 0.12); color: var(--b-amber); }
+        .icon-box.violet { background: rgba(124, 58, 237, 0.12); color: var(--b-violet); }
+
+        .card-title {
+            font-family: var(--font-display); font-size: 24px; font-weight: 700;
+            margin: 0 0 10px 0; color: var(--text-color);
+        }
+        .card-body {
+            font-size: 17px; line-height: 1.65; color: var(--text-sub); margin: 0;
+        }
+
+        /* Pipeline Steps */
+        .pipeline {
+            display: flex; gap: 24px; width: 100%; margin: 10px 0;
+        }
+        .pipeline-step {
+            flex: 1; background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: var(--radius-md); padding: 28px; position: relative;
+            backdrop-filter: blur(16px);
+            transition: transform 0.35s var(--ease-spring), box-shadow 0.35s ease;
+        }
+        .pipeline-step:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -15px rgba(79, 70, 229, 0.25);
+        }
+        .pipeline-step::after {
+            content: ''; position: absolute; top: 50%; right: -18px;
+            width: 14px; height: 14px;
+            border-top: 3px solid var(--b-accent-cyan); border-right: 3px solid var(--b-accent-cyan);
+            transform: translateY(-50%) rotate(45deg); opacity: 0.8; z-index: 2;
+        }
+        .pipeline-step:last-child::after { display: none; }
+        .step-nb {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--b-grad-accent); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-display); font-size: 17px; font-weight: 800; margin-bottom: 14px;
+        }
+
+        /* Stat Cards */
+        .stat-card {
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: var(--radius-md); padding: 24px 28px; backdrop-filter: blur(16px);
+            transition: transform 0.35s var(--ease-spring), box-shadow 0.35s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -15px rgba(79, 70, 229, 0.2);
+        }
+        .stat-label {
+            font-size: 14px; font-weight: 700; letter-spacing: 1px;
+            text-transform: uppercase; color: var(--text-sub); margin-bottom: 8px;
+        }
+        .stat-nb {
+            font-family: var(--font-display); font-size: 48px; font-weight: 800;
+            background: var(--b-grad-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+        .stat-note {
+            font-size: 15px; color: var(--text-sub); margin-top: 10px; font-weight: 500;
+        }
+
+        /* Frame Images */
+        .frame-img {
+            border-radius: var(--radius-md); overflow: hidden;
+            border: 1px solid var(--card-border); background: var(--card-bg);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.4); backdrop-filter: blur(16px);
+            transition: transform 0.35s var(--ease-spring), box-shadow 0.35s ease;
+        }
+        .frame-img:hover { transform: scale(1.02); box-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.3); }
+        .frame-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .frame-img.r-16x10 { aspect-ratio: 16 / 10; }
+        .img-cap {
+            padding: 12px 18px; font-size: 14px; font-weight: 600;
+            color: var(--text-sub); background: rgba(15, 23, 42, 0.6);
+            border-top: 1px solid var(--card-border);
+        }
+
+        /* Quote Block */
+        .quote-block {
+            background: var(--card-bg); border-left: 6px solid var(--b-accent);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 32px 40px; backdrop-filter: blur(16px); position: relative;
+        }
+        .quote-text {
+            font-family: var(--font-display); font-size: 30px; font-weight: 600;
+            line-height: 1.45; color: var(--text-color); margin: 0 0 14px 0;
+        }
+        .quote-author {
+            font-size: 17px; font-weight: 600; color: var(--b-accent-cyan);
+        }
+
+        /* Compare Component */
+        .compare { display: grid; grid-template-columns: 1fr auto 1fr; gap: 40px; align-items: center; width: 100%; }
+        .compare-card {
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: var(--radius-md); padding: 36px; text-align: center;
+            backdrop-filter: blur(16px); transition: transform 0.35s var(--ease-spring);
+        }
+        .compare-card:hover { transform: translateY(-4px); }
+        .compare-card .label { font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-sub); margin-bottom: 12px; }
+        .compare-card .value { font-family: var(--font-display); font-size: 64px; font-weight: 800; color: var(--text-color); line-height: 1.1; margin-bottom: 12px; }
+        .compare-vs {
+            width: 72px; height: 72px; border-radius: 50%;
+            background: var(--b-grad-accent); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-display); font-size: 22px; font-weight: 800;
+            box-shadow: 0 0 40px rgba(79, 70, 229, 0.5);
+        }
+        .tag {
+            display: inline-flex; align-items: center; padding: 6px 18px; border-radius: 20px;
+            font-size: 15px; font-weight: 600; background: rgba(255,255,255,0.06);
+            border: 1px solid var(--card-border); color: var(--text-sub);
+        }
+        .tag.accent { background: var(--b-accent-soft); color: var(--b-accent-cyan); border-color: rgba(6,182,212,0.4); }
+
+        /* Code Mockup Window */
+        .code-window {
+            background: #090d16; border: 1px solid var(--card-border);
+            border-radius: var(--radius-md); overflow: hidden;
+            box-shadow: 0 25px 50px -15px rgba(0,0,0,0.6);
+        }
+        .code-header {
+            background: rgba(255,255,255,0.04); padding: 14px 20px;
+            display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--card-border);
+        }
+        .traffic-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .traffic-dot.red { background: #ff5f56; }
+        .traffic-dot.yellow { background: #ffbd2e; }
+        .traffic-dot.green { background: #27c93f; }
+        .code-title { font-family: monospace; font-size: 14px; color: #64748b; margin-left: 10px; }
+        .code-body {
+            padding: 24px; font-family: 'Fira Code', monospace, sans-serif;
+            font-size: 16px; line-height: 1.8; color: #e2e8f0; overflow-x: auto;
+        }
+        .code-kw { color: #f472b6; }
+        .code-prop { color: #38bdf8; }
+        .code-val { color: #a7f3d0; }
+        .code-comment { color: #64748b; font-style: italic; }
+
+        /* Smart Chart Container */
+        .smart-chart {
+            width: 100%; height: 340px; border-radius: var(--radius-md);
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            backdrop-filter: blur(16px); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.2);
+            overflow: hidden; padding: 16px;
+        }
+
+        /* Spring Physics Visualizer Components */
+        .spring-demo-track {
+            width: 100%; height: 48px; background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--card-border); border-radius: 16px;
+            position: relative; overflow: hidden; display: flex; align-items: center;
+        }
+        .spring-demo-target-line {
+            position: absolute; right: 80px; top: 0; bottom: 0; width: 2px;
+            background: rgba(6, 182, 212, 0.6); border-right: 1px dashed #06b6d4;
+            z-index: 1;
+        }
+        .spring-demo-target-line::after {
+            content: 'TARGET'; position: absolute; top: 4px; right: 6px;
+            font-size: 10px; font-weight: 800; color: var(--b-accent-cyan);
+            font-family: var(--font-display);
+        }
+        .spring-demo-ball {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--b-grad-accent); box-shadow: 0 0 20px rgba(6, 182, 212, 0.7);
+            position: absolute; left: 12px; z-index: 2;
+            transition: transform 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .spring-demo-ball.spring-active {
+            transform: translateX(360px);
+        }
+
+        /* Glowing Orbs for Cover Slide */
+        .cover-orb {
+            position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.5; pointer-events: none;
+        }
+        .cover-orb-1 { width: 600px; height: 600px; background: rgba(79, 70, 229, 0.3); top: -100px; right: -100px; }
+        .cover-orb-2 { width: 500px; height: 500px; background: rgba(6, 182, 212, 0.25); bottom: -80px; left: -80px; }
+
+        /* Animations Physics */
+        @keyframes springUp {
+            0% { opacity: 0; transform: translateY(45px) scale(0.95); }
+            60% { opacity: 1; transform: translateY(-6px) scale(1.015); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes springLeft {
+            0% { opacity: 0; transform: translateX(-60px); }
+            60% { opacity: 1; transform: translateX(8px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .anim { opacity: 0; }
+        .slide.active .anim { animation: springUp 0.85s var(--ease-spring) forwards; }
+        .slide.active .anim-left { animation-name: springLeft; }
+        .slide.active .anim-float { animation: float 4s ease-in-out infinite; opacity: 1; }
+
+        .slide.active .d1 { animation-delay: 0.08s; }
+        .slide.active .d2 { animation-delay: 0.18s; }
+        .slide.active .d3 { animation-delay: 0.30s; }
+        .slide.active .d4 { animation-delay: 0.42s; }
+        .slide.active .d5 { animation-delay: 0.54s; }
+        .slide.active .d6 { animation-delay: 0.66s; }
+
+        /* Navigation Chrome Controls */
+        .controls-bar {
+            position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 16px;
+            background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 8px 24px; border-radius: 40px; backdrop-filter: blur(12px);
+            z-index: 100; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .ctrl-btn {
+            background: none; border: none; color: #94a3b8; font-size: 18px; cursor: pointer;
+            width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .ctrl-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; transform: scale(1.1); }
+        .slide-counter {
+            font-family: var(--font-display); font-size: 16px; font-weight: 700;
+            color: #f8fafc; letter-spacing: 0.05em; min-width: 70px; text-align: center;
+        }
+        .dots-container { display: flex; gap: 8px; align-items: center; }
+        .dot {
+            width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.25);
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .dot.active { background: var(--b-accent-cyan); transform: scale(1.3); box-shadow: 0 0 10px var(--b-accent-cyan); }
+    </style>
+</head>
+<body>
+    <div class="deck-viewport">
+        <div class="deck-stage" id="stage">
+
+            <!-- SLIDE 1: L01 HOOK / HERO COVER -->
+            <div class="slide dark active" id="s1" data-bg="#0f172a">
+                <div class="cover-orb cover-orb-1 anim-float"></div>
+                <div class="cover-orb cover-orb-2 anim-float"></div>
+                <div class="slide-content center-group">
+                    <div>
+                        <div class="eyebrow-pill anim d1">Beautiful Modern Presentation System</div>
+                        <h1 class="display-hero anim d2">Beautiful 样式<br>原生核心能力全景演播</h1>
+                        <p class="tagline anim d3">融合毛玻璃视觉、弹簧物理动画、流式密度控制与智能数据图表的下一代网页演示体验</p>
+                    </div>
+
+                    <!-- Feature Chips Bridge -->
+                    <div class="hero-middle-bridge anim d4">
+                        <div class="hero-chip"><span class="chip-dot">✦</span> Viewport 视口无缝同步</div>
+                        <div class="hero-chip"><span class="chip-dot">✦</span> 1920×1080 物理自适应缩放</div>
+                        <div class="hero-chip"><span class="chip-dot">✦</span> Spring Physics 弹簧物理缓动</div>
+                        <div class="hero-chip"><span class="chip-dot">✦</span> 60fps 数字动态递增</div>
+                        <div class="hero-chip"><span class="chip-dot">✦</span> ECharts 智能图表引擎</div>
+                    </div>
+
+                    <div class="grid-3col anim d5" style="width: 100%;">
+                        <div class="stat-card">
+                            <div class="stat-label">Canvas Stage</div>
+                            <div class="stat-nb">1920×1080</div>
+                            <div style="color: #94a3b8; margin-top: 8px; font-size: 15px;">固定比例自适应物理缩放</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Motion Engine</div>
+                            <div class="stat-nb">Spring Physics</div>
+                            <div style="color: #94a3b8; margin-top: 8px; font-size: 15px;">cubic-bezier 弹性缓动曲线</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Visual Surface</div>
+                            <div class="stat-nb">Glassmorphism</div>
+                            <div style="color: #94a3b8; margin-top: 8px; font-size: 15px;">毛玻璃层次与流光光晕</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 2: L02 PAIN POINTS VS SOLUTION (ACT DIVIDER / COMPARISON) -->
+            <div class="slide dark" id="s2" data-bg="#0f172a">
+                <div class="slide-content">
+                    <div>
+                        <div class="eyebrow-pill anim d1">Context & Comparison</div>
+                        <h2 class="display-chapter anim d2">传统 PPT 痛点 vs Beautiful 样式解法</h2>
+                        <p class="body-desc anim d3">打破传统 Web 演示文稿的僵硬与空白陷阱，重构专业级视觉品质</p>
+                    </div>
+
+                    <div class="grid-2col anim d4">
+                        <div class="b-card rose">
+                            <div>
+                                <div class="icon-box rose">✕</div>
+                                <h3 class="card-title">传统 Web 演示文稿痛点</h3>
+                                <ul style="padding-left: 20px; color: #94a3b8; font-size: 18px; line-height: 1.8;">
+                                    <li><strong>中间中空断层</strong>：流式布局导致不同分辨率下中间大面积尴尬空白</li>
+                                    <li><strong>黑框割裂感</strong>：视口边缘与幻灯片画布背景色不匹配，边界生硬</li>
+                                    <li><strong>动效死板</strong>：使用线性渐变或机械位移，缺乏现代 App 的弹性回响</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="b-card teal">
+                            <div>
+                                <div class="icon-box teal">✓</div>
+                                <h3 class="card-title">Beautiful Modern 解决之道</h3>
+                                <ul style="padding-left: 20px; color: #94a3b8; font-size: 18px; line-height: 1.8;">
+                                    <li><strong>Scheme 1/2 密度控制</strong>：紧凑分组与中间连通桥，彻底消除尴尬留白</li>
+                                    <li><strong>Seamless Viewport Sync</strong>：视口背景与当前页沉浸式同步</li>
+                                    <li><strong>Spring 弹性物理微交互</strong>：采用 60fps 弹簧曲线与微光悬浮</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 3: L03 DESIGN TOKENS & 4-COLOR PALETTE -->
+            <div class="slide dark" id="s3" data-bg="#0f172a">
+                <div class="slide-content">
+                    <div>
+                        <div class="eyebrow-pill anim d1">Design System Specifications</div>
+                        <h2 class="display-chapter anim d2">核心设计规范：字体、色彩与层次</h2>
+                        <p class="body-desc anim d3">严格的 Design Tokens 构建出高级、和谐且富有生命力的视觉基底</p>
+                    </div>
+
+                    <div class="grid-4col anim d4">
+                        <div class="b-card accent-top">
+                            <div>
+                                <div class="card-num-badge">01</div>
+                                <h3 class="card-title">Typography 双核</h3>
+                                <p class="card-body"><strong>Display</strong>: Outfit (800)<br><strong>Body</strong>: Plus Jakarta Sans / Noto Sans SC 中英文组合</p>
+                            </div>
+                        </div>
+
+                        <div class="b-card teal accent-top">
+                            <div>
+                                <div class="card-num-badge" style="background: var(--b-teal);">02</div>
+                                <h3 class="card-title">Teal Accent</h3>
+                                <p class="card-body">青翡标点调色盘，用于表达技术、数据与逻辑严密性场景</p>
+                            </div>
+                        </div>
+
+                        <div class="b-card rose accent-top">
+                            <div>
+                                <div class="card-num-badge" style="background: var(--b-rose);">03</div>
+                                <h3 class="card-title">Rose Alert</h3>
+                                <p class="card-body">玫瑰红高亮警示，用于表达痛点、对比差异与关键警告</p>
+                            </div>
+                        </div>
+
+                        <div class="b-card violet accent-top">
+                            <div>
+                                <div class="card-num-badge" style="background: var(--b-violet);">04</div>
+                                <h3 class="card-title">Violet Glass</h3>
+                                <p class="card-body">紫罗兰晶体毛玻璃，搭配 `blur(16px)` 与微发光高精边框</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4: L07 PIPELINE WORKFLOW BRIDGE & LAYOUT DENSITY -->
+            <div class="slide dark" id="s4" data-bg="#0f172a">
+                <div class="slide-content center-group">
+                    <div>
+                        <div class="eyebrow-pill anim d1">Layout Density Strategy</div>
+                        <h2 class="display-chapter anim d2">防止中间尴尬中空：Scheme 1 vs Scheme 2</h2>
+                        <p class="body-desc anim d3">根据内容区块数量动态匹配最佳垂直空间分配法则，消除页面视觉稀疏与断层</p>
+                    </div>
+
+                    <!-- Pipeline Flow Bridge Component -->
+                    <div class="pipeline anim d4">
+                        <div class="pipeline-step">
+                            <div class="step-nb">1</div>
+                            <h3 style="margin: 0 0 10px 0; font-size: 22px;">2 区块场景 (Scheme 1)</h3>
+                            <ul style="margin: 0; padding-left: 18px; font-size: 16px; color: #94a3b8; line-height: 1.6;">
+                                <li>标题 + 卡片两组顶端对齐</li>
+                                <li>使用 `gap: 40px` 紧凑靠拢</li>
+                                <li>底部自然留出呼吸空间</li>
+                            </ul>
+                        </div>
+                        <div class="pipeline-step">
+                            <div class="step-nb">2</div>
+                            <h3 style="margin: 0 0 10px 0; font-size: 22px;">3 区块场景 (Scheme 2)</h3>
+                            <ul style="margin: 0; padding-left: 18px; font-size: 16px; color: #94a3b8; line-height: 1.6;">
+                                <li>三层结构使用 `.between` 铺满</li>
+                                <li>中间插入 Pipeline 或 Stat 连通桥</li>
+                                <li>强行拉紧上下元素视觉关联</li>
+                            </ul>
+                        </div>
+                        <div class="pipeline-step">
+                            <div class="step-nb">3</div>
+                            <h3 style="margin: 0 0 10px 0; font-size: 22px;">全视口无缝统一</h3>
+                            <ul style="margin: 0; padding-left: 18px; font-size: 16px; color: #94a3b8; line-height: 1.6;">
+                                <li>JS 实时提取幻灯片背景底色</li>
+                                <li>动态同步屏幕视口 `--viewport-bg`</li>
+                                <li>彻底消除边缘黑框与视觉分界</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="quote-block anim d5">
+                        <p class="quote-text">“真正的设计系统不仅提供好颜色，更通过空间密度算法解决实际的排版尴尬。”</p>
+                        <div class="quote-author">— Beautiful Modern Design Principles</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 5: L04 KEY NUMBERS / DATA METRICS -->
+            <div class="slide dark" id="s5" data-bg="#0f172a">
+                <div class="slide-content">
+                    <div>
+                        <div class="eyebrow-pill anim d1">Key Numbers Metrics</div>
+                        <h2 class="display-chapter anim d2">数据大声说话 · 60fps 数字递增</h2>
+                        <p class="body-desc anim d3">核心指标动态递增演示，展现数据可视化与数字计数动画效果</p>
+                    </div>
+
+                    <div class="grid-3col anim d4">
+                        <div class="stat-card">
+                            <div class="stat-label">Projects</div>
+                            <div class="stat-nb count-up" data-value="64">0</div>
+                            <div class="stat-note">过去 64 天上线</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Code Lines</div>
+                            <div class="stat-nb count-up" data-value="110" data-suffix="K+">0</div>
+                            <div class="stat-note">累计代码行数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Stars</div>
+                            <div class="stat-nb count-up" data-value="5166">0</div>
+                            <div class="stat-note">GitHub 收藏</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Downloads</div>
+                            <div class="stat-nb count-up" data-value="41" data-suffix="K+">0</div>
+                            <div class="stat-note">总下载量</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Providers</div>
+                            <div class="stat-nb count-up" data-value="19">0</div>
+                            <div class="stat-note">接入平台数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Commits</div>
+                            <div class="stat-nb count-up" data-value="608" data-suffix="+">0</div>
+                            <div class="stat-note">版本提交数</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 6: L05 TEXT + STYLED IMAGE FRAME & QUOTE -->
+            <div class="slide dark" id="s6" data-bg="#0f172a">
+                <div class="slide-content">
+                    <div>
+                        <div class="eyebrow-pill anim d1">Visual Narrative</div>
+                        <h2 class="display-chapter anim d2">图文呼吸感排版 (Text + Image)</h2>
+                        <p class="body-desc anim d3">文字引导叙事，图片提供证据。两者在 12 列网格上自然呼应</p>
+                    </div>
+
+                    <div class="grid-2-7-5 anim d4" style="align-items: center;">
+                        <div style="display: flex; flex-direction: column; gap: 24px;">
+                            <p style="font-size: 20px; line-height: 1.7; color: #cbd5e1; margin: 0;">
+                                Beautiful Modern 为图片与视听元素量身打造了多层圆角发光框 (`.frame-img`)，自带阴影沉降与悬浮放大微交互。
+                            </p>
+                            <div class="quote-block">
+                                <div class="quote-text">“好的幻灯片不是信息的搬运工，而是视觉故事的导演。”</div>
+                                <div class="quote-author">— 演示设计原则</div>
+                            </div>
+                        </div>
+
+                        <figure class="frame-img r-16x10">
+                            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format&fit=crop" alt="Workspace Showcase">
+                            <figcaption class="img-cap">Unsplash · Modern High-Resolution Showcase</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 7: L06 GALLERY IMAGE GRID -->
+            <div class="slide dark" id="s7" data-bg="#0f172a">
+                <div class="slide-content">
+                    <div>
+                        <div class="eyebrow-pill anim d1">Proof Points</div>
+                        <h2 class="display-chapter anim d2">图片画廊网格 (Image Gallery Grid)</h2>
+                        <p class="body-desc anim d3">统一比例的美图排版，鼠标悬浮触发平滑放大与高亮外发光</p>
+                    </div>
+
+                    <div class="grid-3col anim d4">
+                        <figure class="frame-img" style="height: 200px;">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop" alt="Analytics">
+                            <figcaption class="img-cap">数据分析看板</figcaption>
+                        </figure>
+                        <figure class="frame-img" style="height: 200px;">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&auto=format&fit=crop" alt="Dashboard">
+                            <figcaption class="img-cap">可视化仪表盘</figcaption>
+                        </figure>
+                        <figure class="frame-img" style="height: 200px;">
+                            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&auto=format&fit=crop" alt="Team Work">
+                            <figcaption class="img-cap">团队高能协作</figcaption>
+                        </figure>
+                        <figure class="frame-img" style="height: 200px;">
+                            <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&auto=format&fit=crop" alt="Meeting">
+                            <figcaption class="img-cap">敏捷沟通决策</figcaption>
+                        </figure>
+                        <figure class="frame-img" style="height: 200px;">
+                            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&auto=format&fit=crop" alt="Strategy">
+                            <figcaption class="img-cap">战略规划蓝图</figcaption>
+                        </figure>
+                        <figure class="frame-img" style="height: 200px;">
+                            <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&auto=format&fit=crop" alt="Prototype">
+                            <figcaption class="img-cap">产品交互原型</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 8: L08 SMART ECHARTS INTEGRATION -->
+            <div class="slide dark" id="s8" data-bg="#0f172a">
+                <div class="slide-content">
+                    <div>
+                        <div class="eyebrow-pill anim d1">Data Insights</div>
+                        <h2 class="display-chapter anim d2">ECharts 智能图表引擎</h2>
+                        <p class="body-desc anim d3">只需在 HTML 挂载 `data-chart` JSON 声明，即可自动渲染高保真响应式矢量图表</p>
+                    </div>
+
+                    <div class="grid-2col anim d4">
+                        <div class="smart-chart" data-chart='{"type":"bar","labels":["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],"series":[{"name":"Visits","data":[120,190,150,220,280,310,450]}]}'></div>
+                        <div class="smart-chart" data-chart='{"type":"donut","data":[{"name":"Direct","value":35},{"name":"Social","value":45},{"name":"Organic","value":20}]}'></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 9: L09 COMPARISON VS CARD MATRIX -->
+            <div class="slide dark" id="s9" data-bg="#0f172a">
+                <div class="slide-content center-group">
+                    <div>
+                        <div class="eyebrow-pill anim d1">Performance Boost</div>
+                        <h2 class="display-chapter anim d2">核心效能对比 (Before vs After)</h2>
+                        <p class="body-desc anim d3">重构演播与制作效率，显著提升演讲冲击力与研发交付速度</p>
+                    </div>
+
+                    <div class="compare anim d4">
+                        <div class="compare-card">
+                            <div class="label">Traditional PPT</div>
+                            <div class="value" style="color: #f43f5e;">3.5 Hours</div>
+                            <div class="tag" style="border-color: rgba(244,63,94,0.3); color: #f43f5e;">手动对齐与排版调整</div>
+                        </div>
+
+                        <div class="compare-vs anim-scale d5">VS</div>
+
+                        <div class="compare-card">
+                            <div class="label">Beautiful Modern</div>
+                            <div class="value" style="background: var(--b-grad-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">15 Mins</div>
+                            <div class="tag accent">提升 14 倍创作效率</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 10: L11 CODE BEAUTY MOCKUP & REAL SPRING PHYSICS OVERSHOOT CURVE -->
+            <div class="slide dark" id="s10" data-bg="#0f172a">
+                <div class="slide-content">
+                    <div>
+                        <div class="eyebrow-pill anim d1">Developer Friendly & Motion Physics</div>
+                        <h2 class="display-chapter anim d2">原生代码美学与超越回弹物理曲线</h2>
+                        <p class="body-desc anim d3">精准 CSS Tokens 搭配 60fps GPU 加速弹簧超越缓动曲线 (Spring Overshoot Physics)</p>
+                    </div>
+
+                    <div class="grid-2col anim d4" style="align-items: stretch;">
+                        <!-- Left: Code Mockup Window -->
+                        <div class="code-window" style="display: flex; flex-direction: column; justify-content: space-between;">
+                            <div class="code-header">
+                                <div class="traffic-dot red"></div>
+                                <div class="traffic-dot yellow"></div>
+                                <div class="traffic-dot green"></div>
+                                <span class="code-title">beautiful-tokens.css</span>
+                            </div>
+                            <div class="code-body" style="flex: 1;">
+<span class="code-comment">/* Beautiful Modern Design Tokens */</span><br>
+<span class="code-kw">:root</span> {<br>
+&nbsp;&nbsp;<span class="code-prop">--b-accent</span>: <span class="code-val">#4f46e5</span>;<br>
+&nbsp;&nbsp;<span class="code-prop">--b-accent-cyan</span>: <span class="code-val">#06b6d4</span>;<br>
+&nbsp;&nbsp;<span class="code-prop">--ease-spring</span>: <span class="code-val">cubic-bezier(0.175, 0.885, 0.32, 1.275)</span>;<br>
+&nbsp;&nbsp;<span class="code-prop">--ease-smooth</span>: <span class="code-val">cubic-bezier(0.22, 1, 0.36, 1)</span>;<br>
+&nbsp;&nbsp;<span class="code-prop">--radius-md</span>: <span class="code-val">24px</span>;<br>
+}<br><br>
+<span class="code-comment">/* Real Spring Overshoot Animation */</span><br>
+<span class="code-kw">.spring-element</span> {<br>
+&nbsp;&nbsp;<span class="code-prop">transition</span>: <span class="code-val">transform 0.85s var(--ease-spring)</span>;<br>
+}
+                            </div>
+                        </div>
+
+                        <!-- Right: Real Spring Physics Bezier Visualizer -->
+                        <div class="b-card accent-top" style="padding: 26px; display: flex; flex-direction: column; gap: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3 class="card-title" style="margin: 0; font-size: 20px;">cubic-bezier(0.175, 0.885, 0.32, 1.275)</h3>
+                                <div class="tag accent" style="font-size: 13px;">Overshoot +27.5%</div>
+                            </div>
+
+                            <!-- SVG Bezier Curve Plot -->
+                            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--card-border); border-radius: 16px; padding: 10px; position: relative;">
+                                <svg viewBox="0 0 540 230" style="width: 100%; height: 195px; overflow: visible;">
+                                    <defs>
+                                        <linearGradient id="springGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="#4f46e5" />
+                                            <stop offset="50%" stop-color="#06b6d4" />
+                                            <stop offset="100%" stop-color="#f43f5e" />
+                                        </linearGradient>
+                                    </defs>
+
+                                    <!-- Grid lines & Baselines -->
+                                    <line x1="40" y1="190" x2="450" y2="190" stroke="#334155" stroke-width="1" />
+                                    <text x="455" y="194" fill="#64748b" font-size="11" font-family="monospace">0.0 Start</text>
+
+                                    <!-- Target 1.0 Line -->
+                                    <line x1="40" y1="85" x2="450" y2="85" stroke="#06b6d4" stroke-dasharray="4,4" opacity="0.7" stroke-width="1.5" />
+                                    <text x="455" y="89" fill="#06b6d4" font-size="11" font-weight="700" font-family="monospace">1.0 Target</text>
+
+                                    <!-- Overshoot Peak Line (y = 1.275 -> y = 56) -->
+                                    <line x1="40" y1="56" x2="450" y2="56" stroke="#f43f5e" stroke-dasharray="3,3" opacity="0.7" stroke-width="1.5" />
+                                    <text x="455" y="60" fill="#f43f5e" font-size="11" font-weight="700" font-family="monospace">1.275 Overshoot</text>
+
+                                    <!-- Control handles & lines -->
+                                    <line x1="50" y1="190" x2="120" y2="97" stroke="#818cf8" stroke-dasharray="2,2" opacity="0.6" />
+                                    <circle cx="120" cy="97" r="5" fill="#818cf8" />
+                                    <line x1="430" y1="85" x2="178" y2="56" stroke="#f43f5e" stroke-dasharray="2,2" opacity="0.6" />
+                                    <circle cx="178" cy="56" r="5" fill="#f43f5e" />
+
+                                    <!-- Bezier Curve Path -->
+                                    <path d="M 50,190 C 120,97 178,56 430,85" stroke="url(#springGrad)" stroke-width="4" fill="none" id="bezierCurvePath" />
+
+                                    <!-- Animated Tracer Node -->
+                                    <circle r="7" fill="#06b6d4" style="filter: drop-shadow(0 0 8px #06b6d4);">
+                                        <animateMotion dur="2.2s" repeatCount="indefinite" path="M 50,190 C 120,97 178,56 430,85" />
+                                    </circle>
+                                </svg>
+                            </div>
+
+                            <!-- Live Interactive Spring Ball Track -->
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="display: flex; justify-content: space-between; align- items: center; font-size: 14px; font-weight: 600; color: #cbd5e1;">
+                                    <span>实时物理超越轨迹测试 (Live Spring Overshoot):</span>
+                                    <button onclick="triggerSpringDemo()" style="background: var(--b-accent-soft); border: 1px solid rgba(6,182,212,0.4); color: var(--b-accent-cyan); padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s;">▶ 触发弹簧测试</button>
+                                </div>
+                                <div class="spring-demo-track">
+                                    <div class="spring-demo-target-line"></div>
+                                    <div class="spring-demo-ball" id="spring-demo-ball"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 11: L12 CLOSING & TAKEAWAY CTA -->
+            <div class="slide dark" id="s11" data-bg="#0f172a">
+                <div class="slide-content center">
+                    <div class="eyebrow-pill anim d1">Ready to Create</div>
+                    <h1 class="display-hero anim d2" style="font-size: 80px; margin-bottom: 16px;">立即开启 Beautiful Modern 极速创作</h1>
+                    <p class="tagline anim d3" style="max-width: 900px; margin-bottom: 40px;">用 Design System Specification (`design.md`) 的标准，让你的下一次 Presentation 震撼全场</p>
+
+                    <div class="grid-3col anim d4" style="width: 100%; text-align: left; margin-bottom: 30px;">
+                        <div class="stat-card">
+                            <div class="stat-label">Workflow</div>
+                            <div class="stat-nb" style="font-size: 36px;">Text-First</div>
+                            <div style="color: #94a3b8; margin-top: 6px; font-size: 15px;">需求对齐 ➔ 骨架确认 ➔ 填充</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Template Recipe</div>
+                            <div class="stat-nb" style="font-size: 36px;">Beautiful Modern</div>
+                            <div style="color: #94a3b8; margin-top: 6px; font-size: 15px;">内嵌设计 Tokens & 组件库</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Export</div>
+                            <div class="stat-nb" style="font-size: 36px;">HTML / PDF</div>
+                            <div style="color: #94a3b8; margin-top: 6px; font-size: 15px;">零依赖双击即开，无缝演播</div>
+                        </div>
+                    </div>
+
+                    <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--b-accent-cyan); letter-spacing: 0.1em; text-transform: uppercase;" class="anim d5">
+                        按键盘 ← → 键切换页面 ｜ generate-html-ppt Skill
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- NAVIGATION CHROME CONTROLS -->
+    <div class="controls-bar">
+        <button class="ctrl-btn" onclick="prevSlide()" title="上一页 (Left Arrow)">◄</button>
+        <div class="dots-container" id="dots"></div>
+        <span class="slide-counter" id="counter">01 / 11</span>
+        <button class="ctrl-btn" onclick="nextSlide()" title="下一页 (Right Arrow / Space)">►</button>
+        <button class="ctrl-btn" onclick="toggleFullScreen()" title="全屏演示 (F)">⛶</button>
+    </div>
+
+    <!-- CORE JAVASCRIPT SCALING & VIEWPORT SYNC & CHART & COUNT-UP ENGINE -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        const echartsInstances = [];
+
+        function updateScale() {
+            const stage = document.getElementById('stage');
+            const scaleX = window.innerWidth / 1920;
+            const scaleY = window.innerHeight / 1080;
+            const scale = Math.min(scaleX, scaleY);
+            const left = (window.innerWidth - 1920 * scale) / 2;
+            const top = (window.innerHeight - 1080 * scale) / 2;
+            stage.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
+        }
+
+        function updateViewportBg(slideIndex) {
+            const slide = document.getElementById(`s${slideIndex}`);
+            if (slide) {
+                const bg = slide.getAttribute('data-bg') || (slide.classList.contains('dark') ? '#0f172a' : '#f8fafc');
+                document.documentElement.style.setProperty('--viewport-bg', bg);
+            }
+        }
+
+        function renderDots() {
+            const container = document.getElementById('dots');
+            container.innerHTML = '';
+            for (let i = 1; i <= totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = `dot ${i === currentSlide ? 'active' : ''}`;
+                dot.onclick = () => showSlide(i);
+                container.appendChild(dot);
+            }
+        }
+
+        function initSmartCharts() {
+            if (typeof echarts === 'undefined') return;
+            const activeSlide = document.querySelectorAll('.slide')[currentSlide - 1];
+            if (!activeSlide) return;
+
+            activeSlide.querySelectorAll('.smart-chart').forEach(el => {
+                if (el.dataset.chartInited === 'true') return;
+                let config = null;
+                try { config = JSON.parse(el.dataset.chart); } catch(e) { return; }
+                if (!config || !config.type) return;
+
+                const container = document.createElement('div');
+                container.style.width = '100%';
+                container.style.height = '100%';
+                el.appendChild(container);
+
+                const isDark = activeSlide.classList.contains('dark');
+                const textColor = isDark ? 'rgba(255,255,255,0.8)' : '#475569';
+                let option = { backgroundColor: 'transparent', animationDuration: 1200, animationEasing: 'cubicOut' };
+
+                if (config.type === 'bar') {
+                    option = {
+                        ...option,
+                        tooltip: { trigger: 'axis' },
+                        grid: { left: '4%', right: '4%', bottom: '10%', top: '15%', containLabel: true },
+                        xAxis: { type: 'category', data: config.labels || [], axisLine: { lineStyle: { color: 'rgba(255,255,255,0.2)' } }, axisLabel: { color: textColor, fontSize: 14 } },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { color: isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0' } }, axisLabel: { color: textColor, fontSize: 14 } },
+                        series: (config.series || []).map(s => ({
+                            name: s.name || '', type: 'bar', data: s.data || [],
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: '#4f46e5' }, { offset: 1, color: '#06b6d4' }]),
+                                borderRadius: [8, 8, 0, 0]
+                            },
+                            barWidth: '40%'
+                        }))
+                    };
+                } else if (config.type === 'donut' || config.type === 'pie') {
+                    const palette = ['#4f46e5', '#06b6d4', '#0d9488', '#d97706', '#e11d48', '#7c3aed'];
+                    option = {
+                        ...option,
+                        tooltip: { trigger: 'item' },
+                        legend: { bottom: '2%', textStyle: { color: textColor, fontSize: 14 } },
+                        series: [{
+                            type: 'pie', radius: ['45%', '72%'], center: ['50%', '42%'], avoidLabelOverlap: true,
+                            itemStyle: { borderRadius: 8, borderColor: isDark ? '#0f172a' : '#fff', borderWidth: 2 },
+                            label: { show: true, color: textColor, fontSize: 14, formatter: '{b}\n{d}%' },
+                            data: (config.data || []).map((d, i) => ({ value: d.value, name: d.name, itemStyle: { color: palette[i % palette.length] } }))
+                        }]
+                    };
+                }
+
+                const chart = echarts.init(container, null, { renderer: 'svg' });
+                chart.setOption(option);
+                echartsInstances.push(chart);
+                el.dataset.chartInited = 'true';
+            });
+        }
+
+        function animateNumbers() {
+            const activeSlide = document.querySelectorAll('.slide')[currentSlide - 1];
+            if (!activeSlide) return;
+            activeSlide.querySelectorAll('.count-up').forEach(el => {
+                const target = parseFloat(el.dataset.value);
+                if (isNaN(target)) return;
+                const suffix = el.dataset.suffix || '';
+                const prefix = el.dataset.prefix || '';
+                const decimals = parseInt(el.dataset.decimals || '0');
+
+                if (el._animFrame) cancelAnimationFrame(el._animFrame);
+                const start = performance.now();
+                const duration = 1500;
+
+                function step(now) {
+                    const p = Math.min((now - start) / duration, 1);
+                    const eased = 1 - Math.pow(1 - p, 4);
+                    const currentVal = (target * eased).toFixed(decimals);
+                    el.textContent = prefix + currentVal + suffix;
+                    if (p < 1) {
+                        el._animFrame = requestAnimationFrame(step);
+                    }
+                }
+                el._animFrame = requestAnimationFrame(step);
+            });
+        }
+
+        function triggerSpringDemo() {
+            const ball = document.getElementById('spring-demo-ball');
+            if (!ball) return;
+            ball.classList.remove('spring-active');
+            void ball.offsetWidth;
+            ball.classList.add('spring-active');
+        }
+
+        function showSlide(index) {
+            document.querySelectorAll('.slide').forEach((slide, i) => {
+                slide.classList.toggle('active', i + 1 === index);
+            });
+            currentSlide = index;
+            const counter = document.getElementById('counter');
+            if (counter) counter.innerText = `${String(currentSlide).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+            renderDots();
+            updateViewportBg(currentSlide);
+
+            setTimeout(initSmartCharts, 150);
+            animateNumbers();
+
+            if (currentSlide === 10) {
+                setTimeout(triggerSpringDemo, 300);
+            }
+        }
+
+        function nextSlide() { if (currentSlide < totalSlides) showSlide(currentSlide + 1); }
+        function prevSlide() { if (currentSlide > 1) showSlide(currentSlide - 1); }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'f' || e.key === 'F') toggleFullScreen();
+        });
+
+        window.addEventListener('resize', () => {
+            updateScale();
+            echartsInstances.forEach(c => { try { c.resize(); } catch(e) {} });
+        });
+
+        updateScale();
+        showSlide(1);
+    </script>
+</body>
+</html>

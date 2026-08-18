@@ -1,44 +1,61 @@
-## Description: <br>
-Helps agents query and manage Shopee store orders through LinkFox wrappers for the Shopee Open Platform Order module, including order lists, details, shipment/package views, cancellations, notes, split/unsplit actions, booking, invoices, and related FBS workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents work with authorized Shopee store orders through the LinkFox Shopee order API wrappers, including order lookup, package lookup, cancellation, buyer-cancellation handling, notes, booking, invoice, FBS invoice, and prescription-check workflows.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and agent workflows use this skill to inspect Shopee order state, retrieve order and package details, and perform supported order-management actions after store authorization is available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, subject to Shopee account, marketplace, and endpoint-specific regional eligibility for invoice, FBS, and prescription-check APIs. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact Shopee order mutations such as cancellation, split/unsplit, buyer-cancellation handling, prescription-check handling, and note updates. <br>
-Mitigation: Require explicit confirmation of shop ID, order or package identifier, target API, and operation before running any mutating script. <br>
-Risk: Order responses may contain sensitive buyer, recipient, item, shipment, or invoice data and are saved to workspace files. <br>
-Mitigation: Use a controlled workspace, review saved LinkFox response files, restrict access to generated data, and avoid inline full-response output for sensitive data. <br>
-Risk: Some APIs are region or eligibility restricted, including invoice, FBS, and prescription-check functions. <br>
-Mitigation: Check the referenced API documentation and store eligibility before invoking region-limited endpoints. <br>
+## Use Case:
 
+External Shopee sellers, operators, and commerce support agents use this skill to query and manage orders for stores already authorized through the companion LinkFox Shopee auth skill. It is suited for order review, package and shipment checks, cancellation decisions, notes, invoice workflows, and related operational follow-up.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-orders) <br>
-- [Local API parameter reference](references/api.md) <br>
-- [Shopee Open Platform Order module](https://open.shopee.com/documents/v2/v2.order.get_order_list?module=94&type=1) <br>
+### Deployment Geography for Use:
 
+Global, subject to Shopee regional API availability for invoice, FBS invoice, buyer-invoice, and prescription-check operations.
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, JSON, Files, Guidance] <br>
-**Output Format:** [JSON responses saved to workspace files, with stdout containing either full JSON or a concise summary depending on response size] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API credentials and an authorized Shopee store; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill can perform live Shopee order operations, including cancellation, split or unsplit, note updates, buyer-cancellation handling, invoice actions, payment-related onboarding, and prescription checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation of the shop, order or package identifier, and intended effect before any state-changing or payment-related action.
+
+Risk: The skill depends on LinkFox gateway access and may handle API keys, store identifiers, order data, customer information, invoice details, shipment data, and business records.
+
+Mitigation: Install only when the user trusts LinkFox's gateway, configure API keys directly where possible, and avoid sharing phone numbers or SMS codes with the agent unless the user chooses the onboarding flow.
+
+Risk: Full API responses may be saved locally and could contain sensitive order, customer, invoice, shipment, or business data.
+
+Mitigation: Treat saved response files as sensitive operational data, review local retention expectations, and avoid exposing full response files unless needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-orders)
+- [Publisher profile](https://clawhub.ai/user/linkfox-ai)
+- [Shopee Open Platform Order module](https://open.shopee.com/documents/v2/v2.order.get_order_list?module=94&type=1)
+- [Order API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, API calls, JSON, files]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses; large responses are summarized while full JSON is saved locally.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a LinkFox API key and an authorized Shopee store; full API responses may be written under a local linkfox session data directory.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

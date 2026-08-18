@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Garmin data query for run-coach bot.
-Pure stdlib — no third-party deps.
-Reads JSON files written by garmin-sync.py.
+"""Garmin data query for marathon bot.
+Runs INSIDE OC container — pure stdlib, no third-party deps.
+Reads JSON files written by garmin-sync.py on the NAS host.
 """
 
 import json
@@ -9,8 +9,9 @@ import sys
 from datetime import date, timedelta
 from pathlib import Path
 
-# Workspace is the parent of this script's directory
-GARMIN_DIR = Path(__file__).parent
+# Data lives next to this script; override with GARMIN_DATA_DIR.
+import os
+GARMIN_DIR = Path(os.environ.get("GARMIN_DATA_DIR", Path(__file__).resolve().parent))
 SUMMARY_FILE = GARMIN_DIR / "summary.json"
 ACTIVITIES_DIR = GARMIN_DIR / "activities"
 

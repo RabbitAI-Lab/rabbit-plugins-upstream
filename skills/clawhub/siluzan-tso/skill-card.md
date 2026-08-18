@@ -1,51 +1,63 @@
-## Description: <br>
-Siluzan TSO helps agents route and execute advertising account, campaign, reporting, market analysis, and operations workflows for the TSO ad platform through the siluzan-tso CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Siluzan TSO helps agents route advertising account management, campaign creation, reporting, market analysis, and operations workflows across Google, Bing, Yandex, TikTok, Kwai, and Meta Ads.
 
-## Publisher: <br>
-[sigedev01-bit](https://clawhub.ai/user/sigedev01-bit) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[sigedev01-bit](https://clawhub.ai/user/sigedev01-bit)
 
-## Use Case: <br>
-Advertising operations teams, developers, and agents use this skill to select the correct TSO workflow for ad account management, campaign creation, reporting, diagnostics, keyword planning, market analysis, finance, permissions, and operational monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can affect campaigns, accounts, reports, permissions, invoices, and local assistant configuration. <br>
-Mitigation: Install and use it only for trusted TSO accounts, keep access scoped to the needed task, and require review before write actions or permission and finance operations. <br>
-Risk: The one-click installers perform broad local setup, including global CLI installation and assistant skill registration. <br>
-Mitigation: Prefer manual or scoped installation after reading the installer scripts, and avoid one-click installation on sensitive workstations. <br>
-Risk: Workflows may handle sensitive URLs, market plans, account data, PII, financial records, and generated HTML reports that load remote scripts. <br>
-Mitigation: Limit inputs to necessary data, review generated reports before sharing, and avoid opening generated HTML in high-trust browser sessions when remote script loading is a concern. <br>
+## Use Case:
 
+Marketing operators and agent developers use this skill to inspect ad accounts, manage campaign and account workflows, generate advertising reports, and prepare market or website diagnosis deliverables through Siluzan TSO tooling.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sigedev01-bit/skills/siluzan-tso) <br>
-- [Publisher profile](https://clawhub.ai/user/sigedev01-bit) <br>
-- [References index](references/README.md) <br>
-- [Setup guide](references/core/setup.md) <br>
-- [Intent routing](references/core/intent-routing.md) <br>
-- [Core playbooks](references/core/playbooks.md) <br>
-- [Core workflows](references/core/workflows.md) <br>
-- [Account analytics](references/analytics/account-analytics.md) <br>
-- [Google Ads campaign planning](references/google-ads/google-ads-campaign-plan.md) <br>
-- [Market analysis guide](references/analytics/market-analysis-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON payloads, and generated report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce HTML, Excel, JSON, or campaign configuration files depending on the selected TSO workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.38 (source: server release metadata and _meta.json) <br>
+Risk: The skill can guide agents through workflows that change advertising accounts, budgets, permissions, or campaign state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit human confirmation before write, destructive, budget, permission, or campaign publication actions.
+
+Risk: The installer performs a global CLI and skill installation and changes npm registry configuration.
+
+Mitigation: Review the installer before running it and install in a dedicated machine, shell profile, or account when handling business advertising access.
+
+Risk: Generated reports and templates may include remote scripts or business-sensitive account data.
+
+Mitigation: Review generated HTML before sharing, avoid pasting API keys or identity and financial documents into chat, and limit report distribution to authorized recipients.
+
+## Reference(s):
+
+- [Skill routing entrypoint](SKILL.md)
+- [Reference index](references/README.md)
+- [Intent routing](references/core/intent-routing.md)
+- [Analysis and report playbooks](references/core/playbooks.md)
+- [Operations workflows](references/core/workflows.md)
+- [Google Ads reference](references/google-ads/google-ads.md)
+- [Reporting reference](references/analytics/reporting.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON payloads, report templates, and generated report files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 18+ and siluzan-tso-cli authentication; workflows may produce HTML, Excel, or JSON artifacts depending on the task.]
+
+## Skill Version(s):
+
+1.1.45 (source: server release metadata and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

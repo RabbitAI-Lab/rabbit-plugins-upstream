@@ -1,43 +1,58 @@
-## Description: <br>
-KOL Outreach & Influencer Marketing Playbook helps agents draft and evaluate influencer outreach campaigns, creator briefs, pricing benchmarks, ROI tracking, and platform-specific content guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gingiris KOL Outreach helps agents plan influencer and KOL campaigns with discovery criteria, outreach templates, pricing guidance, content-package structure, platform-specific brief adaptation, and ROI tracking.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-External growth, marketing, and founder teams use this skill to plan KOL and influencer campaigns, generate outreach emails and content packages, negotiate creator pricing, track UTM-based ROI, and adapt briefs for social platforms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bulk or disguised influencer outreach can violate advertising disclosure rules, platform policies, or recipient expectations. <br>
-Mitigation: Require clear sponsored or affiliate disclosure, platform policy review, opt-out handling, and human approval before sending outreach or publishing creator briefs. <br>
-Risk: Creator contact, payment, and tracking data can include sensitive personal or financial information. <br>
-Mitigation: Collect only required data through approved systems, restrict access, avoid storing bank details in prompts or chat transcripts, and apply limited retention. <br>
-Risk: Algorithm and pricing advice can become inaccurate or encourage manipulative ranking tactics. <br>
-Mitigation: Validate recommendations against current platform rules and campaign data before execution, and reject tactics that rely on deceptive engagement or manipulated ranking. <br>
+## Use Case:
 
+Growth, marketing, founder, and developer-relations teams use this skill through an agent to structure KOL discovery, outreach, negotiation, campaign briefs, publishing checks, and post-campaign ROI review. It is intended for human-reviewed creator partnership workflows rather than autonomous outreach or payment execution.
 
-## Reference(s): <br>
-- [Gingiris KOL Outreach ClawHub Skill](https://clawhub.ai/gingiris-1031/skills/gingiris-kol-outreach) <br>
-- [Full KOL Outreach SOP](references/full-sop.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown playbooks, templates, checklists, campaign plans, outreach copy, ROI formulas, and brief structures] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; may produce marketing recommendations involving outreach lists, creator briefs, payment coordination, UTM tracking, and campaign review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: The security review flags under-disclosed guidance for deceptive promotion and synthetic amplification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove or ignore deceptive amplification guidance, require clear sponsorship disclosure, follow each platform's rules, and avoid bought or fake engagement.
+
+Risk: The security review flags handling of sensitive contact and payment data without sufficient safeguards.
+
+Mitigation: Collect only necessary contact and banking details through secure, consent-based workflows and keep final payment decisions under human control.
+
+Risk: Campaign claims, pricing benchmarks, and ROI projections may be misleading if reused without context.
+
+Mitigation: Human reviewers should verify claims, dates, market assumptions, and attribution with campaign data such as UTM links, conversion records, and refund or retention outcomes.
+
+## Reference(s):
+
+- [Full SOP](references/full-sop.md)
+- [ClawHub release page](https://clawhub.ai/gingiris-1031/skills/gingiris-kol-outreach)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown with tables, checklists, formulas, template copy, and campaign planning guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include outreach emails, KOL screening criteria, content package fields, UTM structures, pricing assumptions, ROI calculations, and human-review cautions.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

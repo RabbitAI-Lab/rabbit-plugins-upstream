@@ -5,7 +5,7 @@ PCB &amp; 封装 / 文档操作类
 ## Signature
 
 ```typescript
-declare class PCB_Document 
+export class PCB_Document 
 ```
 
 ## Remarks
@@ -31,6 +31,48 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+[autoLayout()](./PCB_Document.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 自动布局
+
+
+</td></tr>
+<tr><td>
+
+[autoRouting(props)](./PCB_Document.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 自动布线
+
+
+</td></tr>
+<tr><td>
+
+[clearRouting(type)](./PCB_Document.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 清除布线
+
+
+</td></tr>
+<tr><td>
 
 [convertCanvasOriginToDataOrigin(x, y)](./PCB_Document.md)
 
@@ -83,6 +125,20 @@ Description
 </td><td>
 
 获取画布原点相对于数据原点的偏移坐标
+
+
+</td></tr>
+<tr><td>
+
+[getCanvasUpdateCalculationStatus()](./PCB_Document.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 查询当前画布更新计算状态
 
 
 </td></tr>
@@ -214,7 +270,7 @@ Description
 </td></tr>
 <tr><td>
 
-[save(uuid)](./PCB_Document.md)
+[save()](./PCB_Document.md)
 
 
 </td><td>
@@ -256,6 +312,20 @@ Description
 </td></tr>
 <tr><td>
 
+[startCanvasUpdateCalculation()](./PCB_Document.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 开始画布更新计算
+
+
+</td></tr>
+<tr><td>
+
 [stopCalculatingRatline()](./PCB_Document.md)
 
 
@@ -265,6 +335,34 @@ Description
 </td><td>
 
 停止飞线计算功能
+
+
+</td></tr>
+<tr><td>
+
+[stopCanvasUpdateCalculation()](./PCB_Document.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 停止画布更新计算
+
+
+</td></tr>
+<tr><td>
+
+[triggerCanvasUpdateCalculation()](./PCB_Document.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 触发一次画布更新计算
 
 
 </td></tr>
@@ -288,6 +386,166 @@ Description
 
 ## 方法详情
 
+### autolayout
+
+# PCB\_Document.autoLayout() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+自动布局
+
+## Signature
+
+```typescript
+public autoLayout(): Promise<IPCB_AutoLayoutResult>;
+```
+
+
+## Returns
+
+Promise&lt;[IPCB\_AutoLayoutResult](../interfaces/IPCB_AutoLayoutResult.md)<!-- -->&gt;
+
+自动布局结果
+
+## Remarks
+
+ADD since EDA v3.2.162
+
+### autorouting
+
+# PCB\_Document.autoRouting() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+自动布线
+
+## Signature
+
+```typescript
+public autoRouting(props?: IPCB_AutoRoutingProps): Promise<IPCB_AutoRoutingResult>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+props
+
+
+</td><td>
+
+[IPCB\_AutoRoutingProps](../interfaces/IPCB_AutoRoutingProps.md)
+
+
+</td><td>
+
+_(Optional)_ 自动布线参数
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;[IPCB\_AutoRoutingResult](../interfaces/IPCB_AutoRoutingResult.md)<!-- -->&gt;
+
+自动布线结果
+
+## Remarks
+
+如不传入任何参数，将对所有未布线的网络进行自动布线 ADD since EDA v3.2.162
+
+## Example
+
+
+```javascript
+// 对所有未布线的网络进行自动布线
+const result = await eda.pcb_Document.autoRouting();
+console.log(`布线完成：${result.routedNets}/${result.totalNets}`);
+
+// 指定网络进行自动布线，并忽略部分网络
+const result = await eda.pcb_Document.autoRouting({
+    nets: ['VCC', 'GND', 'SDA', 'SCL'],
+    ignoreNets: ['NC'],
+    cornerStyle: EPCB_AutoRoutingCornerStyle.DEGREE_45,
+    optimization: EPCB_AutoRoutingOptimization.COMPLETION,
+});
+```
+
+### clearrouting
+
+# PCB\_Document.clearRouting() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+清除布线
+
+## Signature
+
+```typescript
+public clearRouting(type?: 'all' | 'net' | 'connection'): Promise<boolean>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+type
+
+
+</td><td>
+
+'all' \| 'net' \| 'connection'
+
+
+</td><td>
+
+_(Optional)_ 清除类型，如若需要指定清除类型，请提前选择指定图元
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
 ### convertcanvasorigintodataorigin
 
 # PCB\_Document.convertCanvasOriginToDataOrigin() method
@@ -297,10 +555,7 @@ Description
 ## Signature
 
 ```typescript
-convertCanvasOriginToDataOrigin(x: number, y: number): Promise<{
-        x: number;
-        y: number;
-    }>;
+public convertCanvasOriginToDataOrigin(x: number, y: number): Promise<{ x: number; y: number }>;
 ```
 
 ## Parameters
@@ -355,7 +610,7 @@ number
 
 ## Returns
 
-Promise&lt;{ x: number; y: number; }&gt;
+Promise&lt;{ x: number; y: number }&gt;
 
 数据原点坐标
 
@@ -372,10 +627,7 @@ Promise&lt;{ x: number; y: number; }&gt;
 ## Signature
 
 ```typescript
-convertDataOriginToCanvasOrigin(x: number, y: number): Promise<{
-        x: number;
-        y: number;
-    }>;
+public convertDataOriginToCanvasOrigin(x: number, y: number): Promise<{ x: number; y: number }>;
 ```
 
 ## Parameters
@@ -434,7 +686,7 @@ number
 
 ## Returns
 
-Promise&lt;{ x: number; y: number; }&gt;
+Promise&lt;{ x: number; y: number }&gt;
 
 画布原点坐标
 
@@ -446,18 +698,22 @@ Promise&lt;{ x: number; y: number; }&gt;
 
 # PCB\_Document.getCalculatingRatlineStatus() method
 
+> Warning: This API is now obsolete.
+>
+> since EDA v4.2
+
 获取当前飞线计算功能状态
 
 ## Signature
 
 ```typescript
-getCalculatingRatlineStatus(): Promise<EPCB_DocumentRatlineCalculatingActiveStatus>;
+public getCalculatingRatlineStatus(): Promise<EPCB_DocumentRatlineCalculatingActiveStatus | undefined>;
 ```
 
 
 ## Returns
 
-Promise&lt;[EPCB\_DocumentRatlineCalculatingActiveStatus](../enums/EPCB_DocumentRatlineCalculatingActiveStatus.md)<!-- -->&gt;
+Promise&lt;[EPCB\_DocumentRatlineCalculatingActiveStatus](../enums/EPCB_DocumentRatlineCalculatingActiveStatus.md) \| undefined&gt;
 
 功能状态
 
@@ -470,16 +726,13 @@ Promise&lt;[EPCB\_DocumentRatlineCalculatingActiveStatus](../enums/EPCB_Document
 ## Signature
 
 ```typescript
-getCanvasOrigin(): Promise<{
-        offsetX: number;
-        offsetY: number;
-    }>;
+public getCanvasOrigin(): Promise<{ offsetX: number; offsetY: number }>;
 ```
 
 
 ## Returns
 
-Promise&lt;{ offsetX: number; offsetY: number; }&gt;
+Promise&lt;{ offsetX: number; offsetY: number }&gt;
 
 画布原点相对于数据原点的偏移坐标
 
@@ -493,6 +746,31 @@ Promise&lt;{ offsetX: number; offsetY: number; }&gt;
 
 此处的单位为数据层面单位，在跨度上等同于画布层面的 mil
 
+### getcanvasupdatecalculationstatus
+
+# PCB\_Document.getCanvasUpdateCalculationStatus() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+查询当前画布更新计算状态
+
+## Signature
+
+```typescript
+public getCanvasUpdateCalculationStatus(): Promise<EPCB_DocumentCanvasUpdateCalculationActiveStatus | undefined>;
+```
+
+
+## Returns
+
+Promise&lt;[EPCB\_DocumentCanvasUpdateCalculationActiveStatus](../enums/EPCB_DocumentCanvasUpdateCalculationActiveStatus.md) \| undefined&gt;
+
+画布更新计算功能状态
+
+## Remarks
+
+画布更新计算包括画布渲染更新、属性面板更新等 ADD since EDA v4.2
+
 ### getcurrentfilterconfiguration
 
 # PCB\_Document.getCurrentFilterConfiguration() method
@@ -504,15 +782,13 @@ Promise&lt;{ offsetX: number; offsetY: number; }&gt;
 ## Signature
 
 ```typescript
-getCurrentFilterConfiguration(): Promise<{
-        [key: string]: any;
-    } | undefined>;
+public getCurrentFilterConfiguration(): Promise<Record<string, any> | undefined>;
 ```
 
 
 ## Returns
 
-Promise&lt;{ \[key: string\]: any; } \| undefined&gt;
+Promise&lt;Record&lt;string, any&gt; \| undefined&gt;
 
 当前画布过滤器配置，`undefined` 为获取失败
 
@@ -527,7 +803,7 @@ Promise&lt;{ \[key: string\]: any; } \| undefined&gt;
 ## Signature
 
 ```typescript
-getPrimitiveAtPoint(x: number, y: number): Promise<IPCB_Primitive | undefined>;
+public getPrimitiveAtPoint(x: number, y: number): Promise<IPCB_Primitive | undefined>;
 ```
 
 ## Parameters
@@ -605,7 +881,7 @@ Promise&lt;[IPCB\_Primitive](../interfaces/IPCB_Primitive.md) \| undefined&gt;
 ## Signature
 
 ```typescript
-getPrimitivesInRegion(left: number, right: number, top: number, bottom: number, leftToRight?: boolean): Promise<Array<IPCB_Primitive>>;
+public getPrimitivesInRegion(left: number, right: number, top: number, bottom: number, leftToRight?: boolean): Promise<Array<IPCB_Primitive>>;
 ```
 
 ## Parameters
@@ -727,7 +1003,7 @@ Promise&lt;Array&lt;[IPCB\_Primitive](../interfaces/IPCB_Primitive.md)<!-- -->&g
 ## Signature
 
 ```typescript
-importAutoLayoutJsonFile(autoLayoutFile: File): Promise<boolean>;
+public importAutoLayoutJsonFile(autoLayoutFile: File): Promise<boolean>;
 ```
 
 ## Parameters
@@ -789,7 +1065,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-importAutoRouteJsonFile(autoRouteFile: File): Promise<boolean>;
+public importAutoRouteJsonFile(autoRouteFile: File): Promise<boolean>;
 ```
 
 ## Parameters
@@ -851,7 +1127,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-importAutoRouteSesFile(autoRouteFile: File): Promise<boolean>;
+public importAutoRouteSesFile(autoRouteFile: File): Promise<boolean>;
 ```
 
 ## Parameters
@@ -911,7 +1187,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-importChanges(uuid?: string): Promise<boolean>;
+public importChanges(uuid?: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -967,7 +1243,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-navigateToCoordinates(x: number, y: number): Promise<boolean>;
+public navigateToCoordinates(x: number, y: number): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1049,7 +1325,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-navigateToRegion(left: number, right: number, top: number, bottom: number): Promise<boolean>;
+public navigateToRegion(left: number, right: number, top: number, bottom: number): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1163,43 +1439,8 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-save(uuid: string): Promise<boolean>;
+public save(): Promise<boolean>;
 ```
-
-## Parameters
-
-<table><thead><tr><th>
-
-Parameter
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-uuid
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
-
 
 
 ## Returns
@@ -1217,7 +1458,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-setCanvasOrigin(offsetX: number, offsetY: number): Promise<boolean>;
+public setCanvasOrigin(offsetX: number, offsetY: number): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1294,12 +1535,16 @@ Promise&lt;boolean&gt;
 
 # PCB\_Document.startCalculatingRatline() method
 
+> Warning: This API is now obsolete.
+>
+> since EDA v4.2
+
 启动飞线计算功能
 
 ## Signature
 
 ```typescript
-startCalculatingRatline(): Promise<boolean>;
+public startCalculatingRatline(): Promise<boolean>;
 ```
 
 
@@ -1313,16 +1558,18 @@ Promise&lt;boolean&gt;
 
 在启动时将会触发一次飞线计算
 
-### stopcalculatingratline
+### startcanvasupdatecalculation
 
-# PCB\_Document.stopCalculatingRatline() method
+# PCB\_Document.startCanvasUpdateCalculation() method
 
-停止飞线计算功能
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+开始画布更新计算
 
 ## Signature
 
 ```typescript
-stopCalculatingRatline(): Promise<boolean>;
+public startCanvasUpdateCalculation(): Promise<boolean>;
 ```
 
 
@@ -1331,6 +1578,89 @@ stopCalculatingRatline(): Promise<boolean>;
 Promise&lt;boolean&gt;
 
 操作是否成功
+
+## Remarks
+
+画布更新计算包括画布渲染更新、属性面板更新等
+
+如若不理解该开关的含义，请勿调用本接口进行任何操作 ADD since EDA v4.2
+
+### stopcalculatingratline
+
+# PCB\_Document.stopCalculatingRatline() method
+
+> Warning: This API is now obsolete.
+>
+> since EDA v4.2
+
+停止飞线计算功能
+
+## Signature
+
+```typescript
+public stopCalculatingRatline(): Promise<boolean>;
+```
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+操作是否成功
+
+### stopcanvasupdatecalculation
+
+# PCB\_Document.stopCanvasUpdateCalculation() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+停止画布更新计算
+
+## Signature
+
+```typescript
+public stopCanvasUpdateCalculation(): Promise<boolean>;
+```
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+操作是否成功
+
+## Remarks
+
+画布更新计算包括画布渲染更新、属性面板更新等
+
+如若不理解该开关的含义，请勿调用本接口进行任何操作 ADD since EDA v4.2
+
+### triggercanvasupdatecalculation
+
+# PCB\_Document.triggerCanvasUpdateCalculation() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+触发一次画布更新计算
+
+## Signature
+
+```typescript
+public triggerCanvasUpdateCalculation(): Promise<boolean>;
+```
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+操作是否成功
+
+## Remarks
+
+画布更新计算包括画布渲染更新、属性面板更新等
+
+如若不理解该开关的含义，请勿调用本接口进行任何操作 ADD since EDA v4.2
 
 ### zoomtoboardoutline
 
@@ -1343,7 +1673,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-zoomToBoardOutline(): Promise<boolean>;
+public zoomToBoardOutline(): Promise<boolean>;
 ```
 
 

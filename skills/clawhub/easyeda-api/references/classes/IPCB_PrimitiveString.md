@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class IPCB_PrimitiveString implements IPCB_Primitive 
+export class IPCB_PrimitiveString implements IPCB_Primitive 
 ```
 **Implements:** [IPCB\_Primitive](../interfaces/IPCB_Primitive.md)
 
@@ -62,6 +62,20 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+[done()](./IPCB_PrimitiveString.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 将对图元的更改应用到画布
+
+
+</td></tr>
+<tr><td>
 
 [getState\_AlignMode()](./IPCB_PrimitiveString.md)
 
@@ -282,6 +296,20 @@ Description
 </td><td>
 
 查询图元是否为异步图元
+
+
+</td></tr>
+<tr><td>
+
+[reset()](./IPCB_PrimitiveString.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 将异步图元重置为当前画布状态
 
 
 </td></tr>
@@ -510,7 +538,7 @@ Constructs a new instance of the `IPCB_PrimitiveString` class
 ## Signature
 
 ```typescript
-constructor(layer: TPCB_LayersOfImage, x: number, y: number, text: string, fontFamily?: string, fontSize?: number, lineWidth?: number, alignMode?: EPCB_PrimitiveStringAlignMode, rotation?: number, reverse?: boolean, expansion?: number, mirror?: boolean, primitiveLock?: boolean, primitiveId?: string);
+public constructor(layer: TPCB_LayersOfImage, x: number, y: number, text: string, fontFamily?: string, fontSize?: number, lineWidth?: number, alignMode?: EPCB_PrimitiveStringAlignMode, rotation?: number, reverse?: boolean, expansion?: number, mirror?: boolean, primitiveLock?: boolean, primitiveId?: string);
 ```
 
 ## Parameters
@@ -754,6 +782,27 @@ _(Optional)_
 
 ## 方法详情
 
+### done
+
+# IPCB\_PrimitiveString.done() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+将对图元的更改应用到画布
+
+## Signature
+
+```typescript
+public done(): Promise<IPCB_PrimitiveString>;
+```
+
+
+## Returns
+
+Promise&lt;[IPCB\_PrimitiveString](./IPCB_PrimitiveString.md)<!-- -->&gt;
+
+文本图元对象
+
 ### getstate_alignmode
 
 # IPCB\_PrimitiveString.getState\_AlignMode() method
@@ -763,7 +812,7 @@ _(Optional)_
 ## Signature
 
 ```typescript
-getState_AlignMode(): EPCB_PrimitiveStringAlignMode;
+public getState_AlignMode(): EPCB_PrimitiveStringAlignMode;
 ```
 
 
@@ -782,7 +831,7 @@ getState_AlignMode(): EPCB_PrimitiveStringAlignMode;
 ## Signature
 
 ```typescript
-getState_Expansion(): number;
+public getState_Expansion(): number;
 ```
 
 
@@ -801,7 +850,7 @@ number
 ## Signature
 
 ```typescript
-getState_FontFamily(): string;
+public getState_FontFamily(): string;
 ```
 
 
@@ -820,7 +869,7 @@ string
 ## Signature
 
 ```typescript
-getState_FontSize(): number;
+public getState_FontSize(): number;
 ```
 
 
@@ -839,7 +888,7 @@ number
 ## Signature
 
 ```typescript
-getState_Layer(): TPCB_LayersOfImage;
+public getState_Layer(): TPCB_LayersOfImage;
 ```
 
 
@@ -858,7 +907,7 @@ getState_Layer(): TPCB_LayersOfImage;
 ## Signature
 
 ```typescript
-getState_LineWidth(): number;
+public getState_LineWidth(): number;
 ```
 
 
@@ -877,7 +926,7 @@ number
 ## Signature
 
 ```typescript
-getState_Mirror(): boolean;
+public getState_Mirror(): boolean;
 ```
 
 
@@ -896,7 +945,7 @@ boolean
 ## Signature
 
 ```typescript
-getState_PrimitiveId(): string;
+public getState_PrimitiveId(): string;
 ```
 
 
@@ -915,7 +964,7 @@ string
 ## Signature
 
 ```typescript
-getState_PrimitiveLock(): boolean;
+public getState_PrimitiveLock(): boolean;
 ```
 
 
@@ -934,7 +983,7 @@ boolean
 ## Signature
 
 ```typescript
-getState_PrimitiveType(): EPCB_PrimitiveType;
+public getState_PrimitiveType(): EPCB_PrimitiveType;
 ```
 
 
@@ -953,7 +1002,7 @@ getState_PrimitiveType(): EPCB_PrimitiveType;
 ## Signature
 
 ```typescript
-getState_Reverse(): boolean;
+public getState_Reverse(): boolean;
 ```
 
 
@@ -972,7 +1021,7 @@ boolean
 ## Signature
 
 ```typescript
-getState_Rotation(): number;
+public getState_Rotation(): number;
 ```
 
 
@@ -991,7 +1040,7 @@ number
 ## Signature
 
 ```typescript
-getState_Text(): string;
+public getState_Text(): string;
 ```
 
 
@@ -1010,7 +1059,7 @@ string
 ## Signature
 
 ```typescript
-getState_X(): number;
+public getState_X(): number;
 ```
 
 
@@ -1029,7 +1078,7 @@ number
 ## Signature
 
 ```typescript
-getState_Y(): number;
+public getState_Y(): number;
 ```
 
 
@@ -1048,7 +1097,7 @@ number
 ## Signature
 
 ```typescript
-isAsync(): boolean;
+public isAsync(): boolean;
 ```
 
 
@@ -1057,6 +1106,27 @@ isAsync(): boolean;
 boolean
 
 是否为异步图元
+
+### reset
+
+# IPCB\_PrimitiveString.reset() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+将异步图元重置为当前画布状态
+
+## Signature
+
+```typescript
+public reset(): Promise<IPCB_PrimitiveString>;
+```
+
+
+## Returns
+
+Promise&lt;[IPCB\_PrimitiveString](./IPCB_PrimitiveString.md)<!-- -->&gt;
+
+���本图元对象
 
 ### setstate_alignmode
 
@@ -1069,7 +1139,7 @@ boolean
 ## Signature
 
 ```typescript
-setState_AlignMode(alignMode: EPCB_PrimitiveStringAlignMode): IPCB_PrimitiveString;
+public setState_AlignMode(alignMode: EPCB_PrimitiveStringAlignMode): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1127,7 +1197,7 @@ alignMode
 ## Signature
 
 ```typescript
-setState_Expansion(expansion: number): IPCB_PrimitiveString;
+public setState_Expansion(expansion: number): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1185,7 +1255,7 @@ number
 ## Signature
 
 ```typescript
-setState_FontFamily(fontFamily: string): IPCB_PrimitiveString;
+public setState_FontFamily(fontFamily: string): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1243,7 +1313,7 @@ string
 ## Signature
 
 ```typescript
-setState_FontSize(fontSize: number): IPCB_PrimitiveString;
+public setState_FontSize(fontSize: number): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1301,7 +1371,7 @@ number
 ## Signature
 
 ```typescript
-setState_Layer(layer: TPCB_LayersOfImage): IPCB_PrimitiveString;
+public setState_Layer(layer: TPCB_LayersOfImage): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1359,7 +1429,7 @@ layer
 ## Signature
 
 ```typescript
-setState_LineWidth(lineWidth: number): IPCB_PrimitiveString;
+public setState_LineWidth(lineWidth: number): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1417,7 +1487,7 @@ number
 ## Signature
 
 ```typescript
-setState_Mirror(mirror: boolean): IPCB_PrimitiveString;
+public setState_Mirror(mirror: boolean): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1475,7 +1545,7 @@ boolean
 ## Signature
 
 ```typescript
-setState_PrimitiveLock(primitiveLock: boolean): IPCB_PrimitiveString;
+public setState_PrimitiveLock(primitiveLock: boolean): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1533,7 +1603,7 @@ boolean
 ## Signature
 
 ```typescript
-setState_Reverse(reverse: boolean): IPCB_PrimitiveString;
+public setState_Reverse(reverse: boolean): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1580,6 +1650,10 @@ boolean
 
 文本图元对象
 
+## Remarks
+
+默认字体不支持反相
+
 ### setstate_rotation
 
 # IPCB\_PrimitiveString.setState\_Rotation() method
@@ -1591,7 +1665,7 @@ boolean
 ## Signature
 
 ```typescript
-setState_Rotation(rotation: number): IPCB_PrimitiveString;
+public setState_Rotation(rotation: number): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1649,7 +1723,7 @@ number
 ## Signature
 
 ```typescript
-setState_Text(text: string): IPCB_PrimitiveString;
+public setState_Text(text: string): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1707,7 +1781,7 @@ string
 ## Signature
 
 ```typescript
-setState_X(x: number): IPCB_PrimitiveString;
+public setState_X(x: number): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1765,7 +1839,7 @@ number
 ## Signature
 
 ```typescript
-setState_Y(y: number): IPCB_PrimitiveString;
+public setState_Y(y: number): IPCB_PrimitiveString;
 ```
 
 ## Parameters
@@ -1821,7 +1895,7 @@ number
 ## Signature
 
 ```typescript
-toAsync(): IPCB_PrimitiveString;
+public toAsync(): IPCB_PrimitiveString;
 ```
 
 
@@ -1840,7 +1914,7 @@ toAsync(): IPCB_PrimitiveString;
 ## Signature
 
 ```typescript
-toSync(): IPCB_PrimitiveString;
+public toSync(): IPCB_PrimitiveString;
 ```
 
 

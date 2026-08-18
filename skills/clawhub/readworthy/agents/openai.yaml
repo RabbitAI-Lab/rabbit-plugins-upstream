@@ -1,0 +1,6 @@
+interface:
+  display_name: "Readworthy"
+  short_description: "Personalized, evidence-aware article recommendations"
+  default_prompt: "Use $readworthy to decide whether this article is worth my time."
+policy:
+  allow_implicit_invocation: true

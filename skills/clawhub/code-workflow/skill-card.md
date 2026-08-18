@@ -1,47 +1,63 @@
-## Description: <br>
-Code Workflow guides agents through a staged code-change process covering research, planning, user review, test-driven implementation, and optional pull request evidence capture. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through a four-stage code-change workflow: research, planning, user review, and TDD-based implementation, with optional PR capture support.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to structure non-trivial code changes, preserve research and plan artifacts, require explicit review before implementation, and apply TDD-oriented implementation and verification steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: A hook resource is described as advisory but can block execution when undecided plan markers are detected. <br>
-Mitigation: Review the hook behavior before enabling it, and either make the hook warning-only or document and accept its blocking behavior. <br>
-Risk: Broad plan and research search rules can read unrelated local planning documents into the agent context. <br>
-Mitigation: Limit searches to task-relevant issue numbers, explicit domain keywords, and configured project plan directories. <br>
-Risk: Strict workflow gates can slow or interrupt small changes when applied too broadly. <br>
-Mitigation: Use the skill for moderate or complex code changes, and rely on the documented trivial-task exception for simple one- or two-line edits. <br>
+## Use Case:
 
+Developers and coding agents use this skill to structure non-trivial code changes, issue work, feature implementation, plan authoring, and pull-request preparation with explicit research, planning, approval, testing, and commit gates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/code-workflow) <br>
-- [Skill manifest](SKILL.md) <br>
-- [Workflow steps](steps.md) <br>
-- [Implementation guidance](implement.md) <br>
-- [PR workflow](pr.md) <br>
-- [Release changelog](CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with command snippets, workflow checklists, and file-oriented instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide creation of research and plan Markdown files, test code, Git commands, and pull request evidence when explicitly requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release metadata and CHANGELOG.md) <br>
+Risk: The workflow can write local research and plan files and expects local commits during implementation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in repositories where generated planning files and local commits are acceptable, and review changes before pushing or publishing.
+
+Risk: The workflow can post plans to linked GitHub issues and prepare PR content when the task context calls for those actions.
+
+Mitigation: Confirm that repository issue comments, PR bodies, and any linked task details are appropriate for the target public or private repository before allowing publication.
+
+Risk: Optional RAG dispatch can send research or plan artifacts to a configured receiver.
+
+Mitigation: Enable RAG dispatch only for approved receivers and avoid dispatching sensitive repository details to untrusted stores.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/code-workflow)
+- [Skill overview and topics](artifact/SKILL.md)
+- [Research, plan, review, and branch workflow](artifact/steps.md)
+- [TDD implementation workflow](artifact/implement.md)
+- [PR workflow with visual evidence](artifact/pr.md)
+- [Plan and research pre-search obligation](artifact/plan-research-search.md)
+- [Release changelog](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with file paths, checklists, and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or update local research and plan files, commit guidance, GitHub issue or PR text, and visual capture instructions when explicitly requested.]
+
+## Skill Version(s):
+
+0.6.3 (source: release evidence and CHANGELOG, released 2026-08-17; SKILL.md metadata version is 0.1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,50 +1,70 @@
-## Description: <br>
-Integrates Modellix's unified API and CLI for asynchronous AI image and video generation workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Integrates Modellix's unified API for AI image, video, and audio workflows through CLI-first or REST fallback guidance.
 
-## Publisher: <br>
-[modellix](https://clawhub.ai/user/modellix) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[modellix](https://clawhub.ai/user/modellix)
 
-## Use Case: <br>
-Developers and agents use this skill to select Modellix media models, submit image or video generation tasks, poll results, and retrieve generated resources through CLI-first or REST fallback workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Modellix API key for CLI or REST calls. <br>
-Mitigation: Use a revocable, session-only MODELLIX_API_KEY by default and avoid exposing key values in command lines, logs, transcripts, screenshots, or committed files. <br>
-Risk: Prompts and user-provided media URLs or file-derived content may be sent to Modellix during generation. <br>
-Mitigation: Review prompts and media inputs before submission and use the skill only when Modellix media generation is intended. <br>
-Risk: Installing the optional Modellix CLI globally adds a third-party executable to the user's environment. <br>
-Mitigation: Verify the npm CLI package before global installation and use REST fallback when the CLI is unavailable or unsuitable. <br>
+## Use Case:
 
+Developers and agents use this skill to generate or edit images, create or transform videos, synthesize speech, transcribe audio, clone voices, and download Modellix task results. It is intended for workflows that need model selection, credential handling, paid-task safeguards, and CLI or REST execution guidance.
 
-## Reference(s): <br>
-- [Modellix Skill Page](https://clawhub.ai/modellix/modellix) <br>
-- [Publisher Profile](https://clawhub.ai/user/modellix) <br>
-- [Modellix Agent Quick Start](https://docs.modellix.ai/get-started.md) <br>
-- [Modellix API Documentation](https://docs.modellix.ai/ways-to-use/api.md) <br>
-- [Modellix CLI Documentation](https://docs.modellix.ai/ways-to-use/cli.md) <br>
-- [Modellix Models Index](https://docs.modellix.ai/llms.txt) <br>
-- [Capability Matrix](references/capability-matrix.md) <br>
-- [CLI Playbook](references/cli-playbook.md) <br>
-- [REST Playbook](references/rest-playbook.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, json, code] <br>
-**Output Format:** [Markdown guidance with CLI, REST, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can emit normalized Modellix task results containing mode, task ID, status, generated resource URLs, and raw submit/poll payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.16 (source: server-resolved release metadata) <br>
+Risk: The skill sends prompts or media inputs to Modellix APIs and may download generated resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for intended Modellix media workflows and avoid sending sensitive prompts or media unless the deployment policy permits that egress.
+
+Risk: The skill uses MODELLIX_API_KEY or a saved CLI profile for authenticated API access.
+
+Mitigation: Keep credentials session-scoped by default, do not print API keys, and persist credentials only when the user explicitly requests it.
+
+Risk: Media-generation submissions may be paid asynchronous tasks, and retrying an ambiguous submit can duplicate charges.
+
+Mitigation: Run preflight or doctor first, submit paid tasks once, and check task history, the console, or any returned task ID before retrying after an unknown outcome.
+
+Risk: The workflow may install or update modellix-cli before execution.
+
+Mitigation: Allow installation only in environments that permit npm-based CLI updates, or disable automatic updates with MODELLIX_CLI_AUTO_UPDATE=0 when the installed CLI must remain pinned.
+
+## Reference(s):
+
+- [Modellix Skill on ClawHub](https://clawhub.ai/modellix/skills/modellix)
+- [Modellix AI Onboarding](https://docs.modellix.ai/get-started.md)
+- [Modellix REST API](https://docs.modellix.ai/ways-to-use/api.md)
+- [Modellix Models Index](https://docs.modellix.ai/llms.txt)
+- [Modellix Docs MCP](https://docs.modellix.ai/mcp)
+- [modellix-cli package](https://www.npmjs.com/package/modellix-cli)
+- [CLI Playbook](artifact/references/cli-playbook.md)
+- [REST Playbook](artifact/references/rest-playbook.md)
+- [Capability Matrix](artifact/references/capability-matrix.md)
+- [Task Result Schema](artifact/assets/output/task-result.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, JSON, Files]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON request bodies, and local output file paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May submit paid asynchronous media-generation tasks, poll or wait for task status, and download image, video, audio, or transcript resources.]
+
+## Skill Version(s):
+
+1.0.23 (source: ClawHub release evidence; artifact metadata version 3.9.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

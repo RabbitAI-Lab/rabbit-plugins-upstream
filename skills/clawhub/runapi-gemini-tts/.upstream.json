@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-gemini-tts",
   "slug": "runapi-gemini-tts",
   "ownerHandle": null,
-  "version": "0.1.0",
-  "updatedAt": 1784553410151,
-  "contentHash": "57a52f44a78ae400472b1701d469f62e8b370ea5f7ee48a7edecd16e0b4a248f",
-  "fetchedAt": "2026-07-26T18:10:03.536Z"
+  "version": "0.1.2",
+  "updatedAt": 1786515392391,
+  "contentHash": "7e162b493fc97366af8b32e008ca6e212c2d00fccef34ad63dc9b830fe590793",
+  "fetchedAt": "2026-08-18T08:38:38.705Z"
 }

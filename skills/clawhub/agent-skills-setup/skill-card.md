@@ -1,48 +1,64 @@
-## Description: <br>
-Migrates AI assistant context between IDEs, including MCP servers, rules, skills, commands, agents, hooks, and memory, with dry-run previews, format conversion, backup-first merging, secret redaction, and verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Agent Skills Setup & Migration helps agents plan, inspect, and migrate supported IDE or agent skills, instructions, and MCP configuration using local Bash/Python workflows with explicit approval for writes.
 
-## Publisher: <br>
-[luckycat133](https://clawhub.ai/user/luckycat133) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[luckycat133](https://clawhub.ai/user/luckycat133)
 
-## Use Case: <br>
-Developers and engineers use this skill when they explicitly need to migrate, copy, convert, or synchronize AI assistant context between supported IDEs and agent runtimes. It helps inventory source settings, preview conversion plans, redact credentials, apply approved changes, and verify destination configuration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify IDE and agent configuration files during migration. <br>
-Mitigation: Run dry-runs first, review target directories and planned changes, and only use --yes when the destination changes are understood. <br>
-Risk: Using overwrite or replacement sync modes can rewrite or delete destination skill and configuration files. <br>
-Mitigation: Prefer the default backup strategy, keep timestamped backups, and avoid overwrite modes unless the target contents are disposable. <br>
-Risk: MCP, config, and project migrations may contain credentials or connection strings. <br>
-Mitigation: Treat these migrations as opt-in, expect secrets to be blanked, and re-enter credentials through the target IDE or a secret manager after migration. <br>
-Risk: OpenClaw installation downloads and runs an external installer. <br>
-Mitigation: Set and verify OPENCLAW_INSTALL_SHA256 before allowing the installer to run, and do not proceed when the checksum is missing or mismatched. <br>
+## Use Case:
 
+Developers and engineers use this skill to inventory, plan, apply, verify, roll back, snapshot, and restore portable agent context between supported IDEs and agent products. It is intended for local, offline migration workflows where configuration changes are reviewed before execution.
 
-## Reference(s): <br>
-- [Agent Skills Setup on ClawHub](https://clawhub.ai/luckycat133/skills/agent-skills-setup) <br>
-- [IDE Registry](artifact/references/ide-registry.md) <br>
-- [IDE Paths](artifact/references/ide-paths.json) <br>
-- [OpenClaw Reference](artifact/references/openclaw.md) <br>
-- [Publishing Reference](artifact/references/publishing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, configuration snippets, migration plans, and verification summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local file changes and installer commands; write operations require explicit confirmation and should be previewed first.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.7 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can inspect and modify local IDE or agent configuration files during approved apply, restore, or rollback flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer plan-only and bundle-verify flows first, review every target path and diff, and keep an external backup before apply or rollback.
+
+Risk: Broad object selections can touch higher-risk surfaces such as plugins, hooks, or handoff data.
+
+Mitigation: Select only the specific objects needed and avoid plugins, hooks, or handoff unless the migration requires them.
+
+Risk: Private credentials, sessions, approval grants, runtime state, chat history, or generated memory could be harmful if migrated.
+
+Mitigation: Use the documented secret scanning, strict allowlists, and non-migratable state exclusions before restoring or applying changes.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/luckycat133/skills/agent-skills-setup)
+- [IDE Reference Index](references/ide-registry.md)
+- [Migration Safety and Conflicts](references/migration-safety.md)
+- [File-Backed Object Migration](references/object-migration.md)
+- [MCP Migration](references/mcp-migration.md)
+- [Verification and Evidence](references/verification.md)
+- [Registry v2](references/registry-v2.json)
+- [Documentation Freshness Checks](references/doc-freshness-checks.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands plus JSON plan, manifest, inventory, verification, and bundle metadata artifacts.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires local bash and python3; network access is forbidden by the skill evidence.]
+
+## Skill Version(s):
+
+0.8.22 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

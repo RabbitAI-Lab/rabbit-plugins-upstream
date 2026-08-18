@@ -1,44 +1,59 @@
-## Description: <br>
-servicepack helps developers build Go service or daemon projects from a clone-and-own template with concurrent service management, dependency-ordered startup, readiness gating, retries, CLI commands, logging, and graceful shutdown. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+servicepack guides agents through creating and maintaining Go services on the psyb0t/servicepack clone-and-own framework, including service scaffolding, dependency ordering, readiness gates, retries, logging, configuration, lifecycle hooks, and graceful shutdown.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and engineers use this skill when starting or extending a Go service project that needs long-running workers, dependency-aware startup, retry behavior, readiness signaling, service-specific commands, and graceful shutdown. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Running make own rewrites the module, removes the existing git history for that clone, and initializes a new repository. <br>
-Mitigation: Run make own only once, at the start, in a fresh clone that does not contain work you need to preserve. <br>
-Risk: The template owns framework files and update commands can overwrite framework-managed paths. <br>
-Mitigation: Keep custom service logic in user-owned service and command files, and avoid hand-editing framework-owned paths described by the skill. <br>
-Risk: Generated or custom services may introduce their own network surfaces, credentials, or environment variables. <br>
-Mitigation: Review generated services, configuration variables, and deployment-specific behavior before building or deploying the resulting service. <br>
+## Use Case:
 
+Developers and engineers use this skill to start or maintain Go servicepack-based projects that run related workers locally and can later be built as one binary or split into microservices. It is most relevant when projects need dependency-aware startup, readiness gating, retries, per-service commands, and graceful shutdown.
 
-## Reference(s): <br>
-- [Setup Guide](references/setup.md) <br>
-- [ClawHub servicepack skill page](https://clawhub.ai/psyb0t/skills/servicepack) <br>
-- [servicepack repository](https://github.com/psyb0t/servicepack) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code examples and shell command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Go toolchain and is intended to guide changes in a user-owned servicepack clone.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.8 (source: server release metadata) <br>
+Risk: The ownership step rewrites module paths, removes the clone's Git history, reinitializes Git, and creates an initial commit.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the ownership step once at the start in a fresh clone, not inside an existing project or repository with work to preserve.
+
+Risk: Docker-backed make targets and generated service registration can modify local project files.
+
+Mitigation: Review generated code and pending file changes before building, testing, or committing.
+
+Risk: Framework-owned files may be overwritten by servicepack update workflows.
+
+Mitigation: Customize through documented service directories, command files, and lifecycle hooks instead of editing framework-owned paths.
+
+## Reference(s):
+
+- [servicepack setup reference](artifact/references/setup.md)
+- [servicepack project homepage](https://github.com/psyb0t/servicepack)
+- [ClawHub servicepack skill page](https://clawhub.ai/psyb0t/skills/servicepack)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with Go code examples and shell command blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose local file edits under service and command paths and may suggest make targets for build, test, lint, formatting, audit, service registration, and Docker-backed development.]
+
+## Skill Version(s):
+
+1.6.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
