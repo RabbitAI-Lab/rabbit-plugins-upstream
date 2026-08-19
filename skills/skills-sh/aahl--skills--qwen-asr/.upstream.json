@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aahl/skills/qwen-asr",
+  "repo": "aahl/skills",
+  "skillId": "qwen-asr",
+  "branch": "main",
+  "pushedAt": "2026-07-15T07:01:54Z",
+  "contentHash": "acdc5edd945139b33fbdd5ffa2197be8c2124006f2f68729a54fcfbe170b72c4",
+  "fetchedAt": "2026-08-19T08:00:15.770Z"
+}
