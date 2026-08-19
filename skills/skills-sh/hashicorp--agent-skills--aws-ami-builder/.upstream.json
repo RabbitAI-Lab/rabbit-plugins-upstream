@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/aws-ami-builder",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "aws-ami-builder",
+  "branch": "main",
+  "pushedAt": "2026-08-18T18:37:45Z",
+  "contentHash": "36c678e966b2f99f0b5ced9cada3d5c8ce76929bc01b21b8cc986647c51b0ee5",
+  "fetchedAt": "2026-08-19T07:59:43.470Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/dotneet/claude-code-marketplace/suggest-agent-rules",
+  "repo": "dotneet/claude-code-marketplace",
+  "skillId": "suggest-agent-rules",
+  "branch": "main",
+  "pushedAt": "2026-01-23T08:55:30Z",
+  "contentHash": "ac4c08b2d11dc821f41ffcab786a7286147572ad7d36c17b94700fe9042fbc85",
+  "fetchedAt": "2026-08-19T07:59:53.647Z"
+}
