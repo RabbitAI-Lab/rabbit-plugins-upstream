@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class SYS_Dialog 
+export class SYS_Dialog 
 ```
 
 ## Remarks
@@ -31,6 +31,20 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+[createDesignPortal()](./SYS_Dialog.md)
+
+
+</td><td>
+
+
+</td><td>
+
+创建组件化弹出窗口的通信入口
+
+
+</td></tr>
+<tr><td>
 
 [showConfirmationMessage(content, title, mainButtonTitle, buttonTitle, callbackFn)](./SYS_Dialog.md)
 
@@ -106,6 +120,29 @@ Description
 
 ## 方法详情
 
+### createdesignportal
+
+# SYS\_Dialog.createDesignPortal() method
+
+创建组件化弹出窗口的通信入口
+
+## Signature
+
+```typescript
+public createDesignPortal(): IDesignPortal;
+```
+
+
+## Returns
+
+[IDesignPortal](../interfaces/IDesignPortal.md)
+
+实现 IDesignPortal 的通信对象
+
+## Remarks
+
+返回一个 IDesignPortal 对象，扩展结合 lc-editor-design-react 的 VirtualRender / 虚拟机组件使用。 所有通信（发消息 + 收事件）均封装在对象内部。
+
 ### showconfirmationmessage
 
 # SYS\_Dialog.showConfirmationMessage() method
@@ -115,7 +152,7 @@ Description
 ## Signature
 
 ```typescript
-showConfirmationMessage(content: string, title?: string, mainButtonTitle?: string, buttonTitle?: string, callbackFn?: (mainButtonClicked: boolean) => void): void;
+public showConfirmationMessage(content: string, title?: string, mainButtonTitle?: string, buttonTitle?: string, callbackFn?: (mainButtonClicked: boolean) => void): void;
 ```
 
 ## Parameters
@@ -237,7 +274,7 @@ void
 ## Signature
 
 ```typescript
-showInformationMessage(content: string, title?: string, buttonTitle?: string): void;
+public showInformationMessage(content: string, title?: string, buttonTitle?: string): void;
 ```
 
 ## Parameters
@@ -329,17 +366,7 @@ void
 ## Signature
 
 ```typescript
-showInputDialog(beforeContent?: string, afterContent?: string, title?: string, type?: 'color' | 'date' | 'datetime-local' | 'email' | 'mouth' | 'number' | 'password' | 'tel' | 'text' | 'time' | 'url' | 'week', value?: string | number, otherProperty?: {
-        max?: number;
-        maxlength?: number;
-        min?: number;
-        minlength?: number;
-        multiple?: boolean;
-        pattern?: RegExp;
-        placeholder?: string;
-        readonly?: boolean;
-        step?: number;
-    }, callbackFn?: (value: any) => void): void;
+public showInputDialog(beforeContent?: string, afterContent?: string, title?: string, type?: 'color' | 'date' | 'datetime-local' | 'email' | 'mouth' | 'number' | 'password' | 'tel' | 'text' | 'time' | 'url' | 'week', value?: string | number, otherProperty?: { max?: undefined | number; maxlength?: undefined | number; min?: undefined | number; minlength?: undefined | number; multiple?: undefined | false | true; pattern?: undefined | RegExp; placeholder?: undefined | string; readonly?: undefined | false | true; step?: undefined | number }, callbackFn?: (value: any) => void): void;
 ```
 
 ## Parameters
@@ -447,7 +474,7 @@ otherProperty
 
 </td><td>
 
-\{ max?: number; maxlength?: number; min?: number; minlength?: number; multiple?: boolean; pattern?: RegExp; placeholder?: string; readonly?: boolean; step?: number; \}
+\{ max?: undefined \| number; maxlength?: undefined \| number; min?: undefined \| number; minlength?: undefined \| number; multiple?: undefined \| false \| true; pattern?: undefined \| RegExp; placeholder?: undefined \| string; readonly?: undefined \| false \| true; step?: undefined \| number \}
 
 
 </td><td>
@@ -493,10 +520,7 @@ void
 ## Signature
 
 ```typescript
-showSelectDialog(options: Array<string> | Array<{
-        value: string;
-        displayContent: string;
-    }>, beforeContent?: string, afterContent?: string, title?: string, defaultOption?: string, multiple?: false, callbackFn?: (value: string) => void | Promise<void>): void;
+public showSelectDialog(options: Array<string> | Array<{ value: string; displayContent: string }>, beforeContent?: string, afterContent?: string, title?: string, defaultOption?: string, multiple?: false, callbackFn?: (value: string) => void | Promise<void>): void;
 ```
 
 ## Parameters
@@ -524,16 +548,12 @@ options
 
 </td><td>
 
-Array&lt;string&gt; \| Array&lt;{ value: string; displayContent: string; }&gt;
+Array&lt;string&gt; \| Array&lt;{ value: string; displayContent: string }&gt;
 
 
 </td><td>
 
-选项列表，可以为字符串数组或对象数组，在未指定 `defaultOption` 时，默认值为列表的第一项；
-
-如若为字符串数组，则选项的值和选项的展示内容将保持一致；
-
-如若为对象数组，则 `value` 表示选项的值，`displayContent` 表示选项的展示内容
+选项列表，可以为字符串数组或对象数组，在未指定 `defaultOption` 时，默认值为列表的第一项； 如若为字符串数组，则选项的值和选项的展示内容将保持一致； 如若为对象数组，则 `value` 表示选项的值，`displayContent` 表示选项的展示内容
 
 
 </td></tr>
@@ -654,10 +674,7 @@ void
 ## Signature
 
 ```typescript
-showSelectDialog(options: Array<string> | Array<{
-        value: string;
-        displayContent: string;
-    }>, beforeContent?: string, afterContent?: string, title?: string, defaultOption?: Array<string>, multiple?: true, callbackFn?: (value: Array<string>) => void | Promise<void>): void;
+public showSelectDialog(options: Array<string> | Array<{ value: string; displayContent: string }>, beforeContent?: string, afterContent?: string, title?: string, defaultOption?: Array<string>, multiple?: true, callbackFn?: (value: Array<string>) => void | Promise<void>): void;
 ```
 
 ## Parameters
@@ -685,16 +702,12 @@ options
 
 </td><td>
 
-Array&lt;string&gt; \| Array&lt;{ value: string; displayContent: string; }&gt;
+Array&lt;string&gt; \| Array&lt;{ value: string; displayContent: string }&gt;
 
 
 </td><td>
 
-选项列表，可以为字符串数组或对象数组，在未指定 `defaultOption` 时，默认值为列表的第一项；
-
-如若为字符串数组，则选项的值和选项的展示内容将保持一致；
-
-如若为对象数组，则 `value` 表示选项的值，`displayContent` 表示选项的展示内容
+选项列表，可以为字符串数组或对象数组，在未指定 `defaultOption` 时，默认值为列表的第一项； 如若为字符串数组，则选项的值和选项的展示内容将保持一致； 如若为对象数组，则 `value` 表示选项的值，`displayContent` 表示选项的展示内容
 
 
 </td></tr>

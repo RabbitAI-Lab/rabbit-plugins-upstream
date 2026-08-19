@@ -1,47 +1,60 @@
-## Description: <br>
-ERPClaw is an AI-native ERP skill for accounting, invoicing, inventory, purchasing, tax, billing, HR, payroll, advanced accounting, and financial reporting through a local-first business database. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ERPClaw is an AI-native ERP skill for local accounting, invoicing, inventory, purchasing, tax, billing, HR, payroll, advanced accounting, and financial reporting workflows.
 
-## Publisher: <br>
-[mailnike](https://clawhub.ai/user/mailnike) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-GPL-3.0 <br>
+## Publisher:
 
+[mailnike](https://clawhub.ai/user/mailnike)
 
-## Use Case: <br>
-Small business owners, operators, and their agents use ERPClaw to set up and run accounting, sales, purchasing, inventory, payroll, tax, billing, and reporting workflows from plain-English requests. Developers and administrators can also use it to initialize and maintain a local ERP database with optional approved modules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+GPL-3.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can act on a persistent local ERP database containing financial, payroll, banking, backup, and business records. <br>
-Mitigation: Install only in a dedicated ERPCLAW_HOME and review database, backup, credential, payroll, and fiscal-close workflows before production use. <br>
-Risk: Module install and update flows can fetch user-approved code from GitHub and affect the local ERP installation. <br>
-Mitigation: Require explicit human approval for module install/update actions and review the module source and registry workflow before enabling additional modules. <br>
-Risk: High-impact actions such as fiscal close, restore, payroll payment files, and schema rollback can be hard to undo. <br>
-Mitigation: Require a real human confirmation immediately before these actions and verify current backups before restore or rollback operations. <br>
-Risk: Some file and data handling paths are under-scoped according to the security summary. <br>
-Mitigation: Avoid exposing arbitrary server file paths for imports and limit runtime access to directories required for the ERPClaw installation. <br>
+## Use Case:
 
+Business operators, finance teams, and developers use this skill to run local-first ERP workflows through an agent, including company setup, customer and supplier records, invoices, payments, inventory, payroll, and financial reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mailnike/skills/erpclaw) <br>
-- [ERPClaw website](https://www.erpclaw.ai) <br>
-- [ERPClaw docs](https://www.erpclaw.ai/docs) <br>
-- [OpenClaw](https://openclaw.org) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and plain text with optional shell commands, JSON-like action results, and configuration values] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces business-facing responses and may invoke local ERP actions that read or mutate a persistent database after appropriate confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.13.0 (source: frontmatter, changelog, server release) <br>
+Risk: The skill can mutate real financial, payroll, banking, credential, backup, and local ERP code state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in an intended ERP environment, enable and test RBAC, and restrict mutating workflows to authorized operators.
+
+Risk: Module installation and update actions can fetch and execute local code.
+
+Mitigation: Review module provenance before installing add-ons and treat GitHub-backed module actions as local code execution.
+
+Risk: CSV imports from arbitrary server paths can introduce unwanted or incorrect business data.
+
+Mitigation: Limit import paths to approved locations and review imported data before relying on it for business decisions.
+
+## Reference(s):
+
+- [ClawHub ERPClaw skill page](https://clawhub.ai/mailnike/skills/erpclaw)
+- [ERPClaw documentation](https://www.erpclaw.ai/docs)
+- [ERPClaw website](https://www.erpclaw.ai)
+- [OpenClaw](https://openclaw.org)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, plain text, JSON-like action results, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or change local ERP records and files when the user invokes mutating workflows.]
+
+## Skill Version(s):
+
+4.15.0 (source: SKILL.md frontmatter, CHANGELOG, and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

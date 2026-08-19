@@ -1,45 +1,62 @@
-## Description: <br>
-Detects delivery packages in surveillance images or videos for inventory checks, package-count review, and unattended alerts at community stations, residential entrances, and office lobbies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects delivery packages in a target surveillance area for inventory checks and unattended alerts at community stations, residential entrances, and office building lobbies.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and operations teams use this skill to analyze surveillance images, videos, or media URLs for package presence, counts, locations, overdue pickup alerts, structured reports, and cloud report history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded surveillance media, media URLs, user or tenant identifiers, and generated account tokens may be sent to and stored by the provider's cloud service. <br>
-Mitigation: Use only with explicit consent for the media and identifiers involved, and confirm retention, access, and deletion terms with the publisher before deployment. <br>
-Risk: The skill silently creates or reuses an internal user identity and stores returned tokens with limited user-facing control. <br>
-Mitigation: Run in a controlled workspace, review local data and token storage before and after use, and prefer a release with explicit identity and token-handling controls. <br>
-Risk: The skill contacts configured remote service endpoints for analysis and historical report lookup. <br>
-Mitigation: Allowlist expected provider endpoints and avoid running the skill in environments where outbound media or report metadata transfer is not permitted. <br>
+## Use Case:
 
+External users, operations teams, and developers use this skill to analyze surveillance images or videos for package presence, counts, locations, overdue pickup reminders, and report history.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-package-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Package detection API documentation](references/api_doc.md) <br>
-- [Analysis API error-code documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON-formatted structured analysis reports, with optional saved output files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include package-detection results, report links, historical report lists, and user-facing status or error messages.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: ClawHub release metadata) <br>
+Risk: Surveillance images, videos, and report-history queries may be sent to configured remote services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with appropriate privacy notice and permission, and confirm that the configured API endpoint is approved before submitting media or retrieving history.
+
+Risk: The skill may automatically create and reuse local identity state and store tokens in the workspace data directory.
+
+Mitigation: Review local identity and token storage behavior before installation, restrict workspace access, and clear stored state when rotating users or environments.
+
+Risk: Published configuration includes development or private HTTP endpoints.
+
+Mitigation: Remove or override non-production endpoints before deployment and document the intended production service endpoints.
+
+Risk: Payment prompts or account-provisioning flows may occur during use.
+
+Mitigation: Require explicit user confirmation before account provisioning, history retrieval, or any paid action.
+
+## Reference(s):
+
+- [Package Detection API Documentation](references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands]
+
+**Output Format:** [Markdown or JSON structured analysis report, with optional saved file output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include package detection status, counts, locations, overdue pickup reminders, recommendations, and report links returned by the configured remote API.]
+
+## Skill Version(s):
+
+1.0.11 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

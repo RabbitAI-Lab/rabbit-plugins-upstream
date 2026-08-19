@@ -1,11 +1,11 @@
 ---
 name: dlazy-recraft-v4
 version: 1.3.5
-description: 1MP raster image generation with refined design judgment. Suitable for everyday creative work and fast iteration. 1MP 栅格图像生成，具备更精炼的设计判断力。适合日常创意工作和快速迭代场景。
+description: "1MP raster image generation with refined design judgment. Suitable for everyday creative work and fast iteration. 1MP 栅格图像生成，具备更精炼的设计判断力。适合日常创意工作和快速迭代场景。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy recraft-v4 -h for help."}}
 ---
 
-# dlazy-recraft-v4
+# 图像生成 Recraft V4
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

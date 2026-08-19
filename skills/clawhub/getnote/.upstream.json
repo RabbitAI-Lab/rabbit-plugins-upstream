@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/getnote",
   "slug": "getnote",
   "ownerHandle": null,
-  "version": "1.8.9",
-  "updatedAt": 1783514889676,
-  "contentHash": "fdf2eccb001a14f306d552803a5dcad7688a21671fd9edb877fd79f3131e7e0b",
-  "fetchedAt": "2026-07-26T18:17:58.614Z"
+  "version": "2.0.3",
+  "updatedAt": 1787113782999,
+  "contentHash": "722ab1348b242a68acef32555a51958cb9f4a18187554134f189c2a50c91bc3e",
+  "fetchedAt": "2026-08-19T07:59:52.990Z"
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-DAG 验证器 - 多Agent协作编排引擎 v4.0
+DAG 验证器 - 多Agent协作编排引擎 v5.0
 
 功能：
   1. 验证 JSON Schema 结构完整性
@@ -192,8 +192,8 @@ def validate_schema(pipeline):
         if 'fallback' in agent and agent['fallback'] not in ('retry', 'skip', 'default', 'abort'):
             warnings.append(f"{prefix} [fallback] 建议为 skip/default/abort 之一（当前值：{agent['fallback']}）")
 
-        # type 验证（task/approval/控制流四类）
-        valid_types = ('task', 'approval', 'condition', 'switch', 'for-each', 'while-loop')
+        # type 验证（task/approval/控制流六类）
+        valid_types = ('task', 'approval', 'condition', 'switch', 'for-each', 'while-loop', 'pipeline', 'evaluate')
         node_type = agent.get('type', 'task')
         if 'type' in agent and node_type not in valid_types:
             warnings.append(
@@ -238,6 +238,33 @@ def validate_schema(pipeline):
                 if not isinstance(mi, int) or mi <= 0:
                     warnings.append(f"{prefix} while-loop 节点的 [max_iterations] 建议为正整数")
 
+        elif node_type == 'approval':
+            if 'timeout_seconds' in agent:
+                ts = agent['timeout_seconds']
+                if not isinstance(ts, (int, float)) or ts <= 0:
+                    warnings.append(f"{prefix} approval 节点的 [timeout_seconds] 应为正数（秒）")
+            if 'timeout_action' in agent:
+                if agent['timeout_action'] not in ('approve', 'reject'):
+                    warnings.append(f"{prefix} approval 节点的 [timeout_action] 建议为 'approve' 或 'reject'")
+
+        elif node_type == 'pipeline':
+            if 'pipeline_ref' not in agent or not str(agent.get('pipeline_ref', '')).strip():
+                errors.append(f"{prefix} pipeline 节点必须提供非空 [pipeline_ref] 引用名")
+            if 'params' in agent and not isinstance(agent['params'], dict):
+                errors.append(f"{prefix} pipeline 节点的 [params] 必须是对象")
+            if 'outputs' in agent and not isinstance(agent['outputs'], dict):
+                errors.append(f"{prefix} pipeline 节点的 [outputs] 必须是对象")
+
+        elif node_type == 'evaluate':
+            if 'quality_expr' not in agent or not str(agent.get('quality_expr', '')).strip():
+                errors.append(f"{prefix} evaluate 节点必须提供非空 [quality_expr] 表达式")
+            if 'retry_targets' not in agent or not isinstance(agent.get('retry_targets'), list) or not agent['retry_targets']:
+                errors.append(f"{prefix} evaluate 节点必须提供非空 [retry_targets] 数组")
+            if 'max_eval_rounds' in agent:
+                me = agent['max_eval_rounds']
+                if not isinstance(me, int) or me <= 0:
+                    warnings.append(f"{prefix} evaluate 节点的 [max_eval_rounds] 建议为正整数")
+
     # 分支目标引用校验：控制流节点引用的分支节点必须存在
     branch_ref_errors = _validate_branch_refs(pipeline, agent_ids)
     errors.extend(branch_ref_errors)
@@ -271,6 +298,8 @@ def _validate_branch_refs(pipeline, agent_ids):
             _check_ids('join', agent.get('join', []))
         elif node_type == 'while-loop':
             _check_ids('loop_body', agent.get('loop_body', []))
+        elif node_type == 'evaluate':
+            _check_ids('retry_targets', agent.get('retry_targets', []))
 
     return errors
 
@@ -392,7 +421,7 @@ def validate(filepath):
     python dag_validator.py --help
     """
     print("=" * 60)
-    print("  DAG 验证器 - 多Agent协作编排引擎 v4.0")
+    print("  DAG 验证器 - 多Agent协作编排引擎 v5.0")
     print("=" * 60)
 
     pipeline = load_pipeline(filepath)
@@ -460,7 +489,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     if sys.argv[1] in ('-h', '--help'):
-        print("DAG 验证器 - 多Agent协作编排引擎 v4.0")
+        print("DAG 验证器 - 多Agent协作编排引擎 v5.0")
         print("=" * 50)
         print("用法：python dag_validator.py <pipeline.json>")
         print("")

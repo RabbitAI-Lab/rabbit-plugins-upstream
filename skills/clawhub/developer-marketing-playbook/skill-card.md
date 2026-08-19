@@ -1,44 +1,53 @@
-## Description: <br>
-Developer Marketing Playbook provides DevRel, documentation, API developer experience, community funnel, and hackathon ROI guidance for founders and teams marketing to developers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Developer Marketing Playbook provides dev-tool founders with developer marketing guidance across DevRel programs, documentation as marketing, API developer experience, community building, and hackathon strategy.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-Developers, founders, and DevRel teams use this skill to plan developer marketing programs, improve documentation and API onboarding, build community funnels, and assess hackathon ROI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may trigger on broad hackathon or DevRel prompts. <br>
-Mitigation: Confirm the skill is relevant to the user's developer marketing task before applying its playbook guidance. <br>
-Risk: Marketing recommendations and external profile links may be mistaken for authoritative business strategy. <br>
-Mitigation: Treat the output as general guidance and review recommendations against the organization's goals, market, and policies before use. <br>
+## Use Case:
 
+Dev-tool founders, DevRel teams, and developer marketers use this skill to plan developer acquisition, documentation-led growth, community funnels, ecosystem campaigns, and hackathon programs.
 
-## Reference(s): <br>
-- [Developer Marketing Playbook](https://clawhub.ai/gingiris-1031/skills/developer-marketing-playbook) <br>
-- [English reference](artifact/references/en/README.md) <br>
-- [Japanese reference](artifact/references/ja/README.md) <br>
-- [Korean reference](artifact/references/ko/README.md) <br>
-- [Publisher profile](https://clawhub.ai/user/gingiris-1031) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown guidance with bullet lists and install command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; no executable code or sensitive access according to ClawHub security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: server release evidence) <br>
+Risk: Agent-proposed outreach, interviews, or competitive research may conflict with privacy requirements or internal business policies.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed outreach, interview plans, and competitive research against privacy and business-policy requirements before use.
+
+## Reference(s):
+
+- [English Reference](references/en/README.md)
+- [Japanese Reference](references/ja/README.md)
+- [Korean Reference](references/ko/README.md)
+- [ClawHub Skill Page](https://clawhub.ai/gingiris-1031/skills/developer-marketing-playbook)
+- [Related Gingiris Skills](https://clawhub.ai/gingiris-1031)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown guidance with checklist-style frameworks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes multilingual reference material in English, Japanese, and Korean.]
+
+## Skill Version(s):
+
+1.3.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

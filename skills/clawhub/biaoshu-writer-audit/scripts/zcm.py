@@ -29,6 +29,7 @@ interpret / compliance 可加 --report html|docx|both 在取结果后直接出�
 
 提交类子命令（interpret/packages/generate/compliance）默认自动轮询到终态，
 加 --no-wait 只提交并打印 job_id。
+Locale scope: zh-CN (Simplified Chinese) by design for mainland-China bidding workflows. User-facing help text, platform menu names, risk labels, and generated report prompts default to Chinese because they mirror procurement terminology used by the underlying platform and report artifacts. Assistants may explain those terms in the user's language when needed, but in-product labels remain zh-CN.
 """
 import argparse
 import json
@@ -43,15 +44,17 @@ import uuid
 DEFAULT_BASE = "https://biaoshu.zhiliaobiaoxun.com/api/open/v1"
 
 # skill 版本（单一事实来源）。适配的后端 API 版本与契约快照见 references/api.md 顶部。
-SKILL_VERSION = "2.2.0"
+SKILL_VERSION = "2.2.1"
 API_TARGET = "/api/open/v1"
-CONTRACT_SNAPSHOT = "2026-07-20"
+CONTRACT_SNAPSHOT = "2026-08-10"
 
 # 渠道码：开发线留空（不带渠道）；发布/装配变体时按平台 excel 注入（ClawHub 基线 s113，变体 s81–s114）。
 # 非空时官网链接追加 ?ch=。
 CHANNEL = "s120"
 SIGNUP_URL = "https://biaoshu.zhiliaobiaoxun.com/" + (f"?ch={CHANNEL}" if CHANNEL else "")
 
+# Locale scope: zh-CN labels are intentional for mainland-China bidding workflows;
+# assistants may translate explanations externally, but in-product menu names and prompts remain Chinese.
 # 文档第 6 节错误码 → 友好提示
 ERROR_HINTS = {
     "missing_credentials": "缺少鉴权头：请在本 skill 目录下的 config.json 写入 app_key（或用 login 保存）。",
@@ -708,7 +711,7 @@ def cmd_progress_stream(args):
 
 
 def build_parser():
-    p = argparse.ArgumentParser(description="百炼®标书开放 API 轻客户端")
+    p = argparse.ArgumentParser(description="百炼®标书开放 API 轻客户端 / zh-CN client for mainland-China bidding workflows")
     p.add_argument("--version", action="version",
                    version=f"biaoshu-bailian {SKILL_VERSION}　·　适配 {API_TARGET}　·　契约快照 {CONTRACT_SNAPSHOT}")
     sub = p.add_subparsers(dest="cmd", required=True)

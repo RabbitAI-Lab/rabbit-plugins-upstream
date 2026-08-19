@@ -1,103 +1,96 @@
-# Execution Loop
+# Execution Loop 2.1
 
-## Loop Start
+## Start Or Resume
 
-Read the minimum needed:
+1. Resolve the workspace and Docs directory to real paths.
+2. Read `Docs/ACTIVE_PACKET.md`.
+3. Validate the authority fingerprint and write boundary.
+4. Read one current action, affected source/tests, verification config, and the last three loop records.
+5. Confirm no stop condition is already active.
 
-1. `Docs/ACTIVE_PACKET.md`.
-2. Files linked by the current stage, acceptance criteria, or next action.
-3. Relevant manifests and verification commands.
-4. The last three to five loop records only when needed.
+If no packet exists, run Legacy Bootstrap. Do not execute from contradictory legacy files.
 
-Confirm:
+## Controller Stage Dispatch
 
-- contract version is supported;
-- goal readiness is `Ready for Execution`;
-- execution is `Ready`, `In Progress`, or authorized `Needs Fix`;
-- alignment is not Misaligned or Owner Review Required;
-- one next action exists;
-- no stop condition is already active.
+Controller sets one stage outcome linked to acceptance criteria. It does not create a stage file. The outcome must fit current scope, include expected evidence, and be reversible or have a recovery path.
 
-## Select A Bounded Action
+Controller auto-continues only while:
 
-A loop action should:
+- authority fingerprint is unchanged;
+- alignment is `Aligned`;
+- the next stage is already authorized;
+- useful progress exists;
+- no Owner or safety boundary is triggered.
 
-- fit inside the current stage;
-- change one coherent behavior;
-- link to at least one acceptance criterion;
-- have an expected verification result;
-- be reversible or protected by an explicit recovery plan.
+## Developer Loop
 
-If the action cannot be explained in one sentence as progress toward the desired outcome, stop for alignment.
+```text
+select one coherent behavior
+  -> inspect existing patterns
+  -> reproduce or establish baseline
+  -> implement within write_scope
+  -> focused automatic check
+  -> functional check when behavior changed
+  -> affected regression
+  -> review diff and evidence
+```
 
-## Implement
+Prefer a complete vertical slice. Do not add speculative abstractions, unrelated cleanup, or a new feature merely because time remains.
 
-- Inspect existing patterns before editing.
-- Prefer the smallest coherent vertical slice.
-- Preserve unrelated user changes.
-- Avoid speculative abstractions and unrelated cleanup.
-- Keep protected files untouched.
-- Record a newly discovered scope need as an idea or blocker, not an automatic expansion.
+## Failure Repair
 
-## Verify
+Create a stable `failure_signature` from the failing command, test/criterion, and primary error. Before retrying, require at least one progress delta:
 
-Run the narrowest useful check first, then broaden:
+- new root-cause evidence;
+- narrower failing scope;
+- a relevant code/config change;
+- a newly passing check;
+- a disproved hypothesis.
 
-1. focused test or reproduction;
-2. typecheck/build/lint as relevant;
-3. affected regression;
-4. functional or user-flow check;
-5. target-environment check when required.
+The same signature with no progress twice becomes `Needs Fix` or `Blocked`. A timed-out full suite may be sharded for diagnosis, but shards are not terminal acceptance unless the gate was formally changed.
 
-Record command, exit code, concise result, timestamp, and evidence path.
+## Stage Review
 
-## Evaluate
+Stage Reviewer receives criteria, changed files/diff, raw command results, functional evidence, and known limits. It ignores the Developer's desired verdict.
 
-Use:
+Return one of:
 
-- `In Progress`: useful bounded next action remains.
-- `Ready for Review`: authorized implementation is complete and evidence is sufficient for QA.
-- `Needs Fix`: an actionable defect remains inside authorized scope.
-- `Blocked`: a hard gate or unavailable authority prevents progress.
-- `Invalid State`: project state conflicts or required authorization is missing.
+- `Passed`: stage outcome and evidence are sufficient;
+- `Needs Fix`: an actionable criterion or evidence defect remains;
+- `Blocked`: external authority or environment is required.
 
-At stages 3, 6, and 10, include:
+Stage Reviewer does not set final `qa_decision` in Standard or Full work.
+
+## Alignment
+
+At every stage state:
 
 ```text
 User-visible change:
-Target / acceptance link:
+Target / criterion link:
 Scope or assumption drift:
 Evidence against premature completion:
-Recommended alignment verdict:
+Continue / Needs Fix / Formal Alignment:
 ```
 
-## Progress And Failure Budget
+Formal alignment runs at stages 3, 6, and 10 and on any immediate trigger named in the Skill.
 
-Progress requires at least one:
+## Loop Record
 
-- new passing verification;
-- narrower failing scope;
-- new root cause supported by evidence;
-- completed authorized behavior;
-- resolved acceptance criterion;
-- reduced material risk with proof.
+Append one compact record:
 
-Do not count re-running the same failing command, rewriting plans, or producing documents as progress.
+```json
+{"record_version":"2.1","contract_version":"2.0","timestamp":"2026-01-01T00:00:00Z","packet_id":"GOAL-001","stage":1,"loop":1,"role":"Developer","result":"Progress","progress_delta":"Focused test now passes","evidence":["work/test.log"],"failure_signature":null,"stage_review":"Not Reviewed","context_stats":{"files":5,"characters":18000,"tool_output_characters":2400,"full_regression_runs":0},"next_action":"Run the affected API flow"}
+```
 
-After two consecutive core failures without progress:
+Token fields may be added to `context_stats` only when the platform exposes them. Do not estimate them as facts.
 
-1. stop broad implementation;
-2. summarize both failures and root-cause evidence;
-3. set `Needs Fix` or `Blocked`;
-4. recommend re-plan, environment action, or Owner decision.
+## Terminal States
 
-## Stage Transition
+- `Ready for Independent Acceptance`: authorized implementation and required stage evidence are complete for new Standard/Full work.
+- `Needs Fix`: bounded repair remains inside scope.
+- `Blocked`: a hard gate or unavailable authority prevents progress.
+- `Invalid State`: current authority or state conflicts.
+- `Locally Compliant, Globally Misaligned`: local criteria pass but the result no longer serves the desired outcome.
 
-Advance a stage only when:
-
-- its intended outcome is satisfied or formally superseded;
-- evidence is recorded;
-- unresolved defects are not hidden;
-- one next stage outcome is authorized.
-
-Do not create a new Work Order just because the stage number changed.
+For legacy Layered Standard/Full packets, normalize `Ready for Review` to `Ready for Independent Acceptance`; neither means Accepted.

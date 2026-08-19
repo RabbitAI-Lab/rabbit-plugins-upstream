@@ -329,7 +329,7 @@ def detect_rule_conflicts(text):
 
 ANTI_PATTERN_CHECKS = [
     ("不触发条件",       "## 何时不激活",     r"^-\s+用户",  4, "list"),
-    ("蒸馏红线",         "### 🚫 蒸馏红线与反模式清单",        None,       4, "table"),
+    ("蒸馏红线",         "## 🚫 反例与黑名单",        None,       4, "table"),
 ]
 
 

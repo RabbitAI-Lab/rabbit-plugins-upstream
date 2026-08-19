@@ -1,42 +1,57 @@
-## Description: <br>
-Secure database credential management using MGC Blackbox for MySQL, PostgreSQL, SQLite, MariaDB, and related database workflows while avoiding direct credential exposure to AI models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Secure database credential management using MGC Blackbox 1.4.10. Supports MySQL, PostgreSQL, SQLite, MariaDB and other databases. Credentials are stored encrypted; local scripts retrieve them via HTTP API at runtime, while AI agents never touch plaintext.
 
-## Publisher: <br>
-[zkeviny](https://clawhub.ai/user/zkeviny) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zkeviny](https://clawhub.ai/user/zkeviny)
 
-## Use Case: <br>
-Developers and automation engineers use this skill to design database workflows that store credentials in MGC Blackbox, reference them by identifier, and retrieve them through trusted local execution paths instead of placing passwords in prompts, logs, or skill files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Calling mgc_get for real credential records can place secret material into the agent context. <br>
-Mitigation: Use trusted local scripts to retrieve credentials and return only non-sensitive results; call mgc_get for real credential records only with explicit user approval. <br>
-Risk: Sealed-script examples using action="run" represent code execution. <br>
-Mitigation: Require explicit user approval and trusted script provenance before running sealed scripts; inspect or scan scripts where possible before execution. <br>
-Risk: The release under-discloses sensitive credential retrieval and script execution paths. <br>
-Mitigation: Review the security guidance before enabling the skill and define deployment-specific boundaries for MGC access and database operations. <br>
+## Use Case:
 
+Developers and engineers use this documentation skill to design database access workflows where agents can request database operations without receiving plaintext credentials. It focuses on MGC Blackbox patterns for encrypted credential storage, blackbox script execution, credential rotation, and multi-node script sealing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zkeviny/skills/mgc-database-security) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown documentation with tool-call examples, configuration snippets, and conceptual code patterns] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; examples reference MGC MCP tools and local script patterns rather than providing executable code in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Agents may use the documented pattern to run arbitrary SQL against production databases without sufficient boundaries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use narrowly scoped database accounts and require explicit user approval for migrations, destructive SQL, or production database operations.
+
+Risk: Database result files and script logs may expose sensitive data even when credentials are hidden from the agent.
+
+Mitigation: Limit result contents, avoid logging credentials or sensitive rows, and review result files before sharing or retaining them.
+
+Risk: Stored or sealed scripts can execute with local database credentials on a target node.
+
+Mitigation: Review scripts before deployment, keep credentials local to each node, and verify credential references before calling blackbox execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zkeviny/skills/mgc-database-security)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown documentation with inline Python examples, shell commands, MCP tool call patterns, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only; outputs implementation guidance and templates rather than directly executing database operations.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata; artifact frontmatter lists 1.2.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

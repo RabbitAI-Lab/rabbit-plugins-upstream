@@ -1,45 +1,66 @@
-## Description: <br>
-Generate MP3 speech with Fish Audio through RunAPI. Use for one-off speech generation or application integration. Prefer the RunAPI CLI for one-off requests and the target-language SDK for production integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create account-owned Fish Audio voice resources, attempt to reuse their IDs, or generate MP3/WAV speech through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to generate Fish Audio MP3 speech through RunAPI, either with the RunAPI CLI for one-off requests or language SDKs for application integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Text, reference audio, and transcripts are sent to RunAPI and Fish Audio for speech generation. <br>
-Mitigation: Use the service only with content appropriate for RunAPI and Fish Audio, and avoid submitting sensitive text or audio unless approved for that workflow. <br>
-Risk: The skill relies on local RunAPI CLI or SDK authentication, including optional API keys. <br>
-Mitigation: Prefer environment-based API keys or saved RunAPI configuration, and treat the CLI, SDKs, and stored tokens as trusted local tooling. <br>
+## Use Case:
 
+Developers and external teams use this skill to create or inspect account-owned Fish Audio voice resources and generate MP3/WAV speech through RunAPI for one-off work or application integration.
 
-## Reference(s): <br>
-- [Fish Audio model overview](https://runapi.ai/models/fish-audio.md) <br>
-- [Fish Audio homepage](https://runapi.ai/models/fish-audio) <br>
-- [Fish Audio provider page](https://runapi.ai/providers/fish-audio.md) <br>
-- [Fish Audio s1 model](https://runapi.ai/models/fish-audio/s1.md) <br>
-- [Fish Audio s2-pro model](https://runapi.ai/models/fish-audio/s2-pro.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and SDK guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference RunAPI-managed audio response fields and environment-based API key handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: release evidence) <br>
+Risk: Audio and voice data can be sensitive and may require rights or consent before use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm trust in RunAPI/Fish Audio and only create or reuse voices when the user has appropriate rights and consent.
+
+Risk: Submitted RunAPI requests may incur billing.
+
+Mitigation: Submit only after authentication and contract checks, and avoid repeated paid requests without user authorization.
+
+Risk: The RUNAPI_API_KEY can grant access to the user's RunAPI account.
+
+Mitigation: Prefer environment authentication or saved CLI configuration, keep the key scoped and protected, and use browser login only when explicitly requested.
+
+Risk: Voice IDs and voice readiness can change over time.
+
+Mitigation: Use a voice only after its state is trained, treat returned voice IDs as best-effort references, and preserve service evidence when a request fails.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/runapi-ai/skills/runapi-fish-audio)
+- [RunAPI Fish Audio model overview](https://runapi.ai/models/fish-audio)
+- [RunAPI Fish Audio documentation](https://runapi.ai/models/fish-audio.md)
+- [Fish Audio provider overview](https://runapi.ai/providers/fish-audio.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [Fish Audio SDK integration](https://github.com/runapi-ai/fish-audio-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Code, Files]
+
+**Output Format:** [Markdown guidance with shell commands, JSON request files, CLI or SDK responses, and downloaded audio files when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses and media deliverables should be preserved and verified against the discovered RunAPI contract.]
+
+## Skill Version(s):
+
+0.3.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

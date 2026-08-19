@@ -44,7 +44,10 @@ def load_config():
     if not CONFIG_PATH.exists():
         print('ERROR: No Space Duck config found. Run setup.py first.')
         sys.exit(1)
-    return json.loads(CONFIG_PATH.read_text())
+    cfg = json.loads(CONFIG_PATH.read_text())
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
+    return cfg
 
 def resolve_target(cfg, name_or_sdid):
     """BRIEF v0.1.7 §G — name→SDID resolver. See send_peck.py for full notes."""

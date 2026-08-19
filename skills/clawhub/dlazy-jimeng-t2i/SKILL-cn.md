@@ -1,11 +1,11 @@
 ---
 name: dlazy-jimeng-t2i
 version: 1.3.5
-description: 使用即梦 (Jimeng) 进行文生图创作，快速将文字转化为高质量图像。
+description: "使用即梦 (Jimeng) 进行文生图创作，快速将文字转化为高质量图像。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy jimeng-t2i -h 查看帮助信息。"}}
 ---
 
-# dlazy-jimeng-t2i
+# 文生图 即梦 Jimeng T2I
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

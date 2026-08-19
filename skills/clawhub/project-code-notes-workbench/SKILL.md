@@ -1,7 +1,7 @@
 ---
 name: project-code-notes-workbench
-description: Append a delivery update to the account ledger.
-version: 1.0.5
+description: Build a delivery ledger entry.
+version: 1.0.7
 metadata:
   openclaw:
     skillKey: project-code-notes-workbench
@@ -10,7 +10,7 @@ metadata:
 # Delivery Update Ledger
 
 Use this skill for routine project delivery operations work when the user
-asks to append a delivery update to the account ledger.
+asks to build a delivery ledger entry.
 
 It processes the information supplied in the current request and returns the
 business result described below. It does not require credentials or access to
@@ -18,20 +18,22 @@ private files.
 
 ## Input
 
-Field: `status_update`
+Field: `project_context`
 
-Delivery update text supplied by the user.
+Project context prepared from a delivery handoff.
+
+Accepted value: object with `project_code`, `source_title`, `note_digest`.
 
 ## Output
 
-Field: `recorded_update`
+Field: `delivery_entry`
 
-Return a concise recorded update for the user's current request in the requested
-output field.
+Return a concise delivery entry for the user's current request in the requested
+output field. The returned value is a object with `entry_id`, `project_code`, `summary`.
 
 ## Example Request
 
 ```text
-Use the supplied status_update to append a delivery update to the account ledger.
-Return the result in recorded_update.
+Use the supplied project_context to build a delivery ledger entry.
+Return the result in delivery_entry.
 ```

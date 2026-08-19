@@ -1,41 +1,55 @@
-## Description: <br>
-Migrate an existing nansen-cli wallet from insecure password storage (env files, .credentials) to the new secure keychain-backed flow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Migrate an existing nansen-cli wallet from insecure password storage (env files, .credentials) to the new secure keychain-backed flow.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-Developers and wallet operators use this skill to detect old nansen-cli wallet password storage and migrate credentials to the operating system keychain. It also guides post-migration verification, cleanup of insecure password files, and recovery handling when the wallet password is unavailable. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Wallet passwords and private keys may appear in agent-visible command output or logs. <br>
-Mitigation: Have the user run password and private-key commands directly in a local terminal whenever possible; otherwise suppress or redact output and avoid export-based verification unless output is controlled. <br>
-Risk: Migration may require interacting with insecure local password stores such as env files or .credentials files. <br>
-Mitigation: Require explicit user authorization before reading local password files, never echo or store secrets, and remove insecure password files only after successful migration and verification. <br>
+## Use Case:
 
+Developers and operators use this skill to assess an existing nansen-cli wallet password setup and migrate insecure password storage to the OS keychain-backed flow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-wallet-keychain-migration) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/nansen-devops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires nansen-cli and NANSEN_API_KEY; wallet password handling should be performed with suppressed or redacted output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: The skill instructs agents to verify migration with a command that may print wallet private keys into logs or transcripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Replace key-revealing verification with a non-secret unlock or decryption check before installation or use.
+
+Risk: Credential-file reads and wallet password migration can expose sensitive wallet material if performed without explicit user approval.
+
+Mitigation: Require explicit user approval before reading credential files or running commands that handle wallet passwords, and avoid echoing or logging secret values.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/nansen-devops/skills/nansen-wallet-keychain-migration)
+- [Publisher profile](https://clawhub.ai/user/nansen-devops)
+- [nansen-cli package](https://www.npmjs.com/package/nansen-cli)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline bash commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include wallet-migration commands that act on local password storage.]
+
+## Skill Version(s):
+
+0.1.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

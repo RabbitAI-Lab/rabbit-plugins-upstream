@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>八字命理分析报告</title>
+<style>
+  /* ===== 全局 ===== */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "STKaiti", "KaiTi", "SimSun", serif;
+    background: linear-gradient(160deg, #f7f1e3 0%, #efe6d0 100%);
+    color: #3d3226;
+    line-height: 1.8;
+    padding: 40px 20px;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+  .banner {
+    background: linear-gradient(135deg, #8c1d18 0%, #b03a2e 60%, #c98a3d 100%);
+    color: #f7e9c9;
+    text-align: center;
+    padding: 60px 30px;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 30px rgba(140, 29, 24, 0.3);
+  }
+  .banner::before {
+    content: "";
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 200px; height: 200px;
+    border: 2px solid rgba(247, 233, 201, 0.25);
+    border-radius: 50%;
+  }
+  .banner::after {
+    content: "";
+    position: absolute;
+    bottom: -80px; right: -40px;
+    width: 240px; height: 240px;
+    border: 2px solid rgba(247, 233, 201, 0.2);
+    border-radius: 50%;
+  }
+  .banner h1 {
+    font-size: 42px;
+    letter-spacing: 12px;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+  }
+  .banner .sub { font-size: 16px; letter-spacing: 4px; opacity: 0.9; }
+  .banner .yin-yang {
+    width: 44px; height: 44px;
+    background: radial-gradient(circle at 50% 50%, transparent 0 42%, #f7e9c9 43% 100%);
+    border-radius: 50%;
+    margin: 20px auto 0;
+    opacity: 0.85;
+  }
+
+  /* ===== 卡片 ===== */
+  .card {
+    background: #fdfaf3;
+    border: 1px solid #e2d5bc;
+    border-radius: 10px;
+    padding: 30px 35px;
+    margin-bottom: 28px;
+    box-shadow: 0 3px 14px rgba(61, 50, 38, 0.08);
+  }
+  .card h2 {
+    font-size: 24px;
+    color: #8c1d18;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #c9a86a;
+    letter-spacing: 4px;
+    position: relative;
+  }
+  .card h2::before {
+    content: "◆";
+    color: #c9a86a;
+    margin-right: 10px;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+
+  /* ===== 表格 ===== */
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+  th, td {
+    border: 1px solid #e2d5bc;
+    padding: 10px 12px;
+    text-align: center;
+    font-size: 15px;
+  }
+  th {
+    background: #f3e9d3;
+    color: #6b4a2a;
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+  tr:nth-child(even) td { background: #faf5ea; }
+
+  /* 四柱表 */
+  .bazi-table th { background: #8c1d18; color: #f7e9c9; font-size: 16px; }
+  .bazi-table td { font-size: 20px; font-weight: bold; letter-spacing: 3px; }
+
+  /* ===== 标签 ===== */
+  .tag {
+    display: inline-block;
+    background: #8c1d18;
+    color: #f7e9c9;
+    padding: 3px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin: 4px 6px 4px 0;
+    letter-spacing: 1px;
+  }
+  .tag.gold { background: #c9a86a; color: #4a3417; }
+  .tag.green { background: #5d7a4e; color: #f2f7ec; }
+
+  /* ===== 要点列表 ===== */
+  ul { padding-left: 22px; }
+  li { margin-bottom: 8px; }
+  .highlight {
+    background: #fbf3df;
+    border-left: 4px solid #c9a86a;
+    padding: 12px 18px;
+    margin: 15px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .highlight.good { border-left-color: #5d7a4e; }
+  .highlight.warn { border-left-color: #b03a2e; }
+
+  /* ===== 大运表格 ===== */
+  .dayun-row { display: flex; gap: 10px; margin: 8px 0; flex-wrap: wrap; }
+  .dayun-item {
+    flex: 1;
+    min-width: 120px;
+    background: #f3e9d3;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .dayun-item .age { font-size: 13px; color: #8a7656; }
+  .dayun-item .ganzhi { font-size: 20px; font-weight: bold; color: #6b4a2a; margin: 4px 0; }
+  .dayun-item .desc { font-size: 12px; color: #7a6a50; }
+
+  /* ===== 页脚 ===== */
+  .footer {
+    text-align: center;
+    color: #9a8a6e;
+    font-size: 12px;
+    padding: 20px;
+    border-top: 1px dashed #d9c9a8;
+    margin-top: 20px;
+  }
+  @media (max-width: 600px) {
+    .banner h1 { font-size: 28px; letter-spacing: 6px; }
+    .card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 封面 -->
+  <div class="banner">
+    <h1>八字命理分析</h1>
+    <div class="sub">四柱八字 · 五行喜忌 · 大运流年 · 开运指南</div>
+    <div class="yin-yang"></div>
+    <div style="margin-top:16px; font-size:14px; opacity:0.85;">
+      求测者：{GENDER} · 出生：{BIRTH_DATETIME}
+    </div>
+  </div>
+
+  <!-- 一、基本信息 -->
+  <div class="card">
+    <h2>一、命盘信息</h2>
+    <table>
+      <tr><th>公历</th><td>{SOLAR_DATE}</td><th>农历</th><td>{LUNAR_DATE}</td></tr>
+      <tr><th>性别</th><td>{GENDER}</td><th>日主</th><td>{DAY_MASTER}</td></tr>
+    </table>
+
+    <h3 style="margin:20px 0 10px; color:#6b4a2a;">四柱排盘</h3>
+    <table class="bazi-table">
+      <tr>
+        <th></th><th>年柱</th><th>月柱</th><th>日柱</th><th>时柱</th>
+      </tr>
+      <tr>
+        <th>天干</th>
+        <td>{YEAR_GAN}</td><td>{MONTH_GAN}</td><td>{DAY_GAN}</td><td>{HOUR_GAN}</td>
+      </tr>
+      <tr>
+        <th>地支</th>
+        <td>{YEAR_ZHI}</td><td>{MONTH_ZHI}</td><td>{DAY_ZHI}</td><td>{HOUR_ZHI}</td>
+      </tr>
+      <tr>
+        <th>十神</th>
+        <td>{YEAR_SHISHEN}</td><td>{MONTH_SHISHEN}</td><td>日主</td><td>{HOUR_SHISHEN}</td>
+      </tr>
+      <tr>
+        <th>藏干</th>
+        <td>{YEAR_CANGGAN}</td><td>{MONTH_CANGGAN}</td><td>{DAY_CANGGAN}</td><td>{HOUR_CANGGAN}</td>
+      </tr>
+    </table>
+
+    <div style="margin-top:15px;">
+      <span class="tag">日主：{DAY_MASTER}</span>
+      <span class="tag gold">身{STRONG_WEAK}</span>
+      <span class="tag">喜用神：{YONG_SHEN}</span>
+      <span class="tag green">忌神：{JI_SHEN}</span>
+    </div>
+  </div>
+
+  <!-- 二、性格特质 -->
+  <div class="card">
+    <h2>二、性格特质</h2>
+    <p>{PERSONALITY_INTRO}</p>
+
+    <div class="highlight good">
+      <strong>优势：</strong>{STRENGTHS}
+    </div>
+    <div class="highlight warn">
+      <strong>需注意：</strong>{WEAKNESSES}
+    </div>
+  </div>
+
+  <!-- 三、领域分析 -->
+  <div class="card">
+    <h2>三、人生领域分析</h2>
+
+    <h3 style="color:#6b4a2a; margin-bottom:8px;">事业</h3>
+    <p>{CAREER_ANALYSIS}</p>
+
+    <h3 style="color:#6b4a2a; margin-bottom:8px;">财运</h3>
+    <p>{WEALTH_ANALYSIS}</p>
+
+    <h3 style="color:#6b4a2a; margin-bottom:8px;">感情婚姻</h3>
+    <p>{LOVE_ANALYSIS}</p>
+
+    <h3 style="color:#6b4a2a; margin-bottom:8px;">健康</h3>
+    <p>{HEALTH_ANALYSIS}</p>
+  </div>
+
+  <!-- 四、大运流年 -->
+  <div class="card">
+    <h2>四、大运流年</h2>
+    <div class="dayun-row">
+      {DAYUN_ITEMS}
+    </div>
+
+    <div class="highlight">
+      <strong>当前大运：</strong>{CURRENT_DAYUN}
+    </div>
+    <div class="highlight">
+      <strong>流年运势：</strong>{CURRENT_YEAR_FORTUNE}
+    </div>
+  </div>
+
+  <!-- 五、开运建议 -->
+  <div class="card">
+    <h2>五、开运建议</h2>
+    <ul>
+      <li><strong>吉祥方位：</strong>{LUCKY_DIRECTION}</li>
+      <li><strong>吉祥颜色：</strong>{LUCKY_COLOR}</li>
+      <li><strong>吉祥数字：</strong>{LUCKY_NUMBER}</li>
+      <li><strong>适宜行业：</strong>{SUITABLE_INDUSTRY}</li>
+      <li><strong>穿搭建议：</strong>{DRESS_ADVICE}</li>
+    </ul>
+    <div class="highlight good">
+      <strong>综合建议：</strong>{OVERALL_ADVICE}
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>本报告基于传统命理文化（八字）生成，仅供文化研究与娱乐参考。</p>
+    <p>不构成医疗、法律、投资等专业建议。命运掌握在自己手中，请理性看待，积极生活。</p>
+    <p style="margin-top:8px;">生成时间：{GENERATE_TIME}</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -81,7 +81,9 @@ class CredentialManager {
             throw new Error(`apiKey 长度必须在 1-${types_1.MAX_CREDENTIAL_LENGTH} 之间，当前长度: ${apiKey.length}`);
         }
         const stored = { userNo, apiKey, updatedAt: Date.now() };
-        fs.writeFileSync(this.storagePath, JSON.stringify(stored, null, 2), "utf-8");
+        fs.mkdirSync(path.dirname(this.storagePath), { recursive: true });
+        fs.writeFileSync(this.storagePath, JSON.stringify(stored, null, 2), { encoding: "utf-8", mode: 0o600 });
+        fs.chmodSync(this.storagePath, 0o600);
     }
     isConfigured() {
         return this.get() !== null;
@@ -90,7 +92,7 @@ class CredentialManager {
         return {
             code: types_1.ErrorCode.AUTH_FAILED,
             message: `凭证未配置。请先获取 userNo 和 apiKey，申请地址: ${types_1.CREDENTIAL_APPLY_URL}。` +
-                `获取后请通过 set 方法配置凭证。`,
+                `获取后请调用 configureCredentials action 完成配置。`,
         };
     }
 }

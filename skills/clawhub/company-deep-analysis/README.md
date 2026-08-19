@@ -1,8 +1,8 @@
 # 公司深度分析助手
 
-> **一句话介绍**：你告诉它一家 A 股/港股公司的名字或股票代码，它自动完成数据采集到估值分析的全流程，给你输出**两份产物**——一份完整的公司深度分析报告，一份 30s 必读的投研简报卡片。
+> **一句话介绍**：你告诉它一家 A 股/港股公司的名字或股票代码，它自动跑完 6 步分析，给你输出**两份产物**——一份完整的公司深度分析报告，一份 30s 必读的投研简报卡片。
 
-![版本](https://img.shields.io/badge/版本-1.0.9-blue)
+![版本](https://img.shields.io/badge/版本-1.0.12-blue)
 ![支持市场](https://img.shields.io/badge/支持市场-A股%20%2F%20港股-green)
 ![输出格式](https://img.shields.io/badge/输出-HTML%20%2F%20MD-orange)
 
@@ -26,15 +26,11 @@
 - 行业研究员：做行业研报里的"标的画像"小节
 - 投资顾问：给客户做方案前的快速背调
 
-**适用平台**
-- 目前已在codex上进行验证
-- 若已安装workbuddy，则推荐在workbuddy的skillhub搜索"公司深度分析"并安装，数据来源为westock，输出更稳定
-
 ---
 
 ## 🎯 能帮你做什么？
 
-它会**自动跑完全部分析流程**，从数据采集到最后输出产物全部包圆：
+它会**自动跑完 6 步分析**，从数据采集到最后输出产物全部包圆：
 
 | 步骤 | 它做什么 | 你能看到什么 |
 |------|---------|------------|
@@ -180,15 +176,15 @@ python scripts\valuation.py 600519 peers.json
 **不支持**。本 skill 只覆盖 A 股 + 港股。美股/币圈请用对应工具。
 
 ### Q2: 数据是哪里来的？
-- **行情（A 股/港股）**：腾讯财经 `qt.gtimg.cn`（主力） → AKShare（容错） → yfinance（港股容错）
-- **财务三表（A 股）**：AKShare `stock_*_by_report_em` → 新浪财报 API
-- **财务三表+主要指标（港股）**：AKShare `stock_financial_hk_report_em`（主力） → 东财港股 datacenter（兜底）
-- **F10/研报/概念板块**：东财 + 同花顺 + 百度
-- **定性信息 / 兜底**：WebSearch 实时搜索（各项数据采集失败时的最终降级）
+- **行情**：腾讯财经 `qt.gtimg.cn`（A 股 `q=sh600519` / 港股 `q=hk00700`）
+- **财务三表（A 股）**：新浪财报 API（零外部依赖）
+- **财务三表 + 主要指标（港股）**：东方财富港股 datacenter（`RPT_HKF10_FN_INCOME` / `RPT_HKF10_FN_BALANCE` / `RPT_HKF10_FN_GMAININDICATOR`）
+- **F10/研报/概念板块**：东方财富 + 同花顺
+- **定性信息**：WebSearch 实时搜索
 
 > 📌 **港股特别注意**：港股**无现金流量表**，因此 `llb` 为空、估值自动跳过 EV/EBITDA 变体（PE-TTM / PB-MRQ 仍正常）；`reports`（研报）与 `ths_forecast`（一致预期）港股无数据源，标 `⚠ 缺失`。
 
-所有数据**脚本直采优先**，失败后 WebSearch 兜底。
+所有数据**脚本直采**，不靠 WebSearch 估算。
 
 ### Q3: 报告里的估值准吗？
 **这是相对估值，不是绝对估值**。DCF / DDM / rNPV 等绝对估值方法需要行业 β、5-10 年 FCFF 等数据，本 skill 故意不做。
@@ -220,13 +216,12 @@ python scripts\valuation.py 600519 peers.json
 
 | 模块 | 技术 |
 |------|------|
-| 数据采集 | Python 3.13 + AKShare（A股/港股三表主力）+ requests + pandas |
-| 行情数据 | 腾讯财经（A股/港股主） + AKShare + yfinance（港股容错） |
-| 财务三表 | AKShare（A股/港股） + 新浪财报 API（A股） + 东财 datacenter（港股兜底） |
+| 数据采集 | Python 3.13 + requests + pandas |
+| 行情数据 | 腾讯财经 + 东财 + 同花顺 + 百度 |
+| 财务三表 | 新浪财报 API + 东财 F10（零外部依赖） |
 | 估值 | 自研 10+ 变体（`scripts/valuation.py`，按行业自动选变体） |
 | 报告渲染 | 模板直出（`.md` / `.html`），简报含 html2canvas 复制图片 |
 | 字体 | 系统中文字体，不下载外部字体 |
-| 兜底 | 各项数据采集失败时，自动降级到 WebSearch |
 
 ---
 
@@ -238,8 +233,9 @@ python scripts\valuation.py 600519 peers.json
 ├── README.md                             # 本文件
 ├── requirements.txt                      # Python 依赖
 ├── scripts/                              # 脚本
-│   ├── collect_data.py                   # 数据采集（11 项，A股/港股 + 多源降级链：AKShare / yfinance / emweb）
-│   └── valuation.py                      # 估值（10+ 变体，按行业自动选）
+│   ├── collect_data.py                   # 数据采集（11 项）
+│   ├── valuation.py                      # 估值（10+ 变体）
+│   └── westock_data.py                   # 金融数据采集（公开 HTTP API，零外部依赖）
 ├── templates/                            # 报告模板
 │   ├── company-profile-template.md
 │   ├── deep-analysis-report-template.md

@@ -1,41 +1,54 @@
-## Description: <br>
-Detects friction signals during agent sessions and graduates recurring patterns into reviewed rules for future guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detect friction signals; graduate patterns into rules. Use for session retrospectives.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agent operators use this skill for session retrospectives, local friction logging, and review-driven promotion of recurring agent workflow issues into durable guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Session-derived friction logs can persist local project context under ~/.claude/friction. <br>
-Mitigation: Use only where local logging is acceptable, review or purge friction logs as needed, and avoid highly sensitive projects without additional redaction or encryption controls. <br>
-Risk: Recurring patterns may influence future agent behavior through LEARNINGS.md entries or rule proposals. <br>
-Mitigation: Review proposed graduations before relying on them, and require explicit approval before any permanent CLAUDE.md or skill update. <br>
+## Use Case:
 
+Developers and agent operators use this skill to review session friction, identify recurring workflow patterns, and propose durable guidance after human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-friction-detector) <br>
-- [claude-night-market abstract plugin](https://github.com/athola/claude-night-market/tree/master/plugins/abstract) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports, JSON session-capture records, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write local friction session logs under ~/.claude/friction and add reviewed recurring patterns to LEARNINGS.md.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: Local friction records may retain session-derived details such as commands, file paths, prompts, or project context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or periodically delete ~/.claude/friction and inspect ~/.claude/skills/LEARNINGS.md if those observations should not persist across sessions.
+
+Risk: Recurring friction patterns could lead to incorrect or overly broad guidance if promoted without review.
+
+Mitigation: Review friction reports and require explicit user approval before changing CLAUDE.md or skill instructions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-friction-detector)
+- [Project homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/abstract)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown reports with JSON session records and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose updates to persistent guidance, but documented behavior requires explicit user approval before permanent rule changes.]
+
+## Skill Version(s):
+
+1.9.18 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

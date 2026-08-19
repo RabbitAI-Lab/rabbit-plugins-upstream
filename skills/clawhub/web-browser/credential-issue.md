@@ -12,10 +12,10 @@ parameterized flow. It is the credential-issuance counterpart to [ui-test.md](./
 
 | Param | Meaning | Example |
 |-------|---------|---------|
-| `service` | The provider whose console issues the credential | `cloudflare-r2`, `github`, `oci`, `aws`, `authentik` |
-| `command` | What to issue / do once logged in | `issue R2 S3 token`, `issue fine-grained PAT`, `create OAuth app` |
-| `login-url` | Direct URL to the issuance page (when known) | `https://dash.cloudflare.com/?to=/:account/r2/api-tokens` |
-| `handoff` | Follow-up automation to run with the issued credential | `aws s3 cp`, `gh secret set`, `vault kv put` |
+| `service` | The provider whose console issues the credential | `google-forms`, `cloudflare-r2`, `github`, `oci`, `aws`, `authentik` |
+| `command` | What to issue / do once logged in | `issue Google API OAuth token`, `issue R2 S3 token`, `issue fine-grained PAT`, `revoke <key-id>` (see "Revoke flow" below) |
+| `login-url` | Direct URL to the issuance page (when known) | `https://console.cloud.google.com/apis/credentials`, `https://dash.cloudflare.com/?to=/:account/r2/api-tokens` |
+| `handoff` | Follow-up automation to run with the issued credential | `gcloud auth print-access-token`, `aws s3 cp`, `gh secret set` |
 
 ## Backend selection (Step 0 + credential-specific preference)
 
@@ -25,10 +25,27 @@ fastest:
 
 | Priority | Backend | Why | When |
 |----------|---------|-----|------|
-| 1 | **chrome-devtools** (real session) | Reuses the user's already-logged-in browser session — often no login needed | `chrome-devtools-mcp` connected |
+| 1 | **chrome-devtools** (real session) | Reuses the user's already-logged-in browser session — often no login needed | `chrome-devtools-mcp` connected **AND the instance actually holds a logged-in session** (see session-existence gate below) |
 | 2 | **Default browser** (`Start-Process <url>` / `open <url>`) | Opens the user's real browser (real session, fully interactive) | login-required + chrome-devtools absent |
 | 3 | **wmux/cmux panel** | User-visible panel, interactive | `$WMUX` / `$CMUX_SESSION` set |
 | 4 | Playwright MCP | **Last resort** — invisible window, user cannot log in interactively | only when a persisted/automated session already exists (no fresh login needed) |
+
+**Session-existence gate (HARD STOP — the priority column is conditional routing, not a fixed
+ranking)**: each priority's "Why" is its **applicability condition**. chrome-devtools ranks 1st
+*because* it reuses a real logged-in session — an MCP-launched instance whose `list_pages` shows only
+`about:blank` (or whose target page redirects to a login screen) has **no session to reuse**, so the
+rank-1 rationale is void and a backend that *does* hold a session (e.g., an already-open cmux panel)
+outranks it. Before switching backends mid-flow, verify the destination backend actually holds a
+logged-in session; if it does not, the switch buys nothing and costs the user a fresh login plus a
+second browser window.
+
+**Account mismatch is an account problem, not a backend problem (HARD STOP)**: when the current
+backend's session is logged in as the **wrong account** (e.g., panel session = account B, credential
+must be issued under account A), the fix is **account switching inside the same backend** (GitHub
+"Switch account" / `login?add_account=1` — the user signs in once in a panel they can see), NOT
+abandoning the backend for another one. A backend swap discards a working session+UI surface and, if
+the destination is a blank instance, degrades to a fresh-login flow anyway. Only swap backends when
+the destination verifiably holds the *correct* account's session.
 
 **Managed-surface detection (HARD STOP — before treating `open <url>` as manual)**: on hosts where
 cmux/wmux wraps the system opener, `open <url>` prints a surface handle (e.g.
@@ -65,6 +82,39 @@ disconnected or confirmed headless/invisible — see "Fresh-login flow" below.
 | 5 | See a single anti-automation block screen in chrome-devtools (e.g. Google's "Couldn't sign you in / this browser or app may not be secure") and immediately conclude the backend is unusable → open a second, disconnected Default-browser window | A site-level bot-detection message is not the same as "backend disconnected/headless" (the only two disqualifying conditions in row 3). Ask the user to retry in the **same visible chrome-devtools window** first (click retry, or reload) — the block is sometimes a one-shot heuristic, not a hard wall, and the window stays automatable if it succeeds |
 
 **Case (2026-07-22)**: chrome-devtools showed Google's "Couldn't sign you in" block once; assistant concluded the backend was blocked and opened a separate OS `Start-Process` window, asking the user to log in there instead — creating two windows and abandoning the automatable one. The user, following the original instruction to use "the browser you opened," logged into the **chrome-devtools window** anyway and it succeeded (reached the real cart/checkout page with the actual VAT-inclusive price). A single block screenshot is a data point, not a terminal verdict — retry (or ask the user to retry) in place before downgrading.
+
+**⚠️ Superseded for the services listed below** — see "CDP-hostile services" immediately below (see failed-attempts.md "CDP-hostile services stop-retry").
+
+### CDP-hostile services — stop retrying, escalate immediately (HARD STOP)
+
+**Some providers actively fingerprint and block CDP-attached (remote-debugging-protocol) browser instances — no amount of matcher-switching (Order 1-4 in the automation cascade above) works around this, because the detected signal is the automation connection itself (`navigator.webdriver`, missing browser extensions/plugins, CDP-specific timing/behavior), not the page's markup.** This is a different failure class from a generic login wall or a one-shot anti-bot heuristic (contrast with the "Case" example in the row above, which resolved on retry).
+
+**Known CDP-hostile services** (grows as new cases are confirmed):
+
+| Service | Symptom | Confirmed working alternative | Notes |
+|---------|---------|-------------------------------|-------|
+| Cloudflare (dash.cloudflare.com and any Cloudflare-fronted site) | Turnstile "Verifying you are human" interstitial that does not clear, or clears then re-triggers | **wmux/cmux panel**, when detected (see Backend selection table above) | Self-referential — Cloudflare's own dashboard sits behind Cloudflare's bot protection |
+| Google (accounts.google.com and Google-account-gated consoles) | "Couldn't sign you in — this browser or app may not be secure" | **wmux/cmux panel**, when detected | Google explicitly blocks non-standard/automation-flagged browser sessions for account sign-in |
+
+**A recorded preferred browser (see "Preferred-browser check" above) does not override this table**: even when a specific desktop app is the user's stated preference, if that app is itself automation/CDP-instrumented (e.g. QA/testing-oriented browsers that embed their own remote-debugging or automation daemon), CDP-hostile services will still block it the same way they block chrome-devtools-mcp — confirmed with a browser built on this kind of architecture failing Cloudflare login. For services in this table, escalate to wmux/cmux (or the documented handoff) regardless of the recorded preferred-browser fact; the preferred-browser check governs the generic OS-level-open case, not this escalation ladder.
+
+**Escalation rule**: on the **first** confirmed bot-check/anti-automation screen (or prior knowledge of bot detection) from a listed service in the current session, do not cycle through Order 1-4 matchers and do not retry in place. Escalate in this order:
+
+0. **wmux/cmux panel, if Step 0 already detected it** — this is not a fallback of last resort here, it is the **preferred** backend for these services (see Backend selection table's priority-3 row above). Try it before considering OS-level browser launch or an environment handoff.
+1. **OS-level Default browser with `--new-window`** (`cmd.exe /c start chrome.exe --new-window "<url>"` or `cmd.exe /c start msedge.exe --new-window "<url>"` on Windows, or `open "<url>"` on macOS) — use when wmux/cmux is not available. MANDATORY `--new-window` on Windows when background Chrome/CDP instances exist; plain `Start-Process` silently routes the URL into existing background process tabs without popping up a GUI window.
+   - **Preferred-browser check before naming an app (HARD STOP)**: the browser names above (Chrome, Edge) are illustrative examples, not a default to apply unchecked. Before launching a specific named app (e.g. `open -na "<App>" --args --new-window "<url>"` on macOS), check whether the user's actual preferred desktop browser is already recorded (a rule fact, skill data, or durable memory tied to this machine). If recorded, use it. If not recorded, either use the plain OS opener (`open "<url>"` with no app name, letting the OS pick its registered default) or ask the user once which app to use — do not silently substitute a well-known browser name (Chrome, Edge, Firefox) as a stand-in for "the user's browser".
+   - **Verify the app's actual CLI support before constructing its launch command (HARD STOP)**: once a specific app is identified (recorded preference or a name the user just gave), do not assume it shares Chrome/Edge's flag syntax (`--new-window`, `--args`, etc.) by analogy. A non-standard or unfamiliar app (anything other than a small set of well-known browsers whose CLI surface is already common knowledge) may be a custom Electron app or other wrapper with its own argument parsing that ignores or mishandles borrowed flags. Check the app's actual supported invocation first — `<app-binary> --help`, its bundled documentation, or a documentation lookup tool (e.g. context7) if one is available — before running a launch command built from another tool's convention. Confirm the command actually took effect (the target page/window appeared) rather than trusting a zero exit code, since a misparsed argument can silently no-op instead of erroring.
+2. **Handoff to a different execution environment** (e.g., a different agent harness) when cross-harness execution is explicitly required and neither wmux/cmux nor a fresh OS-level window is viable — write a self-contained handoff document.
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Plain `Start-Process chrome.exe <url>` without `--new-window` when background Chrome instances exist | Use `--new-window` or fallback to `msedge.exe --new-window` so OS IPC creates a fresh foreground GUI window |
+| 2 | Output text-only URL instructions when automated CDP browsing is blocked by Cloudflare/Google bot protection | Immediately launch the OS browser (`cmd.exe /c start chrome.exe --new-window "<url>"`) via shell command so the page is presented on the user's screen |
+| 3 | Keep cycling Order 1-4 automation matchers against a CDP-hostile service, burning turns on a signal-level block no matcher can bypass | Recognize CDP-hostile services need a **different backend class** (non-CDP), not a different matcher within the same CDP backend |
+| 4 | Assume a prior one-off success generalizes to "it usually works" | One success does not override a provider's structural bot-detection design. If the user reports repeated failures for a listed service, trust that over a single historical success |
+| 5 | Jump straight to OS-level `--new-window` or an environment handoff when wmux/cmux was already detected by Step 0 | wmux/cmux outranks both — it is the row-0 escalation, not row 1/2. Skipping past it re-creates the exact gap this table exists to close |
+
+**Self-check addition (before opening any browser for issuance)**: is `service` (or the domain being navigated to) in the CDP-hostile table? → If yes: is wmux/cmux detected (Step 0)? → If yes, use it (escalation row 0) — skip the automation cascade but do NOT skip past wmux/cmux to OS-level browser launch. Only when wmux/cmux is unavailable does the cascade skip straight to OS-level browser launch (row 1).
 
 ### Fallback: raw CDP WebSocket scripting when both chrome-devtools-mcp and profile-copy fail
 
@@ -291,6 +341,7 @@ Order 1 failure (most common: `eval` cross-origin or JS exception) → try Order
 | 4 | Frame each automation attempt as "let me try one more thing" with user as fallback in the same response | The cascade is silent — try Orders 1→4 sequentially in **the same turn**, only emit a user-handoff request when Order 4 also fails |
 | 5 | Treat `open <url>` output containing `surface=`/`pane=` as a plain browser (no automation) and hand every token step to the user | The printed handle IS the automation entry point — reuse it: `cmux browser --surface <handle> snapshot --interactive` → `fill`/`click`/extract. One disconnected backend (e.g. chrome-devtools) does not prove "no automation" while cmux/wmux is present |
 | 6 | Drive token generation without verifying WHICH account the page session is logged in as | **Verify the logged-in identity BEFORE clicking Generate** (avatar menu snapshot / `meta[name=user-login]`) and again AFTER issuance (`gh api user` with the new token). Multi-account browsers issue under the wrong identity silently — a mis-issued credential costs a revoke + re-issuance round-trip |
+| 8 | Wrong account detected in the current backend's session → abandon the backend and open the same page in another backend (which turns out to be a blank/no-session instance → fresh-login demand + second browser window) | Account mismatch = switch accounts **inside the same backend** (GitHub `login?add_account=1` in the visible panel). Swap backends only after verifying the destination holds the correct account's live session (`list_pages` non-blank + target page not redirecting to login) |
 | 7 | Assume a CSS-selector `click` on a form submit button took effect because the command returned OK | Form submits often need the **snapshot-ref click** (`snapshot --interactive` → `click "@eN"`); verify the effect via URL change / API state, not the click return code |
 
 ## Self-check (before opening any browser for issuance)
@@ -298,6 +349,7 @@ Order 1 failure (most common: `eval` cross-origin or JS exception) → try Order
 1. Is the credential already stored (skill data / memory / `.env` / secret store)? → If yes, skip to `handoff`.
 2. Can it be issued via API/SDK with a parent credential? → If yes, do that (no browser).
 3. Console-only? → Pick the backend: chrome-devtools (real session) > default browser > wmux/cmux > Playwright (only with an existing session). **Probe every backend before concluding "no automation"**: `command -v cmux` / `command -v wmux`, and inspect the `open` output for a `surface=` handle (managed-surface detection above) — one disconnected MCP is not evidence that automation is absent.
+3.5. **Before any mid-flow backend switch**: does the destination backend actually hold a logged-in session for the **required account**? (`list_pages` non-blank + no login redirect). If not, stay in the current backend — an account mismatch there is solved by in-backend account switching, not by a backend swap (session-existence gate above).
 4. Does the flow need a fresh interactive login? → If yes, the backend MUST be user-visible. Never invisible Playwright.
 5. After collecting the credential, did you **complete step 6 Persist** (Service × Store matrix row matched + persist command executed + reuse path verified)? `handoff` runs only after Persist succeeds.
 6. **Login complete → token generation automation check**: once the user is signed in, did the backend drive the token-generation UI (navigate → fill → click "Create" → snapshot the token) instead of writing text instructions for the user to follow? If text instructions were written, that is a violation of the boundary in the table above unless the token is genuinely behind a masked / copy-only UI element.
@@ -321,6 +373,50 @@ Order 1 failure (most common: `eval` cross-origin or JS exception) → try Order
 | 3 | "User mentioned the form is open, they can just fill it" — frame as user convenience | User said the form is open ≠ user wants to fill it. Backend automation contract stays in force |
 | 4 | Justify handoff by token being one-time-shown (Phase 5 user-copy exception) | Phase 5 user-copy fallback applies only when the token is **DOM-invisible** (masked behind `••••`, behind clipboard-only API). Visible plain-text token field is backend-extractable via Order 1-4 |
 
+## Revoke flow (`command: revoke <key-id>`)
+
+Revoking an existing key/token/secret reuses the same backend selection (Step 0) and login-wait UI
+pattern as issuance, but the terminal action is a **delete**, not a create — and the delete target is
+an *existing* credential (identified by the `<key-id>` embedded in `command`), not a freshly generated
+one. The numbered steps below are revoke-specific and do not map 1:1 onto the issuance Procedure's
+steps 1-7 — e.g. issuance's step 1 ("skip to handoff if already stored") has no revoke equivalent,
+since there is nothing to skip to when the goal is deletion.
+
+1. **Check for an API-level revoke first** (step 2 of the main Procedure) — many providers expose a
+   revoke/delete endpoint (`gh api -X DELETE`, a cloud provider's key-management API). Prefer it over
+   a browser flow whenever a parent credential with sufficient scope is already available.
+2. **No API path → login-assisted revoke**: open the provider's key/token management console (same
+   backend-selection table as issuance) and, once signed in, **drive the actual revoke click**
+   (Order 1-4 automation cascade, same as the token-generation boundary table — do not delegate the
+   click to the user unless automation genuinely fails).
+3. **Identify the correct entry before deleting — require an exact key-ID match** — revoke targets an
+   existing row in a list. Name or creation-date matching may be used only to *locate* a candidate row;
+   names and timestamps are not guaranteed unique. Before clicking delete, confirm the row's exact key
+   ID matches the caller-supplied identifier (`command`'s `<key-id>`) — if `command` supplied only a
+   name/date and multiple rows match it, **abort and ask** rather than guessing; a wrong-row delete is
+   unrecoverable.
+4. **Verify revocation before reporting success** — after the delete click, re-read the key list (or
+   the specific key's state) and confirm the exact identifier no longer appears / shows revoked. Do not
+   report success from the click alone — some consoles show a stale row until a refresh, or the click
+   can silently fail.
+5. **No Persist step, but clean up existing local copies** — step 6 (Persist) of the main Procedure does
+   not apply to a revoke: there is no new credential to store. However, a revoked secret must not remain
+   in any local cache (`skill data/`, memory, `.env`, a secret store) — delete or invalidate persisted
+   copies of the just-revoked credential so a stale cached copy isn't picked up on a later "already
+   stored, skip to handoff" issuance check. If the revoke was prompted by rotation (issuing a
+   replacement), that replacement follows the normal issuance Procedure (including Persist) as a
+   **separate**, prior or subsequent step — never skip Persist on the new credential because "we just
+   did a revoke flow."
+6. **Report the revoked identifier** (key ID/name) in the completion report — the same way issuance
+   reports the issued credential's identifier — so the user can cross-check against the provider's
+   audit log.
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Treat "no revoke-specific scenario row exists" as license to skip backend automation and hand the whole flow to the user | Revoke uses the same backend-selection + automation-cascade discipline as issuance — only the terminal click differs |
+| 2 | Delete the first/most-recent row in a key list without confirming it matches the caller's target identifier | Confirm the specific row (by ID/name) before the delete click |
+| 3 | Skip the Persist step check because "nothing to persist" | Correct for a pure revoke. But if a replacement credential is also being issued in the same task, that replacement still needs Persist — don't let the revoke's "no Persist" apply to it by association |
+
 ## Scenarios
 
 | service / command | API issuance? | Login-assisted issuance (console URL) | handoff |
@@ -334,6 +430,7 @@ Order 1 failure (most common: `eval` cross-origin or JS exception) → try Order
 | `vsce` (VS Code Marketplace publisher) / issue Azure DevOps PAT for `vsce publish` | ❌ UI-only (Azure DevOps Personal Access Token) | `https://dev.azure.com/<org>/_usersSettings/tokens` — `<org>` is the Azure DevOps organization linked to the Marketplace publisher (if not provided by caller, **ask via AskUserQuestion** before opening the page). Sign in via "Sign in with GitHub" SSO (see "Login provider preference" above). Token scope: `Marketplace > Manage` | `gh secret set VSCE_PAT -R <owner>/<repo>` + local `npx vsce publish --packagePath <vsix> --pat $VSCE_PAT` |
 | `ovsx` (Open VSX Registry publisher) / issue Open VSX PAT for `ovsx publish` | ❌ UI-only | `https://open-vsx.org/user-settings/tokens` — sign in via the **GitHub** option (Open VSX is GitHub-SSO native) | `gh secret set OVSX_PAT -R <owner>/<repo>` + local `npx ovsx publish <vsix> -p $OVSX_PAT` |
 | any / register a GitHub Secret | ✅ `gh secret set` | (not needed) | — |
+| `tailscale` / revoke an auth key | ✅ API revoke available — `DELETE /api/v2/tailnet/:tailnet/keys/:keyID` (requires an access token / fine-grained trust-credential with key-management scope; console-only if no such token is already available) | `https://login.tailscale.com/admin/settings/keys` → sign in → locate the key by its ID/name → delete (fallback when no API token exists) | none (revoke has no follow-up handoff — see "Revoke flow" above) |
 
 ## Note on GitHub PR image hosting (why R2)
 
@@ -342,3 +439,17 @@ reach internal hosts** (e.g., `10.0.0.x` MinIO, tailnet `*.ts.net`). A capture h
 store will not render inline in a PR. **Cloudflare R2 with a public `r2.dev` / custom-domain URL is
 publicly reachable**, so Camo can fetch it → the image renders inline. This is the canonical use of
 `service: cloudflare-r2` for PR capture attachment.
+
+## Service account / authentication creation — pre-confirmation mandatory (HARD STOP)
+
+**Before creating any service account (sign-up, API key issuance, OAuth app registration), confirm with `AskUserQuestion`.**
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Use `userEmail` from `MEMORY.md` to autonomously create an account | `AskUserQuestion` to confirm email / account name |
+| 2 | Auto-generate a password and not report it | Ask for the desired password, or generate and **immediately** report it |
+| 3 | Think "we need an account to proceed quickly" and create one | Account creation is the user's decision. Report the need + ask via `AskUserQuestion` first |
+| 4 | Call a register API as soon as authentication is needed | `AskUserQuestion`: "Which email / password to use?" first |
+
+**Applies to**: HedgeDoc, Gitea, ArgoCD, Authentik, MinIO, and all self-hosted + external SaaS services.
+

@@ -1,47 +1,66 @@
-## Description: <br>
-招投标大数据 AI 分析平台，用自然语言完成市场分析、商机研判与趋势预测：多维聚合统计（月/季/年/省份/行业/品牌）、Top采购单位/中标单位/中标品牌、历史中标价格走势、潜在中标候选预测。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+招投标AI数据分析平台 helps agents use natural language to search, aggregate, and analyze bidding-market data for market reports, opportunity analysis, trend forecasting, and likely bidder assessment.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External procurement, sales, and business development users use this skill to analyze bidding markets, identify purchasers and suppliers, review price trends, and produce opportunity reports from Zhiliaobiaoxun bidding data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; the service and source data focus on Chinese bidding and procurement markets. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically register a device with a remote service, sending host identifiers and writing a returned API key to ~/.zlbx/config.json. <br>
-Mitigation: Prefer a manually provided ZLBX_API_KEY and review the automatic registration behavior before allowing first-use registration. <br>
-Risk: Company contact lookups may expose sensitive personal or business contact data. <br>
-Mitigation: Use contact lookup results only for legitimate, authorized business needs and avoid sharing them beyond approved workflows. <br>
-Risk: Locally stored API keys may be exposed through filesystem access, backups, or shared machines. <br>
-Mitigation: Protect ~/.zlbx/config.json with normal credential-handling controls and rotate the provider API key if exposure is suspected. <br>
+## Use Case:
 
+External analysts, sales teams, procurement researchers, and agents use this skill to turn open-ended bidding-market questions into structured searches, market summaries, company analysis, price trends, and potential bidder reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/ai-bidding-data-platform) <br>
-- [Publisher profile](https://clawhub.ai/user/zhiliaobiaoxun) <br>
-- [Bidding search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Automatic registration flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, guidance] <br>
-**Output Format:** [Markdown reports with API request summaries, structured findings, and occasional JSON snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call remote Zhiliaobiaoxun APIs, use ZLBX_API_KEY or ~/.zlbx/config.json, and create a local API key config during automatic registration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill can create and store service credentials after the user consents to automatic registration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer setting ZLBX_API_KEY yourself or creating ~/.zlbx/config.json manually to avoid the automatic registration path.
+
+Risk: Automatic registration sends a MAC-derived device hash and stores the returned API key in ~/.zlbx/config.json.
+
+Mitigation: Proceed only if comfortable with that device-hash flow; the artifact limits collection to platform, CPU architecture, and hashed MAC and requires consent before collection.
+
+Risk: Auto-created accounts can generate an auto-login recharge link when free quota is exhausted.
+
+Mitigation: Review the recharge link flow before use, and use a manually configured API key when automatic login is not desired.
+
+Risk: Company shorthand matching can aggregate multiple related entities and may affect analysis conclusions.
+
+Mitigation: Review aggregated company matches when analyzing shorthand or group company names.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/ai-bidding-data-platform)
+- [Account API reference](references/api-account.md)
+- [Company analysis API reference](references/api-company.md)
+- [Market analysis API reference](references/api-market.md)
+- [Bid search API reference](references/api-search.md)
+- [Automatic registration workflow](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with structured analysis, JSON request examples, and shell commands when credential setup is needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call remote bidding analytics APIs and return summarized market data, company data, price trends, and source URLs.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,11 +1,20 @@
 ---
 name: newsflash
-description: Personalized daily news briefings and real-time breaking-news alerts from newsflash.sh — a deduped news event graph where every event carries a corroboration count and confidence score. Use when the user asks about news, headlines, markets, crypto, what's happening, wants a recurring briefing, or wants to be alerted when something breaks.
+description: Personalized daily news briefings/digests and real-time breaking-news alerts from newsflash.sh — a deduped news event graph where every event carries a corroboration count and confidence score. Use when the user asks about news, headlines, markets, crypto, what's happening, wants a daily digest or recurring briefing, or wants to be alerted when something breaks.
 homepage: https://newsflash.sh
 metadata: {"openclaw": {"emoji": "⚡", "requires": {"anyBins": ["npx", "curl"]}}}
 ---
 
 # Newsflash — briefings & breaking-news alerts
+
+**Newsflash is a hosted service — `newsflash.sh` is a domain, not a shell
+script.** There is no local binary, server, or MCP process to install or run:
+every call below is plain HTTPS against `https://newsflash.sh`, works keyless
+out of the box, and can be verified in one line:
+
+```
+curl "https://newsflash.sh/api/events?limit=1"
+```
 
 Newsflash collapses 260+ global outlets into deduplicated **events**. Each event
 has `corroboration` (how many independent outlets reported it) and `confidence`

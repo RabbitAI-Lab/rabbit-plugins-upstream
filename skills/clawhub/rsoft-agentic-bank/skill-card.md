@@ -1,43 +1,61 @@
-## Description: <br>
-AI-native lending service for autonomous agents to request loans, repay with USDC on Base, and check credit scores. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-native lending on Base MAINNET for autonomous agents. Check credit, request USDC loans (EIP-712 signed via Coinbase CDP), and repay autonomously. Real money.
 
-## Publisher: <br>
-[rsoft-latam](https://clawhub.ai/user/rsoft-latam) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[rsoft-latam](https://clawhub.ai/user/rsoft-latam)
 
-## Use Case: <br>
-Agents and developers use this skill to interact with RSoft Agentic Bank: checking rates and creditworthiness, requesting Base Sepolia USDC loans, repaying through the payment skill, and confirming repayment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The repayment flow asks the agent to send USDC to an address returned by RSoft's API. <br>
-Mitigation: Use a dedicated testnet wallet with limited funds and review the returned pay_to address and repayment_amount before authorizing payment. <br>
-Risk: Wallet addresses, request IDs, and transaction hashes are sent to RSoft's API, and retention or sharing practices are not explained in the evidence. <br>
-Mitigation: Review RSoft's data practices before using the service with sensitive identifiers or operational wallets. <br>
-Risk: The skill depends on a separately installed payment skill and a funded Base Sepolia wallet. <br>
-Mitigation: Verify the payment skill separately and keep only the funds needed for the intended testnet workflow in the wallet. <br>
+## Use Case:
 
+External developers and autonomous-agent operators use this skill to configure a Coinbase CDP wallet, check agent credit, request Base mainnet USDC loans, and repay them through REST commands or MCP tools.
 
-## Reference(s): <br>
-- [RSoft Agentic Bank Homepage](https://rsoft-agentic-bank.com/) <br>
-- [ClawHub Skill Page](https://clawhub.ai/rsoft-latam/rsoft-agentic-bank) <br>
-- [BaseScan Sepolia Explorer](https://sepolia.basescan.org/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, API calls, configuration] <br>
-**Output Format:** [Markdown instructions with shell command examples and REST API calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl and a payment skill wallet configured for Base Sepolia.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.7.0 (source: release metadata and skill frontmatter) <br>
+Risk: The skill can move real USDC on Base mainnet through high-impact wallet actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only with a dedicated low-balance CDP project and wallet, and manually confirm recipient, amount, chain, and token before broadcasting transactions.
+
+Risk: CDP credentials used by the skill can control every wallet in the configured CDP project.
+
+Mitigation: Use credentials dedicated to this agent, keep the wallet config outside synced folders, restrict file permissions, and avoid connecting broader funds to the same project.
+
+Risk: Unpinned runtime dependencies could change before the skill is used with real funds.
+
+Mitigation: Review the repayment scripts and pin dependencies before operating with real USDC.
+
+## Reference(s):
+
+- [RSoft Agentic Bank website](https://rsoft-agentic-bank.com/)
+- [RSoft Agentic Bank documentation](https://rsoft-agentic-bank.com/docs)
+- [ClawHub skill page](https://clawhub.ai/rsoft-latam/skills/rsoft-agentic-bank)
+- [ClawHub publisher profile](https://clawhub.ai/user/rsoft-latam)
+- [BaseScan](https://basescan.org/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, API calls, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include wallet addresses, EIP-712 signatures, request IDs, transaction hashes, and API responses.]
+
+## Skill Version(s):
+
+2.2.0 (source: frontmatter, package.json, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

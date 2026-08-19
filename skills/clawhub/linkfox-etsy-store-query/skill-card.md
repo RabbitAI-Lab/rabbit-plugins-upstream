@@ -1,43 +1,67 @@
-## Description: <br>
-Filters and analyzes Etsy stores by sales, favorites, reviews, opening date, country, category, and Raving or star status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Filters and queries Etsy stores by sales, favorites, reviews, opening date, country, category, and Raving or star status.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and developers use this skill to query Etsy store data, screen stores by performance and profile filters, and inspect returned store metrics through LinkFox's third-party data service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends Etsy search parameters and an API key to a third-party LinkFox gateway. <br>
-Mitigation: Use the skill only when the user trusts LinkFox with the query parameters and key, and confirm that any gateway override is expected before execution. <br>
-Risk: Queries may consume paid LinkFox credits, with cost based on the number of returned stores. <br>
-Mitigation: Confirm the expected page size and obtain user approval before running paid queries or additional pages. <br>
-Risk: Full API responses may be saved locally and cached in linkfox-related directories. <br>
-Mitigation: Treat saved files as potentially sensitive and delete cached or session outputs when the results or search terms should not persist. <br>
+## Use Case:
 
+External sellers, ecommerce analysts, and developers use this skill to find Etsy stores that match commercial filters and compare store performance signals. It also guides users through LinkFox API-key and credit setup when authentication or billing blocks a query.
 
-## Reference(s): <br>
-- [API Reference](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-etsy-store-query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API parameters, shell commands, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The helper script may save full API responses under linkfox-related local directories and print either full JSON or a concise summary depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: ClawHub release evidence) <br>
+Risk: The skill sends Etsy store-query parameters and an API key to LinkFox’s external service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when use of LinkFox’s external service and API-key sharing are acceptable for the task.
+
+Risk: The onboarding flow can request phone/SMS login details and generate an API token.
+
+Mitigation: Prefer self-service setup on the official LinkFox site and avoid giving SMS codes to an agent unless the flow is understood and approved.
+
+Risk: The billing flow can list paid plans and create unpaid payment orders for credits.
+
+Mitigation: Require explicit user confirmation before selecting a plan or creating an order, and verify any payment QR code or URL before payment.
+
+Risk: The service charges credits dynamically based on returned store count, so broad queries can consume more credits than expected.
+
+Mitigation: Confirm filters, page size, and expected cost before running broad or paginated searches.
+
+Risk: Full responses, cached responses, or QR images may be written to a local linkfox output/cache directory.
+
+Mitigation: Review and delete local linkfox output or cache files when they are no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-etsy-store-query)
+- [Etsy store query API reference](artifact/references/api.md)
+- [Authentication and credits onboarding](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Files, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with JSON API results and optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save full API responses, cached responses, or payment QR images under a local linkfox session directory; large responses may be summarized in the agent output.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

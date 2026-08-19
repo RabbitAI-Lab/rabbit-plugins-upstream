@@ -1,0 +1,72 @@
+{
+  "skill_name": "low-budget-3d",
+  "version": "1.0",
+  "description": "LowBudget3D 不应触发测试用例。包含远邻不相关意图和近邻误触发场景（near-miss）。near-miss case 验证 AP-10 False Positive Trigger：与 low-budget-3d 语义相近但不应触发的意图（如精致低模艺术、Pixar风格、anime风格）。",
+  "negative_case_requirements": {
+    "min_count": 5,
+    "near_miss_ratio": "negative cases 中 ≥ 40% 应为 near-miss",
+    "rationale": "AP-10 风险：纯远邻 negative case（天气/翻译）无法检测误触发。near-miss case（如'低模艺术风格'、'复古CG'、'Pixar风格'）才能暴露 description 过宽问题。"
+  },
+  "cases": [
+    {
+      "id": "N01",
+      "input": "what's the weather today",
+      "category": "negative",
+      "expected_keywords": [],
+      "severity": "soft",
+      "note": "完全不相关，不应触发。"
+    },
+    {
+      "id": "N02",
+      "input": "帮我写一段 Python 代码",
+      "category": "negative",
+      "expected_keywords": [],
+      "severity": "soft",
+      "note": "编程任务，与图像生成无关。"
+    },
+    {
+      "id": "N03",
+      "input": "generate a Pixar style 3D character",
+      "category": "negative",
+      "near_miss": true,
+      "expected_keywords": [],
+      "severity": "hard",
+      "note": "近邻误触发：Pixar 是3D动画但属于高级CG，description 已显式排除 'Not for Pixar/Disney'。若误触发说明边界声明失效。"
+    },
+    {
+      "id": "N04",
+      "input": "create a low-poly art illustration",
+      "category": "negative",
+      "near_miss": true,
+      "expected_keywords": [],
+      "severity": "hard",
+      "note": "近邻误触发：low-poly art（精致低多边形插画）≠ low-budget 3D animation。description 已显式排除 'modern low-poly art style'。这是最危险的 near-miss，因为 'low-poly' 与 'low-budget' 词汇接近。"
+    },
+    {
+      "id": "N05",
+      "input": "generate an anime style character",
+      "category": "negative",
+      "near_miss": true,
+      "expected_keywords": [],
+      "severity": "hard",
+      "note": "近邻误触发：anime 是动画风格但属于2D日系，description 已显式排除 'anime / 日系动画风格'。"
+    },
+    {
+      "id": "N06",
+      "input": "make a retro CGI aesthetic image",
+      "category": "negative",
+      "near_miss": true,
+      "expected_keywords": [],
+      "severity": "hard",
+      "note": "近邻误触发：retro CGI（复古CG美学）≠ low-budget 3D animation。retro CGI 引向有意做旧的高级艺术风格，而非真的粗糙。description 中 Gotchas 已标注此陷阱。"
+    },
+    {
+      "id": "N07",
+      "input": "generate a photorealistic 3D render",
+      "category": "negative",
+      "expected_keywords": [],
+      "severity": "soft",
+      "note": "photorealistic 与低成本动画完全对立，不应触发。"
+    }
+  ]
+}

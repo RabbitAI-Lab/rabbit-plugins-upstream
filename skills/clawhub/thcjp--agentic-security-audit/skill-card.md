@@ -1,41 +1,53 @@
-## Description: <br>
-Audits codebases, infrastructure, and agentic AI systems for security issues. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audits codebases, infrastructure descriptions, and agentic AI systems for security risks and produces security findings and remediation guidance.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, security engineers, and operators use this skill to audit source repositories, infrastructure configurations, and agentic AI systems for security risks, compliance issues, and remediation priorities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill declares shell execution capability during security audits. <br>
-Mitigation: Install and run it only in repositories or infrastructure contexts you are authorized to audit, review commands before execution, and prefer sandboxed or least-privilege environments. <br>
-Risk: Audit findings can affect security prioritization and remediation work. <br>
-Mitigation: Review generated findings before acting on them and validate important issues with the relevant code, configuration, or security owner. <br>
+## Use Case:
 
+Developers, security reviewers, and automation teams use this skill to review a specified repository, infrastructure description, or agent system for security issues, compliance concerns, and prioritized improvements.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/agentic-security-audit) <br>
-- [Homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with structured audit findings and optional JSON-style result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include risk scores, prioritized remediation suggestions, and commands to run or review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence release.version and SKILL.md frontmatter) <br>
+Risk: The skill can read files, run commands, and write outputs while performing security audits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide a narrow target path and audit scope, and review proposed command execution or file writes before granting broad access.
+
+Risk: Security findings may be incomplete or may prioritize issues incorrectly.
+
+Mitigation: Treat generated audit results as review material and validate high-impact findings before deployment or remediation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/agentic-security-audit)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and structured JSON-style audit summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include grades, scores, findings, remediation suggestions, and reviewable command or file-write proposals.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

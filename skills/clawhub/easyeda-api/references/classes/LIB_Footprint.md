@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class LIB_Footprint 
+export class LIB_Footprint 
 ```
 
 ## Methods
@@ -140,6 +140,20 @@ Description
 </td></tr>
 <tr><td>
 
+[searchByProperties(properties, libraryUuid)](./LIB_Footprint.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 使用属性精确搜索封装
+
+
+</td></tr>
+<tr><td>
+
 [updateDocumentSource(footprintUuid, libraryUuid, documentSource)](./LIB_Footprint.md)
 
 
@@ -169,7 +183,7 @@ Description
 ## Signature
 
 ```typescript
-copy(footprintUuid: string, libraryUuid: string, targetLibraryUuid: string, targetClassification?: ILIB_ClassificationIndex | Array<string>, newFootprintName?: string): Promise<string | undefined>;
+public copy(footprintUuid: string, libraryUuid: string, targetLibraryUuid: string, targetClassification?: ILIB_ClassificationIndex | Array<string>, newFootprintName?: string): Promise<string | undefined>;
 ```
 
 ## Parameters
@@ -291,7 +305,7 @@ Promise&lt;string \| undefined&gt;
 ## Signature
 
 ```typescript
-create(libraryUuid: string, footprintName: string, classification?: ILIB_ClassificationIndex | Array<string>, description?: string): Promise<string | undefined>;
+public create(libraryUuid: string, footprintName: string, classification?: ILIB_ClassificationIndex | Array<string>, description?: string): Promise<string | undefined>;
 ```
 
 ## Parameters
@@ -397,7 +411,7 @@ Promise&lt;string \| undefined&gt;
 ## Signature
 
 ```typescript
-delete(footprintUuid: string, libraryUuid: string): Promise<boolean>;
+public delete(footprintUuid: string, libraryUuid: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -471,7 +485,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-get(footprintUuid: string, libraryUuid?: string): Promise<ILIB_FootprintItem | undefined>;
+public get(footprintUuid: string, libraryUuid?: string): Promise<ILIB_FootprintItem | undefined>;
 ```
 
 ## Parameters
@@ -520,7 +534,7 @@ string
 
 </td><td>
 
-_(Optional)_ 库 UUID，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
+_(Optional)_ 库 UUID，默认为系统库，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
 
 
 </td></tr>
@@ -545,10 +559,7 @@ Promise&lt;[ILIB\_FootprintItem](../interfaces/ILIB_FootprintItem.md) \| undefin
 ## Signature
 
 ```typescript
-getRenderImage(source: {
-        footprintUuid: string;
-        libraryUuid: string;
-    }): Promise<Blob | undefined>;
+public getRenderImage(source: { footprintUuid: string; libraryUuid: string }): Promise<Blob | undefined>;
 ```
 
 ## Parameters
@@ -576,7 +587,7 @@ source
 
 </td><td>
 
-\{ footprintUuid: string; libraryUuid: string; \}
+\{ footprintUuid: string; libraryUuid: string \}
 
 
 </td><td>
@@ -604,7 +615,7 @@ Promise&lt;Blob \| undefined&gt;
 ## Signature
 
 ```typescript
-modify(footprintUuid: string, libraryUuid: string, footprintName?: string, classification?: ILIB_ClassificationIndex | Array<string> | null, description?: string | null): Promise<boolean>;
+public modify(footprintUuid: string, libraryUuid: string, footprintName?: string, classification?: ILIB_ClassificationIndex | Array<string> | null, description?: string | null): Promise<boolean>;
 ```
 
 ## Parameters
@@ -730,7 +741,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-openInEditor(footprintUuid: string, libraryUuid: string, splitScreenId?: string): Promise<string | undefined>;
+public openInEditor(footprintUuid: string, libraryUuid: string, splitScreenId?: string): Promise<string | undefined>;
 ```
 
 ## Parameters
@@ -820,7 +831,7 @@ Promise&lt;string \| undefined&gt;
 ## Signature
 
 ```typescript
-search(key: string, libraryUuid?: string, classification?: ILIB_ClassificationIndex | Array<string>, itemsOfPage?: number, page?: number): Promise<Array<ILIB_FootprintSearchItem>>;
+public search(key: string, libraryUuid?: string, classification?: ILIB_ClassificationIndex | Array<string>, itemsOfPage?: number, page?: number): Promise<Array<ILIB_FootprintSearchItem>>;
 ```
 
 ## Parameters
@@ -931,6 +942,80 @@ Promise&lt;Array&lt;[ILIB\_FootprintSearchItem](../interfaces/ILIB_FootprintSear
 
 搜索到的封装属性列表
 
+### searchbyproperties
+
+# LIB\_Footprint.searchByProperties() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+使用属性精确搜索封装
+
+## Signature
+
+```typescript
+public searchByProperties(properties: ILIB_FootprintPropertiesForSearch, libraryUuid?: string): Promise<Array<ILIB_FootprintSearchItem>>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+properties
+
+
+</td><td>
+
+[ILIB\_FootprintPropertiesForSearch](../interfaces/ILIB_FootprintPropertiesForSearch.md)
+
+
+</td><td>
+
+属性
+
+
+</td></tr>
+<tr><td>
+
+libraryUuid
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ 库 UUID，默认为系统库，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;Array&lt;[ILIB\_FootprintSearchItem](../interfaces/ILIB_FootprintSearchItem.md)<!-- -->&gt;&gt;
+
+搜索到的封装属性的列表
+
 ### updatedocumentsource
 
 # LIB\_Footprint.updateDocumentSource() method
@@ -942,7 +1027,7 @@ Promise&lt;Array&lt;[ILIB\_FootprintSearchItem](../interfaces/ILIB_FootprintSear
 ## Signature
 
 ```typescript
-updateDocumentSource(footprintUuid: string, libraryUuid: string, documentSource: string): Promise<boolean | undefined>;
+public updateDocumentSource(footprintUuid: string, libraryUuid: string, documentSource: string): Promise<boolean | undefined>;
 ```
 
 ## Parameters

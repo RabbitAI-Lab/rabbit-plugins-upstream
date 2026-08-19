@@ -1,45 +1,68 @@
-## Description: <br>
-Discover and filter 15,500+ The Graph subgraphs by domain, network, protocol type, or natural language goal, with x402 query URLs for $0.01 USDC on Base per call and no API key required. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover and filter 15,310 The Graph subgraphs by domain, network, protocol type, or natural language goal. Each result includes an x402 query URL — $0.01 USDC on Base per call, no API key required.
 
-## Publisher: <br>
-[paulieb14](https://clawhub.ai/user/paulieb14) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[paulieb14](https://clawhub.ai/user/paulieb14)
 
-## Use Case: <br>
-Developers and agents use this MCP server to discover, rank, and inspect The Graph subgraphs before querying them. It returns structured subgraph metadata, schema details, reliability signals, query instructions, and x402 or legacy gateway URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill returns x402 query links that can lead to paid wallet transactions if an agent follows them with signing authority. <br>
-Mitigation: Require explicit approval before signing x402 payments or using wallet credentials, and limit autonomous use of query_url_x402 links. <br>
-Risk: The runtime may download verified registry or model assets. <br>
-Mitigation: Pin the npm package version, allow network access only to approved sources, and keep registry hash verification enabled. <br>
-Risk: Optional HTTP/SSE mode exposes local endpoints when enabled. <br>
-Mitigation: Use stdio by default, and enable HTTP/SSE only in trusted or firewalled environments. <br>
+## Use Case:
 
+Developers and external agents use this skill to discover, compare, and select The Graph subgraphs by domain, network, protocol type, entity, or natural-language goal before issuing GraphQL queries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/paulieb14/skills/subgraph-registry) <br>
-- [Project homepage](https://github.com/PaulieB14/subgraph-registry) <br>
-- [The Graph](https://thegraph.com) <br>
-- [x402 client package](https://www.npmjs.com/package/@graphprotocol/client-x402) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, API calls, configuration, guidance] <br>
-**Output Format:** [MCP tool responses and optional HTTP JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns subgraph classifications, reliability scores, schema details, query URLs, pricing manifests, and query guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.19 (source: package.json, server.json, ClawHub release evidence) <br>
+Risk: Optional HTTP/SSE mode exposes local endpoints if enabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use stdio mode by default and enable --http or --http-only only on trusted or firewalled networks.
+
+Risk: x402 query flows can spend wallet funds through a separate x402 client.
+
+Mitigation: Keep wallet signing under explicit user control and review each payment before execution.
+
+Risk: Unpinned installs or dependency updates can change runtime behavior.
+
+Mitigation: Pin subgraph-registry-mcp@0.8.29 and review dependency updates before deployment.
+
+Risk: Bypassing registry database verification can allow untrusted or mismatched data to load.
+
+Mitigation: Do not set SUBGRAPH_REGISTRY_SKIP_VERIFY in agent runtime defaults.
+
+Risk: Semantic search may perform a one-time model download if the bundled model is missing.
+
+Mitigation: Pre-bundle the model or avoid semantic_search_subgraphs in strictly offline environments.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/paulieb14/skills/subgraph-registry)
+- [Project Homepage](https://github.com/PaulieB14/subgraph-registry)
+- [MCP Server Metadata](artifact/server.json)
+- [OpenAPI Specification](artifact/data/openapi.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Structured MCP tool responses with text, JSON-like data, URLs, query examples, shell commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results can include subgraph metadata, reliability scores, x402 and legacy query URLs, pricing manifests, schema-change summaries, and generated GraphQL starter queries.]
+
+## Skill Version(s):
+
+0.8.29 (source: server release evidence, package.json, server.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

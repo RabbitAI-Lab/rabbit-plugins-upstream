@@ -2,7 +2,7 @@
 
 > 为测试团队设计的统一 AI 辅助能力——统一入口 /qa + 8 个标准化指令 + 记忆模块 + 完整验证体系，覆盖需求评审到团队管理。
 
-[![Version](https://img.shields.io/badge/version-v1.5.4-blue)](./VERSION)
+[![Version](https://img.shields.io/badge/version-v1.6.1-blue)](./VERSION)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![skills.sh](https://skills.sh/b/Kokxi/qa-team-skills)](https://skills.sh/Kokxi/qa-team-skills)
 
@@ -115,6 +115,8 @@ cp -r qa-team-skills ~/.claude/skills/
 # 项目内安装到 GitHub Copilot
 cp -r qa-team-skills ./.github/skills/
 ```
+
+> ⚠️ **关于 `/qa` 指令的说明**：本技能的 `/qa`、`/qa-prd` 等 8 个指令是**逻辑指令**（由 AI 根据 `prompts/qa/intent-rules.md` 的意图路由规则自动解析执行），**不是各 Agent 注册的斜杠命令**——命令面板的自动补全里看不到它们，安装后也不需要注册。日常使用直接用自然语言下达任务（如"帮我设计登录功能的测试用例"）即可触发，或显式输入 `/qa-case` 让 AI 按对应指令执行。如需在 Claude Code / OpenCode 中拥有真正的斜杠命令补全，可自行在 `.claude/commands/`（或对应 Agent 的 commands 目录）为 8 个指令各建一个命令文件。
 
 #### 方式二：一键安装（npx skills）
 
@@ -250,14 +252,17 @@ qa-team-skills/
 使用本技能前，请了解以下关键信息：
 
 ### 数据持久化
-- 本技能的**记忆模块**（`memory/`）会在本地文件系统**自动存储**以下数据：测试用例、缺陷分析、评审记录、测试报告、团队数据、探索笔记
-- 数据按产品模块组织，存储在本地 `memory/data/products/` 目录下
-- 所有数据**仅本地存储**，不会自动传输到外部
+- 本技能的**记忆模块**（`memory/`）会将以下测试数据**持久化到本地文件系统**（`memory/data/products/` 目录下）：测试用例、缺陷分析、评审记录、测试报告、团队数据、探索笔记
+- **持久化的前提**：每次写入前 AI **都会先询问你确认**，只有在你确认后才写入本地文件；你拒绝则跳过，本次输出不落盘
+- 所有数据**仅本地存储**：不自动上传到外部，仅注入当前对话上下文供本次任务使用，不发送给任何第三方服务
 
-### 需要你确认的操作
+### 需要你确认的操作（均为确认后才执行）
 - 记忆写入：每次写入前 AI 会询问你是否确认持久化
 - 版本清理：AI 会询问是否删除历史版本文件（默认保留最近 5 个版本）
 - 规范沉淀：自动提取的经验教训会先征求你的同意再写入
+
+### 历史记忆加载
+- 每次任务启动时，AI 会**先询问你是否加载该模块的历史记忆**，你确认后才扫描并读取 `memory/data/products/` 下的历史数据；你拒绝则按首次使用处理，不会读取任何历史文件
 
 ### 注意事项
 - ❗ **不要**在输入中粘贴真实的生产环境凭证、支付标识、客户个人信息或敏感截图，除非你的团队已明确批准本地留存
@@ -284,7 +289,7 @@ qa-team-skills/
 
 ## 版本
 
-当前版本：**v1.5.4**
+当前版本：**v1.6.1**
 
 详见 [`docs/CHANGELOG.md`](./docs/CHANGELOG.md)
 

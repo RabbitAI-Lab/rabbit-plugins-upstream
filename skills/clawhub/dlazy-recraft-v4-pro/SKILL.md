@@ -1,11 +1,11 @@
 ---
 name: dlazy-recraft-v4-pro
 version: 1.3.5
-description: 4MP high-resolution raster image generation. Suitable for print-ready assets and large-scale use. 4MP 高分辨率栅格图像生成。适合可印刷级素材与大幅面应用场景。
+description: "4MP high-resolution raster image generation. Suitable for print-ready assets and large-scale use. 4MP 高分辨率栅格图像生成。适合可印刷级素材与大幅面应用场景。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy recraft-v4-pro -h for help."}}
 ---
 
-# dlazy-recraft-v4-pro
+# 图像生成 Recraft V4 Pro
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

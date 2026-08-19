@@ -1,42 +1,60 @@
-## Description: <br>
-Search Google News for headlines by keyword, topic, or publication as structured JSON: headline, source, date, and link. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google News for headlines by keyword, topic, or publication as structured JSON, including headline, source, date, and link for current events, monitoring, and news research.
 
-## Publisher: <br>
-[scavio-ai](https://clawhub.ai/user/scavio-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[scavio-ai](https://clawhub.ai/user/scavio-ai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to retrieve fresh Google News headlines for current events, media monitoring, news research, and source-linked summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an API key and gives the agent access to a paid external API. <br>
-Mitigation: Use a least-privilege SCAVIO_API_KEY, keep it in the environment rather than prompts, and inform users before broad pagination because each request costs 1 credit. <br>
-Risk: News results may be time-sensitive, incomplete, cached, or temporarily unavailable from the upstream service. <br>
-Mitigation: Use the API for current news, return only data received from the API, cite source links, and retry or broaden queries according to the documented failure handling. <br>
+## Use Case:
 
+Developers, researchers, journalists, and agent builders use this skill to retrieve fresh Google News results for keywords, topics, companies, people, or publications. It supports current-events answers, monitoring, and news research when the agent has a Scavio API key.
 
-## Reference(s): <br>
-- [Scavio Google News documentation](https://scavio.dev/docs/google-news) <br>
-- [Scavio rate limits](https://scavio.dev/docs/rate-limits) <br>
-- [ClawHub skill page](https://clawhub.ai/scavio-ai/skills/scavio-google-news) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Guidance] <br>
-**Output Format:** [Structured JSON responses with headline, source, date, link, response timing, credit usage, and cache status.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; each request costs 1 credit; agents should cite returned news sources and links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill sends news search queries to Scavio and requires a Scavio API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only when sharing those queries with Scavio is acceptable, and provide the API key through the SCAVIO_API_KEY environment variable or an approved secret store.
+
+Risk: Each API request consumes one credit.
+
+Mitigation: Confirm broad pagination or repeated searches before running them, and monitor Scavio credit usage.
+
+Risk: News answers may be misleading if an agent summarizes without grounding in returned results.
+
+Mitigation: Return or cite the source and link from API results, and do not fabricate headlines, sources, dates, or links.
+
+## Reference(s):
+
+- [Scavio Google News documentation](https://scavio.dev/docs/google-news)
+- [Scavio rate limits](https://scavio.dev/docs/rate-limits)
+- [ClawHub skill page](https://clawhub.ai/scavio-ai/skills/scavio-google-news)
+- [Publisher profile](https://clawhub.ai/user/scavio-ai)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance, Code]
+
+**Output Format:** [Structured JSON responses and concise Markdown guidance with optional code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; each request costs 1 credit; supports query and Google News token parameters for localized or feed-based results.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

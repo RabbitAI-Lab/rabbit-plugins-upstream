@@ -1,47 +1,63 @@
-## Description: <br>
-Helps agents manage authorized Shopee store Follow Prize campaigns through LinkFox by creating, listing, inspecting, updating, ending, and deleting campaign records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages Shopee Follow Prize campaigns for authorized stores through LinkFox gateway scripts covering add, list, detail, update, end, and delete operations.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External merchants, operators, and agents use this skill to manage Follow Prize promotions for Shopee stores they are authorized to operate. It supports campaign creation, list and detail retrieval, updates, early ending, and deletion through the documented LinkFox and Shopee API workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, end, or delete live Shopee Follow Prize promotions. <br>
-Mitigation: Use it only for stores the user is authorized to manage, and require explicit confirmation before any write or destructive campaign action. <br>
-Risk: Full API responses may be retained locally under linkfox session folders. <br>
-Mitigation: Treat saved response files as sensitive store data and remove them from shared, backed-up, or long-lived workspaces when they are no longer needed. <br>
-Risk: The workflow uses LinkFox API credentials and Shopee campaign data with LinkFox gateway endpoints. <br>
-Mitigation: Keep API keys in environment variables, avoid exposing command arguments or saved outputs, and run only in trusted workspaces. <br>
-Risk: Credit or billing behavior is unclear for repeated use. <br>
-Mitigation: Clarify cost behavior with the publisher before running repeated requests or broad campaign-management workflows. <br>
+## Use Case:
 
+External sellers, e-commerce operators, and agent developers use this skill to create, inspect, update, end, or delete Shopee Follow Prize promotions for stores that already have LinkFox Shopee authorization.
 
-## Reference(s): <br>
-- [Skill API reference](references/api.md) <br>
-- [Shopee Follow Prize API documentation](https://open.shopee.com/documents/v2/v2.follow_prize.add_follow_prize?module=113&type=1) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-follow-prize) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/linkfox-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON files] <br>
-**Output Format:** [Markdown guidance, shell commands, and JSON API responses saved to local files with optional stdout output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full responses are saved under linkfox session folders; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: release evidence) <br>
+Risk: The skill can create, update, end, or delete live Shopee Follow Prize campaigns.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before each add, update, end, or delete action and verify the target shop or merchant identifier before execution.
+
+Risk: The skill handles LinkFox API keys, login details, SMS codes, payment flows, and QR files.
+
+Mitigation: Treat keys, phone numbers, verification codes, payment artifacts, stdout logs, and saved session files as sensitive and clean them up when they are no longer needed.
+
+Risk: The skill saves complete business API responses locally.
+
+Mitigation: Review saved linkfox session data for sensitive store or campaign information and avoid sharing full response files unless necessary.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-follow-prize)
+- [Publisher profile](https://clawhub.ai/user/linkfox-ai)
+- [Follow Prize API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [Shopee add_follow_prize documentation](https://open.shopee.com/documents/v2/v2.follow_prize.add_follow_prize?module=113&type=1)
+- [Shopee get_follow_prize_list documentation](https://open.shopee.com/documents/v2/v2.follow_prize.get_follow_prize_list?module=113&type=1)
+- [Shopee update_follow_prize documentation](https://open.shopee.com/documents/v2/v2.follow_prize.update_follow_prize?module=113&type=1)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses saved to local files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Small responses are printed in full; larger responses are summarized while the complete response is written under a linkfox session data directory.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

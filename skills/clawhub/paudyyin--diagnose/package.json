@@ -1,0 +1,12 @@
+{
+  "name": "diagnose",
+  "version": "2.1.0",
+  "description": "结构化排错调试。6阶段方法论：构建反馈循环→复现→假设→探测→修复→清理。",
+  "author": "yindb2 (adapted from pskoett)",
+  "category": "coding",
+  "triggers": ["排错", "debug", "诊断", "bug修复", "性能回归", "定位问题", "错误分析"],
+  "dependencies": {
+    "coding-framework": ">=10.0.0",
+    "tdd": ">=2.0.0"
+  }
+}

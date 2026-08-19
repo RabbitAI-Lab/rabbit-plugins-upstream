@@ -5,7 +5,7 @@ PCB &amp; 封装 / 器件图元类
 ## Signature
 
 ```typescript
-declare class PCB_PrimitiveComponent implements IPCB_PrimitiveAPI 
+export class PCB_PrimitiveComponent implements IPCB_PrimitiveAPI 
 ```
 **Implements:** [IPCB\_PrimitiveAPI](../interfaces/IPCB_PrimitiveAPI.md)
 
@@ -127,6 +127,20 @@ Description
 </td></tr>
 <tr><td>
 
+[getAllPropertyNames()](./PCB_PrimitiveComponent.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 获取所有器件的所有属性名称集合
+
+
+</td></tr>
+<tr><td>
+
 [modify(primitiveId, property)](./PCB_PrimitiveComponent.md)
 
 
@@ -153,6 +167,20 @@ Description
 
 
 </td></tr>
+<tr><td>
+
+[placeFootprintWithMouse(footprint, properties)](./PCB_PrimitiveComponent.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 使用鼠标放置封装
+
+
+</td></tr>
 </tbody></table>
 
 ---
@@ -170,14 +198,7 @@ Description
 ## Signature
 
 ```typescript
-create(component: {
-        libraryUuid: string;
-        uuid: string;
-    } | ILIB_DeviceItem | ILIB_DeviceSearchItem | {
-        libraryType: ELIB_LibraryType.FOOTPRINT;
-        libraryUuid: string;
-        uuid: string;
-    } | ILIB_FootprintItem | ILIB_FootprintSearchItem, layer: TPCB_LayersOfComponent, x: number, y: number, rotation?: number, primitiveLock?: boolean): Promise<IPCB_PrimitiveComponent | undefined>;
+public create(component: { libraryUuid: string; uuid: string } | ILIB_DeviceItem | ILIB_DeviceSearchItem | { libraryType: ELIB_LibraryType.FOOTPRINT; libraryUuid: string; uuid: string } | ILIB_FootprintItem | ILIB_FootprintSearchItem, layer: TPCB_LayersOfComponent, x: number, y: number, rotation?: number, primitiveLock?: boolean): Promise<IPCB_PrimitiveComponent | undefined>;
 ```
 
 ## Parameters
@@ -205,7 +226,7 @@ component
 
 </td><td>
 
-{ libraryUuid: string; uuid: string; } \| [ILIB\_DeviceItem](../interfaces/ILIB_DeviceItem.md) \| [ILIB\_DeviceSearchItem](../interfaces/ILIB_DeviceSearchItem.md) \| { libraryType: [ELIB\_LibraryType.FOOTPRINT](../enums/ELIB_LibraryType.md)<!-- -->; libraryUuid: string; uuid: string; } \| [ILIB\_FootprintItem](../interfaces/ILIB_FootprintItem.md) \| [ILIB\_FootprintSearchItem](../interfaces/ILIB_FootprintSearchItem.md)
+{ libraryUuid: string; uuid: string } \| [ILIB\_DeviceItem](../interfaces/ILIB_DeviceItem.md) \| [ILIB\_DeviceSearchItem](../interfaces/ILIB_DeviceSearchItem.md) \| { libraryType: [ELIB\_LibraryType.FOOTPRINT](../enums/ELIB_LibraryType.md)<!-- -->; libraryUuid: string; uuid: string } \| [ILIB\_FootprintItem](../interfaces/ILIB_FootprintItem.md) \| [ILIB\_FootprintSearchItem](../interfaces/ILIB_FootprintSearchItem.md)
 
 
 </td><td>
@@ -315,7 +336,7 @@ Promise&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md) \| undefined
 ## Signature
 
 ```typescript
-delete(primitiveIds: string | IPCB_PrimitiveComponent | Array<string> | Array<IPCB_PrimitiveComponent>): Promise<boolean>;
+public delete(primitiveIds: string | IPCB_PrimitiveComponent | Array<string> | Array<IPCB_PrimitiveComponent>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -373,7 +394,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-get(primitiveIds: string): Promise<IPCB_PrimitiveComponent | undefined>;
+public get(primitiveIds: string): Promise<IPCB_PrimitiveComponent | undefined>;
 ```
 
 ## Parameters
@@ -431,7 +452,7 @@ Promise&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md) \| undefined
 ## Signature
 
 ```typescript
-get(primitiveIds: Array<string>): Promise<Array<IPCB_PrimitiveComponent>>;
+public get(primitiveIds: Array<string>): Promise<Array<IPCB_PrimitiveComponent>>;
 ```
 
 ## Parameters
@@ -493,7 +514,7 @@ Promise&lt;Array&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md)<!--
 ## Signature
 
 ```typescript
-getAll(layer?: TPCB_LayersOfComponent, primitiveLock?: boolean): Promise<Array<IPCB_PrimitiveComponent>>;
+public getAll(layer?: TPCB_LayersOfComponent, primitiveLock?: boolean): Promise<Array<IPCB_PrimitiveComponent>>;
 ```
 
 ## Parameters
@@ -567,7 +588,7 @@ Promise&lt;Array&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md)<!--
 ## Signature
 
 ```typescript
-getAllPinsByPrimitiveId(primitiveId: string): Promise<Array<IPCB_PrimitiveComponentPad> | undefined>;
+public getAllPinsByPrimitiveId(primitiveId: string): Promise<Array<IPCB_PrimitiveComponentPad> | undefined>;
 ```
 
 ## Parameters
@@ -625,7 +646,7 @@ Promise&lt;Array&lt;[IPCB\_PrimitiveComponentPad](./IPCB_PrimitiveComponentPad.m
 ## Signature
 
 ```typescript
-getAllPrimitiveId(layer?: TPCB_LayersOfComponent, primitiveLock?: boolean): Promise<Array<string>>;
+public getAllPrimitiveId(layer?: TPCB_LayersOfComponent, primitiveLock?: boolean): Promise<Array<string>>;
 ```
 
 ## Parameters
@@ -688,6 +709,27 @@ Promise&lt;Array&lt;string&gt;&gt;
 
 器件的图元 ID 数组
 
+### getallpropertynames
+
+# PCB\_PrimitiveComponent.getAllPropertyNames() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+获取所有器件的所有属性名称集合
+
+## Signature
+
+```typescript
+public getAllPropertyNames(): Promise<Array<string>>;
+```
+
+
+## Returns
+
+Promise&lt;Array&lt;string&gt;&gt;
+
+所有器件的所有属性名称集合
+
 ### modify
 
 # PCB\_PrimitiveComponent.modify() method
@@ -699,24 +741,7 @@ Promise&lt;Array&lt;string&gt;&gt;
 ## Signature
 
 ```typescript
-modify(primitiveId: string | IPCB_PrimitiveComponent, property: {
-        layer?: TPCB_LayersOfComponent;
-        x?: number;
-        y?: number;
-        rotation?: number;
-        primitiveLock?: boolean;
-        addIntoBom?: boolean;
-        designator?: string | null;
-        name?: string | null;
-        uniqueId?: string | null;
-        manufacturer?: string | null;
-        manufacturerId?: string | null;
-        supplier?: string | null;
-        supplierId?: string | null;
-        otherProperty?: {
-            [key: string]: any;
-        };
-    }): Promise<IPCB_PrimitiveComponent | undefined>;
+public modify(primitiveId: string | IPCB_PrimitiveComponent, property: { layer?: undefined | EPCB_LayerId.TOP | EPCB_LayerId.BOTTOM; x?: undefined | number; y?: undefined | number; rotation?: undefined | number; primitiveLock?: undefined | false | true; addIntoBom?: undefined | false | true; designator?: undefined | null | string; name?: undefined | null | string; uniqueId?: undefined | null | string; manufacturer?: undefined | null | string; manufacturerId?: undefined | null | string; supplier?: undefined | null | string; supplierId?: undefined | null | string; otherProperty?: undefined | Record<string, any> }): Promise<IPCB_PrimitiveComponent | undefined>;
 ```
 
 ## Parameters
@@ -760,7 +785,7 @@ property
 
 </td><td>
 
-{ layer?: [TPCB\_LayersOfComponent](../types/TPCB_LayersOfComponent.md)<!-- -->; x?: number; y?: number; rotation?: number; primitiveLock?: boolean; addIntoBom?: boolean; designator?: string \| null; name?: string \| null; uniqueId?: string \| null; manufacturer?: string \| null; manufacturerId?: string \| null; supplier?: string \| null; supplierId?: string \| null; otherProperty?: { \[key: string\]: any; }; }
+{ layer?: undefined \| [EPCB\_LayerId.TOP](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.BOTTOM](../enums/EPCB_LayerId.md)<!-- -->; x?: undefined \| number; y?: undefined \| number; rotation?: undefined \| number; primitiveLock?: undefined \| false \| true; addIntoBom?: undefined \| false \| true; designator?: undefined \| null \| string; name?: undefined \| null \| string; uniqueId?: undefined \| null \| string; manufacturer?: undefined \| null \| string; manufacturerId?: undefined \| null \| string; supplier?: undefined \| null \| string; supplierId?: undefined \| null \| string; otherProperty?: undefined \| Record&lt;string, any&gt; }
 
 
 </td><td>
@@ -788,10 +813,7 @@ Promise&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md) \| undefined
 ## Signature
 
 ```typescript
-placeComponentWithMouse(component: {
-        libraryUuid: string;
-        uuid: string;
-    } | ILIB_DeviceItem | ILIB_DeviceSearchItem): Promise<boolean>;
+public placeComponentWithMouse(component: { libraryUuid: string; uuid: string } | ILIB_DeviceItem | ILIB_DeviceSearchItem): Promise<boolean>;
 ```
 
 ## Parameters
@@ -819,7 +841,7 @@ component
 
 </td><td>
 
-{ libraryUuid: string; uuid: string; } \| [ILIB\_DeviceItem](../interfaces/ILIB_DeviceItem.md) \| [ILIB\_DeviceSearchItem](../interfaces/ILIB_DeviceSearchItem.md)
+{ libraryUuid: string; uuid: string } \| [ILIB\_DeviceItem](../interfaces/ILIB_DeviceItem.md) \| [ILIB\_DeviceSearchItem](../interfaces/ILIB_DeviceSearchItem.md)
 
 
 </td><td>
@@ -843,3 +865,83 @@ Promise&lt;boolean&gt;
 本接口模拟前端点击放置按钮，指定的器件将绑定到当前鼠标，并在用户后续点击时放置于画布
 
 本接口的返回时机并不会等待用户的放置操作，一旦器件被绑定到鼠标，本接口将立即返回 `true` 的结果
+
+### placefootprintwithmouse
+
+# PCB\_PrimitiveComponent.placeFootprintWithMouse() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+使用鼠标放置封装
+
+## Signature
+
+```typescript
+public placeFootprintWithMouse(footprint: { libraryUuid: string; uuid: string } | ILIB_FootprintItem | ILIB_FootprintSearchItem, properties?: Record<string, boolean | number | string | undefined>): Promise<boolean>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+footprint
+
+
+</td><td>
+
+{ libraryUuid: string; uuid: string } \| [ILIB\_FootprintItem](../interfaces/ILIB_FootprintItem.md) \| [ILIB\_FootprintSearchItem](../interfaces/ILIB_FootprintSearchItem.md)
+
+
+</td><td>
+
+关联库封装
+
+
+</td></tr>
+<tr><td>
+
+properties
+
+
+</td><td>
+
+Record&lt;string, boolean \| number \| string \| undefined&gt;
+
+
+</td><td>
+
+_(Optional)_ 器件属性
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+是否找到封装
+
+## Remarks
+
+本接口模拟前端点击放置按钮，指定的封装将绑定到当前鼠标，并在用户后续点击时放置于画布
+
+本接口的返回时机并不会等待用户的放置操作，一旦封装被绑定到鼠标，本接口将立即返回 `true` 的结果 ADD since API v0.2.26

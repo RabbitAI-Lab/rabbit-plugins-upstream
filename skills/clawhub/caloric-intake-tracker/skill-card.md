@@ -1,42 +1,53 @@
-## Description: <br>
-Log and track daily calorie intake, macronutrients, body weight, and waist measurements locally in a SQLite database. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Log and track daily calorie intake, macronutrients, body weight, and waist measurements locally in a SQLite database. Provides granular statistics, weekly averages, and future calorie budgets.
 
-## Publisher: <br>
-[patello](https://clawhub.ai/user/patello) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[patello](https://clawhub.ai/user/patello)
 
-## Use Case: <br>
-Agents and users use this skill to maintain a local food, macronutrient, weight, and body-measurement log and generate daily, weekly, and trend reports for personal tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores personal health and nutrition data in a local SQLite database file. <br>
-Mitigation: Use a protected database path, restrict access to the file, and avoid placing the database in shared or broadly synced locations unless that is intended. <br>
-Risk: Update and delete commands intentionally modify or remove local tracker records. <br>
-Mitigation: Review entry IDs with list or stats commands before changing records, and keep a backup when preserving history matters. <br>
+## Use Case:
 
+External users and agents use this skill to maintain a local SQLite health log for food intake, macronutrients, body measurements, daily goals, and weekly progress reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/patello/skills/caloric-intake-tracker) <br>
-- [README.md](README.md) <br>
-- [SKILL.md](SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and plain-text CLI reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and uses a local SQLite database file; evidence reports no network access or hidden behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: server release evidence) <br>
+Risk: Automatic database migration can silently remove legacy health-data tables while updating the local health database.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Back up an existing health_data.db before first use, or run commands with --database against a test copy until migration behavior is reviewed.
+
+Risk: The skill modifies local health records stored in SQLite.
+
+Mitigation: Use a dedicated database path for testing and review add, update, delete, and migration actions before using it on personal records.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/patello/skills/caloric-intake-tracker)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with CLI commands and text reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses python3 and stores records in a local SQLite database.]
+
+## Skill Version(s):
+
+1.4.4 (source: server release metadata and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

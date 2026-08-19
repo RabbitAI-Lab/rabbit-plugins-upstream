@@ -1,47 +1,67 @@
-## Description: <br>
-Searches the Zhihuiya patent database for visually similar design patents from a public image URL or an uploaded local image. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches the Zhihuiya patent database for visually similar design patents from a public image URL, with filters for country, Locarno class, legal status, dates, assignee, and pagination.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers, agents, and cross-border commerce teams use this skill to compare product or design images against design patent records, review similar patent results, and identify cases that may need professional patent counsel. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image URLs, uploaded local images, API credentials, and possible feedback text are sent to LinkFox services. <br>
-Mitigation: Use the skill only with images and text approved for external processing, and avoid confidential or unpublished product images unless that transfer is acceptable. <br>
-Risk: Local images are uploaded to obtain public URLs for patent image search. <br>
-Mitigation: Prefer already public image URLs for sensitive workflows, or confirm that temporary public upload is acceptable before using a local file. <br>
-Risk: Full search responses are stored locally and may include patent results and request context. <br>
-Mitigation: Review the saved `linkfox/` data files and clear cached or stored results before working with sensitive matters. <br>
-Risk: The search output indicates visual similarity and does not determine legal infringement. <br>
-Mitigation: Treat results as triage evidence and consult a qualified patent attorney before making legal or commercial decisions. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to compare a product or design image against design patent records and review visually similar patents for prior-art or appearance-risk assessment. It can upload local images to obtain a temporary public URL, then call the LinkFox/Zhihuiya patent image search API and summarize or persist the JSON results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-patent-image-search) <br>
-- [Zhihuiya patent image search API reference](references/api.md) <br>
-- [LinkFox API key guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
-- [LinkFox account and credits console](https://os.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, JSON, markdown] <br>
-**Output Format:** [Markdown guidance with Python commands and JSON patent-search responses or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved locally; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Product images and patent-search parameters are sent to LinkFox/Zhihuiya services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the image and search terms are approved for those external services, and avoid submitting confidential or restricted product images.
+
+Risk: Local image upload makes an image publicly accessible for the stated temporary period.
+
+Mitigation: Confirm the image may be made public before uploading, and prefer an already-approved public URL when possible.
+
+Risk: Full API responses are stored locally and authentication, billing, payment, or order outputs may be sensitive.
+
+Mitigation: Protect the local linkfox output directory, API-key environment variables, and any payment or billing artifacts before sharing logs or workspaces.
+
+Risk: Custom LinkFox endpoint environment variables can redirect requests to another host.
+
+Mitigation: Keep the default endpoint unless the replacement host is explicitly trusted.
+
+Risk: Similarity scores can be mistaken for legal conclusions about infringement.
+
+Mitigation: Present scores as visual-similarity signals only and recommend review by a qualified patent professional for legal decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-patent-image-search)
+- [Zhihuiya patent image search API reference](artifact/references/api.md)
+- [Authentication and billing onboarding](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON files, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses or saved JSON result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The main search script caches repeated parameter sets for 24 hours and writes full responses under a local linkfox data directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,58 @@
-## Description: <br>
-Monitors restaurant daily operations with three structured checks per day for opening, mid-shift, and closing compliance, then tracks patterns over time. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Daily operational compliance monitoring for restaurant and franchise operators. Three structured check-ins per day - opening, mid-shift, and closing - with pattern tracking. Built by a franchise GM with 16 years in QSR operations.
 
-## Publisher: <br>
-[blake27mc](https://clawhub.ai/user/blake27mc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-CC-BY-NC-4.0 <br>
+## Publisher:
 
+[mcphersonai](https://clawhub.ai/user/mcphersonai)
 
-## Use Case: <br>
-Restaurant and franchise operators use this skill to run daily operational compliance check-ins, log food safety and sanitation results, and surface weekly patterns for follow-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+CC-BY-NC-4.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores ongoing check history with employee or respondent details. <br>
-Mitigation: Define who may respond to checks and receive weekly summaries, tell staff what will be logged, minimize personal notes, and set a retention and deletion practice. <br>
-Risk: Scheduled checks may continue after the workflow is no longer needed. <br>
-Mitigation: Disable scheduled checks when the operational monitoring workflow ends. <br>
+## Use Case:
 
+Restaurant and franchise operators, general managers, assistant managers, and shift leaders use this skill to run opening, mid-shift, and closing compliance check-ins, then review recurring operational patterns. It supports internal daily execution, audit readiness, food-safety habits, and weekly focus setting without replacing required corporate or regulatory forms.
 
-## Reference(s): <br>
-- [Qsr Daily Ops Monitor ClawHub listing](https://clawhub.ai/blake27mc/qsr-daily-ops-monitor) <br>
-- [blake27mc publisher profile](https://clawhub.ai/user/blake27mc) <br>
-- [Creative Commons Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown check prompts, status summaries, setup confirmations, and weekly operational summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stores ongoing check history including date, check type, pass count, failed items, respondent, and notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and artifact frontmatter) <br>
+Risk: The skill keeps ongoing operational check-in history that may include respondent names, roles, and free-text notes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit entries to necessary operational facts and avoid unnecessary sensitive personnel, financial, customer, or incident details.
+
+Risk: Operators could treat the monitor as a substitute for required franchise, corporate, or regulatory compliance documentation.
+
+Mitigation: Continue completing required compliance forms and use this skill only as a monitoring and pattern-tracking aid.
+
+Risk: Scheduled reminders and missed-check logging can create avoidable noise if operating hours, respondents, or closure exceptions are stale.
+
+Mitigation: Confirm setup details before use, update schedules when hours change, and log legitimate closures or skipped checks without penalty.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/mcphersonai/skills/qsr-daily-ops-monitor)
+- [McPherson AI](https://mcphersonai.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Conversational text and Markdown summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Stores recurring check-in records and setup details in agent memory when available; no POS, scheduling tool, or corporate platform integration is required.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

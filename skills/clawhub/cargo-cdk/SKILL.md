@@ -1,8 +1,8 @@
 ---
 name: cargo-cdk
-description: "Define an entire Cargo workspace in code — connectors, models, plays, tools, agents, MCP servers, context, capacities, territories, segments, folders, files, workers, apps — and deploy it declaratively with `cargo-ai cdk` (init → types → plan → deploy), the way you'd manage cloud infra with Pulumi or the AWS CDK. Use when the user wants to manage Cargo resources as code: reproducibly, version-controlled, in git, from a template, or across environments. Routes to authoring/deploy/typing guides (Level 2), recipes (Level 2.5), and references. For one-off imperative operations (create one connector, read a model, run a workflow), use the matching capability skill instead."
-version: "1.0.0"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+description: "Manage a whole Cargo workspace as code — declare connectors, models, plays, tools, agents, MCP servers, segments, context, folders, files, workers, and apps in TypeScript, then reconcile them with `cargo-ai cdk` (init → types → plan → deploy), the way you would run Pulumi or the AWS CDK. Triggers: \"as code\", \"in git\", \"version-controlled\", \"reproducible\", \"Terraform for Cargo\", \"set up a whole workspace\", \"staging and production\", \"deploy from CI\", \"review this in a PR\", \"cargo.state.json\", \"scaffold from a template\". Scaffoldable outcome templates live in cargo-cookbooks. Skip when: it is a one-off operation, a read, or an ad-hoc query — use the matching capability skill."
+version: "1.2.2"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -26,6 +26,22 @@ It is the **declarative** counterpart to the imperative capability skills: inste
 of running one CLI command per resource, you write the whole graph once and deploy
 it repeatably, with a committed `cargo.state.json` linking your code to what Cargo
 created.
+
+## Bootstrap
+
+Already signed in (`cargo-ai whoami` returns a workspace)? Skip to the next section.
+
+```bash
+npm install -g @cargo-ai/cli            # no global install? prefix every command with `npx @cargo-ai/cli`
+cargo-ai login --email you@company.com  # emailed code, no browser; creates the account on first use
+                                        # alternatives: --oauth (browser) · --token <api-token> (CI)
+cargo-ai whoami                         # confirm the active workspace before any write
+cargo-ai cdk --help                     # `unknown command` = CLI too old; reinstall @cargo-ai/cli@latest
+```
+
+Two CDK-specific extras: the project needs **`@cargo-ai/cdk` as a dependency** for the `define*` builders you import (`cargo-ai cdk init` scaffolds a `package.json` with it — then `npm install`), and the `cargo-ai cdk` domain ships with the CLI itself.
+
+Every command prints JSON to stdout; failures exit non-zero with `{"errorMessage": "..."}`. Anything that creates a run or a batch is async — pass `--wait-until-finished` or poll the matching `get`. When the full skill bundle is installed, [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) adds the CLI version pin, token scopes, and the admin-only surface.
 
 ## 1) What this skill governs
 
@@ -83,6 +99,14 @@ cargo-ai cdk deploy         create/update resources in dependency order, write s
 cargo-ai cdk destroy        tear down resources recorded in state
 ```
 
+> **`cdk plan` says what resources change; it doesn't show what a play does.**
+> For a `definePlay` / `defineTool` graph past three nodes, present a Mermaid
+> flowchart of the node graph alongside the plan — routing, fallbacks, and which
+> nodes bill on every scheduled run are what the reviewer is approving. Generate it
+> from the deployed release after the first deploy, or from the node array while
+> authoring:
+> [`../cargo-orchestration/references/node-diagram.md`](../cargo-orchestration/references/node-diagram.md).
+
 Side branches: `cargo-ai cdk refresh` (read-only drift report) · `deploy --refresh`
 (re-apply code over out-of-band edits) · `deploy --prune` (delete resources removed
 from code) · `cargo-ai cdk import <id> <uuid>` (bind an existing live resource into
@@ -115,6 +139,32 @@ state) · `cargo-ai cdk rollback` (restore the pre-deploy state snapshot).
 | Exact command flags | [`references/commands.md`](references/commands.md) | Every `cargo-ai cdk` subcommand and its flags. |
 | A deploy error / footgun | [`references/troubleshooting.md`](references/troubleshooting.md) | The known failure modes and fixes. |
 
+### Cookbooks — check the menu before authoring a known outcome from scratch
+
+[`getcargohq/cargo-cookbooks`](https://github.com/getcargohq/cargo-cookbooks) is a
+library of ~20 composable cookbook folders of pre-written `define*` resources — one
+per GTM outcome (TAM building, list building, inbound qualification, contact
+sourcing, routing engine, account scoring, auto-enrichment, meeting prep, pipeline
+health, AI SDR, rep cockpit, …), all built on a shared `base-gtm` foundation
+(accounts/contacts models + core connectors). A cookbook scaffolds directly:
+
+```sh
+cargo-ai cdk init my-tam --from getcargohq/cargo-cookbooks/tam-building
+```
+
+`--from` pulls the cookbook plus its required siblings (`base-gtm`, transitively)
+with the folder layout intact, so cross-folder imports resolve.
+
+**Routing rule:** when the user asks for a common GTM outcome as code, read the
+cookbook menu (the repo README's table) **first**. A cookbook matches → scaffold
+it, edit the `PLACEHOLDER`-marked values (API keys via env, channel IDs, persona
+filters), then `plan` → `deploy`. No match → author from the recipes below.
+
+Caveats: cookbooks typecheck and their scaffold graph validates, but they are not
+yet deploy-verified against a live workspace — treat each cookbook README's "Done
+when" section as the acceptance test, and always review `cargo-ai cdk plan` before
+deploying.
+
 ### Recipes — follow step-by-step when one matches
 
 | Recipe | Use when… |
@@ -128,9 +178,9 @@ state) · `cargo-ai cdk rollback` (restore the pre-deploy state snapshot).
 ## 6) Critical rules
 
 - **Commit `cargo.state.json`.** It is the link from your code to the resources
-  Cargo created — and the **only** handle on a deployed **play** or **agent**
-  (they have no slug). Lose it and those resources orphan; recover a link with
-  `cargo-ai cdk import`. It records only `{hash, uuid, outputs}` — never secret
+  Cargo created — and the **only** handle on a deployed **play**, **agent**, or
+  **alert** (they have no slug). Lose it and those resources orphan; recover a link
+  with `cargo-ai cdk import`. It records only `{hash, uuid, outputs}` — never secret
   values. Git-ignore the working files (`cdk init` scaffolds this):
   ```gitignore
   .cargo-ai/
@@ -157,20 +207,34 @@ state) · `cargo-ai cdk rollback` (restore the pre-deploy state snapshot).
   land in the wrong directory. Use `--dir <path>` to be explicit.
 - **`--yes` in CI.** `deploy` and `destroy` prompt for confirmation; non-interactive
   runs must pass `--yes`.
-
-## Prerequisites
-
-Standard Cargo CLI setup (install, login, output conventions) is shared across all
-skills — see [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md).
-
-Two CDK-specific extras:
-
-- **The project needs `@cargo-ai/cdk` as a dependency** (for the `define*`
-  builders you import). `cargo-ai cdk init` scaffolds a `package.json` with it —
-  then run `npm install`.
-- **The `cargo-ai cdk` domain ships with the CLI.** Confirm with
-  `cargo-ai cdk --help`; an `unknown command` means the CLI is too old —
-  `npm install -g @cargo-ai/cli@latest`.
+- **A `definePlay`/`defineTool` graph with paid nodes gets a sample run before it
+  goes wide.** Deploying is not running, but the first thing that runs a deployed
+  play is usually a batch over the whole segment — and a scheduled play re-bills
+  every node on every run. Before enrolling everything (or enabling a schedule),
+  run the deployed workflow on **10–20 records** — `cargo-ai orchestration batch
+  create --data '{"kind":"filter","modelUuid":"…","filter":…,"limit":15}'`, or
+  `batch create --file ./plays/x.ts` to test-run the module without deploying —
+  then ask the user to approve the full enrollment with the **record count** and
+  **credit estimate**. Read the provider's playbook
+  (`../cargo-gtm/provider-playbooks/<slug>.md`, esp. its *Recurring use* section)
+  and the gate in
+  [`../cargo-gtm/references/cost-discipline.md`](../cargo-gtm/references/cost-discipline.md).
+- **A `defineAlert` whose actions call paid nodes re-bills on every breach.** An
+  alert's `actions` fire as real runs, so a badly-sized `threshold` on a tight
+  `schedule` can breach — and bill — every tick. Size the threshold with
+  `cargo-ai observability alert preview` before deploying, prefer cheap notification
+  actions (an agent that posts, a connector notification) over anything that fans
+  out, and apply the same cost gate above when an action calls a credits-based
+  provider. Scope/threshold and firing semantics:
+  [`../cargo-observability/SKILL.md`](../cargo-observability/SKILL.md).
+- **Route CDK-managed resources into a clearly-labelled folder.** Set `folder:` on
+  each builder so everything CDK owns lands in a dedicated folder whose name signals
+  "owned by code — don't hand-edit" to anyone in the UI (manual UI edits read back as
+  drift on the next `plan`). Folders are per-kind, so give each kind its own but share
+  one short, recognizable prefix — recommended: **`🔒 CDK`** (e.g. `🔒 CDK Models`,
+  `🔒 CDK Agents`). Keep names short (long labels truncate in the folder tree); the
+  lock emoji is the "don't touch" cue. See
+  [`guides/authoring-resources.md`](guides/authoring-resources.md).
 
 ## Help
 

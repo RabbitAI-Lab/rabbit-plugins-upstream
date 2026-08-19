@@ -1,46 +1,62 @@
-## Description: <br>
-Soul Archive is a local-first personality persistence and agentic memory skill that extracts persona data from conversations, stores it as plaintext JSON, and produces prompts, context summaries, recall warnings, and reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Soul Archive is a local-first digital personality persistence and agentic memory skill that extracts, stores, recalls, and reports persona and workflow patterns as plaintext JSON for use by local AI agents.
 
-## Publisher: <br>
-[dqsjqian](https://clawhub.ai/user/dqsjqian) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dqsjqian](https://clawhub.ai/user/dqsjqian)
 
-## Use Case: <br>
-Developers and agent users use this skill to maintain a local persona archive, inject concise user context into AI sessions, recall prior work patterns, warn on repeated failure modes, and generate personality reports from saved local data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can build an automatic, long-term plaintext local profile of the user. <br>
-Mitigation: Review config.json before use, avoid storing secrets or highly sensitive personal details, and delete or edit local JSON files when data should not persist. <br>
-Risk: Auto extraction, context injection, and reflection are enabled by default and may capture or reuse personal details beyond the user's immediate intent. <br>
-Mitigation: Disable auto_extract, auto_context_inject, and auto_reflect for manual-only operation, and keep sensitive-topic confirmation enabled. <br>
-Risk: Generated prompts, reports, or context summaries may be sent to an external AI provider depending on the host agent or platform. <br>
-Mitigation: Treat generated prompts and reports as sensitive data and review the privacy behavior of the agent or platform before sharing them. <br>
+## Use Case:
 
+Developers and AI-agent users use this skill to maintain a local personal profile and long-term agent memory that can be recalled as prompts, summaries, warnings, reports, or configuration for future sessions.
 
-## Reference(s): <br>
-- [Soul Archive ClawHub Release](https://clawhub.ai/dqsjqian/soul-archive) <br>
-- [README](README.md) <br>
-- [Privacy](PRIVACY.md) <br>
-- [Multi-device Sync](docs/multi-device-sync.md) <br>
-- [Extraction Prompts](references/extraction_prompts.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, HTML, Shell commands, Configuration] <br>
-**Output Format:** [Markdown, JSON, plaintext prompts, shell command output, and generated HTML reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include local persona summaries, role-play prompts, memory recall results, warning text, configuration guidance, and report files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.1.2 (source: server release evidence) <br>
+Risk: The skill can build and reuse a sensitive plaintext personal profile that local agents can read.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review config.json before use, disable auto_extract, auto_reflect, and auto_context_inject when manual control is preferred, and avoid storing health, finance, intimate, or other highly sensitive details.
+
+Risk: Persona prompts can enable an AI agent to imitate the user.
+
+Mitigation: Use the skill only for intended personal workflows, review generated prompts and reports, and preserve the documented requirement to disclose AI role-play when directly asked.
+
+Risk: Generated reports or synced archives can expose local personal data beyond the intended machine.
+
+Mitigation: Keep archives out of public repositories, apply the documented gitignore guidance for highly sensitive folders, and open generated reports only in environments where any external script exposure is acceptable.
+
+## Reference(s):
+
+- [Soul Archive on ClawHub](https://clawhub.ai/dqsjqian/skills/soul-archive)
+- [Privacy](PRIVACY.md)
+- [Multi-device sync and backup](docs/multi-device-sync.md)
+- [Extraction prompts](references/extraction_prompts.md)
+- [Claude Skills documentation](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/getting-started)
+- [Agent Guild](https://github.com/dqsjqian/agent-guild)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, HTML, Shell commands, Configuration, Guidance]
+
+**Output Format:** [CLI text, Markdown, JSON files and summaries, generated HTML reports, and prompt-ready persona context]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Stores user and agent memory locally as plaintext JSON under the configured soul data directory.]
+
+## Skill Version(s):
+
+3.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

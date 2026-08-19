@@ -1,45 +1,69 @@
-## Description: <br>
-Retrieves structured Amazon product details for one or more ASINs through the LinkFox Keepa product request API, including pricing, images, listing dates, dimensions, FBA fees, rankings, and optional monthly sales history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves structured Amazon product details by ASIN through the LinkFox Keepa product request API, including pricing, title, images, listing date, product attributes, FBA fees, sales rank, current monthly sales, and optional 12-month sales history.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon sellers, analysts, and developers use this skill to retrieve and summarize structured product data for specified ASINs across supported Amazon marketplaces. It is suited to price checks, product comparisons, monthly sales trend review, category lookup, dimensions, fees, and other ASIN-level analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with product queries limited to the supported Amazon marketplaces listed in the skill documentation. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and may make paid product-data requests that consume credits. <br>
-Mitigation: Use it only with an approved LinkFox account, confirm credit-consuming lookups before running them, and rely on the 24-hour cache for repeated identical parameters. <br>
-Risk: Automatic feedback reporting can send conversation-derived feedback content to LinkFox. <br>
-Mitigation: Disable or avoid automatic feedback reporting unless the user explicitly wants that feedback sent, and review feedback content before submission. <br>
-Risk: Full API responses are stored locally and cached, which can persist product research data in the workspace. <br>
-Mitigation: Run the skill in a trusted workspace and review or clean the linkfox output and cache directories after sensitive analysis. <br>
-Risk: LINKFOX_TOOL_GATEWAY can redirect API traffic if set in the environment. <br>
-Mitigation: Leave the default gateway in place or set LINKFOX_TOOL_GATEWAY only to a trusted LinkFox-compatible endpoint. <br>
+## Use Case:
 
+External Amazon sellers, e-commerce analysts, and developers use this skill to look up one or more known ASINs across supported Amazon marketplaces and summarize product attributes, prices, sales metrics, category data, dimensions, fees, and sales trends.
 
-## Reference(s): <br>
-- [Keepa API reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-keepa-product-request) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown summaries, shell command examples, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved under a local linkfox session data directory; small responses print full JSON, larger responses print summaries unless --inline is used; repeated parameters are cached for 24 hours.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: The skill sends ASIN query data and API credentials to LinkFox-operated services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when the user accepts LinkFox as a trusted service provider; store API keys in environment variables and avoid exposing keys in chat or logs.
+
+Risk: Authentication recovery and onboarding can involve phone-based login, OTP handling, API-key generation, and payment setup.
+
+Mitigation: Ask the user to confirm the trust boundary before providing OTPs or API keys, and have the user explicitly approve plan selection, payment method, and any generated payment flow.
+
+Risk: Keepa product requests consume LinkFox credits and may incur unexpectedly high cost for some queries.
+
+Mitigation: State the marketplace, ASIN count, history setting, and cost warning before issuing paid requests, and avoid repeated retries or parameter changes without user consent.
+
+Risk: Full API responses are persistently saved to a local linkfox session directory.
+
+Mitigation: Tell users where response files are written when results may contain sensitive business research, and avoid adding those files to commits or shared artifacts without review.
+
+Risk: The artifact describes automatic feedback reporting when user sentiment or skill issues are detected.
+
+Mitigation: Avoid sending feedback content externally unless the user consents to sharing the relevant interaction details with LinkFox.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-keepa-product-request)
+- [Publisher profile](https://clawhub.ai/user/linkfox-ai)
+- [Keepa product detail API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance, shell command examples, JSON request examples, product summary tables, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Queries are limited to 5 ASINs per request; full API responses are saved under a local linkfox session directory, with stdout summarized for responses over 8 KB unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

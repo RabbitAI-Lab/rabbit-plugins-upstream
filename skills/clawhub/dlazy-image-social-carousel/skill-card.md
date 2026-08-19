@@ -1,43 +1,60 @@
-## Description: <br>
-A structured workflow skill dedicated to social-media carousel design using a decide-intent-first, single-confirmation, cover-first flow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A structured workflow skill dedicated to social-media carousel design, using a single-confirmation and cover-first flow for planning and generating multi-slide social media image sets.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, marketers, and content teams use this skill to plan and generate social-media carousel image sets with a confirmed direction, cover-first review, and consistent remaining slides. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and provided media can be sent to dLazy API and file services. <br>
-Mitigation: Avoid submitting sensitive material unless approved for the service and review organizational data-handling requirements before use. <br>
-Risk: The dLazy API key may be stored in a local CLI configuration file. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for non-persistent use, and rotate or revoke keys when access changes. <br>
-Risk: The workflow depends on a third-party CLI and hosted API. <br>
-Mitigation: Review the dLazy CLI source or package before installation and use the pinned CLI version identified by the release evidence. <br>
+## Use Case:
 
+Creators, marketers, and social media teams use this skill to plan social carousel structure, confirm the cover direction first, and generate remaining slides consistently through the dLazy CLI cloud service.
 
-## Reference(s): <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with confirmation tables, phase status, CLI commands, and generated image URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires dLazy CLI authentication; prompts and supplied media may be sent to dLazy API and file services.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release metadata) <br>
+Risk: Prompts, generation parameters, and local media paths may be sent or uploaded to the dLazy cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use this skill only when third-party cloud generation is acceptable, and avoid sending sensitive prompts or media unless approved for that service.
+
+Risk: The dLazy API key can be stored persistently in the local CLI configuration.
+
+Mitigation: Use the DLAZY_API_KEY environment variable for per-run authentication when a persistent key in ~/.dlazy/config.json is not desired.
+
+Risk: Generated carousel images may still need review for factual accuracy, brand fit, and platform suitability before publication.
+
+Mitigation: Review generated image URLs and requested slide copy before publishing or using them in external campaigns.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-image-social-carousel)
+- [dLazy CLI Repository](https://github.com/dlazyai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown workflow guidance with confirmation tables and inline shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides dLazy CLI calls; generated images are returned as hosted URLs by the third-party service.]
+
+## Skill Version(s):
+
+1.3.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

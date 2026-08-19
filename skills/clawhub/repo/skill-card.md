@@ -1,43 +1,53 @@
-## Description: <br>
-Project initialization toolkit. contributing - auto-generate CONTRIBUTING.md from project structure [contributing.md]. "init", "project init", "initialize project", "contributing guide", "CONTRIBUTING.md", "contributing generate" triggers <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Project initialization toolkit that helps generate CONTRIBUTING.md guidance from detected project structure and configuration.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and maintainers use this skill to inspect a repository's project structure, configuration files, package scripts, and conventions, then draft a project-specific CONTRIBUTING.md guide. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Generated CONTRIBUTING.md content may be incorrect or misleading if repository conventions are ambiguous or incomplete. <br>
-Mitigation: Review the generated guide against the repository's actual setup before accepting it. <br>
-Risk: Broad trigger phrases such as "init" may invoke the skill unintentionally. <br>
-Mitigation: Use explicit prompts for contributing-guide generation and review activation before allowing file writes. <br>
-Risk: The skill can propose overwriting an existing CONTRIBUTING.md file. <br>
-Mitigation: Confirm before overwrite and keep the existing file available for comparison. <br>
+## Use Case:
 
+Developers and maintainers use this skill to inspect repository structure and common project configuration, then draft a CONTRIBUTING.md file that reflects the project settings.
 
-## Reference(s): <br>
-- [Contributing Generator](contributing.md) <br>
-- [Repo skill page](https://clawhub.ai/drumrobot/repo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a CONTRIBUTING.md draft from repository configuration and directory structure; review before accepting or overwriting files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: server release metadata and CHANGELOG, released 2026-06-03) <br>
+Risk: Generic project initialization or contributing-guide requests may invoke this skill when a narrower workflow was intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the requested repository documentation task before applying generated guidance.
+
+Risk: Generated CONTRIBUTING.md content may not match a repository's required language, wording, or policy.
+
+Mitigation: Review the generated file before accepting it, especially for project-specific language and contribution policies.
+
+## Reference(s):
+
+- [Contributing Generator guide](artifact/contributing.md)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, shell commands, guidance]
+
+**Output Format:** [Markdown with inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generates repository contribution guidance for human review before acceptance.]
+
+## Skill Version(s):
+
+0.3.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,58 @@
-## Description: <br>
-Auto Monitor Tool Free helps an agent check single-machine CPU, memory, disk, network, process, and basic service status, with simple threshold alerts and local history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+个人服务器监控工具，支持CPU/内存/磁盘基础指标与简单告警通知。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, operators, and personal server owners use this skill to inspect local system health, view top resource-consuming processes, configure basic thresholds, and receive simple console or email alerts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: SMTP or callback notifications can disclose host details outside the monitored machine. <br>
-Mitigation: Review notification destinations and credentials before use, and send alerts only to approved endpoints. <br>
-Risk: Local monitoring commands can expose system status, process, disk, network, and history information. <br>
-Mitigation: Run the skill only on machines where the user is authorized to inspect those details, and keep requests scoped to explicit monitoring tasks. <br>
+## Use Case:
 
+Developers, operators, and automation agents use this skill to inspect local server CPU, memory, disk, network, process, and basic service status, then configure simple threshold alerts for a single machine.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/auto-monitor-tool-free) <br>
-- [Project homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with command examples and structured status, alert, log, and configuration details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include local system metrics, alert status, process summaries, and troubleshooting guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: The skill may execute local system commands while collecting monitoring data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for explicit monitoring requests and inspect or define exact commands before execution.
+
+Risk: Broad or inconsistent instructions could move execution outside a clear monitoring-only scope.
+
+Mitigation: Keep use limited to CPU, memory, disk, network, process, service status, and alert configuration tasks.
+
+Risk: SMTP alerting can send alert metadata through a mail provider.
+
+Mitigation: Enable SMTP only after reviewing the destination, provider, and environment-based credentials.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/auto-monitor-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return monitoring summaries, alert setup guidance, command output, and error-handling steps.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

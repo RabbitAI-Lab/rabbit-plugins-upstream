@@ -5,6 +5,7 @@
 （zip + document.xml，带配色/字号/底纹）。字段口径依据《百炼®标书Skill服务.md》附录 A/B。
 被 zcm.py 的 `report` 子命令调用，也可独立运行：
     python3 report.py --in result.json --format both -o <目录> [--tender-name 招标文件名]
+Locale scope: zh-CN (Simplified Chinese) by design for mainland-China bidding workflows. The generated artifact keeps Chinese procurement terminology in report labels and headings; assistants may provide explanations in another language outside the artifact when needed.
 """
 from __future__ import annotations
 
@@ -49,9 +50,25 @@ def _risk_bucket(level):
 _RISK_LABEL = {"high": "高风险", "review": "待复核", "tip": "提示", "other": "其他"}
 # 行动建议优先级 high/medium/low → 中文
 _PRIORITY_ZH = {"high": "高", "medium": "中", "low": "低"}
+_SEMANTIC_STATE_ZH = {
+    "full": "完整完成",
+    "complete": "完整完成",
+    "completed": "完整完成",
+    "done": "完整完成",
+    "rules_only": "仅规则检查",
+    "semantic_partial": "部分完成",
+    "partial": "部分完成",
+    "running": "处理中",
+    "processing": "处理中",
+    "pending": "等待处理",
+    "failed": "异常",
+    "error": "异常",
+    "skipped": "未执行",
+}
 _DOCX_RISK_COLOR = {"high": "C0392B", "review": "B9770E", "tip": "0E7490", "other": "475569"}
 _LABEL = {"interpretation": "智能解读", "compliance": "合规审查"}
-
+# Locale scope: report artifacts currently ship with zh-CN labels because bidding terminology
+# and exported templates follow mainland-China procurement conventions.
 
 # ============================== 最小 .docx 生成 ==============================
 # block = (kind, text, opts)
@@ -373,7 +390,7 @@ class Report:
               "L.forEach(function(a,j){a.classList.toggle('on',j===idx);});}"
               "document.addEventListener('scroll',spy,{passive:true});"
               "window.addEventListener('resize',spy);spy();})();</script>")
-        return (f"<!DOCTYPE html><html lang='zh'><head><meta charset='utf-8'>"
+        return (f"<!DOCTYPE html><html lang='zh-CN'><head><meta charset='utf-8'>"
                 f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
                 f"<title>{esc(self.title)}</title><style>{_HTML_CSS}</style></head>"
                 f"<body><div class='shell'>"
@@ -416,6 +433,64 @@ def _ev(obj):
     if obj.get("source"):
         return f"来源：{obj['source']}"
     return ""
+
+
+def _semantic_review_lines(summary):
+    """把合规语义审查状态转成总览区可读文案。"""
+    if not isinstance(summary, dict):
+        return []
+    lines = []
+    phase = _g(summary, "conclusion_phase", default="")
+    overview_ready = _g(summary, "overview_ready", default=None)
+    semantic = _g(summary, "semantic_review", default={}) or {}
+    state = _g(semantic, "state", default="")
+    state_label = _SEMANTIC_STATE_ZH.get(str(state).strip(), str(state).strip()) if state else ""
+    phase_label = _SEMANTIC_STATE_ZH.get(str(phase).strip(), str(phase).strip()) if phase else ""
+    if state_label:
+        lines.append(f"语义审查状态：{state_label}")
+    if phase_label and phase_label != state_label:
+        lines.append(f"结论阶段：{phase_label}")
+    if overview_ready is not None:
+        lines.append(f"总览状态：{'可用' if bool(overview_ready) else '未完整生成'}")
+    msg = _g(semantic, "message_zh", default="") or _g(semantic, "message", default="")
+    if msg:
+        lines.append(str(msg))
+    return lines
+
+
+def _partial_summary_items(partial):
+    """兼容字段可能漂移的 partial_summary，只展示短值，跳过复杂嵌套。"""
+    if not isinstance(partial, dict) or not partial:
+        return []
+    labels = {
+        "high_count": "高风险",
+        "review_count": "待复核",
+        "tip_count": "提示项",
+        "similarity_count": "多文件雷同",
+        "manual_unchecked_count": "手动待确认",
+        "conclusion": "阶段结论",
+        "message": "阶段说明",
+        "message_zh": "阶段说明",
+        "state": "阶段状态",
+        "status": "阶段状态",
+        "checked_count": "已检查项",
+        "total_count": "总项数",
+    }
+    items = []
+    for key, label in labels.items():
+        val = partial.get(key)
+        if val in (None, "", [], {}):
+            continue
+        if key in ("state", "status"):
+            val = _SEMANTIC_STATE_ZH.get(str(val).strip(), val)
+        items.append(f"{label}：{val}")
+    for key, val in partial.items():
+        if key in labels or val in (None, "", [], {}):
+            continue
+        if isinstance(val, (dict, list)):
+            continue
+        items.append(f"{key}：{val}")
+    return items
 
 
 def _auto_tender_name(service, result):
@@ -540,6 +615,7 @@ def render_compliance(result):
     sims = _g(comp, "similarity_issues", default=[]) or []
     manual = _g(comp, "manual_items", default=[]) or []
     scope = _g(comp, "scope_summary_lines", default=[]) or []
+    partial = _g(comp, "partial_summary", default={}) or {}
 
     files = "、".join(_g(f, "filename", default="") for f in bid_files) or "-"
     r.cover("Compliance Review · 合规审查", "合规审查报告",
@@ -562,6 +638,16 @@ def render_compliance(result):
     ])
     if _g(summary, "conclusion"):
         r.callout(_g(summary, "conclusion", default=""))
+    semantic_lines = _semantic_review_lines(summary)
+    if semantic_lines:
+        r.h3("审查完整性")
+        for line in semantic_lines:
+            r.bullet(line)
+    partial_items = _partial_summary_items(partial)
+    if partial_items:
+        r.h3("阶段性/部分结果摘要")
+        for line in partial_items:
+            r.bullet(line)
     for line in scope:
         r.bullet(line)
 
