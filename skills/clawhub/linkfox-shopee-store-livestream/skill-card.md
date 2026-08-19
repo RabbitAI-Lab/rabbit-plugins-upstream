@@ -1,39 +1,61 @@
-## Description: <br>
-Provides agent-facing scripts and guidance for managing authorized Shopee store livestream sessions, items, comments, images, and metrics through LinkFox's Shopee developer proxy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage authorized Shopee store livestream sessions, products, comments, metrics, and image uploads through LinkFox's Shopee Livestream integration.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and developers use this skill to create and manage Shopee livestream sessions, products, comments, moderation actions, media uploads, and metrics for an already authorized store. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [Skill API reference](references/api.md) <br>
-- [Shopee Open Platform Livestream API](https://open.shopee.com/documents/v2/v2.livestream.upload_image?module=125&type=1) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-livestream) <br>
+External sellers, operators, and developers use this skill to create, start, update, monitor, and moderate Shopee livestream sessions for authorized stores.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, JSON files] <br>
-**Output Format:** [Markdown guidance with shell commands; script output is JSON or a short text summary with full JSON saved to a local file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a trusted LinkFox API key and authorized Shopee store tokens. Confirm store-mutating actions before running scripts, and monitor or clean generated response files because they may contain shop, customer-interaction, media, or metric data.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill can manage real Shopee livestream operations for authorized stores.
+
+Mitigation: Install only if that operational scope is acceptable, and review proposed livestream actions before execution.
+
+Risk: The onboarding flow may handle phone/SMS login, API key generation, billing orders, and payment QR codes.
+
+Mitigation: Only provide SMS codes or approve payment and order commands for flows you explicitly initiated, and protect generated API keys.
+
+Risk: Persisted local response files may contain shop or livestream data.
+
+Mitigation: Review or clean the local linkfox response files after use according to the user's data-handling requirements.
+
+## Reference(s):
+
+- [Skill source](artifact/SKILL.md)
+- [Shopee Livestream API reference](artifact/references/api.md)
+- [Authentication and billing onboarding](artifact/references/onboarding.md)
+- [Shopee Open Platform Livestream documentation](https://open.shopee.com/documents/v2/v2.livestream.upload_image?module=125&type=1)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-livestream)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Files, Shell commands, Guidance]
+
+**Output Format:** [JSON responses on stdout, persisted JSON response files, and concise Markdown-style operational guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Complete API responses are persisted under a local linkfox data directory; larger responses may be summarized on stdout.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

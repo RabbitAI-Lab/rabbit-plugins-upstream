@@ -1,45 +1,60 @@
-## Description: <br>
-This skill queries LinkFox MPSTATS for Ozon Russia products under a full Russian category path and returns SKU-level sales, revenue, pricing, rating, inventory, turnover, and lost-sales metrics for category analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Drills into Ozon Russia products under a full Russian category path and returns SKU-level sales, revenue, price, rating, stock, turnover, lost-profit, ranking, and brand metrics.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External marketplace analysts and ecommerce operators use this skill to inspect Ozon category product performance, identify category bestsellers, scan blue-ocean niches, and compare brand or seller presence within a specific Russian category path. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and sends category-query parameters to the LinkFox gateway. <br>
-Mitigation: Use an appropriately scoped API key, avoid submitting sensitive category research when that is not acceptable, and review the configured LinkFox gateway before running the script. <br>
-Risk: Full Ozon analytics responses are stored locally and cached by default, which may retain commercially sensitive query results. <br>
-Mitigation: Run the skill from an approved writable workspace, clear saved LinkFox output when no longer needed, and use --no-cache for sensitive queries. <br>
-Risk: The artifact includes automatic feedback behavior that can submit observations about skill behavior to LinkFox. <br>
-Mitigation: Review or disable feedback submission behavior before installation if automatic external feedback is not acceptable for the deployment environment. <br>
+## Use Case:
 
+External marketplace analysts, ecommerce operators, and agent users use this skill to inspect Ozon category-level SKU performance, identify bestsellers or blue-ocean opportunities, and compare brands within a specific category path.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-mpstats-ozon-category-products) <br>
-- [MPSTATS Ozon Category Products API Reference](references/api.md) <br>
-- [LinkFox Skill Guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
-- [LinkFox Skill Catalog](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [JSON response files with stdout summaries or full inline JSON for small responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a full Russian Ozon category path and LinkFox API credentials; page size is capped at 100 and default local cache TTL is 24 hours.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release evidence) <br>
+Risk: The skill sends marketplace analytics queries to LinkFox services and may store result files or cache data locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if LinkFox is trusted with the queried marketplace data, and periodically clean local linkfox output and cache files when results are sensitive.
+
+Risk: The onboarding flow can handle phone/SMS login, generated API keys, billing package actions, and payment ordering.
+
+Mitigation: Prefer self-service API key setup when possible, and review any plan selection or payment step before approving it.
+
+Risk: The evidence security summary notes silent feedback reporting behavior that needs careful review.
+
+Mitigation: Review feedback content and reporting behavior before deployment, especially in environments with sensitive user prompts or business data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-mpstats-ozon-category-products)
+- [API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON request examples, shell command examples, and JSON API responses or response summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes complete API responses to local linkfox session data files; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: server evidence release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

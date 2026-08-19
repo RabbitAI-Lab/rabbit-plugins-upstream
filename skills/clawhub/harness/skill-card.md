@@ -1,41 +1,60 @@
-## Description: <br>
-Harness guides agents through stable LLM workflows with pipeline sequencing, guardrail checks, and bounded recovery from verification failures. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Harness enforces stable agent workflows with a five-stage pipeline, pre-execution guardrails, and bounded recovery for failed verification.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent operators use Harness to structure autonomous or headless LLM workflows so intent is clarified, source truth is checked, execution stays in scope, and verification failures are handled with bounded retry or escalation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Configured pipeline, guard, or recovery receivers can change the actual execution behavior. <br>
-Mitigation: Review any custom receivers before deployment and confirm their security posture matches the intended workflow. <br>
+## Use Case:
 
+Developers and engineers use this skill to wrap autonomous or headless agent work with clarify, ground, plan, generate, and verify stages. It is also used to apply destructive-operation guardrails, scope checks, and bounded recovery when verification fails.
 
-## Reference(s): <br>
-- [Harness Skill Page](https://clawhub.ai/drumrobot/skills/harness) <br>
-- [Pipeline Guide](pipeline.md) <br>
-- [Guardrails Guide](guardrails.md) <br>
-- [Recovery Guide](recovery.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with structured workflow reports and optional delegated code or shell-command outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May delegate planning and implementation to configured pipeline receivers; retry budget defaults to 2.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata, skill frontmatter, and changelog) <br>
+Risk: Autonomous or headless use can allow package installs, version pinning, or permission changes to proceed without human review if the runtime policy is too permissive.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure the runtime so package installs, version pinning, and permission changes require explicit policy approval or are limited to a known safe environment.
+
+Risk: Agent work can drift outside the user's requested scope or propose destructive operations during plan or generate stages.
+
+Mitigation: Use the built-in denylist, scope checks, and exact-operation authorization requirements before execution.
+
+Risk: Repeated recovery attempts can hide unresolved input, logic, or environment failures.
+
+Mitigation: Keep the retry budget bounded, record the adapt step for each retry, and escalate with a fallback report when the budget is exhausted.
+
+## Reference(s):
+
+- [Pipeline guide](artifact/pipeline.md)
+- [Guardrails guide](artifact/guardrails.md)
+- [Recovery guide](artifact/recovery.md)
+- [Changelog](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline text, code, command, configuration, and report sections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include clarify resolutions, ground notes, plan deliverables, generated changes, verification reports, guard block reports, retry traces, or fallback reports depending on the selected topic and outcome.]
+
+## Skill Version(s):
+
+0.1.2 (source: frontmatter, changelog, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

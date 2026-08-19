@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class SCH_ManufactureData 
+export class SCH_ManufactureData 
 ```
 
 ## Remarks
@@ -32,6 +32,20 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[deleteBomTemplate(template)](./SCH_ManufactureData.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 删除 BOM 模板
+
+
+</td></tr>
+<tr><td>
+
 [getAssemblyVariantsConfigs()](./SCH_ManufactureData.md)
 
 
@@ -55,6 +69,34 @@ Description
 </td><td>
 
 **_(BETA)_** 获取 BOM 文件
+
+
+</td></tr>
+<tr><td>
+
+[getBomTemplateFile(template)](./SCH_ManufactureData.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 获取 BOM 模板文件
+
+
+</td></tr>
+<tr><td>
+
+[getBomTemplates()](./SCH_ManufactureData.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 获取 BOM 模板列表
 
 
 </td></tr>
@@ -128,11 +170,83 @@ Description
 
 
 </td></tr>
+<tr><td>
+
+[uploadBomTemplateFile(templateFile, template)](./SCH_ManufactureData.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 上传 BOM 模板文件
+
+
+</td></tr>
 </tbody></table>
 
 ---
 
 ## 方法详情
+
+### deletebomtemplate
+
+# SCH\_ManufactureData.deleteBomTemplate() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+删除 BOM 模板
+
+## Signature
+
+```typescript
+public deleteBomTemplate(template: string): Promise<boolean>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+template
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+BOM 模板名称
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+操作是否成功
 
 ### getassemblyvariantsconfigs
 
@@ -145,16 +259,13 @@ Description
 ## Signature
 
 ```typescript
-getAssemblyVariantsConfigs(): Promise<Array<{
-        text: string;
-        value: string;
-    }>>;
+public getAssemblyVariantsConfigs(): Promise<Array<{ text: string; value: string }>>;
 ```
 
 
 ## Returns
 
-Promise&lt;Array&lt;{ text: string; value: string; }&gt;&gt;
+Promise&lt;Array&lt;{ text: string; value: string }&gt;&gt;
 
 装配体变量配置列表
 
@@ -169,13 +280,7 @@ Promise&lt;Array&lt;{ text: string; value: string; }&gt;&gt;
 ## Signature
 
 ```typescript
-getBomFile(fileName?: string, fileType?: 'xlsx' | 'csv', template?: string, filterOptions?: Array<{
-        property: string;
-        includeValue: boolean | string;
-    }>, statistics?: Array<string>, property?: Array<string>, columns?: Array<IPCB_BomPropertiesTableColumns>, assemblyVariantsConfig?: {
-        text: string;
-        value: string;
-    }): Promise<File | undefined>;
+public getBomFile(fileName?: string, fileType?: 'xlsx' | 'csv', template?: string, filterOptions?: Array<{ property: string; includeValue: string | false | true }>, statistics?: Array<string>, property?: Array<string>, columns?: Array<IPCB_BomPropertiesTableColumns>, assemblyVariantsConfig?: { text: string; value: string }): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -251,7 +356,7 @@ filterOptions
 
 </td><td>
 
-Array&lt;{ property: string; includeValue: boolean \| string; }&gt;
+Array&lt;{ property: string; includeValue: string \| false \| true }&gt;
 
 
 </td><td>
@@ -315,7 +420,7 @@ assemblyVariantsConfig
 
 </td><td>
 
-\{ text: string; value: string; \}
+\{ text: string; value: string \}
 
 
 </td><td>
@@ -338,6 +443,85 @@ BOM 文件数据
 
 可以使用 [SYS\_FileSystem.saveFile()](./SYS_FileSystem.md) 接口将文件导出到本地文件系统
 
+### getbomtemplatefile
+
+# SCH\_ManufactureData.getBomTemplateFile() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+获取 BOM 模板文件
+
+## Signature
+
+```typescript
+public getBomTemplateFile(template: string): Promise<File | undefined>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+template
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+BOM 模板名称
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;File \| undefined&gt;
+
+BOM 模板文件
+
+### getbomtemplates
+
+# SCH\_ManufactureData.getBomTemplates() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+获取 BOM 模板列表
+
+## Signature
+
+```typescript
+public getBomTemplates(): Promise<Array<string>>;
+```
+
+
+## Returns
+
+Promise&lt;Array&lt;string&gt;&gt;
+
+BOM 模板列表
+
 ### getexportdocumentfile
 
 # SCH\_ManufactureData.getExportDocumentFile() method
@@ -349,19 +533,7 @@ BOM 文件数据
 ## Signature
 
 ```typescript
-getExportDocumentFile(fileName?: string, fileType?: ESCH_ExportDocumentFileType, typeSpecificParams?: {
-        theme?: 'Default' | 'White on Black' | 'Black on White';
-        lineWidth?: 'Default' | 'Always 1px' | 'Follow the Zoom Change';
-        displayAttributesAsMenu?: boolean;
-        size?: 'Original Size' | string | {
-            width: number;
-            height: number;
-            unit: ESYS_Unit.INCH | ESYS_Unit.MILLIMETER;
-        };
-    }, object?: 'All Schematic' | 'Current Schematic' | 'Current Schematic Page' | string, objectSpecificParams?: {
-        range?: 'All' | [number, number];
-        outputMethod?: 'Merged sheet' | 'Separated sheet';
-    }): Promise<File | undefined>;
+public getExportDocumentFile(fileName?: string, fileType?: ESCH_ExportDocumentFileType, typeSpecificParams?: { theme?: undefined | 'Default' | 'White on Black' | 'Black on White'; lineWidth?: undefined | 'Default' | 'Always 1px' | 'Follow the Zoom Change'; displayAttributesAsMenu?: undefined | false | true; size?: undefined | string | { width: number; height: number; unit: ESYS_Unit.MILLIMETER | ESYS_Unit.INCH } }, object?: 'All Schematic' | 'Current Schematic' | 'Current Schematic Page' | string, objectSpecificParams?: { range?: undefined | 'All' | any; outputMethod?: undefined | 'Merged sheet' | 'Separated sheet' }): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -421,7 +593,7 @@ typeSpecificParams
 
 </td><td>
 
-{ theme?: 'Default' \| 'White on Black' \| 'Black on White'; lineWidth?: 'Default' \| 'Always 1px' \| 'Follow the Zoom Change'; displayAttributesAsMenu?: boolean; size?: 'Original Size' \| string \| { width: number; height: number; unit: [ESYS\_Unit.INCH](../enums/ESYS_Unit.md) \| [ESYS\_Unit.MILLIMETER](../enums/ESYS_Unit.md)<!-- -->; }; }
+{ theme?: undefined \| 'Default' \| 'White on Black' \| 'Black on White'; lineWidth?: undefined \| 'Default' \| 'Always 1px' \| 'Follow the Zoom Change'; displayAttributesAsMenu?: undefined \| false \| true; size?: undefined \| string \| { width: number; height: number; unit: [ESYS\_Unit.MILLIMETER](../enums/ESYS_Unit.md) \| [ESYS\_Unit.INCH](../enums/ESYS_Unit.md) } }
 
 
 </td><td>
@@ -453,7 +625,7 @@ objectSpecificParams
 
 </td><td>
 
-{ range?: 'All' \| \[number, number\]; outputMethod?: 'Merged sheet' \| 'Separated sheet'; }
+{ range?: undefined \| 'All' \| any; outputMethod?: undefined \| 'Merged sheet' \| 'Separated sheet' }
 
 
 </td><td>
@@ -487,7 +659,7 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-getNetlistFile(fileName?: string, netlistType?: ESYS_NetlistType): Promise<File | undefined>;
+public getNetlistFile(fileName?: string, netlistType?: ESYS_NetlistType): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -565,7 +737,7 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-getSimulationNetlistFile(fileName?: string, netlistType?: ESCH_SimulationNetlistType): Promise<File | undefined>;
+public getSimulationNetlistFile(fileName?: string, netlistType?: ESCH_SimulationNetlistType): Promise<File | undefined>;
 ```
 
 ## Parameters
@@ -643,7 +815,7 @@ Promise&lt;File \| undefined&gt;
 ## Signature
 
 ```typescript
-placeComponentsOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
+public placeComponentsOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
 ```
 
 ## Parameters
@@ -676,11 +848,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否启用交互式检查
-
-如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略；
-
-如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
+_(Optional)_ 是否启用交互式检查 如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略； 如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
 
 
 </td></tr>
@@ -696,11 +864,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 在非交互式检查时忽略警告
-
-如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料；
-
-如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
+_(Optional)_ 在非交互式检查时忽略警告 如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料； 如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
 
 
 </td></tr>
@@ -725,7 +889,7 @@ SMT 元件下单
 ## Signature
 
 ```typescript
-placeSmtComponentsOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
+public placeSmtComponentsOrder(interactive?: boolean, ignoreWarning?: boolean): Promise<boolean>;
 ```
 
 ## Parameters
@@ -758,11 +922,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否启用交互式检查
-
-如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略；
-
-如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
+_(Optional)_ 是否启用交互式检查 如若启用，则会存在弹窗等待用户进行交互，且无法使用 `ignoreWarning` 参数忽略警告， 即 `ignoreWarning` 参数将被忽略； 如若禁用，则在调用后不会有任何 EDA 内部弹窗，程序执行静默检查， 如若达成下单条件，将返回 `true` 并在新标签页打开下单页面
 
 
 </td></tr>
@@ -778,11 +938,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 在非交互式检查时忽略警告
-
-如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料；
-
-如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
+_(Optional)_ 在非交互式检查时忽略警告 如果设置为 `true`<!-- -->，将会忽略所有检查警告项并尽可能生成下单资料； 如果设置为 `false`<!-- -->，存在任意警告将中断执行并返回 `false` 的结果
 
 
 </td></tr>
@@ -795,3 +951,77 @@ _(Optional)_ 在非交互式检查时忽略警告
 Promise&lt;boolean&gt;
 
 是否通过下单检查
+
+### uploadbomtemplatefile
+
+# SCH\_ManufactureData.uploadBomTemplateFile() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+上传 BOM 模板文件
+
+## Signature
+
+```typescript
+public uploadBomTemplateFile(templateFile: File, template?: string): Promise<string | undefined>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+templateFile
+
+
+</td><td>
+
+File
+
+
+</td><td>
+
+BOM 模板文件
+
+
+</td></tr>
+<tr><td>
+
+template
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ BOM 模板名称，如若为 `undefined` 则自动从 `templateFile` 中取值
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;string \| undefined&gt;
+
+BOM 模板名称

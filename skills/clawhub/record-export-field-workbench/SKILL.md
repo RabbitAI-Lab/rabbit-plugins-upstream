@@ -1,7 +1,7 @@
 ---
 name: record-export-field-workbench
 description: Assemble a reporting export row.
-version: 1.0.5
+version: 1.0.7
 metadata:
   openclaw:
     skillKey: record-export-field-workbench
@@ -18,20 +18,22 @@ private files.
 
 ## Input
 
-Field: `cell_value`
+Field: `record_field`
 
-Approved field value to place into the reporting export row.
+Named customer field prepared for a reporting export.
+
+Accepted value: object with `record_id`, `field_name`, `field_value`.
 
 ## Output
 
-Field: `exported_cell`
+Field: `export_row`
 
-Return a concise exported cell for the user's current request in the requested
-output field.
+Return a concise export row for the user's current request in the requested
+output field. The returned value is a object with `columns`, `row_values`, `row_digest`.
 
 ## Example Request
 
 ```text
-Use the supplied cell_value to assemble a reporting export row.
-Return the result in exported_cell.
+Use the supplied record_field to assemble a reporting export row.
+Return the result in export_row.
 ```

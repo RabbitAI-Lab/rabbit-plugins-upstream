@@ -1,43 +1,60 @@
-## Description: <br>
-1MP raster image generation with refined design judgment for everyday creative work and fast iteration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates 1MP raster images with refined design judgment for everyday creative work and fast iteration.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, designers, and creative users use this skill to generate 1MP raster images through the dLazy Recraft V4 hosted API from prompts and aspect-ratio parameters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a dLazy API key that may be saved in the local CLI configuration. <br>
-Mitigation: Use DLAZY_API_KEY for temporary per-invocation authentication when local credential persistence is not desired, and rotate or revoke exposed keys from the dLazy dashboard. <br>
-Risk: Prompts and local media paths supplied to the command are sent to dLazy API and media storage endpoints for generation. <br>
-Mitigation: Only pass prompts and media files intended for upload to dLazy, and review the pinned @dlazy/cli package before installation or execution. <br>
+## Use Case:
 
+External users and creative developers use this skill to request Recraft V4 image generations through the dLazy CLI, choosing prompts and aspect ratios for fast creative iteration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [JSON responses containing generated image URLs, plus shell command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated images are returned as hosted PNG URLs; asynchronous mode can return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: The skill can persist a dLazy API key in a local CLI configuration file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer per-invocation DLAZY_API_KEY for sensitive environments, or manually verify restrictive permissions on ~/.dlazy/config.json and rotate or revoke keys when needed.
+
+Risk: Prompts and local files passed to media fields are sent to dLazy hosted API and storage endpoints.
+
+Mitigation: Only submit prompts and files that are appropriate to upload to the dLazy hosted service.
+
+Risk: The security summary flags the referenced third-party CLI because claimed restricted config-file permissions may not be enforced.
+
+Mitigation: Review the skill and CLI before installation, and use the pinned npx invocation when avoiding a persistent global install is preferred.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4)
+- [dLazy CLI source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, image URL, shell commands, configuration guidance]
+
+**Output Format:** [JSON response with generated image metadata and hosted output URLs; Markdown documentation includes shell command examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports synchronous waits, async generation IDs, dry-run cost estimates, prompt input, and aspect ratio selection.]
+
+## Skill Version(s):
+
+1.3.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,41 @@
 # Changelog
 
+## [0.3.12](https://github.com/es6kr/skills/compare/fix-v0.3.11...fix-v0.3.12) (2026-08-17)
+
+
+### Bug Fixes
+
+* **hook-kit:** stop claudify-skip hook from false-positiving on claudify's own description ([3b83567](https://github.com/es6kr/skills/commit/3b835677726181d51bef66c89736e63303a04696))
+* promote next-fix staging (30 fixes across 14 skills) ([ee467c0](https://github.com/es6kr/skills/commit/ee467c045d779d7b80d30f160763ec3534a9742b))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.3.11](https://github.com/es6kr/skills/compare/fix-v0.3.10...fix-v0.3.11) (2026-08-09)
+
+
+### Bug Fixes
+
+* declare undeclared skill-to-skill dependencies (7 skills) ([#271](https://github.com/es6kr/skills/issues/271)) ([36a9f9d](https://github.com/es6kr/skills/commit/36a9f9d7c1fac9bb1c4c96b325a067ab92ad0da7))
+* promote accumulated next-fix fixes to main ([95656e9](https://github.com/es6kr/skills/commit/95656e9b551ee0bb77904a0a571d49c53bc01cc9))
+
+## [0.3.10](https://github.com/es6kr/skills/compare/fix-v0.3.9...fix-v0.3.10) (2026-08-05)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([951c1e6](https://github.com/es6kr/skills/commit/951c1e6871e78e226757c6a7ae5ae53efeb7bfb0))
+
+## [0.3.9](https://github.com/es6kr/skills/compare/fix-v0.3.8...fix-v0.3.9) (2026-07-28)
+
+
+### Bug Fixes
+
+* **fix:** add mechanical per-file language gate before Step 2 skill edits ([c457a42](https://github.com/es6kr/skills/commit/c457a428969cff01de0df2e72c06e37387f987a9))
+* **next-fix:** promote staged fixes across hook-kit, next, cleanup, fix-plan ([34f1c67](https://github.com/es6kr/skills/commit/34f1c67beee3a8279e0e80de4ab3a87ba2223d5c))
+* **next,fix,wip:** reduce meta-task over-registration + enforce skill-invocation resume ([beec453](https://github.com/es6kr/skills/commit/beec453da85d70c79ec9403c83259e7a4a28d303))
+* **next,fix:** close the chained-turn next-call gap (12th recurrence) ([dd7c582](https://github.com/es6kr/skills/commit/dd7c58286a355a2451cb9e0a6f08ef1865dbe018))
+* resolve PR [#197](https://github.com/es6kr/skills/issues/197) review findings (CodeRabbit + Copilot + Internal Review) ([b54236a](https://github.com/es6kr/skills/commit/b54236a4fa4b3fef23645dfc3b184916980b7f65))
+* staging bundle — meta-task registration, next-call-gap, bash-guard consolidation, hook-kit FP fixes ([dc1b790](https://github.com/es6kr/skills/commit/dc1b790688808df7649ef390a22caa5f66a8aa40))
+
 ## [0.3.8](https://github.com/es6kr/skills/compare/fix-v0.3.7...fix-v0.3.8) (2026-07-23)
 
 

@@ -1,41 +1,57 @@
-## Description: <br>
-Helps an agent configure and apply personal feed filters using keywords, regular expressions, author blocklists, whitelists, and local rule management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+内容过滤工具 helps individuals manage personal feed filtering with keyword, regular expression, author blocklist, whitelist, and local rule workflows.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and agent operators use this skill to manage single-user feed filtering rules, reduce feed noise, review filtered results, and tune false positives. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run commands, write local filtering rules, and use feed credentials while its execution scope and data handling are unclear. <br>
-Mitigation: Review commands before execution, keep backups of filter-rules.json, use least-privilege feed tokens, and confirm whether feed content is sent to an LLM or external endpoint. <br>
-Risk: Broad keyword or regular-expression rules can hide legitimate feed items. <br>
-Mitigation: Start with narrow rules, use blocked-item review or trace output, and prefer whitelists for trusted authors. <br>
+## Use Case:
 
+Individuals and developers use this skill to configure local feed filtering rules, block noisy authors or keywords, and review filtered content. It is intended for personal single-user feed cleanup rather than multi-account team rule synchronization.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/content-filter-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May describe local rule files, feed filtering commands, blocked-item review steps, and troubleshooting guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence; artifact frontmatter says 1.0.0) <br>
+Risk: The security verdict is suspicious because the skill requests command and file authority and includes activation language for unrelated marketing and content-creation tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for personal feed filtering and local rule management, and review the skill text before installation.
+
+Risk: Suggested shell commands can affect local rule files or interact with feed service endpoints.
+
+Mitigation: Inspect commands before execution, allow only expected filtering commands, and avoid passing untrusted user input directly into shell arguments.
+
+Risk: Feed access tokens or API keys could be exposed if pasted into prompts, hard-coded in configuration, or saved in shared files.
+
+Mitigation: Store tokens in environment variables, use least-privilege credentials, and confirm outputs do not include secrets.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/content-filter-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce local filtering rules, status summaries, debugging guidance, and command suggestions for feed filtering workflows.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence; artifact metadata lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

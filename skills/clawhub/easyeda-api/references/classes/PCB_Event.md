@@ -5,7 +5,7 @@ PCB &amp; 封装 / 事件类
 ## Signature
 
 ```typescript
-declare class PCB_Event 
+export class PCB_Event 
 ```
 
 ## Remarks
@@ -89,6 +89,48 @@ Description
 </td></tr>
 <tr><td>
 
+[addRayTracerEngine3DViewCameraChangeEventListener(id, callFn, onlyOnce)](./PCB_Event.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 新增光线追踪引擎 3D 预览相机变动（拖动 3D 模型）事件监听
+
+
+</td></tr>
+<tr><td>
+
+[addRayTracerEngine3DViewClickMaterialEventListener(id, callFn, onlyOnce)](./PCB_Event.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 新增光线追踪引擎 3D 预览点击材质事件监听
+
+
+</td></tr>
+<tr><td>
+
+[addRealTimeDrcResultEventListener(id, eventType, callFn)](./PCB_Event.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 新增实时 DRC 结果事件监听
+
+
+</td></tr>
+<tr><td>
+
 [isEventListenerAlreadyExist(id)](./PCB_Event.md)
 
 
@@ -132,7 +174,7 @@ Description
 ## Signature
 
 ```typescript
-addCrossProbeSelectEventListener(id: string, callFn: (props: any) => void | Promise<void>): void;
+public addCrossProbeSelectEventListener(id: string, callFn: (props: any) => void | Promise<void>): void;
 ```
 
 ## Parameters
@@ -208,16 +250,7 @@ void
 ## Signature
 
 ```typescript
-addMouseEventListener(id: string, eventType: 'all' | EPCB_MouseEventType, callFn: (eventType: EPCB_MouseEventType, props: [
-        {
-            primitiveId: string;
-            primitiveType: EPCB_PrimitiveType;
-            net?: string;
-            designator?: string;
-            parentComponentPrimitiveId?: string;
-            parentComponentDesignator?: string;
-        }
-    ]) => void | Promise<void>, onlyOnce?: boolean): void;
+public addMouseEventListener(id: string, eventType: 'all' | EPCB_MouseEventType, callFn: (eventType: EPCB_MouseEventType, props: [{ primitiveId: string; primitiveType: EPCB_PrimitiveType; net?: undefined | string; designator?: undefined | string; parentComponentPrimitiveId?: undefined | string; parentComponentDesignator?: undefined | string }]) => void | Promise<void>, onlyOnce?: boolean): void;
 ```
 
 ## Parameters
@@ -261,7 +294,7 @@ eventType
 
 </td><td>
 
-'all' \| EPCB\_MouseEventType
+'all' \| [EPCB\_MouseEventType](../enums/EPCB_MouseEventType.md)
 
 
 </td><td>
@@ -277,7 +310,7 @@ callFn
 
 </td><td>
 
-(eventType: EPCB\_MouseEventType, props: \[ { primitiveId: string; primitiveType: [EPCB\_PrimitiveType](../enums/EPCB_PrimitiveType.md)<!-- -->; net?: string; designator?: string; parentComponentPrimitiveId?: string; parentComponentDesignator?: string; } \]) =&gt; void \| Promise&lt;void&gt;
+(eventType: [EPCB\_MouseEventType](../enums/EPCB_MouseEventType.md)<!-- -->, props: \[{ primitiveId: string; primitiveType: [EPCB\_PrimitiveType](../enums/EPCB_PrimitiveType.md)<!-- -->; net?: undefined \| string; designator?: undefined \| string; parentComponentPrimitiveId?: undefined \| string; parentComponentDesignator?: undefined \| string }\]) =&gt; void \| Promise&lt;void&gt;
 
 
 </td><td>
@@ -325,9 +358,7 @@ void
 ## Signature
 
 ```typescript
-addNetEventListener(id: string, eventType: 'all' | EPCB_NetEventType, callFn: (eventType: EPCB_NetEventType, props: [{
-        net: string;
-    }]) => void | Promise<void>, onlyOnce?: boolean): void;
+public addNetEventListener(id: string, eventType: 'all' | EPCB_NetEventType, callFn: (eventType: EPCB_NetEventType, props: [{ net: string }]) => void | Promise<void>, onlyOnce?: boolean): void;
 ```
 
 ## Parameters
@@ -371,7 +402,7 @@ eventType
 
 </td><td>
 
-'all' \| EPCB\_NetEventType
+'all' \| [EPCB\_NetEventType](../enums/EPCB_NetEventType.md)
 
 
 </td><td>
@@ -387,7 +418,7 @@ callFn
 
 </td><td>
 
-(eventType: EPCB\_NetEventType, props: \[{ net: string; }\]) =&gt; void \| Promise&lt;void&gt;
+(eventType: [EPCB\_NetEventType](../enums/EPCB_NetEventType.md)<!-- -->, props: \[{ net: string }\]) =&gt; void \| Promise&lt;void&gt;
 
 
 </td><td>
@@ -443,16 +474,7 @@ void
 ## Signature
 
 ```typescript
-addPrimitiveEventListener(id: string, eventType: 'all' | EPCB_PrimitiveEventType, callFn: (eventType: EPCB_PrimitiveEventType, props: [
-        {
-            primitiveId: string;
-            primitiveType: EPCB_PrimitiveType;
-            net?: string;
-            designator?: string;
-            parentComponentPrimitiveId?: string;
-            parentComponentDesignator?: string;
-        }
-    ]) => void | Promise<void>, onlyOnce?: boolean): void;
+public addPrimitiveEventListener(id: string, eventType: 'all' | EPCB_PrimitiveEventType, callFn: (eventType: EPCB_PrimitiveEventType, props: [{ primitiveId: string; primitiveType: EPCB_PrimitiveType; net?: undefined | string; designator?: undefined | string; parentComponentPrimitiveId?: undefined | string; parentComponentDesignator?: undefined | string }]) => void | Promise<void>, onlyOnce?: boolean): void;
 ```
 
 ## Parameters
@@ -496,7 +518,7 @@ eventType
 
 </td><td>
 
-'all' \| EPCB\_PrimitiveEventType
+'all' \| [EPCB\_PrimitiveEventType](../enums/EPCB_PrimitiveEventType.md)
 
 
 </td><td>
@@ -512,7 +534,7 @@ callFn
 
 </td><td>
 
-(eventType: EPCB\_PrimitiveEventType, props: \[ { primitiveId: string; primitiveType: [EPCB\_PrimitiveType](../enums/EPCB_PrimitiveType.md)<!-- -->; net?: string; designator?: string; parentComponentPrimitiveId?: string; parentComponentDesignator?: string; } \]) =&gt; void \| Promise&lt;void&gt;
+(eventType: [EPCB\_PrimitiveEventType](../enums/EPCB_PrimitiveEventType.md)<!-- -->, props: \[{ primitiveId: string; primitiveType: [EPCB\_PrimitiveType](../enums/EPCB_PrimitiveType.md)<!-- -->; net?: undefined \| string; designator?: undefined \| string; parentComponentPrimitiveId?: undefined \| string; parentComponentDesignator?: undefined \| string }\]) =&gt; void \| Promise&lt;void&gt;
 
 
 </td><td>
@@ -549,6 +571,282 @@ void
 
 注意：本接口仅扩展有效，在独立脚本环境内调用将始终 `throw Error`
 
+### addraytracerengine3dviewcamerachangeeventlistener
+
+# PCB\_Event.addRayTracerEngine3DViewCameraChangeEventListener() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+新增光线追踪引擎 3D 预览相机变动（拖动 3D 模型）事件监听
+
+## Signature
+
+```typescript
+public addRayTracerEngine3DViewCameraChangeEventListener(id: string, callFn: (props: { position: { x: number; y: number; z: number }; rotation: { x: number; y: number; z: number }; focalLength: number }) => void | Promise<void>, onlyOnce?: boolean): void;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+id
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+事件 ID，用以防止重复注册事件
+
+
+</td></tr>
+<tr><td>
+
+callFn
+
+
+</td><td>
+
+(props: { position: { x: number; y: number; z: number }; rotation: { x: number; y: number; z: number }; focalLength: number }) =&gt; void \| Promise&lt;void&gt;
+
+
+</td><td>
+
+事件触发时的回调函数
+
+
+</td></tr>
+<tr><td>
+
+onlyOnce
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ 是否仅监听一次
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+void
+
+## Remarks
+
+注意：本接口仅扩展有效，在独立脚本环境内调用将始终 `throw Error` ADD since EDA v4
+
+### addraytracerengine3dviewclickmaterialeventlistener
+
+# PCB\_Event.addRayTracerEngine3DViewClickMaterialEventListener() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+新增光线追踪引擎 3D 预览点击材质事件监听
+
+## Signature
+
+```typescript
+public addRayTracerEngine3DViewClickMaterialEventListener(id: string, callFn: (props: { materialId: number; material: any }) => void | Promise<void>, onlyOnce?: boolean): void;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+id
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+事件 ID，用以防止重复注册事件
+
+
+</td></tr>
+<tr><td>
+
+callFn
+
+
+</td><td>
+
+(props: { materialId: number; material: any }) =&gt; void \| Promise&lt;void&gt;
+
+
+</td><td>
+
+事件触发时的回调函数
+
+
+</td></tr>
+<tr><td>
+
+onlyOnce
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ 是否仅监听一次
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+void
+
+## Remarks
+
+注意：本接口仅扩展有效，在独立脚本环境内调用将始终 `throw Error` ADD since EDA v4
+
+### addrealtimedrcresulteventlistener
+
+# PCB\_Event.addRealTimeDrcResultEventListener() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+新增实时 DRC 结果事件监听
+
+## Signature
+
+```typescript
+public addRealTimeDrcResultEventListener(id: string, eventType: 'all', callFn: (eventType: undefined, props: [{ drcResult: any }]) => void | Promise<void>): void;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+id
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+事件 ID，用以防止重复注册事件
+
+
+</td></tr>
+<tr><td>
+
+eventType
+
+
+</td><td>
+
+'all'
+
+
+</td><td>
+
+事件类型
+
+
+</td></tr>
+<tr><td>
+
+callFn
+
+
+</td><td>
+
+(eventType: undefined, props: \[{ drcResult: any }\]) =&gt; void \| Promise&lt;void&gt;
+
+
+</td><td>
+
+事件触发时的回调函数
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+void
+
+## Remarks
+
+注意：本接口仅扩展有效，在独立脚本环境内调用将始终 `throw Error`
+
 ### iseventlisteneralreadyexist
 
 # PCB\_Event.isEventListenerAlreadyExist() method
@@ -558,7 +856,7 @@ void
 ## Signature
 
 ```typescript
-isEventListenerAlreadyExist(id: string): boolean;
+public isEventListenerAlreadyExist(id: string): boolean;
 ```
 
 ## Parameters
@@ -614,7 +912,7 @@ boolean
 ## Signature
 
 ```typescript
-removeEventListener(id: string): boolean;
+public removeEventListener(id: string): boolean;
 ```
 
 ## Parameters

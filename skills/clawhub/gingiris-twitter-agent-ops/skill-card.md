@@ -1,45 +1,67 @@
-## Description: <br>
-Turns an AI agent into a Twitter/X content-operations assistant that drafts on-brand posts, manages source-backed scheduling, runs pre-publish quality checks, and supports weekly analytics review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill provides a Twitter/X operations SOP for AI agents to help run owned accounts with onboarding, content-pool tracking, pre-publish checks, posting controls, daily logs, and weekly reports.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-Creators, marketers, and account operators use this skill to have an AI agent plan, draft, quality-check, and review Twitter/X content while preserving the account owner's voice and requiring traceable sources for claims. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Drafts or schedules could be posted without proper account-owner authorization or human review. <br>
-Mitigation: Require explicit human approval before publishing and verify authorization from the account owner before connecting any posting tool. <br>
-Risk: Twitter/X automation rules, rate limits, or platform policies could be violated if the workflow is connected directly to posting automation. <br>
-Mitigation: Follow X/Twitter automation rules and rate limits, and keep the skill as a planning and drafting aid unless compliant posting controls are in place. <br>
-Risk: Voice samples, analytics logs, and account data may contain private or sensitive information. <br>
-Mitigation: Protect private voice samples and analytics logs, minimize retained data, and keep credentials outside the skill. <br>
+## Use Case:
 
+Creators, founders, marketers, and operators use this skill to help an agent manage an owned Twitter/X account without losing track of publishing state, content inventory, credential boundaries, or performance review tasks. It is intended for guided operations where public posts, logs, and reports remain subject to user approval and review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gingiris-1031/gingiris-twitter-agent-ops) <br>
-- [English reference README](references/en/README.md) <br>
-- [Japanese reference README](references/ja/README.md) <br>
-- [Korean reference README](references/ko/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with templates, checklists, schedules, and reporting tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces content-operation guidance and draft workflow artifacts; does not include executable posting code or credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata) <br>
+Risk: Automated public posting can publish incorrect, unwanted, or brand-damaging content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require human approval before every post and enforce the skill's pre-publish checklist before using Twitter/X or Buffer publishing paths.
+
+Risk: Credential-adjacent account handling can expose Twitter/X API keys, OAuth1 tokens, or Buffer tokens if they are written into working files.
+
+Mitigation: Store credentials in a secret manager or protected environment variables, and keep credential values out of MASTER-STATUS.md, logs, reports, and chat transcripts.
+
+Risk: Persistent operational logs can retain private conversations, account data, or unpublished content longer than intended.
+
+Mitigation: Confirm the storage location before use, limit logs to necessary operational facts, and define deletion or retention rules for private or sensitive material.
+
+Risk: Publishing decisions based on stale or unverified metrics can mislead readers.
+
+Mitigation: Use the source-index and data-verification checks described by the skill, and remove or qualify numbers that cannot be traced to an approved source.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/gingiris-twitter-agent-ops)
+- [Publisher profile](https://clawhub.ai/user/gingiris-1031)
+- [English README](artifact/references/en/README.md)
+- [Japanese README](artifact/references/ja/README.md)
+- [Korean README](artifact/references/ko/README.md)
+- [Hugging Face dataset](https://huggingface.co/datasets/Gingiris/gingiris-twitter-agent-ops)
+- [Gingiris tools](https://gingiris.tools/skills/)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown SOP with checklists, templates, status-file structures, and inline API command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces operational guidance, tweet workflow prompts, daily log templates, weekly report templates, and publishing safety checks for an agent-managed Twitter/X workflow.]
+
+## Skill Version(s):
+
+2.0.2 (source: server release metadata; artifact frontmatter reports 2.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,61 @@
-## Description: <br>
-Claude Session helps agents manage Claude Code sessions, including session lookup, listing, search, summarization, analysis, archiving, classification, cleanup, migration, repair, renaming, splitting, compression, hook setup, and session URL generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Claude Session helps agents inspect, search, summarize, archive, repair, migrate, and otherwise manage local Claude Code session files.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect, organize, summarize, repair, move, archive, and clean Claude Code session transcripts while keeping session IDs, project mappings, and related metadata manageable. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Session transcripts, IDs, and file paths may be forwarded to memory, RAG receivers, or other agents. <br>
-Mitigation: Review and redact sensitive transcript content before import, archive RAG dispatch, or --sync memory writes; require explicit approval for any external handoff. <br>
-Risk: Workflows can mutate, move, archive, or permanently delete Claude session files. <br>
-Mitigation: Use dry-run or check-only modes where available, verify the exact target session, avoid operating on the active session, and confirm backups before destructive operations. <br>
-Risk: The install workflow can register a persistent hook that injects session metadata into future prompts. <br>
-Mitigation: Install the hook only when automatic session ID context is desired, review the generated settings entry, and remove the hook when it is no longer needed. <br>
+## Use Case:
 
+Developers and agent operators use this skill to manage Claude Code session transcripts, including finding session IDs, listing and searching sessions, summarizing prior work, repairing damaged JSONL chains, moving sessions between projects, and archiving or deleting sessions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/claude-session) <br>
-- [Session topic index](artifact/SKILL.md) <br>
-- [Archive workflow](artifact/archive.md) <br>
-- [Import workflow](artifact/import.md) <br>
-- [Install hook workflow](artifact/install.md) <br>
-- [Repair workflow](artifact/repair.md) <br>
-- [Purge workflow](artifact/purge.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON snippets, and session-management instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or execute file operations against Claude session JSONL files, hooks, and memory or RAG handoffs when the user requests those workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release metadata and artifact CHANGELOG, released 2026-07-23; artifact frontmatter metadata.version is 0.1.5) <br>
+Risk: The skill can modify private local session files through repair, move, archive, clean, purge, and destroy workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact target session and prefer dry runs or backups before allowing destructive or in-place operations.
+
+Risk: Session-derived content can be routed into other agents, memory, or RAG stores.
+
+Mitigation: Review archive, import, analyze, RAG, Serena memory, and agent-transfer behavior before use, especially when sessions may contain sensitive data.
+
+Risk: The security verdict is suspicious because the skill has real session-management capabilities with access to local private transcripts.
+
+Mitigation: Install only when the operator explicitly wants agent-managed session maintenance and accepts the local file access and routing behavior described by the security evidence.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/claude-session)
+- [Skill overview](artifact/SKILL.md)
+- [Archive guide](artifact/archive.md)
+- [Repair guide](artifact/repair.md)
+- [Session import guide](artifact/import.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Some workflows can lead the agent to read, move, modify, repair, archive, or delete local session JSONL files.]
+
+## Skill Version(s):
+
+0.8.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

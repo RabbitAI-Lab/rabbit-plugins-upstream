@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class LIB_Device 
+export class LIB_Device 
 ```
 
 ## Methods
@@ -138,6 +138,20 @@ Description
 
 
 </td></tr>
+<tr><td>
+
+[searchByProperties(properties, libraryUuid, classification, symbolType, itemsOfPage, page)](./LIB_Device.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 使用属性精确搜索器件
+
+
+</td></tr>
 </tbody></table>
 
 ---
@@ -155,7 +169,7 @@ Description
 ## Signature
 
 ```typescript
-copy(deviceUuid: string, libraryUuid: string, targetLibraryUuid: string, targetClassification?: ILIB_ClassificationIndex | Array<string>, newDeviceName?: string): Promise<string | undefined>;
+public copy(deviceUuid: string, libraryUuid: string, targetLibraryUuid: string, targetClassification?: ILIB_ClassificationIndex | Array<string>, newDeviceName?: string): Promise<string | undefined>;
 ```
 
 ## Parameters
@@ -277,24 +291,7 @@ Promise&lt;string \| undefined&gt;
 ## Signature
 
 ```typescript
-create(libraryUuid: string, deviceName: string, classification?: ILIB_ClassificationIndex | Array<string>, association?: {
-        symbolType?: ELIB_SymbolType;
-        symbolUuid?: string;
-        symbol?: {
-            uuid: string;
-            libraryUuid: string;
-        };
-        footprintUuid?: string;
-        footprint?: {
-            uuid: string;
-            libraryUuid: string;
-        };
-        model3D?: {
-            uuid: string;
-            libraryUuid: string;
-        };
-        imageData?: File | Blob;
-    }, description?: string, property?: ILIB_DeviceExtendPropertyItem): Promise<string | undefined>;
+public create(libraryUuid: string, deviceName: string, classification?: ILIB_ClassificationIndex | Array<string>, association?: { symbolType?: undefined | ELIB_SymbolType.COMPONENT | ELIB_SymbolType.NET_FLAG | ELIB_SymbolType.NET_PORT | ELIB_SymbolType.DRAWING | ELIB_SymbolType.NON_ELECTRICAL | ELIB_SymbolType.SHORT_CIRCUIT_FLAG | ELIB_SymbolType.OFF_PAGE_CONNECTOR | ELIB_SymbolType.DIFFERENTIAL_PAIRS_FLAG | ELIB_SymbolType.CBB_SYMBOL; symbolUuid?: undefined | string; symbol?: undefined | { uuid: string; libraryUuid: string }; footprintUuid?: undefined | string; footprint?: undefined | { uuid: string; libraryUuid: string }; model3D?: undefined | { uuid: string; libraryUuid: string }; imageData?: undefined | File | Blob }, description?: string, property?: ILIB_DeviceExtendPropertyItem): Promise<string | undefined>;
 ```
 
 ## Parameters
@@ -370,7 +367,7 @@ association
 
 </td><td>
 
-{ symbolType?: [ELIB\_SymbolType](../enums/ELIB_SymbolType.md)<!-- -->; symbolUuid?: string; symbol?: { uuid: string; libraryUuid: string; }; footprintUuid?: string; footprint?: { uuid: string; libraryUuid: string; }; model3D?: { uuid: string; libraryUuid: string; }; imageData?: File \| Blob; }
+{ symbolType?: undefined \| [ELIB\_SymbolType.COMPONENT](../enums/ELIB_SymbolType.md) \| [ELIB\_SymbolType.NET\_FLAG](../enums/ELIB_SymbolType.md) \| [ELIB\_SymbolType.NET\_PORT](../enums/ELIB_SymbolType.md) \| [ELIB\_SymbolType.DRAWING](../enums/ELIB_SymbolType.md) \| [ELIB\_SymbolType.NON\_ELECTRICAL](../enums/ELIB_SymbolType.md) \| [ELIB\_SymbolType.SHORT\_CIRCUIT\_FLAG](../enums/ELIB_SymbolType.md) \| [ELIB\_SymbolType.OFF\_PAGE\_CONNECTOR](../enums/ELIB_SymbolType.md) \| [ELIB\_SymbolType.DIFFERENTIAL\_PAIRS\_FLAG](../enums/ELIB_SymbolType.md) \| [ELIB\_SymbolType.CBB\_SYMBOL](../enums/ELIB_SymbolType.md)<!-- -->; symbolUuid?: undefined \| string; symbol?: undefined \| { uuid: string; libraryUuid: string }; footprintUuid?: undefined \| string; footprint?: undefined \| { uuid: string; libraryUuid: string }; model3D?: undefined \| { uuid: string; libraryUuid: string }; imageData?: undefined \| File \| Blob }
 
 
 </td><td>
@@ -432,7 +429,7 @@ Promise&lt;string \| undefined&gt;
 ## Signature
 
 ```typescript
-delete(deviceUuid: string, libraryUuid: string): Promise<boolean>;
+public delete(deviceUuid: string, libraryUuid: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -506,7 +503,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-get(deviceUuid: string, libraryUuid?: string): Promise<ILIB_DeviceItem | undefined>;
+public get(deviceUuid: string, libraryUuid?: string): Promise<ILIB_DeviceItem | undefined>;
 ```
 
 ## Parameters
@@ -580,7 +577,7 @@ Promise&lt;[ILIB\_DeviceItem](../interfaces/ILIB_DeviceItem.md) \| undefined&gt;
 ## Signature
 
 ```typescript
-getByLcscIds<T extends boolean>(lcscIds: string, libraryUuid?: string, allowMultiMatch?: T): Promise<T extends true ? ILIB_DeviceSearchItem | undefined : Array<ILIB_DeviceSearchItem>>;
+public getByLcscIds<T extends boolean>(lcscIds: string, libraryUuid?: string, allowMultiMatch?: T): Promise<T extends true ? ILIB_DeviceSearchItem | undefined : Array<ILIB_DeviceSearchItem>>;
 ```
 
 ## Parameters
@@ -678,7 +675,7 @@ Promise&lt;T extends true ? [ILIB\_DeviceSearchItem](../interfaces/ILIB_DeviceSe
 ## Signature
 
 ```typescript
-getByLcscIds(lcscIds: Array<string>, libraryUuid?: string, allowMultiMatch?: boolean): Promise<Array<ILIB_DeviceSearchItem>>;
+public getByLcscIds(lcscIds: Array<string>, libraryUuid?: string, allowMultiMatch?: boolean): Promise<Array<ILIB_DeviceSearchItem>>;
 ```
 
 ## Parameters
@@ -776,36 +773,7 @@ Promise&lt;Array&lt;[ILIB\_DeviceSearchItem](../interfaces/ILIB_DeviceSearchItem
 ## Signature
 
 ```typescript
-modify(deviceUuid: string, libraryUuid: string, deviceName?: string, classification?: ILIB_ClassificationIndex | Array<string> | null, association?: {
-        symbolUuid?: string;
-        symbol?: {
-            uuid: string;
-            libraryUuid: string;
-        };
-        footprintUuid?: string | null;
-        footprint?: {
-            uuid: string;
-            libraryUuid: string;
-        } | null;
-        model3D?: {
-            uuid: string;
-            libraryUuid: string;
-        } | null;
-        imageData?: File | Blob | null;
-    }, description?: string | null, property?: {
-        name?: string | null;
-        designator?: string;
-        addIntoBom?: boolean;
-        addIntoPcb?: boolean;
-        net?: string;
-        manufacturer?: string | null;
-        manufacturerId?: string | null;
-        supplier?: string | null;
-        supplierId?: string | null;
-        otherProperty?: {
-            [key: string]: boolean | number | string | undefined | null;
-        };
-    }): Promise<boolean>;
+public modify(deviceUuid: string, libraryUuid: string, deviceName?: string, classification?: ILIB_ClassificationIndex | Array<string> | null, association?: { symbolUuid?: undefined | string; symbol?: undefined | { uuid: string; libraryUuid: string }; footprintUuid?: undefined | null | string; footprint?: undefined | null | { uuid: string; libraryUuid: string }; model3D?: undefined | null | { uuid: string; libraryUuid: string }; imageData?: undefined | null | File | Blob }, description?: string | null, property?: { name?: undefined | null | string; designator?: undefined | string; addIntoBom?: undefined | false | true; addIntoPcb?: undefined | false | true; net?: undefined | string; manufacturer?: undefined | null | string; manufacturerId?: undefined | null | string; supplier?: undefined | null | string; supplierId?: undefined | null | string; otherProperty?: undefined | Record<string, undefined | null | string | number | false | true> }): Promise<boolean>;
 ```
 
 ## Parameters
@@ -897,7 +865,7 @@ association
 
 </td><td>
 
-\{ symbolUuid?: string; symbol?: \{ uuid: string; libraryUuid: string; \}; footprintUuid?: string \| null; footprint?: \{ uuid: string; libraryUuid: string; \} \| null; model3D?: \{ uuid: string; libraryUuid: string; \} \| null; imageData?: File \| Blob \| null; \}
+\{ symbolUuid?: undefined \| string; symbol?: undefined \| \{ uuid: string; libraryUuid: string \}; footprintUuid?: undefined \| null \| string; footprint?: undefined \| null \| \{ uuid: string; libraryUuid: string \}; model3D?: undefined \| null \| \{ uuid: string; libraryUuid: string \}; imageData?: undefined \| null \| File \| Blob \}
 
 
 </td><td>
@@ -929,7 +897,7 @@ property
 
 </td><td>
 
-\{ name?: string \| null; designator?: string; addIntoBom?: boolean; addIntoPcb?: boolean; net?: string; manufacturer?: string \| null; manufacturerId?: string \| null; supplier?: string \| null; supplierId?: string \| null; otherProperty?: \{ \[key: string\]: boolean \| number \| string \| undefined \| null; \}; \}
+{ name?: undefined \| null \| string; designator?: undefined \| string; addIntoBom?: undefined \| false \| true; addIntoPcb?: undefined \| false \| true; net?: undefined \| string; manufacturer?: undefined \| null \| string; manufacturerId?: undefined \| null \| string; supplier?: undefined \| null \| string; supplierId?: undefined \| null \| string; otherProperty?: undefined \| Record&lt;string, undefined \| null \| string \| number \| false \| true&gt; }
 
 
 </td><td>
@@ -963,7 +931,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-search(key: string, libraryUuid?: string, classification?: ILIB_ClassificationIndex | Array<string>, symbolType?: ELIB_SymbolType, itemsOfPage?: number, page?: number): Promise<Array<ILIB_DeviceSearchItem>>;
+public search(key: string, libraryUuid?: string, classification?: ILIB_ClassificationIndex | Array<string>, symbolType?: ELIB_SymbolType, itemsOfPage?: number, page?: number): Promise<Array<ILIB_DeviceSearchItem>>;
 ```
 
 ## Parameters
@@ -1029,6 +997,144 @@ classification
 </td><td>
 
 _(Optional)_ 分类，默认为全部
+
+
+</td></tr>
+<tr><td>
+
+symbolType
+
+
+</td><td>
+
+[ELIB\_SymbolType](../enums/ELIB_SymbolType.md)
+
+
+</td><td>
+
+_(Optional)_ 符号类型，默认为全部
+
+
+</td></tr>
+<tr><td>
+
+itemsOfPage
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ 一页搜索结果的数量
+
+
+</td></tr>
+<tr><td>
+
+page
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ 页数
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;Array&lt;[ILIB\_DeviceSearchItem](../interfaces/ILIB_DeviceSearchItem.md)<!-- -->&gt;&gt;
+
+搜索到的器件属性的列表
+
+### searchbyproperties
+
+# LIB\_Device.searchByProperties() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+使用属性精确搜索器件
+
+## Signature
+
+```typescript
+public searchByProperties(properties: ILIB_DevicePropertiesForSearch, libraryUuid?: string, classification?: Array<string>, symbolType?: ELIB_SymbolType, itemsOfPage?: number, page?: number): Promise<Array<ILIB_DeviceSearchItem>>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+properties
+
+
+</td><td>
+
+[ILIB\_DevicePropertiesForSearch](../interfaces/ILIB_DevicePropertiesForSearch.md)
+
+
+</td><td>
+
+属性
+
+
+</td></tr>
+<tr><td>
+
+libraryUuid
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ 库 UUID，默认为系统库，可以使用 [LIB\_LibrariesList](./LIB_LibrariesList.md) 内的接口获取
+
+
+</td></tr>
+<tr><td>
+
+classification
+
+
+</td><td>
+
+Array&lt;string&gt;
+
+
+</td><td>
+
+_(Optional)_ 分类，默认为全部 ADD since EDA v4
 
 
 </td></tr>

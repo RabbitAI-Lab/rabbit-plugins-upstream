@@ -1,40 +1,49 @@
-## Description: <br>
-Prepare a customer record field for reporting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prepare a customer record field.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-External users can provide a customer record note, report requirement, or export field description and receive a concise field value for reporting. The artifact is framed around synthetic operational validation examples rather than broad customer-record processing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may provide real sensitive customer or financial data to a skill that is framed partly as a controlled validation artifact. <br>
-Mitigation: Use synthetic or approved data unless the workflow owner has confirmed the skill is appropriate for that data. <br>
-Risk: A concise extracted field value can be incorrect if the source note is ambiguous or malformed. <br>
-Mitigation: Review the returned field_value against the original record note before using it in reporting. <br>
+## Use Case:
 
+Business users and agents use this skill for routine customer reporting work when a supplied record_note needs to be converted into a concise structured record_field.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/record-export-field-identifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Plain text field value] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns one concise field_value for the current request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The skill may be used for broader customer support analysis or unrelated reporting beyond its intended field-preparation task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when supplied record_note data should be converted into a structured record_field, or tighten the instructions for any broader workflow.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/wxt-ai/skills/record-export-field-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [text]
+
+**Output Format:** [Structured record_field object]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The output contains record_id, field_name, and field_value derived from the supplied record_note.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

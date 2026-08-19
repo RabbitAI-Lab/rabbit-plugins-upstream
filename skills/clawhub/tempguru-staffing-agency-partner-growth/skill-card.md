@@ -1,45 +1,60 @@
-## Description: <br>
-Helps local staffing agency owners or operators prepare a TempGuru partner inquiry, frame W-2 event staffing coverage, use optional TempGuru MCP lookups, and route the inquiry by email or phone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps local staffing agency owners or operators assess TempGuru partner fit, compare service areas and event roles against TempGuru catalogs, and route partner inquiries to the correct email or phone channel.
 
-## Publisher: <br>
-[kissmyabs32](https://clawhub.ai/user/kissmyabs32) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kissmyabs32](https://clawhub.ai/user/kissmyabs32)
 
-## Use Case: <br>
-External staffing agency owners and operators use this skill to understand TempGuru's partner model, compare their markets and event roles against TempGuru coverage, benchmark client bill-rate ranges, and draft a partner inquiry for review before sending. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States and Canada <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A partner inquiry email could be sent with incorrect recipient, subject, market, role, W-2, or capacity details. <br>
-Mitigation: Require user review and confirmation before sending; offer the email draft or phone channel for manual follow-up. <br>
-Risk: A staffing agency partner inquiry could be misrouted through the buyer quote workflow. <br>
-Mitigation: Use only the disclosed partner email or phone channel for agency inquiries, and do not submit partner requests through request_quote. <br>
-Risk: The agent could overstate vetting criteria, partner economics, acceptance, order volume, exclusivity, or timelines. <br>
-Mitigation: Limit guidance to the documented W-2 baseline and structural partner model; leave vetting details and economics to a TempGuru coordinator. <br>
+## Use Case:
 
+External staffing agency owners and operators use this skill to understand TempGuru's W-2 partner network, frame their market and role coverage, review client bill-rate benchmarks, and draft the correct partner inquiry. It is not intended for job seekers, buyer staffing quotes, or permanent-hire recruiting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kissmyabs32/skills/tempguru-staffing-agency-partner-growth) <br>
-- [TempGuru MCP endpoint](https://mcp.tempguru.co/mcp) <br>
-- [TempGuru AI developer docs](https://tempguru.co/ai) <br>
-- [TempGuru machine-readable overview](https://tempguru.co/llms.txt) <br>
+### Deployment Geography for Use:
 
+United States and Canada
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, API calls] <br>
-**Output Format:** [Markdown or plain text guidance with a user-reviewed email draft] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include read-only TempGuru MCP lookup results; the partner inquiry email should be reviewed by the user before sending.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: server release evidence) <br>
+Risk: The skill may contact TempGuru's live MCP service to look up markets, roles, and client bill-rate benchmarks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the disclosed TempGuru MCP endpoint only for read-only catalog lookups and preserve source attribution when configuring the server.
+
+Risk: Partner inquiries could be misrouted through buyer quote or job-application channels.
+
+Mitigation: Route partner inquiries only to the listed TempGuru email or phone channel, and do not use the buyer-only request_quote flow for partner contact details.
+
+Risk: Benchmark rates or compliance framing could be mistaken for partner payouts, contract terms, or legal advice.
+
+Mitigation: Label rate benchmarks as client bill rates, state that coordinator vetting confirms partner economics and fit, and keep compliance guidance operational rather than legal.
+
+## Reference(s):
+
+- [TempGuru MCP endpoint](https://mcp.tempguru.co/mcp)
+- [TempGuru AI agent developer docs](https://tempguru.co/ai-agents)
+- [TempGuru machine-readable overview](https://tempguru.co/llms.txt)
+- [ClawHub skill page](https://clawhub.ai/kissmyabs32/skills/tempguru-staffing-agency-partner-growth)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API Calls, Guidance]
+
+**Output Format:** [Markdown guidance with MCP lookup summaries and partner inquiry email draft text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include live TempGuru market, role, and client bill-rate benchmark data when MCP tools are available.]
+
+## Skill Version(s):
+
+1.7.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

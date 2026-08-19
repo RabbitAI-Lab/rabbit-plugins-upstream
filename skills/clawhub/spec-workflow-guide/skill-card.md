@@ -1,44 +1,50 @@
-## Description: <br>
-Guides agents through requirements, technical design, and task planning before medium-to-large coding changes, especially when work spans modules or acceptance criteria are unclear. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when medium-to-large changes need explicit requirements, technical design, and task planning before implementation, especially for multi-module work, unclear acceptance criteria, or architecture-heavy requests.
 
-## Publisher: <br>
-[binggg](https://clawhub.ai/user/binggg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[binggg](https://clawhub.ai/user/binggg)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to have an agent clarify requirements, document design decisions, and prepare implementation tasks before starting substantial or ambiguous coding work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can slow larger tasks by requiring requirements, design, and task confirmation before coding. <br>
-Mitigation: Apply it to medium-to-large or unclear work, and skip the full workflow for small, low-risk changes with clear acceptance criteria. <br>
-Risk: Planning documents can capture incorrect scope when the request is underspecified. <br>
-Mitigation: Ask follow-up questions for core product behavior and require confirmation before moving from requirements to design, tasks, and execution. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to decide when structured requirements, design, and task planning are needed before implementation. It guides medium-to-large or unclear coding work through documented requirements, architecture, tasks, and user confirmation before execution.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/binggg/skills/spec-workflow-guide) <br>
-- [CloudBase main entry](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md) <br>
-- [Spec workflow raw source](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/spec-workflow/SKILL.md) <br>
-- [UI design sibling reference](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/ui-design/SKILL.md) <br>
-- [Data model sibling reference](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/data-model-creation/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown planning documents and implementation checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce requirements.md, design.md, and tasks.md under a specs directory before implementation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.18.14 (source: ClawHub release evidence; artifact frontmatter reports 2.24.1) <br>
+Risk: The workflow can add planning and confirmation steps that slow down small or already-clear coding requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill's skip criteria for small, low-risk, precise requests and reserve the full workflow for medium-to-large, unclear, multi-module, or architecture-heavy work.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/binggg/skills/spec-workflow-guide)
+- [ClawHub publisher profile](https://clawhub.ai/user/binggg)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown documents and structured implementation checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce requirements.md, design.md, and tasks.md files under specs/<spec_name>/ for larger work.]
+
+## Skill Version(s):
+
+1.18.31 (source: server release metadata; artifact frontmatter reports 2.28.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

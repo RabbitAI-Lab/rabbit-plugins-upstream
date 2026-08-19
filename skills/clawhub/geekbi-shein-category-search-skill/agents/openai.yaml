@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云 SHEIN 类目搜索"
+  short_description: "搜索和分析 SHEIN 类目，判断市场规模、供需与品类机会"
+  default_prompt: "使用 $geekbi-shein-category-search-skill 搜索并分析 SHEIN 类目机会。"

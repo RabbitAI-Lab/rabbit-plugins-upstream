@@ -1,43 +1,56 @@
-## Description: <br>
-A professional pipeline for building everything from a core mark to a complete brand visual system, ensuring creative quality, execution consistency, and shippable delivery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A professional pipeline for building everything from a core mark to a complete brand visual system, ensuring creative quality, execution consistency, and shippable delivery.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, designers, and creative agents use this skill to plan and execute a stepwise logo and brand identity workflow, from requirement gathering through core mark design, derivatives, and brand system delivery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and referenced local media files may be sent to dLazy's cloud service. <br>
-Mitigation: Avoid submitting sensitive brand assets unless cloud processing is acceptable for the project. <br>
-Risk: The dLazy CLI can save an API key under ~/.dlazy/config.json. <br>
-Mitigation: Use npx or DLAZY_API_KEY for temporary use, and rotate or revoke keys when they are no longer needed. <br>
+## Use Case:
 
+External users, designers, and brand teams use this skill to plan and execute a staged logo and brand-system workflow, from requirements gathering through core mark concepts, derivatives, applications, and final delivery checks.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-logo-branding-system) <br>
-- [dLazy CLI Homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands, phased design rationale, confirmation prompts, and generated asset URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stepwise execution with user confirmation before image generation and downstream brand derivatives.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: frontmatter and server release evidence) <br>
+Risk: The workflow uses dLazy cloud services and may send prompts and referenced media to dLazy endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with accounts and data-handling terms appropriate for the assets being submitted; avoid confidential client assets unless permitted.
+
+Risk: The workflow requires a dLazy API key that may be stored in local CLI configuration or passed through an environment variable.
+
+Mitigation: Protect the API key, rotate or revoke it through the dLazy dashboard when needed, and avoid exposing it in shared logs or files.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-logo-branding-system)
+- [dLazy CLI Source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and generated asset URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require npm or npx, dLazy CLI authentication, and user confirmation before each generation step.]
+
+## Skill Version(s):
+
+1.2.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

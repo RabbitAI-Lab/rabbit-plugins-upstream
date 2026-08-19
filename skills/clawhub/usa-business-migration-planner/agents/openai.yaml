@@ -1,0 +1,7 @@
+interface:
+  display_name: "USA Business Migration Planner"
+  short_description: "Helps with People repeatedly need a practical, repeatable way..."
+  default_prompt: "Use $usa-business-migration-planner to help me People repeatedly need a practical, repeatable way to handle 我们做了一款专注于股票投资与投研领域的垂类 AI Agent，评论区送 5 个价值 ¥1000+ 的 Pro 年付会员."
+
+policy:
+  allow_implicit_invocation: true

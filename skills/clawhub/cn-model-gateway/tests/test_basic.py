@@ -5,17 +5,20 @@ import sys
 import os
 import unittest
 from pathlib import Path
+from unittest.mock import patch, MagicMock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from src.adapters.base import ChatMessage, BaseAdapter, ChatResponse, ContentChunk
-from src.router import ModelRouter, ERROR_PARAM_INVALID, ERROR_RATE_LIMITED, ERROR_INTERNAL
+from src.adapters.base import ChatMessage, BaseAdapter, ChatResponse, ContentChunk, ToolCall
+from src.router import ModelRouter, ERROR_PARAM_INVALID, ERROR_RATE_LIMITED, ERROR_INTERNAL, ENV_KEY_MAP
 from src.monitor import get_hardware_info, compute_concurrency_limit, Monitor
 from src.mcp_server import MCPServer
 from src.frameworks import (
     LangChainToolAdapter, AutoGPTPluginAdapter, CrewAIToolAdapter,
     CozePluginAdapter, DifyToolAdapter,
 )
+from src.benchmark import BenchmarkSuite, QUESTION_BANK
+from src.price_tracker import PriceTracker, DEFAULT_PRICES
 
 
 class TestChatMessage(unittest.TestCase):
@@ -105,8 +108,11 @@ class TestMCPServer(unittest.TestCase):
         tools = resp["result"]["tools"]
         tool_names = [t["name"] for t in tools]
         self.assertIn("ask_model", tool_names)
-        self.assertIn("compare_models", tool_names)
+        self.assertIn("describe_image", tool_names)
         self.assertIn("list_providers", tool_names)
+        self.assertIn("health_check", tool_names)
+        # v1.5.0: compare_models merged into ask_model
+        self.assertNotIn("compare_models", tool_names)
 
     def test_resources_list(self):
         req = {"jsonrpc": "2.0", "id": 3, "method": "resources/list", "params": {}}
@@ -192,6 +198,287 @@ class TestFrameworkAdapters(unittest.TestCase):
         adapter = DifyToolAdapter(self.router)
         result = adapter.handle_dify_request("unknown_tool", {})
         self.assertIn("未知工具", result)
+
+
+class TestBenchmark(unittest.TestCase):
+    def test_question_bank_has_50_questions(self):
+        total = sum(len(qs) for qs in QUESTION_BANK.values())
+        self.assertEqual(total, 50)
+
+    def test_question_bank_has_5_dimensions(self):
+        # 5 question-based dimensions (speed is measured by runner, not questions)
+        self.assertEqual(len(QUESTION_BANK), 5)
+
+    def test_benchmark_suite_instantiation(self):
+        suite = BenchmarkSuite()
+        self.assertIsNotNone(suite)
+
+    def test_benchmark_suite_dimensions(self):
+        suite = BenchmarkSuite()
+        self.assertEqual(len(suite.DIMENSIONS), 6)
+
+
+class TestPriceTracker(unittest.TestCase):
+    def test_price_tracker_instantiation(self):
+        tracker = PriceTracker()
+        self.assertIsNotNone(tracker)
+
+    def test_default_prices_have_10_providers(self):
+        self.assertEqual(len(DEFAULT_PRICES), 10)
+
+    def test_price_table_generation(self):
+        tracker = PriceTracker()
+        table = tracker.generate_price_table()
+        self.assertIn("Provider", table)
+        self.assertIn("Input", table)
+
+    def test_predict_cost(self):
+        tracker = PriceTracker()
+        result = tracker.predict_cost({"deepseek": 1000000})
+        self.assertIn("total_estimated_cost", result)
+        self.assertIn("predictions", result)
+
+
+class TestEnvVarApiKey(unittest.TestCase):
+    """Tests for environment variable API key reading (v1.4.0)."""
+
+    def test_env_key_map_has_all_providers(self):
+        """All 10 providers should have an env var mapping."""
+        expected = {"deepseek", "tongyi", "zhipu", "kimi", "hunyuan", "doubao",
+                    "minimax", "lingyi", "baichuan", "stepfun"}
+        self.assertEqual(set(ENV_KEY_MAP.keys()), expected)
+
+    @patch.dict(os.environ, {"DEEPSEEK_API_KEY": "env-key-123"})
+    def test_register_all_uses_env_var(self):
+        """register_all should read api_key from environment variable."""
+        router = ModelRouter()
+        # Config without api_key, but env var set
+        config = {"deepseek": {}}
+        availability = router.register_all(config)
+        self.assertTrue(availability["deepseek"])
+
+    def test_register_all_fallback_to_config(self):
+        """register_all should fallback to config.json when env var is empty."""
+        router = ModelRouter()
+        config = {"deepseek": {"api_key": "config-key-456"}}
+        # Make sure env var is not set
+        with patch.dict(os.environ, {}, clear=True):
+            # Clear any DEEPSEEK_API_KEY that might be set
+            env_backup = os.environ.pop("DEEPSEEK_API_KEY", None)
+            try:
+                availability = router.register_all(config)
+                self.assertTrue(availability["deepseek"])
+            finally:
+                if env_backup:
+                    os.environ["DEEPSEEK_API_KEY"] = env_backup
+
+
+class TestFailover(unittest.TestCase):
+    """Tests for auto mode failover (v1.4.0)."""
+
+    def test_auto_select_returns_string(self):
+        """auto_select should return a provider name string."""
+        router = ModelRouter()
+        result = router.auto_select()
+        # With no adapters, should return None
+        self.assertIsNone(result)
+
+    def test_router_has_timeout_param(self):
+        """ModelRouter should accept timeout parameter."""
+        router = ModelRouter(timeout=60)
+        self.assertEqual(router._timeout, 60)
+
+    def test_router_has_failover_param(self):
+        """ModelRouter should accept failover parameter."""
+        router = ModelRouter(failover=False)
+        self.assertFalse(router._failover)
+
+    def test_router_default_timeout_30(self):
+        """Default timeout should be 30 seconds."""
+        router = ModelRouter()
+        self.assertEqual(router._timeout, 30)
+
+    def test_router_default_failover_true(self):
+        """Default failover should be True."""
+        router = ModelRouter()
+        self.assertTrue(router._failover)
+
+    def test_capability_score_default(self):
+        """Unknown provider should have default score 0.5."""
+        router = ModelRouter()
+        self.assertEqual(router._get_capability_score("unknown"), 0.5)
+
+    def test_health_cache_ttl(self):
+        """Health check cache should expire after TTL."""
+        from src.router import HEALTH_CHECK_CACHE_TTL
+        self.assertEqual(HEALTH_CHECK_CACHE_TTL, 60)
+
+
+class TestWALMode(unittest.TestCase):
+    """Tests for SQLite WAL mode (v1.4.0)."""
+
+    def test_monitor_wal_enabled(self):
+        """Monitor database should enable WAL mode."""
+        monitor = Monitor()
+        import sqlite3
+        with sqlite3.connect(monitor.db_path) as conn:
+            result = conn.execute("PRAGMA journal_mode").fetchone()
+        self.assertEqual(result[0], "wal")
+
+    def test_benchmark_wal_enabled(self):
+        """Benchmark database should enable WAL mode."""
+        suite = BenchmarkSuite()
+        import sqlite3
+        with sqlite3.connect(suite.db_path) as conn:
+            result = conn.execute("PRAGMA journal_mode").fetchone()
+        self.assertEqual(result[0], "wal")
+
+    def test_price_tracker_wal_enabled(self):
+        """Price tracker database should enable WAL mode."""
+        tracker = PriceTracker()
+        import sqlite3
+        with sqlite3.connect(tracker.db_path) as conn:
+            result = conn.execute("PRAGMA journal_mode").fetchone()
+        self.assertEqual(result[0], "wal")
+
+
+class TestChatMessageImageField(unittest.TestCase):
+    """Tests for ChatMessage image field (v1.5.0)."""
+
+    def test_default_image_empty(self):
+        """ChatMessage image field should default to empty string."""
+        msg = ChatMessage(role="user", content="hello")
+        self.assertEqual(msg.image, "")
+
+    def test_image_field_accepts_url(self):
+        """ChatMessage should accept image URL."""
+        msg = ChatMessage(role="user", content="describe", image="https://example.com/img.jpg")
+        self.assertEqual(msg.image, "https://example.com/img.jpg")
+
+    def test_to_dict_without_image(self):
+        """to_dict without image should have simple content string."""
+        msg = ChatMessage(role="user", content="hello")
+        d = msg.to_dict()
+        self.assertEqual(d["content"], "hello")
+        self.assertNotIn("image_url", d)
+
+    def test_to_dict_with_image(self):
+        """to_dict with image should have multimodal content."""
+        msg = ChatMessage(role="user", content="describe", image="https://example.com/img.jpg")
+        d = msg.to_dict()
+        self.assertIsInstance(d["content"], list)
+        self.assertEqual(len(d["content"]), 2)
+        self.assertEqual(d["content"][0]["type"], "image_url")
+        self.assertEqual(d["content"][1]["type"], "text")
+
+
+class TestChatResponseToolCalls(unittest.TestCase):
+    """Tests for ChatResponse tool_calls field (v1.5.0)."""
+
+    def test_default_tool_calls_empty(self):
+        """ChatResponse tool_calls should default to empty list."""
+        resp = ChatResponse(content="hi", model="m", provider="p")
+        self.assertEqual(resp.tool_calls, [])
+
+    def test_tool_calls_field_populated(self):
+        """ChatResponse should accept tool_calls."""
+        tc = ToolCall(id="tc1", name="get_weather", arguments={"city": "Beijing"})
+        resp = ChatResponse(content="", model="m", provider="p", tool_calls=[tc])
+        self.assertEqual(len(resp.tool_calls), 1)
+        self.assertEqual(resp.tool_calls[0].name, "get_weather")
+
+    def test_to_dict_without_tool_calls(self):
+        """to_dict without tool_calls should not include tool_calls key."""
+        resp = ChatResponse(content="hi", model="m", provider="p")
+        d = resp.to_dict()
+        self.assertNotIn("tool_calls", d)
+
+    def test_to_dict_with_tool_calls(self):
+        """to_dict with tool_calls should include them."""
+        tc = ToolCall(id="tc1", name="get_weather", arguments={"city": "Beijing"})
+        resp = ChatResponse(content="", model="m", provider="p", tool_calls=[tc])
+        d = resp.to_dict()
+        self.assertIn("tool_calls", d)
+        self.assertEqual(len(d["tool_calls"]), 1)
+        self.assertEqual(d["tool_calls"][0]["name"], "get_weather")
+
+
+class TestToolCallBase(unittest.TestCase):
+    """Tests for BaseAdapter format_tools/parse_tool_calls (v1.5.0)."""
+
+    def setUp(self):
+        """Create a concrete adapter for testing base methods."""
+        from src.adapters.deepseek import DeepSeekAdapter
+        self.adapter = DeepSeekAdapter(api_key="test-key")
+
+    def test_format_tools_openai_compatible(self):
+        """format_tools should produce OpenAI-compatible format."""
+        tools = [{"name": "get_weather", "description": "Get weather", "parameters": {"type": "object"}}]
+        formatted = self.adapter.format_tools(tools)
+        self.assertEqual(len(formatted), 1)
+        self.assertEqual(formatted[0]["type"], "function")
+        self.assertEqual(formatted[0]["function"]["name"], "get_weather")
+
+    def test_parse_tool_calls_empty(self):
+        """parse_tool_calls with no tool_calls in response."""
+        raw = {"choices": [{"message": {"content": "hi"}}]}
+        result = self.adapter.parse_tool_calls(raw)
+        self.assertEqual(result, [])
+
+    def test_parse_tool_calls_with_calls(self):
+        """parse_tool_calls should extract tool calls from OpenAI format."""
+        raw = {
+            "choices": [{
+                "message": {
+                    "content": "",
+                    "tool_calls": [{
+                        "id": "tc1",
+                        "function": {"name": "get_weather", "arguments": '{"city": "Beijing"}'}
+                    }]
+                }
+            }]
+        }
+        result = self.adapter.parse_tool_calls(raw)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].name, "get_weather")
+        self.assertEqual(result[0].arguments, {"city": "Beijing"})
+
+
+class TestMCPToolMerge(unittest.TestCase):
+    """Tests for MCP tool merge (v1.5.0)."""
+
+    def test_ask_model_has_providers_param(self):
+        """ask_model tool should have providers parameter."""
+        router = ModelRouter()
+        monitor = Monitor()
+        server = MCPServer(router, monitor)
+        ask_tool = server._tools.get("ask_model")
+        self.assertIsNotNone(ask_tool)
+        props = ask_tool["inputSchema"]["properties"]
+        self.assertIn("providers", props)
+
+    def test_ask_model_has_tools_param(self):
+        """ask_model tool should have tools parameter for Function Calling."""
+        router = ModelRouter()
+        monitor = Monitor()
+        server = MCPServer(router, monitor)
+        ask_tool = server._tools.get("ask_model")
+        props = ask_tool["inputSchema"]["properties"]
+        self.assertIn("tools", props)
+
+    def test_describe_image_tool_exists(self):
+        """describe_image tool should exist."""
+        router = ModelRouter()
+        monitor = Monitor()
+        server = MCPServer(router, monitor)
+        self.assertIn("describe_image", server._tools)
+
+    def test_compare_models_removed(self):
+        """compare_models tool should be removed (merged into ask_model)."""
+        router = ModelRouter()
+        monitor = Monitor()
+        server = MCPServer(router, monitor)
+        self.assertNotIn("compare_models", server._tools)
 
 
 if __name__ == "__main__":

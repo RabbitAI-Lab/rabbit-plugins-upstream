@@ -32,6 +32,32 @@ easyeda daemon health
 - `windows[]` 有条目 → 环境就绪,看 `context` 是否是目标工程/文档,不是就
   `easyeda doc switch <name> --project <name>`。
 
+## 0.5 版本对齐 —— CLI / skill / 连接器三方同版
+
+`connectorVersionOk:false`、动作报 `UNKNOWN_ACTION`、或用户问「怎么升级」时,**先对版本,
+别怀疑电路**。一条命令看清三方:
+
+```bash
+easyeda update --check               # 只读:cli / skill:<client> / connector 三行对齐表
+easyeda update --check --exit-code   # 有落后 → 退出码 10(可 gate,0=齐,1=检查本身失败)
+easyeda update                       # 升 CLI 二进制 + skill 目录(--check 之外唯一会写盘的形态)
+easyeda update --skill-only          # 只同步 skill(等价 easyeda skill sync)
+easyeda update --version 0.25.0      # 钉版本(离线场景也可用它跳过 GitHub API)
+```
+
+逐行读法:
+
+| 行 | 状态 | 该做什么 |
+|---|---|---|
+| `cli` | `behind` | `easyeda update` 原地换二进制(下载→有 `checksums.txt` 就 sha256 校验→跑一次确认版本→原子替换)。装在 root 目录时 `sudo easyeda update`。**升完 daemon 仍跑旧二进制,必须重启 daemon**。 |
+| `cli` | `skipped (dev build)` | 开发环境的 git-describe 版本,**故意不覆盖**(air 下一次改 `.go` 就重建);要强升才 `--force`。 |
+| `skill:<client>` | `behind` | `easyeda update` 一并同步(daemon 启动时也会自动同步);本地改过 skill 想保留加 `--preserve`。 |
+| `skill:<client>` | `not-installed` | 该客户端没装过 → `easyeda update --create-missing`。 |
+| `connector` | `behind` | **只能人工重装**——侧载 `.eext` 没有原地更新。按提示 URL 下载 → 扩展管理里**先卸载旧的**(平台按 uuid 去重,不卸载则导入静默失败)→ 导入新的 → **完全退出并重启 EasyEDA**(已开窗口会继续跑旧连接器代码并抢 daemon)。市场版可自动更新但滞后 CLI。 |
+| `connector` | `no-daemon` / `no-window` | 不是版本问题,是环境没起来 → 回 §0。 |
+
+> `--check` 从不写盘;非 `--check` 形态只碰 CLI 二进制和 skill 目录,**永不动 EasyEDA 工程**。
+
 ## 1. 打开 web 编辑器 + 目标工程(chrome-devtools MCP)
 
 桌面客户端没开时,web 编辑器 `https://pro.lceda.cn/editor` 是完全等价的宿主
@@ -65,6 +91,47 @@ profile 里持久化)。
 一键装(平台可原地自动更新,但市场版本可能滞后 CLI);并开了 **允许外部交互**、
 登录过嘉立创账号。之后每次自举都无人工步骤。
 
+### 两个必踩的启动坑(2026-08-04 实测)
+
+1. **`browser is already running for …/chrome-profile`** —— chrome-devtools MCP 的
+   profile 被上次留下的孤儿实例占着(带 `--enable-automation` + `about:blank`,
+   **不是**用户的主 Chrome,后者用默认 profile 不带 `--user-data-dir`)。修法:
+   `pkill -f "chrome-devtools-mcp/chrome-profile"`,再调 `list_pages` 让 MCP 重开。
+
+2. **页面显示「登录/注册」但账号数据其实还在 → 点一下「登录」即恢复,不用真的重登。**
+   全新启动时页面可能先渲染成未登录态(`localStorage.isLogin` 里仍有
+   `{username,uuid}`,IndexedDB 里 `User_<uuid>_v6` 扩展库也在)。**此时连接器不加载**
+   ——扩展库按账号分,未登录就不挂载,`health` 的 windows 一直空。
+   点击顶栏「登录」链接会触发 session 恢复,顶栏随即显示用户名,连接器几秒内附着并
+   在页面上弹 `Connected to easyeda-agent (port …)`。
+   判据:`evaluate_script` 读 `localStorage.getItem('isLogin')` —— 有 uuid 就说明只是
+   渲染态没跟上,**别急着让用户重新扫码登录**。
+   (开源工程未登录也能打开,所以「工程打开成功」不代表连接器会附着,别用它当判据。)
+
+3. **daemon 重启后连接器不会自己回来,而且 `reload` 救不了 —— 必须关掉 tab 重开。**
+   实测(2026-08-04):daemon 停掉再起来后,连接器持续扫端口但**永远连不上**,
+   `navigate reload` 等 50s 无效;**关掉该 tab、`new_page` 开 `#id=` 直达页,5 秒就连上**。
+
+   根因:`transport.ts` 的 `WS_ID = 'easyeda-agent'` 是**固定常量**,而
+   `eda.sys_WebSocket.register()` 在同 id 连接仍被 EasyEDA 视为 "active" 时
+   **静默忽略新 url/callback**(该坑代码里早有注释)。daemon 消失留下的半关连接
+   把这个 id 卡住,而这个注册表活得比页面 reload 更久。**同族于**桌面版那条
+   「re-import 不 reload 已开窗口、必须完全退出 EasyEDA」。
+
+   **诊断三件套**(照顺序做,一次分清 daemon / 网络 / 连接器谁的问题):
+   ```
+   curl -s http://127.0.0.1:60832/health                      # ① daemon 活着?
+   curl -i -N -H "Connection: Upgrade" -H "Upgrade: websocket" \
+        -H "Sec-WebSocket-Version: 13" \
+        -H "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==" \
+        http://127.0.0.1:60832/eda                            # ② WS 端点通? 期望 101
+   # ③ 页面里 evaluate: new WebSocket('ws://127.0.0.1:60832/eda') 能 open?
+   ```
+   三步全绿却仍 `windows: 0` ⇒ **就是 WS_ID 卡住**,别再 reload,直接关 tab 重开。
+   特征信号:console 里满屏 `WebSocket is closed before the connection is established`,
+   **含本该成功的那个端口**;而 `ERR_CONNECTION_REFUSED` 只是扫到空端口的正常噪音,
+   别被它带偏方向。
+
 ## 2. 热重载连接器(改了 extension/ 之后)
 
 不卸载、不重导入、不弹文件对话框——直接覆写 IndexedDB 里的执行文件。
@@ -72,6 +139,13 @@ profile 里持久化)。
 
 ```
 1. make eext                        # 产出 extension/dist/index.js(19 万字节级)
+   ⚠️ 必须 `make eext`,**不能只 `npm run compile`**:后者不 bump extension.json 的
+   version,IndexedDB 里字节确实换成了新的(读回验证 bundle 含新代码),但编辑器
+   照旧加载旧扩展——现象是新 action 一直 UNKNOWN_ACTION、health 版本号也不变。
+   version 变了才触发重新加载。
+   ⚠️ 另:新增 typed action 时 **daemon 也要重启**(它有自己的 action catalog)。
+   `UNKNOWN_ACTION` 的 detail 若是 "run `easyeda actions` for the supported set",
+   那是 **daemon 拦的**,跟连接器无关——别再去折腾热重载。
 2. 起本地 WS 文件服务器(编辑器是 HTTPS,fetch http://127.0.0.1 被
    mixed-content 拦,ws://127.0.0.1 放行——连接器本身就靠它):
    一个 ~30 行 node 脚本,收 {action:"getFile"} 回 {content:<base64>}。
@@ -125,11 +199,11 @@ extensionUuid 在 `extension/extension.json`。IndexedDB 结构非官方稳定 A
 - **headless 环境(CI / ClawFlow operator)不能做运行时验收**:没有编辑器就
   没有 DRC/check 的运行时产物;正确行为是失败并说明,绝不伪造通过。
 - **Windows / PowerShell 5.1 会吞 JSON 参数的双引号**(issue #133 Bug 5):
-  `easyeda sch prim-delete --ids '["abc"]'` 经 PowerShell 原生传参到 exe 变成
-  `[abc]` → JSON 解析失败。所有吃 JSON 数组/对象的参数(`--ids`、`--spec` 等)
-  同理。**修法任选**:① 用 `--%` 停止解析符:`easyeda --% sch prim-delete --ids ["a","b"]`;
-  ② 反引号转义 `` `" ``;③ 改用 CSV 形式(接受 CSV 的参数如 `--ids a,b` 优先);
-  ④ 换 cmd 或 PowerShell 7+(行为已修正)。Windows 中文环境另注意:调用 CLI 的
+  JSON 对象/数组参数(`--patch`、`--spec` 等)经 PowerShell 原生传参到 exe 时
+  内层双引号被吃掉 → JSON 解析失败。(`--ids` 已不受此坑影响:它现在只吃 CSV,
+  `--ids a,b` 无引号问题;JSON 数组形式已移除。)**修法任选**:① 用 `--%` 停止
+  解析符:`easyeda --% sch modify --id x --patch {"x":100}`;② 反引号转义 `` `" ``;
+  ③ 换 cmd 或 PowerShell 7+(行为已修正)。Windows 中文环境另注意:调用 CLI 的
   外层脚本读输出必须显式 `encoding='utf-8'`(CLI 输出恒 UTF-8,系统默认 GBK
   会解码崩溃,#133 Bug 4,skill 自带脚本已修)。
 

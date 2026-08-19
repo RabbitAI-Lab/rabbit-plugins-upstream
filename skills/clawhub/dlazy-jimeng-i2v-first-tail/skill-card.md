@@ -1,44 +1,60 @@
-## Description: <br>
-Generate coherent transition videos using Jimeng's first and tail frame models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate coherent transition videos using Jimeng's first and tail frame models.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users use this skill to call dLazy's hosted Jimeng first-and-last-frame video workflow from an agent, providing a prompt plus first and last frame images to generate transition video output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local first or last frame images are sent to dLazy's hosted service for generation. <br>
-Mitigation: Use the skill only when cloud processing by dLazy is intended, and avoid sending sensitive prompts or media unless that use is acceptable for the user's environment. <br>
-Risk: Broad trigger wording could make the skill run for generic transition-video requests. <br>
-Mitigation: Confirm that the user intends to use dLazy's Jimeng video service before invoking the command. <br>
-Risk: Authentication can persist a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY or npx when a less persistent setup is preferred, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+External users and developers use this skill to call the dLazy CLI for Jimeng first-frame and last-frame image-to-video generation. It supports authenticated cloud generation using a prompt, first frame, last frame, and duration parameters.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-i2v-first-tail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, json, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return generated media URLs or an asynchronous task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release metadata) <br>
+Risk: Prompts and selected input media are sent to dLazy's hosted service for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm that the user is comfortable sending the selected prompt and media to dLazy before invoking the command.
+
+Risk: Generated outputs are hosted by dLazy and returned as service URLs.
+
+Mitigation: Avoid submitting sensitive media unless the user's data handling requirements permit hosted output storage.
+
+Risk: Logging in can store a dLazy API key in local CLI configuration for later use.
+
+Mitigation: Use per-invocation credentials when persistence is not desired, and rotate or revoke keys from the dLazy dashboard when needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-i2v-first-tail)
+- [dLazy CLI Homepage](https://github.com/dlazyai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media is returned through dLazy-hosted output URLs; asynchronous runs may return a task identifier for polling.]
+
+## Skill Version(s):
+
+1.3.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

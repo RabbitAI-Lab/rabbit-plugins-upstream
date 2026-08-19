@@ -1,43 +1,60 @@
-## Description: <br>
-Provides Product Hunt launch strategy guidance, including launch-day operations, ranking factors, supporter outreach, asset preparation, and post-launch momentum planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Product Hunt Playbook helps makers and go-to-market teams plan Product Hunt launches with launch-day operations, ranking-factor guidance, ethical community mobilization, asset preparation, and post-launch conversion planning.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-External makers, startup teams, and launch operators use this skill to plan and review Product Hunt launches, including timing, ranking strategy, outreach hygiene, and post-launch conversion work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on generic launch-day wording and return Product Hunt-specific ranking advice when the user intended a broader launch plan. <br>
-Mitigation: Use it when Product Hunt launch strategy is desired, and confirm the target launch channel before following the advice. <br>
-Risk: Vote-mobilization and ranking tactics may conflict with Product Hunt rules or platform expectations if applied mechanically. <br>
-Mitigation: Review recommendations against Product Hunt's current rules before using outreach, upvote, or ranking tactics. <br>
+## Use Case:
 
+External makers, startup operators, and launch teams use this skill to structure Product Hunt launch preparation, launch-day monitoring, compliant community outreach, and follow-up conversion work.
 
-## Reference(s): <br>
-- [Product Hunt Playbook on ClawHub](https://clawhub.ai/gingiris-1031/skills/product-hunt-playbook) <br>
-- [English Product Hunt Launch Playbook](references/en/README.md) <br>
-- [Japanese Product Hunt Launch Playbook](references/ja/README.md) <br>
-- [Korean Product Hunt Launch Playbook](references/ko/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, checklists, tables, and launch planning notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static advisory content; Clawscan found no hidden execution, credential access, persistence, or destructive behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.9 (source: server release evidence) <br>
+Risk: Launch guidance could be treated as a guaranteed ranking system or a substitute for audience-fit validation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the playbook as planning guidance, validate channel fit with current campaign data, and review outcomes against visits, signups, activation, and retention.
+
+Risk: Product Hunt outreach could drift into inauthentic or non-compliant support tactics.
+
+Mitigation: Keep outreach limited to real users and existing communities, avoid paid votes or vote exchanges, and follow Product Hunt platform rules.
+
+Risk: The artifact includes promotional links to paid resources and coaching.
+
+Mitigation: Review external paid links before deployment and disclose commercial relationships where required.
+
+## Reference(s):
+
+- [Iris Product Hunt field notes](references/iris-field-notes.md)
+- [Product Hunt Launch Playbook English reference](references/en/README.md)
+- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/product-hunt-playbook)
+- [Author services page](https://gingiris.tools)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and checklist-style guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include launch timelines, outreach guidance, risk boundaries, and conversion checklists.]
+
+## Skill Version(s):
+
+1.7.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

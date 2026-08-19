@@ -44,10 +44,17 @@ turnover_vendor_float ~= 3.35x
 
 该事件用于验证独立的 `CPHI_SUBTYPE`：低 official gap、事件前异常量预热、开盘后供应快速周转并保持在 VWAP 上方。它不是常规 gap squeeze，也不改变样本内命中率。
 
+## 样本外执行研究：CYCU
+
+CYCU 的 2026-07-30 事件进一步验证了 `CPHI_SUBTYPE` 的低 official gap、盘前预热和盘中周转扩张路径。该案例同时存在注册转售与 Nasdaq 合规风险，因此只用于 5 分钟阶段和退出逻辑研究，不记录为生产环境授权交易。
+
+完整的 point-in-time 时间线、消息发酵、量价公式与供应冲突见 [cycu-2026-07-30.md](cycu-2026-07-30.md)。
+
 ## 数据来源与限制
 
 - 样本内价格与成交量：Yahoo Finance Chart/Spark 的 point-in-time 日线，结合 split effective date 审计。
 - 证券池与公司行动：Nasdaq Stock Screener、Nasdaq corporate actions。
 - 股本和稀释：SEC EDGAR、公司公告。
 - CPHI：用户盘中截图及公司公开披露，按截图时间戳计算。
+- CYCU：用户分时截图、公司投资者关系公告及 SEC 文件；盘后数据与正则盘标签严格分离。
 - 公开数据研究存在 survivorship bias、历史 ticker、奇异打印、LULD、slippage 和 float 时点误差。

@@ -1,41 +1,54 @@
-## Description: <br>
-Provides Windows command-line encoding and compatibility guidance for GBK/UTF-8, PowerShell and pwsh, Python, Node.js, Git, and code generation on Windows 10/11 with MSYS2 or Git Bash. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Windows command-line encoding and compatibility guidance for GBK/UTF-8 behavior, MSYS2 path conversion, PowerShell and pwsh interoperability, Python and Node.js usage, Git configuration, and code-generation rules on Windows 10/11 with MSYS2 or Git Bash.
 
-## Publisher: <br>
-[chenmo0414](https://clawhub.ai/user/chenmo0414) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[chenmo0414](https://clawhub.ai/user/chenmo0414)
 
-## Use Case: <br>
-Developers and coding agents use this skill to avoid garbled Windows shell output and to generate Python, Node.js, PowerShell, and Git commands that handle GBK and UTF-8 encoding correctly. It is most relevant for Windows 10/11 systems using MSYS2 or Git Bash. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Optional setup commands can persistently change Windows user environment variables, shell startup files, and global Git configuration. <br>
-Mitigation: Review the setup commands before running them, apply them only to the intended Windows user account, and keep a plan to revert environment variables, ~/.bash_profile, ~/.bashrc, and global Git settings if they affect other tools. <br>
-Risk: Using the wrong encoding for existing files or tool output can still produce corrupted text or misleading command results. <br>
-Mitigation: Confirm whether each file or tool emits UTF-8, GBK/936, UTF-16, or raw bytes before applying conversion guidance, and test changes in a non-critical shell or repository first. <br>
+## Use Case:
 
+Developers and engineers use this skill to diagnose and avoid Windows shell encoding, path-conversion, and interop issues when issuing commands or generating Python, Node.js, PowerShell, and Git workflows for Windows 10/11 with MSYS2 or Git Bash.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chenmo0414/skills/windows-shell) <br>
-- [Project homepage from ClawHub metadata](https://github.com/Chenmo0414/win-encoding-fix) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell, PowerShell, Python, and JavaScript examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Windows-specific guidance for command execution, file encoding, environment setup, and global Git configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: SKILL.md frontmatter and ClawHub release metadata) <br>
+Risk: Optional setup commands can persistently change Windows user environment variables, shell startup files, and global Git configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each persistent setting before applying it, especially on shared or managed machines, and prefer command-scoped encoding or path-conversion settings when broad changes are not needed.
+
+Risk: MSYS2 path conversion and Windows encoding behavior can silently alter arguments or produce misleading command output if the guidance is applied to the wrong failure mode.
+
+Mitigation: Classify failures as encoding issues or path-conversion issues before applying fixes, and test commands in the target Windows shell environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chenmo0414/skills/windows-shell)
+- [Project homepage](https://github.com/Chenmo0414/win-encoding-fix)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with inline shell, PowerShell, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Windows-focused guidance for command-line behavior, file encoding, environment variables, and Git configuration.]
+
+## Skill Version(s):
+
+4.4.0 (source: server release evidence, SKILL.md frontmatter, CHANGELOG.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

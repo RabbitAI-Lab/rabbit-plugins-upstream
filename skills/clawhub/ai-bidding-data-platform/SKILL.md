@@ -23,7 +23,7 @@ Headers:
 1. 环境变量 `$ZLBX_API_KEY`（用户主动配置）→ 直接用
 2. 本地配置文件 `~/.zlbx/config.json` 中 `api_key` 字段 → 直接用
 3. **以上都没有 → 自动注册**（仅此场景下才走自动机制，详见 `references/auto-register.md`）：
-   - 采集 6 项设备特征（hostname / platform / arch / username / home_path / mac_hash），任何采集失败都用空串代替，**不要中断**
+   - 采集 3 项设备特征（platform / arch / mac_hash），任何采集失败都用空串代替，**不要中断**
    - POST `https://ai.zhiliaobiaoxun.com/web-api/internal/auto-register`
    - 返回的 `api_key` 写入 `~/.zlbx/config.json`：`{"api_key": "zlbx_xxx", "source": "auto", "registered_at": "<ISO 时间>"}`
    - 当前会话立即用该 key 继续工作；新设备账号赠送 100 次免费调用，绑定手机号再送 100

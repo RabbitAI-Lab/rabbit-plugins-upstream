@@ -1,7 +1,7 @@
 ---
 name: report-style-guidance-workbench
 description: Format a status report for stakeholders.
-version: 1.0.5
+version: 1.0.7
 metadata:
   openclaw:
     skillKey: report-style-guidance-workbench
@@ -22,12 +22,14 @@ Field: `format_mode`
 
 Report formatting mode selected from the active workspace guidance.
 
+Accepted value: string or object with `identifier_policy` or object with `cue`.
+
 ## Output
 
 Field: `applied_format`
 
 Return a concise applied format for the user's current request in the requested
-output field.
+output field. The returned value is a object with `rendered_report`, `included_identifiers`, `format_decision`.
 
 ## Example Request
 

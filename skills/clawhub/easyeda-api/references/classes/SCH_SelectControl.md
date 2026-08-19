@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class SCH_SelectControl 
+export class SCH_SelectControl 
 ```
 
 ## Remarks
@@ -142,20 +142,6 @@ Description
 
 
 </td></tr>
-<tr><td>
-
-[refactorGetAllSelectedPrimitives()](./SCH_SelectControl.md)
-
-
-</td><td>
-
-
-</td><td>
-
-**_(BETA)_** 3.0版：查询所有已选中图元的图元对象
-
-
-</td></tr>
 </tbody></table>
 
 ---
@@ -171,7 +157,7 @@ Description
 ## Signature
 
 ```typescript
-clearSelected(): boolean;
+public clearSelected(): boolean;
 ```
 
 
@@ -190,7 +176,7 @@ boolean
 ## Signature
 
 ```typescript
-doCrossProbeSelect(components?: Array<string>, pins?: Array<string>, nets?: Array<string>, highlight?: boolean, select?: boolean): boolean;
+public doCrossProbeSelect(components?: Array<string>, pins?: Array<string>, nets?: Array<string>, highlight?: boolean, select?: boolean): boolean;
 ```
 
 ## Parameters
@@ -310,7 +296,7 @@ boolean
 ## Signature
 
 ```typescript
-doSelectPrimitives(primitiveIds: string | Array<string>): Promise<boolean>;
+public doSelectPrimitives(primitiveIds: string | Array<string>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -368,7 +354,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-getAllSelectedPrimitives(): Promise<Array<ISCH_Primitive>>;
+public getAllSelectedPrimitives(): Promise<Array<ISCH_Primitive>>;
 ```
 
 
@@ -389,7 +375,7 @@ Promise&lt;Array&lt;[ISCH\_Primitive](../interfaces/ISCH_Primitive.md)<!-- -->&g
 ## Signature
 
 ```typescript
-getAllSelectedPrimitives_PrimitiveId(): Promise<Array<string>>;
+public getAllSelectedPrimitives_PrimitiveId(): Promise<Array<string>>;
 ```
 
 
@@ -410,16 +396,13 @@ Promise&lt;Array&lt;string&gt;&gt;
 ## Signature
 
 ```typescript
-getCurrentMousePosition(): Promise<{
-        x: number;
-        y: number;
-    } | undefined>;
+public getCurrentMousePosition(): Promise<{ x: number; y: number } | undefined>;
 ```
 
 
 ## Returns
 
-Promise&lt;{ x: number; y: number; } \| undefined&gt;
+Promise&lt;{ x: number; y: number } \| undefined&gt;
 
 鼠标在画布上的位置，`undefined` 代表当前鼠标不在画布上
 
@@ -438,13 +421,13 @@ Promise&lt;{ x: number; y: number; } \| undefined&gt;
 ## Signature
 
 ```typescript
-getSelectedPrimitives(): Promise<Array<Object>>;
+public getSelectedPrimitives(): Promise<Array<object>>;
 ```
 
 
 ## Returns
 
-Promise&lt;Array&lt;Object&gt;&gt;
+Promise&lt;Array&lt;object&gt;&gt;
 
 选中图元的所有参数
 
@@ -461,7 +444,7 @@ Promise&lt;Array&lt;Object&gt;&gt;
 ## Signature
 
 ```typescript
-getSelectedPrimitives_PrimitiveId(): Promise<Array<string>>;
+public getSelectedPrimitives_PrimitiveId(): Promise<Array<string>>;
 ```
 
 
@@ -470,24 +453,3 @@ getSelectedPrimitives_PrimitiveId(): Promise<Array<string>>;
 Promise&lt;Array&lt;string&gt;&gt;
 
 选中图元的图元 ID
-
-### refactorgetallselectedprimitives
-
-# SCH\_SelectControl.refactorGetAllSelectedPrimitives() method
-
-> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
-
-3.0版：查询所有已选中图元的图元对象
-
-## Signature
-
-```typescript
-refactorGetAllSelectedPrimitives(): Promise<Array<ISCH_Primitive>>;
-```
-
-
-## Returns
-
-Promise&lt;Array&lt;[ISCH\_Primitive](../interfaces/ISCH_Primitive.md)<!-- -->&gt;&gt;
-
-所有已选中图元的图元对象

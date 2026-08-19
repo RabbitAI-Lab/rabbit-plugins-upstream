@@ -13,17 +13,20 @@ async function submitTask(params, client) {
         width: String(params.width),
         height: String(params.height),
         duration: String(params.duration),
-        x1: String(params.x1),
-        y1: String(params.y1),
-        x2: String(params.x2),
-        y2: String(params.y2),
+        // Agent 场景固定全屏擦除，不接受或透传用户坐标。
+        x1: "0",
+        y1: "0",
+        x2: "0",
+        y2: "0",
     };
-    if (params.mode != null && params.mode !== "")
-        requestParams.mode = String(params.mode);
     if (params.fileName != null && params.fileName !== "")
         requestParams.fileName = String(params.fileName);
     if (params.coverUrl != null && params.coverUrl !== "")
         requestParams.coverUrl = String(params.coverUrl);
+    if (params.callbackUrl != null && params.callbackUrl !== "")
+        requestParams.callbackUrl = String(params.callbackUrl);
+    if (params.removeAudio != null)
+        requestParams.removeAudio = String(params.removeAudio);
     const apiResponse = await client.post("/open/submitTask", requestParams, types_1.TIMEOUT_CONFIG.submit);
     if (apiResponse.code === types_1.ErrorCode.SUCCESS) {
         return {

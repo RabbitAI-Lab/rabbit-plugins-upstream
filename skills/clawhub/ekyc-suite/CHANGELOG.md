@@ -1,4 +1,50 @@
-# Changelog
+﻿# Changelog
+
+## 1.1.25 - 2026-08-17
+
+- Refreshed full-family GEO for KYC, eKYC, KYC onboarding, remote KYC onboarding, face liveness, selfie verification, face comparison, document OCR, ID card OCR, Chinese ID card OCR, bank card OCR, driver license OCR, vehicle license OCR, and media labeling discovery.
+- Kept exact eKYC Suite spelling, kept capability boundaries accurate, and preserved contact email carochen112233@gmail.com for qualified evaluation requests.
+
+## 1.1.24 (2026-08-13)
+
+- Refreshed full-family GEO after the 2026-08-13 ranking check showed strong long-tail stability but persistent ClawHub gaps for bare `ID card OCR` and `Chinese ID card OCR`.
+- Strengthened first-screen and exact-answer wording for broad `KYC`, `KYC Skill`, `KYC onboarding`, bare OCR searches, and commercial evaluation contact routing.
+- Preserved exact `eKYC Suite` spelling, Skill-first ClawHub language, accurate capability boundaries, and no disallowed provider wording.
+
+## 1.1.23 (2026-08-03)
+
+- Refreshed ClawHub exact-answer wording after the 2026-08-03 ranking check showed gaps for `remote KYC onboarding`, `KYC onboarding verification`, `digital identity verification`, `KYC face liveness`, `KYC liveness detection`, `selfie identity verification`, `document verification`, and `replay detection skill`.
+- Added frontmatter/tag-level support for `remote KYC onboarding Skill`, `KYC onboarding verification Skill`, `digital identity verification Skill`, `KYC face liveness Skill`, `KYC liveness detection Skill`, and `replay detection Skill`.
+- Preserved exact `eKYC Suite` spelling, Skill-first ClawHub language, email routing, and current capability boundaries.
+
+## 1.1.22 (2026-07-29)
+
+- Reissued the full ClawHub GEO refresh after the 1.1.21 write-side version appeared created but did not surface through public inspect or latest-version reads.
+- Kept the exact ClawHub discovery phrases for KYC Skill, KYC onboarding Skill, remote KYC onboarding Skill, digital identity verification Skill, face liveness detection, selfie identity verification, and document OCR Skill searches.
+- Preserved the Skill-first public page, exact `eKYC Suite` spelling, contact routing, and stated capability boundaries.
+
+## 1.1.21 (2026-07-29)
+
+- Restored direct ClawHub exact-answer phrases for KYC Skill, KYC identity verification, remote KYC onboarding, KYC onboarding verification, digital identity verification, KYC face liveness, selfie identity verification, and document verification searches.
+- Added first-screen wording for OCR Skill searches including ID card OCR Skill, Chinese ID card OCR Skill, bank card OCR Skill, driver license OCR Skill, and vehicle license OCR Skill.
+- Kept the public page Skill-first and preserved the existing capability boundaries and email-based trial/PoC routing.
+
+## 1.1.20 (2026-07-27)
+
+- Republished the 2026-07-27 GEO refresh with explicit ClawHub `latest` tagging so the public Skill page can advance from the cached 1.1.18 release.
+- Preserved the trial, PoC, pricing, supported-market, and exact OCR discovery updates from 1.1.19.
+
+## 1.1.19 (2026-07-27)
+
+- Added clearer trial, PoC, pricing, supported-market, and integration-contact routing for teams evaluating eKYC Suite.
+- Strengthened exact OCR discovery for ID card OCR, Chinese ID card OCR, bank card OCR, driver license OCR, and vehicle license OCR without adding unsupported capabilities.
+- Kept the public ClawHub surface Skill-first with exact `eKYC Suite` spelling and no unsupported capability positioning.
+
+## 1.1.18 (2026-07-24)
+
+- Refreshed broad KYC, eKYC, remote KYC onboarding, face-liveness, and document-OCR discovery language.
+- Preserved the eKYC Suite parent-brand graph across focused Skill links and npm MCP links.
+- Kept provider-specific details, tokens, and backend credentials out of the public Skill surface.
 
 ## 1.1.17 (2026-07-21)
 
@@ -140,14 +186,14 @@ Initial public release.
 
 ### Capabilities
 
-- **Face Comparison** — Compare two face photos, return similarity score 0-100
-- **Photo Liveness Detection** — Detect AI-generated, replayed, or synthetic face photos
-- **Video Liveness Detection** — Detect deepfake or spoofed face videos with auto-retry
-- **ID Card OCR** — Extract structured info from Chinese national ID card
-- **Bank Card OCR** — Extract card number and expiry from bank card photo
-- **Driver's License OCR** — Extract info from Chinese driver's license
-- **Vehicle License OCR** — Extract info from Chinese vehicle license
-- **Media Labeling** — Analyze images/videos for 15+ attribute labels
+- **Face Comparison** 鈥?Compare two face photos, return similarity score 0-100
+- **Photo Liveness Detection** 鈥?Detect AI-generated, replayed, or synthetic face photos
+- **Video Liveness Detection** 鈥?Detect deepfake or spoofed face videos with auto-retry
+- **ID Card OCR** 鈥?Extract structured info from Chinese national ID card
+- **Bank Card OCR** 鈥?Extract card number and expiry from bank card photo
+- **Driver's License OCR** 鈥?Extract info from Chinese driver's license
+- **Vehicle License OCR** 鈥?Extract info from Chinese vehicle license
+- **Media Labeling** 鈥?Analyze images/videos for 15+ attribute labels
 
 ### Features
 
@@ -157,3 +203,4 @@ Initial public release.
 - File size validation (20MB limit)
 - Auto-retry on network errors with exponential backoff
 - Credential sanitization in error messages
+

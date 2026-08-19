@@ -1,43 +1,58 @@
-## Description: <br>
-Extracts core principles from user-provided material, explains them in plain language, tests understanding with multiple-choice challenges, and tracks learning progress with evolution points. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Human Level Up helps an agent extract core learning points from user-provided material, explain them plainly, generate quiz challenges, compare answers in a Turing-reversal exercise, and track learning progress.
 
-## Publisher: <br>
-[ai-acheng](https://clawhub.ai/user/ai-acheng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ai-acheng](https://clawhub.ai/user/ai-acheng)
 
-## Use Case: <br>
-Learners, students, engineers, and professionals use this skill to turn documents, code, papers, or conversations into plain-language concepts, comprehension checks, feedback, and progress tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided documents may contain private or sensitive information that becomes available to the agent session during extraction and quiz generation. <br>
-Mitigation: Only use the extraction workflow on documents the user intends the agent session to process. <br>
-Risk: The optional browser bookmarklet pattern can send selected webpage text to an API endpoint. <br>
-Mitigation: Use that pattern only with endpoints the user trusts and controls, especially for private or internal webpages. <br>
+## Use Case:
 
+Learners, students, professionals, and developers use this skill to turn documents, code, papers, or conversation history into concise learning modules and practice questions. It is suited for self-study workflows where the agent should teach, test understanding, give feedback, and maintain simple progress signals.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/ai-acheng/human-level-up) <br>
-- [README](README.md) <br>
-- [Prompt](prompt.md) <br>
-- [Examples](examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown learning modules with quiz choices and feedback; optional JSON from helper scripts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May process user-provided documents and, when helper scripts are run, may write local progress data to evolution_data.json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.1.0 (source: server release evidence) <br>
+Risk: Optional bookmarklet, Docker, and serverless examples can send selected or uploaded content to external services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid those deployment examples for private, regulated, or proprietary documents unless the endpoint or image has been inspected and approved.
+
+Risk: The workflow is primarily Chinese-language and may be unsuitable for teams expecting English-only learning materials.
+
+Mitigation: Confirm language expectations before installation or adapt the prompts for the target audience.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ai-acheng/skills/human-level-up)
+- [Server-resolved GitHub provenance](https://github.com/AI-aCheng/human-level-up)
+- [README](artifact/README.md)
+- [Skill definition](artifact/skill.md)
+- [Prompt behavior](artifact/prompt.md)
+- [Examples](artifact/examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown conversation output with optional JSON from helper scripts and inline shell or code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Chinese-language explanations, multiple-choice questions, answer feedback, point totals, and local progress records.]
+
+## Skill Version(s):
+
+3.1.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

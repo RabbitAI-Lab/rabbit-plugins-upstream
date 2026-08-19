@@ -1,44 +1,63 @@
-## Description: <br>
-亚马逊广告（Amazon Ads）店铺授权与管理技能，提供授权链接生成、已绑定账号和站点查询、profile 发现、令牌刷新与令牌读取能力。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents generate Amazon Ads OAuth authorization URLs, list authorized advertising profiles, refresh authorization status, and guide LinkFox credential or billing onboarding when needed.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon Ads operators and agent developers use this skill to start the Amazon Ads OAuth flow, discover authorized advertising profiles, select the right marketplace profile, and refresh or retrieve ad access tokens for downstream LinkFox advertising skills. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles API keys, Amazon Ads authorization URLs, access tokens, and refresh tokens. <br>
-Mitigation: Run it only in a trusted local environment, do not disclose saved response files, and verify that token-bearing output remains masked before sharing logs. <br>
-Risk: Gateway host environment variables can redirect requests to an untrusted endpoint. <br>
-Mitigation: Keep LINKFOX_TOOL_GATEWAY and AMAZON_ADS_BASE_URL unset or set only to trusted LinkFox-controlled hosts. <br>
-Risk: Authorization URLs may be copied to the clipboard or cache files and can remain available after the task. <br>
-Mitigation: Clear clipboard contents, cached authorization URL files, and generated output folders after completing authorization work. <br>
+## Use Case:
 
+External sellers, agencies, and developers use this skill to connect Amazon Ads accounts through LinkFox, identify the correct profileId for downstream advertising workflows, and check or refresh authorization status.
 
-## Reference(s): <br>
-- [Artifact API Reference](artifact/references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-ads-auth) <br>
-- [Amazon Ads Console](https://advertising.amazon.com/) <br>
+### Deployment Geography for Use:
 
+Global; Amazon Ads operations are scoped to the skill's NA, EU, and FE region options.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON API responses saved by the scripts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Script outputs may include saved response-file paths, summarized JSON for large responses, masked tokens, and authorization URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill handles LinkFox API credentials and Amazon Ads authorization data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in trusted agent environments, keep API keys private, and avoid exposing OAuth links or authorization output on shared machines.
+
+Risk: The security review notes broad LinkFox account, API key, billing, feedback, and persistence behavior that deserves manual review.
+
+Mitigation: Review the LinkFox onboarding and billing flow before use, and confirm that these account-management behaviors are acceptable for the deployment.
+
+Risk: Base-url environment variables can redirect requests away from the normal LinkFox gateway.
+
+Mitigation: Keep LINKFOX_TOOL_GATEWAY and related base-url variables pointed only at trusted LinkFox hosts.
+
+Risk: Saved response files may retain sensitive authorization or account metadata.
+
+Mitigation: Review and clean locally saved LinkFox response files according to the user's data-retention requirements.
+
+## Reference(s):
+
+- [API Reference](artifact/references/api.md)
+- [Onboarding Reference](artifact/references/onboarding.md)
+- [Amazon Ads Console](https://advertising.amazon.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON responses, saved response files, authorization URLs, and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Large responses may be summarized unless inline output is requested; token-status helpers are intended to show status metadata instead of raw tokens.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

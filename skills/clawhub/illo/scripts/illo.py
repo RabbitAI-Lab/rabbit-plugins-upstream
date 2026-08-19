@@ -10,7 +10,7 @@ Subcommands:
   gallery    Build a self-contained index.html from a run dir's manifest.jsonl.
   init       Create/update the user config (run by the user; prompts for the key).
   doctor     Preflight: report whether the skill is ready to generate.
-  packs      Community character packs: list / show <name> / install <name>.
+  packs      Community character packs: list / show / install / update.
 
 Resolution (generate):
   api key : config "apiKey" only — written by `init` (user-run, mode 600)
@@ -45,8 +45,11 @@ CHROMA_SOFT = 20
 CHROMA_SPILL_MIN = 18   # channel dominance over the other two → spill candidate
 CHROMA_SPILL_FLOOR = 45 # ignore tiny channel noise on very dark pixels
 CHROMA_SPILL_STRONG = 30  # dominance this high keys even when G is below floor
-# Cutout QA hints on a clean-alpha output (warnings, never gate cutout_alpha):
-CUTOUT_FRINGE_WARN = 20   # fringe px below the clean-alpha gate but worth a QA look
+# Cutout QA hints on a transparent output (warnings, never gate cutout_alpha):
+CUTOUT_ALPHA_MIN_TRANSPARENT = 1000  # enough cleared background to trust the alpha
+CUTOUT_SOFT_EDGE_MAX = 8  # max soft-alpha path length from true transparency
+CUTOUT_ACCENT_HALO_EDGE_FRAC = 0.25  # compact locked accent carriers are not halos
+CUTOUT_FRINGE_WARN = 20   # edge-fringe px worth a QA look
 CUTOUT_EDGE_FRAC = 0.02   # opaque px along the bottom row over this frac of width →
                           # character likely touches/crops the frame (no foot margin)
 # Grok Imagine: best riso quality + cheapest in testing. Note: it is reachable via
@@ -74,14 +77,14 @@ SKILL_DIR = pathlib.Path(__file__).resolve().parent.parent
 # subprocess call to the user's own CLI, the same sanctioned exception as Codex.
 # Grok returns JPEG with no alpha channel, so it CANNOT produce transparent
 # cutouts; those redirect to a cutout-capable backend (see cmd_generate).
-BACKENDS = ("codex", "grok", "openrouter")
+BACKENDS = ("codex", "grok", "openrouter", "grok-bot")
 # The subscription-CLI backends: no API key, no per-image charge, no --model, and
 # a null cost/id in the manifest (never queried for OpenRouter cost).
 CLI_BACKENDS = ("codex", "grok")
-# Config schema version. 2 is the first version that has the Codex/OpenRouter
-# backend choice. A config without this key (or below) predates the choice, so
-# the user has never been offered Codex vs OpenRouter — `generate` hard-stops and
-# tells them to re-run `init` to choose (see _config_is_stale); `init` re-stamps it.
+# Config schema version. 2 is the first version that has the backend choice. A
+# config without this key (or below) predates the choice, so the user has never
+# been offered a backend/transport — `generate` hard-stops and tells them to
+# re-run `init` to choose (see _config_is_stale); `init` re-stamps it.
 CONFIG_VERSION = 2
 # Where the built-in tool drops images when it ignores the requested path. The
 # spike found Orca relocates CODEX_HOME under Library/Application Support, so the
@@ -287,9 +290,9 @@ def dump_config_yaml(cfg):
         f"apiKey: {val(cfg['apiKey'])}" if cfg.get("apiKey")
         else "# apiKey: sk-or-...           # set via: illo.py init",
         f"model: {val(cfg['model'])}" if cfg.get("model")
-        else f"# model: {DEFAULT_MODEL}   # any OpenRouter image model id (codex/grok backends ignore it)",
+        else f"# model: {DEFAULT_MODEL}   # any OpenRouter image model id (codex/grok/grok-bot ignore it)",
         f"backend: {val(cfg['backend'])}" if cfg.get("backend")
-        else "# backend: codex            # codex, grok (your subscription), or openrouter; default: auto",
+        else "# backend: codex            # codex, grok, openrouter, or grok-bot; default: auto",
         f"defaultPalette: {val(cfg['defaultPalette'])}" if cfg.get("defaultPalette")
         else "# defaultPalette: signal     # preset or custom palette name; default: ink-punch",
         f"defaultCharacter: {val(cfg['defaultCharacter'])}" if cfg.get("defaultCharacter")
@@ -339,7 +342,7 @@ def migration_message():
     return (
         "illo config is out of date — it predates the image-backend choice, so "
         "no backend is selected.\n"
-        "illo now has three image backends. Pick one, then re-run:\n"
+        "illo now has image backends/transports. Pick one, then re-run:\n"
         f"  Codex      — free, uses your Codex subscription (draws on your Codex "
         f"quota):\n      {PROG} init --backend codex --no-key\n"
         f"  Grok       — free, uses your Grok (xAI) subscription (draws on your "
@@ -347,6 +350,8 @@ def migration_message():
         f"      {PROG} init --backend grok --no-key\n"
         f"  OpenRouter — pick the model (Grok Imagine, Nano Banana, GPT Image, …):\n"
         f"      {PROG} init --backend openrouter --no-key\n"
+        f"  Grok Bot   — agent-side native image tool (not illo.py generate):\n"
+        f"      {PROG} init --backend grok-bot --no-key\n"
         "Agents: surface this as an interactive backend choice to the "
         "user, then run the matching init.")
 
@@ -361,8 +366,9 @@ def resolve_backend(cfg, override=None):
     upgrade: a usable Codex CLI picks codex; otherwise a configured OpenRouter key
     picks openrouter; otherwise the host has neither and onboarding is needed
     (returned as None so doctor/generate can route to the right setup). An
-    explicit choice is honored as-is — readiness is judged separately so doctor
-    can flag a chosen-but-unusable backend without re-resolving."""
+    explicit choice is honored as-is — including agent-side grok-bot — and
+    readiness is judged separately so doctor can flag a chosen-but-unusable
+    backend without re-resolving."""
     choice = override or cfg.get("backend")
     if choice in BACKENDS:
         return choice
@@ -549,10 +555,72 @@ def _is_spill_halo(r, g, b):
 
 
 def _is_accent_halo(r, g, b, a):
-    """Riso misregistration / accent ink tracing the outer silhouette."""
+    """Accent ink color that may be a halo when it sits on the outer edge."""
     if a == 0:
         return False
     return r > 150 and g < 110 and b > 80 and r > g + 35
+
+
+def _neighbor_coords(width, height, x, y):
+    for dy in (-1, 0, 1):
+        ny = y + dy
+        if ny < 0 or ny >= height:
+            continue
+        for dx in (-1, 0, 1):
+            if dx == 0 and dy == 0:
+                continue
+            nx = x + dx
+            if nx < 0 or nx >= width:
+                continue
+            yield nx, ny
+
+
+def _soft_near_air_mask(rgba, width, height, max_depth=CUTOUT_SOFT_EDGE_MAX):
+    """Soft alpha pixels connected to true transparency within max_depth."""
+    mask = bytearray(width * height)
+    queue = []
+    for idx in range(width * height):
+        alpha = rgba[idx * 4 + 3]
+        if not 0 < alpha < 255:
+            continue
+        x = idx % width
+        y = idx // width
+        for nx, ny in _neighbor_coords(width, height, x, y):
+            if rgba[(ny * width + nx) * 4 + 3] == 0:
+                mask[idx] = 1
+                queue.append((x, y, 1))
+                break
+    head = 0
+    while head < len(queue):
+        x, y, depth = queue[head]
+        head += 1
+        if depth >= max_depth:
+            continue
+        for nx, ny in _neighbor_coords(width, height, x, y):
+            nidx = ny * width + nx
+            if mask[nidx]:
+                continue
+            alpha = rgba[nidx * 4 + 3]
+            if 0 < alpha < 255:
+                mask[nidx] = 1
+                queue.append((nx, ny, depth + 1))
+    return mask
+
+
+def _touches_transparency(rgba, width, height, x, y, soft_near_air):
+    """Whether an opaque pixel sits on the alpha boundary.
+
+    Outside is true transparency (alpha 0). Soft alpha counts only when the
+    precomputed mask proves it has a bounded path to air.
+    """
+    for nx, ny in _neighbor_coords(width, height, x, y):
+        idx = ny * width + nx
+        alpha = rgba[idx * 4 + 3]
+        if alpha == 0:
+            return True
+        if 0 < alpha < 255 and soft_near_air[idx]:
+            return True
+    return False
 
 
 def _despill_rgb(r, g, b, a):
@@ -617,7 +685,7 @@ def chroma_key_to_png(data, key=CHROMA_KEY):
 
 
 def analyze_cutout_alpha(img_bytes):
-    """Return transparency metrics for cutout QA and routing."""
+    """Return transparency metrics for cutout routing plus edge-fringe QA."""
     ext = sniff_ext(img_bytes)
     w, h = image_size(img_bytes)
     out = {"ext": ext, "width": w, "height": h, "transparent": 0, "opaque": 0,
@@ -630,6 +698,9 @@ def analyze_cutout_alpha(img_bytes):
     if not parsed:
         return out
     w, h, rgba = parsed
+    soft_near_air = _soft_near_air_mask(rgba, w, h)
+    edge_pixels = 0
+    accent_edge = 0
     for i in range(0, len(rgba), 4):
         r, g, b, a = rgba[i:i + 4]
         if a == 0:
@@ -638,20 +709,32 @@ def analyze_cutout_alpha(img_bytes):
             out["opaque"] += 1
         else:
             out["semi"] += 1
-        if a and g > max(r, b) + 10 and g > 45:
+        x = (i // 4) % w
+        y = (i // 4) // w
+        edge_pixel = a and _touches_transparency(rgba, w, h, x, y, soft_near_air)
+        opaque_edge_pixel = edge_pixel and a == 255
+        if opaque_edge_pixel:
+            edge_pixels += 1
+        if edge_pixel and g > max(r, b) + 10 and g > 45:
             out["green_fringe"] += 1
-        if a and r > 120 and b > 120 and r > g + 15 and b > g + 15 and abs(r - b) < 60:
+        if (edge_pixel and r > 120 and b > 120 and r > g + 15 and b > g + 15
+                and abs(r - b) < 60):
             out["magenta_fringe"] += 1
-        if a and _is_accent_halo(r, g, b, a):
-            out["accent_halo"] += 1
+        if opaque_edge_pixel and _is_accent_halo(r, g, b, a):
+            accent_edge += 1
     corners = [(0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1)]
     out["corner_alpha"] = [rgba[(y * w + x) * 4 + 3] for x, y in corners]
     bottom = (h - 1) * w
     out["bottom_edge_opaque"] = sum(1 for x in range(w) if rgba[(bottom + x) * 4 + 3])
     out["has_alpha"] = out["transparent"] > 0 or out["semi"] > 0
+    # Accent ink touching air is often correct (antenna balls, droplet tips).
+    # Opaque edge pixels define this denominator; soft mattes must not dilute it.
+    if edge_pixels and accent_edge >= max(CUTOUT_FRINGE_WARN,
+                                         int(edge_pixels * CUTOUT_ACCENT_HALO_EDGE_FRAC)):
+        out["accent_halo"] = accent_edge
     out["fringe"] = out["green_fringe"] + out["magenta_fringe"] + out["accent_halo"]
-    out["clean_alpha"] = (out["transparent"] > 1000 and all(a == 0 for a in out["corner_alpha"])
-                          and out["fringe"] < 50)
+    out["clean_alpha"] = (out["transparent"] > CUTOUT_ALPHA_MIN_TRANSPARENT
+                          and all(a == 0 for a in out["corner_alpha"]))
     return out
 
 
@@ -826,7 +909,7 @@ def _place_opaque(img_bytes, out_path):
 
 
 def _cutout_quality_note(analysis):
-    """QA warnings for a clean-alpha cutout. These never gate cutout_alpha —
+    """QA warnings for an alpha cutout. These never gate cutout_alpha —
     transparency is real; the agent re-rolls on framing/fringe at QA."""
     notes = []
     w = analysis.get("width") or 0
@@ -1220,7 +1303,15 @@ def cmd_generate(args):
         # No backend configured — name the fixes.
         sys.exit(f"No image backend ready. Install + `codex login` (or `grok login`) "
                  f"to use a subscription CLI, or run `{PROG} init` to set an "
-                 f"OpenRouter key.")
+                 f"OpenRouter key. Grok Bot agents should run "
+                 f"`{PROG} init --backend grok-bot --no-key` and use the native "
+                 "Grok Bot image tool instead of `illo.py generate`.")
+    if backend == "grok-bot":
+        sys.exit("backend grok-bot is agent-side: `illo.py generate` cannot call "
+                 "Grok Bot's native image tool. The Grok Bot agent should build "
+                 "the illo prompt and call its built-in Grok image tool with the "
+                 "active character sheet as a reference. To use `illo.py generate`, "
+                 "choose an engine backend: codex, grok, or openrouter.")
 
     # Grok returns JPEG with no alpha/chroma path, so it can't produce transparent
     # cutouts. Redirect a cutout render to a cutout-capable backend (Codex chroma,
@@ -1411,9 +1502,10 @@ def cmd_init(args):
     # entered on these branches (neither CLI path needs a key). Codex is offered
     # first (precedence Codex > Grok); if both declined or unavailable, fall through
     # to the existing hidden-prompt OpenRouter flow.
-    chose_cli = (not args.no_key and not args.backend
+    skip_key_prompt = args.no_key or args.backend == "grok-bot"
+    chose_cli = (not skip_key_prompt and not args.backend
                  and (_maybe_offer_codex(cfg) or _maybe_offer_grok(cfg)))
-    if not chose_cli and not args.no_key:
+    if not chose_cli and not skip_key_prompt:
         entered = getpass.getpass("OpenRouter API key (blank to skip): ").strip()
         if entered:
             cfg["apiKey"] = entered
@@ -1421,8 +1513,14 @@ def cmd_init(args):
     p.write_text(dump_config_yaml(cfg))
     os.chmod(p, 0o600)
     backend_note = cfg.get("backend") or "auto"
+    if cfg.get("apiKey"):
+        key_note = "set"
+    elif backend_note == "grok-bot":
+        key_note = "not needed for grok-bot"
+    else:
+        key_note = "not set — run init again to set it"
     print(f"wrote {p} (backend: {backend_note}; "
-          f"key: {'set' if cfg.get('apiKey') else 'not set — run init again to set it'}; "
+          f"key: {key_note}; "
           f"model: {cfg.get('model', DEFAULT_MODEL)})")
 
 
@@ -1581,7 +1679,7 @@ def cmd_doctor(args):
         lines.append("grok cli: not installed (optional — enables free Grok-subscription images)")
     # OpenRouter key (no value ever printed).
     lines.append("api key: found (config)" if has_key
-                 else f"api key: not set — run `{PROG} init` to use OpenRouter")
+                 else f"api key: not set (OpenRouter only — run `{PROG} init` to use OpenRouter)")
     # Resolved backend + transport, and whether it is actually ready (the exit
     # predicate). An OpenRouter-only install stays exit 0: doctor reports
     # the resolved backend's readiness, not a hardwired key check.
@@ -1591,9 +1689,15 @@ def cmd_doctor(args):
         lines.append("backend: NEEDS CHOICE — this config predates the image "
                      "backend choice. Codex (free, your Codex subscription), Grok "
                      "(free, your Grok subscription; no cutouts), or OpenRouter "
-                     "(model choice: Grok Imagine, Nano Banana, GPT Image, …)? Run "
-                     f"`{PROG} init --backend codex|grok|openrouter --no-key`. Agents: "
+                     "(model choice: Grok Imagine, Nano Banana, GPT Image, …), or "
+                     "Grok Bot (agent-side native image tool)? Run "
+                     f"`{PROG} init --backend codex|grok|openrouter|grok-bot --no-key`. Agents: "
                      "ask the user interactively, then run that init.")
+    elif backend == "grok-bot":
+        ready = True
+        lines.append("backend: grok-bot — transport: agent-side native Grok Bot "
+                     "image tool (not `illo.py generate`; no CLI/OpenRouter key "
+                     "required)")
     elif backend == "codex":
         ready = codex_ok
         lines.append("backend: codex — transport: `codex exec` (your Codex "
@@ -1615,8 +1719,12 @@ def cmd_doctor(args):
                      f"backend: openrouter (configured) — NOT ready: no key; run `{PROG} init`")
     else:
         ready = False
-        lines.append(f"backend: none ready — install + `codex login` (or `grok login`), "
-                     f"or run `{PROG} init` to set an OpenRouter key")
+        lines.append("backend: none ready for engine generation — install + "
+                     f"`codex login` (or `grok login`), or run `{PROG} init` "
+                     "to set an OpenRouter key")
+        lines.append("note: Grok Bot agents can use Grok Bot's built-in Grok "
+                     "image tool natively; CLI/OpenRouter setup is not required "
+                     "for that path.")
     # Hermes caveat: the path above is illo's default; a managed runtime may
     # resolve config elsewhere. Preserve this note for that environment.
     lines.append(f"note: config resolved at {p} (a managed runtime e.g. Hermes "
@@ -1717,7 +1825,50 @@ def cmd_packs_show(args):
         fetch(f"{packs_repo(args)}/packs/{pack_name(args.name)}/character.md").decode("utf-8"))
 
 
+def _packs_install_all_requested(args):
+    return args.all or args.name == "*"
+
+
+def _system_exit_message(exc):
+    if exc.code in (None, 0):
+        return "failed"
+    return str(exc.code)
+
+
 def cmd_packs_install(args):
+    if _packs_install_all_requested(args):
+        if args.as_name:
+            sys.exit("packs install --all cannot be combined with --as")
+        repo = packs_repo(args)
+        entries = repo_index(args)
+        if not entries:
+            sys.exit(f"no packs found in repo index at {repo}")
+        cdir = config_dir() / "characters"
+        ok = failed = skipped = 0
+        for name, entry in entries.items():
+            try:
+                pack_name(name)
+                dest = cdir / name
+                if (dest / "character.md").exists() and not args.force:
+                    skipped += 1
+                    print(f"skipped {name}: {dest} already exists (use --force to overwrite)")
+                    continue
+                install_pack_files(repo, name, dest)
+                stamp_version(dest, entry)
+                ok += 1
+                print(f"installed {name} -> {dest}")
+            except SystemExit as e:
+                failed += 1
+                print(f"failed {name}: {_system_exit_message(e)}", file=sys.stderr)
+            except Exception as e:
+                failed += 1
+                print(f"failed {name}: {e}", file=sys.stderr)
+        print(f"summary: ok={ok} failed={failed} skipped={skipped}")
+        if failed:
+            sys.exit(1)
+        return
+    if not args.name:
+        sys.exit("packs install requires <name>, --all, or '*'")
     name = pack_name(args.name)
     local = pack_name(args.as_name) if args.as_name else name
     dest = config_dir() / "characters" / local
@@ -1856,10 +2007,11 @@ def main():
     g.add_argument("--prompt-file")
     g.add_argument("--out", required=True)
     g.add_argument("--model", help="OpenRouter image model id (overrides config/default; "
-                   "ignored by the codex/grok backends, which use their own image tool)")
+                   "ignored by codex/grok/grok-bot, which use their own image tools)")
     g.add_argument("--backend", choices=BACKENDS,
                    help="image backend (overrides config/default): codex or grok (your "
-                        "subscription CLI) or openrouter; default resolves by host capability")
+                        "subscription CLI), openrouter, or grok-bot (agent-side; "
+                        "generate refuses); default resolves by host capability")
     g.add_argument("--allow-paid-fallback", action="store_true",
                    help="if a Codex/Grok subscription render fails, explicitly allow "
                         "fallback to the configured paid OpenRouter API (off by default)")
@@ -1882,7 +2034,7 @@ def main():
     i = sub.add_parser("init", help="create/update user config (run this yourself)")
     i.add_argument("--model", help="default model id")
     i.add_argument("--backend", choices=BACKENDS,
-                   help="default image backend: codex, grok, or openrouter "
+                   help="default image backend: codex, grok, openrouter, or grok-bot "
                         "(skips the subscription-CLI questionnaire)")
     i.add_argument("--palette", help="default palette preset name")
     i.add_argument("--character", help="default character pack name (characters/<name>/)")
@@ -1905,8 +2057,9 @@ def main():
     ps = pksub.add_parser("show", help="print a pack's character.md (review before install)")
     ps.add_argument("name")
     ps.set_defaults(func=cmd_packs_show)
-    pi = pksub.add_parser("install", help="install a pack into ~/.config/illo/characters/")
-    pi.add_argument("name")
+    pi = pksub.add_parser("install", help="install a pack, or --all packs, into ~/.config/illo/characters/")
+    pi.add_argument("name", nargs="?", help="pack to install; use '*' (quoted in shells) for all packs")
+    pi.add_argument("--all", action="store_true", help="install every pack in the repo index")
     pi.add_argument("--as", dest="as_name", metavar="NAME",
                     help="install under a different local name (collision escape)")
     pi.add_argument("--force", action="store_true", help="overwrite an existing local pack")

@@ -13,6 +13,7 @@ import sys
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
 from _lf_output import emit_result, lf_inline_flag
+from _token_status_output import strip_raw_tokens, print_status_note
 
 API_BASE_URL = (
     os.environ.get("LINKFOX_TOOL_GATEWAY")
@@ -56,7 +57,7 @@ def call_api(params: dict) -> dict:
     )
 
     try:
-        with urlopen(req, timeout=30) as response:
+        with urlopen(req, timeout=150) as response:
             return json.loads(response.read().decode("utf-8"))
     except HTTPError as e:
         body = e.read().decode("utf-8") if e.fp else ""
@@ -86,19 +87,13 @@ def main():
         sys.exit(1)
 
     result = call_api(params)
-
-    # Mask tokens in output for security
-    if "accessToken" in result:
-        result["accessToken"] = result["accessToken"][:10] + "..." if len(result["accessToken"]) > 10 else result["accessToken"]
-    if "refreshToken" in result:
-        result["refreshToken"] = result["refreshToken"][:10] + "..." if len(result["refreshToken"]) > 10 else result["refreshToken"]
+    result = strip_raw_tokens(result)
 
     emit_result(result, lf_inline_flag())
+    print_status_note(result)
 
-    # If successful, print confirmation
     if "message" in result:
         print(f"\n✓ {result['message']}", file=sys.stderr)
-        print("Note: Tokens have been masked for security. Full tokens are stored in database.", file=sys.stderr)
 
 
 if __name__ == "__main__":

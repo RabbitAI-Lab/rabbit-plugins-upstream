@@ -1,43 +1,54 @@
-## Description: <br>
-Gingiris Opensource is a markdown playbook for planning open-source launches, GitHub star growth, developer-community outreach, and sustained OSS marketing loops. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gingiris Open Source Launch Marketing Playbook guides developer-tool founders and OSS maintainers through README readiness, Show HN, Reddit and Product Hunt launch planning, KOL outreach, anti-star-farming guidance, and a six-month GitHub stars growth loop.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-Developer tool founders, OSS maintainers, and DevRel teams use this skill to structure an open-source launch, improve README conversion, plan Show HN/Reddit/Product Hunt outreach, and build a multi-month growth loop. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Marketing outreach guidance could be applied in ways that violate GitHub, Reddit, Hacker News, or social-platform rules. <br>
-Mitigation: Review each tactic against the target platform's rules, avoid star farming or spammy DMs, and prioritize organic engagement. <br>
-Risk: The skill provides strategy content rather than executable automation, so recommendations may not fit every project or audience. <br>
-Mitigation: Treat outputs as planning guidance, adapt them to the project's market and community norms, and review claims before publishing. <br>
+## Use Case:
 
+Developers, founders, OSS maintainers, DevRel teams, and growth teams use this skill to plan open-source project launches, improve GitHub README conversion, sequence developer-community distribution, and measure sustainable star and community growth.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/gingiris-opensource) <br>
-- [README.md](README.md) <br>
-- [AFFiNE GitHub repository](https://github.com/toeverything/AFFiNE) <br>
-- [Gingiris tools](https://gingiris.tools) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance, checklists, decision frameworks, and launch playbooks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable behavior; outputs are strategic recommendations and planning checklists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: server release evidence) <br>
+Risk: Marketing tactics such as direct messages, Reddit posts, Product Hunt launches, and pricing-page tests can violate platform rules or user expectations if applied without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the relevant platform rules and obtain explicit user approval before posting publicly, messaging people, or publishing pricing-related content from any real account.
+
+Risk: The playbook includes case metrics and first-person recollections that may be overgeneralized as guaranteed growth outcomes.
+
+Mitigation: Treat case numbers as approximate historical evidence, label them clearly, and track install, first success, retention, qualified demand, and pricing interest alongside stars.
+
+## Reference(s):
+
+- [Podcast evidence register](artifact/references/podcast-evidence.md)
+- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/gingiris-opensource)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration instructions]
+
+**Output Format:** [Markdown guidance with checklists, launch sequences, outreach tactics, and measurement notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill produces strategic recommendations and planning checklists; it does not execute actions on external platforms by itself.]
+
+## Skill Version(s):
+
+2.1.2 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

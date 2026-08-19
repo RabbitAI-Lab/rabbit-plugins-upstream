@@ -2,38 +2,68 @@
 
 spec: usk/3.0
 id: mgc_database_security
-version: 1.1.0
+version: 1.2.0
 name: Database Credential Security (Zero‑Exposure Edition)
-description: Secure database credential management using MGC Blackbox. Supports MySQL, PostgreSQL, SQLite, MariaDB and other databases. Store credentials locally in encrypted form, retrieve at runtime without exposing to AI models.
+description: Secure database credential management using MGC Blackbox 1.4.10. Supports MySQL, PostgreSQL, SQLite, MariaDB and other databases. Credentials are stored encrypted; local scripts retrieve them via HTTP API at runtime, while AI agents never touch plaintext.
 author: MirginCipher Team
 license: MIT
-tags: database, mysql, postgresql, sqlite, mariadb, security, credential-management, zero-exposure, mgc
+tags: database, mysql, postgresql, sqlite, mariadb, security, credential-management, zero-exposure, mgc, mgc_run, mgc_find
 platform_compatibility: windows, macos, linux
 changelog:
+  - version: 1.2.0
+    changes:
+      - Upgraded to adapt to MGC 1.4.10
+      - Refactored zero-exposure flow (mgc_run + HTTP API; credentials never enter AI context)
+      - Replaced mgc_get with mgc_run for sealed-script execution (1.4.7+ blackbox)
+      - Added mgc_find (1.4.10 fuzzy search) and mgc_open_webui; removed mgc_get
+      - Documented mgc_seal ext02/ext03 packaging (1.4.10 auto-parse) and multi-line PEM for ext04
+      - Added update_if_exists=true for credential rotation
+      - Added 1.4.9 sandbox mode note
+      - Updated MGC main skill doc reference to WebUI MGC Skills button (1.4.7+)
+      - Templates updated with parse_known_args and JSON array ext02 contract
   - version: 1.1.0
     changes:
       - Added complete example section with workflow templates
-      - Added comprehensive troubleshooting section
-      - Added FAQ section
-      - Added anti‑patterns section with correct practices
-      - Added when to use / when not to use sections
-      - Added capability boundary explanation
-      - Added advanced scenarios section
-      - Added templates for SKILL.md and local scripts
+      - Added troubleshooting section, FAQ, anti-patterns, capability boundary, advanced scenarios
   - version: 1.0.1
     changes:
       - Updated to emphasize MCP tools over CLI
   - version: 1.0.0
     changes:
-      - Initial release with database zero-exposure pattern
+      - Initial release with MySQL zero-exposure pattern
 
 ---
 
 # Overview
 
-Database Credential Security is a documentation skill that teaches how to manage database credentials securely using MGC Blackbox. Supports MySQL, PostgreSQL, SQLite, MariaDB and other databases. It enables AI agents to execute database operations without ever exposing database passwords or connection strings to the AI model.
+Database Credential Security is a documentation skill that teaches how to manage database credentials securely using MGC Blackbox 1.4.10. Supports MySQL, PostgreSQL, SQLite, MariaDB, SQL Server and other databases. Credentials are encrypted at rest; local scripts retrieve them via HTTP API at runtime; **AI agents never touch credential plaintext** (true zero‑exposure via `mgc_run` blackbox execution).
 
 This skill contains **no executable code** and is safe for automatic approval.
+
+---
+
+# ⚠️ Critical: True Zero‑Exposure Means AI Never Sees Credentials
+
+The wrong way (breaks zero‑exposure):
+
+```
+AI → mgc_get(config) → returns plaintext JSON (incl. password) → AI uses password
+```
+
+The right way (1.4.10 true zero‑exposure):
+
+```
+User → mgc_save(config with credentials)
+User / Script Agent → mgc_save(script that reads config via HTTP API)
+Executor Agent → mgc_run(script) → MGC blackbox executes
+                              └─ script reads credentials via HTTP API
+                              └─ script connects to DB and runs SQL
+                              └─ script writes result to file
+                              └─ MGC returns only {pid, status}
+AI → reads result file → only sees SQL output, NEVER password
+```
+
+> **Never call `mgc_get` from AI**. `mgc_get` returns plaintext and breaks zero‑exposure. Use `mgc_run` for blackbox execution instead.
 
 ---
 
@@ -41,12 +71,12 @@ This skill contains **no executable code** and is safe for automatic approval.
 
 After reading this documentation, an AI agent will understand how to:
 
-- Store database credentials (MySQL, PostgreSQL, SQLite, MariaDB, etc.) securely in MGC Blackbox
-- Retrieve credentials at runtime without AI seeing plaintext
-- Execute database queries through local scripts
+- Store database credentials encrypted in MGC Blackbox (via WebUI or `mgc_save`)
+- Write local database scripts that retrieve credentials via HTTP API at runtime
+- Execute database scripts via `mgc_run` (1.4.7+ blackbox); AI never sees credentials
 - Manage multiple database connections safely
-- Rotate credentials without code changes
-- Seal database scripts for multi‑node execution
+- Rotate credentials without code changes (`update_if_exists=true`)
+- Seal database scripts for multi‑node execution with `mgc_seal`
 
 ---
 
@@ -54,21 +84,10 @@ After reading this documentation, an AI agent will understand how to:
 
 ## Must Use Cases
 
-1. **Production environments**
-   - Any database access in production requires secure credential management
-   - Prevents credential leakage in logs, prompts, and AI context
-
-2. **Automation tasks**
-   - Scheduled scripts that need database access
-   - CI/CD pipelines that connect to databases
-
-3. **Multi‑node collaboration**
-   - Node A creates a database script, Node B executes it
-   - Use `mgc_seal` to encrypt the script with target node's public key
-
-4. **AI needs database access but must not see passwords**
-   - AI provides SQL statements only
-   - Local scripts handle credential retrieval and execution
+1. **Production environments** — any database access in production requires secure credential management
+2. **Automation tasks** — scheduled scripts that need database access (CI/CD, cron jobs)
+3. **Multi‑node collaboration** — Node A creates a database script, Node B executes it via `mgc_seal`
+4. **AI needs database access but must not see passwords** — AI provides SQL only; scripts handle the rest
 
 ## Example Triggers
 
@@ -82,60 +101,50 @@ After reading this documentation, an AI agent will understand how to:
 
 # When NOT to Use This Skill
 
-This skill is NOT needed in these scenarios:
-
-1. **Public databases**
-   - Databases that require no authentication
-   - Read‑only public data sources
-
-2. **Local development with no sensitive data**
-   - Disposable test databases
-   - Demo environments with mock data
-
-3. **Interactive manual access**
-   - When user provides credentials manually each time
-   - Direct database tool usage (DBeaver, MySQL Workbench, etc.)
+- **Public databases with no authentication** — no credential needed
+- **Local development with no sensitive data** — disposable test DBs
+- **Interactive manual access** — DBeaver / MySQL Workbench etc.
 
 ---
 
 # Capability Boundary
 
-This skill has specific boundaries that users must understand:
-
 ## What This Skill Does
 
-- **Credential storage**: Securely store database credentials in MGC Blackbox
-- **Credential retrieval**: Retrieve credentials at runtime via MCP tools
-- **Pattern guidance**: Provide secure patterns for database credential management
-- **Multi‑node sealing**: Encrypt database scripts for trusted nodes
+- Credential storage pattern (encrypted, in MGC)
+- Local-script pattern (HTTP API for credential retrieval)
+- Multi‑node sealing pattern (`mgc_seal`)
+- Anti-pattern and security guidance
 
 ## What This Skill Does NOT Do
 
-- **NOT a database client**: Cannot connect to databases directly
-- **NOT a SQL executor**: Does not run SQL queries
-- **NOT a migration tool**: Does not handle schema changes
-- **NOT a backup tool**: Does not perform database backups
-
-The skill provides **credential management only**. All sensitive database operations (connect, query, migrate, backup) must be performed by local scripts.
+- Is NOT a database client
+- Does NOT run SQL directly from AI
+- Does NOT handle schema migrations or backups (those are local scripts)
 
 ---
 
 # Prerequisites
 
-1. Install MGC Blackbox: `pip install mgc-blackbox`
-2. Start MGC service: `mgc` (runs at http://127.0.0.1:57219)
-3. Token file: `~/.mgc/database/mgc_black_box/.mgc_token`
-4. Database driver installed (mysql‑connector‑python, psycopg2, etc.)
+1. **Install MGC Blackbox 1.4.10+**:
+   ```bash
+   pip install mgc-blackbox>=1.4.9
+   ```
+2. **Start MGC service**: `mgc` (API at http://127.0.0.1:57219, WebUI at 57218)
+3. **Token file**: `~/.mgc/database/mgc_black_box/.mgc_token`
+4. **Database driver installed**: `mysql-connector-python` / `psycopg2` / `pymysql` / etc.
+
+> **Sandbox mode (1.4.9+)**: When running inside a sandbox Agent (Trae Work / Workbuddy), install MGC in the system environment; otherwise MCP operations may be limited — in that case, call FastAPI directly at `/api/mgc/sensitive/run`.
 
 ---
 
-# Complete Example: Full Database Credential Workflow
+# Complete Example: Zero‑Exposure Database Workflow
 
-This section demonstrates a complete flow from credential storage to secure database operation.
+## Step 1: Store Database Credentials (user, via WebUI or `mgc_save`)
 
-## Step 1: Store Database Credentials
+> Credentials should be stored by the user via WebUI (browser or `mgc_open_webui`) or by AI on explicit user instruction. AI must never read them back via `mgc_get`.
 
-### MySQL Credential Storage
+### MySQL
 
 ```
 Tool: mgc_save
@@ -151,7 +160,7 @@ Parameters:
   }"
 ```
 
-### PostgreSQL Credential Storage
+### PostgreSQL
 
 ```
 Tool: mgc_save
@@ -168,7 +177,7 @@ Parameters:
   }"
 ```
 
-### SQL Server Credential Storage
+### SQL Server
 
 ```
 Tool: mgc_save
@@ -184,77 +193,186 @@ Parameters:
   }"
 ```
 
-> **Note:** Replace placeholder values with actual database credentials. The `info_owner` value is your reference identifier—you'll use this same value when retrieving credentials.
+> **Rotating credentials**: call `mgc_save` again with the same `info_type`/`info_owner` AND `update_if_exists=true`. The old entry is replaced; scripts using the same reference will pick up the new credentials automatically.
 
-## Step 2: Reference Credentials in Your Skill
-
-```
-# In your SKILL.md:
-
-database_reference:
-  info_type:  "config"
-  info_owner: "my_mysql_prod"
-  # The AI never sees actual credentials, only the reference
-```
-
-## Step 3: Retrieve Credentials
+## Step 2: Reference Credentials in Your Script
 
 ```
-Tool: mgc_get
-Parameters:
-  info_type:  "config"
-  info_owner: "my_mysql_prod"
+# In your database script (stored as MGC script):
+MGC_CREDENTIAL_REF = "my_mysql_prod"   # info_owner only; no password here
 ```
 
-The MCP tool returns the stored JSON content. The AI receives:
-- Host and port (non‑sensitive)
-- Database name (non‑sensitive)
-- Username (may be non‑sensitive)
-- But **never** the password
+## Step 3: Local Script Retrieves Credentials via HTTP API
 
-## Step 4: Execute Database Operation (Conceptual)
+```python
+import os
+import requests
+import json
 
-A local script performs the actual database operation:
+MGC_BASE_URL = "http://127.0.0.1:57219"
+TOKEN_FILE = os.path.expanduser("~/.mgc/database/mgc_black_box/.mgc_token")
 
+def get_credentials(info_owner, info_type="config"):
+    """Read credentials via HTTP API. Script-internal only; AI never calls this."""
+    if not os.path.exists(TOKEN_FILE):
+        raise RuntimeError("MGC token file missing")
+    with open(TOKEN_FILE, "r") as f:
+        token = f.read().strip()
+
+    url = f"{MGC_BASE_URL}/api/mgc/sensitive/get"
+    headers = {"X-MGC-Token": token, "Content-Type": "application/json"}
+    data = {"info_type": info_type, "info_owner": info_owner, "action": "run"}
+    resp = requests.post(url, json=data, headers=headers, timeout=10)
+    resp.raise_for_status()
+    result = resp.json()
+    if isinstance(result, str):
+        return json.loads(result)
+    return result.get("data", {}).get("data_field", {})
 ```
-# Conceptual script flow (NOT executable):
 
-1. Call mgc_get with info_owner="my_mysql_prod"
-2. Parse returned JSON for connection parameters
-3. Use database driver to connect
-4. Execute SQL query
-5. Return only query results (no credentials)
-6. NEVER log or expose the password
+## Step 4: Local Script Connects and Executes SQL
+
+```python
+import argparse
+import mysql.connector
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--credential_ref", default="my_mysql_prod")
+    parser.add_argument("--sql", required=True)
+    args, _ = parser.parse_known_args()
+
+    creds = get_credentials(args.credential_ref)
+
+    conn = mysql.connector.connect(
+        host=creds["host"],
+        port=creds["port"],
+        database=creds["database"],
+        user=creds["user"],
+        password=creds["password"],
+    )
+    cursor = conn.cursor()
+    cursor.execute(args.sql)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    # Write results to file so AI can read them via mgc_run output path
+    import datetime
+    out = os.path.expanduser(f"~/mgc_outputs/db_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w", encoding="utf-8") as f:
+        for row in rows:
+            f.write(str(row) + "\n")
+    print(f"RESULT_FILE:{out}")  # mgc_run returns this stdout
 ```
 
-## Multi‑Node Example: Sealing Database Scripts
+## Step 5: Store the Script and Execute
 
-When Node A needs Node B to execute a database script:
+```python
+# 5a. Script Agent stores the script in MGC
+mgc_save(
+    info_type="script",
+    info_owner="mysql_query_v1",
+    ext01="python",
+    content="<script body from steps 3-4>",
+    update_if_exists=True
+)
+# MGC 1.4.10 auto-parses argparse literal defaults into ext02
+
+# 5b. Executor Agent runs the script (1.4.7+ blackbox)
+result = mgc_run(
+    info_type="script",
+    info_owner="mysql_query_v1",
+    diff_1="v1",                  # schema-required differentiation field; any non-empty string works for a single entry
+    ext02='["--sql", "SELECT 1"]' # JSON array string, NOT dict
+)
+# Returns: {"pid": 12345, "status": "started"}
+# Read the result file printed on stdout (if mgc returned it via the file output convention).
+# AI never sees the password.
+```
+
+---
+
+# Multi‑Node Example: Sealing Database Scripts (1.4.10)
 
 ### Node A: Seal the database script
 
-```
-Tool: mgc_seal
-Parameters:
-  info_type:   "script"
-  info_owner:  "mysql_backup_script"
-  ext01:       "python"
-  ext04:       "-----BEGIN PUBLIC KEY-----\n...Node B's public key...\n-----END PUBLIC KEY-----"
+```python
+# Get Node B's public key (multi-line PEM, real \n)
+node_pub = mgc_get(info_type="__NODE_PUB__", info_owner="__NODE_PUB__")
+
+# Store original script first
+mgc_save(
+    info_type="script",
+    info_owner="mysql_backup_v1",
+    ext01="python",
+    content="<script body>"
+)
+# 1.4.10 auto-fills ext02 from argparse literal defaults
+
+# Seal with Node B's public key
+sealed = mgc_seal(
+    info_owner="mysql_backup_v1",
+    ext04=node_pub
+)
+# sealed = {content, ext_01, ext_02, ext_03}
+# ⚠️ ext04 MUST be multi-line PEM with real newlines
 ```
 
-Returns: Encrypted capsule containing the database script
+### Node B: Store and execute the sealed capsule
 
-### Node B: Execute the sealed script
+```python
+# Store the sealed capsule (must include ext02 from source)
+mgc_save(
+    info_type="script",
+    info_owner="mysql_backup_v1",
+    ext01=sealed["ext_01"],
+    ext02=sealed["ext_02"],            # default args from source argparse
+    content=sealed["content"],
+    ext03=sealed["ext_03"],            # RSA-encrypted AES key (only Node B can decrypt)
+    update_if_exists=True
+)
 
+# Execute via mgc_run (1.4.7+)
+mgc_run(
+    info_type="script",
+    info_owner="mysql_backup_v1",
+    diff_1="v1",                       # schema-required; any non-empty string works for a single entry
+    ext02='["--output-dir", "/backup"]'
+)
+# Node B executes with its own private key; credentials are read from Node B's local MGC.
 ```
-Tool: mgc_get
-Parameters:
-  info_type:  "script"
-  info_owner: "mysql_backup_script"
-  action:     "run"
-```
 
-Node B uses its private key to decrypt and execute. Node A's database script is never exposed to Node B.
+> **Credential consistency**: Node B must also store the DB credential with the **same `info_type`/`info_owner`** as Node A. Otherwise the sealed script will fail to find credentials.
+
+---
+
+# MCP Tools Reference
+
+| Tool | Purpose | Notes |
+|------|---------|-------|
+| `mgc_save` | Store credentials / scripts | `info_type="config"` for credentials, `"script"` for scripts |
+| `mgc_run` | Blackbox script execution (1.4.7+) | `ext02` MUST be a JSON array string; `diff_1` is schema-required (any non-empty string for a single entry) |
+| `mgc_list` | List entries (exact match) | metadata only, no plaintext |
+| `mgc_find` | Fuzzy search (1.4.10) | `match_mode`: substring/prefix/suffix/exact |
+| `mgc_seal` | Seal script for target node | `ext04` MUST be multi-line PEM with real newlines |
+| `mgc_open_webui` | Open WebUI for user to store credentials | browser opens automatically |
+| ~~`mgc_get`~~ | ~~DO NOT USE FROM AI~~ | Returns plaintext — breaks zero‑exposure |
+
+---
+
+# Quick Reference: AI Behaviour Rules
+
+When this skill is active, the AI MUST:
+
+- ✅ **Use `mgc_run`** to execute database scripts; AI never touches plaintext
+- ✅ **Use `mgc_find`** to locate available database scripts (`match_mode="substring"`)
+- ✅ **Use `mgc_open_webui`** to help user store credentials
+- ✅ Reference scripts by `info_owner`/`diff_1` only; never include credentials in prompts
+- ❌ **Never call `mgc_get`** — returns plaintext
+- ❌ **Never embed credentials** in SKILL.md, prompts, or AI context
+- ❌ **Never ask the user** to paste the password in chat
 
 ---
 
@@ -262,318 +380,172 @@ Node B uses its private key to decrypt and execute. Node A's database script is 
 
 ## MGC Related
 
-### Q: What if MGC is not installed?
-**A:** Install MGC Blackbox: `pip install mgc-blackbox`
+**Q: What if MGC is not installed?**
+A: `pip install mgc-blackbox>=1.4.9`. Requires Python 3.10+.
 
-### Q: What if MGC is not running?
-**A:** Start MGC: `mgc` in a terminal. Service runs at http://127.0.0.1:57219
+**Q: What if MGC is not running?**
+A: Start with `mgc`. WebUI at http://127.0.0.1:57218, API at http://127.0.0.1:57219.
 
-### Q: How do I check if MGC is running?
-**A:** Open http://127.0.0.1:57219 in a browser. If you see a response, MGC is running.
+**Q: Port 57219 is already in use?**
+A: Stop other apps on that port, or run MGC with a different port.
 
-### Q: Port 57219 is already in use
-**A:** Stop other applications using that port, or configure MGC to use a different port.
+**Q: How do I check MGC version?**
+A: `mgc --status` (1.4.9+). Also shown in WebUI's Settings panel.
 
 ## Credential Management
 
-### Q: How do I update database credentials?
-**A:** Call `mgc_save` again with the same `info_type` and `info_owner`. The old credentials will be replaced.
+**Q: How do I update database credentials?**
+A: Call `mgc_save` with the same `info_type`/`info_owner` AND `update_if_exists=true`. The old entry is replaced.
 
-### Q: How do I manage multiple databases?
-**A:** Use different `info_owner` values for each database:
-- "my_mysql_prod"
-- "my_postgres_dev"
-- "my_mysql_reporting"
+**Q: How do I manage multiple databases?**
+A: Use different `info_owner` per database: `my_mysql_prod`, `my_postgres_dev`, etc.
 
-### Q: How do I rotate database credentials?
-**A:**
-1. Update credentials in the database
-2. Call `mgc_save` with new credentials (same `info_owner`)
-3. Local scripts automatically retrieve new credentials on next run
+**Q: How do I rotate database credentials?**
+A: 1) Update in DB; 2) `mgc_save(..., update_if_exists=true)` with new credentials; 3) Scripts auto-pick up on next run.
 
-### Q: What if credentials are not found?
-**A:**
-1. Verify `info_owner` matches exactly (case‑sensitive)
-2. Verify `info_type` matches
-3. List all stored credentials: `mgc_list`
+**Q: What if credentials are not found?**
+A: 1) Verify `info_owner` exactly (case-sensitive); 2) `mgc_list` to check; 3) `mgc_find` for fuzzy lookup.
 
 ## Security
 
-### Q: How do I ensure AI never sees database passwords?
-**A:**
-1. Never include credentials in SKILL.md prompts
-2. Never pass credentials as parameters to AI
-3. Always use MGC to store credentials
-4. Local scripts retrieve credentials directly from MGC
-5. AI only receives non‑sensitive query results
+**Q: Can AI read credentials from MGC?**
+A: **No — never call `mgc_get` from AI.** `mgc_get` returns plaintext and breaks zero‑exposure. Credentials must be read by local scripts via HTTP API inside MGC blackbox execution.
 
-### Q: Can AI read credentials from MGC?
-**A:** Yes, if AI calls `mgc_get`. **Never call mgc_get unless you want AI to process the result.** For zero‑exposure, use local scripts that call MGC, not AI directly.
+**Q: What if AI accidentally logs credentials?**
+A: Local scripts must: never `print`/`log` password values; only log non-sensitive info (host, query, row count).
 
-### Q: What if AI accidentally logs credentials?
-**A:** Ensure your local script:
-- Never prints or logs credential values
-- Only logs non‑sensitive information (query, row count, etc.)
-- Uses secure logging practices
+**Q: Is HTTP API access to credentials safe?**
+A: Yes — HTTP API is bound to localhost (127.0.0.1), requires the MGC token from `~/.mgc/database/mgc_black_box/.mgc_token`. The script is inside MGC blackbox and the AI never sees the response.
 
-## Multi‑Node Scenarios
+## Multi‑Node
 
-### Q: How do I share a database script securely?
-**A:**
-1. Node A creates the database script
-2. Use `mgc_seal` with Node B's public key
-3. Node B decrypts and executes using `mgc_get` with action="run"
+**Q: How to share a database script across nodes?**
+A: 1) Node A stores script; 2) `mgc_seal(info_owner=..., ext04=node_b_pubkey)`; 3) Node B stores capsule with `ext02`/`ext03`; 4) Node B calls `mgc_run`.
 
-### Q: Can I seal a script for multiple nodes?
-**A:** Currently, `mgc_seal` targets one node at a time. For multiple nodes, seal separately with each node's public key.
+**Q: Can I seal for multiple nodes?**
+A: Not in one call — seal separately for each node. Use `mgc_find` to track which nodes have copies.
 
 ---
 
 # Anti‑Patterns
 
-## Common Mistakes and Correct Practices
-
-### ❌ Anti‑Pattern 1: Hardcoding Database Password in Scripts
+### ❌ AI calling mgc_get to retrieve credentials
 
 ```python
-# WRONG - Never do this
-def connect_to_db():
-    connection = pymysql.connect(
-        host="db.example.com",
-        password="secret_password"  # Exposed!
-    )
+# WRONG — breaks zero‑exposure, password enters AI context
+creds = mgc_get(info_type="config", info_owner="my_mysql_prod")
+print(creds["password"])  # NEVER
 ```
 
-**Correct Practice:**
-```python
-# RIGHT - Retrieve from MGC
-def connect_to_db():
-    credentials = get_credentials_from_mgc("my_mysql_prod")
-    connection = pymysql.connect(
-        host=credentials["host"],
-        password=credentials["password"]
-    )
-```
+**Correct**: AI only calls `mgc_run`; the script internally uses HTTP API.
 
 ---
 
-### ❌ Anti‑Pattern 2: Exposing Connection String in SKILL.md
+### ❌ Hardcoding password in script
+
+```python
+# WRONG
+def connect():
+    return pymysql.connect(password="secret_password")
+```
+
+**Correct**: Read from MGC via HTTP API; password is never in source code.
+
+---
+
+### ❌ Embedding connection string in SKILL.md
 
 ```markdown
-# WRONG - In SKILL.md
-Use the following database credentials:
+# WRONG
 - Host: db.example.com
 - Password: my_secret_password
 ```
 
-**Correct Practice:**
+**Correct**:
 ```markdown
-# RIGHT - In SKILL.md
-Database credentials are stored securely in MGC.
 Reference: info_owner="my_mysql_prod"
-AI should NOT handle credentials directly.
+Credentials stored encrypted; AI never sees them.
 ```
 
 ---
 
-### ❌ Anti‑Pattern 3: Putting Password in ext04
+### ❌ Passing password as mgc_run parameter
 
-```json
-// WRONG
-{
-  "info_owner": "my_database",
-  "ext04": "password=secret123"  // This is NOT for passwords!
-}
+```python
+# WRONG
+mgc_run(info_owner="query", ext02=json.dumps({"password": "..."}))
 ```
 
-**Correct Practice:**
-```json
-// RIGHT
-{
-  "info_owner": "my_database",
-  "info_type": "config",
-  "ext04": "-----BEGIN PUBLIC KEY-----\nNodeB_Public_Key...\n-----END PUBLIC KEY-----"
-}
-// ext04 is ONLY for public keys when sealing
+**Correct**: Password is `info_type="config"` stored separately; script reads it via HTTP API inside blackbox.
+
+---
+
+### ❌ Logging credentials
+
+```python
+# WRONG
+logger.info(f"Connecting with password: {creds['password']}")
+```
+
+**Correct**:
+```python
+logger.info(f"Connecting to {creds['host']}:{creds['port']}")  # No password
 ```
 
 ---
 
-### ❌ Anti‑Pattern 4: Writing Credentials to Local Files
+### ❌ Writing credentials to disk
 
 ```bash
 # WRONG
 echo "password=secret" > db_credentials.txt
 ```
 
-**Correct Practice:**
-```bash
-# RIGHT
-# Store in MGC using mgc_save
-# Never write credentials to disk files
-```
-
----
-
-### ❌ Anti‑Pattern 5: Passing Credentials as Prompt Parameters
-
-```markdown
-# WRONG
-Execute SQL: SELECT * FROM users WHERE password='{user_password}'
-```
-
-**Correct Practice:**
-```markdown
-# RIGHT
-Execute SQL using credentials stored in MGC.
-Reference: info_owner="my_mysql_prod"
-The local script handles credential retrieval.
-```
-
----
-
-### ❌ Anti‑Pattern 6: Logging Credentials in Database Scripts
-
-```python
-# WRONG
-def execute_query(sql):
-    creds = get_credentials_from_mgc("my_database")
-    print(f"Connecting with password: {creds['password']}")  # Exposed!
-    # ... execute query
-```
-
-**Correct Practice:**
-```python
-# RIGHT
-def execute_query(sql):
-    creds = get_credentials_from_mgc("my_database")
-    logger.info(f"Connecting to {creds['host']}")  # No password logged
-    # ... execute query
-```
+**Correct**: Store in MGC; never write credentials to plain files.
 
 ---
 
 # Troubleshooting
 
-## Common Errors and Solutions
+## Error: "Credential not found"
 
-### Error: "Credential not found"
+1. Verify `info_owner` matches exactly (case-sensitive)
+2. `mgc_find(info_owner="...", match_mode="substring")` to locate
+3. `mgc_list()` to enumerate all entries
 
-**Symptoms:** `mgc_get` returns empty or error
+## Error: "Update not allowed" / "Entry exists"
 
-**Solutions:**
-1. Verify `info_owner` matches exactly (case‑sensitive)
-2. Verify `info_type` matches
-3. List all credentials: `mgc_list`
-4. Re‑store credentials if needed
+`mgc_save` requires `update_if_exists=true` to overwrite by default (1.4.10 strictness).
 
----
+## Error: "Database connection failed"
 
-### Error: "info_type mismatch"
+1. Verify credentials are correct (test locally outside MGC)
+2. Check DB server running
+3. Verify network/firewall to DB host
+4. Verify port (MySQL: 3306, PostgreSQL: 5432, SQL Server: 1433)
 
-**Symptoms:** API returns wrong data or error
+## Error: "Invalid PEM format" (during mgc_seal)
 
-**Solutions:**
-1. Check the `info_type` used when saving
-2. Use the same `info_type` when retrieving
-3. Common types: "config", "credential", "script"
+`ext04` must be multi-line PEM with real newlines. Copy verbatim from `mgc_get(info_type='__NODE_PUB__')`.
 
----
+## Error: "dynamic_args_detected" (when saving script)
 
-### Error: "Database connection failed"
+Script uses dynamic argparse defaults (`datetime.now()`, `os.path.expanduser()`). Switch to literal defaults or pass `ext02` manually when calling `mgc_run`.
 
-**Symptoms:** Cannot connect to database
+## Error: "args_not_recognized" (during mgc_run)
 
-**Solutions:**
-1. Verify credentials are correct in MGC
-2. Check database server is running
-3. Verify network connectivity to database host
-4. Check port is correct (MySQL: 3306, PostgreSQL: 5432, SQL Server: 1433)
-5. Verify firewall allows connection
+Source script's argparse did not recognize the args passed via `ext02`. Check `add_argument` definitions and the `ext02` JSON array.
 
----
+## Error: "MGC not running"
 
-### Error: "Invalid credentials"
+1. `mgc` in a terminal
+2. Check http://127.0.0.1:57219 responds
+3. Verify token file: `~/.mgc/database/mgc_black_box/.mgc_token`
 
-**Symptoms:** Authentication fails when connecting
+## Error: "MCP tool call failed"
 
-**Solutions:**
-1. Verify username and password in MGC storage
-2. Check if password was recently changed
-3. Update credentials in MGC using `mgc_save`
-4. Verify user has permission to access the database
-
----
-
-### Error: "MGC not running"
-
-**Symptoms:** Cannot connect to MGC service
-
-**Solutions:**
-1. Start MGC: `mgc` in terminal
-2. Check service URL: http://127.0.0.1:57219
-3. Verify token file exists: `~/.mgc/database/mgc_black_box/.mgc_token`
-4. Restart MGC if needed
-
----
-
-### Error: "MCP tool call failed"
-
-**Symptoms:** Tool execution error
-
-**Solutions:**
-1. Verify MGC is running
-2. Check service URL
-3. Verify token file is readable
-4. Check MCP tool parameters are correct
-
----
-
-### Error: "Permission denied"
-
-**Symptoms:** Cannot access MGC storage
-
-**Solutions:**
-1. Check file permissions on `~/.mgc/`
-2. Verify token file is readable
-3. Run MGC with appropriate permissions
-
----
-
-# MGC Blackbox API Reference
-
-## Service Endpoint
-
-- Base URL: http://127.0.0.1:57219
-- Token File: ~/.mgc/database/mgc_black_box/.mgc_token
-- Token: String token read from token file, required for all API calls
-
-## Get Credentials API
-
-**Endpoint:** /api/mgc/sensitive/get
-**Method:** POST
-**Headers:**
-- X-MGC-Token: (string token read from token file)
-- Content-Type: application/json
-
-**Body fields:**
-- info_type: "config"
-- info_owner: your chosen identifier
-
-**Response fields:**
-- code: status code
-- data.content: JSON string containing stored credentials
-
-## Save Credentials API
-
-**Endpoint:** /api/mgc/sensitive/save
-**Method:** POST
-**Headers:** same as above
-
-**Body fields:**
-- info_type: "config"
-- info_owner: your identifier
-- content: JSON string of credentials
+1. Confirm MGC ≥ 1.4.9; upgrade via WebUI Settings or `pip install --upgrade mgc-blackbox`
+2. Verify MCP server config has `PYTHONIOENCODING=utf-8` env (Windows)
 
 ---
 
@@ -581,145 +553,139 @@ def execute_query(sql):
 
 ## Multi‑Database Credential Management
 
-Manage credentials for multiple databases:
-
-```
-# Storage identifiers:
-info_owner: "my_mysql_prod"      # MySQL production
-info_owner: "my_postgres_prod"   # PostgreSQL production
-info_owner: "my_mysql_dev"       # MySQL development
-info_owner: "my_mysql_test"      # MySQL testing
-```
-
-## Multi‑Node Database Task Distribution
-
-### Node A: Prepares database operation script
-
-```
-Tool: mgc_seal
-Parameters:
-  info_type:   "script"
-  info_owner:  "mysql_migration_script"
-  ext01:       "python"
-  ext04:       "-----BEGIN PUBLIC KEY-----\nNodeB_Public_Key...\n-----END PUBLIC KEY-----"
-```
-
-### Node B: Executes the sealed script
-
-```
-Tool: mgc_get
-Parameters:
-  info_type:  "script"
-  info_owner: "mysql_migration_script"
-  action:     "run"
-```
+Use distinct `info_owner` per database; use `mgc_find(info_owner="my_", match_mode="prefix")` to enumerate.
 
 ## Credential Rotation
 
-Regularly rotate database credentials:
+1. Generate new credentials in the DB
+2. `mgc_save(info_type="config", info_owner="...", update_if_exists=true, content="<new>")`
+3. No code change — scripts auto-pick up new credentials
 
-1. **Generate new credentials** in database
-2. **Update MGC storage**:
-   ```
-   Tool: mgc_save
-   Parameters:
-     info_type:   "config"
-     info_owner:  "my_mysql_prod"
-     content:     "{new_credentials}"
-   ```
-3. **No code changes needed** - local scripts automatically use new credentials
+## Credential Versioning
 
-## Credential Version Management
+Use `info_owner` suffixes (`my_mysql_prod_v1`, `my_mysql_prod_v2`) if you need rollback. Switch scripts' `info_owner` reference atomically.
 
-Track credential versions using info_owner suffixes:
+## Cross-Node Script + Credential Consistency
 
-```
-info_owner: "my_mysql_prod_v1"   # Version 1
-info_owner: "my_mysql_prod_v2"   # Version 2 (after rotation)
-```
-
----
-
-# Example Directory Structure
-
-When creating a database skill:
-
-```
-database_skill/
-  SKILL.md           # Skill definition
-  README.md          # User documentation
-  scripts/           # Local scripts (conceptual)
-    execute_query.py
-    backup.py
-    migrate.py
-```
+When sealing scripts across nodes, both the script capsule AND the credential entry must be present on the target node. Use the same `info_type`/`info_owner` for credentials on both nodes.
 
 ---
 
 # Security Best Practices
 
-1. **Never embed credentials in code**
-2. **Use MGC for credential storage**
-3. **Retrieve credentials at runtime only**
-4. **Never log or print credentials**
-5. **Rotate credentials regularly**
-6. **Use separate credentials per database**
-7. **Use separate credentials per environment** (dev/staging/prod)
-8. **Enable SSL/TLS for database connections**
-9. **Limit database user permissions** to minimum required
+1. AI never calls `mgc_get`; credentials stay in MGC.
+2. Use MGC for all credential storage.
+3. Rotate credentials regularly.
+4. Use separate credentials per environment (dev/staging/prod).
+5. Enable SSL/TLS for database connections (`sslmode=require` for PostgreSQL).
+6. Limit DB user permissions to minimum required.
+7. Never log credentials; only log host/query/row count.
+8. Use `mgc_seal` for cross-node script distribution; keep credentials local to each node.
 
 ---
 
-# Common Patterns
-
-## Python Database Connection (Conceptual)
+# Example Directory Structure
 
 ```
-import mysql.connector
+database_skill/
+  manifest.json
+  SKILL.md
+  README.md
+  examples/
+    mysql_query.py        # local script template
+    postgres_backup.py    # backup template
+    connection_pool.py    # pooling template
+```
 
-def get_connection(credentials):
-    return mysql.connector.connect(
-        host=credentials["host"],
-        port=credentials["port"],
-        database=credentials["database"],
-        user=credentials["user"],
-        password=credentials["password"]
+---
+
+# Template: Local Database Script (1.4.10)
+
+```python
+"""Database script template. Store as MGC script; execute via mgc_run."""
+
+import os
+import json
+import argparse
+import requests
+import datetime
+
+MGC_BASE_URL = "http://127.0.0.1:57219"
+TOKEN_FILE = os.path.expanduser("~/.mgc/database/mgc_black_box/.mgc_token")
+
+
+def get_credentials(info_owner, info_type="config"):
+    """Read credentials from MGC via HTTP API. Script-internal only."""
+    if not os.path.exists(TOKEN_FILE):
+        raise RuntimeError("MGC token file missing")
+    with open(TOKEN_FILE, "r") as f:
+        token = f.read().strip()
+    url = f"{MGC_BASE_URL}/api/mgc/sensitive/get"
+    headers = {"X-MGC-Token": token, "Content-Type": "application/json"}
+    resp = requests.post(
+        url,
+        json={"info_type": info_type, "info_owner": info_owner, "action": "run"},
+        headers=headers,
+        timeout=10,
     )
+    resp.raise_for_status()
+    result = resp.json()
+    if isinstance(result, str):
+        return json.loads(result)
+    return result.get("data", {}).get("data_field", {})
 
-def execute_query(sql):
-    creds = retrieve_from_mgc("my_mysql_prod")
-    conn = get_connection(creds)
-    cursor = conn.cursor()
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return result
+
+def main():
+    # ✅ Literal defaults only — MGC 1.4.10 auto-parses into ext02
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--credential_ref", default="my_mysql_prod")
+    parser.add_argument("--sql", default="SELECT 1")
+    args, _ = parser.parse_known_args()  # ✅ parse_known_args avoids exit on unknown params
+
+    creds = get_credentials(args.credential_ref)
+
+    import mysql.connector  # pip install mysql-connector-python
+    conn = mysql.connector.connect(
+        host=creds["host"],
+        port=creds["port"],
+        database=creds["database"],
+        user=creds["user"],
+        password=creds["password"],
+    )
+    try:
+        cursor = conn.cursor()
+        cursor.execute(args.sql)
+        rows = cursor.fetchall()
+        cursor.close()
+    finally:
+        conn.close()
+
+    out_dir = os.path.expanduser("~/mgc_outputs")
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(
+        out_dir, f"db_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+    )
+    with open(out_path, "w", encoding="utf-8") as f:
+        for row in rows:
+            f.write(str(row) + "\n")
+    print(f"RESULT_FILE:{out_path}")
+
+
+if __name__ == "__main__":
+    main()
 ```
 
----
-
-# Use Cases
-
-- Database administration scripts
-- Automated backup operations
-- Data migration tools
-- Application database access
-- Multiple environment management (dev/staging/prod)
-- Scheduled database operations
-- Multi‑node database task execution
+> This template is meant to be stored in MGC as a script (`mgc_save`) and executed by AI via `mgc_run`. The AI provides `--sql` via `ext02` JSON array string; credentials are read inside MGC blackbox; AI only sees the result file.
 
 ---
 
-# Template: Zero‑Exposure Database SKILL.md
-
-When creating a new database skill:
+# Template: SKILL.md for a new database skill
 
 ```markdown
 ---
 
 spec: usk/3.0
-id: your_skill_id
+id: your_db_skill_id
 version: 1.0.0
 name: Your Database Skill
 description: Brief description
@@ -736,9 +702,9 @@ What this skill does.
 
 # Prerequisites
 
-- Install MGC Blackbox
+- MGC Blackbox ≥ 1.4.9
 - Store database credentials in MGC (info_owner: "your_reference")
-- Install required database driver
+- Install database driver
 
 # Usage
 
@@ -753,56 +719,11 @@ How to use this skill.
 # Security
 
 This skill uses Zero‑Exposure design.
-Credentials are stored in MGC, never exposed to AI.
-
----
+Credentials are stored in MGC and read by local scripts; AI never sees plaintext.
 
 # Entrypoint
 
 Describe how to use this skill.
-```
-
----
-
-# Template: Database Local Script Structure
-
-```python
-# Template structure (documentation only)
-
-import json
-import pymysql  # or psycopg2, pymssql, etc.
-
-# MGC Configuration
-MGC_BASE_URL = "http://127.0.0.1:57219"
-TOKEN_FILE = "~/.mgc/database/mgc_black_box/.mgc_token"
-
-def get_mgc_token():
-    # Read token from file
-    pass
-
-def get_credentials(info_owner, info_type="config"):
-    # Call MGC API to retrieve credentials
-    # Return: dict of credential data
-    pass
-
-def execute_query(credentials, sql):
-    # Use credentials to connect and execute
-    # NEVER log credential values
-    # Return: query results only
-    pass
-
-def main():
-    # 1. Get credentials from MGC
-    creds = get_credentials(info_owner="your_database_reference")
-
-    # 2. Execute query
-    result = execute_query(creds, "SELECT * FROM users")
-
-    # 3. Return result (not credentials!)
-    print(result)
-
-if __name__ == "__main__":
-    main()
 ```
 
 ---

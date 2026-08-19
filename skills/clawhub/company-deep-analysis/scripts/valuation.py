@@ -4,7 +4,7 @@
 
 数据流：
   1. 读 系统临时目录/{code}_data.json（collect_data.py 采集；macOS/Linux = /tmp/，Windows = %TEMP%）
-  2. _calc_ebitda(data) —— 自动从三表拆解 EBITDA（A股；港股无 OCF 自动跳过）
+  2. ensure_ebitda(data) —— 自动从三表拆解 EBITDA（A股；港股无 OCF 自动跳过）
   3. estimate_value(data) —— 按行业判定走对应变体
   4. 输出 JSON：方法名 / 估值区间 / 关键假设 / 数据完整度
 
@@ -28,96 +28,36 @@ import statistics
 import tempfile
 from typing import Optional
 
-# ── 安全数值转换 ──
-def _f(v):
-    """安全转为 float，支持百分号字符串（如 '15.3%'）。"""
-    if v is None or v == "" or v == "--" or v == "-":
-        return None
+try:
+    from westock_data import _safe_float as _f
+except ImportError:
+    def _f(v):  # 降级版：百分号不支持（westock_data 不可用时的 fallback）
+        if v is None or v == "" or v == "--":
+            return None
+        try:
+            if isinstance(v, str):
+                v = v.replace(",", "").replace("元", "").strip()
+            return float(v)
+        except (ValueError, TypeError):
+            return None
+
+
+# ── 数据源适配：自动从三表拆 EBITDA（A股新浪 / 港股跳过） ──
+def ensure_ebitda(data):
+    """
+    优先用 data["ebitda"]（gildata MCP 接入时会预填）；
+    否则调 westock_data.calc_ebitda() 拆解；
+    再否则返回 None，估值跳过 EV/EBITDA 变体。
+    """
+    if data.get("ebitda") and isinstance(data["ebitda"], dict) and data["ebitda"].get("EBITDA"):
+        return data["ebitda"]
+
     try:
-        if isinstance(v, str):
-            v = v.replace(",", "").replace("元", "").strip()
-            if v.endswith("%"):
-                return float(v[:-1]) / 100
-        return float(v)
-    except (ValueError, TypeError):
-        return None
-
-
-# ── EBITDA 拆解 ──
-def _calc_ebitda(data):
-    """
-    从三表数据反推 EBIT 和 EBITDA。
-      EBIT = 利润总额 + 财务费用
-      D&A ≈ OCF 净额 - 净利润（粗估）
-      EBITDA = EBIT + D&A
-    港股无 OCF 时自动返回 None。
-    """
-    lrb = data.get("lrb") or []
-    llb = data.get("llb") or []
-
-    if not lrb:
-        return {"error": "lrb 缺失", "EBITDA": None}
-
-    latest_lrb = lrb[0]
-    latest_llb = llb[0] if llb else {}
-    missing = []
-
-    ebt = _f(latest_lrb.get("利润总额"))
-    if ebt is None:
-        missing.append("利润总额")
-
-    interest = _f(latest_lrb.get("财务费用"))
-    if interest is None:
-        interest = 0.0
-        missing.append("财务费用")
-
-    if ebt is None:
-        return {
-            "error": "关键字段缺失",
-            "EBITDA": None,
-            "缺失字段": missing,
-            "报告期": latest_lrb.get("报告期", ""),
-        }
-
-    ocf = _f(latest_llb.get("经营活动产生的现金流量净额"))
-    net_profit = _f(latest_lrb.get("净利润"))
-    if net_profit is None:
-        net_profit = _f(latest_lrb.get("归属于母公司股东的净利润"))
-
-    da = 0.0
-    da_method = "未计算"
-    da_note = ""
-
-    if ocf is not None and net_profit is not None:
-        da_raw = ocf - net_profit
-        if da_raw > 0:
-            da = da_raw
-            da_method = "OCF 净额 - 净利润（粗估）"
-        else:
-            da = 0.0
-            da_method = "OCF ≤ 净利时反推失效，按 0 处理"
-            da_note = f"OCF={ocf / 1e8:.1f}亿 ≤ 净利润={net_profit / 1e8:.1f}亿"
-    else:
-        missing.append("OCF 或净利润缺失")
-        da_method = "OCF/净利缺失"
-
-    ebit = ebt + interest
-    ebitda_val = ebit + da
-
-    return {
-        "EBIT": round(ebit, 2),
-        "EBITDA": round(ebitda_val, 2),
-        "税前利润": round(ebt, 2),
-        "财务费用": round(interest, 2),
-        "折旧摊销": round(da, 2),
-        "折旧摊销算法": da_method,
-        "折旧摊销备注": da_note,
-        "OCF_净额": round(ocf, 2) if ocf is not None else None,
-        "净利润_参考": round(net_profit, 2) if net_profit is not None else None,
-        "报告期": latest_lrb.get("报告期", ""),
-        "数据来源": "公开 API（新浪三表 + 东财 F10）",
-        "缺失字段": missing,
-    }
+        # 懒加载：避免 collect_data 没安装时 import 报错
+        from westock_data import calc_ebitda
+        return calc_ebitda(data)
+    except (ImportError, Exception) as e:
+        return {"EBITDA": None, "error": f"EBITDA 拆解失败: {e}"}
 
 
 # ══════════════════════════════════════════════════════════════
@@ -390,7 +330,7 @@ def val_ev_ebitda_ttm(data, peer_ev_ebitda_median=None, ebitda_obj=None):
 
     ⚠️ 关键：EBITDA 必须是"扣非"或"主营 EBITDA"，不要包含投资收益
     """
-    ebitda_info = ebitda_obj or _calc_ebitda(data)
+    ebitda_info = ebitda_obj or ensure_ebitda(data)
     ebitda = _f(ebitda_info.get("EBITDA")) if ebitda_info else None
     price = _f(data.get("price"))
     shares = _f(data.get("total_shares"))
@@ -430,7 +370,7 @@ def val_ev_ebitda_forward(data, peer_ev_ebitda_median=None, ebitda_growth=0.10):
     """
     EV/EBITDA-Forward：用预测 EBITDA
     """
-    ebitda_info = _calc_ebitda(data)
+    ebitda_info = ensure_ebitda(data)
     ebitda_ttm = _f(ebitda_info.get("EBITDA")) if ebitda_info else None
     price = _f(data.get("price"))
     shares = _f(data.get("total_shares"))
@@ -520,7 +460,7 @@ def val_rule_of_40(data, peer_ev_revenue_median=None):
     如果满足 Rule of 40，给 EV/Revenue 加溢价
     """
     revenue_growth = _f(data.get("revenue_growth"))  # 营收 YoY
-    ebitda_info = _calc_ebitda(data)
+    ebitda_info = ensure_ebitda(data)
     ebitda = _f(ebitda_info.get("EBITDA")) if ebitda_info else None
     revenue_ttm = _f(data.get("revenue_ttm"))
 

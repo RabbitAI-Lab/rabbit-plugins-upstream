@@ -1,6 +1,6 @@
 ---
 name: us-stocks-analysis
-description: "US stocks analysis by an adversarial investment committee. Legendary-investor personas independently research a thesis, attack each other's cases against a shared evidence ledger (sentiment, smart money, SEC fundamentals), and reconcile into a verdict with recorded dissents. Structured rubrics keep every number sourced, on any model. Includes five quick data workflows. Read-only. No trading, no purchases, no write operations, no wallet access."
+description: "US stocks analysis by an adversarial investment committee. Legendary-investor personas independently research a thesis, attack each other's cases against a shared evidence ledger (sentiment, smart money, SEC fundamentals), and reconcile into a verdict with recorded dissents. Structured rubrics keep every number sourced, on any model. Includes five quick data workflows. Use for stock research, investment thesis, bull case vs bear case, due diligence on a ticker, should I buy this stock, deep dive on a company. Read-only. No trading, no purchases, no write operations, no wallet access."
 homepage: https://sentisense.ai
 requires:
   env:
@@ -53,6 +53,11 @@ Use of the SentiSense API is subject to the [API Terms of Service](https://senti
 ---
 
 ## Authentication
+
+**Identify your client.** Send a `User-Agent` naming your agent runtime and this skill, for
+example `OpenClaw/1.4 (us-stocks-analysis)` or `ClaudeCode/2.1 (us-stocks-analysis)`. Substitute your own runtime and
+version if neither matches. Optional, and it is what tells us this skill has real integrations
+behind it, so it gets prioritized and you get notice before it changes.
 
 ```bash
 curl -H "X-SentiSense-API-Key: $SENTISENSE_API_KEY" \
@@ -111,7 +116,7 @@ Intersect the three ticker lists; report names in 2+ buckets with a one-liner ea
 1. `GET /api/v1/stocks/popular` for candidates
 2. Per ticker: `GET /api/v1/stocks/chart?ticker={T}&timeframe=1M` (intraday bars, not daily closes; for a 7-day change filter to bars with `timestamp >= now-7d`, compare first vs last)
 3. Per ticker: `GET /api/v2/metrics/entity/{T}/metric/sentiment` (default 7-day window). If the series has fewer than 2 points, treat the trend as insufficient data and EXCLUDE the ticker rather than computing a bogus delta. With 2+ points, `sentimentChange` = last minus first (each read via `metricValue.value.value`, a polarity in [-1,1]). **Thin-sample guard:** a window-edge point built on a handful of mentions can dominate the delta (a lone 1-mention day at +/-1.0 swamps everything). Only the Score (`sentisense_score`) series carries `metricValue.properties` (`{bull, bear, directional}`; sentiment points have empty `properties`), so read the sample size from the Score point for the same window via `properties.directional`, the day's directional (bull + bear) mention count (or fetch `/metric/mentions`); if the first or last point is thin (roughly under 5 directional mentions), use the nearest robust point or average the first and last two instead of trusting a single noisy edge. Note `directional` counts non-neutral mentions only, so it is always at or below the `/metric/mentions` total. Do not reach for `metricValue.stats.count`: it is the daily-bucket count and is always 1.
-4. **Same scale before ranking.** `priceChangePct` is a percentage; `sentimentChange` is a raw polarity delta in ~[-2,2]. Scale: `sentimentChangeScaled = sentimentChange * 100`. Rank by `|priceChangePct - sentimentChangeScaled|`, report top 5 each direction. Apply this exact scaling so any two implementations agree.
+4. **Same scale before ranking.** `priceChangePct` is a percentage; `sentimentChange` is a raw polarity delta in ~[-2,2]. Scale: `sentimentChangeScaled = sentimentChange * 100`. Apply this exact scaling so any two implementations agree. **Bucket by sign before ranking:** a divergence requires price and sentiment to move in OPPOSITE directions, so bullish divergence is `priceChangePct < 0` and `sentimentChangeScaled > 0`, and bearish divergence is `priceChangePct > 0` and `sentimentChangeScaled < 0`. Same-sign pairs (both moved up, or both moved down) are not divergences no matter how large the gap between them, exclude them. Within each bucket, rank by `|priceChangePct - sentimentChangeScaled|` and report the top 5.
 
 **Synthesize as:** "Bullish divergence (price down, sentiment up): TSLA -8% / sentiment +12%. Bearish divergence: COIN +14% / sentiment -9%."
 
@@ -188,7 +193,7 @@ The single most important artifact. Every downstream claim must cite a ledger ro
 ### EVIDENCE LEDGER: {TICKER}   (filled {date})
 | ID  | Fact                            | Value | As-of / Period      | Class     | Tier | Source |
 |-----|---------------------------------|-------|---------------------|-----------|------|--------|
-| E1  | Price + day change              | $__ / __% | live            | realtime  | D1   | SS /stocks/price |
+| E1  | Price + day change              | $__ / __% | 15-min delayed  | realtime  | D1   | SS /stocks/price |
 | E2  | Revenue (TTM or latest FY)      | $__   | __ (state FY end)   | quarterly | P    | EDGAR XBRL |
 | E3  | Net income (TTM or latest FY)   | $__   | __                  | quarterly | P    | EDGAR XBRL |
 | E4  | Operating cash flow             | $__   | __                  | quarterly | P    | EDGAR XBRL |
@@ -214,7 +219,7 @@ Rules under the table, non-negotiable:
 
 - **Cite or say you don't have it.** `[NOT AVAILABLE]` is a respectable value; a plausible guess is a defect.
 - **Force the fiscal period into every fundamental row.** FY ends differ (NVDA ends January, AAPL ends September). "Q4 2025" without the FY convention is a bug.
-- **Batch rows carry their as-of** and are never described as real time. Sentiment, Score, insights, mood are batch; price and chart are real time.
+- **Every row carries its as-of, and nothing is described as real time.** Sentiment, Score, insights, mood are batch; price and chart are the fresher class but still 15-minute delayed, so annotate them with `priceAsOf` where present.
 - **New facts found mid-debate get appended as E20, E21, ...** before anyone may cite them. No row, no citation, no claim.
 - **13F: quarters first.** Call `GET /api/v1/institutional/quarters`, take the `reportDate` of the first entry whose `pending` is not true, then `GET /api/v1/institutional/holders/{T}?reportDate={Q}`. Never hardcode a quarter; never take a `pending:true` one.
 - **Insider tallies exclude non-signals.** Count only `transactionType == "BUY"` / `"SELL"`; exclude `AWARD` (code A, `totalValue:0`), `GIFT`, `EXERCISE` from counts and dollar sums.
@@ -580,7 +585,7 @@ Run last, before showing the user anything:
 [ ] Every number in the output traces to a ledger row ID.
 [ ] No [NOT AVAILABLE] row was used downstream as if it had a value.
 [ ] Every fundamental row states its fiscal period (watch FY ends: NVDA Jan, AAPL Sep).
-[ ] Every batch row shows its as-of; nothing batch is called "real time".
+[ ] Every row shows its as-of; nothing is called "real time", including price.
 [ ] Every seat voted from the single stance vocabulary and cited at least one row.
 [ ] At least one MATERIAL+ objection was filed; dissents are recorded, not smoothed away.
 [ ] Every rebuttal opened with a steelman.
@@ -762,7 +767,8 @@ PRIMARY (no key; see Fetch safety)
 - **`market-mood` nests the composite under `market`**; `sectors` is a dict with duplicate GICS spellings to dedupe.
 - **Options are end-of-day chain aggregates, not order flow.** `/options/*` gives put/call volume and OI, an ATM IV term structure, 25-delta skew, OI walls with max pain, and unusual contracts, each ranked as a percentile of that ticker's OWN trailing history (`ivRank1y`, `pcVolPctl1y`, `skewPctl1y`), `asOf` the prior session. Read it as positioning context, never as live sweeps or dealer books. The `/options/overview` board is stocks-only; ETFs (`SPY`, `QQQ`, `TLT`, sector `XL*`) are covered but reachable only via `/stocks/{T}/options/summary`.
 - **Don't hallucinate endpoints.** No real-time options order flow or sweeps feed (the `/options/*` endpoints above are end-of-day), no dark pool, no `/congress` (it's `/politicians`), no financial-statements endpoint on SentiSense (fundamentals come from EDGAR).
-- **Batch vs real time.** Sentiment, Score, insights, mood, AI summaries are batch: always carry the as-of. Price and chart are real time.
+- **Batch vs delayed.** Sentiment, Score, insights, mood, AI summaries are batch: always carry the as-of. Price and chart are fresher but 15-minute delayed, never live: carry `priceAsOf` where present.
+- **Freshness fields don't share units.** `/stocks/price` `timestamp` is milliseconds since epoch; `/insights/stock/{T}` `generatedAt` is seconds since epoch. Both are the freshness field this skill tells you to check, so naive age math across the two (e.g. subtracting one from the other, or comparing both to `Date.now()` the same way) is off by 1000x. Convert to a common unit before comparing.
 - **Parallelize independent calls; be brief.** Users want the synthesis, not the recipe.
 
 ---

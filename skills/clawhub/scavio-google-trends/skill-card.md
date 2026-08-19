@@ -1,45 +1,61 @@
-## Description: <br>
-Query Google Trends for interest-over-time, by-region, and related queries for a keyword, and pull real-time trending searches for a country as structured JSON using Scavio's v2 Google Trends API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries Google Trends via Scavio for keyword interest over time, regional interest, related queries, and real-time country trends as structured JSON.
 
-## Publisher: <br>
-[scavio-ai](https://clawhub.ai/user/scavio-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[scavio-ai](https://clawhub.ai/user/scavio-ai)
 
-## Use Case: <br>
-Developers, analysts, SEO practitioners, and market researchers use this skill to query Google Trends interest over time, interest by region, related queries, related topics, and real-time trending searches through Scavio's API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Trend queries, locations, date ranges, and filters are sent to Scavio using SCAVIO_API_KEY. <br>
-Mitigation: Avoid sending secrets, private customer names, sensitive business plans, or other confidential material in trend queries. <br>
-Risk: Google Trends values are relative interest indexes rather than absolute search counts. <br>
-Mitigation: Describe trend values as relative 0-100 interest and return only data received from the API. <br>
-Risk: The skill depends on a valid Scavio API key and paid or free usage credits. <br>
-Mitigation: Confirm SCAVIO_API_KEY is configured and handle 401, 429, 502, and 503 responses before retrying or reporting results. <br>
+## Use Case:
 
+Developers, analysts, SEO practitioners, and agents use this skill to retrieve structured Google Trends data for market research, keyword research, regional interest analysis, and current trending searches.
 
-## Reference(s): <br>
-- [Scavio Google Trends documentation](https://scavio.dev/docs/google-trends) <br>
-- [Scavio rate limits documentation](https://scavio.dev/docs/rate-limits) <br>
-- [ClawHub skill page](https://clawhub.ai/scavio-ai/skills/scavio-google-trends) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/scavio-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Guidance, Shell commands, Code] <br>
-**Output Format:** [Markdown guidance with JSON responses, API request details, shell setup commands, and example code] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; each documented Scavio Google Trends endpoint call costs 1 credit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Trend queries are sent to Scavio's external API using the user's SCAVIO_API_KEY.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is comfortable sending the query to Scavio before making API calls, and keep the API key in environment or secret storage.
+
+Risk: Each request consumes one Scavio credit.
+
+Mitigation: Tell the user before making repeated or broad requests and avoid unnecessary retries.
+
+Risk: Google Trends values are relative indices and trending results depend on the selected geography and time window.
+
+Mitigation: Report returned values as relative interest and include the requested geo, date, hours, and data_type context in summaries.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/scavio-ai/skills/scavio-google-trends)
+- [Publisher profile](https://clawhub.ai/user/scavio-ai)
+- [Scavio Google Trends documentation](https://scavio.dev/docs/google-trends)
+- [Scavio rate limits](https://scavio.dev/docs/rate-limits)
+- [Scavio API](https://api.scavio.dev)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, API Calls, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with JSON response structures and inline code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; external API calls consume one Scavio credit per request.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

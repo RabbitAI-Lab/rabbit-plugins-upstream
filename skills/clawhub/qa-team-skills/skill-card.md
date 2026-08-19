@@ -1,49 +1,63 @@
-## Description: <br>
-Qa Team Skills helps QA teams use a unified /qa entry point and eight standardized workflows to review requirements, design test cases, test agents, analyze defects, generate reports, manage QA work, and retain local testing memory. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+QA Team Skills provides a unified prompt workflow for QA teams to turn natural-language testing requests into requirements reviews, test cases, agent test plans, bug analysis, reports, team management summaries, exploratory testing guidance, and local memory-supported reuse.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test managers, and developers use this skill to standardize AI-assisted testing work across requirement review, test-case design, agent testing, defect analysis, reporting, and team management. Teams can use its local memory workflow to reuse test cases, defect patterns, standards, and reports across product iterations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Local memory can retain test cases, defect details, reports, standards, logs, screenshots, or other sensitive QA inputs. <br>
-Mitigation: Use approved and redacted test data, avoid production credentials and customer personal data, confirm the memory location before use, and delete product memory directories when retention is no longer allowed. <br>
-Risk: Generated test cases, reports, quality assessments, and root-cause analyses may be incomplete or misleading if accepted without review. <br>
-Mitigation: Review P0 test cases, verify generated test data in the test environment, sample-check report data against source systems, and require second-person review for medium- or low-confidence root-cause analysis. <br>
-Risk: Optional evaluation workflows can call an external LLM API when explicitly run with user-provided credentials. <br>
-Mitigation: Run optional evaluation only in approved environments, use sanitized evaluation data, and keep API keys in environment variables rather than test content or reports. <br>
+## Use Case:
 
+QA engineers, test managers, and software teams use this skill to standardize AI-assisted testing work across requirements review, test design, defect analysis, reporting, team quality management, and exploratory testing while keeping human review in the loop.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-team-skills) <br>
-- [Publisher profile](https://clawhub.ai/user/kokxi) <br>
-- [README](README.md) <br>
-- [User manual](docs/user-manual.md) <br>
-- [Memory module](memory/README.md) <br>
-- [Process integration guide](docs/process-integration.md) <br>
-- [CI and quality validation](docs/ci-testing.md) <br>
-- [skills.sh listing](https://skills.sh/Kokxi/qa-team-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance, configuration] <br>
-**Output Format:** [Markdown and structured JSON] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stateful workflows may persist test cases, defects, reports, and standards in local memory files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-v1.5.4 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill can keep QA artifacts such as test cases, defect analyses, reports, and team summaries in local memory files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when local retention is acceptable, avoid credentials, customer PII, sensitive screenshots, and production identifiers unless approved, and require confirmation before loading historical memory or writing or deleting files.
+
+Risk: Historical memory may influence new QA outputs if loaded into the current task context.
+
+Mitigation: Ask before loading historical memory and let users decline memory use for sensitive or one-off tasks.
+
+Risk: Generated QA recommendations, root-cause analysis, and management summaries may be incomplete or misleading if used without review.
+
+Mitigation: Review high-priority cases, low-confidence root-cause analysis, management reports, and release decisions against source systems and human tester judgment before acting.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-team-skills)
+- [README](README.md)
+- [User manual](docs/user-manual.md)
+- [Process integration guide](docs/process-integration.md)
+- [Memory module documentation](memory/README.md)
+- [CI and quality validation](docs/ci-testing.md)
+- [skills.sh listing](https://skills.sh/Kokxi/qa-team-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, configuration, guidance]
+
+**Output Format:** [Markdown responses with structured tables, checklists, and optional JSON memory records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include QA artifacts such as test cases, defect analyses, reports, team summaries, exploratory notes, and prompts to confirm local memory operations.]
+
+## Skill Version(s):
+
+v1.6.1 (source: server release metadata, SKILL.md frontmatter, VERSION, and CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

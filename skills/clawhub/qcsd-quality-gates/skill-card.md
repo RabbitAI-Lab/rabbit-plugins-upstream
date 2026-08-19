@@ -1,42 +1,56 @@
-## Description: <br>
-Quality gates and auto-healing guidance for AI-assisted personal software development. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides quality-gate checklists and auto-healing guidance for AI-assisted personal software development.
 
-## Publisher: <br>
-[ai-acheng](https://clawhub.ai/user/ai-acheng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ai-acheng](https://clawhub.ai/user/ai-acheng)
 
-## Use Case: <br>
-Developers use this skill to run a structured quality-gate checklist before delivering AI-assisted code, with extra review prompts for high-risk features, semantic test selectors, business-aligned assertions, explicit dependencies, and debuggable failures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports that the runtime can report success without actually checking the project. <br>
-Mitigation: Treat results as advisory until the implementation is reviewed or completed; require independent tests or manual review before relying on a pass result. <br>
-Risk: The skill gives broad automatic repair instructions that could change dependencies, generated files, or source code without enough user approval. <br>
-Mitigation: Use version control, inspect diffs, and require explicit approval before dependency changes, generated files, or broad auto-fixes are applied. <br>
+## Use Case:
 
+Developers and individual builders use this skill to review AI-assisted projects across requirements, architecture, coding, dependencies, environment setup, and delivery readiness. It also guides repair of common dependency, import-path, syntax, startup, configuration, and missing-file issues.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ai-acheng/qcsd-quality-gates) <br>
-- [Publisher profile](https://clawhub.ai/user/ai-acheng) <br>
-- [Project homepage](https://github.com/DrPepper8888/qcsd-quality-gates) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text, markdown, code review findings, configuration] <br>
-**Output Format:** [Markdown guidance and structured check results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May report checked status, fixed items, issue lists, and AI-generated-code checklist results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata) <br>
+Risk: The skill may aggressively enforce quality gates and change project files, dependencies, imports, syntax, configuration examples, or missing files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it under version control and require explicit confirmation or a dry run before accepting automatic repairs.
+
+Risk: Automatic repairs may introduce incorrect changes when project boundaries or user intent are unclear.
+
+Mitigation: Review proposed changes and test the project before merging or releasing.
+
+## Reference(s):
+
+- [Server-resolved GitHub repository](https://github.com/AI-aCheng/qcsd-quality-gates)
+- [ClawHub skill page](https://clawhub.ai/ai-acheng/skills/qcsd-quality-gates)
+- [README.md](artifact/README.md)
+- [SKILL.md](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with structured check results and proposed or applied code and configuration changes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May report pass/fail checks, issues found, fixes applied, and AI-generated-code review items.]
+
+## Skill Version(s):
+
+1.1.1 (source: ClawHub release evidence; artifact package metadata lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

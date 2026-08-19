@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class SYS_HeaderMenu 
+export class SYS_HeaderMenu 
 ```
 
 ## Remarks
@@ -114,7 +114,7 @@ Description
 ## Signature
 
 ```typescript
-insertHeaderMenus(headerMenus: ISYS_HeaderMenus): Promise<void>;
+public insertHeaderMenus(headerMenus: ISYS_HeaderMenus): Promise<void>;
 ```
 
 ## Parameters
@@ -170,15 +170,7 @@ Promise&lt;void&gt;
 ## Signature
 
 ```typescript
-insertSystemHeaderMenuItem(env: ESYS_HeaderMenuEnvironment, id: Array<string>, props: {
-        title: string;
-        registerFn?: string;
-        menuItems?: Array<ISYS_HeaderMenuSub1MenuItem | ISYS_HeaderMenuSub2MenuItem | null>;
-        insertDividerBefore?: boolean;
-        insertDividerAfter?: boolean;
-        insertBefore?: string;
-        crossDividerWhenInsert?: boolean;
-    }): Promise<string | undefined>;
+public insertSystemHeaderMenuItem(env: ESYS_HeaderMenuEnvironment, id: Array<string>, props: { title: string; registerFn?: undefined | string; menuItems?: undefined | (null | ISYS_HeaderMenuSub2MenuItem | ISYS_HeaderMenuSub1MenuItem)[]; insertDividerBefore?: undefined | false | true; insertDividerAfter?: undefined | false | true; insertBefore?: undefined | string; crossDividerWhenInsert?: undefined | false | true }): Promise<string | undefined>;
 ```
 
 ## Parameters
@@ -238,7 +230,7 @@ props
 
 </td><td>
 
-{ title: string; registerFn?: string; menuItems?: Array&lt;[ISYS\_HeaderMenuSub1MenuItem](../interfaces/ISYS_HeaderMenuSub1MenuItem.md) \| [ISYS\_HeaderMenuSub2MenuItem](../interfaces/ISYS_HeaderMenuSub2MenuItem.md) \| null&gt;; insertDividerBefore?: boolean; insertDividerAfter?: boolean; insertBefore?: string; crossDividerWhenInsert?: boolean; }
+{ title: string; registerFn?: undefined \| string; menuItems?: undefined \| (null \| [ISYS\_HeaderMenuSub2MenuItem](../interfaces/ISYS_HeaderMenuSub2MenuItem.md) \| [ISYS\_HeaderMenuSub1MenuItem](../interfaces/ISYS_HeaderMenuSub1MenuItem.md)<!-- -->)\[\]; insertDividerBefore?: undefined \| false \| true; insertDividerAfter?: undefined \| false \| true; insertBefore?: undefined \| string; crossDividerWhenInsert?: undefined \| false \| true }
 
 
 </td><td>
@@ -255,11 +247,9 @@ props
 
 Promise&lt;string \| undefined&gt;
 
-顶部菜单项的 ID 数组，分隔线是否插入并不会影响操作结果的返回值
+顶部菜单项的 ID，分隔线是否插入并不会影响操作结果的返回值，不包含 menuItems 中的子项的 ID
 
 ## Remarks
-
-系统顶部菜单一旦新增无法有效删除，需要重启嘉立创 EDA 软件才可以恢复
 
 本接口需要在系统已有的系统一级菜单下新增子菜单，无法新增和修改一级菜单，`id` 数组请至少传递 `2` 个值
 
@@ -282,7 +272,7 @@ Promise&lt;string \| undefined&gt;
 ## Signature
 
 ```typescript
-removeHeaderMenus(): void;
+public removeHeaderMenus(): void;
 ```
 
 
@@ -301,10 +291,7 @@ void
 ## Signature
 
 ```typescript
-removeSystemHeaderMenuItem(id: Array<string>, props?: {
-        removeTheBeforeDivider?: boolean;
-        removeTheAfterDivider?: boolean;
-    }): Promise<boolean>;
+public removeSystemHeaderMenuItem(id: Array<string>, props?: { removeTheBeforeDivider?: undefined | false | true; removeTheAfterDivider?: undefined | false | true }): Promise<boolean>;
 ```
 
 ## Parameters
@@ -337,7 +324,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-菜单项 ID 树，将会按照数组顺序按层级匹配菜单项，并移除数组最后一位对应的菜单项
+菜单项 ID 树，将会按照数组顺序按层级匹配菜单项，并移除数组最后一位对应的菜单项；仅传递一个元素时移除对应的一级菜单
 
 
 </td></tr>
@@ -348,12 +335,12 @@ props
 
 </td><td>
 
-\{ removeTheBeforeDivider?: boolean; removeTheAfterDivider?: boolean; \}
+\{ removeTheBeforeDivider?: undefined \| false \| true; removeTheAfterDivider?: undefined \| false \| true \}
 
 
 </td><td>
 
-_(Optional)_ 其它参数，是否移除菜单项之前、之后的分隔线
+_(Optional)_ 其它参数，是否移除菜单项之前、之后的分隔线（仅在移除子菜单项时生效）
 
 
 </td></tr>
@@ -373,11 +360,13 @@ Promise&lt;boolean&gt;
 
 本接口无法移除  接口导入的系统顶部菜单项
 
-本接口无法移除第一级菜单，`id` 数组请至少传递 `2` 个值
+当 `id` 数组仅包含一个元素时，将移除对应的一级菜单；当 `id` 数组包含多个元素时，将按照数组顺序按层级匹配菜单项，并移除数组最后一位对应的子菜单项
 
-本接口无法移除 \*\*高级\*\* 菜单下的任何子菜单
+本接口无法移除 \*\*高级\*\* 菜单本身及其下的任何子菜单
 
-注意：本接口需要使用者启用扩展的外部交互权限，如若未启用将始终 `throw Error`
+注意 1：本接口需要使用者启用扩展的外部交互权限，如若未启用将始终 `throw Error`
+
+注意 2：本接口 \*\*移除一级菜单\*\* 为私有化部署版本专用功能，如若在其它版本调用将始终 `throw Error`
 
 非公开接口使用提醒：本接口按原样提供，不提供参数的额外文档，参数可能在任何版本出现破坏性更改并不另行通知
 
@@ -390,7 +379,7 @@ Promise&lt;boolean&gt;
 ## Signature
 
 ```typescript
-replaceHeaderMenus(headerMenus: ISYS_HeaderMenus): Promise<void>;
+public replaceHeaderMenus(headerMenus: ISYS_HeaderMenus): Promise<void>;
 ```
 
 ## Parameters

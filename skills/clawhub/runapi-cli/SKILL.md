@@ -1,6 +1,6 @@
 ---
 name: runapi-cli
-description: Install and use the RunAPI CLI as the universal execution layer for RunAPI models. Use when the user asks to run any RunAPI model from an agent, inspect auth, install RunAPI on a local machine/server/CI, pass JSON request bodies, wait for tasks, or automate RunAPI workflows from the terminal.
+description: Install and use the RunAPI CLI for one-off artifacts and results from registered CLI-backed services. Use when the user asks an agent to inspect installed commands, run a supported service, pass JSON request bodies, wait for tasks, or automate a supported RunAPI workflow from the terminal. Use an SDK for app or production integration.
 documentation: https://runapi.ai/models.md
 catalog: https://runapi.ai/models.md
 metadata:
@@ -23,10 +23,17 @@ metadata:
 
 # RunAPI CLI
 
-The `runapi` CLI is the universal execution layer for every RunAPI model that
-ships a CLI service. Use it whenever an agent needs to run a one-off model task,
-pass a JSON request body, wait for an async task, or script RunAPI from a
-terminal, server, or CI job.
+The `runapi` CLI executes one-off artifacts or results only for services in its
+installed command catalog. An app, backend, worker, library, or production code
+integration uses a RunAPI SDK instead.
+
+## Choose route
+
+Use the CLI for a one-off artifact or result. Use an SDK for an app, backend,
+worker, library, or production code. Before composing a service command,
+discover the installed command catalog with `runapi --help`; proceed only when
+it lists the service. An absent service routes to its SDK or public API contract,
+not to a guessed CLI command.
 
 ## Install
 
@@ -34,7 +41,6 @@ terminal, server, or CI job.
 |---|---|
 | macOS / Linux (interactive) | `brew install runapi-ai/tap/runapi` |
 | Server / CI (headless) | `curl -fsSL https://runapi.ai/cli/install.sh \| sh` |
-| Pin a specific version | `curl -fsSL https://runapi.ai/cli/install.sh \| sh -s -- --version v0.1.0` |
 
 The installer detects OS and architecture (Linux and macOS, amd64 and arm64), verifies a SHA-256 checksum from `https://runapi.ai/cli/latest.json`, and refuses to write the binary if verification fails.
 
@@ -70,11 +76,17 @@ runapi suno --help
 runapi suno text-to-music --help
 ```
 
+Select capability in order: use `runapi --help` to choose a listed service,
+then inspect `runapi <service> --help`. Choose `<action>` only from service help,
+then inspect `runapi <service> <action> --help` for the current request contract,
+including nested fields and rules. Use only the listed service, action, model,
+fields, and conditional combinations.
+
 ## Run a model
 
-Pass the request body as JSON through `--input-file` (or `--input` for inline
-JSON, or `-` for stdin). The default flow is synchronous and polls until the
-task completes.
+Write valid JSON to a file and pass it with `--input-file`. The default command
+waits synchronously and polls until the task completes. Use inline `--input` or
+stdin only when the caller specifically needs that transport.
 
 ```shell
 # Synchronous: submit and poll until done
@@ -88,6 +100,10 @@ runapi wait <task-id> --service suno --action text-to-music
 runapi get <task-id> --service suno --action text-to-music
 ```
 
+Use `--async` only when the user explicitly requests background execution,
+polling, or webhook integration. Preserve the returned task ID and use the exact
+service/action pair from the submitted command for `get` or `wait`.
+
 JSON responses go to stdout; progress lines go to stderr. Pipe to `jq` for downstream parsing.
 
 ## Account
@@ -95,6 +111,20 @@ JSON responses go to stdout; progress lines go to stderr. Pipe to `jq` for downs
 ```shell
 runapi account info
 runapi account balance
+```
+
+## Live pricing
+
+Pricing commands return current estimates for paid tasks. `pricing list` and
+ordinary `pricing quote` calls do not require an API key. A quote with an
+Account-owned `source_task_id` follows the normal API-key authentication rules.
+
+```shell
+runapi pricing list --service suno
+runapi pricing quote --service suno --action text_to_music --model suno-v4 \
+  --params '{"vocal_mode":"auto_lyrics","prompt":"A chill lo-fi beat"}'
+runapi pricing quote --service suno --action text_to_music --model suno-v4 \
+  --params-file pricing-inputs.json
 ```
 
 ## Local callback listeners
@@ -134,6 +164,10 @@ Pass the selected ID explicitly from an agent. The listener receives only tasks 
 runapi listen localhost:3000/webhooks/runapi --callback-api-key-id token_abc123
 ```
 
+The CLI acknowledges each valid listener event before attempting the local HTTP request. It forwards each event locally once and reports non-2xx responses or connection errors without requesting a listener replay. This local debugging behavior does not change delivery retries for a Task's `callback_url`.
+
+Each Account can run up to 100 active listeners per Callback Subscription Key and 1,000 in total. When a limit is reached, stop an idle listener or wait and retry; the response identifies which limit is full. The CLI honors the server's `Retry-After` delay when present. Idle polling checks for events about every 15 to 30 seconds. Events are normally found within about 15 seconds and are read immediately when available.
+
 Startup output identifies the selected key by name, ID, and mask, prints the absolute project config path, and prints that key's stable Listen Signing Secret. To inject the secret without starting a listener, keep it out of logs and project config:
 
 ```shell
@@ -154,11 +188,15 @@ Recovery rules:
 - `callback_api_key_unusable` means the selected key was disabled, discarded, or lost membership. The listener exits without falling back; list keys and select another one explicitly.
 - After upgrading from the previous listener behavior, update the CLI, run `runapi login` again, restart listeners, and replace the old local webhook secret.
 
-## Temporary files
+## Files and Uploads
 
-Model commands accept readable local file paths in top-level media URL fields, such as `source_image_url`, `source_image_urls`, `reference_image_urls`, `first_frame_image_url`, `mask_url`, `upload_url`, or `source_audio_url`. The CLI uploads each local file before submitting the request and replaces the field value with the temporary URL. Remote `http://` and `https://` values stay unchanged.
+Pass an agent-readable local path directly to a top-level media URL field. The
+CLI uploads the file before submitting the request and replaces the field value
+with the temporary URL. Remote `http://` and `https://` values stay unchanged.
 
-Use `runapi files create` when you need an explicit temporary URL for reuse, or when the source is Base64 encoded or already hosted at another URL.
+Use `runapi files create` only for a reusable URL, Base64 input, or a
+contract-required upload. This temporary upload command returns a URL and
+remains available unchanged.
 
 ```shell
 runapi files create ./image.png --file-name image.png
@@ -167,6 +205,30 @@ runapi files create --base64 "$BASE64_IMAGE" --file-name image.png
 ```
 
 The command returns JSON with `file_name`, `url`, `size_bytes`, `mime_type`, `created_at`, and `expires_at`. The returned `url` is a one-hour temporary File Upload URL. Use it in endpoint fields that accept media URLs; check the model/action docs for the exact field name. Add `--url-only` when a script needs only the temporary URL on stdout.
+
+Use persistent Files when the caller needs a stable File ID instead of a URL.
+Inspect each command before composing it:
+
+```shell
+runapi files create-file ./knowledge.pdf
+runapi files list --order desc
+runapi files retrieve file_123
+runapi files content file_123 --output ./knowledge-copy.pdf
+runapi files delete file_123
+```
+
+Use multipart Uploads to send Parts before composing the final File. Preserve
+Part ID order when retrying an uncertain completion response:
+
+```shell
+runapi uploads create --bytes 1048576 --filename archive.bin --mime-type application/octet-stream
+runapi uploads add-part upload_123 ./archive.part-01
+runapi uploads complete upload_123 --part-id part_123
+runapi uploads cancel upload_123
+```
+
+Inspect `runapi files --help`, `runapi uploads --help`, and each selected
+subcommand's help for the installed lifecycle contract.
 
 ## Install the skill into another agent runtime
 
@@ -207,8 +269,19 @@ runapi <service> <action> --help
 - Do not run interactive `runapi login` by default from an agent. In MCP hosts, guide the user through the `login` tool; in terminal/headless contexts, prefer `runapi auth status`, `RUNAPI_API_KEY`, and stdin token import unless the user explicitly wants browser auth.
 - Listener operations are the exception: when they return `cli_listen_required`, an imported key cannot recover. Explain that it keeps its existing API access but cannot list or select listener keys. Ask the user to remove any `--api-key` or `RUNAPI_API_KEY` override and complete browser-backed login; never store the returned credential or Listen Signing Secret in `.runapi.toml`.
 - The CLI exits non-zero on validation failures, network errors, and timeouts. Check the exit code before assuming success.
-- For long-running tasks, prefer `--async` plus a `wait` loop so the agent can release the shell promptly.
 - RunAPI-generated file URLs are temporary. Download and store generated images, videos, audio, or other files in your own durable storage within 7 days; do not treat returned URLs as long-term assets.
+
+## Verify, recover, or stop
+
+Verify every requested deliverable: download every URL, require a non-empty
+file, and check the expected MIME type. A successful task status without the
+requested files is incomplete.
+
+Make at most one evidence-backed request-shape correction, using the current
+command help or a structured validation error. Retry a transient transport
+failure once only when no task was created, no usage was billed, and replay is
+safe. Record a terminal service or provider failure and stop without changing
+the model or action.
 
 ## References
 

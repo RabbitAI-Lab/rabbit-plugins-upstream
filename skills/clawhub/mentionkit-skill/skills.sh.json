@@ -1,0 +1,11 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Mentionkit",
+      "description": "Query and manage Mentionkit mention review workflows, keyword tracking, and MCP-guided social monitoring.",
+      "skills": ["mentionkit"]
+    }
+  ]
+}

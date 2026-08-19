@@ -1,11 +1,11 @@
 ---
 name: dlazy-fun-asr
 version: 1.3.4
-description: Alibaba Bailian Fun-ASR recording transcription. Supports Chinese, English and other languages, with auto language detection and speaker diarization. Suitable for subtitles, transcription, and meeting notes. 阿里云百炼 Fun-ASR 录音文件识别，支持中英文及多语种，自动语种识别与说话人分离。适合字幕、转录与会议记录。
+description: "Alibaba Bailian Fun-ASR recording transcription. Supports Chinese, English and other languages, with auto language detection and speaker diarization. Suitable for subtitles, transcription, and meeting notes. 阿里云百炼 Fun-ASR 录音文件识别，支持中英文及多语种，自动语种识别与说话人分离。适合字幕、转录与会议记录。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy fun-asr -h for help."}}
 ---
 
-# dlazy-fun-asr
+# 录音转写 Fun ASR
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

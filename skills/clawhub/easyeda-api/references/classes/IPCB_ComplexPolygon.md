@@ -5,7 +5,7 @@
 ## Signature
 
 ```typescript
-declare class IPCB_ComplexPolygon 
+export class IPCB_ComplexPolygon 
 ```
 
 ## Remarks
@@ -47,6 +47,20 @@ Description
 </td></tr>
 <tr><td>
 
+[getCenter()](./IPCB_ComplexPolygon.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** 获取复杂多边形中心点
+
+
+</td></tr>
+<tr><td>
+
 [getSource()](./IPCB_ComplexPolygon.md)
 
 
@@ -73,6 +87,20 @@ Description
 
 
 </td></tr>
+<tr><td>
+
+[toPolygon()](./IPCB_ComplexPolygon.md)
+
+
+</td><td>
+
+
+</td><td>
+
+拆分为单多边形数组
+
+
+</td></tr>
 </tbody></table>
 
 ---
@@ -88,7 +116,7 @@ Description
 ## Signature
 
 ```typescript
-addSource(complexPolygon: TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray> | IPCB_Polygon | Array<IPCB_Polygon>): IPCB_ComplexPolygon;
+public addSource(complexPolygon: TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray> | IPCB_Polygon | Array<IPCB_Polygon>): IPCB_ComplexPolygon;
 ```
 
 ## Parameters
@@ -135,6 +163,27 @@ complexPolygon
 
 复杂多边形对象
 
+### getcenter
+
+# IPCB\_ComplexPolygon.getCenter() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+获取复杂多边形中心点
+
+## Signature
+
+```typescript
+public getCenter(): Promise<{ x: number; y: number }>;
+```
+
+
+## Returns
+
+Promise&lt;{ x: number; y: number }&gt;
+
+复杂多边形中心点
+
 ### getsource
 
 # IPCB\_ComplexPolygon.getSource() method
@@ -144,7 +193,7 @@ complexPolygon
 ## Signature
 
 ```typescript
-getSource(): TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray>;
+public getSource(): TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray>;
 ```
 
 
@@ -167,7 +216,7 @@ getSource(): TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray>;
 ## Signature
 
 ```typescript
-getSourceStrictComplex(): Array<TPCB_PolygonSourceArray>;
+public getSourceStrictComplex(): Array<TPCB_PolygonSourceArray>;
 ```
 
 
@@ -180,3 +229,26 @@ Array&lt;[TPCB\_PolygonSourceArray](../types/TPCB_PolygonSourceArray.md)<!-- -->
 ## Remarks
 
 强制返回复杂多边形格式数据，即使它仅包含单一的单多边形
+
+### topolygon
+
+# IPCB\_ComplexPolygon.toPolygon() method
+
+拆分为单多边形数组
+
+## Signature
+
+```typescript
+public toPolygon(): Array<IPCB_Polygon>;
+```
+
+
+## Returns
+
+Array&lt;[IPCB\_Polygon](./IPCB_Polygon.md)<!-- -->&gt;
+
+单多边形数组
+
+## Remarks
+
+将复杂多边形拆分为单多边形对象数组

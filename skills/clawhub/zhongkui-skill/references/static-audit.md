@@ -1,10 +1,10 @@
-# 静态审计清单（54 项）
+# 静态审计清单（52 项）
 
-> Layer 1：所有 Skill 必经，秒级完成。来源：CSA 2026 / Snyk 2026 / MiniScope 2025 / Design Patterns 2025 / 腾讯科恩 2026
+> Layer 1：所有 Skill 必经，秒级完成。来源：CSA 2026 / Snyk 2026 / MiniScope 2025 / Design Patterns 2025
 
 ## 使用说明
 
-逐项检查，命中即扣分。每项标注：行号（若可定位）、风险类型（R1-R12）、扣分值。一票否决项命中 → 直接终止审查输出 🚫。
+逐项检查，命中即扣分。每项标注：行号（若可定位）、风险类型（R1-R10）、扣分值。一票否决项命中 → 直接终止审查输出 🚫。
 
 ---
 
@@ -22,17 +22,17 @@
 
 ---
 
-## 二、SKILL.md 内容检查（17 项，共 68 分）🔴 含一票否决项
+## 二、SKILL.md 内容检查（15 项，共 60 分）🔴 含一票否决项
 
 | # | 检查项 | 正则/关键词 | 扣分 | 风险 | 否决 |
 |:---|:---|:---|:---|:---|:---|
-| C1 | 直接提示注入 | 7 种提示注入正则签名（详见 core/patterns.json 中 C1_injection 区块） | -10 | R1 | ✅ |
-| C2 | 间接注入触发源 | 间接注入源检测模式（详见 core/patterns.json 中 C2_indirect_injection 区块） | -4 | R1 | — |
-| C3 | 凭证访问模式 | 凭证模式检测（详见 core/patterns.json 中 C3_credential 区块） | -10 | R3 | ✅ |
-| C4 | 数据外传目标 | 同时出现 文件读指令 + 外传通道检测模式 | -10 | R5 | ✅ |
-| C5 | 系统级危险命令 | 系统级危险命令模式（详见 core/patterns.json 中 C5_dangerous_cmd 区块） | -10 | R2 | ✅ |
-| C6 | 权限提升指令 | 权限提升指令模式（详见 core/patterns.json 中 C6_privilege 区块） | -4 | R6 | — |
-| C7 | 持久化路径 | 持久化写入路径模式（详见 core/patterns.json 中 C7_persistence 区块） | -10 | R7 | ✅ |
+| C1 | 直接提示注入 | `ignore (all )?previous (instructions|prompt)`, `you are now`, `system prompt override`, `pretend (you are|to be)`, `developer mode`, `DAN`, `bypass (safety|security|restriction)` | -10 | R1 | ✅ |
+| C2 | 间接注入触发源 | `fetch_url`, `read_webpage`, `scrape`, `curl.*http`, `web_fetch` | -4 | R1 | — |
+| C3 | 凭证访问模式 | 同时出现 `\.ssh\|\.env\|api_key\|token\|password\|secret\|credential` + `read\|display\|show\|output\|print\|cat\|list` | -10 | R3 | ✅ |
+| C4 | 数据外传目标 | 同时出现 文件读指令 + `webhook\|http.*POST\|upload\|send.*http\|curl.*-X POST\|requests\.post` | -10 | R5 | ✅ |
+| C5 | 系统级危险命令 | `rm -rf\|format\|del /f\|reg delete\|shutdown\|mkfs\|dd if=` | -10 | R2 | ✅ |
+| C6 | 权限提升指令 | `sudo\|runas\|Administrator\|chmod 777\|chown.*root\|Set-Acl.*FullControl` | -4 | R6 | — |
+| C7 | 持久化路径 | `~/.bashrc\|~/.zshrc\|/etc/crontab\|Startup\|LaunchAgents\|HKLM.*Run\|CurrentVersion.*Run` + 写入动词 | -10 | R7 | ✅ |
 | C8 | 隐蔽 Unicode | `\u200B\|\u200C\|\u200D\|\u202E\|\uFEFF` 零宽/控制字符 | -4 | R8 | — |
 | C9 | 条件触发 | `if date\|if time\|after \d{4}\|wait until\|when.*then\|trigger.*when` | -4 | R8 | — |
 | C10 | 编码/混淆载荷 | Base64 字符串长度 > 40 且解码后含危险关键词 | -4 | R2/R8 | — |
@@ -40,9 +40,7 @@
 | C12 | 上下文污染源 | 检测是否含 conversation_history / chat_context / previous_messages 等跨轮引用 → 标记 flag:context_pollution_risk | -4 | R1/R8 | — |
 | C13 | 输出安全风险 | 检测是否含 generate / output / reply 等输出路径但无内容过滤声明 → 标记 flag:unfiltered_output | -4 | R10 | — |
 | C14 | 版权复述风险 | 检测是否含 reproduce / copy_full_text / verbatim 等完整复述指令 → 标记 flag:copyright_risk | -4 | R10 | — |
-| C15 | 模型边界模糊 | 检测是否含角色扮演类指令（要求Agent切换身份/扮演角色/模拟场景的语句），此类指令可能被用于绕过安全护栏 → 标记 flag:roleplay_override | -4 | R1 | — |
-| C16 | 外部信息源引用无校验 | 检测是否含 `fetch_url` / `https?://` 等外部引用但无 HTTPS 强制/证书固定/内容哈希校验 → 标记 flag:unverified_external_source | -4 | R11 | — |
-| C17 | 持久化配置写入无验证 | 检测是否含 `write.*config` / `append.*bashrc` / `add.*startup` 等持久化写入但无用户确认门控 → 标记 flag:persistent_config_no_verify | -4 | R12 | — |
+| C15 | 模型边界模糊 | 检测是否含 you are now / act as / roleplay 等角色扮演指令（可能绕过安全护栏）→ 标记 flag:roleplay_override | -4 | R1 | — |
 
 **C1/C3/C4/C5/C7** 任意命中 → 一票否决，直接裁定 🚫 恶意，终止审查。
 
@@ -56,7 +54,7 @@
 | S2 | 网络出站 | `socket\|requests\.(get\|post)\|urllib\|http\.client\|fetch.*http` | -4 | R5 | — |
 | S3 | 敏感路径读写 | `/etc/passwd\|C:\\\\Windows\|~/.ssh\|/root/` | -4 | R2 | — |
 | S4 | 动态代码执行 | `eval\(\|exec\(\|compile\(` | -4 | R2 | — |
-| S5 | 依赖 CVE | 与 CVE DB 交叉比对命中的依赖 | -2 | R4 | — |
+| S5 | 依赖 CVE | 与 CVE DB 交叉比对命中的依赖 | -4 | R4 | — |
 | S6 | 安装脚本恶意行为 | `curl.*\|.*bash` 或 `wget.*\|.*sh` 链式执行模式 | -10 | R2 | ✅ |
 | S7 | 文件权限修改 | `chmod\|chown\|icacls\|Set-Acl` | -4 | R6 | — |
 | S8 | 配置篡改 | `reg add\|regedit\|Set-ItemProperty\|defaults write` | -4 | R7 | — |
@@ -114,6 +112,6 @@ Layer1_Score = 100 - Σ(扣分)
 ## 检测优先级
 
 1. **先跑否决项**（C1/C3/C4/C5/C7/S6）→ 命中即终止
-2. **再跑高危项**（C2/C6/C8/C9/C10/S1-S4/S7-S8/C11-C17/S9-S12/P8-P11）
+2. **再跑高危项**（C2/C6/C8/C9/C10/S1-S4/S7-S8/C11-C15/S9-S12/P8-P11）
 3. **再跑数据安全项**（D1-D7）
 4. **最后跑中危项**（M1-M7/P1-P7/S5）
