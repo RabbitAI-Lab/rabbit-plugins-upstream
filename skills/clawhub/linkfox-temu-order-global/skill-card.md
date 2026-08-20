@@ -1,47 +1,66 @@
-## Description: <br>
-Temu全球站-订单 helps agents work with LinkFox and Temu Global order APIs for order lists, details, shipping information, amounts, combined shipments, customization data, and verification uploads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agents with LinkFox-mediated Temu Global order-management commands and references for nine bg.order.*, temu.order.*, and temu.local.order.* APIs.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and developers use this skill to query and manage Temu Global order data through LinkFox. It supports order lookup, shipping information, amount queries, combined shipment discovery, customization details, and SN/IMEI verification upload workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, for Temu Global workflows outside the US/EU-specific order skills. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes broad LinkFox/Temu gateway and credential-handling capabilities beyond the narrow order-management description. <br>
-Mitigation: Install only if you trust linkfox-ai and need this gateway; use least-privilege Temu order-shipping tokens and restrict LinkFox API token access. <br>
-Risk: Temu access tokens can be saved locally under ~/.linkfox or another configured token-store path. <br>
-Mitigation: Avoid saving tokens on shared or synced machines, use a protected TEMU_TOKEN_STORE_PATH when possible, and rotate tokens if exposure is suspected. <br>
-Risk: Order responses can contain sensitive customer, shipping, and order data and may be written under ./linkfox. <br>
-Mitigation: Treat saved response files as sensitive, keep them out of logs and version control, limit access to the workspace, and delete them when no longer needed. <br>
+## Use Case:
 
+Developers and operators managing Temu Global shops use this skill to query order lists, order details, shipping information, decrypted shipping data, order amounts, combined-shipment candidates, customization content, and verification uploads through LinkFox gateway scripts.
 
-## Reference(s): <br>
-- [API reference](references/api.md) <br>
-- [Order API index](references/apis/README.md) <br>
-- [Partner Global order catalog](references/partner-global-catalog.md) <br>
-- [Access token authorization](references/access-token.md) <br>
-- [Temu Partner Global documentation](https://partner-global.temu.com/documentation?menu_code=dbd3d395963a408984b8ae7dbc5f64f9) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-order-global) <br>
+### Deployment Geography for Use:
 
+Global, excluding the separate US and EU Temu order sites
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON request/response examples; scripts may write JSON response files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses may be written under ./linkfox by the artifact scripts; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: evidence.release.version) <br>
+Risk: The skill includes broad Temu proxy and signed-file download capabilities that go beyond the narrow order API list.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the requested API type or file URL before execution and require explicit user confirmation before generic proxy calls or signed-file downloads.
+
+Risk: The skill handles LinkFox credentials, Temu access tokens, and optional local token storage.
+
+Mitigation: Use least-privilege LinkFox and Temu credentials, protect local machines and backups, and avoid storing raw tokens unless local storage is secured.
+
+Risk: Order and shipping workflows can return sensitive recipient data and save full response archives locally.
+
+Mitigation: Query only the required orders, avoid exposing full responses unnecessarily, and delete saved response archives when they are no longer needed.
+
+Risk: Onboarding and billing helpers can involve SMS-code handling and payment QR creation.
+
+Mitigation: Require explicit user confirmation before onboarding, SMS-code handling, or payment QR creation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-order-global)
+- [Temu Global order API reference](artifact/references/api.md)
+- [Partner Global order catalog](artifact/references/partner-global-catalog.md)
+- [Order API documents index](artifact/references/apis/README.md)
+- [Temu accessToken authorization](artifact/references/access-token.md)
+- [Temu Partner Global documentation](https://partner-global.temu.com/documentation?menu_code=dbd3d395963a408984b8ae7dbc5f64f9)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, JSON files, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands; Python scripts emit JSON responses and may save full response JSON files locally.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires LinkFox API credentials and either a Temu accessToken or a saved storeKey; large responses may be summarized in stdout.]
+
+## Skill Version(s):
+
+1.0.6 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

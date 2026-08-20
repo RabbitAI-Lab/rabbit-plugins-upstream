@@ -1,11 +1,11 @@
 # PCB\_PrimitivePour class
 
-PCB &amp; 封装 / 覆铜边框图元类
+PCB &amp; footprint / copper border primitive class
 
 ## Signature
 
 ```typescript
-declare class PCB_PrimitivePour implements IPCB_PrimitiveAPI 
+export class PCB_PrimitivePour implements IPCB_PrimitiveAPI 
 ```
 **Implements:** [IPCB\_PrimitiveAPI](../interfaces/IPCB_PrimitiveAPI.md)
 
@@ -37,7 +37,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 创建覆铜边框
+**_(BETA)_** Create Copper border
 
 
 </td></tr>
@@ -51,7 +51,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除覆铜边框
+**_(BETA)_** Delete Copper border
 
 
 </td></tr>
@@ -65,7 +65,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取覆铜边框
+**_(BETA)_** Get Copper border
 
 
 </td></tr>
@@ -79,7 +79,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取覆铜边框
+**_(BETA)_** Get Copper border
 
 
 </td></tr>
@@ -93,7 +93,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有覆铜边框图元
+**_(BETA)_** Get all Copper border primitive
 
 
 </td></tr>
@@ -107,7 +107,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有覆铜边框的图元 ID
+**_(BETA)_** Get all Copper border primitive IDs
 
 
 </td></tr>
@@ -121,7 +121,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改覆铜边框
+**_(BETA)_** Modify Copper border
 
 
 </td></tr>
@@ -137,12 +137,12 @@ Description
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-创建覆铜边框
+Create Copper border
 
 ## Signature
 
 ```typescript
-create(net: string, layer: TPCB_LayersOfCopper, complexPolygon: IPCB_Polygon, pourFillMethod?: EPCB_PrimitivePourFillMethod, preserveSilos?: boolean, pourName?: string, pourPriority?: number, lineWidth?: number, primitiveLock?: boolean): Promise<IPCB_PrimitivePour | undefined>;
+public create(net: string, layer: TPCB_LayersOfCopper, complexPolygon: IPCB_Polygon, pourFillMethod?: EPCB_PrimitivePourFillMethod, preserveSilos?: boolean, pourName?: string, pourPriority?: number, lineWidth?: number, primitiveLock?: boolean): Promise<IPCB_PrimitivePour | undefined>;
 ```
 
 ## Parameters
@@ -175,7 +175,7 @@ string
 
 </td><td>
 
-网络名称
+Net name
 
 
 </td></tr>
@@ -191,7 +191,7 @@ layer
 
 </td><td>
 
-层
+Layer
 
 
 </td></tr>
@@ -207,7 +207,7 @@ complexPolygon
 
 </td><td>
 
-复杂多边形对象
+Complex polygon object
 
 
 </td></tr>
@@ -223,7 +223,7 @@ pourFillMethod
 
 </td><td>
 
-_(Optional)_ 覆铜填充方法
+_(Optional)_ Copper fill method
 
 
 </td></tr>
@@ -239,7 +239,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否保留孤岛
+_(Optional)_ Whether to keep islands
 
 
 </td></tr>
@@ -255,7 +255,7 @@ string
 
 </td><td>
 
-_(Optional)_ 覆铜名称
+_(Optional)_ Copper name
 
 
 </td></tr>
@@ -271,7 +271,7 @@ number
 
 </td><td>
 
-_(Optional)_ 覆铜优先级
+_(Optional)_ Copper priority
 
 
 </td></tr>
@@ -287,7 +287,7 @@ number
 
 </td><td>
 
-_(Optional)_ 线宽
+_(Optional)_ Line width
 
 
 </td></tr>
@@ -303,7 +303,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -315,7 +315,7 @@ _(Optional)_ 是否锁定
 
 Promise&lt;[IPCB\_PrimitivePour](./IPCB_PrimitivePour.md) \| undefined&gt;
 
-覆铜边框图元对象
+Copper border primitive object
 
 ### delete
 
@@ -323,12 +323,12 @@ Promise&lt;[IPCB\_PrimitivePour](./IPCB_PrimitivePour.md) \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除覆铜边框
+Delete Copper border
 
 ## Signature
 
 ```typescript
-delete(primitiveIds: string | IPCB_PrimitivePour | Array<string> | Array<IPCB_PrimitivePour>): Promise<boolean>;
+public delete(primitiveIds: string | IPCB_PrimitivePour | Array<string> | Array<IPCB_PrimitivePour>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -361,7 +361,7 @@ string \| [IPCB\_PrimitivePour](./IPCB_PrimitivePour.md) \| Array&lt;string&gt; 
 
 </td><td>
 
-覆铜边框的图元 ID 或覆铜边框图元对象
+Copper border primitive ID or Copper border primitive object
 
 
 </td></tr>
@@ -373,7 +373,7 @@ string \| [IPCB\_PrimitivePour](./IPCB_PrimitivePour.md) \| Array&lt;string&gt; 
 
 Promise&lt;boolean&gt;
 
-删除操作是否成功
+Delete Whether the operation is successful
 
 ### get
 
@@ -381,12 +381,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取覆铜边框
+Get Copper border
 
 ## Signature
 
 ```typescript
-get(primitiveIds: string): Promise<IPCB_PrimitivePour | undefined>;
+public get(primitiveIds: string): Promise<IPCB_PrimitivePour | undefined>;
 ```
 
 ## Parameters
@@ -419,7 +419,7 @@ string
 
 </td><td>
 
-覆铜边框的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Copper border primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -431,7 +431,7 @@ string
 
 Promise&lt;[IPCB\_PrimitivePour](./IPCB_PrimitivePour.md) \| undefined&gt;
 
-覆铜边框图元对象，`undefined` 表示获取失败
+Copper border primitive object, `undefined` indicates that the retrieval failed
 
 ### get_1
 
@@ -439,12 +439,12 @@ Promise&lt;[IPCB\_PrimitivePour](./IPCB_PrimitivePour.md) \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取覆铜边框
+Get Copper border
 
 ## Signature
 
 ```typescript
-get(primitiveIds: Array<string>): Promise<Array<IPCB_PrimitivePour>>;
+public get(primitiveIds: Array<string>): Promise<Array<IPCB_PrimitivePour>>;
 ```
 
 ## Parameters
@@ -477,7 +477,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-覆铜边框的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Copper border primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -489,11 +489,11 @@ Array&lt;string&gt;
 
 Promise&lt;Array&lt;[IPCB\_PrimitivePour](./IPCB_PrimitivePour.md)<!-- -->&gt;&gt;
 
-覆铜边框图元对象，空数组表示获取失败
+Copper border primitive object; an empty array indicates that the retrieval failed
 
 ## Remarks
 
-如若传入多个图元 ID，任意图元 ID 未匹配到不影响其它图元的返回，即可能返回少于传入的图元 ID 数量的图元对象
+If multiple primitive IDs are passed in, a primitive ID that is not matched will not affect the return of other primitives; that is, fewer primitive objects than the number of primitive IDs passed in may be returned.
 
 ### getall
 
@@ -501,12 +501,12 @@ Promise&lt;Array&lt;[IPCB\_PrimitivePour](./IPCB_PrimitivePour.md)<!-- -->&gt;&g
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有覆铜边框图元
+Get all Copper border primitive
 
 ## Signature
 
 ```typescript
-getAll(net?: string, layer?: TPCB_LayersOfCopper, primitiveLock?: boolean): Promise<Array<IPCB_PrimitivePour>>;
+public getAll(net?: string, layer?: TPCB_LayersOfCopper, primitiveLock?: boolean): Promise<Array<IPCB_PrimitivePour>>;
 ```
 
 ## Parameters
@@ -539,7 +539,7 @@ string
 
 </td><td>
 
-_(Optional)_ 网络名称
+_(Optional)_ Net name
 
 
 </td></tr>
@@ -555,7 +555,7 @@ layer
 
 </td><td>
 
-_(Optional)_ 层
+_(Optional)_ Layer
 
 
 </td></tr>
@@ -571,7 +571,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -583,7 +583,7 @@ _(Optional)_ 是否锁定
 
 Promise&lt;Array&lt;[IPCB\_PrimitivePour](./IPCB_PrimitivePour.md)<!-- -->&gt;&gt;
 
-覆铜边框图元对象数组
+Array of Copper border primitive objects
 
 ### getallprimitiveid
 
@@ -591,12 +591,12 @@ Promise&lt;Array&lt;[IPCB\_PrimitivePour](./IPCB_PrimitivePour.md)<!-- -->&gt;&g
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有覆铜边框的图元 ID
+Get all Copper border primitive IDs
 
 ## Signature
 
 ```typescript
-getAllPrimitiveId(net?: string, layer?: TPCB_LayersOfCopper, primitiveLock?: boolean): Promise<Array<string>>;
+public getAllPrimitiveId(net?: string, layer?: TPCB_LayersOfCopper, primitiveLock?: boolean): Promise<Array<string>>;
 ```
 
 ## Parameters
@@ -629,7 +629,7 @@ string
 
 </td><td>
 
-_(Optional)_ 网络名称
+_(Optional)_ Net name
 
 
 </td></tr>
@@ -645,7 +645,7 @@ layer
 
 </td><td>
 
-_(Optional)_ 层
+_(Optional)_ Layer
 
 
 </td></tr>
@@ -661,7 +661,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -673,7 +673,7 @@ _(Optional)_ 是否锁定
 
 Promise&lt;Array&lt;string&gt;&gt;
 
-覆铜边框的图元 ID 数组
+Array of Copper border primitive IDs
 
 ### modify
 
@@ -681,22 +681,12 @@ Promise&lt;Array&lt;string&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改覆铜边框
+Modify Copper border
 
 ## Signature
 
 ```typescript
-modify(primitiveId: string | IPCB_PrimitivePour, property: {
-        net?: string;
-        layer?: TPCB_LayersOfCopper;
-        complexPolygon?: IPCB_Polygon;
-        pourFillMethod?: EPCB_PrimitivePourFillMethod;
-        preserveSilos?: boolean;
-        pourName?: string;
-        pourPriority?: number;
-        lineWidth?: number;
-        primitiveLock?: boolean;
-    }): Promise<IPCB_PrimitivePour | undefined>;
+public modify(primitiveId: string | IPCB_PrimitivePour, property: { net?: undefined | string; layer?: undefined | EPCB_LayerId.TOP | EPCB_LayerId.BOTTOM | EPCB_LayerId.INNER_1 | EPCB_LayerId.INNER_2 | EPCB_LayerId.INNER_3 | EPCB_LayerId.INNER_4 | EPCB_LayerId.INNER_5 | EPCB_LayerId.INNER_6 | EPCB_LayerId.INNER_7 | EPCB_LayerId.INNER_8 | EPCB_LayerId.INNER_9 | EPCB_LayerId.INNER_10 | EPCB_LayerId.INNER_11 | EPCB_LayerId.INNER_12 | EPCB_LayerId.INNER_13 | EPCB_LayerId.INNER_14 | EPCB_LayerId.INNER_15 | EPCB_LayerId.INNER_16 | EPCB_LayerId.INNER_17 | EPCB_LayerId.INNER_18 | EPCB_LayerId.INNER_19 | EPCB_LayerId.INNER_20 | EPCB_LayerId.INNER_21 | EPCB_LayerId.INNER_22 | EPCB_LayerId.INNER_23 | EPCB_LayerId.INNER_24 | EPCB_LayerId.INNER_25 | EPCB_LayerId.INNER_26 | EPCB_LayerId.INNER_27 | EPCB_LayerId.INNER_28 | EPCB_LayerId.INNER_29 | EPCB_LayerId.INNER_30; complexPolygon?: undefined | IPCB_Polygon; pourFillMethod?: undefined | EPCB_PrimitivePourFillMethod.GRID45 | EPCB_PrimitivePourFillMethod.GRID | EPCB_PrimitivePourFillMethod.SOLID; preserveSilos?: undefined | false | true; pourName?: undefined | string; pourPriority?: undefined | number; lineWidth?: undefined | number; primitiveLock?: undefined | false | true }): Promise<IPCB_PrimitivePour | undefined>;
 ```
 
 ## Parameters
@@ -729,7 +719,7 @@ string \| [IPCB\_PrimitivePour](./IPCB_PrimitivePour.md)
 
 </td><td>
 
-图元 ID
+Primitive ID
 
 
 </td></tr>
@@ -740,12 +730,12 @@ property
 
 </td><td>
 
-{ net?: string; layer?: [TPCB\_LayersOfCopper](../types/TPCB_LayersOfCopper.md)<!-- -->; complexPolygon?: [IPCB\_Polygon](./IPCB_Polygon.md)<!-- -->; pourFillMethod?: [EPCB\_PrimitivePourFillMethod](../enums/EPCB_PrimitivePourFillMethod.md)<!-- -->; preserveSilos?: boolean; pourName?: string; pourPriority?: number; lineWidth?: number; primitiveLock?: boolean; }
+{ net?: undefined \| string; layer?: undefined \| [EPCB\_LayerId.TOP](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.BOTTOM](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_1](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_2](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_3](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_4](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_5](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_6](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_7](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_8](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_9](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_10](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_11](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_12](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_13](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_14](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_15](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_16](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_17](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_18](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_19](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_20](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_21](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_22](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_23](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_24](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_25](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_26](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_27](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_28](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_29](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.INNER\_30](../enums/EPCB_LayerId.md)<!-- -->; complexPolygon?: undefined \| [IPCB\_Polygon](./IPCB_Polygon.md)<!-- -->; pourFillMethod?: undefined \| [EPCB\_PrimitivePourFillMethod.GRID45](../enums/EPCB_PrimitivePourFillMethod.md) \| [EPCB\_PrimitivePourFillMethod.GRID](../enums/EPCB_PrimitivePourFillMethod.md) \| [EPCB\_PrimitivePourFillMethod.SOLID](../enums/EPCB_PrimitivePourFillMethod.md)<!-- -->; preserveSilos?: undefined \| false \| true; pourName?: undefined \| string; pourPriority?: undefined \| number; lineWidth?: undefined \| number; primitiveLock?: undefined \| false \| true }
 
 
 </td><td>
 
-修改参数
+Modify Parameter
 
 
 </td></tr>
@@ -757,4 +747,4 @@ property
 
 Promise&lt;[IPCB\_PrimitivePour](./IPCB_PrimitivePour.md) \| undefined&gt;
 
-覆铜边框图元对象，`undefined` 表示修改失败
+Copper border primitive object, `undefined` indicates that the modification failed

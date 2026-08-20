@@ -121,20 +121,20 @@ and dimensions. Do not model worksheet images as cell values.
 Engine preflight:
 
 - Check `workbook list-worksheets --output json` before inserting images.
-- The target worksheet should be Excelize-backed, usually
-  `data_engine=excelize` and `style_engine=excelize`.
-- PG-only worksheets do not support `add_picture`. In a PG workbook,
-  `excel-worksheet create` can create a PG-only empty worksheet, which image
+- The target worksheet should be Sheet-backed, usually
+  `data_engine=sheet` and `style_engine=sheet`.
+- Base-only worksheets do not support `add_picture`. In a Base Mode workbook,
+  `excel-worksheet create` can create a Base-only empty worksheet, which image
   insert may later report as `sheet <name> does not exist`.
-- If the user wants a new image canvas in an existing PG workbook, create a
+- If the user wants a new image canvas in an existing Base Mode workbook, create a
   small local blank `.xlsx` with the desired sheet name and import it:
 
 ```bash
-mbs worksheet import --strategy create ./blank.xlsx --doc-id <DOC_ID> --engine excelize --source-worksheet-name <SHEET> --target-worksheet-name <SHEET> --verify
+mbs worksheet import --strategy create ./blank.xlsx --doc-id <DOC_ID> --engine sheet --source-worksheet-name <SHEET> --target-worksheet-name <SHEET> --verify
 ```
 
-- If a PG-only placeholder was created only for the image task and cannot be
-  used, delete that placeholder before importing the Excelize worksheet.
+- If a Base-only placeholder was created only for the image task and cannot be
+  used, delete that placeholder before importing the Excel worksheet.
 
 Dashboard worksheet orchestration:
 
@@ -144,11 +144,13 @@ mbs excel-worksheet dashboard refresh --doc-id <DOC_ID> --spec dashboard.json --
 mbs excel-worksheet dashboard manifest --doc-id <DOC_ID> --worksheet-name <SHEET>
 mbs excel-worksheet dashboard create-config --doc-id <DOC_ID> --spec dashboard.json --create-worksheet
 mbs excel-worksheet dashboard refresh --doc-id <DOC_ID> --spec dashboard.json
+mbs excel-worksheet dashboard export-template --doc-id <DOC_ID> --worksheet-name <SHEET> --template-id <template-id> --out-dir <analysis-style-system-skill-dir>/dashboard-templates/<template-id> --force
 ```
 
 Guidance:
 
 - when a dashboard is being designed from scratch, let `sheet-dashboard` generate `dashboard.json` first, then use the commands above to validate and write it
+- when an existing HTML dashboard should become a reusable template, use `dashboard export-template`; the source worksheet must be a `sheet` worksheet, and the output package belongs under `analysis-style-system/dashboard-templates/<template-id>`
 - if a dashboard spec uses `dashboard_style_pack`, keep `industry_style` and `dashboard_story` alongside it so `dashboard validate` can prove the style contract is complete
 - `dashboard refresh --dry-run` is a hard step before mutation; inspect that each operation has `charts: [{cell, chart}]`, not `chart.chart`.
 - Use `chart list` or `image list` first to inspect current worksheet inventory.
@@ -160,9 +162,9 @@ Guidance:
 - Dashboard chart specs should include `chart.format.from` and `chart.format.to`, and the outer `cell` should match `chart.format.from`.
 - For vertically stacked dashboard charts that share horizontal space, leave at least 1 empty worksheet row between them.
 - Images are floating objects like charts. For insert, move, resize, or replace workflows, include `--format picture-format.json` so x/y position, anchors, and size survive readback and frontend drag/resize.
-- Images require an Excelize worksheet. Do not insert pictures into PG-only
-  worksheets; use an existing Excelize sheet or import a blank `.xlsx` with
-  `--engine excelize` to create one.
+- Images require an Sheet-backed worksheet. Do not insert pictures into Base-only
+  worksheets; use an existing Excel sheet or import a blank `.xlsx` with
+  `--engine sheet` to create one.
 - `image list` should return enough metadata for frontend display and later updates: URL/media reference when available, anchor cell, picture id, extension, alt text, size, and chart-compatible position/format fields.
 - `image set` updates an existing picture's anchor, position, size, alt text, scale, hyperlink, or format. Use it after a frontend drag/resize operation instead of reinserting the image.
 - `image replace` inherits prior `alt_text` when `--alt-text` is omitted.
@@ -171,7 +173,8 @@ Guidance:
 - If batch dashboard refresh/create-config returns a server-side or unsupported-route error, retry as per-chart calls:
   `mbs excel-worksheet chart create-config --doc-id <DOC_ID> --worksheet-name Dashboard --cell <CELL> --spec <single_chart.json>`.
 - `dashboard manifest`, `chart list`, `image list`, `media check`, and returned ids prove metadata persistence only. They do not prove the web canvas rendered successfully.
-- For delivery, also verify source data reads for every chart SQL source. If logged-in browser access to the MaybeSheet canvas is available, use a screenshot/vision check for true render validation. Public unauthenticated viewer access may show a login wall instead of charts.
+- For delivery, also verify source data reads for every chart SQL source. If logged-in browser access to the MaybeSheet canvas is available, use a screenshot/vision check for true render validation. Public unauthenticated viewer access may show a login wall instead of charts. For HTML dashboards, use `mbs excel-worksheet dashboard render-probe --screenshot` when possible and read the output in tiers: `local_probe_passed` proves local runtime/data binding, `screenshot_verified` proves PNG capture, and `environment_blocked` with `playwright_unavailable` / `chromium_unavailable` means the environment needs `npm i -D playwright` and `npx playwright install chromium` before final visual proof.
+- After `dashboard export-template`, switch to `analysis-style-system` and run `node scripts/validate_dashboard_html_template.mjs --template-dir dashboard-templates/<template-id>` before reusing or publishing the template.
 - For KPI or chart handlers that consume formatted numeric strings, coerce defensively:
   `Number(String(value || '').replace(/,/g, '')) || 0`.
 
@@ -187,26 +190,27 @@ mbs excel-worksheet style auto-filter remove --doc-id <DOC_ID> --worksheet-name 
 mbs excel-worksheet style gridlines toggle --doc-id <DOC_ID> --worksheet-name <SHEET> --show-gridlines false
 mbs excel-worksheet style filter-values --doc-id <DOC_ID> --worksheet-name <SHEET> --range A1:G100 --column 2 --already-checked Closed
 mbs excel-worksheet style conditional-formats set --doc-id <DOC_ID> --worksheet-name <SHEET> --spec conditional_formats.json
-mbs excel-worksheet style columns-width --doc-id <DOC_ID> --worksheet-name <SHEET> --start-column B --end-column D --width 120
-mbs excel-worksheet style rows-height --doc-id <DOC_ID> --worksheet-name <SHEET> --start-row 1 --end-row 1 --height 28
+mbs excel-worksheet style columns-width --doc-id <DOC_ID> --worksheet-name <SHEET> --start-column B --end-column D --width 120px
+mbs excel-worksheet style rows-height --doc-id <DOC_ID> --worksheet-name <SHEET> --start-row 1 --end-row 1 --height 28px
 mbs excel-worksheet style worksheet plan --doc-id <DOC_ID> --worksheet-name <SHEET> --mode auto_detect --spec worksheet_style.json
 mbs excel-worksheet style worksheet apply --doc-id <DOC_ID> --worksheet-name <SHEET> --mode auto_detect --spec worksheet_style.json
 mbs style beautify --doc-id <DOC_ID> --worksheet-name <SHEET> --dry-run --output json
 mbs style beautify --doc-id <DOC_ID> --worksheet-name <SHEET> --output json
-mbs db-table field batch-update --doc-id <DOC_ID> --name <PG_TABLE_NAME> --updates field-updates.json --verify
+mbs base-table field list --doc-id <DOC_ID> --table-id <TABLE_ID> --output json
+mbs base-table field update --doc-id <DOC_ID> --name <TABLE_NAME> --field amount --formatter "#,##0.00" --verify
 ```
 
 Important rules:
 
 - Use `mbs style beautify` for the default agent-friendly polish workflow. It
-  inspects metadata first, applies Excelize worksheet styling where appropriate,
-  and applies PG/SheetTable field formatter/style/header metadata through the
-  batch field update path when possible.
-- For explicit PG/SheetTable field styles, use `db-table field batch-update`
-  with a JSON array. Verify with `excel-worksheet read --output json` and look
-  for `formatting.frozen_rows`, `formatting.auto_filter`, and
-  `db_table.fields[*].property`.
-- PG/db-table default freeze/filter/header config should be returned by the
+  inspects metadata first, applies Excel worksheet styling where appropriate,
+  and applies Base-backed field formatter/style/header metadata through the
+  native field update path when possible.
+- For explicit Base-backed field styles, use `base-table field list`, then
+  `base-table field update`. It accepts native table/field IDs or resolves
+  `--name --field`; width is persisted as `field.property.style.width`; use
+  `--verify` and inspect the returned field property.
+- Base-backed table default freeze/filter/header config should be returned by the
   backend. Do not instruct the frontend to synthesize auto-filter or dark
   header backgrounds.
 - `filter-values --column` takes a zero-based absolute column index. In `--range A1:G100`, `--column 2` targets column C.
@@ -217,8 +221,25 @@ Important rules:
   - `bold`
   - `bg_color`
   - `font_color`
+  - `font_size`
+  - `font_family`
   - `horizontal`
   - `wrap_text`
+
+
+Example `header_style.json` payload for `batch-set --style`:
+
+```json
+{
+  "bold": true,
+  "font_color": "#FFFFFF",
+  "bg_color": "#173E56",
+  "font_size": 12,
+  "font_family": "Arial",
+  "horizontal": "center",
+  "wrap_text": true
+}
+```
 
 ## 5. Minimal report-polish flow
 
@@ -246,3 +267,62 @@ worksheet media and orchestration workflows above.
 Use `mbs raw post` only for uncovered chart/picture/style operations. Verify
 with `mbs excel-worksheet range read --output table`, `chart list`, or
 `image list`.
+
+## 6. Merge cells and cell notes / record notes
+
+Use these when the user asks to merge/unmerge cells, attach a cell note (Excel
+comment) on a Sheet worksheet, or add notes on Base table records.
+
+### Merge / unmerge cells (Sheet worksheets)
+
+```bash
+mbs range merge --doc-id <doc_id> --worksheet-name Sheet1 --range A1:D1
+mbs range unmerge --doc-id <doc_id> --worksheet-name Sheet1 --range A1:D1
+```
+
+Rules:
+
+- `--range` must be a range (contains `:`); merge requires at least two cells.
+- Unmerging a sub-range removes the whole containing merged region
+  (Excel-compatible).
+- Merged ranges are returned by `mbs excel-worksheet range read` under
+  `formatting.merged_cells`; do not manually compute display values for merged
+  titles.
+
+### Cell notes (Excel comments, Sheet worksheets)
+
+```bash
+# Read notes for a range (string matrix aligned to the range)
+mbs cell note-get --doc-id <doc_id> --worksheet-name Sheet1 --range A1:B2
+
+# Set one note (use a single cell; empty string clears)
+mbs cell note-set --doc-id <doc_id> --worksheet-name Sheet1 --range B2 --note "review this"
+
+# Clear the note
+mbs cell note-clear --doc-id <doc_id> --worksheet-name Sheet1 --range B2
+```
+
+Rules:
+
+- `note-set` / `note-clear` only accept a single-cell `--range` (the backend
+  requires the note matrix to match the range dimensions).
+- Notes are stored as Excel comments inside the workbook and follow workbook
+  version history.
+
+### Base table record notes
+
+```bash
+mbs base-table note-add --doc-id <doc_id> --table-id <table_id> --record-id <record_id> --text "记得核对一下"
+mbs base-table note-list --doc-id <doc_id> --table-id <table_id> --record-id <record_id>
+mbs base-table note-update --doc-id <doc_id> --table-id <table_id> --record-id <record_id> --note-id <note_id> --text "updated"
+mbs base-table note-delete --doc-id <doc_id> --table-id <table_id> --record-id <record_id> --note-id <note_id>
+```
+
+Rules:
+
+- Record notes are collaboration metadata on Base tables; they do **not**
+  participate in version history / rollback.
+- **Owner-only edit/delete**: only the note author (the API user's email/user id)
+  can update or delete a note. When creating via CLI, omit `--author` (or pass
+  your own email) so you remain the owner; a custom `--author` name is not the
+  API user and cannot be edited/deleted through the API.

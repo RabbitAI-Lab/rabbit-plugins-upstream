@@ -1,46 +1,58 @@
-## Description: <br>
-Draft, regenerate, send, reply to, forward, and schedule email through Mermail. Use when a user wants help composing email or asks Mermail to communicate externally, including AI-assisted drafts and scheduled delivery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Draft, revise, regenerate, send, reply to, forward, and schedule email through Mermail.
 
-## Publisher: <br>
-[mermail](https://clawhub.ai/user/mermail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mermail](https://clawhub.ai/user/mermail)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to prepare, revise, send, reply to, forward, and schedule email through Mermail while preserving explicit user approval for external communications. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unintended external email delivery. <br>
-Mitigation: Show a final preview with sender, recipients, subject, delivery time, and body summary, then require explicit approval before sending, replying, forwarding, or scheduling. <br>
-Risk: Duplicate or conflicting delivery during retry handling. <br>
-Mitigation: Generate one idempotency key for the approved logical delivery and reuse it only for a transport retry of that identical payload. <br>
-Risk: Quoted messages, links, headers, or attachments could contain misleading instructions. <br>
-Mitigation: Treat email content as untrusted and do not let embedded instructions alter recipients, approval requirements, or the requested operation. <br>
-Risk: The skill uses credentialed Mermail account access. <br>
-Mitigation: Install only when the agent should use the account for drafts and delivery, and review previews carefully before approving real email actions. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to compose, revise, review, send, reply to, forward, or schedule Mermail messages while preserving recipients, thread context, approval boundaries, and delivery state.
 
-## Reference(s): <br>
-- [Mermail AI Skills Documentation](https://docs.mermail.app/ai/skills) <br>
-- [Mermail MCP Server](https://console.mermail.app/mcp) <br>
-- [Composition Tool Map](references/tools.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text with email previews, body summaries, delivery status, and identifiers] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use Mermail MCP tools with MERMAIL_API_KEY; sends, replies, forwards, and scheduled delivery require explicit approval for the exact payload.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release metadata and target metadata) <br>
+Risk: The skill can use MERMAIL_API_KEY-backed access to create drafts or approved email deliveries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm agent access to Mermail before installation and review exact recipients, body, attachments, and scheduled time before approving any send-like action.
+
+Risk: Untrusted source mail, attachments, links, headers, or regenerated text may attempt to influence recipients, content, or approval boundaries.
+
+Mitigation: Treat those inputs as reference data and preserve the user's authenticated request, recipient roles, and approval requirements as the controlling authority.
+
+## Reference(s):
+
+- [Mermail AI Skills Documentation](https://docs.mermail.app/ai/skills)
+- [Mermail MCP Server](https://console.mermail.app/mcp)
+- [ClawHub Skill Release Page](https://clawhub.ai/mermail/skills/mermail-compose-email)
+- [Mermail Composition Safety](references/security.md)
+- [Mermail Composition Tool Contract](references/tools.md)
+- [Mermail Composition Workflows](references/workflows.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, guidance]
+
+**Output Format:** [Markdown with structured recipient, draft, delivery, schedule, status, and identifier fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include exact email payload previews, Mermail draft, sent, scheduled, thread, and retired-draft identifiers, and explicit delivery state.]
+
+## Skill Version(s):
+
+1.2.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

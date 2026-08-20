@@ -1,11 +1,11 @@
 # ESYS\_ImportProjectViaSolderMaskExpansion enum
 
-导入工程过孔阻焊扩展
+Import project via solder mask extension
 
 ## Signature
 
 ```typescript
-declare enum ESYS_ImportProjectViaSolderMaskExpansion 
+export enum ESYS_ImportProjectViaSolderMaskExpansion 
 ```
 
 ## Enumeration Members
@@ -33,12 +33,10 @@ ALL\_COVER\_OIL
 
 </td><td>
 
-`"cover"`
+`'cover'`
 
 
 </td><td>
-
-全部盖油
 
 
 </td></tr>
@@ -49,12 +47,10 @@ FOLLOW\_ORIGINAL\_SETTING
 
 </td><td>
 
-`"custom"`
+`'custom'`
 
 
 </td><td>
-
-跟随源设置
 
 
 </td></tr>
@@ -62,4 +58,4 @@ FOLLOW\_ORIGINAL\_SETTING
 
 ## Remarks
 
-仅 `fileType` 为 `Altium Designer` 或 `Protel` 时才可以指定该属性，否则将被忽略
+This property can only be specified when `fileType` is `Altium Designer` or `Protel`<!-- -->; otherwise it will be ignored

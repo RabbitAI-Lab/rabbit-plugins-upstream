@@ -5,7 +5,7 @@ description: "Video search tool: queries Pixabay video API by keywords and retur
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy search_video -h for help."}}
 ---
 
-# dlazy-search_video
+# 视频素材搜索 Search Video
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

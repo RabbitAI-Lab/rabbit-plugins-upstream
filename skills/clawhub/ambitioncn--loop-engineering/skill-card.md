@@ -1,43 +1,58 @@
-## Description: <br>
-Loop engineering CLI v0.4.4 with project intake, adaptive queues, progress reports, and human gates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Durable explicit task/project loops with verification, revisions, live progress, and governed completion.
 
-## Publisher: <br>
-[ambitioncn](https://clawhub.ai/user/ambitioncn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ambitioncn](https://clawhub.ai/user/ambitioncn)
 
-## Use Case: <br>
-Developers and engineers use this skill to manage explicit loop-engineering workflows for project intake, queue setup, adaptive queue execution, progress reporting, and review-gated code worktree handoffs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queue dispatcher commands and cron entries can run local workflows in the target workspace. <br>
-Mitigation: Review queue configs, dispatcher commands, and cron entries before execution; start with manual ticks and inspect generated run artifacts before scheduling recurring runs. <br>
-Risk: Commands using `--confirm-apply` or `--confirm-cleanup` can change local files or remove reviewed worktrees. <br>
-Mitigation: Use the read-only planning, status, review bundle, patch verification, and cleanup-plan commands first, and supply confirmation flags only after human review. <br>
-Risk: High-risk process-control, live instrumentation, publishing, destructive, credential, or production configuration actions may exceed ordinary loop automation expectations. <br>
-Mitigation: Keep those actions separately gated and stop at artifacts for human review unless the user explicitly approves execution. <br>
+## Use Case:
 
+Developers and agent operators use this skill to route explicit loop requests into durable task or project queues, inspect progress and evidence, manage revisions, and apply governed completion semantics.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/ambitioncn/skills/loop-engineering) <br>
-- [NPM Package Reference](references/npm-package.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands, JSON configuration examples, and artifact paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local loop configuration, queue state, status ledgers, review bundles, patches, and closeout artifacts when the user explicitly runs the corresponding CLI commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.4 (source: server release evidence and package reference, released 2026-07-23) <br>
+Risk: Loop setup and execution can change workspace state through queue configuration, scheduler setup, patch application, or worktree cleanup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review read-only plans and diagnostics first, then require explicit confirmation flags for installation, patch application, cleanup, and scheduler changes.
+
+Risk: A loop could route progress or terminal notifications to the wrong conversation or workspace if source metadata is missing or incorrect.
+
+Mitigation: Preserve source channel, target, account, message id, and reply-to metadata, and fail closed when delivery routing is incomplete.
+
+Risk: External messages, credential changes, production deployment changes, paid API use, destructive deletion, and device instrumentation exceed ordinary loop authority.
+
+Mitigation: Treat those actions as separate human-approval gates and stop until the required authorization is provided.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ambitioncn/skills/loop-engineering)
+- [npm package reference](artifact/references/npm-package.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown, Code]
+
+**Output Format:** [Markdown with inline shell commands, file paths, JSON artifact references, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs emphasize read-only diagnostics before mutation, explicit confirmation for gated actions, and evidence-backed task or project status.]
+
+## Skill Version(s):
+
+0.15.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,63 @@
-## Description: <br>
-Uses LinkFox/Kalodata endpoints to help agents browse TikTok Shop product leaderboards and retrieve detailed product metrics by product ID. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries Kalodata-powered TikTok Shop product leaderboards and product details by region, currency, language, date range, and productId.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and agents researching TikTok Shop products use this skill to find ranked or best-selling products, then inspect detailed price, sales, revenue, commission, category, shop, video, live, and creator metrics for a selected product. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authorization and session metadata are sent to the configured LinkFox gateway, and the gateway host can be overridden. <br>
-Mitigation: Use the default gateway or set LINKFOX_TOOL_GATEWAY only to an endpoint you trust to receive authorization and session metadata. <br>
-Risk: Full product-query responses are saved locally, which can expose commercial research data in the workspace. <br>
-Mitigation: Run the skill only in a workspace where persisted product-query results are acceptable, and review or clean saved LinkFox output files when the task is complete. <br>
-Risk: API calls consume credits, and some valid but empty requests may still be billed. <br>
-Mitigation: Confirm region, date range, page size, and productId before calling; avoid repeated probing unless the user accepts the additional cost. <br>
-Risk: The artifact includes a separate feedback endpoint that may send user feedback outside the product data gateway. <br>
-Mitigation: Review feedback behavior before installation and avoid sending sensitive user or business details in feedback content. <br>
+## Use Case:
 
+External ecommerce operators, product researchers, and developers use this skill to discover TikTok Shop best-selling products and retrieve product-level pricing, sales, revenue, commission, category, shop, video, livestream, and creator metrics.
 
-## Reference(s): <br>
-- [Kalodata-TikTok商品搜索与详情 API 参考](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-kalodata-tiktok-product) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses, saved JSON files, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Product ranking responses are paginated and detail lookup requires a productId; scripts save full responses locally and may print either full JSON or a summary depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Network calls to LinkFox/Kalodata services and each lookup may consume paid credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user's intent before repeated lookups, reuse the 24-hour cache for identical parameters, and clearly disclose additional credit consumption before continuing.
+
+Risk: The onboarding flow can handle phone numbers, SMS codes, generated API keys, and payment orders.
+
+Mitigation: Prefer self-service key setup, avoid collecting verification codes unless the user explicitly chooses scripted registration or login, and treat printed API keys as secrets.
+
+Risk: The scripts save full API responses locally, which may include product research data and account-related context.
+
+Mitigation: Store outputs only in the intended workspace, review saved files before sharing, and remove response files when they are no longer needed.
+
+Risk: Automatic feedback reporting may send skill-use feedback to a LinkFox endpoint.
+
+Mitigation: Use feedback reporting only when it matches the documented conditions and avoid including unnecessary sensitive details.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-kalodata-tiktok-product)
+- [Kalodata-TikTok商品搜索与详情 API 参考](references/api.md)
+- [解决认证和积分问题](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries and tables with JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are saved locally; small responses may also print complete JSON, while large responses print summaries.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

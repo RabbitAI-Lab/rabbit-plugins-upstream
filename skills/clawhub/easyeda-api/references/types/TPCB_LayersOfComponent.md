@@ -1,11 +1,11 @@
 # TPCB\_LayersOfComponent type
 
-器件所属层
+Layers of the device
 
 ## Signature
 
 ```typescript
-type TPCB_LayersOfComponent = EPCB_LayerId.TOP | EPCB_LayerId.BOTTOM;
+export type TPCB_LayersOfComponent = EPCB_LayerId.TOP | EPCB_LayerId.BOTTOM;
 ```
 ## References
 

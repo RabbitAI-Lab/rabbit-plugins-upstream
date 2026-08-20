@@ -1,5 +1,5 @@
 ## Description: <br>
-Secrets Manager is an encrypted local secret store for OpenClaw agents that uses AES-256-GCM authenticated encryption, per-secret random IVs, a chmod 0600 master-key file, rotation and audit commands, and opt-in plaintext output controls. <br>
+Secrets Manager is an encrypted local secret store for OpenClaw agents that stores, retrieves, lists, rotates, audits, and deletes AES-256-GCM encrypted secrets while masking values by default. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use this skill to store, retrieve, rotate, audit, and inject local secrets for OpenClaw workflows without external dependencies. It is intended for local file-based secret management, not as a replacement for a production vault or OS keychain. <br>
+Developers and agent operators use this skill to manage local OpenClaw secrets with encrypted storage, masked retrieval, rotation tracking, and audit checks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Default --inject can leave a plaintext resolved command in /tmp/secrets-inject-*.sh even though documentation and output imply automatic cleanup. <br>
-Mitigation: Avoid default --inject for important credentials, or remove the generated /tmp/secrets-inject-*.sh file immediately after use. <br>
-Risk: The skill is a local file-based secrets store with master-key material stored in .master-key. <br>
-Mitigation: Protect and back up .master-key, restrict access to the secrets directory, and use a real vault or OS keychain for production credentials. <br>
-Risk: Raw retrieval and explicit inject-to-stdout modes can expose plaintext secrets to logs, terminal history, CI output, or agent transcripts. <br>
-Mitigation: Use masked output by default and reserve --get --raw or --inject-stdout --confirm-expose for tightly controlled private processes. <br>
+Risk: Plaintext secrets can be exposed when --get --raw or audit output is captured in logs, transcripts, shell history, or redirected files. <br>
+Mitigation: Use masked retrieval by default, reserve --get --raw for private process handoff, and avoid writing secrets or audit output to shared or logged locations. <br>
+Risk: The local .master-key file is required to recover stored secrets; losing it makes encrypted secrets unrecoverable. <br>
+Mitigation: Back up .master-key securely and keep file permissions restricted to the local user. <br>
+Risk: Using SECRETS_MASTER_KEY in shared, containerized, CI, or logged environments can expose the master key. <br>
+Mitigation: Prefer the chmod 0600 file-based master key on a single-user host and use environment overrides only for tightly controlled ephemeral workflows. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/jlacroix82/skills/secrets-manager) <br>
-- [Publisher profile](https://clawhub.ai/user/jlacroix82) <br>
-- [Artifact README](artifact/README.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [CLI text output, chmod-0600 shell script files for command injection, and JavaScript module return values] <br>
+**Output Type(s):** [Text, Shell commands, Configuration, Files, Guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and CLI text output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stores encrypted secret records and master-key material as local files; raw secret output and resolved injected commands can expose plaintext when explicitly requested.] <br>
+**Other Properties Related to Output:** [Stores encrypted secrets and a local master key in chmod 0600 files; raw secret retrieval prints plaintext only when explicitly requested.] <br>
 
 ## Skill Version(s): <br>
-1.1.9 (source: server release metadata and artifact clawhub.yaml) <br>
+1.1.15 (source: server release evidence, clawhub.yaml, changelog released 2026-08-04) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,7 +1,7 @@
 ---
-name: AI-Shifu Course Creator
+name: ai-shifu-course-creator
 description: Use when the user works with AI-Shifu (AI师傅) courses in any capacity of creating, writing, editing, rewriting, optimizing, reordering, deploying, publishing, previewing, or managing Teaching Prompts (per-lesson) and Course Prompts (course-level) — both written in MarkdownFlow (MDF). Covers the full course lifecycle — from converting raw material into structured lessons, to authoring interactions (single-select, multi-select, input, branching), adding variables, images, and course prompts, to deploying and managing live courses on the AI-Shifu platform. Also covers post-deployment analytics on those courses — learner count, completion rate, stuck lessons, orders, revenue, ratings, credit consumption, audience profiles, and individual learner tracking. Trigger on any mention of AI-Shifu, AI师傅, MarkdownFlow, Teaching Prompt, Course Prompt authoring, course analytics, creator analytics, 学习人数, 完成率, 卡课节, 订单收入, 积分消耗, or learner progress.
-version: 1.2.1
+version: 1.2.5
 version_management: standalone
 ---
 
@@ -45,7 +45,7 @@ On the first invocation in a session:
 | Deploy a new course | `references/authentication.md` → `references/course-target.md` → `references/deployment-workflow.md` |
 | Sync edited lesson content to an existing course draft | `references/authentication.md` → `references/course-target.md` → `references/course-sync.md` |
 | List platform courses without changing them | `references/authentication.md` → `references/course-management.md` |
-| Publish, preview, archive, reorder, or manage metadata, access, or Listen Mode for a specific course without changing prompt content | `references/authentication.md` → `references/course-target.md` → `references/course-management.md` |
+| Publish, preview, archive, reorder, or manage metadata, teacher avatar, access, or Listen Mode for a specific course without changing prompt content | `references/authentication.md` → `references/course-target.md` → `references/course-management.md` |
 | Query observed data about a live course: learners, completion, stuck lessons, orders, revenue, ratings, follow-ups, audience profiles, progress, or credit use | `references/authentication.md` → `references/analytics/workflow.md` |
 | Author or deploy, then query live-course data | Complete the relevant authoring/deployment route first, then `references/analytics/workflow.md` |
 

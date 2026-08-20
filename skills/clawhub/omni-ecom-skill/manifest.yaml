@@ -1,0 +1,17 @@
+name: omni-ecom
+displayName: 全域电商经营专家团
+version: 1.5.8
+description: 品牌电商经营诊断、周报月报年报、店铺诊断、单平台增长、投流利润优化和内容直播诊断的可审计多角色协作框架。
+category: 营销增长
+slug: omni-ecom
+triggers:
+  - 电商经营诊断
+  - 店铺诊断
+  - 经营周报
+  - 经营月报
+  - 经营年报
+  - GMV下滑
+  - 投流ROI
+  - 直播诊断
+  - 经营方案
+  - 全域电商

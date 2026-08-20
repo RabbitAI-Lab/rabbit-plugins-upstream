@@ -1,51 +1,65 @@
-## Description: <br>
-Generates company background-check reports from a bidding and tendering perspective, including business profile, customers and suppliers, bidding strength, competitors, public risk signals, and optional company comparisons. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents produce Chinese-language company background reports and company comparisons from public bid and tender data, including business profile, customers, suppliers, contract evidence, competitors, and public risk signals.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Business users, procurement teams, sales teams, and agents use this skill to investigate a named company through public bidding and tendering data. It is suited for single-company diligence, supplier review, competitor context, and two-company comparisons. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Company queries are sent to the third-party 知了标讯 service and may consume account credits. <br>
-Mitigation: Use only for company queries the user is comfortable sharing with the service, and disclose expected credit use before starting a report. <br>
-Risk: Generated reports and returned platform links may contain signed access parameters such as sk or sid. <br>
-Mitigation: Treat exported reports and signed links as sensitive, and share them only with recipients who should have equivalent access. <br>
-Risk: The skill can store credentials and generated reports locally. <br>
-Mitigation: Protect ~/.zlbx/config.json and the local report output directory, and avoid committing exported reports or credentials to shared repositories. <br>
-Risk: Company diligence reports may be incomplete or misleading if public bidding data, public web sources, or scanner-visible evidence are incomplete. <br>
-Mitigation: Keep conclusions tied to cited data, state data gaps clearly, and verify important findings through official or primary sources before business decisions. <br>
+## Use Case:
 
+External users and business teams use this skill to investigate a company, assess bid and tender history, identify customers and competitors, review public risk signals, or compare two companies. The skill is aimed at company due diligence from a bid-and-tender perspective rather than general corporate registry lookup.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/company-background-check-qixinbao) <br>
-- [Workflow Guide](artifact/references/workflow.md) <br>
-- [API Quick Reference](artifact/references/api-quick.md) <br>
-- [Report Template](artifact/references/report-template.md) <br>
-- [Automatic Registration Flow](artifact/references/auto-register.md) <br>
-- [知了标讯 API Endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/) <br>
-- [知了标讯 Registration and Recharge](https://ai.zhiliaobiaoxun.com/?ch=s114) <br>
-- [知了商机大师](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown company intelligence report with an optional self-contained HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved trial registration; generated reports may be written under ~/zlbx-company-intel-files/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill can store an API key in local configuration and may create an account when no key is configured.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing if credential storage or account creation is not acceptable; prefer setting your own ZLBX_API_KEY manually.
+
+Risk: Generated reports can be persistent HTML files and may contain login-free signed platform links.
+
+Mitigation: Avoid sharing generated reports broadly; treat signed links as access-bearing URLs and remove reports when they are no longer needed.
+
+Risk: The skill can request company contact details and display the contact data returned by the service.
+
+Mitigation: Request contact details only for a legitimate business purpose and do not use other sources to complete masked contact information.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/company-background-check-qixinbao)
+- [Publisher profile](https://clawhub.ai/user/dragonzu)
+- [API quick reference](artifact/references/api-quick.md)
+- [Workflow guide](artifact/references/workflow.md)
+- [Report template](artifact/references/report-template.md)
+- [Auto-registration guide](artifact/references/auto-register.md)
+- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool})
+- [Manual account registration](https://ai.zhiliaobiaoxun.com/?ch=s114)
+- [Zhiliaobiaoxun agent platform](https://agent.zhiliaobiaoxun.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, files, guidance]
+
+**Output Format:** [Markdown company intelligence report plus optional self-contained HTML report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports include sourced findings, data-boundary notes, disclaimers, and full output paths for generated HTML files.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

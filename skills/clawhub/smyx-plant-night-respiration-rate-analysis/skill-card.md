@@ -1,44 +1,59 @@
-## Description: <br>
-Estimates relative plant night respiration from thermal canopy images or videos, with optional CO2 context, and returns a structured analysis report with respiration intensity, risk prompts, recommendations, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Estimates relative plant night respiration intensity from thermal canopy imagery and optional ambient CO2 signals for plant factories, climate chambers, and closed greenhouses.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and agricultural operators use this skill to analyze night-period plant factory, climate chamber, or greenhouse thermal media and estimate a relative respiration intensity index. It supports monitoring metabolic activity and producing structured guidance for nighttime environmental control. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Plant media or URLs may be processed by the vendor's cloud service with weak user-facing scoping. <br>
-Mitigation: Avoid submitting sensitive facility footage or internal URLs unless the publisher documents retention, deletion, and URL-source restrictions. <br>
-Risk: The skill may silently create or reuse an identity and store account tokens locally. <br>
-Mitigation: Run it only in a controlled workspace, review credential handling before deployment, and clear local account state between users or tenants. <br>
-Risk: History queries may use the stored identity to retrieve cloud report records. <br>
-Mitigation: Confirm identity isolation and report-access expectations before using history features in shared environments. <br>
+## Use Case:
 
+External users, developers, and agricultural operators use this skill to analyze nighttime thermal plant imagery or video, estimate a relative respiration index, review metabolic activity levels, and retrieve prior analysis reports.
 
-## Reference(s): <br>
-- [API Documentation](references/api_doc.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-night-respiration-rate-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown text with structured JSON report content and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include respiration intensity, level assessment, risk prompts, recommendations, and cloud report export URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter lists 1.0.5) <br>
+Risk: Plant media and submitted URLs may be sent to a remote analysis service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only approved plant media and URLs, and review or change the default endpoints before production use.
+
+Risk: The skill may silently create or reuse a local identity and store tokens for future report history queries.
+
+Mitigation: Provide an explicit cleanup or reset path for local identity and token data before production use.
+
+Risk: History queries are account-linked and offer limited user control.
+
+Mitigation: Confirm the expected account scope and user consent before enabling report history retrieval.
+
+## Reference(s):
+
+- [API Documentation](references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-night-respiration-rate-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown or JSON report text, with optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include respiration intensity, activity level, risk prompts, recommendations, report links, and Markdown tables for report history.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

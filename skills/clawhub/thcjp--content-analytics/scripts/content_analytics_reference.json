@@ -1,0 +1,32 @@
+{
+  "_comment": "content-analytics 扩展参考数据",
+  "rating_weights": [
+    {"metric": "播放量", "weight": "25%", "desc": "内容曝光度"},
+    {"metric": "完播率", "weight": "25%", "desc": "内容吸引力"},
+    {"metric": "互动率", "weight": "20%", "desc": "用户参与度"},
+    {"metric": "转化率", "weight": "20%", "desc": "商业价值"},
+    {"metric": "分享率", "weight": "10%", "desc": "传播力"}
+  ],
+  "rating_thresholds": [
+    {"rating": "S", "score": ">90", "desc": "爆款", "action": "总结成功要素，复制模式"},
+    {"rating": "A", "score": "70-90", "desc": "优秀", "action": "保持当前策略"},
+    {"rating": "B", "score": "50-70", "desc": "一般", "action": "基础优化建议"},
+    {"rating": "C", "score": "<=50", "desc": "较差", "action": "详细优化建议，复盘"}
+  ],
+  "alert_thresholds": [
+    {"metric": "互动率", "threshold": "<2%", "desc": "低于2%触发内容质量告警", "source": "02手册§十一11.1"},
+    {"metric": "发布成功率", "threshold": "<95%", "desc": "低于95%触发发布链路排查", "source": "02手册§十一11.1"}
+  ],
+  "input_formats": {
+    "single": {"content_id": "content_20260407_001", "platform": "douyin"},
+    "batch": {"action": "batch", "days": 1, "platforms": ["douyin", "kuaishou"]}
+  },
+  "output_formats": {
+    "single": {"success": true, "data": {"content_id": "", "platform": "douyin", "rating": "A", "score": 75, "metrics": {"views": 10000, "completion_rate": 0.65, "engagement_rate": 0.08, "conversion_rate": 0.02, "share_rate": 0.03}, "suggestions": ["开头3秒吸引力不错", "完播率有提升空间"]}},
+    "batch": {"success": true, "data": {"summary": {"total_analyzed": 10, "avg_score": 68, "rating_distribution": {"S": 1, "A": 3, "B": 4, "C": 2}}, "top_contents": [{"content_id": "", "rating": "S", "score": 92}], "bottom_contents": [{"content_id": "", "rating": "C", "score": 35}]}}
+  },
+  "examples": {
+    "single_analysis": {"input": {"content_id": "content_20260407_001", "platform": "douyin"}, "output": {"success": true, "data": {"rating": "A", "score": 75, "metrics": {"views": 10000, "completion_rate": 0.65, "engagement_rate": 0.08}}}},
+    "batch_analysis": {"input": {"action": "batch", "days": 1}, "output": {"success": true, "data": {"summary": {"total_analyzed": 10, "avg_score": 68, "rating_distribution": {"S": 1, "A": 3, "B": 4, "C": 2}}}}}
+  }
+}

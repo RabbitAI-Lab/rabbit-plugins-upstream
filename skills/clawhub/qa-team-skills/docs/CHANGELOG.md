@@ -2,6 +2,89 @@
 
 All notable changes to qa-team-skills will be documented in this file.
 
+## v1.6.4
+
+### 报告文档导出（2026-08-19）
+
+- `/qa-prd` 评审完成后**自动导出完整报告为 Markdown 文档**到当前项目 `docs/reviews/review-{module}-{YYYYMMDD}.md`（交付物，无需确认；用户明确拒绝时可跳过）
+- 修复：直接调用 `/qa-team-skills` 时评审报告只停留在对话输出、无文档产物的问题
+- 记忆库 JSON 写入仍按既有规则**询问用户确认**，与报告文档（自动落盘）语义分离
+- `/qa` 统一入口单步/多步任务路由到 `/qa-prd` 时同步执行报告导出；validation-rules 新增 P006 校验
+- SKILL.md MCP 能力声明新增「报告文档导出」范围（`docs/reviews/*`），数据隐私须知同步更新
+- memory/README.md 补充评审产物双形态说明（JSON 记忆数据 + Markdown 报告文档）
+
+### 版本号更新（2026-08-19）
+
+- 版本号从 v1.6.2 升级至 v1.6.4
+
+### 质量评估修复（2026-08-19）
+
+按 skill 设计专家整体评估（P0/P1 级问题）修复：
+
+- **P0 修复**：`.gitignore` 的 `*.txt` 规则导致 `ci/forbidden.txt`、`ci/commit-msg.txt` 未被 git 跟踪——clone 仓库后 `ci/validate.sh` 必失败（缺禁止词文件）。新增例外 `!ci/forbidden.txt` / `!ci/commit-msg.txt` 并入库
+- **P1 修复**：`commit-msg.txt` 从根目录移入 `ci/`，与 README/user-manual 结构图一致
+- **P1 修复**：`docs/ci-testing.md` 基线数字过期——触发评测 38/38 → 41/41（train 24 / validation 17），契约断言 37 → 39
+- **P1 修复**：`ci/validate.sh` 补 `examples/qa-demo.md` 检查，消除示例清单三处不一致
+- **P1 修复**：README/user-manual 示例数量 7 → 8（补 qa-demo.md），README 示例表格补 `/qa` 行、"6 个指令" → "8 个指令"
+- **P1 修复**：`evals/history/` 最新评测归档报告入库，建立跨版本基线对比
+
+### 架构审计修复（2026-08-19）
+
+按批判性架构/触发链路审计（重点：`/qa-explore` 与统一入口编排断链）修复：
+
+- **P0 修复**：`/qa-explore` 指令与 `/qa` 统一入口断链——`prompts/qa/prompt.md` 补 4 处同步：指令路由列表（L10）、意图解析 action 枚举（L105）、历史数据影响表（L76-79）、记忆写入表（L258-265）
+- **P1 修复**：`evals/functional-eval.json` 补 `explore-001`（探索性测试评测，5 条断言）；`evals/security-eval.json` 补 `sec-explore-001`（角色篡改注入对抗，4 条断言）——functional-eval 8→9 条、security-eval 8→9 条
+- **P2 修复**：`templates/` 三文件接入 Prompt 体系（此前为孤儿资产）：`case/prompt.md` 引用 `requirement.md`、`agent/prompt.md` 引用 `agent-test.md`、`validation-rules.md` 引用 `error-output.md`（统一错误格式）
+- **P2 修复**：趋势查询路径硬编码 `data/products/payment/` → `data/products/{scope}/`（`qa/prompt.md` + `memory/README.md`）
+- **P2 修复**：`ci/validate.sh` 新增「指令清单三方一致性检查」——prompts/ 目录 ↔ run_llm_eval.py 映射 ↔ SKILL.md 渐进式加载表，防新增指令再漏同步
+- **P2 修复**：`ci/run-evals.sh` 规则完整性检查补 `E001`（explore 规则表此前漏检）；契约断言 39→40
+- **文档同步**：README/user-manual/ci-testing/human-review 中 functional/security-eval 条数 8→9 全部修正
+
+## v1.6.2
+
+### agentskills.io 最佳实践评估修复（2026-08-19）
+
+按 [agentskills.io skill-creation/best-practices](https://agentskills.io/skill-creation/best-practices) 评估修复 6 个质量问题：
+
+- SKILL.md「指令详情」改为**渐进式加载指引表**——明确"何时加载哪个 prompt 文件"，强化按需加载设计
+- SKILL.md trigger 注释修复"写报告"矛盾：有测试数据/任务上下文时"写报告/出份报告"路由到 `/qa-report`，与 trigger-eval 期望一致
+- SKILL.md 新增**常见陷阱（Gotchas）**章节：集中防注入 / 防幻觉 / 防过度自信 / 写入持久化 / 输出前必查规则
+- SKILL.md description 改祈使句开头（"当用户需要……时使用此技能"），补充 RAG 测试/探索性测试触发词（239 字符 < 1024 限制）
+- trigger-eval.json 补 `split` 字段（train 24 / validation 17，正反例两集均衡覆盖）防描述过拟合；run-evals.sh 按 split 分组统计并写入归档报告
+- run_llm_eval.py 增加执行轨迹采集（`trace_preview`/`trace_len`），供人工分析指令清晰度
+
+### Windows 编码 bug 修复（2026-08-19）
+
+- 修复预存编码 bug：Windows + Git Bash 下 Python 默认 GBK 输出，导致触发评测中文 query 全部乱码（准确率从 29.3% 修正为 100%）、emoji/✔ 打印抛 `UnicodeEncodeError`
+- `ci/run-evals.sh`、`ci/test-memory-e2e.sh`、`ci/test-memory-stress.sh` 统一加 `PYTHONIOENCODING=utf-8`
+
+### 文档一致性（2026-08-19）
+
+- README/user-manual 触发评测集条数 38 → 41（含 train/validation 划分）
+
+### 版本号更新（2026-08-19）
+
+- 版本号从 v1.6.1 升级至 v1.6.2
+
+## v1.6.1
+
+### 版本号更新（2026-08-18）
+
+- 版本号从 v1.6.0 升级至 v1.6.1
+- ClawHub 安全审计 B 类 6 项修复：持久化措辞统一（确认后写入）+ 记忆加载前确认 + /qa-team 控制流一致 + 关键词路由表补齐 + 示例脱敏提醒升级
+
+## v1.6.0
+
+### 版本号更新（2026-08-17）
+
+- 版本号从 v1.5.4 升级至 v1.6.0
+- 修复 /qa-agent 16 维度定义不一致（维度表 vs 覆盖确认清单 vs 用例格式模板）
+- run-evals.sh 新增 agent 维度名一致性断言，防回归
+- memory/data/ 加入 .gitignore 并从 git 移除跟踪（防止真实测试数据入库泄漏）
+- README 补充 /qa 逻辑指令说明（非注册斜杠命令，可自行注册）
+- 评测集版本号统一为 v1.6.0（functional/security/trigger）
+- trigger-eval.json 补 explore 正/反例，run-evals.sh 新增 explore 路由分支
+
 ## v1.5.4
 
 ### 版本号更新（2026-07-17）

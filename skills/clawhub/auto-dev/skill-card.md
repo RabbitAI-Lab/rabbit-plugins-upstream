@@ -1,49 +1,68 @@
-## Description: <br>
-Auto.dev – Automotive Data helps agents use Auto.dev APIs, MCP tools, CLI commands, and SDK methods for VIN decoding, vehicle listings, photos, specs, recalls, payments, interest rates, OEM build data, and plate-to-VIN workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Auto.dev – Automotive Data helps agents work with Auto.dev APIs for vehicle data, VIN decoding, car listings, photos, specs, recalls, payments, interest rates, taxes, OEM build data, plate-to-VIN, CLI commands, MCP tools, and SDK methods.
 
-## Publisher: <br>
-[bryant22](https://clawhub.ai/user/bryant22) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bryant22](https://clawhub.ai/user/bryant22)
 
-## Use Case: <br>
-Developers and automotive workflow builders use this skill to have agents search vehicle listings, decode and enrich VINs, retrieve photos, specs, recalls, payments, taxes, and ownership costs, and scaffold Auto.dev-powered apps and integrations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Direct API workflows may expose Auto.dev API keys if keys are pasted into chat, embedded in URLs, logged, or placed in client-side code. <br>
-Mitigation: Prefer OAuth-backed CLI or MCP flows where available; otherwise keep API keys in environment variables or a secret store, use authorization headers when supported, and avoid putting secrets in chat, URLs, logs, or browser-delivered code. <br>
-Risk: VIN, plate, listing, and financing workflows can involve sensitive vehicle or customer-adjacent data and may forward that data to integrations such as webhooks, Google Sheets, Slack, Zapier, or email. <br>
-Mitigation: Review integrations before production use, require appropriate user consent and privacy notices, allowlist callback destinations, minimize logged data, and define retention and deletion controls. <br>
-Risk: Some Auto.dev endpoints and plan upgrades incur per-call or subscription charges, and batch or chained workflows can multiply cost. <br>
-Mitigation: Estimate cost before batch or chained operations, warn before high-cost endpoints such as OEM build data or plate-to-VIN, and require explicit user confirmation for material spend. <br>
-Risk: Generated app, webhook, alert, and export examples may need hardening before deployment. <br>
-Mitigation: Review generated code for authentication, authorization, input validation, callback allowlists, secret handling, logging, and operational monitoring before using it in production. <br>
+## Use Case:
 
+Developers and external users use this skill to query Auto.dev automotive data, choose the available MCP, CLI, SDK, or direct API surface, and build vehicle-data workflows or applications. It supports agent guidance for authentication, endpoint selection, request parameters, pricing awareness, result formatting, and exports.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/bryant22/auto-dev) <br>
-- [Auto.dev CLI, MCP, and SDK documentation](https://docs.auto.dev/v2/cli-mcp-sdk) <br>
-- [Auto.dev API documentation](https://docs.auto.dev/) <br>
-- [Auto.dev pricing](https://auto.dev/pricing) <br>
-- [Skill homepage](https://github.com/drivly/auto-dev-skill) <br>
-- [Glama MCP server listing](https://glama.ai/mcp/servers/drivly/auto-dev-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands, API examples, and code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include CSV or JSON export guidance for larger vehicle data results when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release metadata; artifact SKILL.md frontmatter is 1.1.3) <br>
+Risk: Using the skill may send VINs, ZIP codes, credit scores, payment details, or license plates to Auto.dev.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ask users for sensitive values instead of inferring them, send only the fields required for the chosen endpoint, and avoid persisting or unnecessarily repeating sensitive inputs.
+
+Risk: Some Auto.dev endpoints and batch operations can incur per-call charges.
+
+Mitigation: Estimate call counts and costs before batch work, warn users when paid endpoints are involved, and get explicit confirmation before high-cost operations.
+
+Risk: Auto.dev API keys can be exposed if placed in client-side code or public files.
+
+Mitigation: Prefer OAuth-backed CLI or MCP flows when available; for direct API use, keep AUTODEV_API_KEY in server-side environment configuration only.
+
+Risk: Plate lookups can identify a specific vehicle and may involve regulated data.
+
+Mitigation: Confirm a legitimate purpose before plate lookup, and do not run bulk plate lookups against plates the user did not provide.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/bryant22/skills/auto-dev)
+- [Auto.dev CLI, MCP, and SDK documentation](https://docs.auto.dev/v2/cli-mcp-sdk)
+- [Auto.dev API documentation](https://docs.auto.dev/)
+- [Auto.dev pricing](https://auto.dev/pricing)
+- [V2 VIN API reference](artifact/v2-vin-apis.md)
+- [V2 Listings API reference](artifact/v2-listings-api.md)
+- [V2 Plate API reference](artifact/v2-plate-api.md)
+- [Code patterns](artifact/code-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown prose with inline command examples, API call guidance, code snippets, and optional CSV or JSON export instructions.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide calls through MCP tools, CLI commands, SDK methods, or direct HTTP APIs depending on what is available to the agent.]
+
+## Skill Version(s):
+
+1.1.5 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

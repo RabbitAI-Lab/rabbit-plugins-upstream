@@ -1,40 +1,53 @@
-## Description: <br>
-QSR Audit Readiness Countdown guides restaurant and franchise operators through a 30-day milestone process for EcoSure, health department, corporate brand, and franchise compliance audits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+30-day countdown protocol for third-party compliance audits, including EcoSure, health department, and corporate brand audits, with milestone-driven preparation for restaurant and franchise operators.
 
-## Publisher: <br>
-[mcphersonai](https://clawhub.ai/user/mcphersonai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-CC-BY-NC-4.0 <br>
+## Publisher:
 
+[mcphersonai](https://clawhub.ai/user/mcphersonai)
 
-## Use Case: <br>
-General managers, assistant managers, shift leads, and franchise operators use this skill to plan, track, and review audit readiness tasks across a 30-day countdown. It helps generate milestone checklists, findings, corrective actions, team readiness checks, and post-audit pattern tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
 
-## Known Risks and Mitigations: <br>
-Risk: Audit findings, corrective actions, and respondent names may be retained in agent memory. <br>
-Mitigation: Use roles instead of personal names, avoid confidential corporate details unless needed, and clear or disable memory when workplace retention rules require it. <br>
-Risk: Readiness guidance may not match a specific audit program if the current audit criteria are not supplied. <br>
-Mitigation: Provide the current checklist when available and have the responsible manager verify outputs against the applicable audit standard before relying on them. <br>
+## Use Case:
 
+Restaurant and franchise operators, general managers, assistant managers, and shift leads use this skill to prepare for third-party compliance audits through a 30-day sequence of walkthroughs, training checks, mock audits, corrective actions, and post-audit learning.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/mcphersonai/qsr-audit-readiness-countdown) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown text with milestone checklists, audit questions, readiness summaries, findings, and corrective actions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Conversation-only output; may use agent memory for milestone status, findings, corrective actions, and respondent role or name.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill may record audit findings, corrective actions, scores, and names or roles of responsible staff.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use roles instead of full names when possible and avoid entering confidential corporate documents unless the organization permits it.
+
+Risk: The Observa beta link is promotional and not required for the skill's audit-readiness workflow.
+
+Mitigation: Use the countdown protocol without following the promotional link unless the organization has independently approved that external engagement.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/mcphersonai/skills/qsr-audit-readiness-countdown)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown-style milestone reports, checklists, readiness summaries, and follow-up prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Conversation-only output; may include audit findings, corrective actions, readiness scores, milestone status, and responsible roles.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -2062,7 +2062,6 @@
       }
     </style>
     <script src="https://staticpn.siluzan.com/assets/slz/homeCDN/echarts.min.js"></script>
-
   </head>
   <body>
     <div id="report-root">
@@ -2110,7 +2109,7 @@
           { key: "adsSitelinkExtensionQualified", name: "附加链接" },
           { key: "adsCalloutExtensionQualified", name: "附加宣传信息" },
           { key: "adsCallExtensionQualified", name: "附加电话信息" },
-          { key: "adsNegativeQualified", name: "否定词添加" },
+          // collect 未拉取否词数据，不展示「否定词添加」
           { key: "audienceQualified", name: "受众群体设置" },
           { key: "biddingPolicyQualified", name: "出价策略" },
         ];
@@ -2130,7 +2129,6 @@
             附加链接: "请添加附加链接，为用户提供更多访问路径",
             附加宣传信息: "请添加宣传信息，突出产品优势",
             附加电话信息: "请添加电话信息，方便用户直接联系",
-            否定词添加: "请添加否定关键词，排除不相关流量",
             受众群体设置: "请设置受众群体，提高广告精准度",
             出价策略: "请使用智能出价策略，让Google AI优化出价",
           };
@@ -2270,11 +2268,16 @@
             }
 
             const { desktop = {}, mobile = {} } = rawData;
-            const source = String(rawData.source || (rawData.lighthouseOk === false ? "none" : "api"));
+            const source = String(
+              rawData.source || (rawData.lighthouseOk === false ? "none" : "api"),
+            );
             const simple = rawData.simpleDiagnosis || null;
 
             // TSO Lighthouse 失败后的 CLI 简易诊断：不展示假 0 分，改为说明降级
-            if (source === "simple" || (source !== "api" && !(Number(desktop.score) > 0 || Number(mobile.score) > 0))) {
+            if (
+              source === "simple" ||
+              (source !== "api" && !(Number(desktop.score) > 0 || Number(mobile.score) > 0))
+            ) {
               if (source === "simple" || simple) {
                 const fetchMs = simple && simple.fetchMs != null ? `${simple.fetchMs} ms` : "—";
                 const https = simple ? (simple.https ? "是" : "否") : "—";
@@ -2308,7 +2311,8 @@
                     metric: "手机性能指数 (Mobile Performance Index)",
                     reportValue: "未测到",
                     benchmark: "≥ 75",
-                    action: "P2：稍后重试 Lighthouse；当前勿据此调整出价。(Retry Lighthouse later.)",
+                    action:
+                      "P2：稍后重试 Lighthouse；当前勿据此调整出价。(Retry Lighthouse later.)",
                   },
                 ];
               }
@@ -2324,9 +2328,7 @@
             const mobileFirstContentfulPaint = Number(mobile.firstContentfulPaint) || 0;
             const mobileScore = Number(mobile.score) || 0;
             const hasMeasuredMetrics =
-              desktopFirstContentfulPaint > 0 ||
-              mobileFirstContentfulPaint > 0 ||
-              mobileScore > 0;
+              desktopFirstContentfulPaint > 0 || mobileFirstContentfulPaint > 0 || mobileScore > 0;
 
             // 全 0 = 未测到，禁止当成「0.00s / 0 分 → P1 立即修复」
             if (!hasMeasuredMetrics) {
@@ -2354,7 +2356,8 @@
                   metric: "手机性能指数 (Mobile Performance Index)",
                   reportValue: "未测到",
                   benchmark: `≥ ${healthStandards.score}`,
-                  action: "数据未获取，禁止按 0 分给 P1；可稍后重试 Lighthouse。(Unavailable — retry later.)",
+                  action:
+                    "数据未获取，禁止按 0 分给 P1；可稍后重试 Lighthouse。(Unavailable — retry later.)",
                 },
               ];
             }
@@ -2933,31 +2936,83 @@
           return suggestions;
         };
 
+        /**
+         * 统一图例布局：卡片已有 HTML chart-title 时不再画 ECharts title，避免与 legend 重叠。
+         * 无 HTML 标题时把 ECharts title 置顶、legend 放底部。
+         */
+        const applyChartChrome = (option, opts = {}) => {
+          const { chartTitle, hasHtmlTitle = false, legendPlacement = "top" } = opts;
+          const next = { ...option };
+          const baseLegend =
+            typeof next.legend === "object" && next.legend ? { ...next.legend } : {};
+
+          if (hasHtmlTitle || !chartTitle) {
+            delete next.title;
+            if (baseLegend.orient === "vertical") {
+              next.legend = {
+                ...baseLegend,
+                orient: "vertical",
+                right: 10,
+                top: "middle",
+                left: undefined,
+                bottom: undefined,
+              };
+            } else if (legendPlacement === "bottom") {
+              next.legend = { ...baseLegend, bottom: 0, top: undefined, left: "center" };
+              if (next.grid) {
+                next.grid = {
+                  ...next.grid,
+                  bottom: Math.max(Number(next.grid.bottom) || 0, 48),
+                };
+              }
+            } else {
+              next.legend = { ...baseLegend, top: 4, left: "center", bottom: undefined };
+              if (next.grid) {
+                next.grid = { ...next.grid, top: 48 };
+              }
+            }
+          } else {
+            next.title = {
+              text: chartTitle,
+              left: "center",
+              top: 0,
+              textStyle: { fontSize: 14, fontWeight: "bold" },
+            };
+            next.legend = { ...baseLegend, bottom: 0, top: undefined, left: "center" };
+            if (next.grid) {
+              next.grid = {
+                ...next.grid,
+                top: 40,
+                bottom: Math.max(Number(next.grid.bottom) || 0, 48),
+              };
+            }
+          }
+          return next;
+        };
+
         const buildGeographicChartConfig = (items) => {
           if (!Array.isArray(items) || !items.length) return null;
           const labels = items.map((item) => getItemLabel(item, "geographic"));
           const dataPoints = items.map((item) => Number(item?.cost) || 0);
           if (!dataPoints.some((value) => value > 0)) return null;
-          return {
-            color: ["#3b68f9", "#5b8fff", "#7ba7ff", "#9db9ff", "#bfcbff", "#dce5ff"],
-            title: {
-              text: "地理位置消费分布",
-              left: "center",
-              textStyle: { fontSize: 16, fontWeight: "bold" },
+          return applyChartChrome(
+            {
+              color: ["#3b68f9", "#5b8fff", "#7ba7ff", "#9db9ff", "#bfcbff", "#dce5ff"],
+              tooltip: { trigger: "item" },
+              legend: { type: "scroll" },
+              series: [
+                {
+                  type: "pie",
+                  radius: ["40%", "65%"],
+                  center: ["50%", "46%"],
+                  itemStyle: { borderColor: "#ffffff", borderWidth: 2 },
+                  label: { show: false },
+                  data: labels.map((name, index) => ({ name, value: dataPoints[index] })),
+                },
+              ],
             },
-            tooltip: { trigger: "item" },
-            legend: { bottom: 0, type: "scroll" },
-            series: [
-              {
-                type: "pie",
-                radius: ["40%", "70%"],
-                center: ["50%", "48%"],
-                itemStyle: { borderColor: "#ffffff", borderWidth: 2 },
-                label: { show: false },
-                data: labels.map((name, index) => ({ name, value: dataPoints[index] })),
-              },
-            ],
-          };
+            { hasHtmlTitle: true, legendPlacement: "bottom" },
+          );
         };
 
         const buildDeviceChartConfig = (items) => {
@@ -2966,22 +3021,30 @@
           const costData = items.map((item) => Number(item?.cost) || 0);
           const conversionData = items.map((item) => Number(item?.conversions) || 0);
           if (!costData.some((v) => v > 0) && !conversionData.some((v) => v > 0)) return null;
-          return {
-            title: {
-              text: "设备类型表现对比",
-              left: "center",
-              textStyle: { fontSize: 16, fontWeight: "bold" },
+          return applyChartChrome(
+            {
+              tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+              legend: {},
+              grid: { left: "8%", right: "5%", bottom: 30, containLabel: true },
+              xAxis: {
+                type: "category",
+                data: labels,
+                axisLine: { show: false },
+                axisTick: { show: false },
+              },
+              yAxis: { type: "value", splitLine: { lineStyle: { color: "#f0f0f0" } } },
+              series: [
+                { name: "消费", type: "bar", data: costData, itemStyle: { color: "#3b68f9" } },
+                {
+                  name: "转化次数",
+                  type: "bar",
+                  data: conversionData,
+                  itemStyle: { color: "#5b8fff" },
+                },
+              ],
             },
-            tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-            legend: { top: 28 },
-            grid: { left: "8%", right: "5%", top: 70, bottom: 30, containLabel: true },
-            xAxis: { type: "category", data: labels, axisLine: { show: false }, axisTick: { show: false } },
-            yAxis: { type: "value", splitLine: { lineStyle: { color: "#f0f0f0" } } },
-            series: [
-              { name: "消费", type: "bar", data: costData, itemStyle: { color: "#3b68f9" } },
-              { name: "转化次数", type: "bar", data: conversionData, itemStyle: { color: "#5b8fff" } },
-            ],
-          };
+            { hasHtmlTitle: true },
+          );
         };
 
         const buildAudienceChartConfig = (items) => {
@@ -2989,25 +3052,23 @@
           const labels = items.map((item) => getItemLabel(item, "audience"));
           const dataPoints = items.map((item) => Number(item?.cost) || 0);
           if (!dataPoints.some((value) => value > 0)) return null;
-          return {
-            color: ["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#feca57", "#ff9ff3"],
-            title: {
-              text: "受众特征消费分布",
-              left: "center",
-              textStyle: { fontSize: 16, fontWeight: "bold" },
+          return applyChartChrome(
+            {
+              color: ["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#feca57", "#ff9ff3"],
+              tooltip: { trigger: "item" },
+              legend: { orient: "vertical", type: "scroll" },
+              series: [
+                {
+                  type: "pie",
+                  radius: "65%",
+                  center: ["40%", "55%"],
+                  itemStyle: { borderColor: "#ffffff", borderWidth: 2 },
+                  data: labels.map((name, index) => ({ name, value: dataPoints[index] })),
+                },
+              ],
             },
-            tooltip: { trigger: "item" },
-            legend: { orient: "vertical", right: 10, top: "middle", type: "scroll" },
-            series: [
-              {
-                type: "pie",
-                radius: "65%",
-                center: ["40%", "55%"],
-                itemStyle: { borderColor: "#ffffff", borderWidth: 2 },
-                data: labels.map((name, index) => ({ name, value: dataPoints[index] })),
-              },
-            ],
-          };
+            { hasHtmlTitle: true },
+          );
         };
 
         const buildCustomAudienceChartConfig = (items) => {
@@ -3029,31 +3090,44 @@
             if (totalConversions === 0) return 0;
             return Number(((conversions / totalConversions) * 100).toFixed(2));
           });
-          return {
-            title: {
-              text: "自定义受众花费与转化占比",
-              left: "center",
-              textStyle: { fontSize: 16, fontWeight: "bold" },
+          return applyChartChrome(
+            {
+              tooltip: {
+                trigger: "axis",
+                axisPointer: { type: "shadow" },
+                formatter: (params) =>
+                  params.map((p) => `${p.marker}${p.seriesName}: ${p.value}%`).join("<br/>"),
+              },
+              legend: {},
+              grid: { left: "8%", right: "5%", bottom: 30, containLabel: true },
+              xAxis: {
+                type: "category",
+                data: labels,
+                axisLine: { show: false },
+                axisTick: { show: false },
+              },
+              yAxis: {
+                type: "value",
+                axisLabel: { formatter: "{value}%" },
+                splitLine: { lineStyle: { color: "#f0f0f0" } },
+              },
+              series: [
+                {
+                  name: "花费占比 (%)",
+                  type: "bar",
+                  data: costPercent,
+                  itemStyle: { color: "#3b68f9" },
+                },
+                {
+                  name: "转化占比 (%)",
+                  type: "bar",
+                  data: conversionPercent,
+                  itemStyle: { color: "#5b8fff" },
+                },
+              ],
             },
-            tooltip: {
-              trigger: "axis",
-              axisPointer: { type: "shadow" },
-              formatter: (params) =>
-                params.map((p) => `${p.marker}${p.seriesName}: ${p.value}%`).join("<br/>"),
-            },
-            legend: { top: 28 },
-            grid: { left: "8%", right: "5%", top: 70, bottom: 30, containLabel: true },
-            xAxis: { type: "category", data: labels, axisLine: { show: false }, axisTick: { show: false } },
-            yAxis: {
-              type: "value",
-              axisLabel: { formatter: "{value}%" },
-              splitLine: { lineStyle: { color: "#f0f0f0" } },
-            },
-            series: [
-              { name: "花费占比 (%)", type: "bar", data: costPercent, itemStyle: { color: "#3b68f9" } },
-              { name: "转化占比 (%)", type: "bar", data: conversionPercent, itemStyle: { color: "#5b8fff" } },
-            ],
-          };
+            { hasHtmlTitle: true },
+          );
         };
 
         const buildTargetingTableRow = (item, labelKey) => {
@@ -3387,22 +3461,28 @@
 
         const buildKeywordChartConfig = (items) => {
           if (!Array.isArray(items) || !items.length) {
-            return {
-              title: { text: "关键词表现趋势", left: "center" },
-              tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, valueFormatter: (v) => `${v}%` },
-              legend: { top: 28 },
-              grid: { left: "8%", right: "5%", top: 60, bottom: 30, containLabel: true },
-              xAxis: { type: "category", data: ["暂无数据"] },
-              yAxis: { type: "value", axisLabel: { formatter: "{value}%" } },
-              series: [
-                {
-                  name: "花费占比 (%)",
-                  type: "bar",
-                  data: [0],
-                  itemStyle: { color: "rgba(59, 104, 249, 0.6)", borderRadius: 6 },
+            return applyChartChrome(
+              {
+                tooltip: {
+                  trigger: "axis",
+                  axisPointer: { type: "shadow" },
+                  valueFormatter: (v) => `${v}%`,
                 },
-              ],
-            };
+                legend: {},
+                grid: { left: "8%", right: "5%", containLabel: true },
+                xAxis: { type: "category", data: ["暂无数据"] },
+                yAxis: { type: "value", axisLabel: { formatter: "{value}%" } },
+                series: [
+                  {
+                    name: "花费占比 (%)",
+                    type: "bar",
+                    data: [0],
+                    itemStyle: { color: "rgba(59, 104, 249, 0.6)", borderRadius: 6 },
+                  },
+                ],
+              },
+              { chartTitle: "关键词表现趋势" },
+            );
           }
 
           const topItems = items.slice(0, 20);
@@ -3416,52 +3496,60 @@
             return Number.isFinite(value) ? Number(value.toFixed(2)) : 0;
           });
 
-          return {
-            title: { text: "关键词表现趋势", left: "center" },
-            tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, valueFormatter: (v) => `${v}%` },
-            legend: { top: 28 },
-            grid: { left: "8%", right: "5%", top: 60, bottom: 60, containLabel: true },
-            xAxis: {
-              type: "category",
-              data: labels,
-              axisLabel: { rotate: 45 },
+          return applyChartChrome(
+            {
+              tooltip: {
+                trigger: "axis",
+                axisPointer: { type: "shadow" },
+                valueFormatter: (v) => `${v}%`,
+              },
+              legend: {},
+              grid: { left: "8%", right: "5%", bottom: 60, containLabel: true },
+              xAxis: {
+                type: "category",
+                data: labels,
+                axisLabel: { rotate: 45 },
+              },
+              yAxis: { type: "value", axisLabel: { formatter: "{value}%" } },
+              series: [
+                {
+                  name: "花费占比 (%)",
+                  type: "bar",
+                  data: costShareValues,
+                  itemStyle: { color: "rgba(59, 104, 249, 0.7)", borderRadius: 6 },
+                },
+                {
+                  name: "转化占比 (%)",
+                  type: "bar",
+                  data: conversionShareValues,
+                  itemStyle: { color: "rgba(16, 185, 129, 0.7)", borderRadius: 6 },
+                },
+              ],
             },
-            yAxis: { type: "value", axisLabel: { formatter: "{value}%" } },
-            series: [
-              {
-                name: "花费占比 (%)",
-                type: "bar",
-                data: costShareValues,
-                itemStyle: { color: "rgba(59, 104, 249, 0.7)", borderRadius: 6 },
-              },
-              {
-                name: "转化占比 (%)",
-                type: "bar",
-                data: conversionShareValues,
-                itemStyle: { color: "rgba(16, 185, 129, 0.7)", borderRadius: 6 },
-              },
-            ],
-          };
+            { chartTitle: "关键词表现趋势" },
+          );
         };
 
         const buildSearchTermsChartConfig = (items) => {
           if (!Array.isArray(items) || !items.length) {
-            return {
-              title: { text: "搜索词表现趋势", left: "center" },
-              tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-              legend: { top: 28 },
-              grid: { left: "8%", right: "5%", top: 60, bottom: 30, containLabel: true },
-              xAxis: { type: "category", data: ["暂无数据"] },
-              yAxis: { type: "value" },
-              series: [
-                {
-                  name: "展示次数",
-                  type: "bar",
-                  data: [0],
-                  itemStyle: { color: "rgba(245, 158, 11, 0.7)", borderRadius: 6 },
-                },
-              ],
-            };
+            return applyChartChrome(
+              {
+                tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+                legend: {},
+                grid: { left: "8%", right: "5%", containLabel: true },
+                xAxis: { type: "category", data: ["暂无数据"] },
+                yAxis: { type: "value" },
+                series: [
+                  {
+                    name: "展示次数",
+                    type: "bar",
+                    data: [0],
+                    itemStyle: { color: "rgba(245, 158, 11, 0.7)", borderRadius: 6 },
+                  },
+                ],
+              },
+              { chartTitle: "搜索词表现趋势" },
+            );
           }
 
           const topItems = items.slice(0, 10);
@@ -3469,32 +3557,34 @@
           const impressionsData = topItems.map((item) => Number(item?.impressions) || 0);
           const clicksData = topItems.map((item) => Number(item?.clicks) || 0);
 
-          return {
-            title: { text: "搜索词表现趋势", left: "center" },
-            tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-            legend: { top: 28 },
-            grid: { left: "8%", right: "5%", top: 60, bottom: 60, containLabel: true },
-            xAxis: {
-              type: "category",
-              data: labels,
-              axisLabel: { rotate: 45 },
+          return applyChartChrome(
+            {
+              tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+              legend: {},
+              grid: { left: "8%", right: "5%", bottom: 60, containLabel: true },
+              xAxis: {
+                type: "category",
+                data: labels,
+                axisLabel: { rotate: 45 },
+              },
+              yAxis: { type: "value" },
+              series: [
+                {
+                  name: "展示次数",
+                  type: "bar",
+                  data: impressionsData,
+                  itemStyle: { color: "rgba(245, 158, 11, 0.75)", borderRadius: 6 },
+                },
+                {
+                  name: "点击次数",
+                  type: "bar",
+                  data: clicksData,
+                  itemStyle: { color: "rgba(16, 185, 129, 0.75)", borderRadius: 6 },
+                },
+              ],
             },
-            yAxis: { type: "value" },
-            series: [
-              {
-                name: "展示次数",
-                type: "bar",
-                data: impressionsData,
-                itemStyle: { color: "rgba(245, 158, 11, 0.75)", borderRadius: 6 },
-              },
-              {
-                name: "点击次数",
-                type: "bar",
-                data: clicksData,
-                itemStyle: { color: "rgba(16, 185, 129, 0.75)", borderRadius: 6 },
-              },
-            ],
-          };
+            { chartTitle: "搜索词表现趋势" },
+          );
         };
 
         const STRATEGY_NAME_MAP = {
@@ -4101,22 +4191,78 @@
             if (useCostClickTrend) {
               const costData = items.map((item) => Number(item?.cost) || 0);
               const clicksData = items.map((item) => Number(item?.clicks) || 0);
-              return {
+              return applyChartChrome(
+                {
+                  tooltip: { trigger: "axis" },
+                  legend: { textStyle: { fontSize: 12 } },
+                  grid: { left: "8%", right: "8%", bottom: 30, containLabel: true },
+                  xAxis: { type: "category", data: labels, axisLabel: { fontSize: 11 } },
+                  yAxis: [
+                    {
+                      type: "value",
+                      name: "消耗",
+                      position: "left",
+                      axisLabel: { fontSize: 11 },
+                      nameTextStyle: { fontSize: 12 },
+                    },
+                    {
+                      type: "value",
+                      name: "点击次数",
+                      position: "right",
+                      splitLine: { show: false },
+                      axisLabel: { fontSize: 11 },
+                      nameTextStyle: { fontSize: 12 },
+                    },
+                  ],
+                  series: [
+                    {
+                      name: "消耗",
+                      type: "line",
+                      data: costData,
+                      smooth: 0.3,
+                      symbolSize: 6,
+                      yAxisIndex: 0,
+                      lineStyle: { color: "#3b82f6" },
+                      itemStyle: { color: "#3b82f6" },
+                      areaStyle: { color: "rgba(59, 130, 246, 0.12)" },
+                    },
+                    {
+                      name: "点击次数",
+                      type: "line",
+                      data: clicksData,
+                      smooth: 0.3,
+                      symbolSize: 6,
+                      yAxisIndex: 1,
+                      lineStyle: { color: "#10b981" },
+                      itemStyle: { color: "#10b981" },
+                      areaStyle: { color: "rgba(16, 185, 129, 0.12)" },
+                    },
+                  ],
+                },
+                { hasHtmlTitle: true },
+              );
+            }
+
+            const cpaData = items.map((item) => Number(item?.cpa) || 0);
+            const conversionsData = items.map((item) => Number(item?.conversions ?? 0));
+
+            return applyChartChrome(
+              {
                 tooltip: { trigger: "axis" },
-                legend: { top: 0, textStyle: { fontSize: 12 } },
-                grid: { left: "8%", right: "8%", top: 40, bottom: 30, containLabel: true },
+                legend: { textStyle: { fontSize: 12 } },
+                grid: { left: "8%", right: "8%", bottom: 30, containLabel: true },
                 xAxis: { type: "category", data: labels, axisLabel: { fontSize: 11 } },
                 yAxis: [
                   {
                     type: "value",
-                    name: "消耗",
+                    name: "CPA",
                     position: "left",
                     axisLabel: { fontSize: 11 },
                     nameTextStyle: { fontSize: 12 },
                   },
                   {
                     type: "value",
-                    name: "点击次数",
+                    name: "转化次数",
                     position: "right",
                     splitLine: { show: false },
                     axisLabel: { fontSize: 11 },
@@ -4125,9 +4271,9 @@
                 ],
                 series: [
                   {
-                    name: "消耗",
+                    name: "CPA",
                     type: "line",
-                    data: costData,
+                    data: cpaData,
                     smooth: 0.3,
                     symbolSize: 6,
                     yAxisIndex: 0,
@@ -4136,70 +4282,20 @@
                     areaStyle: { color: "rgba(59, 130, 246, 0.12)" },
                   },
                   {
-                    name: "点击次数",
+                    name: "转化次数",
                     type: "line",
-                    data: clicksData,
+                    data: conversionsData,
                     smooth: 0.3,
                     symbolSize: 6,
                     yAxisIndex: 1,
-                    lineStyle: { color: "#10b981" },
-                    itemStyle: { color: "#10b981" },
-                    areaStyle: { color: "rgba(16, 185, 129, 0.12)" },
+                    lineStyle: { color: "#f97316" },
+                    itemStyle: { color: "#f97316" },
+                    areaStyle: { color: "rgba(249, 115, 22, 0.12)" },
                   },
                 ],
-              };
-            }
-
-            const cpaData = items.map((item) => Number(item?.cpa) || 0);
-            const conversionsData = items.map((item) => Number(item?.conversions ?? 0));
-
-            return {
-              tooltip: { trigger: "axis" },
-              legend: { top: 0, textStyle: { fontSize: 12 } },
-              grid: { left: "8%", right: "8%", top: 40, bottom: 30, containLabel: true },
-              xAxis: { type: "category", data: labels, axisLabel: { fontSize: 11 } },
-              yAxis: [
-                {
-                  type: "value",
-                  name: "CPA",
-                  position: "left",
-                  axisLabel: { fontSize: 11 },
-                  nameTextStyle: { fontSize: 12 },
-                },
-                {
-                  type: "value",
-                  name: "转化次数",
-                  position: "right",
-                  splitLine: { show: false },
-                  axisLabel: { fontSize: 11 },
-                  nameTextStyle: { fontSize: 12 },
-                },
-              ],
-              series: [
-                {
-                  name: "CPA",
-                  type: "line",
-                  data: cpaData,
-                  smooth: 0.3,
-                  symbolSize: 6,
-                  yAxisIndex: 0,
-                  lineStyle: { color: "#3b82f6" },
-                  itemStyle: { color: "#3b82f6" },
-                  areaStyle: { color: "rgba(59, 130, 246, 0.12)" },
-                },
-                {
-                  name: "转化次数",
-                  type: "line",
-                  data: conversionsData,
-                  smooth: 0.3,
-                  symbolSize: 6,
-                  yAxisIndex: 1,
-                  lineStyle: { color: "#f97316" },
-                  itemStyle: { color: "#f97316" },
-                  areaStyle: { color: "rgba(249, 115, 22, 0.12)" },
-                },
-              ],
-            };
+              },
+              { hasHtmlTitle: true },
+            );
           }
 
           const labels = ["消耗", "点击", "转化"];
@@ -4484,10 +4580,6 @@
             {
               label: "附加链接 (Sitelinks)",
               value: structure.extensionCount ?? 0,
-            },
-            {
-              label: "否定关键字 (Negative Keywords)",
-              value: structure.negativeKeywordCount ?? 0,
             },
             {
               label: "有效国家 (Effective Countries)",
@@ -4921,10 +5013,8 @@
             (count, item) => count + (goldAccount[item.key] ? 1 : 0),
             0,
           );
-          const unqualifiedCount =
-            typeof goldAccount.goldAccountUnqualifiedCount === "number"
-              ? goldAccount.goldAccountUnqualifiedCount
-              : totalItems - qualifiedCount;
+          // 按当前展示项重算（已排除否词项），勿用可能含 adsNegativeQualified 的接口计数
+          const unqualifiedCount = totalItems - qualifiedCount;
           const scoreValue =
             goldAccount.goldAccountScore !== undefined && goldAccount.goldAccountScore !== null
               ? String(goldAccount.goldAccountScore)

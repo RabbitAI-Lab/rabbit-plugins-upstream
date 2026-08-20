@@ -1,11 +1,11 @@
 # PCB\_MathPolygon class
 
-PCB &amp; 封装 / 多边形数学类
+PCB &amp; footprint / polygon math class
 
 ## Signature
 
 ```typescript
-declare class PCB_MathPolygon 
+export class PCB_MathPolygon 
 ```
 
 ## Methods
@@ -40,13 +40,29 @@ Description
 </td></tr>
 <tr><td>
 
-[calculateBBoxWidth(complexPolygon)](./PCB_MathPolygon.md)
+[calculateHeight(complexPolygon)](./PCB_MathPolygon.md)
 
 
 </td><td>
 
 
 </td><td>
+
+**_(BETA)_** Calculate complex polygon BBox height
+
+
+</td></tr>
+<tr><td>
+
+[calculateWidth(complexPolygon)](./PCB_MathPolygon.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Calculate complex polygon BBox width
 
 
 </td></tr>
@@ -60,7 +76,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 将图像转换为复杂多边形对象
+**_(BETA)_** Convert Image to Complex polygon object
 
 
 </td></tr>
@@ -74,7 +90,7 @@ Description
 
 </td><td>
 
-创建复杂多边形
+Create Complex polygon
 
 
 </td></tr>
@@ -88,7 +104,21 @@ Description
 
 </td><td>
 
-创建单多边形
+Create Single polygon
+
+
+</td></tr>
+<tr><td>
+
+[discretize(polygon, options)](./PCB_MathPolygon.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Discretize a single polygon into point data
 
 
 </td></tr>
@@ -102,7 +132,7 @@ Description
 
 </td><td>
 
-拆分单多边形
+Split single polygon
 
 
 </td></tr>
@@ -119,7 +149,7 @@ Description
 ## Signature
 
 ```typescript
-calculateBBoxHeight(complexPolygon: TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray>): number;
+public calculateBBoxHeight(complexPolygon: TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray>): number;
 ```
 
 ## Parameters
@@ -162,14 +192,18 @@ complexPolygon
 
 number
 
-### calculatebboxwidth
+### calculateheight
 
-# PCB\_MathPolygon.calculateBBoxWidth() method
+# PCB\_MathPolygon.calculateHeight() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Calculate complex polygon BBox height
 
 ## Signature
 
 ```typescript
-calculateBBoxWidth(complexPolygon: TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray>): number;
+public calculateHeight(complexPolygon: TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray> | IPCB_Polygon | IPCB_ComplexPolygon): number;
 ```
 
 ## Parameters
@@ -197,10 +231,12 @@ complexPolygon
 
 </td><td>
 
-[TPCB\_PolygonSourceArray](../types/TPCB_PolygonSourceArray.md) \| Array&lt;[TPCB\_PolygonSourceArray](../types/TPCB_PolygonSourceArray.md)<!-- -->&gt;
+[TPCB\_PolygonSourceArray](../types/TPCB_PolygonSourceArray.md) \| Array&lt;[TPCB\_PolygonSourceArray](../types/TPCB_PolygonSourceArray.md)<!-- -->&gt; \| [IPCB\_Polygon](./IPCB_Polygon.md) \| [IPCB\_ComplexPolygon](./IPCB_ComplexPolygon.md)
 
 
 </td><td>
+
+Complex polygon
 
 
 </td></tr>
@@ -211,6 +247,66 @@ complexPolygon
 ## Returns
 
 number
+
+BBox height
+
+### calculatewidth
+
+# PCB\_MathPolygon.calculateWidth() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Calculate complex polygon BBox width
+
+## Signature
+
+```typescript
+public calculateWidth(complexPolygon: TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray> | IPCB_Polygon | IPCB_ComplexPolygon): number;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+complexPolygon
+
+
+</td><td>
+
+[TPCB\_PolygonSourceArray](../types/TPCB_PolygonSourceArray.md) \| Array&lt;[TPCB\_PolygonSourceArray](../types/TPCB_PolygonSourceArray.md)<!-- -->&gt; \| [IPCB\_Polygon](./IPCB_Polygon.md) \| [IPCB\_ComplexPolygon](./IPCB_ComplexPolygon.md)
+
+
+</td><td>
+
+Complex polygon
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+number
+
+BBox width
 
 ### convertimagetocomplexpolygon
 
@@ -218,12 +314,12 @@ number
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-将图像转换为复杂多边形对象
+Convert Image to Complex polygon object
 
 ## Signature
 
 ```typescript
-convertImageToComplexPolygon(imageBlob: Blob, imageWidth: number, imageHeight: number, tolerance?: number, simplification?: number, smoothing?: number, despeckling?: number, whiteAsBackgroundColor?: boolean, inversion?: boolean): Promise<IPCB_ComplexPolygon | undefined>;
+public convertImageToComplexPolygon(imageBlob: Blob, imageWidth: number, imageHeight: number, tolerance?: number, simplification?: number, smoothing?: number, despeckling?: number, whiteAsBackgroundColor?: boolean, inversion?: boolean): Promise<IPCB_ComplexPolygon | undefined>;
 ```
 
 ## Parameters
@@ -256,7 +352,7 @@ Blob
 
 </td><td>
 
-图像 Blob 文件，可以使用  方法从文件系统读取文件
+Image Blob file. You can use the  method to read a file from the file system
 
 
 </td></tr>
@@ -272,7 +368,7 @@ number
 
 </td><td>
 
-图像宽度
+Image width
 
 
 </td></tr>
@@ -288,7 +384,7 @@ number
 
 </td><td>
 
-图像高度
+Image height
 
 
 </td></tr>
@@ -304,7 +400,7 @@ number
 
 </td><td>
 
-_(Optional)_ 容差，取值范围 `0`<!-- -->-`1`
+_(Optional)_ Tolerance, value range `0`<!-- -->-`1`
 
 
 </td></tr>
@@ -320,7 +416,7 @@ number
 
 </td><td>
 
-_(Optional)_ 简化，取值范围 `0`<!-- -->-`1`
+_(Optional)_ Simplification, value range `0`<!-- -->-`1`
 
 
 </td></tr>
@@ -336,7 +432,7 @@ number
 
 </td><td>
 
-_(Optional)_ 平滑，取值范围 `0`<!-- -->-`1.33`
+_(Optional)_ Smoothing, value range `0`<!-- -->-`1.33`
 
 
 </td></tr>
@@ -352,7 +448,7 @@ number
 
 </td><td>
 
-_(Optional)_ 去斑，取值范围 `0`<!-- -->-`5`
+_(Optional)_ Despeckling, value range `0`<!-- -->-`5`
 
 
 </td></tr>
@@ -368,7 +464,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否白色作为背景色
+_(Optional)_ Whether to use white as the background color
 
 
 </td></tr>
@@ -384,7 +480,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否反相
+_(Optional)_ Whether it is inverted
 
 
 </td></tr>
@@ -396,18 +492,18 @@ _(Optional)_ 是否反相
 
 Promise&lt;[IPCB\_ComplexPolygon](./IPCB_ComplexPolygon.md) \| undefined&gt;
 
-复杂多边形对象
+Complex polygon object
 
 ### createcomplexpolygon
 
 # PCB\_MathPolygon.createComplexPolygon() method
 
-创建复杂多边形
+Create Complex polygon
 
 ## Signature
 
 ```typescript
-createComplexPolygon(complexPolygon: TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray> | IPCB_Polygon | Array<IPCB_Polygon>): IPCB_ComplexPolygon | undefined;
+public createComplexPolygon(complexPolygon: TPCB_PolygonSourceArray | Array<TPCB_PolygonSourceArray> | IPCB_Polygon | Array<IPCB_Polygon>): IPCB_ComplexPolygon | undefined;
 ```
 
 ## Parameters
@@ -440,7 +536,7 @@ complexPolygon
 
 </td><td>
 
-复杂多边形数据
+Complex polygon data
 
 
 </td></tr>
@@ -452,18 +548,18 @@ complexPolygon
 
 [IPCB\_ComplexPolygon](./IPCB_ComplexPolygon.md) \| undefined
 
-复杂多边形对象，`undefined` 表示数据不合法
+Complex polygon object. `undefined` indicates that the data is invalid
 
 ### createpolygon
 
 # PCB\_MathPolygon.createPolygon() method
 
-创建单多边形
+Create Single polygon
 
 ## Signature
 
 ```typescript
-createPolygon(polygon: TPCB_PolygonSourceArray): IPCB_Polygon | undefined;
+public createPolygon(polygon: TPCB_PolygonSourceArray): IPCB_Polygon | undefined;
 ```
 
 ## Parameters
@@ -496,7 +592,7 @@ polygon
 
 </td><td>
 
-单多边形数据
+Single polygon data
 
 
 </td></tr>
@@ -508,18 +604,96 @@ polygon
 
 [IPCB\_Polygon](./IPCB_Polygon.md) \| undefined
 
-单多边形对象，`undefined` 表示数据不合法
+Single polygon object. `undefined` indicates that the data is invalid
+
+### discretize
+
+# PCB\_MathPolygon.discretize() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Discretize a single polygon into point data
+
+## Signature
+
+```typescript
+public discretize(polygon: IPCB_Polygon | TPCB_PolygonSourceArray, options?: IPCB_DiscretizeOptions): Promise<Array<IPCB_DiscretizedPoint>>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+polygon
+
+
+</td><td>
+
+[IPCB\_Polygon](./IPCB_Polygon.md) \| [TPCB\_PolygonSourceArray](../types/TPCB_PolygonSourceArray.md)
+
+
+</td><td>
+
+Single polygon object
+
+
+</td></tr>
+<tr><td>
+
+options
+
+
+</td><td>
+
+[IPCB\_DiscretizeOptions](../interfaces/IPCB_DiscretizeOptions.md)
+
+
+</td><td>
+
+_(Optional)_ Discretization options
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;Array&lt;[IPCB\_DiscretizedPoint](../interfaces/IPCB_DiscretizedPoint.md)<!-- -->&gt;&gt;
+
+Discretized point data
+
+## Remarks
+
+Discretize the boundary of a single polygon into a series of points
 
 ### splitpolygon
 
 # PCB\_MathPolygon.splitPolygon() method
 
-拆分单多边形
+Split single polygon
 
 ## Signature
 
 ```typescript
-splitPolygon(...complexPolygons: Array<IPCB_ComplexPolygon>): Array<IPCB_Polygon>;
+public splitPolygon(...complexPolygons: Array<IPCB_ComplexPolygon>): Array<IPCB_Polygon>;
 ```
 
 ## Parameters
@@ -552,7 +726,7 @@ Array&lt;[IPCB\_ComplexPolygon](./IPCB_ComplexPolygon.md)<!-- -->&gt;
 
 </td><td>
 
-复杂多边形
+Complex polygon
 
 
 </td></tr>
@@ -564,4 +738,4 @@ Array&lt;[IPCB\_ComplexPolygon](./IPCB_ComplexPolygon.md)<!-- -->&gt;
 
 Array&lt;[IPCB\_Polygon](./IPCB_Polygon.md)<!-- -->&gt;
 
-单多边形数组
+Single polygon array

@@ -1,54 +1,67 @@
-## Description: <br>
-Temu US promotion API helper for querying promotion activities, finding candidate goods, enrolling goods, checking promotion operations, and updating enrolled promotion goods through LinkFox. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent workflows and Python scripts for Temu US promotion management through LinkFox, including promotion activity lookup, candidate goods lookup, enrollment, operation status checks, enrolled goods queries, goods updates, and signed file downloads.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External developers and ecommerce operators use this skill to prepare and run Temu US promotion workflows, including promotion activity lookup, candidate goods review, goods enrollment, operation-result checks, and enrolled-goods updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, for Temu US marketplace workflows. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make broad Temu API calls through the LinkFox gateway. <br>
-Mitigation: Restrict use to documented promotion endpoints and review the request type and payload before execution. <br>
-Risk: Temu access tokens may be handled or stored in plaintext. <br>
-Mitigation: Avoid saving tokens in plaintext when possible, protect any token store, and never commit tokens to source control. <br>
-Risk: Saved API responses may contain business or account data. <br>
-Mitigation: Treat saved response files as sensitive, keep them out of version control, and delete or redact them when no longer needed. <br>
-Risk: Goods enrollment, update, or deactivation calls can affect live promotion operations. <br>
-Mitigation: Require explicit review before business-impacting API calls and confirm the target activity, goods, SKU, price, quantity, and operation type. <br>
+## Use Case:
 
+External sellers, operators, and developers use this skill to work with Temu US Partner Promotion APIs through LinkFox for promotion discovery, item enrollment, status checks, and promotion goods updates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-promotion-us) <br>
-- [API reference](references/api.md) <br>
-- [Temu accessToken authorization and retrieval](references/access-token.md) <br>
-- [Partner US Promotion API catalog](references/partner-us-catalog.md) <br>
-- [Promotion endpoint documentation index](references/apis/README.md) <br>
-- [bg.promotion.activity.query](references/apis/bg-promotion-activity-query.md) <br>
-- [bg.promotion.activity.candidate.goods.query](references/apis/bg-promotion-activity-candidate-goods-query.md) <br>
-- [bg.promotion.activity.goods.query](references/apis/bg-promotion-activity-goods-query.md) <br>
-- [bg.promotion.activity.goods.enroll](references/apis/bg-promotion-activity-goods-enroll.md) <br>
-- [bg.promotion.activity.goods.operation.query](references/apis/bg-promotion-activity-goods-operation-query.md) <br>
-- [bg.promotion.activity.goods.update](references/apis/bg-promotion-activity-goods-update.md) <br>
+### Deployment Geography for Use:
 
+United States
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON, Configuration] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts may save full API responses locally and print full JSON or summaries depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill can call broad LinkFox and Temu proxy workflows, including promotion enrollment, update, and deactivation operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only when those workflows are needed and manually confirm every action that changes promotion participation, pricing, quantity, or item status.
+
+Risk: Temu access tokens may be supplied inline or saved locally for later use.
+
+Mitigation: Use a dedicated least-privilege Temu token where possible, avoid passing secrets inline in shell history, and remove saved tokens when they are no longer needed.
+
+Risk: Full API responses are saved to local linkfox session data files and may contain store or promotion data.
+
+Mitigation: Review where response files are written and periodically delete saved response data that is no longer needed.
+
+Risk: Gateway URL environment overrides can redirect requests away from the default LinkFox endpoint.
+
+Mitigation: Do not set gateway override environment variables unless the endpoint is controlled and trusted.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-promotion-us)
+- [API Reference](references/api.md)
+- [Partner US Promotion Catalog](references/partner-us-catalog.md)
+- [Temu Access Token Guide](references/access-token.md)
+- [Authorization and Billing Onboarding](references/onboarding.md)
+- [Promotion API Documentation Index](references/apis/README.md)
+- [Temu Partner US Promotion Documentation](https://partner-us.temu.com/documentation?menu_code=873ac072a78249c893e5f8d0e656a11f)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, JSON, API calls, Files, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON request or response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full API responses under a linkfox session data directory and print either full JSON or a summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

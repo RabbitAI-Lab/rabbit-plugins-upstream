@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes video or image inputs for fall, abnormal-behavior, and visual health-risk signals, then returns structured risk findings, recommendations, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supports identifying high-risk behaviors and health risks through video/images, including elderly falls, precursors to heart attacks and strokes, and abnormal behaviors, issuing timely warning alerts.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to submit surveillance, care, or safety-monitoring media for cloud-assisted risk analysis and to retrieve identity-linked historical reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive video, image, and health-risk data may be sent to publisher cloud services. <br>
-Mitigation: Use only approved media, confirm recipient and retention expectations before use, and avoid private surveillance footage unless all required permissions are in place. <br>
-Risk: Identity-linked report history may be created or reused with limited user control. <br>
-Mitigation: Run the skill only where identity-linked history is expected, and review access to generated reports before sharing output. <br>
-Risk: Local user and token records may persist in the workspace. <br>
-Mitigation: Restrict workspace access and inspect or clear persisted local data according to the deployment's retention policy. <br>
+## Use Case:
 
+External users and developers use this skill to submit videos, images, URLs, or streams for remote high-risk behavior and health-risk analysis, including fall detection, abnormal behavior detection, and visual warning reports. It can also retrieve cloud-hosted report history associated with the skill's local identity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/new-smyx-risk-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Risk categories and alert levels](references/risk_categories.md) <br>
-- [API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown text with structured JSON analysis content and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save returned analysis text to a caller-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-999.999.1000 (source: ClawHub release evidence; artifact frontmatter version 1.0.7) <br>
+Risk: Submitted videos, images, URLs, and streams may be uploaded to Life Emergence/Smyx cloud services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media that is intended for that remote processing, and avoid private camera streams, signed URLs, or sensitive medical and safety footage unless the sharing is approved.
+
+Risk: The skill can automatically create or reuse a local identity and store cloud authentication tokens for report history.
+
+Mitigation: Run it in an isolated workspace, review and protect the workspace data directory, and remove stored identity or token data when access should be reset.
+
+Risk: Risk-analysis results are advisory and may affect safety or health decisions if treated as authoritative.
+
+Mitigation: Use outputs as decision support only, and require human review or professional emergency, medical, or security procedures for high-risk findings.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/new-smyx-risk-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [Risk Categories and Alert Levels](artifact/references/risk_categories.md)
+- [API Documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Markdown text with structured JSON analysis results, report summaries, recommendations, and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud report history and export links returned by the remote service.]
+
+## Skill Version(s):
+
+999.999.1004 (source: ClawHub release metadata; source skill frontmatter reports 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

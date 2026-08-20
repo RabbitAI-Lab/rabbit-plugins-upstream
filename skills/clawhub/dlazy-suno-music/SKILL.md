@@ -1,11 +1,11 @@
 ---
 name: dlazy-suno-music
 version: 1.3.5
-description: Suno music generation model. Supports inspiration mode (auto lyrics) and custom mode (manual lyrics), generating music with or without vocals. Suno 音乐生成模型。支持灵感模式（自动作词）和自定义模式（手动填词），可生成包含人声或纯器乐的音乐。
+description: "Suno music generation model. Supports inspiration mode (auto lyrics) and custom mode (manual lyrics), generating music with or without vocals. Suno 音乐生成模型。支持灵感模式（自动作词）和自定义模式（手动填词），可生成包含人声或纯器乐的音乐。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy suno-music -h for help."}}
 ---
 
-# dlazy-suno-music
+# 音乐生成 Suno Music
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

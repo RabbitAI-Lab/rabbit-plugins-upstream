@@ -1,42 +1,58 @@
-## Description: <br>
-Helps agents draft, rewrite, continue, and polish long-form WeChat public account articles from topics, outlines, or existing drafts while applying local writing constraints and optional business references. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Aws Wechat Article W guides an agent through drafting, rewriting, continuing, and polishing long-form WeChat public-account articles from a topic, outline, topic card, and local article configuration.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External creators, marketers, and content operators use this skill to generate and iterate WeChat public account article drafts from a topic card, outline, or existing draft. It is intended for article-writing workflows that need account-level tone, reader, structure, publishing-intent, and reference-document constraints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Article drafts, topic cards, selected business reference documents, and the writing-model API key may be used with the configured LLM endpoint. <br>
-Mitigation: Use a dedicated API key, configure only trusted base_url endpoints or an internal proxy, and choose the prompt-only path when content should not be sent to a third-party model. <br>
-Risk: Generated drafts may reflect model errors or omit required account constraints if configuration is incomplete. <br>
-Mitigation: Confirm article_category, target_reader, default_author, publish_method, and article-level constraints before writing, then review generated drafts before downstream review or publishing steps. <br>
+## Use Case:
 
+External creators, marketers, and developers use this skill to guide an agent through WeChat article drafting workflows. It supports article setup checks, draft generation, rewrite and continuation flows, local draft output, and optional model-backed writing.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/aws-wechat-article-writing) <br>
-- [Publisher Profile](https://clawhub.ai/user/thcjp) <br>
-- [Skill Homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, JSON-like status output, shell commands, and generated article draft files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces draft.md for writing-stage article drafts; review and final publishing outputs are outside this skill's stated boundary.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence; artifact frontmatter lists 1.0.26) <br>
+Risk: The server security summary says the read-only install metadata does not match behavior that can run a Python writing script and update local workflow files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation, run it in a controlled workspace, and confirm expected file writes before allowing an agent to execute the workflow.
+
+Risk: The skill can send article materials and WRITING_MODEL_API_KEY to a configured external model endpoint.
+
+Mitigation: Use a dedicated writing-model API key, configure only a trusted base_url or internal proxy, and use the prompt-only path when content should not be sent to a third-party endpoint.
+
+Risk: The skill is part of a companion suite and may rely on sibling skills or shared references for the full workflow.
+
+Mitigation: Install the companion suite only from a trusted source, or limit use to the steps that work with this skill's local files.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/aws-wechat-article-writing)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with file paths, command examples, configuration updates, and generated article draft content.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or update draft.md and article workflow configuration files in the user's article workspace when executed by an agent.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.25)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

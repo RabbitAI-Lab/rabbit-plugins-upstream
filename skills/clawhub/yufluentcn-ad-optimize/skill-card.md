@@ -1,44 +1,60 @@
-## Description: <br>
-Provides cross-border paid ads optimization coaching across targeting, creatives, bidding, landing pages, and analytics for Meta, TikTok, Google, and multi-channel campaigns through Yufluent cloud execution. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cross-border paid ads optimization coach across targeting, creatives, bidding, landing page, and analytics for Meta, TikTok, Google, and multi-channel campaigns via the Yufluent cloud Harness.
 
-## Publisher: <br>
-[metahuan](https://clawhub.ai/user/metahuan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[metahuan](https://clawhub.ai/user/metahuan)
 
-## Use Case: <br>
-External ecommerce marketers, agencies, and operators use this skill to request paid advertising optimization guidance for audience targeting, creative testing, bidding, landing-page review, and analytics decisions. The skill is intended to return recommendations for human review before changes are made in advertising platforms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends a Yufluent API key and campaign context to a configurable network destination. <br>
-Mitigation: Use only approved Yufluent credentials, leave TOKENAPI_BASE_URL unset unless the destination is trusted, and avoid confidential campaign, customer, or account data unless your organization permits sending it to Yufluent cloud. <br>
-Risk: Automatic fallback to a broader Yufluent agent endpoint can change the execution path. <br>
-Mitigation: Review outputs before acting on them and verify endpoint behavior in the deployment environment. <br>
-Risk: Advertising recommendations may be incomplete or conflict with platform policies or local market rules. <br>
-Mitigation: Have a qualified operator review recommendations before applying changes in ad platforms. <br>
+## Use Case:
 
+External users and developers use this skill to collect advertising context and metrics, call the Yufluent cloud service, and receive optimization guidance for audience targeting, creative testing, bidding, landing pages, and analytics.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/metahuan/yufluentcn-ad-optimize) <br>
-- [Yufluent homepage](https://claw.changzhiai.com) <br>
-- [OpenClaw integration](https://claw.changzhiai.com/app/openclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown or plain text returned from Yufluent cloud skill execution; setup and examples use shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires TOKENAPI_KEY and may send campaign context, metrics, and account-related inputs to Yufluent cloud.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.2 (source: server release and skill frontmatter) <br>
+Risk: Ad metrics, campaign context, and TOKENAPI_KEY are sent to Yufluent's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review sensitive business metrics before submission and protect TOKENAPI_KEY as a secret.
+
+Risk: Advertising recommendations may be incorrect, incomplete, or unsuitable for a target market or platform policy.
+
+Mitigation: Require human review before applying recommendations in advertising platforms and check applicable platform policies and local regulations.
+
+Risk: The dependency declaration allows a version range for requests.
+
+Mitigation: Pin and review dependencies in controlled environments before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/metahuan/skills/yufluentcn-ad-optimize)
+- [Yufluent ad optimization homepage](https://www.changzhiai.com/skills/ad-optimize)
+- [OpenClaw integration](https://claw.changzhiai.com/app/openclaw)
+- [Yufluent console](https://claw.changzhiai.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or plain text returned from the cloud skill, with CLI commands and optional JSON inputs for structured metrics.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires TOKENAPI_KEY; accepts campaign message, optimization dimension, ad platform, product, market, metrics, context, and language.]
+
+## Skill Version(s):
+
+1.1.3 (source: server release metadata; artifact frontmatter lists 1.1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,23 +1,27 @@
 {
   "name": "ai-subtitle-remover",
-  "version": "1.0.1",
-  "description": "基于 550W AI 平台的 AI 视频去字幕能力，智能识别并无痕擦除视频中的硬字幕、水印、台标、Logo",
+  "version": "1.2.0",
+  "description": "550W 视频去字幕、视频去水印和图片去水印智能体技能",
   "main": "dist/index.js",
+  "bin": { "550w-skill": "dist/550w-skill.cjs" },
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "npm run build --silent && node --test test/*.test.js"
   },
   "files": [
     "dist/",
+    "references/",
     "skill.json",
     "SKILL.md"
   ],
   "dependencies": {
-    "axios": "^1.7.2",
-    "form-data": "^4.0.0"
+    "axios": "^1.19.0",
+    "form-data": "^4.0.6"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "esbuild": "^0.28.2",
     "typescript": "^5.4.5"
   }
 }

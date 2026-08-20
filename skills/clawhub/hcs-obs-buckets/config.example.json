@@ -1,0 +1,13 @@
+{
+  "region": "cn-north-4",
+  "project_id": "your-project-id-here",
+  "auth": {
+    "ak_env": "HWCLOUD_AK",
+    "sk_env": "HWCLOUD_SK"
+  },
+  "examples": [
+    "python3 scripts/hcs-obs-buckets.py list --region cn-north-4",
+    "python3 scripts/hcs-obs-buckets.py list --bucket-prefix prod",
+    "python3 scripts/hcs-obs-buckets.py associated vpc-prod --format md"
+  ]
+}

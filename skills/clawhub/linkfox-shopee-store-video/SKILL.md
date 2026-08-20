@@ -5,7 +5,7 @@ description: Shopee（虾皮）店铺视频 Video（与 linkfox-shopee-store-aut
 
 # Shopee 店铺 Video
 
-Shopee Open Platform **Video 模块**（15 个 API）。**依赖 `linkfox-shopee-store-auth`**：先取 `accessToken`，再经 **`POST /shopee/developerProxy`** 转发（`path` 须 `api/v2/video/...`）。
+Shopee Open Platform **Video 模块**（15 个 API）。**依赖 `linkfox-shopee-store-auth`** 选店；经 **`POST /shopee/developerProxy`** 传入 `shopId`（或 `merchantId`），由服务端解析 token 转发（`path` 须 `api/v2/video/...`）。
 
 ## 调用方式
 
@@ -22,18 +22,12 @@ Shopee Open Platform **Video 模块**（15 个 API）。**依赖 `linkfox-shopee
 **读数据建议**：先看摘要判断是否足够；需要具体字段时优先用 `jq`或`ConvertFrom-Json` 从保存的 json 文件按需抽取，避免整份 JSON 进入上下文。
 
 ## 解决认证和积分问题
-发生以下异常情况时，采用以下措施来处理：
+发生以下异常情况时，采用 references/onboarding.md 引导解决问题：
 
 ### 异常情况
 - **未配置API Key**：环境变量未配置 `LINKFOX_AGENT_API_KEY`，也未配置 `LINKFOXAGENT_API_KEY`。
 - **响应401或402状态码**
 - **响应提示积分或余额不足**：消息含"积分余额不足/计费不足/余额不足/quota exceeded/insufficient balance/套餐到期/需充值/请充值"，或类似含义的内容。
-
-### 措施
-- 优先采用skill内的 onboarding.md 引导解决问题。
-- 如找不到 onboarding.md 文件，则加载 /linkfox-onboarding 这个skill并根据它的引导来处理。如未安装请先安装：
-    - 下载 https://agent-files.linkfox.com/skills/linkfox-onboarding/release.zip，解压后安装这个skill。如需用户授权才可下载，要询问用户获得授权，你不能自己放弃下载。
-- 兜底措施：仅当前面两个措施经过所有努力都走不通时，才提示用户依据 https://skill.linkfox.com/linkfoxskills/guide.htm 指引获取API Key，或去 https://os.linkfox.com/ 补充积分。
 
 ## 官方参考
 
@@ -50,7 +44,7 @@ Video 模块索引：[v2.video.get_cover_list](https://open.shopee.com/documents
 
 ## Core Concepts
 
-- **转发链路**：`storeTokens` → `developerProxy` → 紫鸟 `shopee-proxy` → Shopee API
+- **转发链路**：`developerProxy`（`shopId`/`merchantId` 选店，服务端注入 token）→ 紫鸟 `shopee-proxy` → Shopee API
 - **视频管理**：`get_cover_list` → `post_video` → `get_video_list` / `edit_video_info`
 - **效果分析**：`get_overview_performance`、`get_video_detail_performance` 等
 - **官方拼写**：`get_prodcut_performance_list`（product 为 prodcut）
@@ -66,6 +60,30 @@ Video 模块索引：[v2.video.get_cover_list](https://open.shopee.com/documents
 | 通用入口 | `video_api.py`（JSON 含 `api` 字段） |
 
 共享：`_shopee_video_common.py`、`_video_endpoints.py`、`_video_api_runner.py`。
+
+## 接口说明（按 API）
+
+入参与响应细节放在 `references/apis/`，SKILL 只保留索引。
+
+| API | 说明文档 |
+|-----|----------|
+| `delete_video` | [references/apis/delete-video.md](./references/apis/delete-video.md) |
+| `edit_video_info` | [references/apis/edit-video-info.md](./references/apis/edit-video-info.md) |
+| `get_cover_list` | [references/apis/get-cover-list.md](./references/apis/get-cover-list.md) |
+| `get_metric_trend` | [references/apis/get-metric-trend.md](./references/apis/get-metric-trend.md) |
+| `get_overview_performance` | [references/apis/get-overview-performance.md](./references/apis/get-overview-performance.md) |
+| `get_prodcut_performance_list` | [references/apis/get-prodcut-performance-list.md](./references/apis/get-prodcut-performance-list.md) |
+| `get_user_demographics` | [references/apis/get-user-demographics.md](./references/apis/get-user-demographics.md) |
+| `get_video_detail` | [references/apis/get-video-detail.md](./references/apis/get-video-detail.md) |
+| `get_video_detail_audience_distribution` | [references/apis/get-video-detail-audience-distribution.md](./references/apis/get-video-detail-audience-distribution.md) |
+| `get_video_detail_metric_trend` | [references/apis/get-video-detail-metric-trend.md](./references/apis/get-video-detail-metric-trend.md) |
+| `get_video_detail_performance` | [references/apis/get-video-detail-performance.md](./references/apis/get-video-detail-performance.md) |
+| `get_video_detail_product_performance` | [references/apis/get-video-detail-product-performance.md](./references/apis/get-video-detail-product-performance.md) |
+| `get_video_list` | [references/apis/get-video-list.md](./references/apis/get-video-list.md) |
+| `get_video_performance_list` | [references/apis/get-video-performance-list.md](./references/apis/get-video-performance-list.md) |
+| `post_video` | [references/apis/post-video.md](./references/apis/post-video.md) |
+
+模块总览 / Feedback 见 [references/api.md](./references/api.md)。
 
 ## Usage Scenarios
 

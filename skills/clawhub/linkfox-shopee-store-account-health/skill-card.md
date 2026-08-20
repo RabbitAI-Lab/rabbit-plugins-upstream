@@ -1,45 +1,69 @@
-## Description: <br>
-Shopee-店铺健康 helps agents query authorized Shopee store account-health metrics, penalty points, punishments, late orders, and listings with issues through LinkFox's Shopee developer proxy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries Shopee Account Health data through LinkFox for authorized stores, including shop performance, metric source details, penalty points, punishment history, listings with issues, and late orders.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Shopee sellers, operators, and support agents use this skill to inspect account-health status for authorized stores and investigate performance metrics, penalty history, punishments, late orders, and listings with issues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can save full Shopee account-health responses locally, which may include sensitive store and operational data. <br>
-Mitigation: Run it only in workspaces intended for this data, protect generated linkfox session files, and delete them when no longer needed. <br>
-Risk: The skill depends on LinkFox and Shopee credentials to access authorized store data. <br>
-Mitigation: Use it only for stores the user is allowed to inspect, keep API keys in environment variables, and avoid sharing generated outputs unnecessarily. <br>
-Risk: Security evidence reports unclear cost and storage behavior for API calls and saved results. <br>
-Mitigation: Confirm expected API credit use before additional calls and avoid repeated probing unless the user explicitly approves. <br>
+## Use Case:
 
+External Shopee sellers and their agents use this skill to inspect authorized store health metrics, investigate penalties and listing issues, review late orders, and decide operational follow-up.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-account-health) <br>
-- [Artifact API reference](artifact/references/api.md) <br>
-- [Shopee Account Health API reference](https://open.shopee.com/documents/v2/v2.account_health.get_shop_performance?module=103&type=1) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with Python command examples; scripts emit JSON or summarized text.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API credentials and the linkfox-shopee-store-auth dependency; full API responses are saved locally under a linkfox session directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill handles sensitive Shopee store health, penalty, listing, order, and account-health data through LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user trusts LinkFox with this store data and understands that API calls are routed through LinkFox endpoints.
+
+Risk: The bundled onboarding flow can involve phone/SMS login, API-key generation, billing, and payment-order handling.
+
+Mitigation: Prefer configuring a pre-existing API key manually, and use the phone/SMS or payment commands only when they are necessary and expected.
+
+Risk: Endpoint environment variables can redirect API traffic away from the expected LinkFox services.
+
+Mitigation: Verify LinkFox endpoint environment variables point to LinkFox domains before using the skill with store or payment data.
+
+Risk: Local LinkFox session files may persist sensitive store or payment-related data.
+
+Mitigation: Review and clean up local LinkFox session data after use, especially in shared or long-lived workspaces.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-account-health)
+- [Shopee Account Health get_shop_performance](https://open.shopee.com/documents/v2/v2.account_health.get_shop_performance?module=103&type=1)
+- [Shopee Account Health get_late_orders](https://open.shopee.com/documents/v2/v2.account_health.get_late_orders?module=103&type=1)
+- [Shopee Account Health get_listings_with_issues](https://open.shopee.com/documents/v2/v2.account_health.get_listings_with_issues?module=103&type=1)
+- [Shopee Account Health get_metric_source_detail](https://open.shopee.com/documents/v2/v2.account_health.get_metric_source_detail?module=103&type=1)
+- [Shopee Account Health get_penalty_point_history](https://open.shopee.com/documents/v2/v2.account_health.get_penalty_point_history?module=103&type=1)
+- [Shopee Account Health get_punishment_history](https://open.shopee.com/documents/v2/v2.account_health.get_punishment_history?module=103&type=1)
+- [Account Health API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Files, Shell commands, Guidance]
+
+**Output Format:** [JSON responses, saved JSON files, summaries, and Markdown guidance with shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full responses are written to LinkFox session data; stdout prints complete JSON for responses up to 8 KB or summaries unless --inline is used.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

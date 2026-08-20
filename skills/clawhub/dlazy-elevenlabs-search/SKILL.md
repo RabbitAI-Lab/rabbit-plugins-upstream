@@ -1,11 +1,11 @@
 ---
 name: dlazy-elevenlabs-search
 version: 1.3.4
-description: Search the ElevenLabs voice library by keyword, source, and category. Returns a playable preview for each matched voice so you can pick the right one before running TTS. 搜索 ElevenLabs 人声库：按关键词、来源、分类筛选可用音色，返回每个音色的试听样本，便于挑选后用于 TTS 配音。
+description: "Search the ElevenLabs voice library by keyword, source, and category. Returns a playable preview for each matched voice so you can pick the right one before running TTS. 搜索 ElevenLabs 人声库：按关键词、来源、分类筛选可用音色，返回每个音色的试听样本，便于挑选后用于 TTS 配音。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy elevenlabs-search -h for help."}}
 ---
 
-# dlazy-elevenlabs-search
+# 音色库搜索 ElevenLabs Voice Search
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

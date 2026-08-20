@@ -1,0 +1,55 @@
+# Iran Chemical Database — central configuration
+# Values are overridable via environment variables (see .env.example).
+
+httrack:
+  base_mirror_dir: "/var/lib/iran_chem_db/mirrors"
+  default_depth: 5
+  default_ext_depth: 0
+  default_connections_per_second: 2.0
+  default_sockets: 4
+  default_max_rate: 50000      # bytes/sec (50 KB/s)
+  default_max_time: 7200       # 2 hours per supplier
+  default_robots_txt: 2        # 0=ignore, 1=follow, 2=follow but test forbidden
+  user_agent: "IranChemDB/1.0 (Research Chemical Database; +https://clawhub.ai/orionshaowswmw/skills/iran-chem-database)"
+  # Supplier-specific overrides (keyed by project name)
+  supplier_overrides: {}
+
+playwright:
+  enabled: true
+  headless: true
+  timeout_ms: 30000
+  max_scroll_iterations: 50
+
+database:
+  host: postgres
+  port: 5432
+  name: iran_chem_db
+  user: chemdb
+  password: "${DB_PASSWORD}"
+
+redis:
+  url: "redis://redis:6379/0"
+
+discovery:
+  search_api_key: "${SEARCH_API_KEY}"
+  auto_discover_interval_hours: 168     # weekly discovery sweep
+  min_verification_score: 60
+
+sync:
+  high_priority_interval_hours: 6
+  medium_priority_interval_hours: 24
+  low_priority_interval_hours: 72
+  force_full_remirror_after_days: 30
+  mark_discontinued_after_missing: 3
+  alert_unreachable_after_days: 7
+
+logging:
+  level: INFO
+  file: "/var/log/iran_chem_db/app.log"
+  max_size_mb: 100
+  backup_count: 10
+
+storage:
+  max_mirror_storage_gb: 500
+  compress_old_mirrors: true
+  compression_after_days: 30

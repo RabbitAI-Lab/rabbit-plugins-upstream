@@ -1,42 +1,60 @@
-## Description: <br>
-Audio Stream Upload Free helps personal creators upload local audio files to a streaming API through a create, upload, and complete workflow, then retrieve an HLS playback link. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+音频流上传免费版 helps agents guide users through creating an audio object, uploading a local audio file to a streaming API, and retrieving an HLS playback link.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[thcjp](https://clawhub.ai/user/thcjp)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External creators and developers use this skill to prepare and run a basic three-step audio upload workflow for podcasts, voice content, or original music. It is intended for explicitly chosen local audio files and returns upload status, audio identifiers, and HLS playback links when the streaming API succeeds.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill can send local media files and streaming API credentials to a third-party service.
+
+Mitigation: Use it only for explicit audio upload tasks, only with files the user intentionally chooses, and only when the user trusts the third-party streaming API.
+
+Risk: API keys may be exposed if pasted into shell commands, logs, or generated scripts.
+
+Mitigation: Store keys in environment variables or a secret manager and avoid echoing credentials in commands, logs, or shared output.
+
+Risk: The trigger language is broader than the actual audio upload behavior and may be invoked for video processing, editing, conversion, or dubbing requests.
+
+Mitigation: Limit use to audio upload and HLS link retrieval; choose a different workflow for general media processing or editing tasks.
+
+Risk: The skill asks the agent to execute shell commands that read local files and perform network uploads.
+
+Mitigation: Review proposed commands before execution, verify file paths and API endpoints, and avoid interpolating untrusted user input into shell commands.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External creators and developers use this skill to prepare API keys, issue curl or Python upload calls, validate file integrity with an MD5 hash, and obtain streaming playback links for podcasts, music, or spoken-word content. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends selected audio files and API credentials to a third-party streaming API. <br>
-Mitigation: Use it only when the attoaioz.cyou streaming API is intended, verify the service and account keys independently, and store credentials in environment variables or a secret store. <br>
-Risk: Users may upload media they do not have rights to distribute. <br>
-Mitigation: Upload only audio content the user owns or is authorized to share. <br>
+**Output Format:** [Markdown guidance with bash and Python snippets plus expected API response fields]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/audio-stream-upload-free) <br>
-- [Streaming API create endpoint](https://api-w3stream.attoaioz.cyou/api/videos/create) <br>
-- [Streaming API base endpoint](https://api-w3stream.attoaioz.cyou/api) <br>
+**Other Properties Related to Output:** [Requires user-provided audio file paths and streaming API credentials; may return operation status, audio IDs, and HLS links.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, code, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash, Python, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces upload workflow guidance and command examples; API responses may include status, result data, logs, and errors.] <br>
+1.0.2 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

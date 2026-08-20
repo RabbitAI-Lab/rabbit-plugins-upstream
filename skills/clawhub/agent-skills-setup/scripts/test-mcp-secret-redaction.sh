@@ -1,29 +1,11 @@
 #!/usr/bin/env bash
-#
-# test-mcp-secret-redaction.sh — regression tests for the security fix that
-# prevents live credentials from being copied during MCP config migration.
-#
-# Context: a security audit flagged that `smart-ide-migration.sh` could read
-# credential-bearing agent-config directories and copy them (including API
-# keys / tokens / bearer auth / URL-embedded credentials) to the target IDE.
-#
-# These tests assert:
-#   1. JSON -> JSON migration blanks secrets (env values, bearer headers,
-#      user:pass@ URLs, ?key= query-string creds) while preserving non-secrets
-#      and keeping the file VALID JSON.
-#   2. The [SECURITY] warning only prints when a real redaction happened
-#      (honest count, not a false alarm on secret-free configs).
-#   3. The YAML/TOML verbatim-copy fallback also redacts secrets.
-#   4. The DEFAULT migration scope (no --objects) excludes mcp/config/project,
-#      so secret-bearing config is NOT copied unless the user opts in.
-#
-# Runs against a FAKE HOME (mktemp); the real user home is never touched.
 
-# No `set -e`: accumulate failures and report, then exit non-zero at the end.
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-MIG="$SCRIPT_DIR/smart-ide-migration.sh"
+MIG="$SCRIPT_DIR/legacy-smart-ide-migration.sh"
+LEGACY_MIG="$SCRIPT_DIR/legacy-smart-ide-migration.sh"
+export AGENT_SKILLS_SETUP_INTERNAL_LEGACY=1
 
 TMP_ROOT="$(mktemp -d /tmp/agent-skills-redact-test.XXXXXX)"
 export HOME="$TMP_ROOT/home"
@@ -40,7 +22,18 @@ check_fail() { CHECKS=$((CHECKS + 1)); FAIL=$((FAIL + 1)); echo "FAIL: $1" >&2; 
 
 run() { "$@" > "$OUT_FILE" 2>&1; LAST_RC=$?; }
 
-# Assert a destination file parses as valid JSON.
+run_goose_manual_mcp() {
+    local label="$1"
+    rm -f "$HOME/.cursor/mcp.json"
+    run bash "$MIG" --source goose-cli --target cursor --objects mcp --strategy overwrite --yes
+    if [[ $LAST_RC -eq 0 && ! -e "$HOME/.cursor/mcp.json" ]] && \
+       grep -Fq 'Goose config.yaml uses YAML extensions; automatic MCP migration is unsupported' "$OUT_FILE"; then
+        check_pass "$label: Goose YAML MCP fails closed without a JSON target"
+    else
+        check_fail "$label: Goose YAML MCP boundary was not fail-closed"
+    fi
+}
+
 assert_valid_json() {
     local f="$1" d="$2"
     if python3 -c 'import json,sys; json.load(open(sys.argv[1]))' "$f" 2>/dev/null; then
@@ -50,7 +43,6 @@ assert_valid_json() {
     fi
 }
 
-# Assert a JSON destination has .mcpServers.<server>.<path> == expected.
 assert_json_val() {
     local f="$1" server="$2" keypath="$3" expected="$4" d="$5"
     local got
@@ -67,7 +59,6 @@ PY
     if [[ "$got" == "OK" ]]; then check_pass "$d"; else check_fail "$d ($got)"; fi
 }
 
-# ===========================================================================
 echo ""
 echo "== 1. JSON -> JSON redaction (claude -> cursor, mcp) =="
 S1="$HOME/.claude.json"
@@ -104,8 +95,8 @@ assert_json_val "$HOME/.cursor/mcp.json" bearer "url" "https://mcp.example.com/s
 assert_json_val "$HOME/.cursor/mcp.json" urlcred "url" "" "1: user:pass@ url blanked"
 assert_json_val "$HOME/.cursor/mcp.json" querycred "url" "" "1: ?key= query-string cred blanked"
 if grep -Fq "[SECURITY]" "$OUT_FILE"; then check_pass "1: [SECURITY] warning printed when secrets redacted"; else check_fail "1: [SECURITY] warning missing despite redaction"; fi
+[[ $LAST_RC -eq 0 ]] && check_pass "1: migration exited rc=0" || check_fail "1: migration exited rc=$LAST_RC (expected 0)"
 
-# ===========================================================================
 echo ""
 echo "== 2. Honest count: secret-free mcp config -> NO [SECURITY] warning =="
 S2="$HOME/.claude.json"
@@ -117,9 +108,8 @@ assert_valid_json "$HOME/.cursor/mcp.json" "2: destination is valid JSON"
 if grep -Fq "demo-server" "$HOME/.cursor/mcp.json"; then check_pass "2: demo-server migrated"; else check_fail "2: demo-server missing"; fi
 if grep -Fq "[SECURITY]" "$OUT_FILE"; then check_fail "2: [SECURITY] should NOT print for secret-free config"; else check_pass "2: no false [SECURITY] warning"; fi
 
-# ===========================================================================
 echo ""
-echo "== 3. YAML fallback redaction (goose-cli -> cursor, mcp) =="
+echo "== 3. Goose YAML MCP is unsupported/fail-closed =="
 mkdir -p "$HOME/.config/goose"
 cat > "$HOME/.config/goose/config.yaml" <<'EOF'
 extensions:
@@ -132,16 +122,15 @@ extensions:
           NORMAL_VAR: "keep-this-value"
           DB_URL: "postgres://u:p@localhost/db"
 EOF
-run bash "$MIG" --source goose-cli --target cursor --objects mcp --strategy overwrite --yes
-if grep -Fq 'API_KEY: ""' "$HOME/.cursor/mcp.json"; then check_pass "3: YAML API_KEY blanked"; else check_fail "3: YAML API_KEY not redacted"; fi
-if grep -Fq 'NORMAL_VAR: "keep-this-value"' "$HOME/.cursor/mcp.json"; then check_pass "3: YAML NORMAL_VAR preserved"; else check_fail "3: YAML NORMAL_VAR lost"; fi
-if grep -Fq 'DB_URL: ""' "$HOME/.cursor/mcp.json"; then check_pass "3: YAML DB_URL (postgres cred) blanked"; else check_fail "3: YAML DB_URL not redacted"; fi
-if grep -Fq "[SECURITY]" "$OUT_FILE"; then check_pass "3: [SECURITY] warning printed for YAML fallback"; else check_fail "3: [SECURITY] missing for YAML fallback"; fi
+run_goose_manual_mcp "3"
+if grep -Fq 'EXAMPLE_API_KEY_VALUE' "$HOME/.config/goose/config.yaml"; then
+    check_pass "3: Goose source YAML remains untouched"
+else
+    check_fail "3: Goose source YAML was modified"
+fi
 
-# ===========================================================================
 echo ""
 echo "== 4. Default scope excludes mcp (audit hardening) =="
-# Source has BOTH a skill and a secret-bearing mcp config.
 S4="$HOME/.claude.json"
 cat > "$S4" <<'EOF'
 { "mcpServers": { "secret-env": { "env": { "API_KEY": "EXAMPLE_API_KEY_VALUE" } } } }
@@ -149,8 +138,6 @@ EOF
 mkdir -p "$HOME/.claude/skills/demo-skill"
 printf '%s\n' '---' 'name: demo-skill' 'description: fixture' '---' > "$HOME/.claude/skills/demo-skill/SKILL.md"
 
-# Run WITHOUT --objects (default). The skill should migrate; the secret mcp
-# must NOT be copied by default.
 run bash "$MIG" --source claude --target cursor --yes
 if [[ -f "$HOME/.cursor/skills/demo-skill/SKILL.md" ]]; then check_pass "4: low-risk skill migrated by default"; else check_fail "4: default migration did not move skills"; fi
 if [[ -e "$HOME/.cursor/mcp.json" ]]; then
@@ -162,9 +149,8 @@ if [[ -e "$HOME/.cursor/mcp.json" ]]; then
 else
     check_pass "4: secret mcp NOT migrated by default (file absent)"
 fi
-if grep -Fq "默认仅迁移低风险类型" "$OUT_FILE"; then check_pass "4: default-scope security notice printed"; else check_fail "4: default-scope notice missing"; fi
+if grep -Fq "global migrations default to skills" "$OUT_FILE"; then check_pass "4: global default is reported"; else check_fail "4: global default notice missing"; fi
 
-# ===========================================================================
 echo ""
 echo "== 5. Array secrets: secret-named key with LIST value (JSON path) =="
 S5="$HOME/.claude.json"
@@ -189,9 +175,8 @@ if grep -Fq "EXAMPLE_EQ_TOKEN" "$HOME/.cursor/mcp.json"; then check_fail "5: --a
 if grep -Fq '"--token"' "$HOME/.cursor/mcp.json"; then check_pass "5: --token flag itself preserved"; else check_fail "5: --token flag lost"; fi
 if grep -Fq '"8080"' "$HOME/.cursor/mcp.json"; then check_pass "5: benign argv (8080) preserved"; else check_fail "5: benign argv lost"; fi
 
-# ===========================================================================
 echo ""
-echo "== 6. Array secrets: line-based fallback (YAML-ish copy path) =="
+echo "== 6. Goose YAML arrays remain behind the fail-closed boundary =="
 mkdir -p "$HOME/.config/goose"
 cat > "$HOME/.config/goose/config.yaml" <<'EOF'
 extensions:
@@ -201,15 +186,15 @@ extensions:
     args: ["--token", "EXAMPLE_YAML_ARGV_TOKEN"]
     keep: ["normal-item"]
 EOF
-run bash "$MIG" --source goose-cli --target cursor --objects mcp --strategy overwrite --yes
-if grep -Fq "EXAMPLE_YAML_ARR_KEY_1" "$HOME/.cursor/mcp.json"; then check_fail "6: api_keys[0] leaked (line path)"; else check_pass "6: api_keys[0] blanked (line path)"; fi
-if grep -Fq "EXAMPLE_YAML_ARR_KEY_2" "$HOME/.cursor/mcp.json"; then check_fail "6: api_keys[1] leaked (line path)"; else check_pass "6: api_keys[1] blanked (line path)"; fi
-if grep -Fq "EXAMPLE_YAML_ARGV_TOKEN" "$HOME/.cursor/mcp.json"; then check_fail "6: --token value leaked (line path)"; else check_pass "6: --token value blanked (line path)"; fi
-if grep -Fq "normal-item" "$HOME/.cursor/mcp.json"; then check_pass "6: benign array preserved (line path)"; else check_fail "6: benign array lost (line path)"; fi
+run_goose_manual_mcp "6"
+if grep -Fq 'EXAMPLE_YAML_ARGV_TOKEN' "$HOME/.config/goose/config.yaml"; then
+    check_pass "6: Goose YAML array source remains untouched"
+else
+    check_fail "6: Goose YAML array source was modified"
+fi
 
-# ===========================================================================
 echo ""
-echo "== 7. Config migration also redacts secrets =="
+echo "== 7. Whole-config migration is a manual boundary =="
 mkdir -p "$HOME/.claude"
 cat > "$HOME/.claude/settings.json" <<'EOF'
 {
@@ -218,26 +203,20 @@ cat > "$HOME/.claude/settings.json" <<'EOF'
   "telemetry": "off"
 }
 EOF
-run bash "$MIG" --source claude --target opencode --objects config --strategy overwrite --yes
-if [[ -f "$HOME/.config/opencode/opencode.json" ]]; then
-    if grep -Fq "EXAMPLE_SETTINGS_API_KEY" "$HOME/.config/opencode/opencode.json"; then
-        check_fail "7: config migration leaked apiKey"
-    else
-        check_pass "7: config apiKey blanked"
-    fi
-    if grep -Fq '"editor.fontSize": 14' "$HOME/.config/opencode/opencode.json"; then check_pass "7: benign settings preserved"; else check_fail "7: benign settings lost"; fi
-    assert_valid_json "$HOME/.config/opencode/opencode.json" "7: migrated config is valid JSON"
-    if grep -Fq "[SECURITY]" "$OUT_FILE"; then check_pass "7: [SECURITY] warning printed for config redaction"; else check_fail "7: [SECURITY] warning missing for config redaction"; fi
+run bash "$MIG" --source claude --target openclaw --objects config --strategy overwrite --yes
+if [[ ! -e "$HOME/.openclaw/openclaw.json" ]]; then
+    check_pass "7: config boundary creates no target file"
 else
-    check_fail "7: config migration produced no target file"
+    check_fail "7: config boundary unexpectedly wrote a target file"
 fi
+if grep -Fq "automatic whole-IDE config migration is unsupported" "$OUT_FILE"; then check_pass "7: config boundary explains manual review"; else check_fail "7: config boundary message missing"; fi
+[[ $LAST_RC -eq 0 ]] && check_pass "7: boundary exits rc=0" || check_fail "7: boundary exited rc=$LAST_RC (expected 0)"
 
-# ===========================================================================
 echo ""
 echo "== 8. copilot/vscode MCP paths wired (no silent skip) =="
 S8="$HOME/.claude.json"
 cat > "$S8" <<'EOF'
-{ "mcpServers": { "demo-server": { "command": "echo" } } }
+{ "mcpServers": { "demo-server": { "command": "echo", "args": [], "tools": ["*"] } } }
 EOF
 run bash "$MIG" --source claude --target copilot --objects mcp --strategy overwrite --yes
 if [[ -f "$HOME/.copilot/mcp-config.json" ]] && grep -Fq "demo-server" "$HOME/.copilot/mcp-config.json"; then
@@ -245,9 +224,12 @@ if [[ -f "$HOME/.copilot/mcp-config.json" ]] && grep -Fq "demo-server" "$HOME/.c
 else
     check_fail "8: claude -> copilot mcp still skipped"
 fi
-run bash "$MIG" --source claude --target vscode --objects mcp --strategy overwrite --yes
-VSCODE_MCP="$HOME/Library/Application Support/Code/User/mcp.json"
-[[ -f "$VSCODE_MCP" ]] || VSCODE_MCP="$HOME/.config/Code/User/mcp.json"
+VSCODE_WORKSPACE="$TMP_ROOT/vscode-workspace"
+rm -rf "$VSCODE_WORKSPACE"
+mkdir -p "$VSCODE_WORKSPACE"
+cp "$S8" "$VSCODE_WORKSPACE/.mcp.json"
+run bash "$MIG" --source claude --target vscode --workspace "$VSCODE_WORKSPACE" --objects mcp --scope project --strategy overwrite --yes
+VSCODE_MCP="$VSCODE_WORKSPACE/.vscode/mcp.json"
 if [[ -f "$VSCODE_MCP" ]]; then
     if python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); assert "demo-server" in d.get("servers", {})' "$VSCODE_MCP" 2>/dev/null; then
         check_pass "8: claude -> vscode mcp under root key servers"
@@ -258,13 +240,8 @@ else
     check_fail "8: claude -> vscode mcp produced no file"
 fi
 
-# ===========================================================================
 echo ""
-echo "== 9. Vector ①: line-based short-secret-flag values (-p/-t/-k) =="
-# The JSON-tree converter already handles short flags, but the LINE-BASED
-# redactor (redact_secrets_in_file) must ALSO blank them when it is the
-# primary redactor (verbatim YAML copy). Exercises inline flow arrays AND
-# cross-line list pairs.
+echo "== 9. Goose YAML short-secret flags remain behind the fail-closed boundary =="
 mkdir -p "$HOME/.config/goose"
 cat > "$HOME/.config/goose/config.yaml" <<'EOF'
 extensions:
@@ -281,31 +258,10 @@ extensions:
           - -t
           - CROSS_T_VAL
 EOF
-run bash "$MIG" --source goose-cli --target cursor --objects mcp --strategy overwrite --yes
-D9="$HOME/.cursor/mcp.json"
-if [[ -f "$D9" ]]; then
-    if grep -Fq "SHORT_P_VAL" "$D9"; then check_fail "9: line-path -p value leaked (inline)"; else check_pass "9: line-path -p value blanked (inline)"; fi
-    if grep -Fq "SHORT_T_VAL" "$D9"; then check_fail "9: line-path -t value leaked (inline)"; else check_pass "9: line-path -t value blanked (inline)"; fi
-    if grep -Fq "SHORT_K_VAL" "$D9"; then check_fail "9: line-path -k value leaked (inline)"; else check_pass "9: line-path -k value blanked (inline)"; fi
-    if grep -Fq "CROSS_P_VAL" "$D9"; then check_fail "9: line-path -p value leaked (cross-line)"; else check_pass "9: line-path -p value blanked (cross-line)"; fi
-    if grep -Fq "CROSS_T_VAL" "$D9"; then check_fail "9: line-path -t value leaked (cross-line)"; else check_pass "9: line-path -t value blanked (cross-line)"; fi
-    if grep -Eq '("-p"|- -p)' "$D9"; then check_pass "9: -p flag itself preserved"; else check_fail "9: -p flag lost"; fi
-    if grep -Eq '("-t"|- -t)' "$D9"; then check_pass "9: -t flag itself preserved"; else check_fail "9: -t flag lost"; fi
-    if grep -Eq '("-k"|- -k)' "$D9"; then check_pass "9: -k flag itself preserved"; else check_fail "9: -k flag lost"; fi
-    if grep -Fq "[SECURITY]" "$OUT_FILE"; then check_pass "9: [SECURITY] warning printed for short-flag redaction"; else check_fail "9: [SECURITY] warning missing"; fi
-else
-    check_fail "9: short-flag migration produced no destination file"
-fi
+run_goose_manual_mcp "9"
 
-# ===========================================================================
 echo ""
 echo "== 10. Vector ②: StopIteration crash on quoted-key inline array =="
-# The JSON-tree converter writes the destination as quoted-key JSON (e.g.
-# "args": [...]). The line-based redactor then re-runs on that file. The OLD
-# code applied re.sub to the WHOLE line (including the quoted key) while
-# new_elems only held argv elements -> an extra quoted token -> next(it)
-# raised StopIteration -> under set -e the whole migration aborted. Assert the
-# migration completes (rc==0) and stays valid JSON instead of crashing.
 S10="$HOME/.claude.json"
 cat > "$S10" <<'EOF'
 {
@@ -324,12 +280,8 @@ if grep -Fq "STOPITER_PWD" "$HOME/.cursor/mcp.json"; then check_fail "10: -p val
 if grep -Fq "STOPITER_TOK" "$HOME/.cursor/mcp.json"; then check_fail "10: --token value leaked"; else check_pass "10: --token value blanked"; fi
 if grep -Fq '"benign-arg"' "$HOME/.cursor/mcp.json"; then check_pass "10: benign argv preserved"; else check_fail "10: benign argv lost"; fi
 
-# ===========================================================================
 echo ""
-echo "== 11. Vector ③: YAML list item '- api_key: secret123' =="
-# A secret-bearing key carried as a YAML LIST ITEM (leading '- ') was invisible
-# to the key/value line regex (which cannot match the leading '- '). The line
-# redactor must now recognise list-item keyed pairs and blank the value.
+echo "== 11. Goose YAML list-item secrets remain behind the fail-closed boundary =="
 mkdir -p "$HOME/.config/goose"
 cat > "$HOME/.config/goose/config.yaml" <<'EOF'
 extensions:
@@ -342,25 +294,10 @@ extensions:
           - token: "tok-xyz-789"
           - normal_var: "keep-this"
 EOF
-run bash "$MIG" --source goose-cli --target cursor --objects mcp --strategy overwrite --yes
-D11="$HOME/.cursor/mcp.json"
-if [[ -f "$D11" ]]; then
-    if grep -Fq "secret123" "$D11"; then check_fail "11: list-item api_key value leaked"; else check_pass "11: list-item api_key value blanked"; fi
-    if grep -Fq "tok-xyz-789" "$D11"; then check_fail "11: list-item token value leaked"; else check_pass "11: list-item token value blanked"; fi
-    if grep -Fq "keep-this" "$D11"; then check_pass "11: list-item normal_var preserved"; else check_fail "11: list-item normal_var lost"; fi
-    if grep -Fq "api_key" "$D11"; then check_pass "11: list-item key (api_key) preserved"; else check_fail "11: list-item key lost"; fi
-    if grep -Fq "[SECURITY]" "$OUT_FILE"; then check_pass "11: [SECURITY] warning printed for list-item redaction"; else check_fail "11: [SECURITY] warning missing"; fi
-else
-    check_fail "11: list-item migration produced no destination file"
-fi
+run_goose_manual_mcp "11"
 
-# ===========================================================================
 echo ""
-echo "== 12. Vector ④: YAML multi-line args ('- --token' / '- sk-live-xxx') =="
-# Secret CLI flags whose VALUE sits on the NEXT list item (e.g. '- --token'
-# then '- TOKVALUE-abcdef123456'). The cross-line flag_pending state must carry
-# the secret flag across the line break and blank the following value, while
-# keeping the flag and any benign list element.
+echo "== 12. Goose YAML multi-line args remain behind the fail-closed boundary =="
 mkdir -p "$HOME/.config/goose"
 cat > "$HOME/.config/goose/config.yaml" <<'EOF'
 extensions:
@@ -375,26 +312,10 @@ extensions:
           - mypassword
           - normal-arg
 EOF
-run bash "$MIG" --source goose-cli --target cursor --objects mcp --strategy overwrite --yes
-D12="$HOME/.cursor/mcp.json"
-if [[ -f "$D12" ]]; then
-    if grep -Fq "TOKVALUE-abcdef123456" "$D12"; then check_fail "12: cross-line --token value leaked"; else check_pass "12: cross-line --token value blanked"; fi
-    if grep -Fq "mypassword" "$D12"; then check_fail "12: cross-line -p value leaked"; else check_pass "12: cross-line -p value blanked"; fi
-    if grep -Fq "normal-arg" "$D12"; then check_pass "12: benign list element preserved"; else check_fail "12: benign list element lost"; fi
-    if grep -Fq -- "- --token" "$D12"; then check_pass "12: --token flag preserved (cross-line)"; else check_fail "12: --token flag lost"; fi
-    if grep -Fq -- "- -p" "$D12"; then check_pass "12: -p flag preserved (cross-line)"; else check_fail "12: -p flag lost"; fi
-    if grep -Fq "[SECURITY]" "$OUT_FILE"; then check_pass "12: [SECURITY] warning printed for multi-line args"; else check_fail "12: [SECURITY] warning missing"; fi
-else
-    check_fail "12: multi-line args migration produced no destination file"
-fi
+run_goose_manual_mcp "12"
 
-# ===========================================================================
 echo ""
-echo "== 13. Vector ⑤: compact single-line JSON with multiple secret keys =="
-# A single line carrying several '\"secretKey\": \"value\"' pairs. The OLD
-# key/value line regex only matched the FIRST key on a line; the line redactor
-# must now blank EVERY secret-keyed value on the line (redact_kv), leaving
-# non-secret keys and their values intact.
+echo "== 13. Compact config remains behind the manual boundary =="
 mkdir -p "$HOME/.claude"
 cat > "$HOME/.claude/settings.json" <<'EOF'
 {
@@ -403,25 +324,17 @@ cat > "$HOME/.claude/settings.json" <<'EOF'
   "nested": { "secret": "SEC_NESTED" }
 }
 EOF
-run bash "$MIG" --source claude --target opencode --objects config --strategy overwrite --yes
-D13="$HOME/.config/opencode/opencode.json"
-if [[ -f "$D13" ]]; then
-    if grep -Fq "AK_SL" "$D13"; then check_fail "13: compact line apiKey leaked"; else check_pass "13: compact line apiKey blanked"; fi
-    if grep -Fq "TOK_SL" "$D13"; then check_fail "13: compact line token leaked"; else check_pass "13: compact line token blanked"; fi
-    if grep -Fq "PW_SL" "$D13"; then check_fail "13: compact line password leaked"; else check_pass "13: compact line password blanked"; fi
-    if grep -Fq "SEC_NESTED" "$D13"; then check_fail "13: second compact line secret leaked"; else check_pass "13: second compact line secret blanked"; fi
-    if grep -Fq "keep-this-too" "$D13"; then check_pass "13: non-secret field preserved"; else check_fail "13: non-secret field lost"; fi
-    assert_valid_json "$D13" "13: compact-line migrated config is valid JSON"
+run bash "$MIG" --source claude --target openclaw --objects config --strategy overwrite --yes
+D13="$HOME/.openclaw/openclaw.json"
+if [[ ! -e "$D13" ]]; then
+    check_pass "13: compact config boundary creates no target file"
 else
-    check_fail "13: compact-line config migration produced no file"
+    check_fail "13: compact config boundary unexpectedly wrote a target file"
 fi
+if grep -Fq "automatic whole-IDE config migration is unsupported" "$OUT_FILE"; then check_pass "13: compact config boundary explains manual review"; else check_fail "13: compact config boundary message missing"; fi
 
-# ===========================================================================
 echo ""
-echo "== 14. Review-fix: secret KEY with non-secret-looking value (keyed lines) =="
-# Regression guard: a secret key must blank its value even when the VALUE
-# itself does not look secret (e.g. "tok-xyz-789" contains no keyword).
-# Covers quoted AND bare (unquoted YAML/TOML) forms on NON-list keyed lines.
+echo "== 14. Goose YAML keyed secrets remain behind the fail-closed boundary =="
 mkdir -p "$HOME/.config/goose"
 cat > "$HOME/.config/goose/config.yaml" <<'EOF'
 extensions:
@@ -433,21 +346,10 @@ extensions:
         apiKey: bare-val-42
         timeout: "30s"
 EOF
-run bash "$MIG" --source goose-cli --target cursor --objects mcp --strategy overwrite --yes
-D14="$HOME/.cursor/mcp.json"
-if [[ -f "$D14" ]]; then
-    if grep -Fq "tok-xyz-789" "$D14"; then check_fail "14: quoted keyed secret value leaked"; else check_pass "14: quoted keyed secret value blanked"; fi
-    if grep -Fq "bare-val-42" "$D14"; then check_fail "14: bare keyed secret value leaked"; else check_pass "14: bare keyed secret value blanked"; fi
-    if grep -Fq "30s" "$D14"; then check_pass "14: non-secret keyed value preserved"; else check_fail "14: non-secret keyed value lost"; fi
-else
-    check_fail "14: keyed-line migration produced no destination file"
-fi
+run_goose_manual_mcp "14"
 
-# ===========================================================================
 echo ""
-echo "== 15. Review-fix: consecutive secret flags ('- -p' then '- -t' then value) =="
-# Regression guard: with -p immediately followed by -t, the SECOND FLAG must
-# not be blanked as if it were the value; only the real value is blanked.
+echo "== 15. Goose YAML consecutive secret flags remain behind the fail-closed boundary =="
 mkdir -p "$HOME/.config/goose"
 cat > "$HOME/.config/goose/config.yaml" <<'EOF'
 extensions:
@@ -461,40 +363,352 @@ extensions:
           - CONSEC_SECRET_VAL
           - --verbose
 EOF
-run bash "$MIG" --source goose-cli --target cursor --objects mcp --strategy overwrite --yes
-D15="$HOME/.cursor/mcp.json"
-if [[ -f "$D15" ]]; then
-    if grep -Fq "CONSEC_SECRET_VAL" "$D15"; then check_fail "15: consecutive-flag value leaked"; else check_pass "15: consecutive-flag value blanked"; fi
-    if grep -Eq -- '(- -p|"-p")' "$D15"; then check_pass "15: first flag (-p) preserved"; else check_fail "15: first flag (-p) lost"; fi
-    if grep -Eq -- '(- -t|"-t")' "$D15"; then check_pass "15: second flag (-t) preserved (not blanked as value)"; else check_fail "15: second flag (-t) blanked by mistake"; fi
-    if grep -Eq -- '(- --verbose|"--verbose")' "$D15"; then check_pass "15: benign trailing flag preserved"; else check_fail "15: benign trailing flag lost"; fi
-else
-    check_fail "15: consecutive-flag migration produced no destination file"
-fi
+run_goose_manual_mcp "15"
 
-# ===========================================================================
 echo ""
 echo "== 16. Review-fix: fail-closed on redaction failure (vector ② hardening) =="
-# If the redactor cannot even READ the destination copy, it must fail CLOSED:
-# delete the (possibly secret-bearing) copy, emit -1, and return rc!=0 —
-# never leave an un-redacted file behind. Exercises the extracted function
-# directly against an unreadable file.
 D16_DIR=$(mktemp -d "$TMP_ROOT/failclosed.XXXXXX")
 D16="$D16_DIR/copy.json"
 printf '{"apiKey": "FAILCLOSED_SECRET"}\n' > "$D16"
 chmod 000 "$D16"
 set +e
 D16_OUT=$(bash -c '
+    eval "$(sed -n "/^REDACTOR_PY=/,/^}/p" "$1")"
     eval "$(sed -n "/^redact_secrets_in_file()/,/^}/p" "$1")"
     redact_secrets_in_file "$2"
-' _ "$MIG" "$D16" 2>/dev/null)
+' _ "$LEGACY_MIG" "$D16" 2>/dev/null)
 D16_RC=$?
 set -e
 if [[ $D16_RC -ne 0 ]]; then check_pass "16: fail-closed returns non-zero rc"; else check_fail "16: fail-closed returned rc=0"; fi
 if [[ "$D16_OUT" == "-1" ]]; then check_pass "16: fail-closed emits -1 sentinel"; else check_fail "16: fail-closed emitted '$D16_OUT' (expected -1)"; fi
 if [[ ! -e "$D16" ]]; then check_pass "16: secret-bearing copy deleted (fail closed)"; else check_fail "16: secret-bearing copy left on disk"; chmod 644 "$D16" 2>/dev/null || true; fi
 
-# ===========================================================================
+echo ""
+echo "== 17. CR-001: provider-key VALUE formats redacted under non-secret key names =="
+S17="$HOME/.claude.json"
+cat > "$S17" <<'EOF'
+{
+  "mcpServers": {
+    "provider-vals": {
+      "command": "npx",
+      "env": {
+        "MY_KEY": "sk-ant-abcdefghijklmnopqrstuvw",
+        "WEBHOOK_URL": "xoxb-1234567890-abcdefghij",
+        "NORMAL_VAR": "keep-this-value"
+      }
+    }
+  }
+}
+EOF
+run bash "$MIG" --source claude --target cursor --objects mcp --strategy overwrite --yes
+assert_valid_json "$HOME/.cursor/mcp.json" "17: mcp destination is valid JSON"
+if grep -Fq "sk-ant-abcdefghijklmnopqrstuvw" "$HOME/.cursor/mcp.json"; then check_fail "17: provider value (sk-) under MY_KEY leaked"; else check_pass "17: sk- provider value blanked under non-secret key"; fi
+if grep -Fq "xoxb-1234567890-abcdefghij" "$HOME/.cursor/mcp.json"; then check_fail "17: provider value (xoxb) under WEBHOOK_URL leaked"; else check_pass "17: xoxb provider value blanked under non-secret key"; fi
+if grep -Fq "keep-this-value" "$HOME/.cursor/mcp.json"; then check_pass "17: non-secret value preserved"; else check_fail "17: non-secret value lost"; fi
+[[ $LAST_RC -eq 0 ]] && check_pass "17: mcp migration exited rc=0" || check_fail "17: mcp migration exited rc=$LAST_RC (expected 0)"
+
+mkdir -p "$HOME/.claude"
+cat > "$HOME/.claude/settings.json" <<'EOF'
+{
+  "editor.fontSize": 14,
+  "modelKey": "ghp_abcdefghijklmnopqrst",
+  "svcAccount": "AKIAIOSFODNN7EXAMPLE",
+  "telemetry": "off"
+}
+EOF
+run bash "$MIG" --source claude --target openclaw --objects config --strategy overwrite --yes
+D17="$HOME/.openclaw/openclaw.json"
+if [[ ! -e "$D17" ]]; then
+    check_pass "17: provider-bearing config boundary creates no target file"
+else
+    check_fail "17: provider-bearing config boundary unexpectedly wrote a target file"
+fi
+if grep -Fq "automatic whole-IDE config migration is unsupported" "$OUT_FILE"; then check_pass "17: provider-bearing config boundary explains manual review"; else check_fail "17: provider-bearing config boundary message missing"; fi
+
+echo ""
+echo "== 18. CR-002: fail-closed when python3 is unavailable (no silent leak) =="
+T18_BIN="$(mktemp -d "$TMP_ROOT/no-py.XXXXXX")"
+for b in /bin/* /usr/bin/*; do
+    bn="$(basename "$b")"
+    case "$bn" in python*) continue ;; esac
+    ln -s "$b" "$T18_BIN/$bn" 2>/dev/null || true
+done
+run_no_python3() { PATH="$T18_BIN" "$@" > "$OUT_FILE" 2>&1; LAST_RC=$?; }
+
+S18="$HOME/.claude.json"
+cat > "$S18" <<'EOF'
+{ "mcpServers": { "leak-test": { "env": { "API_KEY": "sk-ant-TOTALLYSECRETMUSTNOTLEAK" } } } }
+EOF
+run_no_python3 bash "$MIG" --source claude --target cursor --objects mcp --strategy overwrite --yes
+if [[ ! -e "$HOME/.cursor/mcp.json" ]]; then
+    check_pass "18a: MCP copy absent (fail-closed removed the un-redacted file)"
+else
+    if grep -Fq "sk-ant-TOTALLYSECRETMUSTNOTLEAK" "$HOME/.cursor/mcp.json"; then
+        check_fail "18a: secret LEAKED despite missing python3"
+    else
+        check_fail "18a: copy left on disk without secret (should have been deleted)"
+    fi
+fi
+if grep -Fq "[SECURITY]" "$OUT_FILE"; then check_pass "18a: [SECURITY] warning emitted when python3 missing"; else check_fail "18a: [SECURITY] warning missing for no-python3 path"; fi
+
+mkdir -p "$HOME/.claude"
+cat > "$HOME/.claude/settings.json" <<'EOF'
+{ "apiKey": "sk-ant-CONFIGSECRETMUSTNOTLEAK", "telemetry": "off" }
+EOF
+run_no_python3 bash "$MIG" --source claude --target openclaw --objects config --strategy overwrite --yes
+if [[ ! -e "$HOME/.openclaw/openclaw.json" ]]; then
+    check_pass "18b: config boundary creates no file without python3"
+else
+    check_fail "18b: config boundary unexpectedly wrote a file without python3"
+fi
+
+echo ""
+echo "== 19. MED-T3: malformed source JSON must not mutate the source =="
+S19="$HOME/.claude.json"
+printf '{ "mcpServers": ' > "$S19"
+ORIG="$(cat "$S19")"
+run bash "$MIG" --source claude --target cursor --objects mcp --strategy overwrite --yes
+if [[ "$(cat "$S19")" == "$ORIG" ]]; then
+    check_pass "19: malformed source config left UNCHANGED (fail-open-safe, recoverable)"
+else
+    check_fail "19: malformed source config was MUTATED by migration"
+fi
+if [[ "$LAST_RC" =~ ^[0-9]+$ ]]; then
+    check_pass "19: migration returned a clean exit code (rc=$LAST_RC) on malformed input"
+else
+    check_fail "19: migration produced a non-numeric exit status on malformed input"
+fi
+
+echo ""
+echo "== 20. Non-canonical MCP source file + safe environment references =="
+S20_DIR="$TMP_ROOT/custom-source"
+S20="$S20_DIR/cursor-export.json"
+W20="$TMP_ROOT/custom-source-workspace"
+mkdir -p "$S20_DIR" "$W20"
+S20_RESOLVED="$(cd "$S20_DIR" && pwd -P)/$(basename "$S20")"
+cat > "$S20" <<'EOF'
+{
+  "mcpServers": {
+    "local-search": {
+      "command": "npx",
+      "args": ["-y", "@acme/search-mcp"],
+      "env": {
+        "ACME_API_KEY": "${env:ACME_API_KEY}",
+        "UNSUPPORTED_TOKEN": "${UNSUPPORTED_TOKEN}",
+        "LITERAL_TOKEN": "__literal_secret_should_blank__",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "remote-docs": {
+      "url": "https://mcp.acme.example/rpc?api_key=${env:ACME_QUERY_KEY}",
+      "headers": {
+        "Authorization": "Bearer ${env:ACME_BEARER_TOKEN}",
+        "X-Workspace": "acme"
+      }
+    }
+  }
+}
+EOF
+S20_ORIG="$(cat "$S20")"
+
+set +e
+run bash "$MIG" --source cursor --target opencode --workspace "$W20" \
+    --objects project-mcp --source-mcp-file "$S20" --dry-run
+set -e
+if [[ $LAST_RC -eq 0 ]]; then check_pass "20a: custom-source dry-run exits 0"; else check_fail "20a: custom-source dry-run exits rc=$LAST_RC"; fi
+if grep -Fq "source: $S20_RESOLVED" "$OUT_FILE" && grep -Fq "validated MCP source" "$OUT_FILE"; then
+    check_pass "20a: dry-run reads and validates the selected source file"
+else
+    check_fail "20a: dry-run did not consume the selected source file"
+fi
+if [[ ! -e "$W20/opencode.json" ]]; then check_pass "20a: dry-run leaves target absent"; else check_fail "20a: dry-run wrote target config"; fi
+
+run bash "$MIG" --source cursor --target opencode --workspace "$W20" \
+    --objects project-mcp --source-mcp-file "$S20" --strategy overwrite --yes
+D20="$W20/opencode.json"
+if [[ $LAST_RC -eq 0 ]]; then check_pass "20b: custom-source apply exits 0"; else check_fail "20b: custom-source apply exits rc=$LAST_RC"; fi
+assert_valid_json "$D20" "20b: custom-source destination is valid JSON"
+S20_CHECK=$(python3 - "$D20" <<'PY'
+import json, sys
+d = json.load(open(sys.argv[1]))["mcp"]
+assert d["local-search"]["type"] == "local"
+assert d["local-search"]["command"] == ["npx", "-y", "@acme/search-mcp"]
+assert d["local-search"]["environment"]["ACME_API_KEY"] == "{env:ACME_API_KEY}"
+assert d["local-search"]["environment"]["UNSUPPORTED_TOKEN"] == ""
+assert d["local-search"]["environment"]["LITERAL_TOKEN"] == ""
+assert d["local-search"]["environment"]["LOG_LEVEL"] == "info"
+assert d["remote-docs"]["type"] == "remote"
+assert d["remote-docs"]["url"] == "https://mcp.acme.example/rpc?api_key={env:ACME_QUERY_KEY}"
+assert d["remote-docs"]["headers"]["Authorization"] == "Bearer {env:ACME_BEARER_TOKEN}"
+assert d["remote-docs"]["headers"]["X-Workspace"] == "acme"
+print("OK")
+PY
+)
+if [[ "$S20_CHECK" == "OK" ]]; then
+    check_pass "20b: conversion preserves safe references and blanks literal credentials"
+else
+    check_fail "20b: converted MCP semantics are incorrect"
+fi
+if [[ "$(cat "$S20")" == "$S20_ORIG" ]]; then check_pass "20b: selected source file remains unchanged"; else check_fail "20b: selected source file was mutated"; fi
+
+echo ""
+echo "== 21. Explicit MCP source rejects ambiguous or foreign inputs =="
+S21="$S20_DIR/foreign-schema.json"
+W21="$TMP_ROOT/invalid-source-workspace"
+mkdir -p "$W21"
+cat > "$S21" <<'EOF'
+{ "servers": { "wrong-root": { "command": "echo" } } }
+EOF
+
+set +e
+run bash "$MIG" --source cursor --target opencode --workspace "$W21" \
+    --objects project-mcp --source-mcp-file "$S21" --strategy overwrite --yes
+set -e
+if [[ $LAST_RC -ne 0 ]] && grep -Fq "failed strict schema validation" "$OUT_FILE"; then
+    check_pass "21a: foreign source schema is reported as failed"
+else
+    check_fail "21a: foreign source schema was accepted"
+fi
+if [[ ! -e "$W21/opencode.json" ]]; then check_pass "21a: foreign schema leaves target absent"; else check_fail "21a: foreign schema wrote a target"; fi
+
+set +e
+run bash "$MIG" --source cursor --target opencode --workspace "$W21" \
+    --objects rules --source-mcp-file "$S21" --dry-run
+set -e
+if [[ $LAST_RC -ne 0 ]] && grep -Fq "requires --objects mcp or project-mcp" "$OUT_FILE"; then
+    check_pass "21b: override is rejected outside MCP objects"
+else
+    check_fail "21b: override was accepted outside MCP objects"
+fi
+
+set +e
+run bash "$MIG" --source cursor --target opencode --workspace "$W21" \
+    --objects mcp --scope both --source-mcp-file "$S21" --dry-run
+set -e
+if [[ $LAST_RC -ne 0 ]] && grep -Fq "cannot represent both global and project MCP scopes" "$OUT_FILE"; then
+    check_pass "21c: override rejects ambiguous both-scope input"
+else
+    check_fail "21c: override accepted ambiguous both-scope input"
+fi
+
+S21_YAML="$S20_DIR/continue.yaml"
+cat > "$S21_YAML" <<'EOF'
+mcpServers: []
+EOF
+set +e
+run bash "$MIG" --source continue --target opencode --workspace "$W21" \
+    --objects project-mcp --source-mcp-file "$S21_YAML" --dry-run
+set -e
+if [[ $LAST_RC -ne 0 ]] && grep -Fq "accepts JSON or JSONC only" "$OUT_FILE"; then
+    check_pass "21d: override rejects YAML/TOML format boundaries explicitly"
+else
+    check_fail "21d: override did not clearly reject a YAML input"
+fi
+
+echo ""
+echo "== 22. Explicit-source JSONC parsing and symlink identity safety =="
+S22_JSONC="$S20_DIR/cursor-export.jsonc"
+cat > "$S22_JSONC" <<'EOF'
+{
+  // A real JSONC comment.
+  "mcpServers": {
+    "jsonc-local": {
+      "command": "echo",
+      "args": ["https://example.test/a/*literal*/", "literal // text /* x */"],
+    },
+  },
+}
+EOF
+set +e
+run bash "$MIG" --source cursor --target opencode --workspace "$W21" \
+    --objects project-mcp --source-mcp-file "$S22_JSONC" --dry-run
+set -e
+if [[ $LAST_RC -eq 0 ]] && grep -Fq "validated MCP source: 1 server entries" "$OUT_FILE"; then
+    check_pass "22a: JSONC comments/trailing commas do not corrupt string contents"
+else
+    check_fail "22a: valid JSONC source was rejected"
+fi
+
+W22_LINK="$TMP_ROOT/symlink-source-workspace"
+mkdir -p "$W22_LINK"
+D22_LINK="$W22_LINK/opencode.json"
+cat > "$D22_LINK" <<'EOF'
+{ "mcpServers": { "only-copy": { "command": "echo", "args": [] } } }
+EOF
+S22_LINK="$S20_DIR/link-to-target.json"
+ln -s "$D22_LINK" "$S22_LINK"
+D22_ORIG="$(cat "$D22_LINK")"
+run bash "$MIG" --source cursor --target opencode --workspace "$W22_LINK" \
+    --objects project-mcp --source-mcp-file "$S22_LINK" --strategy overwrite --yes
+if grep -Fq "source and target resolve to the same file" "$OUT_FILE"; then check_pass "22b: symlinked self-target is refused"; else check_fail "22b: symlinked self-target was not detected"; fi
+if [[ "$(cat "$D22_LINK")" == "$D22_ORIG" ]]; then check_pass "22b: symlink identity guard preserves the only copy"; else check_fail "22b: symlink identity guard allowed mutation"; fi
+
+echo ""
+echo "== 23. Safe-reference URLs cannot hide a second literal credential =="
+S23="$S20_DIR/mixed-url.json"
+W23="$TMP_ROOT/mixed-url-workspace"
+mkdir -p "$W23"
+PROVIDER_PREFIX="sk-"
+PROVIDER_BODY="ABCDEFGHIJKLMNOPQRSTUV"
+cat > "$S23" <<EOF
+{
+  "mcpServers": {
+    "mixed-remote": {
+      "url": "https://example.test/mcp?api_key=\${env:SAFE_REF}&note=${PROVIDER_PREFIX}${PROVIDER_BODY}"
+    }
+  }
+}
+EOF
+set +e
+run bash "$MIG" --source cursor --target opencode --workspace "$W23" \
+    --objects project-mcp --source-mcp-file "$S23" --strategy overwrite --yes
+set -e
+if [[ $LAST_RC -ne 0 && ! -e "$W23/opencode.json" ]]; then
+    check_pass "23a: mixed-reference MCP URL fails closed with no target"
+else
+    check_fail "23a: MCP safe-reference exception leaked a second literal credential"
+fi
+
+mkdir -p "$HOME/.claude"
+cat > "$HOME/.claude/settings.json" <<EOF
+{ "webhook": "https://example.test/hook?api_key=\${env:SAFE_REF}&note=${PROVIDER_PREFIX}${PROVIDER_BODY}" }
+EOF
+run bash "$MIG" --source claude --target openclaw --objects config --strategy overwrite --yes
+if [[ ! -e "$HOME/.openclaw/openclaw.json" ]]; then
+    check_pass "23b: mixed-reference config remains unwritten at the manual boundary"
+else
+    check_fail "23b: generic config boundary unexpectedly wrote a target file"
+fi
+
+echo ""
+echo "== 24. MCP targets reject symlinks before conversion or cleanup =="
+S24="$S20_DIR/distinct-source.json"
+W24="$TMP_ROOT/symlink-target-workspace"
+D24_REAL="$TMP_ROOT/unrelated-config.json"
+mkdir -p "$W24"
+cat > "$S24" <<'EOF'
+{ "mcpServers": { "source-entry": { "command": "echo", "args": [] } } }
+EOF
+cat > "$D24_REAL" <<'EOF'
+{ "sentinel": "must remain unchanged" }
+EOF
+ln -s "$D24_REAL" "$W24/opencode.json"
+D24_ORIG="$(cat "$D24_REAL")"
+set +e
+run bash "$MIG" --source cursor --target opencode --workspace "$W24" \
+    --objects project-mcp --source-mcp-file "$S24" --strategy overwrite --yes
+set -e
+if [[ $LAST_RC -ne 0 ]] && grep -Fq "target is a symbolic link" "$OUT_FILE"; then
+    check_pass "24: symlinked MCP target is rejected"
+else
+    check_fail "24: symlinked MCP target was accepted"
+fi
+if [[ -L "$W24/opencode.json" && "$(cat "$D24_REAL")" == "$D24_ORIG" ]]; then
+    check_pass "24: rejected symlink target and referent remain unchanged"
+else
+    check_fail "24: symlink target rejection allowed mutation"
+fi
+
 echo ""
 if [[ $FAIL -eq 0 ]]; then
     echo "ALL $CHECKS MCP SECRET-REDACTION CHECKS PASSED"

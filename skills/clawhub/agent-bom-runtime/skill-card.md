@@ -1,43 +1,60 @@
-## Description: <br>
-agent-bom runtime helps agents analyze context graphs, correlate runtime audit logs with CVE findings, and query vulnerability analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI runtime security monitoring for context graph analysis, runtime audit log correlation with CVE findings, and vulnerability analytics queries.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and security engineers use this skill to inspect agent runtime posture, investigate lateral movement in context graphs, correlate user-provided audit logs with CVE findings, and query vulnerability trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided runtime audit logs may contain sensitive operational details. <br>
-Mitigation: Review and minimize audit logs before providing them to the skill. <br>
-Risk: Optional ClickHouse storage can persist vulnerability analytics and runtime data. <br>
-Mitigation: Configure ClickHouse only when persistent analytics storage is intended and approved. <br>
+## Use Case:
 
+Developers and security engineers use this skill to inspect agent runtime behavior, correlate audit logs with vulnerability findings, and query vulnerability posture trends.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-runtime) <br>
-- [Project homepage](https://github.com/msaad00/agent-bom) <br>
-- [PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with concise analysis and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference user-provided audit log paths and optional ClickHouse configuration; no API keys are required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Audit logs may contain secrets or sensitive operational data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only intended audit logs and avoid passing files that contain raw secrets or data that should not be analyzed.
+
+Risk: Optional ClickHouse storage can persist runtime analytics beyond the active session.
+
+Mitigation: Configure ClickHouse only when persistent analytics are desired, and use operator-approved connection settings.
+
+Risk: The skill installs and relies on an external third-party package.
+
+Mitigation: Review the agent-bom package and source repository before installation in sensitive environments.
+
+## Reference(s):
+
+- [Source repository](https://github.com/msaad00/agent-bom)
+- [PyPI package](https://pypi.org/project/agent-bom/)
+- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom)
+- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-runtime)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline commands and structured security analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference user-provided audit log paths, scan results already in memory, optional kubectl context, and optional ClickHouse analytics configuration.]
+
+## Skill Version(s):
+
+0.101.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

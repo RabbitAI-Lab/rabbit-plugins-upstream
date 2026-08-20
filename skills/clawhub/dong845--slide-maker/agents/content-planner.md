@@ -187,6 +187,16 @@ evidence, and letting the rest go on purpose.** Work in this order:
    PRIMARY-SOURCE GATE still runs. A thinner sweep means you find fewer facts, never that you
    verify them less. **If no tier was handed to you, work at `standard`** and say so in the plan —
    an unstated tier must never become whatever this run happened to feel like.
+
+   **A `search cap:` sizes the sweep just as hard as the tier does, and for a blunter reason: web
+   search is capped per SESSION and shared with every subagent you dispatch, so the budget you spend
+   is not yours.** State a per-reader cap **inside each dispatch prompt** — a reader not told a cap
+   searches until it is satisfied, and N of them do that at once. Keep the round under about half of
+   what REMAINS. Report `searches: planned N / spent N` in the plan so the number is a decision
+   somebody made rather than a wall somebody hit; a fan-out that quietly spends the session's whole
+   budget starves the small, late, NAMED lookups — a logo, a brand colour, one clearance number —
+   that the build genuinely cannot do without. If you are given no cap, ask for one rather than
+   assuming there is no ceiling.
 4. **Triage — deep-read only the load-bearing ~20% VERBATIM.** Among the kept chapters, go back and
    read *verbatim* only the sections that actually carry the deck's message; pull exact numbers,
    quotes, and figures from the real pages there. The rest stays at summary altitude — that is correct,
@@ -336,7 +346,7 @@ Use the web for **three jobs**, and run it whether or not you have a source:
     than") into an absolute ("writes don't"). A clause lifted from a longer sentence keeps its
     lowercase and a leading ellipsis (or bracketed capital); a paraphrase drops the quote marks and
     attributes as `after <who>`.
-- **(c) Find the single-entity's real brand assets (a research act, not a design one).** When the
+- **(c) Find the real brand assets (a research act, not a design one).** When the
   deck's subject **is one organisation / product / brand / institution** — a pitch, product intro,
   launch, company or stakeholder readout, an org's report, **and equally** a research talk naming a
   tool / framework / model, a teaching deck showing an app, or a status deck naming a vendor —
@@ -349,7 +359,12 @@ Use the web for **three jobs**, and run it whether or not you have a source:
   **designed wordmark** — a **NOTE for design, not a content blocker** (a missing logo never blocks
   the plan). This stays a **content/research act — you find the asset**; *whether and where* a mark
   is placed is the slide-design agent's call. (A **multi-organisation** deck — survey / landscape /
-  review — or a **neutral-academic** talk needs no such global mark; name entities inline.)
+  review — or a **neutral-academic** talk needs no such GLOBAL mark; name entities inline.
+  🔴 **But that exempts CHROME, not content:** when any slide's FORM is a roster of named real
+  entities — an alliance's members, an ecosystem map, a comparison whose rows are institutions —
+  search each one's mark and report `N of M sourced` with per-entity sources, because the
+  slide-design agent's `entity marks:` line is assembled from what you find. A roster shipped with
+  a coloured square per row is what this arm exists to prevent.)
 
 - **(d) Calibrate density against professional decks when unsure.** If you can't confidently say
   how much a page of THIS genre should carry (an investor update vs a lecture vs a conference talk
@@ -396,13 +411,66 @@ approve. A key point *silently* missing from the arc is a blocking failure — t
 untraced claim. (Compression is editing; silent omission is misrepresentation.)
 
 ### 3 — Design the narrative arc (engage, and obey the logic)
-Choose an order that fits the *purpose* (a conference talk, a status update, and a defense are
+
+🔴 **Produce 2–3 CANDIDATE arcs over the same evidence ledger, then choose — never derive one.**
+The design side has run a competition for years (the direction gate shows rendered alternatives and
+`scripts/directions_diversity.py` measures whether they really differ); content had none. The arc
+was derived from the primary goal and the plan then recorded "which arc I chose and why" — a reason
+written after the fact, against no alternative, with nothing anywhere reporting that the runner-up
+never existed. That asymmetry is expensive in one specific way: **the arc is the only decision whose
+error invalidates everything downstream.** A wrong form costs one slide; a wrong arc costs the design
+plan and the build under it. It is the decision that most deserves an alternative and was getting the
+least.
+
+Each candidate must name the four things that make it an ARGUMENT rather than an order of slides:
+the **audience question** it answers, the **objection** it pre-empts, its **closing ask**, and the
+**evidence** (claim-ledger ids) it carries. Divergence has to move the CLAIM, not the wording —
+evidence before the claim instead of after it, a different ask, a different objection.
+
+🔴 **Check the set mechanically before choosing.** Get the exact shape with
+`python3 scripts/arc_divergence.py --template` (it also prints both vocabularies) rather than
+guessing it — one object per candidate, all seven fields required:
+
+```json
+[{"name": "contribution", "shape": "contribution-first",
+  "roles": ["problem", "method", "evidence", "comparison", "conclusion"],
+  "audience_question": "is the INR formulation actually better than L+S",
+  "objection": "the gain comes from the regulariser, not the representation",
+  "closing_ask": "accept implicit neural representation as the recon backbone",
+  "evidence": ["c1", "c3", "c4"]}]
+```
+
+`shape` is a closed list (`--template` prints it; pick the nearest and put any nuance in the
+one-clause reason). `roles` is the §4 role vocabulary and is **open** — an unrecognised role is
+accepted, not refused, and only reported so a typo stays visible. `evidence` is claim-ledger ids:
+**which evidence an arc leaves on the floor is most of what distinguishes it**, so a candidate set
+where every list is empty is refused outright.
+
+Then run `python3 scripts/arc_divergence.py <arcs>.json` — it measures every pair on shape · opening order ·
+ask · stance and flags a pair matching on ≥3, and separately flags a candidate carrying under half
+the winner's evidence. That second check exists because arcs collapse differently from directions:
+directions become three colourways of one layout, arcs become **one real argument plus two foils** —
+and a pure divergence measure scores a two-beat sketch as beautifully divergent. A flag is never a
+kill: **rediverge, or keep the set and record the reason on the `arc gate:` line** of the content
+checkpoint (`references/checkpoint-convention.md`). A decision arc legitimately carrying less
+evidence than a contribution arc is a real answer — an unrecorded one is not.
+
+**The coordinator picks; this is not a new user stop.** You hand up the candidates with the losers
+and their one-clause reasons; the pick is made where the plan is read, and the whole competition
+reaches the user as the checkpoint's `arc gate:` line. A user who disagrees vetoes in one glance —
+the same economics as the direction gate, without the extra wait.
+
+Then, for each candidate and for the one you pick: choose an order that fits the *purpose* (a
+conference talk, a status update, and a defense are
 sequenced differently — let the rubric guide you). **Let two interview answers steer the arc and
 the density directly:**
 - **Primary goal / intent → the arc shape.** *Inform & educate* builds to the evidence and
   explains; *support a decision* leads with the recommendation + the ask, then justifies (don't
   bury the decision); *inspire / motivate action* opens on the stakes and closes on a clear call
-  to action. State which arc you chose and why in the Narrative arc section.
+  to action. **This derivation SEEDS the candidate set, it no longer settles it** — the derived
+  shape is candidate #1, and the competition exists to find out whether this deck's material
+  argues better some other way. State the chosen shape and the alternatives it beat in the
+  Narrative arc section.
 - **Delivery context → the density / self-sufficiency of each slide's copy.** *Presented live* (or
   screen-shared in a meeting) → few words per slide, the speaker carries the prose (put it in
   speaker notes). *Sent digitally / self-read* → each slide must stand alone with the explanation
@@ -590,7 +658,19 @@ abstract / conclusion / README tagline / the user's stated goal). If it would su
 fix the message before continuing.
 
 ## Narrative arc
-- The narrative **arc in one line** (which arc shape you chose and why — inform / decide / inspire).
+- **Arc candidates (required — 2–3 rows, §3).** One row per candidate over the SAME ledger, the
+  chosen one marked. The four argument fields are mandatory on every row, losers included: a loser
+  with no ask and no objection is a foil, and a winner that beat a foil beat nothing.
+
+  | ✓ | name | shape | opening 3 roles | audience question | objection pre-empted | closing ask | evidence (ledger ids) |
+  |---|---|---|---|---|---|---|---|
+
+  Follow it with the **divergence verdict** — `arc divergence: ok` / `flagged <pair> → rediverged` /
+  `justified: <reason>` — from `scripts/arc_divergence.py`, and ONE clause per loser saying what it
+  lost on. This is what the checkpoint's `arc gate:` line is assembled from; write the JSON the
+  script reads beside the plan (scratch, never the deliverable folder) so the verdict is
+  reproducible rather than asserted.
+- The narrative **arc in one line** (the chosen shape and why it beat the others).
 - The **emotional curve in one line** (purpose-relative beats mapped across the arc, per §3 —
   with the PEAK beat marked) and
   **what is deliberately staged** — the information held back so it lands on a later slide.

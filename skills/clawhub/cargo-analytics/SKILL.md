@@ -1,8 +1,8 @@
 ---
 name: cargo-analytics
-description: Download workflow run results, export segment data, and monitor run metrics using the Cargo CLI. Use when the user wants run metrics, error rates, data export, or download results for their Cargo workspace. For billing and credit usage, use the cargo-billing skill instead. For explaining WHY a run failed or a batch has errors, use the cargo-diagnostics skill instead.
-version: "1.4.2"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+description: "Get data out of Cargo and measure what ran — download a run output, export a segment or model to CSV or JSON, and pull run and batch success and error counts. Triggers: \"download the results\", \"export this to CSV\", \"give me the file\", \"how many succeeded\", \"what is my error rate\", \"send me the enriched list\", \"get the output of that run\", \"how many records did it write\". Skip when: asking why something failed or where credits went — use cargo-diagnostics; asking about credits, plans, or invoices — use cargo-billing."
+version: "1.5.0"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -28,6 +28,19 @@ Measurement and export: monitoring run metrics, downloading run and batch result
 > See `references/examples/exports.md` for data export and download examples.
 > For billing, usage metrics, and subscription: use the `cargo-billing` skill.
 
+## Bootstrap
+
+Already signed in (`cargo-ai whoami` returns a workspace)? Skip to the next section.
+
+```bash
+npm install -g @cargo-ai/cli            # no global install? prefix every command with `npx @cargo-ai/cli`
+cargo-ai login --email you@company.com  # emailed code, no browser; creates the account on first use
+                                        # alternatives: --oauth (browser) · --token <api-token> (CI)
+cargo-ai whoami                         # confirm the active workspace before any write
+```
+
+Every command prints JSON to stdout; failures exit non-zero with `{"errorMessage": "..."}`. Anything that creates a run or a batch is async — pass `--wait-until-finished` or poll the matching `get`. When the full skill bundle is installed, [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) adds the CLI version pin, token scopes, and the admin-only surface.
+
 ## Scope — measure and export, not explain
 
 This skill answers **"what happened"** and **"give me the data"**: metrics, counts, downloads, exports. The moment the question becomes **"why"** — why did this run fail, why is the output wrong or empty, which root cause explains these errors, why is this play so expensive — switch to the `cargo-diagnostics` skill; its runbooks sequence the raw surfaces into a diagnosis.
@@ -40,10 +53,6 @@ This skill answers **"what happened"** and **"give me the data"**: metrics, coun
 | "Why is this play so expensive? Where do the credits go?" | `cargo-diagnostics` → `references/play-optimize-credits.md` |
 
 The two skills chain naturally: analytics **detects** (error rate spiked, batch reports failures), diagnostics **explains** (18 of 20 failures share one root cause), then analytics **retrieves** the clean results once the cause is fixed and the runs re-executed.
-
-## Prerequisites
-
-See [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) for install, login (`--oauth` / `--token`), JSON output conventions, and error shapes. Verify the session with `cargo-ai whoami` before running any of the commands below.
 
 ## Discover resources first
 
@@ -133,46 +142,58 @@ Read-only and capped: 30s execution time, 10 000 result rows, 10 000 000 rows sc
 
 Two distinct commands — pick the right one for the job.
 
-### `run download` — full run records (metadata + per-node `runContext`)
+### `run download` — one row per run, one column per node (gzipped CSV)
 
-Returns each run as a JSON object with status, timing, executions, and `runContext.<nodeSlug>` containing per-node outputs. Best for debugging or when you need the full execution history.
+Returns `{"url": "..."}` — a signed URL to a **gzipped CSV**. Each row is a run: `_uuid`, `_workspace_uuid`, `_workflow_uuid`, `_record_id`, `_record_title`, `_created_at`, `_finished_at`, `_status`, `_error_message`, followed by **one column per node slug**.
+
+**Each node column holds that execution's `title` — a truncated human-readable summary, not the node's output.** There is no `runContext` and no `executions[]` in this file. Treat it as a status board across many runs (which node errored, on which record), never as evidence of what a node produced — the same rule `cargo-diagnostics` applies to `title` everywhere else.
 
 ```bash
-# All finished runs
-cargo-ai orchestration run download --workflow-uuid <uuid> --is-finished
+# Every run of a workflow
+cargo-ai orchestration run download --workflow-uuid <uuid>
 
 # Date range
 cargo-ai orchestration run download --workflow-uuid <uuid> \
   --created-after <start-date> --created-before <end-date>
 
-# Specific statuses
+# Specific statuses (run statuses: idle, pending, running, success, error,
+# cancelling, cancelled, skipped — NOT "finished"/"failed")
 cargo-ai orchestration run download --workflow-uuid <uuid> --statuses success,error
+
+# Every run that reached a terminal state. `--is-finished` is `finished_at IS
+# NOT NULL`, which is wider than success+error: cancelled and skipped runs
+# stamp finishedAt too, so don't substitute one for the other.
+cargo-ai orchestration run download --workflow-uuid <uuid> --is-finished
 
 # From a specific batch
 cargo-ai orchestration run download --workflow-uuid <uuid> --batch-uuid <uuid>
 ```
 
-### `run download-outputs` — output of a specific node (CSV/JSON via signed URL)
+### `run download-outputs` — per-run input + output (CSV/JSON via signed URL)
 
-**This is the canonical way to get action results out of the platform.** Maps to API `POST /v1/orchestration/runs/download-outputs`. Returns `{"url": "..."}` — a signed URL to a CSV (default) or JSON file containing only the output node's data with input/output context. Faster and cheaper than downloading whole run records when you only need the result.
+**This is the canonical way to get action results out of the platform.** Maps to API `POST /v1/orchestration/runs/download-outputs`. Returns `{"url": "..."}` — a signed URL to a CSV (default) or JSON file. One row per run: the same `_`-prefixed run metadata, plus `input` (the first node's resolved config) and `output` (the chosen node's context, defaulting to the **last executed node** when `--output-node-slug` is omitted).
 
 ```bash
-# Required: --workflow-uuid + --output-node-slug
+# --workflow-uuid is the only required flag
 cargo-ai orchestration run download-outputs \
   --workflow-uuid <uuid> \
-  --output-node-slug <slug> \
   --format json \
-  --is-finished
+  --limit 20
 
-# Filter by batch + status
+# Pin the output node explicitly, and filter by batch
 cargo-ai orchestration run download-outputs \
   --workflow-uuid <uuid> \
   --output-node-slug <slug> \
-  --batch-uuid <uuid> \
-  --statuses finished
+  --batch-uuid <uuid>
 ```
 
-To find the `output-node-slug`: `cargo-ai orchestration release get <release-uuid>` → look at `nodes[].slug`. The terminal output node is typically named `output` or `end`.
+To find the `output-node-slug`: `cargo-ai orchestration release get <release-uuid>` → look at `nodes[].slug`. The terminal output node is typically named `output` or `end`. Without `--limit`, the file covers **every** matching run of the workflow, so pass one when you only need a sample.
+
+### Getting the full `runContext` for several runs
+
+You can't, in one call. The full per-node context is a **per-run S3 object**, and `orchestration run get <run-uuid>` is the only command that hydrates it — one run at a time. The two exports above are projections: `download` gives you node *titles* across many runs, `download-outputs` gives you first-node input + one node's output across many runs. For everything in between, loop `run get` over the UUIDs from the discovery ladder in [`../cargo-diagnostics/references/run-trace.md`](../cargo-diagnostics/references/run-trace.md) § 0.
+
+Orchestration SQL is not an alternative here: `runs` and `spans` carry status, timing, and credits, but no node input/output columns.
 
 ## Downloading batch results
 

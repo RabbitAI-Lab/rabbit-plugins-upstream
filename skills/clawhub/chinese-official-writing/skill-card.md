@@ -1,50 +1,71 @@
-## Description: <br>
-Drafts, rewrites, compresses, and reviews Chinese official documents and formal workplace materials, including requests, reports, notices, plans, minutes, speeches, institutional rules, procurement materials, and AI-compute service documents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于中文公文、事务性材料和新闻稿件的起草、改写、压缩和复核；用户要求写申请、请示、报告、通知、通告、意见、决定、决议、议案、公报、命令、函、复函、批复、说明、方案、纪要、公告、公示、通报、征求意见函、制度、规定、办法、管理办法、实施细则、操作规程、工作要点、总结、调研、讲话、致辞、采购公告、可研、审查材料、AI 算力、新闻稿、新闻消息、快讯、活动报道、活动新闻稿、新闻通稿、新闻评论、时评、评论员文章等正式文本，或需校验这类材料的文种、格式、去口语化、降 AI 味时使用；适用于机关、企事业单位、学校、新闻机构。
 
-## Publisher: <br>
-[gongyu0918-debug](https://clawhub.ai/user/gongyu0918-debug) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gongyu0918-debug](https://clawhub.ai/user/gongyu0918-debug)
 
-## Use Case: <br>
-Employees, administrators, and agents use this skill to draft or review Chinese official documents and formal work materials while preserving document genre, reporting relationship, factual boundaries, required handling elements, and formal tone. It is also useful for checking AI-like phrasing, incomplete placeholders, official-document format risks, and AI-compute procurement or service materials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may inspect formal document text that the user provides, and an optional lint script can read local draft files when invoked. <br>
-Mitigation: Use it only on documents the user intentionally provides or explicitly asks the lint script to inspect, and avoid sharing sensitive draft content unless the deployment environment is approved for that data. <br>
-Risk: Generated official-document language can be mistaken for a final legal, financial, procurement, audit, or signing conclusion. <br>
-Mitigation: Require human review for formal signing, legal, financial, procurement, audit, and approval decisions before use. <br>
-Risk: Sparse prompts can lead to unsupported factual detail in formal documents if factual boundaries are not enforced. <br>
-Mitigation: Keep drafts limited to user-provided facts and mark missing business facts for user confirmation instead of inventing organizations, dates, amounts, contacts, or decisions. <br>
+## Use Case:
 
+Employees, external users, and writing teams use this skill to draft, revise, compress, and review Chinese official documents, formal workplace materials, and news-style organizational texts. It helps preserve document type, official tone, formatting expectations, factual boundaries, and review checks for genres such as requests, reports, notices, letters, minutes, institutional rules, and AI compute procurement materials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gongyu0918-debug/skills/chinese-official-writing) <br>
-- [README](artifact/README.md) <br>
-- [Skill definition](artifact/SKILL.md) <br>
-- [Workflow](artifact/references/workflow.md) <br>
-- [Genre routing](artifact/references/genre-routing.md) <br>
-- [Handling elements](artifact/references/handling-elements.md) <br>
-- [GB/T 9704 formatting](artifact/references/format-gbt9704.md) <br>
-- [Review checklist](artifact/references/review-checklist.md) <br>
-- [AI-compute document guidance](artifact/references/ai-compute-docs.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, code, shell commands, configuration] <br>
-**Output Format:** [Plain text or Markdown, with optional code, shell command, or configuration snippets when the user asks for supporting files or checks.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should stay within user-provided facts and avoid adding real organizations, policies, dates, amounts, contacts, signatures, approval conclusions, or other unsupported details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.25 (source: server evidence release.version and skill metadata) <br>
+Risk: Drafts may contain incorrect official numbers, dates, signing details, or document-specific facts if the user-provided material is incomplete or inaccurate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify official numbers, dates, signing details, policy references, and approvals against authoritative sources before final use.
+
+Risk: The optional local lint script parses draft files supplied for review, which could expose unrelated private content if the wrong file is provided.
+
+Mitigation: Run the lint script only on draft files intended for this task and avoid pointing it at unrelated private files.
+
+Risk: The skill can improve tone and structure but does not independently validate the completeness of document-type elements or real-world facts.
+
+Mitigation: Use the referenced genre, handling-element, and review checklists for final human review of document type, authority, facts, formatting, and approval readiness.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gongyu0918-debug/skills/chinese-official-writing)
+- [Workflow](artifact/references/workflow.md)
+- [Genre Routing](artifact/references/genre-routing.md)
+- [Handling Elements](artifact/references/handling-elements.md)
+- [Information Selection](artifact/references/information-selection.md)
+- [Argument Chains](artifact/references/argument-chains.md)
+- [Official Style](artifact/references/official-style.md)
+- [Formulaic Language](artifact/references/formulaic-language.md)
+- [Review Checklist](artifact/references/review-checklist.md)
+- [Final Review Layers](artifact/references/final-review-layers.md)
+- [Proofreading Checklist](artifact/references/proofreading-checklist.md)
+- [Anti-AI Pattern Checks](artifact/references/anti-ai-patterns.md)
+- [GB/T 9704 Format Reference](artifact/references/format-gbt9704.md)
+- [AI Compute Documents](artifact/references/ai-compute-docs.md)
+- [External Research and Public Source Checks](artifact/references/external-research.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Shell commands]
+
+**Output Format:** [Chinese prose, review notes, Markdown, and optional local lint command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May provide draft text, revision suggestions, document review findings, and optional prose-lint findings for user-supplied .txt, .md, or .docx drafts.]
+
+## Skill Version(s):
+
+1.6.11 (source: SKILL.md frontmatter metadata and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

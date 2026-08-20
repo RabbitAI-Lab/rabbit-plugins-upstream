@@ -1,45 +1,64 @@
-## Description: <br>
-Provides UU Paotui same-city delivery and on-site errand workflows, including price quotes, order creation, order lookup, cancellation, payment handling, registration, and courier tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮我跑腿 enables an agent to price, create, query, cancel, and track UU same-city delivery and errand orders, including send, pick-up, buying, and on-site help services.
 
-## Publisher: <br>
-[uupt-mcp](https://clawhub.ai/user/uupt-mcp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[uupt-mcp](https://clawhub.ai/user/uupt-mcp)
 
-## Use Case: <br>
-External users and agents use this skill to price, place, manage, cancel, and track UU Paotui same-city courier and errand orders through Node.js or Python commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create real-world delivery or errand orders and the artifact instructions say to create orders without a second confirmation. <br>
-Mitigation: Require explicit user confirmation of the full order summary, recipient phone number, address, price, and service type before creating or canceling an order. <br>
-Risk: The skill handles developer app secrets, openId values, phone numbers, addresses, payment links, and courier tracking data. <br>
-Mitigation: Prefer environment variables or a secret store over config.json, avoid sharing credentials in chat, and redact personal data from logs and transcripts where possible. <br>
-Risk: Payment links and WeChat QR generation may expose payment URLs to third-party services. <br>
-Mitigation: Verify payment destinations before sharing links or QR codes, and use QR generation only when needed for the selected channel. <br>
-Risk: The security verdict is suspicious because the skill has weak disclosure around sensitive delivery and payment data. <br>
-Mitigation: Install only from the server-resolved publisher profile and review the skill behavior before granting access to real customer orders. <br>
+## Use Case:
 
+External users and their agents use this skill to arrange real-world same-city delivery and errand services through UU, including fee estimates, order creation, payment handoff, order status checks, cancellation, and courier tracking.
 
-## Reference(s): <br>
-- [UU Paotui Open Platform](https://open.uupt.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/uupt-mcp/skills/bang-wo-pao-tui) <br>
+### Deployment Geography for Use:
 
+China, subject to UU service availability.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, API calls, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown/text with inline shell commands, script status tokens, order details, payment links, and optional QR image file paths.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update local config.json, create payment_qrcode.png, and return delivery addresses, phone numbers, payment URLs, order status, and courier tracking details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release metadata; artifact frontmatter and package.json list 1.0.0) <br>
+Risk: The skill can create or cancel real-world paid delivery and errand orders with limited confirmation safeguards.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit human confirmation before running order creation or cancellation commands, including review of addresses, phone numbers, notes, price, and cancellation fees.
+
+Risk: The skill can display sensitive order, recipient, address, phone, payment, and courier information.
+
+Mitigation: Redact sensitive fields in shared logs and responses, and limit use to environments where local configuration and output files are protected.
+
+Risk: The skill can contact UU and other network services and stores an authorization identifier locally.
+
+Mitigation: Install only after reviewing the network behavior and store local configuration with least-privilege file permissions.
+
+Risk: The skill includes behavior that can silently replace its installed code from a remote update source.
+
+Mitigation: Disable silent self-update, use platform-managed updates, and review and scan any new version before deployment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/uupt-mcp/skills/bang-wo-pao-tui)
+- [UU Open Platform](https://open.uupt.com)
+- [UU Open API v3 Endpoint](https://api-open.uupt.com/openapi/v3/)
+- [UU Agent Skill Quick Start](https://open.uupt.com/#/development/agentSkill/quickStart)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Text, JSON, Files]
+
+**Output Format:** [Markdown guidance with shell commands, structured script output, payment links, and optional QR-code image files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update local authorization/configuration files and payment QR-code files.]
+
+## Skill Version(s):
+
+1.0.9 (source: SKILL.md frontmatter, package.json, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

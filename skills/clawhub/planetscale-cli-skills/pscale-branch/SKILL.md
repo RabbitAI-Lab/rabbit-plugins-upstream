@@ -1,6 +1,6 @@
 ---
 name: pscale-branch
-description: Create, delete, promote, diff, inspect query patterns, and manage PlanetScale database branches, Postgres parameters, and Vitess workflows. Use when creating development branches for schema changes, viewing schema diffs, downloading query pattern reports, changing Postgres branch size, replicas, or parameters, promoting branches to production, managing branch lifecycle, or creating vtctld MoveTables workflows. Essential for schema migration workflows and branch-level query analysis. Triggers on branch, create branch, schema diff, query patterns, query pattern report, resize branch, Postgres parameters, promote branch, development branch, database branch, MoveTables, global keyspace.
+description: Create, delete, promote, diff, inspect query patterns, and manage PlanetScale database branches, Postgres parameters, Vitess VTGate capacity, tablet throttling, keyspace routing rules, and Vitess workflows. Use when creating development branches for schema changes, viewing schema diffs, changing Postgres branch size, inspecting or resizing VTGates, inspecting or replacing live keyspace routing rules, changing tablet throttler rules, promoting branches, or creating vtctld MoveTables workflows. Essential for schema migration workflows and branch-level query analysis. Triggers on branch, create branch, schema diff, query patterns, resize branch, Postgres parameters, VTGate, tablet throttler, keyspace routing rules, routing rules, vtctld, promote branch, MoveTables, global keyspace.
 ---
 
 # pscale branch
@@ -48,6 +48,17 @@ pscale branch resize <database> <branch-name> \
 pscale branch resize status <database> <branch-name> --format json
 pscale branch resize cancel <database> <branch-name> --format json
 
+# Inspect and resize VTGates on a Vitess production branch
+pscale branch vtgate show <database> <branch-name> --format json
+pscale branch vtgate resize <database> <branch-name> \
+  --vtgate-size VTG_320 \
+  --vtgate-autoscaling \
+  --vtgate-count 2 \
+  --vtgate-max-count 8 \
+  --vtgate-target-cpu-utilization 50 \
+  --format json
+pscale branch vtgate resize status <database> <branch-name> --format json
+
 # Inspect live branch connections (Postgres and Vitess)
 pscale branch connections show <database> <branch-name> --format json
 pscale branch connections top <database> <branch-name>
@@ -58,10 +69,16 @@ pscale branch query-patterns download <database> <branch-name> --output query-pa
 # Stream the CSV to stdout for pipelines
 pscale branch query-patterns download <database> <branch-name> --output - > query-patterns.csv
 
-# Inspect Vitess routing rules
+# Inspect Vitess routing rules and tablet state
 pscale branch routing-rules get <database> <branch-name>
 pscale branch vtctld get-routing-rules <database> <branch-name>
+pscale branch vtctld get-keyspace-routing-rules <database> <branch-name> --format json
 pscale branch vtctld get-shard <database> <branch-name> --keyspace <keyspace> --shard <shard>
+pscale branch vtctld list-tablets <database> <branch-name> --format json
+
+# Inspect one tablet's throttler state before proposing a change
+pscale branch vtctld throttler status <database> <branch-name> \
+  --tablet-alias <zone-tablet-alias> --format json
 
 # Create a Vitess MoveTables workflow whose generated sequence tables live in a global keyspace
 pscale branch vtctld move-tables create <database> <branch-name> \
@@ -211,6 +228,35 @@ pscale branch resize cancel <database> <branch-name> --org <org> --format json
 
 Review the parameter catalog's `restart` and `immutable` fields before proposing a change. Surface restart impact and capacity/cost impact to the user, then obtain approval before running `resize`. Request states include `queued`, `pending`, `resizing`, `completed`, and `canceled`; only the last two are terminal. A JSON no-op returns `{"result":"no_change","branch":"<branch>"}` rather than a change request. After completion, verify with both `resize status` and `branch show`.
 
+### Resize Vitess VTGates
+
+`pscale branch vtgate` manages VTGate capacity for Vitess production branches. Development branches cannot be resized. Inspect current capacity first, propose the exact size/count/autoscaling change and cost/capacity impact, and obtain approval before creating or canceling a resize.
+
+```bash
+# Read the applied configuration
+pscale branch vtgate show <database> <branch> --org <org> --format json
+
+# Fixed capacity: two VTGates per availability zone
+pscale branch vtgate resize <database> <branch> --org <org> --format json \
+  --vtgate-size VTG_320 \
+  --vtgate-count 2 \
+  --vtgate-autoscaling=false
+
+# Autoscaling: minimum two and maximum eight VTGates per availability zone
+pscale branch vtgate resize <database> <branch> --org <org> --format json \
+  --vtgate-size VTG_320 \
+  --vtgate-autoscaling \
+  --vtgate-count 2 \
+  --vtgate-max-count 8 \
+  --vtgate-target-cpu-utilization 50
+
+# Track the latest request; cancel only while it is still queued
+pscale branch vtgate resize status <database> <branch> --org <org> --format json
+pscale branch vtgate resize cancel <database> <branch> --org <org> --format json
+```
+
+At least one resize flag is required. Omitted flags preserve their current values; pass `--vtgate-autoscaling=false` explicitly to disable autoscaling. `--vtgate-count` is the per-availability-zone fixed count, or the minimum when autoscaling is enabled. After the request completes, verify both `resize status` and `vtgate show`; do not treat the requested values as applied while status is non-terminal.
+
 ### Routing rules
 
 ```bash
@@ -220,11 +266,20 @@ pscale branch routing-rules get <database> <branch-name>
 # Vitess only: read live routing rules from vtctld/current cluster state
 pscale branch vtctld get-routing-rules <database> <branch-name>
 
+# Vitess only: read live keyspace-to-keyspace routing rules
+pscale branch vtctld get-keyspace-routing-rules <database> <branch-name> --format json
+
 # Update routing rules from a file
 pscale branch routing-rules update <database> <branch-name> --routing-rules routing-rules.json
+
+# Replace live keyspace routing rules (approved write)
+pscale branch vtctld apply-keyspace-routing-rules <database> <branch-name> \
+  --rules-file keyspace-routing-rules.json --format json
 ```
 
 Use `vtctld get-routing-rules` when debugging propagation/live cluster state; use `routing-rules get` when you need the schema snapshot contract.
+
+Keyspace routing rules are a separate live map of `from_keyspace` to `to_keyspace`. Before replacing them, save `get-keyspace-routing-rules` output, validate every entry includes both fields, show the complete proposed replacement, and obtain explicit approval. `apply-keyspace-routing-rules` requires exactly one of `--rules` or `--rules-file`; an empty `rules` array clears all live keyspace routing rules. By default the command rebuilds SrvVSchema objects; use `--cells` only to scope that rebuild deliberately, and use `--skip-rebuild` only with an explicit propagation plan. Re-run `get-keyspace-routing-rules` after the write and compare the full returned set.
 
 ### Vitess shard inspection
 
@@ -241,6 +296,47 @@ pscale branch vtctld get-shard <database> <branch-name> \
   --keyspace commerce \
   --shard '-80'
 ```
+
+### Vitess tablet throttler configuration
+
+`pscale branch vtctld throttler update-config` mutates a Vitess keyspace's tablet-throttler policy. Inspect tablet aliases and current state first, show the exact keyspace/app/metrics/rule to the user, and obtain explicit approval before changing it.
+
+```bash
+# Discover tablets and inspect current throttler state
+pscale branch vtctld list-tablets <database> <branch> --org <org> --format json
+pscale branch vtctld throttler status <database> <branch> --org <org> \
+  --tablet-alias <zone-tablet-alias> --format json
+
+# Temporarily throttle an app at 50% for 30 minutes
+pscale branch vtctld throttler update-config <database> <branch> --org <org> \
+  --keyspace <keyspace> \
+  --throttle-app rowstreamer \
+  --throttle-app-ratio 0.5 \
+  --throttle-app-duration 30m \
+  --format json
+
+# Remove one app throttle rule
+pscale branch vtctld throttler update-config <database> <branch> --org <org> \
+  --keyspace <keyspace> --unthrottle-app rowstreamer --format json
+
+# Assign the metrics checked for one app
+pscale branch vtctld throttler update-config <database> <branch> --org <org> \
+  --keyspace <keyspace> --app-name vreplication \
+  --app-metrics lag,loadavg --format json
+
+# Change the keyspace's overall enable state explicitly
+pscale branch vtctld throttler update-config <database> <branch> --org <org> \
+  --keyspace <keyspace> --enabled=false --format json
+```
+
+Rules:
+
+- Omit `--enabled` to preserve the current enable state; use `--enabled=true` or `--enabled=false` only for an approved state change.
+- `--throttle-app` and `--unthrottle-app` are mutually exclusive.
+- `--app-name` and `--app-metrics` must be passed together; `--app-name` cannot be empty.
+- `--throttle-app-ratio` is between `0.00` and `1.00` and defaults to `1`; `--throttle-app-duration` defaults to one hour.
+- `--threshold` changes the replication-lag threshold (in seconds) for the keyspace's default check; treat it as a keyspace-wide mutation that needs the same explicit approval as an app rule change.
+- After a write, re-run `throttler status` on the relevant tablets and verify the returned policy. Do not assume one tablet proves cluster-wide propagation when the branch has multiple tablets.
 
 ### Vitess MoveTables and global sequences
 

@@ -81,27 +81,37 @@ This skill applies **exclusively to the Nano cryptocurrency protocol** (ticker: 
 
 When the environment provides `xno-mcp` tools (`wallet_list`, `wallet_send`, `wallet_receive`, `wallet_balance`, `util_convert`, `util_qr`, `util_validate`, `rpc_account_balance`, `payment_create`, etc.) — **always use them first**. They handle signing, PoW, and broadcast automatically via OWS.
 
-If the client supports MCP, set it up as a "stdio" type MCP server:
+If the client supports MCP, set it up as a "stdio" type MCP server.
 
-    npx -y -p xno-skills@4.5.2 -- mcp
+**Preferred — global install** (avoids `npx` concurrency issues that cause handshake failures):
+
+    npm install -g xno-skills@4.7.1
+    xno-skills mcp
+
+**Fallback** (only if global install is not possible):
+
+    npx -y xno-skills@4.7.1 mcp
+
+> **Why not `npx` by default?** When multiple agent sessions start concurrently, `npx` can fail during package resolution — the second process exits before the MCP handshake completes. A global install eliminates this race.
 
 MCP is the primary execution path because tools, schemas, and results are structured for the client. Use the included CLI script (`xno-skills`) only as a fallback when MCP is unavailable or the client cannot attach MCP servers. MCP and the CLI target EXACTLY the same underlying code paths — two access paths, not two different products.
 
 ### 2. Fall back to CLI only when MCP is unavailable
 
-If `xno-mcp` tools are not available, or the user explicitly asks for CLI usage, fall back to the `xno-skills` CLI in this priority order:
+If `xno-mcp` tools are not available, or the user explicitly asks for CLI usage, use the `xno-skills` CLI in this priority order:
 
 ```
-1. bunx -y xno-skills@4.5.2 <command>
-2. pnpm dlx xno-skills@4.5.2 <command>
-3. npx -y xno-skills@4.5.2 <command>
+1. xno-skills <command>              (global install — preferred)
+2. bunx -y xno-skills@4.7.1 <command>
+3. pnpm dlx xno-skills@4.7.1 <command>
+4. npx -y xno-skills@4.7.1 <command>
 ```
 
-Do **not** assume `xno-skills` is installed globally. Always use one of the above forms with `@latest` to get critical bugfixes and to prevent interactive prompts from freezing.
+If the global `xno-skills` binary is not available, fall through to the next option. Always pin the version (`@4.5.2`) with `bunx`/`pnpm dlx`/`npx` to prevent interactive prompts from freezing.
 
 Before guessing a subcommand, run `--help`:
 ```bash
-bunx -y xno-skills@4.5.2 --help
+xno-skills --help              # or: bunx -y xno-skills@4.7.1 --help
 ```
 
 ### 3. Wallet lifecycle → `ows` skill only
@@ -127,10 +137,10 @@ When the user asks for an account, block, transaction, or explorer link, always 
 
 - **State verification**: Always fetch balance and frontier via RPC before manually building a block. Never hallucinate previous hashes.
 - **PoW is automatic**: MCP tools and the CLI both handle PoW internally. Never attempt to supply or generate PoW manually.
-- **Proactivity on pending funds**: If you see pending funds during any balance check, call `wallet_receive` immediately. Do not wait for the user to ask.
+- **Pre-send state**: Before `wallet_send`, inspect the source wallet's confirmed balance and total receivable amount with `wallet_balance`. If confirmed funds cannot cover the requested send and receivables are needed, call `wallet_receive`, then recheck. Do not submit receive blocks merely because unrelated funds are pending.
 - **Persistence on "Account not found"**: This is normal for a brand-new, unopened account. Continue — `wallet_receive` will automatically build an open block (sets `previous` to zeros), sign it via OWS, generate PoW, and broadcast. Never conclude you are unauthorized or that OWS cannot sign Nano blocks.
 - **No mnemonic exports**: Never call `ows wallet export` or suggest exporting to a third-party wallet unless the user explicitly commands it.
-- **Supply chain**: Only use `xno-skills@4.5.2` and `@open-wallet-standard/core`. No other npm packages.
+- **Supply chain**: Only use `xno-skills@4.7.1` and `@open-wallet-standard/core`. No other npm packages.
 - **Stop-loss**: If you have made 5 tool calls without completing the operation, stop and report what you tried, what failed, and ask for guidance. Hard limits: max 3 retries of the same failing tool; max 2 `config_set` RPC endpoint switches.
 
 ---
@@ -161,8 +171,8 @@ To **create** a new wallet, delegate to the `ows` skill. Then return here for al
 
 **Via CLI (required flags only):**
 ```bash
-bunx -y xno-skills@4.5.2 balance --wallet "my-wallet"
-bunx -y xno-skills@4.5.2 rpc account-balance <address>
+bunx -y xno-skills@4.7.1 balance --wallet "my-wallet"
+bunx -y xno-skills@4.7.1 rpc account-balance <address>
 ```
 
 Full options: [balance](references/balance.md), [rpc_account-balance](references/rpc_account-balance.md)
@@ -172,7 +182,7 @@ Full options: [balance](references/balance.md), [rpc_account-balance](references
 - `https://nanoslo.0x.no/proxy` (secondary)
 - `https://rpc.nano.to` (tertiary)
 
-**If you see pending funds: receive them immediately** (see Receiving Funds section).
+Pending funds are not spendable. Receive them only when the user asks to claim them or they are needed for the requested operation (see Receiving Funds section).
 
 ---
 
@@ -184,7 +194,7 @@ A Nano transfer shows as **pending** until the recipient publishes a receive blo
 
 > **OWS DOES support Nano block signing.** Never assume otherwise.
 
-**Mandate**: When funds are pending, call `wallet_receive`. Do not analyze whether the account "exists" first. Just call it.
+When receipt is requested or needed to fund a send, call `wallet_receive`. Do not treat an unopened account as a blocker: `wallet_receive` handles the open block.
 
 **Via MCP:**
 ```json
@@ -193,7 +203,7 @@ A Nano transfer shows as **pending** until the recipient publishes a receive blo
 
 **Via CLI (required flags only):**
 ```bash
-bunx -y xno-skills@4.5.2 receive --wallet "my-wallet"
+bunx -y xno-skills@4.7.1 receive --wallet "my-wallet"
 ```
 
 Full options: [receive](references/receive.md)
@@ -218,6 +228,8 @@ If no `defaultRepresentative` is configured via `config_set`, pass `representati
 
 The account must be opened (have a receive block) and have sufficient balance.
 
+**Preflight**: Call `wallet_balance` for the source wallet before each send. If its confirmed balance is insufficient but its receivable amount can cover the requested send, call `wallet_receive` and recheck before sending. Do not receive unrelated pending funds solely because they exist.
+
 **Via MCP:**
 ```json
 { "name": "wallet_send", "arguments": { "wallet": "my-wallet", "destination": "nano_...", "amountXno": "0.01" } }
@@ -225,7 +237,7 @@ The account must be opened (have a receive block) and have sufficient balance.
 
 **Via CLI (required flags only):**
 ```bash
-bunx -y xno-skills@4.5.2 send --wallet "my-wallet" --to "nano_..." --amount-xno 0.01
+bunx -y xno-skills@4.7.1 send --wallet "my-wallet" --to "nano_..." --amount-xno 0.01
 ```
 
 Full options: [send](references/send.md)
@@ -341,7 +353,7 @@ Generates a terminal-friendly ASCII QR code for a Nano address, optionally with 
 
 **Via CLI (required args only):**
 ```bash
-bunx -y xno-skills@4.5.2 qr nano_1abc...
+bunx -y xno-skills@4.7.1 qr nano_1abc...
 ```
 
 Full options: [qr](references/qr.md)
@@ -368,7 +380,7 @@ All validation is **offline** — no network required.
 
 **Via CLI:**
 ```bash
-bunx -y xno-skills@4.5.2 validate nano_1abc...
+bunx -y xno-skills@4.7.1 validate nano_1abc...
 ```
 
 Full options: [validate](references/validate.md)
@@ -395,10 +407,10 @@ XNO uses **30 decimal places**. Floating-point arithmetic is unsafe. Always use 
 
 **Via CLI:**
 ```bash
-bunx -y xno-skills@4.5.2 convert 1 xno       # all units
-bunx -y xno-skills@4.5.2 convert 1 knano
-bunx -y xno-skills@4.5.2 convert 1000000000000000000000000000000 raw
-bunx -y xno-skills@4.5.2 convert 1 xno --json
+bunx -y xno-skills@4.7.1 convert 1 xno       # all units
+bunx -y xno-skills@4.7.1 convert 1 knano
+bunx -y xno-skills@4.7.1 convert 1000000000000000000000000000000 raw
+bunx -y xno-skills@4.7.1 convert 1 xno --json
 ```
 
 Full options: [convert](references/convert.md)
@@ -424,20 +436,20 @@ Present the user with this command to run locally:
 
 ```bash
 # Sign — run this yourself, replacing the placeholder with your actual key
-bunx -y xno-skills@4.5.2 sign "<message>" --key YOUR_PRIVATE_KEY_HEX
+bunx -y xno-skills@4.7.1 sign "<message>" --key YOUR_PRIVATE_KEY_HEX
 
 # Sign with JSON output
-bunx -y xno-skills@4.5.2 sign "<message>" --key YOUR_PRIVATE_KEY_HEX --json
+bunx -y xno-skills@4.7.1 sign "<message>" --key YOUR_PRIVATE_KEY_HEX --json
 ```
 
 For verify, the agent *can* run this directly (no secret material involved):
 
 ```bash
 # Verify
-bunx -y xno-skills@4.5.2 verify <nano_address> "<message>" <signature-hex>
+bunx -y xno-skills@4.7.1 verify <nano_address> "<message>" <signature-hex>
 
 # Verify with JSON output
-bunx -y xno-skills@4.5.2 verify <nano_address> "<message>" <signature-hex> --json
+bunx -y xno-skills@4.7.1 verify <nano_address> "<message>" <signature-hex> --json
 ```
 
 **NOMS standard (ORIS-001)**: Signatures are computed over a binary payload with a magic header, ensuring a valid signature cannot be misinterpreted as a Nano transaction block.
@@ -492,7 +504,11 @@ Full options: [sign](references/sign.md), [verify](references/verify.md)
 ### PoW Thresholds (Epoch v2, 2026)
 
 - Send / Change: `fffffff800000000`
-- Receive / Open: `fffffe0000000000`
+- Receive / Open / Epoch: `fffffe0000000000`
+
+Epoch blocks use the receive/open threshold above. The historical epoch-1
+threshold `ffffffc000000000` is legacy-only and must not be selected for
+current mainnet blocks.
 
 PoW input:
 - Open block (height 1): `blake2b(nonce || public_key)`
@@ -512,7 +528,7 @@ PoW input:
 { "name": "wallet_change_rep", "arguments": { "wallet": "my-wallet", "representative": "nano_..." } }
 ```
 ```bash
-bunx -y xno-skills@4.5.2 change-rep --wallet "my-wallet" --representative "nano_..."
+bunx -y xno-skills@4.7.1 change-rep --wallet "my-wallet" --representative "nano_..."
 ```
 
 Full options: [change-rep](references/change-rep.md)
@@ -683,6 +699,6 @@ On first use, the system probes local backends to build a local-first execution 
 ```
 1. wallet_list: {}                    → discover "my-wallet" exists
 2. wallet_balance: { wallet: "my-wallet" }    → check balance / pending
-3. wallet_receive: { wallet: "my-wallet" }    → pocket any pending funds
+3. wallet_receive: { wallet: "my-wallet" }    → only if receipt was requested or pending funds are needed
 4. wallet_send: { wallet: "my-wallet", destination: "nano_...", amountXno: "0.01" }
 ```

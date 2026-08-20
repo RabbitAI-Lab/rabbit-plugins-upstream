@@ -1,47 +1,68 @@
-## Description: <br>
-标书智能制作工具，凭 App Key 调用开放 API 完成评分点应答、投标文件生成、合规审查与报告排版。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses a user-provided App Key to call the 百炼标书 service for Chinese tender document interpretation, bid document drafting, and compliance review.
 
-## Publisher: <br>
-[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666)
 
-## Use Case: <br>
-Bid and proposal teams use this skill to analyze tender requirements, identify disqualification risks, generate editable bid documents, and review submitted bid files against tender criteria. It is intended for workflows where users provide local tender or bid files and consent to processing by the 百炼标书 service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents may contain business, pricing, or personal information and are uploaded to biaoshu.zhiliaobiaoxun.com for processing. <br>
-Mitigation: Confirm user consent before upload, use only files the user explicitly provides, and avoid processing cloud links directly. <br>
-Risk: The App Key is an account credential and may be stored on disk in config.json. <br>
-Mitigation: Keep the App Key out of chat, store it only in the local credential file with restricted permissions, and reset it through the provider if exposed. <br>
-Risk: Generated reports, DOCX outputs, and task results may remain locally or in the service account history for a limited period. <br>
-Mitigation: Tell users where outputs are written, delete local artifacts when no longer needed, and manage server-side history through the provider account. <br>
-Risk: Changing the API base can send files and credentials to a non-default endpoint. <br>
-Mitigation: Use the default biaoshu.zhiliaobiaoxun.com endpoint unless the user intentionally trusts an alternate endpoint. <br>
+## Use Case:
 
+External users and agents use this skill when a user explicitly provides local Chinese tender or bid files and asks for bid interpretation, bid document generation, or pre-submission compliance review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-radar) <br>
-- [百炼标书 service](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [API contract reference](references/api.md) <br>
-- [Usage reference](references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with generated HTML, Word, and DOCX file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local files selected by the user, a local App Key configuration file, and asynchronous API jobs that may incur account-point charges.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata) <br>
+Risk: Tender and bid files may contain confidential business, pricing, or personal information and are uploaded to the remote service for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm user consent before upload and avoid processing files the user is not authorized to send to the service.
+
+Risk: Generated files and task results may be retained under the App Key account after processing.
+
+Mitigation: Tell users that uploaded files and generated outputs are retained by the service account and direct them to manage historical data in the official service.
+
+Risk: The App Key is a full account credential stored in a local config file.
+
+Mitigation: Keep the App Key out of chat, store it only in the local config file with restrictive permissions, and remove config.json when access is no longer needed.
+
+Risk: Optional endpoint overrides can redirect API traffic away from the stated official service.
+
+Mitigation: Use the official service endpoint and avoid ZCM_BASE or login --base unless the alternate destination is fully trusted.
+
+Risk: Bid drafting and compliance outputs can affect commercial submissions and may contain incomplete or incorrect recommendations.
+
+Mitigation: Have qualified staff review generated bid documents, risk findings, and retained待填项 before submission.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-radar)
+- [百炼标书 Service](https://biaoshu.zhiliaobiaoxun.com/)
+- [API Contract Reference](artifact/references/api.md)
+- [Usage Runbook](artifact/references/usage.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance]
+
+**Output Format:** [Markdown guidance plus generated HTML reports, Word reports, and .docx bid documents]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated files are written locally under biaoshu-bailian-files or a configured output path; service results may also be retained by the remote account.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,11 +1,11 @@
 # SCH\_PrimitiveText class
 
-原理图 &amp; 符号 / 文本图元类
+Schematic &amp; symbol / text primitive class
 
 ## Signature
 
 ```typescript
-declare class SCH_PrimitiveText implements ISCH_PrimitiveAPI 
+export class SCH_PrimitiveText implements ISCH_PrimitiveAPI 
 ```
 **Implements:** [ISCH\_PrimitiveAPI](../interfaces/ISCH_PrimitiveAPI.md)
 
@@ -37,7 +37,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 创建文本
+**_(BETA)_** Create Text
 
 
 </td></tr>
@@ -51,7 +51,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除文本
+**_(BETA)_** Delete Text
 
 
 </td></tr>
@@ -65,7 +65,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取文本
+**_(BETA)_** Get Text
 
 
 </td></tr>
@@ -79,7 +79,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取文本
+**_(BETA)_** Get Text
 
 
 </td></tr>
@@ -93,7 +93,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有文本
+**_(BETA)_** Get all Text
 
 
 </td></tr>
@@ -107,7 +107,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有文本的图元 ID
+**_(BETA)_** Get all Text primitive IDs
 
 
 </td></tr>
@@ -121,7 +121,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改文本
+**_(BETA)_** Modify Text
 
 
 </td></tr>
@@ -137,12 +137,12 @@ Description
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-创建文本
+Create Text
 
 ## Signature
 
 ```typescript
-create(x: number, y: number, content: string, rotation?: number, textColor?: string | null, fontName?: string | null, fontSize?: number | null, bold?: boolean, italic?: boolean, underLine?: boolean, alignMode?: ESCH_PrimitiveTextAlignMode): Promise<ISCH_PrimitiveText | undefined>;
+public create(x: number, y: number, content: string, rotation?: number, textColor?: string | null, fontName?: string | null, fontSize?: number | null, bold?: boolean, italic?: boolean, underLine?: boolean, alignMode?: ESCH_PrimitiveTextAlignMode): Promise<ISCH_PrimitiveText | undefined>;
 ```
 
 ## Parameters
@@ -175,7 +175,7 @@ number
 
 </td><td>
 
-坐标 X
+X coordinate
 
 
 </td></tr>
@@ -191,7 +191,7 @@ number
 
 </td><td>
 
-坐标 Y
+Y coordinate
 
 
 </td></tr>
@@ -207,7 +207,7 @@ string
 
 </td><td>
 
-文本内容
+Text content
 
 
 </td></tr>
@@ -223,7 +223,7 @@ number
 
 </td><td>
 
-_(Optional)_ 旋转角度，可选 `0` `90` `180` `270`
+_(Optional)_ Rotation angle. Options: `0` `90` `180` `270`
 
 
 </td></tr>
@@ -239,7 +239,7 @@ string \| null
 
 </td><td>
 
-_(Optional)_ 文本颜色，`null` 表示默认
+_(Optional)_ Text color, `null` indicates the default
 
 
 </td></tr>
@@ -255,7 +255,7 @@ string \| null
 
 </td><td>
 
-_(Optional)_ 字体名称，`null` 表示默认
+_(Optional)_ Font name, `null` indicates the default
 
 
 </td></tr>
@@ -271,7 +271,7 @@ number \| null
 
 </td><td>
 
-_(Optional)_ 字体大小，`null` 表示默认
+_(Optional)_ Font size. `null` indicates the default
 
 
 </td></tr>
@@ -287,7 +287,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否加粗
+_(Optional)_ Whether it is bold
 
 
 </td></tr>
@@ -303,7 +303,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否斜体
+_(Optional)_ Whether it is italic
 
 
 </td></tr>
@@ -319,7 +319,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否加下划线
+_(Optional)_ Whether it is underlined
 
 
 </td></tr>
@@ -335,7 +335,7 @@ alignMode
 
 </td><td>
 
-_(Optional)_ 对齐模式，`0` 左顶，`1` 中顶，`2` 右顶，`3` 左中，`4` 中中，`5` 右中，`6` 左底，`7` 中底，`8` 右底
+_(Optional)_ Alignment mode
 
 
 </td></tr>
@@ -347,7 +347,7 @@ _(Optional)_ 对齐模式，`0` 左顶，`1` 中顶，`2` 右顶，`3` 左中，
 
 Promise&lt;[ISCH\_PrimitiveText](./ISCH_PrimitiveText.md) \| undefined&gt;
 
-文本图元对象
+Text primitive object
 
 ### delete
 
@@ -355,12 +355,12 @@ Promise&lt;[ISCH\_PrimitiveText](./ISCH_PrimitiveText.md) \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除文本
+Delete Text
 
 ## Signature
 
 ```typescript
-delete(primitiveIds: string | ISCH_PrimitiveText | Array<string> | Array<ISCH_PrimitiveText>): Promise<boolean>;
+public delete(primitiveIds: string | ISCH_PrimitiveText | Array<string> | Array<ISCH_PrimitiveText>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -393,7 +393,7 @@ string \| [ISCH\_PrimitiveText](./ISCH_PrimitiveText.md) \| Array&lt;string&gt; 
 
 </td><td>
 
-文本的图元 ID 或文本图元对象
+Text primitive ID or Text primitive object
 
 
 </td></tr>
@@ -405,7 +405,7 @@ string \| [ISCH\_PrimitiveText](./ISCH_PrimitiveText.md) \| Array&lt;string&gt; 
 
 Promise&lt;boolean&gt;
 
-删除操作是否成功
+Delete Whether the operation is successful
 
 ### get
 
@@ -413,12 +413,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取文本
+Get Text
 
 ## Signature
 
 ```typescript
-get(primitiveIds: string): Promise<ISCH_PrimitiveText | undefined>;
+public get(primitiveIds: string): Promise<ISCH_PrimitiveText | undefined>;
 ```
 
 ## Parameters
@@ -451,7 +451,7 @@ string
 
 </td><td>
 
-文本的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Text primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -463,7 +463,7 @@ string
 
 Promise&lt;[ISCH\_PrimitiveText](./ISCH_PrimitiveText.md) \| undefined&gt;
 
-文本图元对象，`undefined` 表示获取失败
+Text primitive object, `undefined` indicates that the retrieval failed
 
 ### get_1
 
@@ -471,12 +471,12 @@ Promise&lt;[ISCH\_PrimitiveText](./ISCH_PrimitiveText.md) \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取文本
+Get Text
 
 ## Signature
 
 ```typescript
-get(primitiveIds: Array<string>): Promise<Array<ISCH_PrimitiveText>>;
+public get(primitiveIds: Array<string>): Promise<Array<ISCH_PrimitiveText>>;
 ```
 
 ## Parameters
@@ -509,7 +509,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-文本的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Text primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -521,11 +521,11 @@ Array&lt;string&gt;
 
 Promise&lt;Array&lt;[ISCH\_PrimitiveText](./ISCH_PrimitiveText.md)<!-- -->&gt;&gt;
 
-文本图元对象，空数组表示获取失败
+Text primitive object; an empty array indicates that the retrieval failed
 
 ## Remarks
 
-如若传入多个图元 ID，任意图元 ID 未匹配到不影响其它图元的返回，即可能返回少于传入的图元 ID 数量的图元对象
+If multiple primitive IDs are passed in, a primitive ID that is not matched will not affect the return of other primitives; that is, fewer primitive objects than the number of primitive IDs passed in may be returned.
 
 ### getall
 
@@ -533,12 +533,12 @@ Promise&lt;Array&lt;[ISCH\_PrimitiveText](./ISCH_PrimitiveText.md)<!-- -->&gt;&g
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有文本
+Get all Text
 
 ## Signature
 
 ```typescript
-getAll(): Promise<Array<ISCH_PrimitiveText>>;
+public getAll(): Promise<Array<ISCH_PrimitiveText>>;
 ```
 
 
@@ -546,7 +546,7 @@ getAll(): Promise<Array<ISCH_PrimitiveText>>;
 
 Promise&lt;Array&lt;[ISCH\_PrimitiveText](./ISCH_PrimitiveText.md)<!-- -->&gt;&gt;
 
-文本图元对象数组
+Array of Text primitive objects
 
 ### getallprimitiveid
 
@@ -554,12 +554,12 @@ Promise&lt;Array&lt;[ISCH\_PrimitiveText](./ISCH_PrimitiveText.md)<!-- -->&gt;&g
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有文本的图元 ID
+Get all Text primitive IDs
 
 ## Signature
 
 ```typescript
-getAllPrimitiveId(): Promise<Array<string>>;
+public getAllPrimitiveId(): Promise<Array<string>>;
 ```
 
 
@@ -567,7 +567,7 @@ getAllPrimitiveId(): Promise<Array<string>>;
 
 Promise&lt;Array&lt;string&gt;&gt;
 
-文本的图元 ID 数组
+Array of Text primitive IDs
 
 ### modify
 
@@ -575,24 +575,12 @@ Promise&lt;Array&lt;string&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改文本
+Modify Text
 
 ## Signature
 
 ```typescript
-modify(primitiveId: string | ISCH_PrimitiveText, property: {
-        x?: number;
-        y?: number;
-        content?: string;
-        rotation?: number;
-        textColor?: string | null;
-        fontName?: string | null;
-        fontSize?: number | null;
-        bold?: boolean;
-        italic?: boolean;
-        underLine?: boolean;
-        alignMode?: ESCH_PrimitiveTextAlignMode;
-    }): Promise<ISCH_PrimitiveText | undefined>;
+public modify(primitiveId: string | ISCH_PrimitiveText, property: { x?: undefined | number; y?: undefined | number; content?: undefined | string; rotation?: undefined | number; textColor?: undefined | null | string; fontName?: undefined | null | string; fontSize?: undefined | null | number; bold?: undefined | false | true; italic?: undefined | false | true; underLine?: undefined | false | true; alignMode?: undefined | ESCH_PrimitiveTextAlignMode.LEFT_TOP | ESCH_PrimitiveTextAlignMode.LEFT_MIDDLE | ESCH_PrimitiveTextAlignMode.LEFT_BOTTOM | ESCH_PrimitiveTextAlignMode.CENTER_TOP | ESCH_PrimitiveTextAlignMode.CENTER | ESCH_PrimitiveTextAlignMode.CENTER_BOTTOM | ESCH_PrimitiveTextAlignMode.RIGHT_TOP | ESCH_PrimitiveTextAlignMode.RIGHT_MIDDLE | ESCH_PrimitiveTextAlignMode.RIGHT_BOTTOM }): Promise<ISCH_PrimitiveText | undefined>;
 ```
 
 ## Parameters
@@ -625,7 +613,7 @@ string \| [ISCH\_PrimitiveText](./ISCH_PrimitiveText.md)
 
 </td><td>
 
-图元 ID
+Primitive ID
 
 
 </td></tr>
@@ -636,12 +624,12 @@ property
 
 </td><td>
 
-{ x?: number; y?: number; content?: string; rotation?: number; textColor?: string \| null; fontName?: string \| null; fontSize?: number \| null; bold?: boolean; italic?: boolean; underLine?: boolean; alignMode?: [ESCH\_PrimitiveTextAlignMode](../enums/ESCH_PrimitiveTextAlignMode.md)<!-- -->; }
+{ x?: undefined \| number; y?: undefined \| number; content?: undefined \| string; rotation?: undefined \| number; textColor?: undefined \| null \| string; fontName?: undefined \| null \| string; fontSize?: undefined \| null \| number; bold?: undefined \| false \| true; italic?: undefined \| false \| true; underLine?: undefined \| false \| true; alignMode?: undefined \| [ESCH\_PrimitiveTextAlignMode.LEFT\_TOP](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.LEFT\_MIDDLE](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.LEFT\_BOTTOM](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.CENTER\_TOP](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.CENTER](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.CENTER\_BOTTOM](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.RIGHT\_TOP](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.RIGHT\_MIDDLE](../enums/ESCH_PrimitiveTextAlignMode.md) \| [ESCH\_PrimitiveTextAlignMode.RIGHT\_BOTTOM](../enums/ESCH_PrimitiveTextAlignMode.md) }
 
 
 </td><td>
 
-修改参数
+Modify Parameter
 
 
 </td></tr>
@@ -653,4 +641,4 @@ property
 
 Promise&lt;[ISCH\_PrimitiveText](./ISCH_PrimitiveText.md) \| undefined&gt;
 
-文本图元对象
+Text primitive object

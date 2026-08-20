@@ -1,16 +1,16 @@
 # SYS\_Environment class
 
-系统 / 运行环境类
+System / runtime environment class
 
 ## Signature
 
 ```typescript
-declare class SYS_Environment 
+export class SYS_Environment 
 ```
 
 ## Remarks
 
-获取嘉立创 EDA 专业版运行环境参数
+Get the runtime environment parameters of EasyEDA Pro
 
 ## Methods
 
@@ -40,13 +40,13 @@ Description
 
 </td><td>
 
-获取编辑器编译日期
+Get the editor compiled date
 
 
 </td></tr>
 <tr><td>
 
-[getEditorCurrentVersion()](./SYS_Environment.md)
+[getEditorCurrentVersion(onlySemantic)](./SYS_Environment.md)
 
 
 </td><td>
@@ -54,7 +54,7 @@ Description
 
 </td><td>
 
-获取编辑器当前版本
+Get the current version of the editor
 
 
 </td></tr>
@@ -68,7 +68,7 @@ Description
 
 </td><td>
 
-获取用户信息
+Get user information
 
 
 </td></tr>
@@ -82,7 +82,7 @@ Description
 
 </td><td>
 
-是否处于客户端环境
+Whether it is in the client environment
 
 
 </td></tr>
@@ -96,7 +96,7 @@ Description
 
 </td><td>
 
-是否为 EasyEDA Pro 版本
+Whether it is the EasyEDA Pro edition
 
 
 </td></tr>
@@ -110,7 +110,7 @@ Description
 
 </td><td>
 
-是否为半离线模式
+Whether it is half-offline mode
 
 
 </td></tr>
@@ -124,7 +124,7 @@ Description
 
 </td><td>
 
-是否为 嘉立创EDA 专业版本
+Whether it is the EasyEDA Pro edition
 
 
 </td></tr>
@@ -138,7 +138,7 @@ Description
 
 </td><td>
 
-是否为全离线模式
+Whether it is fully-offline mode
 
 
 </td></tr>
@@ -152,7 +152,7 @@ Description
 
 </td><td>
 
-是否为在线模式
+Whether it is online mode
 
 
 </td></tr>
@@ -166,7 +166,7 @@ Description
 
 </td><td>
 
-是否为私有化部署版本
+Whether it is the private deployment edition
 
 
 </td></tr>
@@ -180,7 +180,7 @@ Description
 
 </td><td>
 
-是否处于浏览器环境
+Whether it is in the browser environment
 
 
 </td></tr>
@@ -194,12 +194,12 @@ Description
 
 # SYS\_Environment.getEditorCompliedDate() method
 
-获取编辑器编译日期
+Get the editor compiled date
 
 ## Signature
 
 ```typescript
-getEditorCompliedDate(): string;
+public getEditorCompliedDate(): string;
 ```
 
 
@@ -207,62 +207,93 @@ getEditorCompliedDate(): string;
 
 string
 
-编辑器编译日期
+Editor compiled date
 
 ### geteditorcurrentversion
 
 # SYS\_Environment.getEditorCurrentVersion() method
 
-获取编辑器当前版本
+Get the current version of the editor
 
 ## Signature
 
 ```typescript
-getEditorCurrentVersion(): string;
+public getEditorCurrentVersion(onlySemantic?: boolean): string;
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+onlySemantic
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Whether to only return the semantic version number. ADD since EDA v3.2.176, ADD since EDA v4.1.13
+
+
+</td></tr>
+</tbody></table>
+
 
 
 ## Returns
 
 string
 
-编辑器当前版本
+Current version of the editor
 
 ### getuserinfo
 
 # SYS\_Environment.getUserInfo() method
 
-获取用户信息
+Get user information
 
 ## Signature
 
 ```typescript
-getUserInfo(): {
-        username?: string;
-        nickname?: string;
-        avatar?: string;
-        uuid?: string;
-        customerCode?: string;
-    };
+public getUserInfo(): { username?: undefined | string; nickname?: undefined | string; avatar?: undefined | string; uuid?: undefined | string; customerCode?: undefined | string };
 ```
 
 
 ## Returns
 
-\{ username?: string; nickname?: string; avatar?: string; uuid?: string; customerCode?: string; \}
+\{ username?: undefined \| string; nickname?: undefined \| string; avatar?: undefined \| string; uuid?: undefined \| string; customerCode?: undefined \| string \}
 
-用户信息
+User information
 
 ### isclient
 
 # SYS\_Environment.isClient() method
 
-是否处于客户端环境
+Whether it is in the client environment
 
 ## Signature
 
 ```typescript
-isClient(): boolean;
+public isClient(): boolean;
 ```
 
 
@@ -270,18 +301,18 @@ isClient(): boolean;
 
 boolean
 
-是否处于客户端环境
+Whether it is in the client environment
 
 ### iseasyedaproedition
 
 # SYS\_Environment.isEasyEDAProEdition() method
 
-是否为 EasyEDA Pro 版本
+Whether it is the EasyEDA Pro edition
 
 ## Signature
 
 ```typescript
-isEasyEDAProEdition(): boolean;
+public isEasyEDAProEdition(): boolean;
 ```
 
 
@@ -289,18 +320,18 @@ isEasyEDAProEdition(): boolean;
 
 boolean
 
-是否为 EasyEDA Pro 版本
+Whether it is the EasyEDA Pro edition
 
 ### ishalfofflinemode
 
 # SYS\_Environment.isHalfOfflineMode() method
 
-是否为半离线模式
+Whether it is half-offline mode
 
 ## Signature
 
 ```typescript
-isHalfOfflineMode(): boolean;
+public isHalfOfflineMode(): boolean;
 ```
 
 
@@ -308,18 +339,18 @@ isHalfOfflineMode(): boolean;
 
 boolean
 
-是否为半离线模式
+Whether it is half-offline mode
 
 ### isjlcedaproedition
 
 # SYS\_Environment.isJLCEDAProEdition() method
 
-是否为 嘉立创EDA 专业版本
+Whether it is the EasyEDA Pro edition
 
 ## Signature
 
 ```typescript
-isJLCEDAProEdition(): boolean;
+public isJLCEDAProEdition(): boolean;
 ```
 
 
@@ -327,18 +358,18 @@ isJLCEDAProEdition(): boolean;
 
 boolean
 
-是否为嘉立创EDA 专业版本
+Whether it is the EasyEDA Pro edition
 
 ### isofflinemode
 
 # SYS\_Environment.isOfflineMode() method
 
-是否为全离线模式
+Whether it is fully-offline mode
 
 ## Signature
 
 ```typescript
-isOfflineMode(): boolean;
+public isOfflineMode(): boolean;
 ```
 
 
@@ -346,18 +377,18 @@ isOfflineMode(): boolean;
 
 boolean
 
-是否为全离线模式
+Whether it is fully-offline mode
 
 ### isonlinemode
 
 # SYS\_Environment.isOnlineMode() method
 
-是否为在线模式
+Whether it is online mode
 
 ## Signature
 
 ```typescript
-isOnlineMode(): boolean;
+public isOnlineMode(): boolean;
 ```
 
 
@@ -365,18 +396,18 @@ isOnlineMode(): boolean;
 
 boolean
 
-是否为在线模式
+Whether it is online mode
 
 ### isproprivateedition
 
 # SYS\_Environment.isProPrivateEdition() method
 
-是否为私有化部署版本
+Whether it is the private deployment edition
 
 ## Signature
 
 ```typescript
-isProPrivateEdition(): boolean;
+public isProPrivateEdition(): boolean;
 ```
 
 
@@ -384,18 +415,18 @@ isProPrivateEdition(): boolean;
 
 boolean
 
-是否为私有化部署版本
+Whether it is the private deployment edition
 
 ### isweb
 
 # SYS\_Environment.isWeb() method
 
-是否处于浏览器环境
+Whether it is in the browser environment
 
 ## Signature
 
 ```typescript
-isWeb(): boolean;
+public isWeb(): boolean;
 ```
 
 
@@ -403,4 +434,4 @@ isWeb(): boolean;
 
 boolean
 
-是否处于浏览器环境
+Whether it is in the browser environment

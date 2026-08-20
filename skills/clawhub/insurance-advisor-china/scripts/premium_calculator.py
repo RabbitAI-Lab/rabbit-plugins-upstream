@@ -96,6 +96,10 @@ def calculate_all_premiums(age, gender, coverage_amount, product_types=None, pay
 
     results = {}
     for product in products:
+        # Skip products missing required fields
+        if "id" not in product:
+            continue
+
         # 按类型筛选
         if product_types:
             if product["type"] not in product_types:
@@ -130,8 +134,8 @@ def calculate_all_premiums(age, gender, coverage_amount, product_types=None, pay
                 "annual_premium": premiums_by_term[payment_term],
                 "payment_term": payment_term,
                 "coverage_amount": coverage_amount,
-                "coverage_period": product["coverage_period"],
-                "waiting_period": product["waiting_period"],
+                "coverage_period": (product.get("coverage_period") or "未明确"),
+                "waiting_period": (product.get("waiting_period") or "未明确"),
                 "core_coverage": ", ".join(product.get("key_benefits", [])) if isinstance(product.get("key_benefits"), list) else product.get("core_coverage", ""),
                 "notes": product.get("notes", "")
             }
@@ -143,8 +147,8 @@ def calculate_all_premiums(age, gender, coverage_amount, product_types=None, pay
                 "type": product["type"],
                 "premiums_by_term": premiums_by_term,
                 "coverage_amount": coverage_amount,
-                "coverage_period": product["coverage_period"],
-                "waiting_period": product["waiting_period"],
+                "coverage_period": (product.get("coverage_period") or "未明确"),
+                "waiting_period": (product.get("waiting_period") or "未明确"),
                 "core_coverage": ", ".join(product.get("key_benefits", [])) if isinstance(product.get("key_benefits"), list) else product.get("core_coverage", ""),
                 "notes": product.get("notes", "")
             }

@@ -13,7 +13,7 @@ from ..update_check import get_mcp_update_status
 _RUNTIME_DEPENDENCIES = ("_OFFICIAL_API", "_clear_session_caches", "_get", "_require_token", "_session", "build_tool_manifest")
 
 _EXPECTED_QUANT_SCHEMA_VERSION = "quant-v2"
-_EXPECTED_STRATEGY_CONTEXT_SCHEMA_VERSION = "quant_strategy_context.v2"
+_EXPECTED_STRATEGY_CONTEXT_SCHEMA_VERSION = "quant_strategy_context.v3"
 _BACKEND_COMPATIBILITY_SUCCESS_TTL = 6 * 60 * 60
 _BACKEND_COMPATIBILITY_FAILURE_TTL = 15 * 60
 _backend_compatibility_cache: dict = {"value": None, "expires_at": 0.0}
@@ -61,6 +61,10 @@ async def set_token(token: str) -> str:
     normalized_token = str(token or "").strip()
     if not normalized_token:
         raise ValueError("Agent Token 不能为空")
+    if len(normalized_token) > 4096:
+        raise ValueError("Agent Token 过长")
+    if any(ord(character) < 32 or ord(character) == 127 for character in normalized_token):
+        raise ValueError("Agent Token 不能包含控制字符")
     _session["token"] = normalized_token
     _clear_session_caches()
     return f"✅ Token 已设置，将连接官方后端：{_session['base_url']}"

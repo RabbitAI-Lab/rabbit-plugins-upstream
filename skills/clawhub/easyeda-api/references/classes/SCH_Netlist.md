@@ -1,16 +1,16 @@
 # SCH\_Netlist class
 
-原理图 &amp; 符号 / 网表类
+Schematic &amp; symbol / netlist class
 
 ## Signature
 
 ```typescript
-declare class SCH_Netlist 
+export class SCH_Netlist 
 ```
 
 ## Remarks
 
-获取、更新网表
+Get, update the netlist
 
 ## Methods
 
@@ -40,7 +40,7 @@ Description
 
 </td><td>
 
-获取网表
+Get the netlist
 
 
 </td></tr>
@@ -54,7 +54,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 更新网表
+**_(BETA)_** Update the netlist
 
 
 </td></tr>
@@ -70,14 +70,14 @@ Description
 
 > Warning: This API is now obsolete.
 >
-> 请使用 [SCH\_ManufactureData.getNetlistFile()](./SCH_ManufactureData.md) 替代
+> Please use [SCH\_ManufactureData.getNetlistFile()](./SCH_ManufactureData.md) instead
 
-获取网表
+Get the netlist
 
 ## Signature
 
 ```typescript
-getNetlist(type?: ESYS_NetlistType): Promise<string>;
+public getNetlist(type?: ESYS_NetlistType): Promise<string>;
 ```
 
 ## Parameters
@@ -110,7 +110,7 @@ type
 
 </td><td>
 
-_(Optional)_ 网表格式
+_(Optional)_ Netlist format
 
 
 </td></tr>
@@ -122,7 +122,7 @@ _(Optional)_ 网表格式
 
 Promise&lt;string&gt;
 
-网表数据
+Netlist data
 
 ### setnetlist
 
@@ -130,12 +130,12 @@ Promise&lt;string&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-更新网表
+Update the netlist
 
 ## Signature
 
 ```typescript
-setNetlist(type: ESYS_NetlistType | undefined, netlist: string): Promise<void>;
+public setNetlist(type: ESYS_NetlistType | undefined, netlist: string): Promise<void>;
 ```
 
 ## Parameters
@@ -168,7 +168,7 @@ type
 
 </td><td>
 
-网表格式
+Netlist format
 
 
 </td></tr>
@@ -184,7 +184,7 @@ string
 
 </td><td>
 
-网表数据
+Netlist data
 
 
 </td></tr>

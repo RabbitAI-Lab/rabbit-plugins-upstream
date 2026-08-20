@@ -1,42 +1,56 @@
-## Description: <br>
-基于 pdfplumber 本地提取增值税电子发票和火车票信息，并输出格式化 Excel，支持多税率及水印页兜底识别。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基于 pdfplumber、PaddleOCR 和 PP-StructureV3 在本地提取增值税电子发票、火车票和通行费 PDF 信息，并输出格式化 Excel。
 
-## Publisher: <br>
-[seairteng](https://clawhub.ai/user/seairteng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seairteng](https://clawhub.ai/user/seairteng)
 
-## Use Case: <br>
-Finance, operations, and administrative users can use this skill to process local invoice PDF batches and create a structured Excel summary for reimbursement or accounting workflows. It extracts invoice identifiers, dates, buyer and seller details, tax rates, amounts, totals, duplicate indicators, and train-ticket records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Input PDFs and generated Excel summaries may contain sensitive financial and taxpayer information. <br>
-Mitigation: Handle PDF inputs and .xlsx outputs as confidential records, store them only in approved locations, and remove them when no longer needed. <br>
-Risk: Installing runtime dependencies from an untrusted package source could introduce supply-chain risk. <br>
-Mitigation: Install pdfplumber and openpyxl from trusted package indexes or approved internal mirrors before running the extractor. <br>
-Risk: Invoice parsing can miss or misread fields when PDFs use unusual layouts, watermarks, or OCR/text extraction edge cases. <br>
-Mitigation: Review the generated Excel summary, especially blank dates, missing tax IDs, zero non-train-ticket amounts, empty item names, and highlighted duplicates. <br>
+## Use Case:
 
+财务、报销和运营人员可使用该技能将本地 PDF 发票、铁路电子客票和通行费票据提取为结构化 Excel，便于汇总、核对和报销整理。开发者也可直接运行随附 Python 脚本处理本地票据文件。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/seairteng/skills/pdf-invoice-stat) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, code, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with Python shell commands and generated Excel files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads local PDF invoice files and writes a formatted .xlsx summary; no network behavior is reported by the security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Source PDFs and generated Excel files can contain sensitive financial and tax records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill on a trusted local machine, restrict access to input and output files, and handle generated workbooks according to the user's financial-record retention policy.
+
+Risk: Optional OCR paths may download model files locally and temporarily render PDF pages under /tmp.
+
+Mitigation: Use OCR dependencies only when needed for scanned or complex PDFs, keep the machine single-user or otherwise trusted during processing, and clear temporary or cached OCR artifacts according to local policy.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/seairteng/skills/pdf-invoice-stat)
+- [Publisher profile](https://clawhub.ai/user/seairteng)
+- [artifact/SKILL.md](artifact/SKILL.md)
+- [artifact/CHANGELOG.md](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Shell commands, Guidance]
+
+**Output Format:** [Excel workbook with console summary and Markdown usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Processes user-provided local PDFs and writes a formatted .xlsx file; optional OCR dependencies may download model files locally on first use.]
+
+## Skill Version(s):
+
+2.4.1 (source: server release metadata and artifact changelog, released 2026-08-17)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

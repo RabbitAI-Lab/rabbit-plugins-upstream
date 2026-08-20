@@ -1,41 +1,54 @@
-## Description: <br>
-This skill helps QA teams tailor bug-fix, requirement-change, and quality-risk communication for developers, product managers, and leadership. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA practitioners tailor bug, release-risk, and quality updates for developers, product managers, and leadership.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA practitioners and team stakeholders use this skill to convert QA findings into audience-specific communication plans, tailored reports, metric summaries, and risk highlights. It supports bug triage, requirement-change discussions, release reviews, and quality reporting across development, product, and management audiences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may paste real customer, payment, identity, order, or production incident data into QA communication examples. <br>
-Mitigation: Redact or mask sensitive data before using the skill, and avoid including production credentials, customer identifiers, or financial records. <br>
-Risk: Broad Chinese trigger phrases may make the skill appear for non-QA communication requests. <br>
-Mitigation: Confirm that the request is about QA stakeholder communication and identify the intended audience before applying the templates. <br>
+## Use Case:
 
+QA engineers and test leads use this skill to turn testing findings, bug reports, and quality risks into audience-specific communication for developers, product managers, and management stakeholders.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-stakeholder-communication) <br>
-- [Publisher profile](https://clawhub.ai/user/kokxi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown communication plans, tailored reports, key metric summaries, and risk highlights with COMM-XXXX traceability IDs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code or shell commands; outputs should avoid real customer, payment, identity, order, or production incident data unless redacted.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Communication examples and QA reports may contain customer, payment, identity, incident, or production data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Mask or remove sensitive data before using the skill, especially in bug reports, screenshots, logs, payment examples, and quality reports.
+
+Risk: Broad communication prompts may activate the skill outside a QA stakeholder communication workflow.
+
+Mitigation: Use the skill for QA and testing communication tasks, and confirm the audience and decision context before relying on its templates.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-stakeholder-communication)
+- [Publisher profile](https://clawhub.ai/user/kokxi)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown-style communication plans, tailored reports, metric summaries, and risk highlights]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include traceable communication IDs such as COMM-XXXX.]
+
+## Skill Version(s):
+
+1.7.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

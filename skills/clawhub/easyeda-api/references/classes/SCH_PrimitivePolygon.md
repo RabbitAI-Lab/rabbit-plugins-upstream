@@ -1,11 +1,11 @@
 # SCH\_PrimitivePolygon class
 
-原理图 &amp; 符号 / 多边形（折线）图元类
+Schematic &amp; symbol / polygon (polyline) primitive class
 
 ## Signature
 
 ```typescript
-declare class SCH_PrimitivePolygon implements ISCH_PrimitiveAPI 
+export class SCH_PrimitivePolygon implements ISCH_PrimitiveAPI 
 ```
 **Implements:** [ISCH\_PrimitiveAPI](../interfaces/ISCH_PrimitiveAPI.md)
 
@@ -37,7 +37,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 创建多边形
+**_(BETA)_** Create Polygon
 
 
 </td></tr>
@@ -51,7 +51,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除多边形
+**_(BETA)_** Delete Polygon
 
 
 </td></tr>
@@ -65,7 +65,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取多边形
+**_(BETA)_** Get Polygon
 
 
 </td></tr>
@@ -79,7 +79,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取多边形
+**_(BETA)_** Get Polygon
 
 
 </td></tr>
@@ -93,7 +93,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有多边形
+**_(BETA)_** Get all Polygon
 
 
 </td></tr>
@@ -107,7 +107,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有多边形的图元 ID
+**_(BETA)_** Get all Polygon primitive IDs
 
 
 </td></tr>
@@ -121,7 +121,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改多边形
+**_(BETA)_** Modify Polygon
 
 
 </td></tr>
@@ -137,12 +137,12 @@ Description
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-创建多边形
+Create Polygon
 
 ## Signature
 
 ```typescript
-create(line: Array<number>, color?: string | null, fillColor?: string | null, lineWidth?: number | null, lineType?: ESCH_PrimitiveLineType | null): Promise<ISCH_PrimitivePolygon | undefined>;
+public create(line: Array<number>, color?: string | null, fillColor?: string | null, lineWidth?: number | null, lineType?: ESCH_PrimitiveLineType | null): Promise<ISCH_PrimitivePolygon | undefined>;
 ```
 
 ## Parameters
@@ -175,7 +175,7 @@ Array&lt;number&gt;
 
 </td><td>
 
-坐标组，连续的一组 `[x1, y1, x2, y2, x3, y3]` 所描述的线
+Coordinate group, a continuous set of lines described by `[x1, y1, x2, y2, x3, y3]`
 
 
 </td></tr>
@@ -191,7 +191,7 @@ string \| null
 
 </td><td>
 
-_(Optional)_ 颜色，`null` 表示默认
+_(Optional)_ Color, `null` indicates the default
 
 
 </td></tr>
@@ -207,7 +207,7 @@ string \| null
 
 </td><td>
 
-_(Optional)_ 填充颜色，`none` 表示无填充，`null` 表示默认
+_(Optional)_ Fill color. `none` indicates no fill, `null` indicates the default
 
 
 </td></tr>
@@ -223,7 +223,7 @@ number \| null
 
 </td><td>
 
-_(Optional)_ 线宽，范围 `1-10`<!-- -->，`null` 表示默认
+_(Optional)_ Line width, range `1-10`<!-- -->. `null` indicates the default
 
 
 </td></tr>
@@ -239,7 +239,7 @@ lineType
 
 </td><td>
 
-_(Optional)_ 线型，`null` 表示默认
+_(Optional)_ Line type. `null` indicates the default
 
 
 </td></tr>
@@ -251,7 +251,7 @@ _(Optional)_ 线型，`null` 表示默认
 
 Promise&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md) \| undefined&gt;
 
-多边形图元对象
+Polygon primitive object
 
 ### delete
 
@@ -259,12 +259,12 @@ Promise&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md) \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除多边形
+Delete Polygon
 
 ## Signature
 
 ```typescript
-delete(primitiveIds: string | ISCH_PrimitivePolygon | Array<string> | Array<ISCH_PrimitivePolygon>): Promise<boolean>;
+public delete(primitiveIds: string | ISCH_PrimitivePolygon | Array<string> | Array<ISCH_PrimitivePolygon>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -297,7 +297,7 @@ string \| [ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md) \| Array&lt;strin
 
 </td><td>
 
-多边形的图元 ID 或多边形图元对象
+Polygon primitive ID or Polygon primitive object
 
 
 </td></tr>
@@ -309,7 +309,7 @@ string \| [ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md) \| Array&lt;strin
 
 Promise&lt;boolean&gt;
 
-删除操作是否成功
+Delete Whether the operation is successful
 
 ### get
 
@@ -317,12 +317,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取多边形
+Get Polygon
 
 ## Signature
 
 ```typescript
-get(primitiveIds: string): Promise<ISCH_PrimitivePolygon | undefined>;
+public get(primitiveIds: string): Promise<ISCH_PrimitivePolygon | undefined>;
 ```
 
 ## Parameters
@@ -355,7 +355,7 @@ string
 
 </td><td>
 
-多边形的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Polygon primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -367,7 +367,7 @@ string
 
 Promise&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md) \| undefined&gt;
 
-多边形图元对象，`undefined` 表示获取失败
+Polygon primitive object, `undefined` indicates that the retrieval failed
 
 ### get_1
 
@@ -375,12 +375,12 @@ Promise&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md) \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取多边形
+Get Polygon
 
 ## Signature
 
 ```typescript
-get(primitiveIds: Array<string>): Promise<Array<ISCH_PrimitivePolygon>>;
+public get(primitiveIds: Array<string>): Promise<Array<ISCH_PrimitivePolygon>>;
 ```
 
 ## Parameters
@@ -413,7 +413,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-多边形的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Polygon primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -425,11 +425,11 @@ Array&lt;string&gt;
 
 Promise&lt;Array&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)<!-- -->&gt;&gt;
 
-多边形图元对象，空数组表示获取失败
+Polygon primitive object; an empty array indicates that the retrieval failed
 
 ## Remarks
 
-如若传入多个图元 ID，任意图元 ID 未匹配到不影响其它图元的返回，即可能返回少于传入的图元 ID 数量的图元对象
+If multiple primitive IDs are passed in, a primitive ID that is not matched will not affect the return of other primitives; that is, fewer primitive objects than the number of primitive IDs passed in may be returned.
 
 ### getall
 
@@ -437,12 +437,12 @@ Promise&lt;Array&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)<!-- -->
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有多边形
+Get all Polygon
 
 ## Signature
 
 ```typescript
-getAll(): Promise<Array<ISCH_PrimitivePolygon>>;
+public getAll(): Promise<Array<ISCH_PrimitivePolygon>>;
 ```
 
 
@@ -450,7 +450,7 @@ getAll(): Promise<Array<ISCH_PrimitivePolygon>>;
 
 Promise&lt;Array&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)<!-- -->&gt;&gt;
 
-多边形图元对象数组
+Array of Polygon primitive objects
 
 ### getallprimitiveid
 
@@ -458,12 +458,12 @@ Promise&lt;Array&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)<!-- -->
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有多边形的图元 ID
+Get all Polygon primitive IDs
 
 ## Signature
 
 ```typescript
-getAllPrimitiveId(): Promise<Array<string>>;
+public getAllPrimitiveId(): Promise<Array<string>>;
 ```
 
 
@@ -471,7 +471,7 @@ getAllPrimitiveId(): Promise<Array<string>>;
 
 Promise&lt;Array&lt;string&gt;&gt;
 
-多边形的图元 ID 数组
+Array of Polygon primitive IDs
 
 ### modify
 
@@ -479,18 +479,12 @@ Promise&lt;Array&lt;string&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改多边形
+Modify Polygon
 
 ## Signature
 
 ```typescript
-modify(primitiveId: string | ISCH_PrimitivePolygon, property: {
-        line?: Array<number>;
-        color?: string | null;
-        fillColor?: string | null;
-        lineWidth?: number | null;
-        lineType?: ESCH_PrimitiveLineType | null;
-    }): Promise<ISCH_PrimitivePolygon | undefined>;
+public modify(primitiveId: string | ISCH_PrimitivePolygon, property: { line?: undefined | number[]; color?: undefined | null | string; fillColor?: undefined | null | string; lineWidth?: undefined | null | number; lineType?: undefined | null | ESCH_PrimitiveLineType.SOLID | ESCH_PrimitiveLineType.DASHED | ESCH_PrimitiveLineType.DOTTED | ESCH_PrimitiveLineType.DOT_DASHED }): Promise<ISCH_PrimitivePolygon | undefined>;
 ```
 
 ## Parameters
@@ -523,7 +517,7 @@ string \| [ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)
 
 </td><td>
 
-图元 ID
+Primitive ID
 
 
 </td></tr>
@@ -534,12 +528,12 @@ property
 
 </td><td>
 
-{ line?: Array&lt;number&gt;; color?: string \| null; fillColor?: string \| null; lineWidth?: number \| null; lineType?: [ESCH\_PrimitiveLineType](../enums/ESCH_PrimitiveLineType.md) \| null; }
+{ line?: undefined \| number\[\]; color?: undefined \| null \| string; fillColor?: undefined \| null \| string; lineWidth?: undefined \| null \| number; lineType?: undefined \| null \| [ESCH\_PrimitiveLineType.SOLID](../enums/ESCH_PrimitiveLineType.md) \| [ESCH\_PrimitiveLineType.DASHED](../enums/ESCH_PrimitiveLineType.md) \| [ESCH\_PrimitiveLineType.DOTTED](../enums/ESCH_PrimitiveLineType.md) \| [ESCH\_PrimitiveLineType.DOT\_DASHED](../enums/ESCH_PrimitiveLineType.md) }
 
 
 </td><td>
 
-修改参数
+Modify Parameter
 
 
 </td></tr>
@@ -551,4 +545,4 @@ property
 
 Promise&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md) \| undefined&gt;
 
-多边形图元对象
+Polygon primitive object

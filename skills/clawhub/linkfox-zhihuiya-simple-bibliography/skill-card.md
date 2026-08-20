@@ -1,45 +1,63 @@
-## Description: <br>
-Retrieves simple bibliographic metadata for a single patent from the Zhihuiya patent database by patent ID or publication number. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries simple bibliographic patent metadata from the Zhihuiya patent database by patent ID or publication/grant number.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and patent/IP practitioners use this skill to retrieve front-page patent metadata for a specific patent identifier, including title, abstract, applicants, inventors, dates, classifications, and citation references. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Patent identifiers and related session metadata are sent to LinkFox/Zhihuiya during lookup. <br>
-Mitigation: Use the skill only when the user explicitly chooses this provider and accepts sending the patent lookup details to the service. <br>
-Risk: Full lookup responses are persisted on local disk, which may retain patent metadata beyond the immediate conversation. <br>
-Mitigation: Review the saved response location and apply local retention, access-control, or cleanup practices appropriate for the workspace. <br>
-Risk: Lookups consume LinkFox API credits and the skill warns that multiple patent checks can be costly. <br>
-Mitigation: Confirm before running lookups, especially for multiple patents, and keep the one-patent-per-call behavior. <br>
-Risk: The skill includes automatic feedback reporting behavior. <br>
-Mitigation: Require confirmation before submitting feedback so user statements and task context are not reported unexpectedly. <br>
+## Use Case:
 
+External users and agent operators use this skill to retrieve structured front-page patent metadata, including titles, abstracts, applicants, inventors, classification codes, filing dates, priorities, and citations for known patent identifiers.
 
-## Reference(s): <br>
-- [Zhihuiya Simple Bibliography API reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-simple-bibliography) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance, Files] <br>
-**Output Format:** [Markdown summaries and JSON API responses saved to local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Single-patent lookup; full responses are persisted locally and large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill handles API keys and may guide optional account login, API-key generation, billing, and order flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only trusted LinkFox/Zhihuiya endpoints, prefer completing login and payment through the official site, and avoid sharing phone numbers or one-time codes through the skill unless the user explicitly chooses that path.
+
+Risk: Patent queries and returned metadata are persisted to local result files and may reveal sensitive research or business interests.
+
+Mitigation: Run the skill only in an appropriate workspace, review saved files before sharing them, and remove local results when they are no longer needed.
+
+Risk: Requests consume LinkFox/Zhihuiya credits and batch queries can consume many credits at once.
+
+Mitigation: Confirm the identifiers and expected cost before additional lookups, especially for batch requests or retries after empty results.
+
+Risk: Gateway URL environment variables can change where API requests are sent.
+
+Mitigation: Ensure gateway-related environment variables point only to trusted LinkFox hosts before running the scripts.
+
+## Reference(s):
+
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-simple-bibliography)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON files, shell commands, configuration guidance]
+
+**Output Format:** [Markdown summaries or tables for users, with full API responses saved as JSON files and optionally printed to stdout.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts up to 100 patent IDs or publication/grant numbers per request; identical parameters may be cached for 24 hours.]
+
+## Skill Version(s):
+
+1.0.8 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

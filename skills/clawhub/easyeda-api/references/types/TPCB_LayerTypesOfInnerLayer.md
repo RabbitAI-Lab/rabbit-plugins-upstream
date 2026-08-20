@@ -1,11 +1,11 @@
 # TPCB\_LayerTypesOfInnerLayer type
 
-内层允许设置的图层类型
+Layer types allowed to be set for inner layers
 
 ## Signature
 
 ```typescript
-type TPCB_LayerTypesOfInnerLayer = EPCB_LayerType.SIGNAL | EPCB_LayerType.INTERNAL_ELECTRICAL;
+export type TPCB_LayerTypesOfInnerLayer = EPCB_LayerType.SIGNAL | EPCB_LayerType.INTERNAL_ELECTRICAL;
 ```
 ## References
 

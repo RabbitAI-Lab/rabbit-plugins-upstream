@@ -1,45 +1,59 @@
-## Description: <br>
-Fast version of ByteDance's Seedance 2.0 for generating videos from text prompts, reference media, or first and last frame inputs through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fast version of ByteDance's Seedance 2.0 that generates videos faster with support for multi-modal references, first and last frames, and text-to-video.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to generate short videos with Seedance 2.0 Fast through the dLazy CLI. It supports text-to-video, multimodal reference inputs, first/last frame workflows, selectable aspect ratios, durations, and asynchronous polling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media paths provided to the CLI may be uploaded to dLazy for processing. <br>
-Mitigation: Avoid submitting sensitive or unauthorized content, and review dLazy service terms before use. <br>
-Risk: The dLazy API key can be stored locally in the CLI configuration. <br>
-Mitigation: Use OS account protections, prefer per-invocation credentials when appropriate, and rotate or revoke the organization API key if exposure is suspected. <br>
-Risk: Generated outputs are hosted by dLazy. <br>
-Mitigation: Review generated media URLs and sharing practices before distributing outputs. <br>
+## Use Case:
 
+Developers and external users can use this skill to invoke the dLazy CLI for Seedance 2.0 Fast video generation from prompts, reference media, or first and last frame inputs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0-fast) <br>
-- [dLazy publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON responses containing generated media URLs or asynchronous task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is hosted by dLazy; local media paths supplied to the CLI may be uploaded for processing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: server release metadata and skill frontmatter) <br>
+Risk: Prompts and user-supplied media paths are sent to dLazy services for cloud video generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sending sensitive prompts or media unless the user's data handling requirements permit dLazy cloud processing.
+
+Risk: Authentication can save a dLazy API key in the local CLI configuration.
+
+Mitigation: Use per-invocation environment variables when persistent storage is undesirable, and rotate or revoke API keys from the dLazy dashboard when needed.
+
+Risk: A global CLI install persists the dLazy command on the user's system.
+
+Mitigation: Use the pinned npx invocation when a one-time command is preferred over a global install.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0-fast)
+- [dLazy CLI Homepage](https://github.com/dlazyai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [JSON with generated media URLs or async task status]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media URLs are hosted by files.dlazy.com; no-wait mode returns a task ID for polling.]
+
+## Skill Version(s):
+
+1.3.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

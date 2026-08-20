@@ -1,0 +1,7 @@
+{
+  "version": "3.1.0",
+  "bundle_sha256": "19c909757262d77dd4b8c871acc088d11cb02b93df959cf572b404098ab2c833",
+  "published_at": "2026-08-11T23:53:47.648Z",
+  "commit": "b48b23ebb9ad6f79bbf2ea1fec3585de32ec7223",
+  "changelog": "The Web Bot Auth line reaches the bundle: the free directory check at /api/bot-auth/check (proof-of-possession verified, not just noticed), the signed Calling Card (signature_agent_card) an origin can believe, the /bot-auth room, and the store's own signed egress with its published key directory."
+}

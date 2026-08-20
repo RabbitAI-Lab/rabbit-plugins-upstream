@@ -1,42 +1,69 @@
-## Description: <br>
-Helps agents work with Shopee in-store advertising for authorized shops, including ad balance checks, CPC and campaign performance reports, manual product ads, GMS campaigns, keyword recommendations, and campaign edits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shopee-店铺广告 helps agents query Shopee Ads balances, recommendations, performance reports, and create or edit product and GMS advertising campaigns for authorized Shopee shops through LinkFox.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Shopee sellers, e-commerce operators, and developers use this skill to inspect ad account balances, retrieve advertising performance reports, and create or edit product ad campaigns for stores they have authorized. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or edit live Shopee advertising campaigns for authorized accounts. <br>
-Mitigation: Require explicit user approval before campaign create or edit calls and use only Shopee ad accounts the user intends the agent to manage. <br>
-Risk: Full Shopee Ads API responses are persistently stored in local linkfox response folders. <br>
-Mitigation: Review before installing in workspaces with sensitive business data and periodically delete retained response folders when they are no longer needed. <br>
+## Use Case:
 
+External Shopee sellers, operators, and developers use this skill to inspect authorized shop advertising accounts, retrieve CPC and campaign performance data, get recommendations, and manage paid product or GMS campaigns. Users should review any create, edit, onboarding, or payment action before it runs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-ads) <br>
-- [Shopee Ads API reference](references/api.md) <br>
-- [Shopee Open Platform Ads documentation](https://open.shopee.com/documents/v2/v2.ads.get_total_balance?module=117&type=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, JSON files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and saved JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts save full API responses under a local linkfox response folder and may print either full JSON or summaries depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill can access LinkFox and Shopee Ads using an API key and read advertising account data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only for shops where the user intends to grant advertising-account access, and remove shell-profile API keys when they are no longer needed.
+
+Risk: Create and edit operations can change paid Shopee advertising campaigns.
+
+Mitigation: Review every campaign creation, edit, order, and payment action before execution, including target shop, campaign body, budget, and identifiers.
+
+Risk: Onboarding and billing flows may involve phone numbers, SMS codes, payment plans, payment URLs, or QR images.
+
+Mitigation: Use those flows only when explicitly setting up or recharging a LinkFox account, and do not provide SMS codes or create payment orders unless that is the intended action.
+
+Risk: Saved response JSON may contain advertising account, campaign, performance, or billing-related data.
+
+Mitigation: Run the skill from a trusted workspace and delete saved response JSON, QR images, and other local artifacts when they are no longer needed.
+
+Risk: Custom gateway URL overrides can redirect API traffic to an endpoint other than the default LinkFox gateway.
+
+Mitigation: Avoid gateway environment overrides unless the endpoint is trusted and expected for the task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-ads)
+- [Publisher profile](https://clawhub.ai/user/linkfox-ai)
+- [Shopee Ads get_total_balance official reference](https://open.shopee.com/documents/v2/v2.ads.get_total_balance?module=117&type=1)
+- [API reference](references/api.md)
+- [Onboarding and billing guidance](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save full API responses as JSON files under a linkfox session directory; large responses may be summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,7 +1,7 @@
 ---
 name: dlazy-grok-4.2
 version: 1.3.4
-description: Efficient text generation, dialogue QA, and logical reasoning using Grok 4.2 text model. 使用 Grok 4.2 文本大模型，进行高效的文本生成、对话问答与逻辑推理。
+description: "Efficient text generation, dialogue QA, and logical reasoning using Grok 4.2 text model. 使用 Grok 4.2 文本大模型，进行高效的文本生成、对话问答与逻辑推理。"
 metadata:
   {
     'clawdbot':
@@ -22,7 +22,7 @@ metadata:
   }
 ---
 
-# dlazy-grok-4.2
+# 文本生成 Grok 4.2
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

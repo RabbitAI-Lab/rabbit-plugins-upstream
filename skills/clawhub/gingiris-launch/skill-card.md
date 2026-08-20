@@ -1,43 +1,58 @@
-## Description: <br>
-Gingiris Launch helps agents produce product launch plans, Product Hunt timelines, channel sequencing, outreach templates, and post-launch follow-up guidance for startup go-to-market work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gingiris Launch is a multilingual product launch playbook that helps agents plan Product Hunt, go-to-market, community seeding, KOL outreach, and post-launch momentum workflows.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-Use this skill when planning a product launch, Product Hunt campaign, go-to-market sequence, launch-day response plan, hunter outreach, community seeding, KOL outreach, or post-launch momentum plan. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global use; the artifact includes English, Chinese, Japanese, and Korean launch guidance. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review flags guidance that may encourage platform rule violations such as vote manipulation or coordinated upvote solicitation. <br>
-Mitigation: Use the skill only for compliant launch planning, and remove or reject any recommendation that asks users to manipulate ranking systems or coordinate artificial engagement. <br>
-Risk: The security review flags unsolicited outreach patterns, including competitor-follower direct-message campaigns. <br>
-Mitigation: Limit outreach to consent-based, platform-compliant communication and verify each channel's rules before sending messages. <br>
-Risk: The security review flags collecting or storing upvoter emails without consent safeguards. <br>
-Mitigation: Collect and store contact data only with clear consent and after verifying applicable privacy obligations. <br>
+## Use Case:
 
+External founders, operators, and agent users use this skill to plan and sequence product launches across Product Hunt, developer communities, consumer channels, B2B outreach, and follow-up content. It is intended for launch execution after a product is ready or nearly ready to ship.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/gingiris-launch) <br>
-- [Publisher profile](https://clawhub.ai/user/gingiris-1031) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, shell commands] <br>
-**Output Format:** [Structured launch plans, timelines, checklists, outreach templates, and channel-specific recommendations.] <br>
-**Output Parameters:** [Product type, target audience, launch goal, timeline, budget, channel mix, market, and language requirements.] <br>
-**Other Properties Related to Output:** [Outputs are advisory and non-executable; users should review recommendations for platform compliance, consent, and privacy obligations before acting.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.1.0 <br>
+Risk: The playbook includes Product Hunt vote pacing, cellular voting, and coordinated vote solicitation tactics that may violate platform rules or manipulate rankings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Rewrite or ignore those portions; use only opt-in promotion and follow Product Hunt and other platform policies.
+
+Risk: The playbook includes unsolicited outreach patterns such as competitor-follower DMs.
+
+Mitigation: Use consent-based, personalized outreach with clear opt-out paths and applicable anti-spam compliance.
+
+Risk: The playbook refers to importing upvoter emails into a user pool without adequate consent guardrails.
+
+Mitigation: Collect, import, retain, and use personal data only with clear consent, a legitimate basis, and privacy controls.
+
+## Reference(s):
+
+- [Podcast evidence for launch decisions](references/podcast-evidence.md)
+- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/gingiris-launch)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text]
+
+**Output Format:** [Markdown guidance with launch timelines, checklists, channel plans, and outreach templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce multilingual launch planning content and human-facing launch recommendations.]
+
+## Skill Version(s):
+
+3.1.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

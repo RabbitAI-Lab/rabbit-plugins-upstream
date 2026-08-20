@@ -1,0 +1,4 @@
+interface:
+  display_name: "JYS S1 · 选套路"
+  short_description: "从内核库选择已有套路，或解析并录入用户提供的新剧本"
+  default_prompt: "Use $jys-s1 to 帮我选择或录入本次带货短剧的套路内核。"

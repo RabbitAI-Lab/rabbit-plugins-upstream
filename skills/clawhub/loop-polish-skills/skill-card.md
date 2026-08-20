@@ -1,48 +1,63 @@
-## Description: <br>
-Loop Polish automates full-stack project polishing by starting services, verifying APIs, frontend behavior, and database state, scoring results, applying bounded fixes, retesting, and generating a report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Loop Polish automates full-stack quality checks, browser verification, scoring, conservative auto-fixes, regression loops, and release reports for development or staging projects.
 
-## Publisher: <br>
-[lqclf](https://clawhub.ai/user/lqclf) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lqclf](https://clawhub.ai/user/lqclf)
 
-## Use Case: <br>
-Developers and engineers use this skill for explicit pre-release QA or delivery acceptance workflows that verify a runnable project, fix bounded issues, and produce a quality report. It is not intended for routine quick reviews or production environment validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill actively runs, tests, and modifies development or staging projects. <br>
-Mitigation: Review configuration before use, start with preflight or conservative mode, and avoid production systems or valuable live data. <br>
-Risk: Full mode can terminate processes on common development ports. <br>
-Mitigation: Only terminate processes confirmed as project-owned; ask the user before killing unrelated processes. <br>
-Risk: Database verification may read credentials from project configuration files. <br>
-Mitigation: Ask before reading database credentials, set db_verify to false when credential access is unnecessary, and never write credentials or connection strings to reports. <br>
-Risk: Diagnostic collection can encounter sensitive headers, cookies, request bodies, responses, passwords, tokens, or secrets. <br>
-Mitigation: Redact sensitive fields before saving diagnostics, reports, or state files, and exclude raw request and response bodies from reports. <br>
-Risk: Auto-fixes may introduce incorrect code changes when findings are ambiguous or high risk. <br>
-Mitigation: Use isolated Git branches, limit fix scope by strategy, request confirmation for schema, auth, or large-deletion changes, and roll back failed fixes from saved originals. <br>
+## Use Case:
 
+Developers and engineering teams use Loop Polish as a pre-release QA and acceptance loop for full-stack applications in development or staging environments. It starts services, verifies APIs, browser flows, and database state, scores quality, applies controlled fixes, reruns regressions, and produces a report.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/lqclf/skills/loop-polish-skills) <br>
-- [Skill Instructions](artifact/SKILL.md) <br>
-- [README](artifact/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports, status text, code diffs, shell command guidance, and optional JSON configuration] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create polish reports, temporary state, and source-code edits in full mode; preflight mode is read-only.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata) <br>
+Risk: Full mode can change source code, mutate application data, and read database credentials automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only in disposable development or staging environments with test data; start with preflight mode or set db_verify=false when database access is not needed.
+
+Risk: Automated fixes may introduce incorrect behavior or broad changes, especially with moderate or aggressive strategies.
+
+Mitigation: Begin with the conservative strategy, review the generated branch and diff before merging, and require human approval for schema, authentication, or large deletion changes.
+
+Risk: Diagnostics can include sensitive runtime details if not handled carefully.
+
+Mitigation: Redact authorization headers, cookies, passwords, tokens, secrets, and database connection strings from reports, logs, and saved state.
+
+Risk: Service startup and cleanup can affect local processes on common development ports.
+
+Mitigation: Only terminate processes confirmed to belong to the target project, and ask before touching unrelated processes.
+
+## Reference(s):
+
+- [Loop Polish ClawHub release](https://clawhub.ai/lqclf/skills/loop-polish-skills)
+- [README.md](artifact/README.md)
+- [SKILL.md](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown reports with inline command, configuration, and code-diff details]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full mode may create a working branch, state file, quality report, and code changes; diagnostics should redact credentials, tokens, cookies, and passwords.]
+
+## Skill Version(s):
+
+1.1.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

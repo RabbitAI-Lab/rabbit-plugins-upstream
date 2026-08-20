@@ -1,0 +1,15 @@
+# 基础依赖（必需）
+pymupdf>=1.23.0
+ezdxf>=1.4.0
+openpyxl>=3.1.0
+numpy>=1.24.0
+matplotlib>=3.7.0
+
+# OCR 模式选择（按需安装）
+# rapidocr        # v6模式（推荐，PP-OCRv6）
+# onnxruntime     # dl模式（deepdoc）
+# opencv-python-headless  # dl模式
+
+# CAD 依赖
+# oda-file-converter  # v4管线（需手动下载）
+# pyautocad          # v3管线备用

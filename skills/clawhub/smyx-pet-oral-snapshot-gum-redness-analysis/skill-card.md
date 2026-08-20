@@ -1,44 +1,60 @@
-## Description: <br>
-This skill analyzes pet oral snapshot images or videos through the publisher's cloud API to estimate gum color, gum redness level, and tartar coverage, then returns oral-health observations and report links without providing a disease diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet oral snapshot images or videos through server-side APIs to report visible gum color, redness level, tartar coverage, oral-health observations, and report links without providing a diagnosis.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill in pet cameras, smart pet products, and pet health management workflows to analyze oral snapshots for visible gum redness and tartar indicators. It supports single-image, video, URL-based, and history-query workflows for structured pet oral-health observations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images, videos, or media URLs may be sent to the publisher's cloud service for analysis. <br>
-Mitigation: Use only media approved for cloud processing, avoid sensitive content, and confirm the publisher's retention and deletion practices before deployment. <br>
-Risk: Cloud report history is tied to an automatically selected or created identity. <br>
-Mitigation: Review the identity behavior before installation and provide clear user consent, disclosure, and opt-out paths in production workflows. <br>
-Risk: Local token or account records may be stored in the workspace data directory. <br>
-Mitigation: Restrict workspace access, rotate or delete stored credentials when no longer needed, and prefer a release that documents local storage controls explicitly. <br>
+## Use Case:
 
+External users and developers of pet cameras, smart pet products, and pet health platforms use this skill to submit local or URL-based pet oral media for oral-health observation reports and cloud history lookups.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-oral-snapshot-gum-redness-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown text with optional JSON details and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write a requested output file; cloud history queries are presented as a Markdown table.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter lists 1.0.5) <br>
+Risk: Pet oral media and report-history requests are processed through lifeemergence.com cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use non-sensitive media where possible and confirm retention, authorization, and data-handling terms with the publisher before production use.
+
+Risk: Security evidence reports under-disclosed account-linked identity creation, cloud history access, and local token persistence.
+
+Mitigation: Install in a contained workspace or dedicated account, review local identity and token storage, and avoid shared agent accounts unless the publisher clarifies token handling.
+
+Risk: The skill reports oral-health observations that could be mistaken for veterinary diagnosis.
+
+Mitigation: Present outputs as visual care references only and direct users to a veterinarian for diagnosis or treatment decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-oral-snapshot-gum-redness-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API interface documentation](references/api_doc.md)
+- [Analysis API error-code documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON structured analysis reports with report links, plus shell commands for running analysis or listing historical reports.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local file paths or network URLs for pet oral images and videos; documented media size limit is 10 MB.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter reports 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

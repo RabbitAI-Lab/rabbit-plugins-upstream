@@ -1,45 +1,64 @@
-## Description: <br>
-Analyzes a provided product list with multimodal AI to group products by main-image similarity for visual clustering, deduplication, and competitor lookalike detection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes a provided product list and groups products by visual similarity of their main images.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers and ecommerce analysts use this skill to post-process product search or recommendation results, grouping items by visual similarity and highlighting same-style, duplicate, or cross-brand lookalike products. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product metadata, image URLs, prior tool output, and user prompts are sent to LinkFox services. <br>
-Mitigation: Use only with data approved for LinkFox processing, and avoid confidential catalog or customer data unless the gateway environment and data handling are understood. <br>
-Risk: Full API responses can be persisted in local LinkFox session and cache directories. <br>
-Mitigation: Review where response files are stored, limit access to the workspace, and delete cached or saved responses that contain sensitive product data. <br>
-Risk: The skill can automatically report feedback and may send context about behavior or user satisfaction to a separate LinkFox feedback endpoint. <br>
-Mitigation: Disable or avoid feedback reporting where user prompts, business context, or result details should not leave the environment. <br>
-Risk: Calls consume LinkFox credits and repeated analysis can create unexpected cost. <br>
-Mitigation: Confirm cost-sensitive runs with the user, reuse cached results when appropriate, and avoid repeated retries with changed parameters unless the user approves. <br>
+## Use Case:
 
+External marketplace sellers and agents use this skill after product search or recommendation to cluster visually similar product images, identify near-duplicates, and surface cross-brand lookalikes.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/linkfox-ai/skills/linkfox-multimodal-product-similarity) <br>
-- [API reference](references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries and tables with saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a prior products array; large responses are summarized on stdout unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Product data and user instructions are sent to LinkFox for multimodal analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with product data approved for LinkFox processing, and avoid environments where LINKFOX endpoint variables can be set by untrusted parties.
+
+Risk: Full analysis responses are persisted locally and may include product, image, and similarity result data.
+
+Mitigation: Run the skill in an appropriate workspace and manage the generated linkfox output files according to the user's retention requirements.
+
+Risk: The skill can guide account login, API-key generation, billing, order, and payment flows.
+
+Mitigation: Provide phone numbers, SMS codes, plan choices, or payment methods only when intentionally completing LinkFox onboarding or billing actions.
+
+Risk: Dynamic credit consumption may be large for product-image similarity analysis.
+
+Mitigation: Warn the user about possible credit costs before execution and avoid automatic retries or parameter changes that would trigger extra paid calls.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-multimodal-product-similarity)
+- [LinkFox publisher profile](https://clawhub.ai/user/linkfox-ai)
+- [API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [JSON results persisted locally with concise text or Markdown summaries for larger responses.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an existing products array from a preceding tool, uses a configurable similarity threshold, and may guide LinkFox API-key or billing setup when authentication or balance errors occur.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

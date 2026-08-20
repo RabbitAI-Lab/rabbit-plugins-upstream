@@ -1,20 +1,7 @@
 ---
 name: startup-marketing-playbook
 description: |
-  You have a product, zero marketing budget, and a competitor outspending you 100:1. Paid isn't an option — so this playbook is organic-only: the channels that cost nothing but time, and the discipline to work them without getting flagged as spam.
-
-  What's inside:
-  • SEO from scratch — how to rank without backlinks or domain authority
-  • Community infiltration — provide real value in existing communities without triggering spam flags
-  • Social media playbook — platform-specific content that drives signups organically
-  • Word-of-mouth engineering — how to make a product naturally shareable
-  • Guerrilla tactics — scrappy, creative moves that punch above their weight on $0
-
-  🇨🇳 零预算创业营销 — 从零做 SEO、社区渗透（不触发 spam）、社媒引流、口碑工程、游击战术。纯有机渠道。
-  🇯🇵 ゼロ予算スタートアップ — ゼロからのSEO、コミュニティ浸透、SNS、口コミ設計、ゲリラ戦術。オーガニックのみ。
-  🇰🇷 제로예산 스타트업 마케팅 — 밑바닥 SEO, 커뮤니티 침투, SNS, 입소문 설계, 게릴라 전술. 오가닉 전용.
-
-  Triggers: "startup marketing" | "zero budget marketing" | "bootstrapped marketing" | "organic marketing" | "organic growth" | "no budget marketing" | "community marketing" | "word of mouth" | "guerrilla marketing" | "free marketing channels" | "创业营销" | "零预算" | "冷启动获客" | "口碑营销" | "스타트업 마케팅" | "제로예산"
+  Marketing playbook for bootstrapped startups with zero budget. Covers organic-only channels including SEO, community building, social media, and word-of-mouth tactics that cost nothing but time. Follow @WeiYipei on X.
 source: https://github.com/Gingiris-1031/gingiris-skills/tree/main/skills/startup-marketing-playbook
 tags:
   - startup-marketing
@@ -31,6 +18,12 @@ tags:
   - ai-agent-skill
   - agent-skill
   - latest
+---
+
+## ⚠️ 区分 B2B 与 2C
+
+本 skill 默认偏 dev / 开源 / B2B SaaS。若产品是 **2C 消费品 / 教育 / 应用 / 游戏**：核心指标换成 D1/D7/D30 留存、激活率、病毒系数 K（非 MRR/CAC/LTV）；冷启动渠道换成垂类社区 / 短视频 / 垂直 KOL（非 PH/HN/LinkedIn）。完整 2C 适配指南 + 各国渠道公开数据见 → `gingiris-seo-geo/references/2c-adaptation.md`。
+
 ---
 
 ## 📦 Install
@@ -58,10 +51,34 @@ No money? No problem. Every tactic here costs $0 — just your time and creativi
 - **Word-of-mouth engineering**: How to make your product naturally shareable
 - **Guerrilla tactics**: Creative, scrappy approaches that punch above their weight
 
+## $0 execution plan
+
+### Week 1: positioning and first list
+
+- Compare the top three alternatives' earliest, beta and current messaging; write one benefit-led sentence for your product.
+- Build a 200-person prospect sheet from competitor followers, LinkedIn keyword/job-title searches, Reddit/X intent conversations and relevant service marketplaces.
+- Define one activation event and one retained-use event before posting.
+
+### Week 2: conversations, not broadcasting
+
+- Send personalized outreach in small batches; record source, segment, reply, interview, activation and paid outcome.
+- Conduct screen-share interviews; let users speak most of the time and ask what they already pay for.
+- Reply to live intent in communities with a useful answer first. Disclose affiliation; do not impersonate a user or paste identical promotional copy.
+
+### Week 3: reusable proof asset
+
+- Turn the most repeated problem into one comparison page, tutorial, demo or case note.
+- Distribute channel-native excerpts and close every link back to the same measurable activation path.
+
+### Week 4: keep, fix or kill
+
+Keep a channel only if it creates activated/retained users, not just visits. If acquisition works but activation does not, pause distribution and fix the product. Publish a cohort table: `source → contacted → replies → interviews → signups → activated → retained → paid`.
+
 ## Related Gingiris Skills
 - Full version: https://clawhub.ai/gingiris-1031/skills/gingiris-launch
 - All skills: https://clawhub.ai/gingiris-1031
 - Follow: [@WeiYipei on X](https://x.com/WeiYipei)
+
 
 ---
 
@@ -70,6 +87,6 @@ No money? No problem. Every tactic here costs $0 — just your time and creativi
 **Iris Wei** — Growth consultant for 150+ AI startups. Ex-COO at AFFiNE (69K GitHub stars).
 
 - 🐦 Twitter: [@WeiYipei](https://twitter.com/WeiYipei) — Daily growth tactics
+- 💬 Consulting: [@Iris_carrot on Telegram](https://t.me/Iris_carrot)
 - 🛒 Premium Bundle (all 5 playbooks + templates): [Get on Gumroad ($249)](https://gingiris.gumroad.com/l/gingiris-complete-global-launch-bundle)
 - 📚 40+ Free Playbooks: [gingiris.tools/skills](https://gingiris.tools/skills/)
-

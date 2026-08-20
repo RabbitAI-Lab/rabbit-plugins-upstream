@@ -1,46 +1,67 @@
-## Description: <br>
-Uses SellerSprite data to help Amazon sellers find and analyze competing products across 12 marketplaces, including sales, BSR, pricing, rating, and growth metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents query LinkFox/SellerSprite data for Amazon competitor research across 12 marketplaces, returning product metrics such as estimated sales, BSR, price, ratings, seller, brand, and growth trends.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon sellers and ecommerce analysts use this skill to query SellerSprite competitor data by ASIN, keyword, seller, brand, or category and compare product performance metrics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Amazon research terms, ASINs, seller, brand, category inputs, session metadata, and the LinkFox API key are sent to LinkFox-controlled endpoints. <br>
-Mitigation: Use the skill only when those inputs are acceptable to share with LinkFox-controlled services, and avoid confidential product strategy unless that data handling is approved. <br>
-Risk: The helper script persists full API responses locally, which may include sensitive competitor research data. <br>
-Mitigation: Review the generated local JSON files, manage retention, and avoid running the skill in shared workspaces that should not store these results. <br>
-Risk: Authentication or credit issues may lead the agent toward installing a separate onboarding skill from a remote ZIP. <br>
-Mitigation: Confirm the source and need for any onboarding skill before installation, and prefer existing trusted authentication guidance when available. <br>
-Risk: The service consumes paid LinkFox credits and repeated queries can increase cost. <br>
-Mitigation: Confirm additional searches, pagination, or query changes with the user before making repeated calls. <br>
+## Use Case:
 
+External Amazon sellers and ecommerce analysts use this skill to find and compare competing products by ASIN, keyword, seller, brand, or category. It supports competitor discovery, sales estimation, brand benchmarking, and historical snapshot analysis using SellerSprite data.
 
-## Reference(s): <br>
-- [卖家精灵-查竞品 API 参考](references/api.md) <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-competitor-lookup) <br>
-- [LinkFox publisher profile](https://clawhub.ai/user/linkfox-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON parameters, shell command examples, and saved JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The helper script writes full API responses to local JSON files and prints either full JSON or a compact summary depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill sends competitor-research inputs and API-key authenticated requests to third-party LinkFox/SellerSprite services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this external-service workflow is acceptable, and avoid submitting confidential ASIN, seller, brand, keyword, or category research inputs.
+
+Risk: Onboarding can ask for a phone number and SMS code, generate or retrieve an API key, and print that key for environment setup.
+
+Mitigation: Treat generated API keys and onboarding output as secrets; do not paste, log, commit, or share them beyond the intended local environment configuration.
+
+Risk: Billing flows can list paid plans and create payment orders when directed.
+
+Mitigation: Confirm the selected plan and payment method with the user before creating an order, and do not poll or retry payment status unless the user asks.
+
+Risk: Full API responses and cached results may be stored under local linkfox data/cache directories.
+
+Mitigation: Review generated linkfox directories before sharing or committing the workspace, especially when responses include commercially sensitive competitor research.
+
+Risk: Environment variables can override LinkFox service endpoints.
+
+Mitigation: Use endpoint overrides only for endpoints you control or trust.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-competitor-lookup)
+- [卖家精灵-查竞品 API 参考](references/api.md)
+- [解决认证和积分问题](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries and tables, shell commands for scripted calls, and JSON responses or saved JSON data files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full responses may be saved locally; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

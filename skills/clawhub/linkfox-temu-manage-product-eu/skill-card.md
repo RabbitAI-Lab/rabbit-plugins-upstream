@@ -1,46 +1,67 @@
-## Description: <br>
-Helps agents manage Temu Europe product listings through LinkFox gateway scripts and reference docs for Partner EU product, SKU, inventory, compliance, sale-status, pre-sale, and delete APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent manage Temu Partner EU product catalog operations through LinkFox gateway scripts and references, including product lookup, detail retrieval, SKU and stock queries, edits, deletion, listing status changes, compliance edits, category checks, property templates, external codes, and video cover retrieval.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Temu sellers, operators, and developers use this skill to query and update product listings for Temu Europe via LinkFox. It supports product discovery, detail and SKU lookup, stock edits, listing edits, compliance updates, sale-status changes, pre-sale changes, and deletion workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Europe for Temu EU product-management workflows. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform account-impacting Temu product actions, including deletion, stock overwrite, full listing update, compliance edit, and sale-status changes. <br>
-Mitigation: Require explicit human confirmation and review request payloads before running those operations against real stores. <br>
-Risk: The skill handles LinkFox and Temu seller credentials and includes helpers for local token storage. <br>
-Mitigation: Use least-privilege Temu tokens, keep token-store paths private, avoid raw token reveal or unmasked listing helpers, and rotate tokens if exposed. <br>
-Risk: Saved LinkFox response files may contain sensitive product or store data. <br>
-Mitigation: Clean up saved response files, restrict access to project output directories, and avoid sharing full JSON dumps unless needed. <br>
+## Use Case:
 
+External developers and operators use this skill to guide and execute Temu EU product-management workflows through LinkFox, including finding goods, inspecting details, changing stock or listing status, updating product fields, editing compliance data, and deleting products when explicitly intended.
 
-## Reference(s): <br>
-- [LinkFox Temu Europe product API reference](references/api.md) <br>
-- [Partner EU product API catalog](references/partner-eu-catalog.md) <br>
-- [Temu access token authorization guide](references/access-token.md) <br>
-- [Per-interface API reference index](references/apis/README.md) <br>
-- [Temu Partner EU Manage Products documentation](https://partner-eu.temu.com/documentation?menu_code=2283b8dc7fcc42529633b0b41114aef8) <br>
+### Deployment Geography for Use:
 
+Europe (Temu Partner EU catalog operations)
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with Python command examples and JSON API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts save complete LinkFox responses under ./linkfox/<date>/<session>/data and print either full JSON or a response summary depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill can mutate live Temu EU catalog data, including product deletion, stock changes, listing status changes, compliance edits, and full or partial product updates.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit human confirmation for destructive or high-impact operations, and review the target goodsId, skuId, operation type, and request payload before running a script.
+
+Risk: The skill handles LinkFox and Temu credentials and may persist Temu access tokens locally.
+
+Mitigation: Use least-privilege and short-lived tokens where possible, keep token files out of shared workspaces and source control, and avoid exposing tokens in command history or logs.
+
+Risk: Custom gateway or endpoint environment variables could redirect requests away from the default LinkFox gateway.
+
+Mitigation: Avoid overriding gateway or login endpoint environment variables unless the endpoint is trusted and intentionally configured.
+
+Risk: The server security summary reports live catalog mutation, credential handling, billing flows, and local data persistence with insufficient guardrails.
+
+Mitigation: Install only when the user trusts LinkFox and needs this Temu EU catalog-management capability; review and scan the skill before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-manage-product-eu)
+- [API reference](artifact/references/api.md)
+- [Partner EU manage product catalog](artifact/references/partner-eu-catalog.md)
+- [Per-interface API references](artifact/references/apis/README.md)
+- [Access token guide](artifact/references/access-token.md)
+- [Onboarding and authentication recovery](artifact/references/onboarding.md)
+- [Temu Partner EU documentation](https://partner-eu.temu.com/documentation?menu_code=7289390cfd724be4a196f11ebe45a896)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, JSON, files]
+
+**Output Format:** [Markdown guidance with inline shell commands; scripts emit JSON responses or summaries and write response JSON files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a LinkFox API key plus a Temu accessToken or stored storeKey; high-impact catalog changes should be explicitly confirmed by a human before execution.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

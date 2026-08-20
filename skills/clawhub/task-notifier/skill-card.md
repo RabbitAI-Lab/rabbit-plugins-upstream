@@ -1,41 +1,58 @@
-## Description: <br>
-Sends desktop notifications when an OpenClaw agent or subagent finishes a task, with support for macOS and WSL-on-Windows, smart suppression, and language detection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Task Notifier provides documentation and operating guidance for installing, configuring, verifying, and uninstalling an OpenClaw desktop notification runtime plugin.
 
-## Publisher: <br>
-[wdgame](https://clawhub.ai/user/wdgame) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT No Attribution <br>
+## Publisher:
 
+[wdgame](https://clawhub.ai/user/wdgame)
 
-## Use Case: <br>
-Developers and OpenClaw users use this skill to monitor long-running agent and multi-agent workflows and receive local desktop notifications when work completes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can prompt installation of a separate runtime plugin using unsafe install flags, and that plugin was not included in the reviewed skill files. <br>
-Mitigation: Inspect the runtime plugin package before installation and proceed only if its local notification behavior and install flags are acceptable. <br>
-Risk: The runtime plugin is described as having broad all-agent lifecycle hook coverage for task-completion monitoring. <br>
-Mitigation: Use the documented include and exclude filters to narrow monitored agents, or avoid installing the runtime plugin when broad monitoring is not acceptable. <br>
+## Use Case:
 
+Developers and OpenClaw users use this skill to set up desktop notifications when OpenClaw agents or subagents finish user-initiated work. It also guides verification, troubleshooting, filtering, and rollback for the Task Notifier runtime plugin.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wdgame/task-notifier) <br>
-- [ClawHub README Link](https://clawhub.ai/skills/task-notifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill itself is documentation-only; notification behavior depends on a separately installed runtime plugin.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.3 (source: server release metadata) <br>
+Risk: The runtime plugin is persistent and can observe OpenClaw lifecycle hook context across agents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after explicit user consent and acceptance of the documented unsafe-install warning.
+
+Risk: The runtime plugin runs local OS notification commands and reads the active foreground window title for suppression.
+
+Mitigation: Review the security notice before installation, run the doctor after setup, and adjust the active-window match configuration if suppression behaves incorrectly.
+
+Risk: The runtime plugin writes small per-run state files under active workspaces.
+
+Mitigation: Use the documented disable, uninstall, gateway restart, and stale-state cleanup commands when rolling back.
+
+## Reference(s):
+
+- [Task Notifier ClawHub Page](https://clawhub.ai/wdgame/skills/task-notifier)
+- [Task Notifier Reference README](references/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration]
+
+**Output Format:** [Markdown with bash command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes install, verification, configuration, diagnostic, and rollback guidance.]
+
+## Skill Version(s):
+
+1.1.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,63 @@
-## Description: <br>
-查询TikTok Shop店铺（卖家）详情，通过sellerId获取单个店铺的完整档案，返回总销量、多周期(1天/7天/30天/90天)销量与销售额(GMV)、粉丝数、评分、评价数、好评率、送达率、回复率、在店商品数、带货达人数、带货视频数、直播数、价格区间、商品分类、预估上架时间等指标。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries a single TikTok Shop seller by sellerId and returns a detailed store profile with sales, GMV, follower, rating, fulfillment, product, category, video, influencer, livestream, and listing-date metrics.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketers, and ecommerce analysts use this skill to retrieve a full performance profile for one TikTok Shop store when they already have a sellerId. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and makes authenticated network calls to retrieve seller details. <br>
-Mitigation: Install and run it only when the user is comfortable granting LinkFox API access for this workflow. <br>
-Risk: Calls can consume paid LinkFox credits. <br>
-Mitigation: Avoid repeated automatic calls for the same request, and tell the user before continuing with extra paid lookups. <br>
-Risk: Full seller-detail responses are stored locally after calls. <br>
-Mitigation: Review the generated LinkFox session data files and handle them according to the workspace's data-retention expectations. <br>
-Risk: A configured LINKFOX_TOOL_GATEWAY value can change the API gateway used by the script. <br>
-Mitigation: Verify LINKFOX_TOOL_GATEWAY is unset or points to the official LinkFox gateway before use. <br>
-Risk: The artifact documents automatic feedback reporting to a separate LinkFox feedback endpoint. <br>
-Mitigation: Review feedback behavior before installation if user comments or task outcomes may be sensitive. <br>
+## Use Case:
 
+External ecommerce sellers, analysts, and marketers use this skill to inspect one known TikTok Shop store's performance profile by sellerId. It is useful for benchmarking a store's sales momentum, GMV, followers, ratings, fulfillment indicators, content reach, and product mix.
 
-## Reference(s): <br>
-- [EchoTik-TikTok店铺详情 API reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-seller-detail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell or Python command examples and saved JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a sellerId; writes complete seller-detail responses to local LinkFox session data, prints small JSON responses inline, and summarizes larger responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Seller lookup requests, API keys, and session metadata are sent to LinkFox/EchoTik services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that data sharing is acceptable, and prefer obtaining and storing the API key yourself through the official LinkFox site.
+
+Risk: The bundled onboarding flow can handle phone/SMS login, API-key creation, package listing, and payment-order creation.
+
+Mitigation: Do not run onboarding login or payment commands unless the user explicitly intends to provide a phone/SMS code or create a payment order.
+
+Risk: Full API responses are persisted to local linkfox folders.
+
+Mitigation: Review the saved response location and avoid running the skill from workspaces where persisted seller data or account metadata would be inappropriate.
+
+Risk: Each seller-detail lookup consumes LinkFox credits.
+
+Mitigation: Confirm user intent before repeated calls, especially when the user may not expect additional credit consumption.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-seller-detail)
+- [EchoTik-TikTok店铺详情 API 参考](artifact/references/api.md)
+- [解决认证和积分问题](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API results and local JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires sellerId; full responses are written under a local linkfox session directory, with stdout showing full JSON for small responses or a summary for larger responses.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

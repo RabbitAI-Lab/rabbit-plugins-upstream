@@ -1,44 +1,64 @@
-## Description: <br>
-Analyzes cat litter box image or video inputs through LifeEmergence/Smyx cloud APIs to produce structured observations about feces morphology, urine clump size, and health-risk alerts without disease diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes cat litter box images or videos by calling remote APIs to identify feces morphology and urine clump characteristics, returning structured observation reports and health risk alerts without disease diagnosis.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to submit cat litter box videos or URLs for waste characteristic analysis, smart litter box monitoring, and multi-cat household health trend review. It returns observations and risk prompts rather than veterinary diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Litter-box videos or video URLs are sent to LifeEmergence/Smyx cloud services for analysis. <br>
-Mitigation: Install only when users accept that cloud transfer; avoid submitting sensitive media and confirm service terms before production use. <br>
-Risk: The skill can silently create or reuse an internal identity and use it for report retrieval. <br>
-Mitigation: Require explicit user or workspace approval for identity creation and history lookup before enabling the skill. <br>
-Risk: Tokens may be stored in a workspace SQLite database for later API calls. <br>
-Mitigation: Limit workspace access, rotate credentials if exposed, and prefer an updated release with explicit token storage and deletion controls. <br>
+## Use Case:
 
+External users and developers use this skill to analyze cat litter box media for waste characteristics, urine clump size, and trend-oriented health observations. The output is intended for monitoring and risk awareness, not veterinary diagnosis or treatment guidance.
 
-## Reference(s): <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Skill usage demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill release page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-litter-box-waste-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON analysis reports with optional saved text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured observations, risk prompts, suggestions, report links, and historical report lists from cloud APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Uploaded household pet media or supplied media URLs may be sent to remote services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the intended backend, consent model, and data-retention policy before use.
+
+Risk: The skill can automatically create or reuse an identity and store authentication tokens in a local workspace database.
+
+Mitigation: Run in a controlled workspace, restrict local database access, and clear stored credentials when no longer needed.
+
+Risk: Default development configuration references private HTTP 192.168.1.234 endpoints.
+
+Mitigation: Review configuration before installation and set trusted production endpoints before processing media.
+
+Risk: History queries retrieve prior analysis reports from cloud APIs.
+
+Mitigation: Verify the user or account scope before listing reports and avoid exposing internal identity values.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-litter-box-waste-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API interface documentation](references/api_doc.md)
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, guidance]
+
+**Output Format:** [Markdown report or JSON-formatted structured analysis and history list]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include remote report links; does not diagnose disease.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter says 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

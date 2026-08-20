@@ -1,50 +1,64 @@
-## Description: <br>
-Siluzan CSO helps agents use the Siluzan content operations platform for content drafting and revision, persona/styleGuide work, RAG-backed knowledge retrieval, social publishing, account operations, planning, and reporting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Siluzan CSO helps agents operate the Siluzan content operations platform for content workflows, persona management, RAG-backed brand knowledge, social-media publishing, account operations, planning, and reporting.
 
-## Publisher: <br>
-[sigedev01-bit](https://clawhub.ai/user/sigedev01-bit) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sigedev01-bit](https://clawhub.ai/user/sigedev01-bit)
 
-## Use Case: <br>
-Content operations teams and external agents use this skill to create and revise marketing content, manage account personas, retrieve CSO knowledge-base material, upload media, publish to supported social platforms, inspect publishing tasks, and review operating reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The installer may make broad lasting system changes and run remote code with limited user control. <br>
-Mitigation: Review the installer before running it, prefer manual installation when appropriate, keep npm registry changes explicit, and avoid piping remote scripts directly into shells. <br>
-Risk: CSO credentials, OAuth links, account snapshots, uploaded media, and publish actions are sensitive. <br>
-Mitigation: Use intended credential storage, avoid exposing tokens in shell history or shared files, and confirm target accounts and content before upload, account changes, retries, deletes, or publishing. <br>
-Risk: Publishing, planning, and account-management commands can change external platform state. <br>
-Mitigation: Require user confirmation for write actions and verify account IDs, media assets, platform selection, and scheduled content before execution. <br>
+## Use Case:
 
+External users and operators use this skill to guide agents through Siluzan CSO workflows for content drafting, persona management, RAG-backed brand answers, media account publishing, task handling, planning, and reporting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sigedev01-bit/skills/siluzan-cso) <br>
-- [Siluzan homepage](https://www.siluzan.com) <br>
-- [Setup and authentication](references/setup.md) <br>
-- [Publishing workflow](references/publish.md) <br>
-- [RAG knowledge retrieval](references/rag.md) <br>
-- [Content writing workflow](three-lib-content-workflow/content-writer.workflow.md) <br>
-- [Persona management](references/persona.md) <br>
-- [Task management](references/task.md) <br>
-- [Reporting](references/report.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands, JSON configuration examples, and local file outputs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local validation files, media cover images, account snapshots, and publishing configuration artifacts when the user confirms the relevant operation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.33 (source: ClawHub release evidence) <br>
+Risk: Installer scripts and CLI setup may make broad, persistent local changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer scripts first, prefer installing Node and the CLI manually, avoid persistent npm registry changes, and register the skill only in the intended assistant.
+
+Risk: The skill can guide upload, publish, delete, account-group, planning, and persona-save actions.
+
+Mitigation: Confirm each write action with the user before it runs and verify the result afterward with the relevant read-only command.
+
+Risk: Generated content may include incorrect or unsupported claims, and the security guidance flags adversarial persuasion framing in some workflow rules.
+
+Mitigation: Review generated content carefully, ground brand or product claims in RAG evidence, and run the skill's content validation workflow where applicable.
+
+## Reference(s):
+
+- [Siluzan CSO ClawHub release page](https://clawhub.ai/sigedev01-bit/skills/siluzan-cso)
+- [Setup](references/setup.md)
+- [Publishing workflow](references/publish.md)
+- [RAG workflow](references/rag.md)
+- [Content writer workflow](three-lib-content-workflow/content-writer.workflow.md)
+- [Planning workflow](references/planning.md)
+- [Persona workflow](references/persona.md)
+- [Reporting workflow](references/report.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local files such as cover images, validation reports, and publish configuration when the agent follows the skill workflows.]
+
+## Skill Version(s):
+
+1.1.41 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

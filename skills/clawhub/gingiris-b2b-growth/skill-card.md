@@ -1,43 +1,60 @@
-## Description: <br>
-Gingiris B2B Growth helps B2B SaaS founders and growth teams diagnose PLG versus SLG fit, pricing, PMF, revenue stages, channels, enterprise sales, and retention. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A B2B SaaS growth playbook that helps agents diagnose PLG versus SLG motion, pricing, PMF, NRR, affiliate and channel strategy, enterprise tiering, and staged ARR growth.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-External founders, operators, and growth teams use this skill to choose a B2B SaaS go-to-market motion, improve signup-to-paid and NRR discipline, structure pricing, and plan affiliate, channel, and enterprise sales work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Business-growth advice may be applied outside the user's market, contract, or payment context. <br>
-Mitigation: Review recommendations for fit before using them, especially pricing, contract, payment, and enterprise sales tactics. <br>
-Risk: Common SaaS acronyms and multilingual trigger phrases may activate the skill for broad business questions. <br>
-Mitigation: Confirm the request is about B2B SaaS growth, PLG, SLG, pricing, PMF, channels, enterprise sales, or retention before relying on the playbook. <br>
+## Use Case:
 
+External founders, growth teams, and startup operators use this skill to choose PLG, SLG, or hybrid go-to-market motions and plan B2B SaaS growth from early PMF through enterprise sales and channel expansion.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/gingiris-1031/skills/gingiris-b2b-growth) <br>
-- [Enterprise Deal Execution Framework](references/en/deal-execution.md) <br>
-- [2B deal execution framework](references/deal-execution.md) <br>
-- [Gingiris 2B deals playbook](https://gingiris.tools/playbook/2b-deals/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown guidance and structured playbook recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only skill; no code execution, credential access, persistence, or hidden behavior found in server security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.3.0 (source: server release metadata) <br>
+Risk: Broad activation wording may cause the skill to be invoked for many B2B, SaaS, PLG, SLG, pricing, ARR, NRR, and go-to-market prompts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and narrow trigger terms during installation if the skill should only apply to specific growth-planning workflows.
+
+Risk: The final-payment leverage tactic can create legal, contractual, customer-trust, or data-control risk if used without explicit agreement.
+
+Mitigation: Require explicit customer agreement, clear data and control boundaries, and legal review before applying any payment-leverage advice.
+
+Risk: The skill is advisory business content and may contain heuristics or benchmark claims that do not fit every company or market.
+
+Mitigation: Treat benchmarks as hypotheses; verify segment, date, price point, denominator, and customer context before acting on recommendations.
+
+## Reference(s):
+
+- [Podcast evidence for B2B growth](references/podcast-evidence.md)
+- [Enterprise Deal Execution Framework Reference](references/en/deal-execution.md)
+- [2B deal execution framework reference](references/deal-execution.md)
+- [Gingiris 2B deals field manual](https://gingiris.tools/playbook/2b-deals/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text]
+
+**Output Format:** [Markdown guidance with checklists, tables, decision rules, and concise recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory business content; no executable behavior.]
+
+## Skill Version(s):
+
+2.3.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

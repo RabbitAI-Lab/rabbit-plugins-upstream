@@ -1,49 +1,64 @@
-## Description: <br>
-AI video generation skill with auto model selection across Seedance 2, Kling 3.0, HappyHorse, and 10+ models. Produces finished multi-shot videos (5-120s) from text, images, URLs, scripts, or audio, including AI music, lip sync, and multi-shot sequencing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pexo Video Agent helps agents create finished multi-shot AI videos from text, images, URLs, scripts, or audio through Pexo's external video-generation service.
 
-## Publisher: <br>
-[pexo](https://clawhub.ai/user/pexo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pexo](https://clawhub.ai/user/pexo)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill to create finished short-form, product, brand, explainer, and marketing videos from text briefs, media files, URLs, scripts, or audio through Pexo projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Video briefs, uploaded media, and generated outputs are sent to Pexo. <br>
-Mitigation: Use the skill only for content approved for Pexo processing, and do not include secrets, confidential business data, regulated personal data, or untrusted remote files unless approved. <br>
-Risk: The workflow can continue credit-gated video-generation work after explicit user approval. <br>
-Mitigation: Review estimated credits and available balance before approval, and only run billing confirmation for work the user intends to pay for. <br>
-Risk: Final delivery can include full signed download URLs for generated assets. <br>
-Mitigation: Treat signed URLs as private until they expire and share them only with intended recipients. <br>
-Risk: The skill requires a Pexo API key in local configuration. <br>
-Mitigation: Store the key in an owner-only config file, keep it out of prompts and logs, and run the diagnostic script after setup or configuration errors. <br>
+## Use Case:
 
+Developers and external users use this skill to turn natural-language briefs, selected media, product URLs, scripts, or audio into finished short-form and marketing videos while the agent manages project setup, uploads, status polling, billing confirmations, and delivery.
 
-## Reference(s): <br>
-- [Setup Checklist](references/SETUP-CHECKLIST.md) <br>
-- [Troubleshooting](references/TROUBLESHOOTING.md) <br>
-- [Pexo](https://pexo.ai) <br>
-- [Pexo OpenClaw connection guide](https://pexo.ai/connect/openclaw) <br>
-- [Pexo Video Agent on ClawHub](https://clawhub.ai/pexo/skills/pexo-video-agent) <br>
-- [Pexo publisher profile on ClawHub](https://clawhub.ai/user/pexo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Files] <br>
-**Output Format:** [Markdown guidance with bash commands, JSON script outputs, project links, signed download URLs, and local video files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Final media outputs are 5-120 second videos with optional music, narration, subtitles, transitions, and aspect ratios 16:9, 9:16, or 1:1.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.12 (source: server release and skill frontmatter) <br>
+Risk: User briefs, selected media files, and project metadata are sent to Pexo for video generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain explicit user consent before the first external transmission and upload only files the user selected for the video task.
+
+Risk: The PEXO_API_KEY grants authenticated access to the user's Pexo account.
+
+Mitigation: Keep the key private, store it in ~/.pexo/config with restrictive permissions or an environment variable, and rotate it if it is exposed.
+
+Risk: Billable video-generation batches can consume Pexo credits.
+
+Mitigation: Review the available credit estimate and require explicit user approval before confirming any billable batch.
+
+Risk: Generated videos and fetched media may remain in the local cache.
+
+Mitigation: Periodically delete cached media from ~/.pexo/tmp or PEXO_TMP_DIR when outputs are sensitive.
+
+## Reference(s):
+
+- [Setup Checklist](references/SETUP-CHECKLIST.md)
+- [Troubleshooting](references/TROUBLESHOOTING.md)
+- [Pexo OpenClaw Guide](https://pexo.ai/connect/openclaw)
+- [ClawHub Skill Page](https://clawhub.ai/pexo/skills/pexo-video-agent)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON command outputs, plain URLs, and downloaded media files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires PEXO_API_KEY, bash, curl, jq, file, outbound HTTPS to https://pexo.ai, and local cache storage under ~/.pexo/tmp or PEXO_TMP_DIR.]
+
+## Skill Version(s):
+
+0.3.16 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

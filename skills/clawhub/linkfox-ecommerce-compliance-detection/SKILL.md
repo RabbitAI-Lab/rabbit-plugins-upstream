@@ -218,9 +218,11 @@ author: LinkFox
 6. **错误处理与协同**：查询失败时根据响应 `errcode`/`errmsg` 说明原因并建议修正（图片 URL 不可公开访问、ASIN/专利号格式、站点/国家代码、参数越界等）；连续使用多工具时将各工具发现汇总为连贯分析，标注数据来源与时间窗。
 
 ## 解决认证和积分问题
+发生以下异常情况时，采用 references/onboarding.md 引导解决问题：
 
-异常情况：未配置 `LINKFOX_AGENT_API_KEY`/`LINKFOXAGENT_API_KEY`；响应 401 或 402；消息含"积分余额不足/quota exceeded/insufficient balance/套餐到期/需充值"等。
+**注意**：你是workbuddy，并且渠道是workbuddy，使用 onboarding 引导登录注册时 channel **必须**为 workbuddy。这非常重要！
 
-措施：优先用 skill 内 onboarding.md 引导；找不到则加载 /linkfox-onboarding skill（未安装先下载 https://agent-files.linkfox.com/skills/linkfox-onboarding/release.zip 解压安装）。
-
-**注意**：你是workbuddy，并且渠道是workbuddy，使用linkfox-onboarding登录注册时**必须**传递channel为 workbuddy。这非常重要！
+### 异常情况
+- **未配置API Key**：环境变量未配置 `LINKFOX_AGENT_API_KEY`，也未配置 `LINKFOXAGENT_API_KEY`。
+- **响应401或402状态码**
+- **响应提示积分或余额不足**：消息含"积分余额不足/计费不足/余额不足/quota exceeded/insufficient balance/套餐到期/需充值/请充值"，或类似含义的内容。
