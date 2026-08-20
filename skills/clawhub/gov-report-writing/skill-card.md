@@ -1,44 +1,64 @@
-## Description: <br>
-Helps agents draft, format, and review Chinese public-sector reports and formal documents using GB/T 9704-2012 formatting guidance, report templates, official wording conventions, and confidentiality checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese official-document drafting skill for government, state-owned enterprise, public institution, and enterprise report workflows, including formal report templates, GB/T 9704-2012 formatting guidance, terminology checks, polishing guidance, and confidentiality reminders.
 
-## Publisher: <br>
-[mogician11111](https://clawhub.ai/user/mogician11111) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[mogician11111](https://clawhub.ai/user/mogician11111)
 
-## Use Case: <br>
-Employees and external users working in or with Chinese state-owned enterprises, government agencies, public institutions, or similar organizations use this skill to prepare formal reports, summaries, briefings, meeting minutes, notices, and implementation plans. It is intended for drafting and formatting assistance, with user review required before organizational submission. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may include classified, confidential, or sensitive internal material when requesting a draft. <br>
-Mitigation: Use placeholders or sanitized excerpts, avoid classified or confidential inputs, and review any generated document under the organization's information-handling rules. <br>
-Risk: The activation wording is broad enough that the skill could be invoked for ordinary writing tasks where this specialized workflow is not intended. <br>
-Mitigation: Invoke it deliberately for Chinese public-sector, state-owned enterprise, or institutional formal-document drafting, and use a general writing workflow for unrelated tasks. <br>
-Risk: Generated facts, names, dates, figures, and policy references may be incomplete or inaccurate. <br>
-Mitigation: Treat outputs as drafts and verify all factual, policy, and formatting details before submission or distribution. <br>
+## Use Case:
 
+Employees and external users use this skill to draft, polish, format, and review Chinese official documents such as annual summaries, duty reports, Party-building reports, research reports, work plans, meeting minutes, notices, requests, replies, and briefing materials. It is intended for non-classified materials and uses placeholders plus review reminders for missing, sensitive, or unverifiable facts.
 
-## Reference(s): <br>
-- [GB/T 9704-2012 formatting guide](references/gb-t9704-format.md) <br>
-- [Report templates](references/report-templates.md) <br>
-- [Vocabulary and wording guide](references/vocabulary-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, guidance] <br>
-**Output Format:** [Markdown guidance or formal Chinese document drafts, with Word document output when paired with a document-generation skill] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses XX placeholders for missing or sensitive fields and asks users to review facts, dates, names, policy references, formatting, and required fonts before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: frontmatter and server release evidence) <br>
+Risk: Classified or sensitive internal material could be exposed if users paste original source text into an agent conversation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use redacted, non-classified inputs only; the skill should refuse classified source material and ask for sanitized content.
+
+Risk: Generated policy wording, names, dates, and numerical claims may be incorrect or unsupported.
+
+Mitigation: Review all generated facts against authoritative source documents before submission or distribution.
+
+Risk: Official-document formatting may not match local filing requirements if required Chinese fonts or Word settings are unavailable.
+
+Mitigation: Verify output with the included format-check guidance and install or configure required fonts before final use.
+
+## Reference(s):
+
+- [README](README.md)
+- [GB/T 9704-2012 Formatting Reference](references/gb-t9704-format.md)
+- [Report Templates](references/report-templates.md)
+- [Vocabulary and Terminology Guide](references/vocabulary-guide.md)
+- [Policy Citation Reference](references/policy-database.md)
+- [Polishing Guide](references/polishing-guide.md)
+- [AI Trace Review Guide](references/ai-traces.md)
+- [Format Check Script](scripts/format_check.py)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or structured Chinese document text with optional DOCX formatting guidance and format-check commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses XX placeholders for missing or sensitive details and includes safety, factual review, and font/format reminders.]
+
+## Skill Version(s):
+
+1.4.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -15,11 +15,11 @@ def _get_repos() -> tuple:
         cfg = json.load(open(CONFIG_FILE, encoding="utf-8"))
         g = cfg.get("gitee", {})
         h = cfg.get("github", {})
-        gitee = f"{g.get('user','[username-redacted]')}/{g.get('repo','workbuddy-skills')}"
-        github = f"{h.get('user','[username-redacted]')}/{h.get('repo','workbuddy-skills')}"
+        gitee = f"{g.get('user','wUwproject')}/{g.get('repo','workbuddy-skills')}"
+        github = f"{h.get('user','Ldxs001')}/{h.get('repo','workbuddy-skills')}"
         return gitee, github
     except:
-        return "[username-redacted]/workbuddy-skills", "[username-redacted]/workbuddy-skills"
+        return "wUwproject/workbuddy-skills", "Ldxs001/workbuddy-skills"
 
 
 def [credential-redacted]() -> str:

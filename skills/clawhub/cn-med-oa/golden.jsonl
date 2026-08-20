@@ -1,0 +1,29 @@
+{"query": "类风湿关节炎", "field": "title", "min_results": 3, "min_relevant": 3, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "系统性红斑狼疮", "field": "title", "min_results": 3, "min_relevant": 3, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "强直性脊柱炎", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "痛风", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "干燥综合征", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "糖尿病肾病", "field": "title", "min_results": 3, "min_relevant": 3, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "急性心肌梗死", "field": "title", "min_results": 3, "min_relevant": 3, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "慢性心力衰竭", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "高血压", "field": "title", "min_results": 3, "min_relevant": 3, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "心房颤动", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "慢性阻塞性肺疾病", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "支气管哮喘", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "非小细胞肺癌", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "缺血性脑卒中", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "阿尔茨海默病", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "抑郁症", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "慢性乙型肝炎", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "肝硬化", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "幽门螺杆菌", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "胃癌", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "骨质疏松症", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "慢性肾脏病", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "甲状腺功能亢进", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "脓毒症", "field": "title", "min_results": 2, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "原发性肝癌诊疗指南", "field": "title", "min_results": 1, "min_relevant": 1, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api"}
+{"query": "量子纠缠炒股", "field": "title", "negative": true, "min_relevant": 0, "expect_final": ["low_relevance", "not_found"], "expect_no_ok": true}
+{"query": "玄幻小说修炼体系等级划分", "field": "title", "negative": true, "min_relevant": 0, "expect_final": ["low_relevance", "not_found"], "expect_no_ok": true}
+{"query": "专家共识 风湿", "field": "title", "negative": false, "min_relevant": 2, "expect_final": ["full", "metadata_only"], "expect_no_ok": true, "note": "v2.1: yiigle 源返回真实相关专家共识（旧负例基于维普OR捞回）", "min_results": 2}
+{"query": "rheumatoid arthritis", "field": "title", "min_results": 1, "min_relevant": 1, "expect_final": ["full", "metadata_only"], "expect_vol_source": "api", "note": "英文查询在平台有英文OA文献"}

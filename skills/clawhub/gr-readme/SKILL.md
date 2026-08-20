@@ -24,6 +24,12 @@ when_to_use: |
     gr-readme = writing/editing the document itself
     gr-oss-marketing / gingiris-opensource = the entire growth strategy the document lives inside
 
+  Handoff rule:
+    If the request also asks for competitor research, comparison content, launch distribution,
+    partner/sponsor outreach, or backlinks, finish the README artifact here and route those
+    deliverables to gr-competitor, gr-oss-marketing, or gr-backlinks. Do not pretend the README
+    alone produced campaign reach.
+
 tags:
   - github-readme
   - open-source
@@ -658,6 +664,10 @@ Run before every README publish or major update.
 ---
 
 ## 快速诊断 / Quick Diagnosis
+
+### 2026 activation gate
+
+A README is an activation surface, not a brochure. The first screen should connect a crisp promise to a visible demo and the shortest runnable path. Track `README visit → install/start → first successful outcome → return`, with dated cohorts. If users star but cannot reach the first outcome in roughly three minutes, improve prerequisites, copy-paste commands, expected output, troubleshooting, and integration examples before adding more launch traffic. Keep benchmarks dated and label self-reported evidence.
 
 When someone sends you a README to review, run through this in order:
 

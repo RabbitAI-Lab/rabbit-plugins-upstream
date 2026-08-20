@@ -1,43 +1,58 @@
-## Description: <br>
-Kakutei Shinkoku helps Japanese freelancers and sole proprietors prepare for tax filing by organizing income categories, expenses, deductions, consumption tax, and invoice-system questions without e-Tax connectivity or My Number handling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Freelancers and sole proprietors use this Japanese tax guidance skill to classify income, organize expenses, review deductions, and understand consumption tax and invoice-system topics for 2025 and 2026 filing preparation.
 
-## Publisher: <br>
-[enawareness](https://clawhub.ai/user/enawareness) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[enawareness](https://clawhub.ai/user/enawareness)
 
-## Use Case: <br>
-External freelancers, sole proprietors, and side-business filers in Japan use this skill to prepare tax materials, classify income and expenses, review deductions, and understand consumption tax and invoice-system considerations before filing or consulting a tax professional. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Japan <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat general tax guidance or estimates as licensed professional tax advice. <br>
-Mitigation: Use the skill for preparation support only and verify filing decisions with a licensed tax professional or official tax authority guidance before filing. <br>
-Risk: Users may enter unnecessary sensitive financial or identity details into the memory template. <br>
-Mitigation: Avoid entering My Number, bank details, client identifiers, or other unnecessary personal data. <br>
-Risk: Japanese tax rules, filing dates, and thresholds can change. <br>
-Mitigation: Verify current rules, dates, and thresholds before relying on the guidance for a filing. <br>
+## Use Case:
 
+External freelancers, sole proprietors, side-income filers, and people preparing materials for a tax professional use this skill to organize Japanese tax filing information, estimate common tax concepts, and identify issues to verify with official guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/enawareness/kakutei-shinkoku) <br>
-- [Project homepage](https://github.com/ENAwareness/kakutei-shinkoku) <br>
+### Deployment Geography for Use:
 
+Japan
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown] <br>
-**Output Format:** [Markdown text responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompt-only; no executable code, external API calls, e-Tax connection, or My Number handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: Tax thresholds, deadlines, and deductions can change or vary by filing situation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current figures against official National Tax Agency guidance or a qualified tax professional before filing.
+
+Risk: The memory template could invite users to record sensitive personal or financial details.
+
+Mitigation: Do not include My Number or unnecessary sensitive personal data, and keep only the minimum information needed for filing preparation.
+
+Risk: Users may mistake general tax guidance and rough calculations for individualized tax advice.
+
+Mitigation: Treat outputs as filing-preparation support and confirm final filing decisions with official sources or a tax accountant.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/enawareness/skills/kakutei-shinkoku)
+- [Declared skill homepage](https://github.com/ENAwareness/kakutei-shinkoku)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text]
+
+**Output Format:** [Markdown text with tables, checklists, filing-preparation prompts, and approximate calculation guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompt-only skill; no API connection, no e-Tax integration, and no My Number handling is evidenced.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

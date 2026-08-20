@@ -1,8 +1,8 @@
 ---
 name: cargo-orchestration
-description: Interact with the Cargo platform via CLI. Use when the user wants to execute an action, run a workflow, trigger a batch, message an AI agent, query orchestration runtime tables (runs/batches/spans/records) with SQL, fetch segment records, resolve an action's output schema, or inspect a model schema.
-version: "1.5.1"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+description: "Make Cargo actually run something, or show what it would run — execute one connector action, run a multi-step workflow, trigger a batch across a whole segment or model, message an AI agent, build or edit a node graph, draw a workflow, tool or play as a diagram, and query the runtime tables (runs, batches, spans, records) with SQL. Triggers: \"run this on all my contacts\", \"execute the action\", \"kick off a batch\", \"build a workflow\", \"schedule a play\", \"make it run every morning\", \"ask the agent\", \"show me the workflow\", \"what does this tool do\", \"visualize this play\", \"draw the graph\", \"explain this workflow\", \"how many runs failed today\", \"what is the output schema for this action\", \"add a step that\". Skip when: explaining why a run misbehaved — use cargo-diagnostics; downloading result files — use cargo-analytics; committing the workflow as code — use cargo-cdk."
+version: "1.8.0"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -33,8 +33,21 @@ Need to run something?
 │   │                              batch create --nodes (many records)
 │   └── Reusable workflow        → build a tool, then run create --workflow-uuid
 │                                  or batch create --workflow-uuid
-└── Conversational AI agent      → message create
+├── Conversational AI agent      → message create
+└── Testing ONE node of a
+    workflow you're building     → node execute (debug only — see below)
 ```
+
+> **Fanning out across many records (`action execute-batch`, `batch create`)? Sample first.** Run 10–20 records, report the observed cost and hit-rate, then ask the user to approve the full enrollment — quoting the **record count** and the **credit estimate**. See [Create a batch → the sample gate](#the-sample-gate).
+
+> **`action execute`, not `node execute`, is the default for running something.**
+> `node execute` is a **debug** surface for a node that already lives in a workflow:
+> it requires `--workflow-uuid`, `--release-uuid`, `--node`, `--computed-config`
+> **and** `--context` (all five, enforced client-side), and it bills like any live
+> call. If you just want an operation's output — enrich a domain, call a connector
+> action, invoke a tool or agent — use `action execute` / `action execute-batch`
+> with a small `--action` + `--data` payload. Only reach for `node execute` when
+> verifying one node's behavior before running the full graph.
 
 > **Terminology:** An orchestration **tool** is a saved on-demand workflow (listed via `tool list`). An **action** is a single operation you execute without building a workflow — it can embed a saved orchestration tool (`kind: "tool"`), call a third-party connector (`kind: "connector"`), invoke an AI agent (`kind: "agent"`), or run a built-in platform operation (`kind: "native"`).
 
@@ -44,6 +57,17 @@ Need to run something?
 > data → `variables`; call an LLM and get parsed JSON → native `agent` node; call an
 > API → the integration's dedicated **connector action**; route → `branch`/`filter`/`switch`.
 > See **`references/node-selection.md`**.
+
+> **Show the graph, don't describe it.** Before deploying a draft, and whenever
+> the user asks what a workflow or play does, draw it:
+> `cargo-ai orchestration node diagram --workflow-uuid <uuid> --format ascii --raw`
+> (free, runs nothing; `--format` needs CLI ≥ 1.0.56, the command itself ≥ 1.0.54).
+> Routing, fallback edges, and which steps bill are what the user is actually
+> approving, and prose flattens all three. **Pick the format by where the output
+> goes:** `ascii` renders a picture a person can read in a terminal or a chat
+> reply; `mermaid` (the default) is source code, correct only when you are
+> pasting into a PR, a doc, or a page that renders it. Sources, the ASCII legend,
+> cost marking, and the duplicate-slug footgun: **`references/node-diagram.md`**.
 
 **References:**
 
@@ -55,6 +79,7 @@ Need to run something?
 > `references/examples/queries.md` — `orchestration query execute` (ClickHouse: runs/batches/spans/records) SQL examples. For `storage query` (workspace storage), see the `cargo-storage` skill.
 > `references/examples/segments.md` — segment fetch and filter examples
 > `references/nodes.md` — full node creation guide (kinds, native actions, expressions, validation, routing)
+> `references/node-diagram.md` — **draw a node graph as a Mermaid flowchart** (`node diagram`): every source (workflow / draft / release / run / raw nodes), marking paid nodes, highlighting a failing node, and why diagrams key on `uuid` rather than `slug`
 > `references/node-selection.md` — **how to pick the right node and avoid unnecessary `python` nodes** (decision table, native LLM `agent` node, template-expression limits, the silent-undefined footgun, inspecting node data via `runContext`, Pyodide sandbox limits, what survives a `delay`, group result access)
 > `references/filter-syntax.md` — complete filter condition reference
 > `references/polling.md` — async polling patterns, error handling, retry strategies
@@ -63,9 +88,18 @@ Need to run something?
 
 > **Diagnosing after the fact?** For the ordered forensic runbooks built on these surfaces — trace one run, sweep a batch for errors grouped by root cause, profile a play's credit spend — load the [`cargo-diagnostics`](../cargo-diagnostics/SKILL.md) skill.
 
-## Prerequisites
+## Bootstrap
 
-See [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) for install, login (`--oauth` / `--token`), JSON output conventions, and error shapes. Verify the session with `cargo-ai whoami` before running any of the commands below.
+Already signed in (`cargo-ai whoami` returns a workspace)? Skip to the next section.
+
+```bash
+npm install -g @cargo-ai/cli            # no global install? prefix every command with `npx @cargo-ai/cli`
+cargo-ai login --email you@company.com  # emailed code, no browser; creates the account on first use
+                                        # alternatives: --oauth (browser) · --token <api-token> (CI)
+cargo-ai whoami                         # confirm the active workspace before any write
+```
+
+Every command prints JSON to stdout; failures exit non-zero with `{"errorMessage": "..."}`. Anything that creates a run or a batch is async — pass `--wait-until-finished` or poll the matching `get`. When the full skill bundle is installed, [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) adds the CLI version pin, token scopes, and the admin-only surface.
 
 ## Discover resources first
 
@@ -94,7 +128,7 @@ cargo-ai connection connector list         # all connectors
 
 - **`run create`** — only works with **tool** workflows (or no `workflowUuid`). Play workflows return `playNotCompatible`.
 - **`batch create`** — allowed data kinds depend on the workflow type:
-  - **Play** workflows: `segment`, `change`, `filter`, `recordIds`
+  - **Play** workflows: `filter`, `recordIds`, `segment`, `change`. Trigger a play with `filter`; `segment` takes a standalone segment only, never the `segmentUuid` from `play list`.
   - **Tool** workflows (or no `workflowUuid`): `file`, `records`
 
 ## Quick reference
@@ -108,7 +142,7 @@ cargo-ai orchestration action get-output-schema --action '{"kind":"connector","i
 # Workflows (chain multiple actions)
 cargo-ai orchestration run create --workflow-uuid <uuid> --data '{"company":"Acme","domain":"acme.com"}'
 cargo-ai orchestration run create --data '{"domain":"acme.com"}' --nodes '[...]'
-cargo-ai orchestration batch create --workflow-uuid <uuid> --data '{"kind":"segment","segmentUuid":"..."}'
+cargo-ai orchestration batch create --workflow-uuid <uuid> --data '{"kind":"filter","modelUuid":"...","filter":{"conjonction":"and","groups":[]}}'
 
 # AI agents
 cargo-ai ai message create --chat-uuid <uuid> --parts '[{"type":"text","text":"..."}]'
@@ -152,6 +186,8 @@ cargo-ai orchestration action execute-batch \
 ```
 
 Action kinds: `tool`, `connector`, `agent`, `native`. See `references/examples/actions.md` for all action kinds, parameters, retry config, response shapes, and end-to-end examples.
+
+> **`execute-batch` bills per record.** Pass a 10–20 record slice of `--records` first, report the observed per-record cost and hit-rate, and get approval (with the full record count and credit estimate) before sending the rest — same gate as [Create a batch](#the-sample-gate).
 
 ### Resolve an action's output schema (without executing)
 
@@ -205,16 +241,75 @@ See `references/examples/tools.md` for file uploads, monitoring, and cancellatio
 
 ## Create a batch
 
-Batches process multiple records at once. Allowed data kinds depend on the workflow type:
+> **Sample first, then ask before enrolling everything — blocking.** A batch fans one workflow across every record in its data source, so a mistake and a full bill land together. Never enroll a full segment/file/model on the first attempt: run a **10–20 record sample**, report what it cost and returned, then ask the user to approve the full enrollment with the **record count and credit estimate** in the question. Mechanics below; the spend rules behind it are [`../cargo-gtm/references/cost-discipline.md`](../cargo-gtm/references/cost-discipline.md).
 
-- **Play** workflows: `segment`, `change`, `filter`, `recordIds`
-- **Tool** workflows (or no `workflowUuid`): `file`, `records`
+### The sample gate
+
+**1. Count the pool first (free).** Never quote an estimate from a guess:
 
 ```bash
-# Play workflow — run on a segment
+cargo-ai segmentation segment get <segment-uuid>          # → recordsCount (also on `segment list`)
+cargo-ai storage query execute "SELECT count() FROM <dataset>.<model>"   # for a filter/model source
+# For a file source: wc -l on the CSV, minus the header row.
+```
+
+**2. Run 10–20 records through the exact workflow and config.** Sample by data kind:
+
+```bash
+# Play workflow, segment source → reuse the segment's own filter, capped by `limit`
+cargo-ai segmentation segment get <segment-uuid>          # → copy .filter and .modelUuid
 cargo-ai orchestration batch create \
   --workflow-uuid <play.workflowUuid> \
-  --data '{"kind":"segment","segmentUuid":"..."}'
+  --data '{"kind":"filter","modelUuid":"<modelUuid>","filter":<segment.filter>,"limit":15}' \
+  --wait-until-finished
+
+# Play workflow, explicit records → pick 10–20 ids
+cargo-ai orchestration batch create \
+  --workflow-uuid <play.workflowUuid> \
+  --data '{"kind":"recordIds","modelUuid":"<modelUuid>","ids":["id-1","…","id-15"]}'
+
+# Tool workflow, inline records → slice the array
+cargo-ai orchestration batch create \
+  --workflow-uuid <tool.workflowUuid> \
+  --data '{"kind":"records","records":[ /* first 15 only */ ]}'
+
+# Tool workflow, file → upload a truncated CSV (header + 15 rows), not the full file
+head -n 16 leads.csv > leads-sample.csv
+cargo-ai workspaceManagement file upload --file ./leads-sample.csv
+```
+
+`limit` is the sampling lever for `kind: "filter"`. `kind: "segment"` and `kind: "change"` have **no limit** — they always enroll the whole set, so sample via `filter` or `recordIds` and switch to `segment` only for the approved full run.
+
+**3. Report the sample, then ask.** The confirmation must carry both numbers the user needs to decide:
+
+```
+Sample: 15 of 1,240 records · 6.2 credits (0.41/record) · 13/15 enriched (87%)
+Full enrollment: 1,225 remaining records ≈ 502 credits (balance: 780)
+
+Enroll all 1,225? Or:
+  1. Enroll all 1,225 (≈502 cr, leaves ~278)
+  2. Trim scope — e.g. the 610 records with a domain set (≈250 cr)
+  3. Stop here and review the sample output first
+```
+
+Wait for an explicit answer. **Do not enroll the full set on an unanswered question**, and don't treat approval of the sample as approval of the full run. Skip the gate only when the batch is free (no paid nodes) *and* small, or when the user has already named the scope and approved the cost this session.
+
+Batches process multiple records at once. Allowed data kinds depend on the workflow type:
+
+- **Play** workflows: `filter`, `recordIds`, `segment`, `change`
+- **Tool** workflows (or no `workflowUuid`): `file`, `records`
+
+Use `filter` to trigger a play — it queries the model directly. `segment` only
+accepts a **standalone** segment from `segmentation segment list`; passing the
+`segmentUuid` that `play list` returns is rejected (`segmentLinkedToPlay`, or
+`noRecords` on older backends) because a play's generated segment never has a
+populated record count.
+
+```bash
+# Play workflow — run over the play's model (empty filter = all rows)
+cargo-ai orchestration batch create \
+  --workflow-uuid <play.workflowUuid> \
+  --data '{"kind":"filter","modelUuid":"...","filter":{"conjonction":"and","groups":[]}}'
 
 # Tool workflow — run on a file
 cargo-ai orchestration batch create \
@@ -225,7 +320,7 @@ cargo-ai orchestration batch create \
 # Or wait synchronously — blocks until the batch reaches a terminal state and returns the final result
 cargo-ai orchestration batch create \
   --workflow-uuid <play.workflowUuid> \
-  --data '{"kind":"segment","segmentUuid":"..."}' \
+  --data '{"kind":"filter","modelUuid":"...","filter":{"conjonction":"and","groups":[]}}' \
   --wait-until-finished
 ```
 
@@ -335,7 +430,18 @@ cargo-ai orchestration node validate --nodes '[...]'
 # → { "outcome": "valid" } or { "outcome": "notValid", "invalidNodes": [...] }
 ```
 
-For debugging, use `node compute` (dry-run expressions) or `node execute` (live test, costs credits). For runs that complete with `status: success` but produce wrong output (wrong branch taken, empty downstream values), use `run.executions[].title` from `run get` only as a quick summary — it may be truncated — and read `runContext.<nodeSlug>` (returned at the top level of the same `run get <run-uuid>` response) to verify field-level data. See `references/troubleshooting.md` → "Debugging a workflow run" and `references/nodes.md` for the full node creation guide, validation error codes, and examples.
+Then **show it before deploying it** — `validate` proves the graph is well-formed,
+not that it does what the user asked for:
+
+```bash
+cargo-ai orchestration node diagram --nodes '[...]' --format ascii --raw   # free, runs nothing
+```
+
+Same command draws a deployed workflow (`--workflow-uuid`), a draft (`--draft`), a
+release (`--release-uuid`), or the graph a run executed (`--run-uuid`). See
+`references/node-diagram.md`.
+
+For debugging, use `node compute` (dry-run expressions) or `node execute` (live test of one node **of an existing workflow** — needs `--workflow-uuid` + `--release-uuid` + `--computed-config`, and costs credits; for anything that isn't node-level debugging, use `action execute` instead). For runs that complete with `status: success` but produce wrong output (wrong branch taken, empty downstream values), use `run.executions[].title` from `run get` only as a quick summary — it may be truncated — and read `runContext.<nodeSlug>` (returned at the top level of the same `run get <run-uuid>` response) to verify field-level data. See `references/troubleshooting.md` → "Debugging a workflow run" and `references/nodes.md` for the full node creation guide, validation error codes, and examples.
 
 ## Help
 

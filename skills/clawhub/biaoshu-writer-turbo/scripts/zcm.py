@@ -2,16 +2,14 @@
 """百炼®标书开放 API 轻客户端（thin client）。
 
 封装「提交 → 轮询 → 取结果」异步模型，零第三方依赖（仅标准库）。
-凭证与环境通过环境变量或本地凭证文件传入：
-  ZCM_APP_KEY  App Key（形如 bk_live_xxxxx，必填）
+凭证通过本地凭证文件 config.json 传入；可选环境变量仅覆盖路径/地址（不含凭证）：
   ZCM_BASE     Base URL，默认生产 https://biaoshu.zhiliaobiaoxun.com/api/open/v1
-  ZCM_CONFIG   凭证文件路径，默认 skill 内 config.json（含 app_key/可选 base/output_dir）
   ZCM_OUTPUT_DIR  成品标书 .docx 存放目录；未设时默认 skill 同级的 biaoshu-bailian-files/
 
-凭证读取优先级：环境变量 > skill 内 config.json（旧版 ~/.zcm/config.json 仍可读，兼容已有安装）。
+App Key 只从 skill 内 config.json 读取。
 凭证文件权限 600。config.json 含真实 Key，**勿上传发布包**（发布包不含配置文件）。
 App Key 仅能在官网自助注册获取（本 skill 不代注册）。
-经环境变量首次提供凭证时自动落盘到 config.json；也可用 login 显式保存、logout 清除。
+用 login 显式保存凭证、logout 清除。
 成品存放目录优先级：generate -o 显式路径 > ZCM_OUTPUT_DIR > 凭证文件的 output_dir > 默认 biaoshu-bailian-files。
 
 子命令：
@@ -31,6 +29,7 @@ interpret / compliance 可加 --report html|docx|both 在取结果后直接出�
 
 提交类子命令（interpret/packages/generate/compliance）默认自动轮询到终态，
 加 --no-wait 只提交并打印 job_id。
+Locale scope: zh-CN (Simplified Chinese) by design for mainland-China bidding workflows. User-facing help text, platform menu names, risk labels, and generated report prompts default to Chinese because they mirror procurement terminology used by the underlying platform and report artifacts. Assistants may explain those terms in the user's language when needed, but in-product labels remain zh-CN.
 """
 import argparse
 import json
@@ -45,18 +44,20 @@ import uuid
 DEFAULT_BASE = "https://biaoshu.zhiliaobiaoxun.com/api/open/v1"
 
 # skill 版本（单一事实来源）。适配的后端 API 版本与契约快照见 references/api.md 顶部。
-SKILL_VERSION = "2.2.0"
+SKILL_VERSION = "2.2.1"
 API_TARGET = "/api/open/v1"
-CONTRACT_SNAPSHOT = "2026-07-20"
+CONTRACT_SNAPSHOT = "2026-08-10"
 
 # 渠道码：开发线留空（不带渠道）；发布/装配变体时按平台 excel 注入（ClawHub 基线 s113，变体 s81–s114）。
 # 非空时官网链接追加 ?ch=。
 CHANNEL = "s87"
 SIGNUP_URL = "https://biaoshu.zhiliaobiaoxun.com/" + (f"?ch={CHANNEL}" if CHANNEL else "")
 
+# Locale scope: zh-CN labels are intentional for mainland-China bidding workflows;
+# assistants may translate explanations externally, but in-product menu names and prompts remain Chinese.
 # 文档第 6 节错误码 → 友好提示
 ERROR_HINTS = {
-    "missing_credentials": "缺少鉴权头：请设置环境变量 ZCM_APP_KEY。",
+    "missing_credentials": "缺少鉴权头：请在本 skill 目录下的 config.json 写入 app_key（或用 login 保存）。",
     "invalid_credentials": "App Key 不正确：核对凭证，或到官网 https://biaoshu.zhiliaobiaoxun.com/ 左侧菜单『Skill 接入 → 获取 APP Key』重置 Key（重置后旧 Key 立即失效）。",
     "account_disabled": "凭证或用户已被停用，请联系百炼®标书管理员。",
     "insufficient_points": "积分余额不足：本次不扣费也不产出，请到官网充值后重试。",
@@ -103,28 +104,19 @@ def log(msg):
 
 
 def creds_path():
-    """凭证文件：默认 skill 内 config.json；ZCM_CONFIG 可覆盖路径。"""
-    env = os.environ.get("ZCM_CONFIG", "").strip()
-    return env or os.path.join(skill_dir(), "config.json")
-
-
-def _user_creds_path():
-    """旧位置 ~/.zcm/config.json（ZCM_HOME 可改目录），仅作只读回退（兼容已有安装）。"""
-    home = os.environ.get("ZCM_HOME", "").strip() or os.path.join(
-        os.path.expanduser("~"), ".zcm")
-    return os.path.join(home, "config.json")
+    """凭证文件：固定为 skill 内 config.json（不可由环境变量重定向）。"""
+    return os.path.join(skill_dir(), "config.json")
 
 
 def load_creds_file():
-    """读凭证：先 skill 内 config.json，再回退旧版 ~/.zcm/config.json（兼容已有安装）。"""
-    for p in (creds_path(), _user_creds_path()):
-        try:
-            with open(p, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                if isinstance(data, dict):
-                    return data
-        except (FileNotFoundError, ValueError, OSError):
-            continue
+    """读凭证：仅 skill 内 config.json。"""
+    try:
+        with open(creds_path(), "r", encoding="utf-8") as f:
+            data = json.load(f)
+            if isinstance(data, dict):
+                return data
+    except (FileNotFoundError, ValueError, OSError):
+        pass
     return {}
 
 
@@ -147,15 +139,10 @@ def save_creds_file(data):
 
 
 def get_creds():
-    """返回 App Key。未配置时打印官网获取指引并退出（码 2）。"""
-    stored = load_creds_file()
-    env_key = os.environ.get("ZCM_APP_KEY", "").strip()
-    app_key = env_key or str(stored.get("app_key", "")).strip()
+    """返回 App Key。只从本地 config.json 读取；未配置时打印官网获取指引并退出（码 2）。"""
+    app_key = str(load_creds_file().get("app_key", "")).strip()
     if not app_key:
         die(REGISTER_GUIDE, code=2)
-    if env_key and env_key != stored.get("app_key"):
-        save_creds_file(dict(stored, app_key=env_key))
-        log(f"凭证已保存到 {creds_path()}（权限 600），下次无需再输。")
     return app_key
 
 
@@ -724,7 +711,7 @@ def cmd_progress_stream(args):
 
 
 def build_parser():
-    p = argparse.ArgumentParser(description="百炼®标书开放 API 轻客户端")
+    p = argparse.ArgumentParser(description="百炼®标书开放 API 轻客户端 / zh-CN client for mainland-China bidding workflows")
     p.add_argument("--version", action="version",
                    version=f"biaoshu-bailian {SKILL_VERSION}　·　适配 {API_TARGET}　·　契约快照 {CONTRACT_SNAPSHOT}")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -815,74 +802,8 @@ def build_parser():
     return p
 
 
-def _cmp_semver(a, b):
-    """比较 MAJOR.MINOR.PATCH：a<b→-1，a==b→0，a>b→1；非法输入抛 ValueError。"""
-    def _parse(v):
-        parts = str(v).strip().split(".")
-        if len(parts) != 3:
-            raise ValueError("非法版本号: %r" % (v,))
-        return tuple(int(x) for x in parts)
-    ta, tb = _parse(a), _parse(b)
-    return (ta > tb) - (ta < tb)
-
-
-def _fetch_latest_version(timeout=2.0):
-    """带 App Key GET /skill/version（带 channel）；返回 (latest, notice) 或 None（无 Key/任何失败）。"""
-    try:
-        app_key = os.environ.get("ZCM_APP_KEY", "").strip() or str(
-            load_creds_file().get("app_key", "")).strip()
-        if not app_key:
-            return None
-        url = base_url() + "/skill/version"
-        if CHANNEL:
-            url += "?channel=" + CHANNEL
-        req = urllib.request.Request(
-            url, headers={"User-Agent": "zcm-client", "X-App-Key": app_key}, method="GET")
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            raw = resp.read()
-        data = json.loads(raw.decode("utf-8")) if raw else {}
-        latest = data.get("latest")
-        if not latest:
-            return None
-        return str(latest), data.get("notice")
-    except Exception:
-        return None
-
-
-def _maybe_check_update():
-    """每天首次运行匿名查一次最新版本；本地落后则提示。任何失败静默、绝不阻断命令。"""
-    try:
-        if not os.path.exists(creds_path()):
-            return  # 未配置凭证：onboarding 阶段跳过，重点是引导拿 Key
-        creds = load_creds_file()
-        today = time.strftime("%Y-%m-%d")
-        if creds.get("last_version_check") == today:
-            return  # 今天已查过
-        creds["last_version_check"] = today  # 无论成败都记，避免当天反复打网络
-        try:
-            save_creds_file(creds)
-        except Exception:
-            pass
-        got = _fetch_latest_version()
-        if not got:
-            return
-        latest, notice = got
-        try:
-            if _cmp_semver(latest, SKILL_VERSION) <= 0:
-                return  # 本地不落后
-        except ValueError:
-            return
-        log("📢 「百炼®标书」检测到新版本 v%s（当前 v%s）。是否需要更新到最新版？（用户同意后，我会为你拉取并安装最新版本的本 skill。）"
-            % (latest, SKILL_VERSION))
-        if notice:
-            log("   说明：%s" % (notice,))
-    except Exception:
-        return
-
-
 def main():
     args = build_parser().parse_args()
-    _maybe_check_update()
     args.func(args)
 
 

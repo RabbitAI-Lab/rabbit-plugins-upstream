@@ -1,50 +1,66 @@
-## Description: <br>
-钟馗.Skill helps agents review other skills for security risks with static auditing, vulnerability-rule updates, scoring, and structured clean, suspicious, or malicious verdicts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zhongkui Skill helps agents review agent skills for security risks through static audit, behavior-simulation guidance, and supply-chain provenance checks, then returns a structured security verdict.
 
-## Publisher: <br>
-[ebandao777-oss](https://clawhub.ai/user/ebandao777-oss) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ebandao777-oss](https://clawhub.ai/user/ebandao777-oss)
 
-## Use Case: <br>
-Developers and security reviewers use this skill to assess a ClawHub or agent skill before installation or release, inspect risk findings, and receive a structured safety verdict. It can also preview or apply local vulnerability-rule updates before running a review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The --update --apply path changes the local rule database without the normal confirmation step. <br>
-Mitigation: Prefer --update --dry-run or interactive confirmation, and review generated rule changes before applying them. <br>
-Risk: A clean automated scan is not a security guarantee for every install context. <br>
-Mitigation: Use the verdict as triage, and add human review for sensitive, regulated, or high-impact deployments. <br>
-Risk: Threat-intelligence updates may involve external services or optional credentials. <br>
-Mitigation: Use scoped tokens only when needed, avoid pasting unrelated secrets, and keep network access limited to the documented update workflow. <br>
+## Use Case:
 
+Developers and security reviewers use this skill to inspect an agent skill directory before installation or release. It supports quick static checks and structured review reports for suspicious or malicious skill behavior.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/ebandao777-oss/zhongkui-skill) <br>
-- [README.md](README.md) <br>
-- [QUICKSTART.md](QUICKSTART.md) <br>
-- [REFERENCE.md](REFERENCE.md) <br>
-- [Static Audit Checklist](references/static-audit.md) <br>
-- [Risk Taxonomy](references/risk-taxonomy.md) <br>
-- [Scoring and Verdict Rules](references/scoring.md) <br>
-- [Capability Boundaries](references/capability-boundaries.md) <br>
-- [Threat Intelligence Pipeline](references/threat-intel-pipeline.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown security review report with verdict, score, findings table, and remediation guidance; direct script mode prints Markdown to stdout.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The optional update mode can modify local vulnerability signatures; dry-run or interactive confirmation is safer than direct apply.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter reports 2.0.0) <br>
+Risk: The skill reads files from a user-supplied skill directory as part of its review workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only on explicit skill directories and avoid broad private folders or unrelated workspaces.
+
+Risk: The security verdict is heuristic and may not fully match the broader behavior-simulation and supply-chain claims in the documentation.
+
+Mitigation: Treat results as review assistance and require human security review before installation, release, or blocking decisions.
+
+Risk: The artifact frontmatter version differs from the server release version.
+
+Mitigation: Use the server release version for this card and verify version alignment during release review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ebandao777-oss/skills/zhongkui-skill)
+- [Server-resolved source repository](https://github.com/ebandao777-oss/zhongkui-skill)
+- [README](README.md)
+- [Quickstart](QUICKSTART.md)
+- [Technical reference](REFERENCE.md)
+- [Static audit checklist](references/static-audit.md)
+- [Risk taxonomy](references/risk-taxonomy.md)
+- [Behavioral emulation scenarios](references/behavioral-emulation.md)
+- [Supply-chain review](references/supply-chain.md)
+- [Scoring and verdicts](references/scoring.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown security verdict report with tables and optional shell command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports include a verdict, score, short conclusion, deductions with file and line references, and review guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: ClawHub release metadata; artifact frontmatter reports 1.0.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

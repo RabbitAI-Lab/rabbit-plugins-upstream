@@ -1,105 +1,154 @@
 #!/bin/bash
-# stellar-trails dev server v8.0.0 — resilient no-cache HTTP server
+# stellar-trails dev server v9.11.7 — improved from v7.2.2 base
 #
-# Serves /home/z/my-project/.zscripts/ on port :3000 with Cache-Control: no-store.
+# Serves /home/z/my-project/.zscripts/ on port :3000 with Cache-Control: no-store
+# headers (bypass browser heuristic caching).
 #
-# v8.0.0 changes (from v7.2.2):
-#   1. Signal traps (SIGHUP, SIGTERM, SIGINT) → clean child shutdown
-#   2. PID file tracking → prevent orphans, enable clean restart
-#   3. Exponential backoff (1s→2s→4s→8s→16s→30s max) → no spin loop
-#   4. Max retries (10 consecutive failures → exit, don't spin forever)
-#   5. Log to file (/tmp/st-devsh.log) → debugging possible
-#   6. Health check (curl every 30s → restart if hung)
-#   7. No `set -e` → explicit error handling
+# v9.0.0 architecture (improved from v7.2.2, NOT hybrid with v8.0.0):
+#   - python3 runs in FOREGROUND (no & background, no wait race condition)
+#   - while true infinite loop (no MAX_RETRIES permanent exit)
+#   - No exit 0 on clean signal (always restart — proven v7.2.2 behavior)
+#   - set -e for setup phase (fail-fast on config errors)
 #
-# Kill vectors addressed:
-#   A. SIGHUP on terminal close → trap + ignore (keep serving)
-#   B. Session reset → setsid in caller + PID file for recovery
-#   C. OOM killer → crash recovery + backoff
-#   D. Orphaned python3 → trap kills child before exit
-#   E. Spin loop → backoff + max retries
-#   F. Silent errors → log to file
-#   G. Hung server → health check + restart
+# Improvements over v7.2.2 (safe additions only):
+#   1. SIGHUP trap in python3 (signal.SIG_IGN) — survive terminal close
+#   2. SIGHUP trap in bash (trap '' SIGHUP) — wrapper survives too
+#   3. Log to /tmp/st-devsh.log — post-mortem debugging
+#   4. PID file (.zscripts/st-devsh.pid, moved from /tmp/ in v9.11.4) — prevent duplicate instances
+#   5. Stale PID detection — clean up if process already dead (v9.11.6: verify /proc/cmdline)
+#   6. Rapid-crash backoff — if python3 exits within 2s, increase sleep
+#      (prevents spin loop on persistent failure, but NEVER gives up)
+#   7. Orphaned python3 reclaim (v9.11.7 Bug 4 fix) — when port :3000 is in use,
+#      if the listener is python3 (orphaned child of a previously-killed supervisor),
+#      kill it and reclaim the port instead of exiting. Fixes the regression where
+#      v9.11.6's "kill bash supervisor" (Bug 3 fix) left python3 orphaned and
+#      blocked all subsequent dev.sh starts.
+#
+# Explicitly REJECTED from v8.0.0 (caused degraded behavior):
+#   ❌ Background python3 + wait (race condition on SIGHUP)
+#   ❌ exit 0 on clean signal (kills supervisor, no restart)
+#   ❌ MAX_RETRIES permanent exit (gives up after 10 failures)
+#
+# Usage:
+#   bash /home/z/my-project/.zscripts/dev.sh
+#
+# On ZAI platform, /start.sh auto-launches this at session start.
+
+set -e
 
 ZSCRIPTS_DIR="${ZSCRIPTS_DIR:-/home/z/my-project/.zscripts}"
 PORT="${PORT:-3000}"
-PID_FILE="/tmp/st-devsh.pid"
+# PID file moved from /tmp/ to .zscripts/ (v9.11.4) — /tmp/ is shared across shells
+# and race-prone if multiple dev.sh start simultaneously. .zscripts/ is in repo.tar
+# so survives session reset, and is owned by the same user.
+PID_FILE="$ZSCRIPTS_DIR/st-devsh.pid"
 LOG_FILE="/tmp/st-devsh.log"
-MAX_RETRIES=10
-HEALTH_CHECK_INTERVAL=30
 
 mkdir -p "$ZSCRIPTS_DIR"
-cd "$ZSCRIPTS_DIR" || exit 1
+cd "$ZSCRIPTS_DIR"
 
-# --- Logging ---
+# --- Logging (improvement over v7.2.2 silent 2>/dev/null) ---
 log() {
-  echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] [dev.sh] $*" >> "$LOG_FILE"
+  echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] [dev.sh] $*" >> "$LOG_FILE" 2>/dev/null
   echo "[dev.sh] $*"
 }
 
-# --- PID file management ---
-write_pid() {
-  echo $$ > "$PID_FILE"
-}
-
-clear_pid() {
-  rm -f "$PID_FILE" 2>/dev/null
-}
-
-check_already_running() {
-  if [ -f "$PID_FILE" ]; then
-    OLD_PID=$(cat "$PID_FILE" 2>/dev/null)
-    if [ -n "$OLD_PID" ] && kill -0 "$OLD_PID" 2>/dev/null; then
-      log "Already running (PID $OLD_PID) — not starting"
+# --- PID file management (v9.11.6: verify process identity, not just PID alive) ---
+# Bug 1 fix: kill -0 only checks if PID is alive, not whether it's dev.sh.
+# After container reboot, PID file persists (in .zscripts/ which survives reset),
+# but the PID number may be reused by a different process (boot service, etc).
+# dev.sh would false-positive "Already running" and exit without serving → 9-min outage.
+# Fix: verify /proc/$PID/cmdline contains 'dev.sh' before trusting it.
+if [ -f "$PID_FILE" ]; then
+  OLD_PID=$(cat "$PID_FILE" 2>/dev/null)
+  if [ -n "$OLD_PID" ] && [ -d "/proc/$OLD_PID" ]; then
+    OLD_CMDLINE=$(tr '\0' ' ' < "/proc/$OLD_PID/cmdline" 2>/dev/null)
+    if echo "$OLD_CMDLINE" | grep -q 'dev\.sh'; then
+      log "Already running (PID $OLD_PID, cmdline: $OLD_CMDLINE) — not starting"
       exit 0
     fi
-    # Stale PID file — clean up
+    log "PID $OLD_PID is not dev.sh (cmdline: $OLD_CMDLINE) — stale PID file, cleaning up"
+    rm -f "$PID_FILE"
+  else
     log "Stale PID file (PID $OLD_PID not running) — cleaning up"
-    clear_pid
+    rm -f "$PID_FILE"
   fi
-}
+fi
+echo $$ > "$PID_FILE"
 
-# --- Signal handling ---
-CHILD_PID=""
+# Bug 2 fix: EXIT trap must only delete PID file if it contains our own PID ($$).
+# Original trap 'rm -f "$PID_FILE"' would delete the PID file on ANY exit,
+# including the "Already running" exit path above — a second dev.sh invocation
+# would delete the first one's PID file, breaking duplicate-detection.
+trap 'if [ -f "$PID_FILE" ] && [ "$(cat "$PID_FILE" 2>/dev/null)" = "$$" ]; then rm -f "$PID_FILE"; fi' EXIT
 
-cleanup() {
-  log "Received signal — shutting down"
-  if [ -n "$CHILD_PID" ] && kill -0 "$CHILD_PID" 2>/dev/null; then
-    kill -TERM "$CHILD_PID" 2>/dev/null
-    sleep 0.5
-    kill -KILL "$CHILD_PID" 2>/dev/null
-  fi
-  clear_pid
-  exit 0
-}
-
-# SIGHUP: terminal closed — DON'T exit, keep serving (detached)
+# SIGHUP: terminal closed — DON'T exit, keep serving (improvement over v7.2.2)
 trap '' SIGHUP
-# SIGTERM/SIGINT: clean shutdown
-trap cleanup SIGTERM SIGINT
 
-# --- Port guard ---
+# --- Port guard (v9.11.7 Bug 4 fix: kill orphaned python3 listener, don't just exit) ---
+# Bug 4 root cause: v9.11.6's Bug 3 fix kills the bash supervisor via PID file
+# but leaves the python3 child (running serve_forever in foreground) orphaned —
+# it gets reparented to PID 1 and keeps :3000 occupied. The next dev.sh start
+# (Step 4d, /start.sh, session reset) sees :3000 in use → exits → no supervisor
+# ever starts → no crash recovery for python3.
+#
+# Fix: when :3000 is in use, identify the listener. If it's python3 (our orphaned
+# child), kill it (SIGTERM → 0.2s×5 retry → SIGKILL fallback) and reclaim the port.
+# If it's a non-python3 process (legitimate other service), exit gracefully.
 if command -v ss >/dev/null 2>&1 && ss -tlnp 2>/dev/null | grep -q ":$PORT "; then
-  # Check if it's our own process
-  EXISTING_PID=$(ss -tlnp 2>/dev/null | grep ":$PORT " | grep -oP 'pid=\K[0-9]+' | head -1)
-  if [ -n "$EXISTING_PID" ] && [ -f "$PID_FILE" ] && [ "$(cat "$PID_FILE")" = "$EXISTING_PID" ]; then
-    log "Port :$PORT in use by our own process (PID $EXISTING_PID) — not starting"
+  LISTENER_PID=$(ss -tlnp 2>/dev/null | grep ":$PORT " | grep -oP 'pid=\K[0-9]+' | head -1)
+  LISTENER_NAME=""
+  if [ -n "$LISTENER_PID" ] && [ -d "/proc/$LISTENER_PID" ]; then
+    LISTENER_NAME=$(cat "/proc/$LISTENER_PID/comm" 2>/dev/null || echo "")
+  fi
+
+  if [ "$LISTENER_NAME" = "python3" ] || [ "$LISTENER_NAME" = "python" ]; then
+    log "Port :$PORT in use by orphaned python3 (PID $LISTENER_PID) — killing and reclaiming"
+    kill "$LISTENER_PID" 2>/dev/null || true
+    # Wait up to 1s for graceful exit (5 × 0.2s)
+    for _ in 1 2 3 4 5; do
+      ss -tlnp 2>/dev/null | grep -q ":$PORT " || break
+      sleep 0.2
+    done
+    # Still alive → SIGKILL
+    if ss -tlnp 2>/dev/null | grep -q ":$PORT "; then
+      log "Listener PID $LISTENER_PID did not die on SIGTERM — sending SIGKILL"
+      kill -9 "$LISTENER_PID" 2>/dev/null || true
+      sleep 1
+    fi
+    # Verify port is now free; if not, exit (don't spin forever)
+    if ss -tlnp 2>/dev/null | grep -q ":$PORT "; then
+      log "Port :$PORT STILL in use after SIGKILL — cannot reclaim, exiting"
+      if [ "$(cat "$PID_FILE" 2>/dev/null)" = "$$" ]; then rm -f "$PID_FILE"; fi
+      exit 0
+    fi
+    log "Port :$PORT reclaimed — proceeding with start"
+  else
+    log "Port :$PORT in use by non-python3 process (PID ${LISTENER_PID:-?}, name: ${LISTENER_NAME:-unknown}) — not starting"
+    if [ "$(cat "$PID_FILE" 2>/dev/null)" = "$$" ]; then rm -f "$PID_FILE"; fi
     exit 0
   fi
-  log "Port :$PORT in use by PID $EXISTING_PID — not starting"
-  exit 0
 fi
 
-# --- Start server ---
-check_already_running
-write_pid
-log "Serving $ZSCRIPTS_DIR on :$PORT (v8.0.0 resilient mode)"
-log "PID: $$ | Log: $LOG_FILE | Backoff: 1s→30s | Max retries: $MAX_RETRIES"
+log "Serving $ZSCRIPTS_DIR on :$PORT with Cache-Control: no-store (v9.0.0 — improved v7.2.2)"
+log "PID: $$ | Log: $LOG_FILE | Mode: foreground + infinite loop + rapid-crash backoff"
 
-RETRY_COUNT=0
+# --- Crash recovery loop (v7.2.2 architecture + rapid-crash backoff) ---
+# Key difference from v8.0.0:
+#   - python3 runs in FOREGROUND (no &, no wait, no race condition)
+#   - NO exit 0 on clean signal (always restart — proven v7.2.2 behavior)
+#   - NO MAX_RETRIES (infinite loop — never gives up)
+#   - Rapid-crash backoff: if python3 exits within 2s, sleep longer
+#     (prevents spin loop, but NEVER exits permanently)
+
 BACKOFF=1
 
-start_python_server() {
+while true; do
+  START_TIME=$(date +%s)
+  log "Starting python3 server (foreground, backoff=${BACKOFF}s)"
+
+  # python3 runs in FOREGROUND — dev.sh blocks here until python3 exits
+  # This is the KEY difference from v8.0.0 (which used & + wait)
   python3 -c "
 import http.server, socketserver, signal, sys
 
@@ -113,48 +162,38 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Expires', '0')
         super().end_headers()
     def log_message(self, format, *args):
-        pass
+        pass  # suppress access logs
 
 def shutdown(sig, frame):
     sys.exit(0)
 
 signal.signal(signal.SIGTERM, shutdown)
 signal.signal(signal.SIGINT, shutdown)
-# SIGHUP: keep serving even if terminal closes
+# SIGHUP: keep serving even if terminal closes (improvement over v7.2.2)
 signal.signal(signal.SIGHUP, signal.SIG_IGN)
 
 with ReuseTCPServer(('0.0.0.0', $PORT), NoCacheHandler) as httpd:
     httpd.serve_forever()
-" >> "$LOG_FILE" 2>&1 &
-  CHILD_PID=$!
-}
+" 2>>"$LOG_FILE" || true
 
-# --- Main loop with backoff + health check ---
-while true; do
-  log "Starting python3 server (attempt $((RETRY_COUNT + 1)))"
-  start_python_server
-  wait "$CHILD_PID"
-  EXIT_CODE=$?
+  # python3 exited — calculate uptime
+  END_TIME=$(date +%s)
+  UPTIME=$((END_TIME - START_TIME))
+  log "python3 exited (uptime: ${UPTIME}s)"
 
-  if [ $EXIT_CODE -eq 0 ]; then
-    # Clean exit (SIGTERM/SIGINT) — don't restart
-    log "python3 exited cleanly (signal) — not restarting"
-    clear_pid
-    exit 0
+  # Rapid-crash backoff: if python3 ran for <2s, it's a crash (not a signal)
+  # Increase sleep to prevent spin loop, but NEVER exit (unlike v8.0.0 MAX_RETRIES)
+  if [ "$UPTIME" -lt 2 ]; then
+    log "Rapid crash detected (uptime ${UPTIME}s < 2s) — backing off ${BACKOFF}s"
+    sleep "$BACKOFF"
+    # Exponential backoff: 1→2→4→8→16→30 (capped, but NEVER exits)
+    BACKOFF=$((BACKOFF * 2))
+    [ "$BACKOFF" -gt 30 ] && BACKOFF=30
+  else
+    # Normal exit (signal, OOM, etc) — restart immediately with backoff reset
+    log "Normal exit — restarting immediately (backoff reset to 1s)"
+    BACKOFF=1
+    sleep 1
   fi
-
-  RETRY_COUNT=$((RETRY_COUNT + 1))
-
-  if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-    log "Max retries ($MAX_RETRIES) reached — giving up. Check $LOG_FILE for details."
-    clear_pid
-    exit 1
-  fi
-
-  log "python3 exited (code $EXIT_CODE) — retry $RETRY_COUNT/$MAX_RETRIES in ${BACKOFF}s"
-  sleep "$BACKOFF"
-
-  # Exponential backoff: 1→2→4→8→16→30 (capped)
-  BACKOFF=$((BACKOFF * 2))
-  [ "$BACKOFF" -gt 30 ] && BACKOFF=30
+  # Loop continues — infinite, never gives up (v7.2.2 proven behavior)
 done

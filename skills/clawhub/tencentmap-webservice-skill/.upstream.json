@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/tencentmap-webservice-skill",
   "slug": "tencentmap-webservice-skill",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1782977161883,
-  "contentHash": "e24cb33e357349588137ff493bcf46b7d04028cd3150cbdf53305a838096b772",
-  "fetchedAt": "2026-07-26T18:21:12.913Z"
+  "version": "1.0.4",
+  "updatedAt": 1787133177622,
+  "contentHash": "fbd3836af25f47a105af693bd6a0d6494bedc976edf45fa52992c8a3404123aa",
+  "fetchedAt": "2026-08-20T08:05:42.154Z"
 }

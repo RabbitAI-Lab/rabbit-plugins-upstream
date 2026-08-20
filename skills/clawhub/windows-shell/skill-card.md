@@ -1,41 +1,59 @@
-## Description: <br>
-Provides Windows command-line encoding and compatibility guidance for GBK/UTF-8, PowerShell and pwsh, Python, Node.js, Git, and code generation on Windows 10/11 with MSYS2 or Git Bash. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Windows command-line guidance for choosing Git Bash, PowerShell, or WSL and avoiding encoding, MSYS2 argument rewriting, path, virtual environment, and Git configuration pitfalls on Windows 10/11.
 
-## Publisher: <br>
-[chenmo0414](https://clawhub.ai/user/chenmo0414) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[chenmo0414](https://clawhub.ai/user/chenmo0414)
 
-## Use Case: <br>
-Developers and coding agents use this skill to avoid garbled Windows shell output and to generate Python, Node.js, PowerShell, and Git commands that handle GBK and UTF-8 encoding correctly. It is most relevant for Windows 10/11 systems using MSYS2 or Git Bash. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Optional setup commands can persistently change Windows user environment variables, shell startup files, and global Git configuration. <br>
-Mitigation: Review the setup commands before running them, apply them only to the intended Windows user account, and keep a plan to revert environment variables, ~/.bash_profile, ~/.bashrc, and global Git settings if they affect other tools. <br>
-Risk: Using the wrong encoding for existing files or tool output can still produce corrupted text or misleading command results. <br>
-Mitigation: Confirm whether each file or tool emits UTF-8, GBK/936, UTF-16, or raw bytes before applying conversion guidance, and test changes in a non-critical shell or repository first. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to run command-line workflows on Windows 10/11 with the right shell and safer handling of encoding, MSYS2 path conversion, WSL boundaries, Python/Node tooling, Git, and virtual environments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chenmo0414/skills/windows-shell) <br>
-- [Project homepage from ClawHub metadata](https://github.com/Chenmo0414/win-encoding-fix) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell, PowerShell, Python, and JavaScript examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Windows-specific guidance for command execution, file encoding, environment setup, and global Git configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: SKILL.md frontmatter and ClawHub release metadata) <br>
+Risk: Optional setup snippets can change user-level Python encoding variables, shell profile files, and global Git settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each setup command before applying it and limit changes to user-level configuration unless an operator explicitly approves broader changes.
+
+Risk: The skill includes shell routing guidance for Windows workflows and is not a basis for an agent to perform administrator-only UAC actions.
+
+Mitigation: Keep administrator-only actions as human-executed steps and avoid commands that wait on an unattended UAC prompt.
+
+## Reference(s):
+
+- [Skill release page](https://clawhub.ai/chenmo0414/skills/windows-shell)
+- [Project homepage](https://github.com/Chenmo0414/win-encoding-fix)
+- [Encoding details](references/encoding.md)
+- [MSYS2 argument rewriting and symlinks](references/msys2.md)
+- [Shell routing](references/shell-routing.md)
+- [Git Bash pitfalls](references/gitbash-pitfalls.md)
+- [WSL guidance](references/wsl.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with inline shell and PowerShell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are advisory and should be reviewed before applying user-level environment variable, shell profile, or global Git configuration changes.]
+
+## Skill Version(s):
+
+5.1.0 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,6 +1,6 @@
 ---
 name: stock-terminal
-description: "Stock terminal for AI agents. Turns chat into a futuristic financial terminal: typed commands like \"open NVDA\", \"screen smart-money\", \"daily brief\", or natural questions like \"what's hot today?\" return composite synthesized reports across price, sentiment, insider trades, congressional disclosures, institutional flows, analyst ratings, AI insights, and embedded news. Read-only. No trading, no purchases, no write operations, no wallet access."
+description: "Stock terminal for AI agents. Turns chat into a futuristic financial terminal: typed commands like \"open NVDA\", \"screen smart-money\", \"daily brief\", or natural questions like \"what's hot today?\" return composite synthesized reports across price, sentiment, insider trades, congressional disclosures, institutional flows, analyst ratings, AI insights, and embedded news. Use for stock terminal, financial terminal for AI, daily market brief, open a ticker, screen stocks by smart money, what is hot today, one-command stock research. Read-only. No trading, no purchases, no write operations, no wallet access."
 homepage: https://sentisense.ai
 requires:
   env:
@@ -72,6 +72,11 @@ Use of the SentiSense API is subject to the [API Terms of Service](https://senti
 ---
 
 ## Authentication
+
+**Identify your client.** Send a `User-Agent` naming your agent runtime and this skill, for
+example `OpenClaw/1.4 (stock-terminal)` or `ClaudeCode/2.1 (stock-terminal)`. Substitute your own runtime and
+version if neither matches. Optional, and it is what tells us this skill has real integrations
+behind it, so it gets prioritized and you get notice before it changes.
 
 ```bash
 curl -H "X-SentiSense-API-Key: $SENTISENSE_API_KEY" \
@@ -179,7 +184,7 @@ A tool is four parts. The model sees the first three; the host keeps the fourth 
 ```
 {
   name:        "get_quote",                 # stable identifier, shown in chips
-  description: "Live price + day change for one ticker.",
+  description: "Latest price (15-minute delayed) + day change for one ticker.",
   input:       { ticker: "string, e.g. NVDA" },   # JSON Schema the model fills in
   handler:     async ({ticker}) => callApi(...)     # host-only; injects the key
 }
@@ -513,12 +518,16 @@ Grounding is not only "is it fetched" but "how old is fetched allowed to be." Bi
 
 | Class | Surfaces | Cache `kind` | How the model renders it |
 |---|---|---|---|
-| Real-time | quote, price, chart points | `realtime` | State the value plainly. Re-fetch on the poll interval, never faster than ~60s on the header. |
+| Delayed price | quote, price, chart points | `realtime` | State the value, then annotate its age: `as of {priceAsOf}` when the payload carries one, otherwise the class delay `delayed 15 min`. Re-fetch on the poll interval, never faster than ~60s on the header. |
 | Batch | Sentiment, SentiSense Score, Mentions, Social Dominance, news clustering, AI summary, insights | `batch` | State the value, then annotate freshness: `as of {dataAsOf}`. Never call it "real time." |
+
+The `kind` values are a frozen contract that installed copies already emit: keep `realtime` and `batch` exactly as spelled, even though the price class is no longer described as real time.
 
 The `dataAsOf` for a batch slot is the payload's `generatedAt` (present on insight and AI-summary surfaces). Surfacing it is not decoration: it is what lets a user trust a `+0.42` sentiment reading taken at the open even though price has moved since. A batch value with no visible age is indistinguishable from a fabricated one.
 
-Compose-time rule the model applies: if two values on one screen have different freshness classes and the question is time-sensitive ("is it still mooning?"), lead with the real-time value and tag the batch value's age, rather than blending both into one implied "now."
+The same reasoning applies to price, which carries a real delay of roughly 15 to 17 minutes during regular hours, so it must not be rendered as if it had no age. Its as-of is **`priceAsOf`**, present on the price and quote payloads. Two neighbouring fields are not this, and using either produces a value that always looks fresh: `timestamp` is when the response was served, and `expiresEpochSecond` is a cache-expiry boundary. When `priceAsOf` is absent, which happens outside regular hours and wherever the upstream data is undated, annotate the constant class delay rather than inventing an age.
+
+Compose-time rule the model applies: if two values on one screen have different freshness classes and the question is time-sensitive ("is it still mooning?"), lead with the freshest value, tag every value with its own age, and never blend them into one implied "now."
 
 ### 3. The grounding requirement (host prompt, not this skill)
 
@@ -760,7 +769,7 @@ Below the table, write a one-line "edge" summary: which ticker has the better co
 1. `GET /api/v1/stocks/market-status`
 2. `GET /api/v2/market-mood`
 3. `GET /api/v1/market-summary`
-4. `GET /api/v1/insights/market` (top 5)
+4. `GET /api/v1/insights/market` (top 3)
 5. `GET /api/v1/stocks/prices?tickers=SPY,QQQ,IWM,DIA`
 
 **Output template:**
@@ -769,13 +778,17 @@ DAILY BRIEF · {date} · Market {OPEN/CLOSED}
 ────────────────────────────────────────────
 INDEXES   $SPY {p} ({d}%)  $QQQ {p} ({d}%)  $IWM {p} ({d}%)  $DIA {p} ({d}%)
 MOOD      {score} ({phase})  {weeklyChange} 7d
-HEADLINE  {marketSummary.headline}
+HEADLINE  {headline}
 
 TOP SIGNALS
 1. {insight1.insightText}
 2. {insight2.insightText}
 3. {insight3.insightText}
 ```
+
+`{headline}` comes from call 3, `GET /api/v1/market-summary`: the response is flat at the
+root (`expandedContent`, `generatedAt`, `headline`, `lastUpdated`), there is no `marketSummary`
+wrapper.
 
 `/api/v1/insights/market` items expose `insightText` (no `headline` field) and carry no
 standalone `ticker` field; the ticker is embedded in `insightText` (and in `insightId`), so
@@ -790,7 +803,7 @@ Find tickers where insiders + congress + analysts all positive in the same 7-day
 **Calls:**
 1. `GET /api/v1/insider/cluster-buys?lookbackDays=7`
 2. `GET /api/v1/politicians/activity?lookbackDays=7` (filter `transactionType=PURCHASE` client-side; no server-side param)
-3. `GET /api/v1/analyst/activity?lookbackDays=7` (filter `actionType=="UPGRADE"` client-side; no server-side `types=` filter)
+3. `GET /api/v1/analyst/activity?lookbackDays=7&actionTypes=UPGRADE` (server-side filter; CSV of UPGRADE/DOWNGRADE/INITIATE/REITERATE/OTHER)
 
 **Output template:**
 ```
@@ -819,12 +832,15 @@ Market Dir     {v}  ({d})
 Risk Appetite  {v}  ({d})
 Social Mom     {v}  ({d})
 S&P 500 Trend  {v}  ({d})
+Options Flow   {v}  ({d})
 
 SECTORS (top 3 / bottom 3)
-Tech     {s} ({d})    Energy   {s} ({d})
-Comms    {s} ({d})    Utils    {s} ({d})
-Disc     {s} ({d})    Staples  {s} ({d})
+{sectorName1}  {s} ({d})    {sectorName4}  {s} ({d})
+{sectorName2}  {s} ({d})    {sectorName5}  {s} ({d})
+{sectorName3}  {s} ({d})    {sectorName6}  {s} ({d})
 ```
+
+Sort the `sectors` dict by `currentScore` descending; `{sectorName1..3}` are the top 3 (left column), `{sectorName4..6}` are the bottom 3 (right column, still highest-to-lowest of that group). The response returns 11 GICS level-1 sectors with full names (e.g. `Information Technology`, `Communication Services`, `Consumer Discretionary`); if a full name doesn't fit the grid, abbreviate consistently and say in the output that names are abbreviated, rather than guessing a fixed shorthand per sector.
 
 ---
 
@@ -833,7 +849,7 @@ Disc     {s} ({d})    Staples  {s} ({d})
 **Calls:**
 1. `GET /api/v1/insider/trades/{T}?lookbackDays=90`
 2. `GET /api/v1/politicians/filings/{T}?lookbackDays=90` (per-ticker filings; no client-side filter needed)
-3. `GET /api/v1/institutional/quarters` then `/api/v1/institutional/holders/{T}?reportDate={Q}` (`data.holders[]`; `Q` = `reportDate` of the first quarter whose `pending` is not true, skip any `pending:true` entry)
+3. `GET /api/v1/institutional/quarters` then `/api/v1/institutional/holders/{T}?reportDate={Q}&limit=10&sortBy=shares&sortDir=desc` (`data.holders[]`; `Q` = `reportDate` of the first quarter whose `pending` is not true, skip any `pending:true` entry). **Always pass `limit`.** The TOP 13F block renders 3 rows, and omitting `limit` returns every holder: a mega-cap is 6,000+ rows and over a megabyte for the three you use. `limit` also gives you `data.returnedCount` and `data.notableChanges`, while `data.holderCount` stays the full-quarter count either way.
 4. `GET /api/v1/analyst/{T}/actions?lookbackDays=90`
 
 **Output template:**
@@ -1204,7 +1220,7 @@ The values are share-of-voice percentages summing to roughly 100, **not** per-so
 
 **`institutional/quarters` is a bare array** `[{ value, label, reportDate, pending }]` (not wrapped in `data`). Take the `reportDate` of the FIRST quarter whose `pending` is not true (skip any `pending:true` entry); only if every entry is `pending:true`, fall back to `[0]`. Do NOT blindly take `[0].reportDate`: within ~45 days of a quarter close, `[0]` is a still-filing `pending:true` quarter with almost no holders. Pass the resolved `reportDate` to `institutional/holders`.
 
-**Sentiment, SentiSense Score, news clustering, AI summaries, and insights are batch metrics.** Quote / price / chart points are real-time. Show the `generatedAt` timestamp on insight and AI summary surfaces so the user knows how fresh the analysis is. Don't claim "real time" on analytical surfaces.
+**Sentiment, SentiSense Score, news clustering, AI summaries, and insights are batch metrics.** Quote / price / chart points are the fresher class, but they are 15-minute delayed, not live: annotate them with `priceAsOf` where the payload carries it. Show the `generatedAt` timestamp on insight and AI summary surfaces so the user knows how fresh the analysis is. Don't claim "real time" on any surface.
 
 ---
 
@@ -1234,12 +1250,13 @@ CONGRESS      GET /api/v1/politicians/activity?lookbackDays=N
               GET /api/v1/politicians/member/{slug}      (recent trades nested at data.recentTrades)
 
 INSTITUTIONAL GET /api/v1/institutional/quarters    (always FIRST)
-              GET /api/v1/institutional/holders/{T}?reportDate={Q}      (data.holders[] sorted by largest position)
+              GET /api/v1/institutional/holders/{T}?reportDate={Q}&limit=10&sortBy=shares
+                                                                        (data.holders[]; ALWAYS pass limit, the full list is 6,000+ rows)
 
 ANALYST       GET /api/v1/analyst/{T}/consensus
               GET /api/v1/analyst/{T}/actions?lookbackDays=N
               GET /api/v1/analyst/{T}/estimates
-              GET /api/v1/analyst/activity?lookbackDays=N               (market-wide; filter actionType client-side)
+              GET /api/v1/analyst/activity?lookbackDays=N&actionTypes=UPGRADE,DOWNGRADE,INITIATE  (market-wide rating changes)
 
 INSIGHTS      GET /api/v1/insights/stock/{T}        (ranked by importance: relevance, confidence, recency; Public preview, free top 3; take data[0])
               GET /api/v1/insights/stock/{T}/types

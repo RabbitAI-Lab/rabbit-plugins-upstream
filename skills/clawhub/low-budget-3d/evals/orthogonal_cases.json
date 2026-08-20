@@ -1,0 +1,31 @@
+{
+  "skill_name": "low-budget-3d",
+  "version": "1.0",
+  "description": "LowBudget3D 语义盲区测试用例（orthogonal）。检测用户意图应触发但使用不同词汇的场景，暴露关键词匹配的天花板。这些 case 在静态检测中不可达，但真实 LLM 可能通过语义理解正确触发。",
+  "cases": [
+    {
+      "id": "O01",
+      "input": "画一个像小时候看的国产动画片里那种3D角色",
+      "category": "orthogonal",
+      "expected_keywords": ["小时候", "国产动画片", "3D角色"],
+      "severity": "soft",
+      "note": "语义盲区（CJK）：'小时候看的国产动画片' ≈ '低成本3D动画'。description 不含此表述，但真实 LLM 可通过语义理解触发。"
+    },
+    {
+      "id": "O02",
+      "input": "make it look like a student 3D animation project from the 2000s",
+      "category": "orthogonal",
+      "expected_keywords": ["student", "animation project", "2000s"],
+      "severity": "soft",
+      "note": "语义盲区：'student animation project' 是 style-constitution.md 中的关键词汇之一，但未出现在 description frontmatter 中。真实 LLM 可能通过 reference 内容语义理解触发。"
+    },
+    {
+      "id": "O03",
+      "input": "生成一个看起来很廉价但很认真的3D卡通画面",
+      "category": "orthogonal",
+      "expected_keywords": ["廉价", "认真", "3D卡通"],
+      "severity": "soft",
+      "note": "语义盲区（CJK）：'廉价但认真' 精准描述了 LowBudget3D 的核心美学（earnest but cheap），但 description 不含 '廉价'/'认真' 这对词。"
+    }
+  ]
+}

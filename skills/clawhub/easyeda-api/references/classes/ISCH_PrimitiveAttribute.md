@@ -1,11 +1,11 @@
 # ISCH\_PrimitiveAttribute class
 
-属性图元
+Property primitive
 
 ## Signature
 
 ```typescript
-declare class ISCH_PrimitiveAttribute implements ISCH_Primitive 
+export class ISCH_PrimitiveAttribute implements ISCH_Primitive 
 ```
 **Implements:** [ISCH\_Primitive](../interfaces/ISCH_Primitive.md)
 
@@ -40,7 +40,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 将对图元的更改应用到画布
+**_(BETA)_** Apply the changes to the primitives to the canvas
 
 
 </td></tr>
@@ -54,7 +54,7 @@ Description
 
 </td><td>
 
-获取属性状态：对齐模式
+Get the property state: alignment mode
 
 
 </td></tr>
@@ -68,7 +68,7 @@ Description
 
 </td><td>
 
-获取属性状态：是否加粗
+Get the property state: whether it is bold
 
 
 </td></tr>
@@ -82,7 +82,7 @@ Description
 
 </td><td>
 
-获取属性状态：文本颜色
+Get the property state: text color
 
 
 </td></tr>
@@ -96,7 +96,7 @@ Description
 
 </td><td>
 
-获取属性状态：填充颜色
+Get the property state: fill color
 
 
 </td></tr>
@@ -110,7 +110,7 @@ Description
 
 </td><td>
 
-获取属性状态：字体名称
+Get the property state: font name
 
 
 </td></tr>
@@ -124,7 +124,7 @@ Description
 
 </td><td>
 
-获取属性状态：字体大小
+Get the property state: font size
 
 
 </td></tr>
@@ -138,7 +138,7 @@ Description
 
 </td><td>
 
-获取属性状态：是否斜体
+Get the property state: whether it is italic
 
 
 </td></tr>
@@ -152,7 +152,7 @@ Description
 
 </td><td>
 
-获取属性状态：键
+Get the property state: key
 
 
 </td></tr>
@@ -166,7 +166,7 @@ Description
 
 </td><td>
 
-获取属性状态：键是否显示
+Get the property state: whether the key is visible
 
 
 </td></tr>
@@ -180,7 +180,7 @@ Description
 
 </td><td>
 
-获取属性状态：父图元 ID
+Get the property state: parent primitive ID
 
 
 </td></tr>
@@ -194,7 +194,7 @@ Description
 
 </td><td>
 
-获取属性状态：图元 ID
+Get the property state: primitive ID
 
 
 </td></tr>
@@ -208,7 +208,7 @@ Description
 
 </td><td>
 
-获取属性状态：图元类型
+Get the property state: primitive type
 
 
 </td></tr>
@@ -222,7 +222,7 @@ Description
 
 </td><td>
 
-获取属性状态：旋转角度
+Get the property state: rotation angle
 
 
 </td></tr>
@@ -236,7 +236,7 @@ Description
 
 </td><td>
 
-获取属性状态：是否加下划线
+Get the property state: whether it is underlined
 
 
 </td></tr>
@@ -250,7 +250,7 @@ Description
 
 </td><td>
 
-获取属性状态：值
+Get the property state: value
 
 
 </td></tr>
@@ -264,7 +264,7 @@ Description
 
 </td><td>
 
-获取属性状态：值是否显示
+Get the property state: whether the value is visible
 
 
 </td></tr>
@@ -278,7 +278,7 @@ Description
 
 </td><td>
 
-获取属性状态：坐标 X
+Get the property state: X coordinate
 
 
 </td></tr>
@@ -292,7 +292,7 @@ Description
 
 </td><td>
 
-获取属性状态：坐标 Y
+Get the property state: Y coordinate
 
 
 </td></tr>
@@ -306,7 +306,7 @@ Description
 
 </td><td>
 
-查询图元是否为异步图元
+Query whether the primitive is an async primitive
 
 
 </td></tr>
@@ -320,7 +320,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 将异步图元重置为当前画布状态
+**_(BETA)_** Reset the async primitive to the current canvas state
 
 
 </td></tr>
@@ -334,7 +334,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：对齐模式
+**_(BETA)_** Set the property state: alignment mode
 
 
 </td></tr>
@@ -348,7 +348,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：是否加粗
+**_(BETA)_** Set the property state: whether it is bold
 
 
 </td></tr>
@@ -362,7 +362,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：文本颜色
+**_(BETA)_** Set the property state: text color
 
 
 </td></tr>
@@ -376,7 +376,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：填充颜色
+**_(BETA)_** Set the property state: fill color
 
 
 </td></tr>
@@ -390,7 +390,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：字体名称
+**_(BETA)_** Set the property state: font name
 
 
 </td></tr>
@@ -404,7 +404,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：字体大小
+**_(BETA)_** Set the property state: font size
 
 
 </td></tr>
@@ -418,7 +418,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：是否斜体
+**_(BETA)_** Set the property state: whether it is italic
 
 
 </td></tr>
@@ -432,7 +432,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：键
+**_(BETA)_** Set the property state: key
 
 
 </td></tr>
@@ -446,7 +446,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：键是否显示
+**_(BETA)_** Set the property state: whether the key is visible
 
 
 </td></tr>
@@ -460,7 +460,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：旋转角度
+**_(BETA)_** Set the property state: rotation angle
 
 
 </td></tr>
@@ -474,7 +474,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：是否加下划线
+**_(BETA)_** Set the property state: whether it is underlined
 
 
 </td></tr>
@@ -488,7 +488,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：值
+**_(BETA)_** Set the property state: value
 
 
 </td></tr>
@@ -502,7 +502,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：值是否显示
+**_(BETA)_** Set the property state: whether the value is visible
 
 
 </td></tr>
@@ -516,7 +516,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：坐标 X
+**_(BETA)_** Set the property state: X coordinate
 
 
 </td></tr>
@@ -530,7 +530,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：坐标 Y
+**_(BETA)_** Set the property state: Y coordinate
 
 
 </td></tr>
@@ -544,7 +544,7 @@ Description
 
 </td><td>
 
-将图元转换为异步图元
+Convert Primitive to Async primitive
 
 
 </td></tr>
@@ -558,7 +558,7 @@ Description
 
 </td><td>
 
-将图元转换为同步图元
+Convert Primitive to Sync primitive
 
 
 </td></tr>
@@ -574,12 +574,12 @@ Description
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-将对图元的更改应用到画布
+Apply the changes to the primitives to the canvas
 
 ## Signature
 
 ```typescript
-done(): Promise<ISCH_PrimitiveAttribute>;
+public done(): Promise<ISCH_PrimitiveAttribute>;
 ```
 
 
@@ -587,18 +587,50 @@ done(): Promise<ISCH_PrimitiveAttribute>;
 
 Promise&lt;[ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)<!-- -->&gt;
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 记录修改前的字号和旋转角度
+const fontSizeBefore = designator.getState_FontSize();
+const rotationBefore = designator.getState_Rotation();
+
+// 4. 批量修改两个属性，一次 done() 提交
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_FontSize(50);
+asyncAttr.setState_Rotation(90);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('fontSize:', fontSizeBefore, '→', refetched.getState_FontSize());
+console.log('rotation:', rotationBefore, '→', refetched.getState_Rotation());
+```
 
 ### getstate_alignmode
 
 # ISCH\_PrimitiveAttribute.getState\_AlignMode() method
 
-获取属性状态：对齐模式
+Get the property state: alignment mode
 
 ## Signature
 
 ```typescript
-getState_AlignMode(): ESCH_PrimitiveTextAlignMode | null;
+public getState_AlignMode(): ESCH_PrimitiveTextAlignMode | null;
 ```
 
 
@@ -606,18 +638,41 @@ getState_AlignMode(): ESCH_PrimitiveTextAlignMode | null;
 
 [ESCH\_PrimitiveTextAlignMode](../enums/ESCH_PrimitiveTextAlignMode.md) \| null
 
-对齐模式
+Alignment mode
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号文本的对齐模式（1~9 对应左上/中上/居中等九宫格方位，null 为跟随默认）
+const alignMode = designator.getState_AlignMode();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('alignMode:', alignMode);
+```
 
 ### getstate_bold
 
 # ISCH\_PrimitiveAttribute.getState\_Bold() method
 
-获取属性状态：是否加粗
+Get the property state: whether it is bold
 
 ## Signature
 
 ```typescript
-getState_Bold(): boolean | null;
+public getState_Bold(): boolean | null;
 ```
 
 
@@ -625,18 +680,41 @@ getState_Bold(): boolean | null;
 
 boolean \| null
 
-是否加粗
+Whether it is bold
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号文本是否加粗（null 表示跟随默认样式）
+const bold = designator.getState_Bold();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('bold:', bold);
+```
 
 ### getstate_color
 
 # ISCH\_PrimitiveAttribute.getState\_Color() method
 
-获取属性状态：文本颜色
+Get the property state: text color
 
 ## Signature
 
 ```typescript
-getState_Color(): string | null;
+public getState_Color(): string | null;
 ```
 
 
@@ -644,18 +722,41 @@ getState_Color(): string | null;
 
 string \| null
 
-文本颜色
+Text color
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号文本颜色（null 表示跟随默认颜色）
+const color = designator.getState_Color();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('color:', color);
+```
 
 ### getstate_fillcolor
 
 # ISCH\_PrimitiveAttribute.getState\_FillColor() method
 
-获取属性状态：填充颜色
+Get the property state: fill color
 
 ## Signature
 
 ```typescript
-getState_FillColor(): string | null;
+public getState_FillColor(): string | null;
 ```
 
 
@@ -663,18 +764,41 @@ getState_FillColor(): string | null;
 
 string \| null
 
-填充颜色
+Fill color
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号文本底色（null 表示无底色）
+const fillColor = designator.getState_FillColor();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('fillColor:', fillColor);
+```
 
 ### getstate_fontname
 
 # ISCH\_PrimitiveAttribute.getState\_FontName() method
 
-获取属性状态：字体名称
+Get the property state: font name
 
 ## Signature
 
 ```typescript
-getState_FontName(): string | null;
+public getState_FontName(): string | null;
 ```
 
 
@@ -682,18 +806,41 @@ getState_FontName(): string | null;
 
 string \| null
 
-字体名称
+Font name
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号文本的字体名称（null 表示跟随默认字体）
+const fontName = designator.getState_FontName();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('fontName:', fontName);
+```
 
 ### getstate_fontsize
 
 # ISCH\_PrimitiveAttribute.getState\_FontSize() method
 
-获取属性状态：字体大小
+Get the property state: font size
 
 ## Signature
 
 ```typescript
-getState_FontSize(): number | null;
+public getState_FontSize(): number | null;
 ```
 
 
@@ -701,18 +848,41 @@ getState_FontSize(): number | null;
 
 number \| null
 
-字体大小
+Font size
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号文本的字号，单位 mm（null 表示跟随默认字号）
+const fontSize = designator.getState_FontSize();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('fontSize:', fontSize);
+```
 
 ### getstate_italic
 
 # ISCH\_PrimitiveAttribute.getState\_Italic() method
 
-获取属性状态：是否斜体
+Get the property state: whether it is italic
 
 ## Signature
 
 ```typescript
-getState_Italic(): boolean | null;
+public getState_Italic(): boolean | null;
 ```
 
 
@@ -720,18 +890,41 @@ getState_Italic(): boolean | null;
 
 boolean \| null
 
-是否斜体
+Whether it is italic
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号文本是否斜体（null 表示跟随默认样式）
+const italic = designator.getState_Italic();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('italic:', italic);
+```
 
 ### getstate_key
 
 # ISCH\_PrimitiveAttribute.getState\_Key() method
 
-获取属性状态：键
+Get the property state: key
 
 ## Signature
 
 ```typescript
-getState_Key(): string;
+public getState_Key(): string;
 ```
 
 
@@ -739,18 +932,41 @@ getState_Key(): string;
 
 string
 
-键
+Key
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取器件全部属性的 Key（属性名）
+const keys = attrs.map(a => a.getState_Key());
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('keys:', keys.join(', '));
+```
 
 ### getstate_keyvisible
 
 # ISCH\_PrimitiveAttribute.getState\_KeyVisible() method
 
-获取属性状态：键是否显示
+Get the property state: whether the key is visible
 
 ## Signature
 
 ```typescript
-getState_KeyVisible(): boolean | null;
+public getState_KeyVisible(): boolean | null;
 ```
 
 
@@ -758,18 +974,41 @@ getState_KeyVisible(): boolean | null;
 
 boolean \| null
 
-键是否显示
+Whether the key is visible
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取 Key（属性名前缀）是否可见
+const keyVisible = designator.getState_KeyVisible();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('keyVisible:', keyVisible);
+```
 
 ### getstate_parentprimitiveid
 
 # ISCH\_PrimitiveAttribute.getState\_ParentPrimitiveId() method
 
-获取属性状态：父图元 ID
+Get the property state: parent primitive ID
 
 ## Signature
 
 ```typescript
-getState_ParentPrimitiveId(): string;
+public getState_ParentPrimitiveId(): string;
 ```
 
 
@@ -777,18 +1016,42 @@ getState_ParentPrimitiveId(): string;
 
 string
 
-父图元 ID
+Parent primitive ID
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取父图元 ID，并与所属器件的 ID 比对
+const parentPrimitiveId = designator.getState_ParentPrimitiveId();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('parentPrimitiveId:', parentPrimitiveId);
+console.log('belongs to component:', parentPrimitiveId === compId);
+```
 
 ### getstate_primitiveid
 
 # ISCH\_PrimitiveAttribute.getState\_PrimitiveId() method
 
-获取属性状态：图元 ID
+Get the property state: primitive ID
 
 ## Signature
 
 ```typescript
-getState_PrimitiveId(): string;
+public getState_PrimitiveId(): string;
 ```
 
 
@@ -796,18 +1059,41 @@ getState_PrimitiveId(): string;
 
 string
 
-图元 ID
+Primitive ID
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取属性图元 ID
+const primitiveId = designator.getState_PrimitiveId();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('primitiveId:', primitiveId);
+```
 
 ### getstate_primitivetype
 
 # ISCH\_PrimitiveAttribute.getState\_PrimitiveType() method
 
-获取属性状态：图元类型
+Get the property state: primitive type
 
 ## Signature
 
 ```typescript
-getState_PrimitiveType(): ESCH_PrimitiveType;
+public getState_PrimitiveType(): ESCH_PrimitiveType;
 ```
 
 
@@ -815,18 +1101,41 @@ getState_PrimitiveType(): ESCH_PrimitiveType;
 
 [ESCH\_PrimitiveType](../enums/ESCH_PrimitiveType.md)
 
-图元类型
+Primitive type
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取图元类型（属性图元固定为 Attribute）
+const primitiveType = designator.getState_PrimitiveType();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('primitiveType:', primitiveType);
+```
 
 ### getstate_rotation
 
 # ISCH\_PrimitiveAttribute.getState\_Rotation() method
 
-获取属性状态：旋转角度
+Get the property state: rotation angle
 
 ## Signature
 
 ```typescript
-getState_Rotation(): number | null;
+public getState_Rotation(): number | null;
 ```
 
 
@@ -834,18 +1143,41 @@ getState_Rotation(): number | null;
 
 number \| null
 
-旋转角度
+Rotation angle
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号文本的旋转角度（度）
+const rotation = designator.getState_Rotation();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('rotation:', rotation);
+```
 
 ### getstate_underline
 
 # ISCH\_PrimitiveAttribute.getState\_UnderLine() method
 
-获取属性状态：是否加下划线
+Get the property state: whether it is underlined
 
 ## Signature
 
 ```typescript
-getState_UnderLine(): boolean | null;
+public getState_UnderLine(): boolean | null;
 ```
 
 
@@ -853,18 +1185,41 @@ getState_UnderLine(): boolean | null;
 
 boolean \| null
 
-是否加下划线
+Whether it is underlined
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号文本是否加下划线（null 表示跟随默认样式）
+const underLine = designator.getState_UnderLine();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('underLine:', underLine);
+```
 
 ### getstate_value
 
 # ISCH\_PrimitiveAttribute.getState\_Value() method
 
-获取属性状态：值
+Get the property state: value
 
 ## Signature
 
 ```typescript
-getState_Value(): string;
+public getState_Value(): string;
 ```
 
 
@@ -872,18 +1227,41 @@ getState_Value(): string;
 
 string
 
-值
+Value
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号属性的值
+const value = designator.getState_Value();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('value:', value);
+```
 
 ### getstate_valuevisible
 
 # ISCH\_PrimitiveAttribute.getState\_ValueVisible() method
 
-获取属性状态：值是否显示
+Get the property state: whether the value is visible
 
 ## Signature
 
 ```typescript
-getState_ValueVisible(): boolean | null;
+public getState_ValueVisible(): boolean | null;
 ```
 
 
@@ -891,18 +1269,41 @@ getState_ValueVisible(): boolean | null;
 
 boolean \| null
 
-值是否显示
+Whether the value is visible
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取值是否可见
+const valueVisible = designator.getState_ValueVisible();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('valueVisible:', valueVisible);
+```
 
 ### getstate_x
 
 # ISCH\_PrimitiveAttribute.getState\_X() method
 
-获取属性状态：坐标 X
+Get the property state: X coordinate
 
 ## Signature
 
 ```typescript
-getState_X(): number | null;
+public getState_X(): number | null;
 ```
 
 
@@ -910,18 +1311,41 @@ getState_X(): number | null;
 
 number \| null
 
-坐标 X
+X coordinate
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号文本的 X 坐标（原理图单位，1 单位 = 10mil）
+const attrX = designator.getState_X();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('attrX:', attrX);
+```
 
 ### getstate_y
 
 # ISCH\_PrimitiveAttribute.getState\_Y() method
 
-获取属性状态：坐标 Y
+Get the property state: Y coordinate
 
 ## Signature
 
 ```typescript
-getState_Y(): number | null;
+public getState_Y(): number | null;
 ```
 
 
@@ -929,18 +1353,41 @@ getState_Y(): number | null;
 
 number \| null
 
-坐标 Y
+Y coordinate
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取编号文本的 Y 坐标（原理图单位，1 单位 = 10mil）
+const attrY = designator.getState_Y();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('attrY:', attrY);
+```
 
 ### isasync
 
 # ISCH\_PrimitiveAttribute.isAsync() method
 
-查询图元是否为异步图元
+Query whether the primitive is an async primitive
 
 ## Signature
 
 ```typescript
-isAsync(): boolean;
+public isAsync(): boolean;
 ```
 
 
@@ -948,7 +1395,30 @@ isAsync(): boolean;
 
 boolean
 
-是否为异步图元
+Whether Is async primitive
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件（属性图元随器件生成，无法单独创建）
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], 600, 600);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出器件的属性图元，定位 Designator（编号）属性
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(compId);
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 查询异步状态
+const isAsync = designator.isAsync();
+
+// 4. 清理测试器件（属性图元随器件一起删除）
+await eda.sch_PrimitiveComponent.delete([compId]);
+
+console.log('isAsync:', isAsync);
+```
 
 ### reset
 
@@ -956,12 +1426,12 @@ boolean
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-将异步图元重置为当前画布状态
+Reset the async primitive to the current canvas state
 
 ## Signature
 
 ```typescript
-reset(): Promise<ISCH_PrimitiveAttribute>;
+public reset(): Promise<ISCH_PrimitiveAttribute>;
 ```
 
 
@@ -969,7 +1439,36 @@ reset(): Promise<ISCH_PrimitiveAttribute>;
 
 Promise&lt;[ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)<!-- -->&gt;
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 记录画布上的原始值
+const original = designator.getState_Value();
+
+// 4. 异步模式下改一个错误值，但不提交，直接 reset() 丢弃
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_Value('SHOULD-DISCARD');
+await asyncAttr.reset();
+
+// 5. 从画布重新读取，确认值仍是原始值（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('value:', original, '→', refetched.getState_Value(), '(修改已丢弃)');
+```
 
 ### setstate_alignmode
 
@@ -977,12 +1476,12 @@ Promise&lt;[ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)<!-- -->&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：对齐模式
+Set the property state: alignment mode
 
 ## Signature
 
 ```typescript
-setState_AlignMode(alignMode: ESCH_PrimitiveTextAlignMode | null): ISCH_PrimitiveAttribute;
+public setState_AlignMode(alignMode: ESCH_PrimitiveTextAlignMode | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1015,7 +1514,7 @@ alignMode
 
 </td><td>
 
-对齐模式
+Alignment mode
 
 
 </td></tr>
@@ -1027,7 +1526,36 @@ alignMode
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取修改前的对齐模式
+const before = designator.getState_AlignMode();
+
+// 4. 切换异步模式设置为中上对齐并提交
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_AlignMode(4);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('alignMode:', before, '→', refetched.getState_AlignMode());
+```
 
 ### setstate_bold
 
@@ -1035,12 +1563,12 @@ alignMode
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：是否加粗
+Set the property state: whether it is bold
 
 ## Signature
 
 ```typescript
-setState_Bold(bold: boolean | null): ISCH_PrimitiveAttribute;
+public setState_Bold(bold: boolean | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1073,7 +1601,7 @@ boolean \| null
 
 </td><td>
 
-是否加粗
+Whether it is bold
 
 
 </td></tr>
@@ -1085,7 +1613,33 @@ boolean \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 切换异步模式加粗编号并提交
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_Bold(true);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('bold:', refetched.getState_Bold());
+```
 
 ### setstate_color
 
@@ -1093,12 +1647,12 @@ boolean \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：文本颜色
+Set the property state: text color
 
 ## Signature
 
 ```typescript
-setState_Color(color: string | null): ISCH_PrimitiveAttribute;
+public setState_Color(color: string | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1141,7 +1695,34 @@ string \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 切换异步模式，Color 与 FillColor 同时设置才生效
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_Color('#FFEC8B');
+asyncAttr.setState_FillColor('#FFEC8B');
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('color:', refetched.getState_Color());
+```
 
 ### setstate_fillcolor
 
@@ -1149,12 +1730,12 @@ string \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：填充颜色
+Set the property state: fill color
 
 ## Signature
 
 ```typescript
-setState_FillColor(fillColor: string | null): ISCH_PrimitiveAttribute;
+public setState_FillColor(fillColor: string | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1187,7 +1768,7 @@ string \| null
 
 </td><td>
 
-填充颜色
+Fill color
 
 
 </td></tr>
@@ -1199,7 +1780,33 @@ string \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 切换异步模式设置底色并提交
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_FillColor('#FFEC8B');
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('fillColor:', refetched.getState_FillColor());
+```
 
 ### setstate_fontname
 
@@ -1207,12 +1814,12 @@ string \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：字体名称
+Set the property state: font name
 
 ## Signature
 
 ```typescript
-setState_FontName(fontName: string | null): ISCH_PrimitiveAttribute;
+public setState_FontName(fontName: string | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1245,7 +1852,7 @@ string \| null
 
 </td><td>
 
-字体名称
+Font name
 
 
 </td></tr>
@@ -1257,7 +1864,33 @@ string \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 切换异步模式设置字体并提交
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_FontName('Arial');
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('fontName:', refetched.getState_FontName());
+```
 
 ### setstate_fontsize
 
@@ -1265,12 +1898,12 @@ string \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：字体大小
+Set the property state: font size
 
 ## Signature
 
 ```typescript
-setState_FontSize(fontSize: number | null): ISCH_PrimitiveAttribute;
+public setState_FontSize(fontSize: number | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1303,7 +1936,7 @@ number \| null
 
 </td><td>
 
-字体大小
+Font size
 
 
 </td></tr>
@@ -1315,7 +1948,33 @@ number \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 切换异步模式设置字号并提交（传入 50，读回 0.5mm）
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_FontSize(50);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('fontSize:', refetched.getState_FontSize());
+```
 
 ### setstate_italic
 
@@ -1323,12 +1982,12 @@ number \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：是否斜体
+Set the property state: whether it is italic
 
 ## Signature
 
 ```typescript
-setState_Italic(italic: boolean | null): ISCH_PrimitiveAttribute;
+public setState_Italic(italic: boolean | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1361,7 +2020,7 @@ boolean \| null
 
 </td><td>
 
-是否斜体
+Whether it is italic
 
 
 </td></tr>
@@ -1373,7 +2032,33 @@ boolean \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 切换异步模式设置斜体并提交
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_Italic(true);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('italic:', refetched.getState_Italic());
+```
 
 ### setstate_key
 
@@ -1381,12 +2066,12 @@ boolean \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：键
+Set the property state: key
 
 ## Signature
 
 ```typescript
-setState_Key(key: string): ISCH_PrimitiveAttribute;
+public setState_Key(key: string): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1419,7 +2104,7 @@ string
 
 </td><td>
 
-键
+Key
 
 
 </td></tr>
@@ -1431,7 +2116,36 @@ string
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取修改前的属性名
+const before = designator.getState_Key();
+
+// 4. 切换异步模式重命名属性并提交
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_Key('Ref');
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('key:', before, '→', refetched.getState_Key());
+```
 
 ### setstate_keyvisible
 
@@ -1439,12 +2153,12 @@ string
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：键是否显示
+Set the property state: whether the key is visible
 
 ## Signature
 
 ```typescript
-setState_KeyVisible(keyVisible: boolean | null): ISCH_PrimitiveAttribute;
+public setState_KeyVisible(keyVisible: boolean | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1477,7 +2191,7 @@ boolean \| null
 
 </td><td>
 
-键是否显示
+Whether the key is visible
 
 
 </td></tr>
@@ -1489,7 +2203,33 @@ boolean \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 切换异步模式显示属性名前缀并提交
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_KeyVisible(true);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('keyVisible:', refetched.getState_KeyVisible());
+```
 
 ### setstate_rotation
 
@@ -1497,12 +2237,12 @@ boolean \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：旋转角度
+Set the property state: rotation angle
 
 ## Signature
 
 ```typescript
-setState_Rotation(rotation: number | null): ISCH_PrimitiveAttribute;
+public setState_Rotation(rotation: number | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1535,7 +2275,7 @@ number \| null
 
 </td><td>
 
-旋转角度
+Rotation angle
 
 
 </td></tr>
@@ -1547,7 +2287,34 @@ number \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取修改前的角度，切换异步模式旋转 90° 并提交
+const before = designator.getState_Rotation();
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_Rotation(90);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('rotation:', before, '→', refetched.getState_Rotation());
+```
 
 ### setstate_underline
 
@@ -1555,12 +2322,12 @@ number \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：是否加下划线
+Set the property state: whether it is underlined
 
 ## Signature
 
 ```typescript
-setState_UnderLine(underLine: boolean | null): ISCH_PrimitiveAttribute;
+public setState_UnderLine(underLine: boolean | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1593,7 +2360,7 @@ boolean \| null
 
 </td><td>
 
-是否加下划线
+Whether it is underlined
 
 
 </td></tr>
@@ -1605,7 +2372,33 @@ boolean \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 切换异步模式加下划线并提交
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_UnderLine(true);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('underLine:', refetched.getState_UnderLine());
+```
 
 ### setstate_value
 
@@ -1613,12 +2406,12 @@ boolean \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：值
+Set the property state: value
 
 ## Signature
 
 ```typescript
-setState_Value(value: string): ISCH_PrimitiveAttribute;
+public setState_Value(value: string): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1651,7 +2444,7 @@ string
 
 </td><td>
 
-值
+Value
 
 
 </td></tr>
@@ -1663,7 +2456,36 @@ string
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取修改前的属性值
+const before = designator.getState_Value();
+
+// 4. 切换异步模式修改属性值并提交
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_Value(before + '-MOD');
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('value:', before, '→', refetched.getState_Value());
+```
 
 ### setstate_valuevisible
 
@@ -1671,12 +2493,12 @@ string
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：值是否显示
+Set the property state: whether the value is visible
 
 ## Signature
 
 ```typescript
-setState_ValueVisible(valueVisible: boolean | null): ISCH_PrimitiveAttribute;
+public setState_ValueVisible(valueVisible: boolean | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1709,7 +2531,7 @@ boolean \| null
 
 </td><td>
 
-值是否显示
+Whether the value is visible
 
 
 </td></tr>
@@ -1721,7 +2543,36 @@ boolean \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取修改前的可见状态
+const before = designator.getState_ValueVisible();
+
+// 4. 切换异步模式隐藏属性值并提交
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_ValueVisible(false);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('valueVisible:', before, '→', refetched.getState_ValueVisible());
+```
 
 ### setstate_x
 
@@ -1729,12 +2580,12 @@ boolean \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：坐标 X
+Set the property state: X coordinate
 
 ## Signature
 
 ```typescript
-setState_X(x: number | null): ISCH_PrimitiveAttribute;
+public setState_X(x: number | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1767,7 +2618,7 @@ number \| null
 
 </td><td>
 
-坐标 X
+X coordinate
 
 
 </td></tr>
@@ -1779,7 +2630,34 @@ number \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取修改前的 X 坐标，向右平移 50 单位（约 12.7mm）
+const before = designator.getState_X();
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_X(before + 50);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('attrX:', before, '→', refetched.getState_X());
+```
 
 ### setstate_y
 
@@ -1787,12 +2665,12 @@ number \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：坐标 Y
+Set the property state: Y coordinate
 
 ## Signature
 
 ```typescript
-setState_Y(y: number | null): ISCH_PrimitiveAttribute;
+public setState_Y(y: number | null): ISCH_PrimitiveAttribute;
 ```
 
 ## Parameters
@@ -1825,7 +2703,7 @@ number \| null
 
 </td><td>
 
-坐标 Y
+Y coordinate
 
 
 </td></tr>
@@ -1837,18 +2715,45 @@ number \| null
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取修改前的 Y 坐标，向下平移 50 单位（读回值符号相反）
+const before = designator.getState_Y();
+const asyncAttr = designator.toAsync();
+asyncAttr.setState_Y(before + 50);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('attrY:', before, '→', refetched.getState_Y());
+```
 
 ### toasync
 
 # ISCH\_PrimitiveAttribute.toAsync() method
 
-将图元转换为异步图元
+Convert Primitive to Async primitive
 
 ## Signature
 
 ```typescript
-toAsync(): ISCH_PrimitiveAttribute;
+public toAsync(): ISCH_PrimitiveAttribute;
 ```
 
 
@@ -1856,18 +2761,47 @@ toAsync(): ISCH_PrimitiveAttribute;
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 转换为异步句柄并确认其异步状态
+const asyncAttr = designator.toAsync();
+
+// 4. 通过异步句柄修改字号并提交（传入 50，读回 0.5mm）
+asyncAttr.setState_FontSize(50);
+await asyncAttr.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('isAsync:', asyncAttr.isAsync());
+console.log('fontSize:', refetched.getState_FontSize());
+```
 
 ### tosync
 
 # ISCH\_PrimitiveAttribute.toSync() method
 
-将图元转换为同步图元
+Convert Primitive to Sync primitive
 
 ## Signature
 
 ```typescript
-toSync(): ISCH_PrimitiveAttribute;
+public toSync(): ISCH_PrimitiveAttribute;
 ```
 
 
@@ -1875,4 +2809,32 @@ toSync(): ISCH_PrimitiveAttribute;
 
 [ISCH\_PrimitiveAttribute](./ISCH_PrimitiveAttribute.md)
 
-属性图元对象
+Attribute primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试器件重合
+const x = 2000 + Math.floor(Math.random() * 6000);
+const y = 2000 + Math.floor(Math.random() * 6000);
+
+// 2. 放置测试器件并取出 Designator（编号）属性
+const devices = await eda.lib_Device.search('C0402');
+const comp = await eda.sch_PrimitiveComponent.create(devices[0], x, y);
+const attrIds = await eda.sch_PrimitiveAttribute.getAllPrimitiveId(comp.getState_PrimitiveId());
+const attrs = await eda.sch_PrimitiveAttribute.get(attrIds);
+const designator = attrs.find(a => a.getState_Key() === 'Designator');
+
+// 3. 读取修改前的属性值
+const before = designator.getState_Value();
+
+// 4. 转换为同步图元后直接修改，立即生效（无需 done()）
+const syncAttr = designator.toSync();
+syncAttr.setState_Value(before + '-SYNC');
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveAttribute.get(designator.getState_PrimitiveId());
+
+console.log('value:', before, '→', refetched.getState_Value());
+```

@@ -1,49 +1,59 @@
-## Description: <br>
-Automatically monitors OKX Flash Earn, Fixed Earn, and Flexible Earn opportunities, sends notifications, and guides users through subscription steps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automatically monitors OKX Flash Earn, Fixed Earn and Flexible Earn opportunities, sends push notifications, and guides subscription.
 
-## Publisher: <br>
-[searchworld](https://clawhub.ai/user/searchworld) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[searchworld](https://clawhub.ai/user/searchworld)
 
-## Use Case: <br>
-External OKX users and agent operators use this skill to monitor OKX Earn opportunities, configure APY and currency filters, receive Telegram, Lark, or session notifications, and follow subscription guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill installs persistent background monitoring for OKX Earn opportunities. <br>
-Mitigation: Review the scheduler it creates and the files under ~/.okx/earn-hunter before enabling scheduled scans. <br>
-Risk: The skill uses financial-account context and includes transaction guidance. <br>
-Mitigation: Confirm OKX account permissions and require separate explicit confirmation for purchase, redeem, or transfer steps. <br>
-Risk: The skill can send external notifications through Telegram or Lark. <br>
-Mitigation: Verify the configured notification destination before relying on scheduled monitoring. <br>
+## Use Case:
 
+External users use this skill to monitor OKX Earn opportunities across Flash Earn, Fixed Earn, and Flexible Earn, receive alerts, configure scan thresholds, and get guided subscription steps. It is intended for ongoing monitoring with explicit user confirmation before asset-moving actions.
 
-## Reference(s): <br>
-- [Earn Hunter on ClawHub](https://clawhub.ai/searchworld/skills/earn-hunter) <br>
-- [Publisher profile](https://clawhub.ai/user/searchworld) <br>
-- [OKX](https://www.okx.com) <br>
-- [Configuration Reference](references/config-reference.md) <br>
-- [Notification Channels](references/notify-channels.md) <br>
-- [Purchase Guide](references/purchase-guide.md) <br>
-- [Scan Logic](references/scan-logic.md) <br>
-- [Scheduler Setup](references/scheduler-setup.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces monitoring setup guidance, scan summaries, notification content, and subscription guidance; financial actions require separate explicit confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata and artifact metadata) <br>
+Risk: The skill has ongoing scheduler access, local OKX Earn state, and optional Telegram or Lark notification delivery.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when those access patterns are acceptable, review scheduler and notification configuration during setup, and keep credentials in environment variables or platform configuration rather than chat.
+
+Risk: The skill guides users toward real asset-moving purchase, transfer, and redeem workflows from a monitoring context.
+
+Mitigation: Confirm asset, amount, term, source account, and destination before any transfer, redeem, or fixed-purchase command is run, and prefer the dedicated transaction skill or the OKX app for execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/searchworld/skills/earn-hunter)
+- [OKX](https://www.okx.com)
+- [Purchase Guide](references/purchase-guide.md)
+- [Scan Logic](references/scan-logic.md)
+- [Scheduler Setup](references/scheduler-setup.md)
+- [Notification Channels](references/notify-channels.md)
+- [Configuration Reference](references/config-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON configuration, and notification templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces monitoring alerts, setup guidance, configuration edits, scan output summaries, and confirmation-oriented purchase guidance.]
+
+## Skill Version(s):
+
+1.4.3 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

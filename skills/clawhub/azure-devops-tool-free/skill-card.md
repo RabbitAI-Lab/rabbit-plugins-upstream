@@ -1,44 +1,58 @@
-## Description: <br>
-Azure DevOps Base helps personal developers inspect Azure DevOps projects, repositories, branches, pull requests, and work items, and create pull requests through Azure DevOps API commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Azure DevOps 基础版 helps agents manage Azure DevOps projects, repositories, branches, pull requests, and work item lookup for individual developer workflows.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External developers and individual Azure DevOps users use this skill to browse projects, repositories, and branches, review pull request lists, and draft pull request creation commands for lightweight workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses PAT-backed Azure DevOps API access and includes pull request creation examples. <br>
-Mitigation: Use a least-privilege Azure DevOps PAT, confirm the target organization, project, repository, and branch before use, and require explicit approval before any POST or write action. <br>
-Risk: The artifact claims local-only data handling, but Azure DevOps requests send relevant project, repository, branch, pull request, and authentication data to Azure DevOps APIs. <br>
-Mitigation: Treat API calls as external data sharing with Azure DevOps and avoid sending credentials or repository details unless the user has approved the action. <br>
-Risk: The security verdict is suspicious due to broad triggers and misleading data handling claims. <br>
-Mitigation: Review the skill before installing or running it, and limit use to the documented Azure DevOps read and pull request workflows. <br>
+## Use Case:
 
+Developers and individual Azure DevOps users use this skill to inspect organizations, projects, repositories, and branches, then create or review pull requests through an agent using Azure DevOps credentials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/azure-devops-tool-free) <br>
-- [Azure DevOps projects API endpoint example](https://dev.azure.com/${AZURE_DEVOPS_ORG}/_apis/projects?api-version=7.1) <br>
-- [Azure DevOps pull request API endpoint example](https://dev.azure.com/${ORG}/${PROJ}/_apis/git/repositories/${REPO_ID}/pullrequests?api-version=7.1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text, markdown] <br>
-**Output Format:** [Markdown with inline bash commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Azure DevOps organization, project, repository, branch, pull request, and PAT-related configuration details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can use a Personal Access Token to make live Azure DevOps repository changes, including pull request creation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the narrowest PAT scopes possible and review the organization, project, repository, branch, and pull request payload before execution.
+
+Risk: The artifact includes a local-only privacy claim, but authenticated requests are sent to Azure DevOps for normal operation.
+
+Mitigation: Treat Azure DevOps API calls as external network activity and avoid exposing tokens or sensitive project data in prompts, logs, or shared outputs.
+
+Risk: The security evidence describes the instructions as misleading or overbroad.
+
+Mitigation: Have the agent propose commands and API calls for review before running them, especially for write operations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/azure-devops-tool-free)
+- [Artifact Skill Definition](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and structured Azure DevOps operation results.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide authenticated Azure DevOps REST API calls using a user-provided PAT.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

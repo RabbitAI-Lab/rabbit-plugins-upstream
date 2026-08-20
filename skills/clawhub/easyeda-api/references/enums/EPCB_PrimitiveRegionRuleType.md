@@ -1,11 +1,11 @@
 # EPCB\_PrimitiveRegionRuleType enum
 
-区域图元区域规则类型
+Region primitive region rule type
 
 ## Signature
 
 ```typescript
-declare enum EPCB_PrimitiveRegionRuleType 
+export enum EPCB_PrimitiveRegionRuleType 
 ```
 
 ## Enumeration Members
@@ -38,8 +38,6 @@ FOLLOW\_REGION\_RULE
 
 </td><td>
 
-约束区域
-
 
 </td></tr>
 <tr><td>
@@ -53,8 +51,6 @@ NO\_COMPONENTS
 
 
 </td><td>
-
-禁止元件
 
 
 </td></tr>
@@ -70,8 +66,6 @@ NO\_FILLS
 
 </td><td>
 
-禁止填充
-
 
 </td></tr>
 <tr><td>
@@ -85,8 +79,6 @@ NO\_INNER\_ELECTRICAL\_LAYERS
 
 
 </td><td>
-
-禁止内电层
 
 
 </td></tr>
@@ -102,24 +94,6 @@ NO\_POURS
 
 </td><td>
 
-禁止覆铜
-
-
-</td></tr>
-<tr><td>
-
-NO\_VIAS
-
-
-</td><td>
-
-`3`
-
-
-</td><td>
-
-禁止过孔
-
 
 </td></tr>
 <tr><td>
@@ -134,12 +108,10 @@ NO\_WIRES
 
 </td><td>
 
-禁止布线
-
 
 </td></tr>
 </tbody></table>
 
 ## Remarks
 
-[FOLLOW\_REGION\_RULE](./EPCB_PrimitiveRegionRuleType.md) 即为约束区域
+[FOLLOW\_REGION\_RULE](./EPCB_PrimitiveRegionRuleType.md) is the constrained region

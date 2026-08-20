@@ -37,6 +37,9 @@ def base_candidate() -> dict[str, object]:
         "split_today": False,
         "post_split": False,
         "halted": False,
+        "premarket_supply_risk": False,
+        "supply_risk_source": "SEC EDGAR checked",
+        "supply_risk_checked_at": "2026-07-22T08:30:00-04:00",
         "dilution_overhang": False,
     }
 
@@ -68,6 +71,26 @@ def cphi_candidate() -> dict[str, object]:
             "first_5m_structure": "confirmed",
             "prior_abnormal_volume_warmup": True,
             "turnover_expanding": True,
+        }
+    )
+    return row
+
+
+def after_hours_candidate() -> dict[str, object]:
+    row = base_candidate()
+    row.update(
+        {
+            "symbol": "AFTER",
+            "timestamp": "2026-08-13T18:00:00-04:00",
+            "market_status": "After-Hours",
+            "regular_close": 1.00,
+            "after_price": 1.50,
+            "after_high": 1.55,
+            "after_volume": 500_000,
+            "after_bid": 1.49,
+            "after_ask": 1.50,
+            "after_hours_catalyst_quality": "EARNINGS_SUPPORTED",
+            "after_hours_supply_thesis": "UNKNOWN",
         }
     )
     return row
@@ -133,12 +156,43 @@ class ClassificationTests(unittest.TestCase):
         self.assertEqual(result["status"], "WATCH")
         self.assertIn("HALTED", result["risk_flags"])
 
-    def test_dilution_blocks_execution(self) -> None:
+    def test_confirmed_premarket_supply_risk_excludes(self) -> None:
         row = conventional_candidate()
+        row.update(
+            {
+                "premarket_supply_risk": True,
+                "supply_risk_type": "ACTIVE_ATM",
+                "supply_risk_source": "SEC 424B5",
+            }
+        )
+        result = classify(row)
+        self.assertEqual(result["status"], "EXCLUDE")
+        self.assertIn("SUPPLY_RISK_CONFIRMED", result["risk_flags"])
+        self.assertIn("PREMARKET_SUPPLY_RISK", result["risk_flags"])
+
+    def test_legacy_dilution_risk_also_excludes(self) -> None:
+        row = conventional_candidate()
+        row.pop("premarket_supply_risk")
         row["dilution_overhang"] = "active ATM and warrants"
         result = classify(row)
-        self.assertEqual(result["status"], "WATCH")
+        self.assertEqual(result["status"], "EXCLUDE")
         self.assertIn("DILUTION_OVERHANG", result["risk_flags"])
+        self.assertIn("SUPPLY_RISK_LEGACY_FALLBACK", result["risk_flags"])
+
+    def test_unknown_premarket_supply_review_waits_for_data(self) -> None:
+        row = conventional_candidate()
+        row["premarket_supply_risk"] = "UNKNOWN"
+        row["dilution_overhang"] = False
+        result = classify(row)
+        self.assertEqual(result["status"], "WAIT_DATA")
+        self.assertIn("SUPPLY_RISK_UNKNOWN", result["risk_flags"])
+
+    def test_legacy_clean_dilution_field_remains_compatible(self) -> None:
+        row = conventional_candidate()
+        row.pop("premarket_supply_risk")
+        result = classify(row)
+        self.assertEqual(result["status"], "EXECUTE")
+        self.assertIn("SUPPLY_RISK_LEGACY_FALLBACK", result["risk_flags"])
 
     def test_missing_fields_remain_unknown(self) -> None:
         result = classify({"symbol": "MISS"})
@@ -151,16 +205,66 @@ class ClassificationTests(unittest.TestCase):
         rows = [
             conventional_candidate(),
             cphi_candidate(),
+            after_hours_candidate(),
             base_candidate(),
             {"symbol": "MISS"},
         ]
         self.assertTrue(all(classify(row)["status"] in VALID_STATUSES for row in rows))
 
+    def test_after_hours_earnings_route_is_watch_only(self) -> None:
+        result = classify(after_hours_candidate())
+        self.assertEqual(result["status"], "WATCH")
+        self.assertEqual(result["path_type"], "AFTER_HOURS_EARNINGS")
+        self.assertIn("AFTER_HOURS_SIGNAL", result["risk_flags"])
+        self.assertAlmostEqual(result["after_gap_pct"], 50.00, places=2)
+        self.assertNotEqual(result["status"], "EXECUTE")
+
+    def test_after_hours_verified_low_supply_route_is_watch_only(self) -> None:
+        row = after_hours_candidate()
+        row["after_hours_catalyst_quality"] = "UNKNOWN"
+        row["after_hours_supply_thesis"] = "VERIFIED_LOW_SUPPLY"
+        result = classify(row)
+        self.assertEqual(result["status"], "WATCH")
+        self.assertEqual(result["path_type"], "AFTER_HOURS_LOW_SUPPLY")
+
+    def test_after_hours_confirmed_supply_risk_excludes(self) -> None:
+        row = after_hours_candidate()
+        row.update(
+            {
+                "premarket_supply_risk": True,
+                "supply_risk_type": "ACTIVE_ATM",
+                "supply_risk_source": "SEC 424B5",
+            }
+        )
+        result = classify(row)
+        self.assertEqual(result["status"], "EXCLUDE")
+        self.assertIn("SUPPLY_RISK_CONFIRMED", result["risk_flags"])
+
+    def test_after_hours_missing_turnover_waits_for_data(self) -> None:
+        row = after_hours_candidate()
+        row.pop("after_volume")
+        result = classify(row)
+        self.assertEqual(result["status"], "WAIT_DATA")
+        self.assertTrue(any(item.startswith("after_turnover") for item in result["unknown"]))
+
+    def test_after_hours_unverified_route_stays_watch(self) -> None:
+        row = after_hours_candidate()
+        row["after_hours_catalyst_quality"] = "UNKNOWN"
+        row["after_hours_supply_thesis"] = "UNKNOWN"
+        result = classify(row)
+        self.assertEqual(result["status"], "WATCH")
+        self.assertEqual(result["path_type"], "NONE")
+        self.assertIn("AFTER_HOURS_UNVERIFIED_ROUTE", result["risk_flags"])
+
     def test_markdown_exposes_path_and_risks(self) -> None:
-        output = markdown([classify(conventional_candidate())])
+        output = markdown(
+            [classify(conventional_candidate()), classify(after_hours_candidate())]
+        )
         self.assertIn("| Path |", output)
         self.assertIn("| Risks |", output)
         self.assertIn("CONVENTIONAL_GAP", output)
+        self.assertIn("After-gap", output)
+        self.assertIn("AFTER_HOURS_EARNINGS", output)
 
 
 class InputAndCliTests(unittest.TestCase):
@@ -200,9 +304,23 @@ class DocumentationTests(unittest.TestCase):
             text = (SKILL_ROOT / filename).read_text(encoding="utf-8")
             for ticker in ("ELPW", "TDIC", "SKK", "CPOP", "RGNT", "CPHI"):
                 self.assertIn(ticker, text)
+            for ticker in ("FGI", "GXAI"):
+                self.assertIn(ticker, text)
+            self.assertIn("AFTER_HOURS_EARNINGS", text)
+            self.assertIn("AFTER_HOURS_LOW_SUPPLY", text)
             self.assertIn("hrclaw@126.com", text)
         self.assertIn("README_EN.md", (SKILL_ROOT / "README.md").read_text(encoding="utf-8"))
         self.assertIn("README.md", (SKILL_ROOT / "README_EN.md").read_text(encoding="utf-8"))
+
+    def test_fgi_marketing_copy_has_no_performance_guarantee(self) -> None:
+        chinese = (SKILL_ROOT / "README.md").read_text(encoding="utf-8")
+        english = (SKILL_ROOT / "README_EN.md").read_text(encoding="utf-8")
+        self.assertIn("用户反馈", chinese)
+        self.assertIn("未经独立审计", chinese)
+        self.assertIn("不代表未来表现", chinese)
+        self.assertIn("user-reported", english)
+        self.assertIn("not independently audited", english)
+        self.assertIn("not indicative of future performance", english)
 
     def test_openai_metadata_constraints(self) -> None:
         text = (SKILL_ROOT / "agents" / "openai.yaml").read_text(encoding="utf-8")

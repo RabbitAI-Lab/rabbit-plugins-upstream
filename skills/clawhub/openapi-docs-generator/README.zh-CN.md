@@ -14,18 +14,18 @@ Validated demand: Backend and platform teams need practical help generating, imp
 
 ## 来源证据
 
-- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search：[Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues：[Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues：[[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
-- segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search：[typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search：[ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search：[答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
-- segmentfault-search：[OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
-- segmentfault-search：[答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues：[Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- github-issues：[Prozesse und Witnesses konvergieren nach Cancel, Crash und Shutdown](https://github.com/FlexOr2/atelier-2/issues/15)
+- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=bbdb6a739ead4f3b9400c0b273e0176c&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-159013081-null-null.142^v102^control&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues：[Deprecate stateful API surfaces and retain stateless Responses](https://github.com/nearai/cloud-api/issues/934)
+- github-issues：[ZUULI: make card checkout work end to end on iOS and Android](https://github.com/free2z/zuu/issues/388)
+- github-issues：[dnse: pool the polls per asset/account — prerequisite for running a strategy fleet](https://github.com/rubycell/pynecore/issues/40)
+- github-issues：[Add a Neon-authenticated public REST API and Scalar documentation](https://github.com/cuevaio/normal/issues/76)
+- hacker-news-search：[Uber SubmitQueue: a high-performance speculative merge queue](https://news.ycombinator.com/item?id=49232375)
+- hacker-news-search：[Gemini 3.7 Flash](https://news.ycombinator.com/item?id=49291703)
+- hacker-news-search：[Mea Culpa – Dark Hours](https://news.ycombinator.com/item?id=49268833)
+- hacker-news-search：[AMD acquires Taalas to boost inference performance by etching models in silicon](https://news.ycombinator.com/item?id=49203797)
+- github-issues：[Deprecate Conversations API surface](https://github.com/nearai/cloud-api/issues/939)
+- github-issues：[Deprecate Files API surface](https://github.com/nearai/cloud-api/issues/937)
 
 ## 这个技能如何满足需求
 

@@ -1,0 +1,29 @@
+{
+  "_meta": {
+    "description": "Deutsche Status-Strings (Identitaets-Mapping fuer DE-Nutzer, die DE-Texte direkt von DHL bekommen).",
+    "fallback": "identity"
+  },
+  "Die Sendung wurde an DHL uebergeben.": "Die Sendung wurde an DHL uebergeben.",
+  "Die Sendungsdaten wurden vom Absender elektronisch an DHL uebermittelt.": "Die Sendungsdaten wurden vom Absender elektronisch an DHL uebermittelt.",
+  "Die Sendung wurde im Paketzentrum des Absenders verarbeitet.": "Die Sendung wurde im Paketzentrum des Absenders verarbeitet.",
+  "Die Sendung wurde im Paketzentrum verarbeitet.": "Die Sendung wurde im Paketzentrum verarbeitet.",
+  "Die Sendung ist auf dem Weg zu einem DHL-Paketzentrum.": "Die Sendung ist auf dem Weg zu einem DHL-Paketzentrum.",
+  "Die Sendung ist im Paketzentrum angekommen.": "Die Sendung ist im Paketzentrum angekommen.",
+  "Die Sendung ist in der Region des Empfaengers angekommen und wird im naechsten Schritt zur Zustellbasis transportiert.": "Die Sendung ist in der Region des Empfaengers angekommen und wird im naechsten Schritt zur Zustellbasis transportiert.",
+  "Die Sendung wird zur Zustellbasis transportiert.": "Die Sendung wird zur Zustellbasis transportiert.",
+  "Die Sendung hat die Zustellbasis erreicht.": "Die Sendung hat die Zustellbasis erreicht.",
+  "Die Sendung wird fuer die Zustellung verladen.": "Die Sendung wird fuer die Zustellung verladen.",
+  "Die Sendung ist in der Zustellung.": "Die Sendung ist in der Zustellung.",
+  "Die Sendung wurde zugestellt.": "Die Sendung wurde zugestellt.",
+  "Die Sendung wurde erfolgreich zugestellt.": "Die Sendung wurde erfolgreich zugestellt.",
+  "Die Sendung wurde vom Empfaenger abgeholt.": "Die Sendung wurde vom Empfaenger abgeholt.",
+  "Lagerung basierend auf dem gewuenschten Zustelltag (vom Empfaenger bestellt).": "Lagerung basierend auf dem gewuenschten Zustelltag (vom Empfaenger bestellt).",
+  "Die Sendung wird im Zustelldepot gelagert, weil ein bestimmter Zustelltag gewuenscht wurde (vom Empfaenger bestellt).": "Die Sendung wird im Zustelldepot gelagert, weil ein bestimmter Zustelltag gewuenscht wurde (vom Empfaenger bestellt).",
+  "Die Wunschtag-Zustellung am {0} wurde vom Empfaenger bestellt.": "Die Wunschtag-Zustellung am {0} wurde vom Empfaenger bestellt.",
+  "Die Sendung wird im Depot fuer den Empfaenger bereitgehalten.": "Die Sendung wird im Depot fuer den Empfaenger bereitgehalten.",
+  "Ein neuer Wunsch-Zustelltag wurde festgelegt.": "Ein neuer Wunsch-Zustelltag wurde festgelegt.",
+  "Der Empfaenger wurde benachrichtigt.": "Der Empfaenger wurde benachrichtigt.",
+  "Die Sendung konnte nicht zugestellt werden.": "Die Sendung konnte nicht zugestellt werden.",
+  "Die Sendung wird an den Absender zurueckgesendet.": "Die Sendung wird an den Absender zurueckgesendet.",
+  "Die Sendung wurde an den Absender zurueckgesendet.": "Die Sendung wurde an den Absender zurueckgesendet."
+}

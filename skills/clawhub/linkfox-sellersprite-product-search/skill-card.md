@@ -1,43 +1,60 @@
-## Description: <br>
-Searches and filters SellerSprite Amazon product data across supported marketplaces by keyword, category, price, sales, BSR, ratings, margins, fulfillment, seller, and brand criteria. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses SellerSprite data to search, filter, and analyze Amazon products across supported marketplaces by price, sales, BSR, margin, ratings, fulfillment, seller, brand, and related product attributes.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon sellers and ecommerce analysts use this skill to find, filter, and compare product opportunities using SellerSprite product-level data. It supports product research workflows such as sales filtering, BSR analysis, margin screening, seasonal comparisons, and competitor landscape review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product queries and full API results may be shared with LinkFox/SellerSprite and saved locally. <br>
-Mitigation: Use the skill only for product research data that can be sent to the service, and manage or delete saved LinkFox data and cache files in shared workspaces. <br>
-Risk: Calls consume credits, and repeated searches can create unexpected cost. <br>
-Mitigation: Confirm billable calls with the user before running additional searches, changing keywords, or paginating through more results. <br>
-Risk: The skill can report feedback externally when it detects praise, dissatisfaction, mismatch, or improvement opportunities. <br>
-Mitigation: Ask for confirmation before submitting feedback and avoid including sensitive product-research details in feedback payloads. <br>
+## Use Case:
 
+External Amazon sellers, marketplace analysts, and ecommerce operators use this skill to run product-level SellerSprite searches for product discovery, competitor analysis, BSR review, sales filtering, and margin screening. It helps agents prepare structured search parameters, call the product-search API, and present concise product-analysis results.
 
-## Reference(s): <br>
-- [SellerSprite Product Search API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-product-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with JSON parameters, shell commands, and saved JSON API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved under LinkFox session data; small responses may print inline, while large responses print summaries unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill requires a LinkFox API key and may guide users through account login or API-key generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use secure secret storage, avoid entering verification codes on shared machines, and review credential setup before running the scripts.
+
+Risk: The skill uses a paid credit-based service and can initiate billing or payment onboarding when credits are unavailable.
+
+Mitigation: Review payment plans and QR codes before paying, and confirm with the user before additional searches that may consume credits.
+
+Risk: The security summary flags account login, API-key generation, billing, persistent credential setup, and automatic feedback reporting as behaviors that need review.
+
+Mitigation: Inspect the onboarding and feedback behavior before installation, and only install when these account, billing, credential, and reporting flows are acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-product-search)
+- [SellerSprite product-search API reference](artifact/references/api.md)
+- [Authentication and billing onboarding](artifact/references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, API calls, shell commands, configuration, JSON, markdown, files]
+
+**Output Format:** [Markdown guidance with JSON request examples, shell commands, API responses, tabular summaries, and saved JSON result files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Product-search calls consume paid credits, use API-key authentication, cache identical parameters for 24 hours, and save full responses under a linkfox session data directory while summarizing large responses.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

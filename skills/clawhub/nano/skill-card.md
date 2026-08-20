@@ -1,65 +1,73 @@
-## Description: <br>
-Nano (XNO) supports cryptocurrency wallet operations, transaction analysis, explorer lookups, address validation, unit conversion, and block-lattice guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Nano (XNO) supports cryptocurrency wallet operations, transaction analysis, explorer lookups, sends and receives, balances, pending funds, address validation, unit conversion, transaction/hash/account lookup, and Nano block-lattice questions.
 
-## Publisher: <br>
-[casualsecurityinc](https://clawhub.ai/user/casualsecurityinc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[casualsecurityinc](https://clawhub.ai/user/casualsecurityinc)
 
-## Use Case: <br>
-External users, developers, and wallet operators use this skill when an agent needs to work with Nano/XNO wallets, balances, pending funds, payment requests, transaction history, explorer links, and Nano protocol questions. The skill guides MCP tool use first and CLI commands as a fallback for compatible agent environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically broadcast receive/open transactions and may activate on generic wallet, balance, invoice, or open-account requests. <br>
-Mitigation: Install it only for Nano/XNO wallet work and require explicit confirmation before receive/open, send, refund, representative change, or spending-limit/config changes. <br>
-Risk: Wallet seeds or private keys could be exposed if they are provided to an agent. <br>
-Mitigation: Do not share seeds or private keys with the agent; use OWS-managed wallet flows and placeholder commands when private-key signing is unavoidable. <br>
-Risk: Ambiguous refund, send, or representative-change requests can move funds or alter wallet governance incorrectly. <br>
-Mitigation: Validate destination addresses, show full addresses and amounts, and require operator confirmation before executing value-moving or representative-changing actions. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent work with Nano wallets, payments, account data, transaction history, explorer links, unit conversion, and block-lattice concepts through MCP tools or pinned CLI commands.
 
-## Reference(s): <br>
-- [Nano Protocol](https://nano.org) <br>
-- [MCP Reference](references/mcp.md) <br>
-- [Wallets Reference](references/wallets.md) <br>
-- [Balance Reference](references/balance.md) <br>
-- [Receive Reference](references/receive.md) <br>
-- [Send Reference](references/send.md) <br>
-- [Transaction History Reference](references/history.md) <br>
-- [Address Validation Reference](references/validate.md) <br>
-- [Unit Conversion Reference](references/convert.md) <br>
-- [QR Reference](references/qr.md) <br>
-- [Message Signing Reference](references/sign.md) <br>
-- [Message Verification Reference](references/verify.md) <br>
-- [Representative Change Reference](references/change-rep.md) <br>
-- [RPC Account Balance Reference](references/rpc_account-balance.md) <br>
-- [RPC Account Info Reference](references/rpc_account-info.md) <br>
-- [RPC Receivable Reference](references/rpc_receivable.md) <br>
-- [RPC Capability Probe Reference](references/rpc_probe-caps.md) <br>
-- [Submit Block Reference](references/submit-block.md) <br>
-- [Block Send Reference](references/block_send.md) <br>
-- [Block Receive Reference](references/block_receive.md) <br>
-- [Block Change Reference](references/block_change.md) <br>
-- [Diagnostics Reference](references/diag.md) <br>
-- [Nano Representative Lists](https://blocklattice.io/representatives) <br>
-- [NanoTicker Representatives](https://nanoticker.org/representatives) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON tool-call examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access for RPC-backed wallet and explorer operations; address validation and unit conversion can be performed offline.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.5.2 (source: server release evidence) <br>
+Risk: The skill can initiate Nano sends or refunds from available wallets.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review wallet names, destination addresses, and XNO amounts before approving any send or refund action.
+
+Risk: The skill can use and change network RPC endpoints and save configuration.
+
+Mitigation: Approve RPC endpoint changes only when needed and prefer known endpoints or operator-controlled infrastructure.
+
+Risk: Raising maxSendXno increases the maximum amount an agent-assisted action can send.
+
+Mitigation: Change maxSendXno only after an explicit operator decision and set the smallest limit needed for the task.
+
+Risk: Wallet operations involve sensitive assets and may expose risk if secrets are exported or entered into chat.
+
+Mitigation: Do not export mnemonics or private keys; keep signing through OWS-backed wallet flows or use local placeholders for any manual signing command.
+
+## Reference(s):
+
+- [Nano.org](https://nano.org)
+- [Nano Skill on ClawHub](https://clawhub.ai/casualsecurityinc/skills/nano)
+- [xno-skills MCP](references/mcp.md)
+- [xno-skills Wallets](references/wallets.md)
+- [xno-skills Send](references/send.md)
+- [xno-skills Receive](references/receive.md)
+- [xno-skills Balance](references/balance.md)
+- [xno-skills Address Validation](references/validate.md)
+- [xno-skills Unit Conversion](references/convert.md)
+- [xno-skills RPC Account Info](references/rpc_account-info.md)
+- [xno-skills RPC Receivable](references/rpc_receivable.md)
+- [xno-skills QR](references/qr.md)
+- [xno-skills Message Verification](references/verify.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration, API calls]
+
+**Output Format:** [Markdown guidance with inline JSON tool calls and shell commands; command results may be JSON or text.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses network RPC endpoints for Nano operations and may save configuration changes when explicitly requested.]
+
+## Skill Version(s):
+
+4.7.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

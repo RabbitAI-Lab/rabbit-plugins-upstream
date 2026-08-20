@@ -1,43 +1,63 @@
-## Description: <br>
-Queries LinkFox SIF data to analyze traffic keywords for a single Amazon ASIN, including organic rank, ad rank, search volume, traffic share, click concentration, conversion rate, and weekly or monthly time windows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Looks up SIF traffic keywords for a single Amazon ASIN, including organic and ad ranks, search volume, traffic share, conversion markers, and weekly or monthly time windows.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon sellers and e-commerce analysts use this skill to reverse-look up traffic keywords for a specific ASIN and inspect ranking, advertising, search-volume, and conversion-related metrics. Developers can also use it to run the bundled Python helper against the LinkFox SIF API and review saved JSON responses. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends ASIN and keyword queries to LinkFox's paid SIF API and uses API credentials. <br>
-Mitigation: Install only when LinkFox API use is intended, use a scoped API key, and keep LINKFOX_TOOL_GATEWAY unset or pinned to a trusted LinkFox endpoint. <br>
-Risk: The skill stores full LinkFox API responses and cache files locally, which may contain sensitive product research data. <br>
-Mitigation: Review the saved linkfox response and cache directories and delete them periodically when the data is sensitive. <br>
-Risk: The skill includes automatic feedback reporting behavior and can direct users toward a separate onboarding skill when authentication or balance issues occur. <br>
-Mitigation: Review or disable feedback reporting before deployment, and install the separate onboarding skill only after explicitly trusting its source and package. <br>
+## Use Case:
 
+External Amazon sellers and e-commerce analysts use this skill to retrieve and present keyword performance data for a specific Amazon ASIN. It supports reverse ASIN keyword lookup, rank checks, ad keyword analysis, traffic-share review, conversion-marker review, and period-based keyword filtering.
 
-## Reference(s): <br>
-- [SIF-ASIN API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-sif-asin-keywords) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Analysis, Markdown, JSON, Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown tables and summaries, JSON API responses, and saved local JSON files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Queries one ASIN per request; large responses are summarized on stdout while full responses are saved locally.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: ASIN queries and related account data are sent to LinkFox.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when sharing those queries and account details with LinkFox is acceptable.
+
+Risk: Full API responses are written locally and cached, which may preserve competitive keyword data or account-linked results.
+
+Mitigation: Treat generated response files and cache files as sensitive, keep them in trusted workspaces, and remove them when no longer needed.
+
+Risk: The onboarding flow can guide phone-number login, API-key setup, and paid credit purchase steps.
+
+Mitigation: Protect generated API keys, review any payment order before scanning or paying a QR code, and confirm that the user intends to spend credits before additional calls.
+
+Risk: Environment-variable gateway overrides can redirect API traffic.
+
+Mitigation: Avoid using gateway override environment variables unless the destination is explicitly trusted.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-sif-asin-keywords)
+- [SIF-ASIN keyword API reference](references/api.md)
+- [Authentication and credits onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files]
+
+**Output Format:** [Markdown guidance, shell commands, and JSON API responses saved to local files or summarized to stdout]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full API responses under a local linkfox session directory, summarizes large responses unless inline output is requested, and uses a 24-hour local cache for repeated parameter combinations.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

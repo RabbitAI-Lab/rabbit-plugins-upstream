@@ -17,7 +17,7 @@ import requests
 
 API_VERSION = "2025-06-18"
 SERVER_NAME = "wikipedia-mcp"
-SERVER_VERSION = "1.1.0"
+SERVER_VERSION = "1.1.2"
 
 # Wikipedia requires a descriptive User-Agent with contact info.
 USER_AGENT = (
@@ -99,7 +99,10 @@ def _summary_block(data: dict, fallback_title: str) -> str:
 # ---------------------------------------------------------------------------
 def search_wikipedia(query: str, limit: int = 5, lang: str = "en") -> str:
     """Search Wikipedia for articles matching a query."""
-    limit = max(1, min(int(limit), 20))
+    try:
+        limit = max(1, min(int(limit), 20))
+    except (TypeError, ValueError):
+        limit = 5  # fall back to default on garbage input
     params = {
         "action": "query",
         "list": "search",

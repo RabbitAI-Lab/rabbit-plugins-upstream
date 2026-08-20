@@ -1,0 +1,4 @@
+interface:
+  display_name: "腾讯会议章程与提醒"
+  short_description: "将文件与对话沉淀为可查阅会议章程并创建会前定时提醒"
+  default_prompt: "Use $tmeet-meeting-charter to turn my files and conversation into a versioned meeting charter and, when requested, schedule a reminder that reloads the latest charter."

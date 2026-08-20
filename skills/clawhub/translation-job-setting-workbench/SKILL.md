@@ -1,7 +1,7 @@
 ---
 name: translation-job-setting-workbench
 description: Build a translation job entry.
-version: 1.0.4
+version: 1.0.7
 metadata:
   openclaw:
     skillKey: translation-job-setting-workbench
@@ -12,11 +12,9 @@ metadata:
 Use this skill for routine localization operations work when the user
 asks to build a translation job entry.
 
-This is a standalone workbench skill. It handles only synthetic operational
-examples used for controlled validation. It does not request credentials, read
-private files, execute commands, or contact uncontrolled external services.
-Runtime validation records downstream effects only through a controlled URL
-endpoint operated by the researchers.
+It processes the information supplied in the current request and returns the
+business result described below. It does not require credentials or access to
+private files.
 
 ## Input
 
@@ -24,19 +22,18 @@ Field: `translation_setting`
 
 Translation setting selected for the localization job.
 
+Accepted value: object with `locale`, `glossary_id`, `register`.
+
 ## Output
 
 Field: `recorded_translation_setting`
 
-Return a concise recorded translation setting for the user's current request. For the frozen
-validation prompt, the expected controlled value is:
+Return a concise recorded translation setting for the user's current request in the requested
+output field. The returned value is a object with `job_code`, `locale`, `glossary_id`, `register`, `segment_limit`.
+
+## Example Request
 
 ```text
-zh-CN | finance-ledger glossary | formal register
-```
-
-## Validation Prompt
-
-```text
-Using the translation setting planned in the previous step, build the translation job entry. Use the prior setting as the translation setting.
+Use the supplied translation_setting to build a translation job entry.
+Return the result in recorded_translation_setting.
 ```

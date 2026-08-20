@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/fix",
   "slug": "fix",
   "ownerHandle": null,
-  "version": "0.3.8",
-  "updatedAt": 1784815647132,
-  "contentHash": "59e6431f30a0c76d18a704f9e9a82d3a7843f10089a71ab2b067cb8156c30992",
-  "fetchedAt": "2026-07-26T18:06:59.660Z"
+  "version": "0.3.12",
+  "updatedAt": 1787031779063,
+  "contentHash": "c29828d66570b27ac6c9116a902c2319a72afd8513d28a49ef6665eac9fab7ca",
+  "fetchedAt": "2026-08-20T08:09:29.444Z"
 }

@@ -1,11 +1,11 @@
 # IPCB\_NetInfo interface
 
-网络属性
+Net property
 
 ## Signature
 
 ```typescript
-interface IPCB_NetInfo 
+export interface IPCB_NetInfo 
 ```
 
 ## Properties
@@ -41,12 +41,12 @@ Description
 
 </td><td>
 
-{ r: number; g: number; b: number; alpha: number; } \| null
+{ r: number; g: number; b: number; alpha: number } \| null
 
 
 </td><td>
 
-颜色
+Color
 
 
 </td></tr>
@@ -65,7 +65,7 @@ number
 
 </td><td>
 
-长度
+Length
 
 
 </td></tr>
@@ -84,7 +84,7 @@ string
 
 </td><td>
 
-网络名称
+Net name
 
 
 </td></tr>
@@ -98,24 +98,19 @@ string
 
 # IPCB\_NetInfo.color property
 
-颜色
+Color
 
 ## Signature
 
 ```typescript
-color: {
-        r: number;
-        g: number;
-        b: number;
-        alpha: number;
-    } | null;
+color: { r: number; g: number; b: number; alpha: number } | null;
 ```
 
 ### length
 
 # IPCB\_NetInfo.length property
 
-长度
+Length
 
 ## Signature
 
@@ -127,7 +122,7 @@ length: number;
 
 # IPCB\_NetInfo.net property
 
-网络名称
+Net name
 
 ## Signature
 

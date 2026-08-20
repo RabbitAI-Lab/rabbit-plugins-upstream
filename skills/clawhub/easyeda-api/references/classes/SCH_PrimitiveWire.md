@@ -1,11 +1,11 @@
 # SCH\_PrimitiveWire class
 
-原理图 &amp; 符号 / 导线图元类
+Schematic &amp; symbol / wire primitive class
 
 ## Signature
 
 ```typescript
-declare class SCH_PrimitiveWire implements ISCH_PrimitiveAPI 
+export class SCH_PrimitiveWire implements ISCH_PrimitiveAPI 
 ```
 **Implements:** [ISCH\_PrimitiveAPI](../interfaces/ISCH_PrimitiveAPI.md)
 
@@ -37,7 +37,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 创建导线
+**_(BETA)_** Create Wire
 
 
 </td></tr>
@@ -51,7 +51,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除导线
+**_(BETA)_** Delete Wire
 
 
 </td></tr>
@@ -65,7 +65,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取导线
+**_(BETA)_** Get Wire
 
 
 </td></tr>
@@ -79,7 +79,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取导线
+**_(BETA)_** Get Wire
 
 
 </td></tr>
@@ -93,7 +93,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有导线
+**_(BETA)_** Get all Wire
 
 
 </td></tr>
@@ -107,7 +107,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有导线的图元 ID
+**_(BETA)_** Get all Wire primitive IDs
 
 
 </td></tr>
@@ -121,7 +121,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改导线
+**_(BETA)_** Modify Wire
 
 
 </td></tr>
@@ -137,12 +137,12 @@ Description
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-创建导线
+Create Wire
 
 ## Signature
 
 ```typescript
-create(line: Array<number> | Array<Array<number>>, net?: string, color?: string | null, lineWidth?: number | null, lineType?: ESCH_PrimitiveLineType | null): Promise<ISCH_PrimitiveWire | undefined>;
+public create(line: Array<number> | Array<Array<number>>, net?: string, color?: string | null, lineWidth?: number | null, lineType?: ESCH_PrimitiveLineType | null): Promise<ISCH_PrimitiveWire | undefined>;
 ```
 
 ## Parameters
@@ -175,7 +175,7 @@ Array&lt;number&gt; \| Array&lt;Array&lt;number&gt;&gt;
 
 </td><td>
 
-多段线坐标组，每段都是连续的一组 `[x1, y1, x2, y2, x3, y3]` 所描述的线，如若多段线彼此无任何连接则创建将会失败
+Polyline coordinate group. Each segment is a continuous line described by `[x1, y1, x2, y2, x3, y3]`<!-- -->. If the polylines have no connection to each other, the creation will fail. Examples for the type `Array<Array<number>>`<!-- -->: 1. `[[], [0, 0, 0, 1]]` - segment 1 has no path, invalid; 2. `[[1], [0, 0, 0, 1]]` - segment 1 only has x, missing y, invalid; 3. `[[0, 0, -1, 0], [0, 0, 1, 1]]` - segment 1 is a horizontal line but segment 2 is a diagonal line, invalid; 4. `[[0, 0, -1, 0, -1, 1], [0, 1, 1, 1]]` - the two segments have no connection, invalid; 5. `[[1, 1], [1, 2, 2, 2]]` - segment 1 has only one point, ignored; segment 2 is a horizontal segment, and the final path keeps only segment 2, valid; 6. `[[1, 1], [1, 2]]` - segment 1 has only one point, ignored; segment 2 is also ignored, and the final path is empty, invalid
 
 
 </td></tr>
@@ -191,9 +191,7 @@ string
 
 </td><td>
 
-_(Optional)_ 网络名称，如若未指定，则遵循： 1. 没有坐标落在任何图元上，则默认为空网络； 2. 有一个坐标点在某个网络的图元上，则跟随该图元的网络； 3. 有多个坐标点在多个不同网络的图元上，则创建失败
-
-如若已指定，则遵循： 1. 有一个或多个坐标点在其他网络的图元上，且其他图元并未显式（通常指的是包含网络标签或网络端口）指定网络，则其他图元跟随指定的网络； 2. 如若其他图元指定了网络，则创建失败
+_(Optional)_ Net name. If not specified, the following rules apply: 1. If no coordinate falls on any primitive, the empty net is used by default; 2. If one coordinate point is on a primitive of a net, the net of that primitive is followed; 3. If multiple coordinate points are on primitives of different nets, the creation fails. If specified, the following rules apply: 1. If one or more coordinate points are on primitives of other nets, and those other primitives do not explicitly (usually via net labels or net ports) specify a net, they follow the specified net; 2. If other primitives have specified a net, the creation fails
 
 
 </td></tr>
@@ -209,7 +207,7 @@ string \| null
 
 </td><td>
 
-_(Optional)_ 导线颜色，`null` 表示默认
+_(Optional)_ Wire color, `null` indicates the default
 
 
 </td></tr>
@@ -225,7 +223,7 @@ number \| null
 
 </td><td>
 
-_(Optional)_ 线宽，范围 `1-10`<!-- -->，`null` 表示默认
+_(Optional)_ Line width, range `1-10`<!-- -->. `null` indicates the default
 
 
 </td></tr>
@@ -241,7 +239,7 @@ lineType
 
 </td><td>
 
-_(Optional)_ 线型，`null` 表示默认
+_(Optional)_ Line type. `null` indicates the default
 
 
 </td></tr>
@@ -253,7 +251,7 @@ _(Optional)_ 线型，`null` 表示默认
 
 Promise&lt;[ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md) \| undefined&gt;
 
-导线图元对象
+Wire primitive object
 
 ### delete
 
@@ -261,12 +259,12 @@ Promise&lt;[ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md) \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除导线
+Delete Wire
 
 ## Signature
 
 ```typescript
-delete(primitiveIds: string | ISCH_PrimitiveWire | Array<string> | Array<ISCH_PrimitiveWire>): Promise<boolean>;
+public delete(primitiveIds: string | ISCH_PrimitiveWire | Array<string> | Array<ISCH_PrimitiveWire>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -299,7 +297,7 @@ string \| [ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md) \| Array&lt;string&gt; 
 
 </td><td>
 
-导线的图元 ID 或导线图元对象
+Wire primitive ID or Wire primitive object
 
 
 </td></tr>
@@ -311,7 +309,7 @@ string \| [ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md) \| Array&lt;string&gt; 
 
 Promise&lt;boolean&gt;
 
-删除操作是否成功
+Delete Whether the operation is successful
 
 ### get
 
@@ -319,12 +317,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取导线
+Get Wire
 
 ## Signature
 
 ```typescript
-get(primitiveIds: string): Promise<ISCH_PrimitiveWire | undefined>;
+public get(primitiveIds: string): Promise<ISCH_PrimitiveWire | undefined>;
 ```
 
 ## Parameters
@@ -357,7 +355,7 @@ string
 
 </td><td>
 
-导线的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Wire primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -369,7 +367,7 @@ string
 
 Promise&lt;[ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md) \| undefined&gt;
 
-导线图元对象，`undefined` 表示获取失败
+Wire primitive object, `undefined` indicates that the retrieval failed
 
 ### get_1
 
@@ -377,12 +375,12 @@ Promise&lt;[ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md) \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取导线
+Get Wire
 
 ## Signature
 
 ```typescript
-get(primitiveIds: Array<string>): Promise<Array<ISCH_PrimitiveWire>>;
+public get(primitiveIds: Array<string>): Promise<Array<ISCH_PrimitiveWire>>;
 ```
 
 ## Parameters
@@ -415,7 +413,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-导线的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Wire primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -427,11 +425,11 @@ Array&lt;string&gt;
 
 Promise&lt;Array&lt;[ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)<!-- -->&gt;&gt;
 
-导线图元对象，空数组表示获取失败
+Wire primitive object; an empty array indicates that the retrieval failed
 
 ## Remarks
 
-如若传入多个图元 ID，任意图元 ID 未匹配到不影响其它图元的返回，即可能返回少于传入的图元 ID 数量的图元对象
+If multiple primitive IDs are passed in, a primitive ID that is not matched will not affect the return of other primitives; that is, fewer primitive objects than the number of primitive IDs passed in may be returned.
 
 ### getall
 
@@ -439,12 +437,12 @@ Promise&lt;Array&lt;[ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)<!-- -->&gt;&g
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有导线
+Get all Wire
 
 ## Signature
 
 ```typescript
-getAll(net?: string | Array<string>): Promise<Array<ISCH_PrimitiveWire>>;
+public getAll(net?: string | Array<string>): Promise<Array<ISCH_PrimitiveWire>>;
 ```
 
 ## Parameters
@@ -477,7 +475,7 @@ string \| Array&lt;string&gt;
 
 </td><td>
 
-_(Optional)_ 网络名称
+_(Optional)_ Net name
 
 
 </td></tr>
@@ -489,7 +487,7 @@ _(Optional)_ 网络名称
 
 Promise&lt;Array&lt;[ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)<!-- -->&gt;&gt;
 
-导线图元对象数组
+Array of Wire primitive objects
 
 ### getallprimitiveid
 
@@ -497,12 +495,12 @@ Promise&lt;Array&lt;[ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)<!-- -->&gt;&g
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有导线的图元 ID
+Get all Wire primitive IDs
 
 ## Signature
 
 ```typescript
-getAllPrimitiveId(net?: string | Array<string>): Promise<Array<string>>;
+public getAllPrimitiveId(net?: string | Array<string>): Promise<Array<string>>;
 ```
 
 ## Parameters
@@ -535,7 +533,7 @@ string \| Array&lt;string&gt;
 
 </td><td>
 
-_(Optional)_ 网络名称
+_(Optional)_ Net name
 
 
 </td></tr>
@@ -547,7 +545,7 @@ _(Optional)_ 网络名称
 
 Promise&lt;Array&lt;string&gt;&gt;
 
-导线的图元 ID 数组
+Array of Wire primitive IDs
 
 ### modify
 
@@ -555,18 +553,12 @@ Promise&lt;Array&lt;string&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改导线
+Modify Wire
 
 ## Signature
 
 ```typescript
-modify(primitiveId: string | ISCH_PrimitiveWire, property: {
-        line?: Array<number> | Array<Array<number>>;
-        net?: string;
-        color?: string | null;
-        lineWidth?: number | null;
-        lineType?: ESCH_PrimitiveLineType | null;
-    }): Promise<ISCH_PrimitiveWire | undefined>;
+public modify(primitiveId: string | ISCH_PrimitiveWire, property: { line?: undefined | number[] | number[][]; net?: undefined | string; color?: undefined | null | string; lineWidth?: undefined | null | number; lineType?: undefined | null | ESCH_PrimitiveLineType.SOLID | ESCH_PrimitiveLineType.DASHED | ESCH_PrimitiveLineType.DOTTED | ESCH_PrimitiveLineType.DOT_DASHED }): Promise<ISCH_PrimitiveWire | undefined>;
 ```
 
 ## Parameters
@@ -599,7 +591,7 @@ string \| [ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)
 
 </td><td>
 
-导线的图元 ID 或导线图元对象
+Wire primitive ID or Wire primitive object
 
 
 </td></tr>
@@ -610,12 +602,12 @@ property
 
 </td><td>
 
-{ line?: Array&lt;number&gt; \| Array&lt;Array&lt;number&gt;&gt;; net?: string; color?: string \| null; lineWidth?: number \| null; lineType?: [ESCH\_PrimitiveLineType](../enums/ESCH_PrimitiveLineType.md) \| null; }
+{ line?: undefined \| number\[\] \| number\[\]\[\]; net?: undefined \| string; color?: undefined \| null \| string; lineWidth?: undefined \| null \| number; lineType?: undefined \| null \| [ESCH\_PrimitiveLineType.SOLID](../enums/ESCH_PrimitiveLineType.md) \| [ESCH\_PrimitiveLineType.DASHED](../enums/ESCH_PrimitiveLineType.md) \| [ESCH\_PrimitiveLineType.DOTTED](../enums/ESCH_PrimitiveLineType.md) \| [ESCH\_PrimitiveLineType.DOT\_DASHED](../enums/ESCH_PrimitiveLineType.md) }
 
 
 </td><td>
 
-修改参数
+Modify Parameter
 
 
 </td></tr>
@@ -627,4 +619,4 @@ property
 
 Promise&lt;[ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md) \| undefined&gt;
 
-导线图元对象
+Wire primitive object

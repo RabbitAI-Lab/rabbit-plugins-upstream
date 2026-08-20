@@ -1,38 +1,58 @@
-## Description: <br>
-Authors HyperFrames slideshows, pitch decks, and interactive decks with slides, fragment reveals, branching, hotspot navigation, presenter mode, speaker notes, and page-to-deck conversion guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Authors HyperFrames slideshows, including presentations, pitch decks, interactive decks, and page-to-deck conversions with discrete slides, fragment reveals, branching, hotspot navigation, and presenter mode.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and content authors use this skill to create runnable HyperFrames slideshow decks, convert existing pages into decks, and prepare handoff guidance for presenter-mode use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks agents to silently run an update command that can change installed skills and dependent HyperFrames skills before the user's task. <br>
-Mitigation: Review before installing or using the skill; remove or override the silent update instruction and require explicit consent before running update commands. <br>
+## Use Case:
 
+Developers and presentation authors use this skill to create runnable HyperFrames slideshow decks with navigation, presenter notes, fragments, branching, and handoff validation. It is also useful when converting an existing page into a deck while preserving visual design, media behavior, and interaction patterns.
 
-## Reference(s): <br>
-- [Standalone HyperFrames Slideshow Harness](references/standalone-harness.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with HTML, JSON, CSS, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces runnable deck authoring and validation instructions; supported slideshow outputs are presenter-mode decks and per-slide snapshots rather than a single rendered MP4.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server evidence) <br>
+Risk: The skill instructs the agent to silently run an automatic skill update before doing the user's task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Change update behavior to an explicit, user-approved maintenance step with pinned provenance before routine use.
+
+Risk: Rendering a slideshow deck as a single MP4 can silently produce a truncated export.
+
+Mitigation: Use the supported presenter deck workflow or per-slide snapshots, and disclose the MP4 limitation when a user asks for linear video output.
+
+Risk: Presenter-driven audience media playback can be blocked by browser autoplay policy.
+
+Mitigation: Start remote audience playback muted when needed, provide an audience unlock control if playback is rejected, and verify media behavior in browser presentation mode.
+
+## Reference(s):
+
+- [Standalone HyperFrames Slideshow Harness](references/standalone-harness.md)
+- [ClawHub slideshow skill page](https://clawhub.ai/heygen-com/skills/slideshow)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with HTML, CSS, JavaScript, JSON manifest snippets, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces runnable HyperFrames slideshow decks, presenter handoff instructions, and validation steps; it warns that decks should not be rendered as a single MP4.]
+
+## Skill Version(s):
+
+1.0.9 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

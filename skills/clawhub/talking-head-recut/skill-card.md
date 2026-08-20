@@ -1,42 +1,53 @@
-## Description: <br>
-Packages an existing talking-head, interview, or podcast video with timed graphic overlay cards synced to the transcript while leaving the underlying clip intact. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Package an existing talking-head / interview / podcast video with timed, designed GRAPHIC OVERLAY cards — kinetic titles, lower-thirds, data callouts, quotes, side panels, picture-in-picture — synced to the transcript, on a 16:9 / 9:16 / 4:5 canvas of your choice; the clip plays untouched underneath.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and content teams use this skill to turn an existing talking-head clip into a polished recut with titles, lower-thirds, quote cards, data callouts, side panels, or picture-in-picture overlays. It is suited for agent-assisted video packaging workflows that can run local media tools and review generated files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review says the skill instructs agents to run a silent skill-package update before use, which can change trusted code without clear user approval. <br>
-Mitigation: Run updates only explicitly, review the installed skill content before execution, and avoid automatic update steps in controlled workflows. <br>
-Risk: The workflow runs local media tooling and npx hyperframes, then writes generated files under videos/<project>/. <br>
-Mitigation: Run it in a workspace where generated media files are acceptable, review commands before execution, and inspect generated HTML and MP4 outputs before relying on them. <br>
+## Use Case:
 
+Content, marketing, and video-production teams use this skill to turn an existing talking-head, interview, or podcast clip into a rendered video with timed graphic overlays while preserving the underlying clip. Agents use it to plan transcript-synced cards, author HTML overlay fragments, assemble a HyperFrames composition, and render the final MP4.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/talking-head-recut) <br>
-- [Design reference index](artifact/references/DESIGN_INDEX.md) <br>
-- [Attribution notice](artifact/NOTICE.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON planning artifacts, and HTML/CSS card fragments] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces media workflow instructions and generated project files under videos/<project>/, including metadata, transcript, storyboard, card HTML, composition HTML, and output MP4.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The skill asks the agent to silently run an unpinned `npx hyperframes skills update talking-head-recut` command before use, which can update the skill and related HyperFrames skills without an explicit review point.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Skip the silent update path for controlled deployments; run updates manually only when intended, review the command and package changes first, and rescan the skill before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/talking-head-recut)
+- [HeyGen publisher profile](https://clawhub.ai/user/heygen-com)
+- [NOTICE.md](NOTICE.md)
+- [Design index](references/DESIGN_INDEX.md)
+- [vtake-skills attribution source](https://github.com/notedit/vtake-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON planning artifacts, HTML/CSS/JavaScript composition files, and MP4 render outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a local source video plus system ffmpeg/ffprobe, HyperFrames CLI, and a headless browser render environment.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

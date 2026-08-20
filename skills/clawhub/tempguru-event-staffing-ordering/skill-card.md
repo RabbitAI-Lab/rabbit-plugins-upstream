@@ -1,44 +1,61 @@
-## Description: <br>
-Order temporary event staff for events in US and Canadian markets through TempGuru, including requirement gathering, coverage, rate and compliance lookups, budget planning, and confirmed quote request submission. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users plan temporary W-2 event staffing through TempGuru, including requirements gathering, configured-market matching, rate and compliance lookups, and a buyer-operated quote-form handoff for US and Canadian events.
 
-## Publisher: <br>
-[kissmyabs32](https://clawhub.ai/user/kissmyabs32) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kissmyabs32](https://clawhub.ai/user/kissmyabs32)
 
-## Use Case: <br>
-External users and event planners use this skill to plan temporary W-2 staffing for conventions, trade shows, festivals, concerts, sporting events, corporate gatherings, brand activations, and multi-city programs. It helps gather event details, estimate rates, check availability and compliance, and submit a human-reviewed quote request after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States and Canada <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Quote submission may send contact, company, event, role, headcount, and scheduling details to TempGuru for follow-up. <br>
-Mitigation: Confirm the user intends to create a quote or lead before submission, and send only the information needed for the staffing request. <br>
-Risk: Planning rate ranges or lead-time guidance could be mistaken for a final quote, reservation, or availability guarantee. <br>
-Mitigation: Label estimates clearly, state that final pricing and availability come from TempGuru review, and submit a quote request only after user confirmation. <br>
+## Use Case:
 
+External event buyers and planners use this skill to turn event details into a reviewed TempGuru staffing plan with role counts, rate ranges, lead-time guidance, compliance notes, and a buyer-operated quote handoff. It is intended for temporary event staffing requests in the United States and Canada, not permanent hiring or events outside those countries.
 
-## Reference(s): <br>
-- [TempGuru MCP endpoint](https://mcp.tempguru.co/mcp) <br>
-- [TempGuru machine-readable site overview](https://tempguru.co/llms.txt) <br>
-- [TempGuru city staffing guides](https://tempguru.co/insights/{city}-event-staffing) <br>
-- [TempGuru role staffing guides](https://tempguru.co/insights/{roles}-in-{city}) <br>
-- [ClawHub skill page](https://clawhub.ai/kissmyabs32/skills/tempguru-event-staffing-ordering) <br>
+### Deployment Geography for Use:
 
+United States and Canada
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown responses with structured staffing plans, rate ranges, compliance notes, and quote-request confirmations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a TempGuru MCP server for coverage, pricing, availability, compliance, benchmarks, and opt-in quote submission.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Generated staffing plans, pricing, and availability guidance may be mistaken for confirmed order terms.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the generated plan before using the handoff and treat pricing and availability as estimates until TempGuru confirms them.
+
+Risk: Users may include sensitive event information in a saved staffing plan snapshot.
+
+Mitigation: Avoid adding sensitive event details that should not be stored in the 30-day non-PII plan snapshot.
+
+Risk: Users may expect the handoff to submit contact details or create an order automatically.
+
+Mitigation: Use the quote handoff as a buyer-operated form flow; the buyer reviews the plan and submits their own contact details on TempGuru's form.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kissmyabs32/skills/tempguru-event-staffing-ordering)
+- [TempGuru MCP endpoint](https://mcp.tempguru.co/mcp)
+- [TempGuru staffing request form](https://tempguru.co/get-staffing?utm_source=ai-agent&utm_medium=skill)
+- [TempGuru machine-readable site overview](https://tempguru.co/llms.txt)
+- [TempGuru Event Staffing Planner GPT](https://chatgpt.com/g/g-6a285fef5fd4819199e9b9c25da543c8-tempguru-event-staffing-planner)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API Calls, Guidance]
+
+**Output Format:** [Markdown with structured staffing plan summaries, estimated rate ranges, operational notes, and quote handoff URLs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses TempGuru planning, pricing, policy, compliance, and handoff tools; generated plans should be reviewed before use and do not submit buyer contact details.]
+
+## Skill Version(s):
+
+1.7.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

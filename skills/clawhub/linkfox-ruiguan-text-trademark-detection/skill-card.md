@@ -1,45 +1,63 @@
-## Description: <br>
-Detects possible text trademark matches and infringement risk in e-commerce product titles and listing text across supported regions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps e-commerce sellers scan product titles and listing text for text-based trademark matches and potential infringement risk across supported regions.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-E-commerce sellers, marketplace operators, and listing reviewers use this skill to scan product titles, descriptions, bullet points, and keywords for registered trademark matches before publishing listings. It helps surface risk scores, matched trademarks, and blacklist or whitelist signals for human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product titles, listing text, session metadata, and the LinkFox API key are sent to the configured LinkFox gateway. <br>
-Mitigation: Use the skill only with content appropriate to share with LinkFox, avoid personal data or confidential launches, and verify the configured gateway before use. <br>
-Risk: Local response caching and saved JSON outputs may retain scanned listing text and trademark results. <br>
-Mitigation: Inspect or disable caching where possible and clean saved LinkFox session data when the results should not persist. <br>
-Risk: The onboarding flow may direct users to install a separate package from a URL. <br>
-Mitigation: Allow onboarding package installation only after explicitly trusting the separate package and its source. <br>
-Risk: The skill consumes paid LinkFox credits for API calls. <br>
-Mitigation: Confirm user intent before repeated, broad, or high-frequency scans, especially when changing parameters would incur additional calls. <br>
+## Use Case:
 
+External e-commerce sellers and marketplace operators use this skill to check product titles, descriptions, and bullet points for text trademark risks before publishing listings.
 
-## Reference(s): <br>
-- [睿观-文本商标检测 API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-text-trademark-detection) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, json, shell commands, files] <br>
-**Output Format:** [Markdown summaries and tables with JSON API responses saved to files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Small responses may be printed in full; larger responses are summarized while the full JSON is saved in the LinkFox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence and target metadata) <br>
+Risk: Product titles and descriptions are sent to LinkFox/Ruiguan for trademark analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid including secrets, customer personal data, or sensitive unpublished listing details unless the user is comfortable sharing them with the provider.
+
+Risk: The skill includes LinkFox account, API-key, and payment-credit workflows.
+
+Mitigation: Prefer the provider's self-service account portal when possible and treat printed API keys and payment artifacts as sensitive.
+
+Risk: Trademark responses and cache files may be retained locally under linkfox session directories.
+
+Mitigation: Clean up saved response and cache files when they are no longer needed.
+
+Risk: Trademark scan results are risk signals rather than legal clearance.
+
+Mitigation: Present results as reference information and recommend consulting an IP attorney for definitive trademark advice.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-text-trademark-detection)
+- [Ruiguan text trademark detection API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown risk summaries and tables, shell commands, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are saved under linkfox session directories; large responses print summaries unless inline output is requested; repeated parameter sets may use a 24-hour local cache.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

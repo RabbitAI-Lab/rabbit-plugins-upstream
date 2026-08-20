@@ -1,11 +1,11 @@
 # SYS\_Log class
 
-系统 / 日志类
+System / log class
 
 ## Signature
 
 ```typescript
-declare class SYS_Log 
+export class SYS_Log 
 ```
 
 ## Methods
@@ -36,7 +36,7 @@ Description
 
 </td><td>
 
-添加日志条目
+Add a log entry
 
 
 </td></tr>
@@ -50,7 +50,7 @@ Description
 
 </td><td>
 
-清空日志
+Clear the log
 
 
 </td></tr>
@@ -64,7 +64,7 @@ Description
 
 </td><td>
 
-导出日志
+Export the log
 
 
 </td></tr>
@@ -78,7 +78,7 @@ Description
 
 </td><td>
 
-查找条目
+Find entries
 
 
 </td></tr>
@@ -92,7 +92,7 @@ Description
 
 </td><td>
 
-筛选并获取日志条目
+Filter and get log entries
 
 
 </td></tr>
@@ -106,12 +106,12 @@ Description
 
 # SYS\_Log.add() method
 
-添加日志条目
+Add a log entry
 
 ## Signature
 
 ```typescript
-add(message: string, type?: ESYS_LogType): void;
+public add(message: string, type?: ESYS_LogType): void;
 ```
 
 ## Parameters
@@ -144,7 +144,7 @@ string
 
 </td><td>
 
-日志内容
+Log content
 
 
 </td></tr>
@@ -160,7 +160,7 @@ type
 
 </td><td>
 
-_(Optional)_ 日志类型
+_(Optional)_ Log type
 
 
 </td></tr>
@@ -176,12 +176,12 @@ void
 
 # SYS\_Log.clear() method
 
-清空日志
+Clear the log
 
 ## Signature
 
 ```typescript
-clear(): void;
+public clear(): void;
 ```
 
 
@@ -193,12 +193,12 @@ void
 
 # SYS\_Log.export() method
 
-导出日志
+Export the log
 
 ## Signature
 
 ```typescript
-export(types?: ESYS_LogType | Array<ESYS_LogType>): void;
+public export(types?: ESYS_LogType | Array<ESYS_LogType>): void;
 ```
 
 ## Parameters
@@ -231,7 +231,7 @@ types
 
 </td><td>
 
-_(Optional)_ 日志类型
+_(Optional)_ Log type
 
 
 </td></tr>
@@ -247,21 +247,12 @@ void
 
 # SYS\_Log.find() method
 
-查找条目
+Find entries
 
 ## Signature
 
 ```typescript
-find(message: string | Array<string | {
-        text: string;
-        attr?: {
-            id?: string;
-            path?: string;
-            sheet?: string;
-            pcbid?: string;
-            type?: string;
-        };
-    }>, types?: ESYS_LogType | Array<ESYS_LogType>): Promise<Array<ISYS_LogLine>>;
+public find(message: string | Array<string | { text: string; attr?: undefined | { id?: undefined | string; path?: undefined | string; sheet?: undefined | string; pcbid?: undefined | string; type?: undefined | string } }>, types?: ESYS_LogType | Array<ESYS_LogType>): Promise<Array<ISYS_LogLine>>;
 ```
 
 ## Parameters
@@ -289,12 +280,12 @@ message
 
 </td><td>
 
-string \| Array&lt;string \| { text: string; attr?: { id?: string; path?: string; sheet?: string; pcbid?: string; type?: string; }; }&gt;
+string \| Array&lt;string \| { text: string; attr?: undefined \| { id?: undefined \| string; path?: undefined \| string; sheet?: undefined \| string; pcbid?: undefined \| string; type?: undefined \| string } }&gt;
 
 
 </td><td>
 
-查找内容
+Find content
 
 
 </td></tr>
@@ -310,7 +301,7 @@ types
 
 </td><td>
 
-_(Optional)_ 日志类型数组，可以在指定的日志类型内查找
+_(Optional)_ Array of log types. The search can be performed within the specified log types
 
 
 </td></tr>
@@ -322,22 +313,22 @@ _(Optional)_ 日志类型数组，可以在指定的日志类型内查找
 
 Promise&lt;Array&lt;[ISYS\_LogLine](../interfaces/ISYS_LogLine.md)<!-- -->&gt;&gt;
 
-符合查找条件的日志条目数组
+Array of log entries matching the find criteria
 
 ## Remarks
 
-如果日志面板处于打开状态，查找操作会同时在前端展现
+If the log panel is open, the find operation will also be displayed on the front end
 
 ### sort
 
 # SYS\_Log.sort() method
 
-筛选并获取日志条目
+Filter and get log entries
 
 ## Signature
 
 ```typescript
-sort(types?: ESYS_LogType | Array<ESYS_LogType>): Promise<Array<ISYS_LogLine>>;
+public sort(types?: ESYS_LogType | Array<ESYS_LogType>): Promise<Array<ISYS_LogLine>>;
 ```
 
 ## Parameters
@@ -370,7 +361,7 @@ types
 
 </td><td>
 
-_(Optional)_ 日志类型数组，可以同时指定多种日志类型，如若不指定则为全部类型
+_(Optional)_ Array of log types. Multiple log types can be specified at the same time. If not specified, all types are used
 
 
 </td></tr>
@@ -382,8 +373,8 @@ _(Optional)_ 日志类型数组，可以同时指定多种日志类型，如若�
 
 Promise&lt;Array&lt;[ISYS\_LogLine](../interfaces/ISYS_LogLine.md)<!-- -->&gt;&gt;
 
-符合筛选条件的日志条目数组
+Array of log entries matching the filter criteria
 
 ## Remarks
 
-如果日志面板处于打开状态，筛选操作会同时在前端展现
+If the log panel is open, the filter operation will also be displayed on the front end

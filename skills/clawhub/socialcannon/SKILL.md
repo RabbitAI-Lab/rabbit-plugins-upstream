@@ -4,8 +4,9 @@ description: >
   Publish, schedule, and manage social media posts across Twitter/X, Facebook,
   Instagram, LinkedIn, TikTok, and YouTube. Content calendar with gap analysis,
   A/B testing, engagement inbox, AI content repurposing, optimal timing
-  suggestions, auto-scheduling, and UTM tracking.
-version: 1.10.0
+  suggestions, auto-scheduling, UTM tracking, and platform-native AI-content
+  disclosure labels.
+version: 1.11.0
 metadata:
   openclaw:
     requires:
@@ -201,6 +202,7 @@ Fields:
 - `mediaUrls` (optional) — array of public image/video URLs
 - `scheduledAt` (optional) — ISO 8601 datetime, `"optimal"` (auto-pick best time based on engagement data, Pro), or omit for immediate publish
 - `platformOptions.autoUtm` (optional) — auto-tag URLs with UTM parameters
+- `platformOptions.aiGenerated` (optional) — set `true` when the post's media is AI-generated. Maps to the platform's native AI-content label (Instagram, TikTok, YouTube); ignored on platforms without one. See [AI-content disclosure](#ai-content-disclosure).
 - `platformOptions.mediaType` (optional) — controls content type:
   - `"reel"` — Facebook/Instagram Reel (vertical 9:16 video)
   - `"story"` — Facebook/Instagram/TikTok Story (24h ephemeral)
@@ -277,7 +279,19 @@ curl -X POST https://socialcannon.app/api/v1/posts/thread \
   }'
 ```
 
-Fields: `accountId` (required), `items` (required, min 2, max 25), `scheduledAt` (optional), `platformOptions` (optional). Instagram requires media on each item.
+Fields: `accountId` (required), `items` (required, min 2, max 25), `scheduledAt` (optional), `platformOptions` (optional — e.g. `aiGenerated: true` for the AI-content label). Instagram requires media on each item.
+
+## AI-Content Disclosure
+
+When a post's media is AI-generated, set `platformOptions.aiGenerated: true`. SocialCannon maps it to each platform's native AI-content label:
+
+| Platform | API field | User-facing label |
+|----------|-----------|-------------------|
+| Instagram | `is_ai_generated` | "AI info" label (on carousels, applied to the carousel container) |
+| TikTok | `is_aigc` | "AI-generated" label |
+| YouTube | `containsSyntheticMedia` | "Altered content" disclosure |
+
+Facebook, X, and LinkedIn have no API disclosure field — the flag is accepted but ignored there. Also supported on threads (`platformOptions`), per-post in auto-schedule (`posts[].platformOptions`), and as a test-level `aiGenerated` flag on A/B tests (applies to every variant).
 
 ## Media Upload
 
@@ -512,7 +526,8 @@ curl -X POST https://socialcannon.app/api/v1/ab-tests \
     ],
     "metric": "engagementRate",
     "minDurationHours": 24,
-    "scheduledAt": "2026-04-20T10:00:00Z"
+    "scheduledAt": "2026-04-20T10:00:00Z",
+    "aiGenerated": true
   }'
 ```
 
@@ -520,7 +535,7 @@ curl -X POST https://socialcannon.app/api/v1/ab-tests \
 - **Omit `scheduledAt`** → all variants publish **immediately** to the platform via the social adapter
 - **Provide `scheduledAt`** → all variants are **scheduled** for that time (must be within 30 days; cron publishes them hourly)
 
-Each variant is a separate post record. Auto-completes after `minDurationHours` and the winner is determined by the chosen metric. Per-variant `mediaUrls` is optional.
+Each variant is a separate post record. Auto-completes after `minDurationHours` and the winner is determined by the chosen metric. Per-variant `mediaUrls` is optional. The test-level `aiGenerated` flag (optional) applies the platform's native AI-content label to every variant.
 
 **Partial failure semantics:** if ANY variant fails to publish during immediate mode, the endpoint returns **HTTP 502** and the failed variants are marked with `status: 'failed'`. The A/B test record is still created, but the winner comparison at completion only considers successfully published variants. Inspect each variant's post status before relying on test results.
 
@@ -581,14 +596,14 @@ curl -X POST https://socialcannon.app/api/v1/posts/auto-schedule \
     "accountId": "<account_id>",
     "posts": [
       { "content": "Post 1 text" },
-      { "content": "Post 2 text", "mediaUrls": ["https://..."] },
+      { "content": "Post 2 text", "mediaUrls": ["https://..."], "platformOptions": { "aiGenerated": true } },
       { "content": "Post 3 text" }
     ],
     "timezone": "UTC-5"
   }'
 ```
 
-Max 20 posts per request. Each post gets a unique slot. Returns `{ scheduled: [...], unscheduled: [...], summary: {...} }`.
+Max 20 posts per request. Each post gets a unique slot. Per-post `platformOptions` are supported (e.g. `aiGenerated` for the AI-content label, `title`/`visibility` where applicable). Returns `{ scheduled: [...], unscheduled: [...], summary: {...} }`.
 
 ## UTM Link Tracking
 
@@ -655,12 +670,14 @@ curl -X POST https://socialcannon.app/api/v1/posts \
 - Requires media (no text-only). Max 10 carousel items. No API deletion.
 - **Stories**: Set `platformOptions.mediaType` to `"story"`. One image or video.
 - **Reels**: Set `platformOptions.mediaType` to `"reel"`. Vertical 9:16 video.
+- **AI-content label**: Set `platformOptions.aiGenerated: true` to flag AI-generated media (`is_ai_generated` — the "AI info" label). On carousels it's applied to the carousel container.
 
 ### TikTok
 - Requires media — no text-only posts. Supports video, photo carousel (up to 35 images), and Stories.
 - **`platformOptions.privacyLevel` is REQUIRED** on every TikTok post — there is no default. Omitting it returns `400` with code `TIKTOK_PRIVACY_REQUIRED`. Use a value from the creator-info endpoint's `privacyLevelOptions` (e.g. `PUBLIC_TO_EVERYONE`, `MUTUAL_FOLLOW_FRIENDS`, `FOLLOWER_OF_CREATOR`, `SELF_ONLY`).
 - **Interaction toggles** (optional, default = allowed): `disableComment`, `disableDuet`, `disableStitch` (booleans). Duet/Stitch apply to video only. If the creator-info endpoint reports an interaction is disabled account-side (`commentDisabled` / `duetDisabled` / `stitchDisabled`), set the matching `disable*` to `true` (the server force-disables it regardless).
 - **Commercial content disclosure** (optional): set `commercialContent: true` if the post promotes a brand, product, or service, then set `brandOrganic: true` (your own brand) and/or `brandedContent: true` (paid/third-party partnership). If `brandedContent` is true, `privacyLevel` cannot be `SELF_ONLY`.
+- **AI-generated disclosure** (optional): set `aiGenerated: true` when the media is AI-generated (`is_aigc` — TikTok shows an "AI-generated" label).
 - **Stories**: Set `platformOptions.mediaType` to `"story"`. One video. Ephemeral (24h).
 - Video publish uses an async poll model. No API deletion support.
 
@@ -696,6 +713,7 @@ curl -X POST https://socialcannon.app/api/v1/posts \
 - **Shorts**: Set `platformOptions.mediaType` to `"short"`. Vertical video ≤60s.
 - **Community posts**: Set `platformOptions.mediaType` to `"community"`. Text/image post to channel's Community tab.
 - Scheduled videos are uploaded as private with a `publishAt` timestamp.
+- **Altered content disclosure**: Set `platformOptions.aiGenerated: true` for realistic AI-generated media (`containsSyntheticMedia` — YouTube's "Altered content" disclosure).
 
 ### LinkedIn
 - 3,000 char limit. Supports text-only and images (single or multi-image). Threads combine all items into one post.
@@ -775,3 +793,4 @@ If you run into issues with the API, account connections, or integration setup, 
 8. For batch scheduling, use the auto-schedule endpoint instead of creating posts one by one.
 9. For YouTube, set `mediaType` to `"short"` for Shorts or `"community"` for Community tab posts.
 10. For TikTok, call `GET /api/v1/accounts/{id}/tiktok/creator-info` first — it returns the allowed `privacyLevelOptions` (pass one as `platformOptions.privacyLevel`; it is required) and which of Comment/Duet/Stitch are disabled (never enable a disabled one).
+11. If the media is AI-generated, set `platformOptions.aiGenerated: true` so Instagram, TikTok, or YouTube show their native AI-content label.

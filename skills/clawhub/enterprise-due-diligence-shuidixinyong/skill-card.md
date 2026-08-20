@@ -1,48 +1,66 @@
-## Description: <br>
-Enterprise due diligence assistant for light pre-cooperation checks on companies, using bidding records, customer and supplier relationships, competitor overlap, and sourced public risk signals to produce single-company or two-company comparison reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a lightweight pre-cooperation enterprise due-diligence workflow using Zhiliaobiaoxun tender and bidding data to produce business activity, customer and supplier, bid strength, competitor, and public-risk reports.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Business users and agents use this skill before cooperation, signing, credit terms, or supplier selection to generate a light due diligence report on a company. The skill supports single-company reports and two-company comparisons based on Zhiliaobiaoxun bidding data plus sourced public risk information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts zhiliaobiaoxun.com services and can consume paid or trial credits. <br>
-Mitigation: Confirm the expected credit cost before running a report and stop for user approval before exceeding the documented budget. <br>
-Risk: The skill checks and may store a service API key in ~/.zlbx/config.json. <br>
-Mitigation: Prefer a user-provided ZLBX_API_KEY when available, do not expose credentials in conversation, and review local credential storage before deployment. <br>
-Risk: Generated Markdown and HTML reports may contain signed免登录 links that can work for anyone who receives the file or URL. <br>
-Mitigation: Treat generated reports as sensitive business documents, store them in controlled locations, and avoid public sharing of report files or signed links. <br>
-Risk: Automatic registration collects device characteristics for trial-account deduplication. <br>
-Mitigation: Run automatic registration only after explicit user consent and limit collection to the documented platform, architecture, and hashed MAC fields. <br>
+## Use Case:
 
+Business, procurement, sales, and partnership users use this skill before cooperation, contracting, or credit-period decisions to assess a company's observable business activity, project履约 history, customer concentration, competitive landscape, and publicly sourced risk signals.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/dragonzu/skills/enterprise-due-diligence-shuidixinyong) <br>
-- [Workflow guide](artifact/references/workflow.md) <br>
-- [API quick reference](artifact/references/api-quick.md) <br>
-- [Report template](artifact/references/report-template.md) <br>
-- [Automatic registration flow](artifact/references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown due diligence report with an optional self-contained HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or explicit-consent automatic registration; may use paid or trial credits; generated reports may include shareable signed links and are saved under ~/zlbx-company-intel-files/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: The skill can collect a device fingerprint for auto-registration when no API key is configured.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a preconfigured ZLBX_API_KEY or local config API key; if auto-registration is needed, require explicit user consent before collecting platform, architecture, and hashed MAC details.
+
+Risk: API credentials are stored locally for reuse.
+
+Mitigation: Treat ~/.zlbx/config.json as sensitive, avoid sharing credential values in conversation, and rotate or remove the key if the environment is shared.
+
+Risk: Generated HTML reports can preserve signed links and business-sensitive retrieved data.
+
+Mitigation: Share generated reports only with intended recipients and review embedded company, announcement, signed access, and contact information before redistribution.
+
+Risk: Due-diligence outputs may be mistaken for definitive judgments about a real company.
+
+Mitigation: Keep conclusions tied to cited public data, state data boundaries and gaps, avoid unsupported risk labels, and require the user to make their own cooperation or credit decision.
+
+## Reference(s):
+
+- [ClawHub skill release page](https://clawhub.ai/dragonzu/skills/enterprise-due-diligence-shuidixinyong)
+- [Enterprise intelligence workflow](references/workflow.md)
+- [API quick reference](references/api-quick.md)
+- [Report template](references/report-template.md)
+- [Auto-registration flow](references/auto-register.md)
+- [Zhiliaobiaoxun main agent site](https://agent.zhiliaobiaoxun.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown report plus a self-contained HTML report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY; reports may include signed source links, public-risk source URLs, and contact data returned by the service.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/magicpay",
   "slug": "magicpay",
   "ownerHandle": null,
-  "version": "0.1.41",
-  "updatedAt": 1781096502327,
-  "contentHash": "ba14562f1cc96063a03bb14c1de2d282edf6033a660205f6a776583284fe5a54",
-  "fetchedAt": "2026-07-26T18:30:01.984Z"
+  "version": "0.1.45",
+  "updatedAt": 1787211636332,
+  "contentHash": "272fdb1cf4106b512f40f529c77ccbcc32c630c747b715928fe41abb086eb736",
+  "fetchedAt": "2026-08-20T08:02:06.695Z"
 }

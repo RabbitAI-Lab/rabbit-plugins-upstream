@@ -1,32 +1,35 @@
-# Formulas and SQL Reference
+# Formulas and Worksheet SQL Reference
 
-## Contents
+## 1. Pick one computation model
 
-1. When to use this
-2. Formula commands
-3. Persistence and recalculation state
-4. SQL formula flow
-5. SQL authoring rules
-6. Common workflows
+There are three different producers. Resolve the engine before creating one.
 
-## 1. When to use this
+| Model | Formula/query identity | Author with |
+|---|---|---|
+| Excel Sheet | A1 cell and `worksheet_name` | ordinary cell/range formula |
+| Base Table | `table_id` and target `field_id` | column Formula |
+| Worksheet SQL Config | SQL result worksheet and config | raw SQL |
 
-Read this document when the task involves writing formulas, recalculating formulas, building SQL result tables, or verifying result sheets. For persisted pivot tables, use `mbs pivot` instead of formula authoring.
+Do not translate a cell address into a Base Formula, and do not turn raw SQL
+into a cell-formula wrapper. See [base-mode-verification.md](base-mode-verification.md)
+for the Base evidence contract.
 
-## 2. Formula commands
+## 2. Excel Sheet formulas
+
+These commands are only for a target confirmed as `engine=sheet`.
 
 Guidance:
 
 - Use `mbs excel-worksheet range set-formula` when you need to persist one worksheet formula or a batch of worksheet formulas.
 - Use `mbs formula batch-set` when you need the workbook-level batch alias for many formulas across worksheets.
 - Treat `mbs formula set` as a compatibility alias for single worksheet formula writes; prefer the `excel-worksheet range` form in new examples.
-- Use `mbs db-table range set-formula` when the target is a PG/SheetTable-backed table.
-- Use `mbs excel-worksheet range calculate` for temporary preview or debugging.
+- Use `mbs excel-worksheet range calculate --no-save-result` for temporary preview or debugging.
+- Use `mbs formula calculate --save-result` or `mbs excel-worksheet range calculate --save-result` only when a one-cell calculation should also persist the formula/result.
 - Use `mbs excel-worksheet calculate` for one-sheet refresh after data changes.
 - Use `mbs workbook calculate` when downstream formulas span worksheets.
 - Use `mbs excel-worksheet check-error` after writes or recalculation when the result worksheet must be free of worksheet errors.
 - For batch report builds, prefer rectangular `operations[]` and one final `recalculate_mode`.
-- Batch formula setting is for ordinary workbook formulas; do not use it for `=SQL(...)` or pivot formulas. For persisted pivots, use `mbs pivot preview` / `mbs pivot upsert`.
+- Batch formula setting is for ordinary workbook formulas; do not use it for SQL Config or pivot formulas. For persisted pivots, use `mbs pivot preview` / `mbs pivot upsert`.
 - `mbs excel-worksheet range set-formula` is a saved workbook write. If the command succeeds, the target cell contains the formula; there is no separate save command.
 - If you explicitly pass `--skip-recalculation`, the formula is still saved, but the displayed value or SQL spill output may not refresh until you call `mbs excel-worksheet calculate` or `mbs workbook calculate`.
 
@@ -36,209 +39,90 @@ CLI:
 mbs excel-worksheet range set-formula --doc-id <DOC_ID> --worksheet-name <SHEET> --cell E2 --formula '=SUM(B2:D2)'
 mbs excel-worksheet range set-formula --doc-id <DOC_ID> --operations ops.json --recalculate-mode worksheet
 mbs formula batch-set --doc-id <DOC_ID> --operations ops.json --recalculate-mode worksheet
-mbs db-table range set-formula --doc-id <DOC_ID> --name Orders --cell G2 --formula '=SQL("select * from Orders limit 10")'
-mbs workbook calculate --doc-id <DOC_ID>
 mbs excel-worksheet calculate --doc-id <DOC_ID> --worksheet-name <SHEET>
+mbs workbook calculate --doc-id <DOC_ID>
 mbs formula read --doc-id <DOC_ID> --worksheet-name <SHEET> --range A1:E20
-mbs excel-worksheet range calculate --doc-id <DOC_ID> --worksheet-name <SHEET> --cell E2 --formula '=SUM(B2:D2)'
+mbs excel-worksheet range calculate --doc-id <DOC_ID> --worksheet-name <SHEET> --cell E2 --formula '=SUM(B2:D2)' --no-save-result
+mbs formula calculate --doc-id <DOC_ID> --worksheet-name <SHEET> --cell E2 --formula '=SUM(B2:D2)' --save-result
 mbs excel-worksheet check-error --doc-id <DOC_ID> --worksheet-name <SHEET>
-mbs formula lineage --doc-id <DOC_ID> --worksheet-name <SHEET> --cell E2 --format tree
 ```
 
-For SQL-over-sheet work, choose the persistence model deliberately:
+Use `mbs formula lineage` only for A1-style worksheet formula lineage. It does
+not make a Base Table cell-addressable.
 
-- Use live `=SQL(...)` formulas through `excel-worksheet range set-formula` or
-  `db-table range set-formula` when the workbook should recalculate from source
-  tables later.
-- Use `db-table create-from-query` when the result should become a reusable
-  PG/SheetTable handoff table. Current CLI versions still try to keep the
-  source `=SQL(...)` formula in the final table cell, defaulting to `A1`, and
-  report that attempt in `context.formula_trace`.
-- For user-facing silver handoffs such as `OrderDetailsStructureInput`, treat
-  `A1 =SQL(...)` as a **pass gate**. If `formula_trace` is not `persisted`, or
-  A1 only shows a materialized header (for example `period`), run
-  `mbs db-table range set-formula --cell A1 --formula '=SQL("...")'` and
-  re-check with `mbs formula read --range A1`. Do not use
-  `--no-preserve-formula` on those tables.
-- For native pivot-table aggregation, do not hand-build `MAYBE_PIVOT(...)` or
-  call pivot APIs through `raw post`. Author a JSON pivot config and run
-  `mbs pivot preview` before `mbs pivot upsert --target-worksheet-name ... --anchor-cell ...`.
+## 3. Base column Formula
 
-## 3. Persistence and recalculation state
+A Base Formula belongs to a field and evaluates across the table's records. Its
+inputs and outputs are identified by `table_id`, `field_id`, and records, not
+by `E2`, a range, or a copied row template.
 
-`mbs excel-worksheet range set-formula` and the `formula set` alias change workbook state.
-Treat them like writing a formula into a cell in Excel or Google Sheets.
-
-| Action | Saved formula state | Displayed result state |
-|--------|---------------------|------------------------|
-| `mbs excel-worksheet range set-formula ... --formula '=SQL(...)'` succeeds | Formula is saved in the target cell | Recalculated immediately by default |
-| Same command with `--skip-recalculation` | Formula is still saved in the target cell | Existing displayed value may remain stale until a calculate command runs |
-| Source worksheet data changes later | Formula remains saved | SQL spill result may need `mbs excel-worksheet calculate` or `mbs workbook calculate` |
-| `mbs excel-worksheet range calculate` | Does not document a persistent save workflow | Useful for preview/debugging a formula result |
-
-Verification should check both layers when precision matters:
+Use the separate P5 command surface:
 
 ```bash
-# Confirm the saved formula text.
-mbs formula read --doc-id <DOC_ID> --worksheet-name <SHEET> --range A1:A1
-
-# Confirm the visible/spilled result values.
-mbs excel-worksheet read --doc-id <DOC_ID> --worksheet-name <SHEET> --range A1:E20 --output table
-
-# Scan the worksheet for formula-style errors or missing cached results.
-mbs excel-worksheet check-error --doc-id <DOC_ID> --worksheet-name <SHEET>
+mbs base-table formula compile --doc-id <DOC_ID> --table-id <TABLE_ID> --field-id <FIELD_ID> --expression '<EXPRESSION>'
+mbs base-table formula set --doc-id <DOC_ID> --table-id <TABLE_ID> --field-id <FIELD_ID> --expression '<EXPRESSION>'
+mbs base-table formula recalculate --doc-id <DOC_ID> --worksheet-name <BASE_WORKSHEET> --table-id <TABLE_ID>
 ```
 
-## 4. SQL formula flow
+Compile/validate before setting the target `field_id`, then retain the execution
+evidence returned by table-level recalculation. `--result-type` and
+`--expected-revision` are optional when the workflow needs an expected formula
+type or optimistic concurrency. Do not use the legacy range-formula path: it
+turns a column intent into a cell operation and cannot represent a Base column
+Formula.
 
-Default flow:
+## 4. Worksheet SQL Config
 
-1. `mbs workbook metadata`
-2. `mbs workbook list-worksheets`
-3. `mbs excel-table schema` or `mbs db-table schema`
-4. Optionally read a sample with `excel-table sample`, `db-table sample`, or `excel-worksheet range read`
-5. Convert the SQL into a `=SQL("...")` formula, doubling internal double quotes
-6. Use `mbs excel-worksheet range set-formula` on the target cell; on success, the formula is saved automatically
-7. Verify the saved formula with `formula read` if needed
-8. Verify the spill result with `excel-worksheet range read`, `excel-table sample`, or `workbook list-worksheets`
-9. Run `excel-worksheet check-error` on the worksheet before claiming the report is healthy
+SQL Config persists and materializes a raw query. Supply a plain `SELECT` or
+`WITH ... SELECT` body using `--sql` or `--sql-file`:
 
-For reusable PG/SheetTable handoff tables, replace steps 6-9 with
-`mbs db-table create-from-query --sql-file ... --verify`, then inspect
-`context.formula_trace` in JSON output and sample the created table. If
-`formula_trace.persisted` is false, report the traceability limitation instead
-of implying the created table still contains the source formula in `A1`.
-
-For temporary validation, use `mbs excel-worksheet range calculate` with the
-`=SQL(...)` formula on a disposable target cell or worksheet.
-
-## 5. SQL authoring rules
-
-Prefer PostgreSQL-compatible worksheet SQL, but stay within a conservative subset.
-
-Recommended default subset:
-
-- `select`
-- `with`
-- `where`
-- `group by`
-- `having`
-- `order by`
-- `limit`
-- `left join`
-- `inner join`
-- `coalesce`
-- `round`
-- `cast`
-- `case when`
-- `nullif`
-- `count` / `sum` / `avg` / `min` / `max`
-
-Practical assumption for this skill:
-
-- The online SQL path is PostgreSQL-backed
-- Agents should still prefer worksheet SQL that is easy to compile, portable, and easy to rewrite
-
-Hard boundaries:
-
-- only `SELECT` or `WITH ... SELECT`
-- no multiple statements
-- no `INSERT` / `UPDATE` / `DELETE` / DDL
-- no `SELECT INTO`
-- no row-locking clauses such as `FOR UPDATE`
-- do not reference `pg_catalog`, `information_schema`, `public`, or internal worksheet metadata tables
-
-Not recommended:
-
-- MySQL backticks
-- SQL Server `TOP`
-- BigQuery-only structures
-- heavy PostgreSQL-specific features unless you have validated them against the current formula runtime
-
-Notes:
-
-- `ILIKE` is no longer treated as automatically forbidden
-- whether it works in practice still depends on the current backend SQL formula runtime
-- in many cases, `lower(...) like ...` is a safer default than depending on a more specific dialect feature
-
-Table naming rules:
-
-- Prefer worksheet names directly
-- If a worksheet name contains spaces, wrap it in double quotes, for example `"Sales Data"`
-- If a historical workflow already uses `gid_*`, that is still acceptable, but new examples should prefer worksheet names
-
-Extra rules for `=SQL("...")`:
-
-- the SQL text lives inside an Excel string literal
-- internal double quotes must be doubled as `""`
-- for example, raw SQL `"Revenue"` becomes `""Revenue""` inside the formula
-
-If `WITH` is rejected by the backend, rewrite it as an inline subquery and recalculate again.
-
-## 6. Common workflows
-
-### Build a regional revenue result table
-
-1. `mbs excel-table schema` or `mbs db-table schema`
-2. Write PostgreSQL-compatible worksheet SQL:
-
-```sql
-select "Region", sum("Revenue") as "Revenue"
-from "Orders"
-group by "Region"
-order by "Revenue" desc
+```bash
+mbs sql config get --doc-id <DOC_ID> --worksheet-name <SQL_RESULT_SHEET>
+mbs sql config set --doc-id <DOC_ID> --worksheet-name <SQL_RESULT_SHEET> --sql-file result.sql --auto-refresh
+mbs sql preview --doc-id <DOC_ID> --worksheet-name <SQL_RESULT_SHEET> --sql-file result.sql --output table
+mbs sql overwrite --doc-id <DOC_ID> --worksheet-name <SQL_RESULT_SHEET> --confirm-overwrite
+mbs sql config delete --doc-id <DOC_ID> --worksheet-name <SQL_RESULT_SHEET>
 ```
 
-3. Write it as `=SQL("...")` in the report worksheet with `mbs excel-worksheet range set-formula`
-4. The formula is saved automatically if the command succeeds
-5. `mbs excel-worksheet range read` to verify `Pivot_RegionRevenue`
-6. `mbs excel-worksheet check-error` on the output worksheet
+`sql preview` is read-only. `sql overwrite` materializes the reviewed result;
+verify both the saved config and a bounded result read/sample. A raw SQL Config
+can materialize a Sheet result or a Base result, but it remains SQL Config and
+does not become either a cell formula or a column Formula.
 
-### Recalculate after syncing business data
+### Typed result schema
 
-1. `mbs sheet upsert --verify` or table insert plus sample verification
-2. `mbs excel-worksheet calculate` or `mbs workbook calculate`
-3. `mbs excel-worksheet range read`
-4. `mbs excel-worksheet check-error` when downstream formulas are expected to be stable
-
-If JSON output includes `result.source_info.degraded_success=true`, recalculation completed with available dependencies while skipping stale or missing PG-backed worksheet sources. Inspect `result.source_info.warnings` for `pg_sources[n]`, `gid`, worksheet, and skipped cell details before deciding whether source repair is needed.
-
-### Write formulas into a new report worksheet
-
-1. `mbs excel-worksheet create`
-2. Group derived cells into rectangular blocks
-3. Use `mbs excel-worksheet range set-formula --operations formulas.json`
-4. Prefer `recalculate_mode=workbook` if downstream sheets reference these blocks
-5. `mbs excel-worksheet range read`
-6. `mbs excel-worksheet check-error`
-
-Example payload:
+Use `--output json` when an automation needs the schema. A current SQL result
+contains an ordered `columns` array; every column must have a non-empty `name`
+and `pg_type`. `pg_type` is the PostgreSQL type of the final SQL projection and
+is the only physical type source for Base field creation and materialization.
+Do not replace it with a type inferred from sample values. For example, a
+numeric expression must remain numeric even when the preview rows are empty or
+contain values that happen to look like text.
 
 ```json
 {
-  "uri": "https://www.maybe.ai/docs/spreadsheets/d/<doc_id>",
-  "skip_recalculation": true,
-  "recalculate_mode": "workbook",
-  "operations": [
-    {
-      "worksheet_name": "利润分析",
-      "range_address": "B2:F3",
-      "formulas": [
-        ["='利润表-2025Q1'!D4/10000", "='利润表-2025Q2'!D4/10000", "='利润表-2025Q3'!D4/10000", "='利润表-2025Q4'!D4/10000", "=SUM(B2:E2)"],
-        ["='利润表-2025Q1'!D5/10000", "='利润表-2025Q2'!D5/10000", "='利润表-2025Q3'!D5/10000", "='利润表-2025Q4'!D5/10000", "=SUM(B3:E3)"]
-      ]
-    }
+  "columns": [
+    {"name": "amount", "pg_type": "numeric(12,2)"},
+    {"name": "created_at", "pg_type": "timestamp with time zone"}
   ]
 }
 ```
 
-### Write a live SQL formula into a report worksheet
+The backend may add `ui_type` and `ui_type_source`. Treat those fields as a
+verified display-type hint only when `ui_type_source` identifies a source
+field, such as a strict `SELECT * FROM <one source>` projection. Do not infer
+or preserve a source UI type for joins, expressions, aliases, aggregates,
+casts, CTEs, or other computed projections; use their returned `pg_type` and
+the normal PostgreSQL-to-Base mapping instead. `ui_type` never overrides a
+conflicting `pg_type`.
 
-1. `mbs excel-worksheet create`
-2. Write the SQL and validate it by calculating the corresponding `=SQL(...)` formula on a disposable target if needed
-3. Use `mbs excel-worksheet range set-formula` to write `=SQL("...")`
+For `db-table create-from-query`, pass the complete typed schema to the Base
+create request. If any result column is missing `pg_type`, stop before the
+mutation and report an invalid typed SQL schema. If a same-name field already
+exists in the target Base table with an incompatible physical type, reject the
+write and preserve the existing table; do not silently coerce it to text.
 
-Raw SQL before converting to the Excel formula string:
+Example `result.sql`:
 
 ```sql
 select "Region", sum("Revenue") as "Revenue"
@@ -247,19 +131,37 @@ group by "Region"
 order by "Revenue" desc
 ```
 
-Formula text for `excel-worksheet range set-formula`:
+## 5. SQL constraints
 
-```text
-=SQL("select ""Region"", sum(""Revenue"") as ""Revenue"" from ""Orders"" group by ""Region"" order by ""Revenue"" desc")
+Use a single read-only `SELECT` or `WITH ... SELECT`. Do not use multiple
+statements, DDL/DML, `SELECT INTO`, row locks, or internal metadata schemas.
+Prefer exact worksheet/table names; quote names containing spaces.
+
+For a Base source, SQL column references use field display names, not the
+Base `field_id` used by `mbs base-table` record and Formula commands. Quote the
+display names when needed:
+
+```sql
+select "mainImage", "categoryId", "skc"
+from "Base"
 ```
 
-4. If the command succeeds, the formula is saved automatically in the target cell
-5. By default, that request also recalculates and materializes the SQL spill result
-6. If you pass `--skip-recalculation`, the formula is still saved, but the visible result may remain stale until you call `mbs excel-worksheet calculate` or `mbs workbook calculate`
-7. `mbs formula read` can confirm the saved formula text
-8. `mbs excel-worksheet range read` can confirm the visible result values
-9. `mbs excel-worksheet check-error` can catch `#VALUE!`, `#REF!`, and empty cached formula results across the worksheet
+`col_000001`-style field IDs are not SQL columns. `SELECT * FROM "Base"`
+returns each display column once, so it is valid when all source columns are
+needed. For a reusable materialized result, `mbs base-table create-from-query`
+infers its sources from these `FROM`/`JOIN` relations; `--name` identifies the
+new Base table and `--worksheet-name` is not accepted.
 
-Reference:
+## 6. Existing legacy SQL formulas
 
-- `references/sql-formula-showcase.md`
+Some older workbooks contain cell formulas of the legacy SQL-wrapper form.
+They are migration-only compatibility objects: do not create, edit, or copy
+them. Use:
+
+```bash
+mbs sql migration preview --doc-id <DOC_ID>
+mbs sql migration commit --doc-id <DOC_ID> --candidate-id <CANDIDATE_ID> --allow-manual-candidates
+```
+
+Run preview first; commit only in an approved migration window. New SQL work
+uses Worksheet SQL Config raw SQL.

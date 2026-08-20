@@ -1,47 +1,68 @@
-## Description: <br>
-Cross-border ecommerce sellers use this skill to generate SEO-oriented product listings for Amazon, Shopify, and TikTok Shop in multiple languages through the Yufluent cloud service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates SEO-oriented, multilingual ecommerce listing copy for Amazon, Shopify, and TikTok Shop through the Yufluent cloud listing service.
 
-## Publisher: <br>
-[metahuan](https://clawhub.ai/user/metahuan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[metahuan](https://clawhub.ai/user/metahuan)
 
-## Use Case: <br>
-External sellers and ecommerce operators use this skill to collect product details, call the Yufluent listing service, and produce platform-specific listing copy for Amazon, Shopify, and TikTok Shop. Agents should review the generated content with the user before publication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends product names, keywords, and related listing details to Yufluent's cloud service using a TOKENAPI_KEY. <br>
-Mitigation: Use only the intended Yufluent endpoint, protect the tk-* key like a password, and avoid sending data the user is not comfortable sharing with that service. <br>
-Risk: Generated ecommerce listings may contain inaccurate, noncompliant, or unsupported claims. <br>
-Mitigation: Review all generated listings against the target marketplace rules and product evidence before publishing. <br>
+## Use Case:
 
+External sellers, ecommerce operators, and their agents use this skill to gather product details and produce platform-specific listing copy, including titles, bullet points, descriptions, SEO keywords, and platform metadata.
 
-## Reference(s): <br>
-- [ClawHub listing page](https://clawhub.ai/metahuan/yufluentcn-ecommerce-listing) <br>
-- [Yufluent console](https://claw.changzhiai.com) <br>
-- [Yufluent OpenClaw guide](https://claw.changzhiai.com/app/openclaw) <br>
-- [Amazon listing style guide](references/amazon-style-guide.md) <br>
-- [Amazon platform rules](references/platform-rules-amazon.md) <br>
-- [Shopify best practices](references/shopify-best-practices.md) <br>
-- [TikTok Shop tips](references/tiktok-shop-tips.md) <br>
-- [Pricing table](references/pricing-table.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration] <br>
-**Output Format:** [Markdown, plain text, or JSON listing content produced by the Yufluent API client] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Output varies by selected platform and may include titles, bullet points, descriptions, keywords, meta fields, hashtags, or hooks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.2 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Product and listing inputs are sent to the Yufluent service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when those inputs are appropriate to share with Yufluent, and remove sensitive or confidential product data before submission.
+
+Risk: The skill requires TOKENAPI_KEY and allows TOKENAPI_BASE_URL configuration.
+
+Mitigation: Protect the API key, review the configured base URL before use, and avoid sending requests to untrusted endpoints.
+
+Risk: Generated listing copy may include inaccurate claims or platform-noncompliant wording.
+
+Mitigation: Manually review generated titles, bullet points, descriptions, and keywords against the relevant marketplace rules before publishing.
+
+Risk: The security guidance flags dependency and packaging hygiene considerations.
+
+Mitigation: Prefer a pinned or constrained requests dependency and verify the packaged cloud client in controlled deployments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/metahuan/skills/yufluentcn-ecommerce-listing)
+- [Yufluent Listing homepage](https://www.changzhiai.com/skills/listing)
+- [OpenClaw and Yufluent setup](https://claw.changzhiai.com/app/openclaw)
+- [Amazon Listing reference](artifact/references/amazon-style-guide.md)
+- [Amazon platform rules](artifact/references/platform-rules-amazon.md)
+- [Shopify best practices](artifact/references/shopify-best-practices.md)
+- [TikTok Shop tips](artifact/references/tiktok-shop-tips.md)
+- [Pricing table](artifact/references/pricing-table.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, shell commands, configuration, guidance]
+
+**Output Format:** [Plain text or JSON listing output, optionally saved as a text file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes run metadata; the generated fields vary by Amazon, Shopify, or TikTok Shop format.]
+
+## Skill Version(s):
+
+1.3.3 (source: server release metadata; artifact frontmatter reports 1.3.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,55 @@
-## Description: <br>
-Create a shareable RooQuiz preview scorecard, a scored questionnaire where each option adds points toward a total that buckets into levels, and get a link to open in the browser. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create a shareable RooQuiz preview scorecard: a scored questionnaire where options add points toward a total that maps into result levels and returns a temporary browser link.
 
-## Publisher: <br>
-[rooquiz](https://clawhub.ai/user/rooquiz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rooquiz](https://clawhub.ai/user/rooquiz)
 
-## Use Case: <br>
-Developers and agents use this skill to draft, validate, and create temporary RooQuiz scorecard previews for self-assessments, readiness checks, maturity checks, surveys, and other scored questionnaires. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to send questionnaire content to a public RooQuiz preview endpoint. <br>
-Mitigation: Review the generated JSON for sensitive or inappropriate content before approving the request. <br>
-Risk: Generated preview links are temporary and may be unsuitable as permanent published forms. <br>
-Mitigation: Use preview links only for short-lived review and recreate or publish through RooQuiz when a durable form is needed. <br>
-Risk: Generated commands or HTTP requests could target the wrong endpoint when environment overrides are used. <br>
-Mitigation: Review the exact endpoint, request body, and command before execution. <br>
+## Use Case:
 
+External users and developers use this skill to draft a scored self-assessment, readiness check, satisfaction survey, or similar questionnaire and generate a temporary RooQuiz preview link without credentials.
 
-## Reference(s): <br>
-- [Preview Scorecard on ClawHub](https://clawhub.ai/rooquiz/skills/preview-scorecard) <br>
-- [RooQuiz Preview API](https://preview.rooquiz.com/api/preview-forms) <br>
-- [RooQuiz Preview Link Base](https://quizster.app) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown with JSON examples, HTTP request details, shell command examples, and preview-link guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include a short-lived RooQuiz preview link that expires after about 1 hour.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release evidence) <br>
+Risk: Questionnaire content is sent to the RooQuiz preview service and may be shared through a public temporary link.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review content before creating previews and avoid private, regulated, or confidential data unless that use fits the user's data-handling requirements.
+
+Risk: Preview links are short-lived and may stop working after expiration.
+
+Mitigation: Treat generated links as temporary previews and recreate or publish through RooQuiz when a persistent form is needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/rooquiz/skills/preview-scorecard)
+- [RooQuiz preview creation endpoint](https://preview.rooquiz.com/api/preview-forms)
+- [RooQuiz preview link base](https://quizster.app)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples, shell commands, and a browser-openable preview URL]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces temporary RooQuiz preview links that expire after about one hour.]
+
+## Skill Version(s):
+
+0.1.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

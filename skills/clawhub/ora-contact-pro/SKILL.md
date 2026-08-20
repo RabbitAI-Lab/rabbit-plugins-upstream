@@ -19,20 +19,20 @@ argument-hint: <name|domain|linkedin> <企业名称/域名/LinkedIn号>
 用户输入：
 
 - `/ora-contact-pro name <企业名称>`
-- `/ora-contact-pro domain <企业域名>`
+- `/ora-contact-pro domain <企业域名1> [企业域名2 ...]`
 - `/ora-contact-pro linkedin <LinkedIn企业号>`
 
 示例：
 
 - `/ora-contact-pro name Microsoft`
-- `/ora-contact-pro domain microsoft.com`
+- `/ora-contact-pro domain baidu.com xiaomi.com huawei.com alibaba.com tencent.com`
 - `/ora-contact-pro linkedin microsoft`
 
 如果用户给出完整 LinkedIn 公司链接，例如 `https://www.linkedin.com/company/microsoft/`，按 `linkedin` 类型处理。
 
 ## 规则
 
-- 每次只搜索一个企业。
+- 企业名称和 LinkedIn 企业号每次只搜索一个企业；域名搜索支持一次输入一个或多个域名。
 - 必须调用下面对应的脚本查询，不要自己拼接接口请求。
 - 不要修改或重写脚本。
 - 仅在用户明确授权、且查询场景合规时执行；如果涉及个人隐私、未公开联系人、骚扰式营销或其他高风险场景，必须先向用户说明风险并获得确认。
@@ -46,14 +46,14 @@ argument-hint: <name|domain|linkedin> <企业名称/域名/LinkedIn号>
 | 用户要查什么 | 调用脚本 |
 | --- | --- |
 | 企业名称 | `node ./scripts/search_by_company_name.js "<企业名称>"` |
-| 企业域名 | `node ./scripts/search_by_domain.js "<企业域名>"` |
+| 一个或多个企业域名 | `node ./scripts/search_by_domain.js "<域名1>" "<域名2>" ...` |
 | LinkedIn 企业号 | `node ./scripts/search_by_linkedin.js "<LinkedIn企业号或公司链接>"` |
 
 ## 执行步骤（严格按顺序）
 
 ### 步骤 1：判断搜索类型
 
-从用户输入中判断要按企业名称、企业域名还是 LinkedIn 企业号查询。
+从用户输入中判断要按企业名称、企业域名还是 LinkedIn 企业号查询。域名模式应收集用户给出的全部域名，在一次脚本调用中批量查询，不要逐个调用。
 
 ### 步骤 2：执行对应脚本
 
@@ -63,11 +63,11 @@ Bash 工具参数：
 - `timeout`: `600000`
 - `run_in_background`: `false`
 
-脚本会自动读取 `OraAgent.key`，请求对应接口，并输出原始数据文件路径和文件名标识。
+脚本会自动读取 `OraAgent.key`，请求对应接口，并输出原始数据文件路径和文件名标识。域名脚本会将所有域名作为 JSON 数组放入 POST 请求体，并持续读取流式返回，直至服务端结束响应。
 
 ### 步骤 3：读取原始数据
 
-读取脚本输出的 JSON 文件，按企业详情、联系方式、社媒、职员信息几个部分自然整理给用户。
+读取脚本输出的 JSON 文件。批量域名搜索时，按域名分别整理结果；每个域名下再按企业详情、联系方式、社媒、职员信息几个部分自然展示，并明确指出无结果或返回错误的域名。
 
 ### 步骤 4：中文企业名无结果时重查
 

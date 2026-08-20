@@ -1,45 +1,64 @@
-## Description: <br>
-Automatically triggers soothing mechanisms when pet anxiety, howling, or prolonged loneliness is detected, and produces structured pet behavior analysis reports from video or URL inputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet monitoring videos or video URLs for signs of anxiety, howling, or prolonged isolation and returns structured results that can inform soothing actions.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze pet monitoring videos or media URLs for anxiety-related behavior, generate structured reports, and query prior cloud-hosted analysis reports. It is intended as an intelligent pet-care trigger and reporting assistant, not as a guaranteed animal-care or smart-device control system. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet camera media and submitted URLs are processed by the LifeEmergence cloud service. <br>
-Mitigation: Use only media that is appropriate for cloud processing, avoid sensitive household footage, and review service handling before installation. <br>
-Risk: Report history is associated with a hidden local identity and backend tokens may be stored in the workspace. <br>
-Mitigation: Review local workspace storage before and after use, protect generated identity and token files, and clear them when the skill is no longer needed. <br>
-Risk: The release is packaged as an automatic soothing trigger, but evidence does not show reviewed code that directly controls speakers, toys, or smart-home devices. <br>
-Mitigation: Treat device activation as requiring separate reviewed integration code and human validation before connecting any physical pet-care devices. <br>
+## Use Case:
 
+External users and developers use this skill to analyze pet camera media or a video URL for anxiety-related behavior, retrieve cloud-stored analysis history, and receive structured results, recommendations, and report links.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-calming-trigger-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [Pet Calming Trigger API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis text with optional report links and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local video files or media URLs, historical report listing, optional detail level, and optional output file path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata; artifact frontmatter reports 1.0.9) <br>
+Risk: Pet camera media or supplied video URLs may be sent to LifeEmergence cloud services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm user consent before use, avoid sensitive household footage where possible, and clarify provider retention and deletion policies before deployment.
+
+Risk: The skill may silently create or reuse a persistent user identity and store user identity data or tokens in a local SQLite database.
+
+Mitigation: Run the skill in a controlled workspace, protect local data files, and define how users can inspect, rotate, or delete stored identity and token data.
+
+Risk: History queries retrieve prior reports from the cloud and may expose report links associated with the resolved user identity.
+
+Mitigation: Limit history access to authorized users and confirm account ownership and report-sharing expectations before enabling the skill.
+
+Risk: The artifact describes soothing actions such as sounds or laser toys, but actual device control may require separate smart-home integration.
+
+Mitigation: Present the skill output as analysis and trigger guidance unless a verified device integration is separately configured and reviewed.
+
+## Reference(s):
+
+- [Pet Calming Trigger Analysis API Documentation](artifact/references/api_doc.md)
+- [Common AI Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Listing](https://clawhub.ai/18072937735/skills/smyx-pet-calming-trigger-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files, Guidance]
+
+**Output Format:** [Markdown text with structured analysis content, JSON-style results, recommendations, report links, or cloud history output; optional saved result file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local mp4, avi, and mov video files up to 10 MB or public video URLs.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release metadata; artifact frontmatter says 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

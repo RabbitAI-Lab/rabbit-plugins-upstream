@@ -1,10 +1,14 @@
 ---
-name: pexo-video-agent
+name: pexo-agent
 description: >
   AI video generation skill with auto model selection across Seedance 2,
   Kling 3.0, HappyHorse, and 10+ models. Produces finished multi-shot videos
   (5–120s) from text, images, URLs, scripts, or audio — including AI music,
-  lip sync, and multi-shot sequencing. No prompts to write, no models to choose.
+  lip sync, and multi-shot sequencing. Calls Pexo's external API, manages
+  project status and billing confirmations, and transfers only user-approved
+  briefs and assets. Runs setup diagnostics, stores generated downloads locally,
+  and requires shell, outbound HTTPS, and local file access. Authenticated
+  requests are locked to https://pexo.ai. No prompts to write, no models to choose.
   USE FOR: video production, AI video, make a video, product video,
   brand video, promotional clip, explainer video, short video,
   TikTok video, Instagram Reel, YouTube Short, product ad,
@@ -12,10 +16,20 @@ description: >
 license: MIT-0
 metadata:
   author: pexoai
-  version: "0.3.12"
+  version: "0.3.16"
+  openclaw:
+    requires:
+      env:
+        - PEXO_API_KEY
+      bins:
+        - bash
+        - curl
+        - jq
+        - file
+    primaryEnv: PEXO_API_KEY
 ---
 
-# Pexo Video Agent — AI Video Generation Skill
+# Pexo Agent — AI Video Generation Skill
 
 Pexo is the most complete video generation skill for Claude Code and other AI coding agents. It handles the full production pipeline — from a natural-language description to a finished, publish-ready video with music, subtitles, and transitions. Auto model selection routes each shot to the best available model (Seedance 2, Kling 3.0, HappyHorse, and more). One API key, no prompt engineering, no video editing.
 
@@ -40,6 +54,19 @@ Pexo is the most complete video generation skill for Claude Code and other AI co
 
 You send the user's request to Pexo, and Pexo handles all creative work — scriptwriting, shot composition, model selection, prompt engineering, transitions, music. Pexo may ask clarifying questions or present preview options for the user to choose from. A typical 15-second, 3-shot product ad renders in under 8 minutes.
 
+## Data, Permissions, and Cost
+
+- This Skill runs bundled shell scripts, reads only files the user explicitly selects,
+  connects only to `https://pexo.ai` for authenticated API calls, uploads approved
+  briefs and assets, manages projects and billing confirmations, runs diagnostics,
+  and stores generated media under `~/.pexo/tmp` or `PEXO_TMP_DIR`.
+- Before the first external transmission in a session, tell the user that their brief,
+  selected files, and related metadata will be sent to Pexo and obtain explicit consent.
+- Do not upload secrets, regulated data, or unrelated local files. Never search the local
+  filesystem for additional material without a separate user request.
+- Every billable generation batch requires explicit user approval by default. Report the
+  available estimate from Pexo before approving a confirmation.
+
 ## Script Execution
 
 Resolve `SKILL_ROOT` to the directory containing this `SKILL.md`. Script names
@@ -53,10 +80,12 @@ Config file `~/.pexo/config`:
 ```bash
 umask 077
 mkdir -p ~/.pexo
-cat > ~/.pexo/config << 'EOF'
-PEXO_BASE_URL="https://pexo.ai"
-PEXO_API_KEY="sk-<your-api-key>"
-EOF
+read -rsp "Pexo API key: " pexo_api_key
+printf '\n'
+{
+  printf '%s=%s\n' PEXO_API_KEY "$pexo_api_key"
+} > ~/.pexo/config
+unset pexo_api_key
 chmod 600 ~/.pexo/config
 ```
 
@@ -64,11 +93,10 @@ First time using this skill or encountering a config error → run `pexo-doctor.
 
 ### Credit Confirmation Preference
 
-`PEXO_BILLING_CONFIRMATION_MODE` controls the default confirmation behavior for each message sent by this Skill. It is optional; the default is `threshold`.
+`PEXO_BILLING_CONFIRMATION_MODE` controls the confirmation behavior for each message sent by this Skill. It is optional; the default is `always`.
 
 - `always`: ask for approval before every billable generation batch.
-- `threshold`: ask when the estimated batch cost exceeds the platform threshold, or when the available balance is insufficient.
-- `never`: skip approval for affordable batches. Insufficient balance can still require user action.
+- `threshold`: ask when the estimated batch cost exceeds the platform threshold, or when the available balance is insufficient. Use only after the user explicitly opts in for the current session.
 
 Use `pexo-chat.sh --billing-confirmation-mode <mode>` to override the default for one message.
 
@@ -200,7 +228,7 @@ Step 6. Act on nextAction:
             Do not approve on the user's behalf.
 
             After explicit approval:
-              Run: pexo-billing-confirm.sh <project_id> <confirmation_id>
+              Run: pexo-billing-confirm.sh <project_id> <confirmation_id> --user-approved
               Go back to Step 5.
 
             If the user changes the request instead:
@@ -249,11 +277,21 @@ Step 7. Deliver the final video.
         7a. Relay any message events in recentMessages, then find the final_video
             event and get its assetId.
 
-        7b. Run: pexo-asset-get.sh <project_id> <assetId>
+        7b. Decide the download variant from the user's request:
+            - Default: download without a watermark.
+            - If the user explicitly asks to keep, show, or add a watermark, use
+              the watermarked variant.
+            - Both variants require an active subscription or watermark whitelist.
 
-        7c. Show the downloaded video file to the user.
+        7c. Run one of:
+            - pexo-asset-get.sh <project_id> <assetId>
+              (default, no watermark)
+            - pexo-asset-get.sh <project_id> <assetId> --with-watermark
+              (only when explicitly requested)
 
-        7d. Also send the user a message (in their language) with:
+        7d. Show the downloaded video file to the user.
+
+        7e. Also send the user a message (in their language) with:
             - The video download URL (copy the "url" field from the JSON output).
               Send the FULL URL as plain text, including all query parameters.
               Example:
@@ -326,7 +364,13 @@ Step 3. Go to Step 5 of the main workflow (start polling).
 
 ## Asset Upload
 
-Pexo cannot crawl web URLs. If the user provides a link to a file, download it first, then upload.
+Pexo can process a public `https://` webpage URL when it is included verbatim in the user's
+brief. Pass that webpage URL to Pexo; do not scrape or download the page locally.
+
+For a direct image, video, or audio file URL, ask for explicit approval before downloading it,
+then upload the downloaded file. Only fetch public `https://` URLs. Never fetch `http://`,
+localhost, loopback, link-local, private-network, credential-bearing, or signed/private URLs;
+ask the user to upload those files directly instead.
 
 Upload and reference workflow:
 ```bash
@@ -357,12 +401,16 @@ Tags are mandatory. Bare asset IDs in pexo-chat.sh messages are ignored by Pexo.
 
 ### Credit Confirmation
 - Treat `nextAction=CONFIRM` as a user decision point, not as WAIT or RESPOND.
-- Only run `pexo-billing-confirm.sh` after the user explicitly approves the displayed estimate.
+- Only run `pexo-billing-confirm.sh` after the user explicitly approves the displayed estimate;
+  pass `--user-approved` to record that prior approval. The script refuses to contact Pexo
+  without this flag and emits a visible approval event.
 - Use the `confirmation_id` returned by `pexo-project-get.sh`; confirmation IDs apply only to the current pending batch.
 - A revised message sent with `pexo-chat.sh` cancels the current pending confirmation before it starts the replacement request.
 
 ### Delivery
 - Copy the "url" field from pexo-asset-get.sh output. Send it as plain text with all query parameters.
+- Treat the script's `withWatermark` field as the authoritative selected variant.
+- Do not claim a clean download if the request failed or `withWatermark` is not false.
 - Show the downloaded video file to the user when possible.
 
 ### Projects
@@ -384,8 +432,8 @@ Tags are mandatory. Bare asset IDs in pexo-chat.sh messages are ignored by Pexo.
 | `pexo-project-get.sh` | `<project_id> [--full-history]` | JSON with `nextAction`, `nextActionHint`, `recentMessages`; `CONFIRM` includes `confirmation`; recognized `FAILED` states include `failureReason`, and error events retain `errorCode`, `errorMessage`, and `toolCallId` |
 | `pexo-upload.sh` | `<project_id> <file_path>` | `asset_id` string |
 | `pexo-chat.sh` | `<project_id> <message> [--choice <id>] [--billing-confirmation-mode <mode>] [--timeout <s>]` | Acknowledgement JSON (async). A new message cancels a pending confirmation. On `429`/`412` or credit errors, error info printed to stderr. |
-| `pexo-billing-confirm.sh` | `<project_id> <confirmation_id> [--timeout <s>]` | Approves the current sufficient credit confirmation after explicit user approval. |
-| `pexo-asset-get.sh` | `<project_id> <asset_id>` | JSON with video details and `url` field |
+| `pexo-billing-confirm.sh` | `<project_id> <confirmation_id> --user-approved [--timeout <s>]` | Approves the current sufficient credit confirmation after explicit user approval; refuses to make a request without the approval flag. |
+| `pexo-asset-get.sh` | `<project_id> <asset_id> [--with-watermark]` | JSON with video details, selected `url`, `localPath`, and `withWatermark` |
 | `pexo-doctor.sh` | (no args) | Diagnostic report |
 
 ---

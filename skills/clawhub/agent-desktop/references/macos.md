@@ -56,7 +56,8 @@ agent-desktop uses the macOS Accessibility API (`AXUIElement`) to read and manip
 
 Core resolves and validates a ref, applies its headed focus/cursor requirement, and then asks the macOS adapter to execute an action-specific chain. The chain records each attempted mechanism and never invents a generic fallback ladder:
 
-- Headless `click` uses `AXPress`; headed `click` uses a verified-point `CGClick` first, then `AXPress` only if physical delivery was not attempted.
+- Headless `click` performs whichever activation the element publishes — `AXPress`, `AXOpen`, or `AXConfirm` — and falls back to writing the owning container's selection (`AXSelected`, `AXSelectedRows`, or `AXSelectedChildren`) for rows that publish no activation action. Only advertised actions are performed, because a responder can answer success to an action it never published. Headed `click` uses a verified-point `CGClick` first, then the same semantic chain if physical delivery was not attempted.
+- Return codes do not decide delivery. Finder answers `kAXErrorAttributeUnsupported` from an `AXOpen` that navigates and `kAXErrorSuccess` from an `AXConfirm` that does nothing, so a performed action is judged by observing the application.
 - Headed `right-click` uses physical right-click first; headless uses the bounded `AXShowMenu` family.
 - Headed `type`, `clear`, and `scroll` use PID-targeted keyboard, keyboard clear, and wheel delivery respectively; their headless paths use AX semantics.
 - `expand` and `collapse` use a verified semantic disclosure mutation in both modes.
@@ -178,6 +179,7 @@ Some apps don't expose full accessibility trees:
 - Remove `-i` flag to see all elements including non-interactive ones
 - Increase `--max-depth` to explore deeper
 - Use `screenshot` as a visual fallback
+- For a Chromium-based app's web contents specifically, `launch --cdp` plus a CDP client is a faster path than a deep accessibility walk — see `references/commands-system.md`. Accessibility remains the only attach story for an app already running, and the only path to native surfaces even when `--cdp` is in use.
 
 ### STALE_REF / SNAPSHOT_NOT_FOUND
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Datawhale Learning Navigator"
+  short_description: "Query Easy Vibe and Hello Agents learning resources"
+  default_prompt: "Use $datawhale-learning to find the relevant Datawhale lessons and create a project-based learning plan."

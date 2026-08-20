@@ -1,5 +1,8 @@
 ---
 name: competitive-product-research
+slug: competitive-product-research
+version: 1.4.8
+displayName: 竞品调研 · CPR
 description: >-
   Dual-track competitive research: experience benchmarking (8 UX dimensions) + strategic diagnostics (SWOT/Five Forces/PESTLE), source-traceable HTML or Markdown report.
   Use when competitive analysis, benchmarking, differentiation strategy, or when the user says「竞品调研」「对标分析」「和 XX 比差在哪」.
@@ -84,10 +87,12 @@ Our app post conversion is 3% — benchmark Xiaohongshu vs Instagram, first-post
 
 必含：对标表 · Key Findings · 路线图（Owner/优先级）· Source Index · 免责声明。对外分享须脱敏。
 
+HTML 报告中的公开来源证据标签必须可点击并直接打开对应 URL；同一单元格有多个来源时，每个 `SRC-xxx` 分别生成链接，禁止合并成一个不可点击的标签。无 URL 的用户材料、行业推断和证据缺口链接到 Source Index 内对应条目，并明确标注其类型。
+
 ## 硬约束
 
 - **信息优先**：禁止编造；缺失标注；推断透明；清单追问优于脑补
-- **证据**：关键结论至少一个 `SRC-xxx`；体验轨与策略轨不重复
+- **证据**：关键结论至少一个 `SRC-xxx`；HTML 的公开来源 `SRC-xxx` 必须直接链接来源 URL；体验轨与策略轨不重复
 - **输出**：具名、具数、具动作；必有执行建议
 - **优先级**：信息优先 > 格式锁 > playbook > 文风护栏
 

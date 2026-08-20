@@ -5,7 +5,7 @@ description: "Image super-resolution tool: enhances image clarity and details, r
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy superres -h 查看帮助信息。"}}
 ---
 
-# dlazy-superres
+# 图片高清放大 Super Resolution
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

@@ -1,43 +1,60 @@
-## Description: <br>
-Image super-resolution tool that enhances image clarity and details and returns an enhanced image URL for restoration or upscaling workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enhances low-resolution images with dLazy's cloud super-resolution service and returns an upscaled image URL.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to invoke dLazy's hosted super-resolution service on an image URL or local image path and receive an enhanced image URL. It is suited to low-resolution asset restoration and secondary upscaling workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected images or image URLs are sent to dLazy's hosted cloud service for processing. <br>
-Mitigation: Use the skill only for images appropriate to send to dLazy, and run with --dry-run when payload and cost should be inspected before making a request. <br>
-Risk: The dLazy API key may be stored in local CLI configuration or supplied through the environment. <br>
-Mitigation: Prefer DLAZY_API_KEY for per-invocation use or verify permissions on ~/.dlazy/config.json on shared machines; rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+External users and developers use this skill to upscale low-resolution images through the dLazy CLI and retrieve enhanced image URLs for restoration or downstream asset workflows.
 
-## Reference(s): <br>
-- [Dlazy Superres ClawHub page](https://clawhub.ai/dlazyai/skills/dlazy-superres) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [JSON response containing image output URLs, with optional shell commands and human-facing guidance for authentication or billing errors] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return a generated image URL immediately or an asynchronous task identifier when --no-wait is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: artifact frontmatter and server release evidence) <br>
+Risk: Selected images and prompts are sent to dLazy's cloud service for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use dry-run or explicit confirmation before uploading private media, and avoid sending sensitive images unless the user accepts the cloud-processing risk.
+
+Risk: The dLazy CLI requires an API key that may be stored in local configuration.
+
+Mitigation: Prefer per-invocation DLAZY_API_KEY or npx when less local persistence is desired, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: The skill depends on a third-party CLI and hosted API.
+
+Mitigation: Install only when the user trusts dLazy, keep the pinned CLI version under review, and treat service errors or insufficient-credit responses as user-actionable conditions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-superres)
+- [dLazy CLI source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns an enhanced image URL; asynchronous requests may return a task ID for polling.]
+
+## Skill Version(s):
+
+1.3.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

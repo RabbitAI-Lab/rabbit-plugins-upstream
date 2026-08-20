@@ -1,11 +1,11 @@
 # PCB\_Layer class
 
-PCB &amp; 封装 / 图层操作类
+PCB &amp; footprint / layer operation class
 
 ## Signature
 
 ```typescript
-declare class PCB_Layer 
+export class PCB_Layer 
 ```
 
 ## Methods
@@ -36,7 +36,21 @@ Description
 
 </td><td>
 
-**_(BETA)_** 新增自定义层
+**_(BETA)_** Add a custom layer
+
+
+</td></tr>
+<tr><td>
+
+[deletePhysicalStackingConfiguration(configurationName, physicalProps)](./PCB_Layer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Delete Physical stacking configuration
 
 
 </td></tr>
@@ -50,7 +64,91 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有图层的详细属性
+**_(BETA)_** Get the detailed properties of all layers
+
+
+</td></tr>
+<tr><td>
+
+[getAllPhysicalStackingConfigurations(physicalProps)](./PCB_Layer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Get all Physical stacking configuration
+
+
+</td></tr>
+<tr><td>
+
+[getCurrentLayer()](./PCB_Layer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Get the detailed properties of the current layer
+
+
+</td></tr>
+<tr><td>
+
+[getCurrentPhysicalStackingConfiguration()](./PCB_Layer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Get Current physical stacking configuration
+
+
+</td></tr>
+<tr><td>
+
+[getCurrentPhysicalStackingConfigurationName()](./PCB_Layer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Get Current physical stacking configuration name
+
+
+</td></tr>
+<tr><td>
+
+[getDefaultPhysicalStackingConfigurationName(physicalProps)](./PCB_Layer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Get the name of the default physical stacking configuration for new PCBs
+
+
+</td></tr>
+<tr><td>
+
+[getPhysicalStackingConfiguration(configurationName, physicalProps)](./PCB_Layer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Get Specify physical stacking configuration
 
 
 </td></tr>
@@ -64,7 +162,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 锁定层
+**_(BETA)_** Lock the layer
 
 
 </td></tr>
@@ -78,7 +176,21 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改图层属性
+**_(BETA)_** Modify Layer properties
+
+
+</td></tr>
+<tr><td>
+
+[overwriteCurrentPhysicalStackingConfiguration(physicalStackingConfiguration)](./PCB_Layer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Overwrite current physical stacking configuration
 
 
 </td></tr>
@@ -92,7 +204,35 @@ Description
 
 </td><td>
 
-**_(BETA)_** 移除层
+**_(BETA)_** Remove Layer
+
+
+</td></tr>
+<tr><td>
+
+[renamePhysicalStackingConfiguration(originalConfigurationName, configurationName, physicalProps)](./PCB_Layer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Rename the physical stacking configuration
+
+
+</td></tr>
+<tr><td>
+
+[savePhysicalStackingConfiguration(physicalStackingConfiguration, configurationName, physicalProps, allowOverwrite)](./PCB_Layer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Save Physical stacking configuration
 
 
 </td></tr>
@@ -106,7 +246,21 @@ Description
 
 </td><td>
 
-选中图层
+Select a layer
+
+
+</td></tr>
+<tr><td>
+
+[setAsDefaultPhysicalStackingConfiguration(configurationName, physicalProps)](./PCB_Layer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Set as the default physical stacking configuration for new PCBs
 
 
 </td></tr>
@@ -120,7 +274,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置非激活层展示模式
+**_(BETA)_** Set Inactive layer display mode
 
 
 </td></tr>
@@ -134,7 +288,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置非激活层透明度
+**_(BETA)_** Set the inactive layer transparency
 
 
 </td></tr>
@@ -148,7 +302,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置层颜色配置
+**_(BETA)_** Set the layer color configuration
 
 
 </td></tr>
@@ -162,7 +316,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 将层设置为不可见
+**_(BETA)_** Set the layer to invisible
 
 
 </td></tr>
@@ -176,7 +330,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 将层设置为可见
+**_(BETA)_** Set the layer to visible
 
 
 </td></tr>
@@ -190,7 +344,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置 PCB 类型
+**_(BETA)_** Set PCB type
 
 
 </td></tr>
@@ -204,7 +358,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置铜箔层数
+**_(BETA)_** Set Number of copper layers
 
 
 </td></tr>
@@ -218,7 +372,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 取消锁定层
+**_(BETA)_** Unlock the layer
 
 
 </td></tr>
@@ -234,12 +388,12 @@ Description
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-新增自定义层
+Add a custom layer
 
 ## Signature
 
 ```typescript
-addCustomLayer(): Promise<TPCB_LayersOfCustom | undefined>;
+public addCustomLayer(): Promise<TPCB_LayersOfCustom | undefined>;
 ```
 
 
@@ -247,7 +401,85 @@ addCustomLayer(): Promise<TPCB_LayersOfCustom | undefined>;
 
 Promise&lt;[TPCB\_LayersOfCustom](../types/TPCB_LayersOfCustom.md) \| undefined&gt;
 
-新增的自定义层的图层 ID，如若为 `undefined` 则为新增失败，可能是自定义层数量已达到上限
+The layer ID of the newly added custom layer. If it is `undefined`<!-- -->, the addition failed, possibly because the number of custom layers has reached the upper limit
+
+### deletephysicalstackingconfiguration
+
+# PCB\_Layer.deletePhysicalStackingConfiguration() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Delete Physical stacking configuration
+
+## Signature
+
+```typescript
+public deletePhysicalStackingConfiguration(configurationName: string, physicalProps?: IPCB_SubstratePhysicalProperties): Promise<boolean>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+configurationName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Configuration name
+
+
+</td></tr>
+<tr><td>
+
+physicalProps
+
+
+</td><td>
+
+[IPCB\_SubstratePhysicalProperties](../interfaces/IPCB_SubstratePhysicalProperties.md)
+
+
+</td><td>
+
+_(Optional)_ Physical properties. If not passed in, the current PCB properties are used by default
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+Delete Whether Successful
+
+## Remarks
+
+ADD since EDA v4.2
 
 ### getalllayers
 
@@ -255,12 +487,12 @@ Promise&lt;[TPCB\_LayersOfCustom](../types/TPCB_LayersOfCustom.md) \| undefined&
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有图层的详细属性
+Get the detailed properties of all layers
 
 ## Signature
 
 ```typescript
-getAllLayers(): Promise<Array<IPCB_LayerItem>>;
+public getAllLayers(): Promise<Array<IPCB_LayerItem>>;
 ```
 
 
@@ -268,7 +500,284 @@ getAllLayers(): Promise<Array<IPCB_LayerItem>>;
 
 Promise&lt;Array&lt;[IPCB\_LayerItem](../interfaces/IPCB_LayerItem.md)<!-- -->&gt;&gt;
 
-所有图层的详细属性
+Detailed properties of all layers
+
+### getallphysicalstackingconfigurations
+
+# PCB\_Layer.getAllPhysicalStackingConfigurations() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Get all Physical stacking configuration
+
+## Signature
+
+```typescript
+public getAllPhysicalStackingConfigurations(physicalProps?: IPCB_SubstratePhysicalProperties): Promise<Array<IPCB_PhysicalStackingConfiguration>>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+physicalProps
+
+
+</td><td>
+
+[IPCB\_SubstratePhysicalProperties](../interfaces/IPCB_SubstratePhysicalProperties.md)
+
+
+</td><td>
+
+_(Optional)_ Physical properties. If not passed in, the current PCB properties are used by default
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;Array&lt;[IPCB\_PhysicalStackingConfiguration](../interfaces/IPCB_PhysicalStackingConfiguration.md)<!-- -->&gt;&gt;
+
+All physical stacking configurations
+
+## Remarks
+
+ADD since EDA v4.2
+
+### getcurrentlayer
+
+# PCB\_Layer.getCurrentLayer() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Get the detailed properties of the current layer
+
+## Signature
+
+```typescript
+public getCurrentLayer(): Promise<IPCB_LayerItem | undefined>;
+```
+
+
+## Returns
+
+Promise&lt;[IPCB\_LayerItem](../interfaces/IPCB_LayerItem.md) \| undefined&gt;
+
+Detailed properties of the current layer. `undefined` is returned when there is no active layer or no PCB canvas
+
+## Remarks
+
+ADD since EDA v4.2
+
+### getcurrentphysicalstackingconfiguration
+
+# PCB\_Layer.getCurrentPhysicalStackingConfiguration() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Get Current physical stacking configuration
+
+## Signature
+
+```typescript
+public getCurrentPhysicalStackingConfiguration(): Promise<IPCB_PhysicalStackingConfiguration | undefined>;
+```
+
+
+## Returns
+
+Promise&lt;[IPCB\_PhysicalStackingConfiguration](../interfaces/IPCB_PhysicalStackingConfiguration.md) \| undefined&gt;
+
+Current physical stacking configuration; `undefined` indicates that the retrieval failed
+
+## Remarks
+
+ADD since EDA v4.2
+
+### getcurrentphysicalstackingconfigurationname
+
+# PCB\_Layer.getCurrentPhysicalStackingConfigurationName() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Get Current physical stacking configuration name
+
+## Signature
+
+```typescript
+public getCurrentPhysicalStackingConfigurationName(): Promise<string | undefined>;
+```
+
+
+## Returns
+
+Promise&lt;string \| undefined&gt;
+
+Current physical stacking configuration name; `undefined` indicates that the retrieval failed
+
+## Remarks
+
+ADD since EDA v4.2
+
+### getdefaultphysicalstackingconfigurationname
+
+# PCB\_Layer.getDefaultPhysicalStackingConfigurationName() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Get the name of the default physical stacking configuration for new PCBs
+
+## Signature
+
+```typescript
+public getDefaultPhysicalStackingConfigurationName(physicalProps?: IPCB_SubstratePhysicalProperties): Promise<string | undefined>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+physicalProps
+
+
+</td><td>
+
+[IPCB\_SubstratePhysicalProperties](../interfaces/IPCB_SubstratePhysicalProperties.md)
+
+
+</td><td>
+
+_(Optional)_ Physical properties. If not passed in, the current PCB properties are used by default
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;string \| undefined&gt;
+
+Default physical stacking configuration name of; `undefined` indicates that the retrieval failed
+
+## Remarks
+
+ADD since EDA v4.2
+
+### getphysicalstackingconfiguration
+
+# PCB\_Layer.getPhysicalStackingConfiguration() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Get Specify physical stacking configuration
+
+## Signature
+
+```typescript
+public getPhysicalStackingConfiguration(configurationName: string, physicalProps?: IPCB_SubstratePhysicalProperties): Promise<IPCB_PhysicalStackingConfiguration | undefined>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+configurationName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Configuration name
+
+
+</td></tr>
+<tr><td>
+
+physicalProps
+
+
+</td><td>
+
+[IPCB\_SubstratePhysicalProperties](../interfaces/IPCB_SubstratePhysicalProperties.md)
+
+
+</td><td>
+
+_(Optional)_ Physical properties. If not passed in, the current PCB properties are used by default
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;[IPCB\_PhysicalStackingConfiguration](../interfaces/IPCB_PhysicalStackingConfiguration.md) \| undefined&gt;
+
+Physical stacking configuration, `undefined` is does not exist this physical stacking
+
+## Remarks
+
+ADD since EDA v4.2
 
 ### locklayer
 
@@ -276,12 +785,12 @@ Promise&lt;Array&lt;[IPCB\_LayerItem](../interfaces/IPCB_LayerItem.md)<!-- -->&g
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-锁定层
+Lock the layer
 
 ## Signature
 
 ```typescript
-lockLayer(layer?: TPCB_LayersInTheSelectable | Array<TPCB_LayersInTheSelectable>): Promise<boolean>;
+public lockLayer(layer?: TPCB_LayersInTheSelectable | Array<TPCB_LayersInTheSelectable>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -314,7 +823,7 @@ layer
 
 </td><td>
 
-_(Optional)_ 层，如若不指定任何层则默认为所有层
+_(Optional)_ Layer. If no layer is specified, all layers are used by default
 
 
 </td></tr>
@@ -326,7 +835,7 @@ _(Optional)_ 层，如若不指定任何层则默认为所有层
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ### modifylayer
 
@@ -334,17 +843,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改图层属性
+Modify Layer properties
 
 ## Signature
 
 ```typescript
-modifyLayer(layer: TPCB_LayersInTheSelectable, property: {
-        name?: string;
-        type?: TPCB_LayerTypesOfInnerLayer;
-        color?: string;
-        transparency?: number;
-    }): Promise<boolean>;
+public modifyLayer(layer: TPCB_LayersInTheSelectable, property: { name?: undefined | string; type?: undefined | EPCB_LayerType.SIGNAL | EPCB_LayerType.INTERNAL_ELECTRICAL; color?: undefined | string; transparency?: undefined | number }): Promise<boolean>;
 ```
 
 ## Parameters
@@ -377,7 +881,7 @@ layer
 
 </td><td>
 
-层
+Layer
 
 
 </td></tr>
@@ -388,12 +892,12 @@ property
 
 </td><td>
 
-{ name?: string; type?: [TPCB\_LayerTypesOfInnerLayer](../types/TPCB_LayerTypesOfInnerLayer.md)<!-- -->; color?: string; transparency?: number; }
+{ name?: undefined \| string; type?: undefined \| [EPCB\_LayerType.SIGNAL](../enums/EPCB_LayerType.md) \| [EPCB\_LayerType.INTERNAL\_ELECTRICAL](../enums/EPCB_LayerType.md)<!-- -->; color?: undefined \| string; transparency?: undefined \| number }
 
 
 </td><td>
 
-属性
+Property
 
 
 </td></tr>
@@ -405,11 +909,73 @@ property
 
 Promise&lt;boolean&gt;
 
-修改后的图层属性，如若为 `undefined` 则代表修改失败或图层不存在
+The modified layer properties. If it is `undefined`<!-- -->, the modification failed or the layer does not exist
 
 ## Remarks
 
-仅内层和自定义层允许修改名称；仅内层允许修改类型, 透明度仅支持0-100之间的数
+Only inner layers and custom layers can have their names modified; only inner layers can have their types modified. Transparency only supports values between 0-100
+
+### overwritecurrentphysicalstackingconfiguration
+
+# PCB\_Layer.overwriteCurrentPhysicalStackingConfiguration() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Overwrite current physical stacking configuration
+
+## Signature
+
+```typescript
+public overwriteCurrentPhysicalStackingConfiguration(physicalStackingConfiguration: IPCB_PhysicalStackingConfiguration): Promise<boolean>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+physicalStackingConfiguration
+
+
+</td><td>
+
+[IPCB\_PhysicalStackingConfiguration](../interfaces/IPCB_PhysicalStackingConfiguration.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+Overwrite whether it is successful
+
+## Remarks
+
+It will overwrite the current physical stacking configuration of the PCB. Please note the risk of data loss
+
+If the passed-in physical stacking configuration does not match the physical properties of the current PCB, `false` will be returned directly without modification ADD since EDA v4.2
 
 ### removelayer
 
@@ -417,12 +983,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-移除层
+Remove Layer
 
 ## Signature
 
 ```typescript
-removeLayer(layer: TPCB_LayersOfCustom): Promise<boolean>;
+public removeLayer(layer: TPCB_LayersOfCustom): Promise<boolean>;
 ```
 
 ## Parameters
@@ -455,7 +1021,7 @@ layer
 
 </td><td>
 
-层
+Layer
 
 
 </td></tr>
@@ -467,22 +1033,226 @@ layer
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ## Remarks
 
-当前仅支持移除自定义层
+Currently only custom layers can be removed
+
+### renamephysicalstackingconfiguration
+
+# PCB\_Layer.renamePhysicalStackingConfiguration() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Rename the physical stacking configuration
+
+## Signature
+
+```typescript
+public renamePhysicalStackingConfiguration(originalConfigurationName: string, configurationName: string, physicalProps?: IPCB_SubstratePhysicalProperties): Promise<boolean>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+originalConfigurationName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Original physical stacking configuration name
+
+
+</td></tr>
+<tr><td>
+
+configurationName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+New physical stacking configuration name
+
+
+</td></tr>
+<tr><td>
+
+physicalProps
+
+
+</td><td>
+
+[IPCB\_SubstratePhysicalProperties](../interfaces/IPCB_SubstratePhysicalProperties.md)
+
+
+</td><td>
+
+_(Optional)_ Physical properties. If not passed in, the current PCB properties are used by default
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+Whether the rename was successful
+
+## Remarks
+
+ADD since EDA v4.2
+
+### savephysicalstackingconfiguration
+
+# PCB\_Layer.savePhysicalStackingConfiguration() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Save Physical stacking configuration
+
+## Signature
+
+```typescript
+public savePhysicalStackingConfiguration(physicalStackingConfiguration: IPCB_PhysicalStackingConfiguration, configurationName: string, physicalProps?: IPCB_SubstratePhysicalProperties, allowOverwrite?: boolean): Promise<boolean>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+physicalStackingConfiguration
+
+
+</td><td>
+
+[IPCB\_PhysicalStackingConfiguration](../interfaces/IPCB_PhysicalStackingConfiguration.md)
+
+
+</td><td>
+
+Physical stacking configuration
+
+
+</td></tr>
+<tr><td>
+
+configurationName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Configuration name
+
+
+</td></tr>
+<tr><td>
+
+physicalProps
+
+
+</td><td>
+
+[IPCB\_SubstratePhysicalProperties](../interfaces/IPCB_SubstratePhysicalProperties.md)
+
+
+</td><td>
+
+_(Optional)_ Physical properties. If not passed in, the current PCB properties are used by default
+
+
+</td></tr>
+<tr><td>
+
+allowOverwrite
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Whether to allow overwriting a physical stacking configuration with the same name. If `false`<!-- -->, `false` will be returned when a configuration with the same name is encountered. Please note the possible risk of data loss
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+Save Whether Successful
+
+## Remarks
+
+ADD since EDA v4.2
 
 ### selectlayer
 
 # PCB\_Layer.selectLayer() method
 
-选中图层
+Select a layer
 
 ## Signature
 
 ```typescript
-selectLayer(layer: TPCB_LayersInTheSelectable): Promise<boolean>;
+public selectLayer(layer: TPCB_LayersInTheSelectable): Promise<boolean>;
 ```
 
 ## Parameters
@@ -515,7 +1285,7 @@ layer
 
 </td><td>
 
-层
+Layer
 
 
 </td></tr>
@@ -527,7 +1297,85 @@ layer
 
 Promise&lt;boolean&gt;
 
-操作是否成功，不存在指定层将返回 `false`
+Whether the operation was successful. `false` is returned if the specified layer does not exist
+
+### setasdefaultphysicalstackingconfiguration
+
+# PCB\_Layer.setAsDefaultPhysicalStackingConfiguration() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Set as the default physical stacking configuration for new PCBs
+
+## Signature
+
+```typescript
+public setAsDefaultPhysicalStackingConfiguration(configurationName: string, physicalProps?: IPCB_SubstratePhysicalProperties): Promise<boolean>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+configurationName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Configuration name
+
+
+</td></tr>
+<tr><td>
+
+physicalProps
+
+
+</td><td>
+
+[IPCB\_SubstratePhysicalProperties](../interfaces/IPCB_SubstratePhysicalProperties.md)
+
+
+</td><td>
+
+_(Optional)_ Physical properties. If not passed in, the current PCB properties are used by default
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+Set Whether Successful
+
+## Remarks
+
+The return value is result-oriented. Repeatedly setting the same physical stacking as the default will also return `true` ADD since EDA v4.2
 
 ### setinactivelayerdisplaymode
 
@@ -535,12 +1383,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置非激活层展示模式
+Set Inactive layer display mode
 
 ## Signature
 
 ```typescript
-setInactiveLayerDisplayMode(displayMode?: EPCB_InactiveLayerDisplayMode): Promise<boolean>;
+public setInactiveLayerDisplayMode(displayMode?: EPCB_InactiveLayerDisplayMode): Promise<boolean>;
 ```
 
 ## Parameters
@@ -573,7 +1421,7 @@ displayMode
 
 </td><td>
 
-_(Optional)_ 展示模式
+_(Optional)_ Display mode
 
 
 </td></tr>
@@ -585,7 +1433,7 @@ _(Optional)_ 展示模式
 
 Promise&lt;boolean&gt;
 
-是否设置成功
+Whether Set Successful
 
 ### setinactivelayertransparency
 
@@ -593,12 +1441,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置非激活层透明度
+Set the inactive layer transparency
 
 ## Signature
 
 ```typescript
-setInactiveLayerTransparency(transparency: number): Promise<boolean>;
+public setInactiveLayerTransparency(transparency: number): Promise<boolean>;
 ```
 
 ## Parameters
@@ -631,7 +1479,7 @@ number
 
 </td><td>
 
-透明度，范围 `0-100`
+Transparency, range `0-100`
 
 
 </td></tr>
@@ -643,7 +1491,7 @@ number
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ### setlayercolorconfiguration
 
@@ -651,12 +1499,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置层颜色配置
+Set the layer color configuration
 
 ## Signature
 
 ```typescript
-setLayerColorConfiguration(colorConfiguration: EPCB_LayerColorConfiguration): Promise<boolean>;
+public setLayerColorConfiguration(colorConfiguration: EPCB_LayerColorConfiguration): Promise<boolean>;
 ```
 
 ## Parameters
@@ -689,7 +1537,7 @@ colorConfiguration
 
 </td><td>
 
-颜色配置
+Color configuration
 
 
 </td></tr>
@@ -701,7 +1549,7 @@ colorConfiguration
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ### setlayerinvisible
 
@@ -709,12 +1557,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-将层设置为不可见
+Set the layer to invisible
 
 ## Signature
 
 ```typescript
-setLayerInvisible(layer?: TPCB_LayersInTheSelectable | Array<TPCB_LayersInTheSelectable>, setOtherLayerVisible?: boolean): Promise<boolean>;
+public setLayerInvisible(layer?: TPCB_LayersInTheSelectable | Array<TPCB_LayersInTheSelectable>, setOtherLayerVisible?: boolean): Promise<boolean>;
 ```
 
 ## Parameters
@@ -747,7 +1595,7 @@ layer
 
 </td><td>
 
-_(Optional)_ 层，如若不指定任何层则默认为所有层
+_(Optional)_ Layer. If no layer is specified, all layers are used by default
 
 
 </td></tr>
@@ -763,7 +1611,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否将其它层设置为可见
+_(Optional)_ Whether to set other layers to visible
 
 
 </td></tr>
@@ -775,7 +1623,7 @@ _(Optional)_ 是否将其它层设置为可见
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ### setlayervisible
 
@@ -783,12 +1631,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-将层设置为可见
+Set the layer to visible
 
 ## Signature
 
 ```typescript
-setLayerVisible(layer?: TPCB_LayersInTheSelectable | Array<TPCB_LayersInTheSelectable>, setOtherLayerInvisible?: boolean): Promise<boolean>;
+public setLayerVisible(layer?: TPCB_LayersInTheSelectable | Array<TPCB_LayersInTheSelectable>, setOtherLayerInvisible?: boolean): Promise<boolean>;
 ```
 
 ## Parameters
@@ -821,7 +1669,7 @@ layer
 
 </td><td>
 
-_(Optional)_ 层，如若不指定任何层则默认为所有层
+_(Optional)_ Layer. If no layer is specified, all layers are used by default
 
 
 </td></tr>
@@ -837,7 +1685,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否将其它层设置为不可见
+_(Optional)_ Whether to set other layers to invisible
 
 
 </td></tr>
@@ -849,7 +1697,7 @@ _(Optional)_ 是否将其它层设置为不可见
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ### setpcbtype
 
@@ -857,12 +1705,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置 PCB 类型
+Set PCB type
 
 ## Signature
 
 ```typescript
-setPcbType(pcbType: EPCB_PcbPlateType): Promise<boolean>;
+public setPcbType(pcbType: EPCB_PcbPlateType): Promise<boolean>;
 ```
 
 ## Parameters
@@ -895,7 +1743,7 @@ pcbType
 
 </td><td>
 
-PCB 类型
+PCB type
 
 
 </td></tr>
@@ -907,17 +1755,17 @@ PCB 类型
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ## Remarks
 
-此处主要是为了适配 FPC 软板的设计，如若将 PCB 类型设置为 FPC 软板，将会新增 FPC 补强层图层。
+This is mainly to support FPC flexible board design. If the PCB type is set to FPC flexible board, an FPC stiffener layer will be added.
 
-请注意：
+Please note:
 
-1. 嘉立创暂不支持超过 2 层铜箔层的 FPC 软板生产；
+1. EasyEDA does not yet support FPC flexible board production with more than 2 copper layers;
 
-2. 将 PCB 类型从 FPC 软板切换为普通板材时需要预先删除 FPC 补强层上的任何图元，否则将无法切换并返回 `false` 的结果。
+2. When switching the PCB type from FPC flexible board to ordinary board, any primitives on the FPC stiffener layer must be deleted in advance; otherwise, the switch will fail and `false` will be returned.
 
 ### setthenumberofcopperlayers
 
@@ -925,12 +1773,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置铜箔层数
+Set Number of copper layers
 
 ## Signature
 
 ```typescript
-setTheNumberOfCopperLayers(numberOfLayers: 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 | 18 | 20 | 22 | 24 | 26 | 28 | 30 | 32): Promise<boolean>;
+public setTheNumberOfCopperLayers(numberOfLayers: TPCB_NumberOfCopperLayers): Promise<boolean>;
 ```
 
 ## Parameters
@@ -958,12 +1806,12 @@ numberOfLayers
 
 </td><td>
 
-2 \| 4 \| 6 \| 8 \| 10 \| 12 \| 14 \| 16 \| 18 \| 20 \| 22 \| 24 \| 26 \| 28 \| 30 \| 32
+[TPCB\_NumberOfCopperLayers](../types/TPCB_NumberOfCopperLayers.md)
 
 
 </td><td>
 
-层数
+Number of copper layers
 
 
 </td></tr>
@@ -975,11 +1823,11 @@ numberOfLayers
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ## Remarks
 
-新建的 PCB 文档默认拥有两层铜箔层
+A newly created PCB document has two copper layers by default
 
 ### unlocklayer
 
@@ -987,12 +1835,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-取消锁定层
+Unlock the layer
 
 ## Signature
 
 ```typescript
-unlockLayer(layer?: TPCB_LayersInTheSelectable | Array<TPCB_LayersInTheSelectable>): Promise<boolean>;
+public unlockLayer(layer?: TPCB_LayersInTheSelectable | Array<TPCB_LayersInTheSelectable>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1025,7 +1873,7 @@ layer
 
 </td><td>
 
-_(Optional)_ 层，如若不指定任何层则默认为所有层
+_(Optional)_ Layer. If no layer is specified, all layers are used by default
 
 
 </td></tr>
@@ -1037,4 +1885,4 @@ _(Optional)_ 层，如若不指定任何层则默认为所有层
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful

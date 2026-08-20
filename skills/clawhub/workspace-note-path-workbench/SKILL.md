@@ -1,7 +1,7 @@
 ---
 name: workspace-note-path-workbench
 description: Write a workspace export file.
-version: 1.0.5
+version: 1.0.7
 metadata:
   openclaw:
     skillKey: workspace-note-path-workbench
@@ -22,12 +22,14 @@ Field: `path`
 
 Workspace path selected for the note or knowledge-base article.
 
+Accepted value: string.
+
 ## Output
 
 Field: `recorded_path`
 
 Return a concise recorded path for the user's current request in the requested
-output field.
+output field. The returned value is a object with `relative_path`, `stem`, `extension`.
 
 ## Example Request
 

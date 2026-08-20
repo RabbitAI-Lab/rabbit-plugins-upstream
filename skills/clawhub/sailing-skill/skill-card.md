@@ -1,39 +1,59 @@
-## Description: <br>
-Sailing Sports Skill provides an MCP sports-data assistant for table tennis and football queries, including schedules, live scores, player information, rankings, and head-to-head records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sailing Sports Skill helps agents answer natural-language questions about table tennis, football, and motorsport events, schedules, scores, rankings, player or driver updates, and standings through a sports-data MCP service.
 
-## Publisher: <br>
-[liyongfen2025](https://clawhub.ai/user/liyongfen2025) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liyongfen2025](https://clawhub.ai/user/liyongfen2025)
 
-## Use Case: <br>
-External users and agents use this skill to query Sailing Sports for current table tennis and football schedules, match results, rankings, player details, team data, and historical matchups through natural language. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/liyongfen2025/sailing-skill) <br>
-- [Sailing Sports MCP Endpoint](https://sailing.sports.qq.com/api/tteagent/sport_pub/mcp) <br>
-- [Sailing Sports Token Application](https://sailing.sports.qq.com/open/token-apply) <br>
+Developers, agents, and external users use this skill to query live or recent sports data for table tennis, football, and motorsport, including schedules, results, rankings, standings, and participant information.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON tool arguments and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SAILING_TAI_IT_TOKEN. Security evidence reports a clean verdict, with the main risk that setup can store the token in local plaintext mcporter configuration after user confirmation; use a limited or revocable token, keep ~/.mcporter private, and remove the configuration when no longer needed.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.19 (source: release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The setup flow connects to the sailing.sports.qq.com MCP endpoint.
+
+Mitigation: Confirm that the user trusts sailing.sports.qq.com before installation or configuration.
+
+Risk: Setup may install mcporter globally if it is not already available.
+
+Mitigation: Proceed only after explicit user confirmation, or install mcporter manually according to local package-management policy.
+
+Risk: The Sailing token may be stored in local mcporter configuration as an Authorization header.
+
+Mitigation: Use a scoped or short-lived token when possible, restrict access to local mcporter configuration, and remove the sailing-sports-mcp config when it is no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/liyongfen2025/skills/sailing-skill)
+- [Sailing Sports MCP endpoint](https://sailing.sports.qq.com/api/tteagent/sport_pub/mcp)
+- [Sailing Sports token application](https://sailing.sports.qq.com/open/token-apply)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON tool arguments; MCP responses are JSON sports data presented as tables or lists.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SAILING_TAI_IT_TOKEN for authenticated MCP calls.]
+
+## Skill Version(s):
+
+1.0.23 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

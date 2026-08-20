@@ -1,38 +1,60 @@
-## Description: <br>
-Discovers emerging domain-registration keyword trends, validates each trend against aligned new-registration evidence, and can surface related lifecycle inventory without recommending acquisition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover domain investment opportunities from emerging keyword spikes. Filters junk signals from real multi-party market activity using registration profiling, catalyst research, and NRDS position analysis. Powered by DomainKits MCP.
 
-## Publisher: <br>
-[abtdomain](https://clawhub.ai/user/abtdomain) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[abtdomain](https://clawhub.ai/user/abtdomain)
 
-## Use Case: <br>
-Developers, analysts, and domain researchers use this skill to browse hot or emerging registration keywords, check whether a spike is supported by broad open-market participation, and optionally review related dropped, expiring, or listed domains as options rather than recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/abtdomain/skills/domain-keyword-intelligence) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/abtdomain) <br>
+Domain investors and market researchers use this skill to identify emerging domain keyword trends, filter low-quality registration spikes, research catalysts, and inspect registration positioning before pursuing opportunities.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured trend analysis with cohort metrics, unavailable-field markings, validation outcomes, and optional lifecycle candidate tables.] <br>
-**Output Parameters:** [User-selected keyword, trend set, or candidate request; domain-market tool responses; public web checks for brand dominance and collision risk when candidates are surfaced.] <br>
-**Other Properties Related to Output:** [Results are evidence analysis, not legal trademark clearance or acquisition advice. Review findings before acting, verify marketplace or availability status by lifecycle stage, and treat incomplete or unaligned data as uncertain.] <br>
+Global
 
-## Skill Version(s): <br>
-1.1.0 <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Market catalysts or registration spikes can be misleading or incomplete.
+
+Mitigation: Independently verify web search sources and DomainKits findings before spending money on domains.
+
+Risk: DomainKits access may use a connected account or API key.
+
+Mitigation: Protect DOMAINKITS_API_KEY and use the minimum access needed for the agent environment.
+
+Risk: The skill produces investment research rather than guaranteed financial outcomes.
+
+Mitigation: Treat outputs as decision support and review the cited data, filters, and catalysts before acting.
+
+## Reference(s):
+
+- [DomainKits MCP](https://domainkits.com/mcp)
+- [DomainKits pricing](https://domainkits.com/pricing)
+- [DomainKits MCP GitHub repository](https://github.com/ABTdomain/domainkits-mcp)
+- [DomainKits](https://domainkits.com)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, API Calls, Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown with tables, concise bullet summaries, and inline JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires DomainKits MCP access and web search; optional DomainKits API key can raise usage limits.]
+
+## Skill Version(s):
+
+1.1.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

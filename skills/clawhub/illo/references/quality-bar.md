@@ -51,9 +51,10 @@ its style's file** — everything else here still applies.
   covers every case: **only the character's own locked design parts touch its
   silhouette** — limbs, the accent carrier, locked accessories, nothing else.
   Everything else is
-  either *clearly held in a hand with visible separation from the body* or
-  *resting in the scene* (on the table, the ground). Trace the outline and
-  check the three ways that breaks:
+  either *clearly connected through a declared contact surface
+  (`character.md`, the interaction model) with visible separation from the
+  body* or *resting in the scene* (on the table, the ground). Trace the
+  outline and check the three ways that breaks:
   - **Occlusion / opacity** — nothing from behind passes *through* the body.
     A ground line, horizon, table edge, belt, shelf, or prop must **stop at
     the silhouette**, not cut across the waist/torso. The mascot (and every
@@ -67,11 +68,16 @@ its style's file** — everything else here still applies.
     character sheet: a stubby arm cannot become a long bar, cable, lever, or
     bridge across the scene. For one-arm / handle characters, the handle is
     never a second hand and the working arm must stay visually short.
-  - **No fused props** — a tool/object is held in a hand (separated from the
-    torso) or sits in the scene; it is never pressed flat against the body
-    or sprouting from it. Watch the case where the mascot is given more
-    props than it has hands: the extra one tends to fuse to the torso — keep
-    held props to **one per hand** and let any others rest in the world.
+  - **No fused props** — a tool/object connects through a declared contact
+    surface (separated from the torso) or sits in the scene; it is never
+    pressed flat against the body or sprouting from it. Exception: when the
+    character's interaction model declares **body contact as the operating
+    mechanism** (a body-press, a load resting against the torso or back),
+    judge that contact against the declared surface — deliberate body
+    contact is not fusion. Watch the case where
+    the mascot is given more props than it has contact surfaces: the extra
+    one tends to fuse to the torso — keep operated props to **one per
+    contact surface** and let any others rest in the world.
   - **Line topology / collisions** — trace facial strokes and every route-like
     line (wire, arrow, path, ground line, cable) through contacts near the
     character. A stroke must keep one clear owner and readable endpoints. It is a
@@ -127,11 +133,12 @@ style QA deltas) still applies to the character cluster.
 
 ### Must pass
 
-- **Transparent output** — manifest `cutout_alpha` is true (engine requires clean
-  alpha: transparent corners and sufficient background removal). No visible
-  magenta/green screen fringing at the silhouette edge. When `cutout_alpha` is false,
-  do not deliver as a compositing sticker — re-roll, switch backend/model, or
-  disclose honestly (see `cutout_note`).
+- **Transparent output** — manifest `cutout_alpha` is true (transparent corners
+  and sufficient background removal). No visible magenta/green screen fringing at
+  the silhouette edge. Interior accent fill is not a fringe fail; when corners
+  are transparent and the background is gone, `cutout_alpha` must stay true. When
+  `cutout_alpha` is false, do not deliver as a compositing sticker — re-roll,
+  switch backend/model, or disclose honestly (see `cutout_note`).
 - **Full body framing** — feet/base fully visible, not cropped by the frame; clear
   margin below the feet (same structural-integrity bar as editorial limbs). The
   engine flags likely crops in `cutout_note` ("character touches the bottom frame
@@ -149,15 +156,20 @@ style QA deltas) still applies to the character cluster.
 - **One compositing unit** — reads as one sticker, not a cropped illustration.
 - **Pose matches the ask** — gesture, facing, and attitude match what was
   requested (or the agent's inferred pose when the prompt was thin).
+- **Idle-loop GIFs** — after this cutout QA, run `references/cutout.md`, "Idle
+  loop / bot avatar" on the source cutout, rest/peak-motion/blink-or-other
+  changed frames, and final GIF.
 
 ### Fail signals → fix
 
 - Green or magenta bleed on the silhouette → re-roll with the **other** chroma
   screen (see `references/cutout.md`); check `--cutout` was passed and the
   BACKGROUND line matches the character.
-- Accent-colored halo tracing the outer contour (riso misregistration) → re-roll
-  with the **registration-locked SILHOUETTE** block — no ink-layer offset on
-  cutouts (`references/prompt-recipe.md`, "Cutout variant").
+- Edge-only accent-colored halo tracing the outer contour (riso
+  misregistration) → re-roll with the **registration-locked SILHOUETTE** block —
+  no ink-layer offset on cutouts (`references/prompt-recipe.md`, "Cutout
+  variant"). Interior accent fill and compact locked accent carriers that touch
+  air are correct on-model, not halos.
 - Feet or base cropped by the frame → re-roll; check the Composition line names
   full body and margin below the feet.
 - A separate object sits near but not touching the character → re-roll
@@ -197,13 +209,29 @@ style QA deltas) still applies to the character cluster.
 - Gradients, soft shadows, glossy/3D, photo, real UI → re-roll.
 - Subject tiny in a sea of paper → re-roll larger (scale drifts run-to-run).
 - A line passes through the mascot's body, a limb roots wrong / is
-  doubled/floating, or a prop is fused flat to the torso instead of held →
-  re-roll (these resist edits; a fresh render is cleaner). If the re-roll
-  keeps fusing a prop, the scene likely has more tools than hands — drop one
-  or rest it on the table.
+  doubled/floating, or a prop is fused flat to the torso instead of
+  connected through a declared contact surface (declared body contact is
+  not fusion — see the exception above) → re-roll (these resist edits; a
+  fresh render is cleaner). If the re-roll
+  keeps fusing a prop, the scene likely has more tools than contact
+  surfaces — drop one or rest it on the table.
 - Accent spread across the body/background, or label text on an accent fill → fix.
 - Derived/custom palette colors off-target → eyedrop vs the target hex; re-roll or snap in post.
 - Misspelled labels → prefer an edit; if widespread, re-roll with fewer/shorter labels.
+
+## Topology failure response
+
+Not every structural failure is random drift — distinguish the two before
+spending the next render. When a failed render's contact geometry was itself
+infeasible — a limb stretched past its reach class, undeclared grip anatomy
+(invented fingers/hands), a prop or route crossing the body or face
+where the interaction model declares no such contact,
+ambiguous stroke ownership near the face or torso — the pose is the problem:
+re-stage immediately through the feasibility gate (`composition.md`) rather
+than re-rolling the same prompt. If one clean re-roll repeats the same
+topology failure, changing the physical move is **mandatory**; appending
+more negative constraints to the same pose is not an acceptable third
+attempt.
 
 ## Iteration moves
 

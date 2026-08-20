@@ -1,16 +1,16 @@
 # SCH\_Primitive class
 
-原理图 &amp; 符号 / 图元类
+Schematic &amp; symbol / primitive class
 
 ## Signature
 
 ```typescript
-declare class SCH_Primitive 
+export class SCH_Primitive 
 ```
 
 ## Remarks
 
-图元的统一操作
+Unified operations on primitives
 
 ## Methods
 
@@ -40,7 +40,7 @@ Description
 
 </td><td>
 
-获取指定 ID 的图元的所有属性
+Get all properties of the primitive with the specified ID
 
 
 </td></tr>
@@ -54,7 +54,21 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取图元的 BBox
+**_(BETA)_** Get The BBox of the primitive
+
+
+</td></tr>
+<tr><td>
+
+[getPrimitivesByPrimitiveId(ids)](./SCH_Primitive.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Get all properties of the primitives with the specified IDs
 
 
 </td></tr>
@@ -68,7 +82,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取指定 ID 的图元的图元类型
+**_(BETA)_** Get the primitive type of the primitive with the specified ID
 
 
 </td></tr>
@@ -82,12 +96,12 @@ Description
 
 # SCH\_Primitive.getPrimitiveByPrimitiveId() method
 
-获取指定 ID 的图元的所有属性
+Get all properties of the primitive with the specified ID
 
 ## Signature
 
 ```typescript
-getPrimitiveByPrimitiveId(id: string): Promise<ISCH_Primitive | undefined>;
+public getPrimitiveByPrimitiveId(id: string): Promise<ISCH_Primitive | undefined>;
 ```
 
 ## Parameters
@@ -120,7 +134,7 @@ string
 
 </td><td>
 
-图元 ID
+Primitive ID
 
 
 </td></tr>
@@ -132,7 +146,7 @@ string
 
 Promise&lt;[ISCH\_Primitive](../interfaces/ISCH_Primitive.md) \| undefined&gt;
 
-图元的所有属性
+All properties of the primitive
 
 ### getprimitivesbbox
 
@@ -140,17 +154,12 @@ Promise&lt;[ISCH\_Primitive](../interfaces/ISCH_Primitive.md) \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取图元的 BBox
+Get The BBox of the primitive
 
 ## Signature
 
 ```typescript
-getPrimitivesBBox(primitiveIds: Array<string | ISCH_Primitive>): Promise<{
-        minX: number;
-        minY: number;
-        maxX: number;
-        maxY: number;
-    } | undefined>;
+public getPrimitivesBBox(primitiveIds: Array<string | ISCH_Primitive>): Promise<{ minX: number; minY: number; maxX: number; maxY: number } | undefined>;
 ```
 
 ## Parameters
@@ -183,7 +192,7 @@ Array&lt;string \| [ISCH\_Primitive](../interfaces/ISCH_Primitive.md)<!-- -->&gt
 
 </td><td>
 
-图元 ID 数组或图元对象数组
+Array of Primitive ID array or primitive objects
 
 
 </td></tr>
@@ -193,9 +202,67 @@ Array&lt;string \| [ISCH\_Primitive](../interfaces/ISCH_Primitive.md)<!-- -->&gt
 
 ## Returns
 
-Promise&lt;{ minX: number; minY: number; maxX: number; maxY: number; } \| undefined&gt;
+Promise&lt;{ minX: number; minY: number; maxX: number; maxY: number } \| undefined&gt;
 
-图元的 BBox，如若图元不存在或没有 BBox，将会返回 `undefined` 的结果
+The BBox of the primitive. If the primitive does not exist or has no BBox, `undefined` will be returned
+
+### getprimitivesbyprimitiveid
+
+# SCH\_Primitive.getPrimitivesByPrimitiveId() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Get all properties of the primitives with the specified IDs
+
+## Signature
+
+```typescript
+public getPrimitivesByPrimitiveId(ids: Array<string>): Promise<Array<ISCH_Primitive>>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+ids
+
+
+</td><td>
+
+Array&lt;string&gt;
+
+
+</td><td>
+
+Primitive ID array
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;Array&lt;[ISCH\_Primitive](../interfaces/ISCH_Primitive.md)<!-- -->&gt;&gt;
+
+All properties of all primitives
 
 ### getprimitivetypebyprimitiveid
 
@@ -203,12 +270,12 @@ Promise&lt;{ minX: number; minY: number; maxX: number; maxY: number; } \| undefi
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取指定 ID 的图元的图元类型
+Get the primitive type of the primitive with the specified ID
 
 ## Signature
 
 ```typescript
-getPrimitiveTypeByPrimitiveId(id: string): Promise<ESCH_PrimitiveType | undefined>;
+public getPrimitiveTypeByPrimitiveId(id: string): Promise<ESCH_PrimitiveType | undefined>;
 ```
 
 ## Parameters
@@ -241,7 +308,7 @@ string
 
 </td><td>
 
-图元 ID
+Primitive ID
 
 
 </td></tr>
@@ -253,4 +320,4 @@ string
 
 Promise&lt;[ESCH\_PrimitiveType](../enums/ESCH_PrimitiveType.md) \| undefined&gt;
 
-图元类型
+Primitive type
