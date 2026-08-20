@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/prime-skills/runcomfy-agent-skills/video-inpainting",
+  "repo": "prime-skills/runcomfy-agent-skills",
+  "skillId": "video-inpainting",
+  "branch": "main",
+  "pushedAt": "2026-05-15T10:59:51Z",
+  "contentHash": "bab0ab81c7612b4a594a4b68eb0d89e0c0e07be0f0b0289250fc5ad1d335ff96",
+  "fetchedAt": "2026-08-20T08:05:54.565Z"
+}

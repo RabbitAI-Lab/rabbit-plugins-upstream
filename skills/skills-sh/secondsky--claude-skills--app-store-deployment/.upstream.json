@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/app-store-deployment",
+  "repo": "secondsky/claude-skills",
+  "skillId": "app-store-deployment",
+  "branch": "main",
+  "pushedAt": "2026-08-17T09:49:10Z",
+  "contentHash": "d6ebfd1fc127af9f61704fd9f0fe7c322351d8473e141677e403b400763ac8c8",
+  "fetchedAt": "2026-08-20T08:08:34.154Z"
+}

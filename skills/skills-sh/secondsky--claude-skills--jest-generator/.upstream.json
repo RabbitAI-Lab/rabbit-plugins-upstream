@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/jest-generator",
+  "repo": "secondsky/claude-skills",
+  "skillId": "jest-generator",
+  "branch": "main",
+  "pushedAt": "2026-08-17T09:49:10Z",
+  "contentHash": "986b31015e17cc2dff4d43fad5ad334ab64eaf8b73b559c9f08e1cc996264a7f",
+  "fetchedAt": "2026-08-20T08:08:35.190Z"
+}

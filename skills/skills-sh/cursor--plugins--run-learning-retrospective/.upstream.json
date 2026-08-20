@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/run-learning-retrospective",
+  "repo": "cursor/plugins",
+  "skillId": "run-learning-retrospective",
+  "branch": "main",
+  "pushedAt": "2026-08-19T21:12:59Z",
+  "contentHash": "643e9ec44c1634bb20af82236a57b318989585c50e7a66ccf77abbc0677b5519",
+  "fetchedAt": "2026-08-20T08:07:45.522Z"
+}

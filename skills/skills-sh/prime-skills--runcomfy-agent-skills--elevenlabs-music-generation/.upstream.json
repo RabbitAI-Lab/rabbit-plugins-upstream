@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/prime-skills/runcomfy-agent-skills/elevenlabs-music-generation",
+  "repo": "prime-skills/runcomfy-agent-skills",
+  "skillId": "elevenlabs-music-generation",
+  "branch": "main",
+  "pushedAt": "2026-05-15T10:59:51Z",
+  "contentHash": "dcdb7382caaa37209253fa1ff7c5186c2d18b925ac3e99d96d3f6865eb5125e1",
+  "fetchedAt": "2026-08-20T08:05:54.568Z"
+}

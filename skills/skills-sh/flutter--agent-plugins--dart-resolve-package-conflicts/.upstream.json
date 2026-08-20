@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/flutter/agent-plugins/dart-resolve-package-conflicts",
+  "repo": "flutter/agent-plugins",
+  "skillId": "dart-resolve-package-conflicts",
+  "branch": "main",
+  "pushedAt": "2026-08-18T20:19:17Z",
+  "contentHash": "7baaeec51b9f1ff8bde9f26226253189423638aa4461548bd797d9df8f19384c",
+  "fetchedAt": "2026-08-20T08:05:56.086Z"
+}
