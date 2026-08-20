@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-browser-sdk",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-browser-sdk",
+  "branch": "main",
+  "pushedAt": "2026-08-14T00:44:59Z",
+  "contentHash": "e4880cf2c27684f212ccd0fbc6a0d5b998848c6fa6ce6ac4017c0cbb53287093",
+  "fetchedAt": "2026-08-20T08:08:36.556Z"
+}

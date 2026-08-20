@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/knowledge-work-plugins/ticket-triage",
+  "repo": "anthropics/knowledge-work-plugins",
+  "skillId": "ticket-triage",
+  "branch": "main",
+  "pushedAt": "2026-08-20T07:35:42Z",
+  "contentHash": "8c100bc8cc902902e6e7feb1cc56a6b594e97c3745b39a621b250f0b543166dc",
+  "fetchedAt": "2026-08-20T08:07:42.848Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/hyperliquid",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "hyperliquid",
+  "branch": "main",
+  "pushedAt": "2026-08-19T07:42:41Z",
+  "contentHash": "f735c01ce84887ec3c3864bb525a5465e3662fbc42ab61a1d5051fb154a6c466",
+  "fetchedAt": "2026-08-20T08:07:49.787Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/okx/agent-skills/okx-outcomes",
+  "repo": "okx/agent-skills",
+  "skillId": "okx-outcomes",
+  "branch": "github-main",
+  "pushedAt": "2026-08-20T06:31:21Z",
+  "contentHash": "ac9b46825366318fbf183d342bb2ea365f8311981a2aa7d209196a43ccf467c0",
+  "fetchedAt": "2026-08-20T08:07:56.472Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/cloudflare-d1",
+  "repo": "secondsky/claude-skills",
+  "skillId": "cloudflare-d1",
+  "branch": "main",
+  "pushedAt": "2026-08-17T09:49:10Z",
+  "contentHash": "d331f20324ac51b1e16e46eadfcabbf0c03814659bf6929a5d5672a8146659fc",
+  "fetchedAt": "2026-08-20T08:08:35.209Z"
+}

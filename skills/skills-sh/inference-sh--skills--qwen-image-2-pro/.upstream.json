@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/qwen-image-2-pro",
+  "repo": "inference-sh/skills",
+  "skillId": "qwen-image-2-pro",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "931e5655c92c075356b114fad2345cac6b5f13febd915986fda10c24280b110e",
+  "fetchedAt": "2026-08-20T08:05:54.872Z"
+}
