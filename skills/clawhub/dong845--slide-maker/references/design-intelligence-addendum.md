@@ -99,8 +99,14 @@ Required table (one row per content slide):
 
 **The Density cell carries the §1.3 whitespace estimate** — write it as `light ~65%` / `medium ~55%` /
 `dense ~45% (split?)`, so the 50–70% target is *planned* per slide here rather than remembered
-mid-build (the render-time lint then measures the real ink coverage and warns `CROWDED` when the
-estimate was optimistic).
+mid-build. 🔴 **Nothing checks this number against the built deck, and this sentence used to claim
+otherwise** ("the render-time lint then measures the real ink coverage and warns `CROWDED` when the
+estimate was optimistic"). It does not: `CROWDED` is a fixed absolute ceiling (`ink_cov_nopic > 0.70`,
+0.80 on a briefing) and never reads the planned figure, so a slide planned at 35% ink that ships at
+60% is silent forever. The estimate also never reaches the file — the per-slide rhythm map stays in
+the checkpoint (`references/checkpoint-convention.md` forbids writing it into the deck folder), so
+no lint *can* read it today. A gate that is claimed and absent is worse than one that is simply
+missing: it stops anyone looking. **The Density cell is a planning aid you honour by hand.**
 
 **The SKELETON column is the page's bone structure — one level above the protagonist.** A deck can
 rotate protagonists (chart → diagram → number) and still feel templated because every page shares the
@@ -143,7 +149,7 @@ Whitespace estimate: ~55% / ~65% / ~70%
 Density decision: keep airy because … / split because … / compress only if …
 ```
 
-Target band is ~50–70% whitespace (the operational figure here for `design-principles.md`'s *generous whitespace*). "Compress" is the last resort and must be
+State the dial as OCCUPANCY (ink), in the same direction the render-time lint measures it — the role bands below are the operational figure for `design-principles.md`'s *generous whitespace*. (~50–70% whitespace is the same target read backwards, i.e. ~30–50% ink; giving one dial two directions four lines apart is how a plan ends up aiming at the complement of what the gate reads.) "Compress" is the last resort and must be
 justified; the first two moves are **strengthen the hero** and **split the slide** (never shrink to
 illegible).
 

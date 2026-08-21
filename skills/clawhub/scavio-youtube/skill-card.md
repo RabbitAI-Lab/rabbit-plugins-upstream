@@ -1,43 +1,59 @@
-## Description: <br>
-Search YouTube and retrieve video metadata. Use for finding videos, checking view counts, channel info, or AI training suitability. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search YouTube and retrieve videos, shorts, comments, transcripts, streams, and channel data as structured JSON. 15 endpoints across video and channel surfaces.
 
-## Publisher: <br>
-[scavio-ai](https://clawhub.ai/user/scavio-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[scavio-ai](https://clawhub.ai/user/scavio-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to search YouTube, retrieve structured video metadata, and check whether videos have transcript or license signals relevant to AI training workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends YouTube search terms and video IDs to Scavio APIs. <br>
-Mitigation: Use it only when sharing those queries and identifiers with Scavio is acceptable for the workflow. <br>
-Risk: The skill requires a Scavio API key stored in the agent environment. <br>
-Mitigation: Store SCAVIO_API_KEY in a managed secret or environment variable and avoid committing it to files or prompts. <br>
-Risk: Optional LangChain integration adds an extra package dependency. <br>
-Mitigation: Install langchain-scavio only when that integration is needed. <br>
+## Use Case:
 
+Developers and agents use this skill to search YouTube, retrieve public video and channel data, inspect comments and transcripts, and request stream metadata through the Scavio API.
 
-## Reference(s): <br>
-- [Scavio Documentation](https://scavio.dev/docs) <br>
-- [Scavio Youtube ClawHub Listing](https://clawhub.ai/scavio-ai/scavio-youtube) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with API examples, shell commands, and structured JSON response descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; configured timeout is 90 seconds and throttle is 1 request per second.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.3 (source: frontmatter and server release evidence) <br>
+Risk: The skill sends YouTube lookup requests to Scavio using a user-provided API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if that data flow is acceptable and keep SCAVIO_API_KEY out of source control.
+
+Risk: Broad pagination and transcript retrieval can consume Scavio credits quickly.
+
+Mitigation: Monitor credit usage and confirm user intent before large searches, many paginated requests, or transcript retrieval.
+
+Risk: Stream URLs may be sensitive to platform and content usage rules.
+
+Mitigation: Treat stream URLs according to applicable platform, content, and organizational policies.
+
+## Reference(s):
+
+- [Scavio Documentation](https://scavio.dev/docs)
+- [Scavio Rate Limits](https://scavio.dev/docs/rate-limits)
+- [ClawHub Skill Page](https://clawhub.ai/scavio-ai/skills/scavio-youtube)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with JSON and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to call Scavio YouTube API endpoints that return structured JSON.]
+
+## Skill Version(s):
+
+3.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

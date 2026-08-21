@@ -1,1 +1,1 @@
-{"version": "2.1.0", "homepage": "https://skillhub.cn/skill/cn-llm-router", "notes": "v2.1.0：新增 MiniMax、零一万物 Yi、百川、阶跃 Step-2 四家厂商（覆盖扩至 12 家 32 款模型）；补 DeepSeek V3 能力画像；auto 策略改由能力画像（推理/代码/长文得分）智能选型；分类器新增流式适配判断；修复流式输出 token 计费恒为 0 的问题。"}
+{"version": "2.4.0", "homepage": "https://skillhub.cn/skill/cn-llm-router", "notes": "v2.4.0：增加多模态路由——classifier 新增 image/audio 识别，models.yaml 新增 Qwen-VL/GLM-4V/豆包视觉；arena 新增 --blind 开关控制盲选/显名对比；流式 token 估算复用基类 _extract_usage() 统一取值"}

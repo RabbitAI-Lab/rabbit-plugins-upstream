@@ -1,44 +1,55 @@
-## Description: <br>
-Fetch health and fitness data from Garmin Connect -- 40+ metrics including sleep, HRV, stress, body battery, SpO2, VO2 Max, training status, and activities. Stores data locally as JSON and SQLite. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetch health and fitness data from Garmin Connect -- 40+ metrics including sleep, HRV, stress, body battery, SpO2, VO2 Max, training status, and activities. Stores data locally as JSON and SQLite.
 
-## Publisher: <br>
-[dw1161](https://clawhub.ai/user/dw1161) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dw1161](https://clawhub.ai/user/dw1161)
 
-## Use Case: <br>
-External users and developers use this skill to let an AI agent retrieve, cache, and query their own Garmin Connect health and fitness data for personal health, recovery, and training analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Garmin credentials or OAuth tokens can expose sensitive account access if stored or passed insecurely. <br>
-Mitigation: Use macOS Keychain or a credentials file with mode 600 instead of command-line passwords, and keep the token cache in a private directory. <br>
-Risk: Local JSON snapshots and SQLite databases can retain sensitive health history on disk. <br>
-Mitigation: Store GARMIN_DATA_DIR in a private directory and periodically delete cached health and token files when retention is no longer needed. <br>
-Risk: Using the wrong Garmin regional endpoint can cause unreliable access or rate-limit errors. <br>
-Mitigation: Set GARMIN_IS_CN=true or use the --cn flag for China-registered accounts or mainland China network locations. <br>
+## Use Case:
 
+External users and developers use this skill to let an AI agent fetch, cache, and query their Garmin Connect health and fitness data for personal trend review and workout analysis.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/dw1161/garmin-connect-health) <br>
-- [OpenClaw](https://github.com/openclaw/openclaw) <br>
-- [python-garminconnect](https://github.com/cyberjunky/python-garminconnect) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, JSON, Files] <br>
-**Output Format:** [Markdown guidance, shell commands, JSON snapshots, and SQLite data files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes local daily JSON snapshots, latest.json, a SQLite database, and an OAuth token cache unless paths are overridden.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: frontmatter, skill.json, changelog, released 2026-05-31) <br>
+Risk: The skill accesses a Garmin account and stores detailed health history locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when comfortable granting that access, keep data and token directories private, and delete the cache when local retention is no longer wanted.
+
+Risk: Passing the Garmin password as a command-line argument can expose it through shell history or process listings.
+
+Mitigation: Prefer macOS Keychain or environment variables for credentials instead of the CLI password flag.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dw1161/skills/garmin-connect-health)
+- [OpenClaw](https://github.com/openclaw/openclaw)
+- [python-garminconnect](https://github.com/cyberjunky/python-garminconnect)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, code, shell commands, configuration, guidance]
+
+**Output Format:** [Terminal status text, JSON snapshots, and SQLite tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes daily snapshots, latest cached JSON, OAuth token cache, and a local SQLite database under user-configurable directories.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter, skill.json, changelog, and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

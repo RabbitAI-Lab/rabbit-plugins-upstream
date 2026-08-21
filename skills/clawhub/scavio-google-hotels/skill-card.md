@@ -1,44 +1,54 @@
-## Description: <br>
-Search Google Hotels for a destination and dates, then fetch per-property vendor pricing and full details as structured JSON. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Hotels for a destination and dates, then fetch per-property vendor pricing and full details as structured JSON, with price, rating, class, and amenity filters.
 
-## Publisher: <br>
-[scavio-ai](https://clawhub.ai/user/scavio-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[scavio-ai](https://clawhub.ai/user/scavio-ai)
 
-## Use Case: <br>
-Travel-focused agents, developers, and operators use this skill to search lodging for specific destinations and stay dates, compare price/rating/class/amenity filters, and retrieve vendor pricing for selected properties. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel search details, stay dates, and selected property identifiers are sent to Scavio. <br>
-Mitigation: Install only when that data sharing is acceptable and use a user-provided SCAVIO_API_KEY. <br>
-Risk: Each documented API call consumes one Scavio credit. <br>
-Mitigation: Run search and detail calls deliberately, page results only when needed, and monitor credits_remaining. <br>
-Risk: Hotel prices and vendor availability may change before booking. <br>
-Mitigation: State the requested currency and stay dates, and verify prices with the booking vendor before purchase. <br>
+## Use Case:
 
+External users and developers use this skill to search lodging for a destination and travel dates, compare properties by price, rating, class, amenities, and retrieve per-property booking source prices. It is suited for agents that need structured hotel search results and property details from Scavio.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/scavio-ai/skills/scavio-google-hotels) <br>
-- [Scavio Google Hotels documentation](https://scavio.dev/docs/google-hotels) <br>
-- [Scavio rate limits](https://scavio.dev/docs/rate-limits) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands, Python examples, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; API responses include hotel properties, detail tokens, booking sources, credit usage, and cache status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and frontmatter) <br>
+Risk: Hotel destinations, stay dates, filters, and selected property lookup tokens are sent to Scavio using the user's API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid including unnecessary personal details in travel queries and use the skill only when sending those travel details to Scavio is acceptable.
+
+Risk: Each documented hotel search or detail call consumes one Scavio credit.
+
+Mitigation: Monitor API credit use, page results intentionally, and avoid repeated detail lookups unless the property data is needed.
+
+## Reference(s):
+
+- [Scavio Google Hotels documentation](https://scavio.dev/docs/google-hotels)
+- [ClawHub skill page](https://clawhub.ai/scavio-ai/skills/scavio-google-hotels)
+
+## Skill Output:
+
+**Output Type(s):** [json, code, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, Python examples, API request details, and structured JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; documented Scavio hotel search and detail calls each cost one credit.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -91,6 +91,14 @@ class OrderRequest:
     #   "skip"  — remove the out-of-stock line(s) and order the rest.
     # (Substitution is handled by the agent re-running with edited lines.)
     on_insufficient_stock: str = "pause"
+    # What to do when adidas has no product page for a requested style (a wrong
+    # article number, or one this account is simply not offered):
+    #   "pause" (default) — place nothing and return status="needs_confirmation"
+    #     with the missing styles, so the agent escalates to the user instead of
+    #     failing the run.
+    #   "skip"  — drop the missing style's line(s) and order the rest.
+    #   "error" — raise (the pre-0.7 behaviour): the run fails outright.
+    on_missing_product: str = "pause"
 
 
 # ---------------------------------------------------------------------------
@@ -117,9 +125,12 @@ class OrderResult:
     """Outcome of an adidas Click order attempt.
 
     ``status``:
-    - ``needs_confirmation`` — one or more lines are not fully in stock and
-      ``on_insufficient_stock`` was ``pause``. **Nothing was ordered.** See
-      ``out_of_stock``; re-run with an explicit policy (or edited lines).
+    - ``needs_confirmation`` — the order needs a human decision before it can
+      be placed. **Nothing was ordered.** Either one or more lines are not fully
+      in stock (``on_insufficient_stock`` was ``pause`` — see ``out_of_stock``)
+      or adidas has no product page for a requested style
+      (``on_missing_product`` was ``pause`` — see ``missing_products``). Re-run
+      with an explicit policy, or with corrected/edited lines.
     - ``dry_run`` — the cart/checkout was filled and validated but **not**
       submitted (``confirm`` was false). No order was placed.
     - ``not_implemented`` — ``confirm`` was true but the final
@@ -135,6 +146,12 @@ class OrderResult:
     # Populated when status == "needs_confirmation": the lines whose full
     # quantity is not available: [{style, size, requested, available}, ...].
     out_of_stock: list[dict] = field(default_factory=list)
+    # Styles adidas served no product page for (wrong article number, or not
+    # offered to this account), one entry per style:
+    # [{style, sizes, requested, reason, detail}, ...]. ``reason`` is
+    # "not_found" (the portal said so) or "unresolved" (the product page never
+    # rendered a size table — treat the style as unconfirmed, not proven absent).
+    missing_products: list[dict] = field(default_factory=list)
     total_quantity: int | None = None
     order_subtotal: str | None = None
     order_total: str | None = None
@@ -170,9 +187,11 @@ class CheckLineResult:
     # unbounded/unknown ("300+", blank).
     available: str | None = None
     available_count: int | None = None
-    # Availability classification: "in_stock" | "backorder" | "unavailable".
-    # ("backorder" = orderable but 0/low with a restock date; "unavailable" = the
-    # portal's "X" cell, which can never be ordered.)
+    # Availability classification: "in_stock" | "backorder" | "unavailable" |
+    # "not_found". ("backorder" = orderable but 0/low with a restock date;
+    # "unavailable" = the portal's "X" cell, which can never be ordered;
+    # "not_found" = adidas served no product page for the style at all, so
+    # nothing about it — stock or price — could be read.)
     status: str | None = None
     in_stock: bool | None = None
     # Wholesale (net) pricing — populated only for a pricing/both check that
@@ -189,6 +208,11 @@ class CheckResult:
     ``status``:
     - ``checked`` — the requested inventory and/or pricing was retrieved. For a
       pricing/both check the cart was created, priced, read, and then deleted.
+    - ``needs_confirmation`` — the check ran and every resolvable line was
+      reported, but adidas served no product page for one or more styles (see
+      ``missing_products``) and ``on_missing_product`` was ``pause``. The
+      results that *are* present are complete and usable; the caller should take
+      the missing styles back to the user.
     - ``error`` — see ``message``.
 
     ``check`` echoes the requested mode (``inventory`` | ``pricing`` | ``both``).
@@ -201,6 +225,9 @@ class CheckResult:
     check: str
     po_number: str | None = None
     lines: list[CheckLineResult] = field(default_factory=list)
+    # Styles adidas served no product page for, same shape as on OrderResult:
+    # [{style, sizes, requested, reason, detail}, ...].
+    missing_products: list[dict] = field(default_factory=list)
     total_quantity: int | None = None
     order_total: str | None = None
     # True/False once a pricing check tried to remove its throwaway cart; None
@@ -211,6 +238,114 @@ class CheckResult:
     screenshot_path: str | None = None
     surface: str = "adidas_click"
     operation: str = "check_inventory_pricing"
+
+
+# ---------------------------------------------------------------------------
+# Delivery tracking (agent input + driver output)
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class TrackingShipment:
+    """One shipped delivery on an adidas Click order.
+
+    Read from the order's Delivery Tracking page — one entry per row of the
+    delivery table (an order can ship in several deliveries, and one delivery
+    note can carry more than one parcel/tracking number).
+
+    ``carrier`` is adidas's raw carrier code as shown ("UPSN"); ``carrier_name``
+    is the human carrier derived from the tracking URL's host (UPS, FedEx, ...)
+    or None when the host is unrecognized. The delivery note's PDF download link
+    is deliberately **not** captured — its URL embeds a bearer access token.
+    """
+
+    delivery_note: str | None = None
+    ship_date: str | None = None
+    carrier: str | None = None
+    carrier_name: str | None = None
+    tracking_number: str | None = None
+    tracking_url: str | None = None
+
+
+@dataclass
+class TrackingOrder:
+    """One adidas order found for a purchase-order number.
+
+    ``status``:
+    - ``shipped`` — the order has a Delivery Tracking page; ``shipments`` holds
+      its carrier/tracking rows.
+    - ``not_shipped`` — no Delivery Tracking link on the order, so nothing has
+      shipped yet. ``expected_ship_dates`` holds the per-article expected ship
+      dates read from the order's expanded article rows, and
+      ``expected_ship_date`` is the earliest of them (as displayed).
+    - ``unreadable`` — the order page could not be opened or parsed; see
+      ``note``. Nothing about this order is known.
+    """
+
+    order_number: str
+    po_number: str = ""
+    order_type: str | None = None
+    status: str = "unreadable"
+    shipments: list[TrackingShipment] = field(default_factory=list)
+    # [{"article": str | None, "dates": [str, ...]}, ...] — expected (not
+    # actual) ship dates, only populated for an order that has not shipped.
+    expected_ship_dates: list[dict] = field(default_factory=list)
+    expected_ship_date: str | None = None
+    note: str | None = None
+
+
+@dataclass
+class TrackingPO:
+    """All adidas orders found for one requested PO number.
+
+    ``status``:
+    - ``shipped`` — every order for this PO has shipment tracking.
+    - ``partial`` — some orders have shipped, others have not.
+    - ``not_shipped`` — orders exist but none has shipped yet.
+    - ``unreadable`` — orders exist but none of their pages could be read, so
+      whether they shipped is unknown (see each order's ``note``).
+    - ``not_found`` — the order-book search returned no order carrying this PO.
+
+    ``partial`` also covers a mix that includes an unreadable order — an order
+    whose page did not load is never counted as "not shipped".
+    """
+
+    po_number: str
+    status: str = "not_found"
+    orders: list[TrackingOrder] = field(default_factory=list)
+    order_count: int = 0
+    shipment_count: int = 0
+    note: str | None = None
+
+
+@dataclass
+class TrackingResult:
+    """Outcome of an adidas Click delivery-tracking lookup (read-only).
+
+    ``status``:
+    - ``checked`` — every requested PO resolved to at least one order.
+    - ``needs_confirmation`` — the lookup is **incomplete**: one or more POs
+      returned no orders at all (see ``not_found_pos``), and/or an order's page
+      could not be read (that order's ``status`` is ``unreadable`` and the run's
+      ``warnings`` say which). Everything that *was* read is complete and
+      usable; the gaps should be taken back to the user (or retried).
+    - ``error`` — see ``message``.
+
+    ``table`` is a ready-to-render Markdown table of every PO / order /
+    tracking number, with unshipped lines annotated as expected ship dates.
+    """
+
+    status: str
+    pos: list[TrackingPO] = field(default_factory=list)
+    not_found_pos: list[str] = field(default_factory=list)
+    total_orders: int = 0
+    total_shipments: int = 0
+    table: str = ""
+    message: str = ""
+    warnings: list[str] = field(default_factory=list)
+    screenshot_path: str | None = None
+    surface: str = "adidas_click"
+    operation: str = "get_order_tracking"
 
 
 # ---------------------------------------------------------------------------

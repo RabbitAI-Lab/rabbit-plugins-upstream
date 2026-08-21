@@ -1,46 +1,62 @@
-## Description: <br>
-Gingiris Aso Growth helps agents provide App Store Optimization and mobile app growth guidance for keyword research, store listing optimization, cold-start planning, UGC creator operations, and short-form content marketing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gingiris ASO Growth helps agents provide App Store Optimization, app cold-start, UGC creator operations, short-form mobile acquisition, and compliant mobile growth guidance.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-External developers, founders, and growth teams use this skill to plan ASO, mobile app cold starts, UGC creator operations, and TikTok, Instagram Reels, or YouTube Shorts user acquisition campaigns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes promotional consulting and contact links that may be surfaced during ASO or app-growth advice. <br>
-Mitigation: Treat commercial offers as third-party promotional content and separate them from objective ASO guidance before acting on recommendations. <br>
-Risk: Broad triggers may cause the skill to appear in general app-growth discussions where a narrower ASO skill may be more appropriate. <br>
-Mitigation: Use it for App Store Optimization, mobile launch, UGC, and short-form user-acquisition planning; verify fit when the request is outside those topics. <br>
-Risk: Marketing and ASO recommendations can become outdated or platform-policy-sensitive. <br>
-Mitigation: Check current App Store, Google Play, and social-platform policies before executing campaigns, especially around reviews, rankings, paid promotion, and account operations. <br>
+## Use Case:
 
+External mobile app founders, growth marketers, and developers use this skill to plan ASO keyword research, storefront optimization, app cold-start growth, UGC creator operations, and compliant TikTok, Instagram Reels, and YouTube Shorts acquisition experiments.
 
-## Reference(s): <br>
-- [Full ASO and App Cold Start Guide](references/full-guide-zh.md) <br>
-- [ASO Tools Comparison](references/aso-tools.md) <br>
-- [UGC Management SOP](references/ugc-management.md) <br>
-- [App Store vs Google Play Platform Algorithms](references/platform-algorithms.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/gingiris-1031/skills/gingiris-aso-growth) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with tables, checklists, and campaign planning recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No shell execution, credential access, MCP tools, or API calls were detected in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.3.1 (source: server release metadata) <br>
+Risk: Marketing guidance may become inaccurate as app-store and social-platform policies or algorithms change.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify ASO tactics, ranking claims, and campaign plans against current App Store, Google Play, and social-platform policies before acting.
+
+Risk: The artifact discusses prohibited tactics as historical notes, which could be misread as recommended growth tactics.
+
+Mitigation: Use only the artifact's compliant alternatives: genuine-user research, official Product Page Optimization or Store Listing Experiments, transparent paid acquisition, and compliant review prompts.
+
+Risk: The playbook does not include controlled before-and-after datasets and cannot establish causal uplift.
+
+Mitigation: Establish a pre-change measurement baseline and validate outcomes against each app's own storefront, cohort, retention, revenue, and paid-campaign data.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gingiris-1031/skills/gingiris-aso-growth)
+- [Apple Notes field evidence](artifact/references/apple-notes-field-evidence.md)
+- [ASO tools comparison](artifact/references/aso-tools.md)
+- [ASO and app cold-start guide](artifact/references/full-guide-zh.md)
+- [App Store vs Google Play platform algorithms](artifact/references/platform-algorithms.md)
+- [UGC management SOP](artifact/references/ugc-management.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or structured text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only guidance; no tool execution, credential access, persistence, or destructive behavior is indicated by the security evidence.]
+
+## Skill Version(s):
+
+2.4.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

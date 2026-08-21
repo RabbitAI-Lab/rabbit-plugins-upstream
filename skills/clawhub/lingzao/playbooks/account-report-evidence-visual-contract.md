@@ -35,7 +35,7 @@ Use light read when:
 - the user only asks "值不值得学"
 - the user provided one account and has not asked for a formal report
 - only a small homepage/recent-post sample is available
-- paid scope has not been confirmed
+- deeper research scope has not been confirmed
 
 Output:
 
@@ -53,7 +53,7 @@ Use formal report when:
   or client-facing output
 - Lingzao has enough public note samples for a standard diagnosis or comparable
   report
-- the user has confirmed the paid/deep scope if more public lookups are needed
+- the user has confirmed the deeper scope if more public lookups are needed
 
 Default formal carriers:
 

@@ -1,40 +1,62 @@
-## Description: <br>
-LYGO-MINT Verifier canonicalizes Champion and alignment prompt packs, generates deterministic SHA-256 hashes, writes ledger receipts, and emits portable Anchor Snippets for public anchoring. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LYGO-MINT Verifier canonicalizes packs, computes deterministic SHA-256 hashes, creates portable Anchor Snippets, and writes append-only and canonical ledgers only when the operator supplies consent.
 
-## Publisher: <br>
-[deepseekoracle](https://clawhub.ai/user/deepseekoracle) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[deepseekoracle](https://clawhub.ai/user/deepseekoracle)
 
-## Use Case: <br>
-Developers and operators use this skill to mint verifiable prompt or workflow packs by producing canonical hashes, ledger receipts, and anchor snippets. It is intended for non-secret packs where public or shared verification records are useful. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT No Attribution (MIT-0)
 
-## Known Risks and Mitigations: <br>
-Risk: The skill invokes local tools/lygo_mint scripts that are outside the published bundle and run with local workspace permissions. <br>
-Mitigation: Inspect those local scripts before use and run the skill only in a controlled workspace. <br>
-Risk: Minting or anchoring sensitive pack content could expose secrets through ledger records or public anchor snippets. <br>
-Mitigation: Use non-secret prompt packs and remove private keys, API keys, or other sensitive data before minting or posting anchors. <br>
+## Use Case:
 
+Developers and operators use this skill to mint, verify, and share receipts for Champion, alignment prompt, or workflow packs. It supports local pack verification, consent-gated ledger updates, and manual posting of Anchor Snippets.
 
-## Reference(s): <br>
-- [LYGO-MINT Verifier Process](artifact/references/process.md) <br>
-- [ClawHub skill page](https://clawhub.ai/deepseekoracle/skills/lygo-mint-verifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, files] <br>
-**Output Format:** [Markdown/text anchor snippets plus JSON and JSONL ledger files from local Python commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes append-only and canonical ledger state under state/lygo_mint_ledger.jsonl and state/lygo_mint_ledger_canonical.json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Pack files may contain sensitive information that becomes reflected in local receipts or ledgers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review pack content before minting and avoid putting secrets, API keys, or tokens in packs.
+
+Risk: Consent-gated ledger writes create local state that may be committed or shared accidentally.
+
+Mitigation: Use the default skill-local state directory or another controlled path, and review generated ledger files before committing or sharing them.
+
+Risk: Anchor Snippets are intended for manual publication and can be posted to public channels by the operator.
+
+Mitigation: Confirm the snippet content and target channel before posting; the skill does not auto-publish.
+
+## Reference(s):
+
+- [LYGO-MINT process](references/process.md)
+- [Security](references/SECURITY.md)
+- [SkillSpector / ClawHub audit](references/SKILLSPECTOR_AUDIT.md)
+- [ClawHub skill page](https://clawhub.ai/deepseekoracle/skills/lygo-mint-verifier)
+- [Security audit](https://clawhub.ai/deepseekoracle/skills/lygo-mint-verifier/security-audit)
+- [Homepage](https://github.com/DeepSeekOracle/lygo-protocol-stack/tree/main/clawhub/mirrors/lygo-mint-verifier)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and optional JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces hashes, Anchor Snippets, verification results, and consent-gated local ledger files.]
+
+## Skill Version(s):
+
+1.1.1 (source: SKILL.md frontmatter, claw.json, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

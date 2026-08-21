@@ -1,42 +1,63 @@
-## Description: <br>
-CN Model Gateway is a local Python gateway that exposes MCP and agent-framework adapters for sending text prompts to configured Chinese model providers such as DeepSeek, Tongyi, Zhipu GLM, Kimi, Hunyuan, Doubao, MiniMax, LingYi, Baichuan, and StepFun. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CN Model Gateway is a Python MCP server that routes agent requests to ten China-based model providers through JSON-RPC tools, resources, prompts, CLI commands, and framework adapters.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Developers and agent operators use this skill to connect MCP-compatible tools and other agent frameworks to multiple Chinese text model APIs through one local gateway. It supports asking one model, comparing multiple providers, listing available providers, checking health, reading configuration and usage summaries, and using prompt templates for code review and translation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and generated content are sent to the configured third-party model providers. <br>
-Mitigation: Use only providers approved for the data being processed, and avoid compare_models for sensitive prompts unless every selected provider is acceptable. <br>
-Risk: Provider API keys can be exposed if configuration files are shared or committed. <br>
-Mitigation: Keep config.json private, do not commit API keys, and limit access to the local configuration directory. <br>
-Risk: Model calls may consume paid provider quota. <br>
-Mitigation: Monitor usage with the built-in stats functionality and configure provider-side quota or billing alerts. <br>
+## Use Case:
 
+Developers and agent users use this skill to connect MCP-compatible and related agent frameworks to configured Chinese model providers, compare provider responses, describe images, inspect provider health, and review local usage statistics.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/cn-model-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [MCP JSON-RPC responses, command-line text, framework adapter outputs, and markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May send user prompts to configured third-party model providers and may record local usage statistics in SQLite.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server evidence and frontmatter) <br>
+Risk: Prompts, image inputs, and benchmark questions may be sent to configured third-party model providers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with approved providers for the data involved, specify a single provider for sensitive work, and disable failover when provider routing must be controlled.
+
+Risk: API keys and provider credentials are required for model access.
+
+Mitigation: Prefer environment variables for API keys and protect any config.json files that contain credentials.
+
+Risk: Multi-provider comparison and automatic failover can increase cost or route requests to a backup provider.
+
+Mitigation: Review provider selection before use, monitor usage statistics, and disable failover or comparison when cost or routing constraints apply.
+
+Risk: Local usage data is stored in the user's environment.
+
+Mitigation: Protect the ~/.cn-model-gateway local database and apply normal endpoint security controls for workstations or shared systems.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/cn-model-gateway)
+- [Skill definition](artifact/SKILL.md)
+- [README](artifact/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [JSON-RPC responses, Markdown guidance, Python code examples, shell commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce model responses, provider status, usage statistics, benchmark summaries, image descriptions, and tool-call metadata.]
+
+## Skill Version(s):
+
+1.5.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

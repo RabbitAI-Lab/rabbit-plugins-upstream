@@ -1,39 +1,50 @@
-## Description: <br>
-Weekly food cost variance diagnostic for restaurant and franchise operators. Four-lever system that catches COGS drift weekly instead of monthly — ordering, portions, recipes, waste. Built by a franchise GM with 16 years in QSR operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Weekly food cost variance diagnostic for restaurant and franchise operators. Four-lever system that catches COGS drift weekly instead of monthly: ordering, portions, recipes, and waste.
 
-## Publisher: <br>
-[blake27mc](https://clawhub.ai/user/blake27mc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-CC-BY-NC-4.0 <br>
+## Publisher:
 
+[mcphersonai](https://clawhub.ai/user/mcphersonai)
 
-## Use Case: <br>
-Restaurant and franchise operators use this skill to diagnose weekly food cost variance, identify whether ordering, portions, recipes, or waste is driving the issue, and choose corrective action before month-end reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
 
-## Known Risks and Mitigations: <br>
-Risk: Diagnostic history may retain sensitive restaurant operating details such as sales, payroll, vendor, customer, margin, or food cost information. <br>
-Mitigation: Share only the details needed for the diagnostic, avoid confidential data where possible, and ask the agent to analyze without saving or to clear prior notes when appropriate. <br>
-Risk: Recommendations can be misleading if based on incomplete or inaccurate self-reported food cost, inventory, ordering, portion, recipe, or waste data. <br>
-Mitigation: Confirm findings against current POS, inventory, vendor, recipe, and waste records before changing orders, prep pars, or team training plans. <br>
+## Use Case:
 
+Restaurant managers, franchise operators, and multi-unit leaders use this skill to diagnose weekly food cost variance and identify whether ordering, portioning, recipe adherence, or waste is the most likely root cause. It guides the operator toward corrective actions and follow-up checks before monthly P&L review.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown diagnostic questions, summaries, follow-up prompts, and action recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stores and revisits diagnostic run summaries when memory is available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter) <br>
+Risk: Food-cost diagnostics and follow-up dates may be stored in the agent's memory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with operational data the operator is comfortable sharing with the agent, and invoke it explicitly for COGS variance review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/mcphersonai/skills/qsr-food-cost-diagnostic)
+- [README.md](README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Conversational Markdown with diagnostic questions, action recommendations, summaries, and follow-up prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May record diagnostic run details and follow-up dates in agent memory when the host agent supports memory.]
+
+## Skill Version(s):
+
+1.0.3 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

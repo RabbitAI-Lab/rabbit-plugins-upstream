@@ -1,46 +1,65 @@
-## Description: <br>
-Provides agent guidance and scripts for Temu Europe tax workflows through LinkFox, including tax report export, Galerie signatures, invoice queries and downloads, merchant report downloads, and merchant invoice uploads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Temu EU Tax API skill that helps agents call seven LinkFox-forwarded Partner EU temu.pay.tax interfaces for report export, Galerie signatures, invoice lookup and download, merchant report download, and invoice upload.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External developers and marketplace operators use this skill to call and troubleshoot Temu Europe tax and invoice APIs through LinkFox. It helps agents prepare API requests, manage required credentials, run helper scripts, and inspect saved JSON results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Europe for Temu EU tax workflows; globally usable by authorized agent environments. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan says this skill requires LinkFox gateway credentials, Temu seller access tokens, and local disk storage for tax and invoice responses. <br>
-Mitigation: Pass credentials only when needed, restrict access to the working directory and token store, and delete saved response files and saved Temu tokens when they are no longer required. <br>
-Risk: The security scan notes that the artifact includes broader Temu API and credential utilities than the tax-only description suggests. <br>
-Mitigation: Prefer the tax-specific scripts for normal use, and use the generic proxy or non-EU examples only when the broader Temu access is intentional and authorized. <br>
+## Use Case:
 
+External Temu EU sellers, operators, and developers use this skill to perform tax workflows through LinkFox, including VAT invoice queries, invoice upload, signed PDF download, Galerie signatures, and monthly tax report export or download.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-tax-eu) <br>
-- [API Reference](references/api.md) <br>
-- [Temu Access Token Guide](references/access-token.md) <br>
-- [Authorization Flow](references/authorization-flow.md) <br>
-- [Partner EU Tax Catalog](references/partner-eu-catalog.md) <br>
-- [Tax API Documentation Index](references/apis/README.md) <br>
-- [Temu Partner EU Tax Documentation](https://partner-eu.temu.com/documentation?menu_code=7289390cfd724be4a196f11ebe45a896&sub_menu_code=6494bb7afd8048d380a13e92f6275d17) <br>
+### Deployment Geography for Use:
 
+Europe, for Temu Partner EU tax workflows
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses saved to local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Large API responses are summarized in stdout while full JSON responses are saved under the working directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The release security summary flags broader proxying, credential storage and reveal, billing/payment onboarding, and retention of sensitive tax results.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before production use, prefer specific tax scripts over generic proxy or file-download scripts, and restrict access to trusted workspaces.
+
+Risk: Temu and LinkFox credentials and saved tax outputs may expose invoices, order identifiers, reports, or tokens.
+
+Mitigation: Use dedicated least-privilege credentials, protect or disable the local token store, avoid exposing endpoint override environment variables, and regularly clean the linkfox response-output directory.
+
+## Reference(s):
+
+- [Skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-tax-eu)
+- [API reference](references/api.md)
+- [Temu access token guide](references/access-token.md)
+- [Authorization flow](references/authorization-flow.md)
+- [Partner EU catalog](references/partner-eu-catalog.md)
+- [Tax API index](references/apis/README.md)
+- [temu.pay.tax.apply.export.report](references/apis/temu-pay-tax-apply-export-report.md)
+- [temu.pay.tax.get.galerie.signature](references/apis/temu-pay-tax-get-galerie-signature.md)
+- [temu.pay.tax.invoice.detail.query](references/apis/temu-pay-tax-invoice-detail-query.md)
+- [temu.pay.tax.invoice.info.query](references/apis/temu-pay-tax-invoice-info-query.md)
+- [temu.pay.tax.invoice.pdf.download](references/apis/temu-pay-tax-invoice-pdf-download.md)
+- [temu.pay.tax.merchant.report.download](references/apis/temu-pay-tax-merchant-report-download.md)
+- [temu.pay.tax.merchant.upload.invoice](references/apis/temu-pay-tax-merchant-upload-invoice.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, JSON files]
+
+**Output Format:** [Markdown guidance with shell commands and JSON request or response artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save complete API responses under the workspace linkfox output directory and may print either full JSON or summaries depending on response size.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

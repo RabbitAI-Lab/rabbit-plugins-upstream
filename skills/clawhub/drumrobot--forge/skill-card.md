@@ -1,50 +1,59 @@
-## Description: <br>
-Forge is a forge-agnostic git-host driver contract that helps agent pipelines reason about GitHub, GitLab, and Gitea PR, issue, merge, visibility, reference, dependency, and review-bot operations through normalized driver methods. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Forge defines a forge-agnostic git-host driver contract for GitHub, GitLab, and Gitea workflows through normalized driver methods, capability flags, and --forge dispatch.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and automation engineers use this skill when designing or updating repository workflow agents that need to operate across GitHub, GitLab, and Gitea. It provides a normalized driver interface, dispatch model, capability matrix, and adapter boundaries so pipelines can choose native behavior or documented degrade paths per forge. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use existing GitHub, GitLab, or Gitea CLI authentication when invoked by an agent workflow. <br>
-Mitigation: Install and enable it only in repositories where agent-driven issue, PR, MR, and merge operations are intended, and scope CLI credentials to the minimum permissions needed. <br>
-Risk: Forge auto-detection falls back to GitHub when the remote host cannot be resolved. <br>
-Mitigation: Use an explicit --forge value for non-GitHub or self-hosted repositories when incorrect fallback behavior would be disruptive. <br>
-Risk: Some GitLab and Gitea adapter behavior is documented as a Phase 2 boundary rather than complete implementation. <br>
-Mitigation: Treat GitLab and Gitea paths as contract guidance unless the consuming pipeline has implemented and tested the corresponding adapter methods. <br>
+## Use Case:
 
+Developers and workflow engineers use this skill to design, reason about, and implement forge-portable PR, MR, issue, merge, authentication, visibility, and dependency operations across GitHub, GitLab, and Gitea. It helps agents choose adapter behavior, dispatch rules, and graceful degradation paths when a forge lacks a native capability.
 
-## Reference(s): <br>
-- [Forge skill page](https://clawhub.ai/drumrobot/skills/forge) <br>
-- [Publisher profile](https://clawhub.ai/user/drumrobot) <br>
-- [Changelog](CHANGELOG.md) <br>
-- [Driver Interface](driver-interface.md) <br>
-- [Capability Matrix](capability-matrix.md) <br>
-- [Dispatch](dispatch.md) <br>
-- [Adapters](adapters.md) <br>
-- [Initial forge registration issue](https://github.com/es6kr/skills/issues/74) <br>
-- [Initial forge registration commit](https://github.com/es6kr/skills/commit/1bb16ea7c7cc466b43c87c0761bc841fe8cab95d) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with normalized method contracts, capability tables, and bash command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes a bash driver resource that can assemble or run host CLI commands through gh, glab, or tea depending on forge detection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata and changelog, released 2026-07-07) <br>
+Risk: The included shell helper can perform PR, MR, issue, and merge operations when explicitly sourced and called.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the helper only in repositories where those forge operations are intended, review generated command shapes, and rely on dry-run or tests before live use.
+
+Risk: Some GitLab and Gitea adapter behavior is documented as a boundary or Phase 2 follow-up rather than fully implemented behavior.
+
+Mitigation: Check the capability matrix and adapter documentation before relying on a native operation, and use documented degradation paths when support is absent.
+
+## Reference(s):
+
+- [Forge Skill Page](https://clawhub.ai/drumrobot/skills/forge)
+- [Driver Interface](artifact/driver-interface.md)
+- [Capability Matrix](artifact/capability-matrix.md)
+- [Dispatch](artifact/dispatch.md)
+- [Adapters](artifact/adapters.md)
+- [Forge Driver Helper](artifact/resources/forge-driver.sh)
+- [Changelog](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with Bash helper functions and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include forge CLI command shapes and adapter boundary guidance; shell helper behavior depends on the resolved forge and caller environment.]
+
+## Skill Version(s):
+
+0.1.2 (source: server release metadata and CHANGELOG, released 2026-08-17)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/golang-cli",
   "slug": "golang-cli",
   "ownerHandle": null,
-  "version": "1.2.0",
-  "updatedAt": 1779305135235,
-  "contentHash": "a19edca35f583d20a69db8122761aa6f0da4a92e8fc4384852d4b2066ad22864",
-  "fetchedAt": "2026-07-26T18:42:11.286Z"
+  "version": "1.3.0",
+  "updatedAt": 1787235963484,
+  "contentHash": "408917381e78711450534eb9c2e022f305c904ee2b51ced78973e4f34189e20e",
+  "fetchedAt": "2026-08-21T08:05:56.538Z"
 }

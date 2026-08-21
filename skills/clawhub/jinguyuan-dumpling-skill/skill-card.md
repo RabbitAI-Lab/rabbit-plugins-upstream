@@ -1,48 +1,58 @@
-## Description: <br>
-金谷园饺子馆 Skill helps an agent retrieve restaurant information, queue status, visit guidance, recommendations, pickup details, and explicit Meituan queue actions for the named restaurant. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents answer questions about Jinguyuan Dumpling Restaurant locations, hours, queue status, recommended dishes, takeout, raw dumpling pickup, and online queue actions through the bundled CLI and official restaurant API.
 
-## Publisher: <br>
-[jinguyuan](https://clawhub.ai/user/jinguyuan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[jinguyuan](https://clawhub.ai/user/jinguyuan)
 
-## Use Case: <br>
-External users and their agents use this skill to answer questions about JinGuYuan Dumpling Restaurant and, after explicit confirmation, take, check, or cancel Meituan queue numbers for supported store locations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Meituan account authorization and persistent local token storage are required for real queue actions. <br>
-Mitigation: Use authorization only for explicit queue tasks and run logout after use to clear the local Meituan token. <br>
-Risk: The bundled Meituan login/signing component is security-sensitive and includes under-disclosed device profiling and signing telemetry. <br>
-Mitigation: Review the skill before installation and avoid installing it if that behavior is unacceptable for the environment. <br>
-Risk: Taking or canceling a queue number can affect a user's real restaurant queue state. <br>
-Mitigation: Confirm the store, party size, table type, and action in the current conversation before executing commands with --confirm. <br>
+## Use Case:
 
+External restaurant customers and their agents use this skill to get current Jinguyuan Dumpling Restaurant information, queue guidance, pickup information, and restaurant news. When explicitly requested and confirmed, the skill can also guide real online queue actions such as taking a number, checking personal queue progress, or canceling a queue order.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/jinguyuan/skills/jinguyuan-dumpling-skill) <br>
-- [Publisher Profile](https://clawhub.ai/user/jinguyuan) <br>
-- [Official Restaurant Website](https://jinguyuan.cloud) <br>
-- [JinGuYuan MCP Endpoint](https://mcp.jinguyuan.cloud) <br>
-- [MCP Access](references/mcp-access.md) <br>
-- [MCP Reply Contract](references/mcp-reply-contract.md) <br>
-- [Queue Actions](references/queue-actions.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown responses with inline shell commands and structured JSON command outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js 18+ for local queue actions; real queue actions require current-turn user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.3.0 (source: SKILL.md frontmatter, skill.json, package.json, server release metadata) <br>
+Risk: Queue features use Meituan authorization, store a local token under ~/.jinguyuan, and the signing dependency creates a persistent ~/.cliguard device identifier that the skill does not clearly disclose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing if local account authorization helpers are uncomfortable; proceed only when the publisher is trusted and the local token and device identifier behavior is acceptable.
+
+Risk: Confirmed take-number and cancel operations affect a real queue account.
+
+Mitigation: Use these actions only after the user gives explicit confirmation for the current request, and verify queue status with the CLI or Meituan account if an operation result is unclear.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jinguyuan/skills/jinguyuan-dumpling-skill)
+- [Public query API reference](references/api-reference.md)
+- [Queue reply contract](references/queue-reply-contract.md)
+- [Queue actions reference](references/queue-actions.md)
+- [Jinguyuan website](https://jinguyuan.cloud)
+- [Jinguyuan MCP endpoint](https://mcp.jinguyuan.cloud)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and plain text with inline shell commands and JSON-shaped command results when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 18 or newer for the bundled CLI; public queries return one JSON object on stdout, while queue actions may require local Meituan authorization and explicit user confirmation.]
+
+## Skill Version(s):
+
+3.1.2 (source: evidence release, skill.json, SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

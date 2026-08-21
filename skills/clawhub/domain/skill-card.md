@@ -1,45 +1,61 @@
-## Description: <br>
-Check domain availability, search domains by keyword across newly registered, expired, deleted, active, and marketplace datasets, and analyze keyword value and domain trends. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Check domain availability, search domains by keyword across the domain lifecycle, analyze keyword value and trends, and help agents act on DomainKits domain intelligence.
 
-## Publisher: <br>
-[abtdomain](https://clawhub.ai/user/abtdomain) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[abtdomain](https://clawhub.ai/user/abtdomain)
 
-## Use Case: <br>
-Developers, domain operators, marketers, and naming teams use this skill to find available domains, inspect WHOIS and DNS records, compare pricing, monitor changes, and turn domain search results into actionable recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Domain searches, keywords, and optional API keys are sent to the remote DomainKits MCP service. <br>
-Mitigation: Use an API key only when needed, avoid submitting sensitive domain strategy data unless appropriate, and review DomainKits account and privacy settings before use. <br>
-Risk: Memory-backed preferences, monitors, and strategies can store domain-related data with DomainKits when enabled. <br>
-Mitigation: Keep memory off unless storage is intended, obtain consent before saving data, and use the preferences delete action when stored data should be removed. <br>
-Risk: Some tools are account-gated or quota-limited, which can affect completeness of safety, keyword, backlink, trend, bulk, and monitoring workflows. <br>
-Mitigation: Check remaining quota with the usage tool before heavy operations and disclose when results are limited by access tier. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to search domain availability, inspect DNS and WHOIS/RDAP data, evaluate pricing and market signals, monitor domain changes, and support domain naming or due-diligence workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/abtdomain/skills/domain) <br>
-- [DomainKits MCP](https://domainkits.com/mcp) <br>
-- [DomainKits Pricing](https://domainkits.com/pricing) <br>
-- [DomainKits Registration](https://domainkits.com/register) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with domain data summaries, verdicts, setup commands, and MCP configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include availability status, pricing, WHOIS/RDAP, DNS, safety, keyword, trend, marketplace, monitoring, and quota information depending on the selected DomainKits tool and account tier.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.1.1 (source: server release metadata) <br>
+Risk: Domain searches, lookups, and optional API keys are sent to DomainKits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review DomainKits terms and privacy posture before enabling the skill, and use guest access when an account-bound API key is not required.
+
+Risk: Account-bound tools can manage monitors, preferences, strategy storage, keyword data, and backlink lookups.
+
+Mitigation: Enable account-bound tools only for intended workflows, keep memory off unless explicitly needed, and delete stored preferences or data when no longer required.
+
+Risk: Heavy or deeper operations can depend on the current quota and access tier.
+
+Mitigation: Use the usage tool to check remaining quota before high-volume operations and consult the current pricing/access reference for tier limits.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/abtdomain/skills/domain)
+- [DomainKits MCP](https://domainkits.com/mcp)
+- [DomainKits Pricing](https://domainkits.com/pricing)
+- [DomainKits Skills](https://github.com/ABTdomain/domainkits-skills)
+- [DomainKits MCP GitHub](https://github.com/ABTdomain/domainkits-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include domain availability, DNS, WHOIS/RDAP, pricing, trend, monitoring, usage, and account-bound tool results returned by DomainKits MCP.]
+
+## Skill Version(s):
+
+3.1.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

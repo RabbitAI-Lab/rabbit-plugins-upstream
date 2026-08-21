@@ -1,6 +1,6 @@
 # rune-sast
 
-> Rune L3 Skill | validation | model: tier:light
+> Rune L3 Skill | validation | model: tier:mid
 
 
 # sast

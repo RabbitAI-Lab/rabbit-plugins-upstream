@@ -1,45 +1,59 @@
-## Description: <br>
-Screens and ranks Amazon category markets with SellerSprite data across market size, competition, concentration, seller structure, new-product share, pricing, ratings, and profit filters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+使用卖家精灵选市场列表能力，基于类目维度筛选亚马逊细分市场，支持市场规模、竞争度、头部集中度、卖家结构、新品占比、价格/评分/毛利区间等大量条件，用于发现可进入市场与评估选品方向。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External developers and agents use this skill to research Amazon category opportunities with SellerSprite data, compare candidate markets, and guide product-selection decisions before making paid API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid-credit API calls can incur costs. <br>
-Mitigation: Confirm the user wants to proceed before repeat calls, retries, pagination, or broadened searches. <br>
-Risk: API credentials and request routing are sensitive. <br>
-Mitigation: Use trusted LinkFox/SellerSprite credentials and keep LINKFOX_TOOL_GATEWAY unset unless the destination is controlled and expected. <br>
-Risk: Full market-research responses are stored locally. <br>
-Mitigation: Review saved response files for sensitive business data and remove them when they are no longer needed. <br>
-Risk: Automatic feedback reporting and onboarding installation may send data or add another skill. <br>
-Mitigation: Review or disable feedback behavior and install the onboarding package only when intentionally needed. <br>
+## Use Case:
 
+External marketplace researchers, Amazon sellers, and ecommerce operators use this skill to screen category-level SellerSprite market data, compare market size and competition signals, and identify product or category opportunities.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-market-research) <br>
-- [SellerSprite market research API reference](artifact/references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, shell command examples, and JSON API responses or summarized JSON output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved locally; responses over 8 KB are summarized unless inline output is requested; repeated calls may consume paid credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The skill sends research queries, session metadata, and a LinkFox API key to LinkFox endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for intended LinkFox/SellerSprite market research, review gateway environment variables before use, and avoid sending sensitive or unnecessary query data.
+
+Risk: The skill can guide phone login, reusable API-key generation, billing checkout, and feedback submission.
+
+Mitigation: Prefer self-service account setup and require explicit user confirmation before phone login, API-key generation, purchase, order query, or feedback actions.
+
+Risk: The skill consumes paid credits and may save complete API responses locally.
+
+Mitigation: Warn users before additional paid calls, use the 24-hour cache where appropriate, and review or delete saved response files when they are no longer needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-market-research)
+- [卖家精灵-选市场列表 API 参考](artifact/references/api.md)
+- [解决认证和积分问题](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON examples, shell commands, and locally saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [API responses may be summarized in stdout when large while complete JSON responses are saved under a linkfox session data directory.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,75 @@
-## Description: <br>
-Structured code reviews with severity-ranked findings and deep multi-agent mode for reviewing code, auditing code quality, and critiquing PRs, MRs, or diffs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides structured code review guidance for PRs, MRs, and diffs, with severity-ranked findings and optional deep multi-agent review.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to perform structured code reviews that check intended behavior first, then assess correctness, maintainability, security, reliability, performance, and test coverage. It supports standard reviews and deeper multi-agent review for large or sensitive diffs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Deep or external review modes may expose repository diffs and PR discussion to local tools, gh, and configured agent or model providers. <br>
-Mitigation: Use those modes only when the repository and PR discussion are appropriate for the configured tools and providers. <br>
-Risk: Auto-applied safe fixes can still affect the working tree. <br>
-Mitigation: Review any auto-applied changes before committing. <br>
+## Use Case:
 
+Developers and engineering reviewers use this skill to perform structured reviews of code changes, audits, PRs, MRs, and diffs. It helps scope the review, select standard or deep review mode, classify findings by severity and confidence, and produce a concise Markdown review report.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-code-review) <br>
-- [Skill instructions](artifact/SKILL.md) <br>
-- [Skill specification](artifact/SPEC.md) <br>
-- [Action Routing](artifact/references/action-routing.md) <br>
-- [Deep Review Process](artifact/references/deep-review.md) <br>
-- [Scope & comparison-range resolution](artifact/references/scope-resolution.md) <br>
-- [Security Detection Patterns](artifact/references/security-patterns.md) <br>
-- [Severity Levels and Confidence Rubric](artifact/references/severity-and-confidence.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown review reports with severity-ranked findings, residual risks, verdicts, and inline shell commands when verification is needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask scope or review-mode questions; may propose or apply safe local fixes according to the skill's action-routing rules.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.1 (source: ClawHub release evidence) <br>
+Risk: Reviewed repository content, diffs, comments, and tool output may contain misleading or instruction-like text.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: The skill defines a reviewer trust boundary that treats reviewed content as evidence, not workflow instructions, and keeps active instructions authoritative.
+
+Risk: Running verification during review can execute target-controlled scripts or newly changed commands.
+
+Mitigation: The skill limits execution to caller-authorized verification and instructs reviewers to inspect changed command definitions before running scripts with network, privileged, destructive, or opaque behavior.
+
+Risk: Deep review and external reviewer modes may send diffs or surrounding source to additional agents or services.
+
+Mitigation: The skill requires read-only specialist delegation and explicit per-packet consent before external reviewer egress, including naming the files and sensitive data involved.
+
+Risk: Review findings could be mistaken for permission to edit code, post comments, or change repository state.
+
+Mitigation: The security evidence notes that sensitive actions are explicitly gated; the artifact also requires separate authority for source edits, VCS writes, external posts, and non-review changes.
+
+## Reference(s):
+
+- [ia-code-review Specification](SPEC.md)
+- [Scope & comparison-range resolution](references/scope-resolution.md)
+- [Reviewer trust boundary](references/reviewer-trust-boundary.md)
+- [Deep Review Process](references/deep-review.md)
+- [What to Check - Review Category Checklists](references/check-categories.md)
+- [Severity Levels and Confidence Rubric](references/severity-and-confidence.md)
+- [Action Routing - 4-Tier Fix Classification](references/action-routing.md)
+- [Security Detection Patterns](references/security-patterns.md)
+- [Security Test Coverage Checklist](references/security-test-coverage.md)
+- [Reliability Patterns](references/reliability-patterns.md)
+- [Language-Specific Review Profiles](references/language-profiles.md)
+- [False Positive Suppression](references/false-positive-suppression.md)
+- [Review Traps Catalog](references/review-traps-catalog.md)
+- [PR sizing and large-diff strategy](references/pr-sizing.md)
+- [Driving a long-running external reviewer subprocess](references/external-review-subprocess.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands]
+
+**Output Format:** [Markdown review report with severity sections, file and line references, findings, residual risks, and verdict]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include shell commands for caller-authorized verification and concise guidance for review scope, action routing, and follow-up.]
+
+## Skill Version(s):
+
+4.4.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

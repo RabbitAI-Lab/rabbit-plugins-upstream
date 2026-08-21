@@ -1,0 +1,22 @@
+{
+  "region": "cn-north-4",
+  "project_id": "your-project-id-here",
+  "auth": {
+    "ak_env": "HWCLOUD_AK",
+    "sk_env": "HWCLOUD_SK"
+  },
+  "test_buckets": {
+    "scalar-search": "python3 scripts/hcs-obs-metaquery.py scalar-search --bucket demo-assets --mock",
+    "scalar-search-filtered": "python3 scripts/hcs-obs-metaquery.py scalar-search --bucket demo-assets --name-filter .png --min-size 1KB --mock",
+    "semantic-search": "python3 scripts/hcs-obs-metaquery.py semantic-search --bucket demo-assets --query landscape --mock",
+    "enable-ai-image": "python3 scripts/hcs-obs-metaquery.py enable-ai --bucket demo-assets --ai-type image --mock",
+    "enable-ai-video": "python3 scripts/hcs-obs-metaquery.py enable-ai --bucket demo-assets --ai-type video --mock",
+    "ai-status": "python3 scripts/hcs-obs-metaquery.py ai-status --bucket demo-assets --mock",
+    "disable-ai": "python3 scripts/hcs-obs-metaquery.py disable-ai --bucket demo-assets --mock",
+    "create-bucket": "python3 scripts/hcs-obs-metaquery.py create-bucket --bucket test-bucket --mock",
+    "upload-object": "python3 scripts/hcs-obs-metaquery.py upload-object --bucket demo-assets --file /tmp/test.txt --mock",
+    "bucket-stats": "python3 scripts/hcs-obs-metaquery.py bucket-stats --bucket demo-assets --mock",
+    "list-buckets": "python3 scripts/hcs-obs-metaquery.py list-buckets --mock",
+    "capability-list": "python3 scripts/hcs-obs-metaquery.py capability-list --mock"
+  }
+}

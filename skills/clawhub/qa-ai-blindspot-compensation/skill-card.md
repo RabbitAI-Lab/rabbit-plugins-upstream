@@ -1,41 +1,55 @@
-## Description: <br>
-Helps QA reviewers find AI-generated test-case blind spots across sequencing, concurrency, resource contention, state accumulation, data consistency, and third-party integration, then produce supplemental test cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA reviewers find missed test scenarios after AI-generated test cases by checking six recurring blind spots: sequencing, concurrency, resource contention, state accumulation, data consistency, and third-party integration differences.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and test reviewers use this skill after AI-generated test cases have been reviewed to identify missing coverage and generate traceable supplemental cases for known AI blindspot categories. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad coverage prompts and add a fixed six-category review structure when a lighter answer would be enough. <br>
-Mitigation: Use it for post-review blindspot analysis or explicit omission checks, and keep the response scoped to categories relevant to the user's request. <br>
-Risk: Supplemental test cases may not be directly executable without product-specific requirements, environments, or constraints. <br>
-Mitigation: Have QA reviewers validate generated cases against the requirements, system behavior, and available test environment before adding them to a test suite. <br>
+## Use Case:
 
+QA engineers, test designers, and software teams use this skill after reviewing AI-generated test cases to add blind-spot coverage for sequence changes, concurrent use, resource exhaustion, long-running state, distributed data consistency, and real third-party behavior.
 
-## Reference(s): <br>
-- [Six Blindspot Details](references/blindspot-details.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-ai-blindspot-compensation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown report with tables and traceable supplemental test-case entries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supplemental cases are expected to include blindspot IDs and related requirement or original test-case IDs when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and release evidence) <br>
+Risk: The skill may be invoked broadly during QA review and can add 12-18 extra scenarios, increasing review scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it when expanded test coverage analysis is desired and review the generated scenarios for relevance and priority before adding them to the test plan.
+
+Risk: Generated supplemental test scenarios may be incorrect, low priority, or hard to execute for a specific system.
+
+Mitigation: Validate each proposed scenario against requirements, existing test cases, and the system architecture before implementation.
+
+## Reference(s):
+
+- [Six Blind Spots Details](references/blindspot-details.md)
+- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-ai-blindspot-compensation)
+- [Publisher Profile](https://clawhub.ai/user/kokxi)
+
+## Skill Output:
+
+**Output Type(s):** [analysis, markdown, guidance]
+
+**Output Format:** [Markdown blind-spot coverage report with tables and test-case lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces supplemental test scenarios with blindspot IDs, related requirement IDs, original test case IDs, blindspot type, risk level, test difficulty, and suggested test depth.]
+
+## Skill Version(s):
+
+1.7.0 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

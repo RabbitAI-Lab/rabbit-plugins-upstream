@@ -1,45 +1,63 @@
-## Description: <br>
-Simulates Amazon storefront searches and returns real-time search results data such as product positions, prices, ratings, review counts, brands, delivery details, and sponsored status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Simulates Amazon storefront searches to retrieve real-time search results data, including product rankings, prices, ratings, review counts, brands, delivery details, and sponsored placement signals.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Amazon sellers, e-commerce analysts, and agent users use this skill to inspect live Amazon search result pages for keyword ranking, competitor discovery, price comparison, sponsored product analysis, and new product monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review flagged that the skill sends Amazon search terms, marketplace settings, delivery ZIPs, API credentials, and session-related headers to LinkFox. <br>
-Mitigation: Use only approved LinkFox credentials, avoid sensitive business queries unless necessary, and confirm the user is comfortable sharing the requested search context before calling the API. <br>
-Risk: Raw search responses are saved on disk and may contain query details, product data, delivery simulation settings, and session metadata. <br>
-Mitigation: Run the skill in a dedicated workspace, inspect generated linkfox files before sharing them, and delete saved response files when they are no longer needed. <br>
-Risk: Each Amazon search consumes LinkFox credits, and repeated retries, pagination, or parameter changes can increase cost. <br>
-Mitigation: Explain additional credit usage before follow-up searches and avoid automatic retries, keyword changes, page turns, or delivery ZIP changes without user confirmation. <br>
-Risk: The artifact includes onboarding-download and feedback-reporting flows that may contact LinkFox services beyond the search API. <br>
-Mitigation: Ask for explicit user consent before downloading onboarding materials or sending feedback, and skip those flows when they are not needed for the task. <br>
+## Use Case:
 
+Amazon sellers and ecommerce analysts use this skill to inspect live Amazon search result pages for keyword ranking, competitor discovery, price comparison, sponsored product analysis, and new product monitoring. It is intended for current SERP inspection rather than historical trend, campaign, sales, or inventory analysis.
 
-## Reference(s): <br>
-- [亚马逊前端搜索模拟 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-search) <br>
+### Deployment Geography for Use:
 
+Global, across the supported Amazon marketplaces documented by the skill.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON files, guidance] <br>
-**Output Format:** [Markdown summaries and tables with optional shell commands and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full responses are saved under a local linkfox session data directory; large responses are summarized unless inline output is explicitly requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Search terms, optional ZIP or location parameters, onboarding phone-login data, feedback text, and API-authenticated billing requests may be sent to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that data sharing is acceptable, avoid sensitive search or business data when possible, and review the LinkFox onboarding terms before account setup.
+
+Risk: Endpoint override environment variables can redirect API, login, or billing traffic.
+
+Mitigation: Use default endpoints unless you control and trust the override destination.
+
+Risk: API keys may appear in onboarding output or shell configuration instructions.
+
+Mitigation: Treat API keys as secrets, avoid sharing logs or screenshots containing keys, and rotate credentials if exposure is suspected.
+
+Risk: Full search results and payment-related QR artifacts may persist in local linkfox output or cache directories.
+
+Mitigation: Review and delete local linkfox output or cache directories when results or onboarding artifacts contain sensitive information.
+
+## Reference(s):
+
+- [亚马逊前端搜索模拟 API 参考](references/api.md)
+- [解决认证和积分问题](references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-search)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown tables and summaries, shell commands, configuration snippets, and JSON API response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The search script saves full JSON responses under a local linkfox session data directory, uses a 24-hour local cache by default, and may summarize large responses instead of printing them inline.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

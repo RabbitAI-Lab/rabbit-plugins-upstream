@@ -1,42 +1,52 @@
-## Description: <br>
-日语朗读作业AI批改（教师模式）——支持音频转写、CEFR分级评价、纠错与成绩录入。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A teacher-assistant skill for grading A1/A2/B1 Japanese reading audio with faster-whisper transcription, acoustic checks, four-dimension 10-point scoring, feedback, reports, and teacher final review.
 
-## Publisher: <br>
-[bianmaxingkong](https://clawhub.ai/user/bianmaxingkong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[bianmaxingkong](https://clawhub.ai/user/bianmaxingkong)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External teachers use this skill to pre-grade Japanese reading audio assignments for A1/A2/B1 learners, generate concise feedback, and route uncertain or low-confidence cases to teacher review before final grades are recorded.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Student audio, grades, generated reports, progress files, and failure records may contain sensitive student data.
+
+Mitigation: Store generated local files according to the school's student-data policy and confirm teachers are comfortable processing this data locally before installing.
+
+Risk: Automatic transcription and acoustic analysis can misread student speech or overstate pronunciation issues.
+
+Mitigation: Use the skill's high, medium, and low confidence routing; keep low-confidence scores as diagnostic only and require teacher review before final grading.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Teachers use this skill to grade Japanese reading-aloud audio submissions, transcribe audio with local Whisper, provide CEFR-aligned feedback, record Canvas grades, and generate class summaries. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can post Canvas grades and upload class summaries without an explicit confirmation step. <br>
-Mitigation: Manually review every grade, comment, course ID, assignment ID, student ID, and summary file before running Canvas posting or upload commands. <br>
-Risk: Audio transcription uncertainty can lead to incorrect grading feedback. <br>
-Mitigation: Use the artifact's alignment check against the standard answer and send uncertain, missing, extra, or failed transcriptions to manual review instead of automatic scoring. <br>
-Risk: Canvas credentials and permissions are not described by the artifact. <br>
-Mitigation: Confirm credential storage, scope, and access controls before use, and run the workflow only for Canvas courses the user controls. <br>
+**Output Format:** [Markdown or plain text grading reports with optional local report, progress, and failure files]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/bianmaxingkong/skills/japanese-reading-grader) <br>
+**Other Properties Related to Output:** [Reports are intended to stay within 1000 characters; batch progress and failed-audio records may be stored locally for teacher review.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown-style guidance with plain-text grading feedback and bash command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Feedback comments are capped at 1000 characters; batch processing guidance limits a run to 50 students.] <br>
+2.2.3 (source: release evidence)
 
-## Skill Version(s): <br>
-2.2.2 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

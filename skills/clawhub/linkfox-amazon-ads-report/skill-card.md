@@ -1,44 +1,65 @@
-## Description: <br>
-Fetches Amazon Ads reports for Sponsored Products, Sponsored Brands, and Sponsored Display by creating, polling, downloading, and returning structured report data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves Amazon Ads Sponsored Products, Sponsored Brands, and Sponsored Display reports by guiding an agent to select valid report types, columns, grouping, and filters, then create, poll, download, and unpack reports through LinkFox.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External agents and e-commerce operators use this skill to retrieve Amazon Ads performance reports across SP, SB, and SD report types. It helps select report definitions, run the reporting workflow, and return structured data for campaign, keyword, search term, product, and related advertising analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Amazon Ads reports, saved report paths, and temporary local download links can contain sensitive business data and may be retained locally after use. <br>
-Mitigation: Install only in a trusted local environment, prefer disabling local HTTP serving for sensitive reports, keep serving bound to 127.0.0.1, and delete generated report files when they are no longer needed. <br>
+## Use Case:
 
+External sellers, agencies, and operators use this skill to retrieve Amazon Ads performance reports for SP, SB, and SD campaigns. Developers and agent users can use it to construct valid report requests, handle long-running report generation, and inspect downloaded report data.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-ads-report) <br>
-- [API and runtime parameter reference](references/api.md) <br>
-- [Amazon Ads report type index](references/report-types/index.md) <br>
-- [Sponsored Products report types](references/report-types/sp/) <br>
-- [Sponsored Brands report types](references/report-types/sb/) <br>
-- [Sponsored Display report types](references/report-types/sd/) <br>
-- [Amazon Ads Reporting v3 report types](https://advertising.amazon.com/API/docs/en-us/guides/reporting/v3/report-types) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [JSON responses, saved report files, local file links, and concise text summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Large responses are saved under the current working directory; temporary local HTTP links may be served unless disabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill handles Amazon Ads report requests and may process sensitive advertising performance data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when LinkFox is an acceptable processor for the relevant Amazon Ads data, and treat saved files, terminal logs, local paths, and report URLs as sensitive business data.
+
+Risk: Downloaded reports can be exposed through a temporary localhost HTTP URL by default.
+
+Mitigation: Disable serveExtractedFileHttp for sensitive reports or restrict access to the local machine and retrieve files directly from the saved path.
+
+Risk: The skill can assist account setup and billing recovery when authentication or balance problems occur.
+
+Mitigation: Review account, payment, and billing prompts before acting, and use trusted LinkFox endpoints only.
+
+Risk: Base URL overrides and inline output can expose confidential report data or credentials to untrusted destinations or logs.
+
+Mitigation: Avoid LinkFox API base URL overrides unless the destination is trusted, and avoid --inline for large or confidential data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-ads-report)
+- [API and runtime reference](references/api.md)
+- [Auth and billing onboarding](references/onboarding.md)
+- [Amazon Ads report type catalog](references/report-types/index.md)
+- [Amazon Ads API reporting v3 report types](https://advertising.amazon.com/API/docs/en-us/guides/reporting/v3/report-types)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, files, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result summaries; scripts save full report responses as JSON files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full responses are saved under LinkFox session data; large outputs are summarized unless --inline is used; downloaded reports may also be exposed through a temporary localhost URL.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

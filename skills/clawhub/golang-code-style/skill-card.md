@@ -1,42 +1,55 @@
-## Description: <br>
-Golang code style conventions for line length, variable declarations, control flow clarity, and useful comments when writing or reviewing Go code. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Go code style guidance for line breaking, variable declarations, control flow clarity, comments, function design, collection initialization, and file organization.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and coding agents use this skill to apply opinionated Go style guidance during implementation and review. It helps improve readability across line breaking, variable initialization, control flow, function design, collection handling, and file organization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Style-driven edits can change Go source files or produce recommendations that should not be accepted blindly. <br>
-Mitigation: Review diffs, run the relevant Go tests or checks, and confirm that readability changes preserve intended behavior. <br>
-Risk: The skill can run Go, golangci-lint, git, and sub-agent review workflows in a repository. <br>
-Mitigation: Use it only in repositories where those actions are appropriate and inspect proposed commands before execution. <br>
+## Use Case:
 
+Developers and engineers use this skill to write or review Go code for clear, maintainable style. It is intended for Go source files and focuses on judgment-based style concerns that complement automated formatting and linting.
 
-## Reference(s): <br>
-- [Code Style Details](references/details.md) <br>
-- [Source Homepage](https://github.com/samber/cc-skills-golang) <br>
-- [ClawHub Skill Page](https://clawhub.ai/samber/golang-code-style) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands] <br>
-**Output Format:** [Markdown guidance with Go code examples and optional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or make source edits and may run Go, golangci-lint, git, or sub-agent review workflows when appropriate.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill may guide edits to Go files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for intended Go style work and review proposed diffs before accepting changes.
+
+Risk: The skill may use Go, golangci-lint, git, or review sub-agents for large code-style tasks.
+
+Mitigation: Run those commands only in trusted repositories and check command intent before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/golang-code-style)
+- [Project homepage](https://github.com/samber/cc-skills-golang)
+- [Code Style Details](references/details.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with Go code examples and optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide edits to Go files and large style reviews using Go tooling, golangci-lint, git, or review sub-agents when appropriate.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

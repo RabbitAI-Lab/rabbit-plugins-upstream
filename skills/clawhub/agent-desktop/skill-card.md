@@ -1,47 +1,61 @@
-## Description: <br>
-Desktop automation via native OS accessibility trees using the agent-desktop CLI for observing and interacting with desktop applications. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Desktop automation via native OS accessibility trees using the agent-desktop CLI.
 
-## Publisher: <br>
-[lahfir](https://clawhub.ai/user/lahfir) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lahfir](https://clawhub.ai/user/lahfir)
 
-## Use Case: <br>
-Developers and agent operators use this skill to guide agents through desktop GUI observation, interaction, app lifecycle, window, clipboard, notification, wait, and session workflows. It is intended for real desktop automation tasks where the calling agent must inspect UI state and act through the agent-desktop CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill enables broad control of a user's real desktop through accessibility and screen recording permissions. <br>
-Mitigation: Grant permissions only to trusted launchers and install the skill only when real desktop operation is intended. <br>
-Risk: Desktop observation, screenshots, clipboard use, and trace artifacts may expose sensitive application data. <br>
-Mitigation: Avoid running the skill around secrets or sensitive apps, use --no-trace or short-lived sessions when possible, and clean up ~/.agent-desktop sessions after use. <br>
-Risk: High-impact physical or forced input can disrupt active applications. <br>
-Mitigation: Use headed or forceful commands only when explicit physical interaction is intended and verify UI state before continuing. <br>
+## Use Case:
 
+Developers and AI agents use this skill to observe desktop UI state and perform GUI automation tasks such as filling forms, navigating menus, managing windows, using the clipboard, handling notifications, and verifying interactions.
 
-## Reference(s): <br>
-- [Agent Desktop Skill](https://clawhub.ai/lahfir/skills/agent-desktop) <br>
-- [Observation Commands](artifact/references/commands-observation.md) <br>
-- [Interaction Commands](artifact/references/commands-interaction.md) <br>
-- [System Commands](artifact/references/commands-system.md) <br>
-- [Common Automation Workflows](artifact/references/workflows.md) <br>
-- [macOS Platform](artifact/references/macos.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON output expectations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs guide an agent that invokes the separate agent-desktop CLI; command results are expected to use structured JSON envelopes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.21 (source: server release metadata) <br>
+Risk: The skill enables broad desktop observation and control through the launching terminal.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only in environments where that level of desktop automation access is acceptable.
+
+Risk: Screenshots, clipboard operations, notifications, and trace artifacts may expose sensitive information from the desktop.
+
+Mitigation: Avoid sensitive screens unless necessary, prefer app- or window-scoped screenshots, use no-trace for private workflows, and clean up sessions when finished.
+
+Risk: Headed or physical-input commands can move focus, cursor position, or interact with the active desktop.
+
+Mitigation: Use headless semantic commands by default and reserve headed commands for workflows that intentionally need physical input.
+
+## Reference(s):
+
+- [Observation Commands](references/commands-observation.md)
+- [Interaction Commands](references/commands-interaction.md)
+- [System Commands](references/commands-system.md)
+- [Common Automation Workflows](references/workflows.md)
+- [macOS Platform](references/macos.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline bash commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The underlying CLI returns JSON envelopes and can produce screenshots or trace artifacts when requested.]
+
+## Skill Version(s):
+
+0.1.25 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

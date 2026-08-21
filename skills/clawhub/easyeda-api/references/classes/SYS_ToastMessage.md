@@ -2,19 +2,19 @@
 
 > Warning: This API is now obsolete.
 >
-> 即将移除吐司消息类，合并入 [消息通知类](./SYS_Message.md)
+> The toast message class will soon be removed and merged into [the message notification class](./SYS_Message.md)
 
-系统 / 吐司消息类
+System / toast message class
 
 ## Signature
 
 ```typescript
-declare class SYS_ToastMessage 
+export class SYS_ToastMessage 
 ```
 
 ## Remarks
 
-在屏幕的边缘弹出简短的消息提醒，会在一定时间后自动消除
+Pops up a brief message notification at the edge of the screen, which will automatically disappear after a certain period of time
 
 ## Methods
 
@@ -44,7 +44,7 @@ Description
 
 </td><td>
 
-显示吐司消息
+Show a toast message
 
 
 </td></tr>
@@ -60,14 +60,14 @@ Description
 
 > Warning: This API is now obsolete.
 >
-> 请使用 [SYS\_Message.showToastMessage()](./SYS_Message.md) 方法替代
+> Please use the [SYS\_Message.showToastMessage()](./SYS_Message.md) method instead
 
-显示吐司消息
+Show a toast message
 
 ## Signature
 
 ```typescript
-showMessage(message: string, messageType?: ESYS_ToastMessageType, timer?: number, bottomPanel?: ESYS_BottomPanelTab, buttonTitle?: string, buttonCallbackFn?: string): void;
+public showMessage(message: string, messageType?: ESYS_ToastMessageType, timer?: number, bottomPanel?: ESYS_BottomPanelTab, buttonTitle?: string, buttonCallbackFn?: string): void;
 ```
 
 ## Parameters
@@ -100,7 +100,7 @@ string
 
 </td><td>
 
-消息内容
+Message content
 
 
 </td></tr>
@@ -116,7 +116,7 @@ messageType
 
 </td><td>
 
-_(Optional)_ 消息类型
+_(Optional)_ Message type
 
 
 </td></tr>
@@ -132,7 +132,7 @@ number
 
 </td><td>
 
-_(Optional)_ 自动关闭倒计时秒数，`0` 为不自动关闭
+_(Optional)_ Auto-close countdown in seconds. `0` means it will not auto-close
 
 
 </td></tr>
@@ -148,7 +148,7 @@ bottomPanel
 
 </td><td>
 
-_(Optional)_ 展开底部信息面板
+_(Optional)_ Expand the bottom information panel
 
 
 </td></tr>
@@ -164,7 +164,7 @@ string
 
 </td><td>
 
-_(Optional)_ 回调按钮标题
+_(Optional)_ Callback button title
 
 
 </td></tr>
@@ -180,7 +180,7 @@ string
 
 </td><td>
 
-_(Optional)_ 回调函数内容，字符串形式，会被自动解析并执行
+_(Optional)_ Callback function content, in string form. It will be automatically parsed and executed
 
 
 </td></tr>
@@ -191,3 +191,27 @@ _(Optional)_ 回调函数内容，字符串形式，会被自动解析并执行
 ## Returns
 
 void
+
+## Example
+
+
+```javascript
+// 1. 最简调用：默认信息类型，倒计时结束后自动消失
+eda.sys_ToastMessage.showMessage('嘉立创示例 工程已自动保存');
+console.log('信息吐司已显示');
+
+// 2. 指定消息类型与倒计时秒数：成功图标，2 秒后自动关闭
+eda.sys_ToastMessage.showMessage('嘉立创示例 导出完成', 'success', 2);
+console.log('成功吐司已显示，2 秒后自动关闭');
+
+// 3. 带回调按钮与底部面板联动：点击按钮执行回调并展开日志面板
+eda.sys_ToastMessage.showMessage(
+  '嘉立创示例 检查完成，详见日志面板',
+  'warn',
+  5,
+  'log',
+  '查看日志',
+  'console.log("嘉立创示例 按钮回调被执行")'
+);
+console.log('警告吐司已显示，附带查看日志按钮，5 秒后自动关闭');
+```

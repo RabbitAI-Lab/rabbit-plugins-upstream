@@ -13,7 +13,7 @@
 |---|---|---|
 | search_proposed_projects | min_amount / max_amount | **万元** |
 | search_expiring_projects | min_amount | **万元** |
-| search_bids | min_amount / max_amount | **元** |
+| search_bids | min_amount / max_amount | **万元** |
 
 返回值统一：`money` 为元；拟建路给 `money_format`（可读字符串），意向/临期路给 `money_wan`（万元数值）。
 
@@ -34,10 +34,10 @@
 ### search_bids（bid_process=[1]）— ② 采购意向（发标前 1-3 个月）
 ```json
 {"keywords": ["信息化"], "bid_process": [1], "provinces": ["广东"],
- "min_amount": 1000000, "begin_date": "2026-04-15", "page_size": 20}
+ "min_amount": 100, "begin_date": "2026-04-15", "page_size": 20}
 ```
 - `bid_process` 固定传 `[1]`（采购意向）。其他阶段值：2=预招标 4=招标 7=中标结果 8=合同——本 SKILL 只在 timeline 解读时用到含义，不主动查。
-- `min_amount` 单位是**元**（与另两路不同）。
+- `min_amount` 单位是**万元**（与另两路一致；服务端会 ×10000 转成元再过滤）。
 - 返回关键字段：`title`、`caller_name`、`money`/`money_wan`、`sm_names`（标的物）、`pub_time`、`url`（带 sk）。
 
 ### search_expiring_projects — ③ 临期续约（合同到期前 0-180 天）

@@ -1,43 +1,54 @@
-## Description: <br>
-AI Agents Skills - Query product catalog from fore.vip platform via MCP Server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Product is a general product research and recommendation workflow that turns product-selection requests into source-aware recommendations, weighted comparisons, and next-step guidance.
 
-## Publisher: <br>
-[onsoul](https://clawhub.ai/user/onsoul) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[onsoul](https://clawhub.ai/user/onsoul)
 
-## Use Case: <br>
-External users and developers use this skill to browse and search the fore.vip product catalog through MCP-compatible agents. It supports tag filtering, pagination, product detail display, and links back to fore.vip product pages. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product search terms, tags, and pagination parameters are sent to the fore.vip API. <br>
-Mitigation: Keep queries scoped to catalog browsing and avoid sending secrets, personal data, or sensitive business queries. <br>
-Risk: The artifact documents a create_activity endpoint in addition to catalog query behavior. <br>
-Mitigation: Require explicit user confirmation before allowing create_activity or any other write-capable MCP action. <br>
+## Use Case:
 
+External users and employees use this skill to make product-selection decisions, compare alternatives, and create recommendation shortlists. It supports product research, evaluation criteria, weighted scoring, and source-aware action guidance across product categories.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/onsoul/fore-vip-product) <br>
-- [fore.vip MCP query endpoint](https://api.fore.vip/mcp/query_kl) <br>
-- [fore.vip MCP tools endpoint](https://api.fore.vip/mcp/tools/call) <br>
-- [fore.vip product URL pattern](https://fore.vip/p?id={product_id}) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples, curl commands, and product catalog response data] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Product results include pagination metadata, product names, descriptions, images, tags, popularity, update timestamps, and product URLs when returned by the API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata; artifact frontmatter reports 0.0.3) <br>
+Risk: Broad recommendation triggers may apply this skill to regulated or specialist decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a specialized skill or qualified expert for medical, financial, legal, financial-services, or purchasing execution tasks.
+
+Risk: Product recommendations can be misleading when source data is stale, incomplete, or outside the user's context.
+
+Mitigation: Require source, time, and applicability notes for key facts, label uncertainty, and keep facts, analysis, and advice separate.
+
+## Reference(s):
+
+- [Evaluation Dimensions and Clarification Questions](references/dimensions.md)
+- [ClawHub Skill Page](https://clawhub.ai/onsoul/skills/fore-vip-product)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown with recommendation sections, source notes, and optional scoring matrices]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Separates facts, analysis, and advice; may include preferred, alternate, and caution recommendations.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

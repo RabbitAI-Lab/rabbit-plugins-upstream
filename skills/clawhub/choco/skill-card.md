@@ -1,50 +1,67 @@
-## Description: <br>
-Chocolatey operations integration for post-upgrade checks, NSSM service path refreshes, NSSM-to-shawl migration guidance, and recovery from stale Chocolatey or UniGetUI metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chocolatey operations integration for post-processing after Chocolatey upgrades, refreshing NSSM service paths, migrating NSSM services to shawl, and recovering stale UniGetUI or Chocolatey metadata.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and Windows administrators use this skill to diagnose Chocolatey-managed Windows service issues, generate commands for NSSM path repair, plan NSSM-to-shawl migrations, and resynchronize stale Chocolatey package metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Elevated Chocolatey, NSSM, shawl, and Windows service commands can change or remove services. <br>
-Mitigation: Review each proposed command, confirm the target service and executable path, and use a maintenance window with a rollback plan for production services. <br>
-Risk: Service re-registration can expose or mishandle service-account credentials. <br>
-Mitigation: Do not paste passwords into chat or hardcode them in scripts; use secure prompts or managed service accounts where possible. <br>
-Risk: Downloading shawl from a release URL introduces binary supply-chain risk. <br>
-Mitigation: Verify the downloaded shawl binary independently before installing or using it. <br>
-Risk: Incorrect service account or path choices can break sync services or change file ownership behavior. <br>
-Mitigation: Preserve existing service settings during migration and verify service status, account, path, and application behavior after changes. <br>
+## Use Case:
 
+Developers and Windows administrators use this skill to diagnose Chocolatey-managed NSSM services after package upgrades, generate service path refresh commands, migrate affected services to shawl, and reconcile stale Chocolatey metadata.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/choco) <br>
-- [Chocolatey documentation](https://docs.chocolatey.org/) <br>
-- [UniGetUI repository](https://github.com/Devolutions/UniGetUI) <br>
-- [shawl repository](https://github.com/mtkennerly/shawl) <br>
-- [chocolatey/choco repository](https://github.com/chocolatey/choco) <br>
-- [Syncthing v2.0 release notes](https://github.com/syncthing/syncthing/releases/tag/v2.0.0) <br>
-- [Syncthing issue 10340](https://github.com/syncthing/syncthing/issues/10340) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration, code] <br>
-**Output Format:** [Markdown guidance with inline shell, PowerShell, and JSON command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose elevated Windows service and Chocolatey commands for human review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and CHANGELOG, released 2026-06-25) <br>
+Risk: High-impact Windows service and package-management commands may disrupt production services if run without preparation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact package and service names, back up current NSSM or service configuration, and perform service removal or upgrade operations during a maintenance window.
+
+Risk: The shawl migration workflow downloads and installs a service wrapper binary.
+
+Mitigation: Verify the downloaded shawl binary before use and keep the installation path explicit.
+
+Risk: Service account or credential changes can break access to user data or expose passwords.
+
+Mitigation: Preserve the existing service account where appropriate, avoid hardcoding plaintext passwords, and prompt for or otherwise protect credentials.
+
+Risk: Broad Chocolatey upgrades can update many packages and trigger unexpected service changes.
+
+Mitigation: Prefer targeted upgrades when possible, verify Chocolatey metadata after changes, and confirm affected service status before and after the operation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/choco)
+- [Chocolatey documentation](https://docs.chocolatey.org/)
+- [UniGetUI repository](https://github.com/Devolutions/UniGetUI)
+- [shawl repository](https://github.com/mtkennerly/shawl)
+- [chocolatey/choco repository](https://github.com/chocolatey/choco)
+- [Syncthing v2.0 release notes](https://github.com/syncthing/syncthing/releases/tag/v2.0.0)
+- [Syncthing issue 10340](https://github.com/syncthing/syncthing/issues/10340)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell, PowerShell, and JSON command output examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes diagnostic summaries, service path analysis, and administrator command sequences for Windows service maintenance.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, changelog, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

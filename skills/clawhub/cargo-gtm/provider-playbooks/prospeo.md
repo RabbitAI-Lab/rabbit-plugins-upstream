@@ -6,7 +6,7 @@ last-reviewed: 2026-07-09
 
 # prospeo
 
-Contact-lookup specialist whose standout is **the cheapest phone finder in the priority stack** — `findPhone` (3) is the default first stop of the phone chain, ahead of `FullEnrich.findPhone` (6) and `waterfall.findPhone` (7). Its `findEmail` (0.5) is a mid-tier alternative to the `FullEnrich.findEmail` (1) default; prefer it only when budget-constrained or as a waterfall rung ([`../references/alternatives.md`](../references/alternatives.md)). Also carries cheap LinkedIn-profile and company enrichment at 0.5.
+Contact-lookup specialist whose standout is **the cheapest landline/DID phone finder in the priority stack** — `findPhone` (3) sits ahead of `FullEnrich.findPhone` (6) and `waterfall.findPhone` (7), behind the mobile-only `aiArk.findMobilePhone` (0.5), which is the first rung whenever a LinkedIn URL is in hand. Its `findEmail` (0.5) is a mid-tier alternative to the `FullEnrich.findEmail` (1) default; prefer it only when budget-constrained or as a waterfall rung ([`../references/alternatives.md`](../references/alternatives.md)). Also carries cheap LinkedIn-profile and company enrichment at 0.5.
 
 ## Credits-based actions
 
@@ -71,6 +71,13 @@ cargo-ai orchestration action execute-batch \
 - `findPhone` — **rung 1** of the phone chain. CONTACT stage, gated to qualified leads.
 - `findEmail` — mid-tier CONTACT alternative alongside `hunter`/`findyMail`/`leadMagic` (all 0.5); every hit flows to the VERIFY stage (`waterfall.verifyEmail`, 0.1).
 - `enrichLinkedin` / `enrichCompany` — enrich-stage fillers when the identifier you hold matches their required input.
+
+## Recurring use
+
+No scheduled fit — per-record contact lookup only; recurring use means **paid nodes inside a play**, each behind an empty-field gate.
+
+- **In-play gate:** `findEmail` only where the email column is still empty; `findPhone` only where phone is empty AND the row is qualified (the cost-discipline gate applies per-run, forever, in a play). A miss escalates to the next chain rung — stamp an attempted-at column so it never retries prospeo on the next cycle.
+- **Time-sensitivity:** a found-and-verified email or phone is stable until the person moves — re-lookup belongs downstream of a job-change signal ([`../recipes/job-change-monitoring.md`](../recipes/job-change-monitoring.md)), not on a cadence. Play wrapper + cadence table: [`../recipes/save-as-play.md`](../recipes/save-as-play.md).
 
 ## Action shape
 

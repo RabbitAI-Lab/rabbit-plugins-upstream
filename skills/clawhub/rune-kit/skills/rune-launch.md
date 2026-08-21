@@ -1,6 +1,6 @@
 # rune-launch
 
-> Rune L1 Skill | orchestrator | model: tier:mid
+> Rune L1 Skill | orchestrator | model: tier:heavy
 
 
 # launch

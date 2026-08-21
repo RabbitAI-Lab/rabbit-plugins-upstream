@@ -1,42 +1,65 @@
-## Description: <br>
-Configure, verify, and troubleshoot the hosted Mermail MCP server in Codex, Claude Code, Cursor, or another MCP client. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Configure, verify, and recover the hosted Mermail MCP connection for Codex, Claude, Cursor, OpenClaw, and other external MCP clients.
 
-## Publisher: <br>
-[mermail](https://clawhub.ai/user/mermail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mermail](https://clawhub.ai/user/mermail)
 
-## Use Case: <br>
-Developers and operators use this skill to configure Mermail MCP access, map MERMAIL_API_KEY to the x-api-key header, verify tool discovery, and troubleshoot common connection errors. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A Mermail API key can be exposed if copied into chat, committed configuration, command-line arguments, or shell history. <br>
-Mitigation: Store MERMAIL_API_KEY in a platform secret store or environment variable, use the narrowest workspace-scoped key available, and revoke any exposed key immediately. <br>
-Risk: Incorrect MCP header mapping or a stale client environment can prevent connection or tool discovery. <br>
-Mitigation: Map MERMAIL_API_KEY to the x-api-key header using the client-specific configuration, restart or reload the client after changes, and run the included connection check. <br>
+## Use Case:
 
+External developers and operators use this skill to connect Mermail's hosted MCP server to supported agent clients, choose OAuth or API-key setup, verify tool discovery, and diagnose authentication, scope, credit, rate-limit, and transport failures.
 
-## Reference(s): <br>
-- [Platform configuration](references/platforms.md) <br>
-- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills) <br>
-- [Mermail MCP endpoint](https://console.mermail.app/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Configuration, Shell commands, Code] <br>
-**Output Format:** [Markdown with JSON and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MERMAIL_API_KEY and verifies discovery of 63 MCP tools.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+Risk: A workspace API key or OAuth credential could be exposed through chat, logs, tracked configuration, shell history, or command arguments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Reference MERMAIL_API_KEY through a secret store or launch environment, redact credential values in diagnostics, and revoke any exposed secret before replacing it.
+
+Risk: The client may connect to the wrong workspace, authentication mode, or tool profile, causing missing tools or broader access than intended.
+
+Mitigation: Verify the selected workspace and profile, prefer OAuth where supported, and use the agent-inbox profile only when its limited mailbox-provisioning and safe-read capability set is sufficient.
+
+Risk: Connection checks could accidentally invoke email delivery, deletion, PayBox, wallet, Composio, or other provider-write behavior.
+
+Mitigation: Limit verification to initialize, tools/list, and one bounded read-only list_workspaces or list_mailboxes smoke test.
+
+Risk: After reconnecting or changing clients, replaying an uncertain prior write could duplicate or alter real Mermail state.
+
+Mitigation: Restore the connection, inspect authoritative state once, and return control to the relevant domain workflow instead of retrying the write from this connection skill.
+
+## Reference(s):
+
+- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills)
+- [Mermail agents setup](https://mermail.app/agents)
+- [Mermail MCP platform configuration](references/platforms.md)
+- [Mermail MCP connection safety](references/security.md)
+- [Mermail MCP verification and recovery](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON configuration snippets and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Redacts credential values and keeps connection verification read-only unless the task is handed to a domain skill.]
+
+## Skill Version(s):
+
+1.2.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
