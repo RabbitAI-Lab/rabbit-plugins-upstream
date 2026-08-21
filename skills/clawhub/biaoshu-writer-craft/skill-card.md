@@ -1,46 +1,60 @@
-## Description: <br>
-Consumes tender files and helps produce compliant bid documents by interpreting requirements, drafting technical and commercial bid content, exporting .docx files, and reviewing rejection and compliance risks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为中国大陆招投标场景解读招标文件、生成投标文件 .docx，并审查废标与合规风险。
 
-## Publisher: <br>
-[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666)
 
-## Use Case: <br>
-External users and bid-writing teams use this skill to analyze tender files, generate editable bid documents, and review bid submissions for compliance and rejection risk through the named bid-writing service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid files may contain confidential commercial, pricing, or personal information and are uploaded to the named service for processing. <br>
-Mitigation: Confirm the user understands and agrees to each upload before running interpretation, bid generation, or compliance review. <br>
-Risk: Bid document generation can use the App Key account and may consume paid credits. <br>
-Mitigation: Check account balance before submission and confirm paid generation steps with the user. <br>
-Risk: The App Key is an account credential. <br>
-Mitigation: Have the user store it only in the local config file and never paste it into chat or expose links containing the key. <br>
+## Use Case:
 
+External bidding teams and proposal writers use this skill to process local Chinese tender and bid documents, generate editable bid-document deliverables, and review compliance risks before submission.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-craft) <br>
-- [Publisher profile](https://clawhub.ai/user/chichihaixiaojian666) <br>
-- [百炼标书 service](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [API contract reference](references/api.md) <br>
-- [Usage reference](references/usage.md) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance plus generated .docx, HTML, and Word report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated bid documents and reports are written to local output paths; some cloud results may expire after about 7 days.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+Risk: The skill handles confidential tender or bid files and account credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, use only when comfortable uploading files to the named service, confirm user consent before upload, and keep the App Key out of chat.
+
+Risk: The API destination override is broader than the single-domain disclosure.
+
+Mitigation: Avoid setting ZCM_BASE or any custom base URL unless the endpoint is intentionally trusted.
+
+Risk: Account links or logs can expose credential-bearing App Key or bind_key values.
+
+Mitigation: Use the local config.json credential flow and do not forward URLs that contain App Key or bind_key parameters.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-craft)
+- [百炼®标书 Platform](https://biaoshu.zhiliaobiaoxun.com/)
+- [API Contract Reference](references/api.md)
+- [Usage Guide](references/usage.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance]
+
+**Output Format:** [User-facing text plus local HTML reports, Word .docx files, and JSON-backed result summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated artifacts and report labels are primarily Simplified Chinese; outputs may include local absolute file paths.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

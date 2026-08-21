@@ -1,51 +1,65 @@
-## Description: <br>
-Use when troubleshooting Linux server performance or stability issues, including CPU saturation, high load, scheduling delay, memory pressure, OOM events, high RSS, page cache or shared memory growth, memory cgroup residue, Java heap issues, disk IO saturation or latency, packet loss, network jitter, or a server that is slow, stuck, or unstable. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when troubleshooting Linux server performance or stability issues across CPU saturation, high load, scheduling delay, memory pressure, OOM events, high RSS, cache or shared-memory growth, Java heap issues, disk IO latency, packet loss, network jitter, or an unstable server; it performs diagnosis and surfaces recommendations without applying fixes automatically.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Developers, SREs, and operations engineers use this skill to route Linux ECS performance and stability symptoms through SysOM diagnosis commands and summarize evidence-backed root causes and next actions. It is intended for Alibaba Cloud SysOM troubleshooting, not for automatically applying repairs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China Mainland regions and China (Hong Kong) for remote diagnosis; local diagnosis depends on the supported target operating systems. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may fetch a root-level installer from an Alibaba Cloud OSS URL and pipe it to sudo when sysom-osops is missing. <br>
-Mitigation: Install sysom-osops through a verified channel before using the skill, or require explicit review and approval of the installer before any elevated installation step. <br>
-Risk: Remote diagnosis requires Alibaba Cloud credentials and an online Cloud Assistant on the target ECS instance. <br>
-Mitigation: Configure credentials outside the conversation, use least-privilege RAM policies, and treat authentication or permission errors as setup issues rather than asking the agent to collect secrets. <br>
-Risk: SysOM diagnosis may produce remediation recommendations for production systems. <br>
-Mitigation: Keep the skill in diagnostic mode by default and review operational actions, ownership, and change-window requirements before executing any repair. <br>
+## Use Case:
 
+Developers and operations engineers use this skill to diagnose Alibaba Cloud Linux or ECS performance and stability issues across memory, IO, load/CPU, network, and Java runtime domains. The skill guides SysOM CLI collection, interprets Agent-facing envelopes, and returns evidence-based operational recommendations without executing repairs automatically.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sdk-team/alibabacloud-sysom-diagnosis) <br>
-- [Classify Output Guide](references/classify-output-guide.md) <br>
-- [Deep Actions Reference](references/deep-actions.md) <br>
-- [Memory Triage](references/memory-triage.md) <br>
-- [Non-Memory Triage](references/non-memory-triage.md) <br>
-- [Parameter Guide](references/parameter-guide.md) <br>
-- [RAM Policies](references/ram-policies.md) <br>
-- [Report Interpretation](references/report-interpretation.md) <br>
-- [Supported Environments](references/supported-environments.md) <br>
-- [SysOM CLI Installer](https://sysom-prd-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/sysom_prd/skill_cli/install.sh) <br>
+### Deployment Geography for Use:
 
+China Mainland and China (Hong Kong)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with concise diagnostic summaries and occasional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Answers should preserve SysOM evidence qualifiers and avoid executable remediation snippets unless the user explicitly requests commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.4 (source: server release evidence) <br>
+Risk: The skill may install and run the sysom-osops CLI with sudo and use remote SysOM diagnostic access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for Alibaba Cloud Linux/ECS diagnosis, review the installer source and environment fit, and keep remediation actions separate from diagnosis unless explicitly requested.
+
+Risk: Remote diagnosis requires Alibaba Cloud credentials or an ECS RAM Role.
+
+Mitigation: Configure credentials outside the chat and use the least-privilege RAM actions documented for SysOM access.
+
+Risk: Java profiling and collection follow-ups can run for several minutes and may add sampling or agent overhead to the target process.
+
+Mitigation: Explain duration and expected impact, obtain user confirmation before long-running profiling, run the requested command once, and avoid duplicate collection after client timeouts.
+
+## Reference(s):
+
+- [ClawHub skill release page](https://clawhub.ai/sdk-team/skills/alibabacloud-sysom-diagnosis)
+- [SysOM diagnosis workflow](artifact/SKILL.md)
+- [Supported environments](artifact/references/supported-environments.md)
+- [RAM policies](artifact/references/ram-policies.md)
+- [Deep actions reference](artifact/references/deep-actions.md)
+- [Report interpretation](artifact/references/report-interpretation.md)
+- [Java diagnosis reference](artifact/references/java/README.md)
+- [Java memory diagnosis guide](artifact/references/java/memory/memory-guide.md)
+- [Java profiling playbook](artifact/references/java/memory/profiling-playbook.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown diagnostic responses with command progress, evidence summaries, and recommended next actions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Does not apply fixes automatically; remote diagnosis requires sysom-osops, Alibaba Cloud credentials, Cloud Assistant on the target ECS instance, and supported regions.]
+
+## Skill Version(s):
+
+0.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

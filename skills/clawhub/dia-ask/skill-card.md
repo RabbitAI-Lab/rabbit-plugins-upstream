@@ -1,45 +1,59 @@
-## Description: <br>
-Dia Ask prompts The Browser Company's Dia browser from the command line to read or research logged-in or JavaScript-heavy pages and return the assistant's answer as an exact text file. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prompt The Browser Company's Dia from the command line and get its answer back as an exact text file for reading or researching logged-in or JavaScript-heavy pages in a local browser session.
 
-## Publisher: <br>
-[germankovacevic-lab](https://clawhub.ai/user/germankovacevic-lab) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[germankovacevic-lab](https://clawhub.ai/user/germankovacevic-lab)
 
-## Use Case: <br>
-Developers and agent operators use Dia Ask to delegate read and research prompts to a locally running Dia browser when pages require a logged-in browser session or heavy JavaScript rendering. It is intended for gathering exact text outputs, not for taking browser actions such as clicking or submitting forms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The tool requires Accessibility control over Dia from the invoking terminal or IDE. <br>
-Mitigation: Install and run it only in environments where granting that local Accessibility permission is approved. <br>
-Risk: Prompts and page content are processed by the user's local Dia assistant and may include sensitive or regulated data. <br>
-Mitigation: Avoid secrets and regulated data unless Dia is approved for that data and the user is authorized to process it there. <br>
-Risk: The fallback sender can briefly steal focus and uses clipboard-style UI automation. <br>
-Mitigation: Use the focus-safe v2 sender by default and pass --no-fallback when focus stealing or clipboard interaction is unacceptable. <br>
-Risk: Generated answer files can persist sensitive content on disk. <br>
-Mitigation: Review where Dia writes outputs and delete generated files when they are no longer needed. <br>
+## Use Case:
 
+Developers and agent operators use this skill to delegate read-only browser research tasks to a locally running Dia assistant, especially for logged-in or JavaScript-heavy pages where normal fetch tools are insufficient.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/germankovacevic-lab/skills/dia-ask) <br>
-- [Dia browser](https://www.diabrowser.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; command output is an absolute file path to Dia's generated text, Markdown, JSON, or CSV file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires macOS, Node.js 18 or newer, Dia installed locally, and Accessibility permission for the invoking terminal or IDE.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: server release metadata and package.json) <br>
+Risk: The skill may process logged-in, paywalled, personal, corporate, or regulated browser content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompts before use, confirm the data is appropriate for Dia to inspect, and store returned plaintext files in a controlled location.
+
+Risk: Fallback or broad output discovery may surface an unrelated Dia output file.
+
+Mitigation: Prefer --no-fallback for sensitive use and adapt the tool to restrict discovery to exact filenames and the current conversation context.
+
+Risk: Unofficial UI automation can break when Dia changes its window or Accessibility behavior.
+
+Mitigation: Re-test against a live Dia install after updates and treat failures as requiring manual review before continued use.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/germankovacevic-lab/skills/dia-ask)
+- [Dia Browser](https://www.diabrowser.com/)
+- [AgentNeo](https://agneo.app)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, csv]
+
+**Output Format:** [One stdout file path pointing to a Dia-written md, txt, json, or csv file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires macOS, a local Dia session, Accessibility permission, and Node.js; returned files persist as plaintext.]
+
+## Skill Version(s):
+
+0.1.3 (source: server release metadata and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

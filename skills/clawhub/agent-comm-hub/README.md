@@ -5,8 +5,8 @@
   </picture>
   <img src="https://img.shields.io/badge/Python-3.9+-blue?logo=python" alt="Python 3.9+">
   <img src="https://img.shields.io/badge/MCP_Protocol-1.0-orange?logo=robot" alt="MCP Protocol">
-  <img src="https://img.shields.io/badge/159_Tests-Passing-3fb950?logo=vitest" alt="159 Tests">
-  <img src="https://img.shields.io/badge/Zero_External_Deps-success?logo=package" alt="Zero External Deps">
+  <img src="https://img.shields.io/badge/288_Tests-Passing-3fb950?logo=vitest" alt="288 Tests">
+  <img src="https://img.shields.io/badge/Zero_External_Services-success?logo=server" alt="Zero External Services">
   <img src="https://img.shields.io/badge/Web_Panel-Live-7c3aed?logo=htmx" alt="Web Panel">
   <a href="https://github.com/liuboacean/agent-comm-hub/actions/workflows/ci.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/liuboacean/agent-comm-hub/ci.yml?branch=master&logo=githubactions&label=CI" alt="CI">
@@ -21,6 +21,9 @@
   <a href="https://glama.ai/mcp/servers/liuboacean/agent-comm-hub">
     <img src="https://glama.ai/mcp/servers/liuboacean/agent-comm-hub/badges/score.svg" alt="Glama score">
   </a>
+  <a href="https://codeguilds.dev/packages/agent-comm-hub">
+    <img src="https://img.shields.io/badge/Available_on-CodeGuilds-6366f1" alt="Available on CodeGuilds">
+  </a>
 </p>
 
 <h1 align="center">
@@ -29,7 +32,7 @@
 <p align="center">
   <strong>让 AI Agent 不再各自为战</strong><br>
   <em>实时消息 · 任务调度 · 共享记忆 · 信任进化 · Web 仪表盘</em><br>
-  <code>58 个 MCP 工具 · 零外部依赖 · 5 分钟部署</code>
+  <code>58 个 MCP 工具 · 零外部服务 · 5 分钟部署</code>
 </p>
 
 <p align="center">
@@ -117,9 +120,10 @@ print('✅ 消息已发送')
 | MCP 工具 | **58 个** |
 | Python SDK 方法 | **68 个** |
 | TypeScript SDK 方法 | **35 个** |
-| 单元测试 | **159 个 ✅** |
+| 单元测试 | **288 个 ✅** |
 | 数据库表 | **32 张** |
-| 外部依赖 | **0** |
+| client-sdk 运行时依赖 | **0（Python/TS 纯标准库）** |
+| 服务端运行时依赖 | **5 个轻量依赖**（express / better-sqlite3 / zod / eventsource / @modelcontextprotocol/sdk） |
 | 消息延迟 | **< 50ms** |
 | 部署方式 | Docker / npm / SkillHub |
 
@@ -227,7 +231,7 @@ await client.sendMessage({ to: "other-agent", content: "搞定了！" });
 | 进化引擎（经验复用） | ✅ | ❌ | ❌ | ❌ |
 | 内置 Web 面板 | ✅ | ❌ | ❌ | ❌ |
 | 审计哈希链 | ✅ | ❌ | ❌ | ❌ |
-| 零外部依赖 | ✅ | ✅ | ✅ | ❌ |
+| 零外部服务 | ✅ | ✅ | ✅ | ❌ |
 | Python + TS SDK | ✅ | ❌ | ❌ | ❌ |
 
 ---
@@ -338,7 +342,7 @@ agent-comm-hub/
 │   ├── hub_client.py          # Python SDK（68 方法，零依赖）
 │   └── agent-client.ts        # TypeScript SDK（35 方法）
 ├── deploy/                    # Docker Compose + 监控
-├── tests/                     # 159 个测试
+├── tests/                     # 288 个测试
 └── docs/                      # 完整文档
 ```
 
@@ -350,8 +354,8 @@ agent-comm-hub/
 |------|--------|
 | [API 参考](docs/API_REFERENCE.md) | 开发者（HTTP/SSE/MCP 端点 + Bearer 鉴权） |
 | [编排指南](docs/advanced-orchestration-guide.md) | 搭 Pipeline 高级玩家 |
-| 进化引擎指南 | 暂未发布（TODO：计划从 A 层 `evolution-guide.md` 同步） |
-| Hermes 集成指南 | 暂未发布（TODO：计划从 A 层 `hermes-integration-guide.md` 同步） |
+| 进化引擎指南 | 实验性，欢迎 PR（计划从 A 层 `evolution-guide.md` 同步） |
+| Hermes 集成指南 | 实验性，欢迎 PR（计划从 A 层 `hermes-integration-guide.md` 同步） |
 | [DB 三层防护](docs/hub-db-split-three-layer-protection.md) | 运维/稳定性保障 |
 | [English README](docs/README_EN.md) | English speakers |
 
@@ -360,6 +364,78 @@ agent-comm-hub/
 ---
 
 ## 🆕 更新历史
+
+<details>
+<summary><strong>v3.0.24</strong> (2026-08-14) — 宿主执行器闭环收口（HostExecutor 注入）</summary>
+
+- ⚡ **真实宿主执行器（HostExecutor）** — 新增 `client-sdk/adapters/host-executor.ts`，提供 `LlmHostExecutor` / `HttpHostExecutor` 参考实现，`defaultHostExecutor()` 按环境变量自动选择；`AbstractHostTaskBridge` 新增可注入 `executor` 字段
+- 🔧 **消灭 setTimeout 占位** — WorkBuddy / Hermes 桥 `runTask()` 委托 `this.executor.execute()`，任务到达即触发宿主真实能力，自主执行闭环真正打通
+- 📝 **文档** — `docs/HOST_INTEGRATION.md` §4 重写，含 HostExecutor 注入模型与自定义执行器示例
+
+</details>
+
+<details>
+<summary><strong>v3.0.23</strong> (2026-08-14) — Agent 自主执行闭环 + 人在环授权</summary>
+
+- 🤖 **Feature A：Agent 自主执行闭环** — 新增 `AgentRuntime`（client-sdk/runtime.ts），自动驱动 `in_progress → execute() → completed/failed`，含 inFlight 去重 / 崩溃恢复 / loopGuard，消灭人工「传话」
+- 🔐 **Feature B：人在环授权队列** — 新增操作级授权（`auth_requests` 表 + `request_authorization`/`resolve_authorization` 工具，deny-by-default，TTL 10min）+ Web `AuthQueue` 面板，敏感操作一键批准/拒绝
+- 🧹 **清理陈旧产物** — 移除 `client-sdk/` 下 3 个 5 月旧编译 `.js`（`agent-client.js` / `hermes-integration.js` / `workbuddy-integration.js`）及其 `.map`，修正 `client-sdk/package.json` 入口引用
+
+</details>
+
+<details>
+<summary><strong>v3.0.22</strong> (2026-07-23) — 在线状态 / 审计归档 / 备份路径</summary>
+
+- 🟢 **在线状态统一判定** — 新增 `isAgentOnline()` =（存在 SSE 实时连接）**或**（心跳 90s 内）；`get_online_agents`、派单候选排序、`/health/detailed`、`/api/agents`、指标全部改用统一判定，SSE 连着即在线、可派单
+- 💓 **心跳监控不再误杀 SSE 在线 Agent** — 仍有 SSE 连接的 Agent 不因心跳陈旧误标离线、不再广播离线通知；SSE 连接建立即同步 `agents.status`
+- 🗂️ **`audit_log` 行数上限自动归档** — 超 `AUDIT_LOG_MAX_ROWS`（默认 3000，env 可调）自动将最旧溢出行**镜像**到 `audit_log_archive`（WORM 安全，不删源表）；新增启动即跑 + 每小时维护调度器
+- 📦 **备份路径稳定化** — `backup.ts` 的 `BACKUP_DIR` 由 `process.cwd()/backups`（易失 workspace）改为 `~/agent-comm-hub/backups`，与 launchd 备份脚本同目录，支持 `BACKUP_DIR` 覆盖
+
+</details>
+
+<details>
+<summary><strong>v3.0.21</strong> (2026-07-23) — 安全加固（稳定性 / 安全 / 质量）</summary>
+
+- 🔌 **P1-1 SSE 重连竞态** — `registerClient`/`removeClient` 增连接级 `connId` 校验，旧 socket 的 `close` 不再误删当前实时连接，重连后消息/任务不再静默丢失
+- 💾 **P1-2 并发写 `SQLITE_BUSY`** — `busy_timeout=5000` + `foreign_keys` + WAL 自动检查点，消除并发写静默丢数据
+- 🛡️ **P1-3 限流绕过** — 认证前置单 IP / 全局限流（防令牌爆破与未认证 `/mcp` 耗尽资源）；`/mcp` 增并发在途上限（默认 50）防 DoS
+- 🔍 **P1-4/5 FTS 值碰撞** — `memories_fts` 增 `memory_id` 精确关联键（启动迁移旧表），内容相同的两条记忆不再互相串台
+- 🔐 **P2 质量** — 信任分按 `target` 列计吊销（管理员不再误扣）；受保护端点仅接受 `Bearer`，移除 `?token=` 与 `x-api-key` 令牌泄漏面
+
+</details>
+
+<details>
+<summary><strong>v3.0.20</strong> (2026-07-23) — 构建产物固化</summary>
+
+- 🏗️ **构建产物固化** — `dist/package.json` 生成写入 `build` 脚本与启动脚本，消除「安装即崩溃」（`version.ts` 启动依赖 `../package.json`）
+
+</details>
+
+<details>
+<summary><strong>v3.0.19</strong> (2026-07-21) — 文档与版本一致性修复</summary>
+
+- 📝 **文档工具数统一为 58** — 与 `src/security.ts` 的 `TOOL_PERMISSIONS` 矩阵一致，修正 README/SKILL.md 残留的 56/53
+- 📚 **新建 `docs/API_REFERENCE.md`** — 准确的 HTTP/SSE/MCP 端点速查（含 Bearer 鉴权与 SSE `Last-Event-ID` 断线重连）；修正 README 三处死链
+- 🏷️ **SKILL.md 文件传输工具名更正** — `send_file`/`receive_file` → `upload_file`/`download_file`
+
+</details>
+
+<details>
+<summary><strong>v3.0.18</strong> (2026-07-14) — 安全加固集（ClawScan 67 findings + IDOR）</summary>
+
+- 🔒 **修复 ClawScan 审计 67 findings** — fail-closed 权限矩阵 + stdio 强制认证
+- 🛡️ **IDOR 对象级授权加固** — `assertOwns` + `HUB_2004` 防越权访问
+- 🧩 **版本单一真相源** — 抽离 `src/version.ts`；`/health` 收敛
+
+</details>
+
+<details>
+<summary><strong>v3.0.12</strong> (2026-07-08) — README 同步 + 测试卫生</summary>
+
+- 📄 **同步中英文 README** — 对齐 v2.5.1（Node 22 约束锁定 + 测试计数）
+- 🧹 **测试卫生** — 修复 unit 测试在仓库根生成 `undefined*` 游离文件
+
+</details>
 
 <details>
 <summary><strong>v2.5.1</strong> (2026-07-08) — 稳定性修复 + Node 22 约束锁定</summary>

@@ -1,41 +1,59 @@
-## Description: <br>
-Manage Zoom meetings, cloud recordings, and account users through a fixed set of Zoom Server-to-Server OAuth REST actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Zoom meetings, cloud recordings, and account users through a fixed-whitelist Server-to-Server OAuth CLI.
 
-## Publisher: <br>
-[mebusw](https://clawhub.ai/user/mebusw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mebusw](https://clawhub.ai/user/mebusw)
 
-## Use Case: <br>
-Zoom account administrators and operators use this skill from an agent to list, inspect, create, or delete scheduled meetings, query cloud recordings, and look up account users. It is intended for environments where a dedicated Zoom Server-to-Server OAuth app can be configured with only the scopes needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Zoom Server-to-Server OAuth credentials and caches access tokens locally, so leaked files or logs could expose account-level access. <br>
-Mitigation: Use a dedicated Zoom app, grant only required scopes, keep .env and ~/.zoom-s2s-token.json private with restrictive permissions, and verify .env is ignored by git. <br>
-Risk: Meeting creation and deletion can change live Zoom account state. <br>
-Mitigation: Require explicit human approval before creating or deleting meetings, and keep delete permissions disabled unless they are needed. <br>
+## Use Case:
 
+Employees, operators, and developers use this skill to list, inspect, create, and delete Zoom meetings, query cloud recordings, and look up account users from an agent while staying within a fixed action set.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mebusw/zoom-meeting-admin) <br>
-- [Zoom Marketplace](https://marketplace.zoom.us/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python 3.7+, network access to Zoom APIs, and local Zoom Server-to-Server OAuth credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server-resolved release metadata) <br>
+Risk: Zoom Server-to-Server OAuth credentials can grant account-level access to meeting metadata, cloud recordings, and deletion actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated Zoom app with minimum required scopes, keep .env and ~/.zoom-s2s-token.json private, and avoid enabling delete or recording scopes unless they are needed.
+
+Risk: Deleting a meeting is destructive.
+
+Mitigation: Show the meeting details to the user and obtain explicit confirmation before running delete_meeting with the required --yes flag.
+
+Risk: Bypassing the documented CLI whitelist could expand access beyond the skill's intended Zoom operations.
+
+Mitigation: Invoke only the documented CLI actions and do not modify the script, import internal functions, or construct arbitrary Zoom API requests with the same credentials.
+
+## Reference(s):
+
+- [Server-resolved source repository](https://github.com/mebusw/zoom-meeting-admin)
+- [ClawHub skill page](https://clawhub.ai/mebusw/skills/zoom-meeting-admin)
+- [Zoom Marketplace](https://marketplace.zoom.us/)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill invokes a Python CLI that prints JSON responses from whitelisted Zoom API actions.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

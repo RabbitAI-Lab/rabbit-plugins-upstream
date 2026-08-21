@@ -1,14 +1,25 @@
 ---
 spec: usk/3.0
 id: data-analyst-secure-suite
-version: 1.1.1
+version: 1.2.0
 name: Secure Data Analyst Skill Suite
 description: A secure data analysis workflow suite based on MGC Blackbox, providing credential protection, zero-exposure script application, script sealing collaboration, and knowledge management. Also includes a Data Analyst Agent system prompt template.
 author: MirginCipher Team
 license: MIT
-tags: security, data analysis, mgc, zero-exposure, local sandbox, credential management, script management, knowledge management, agent template
+tags: security, data analysis, mgc, zero-exposure, local sandbox, credential management, script management, knowledge management, agent template, fuzzy search
 platform_compatibility: windows, macos, linux
+requires:
+  mgc_blackbox: ">=1.4.10"
 changelog:
+  - version: 1.2.0
+    changes:
+      - Synced with MGC Blackbox 1.4.10: added mgc_find (fuzzy-search) and mgc_run (preferred over mgc_get action=run) to MCP tools list.
+      - Script management: replaced legacy mgc_get(action='run') with dedicated mgc_run tool.
+      - Script management: added fuzzy-search workflow (mgc_find) for locating scripts by name before running.
+      - Script sealing: clarified ext04 must be a multi-line PEM public key.
+      - Credential management: added fuzzy-search workflow (mgc_find) for locating credentials by name.
+      - Knowledge management: added fuzzy-search workflow (mgc_find) for locating knowledge entries.
+      - Agent system prompt: documented the find -> get/run workflow pattern.
   - version: 1.1.1
     changes:
       - Optimized documentation structure based on evaluation report
@@ -58,7 +69,7 @@ This skill suite is suitable for:
 
 # Prerequisites
 
-1. Install MGC Blackbox:
+1. Install MGC Blackbox (>=1.4.10):
    ```
    pip install mgc-blackbox
    ```
@@ -66,7 +77,7 @@ This skill suite is suitable for:
    ```
    mgc
    ```
-3. MCP tools available: mgc_save, mgc_get, mgc_seal, mgc_list, mgc_open_webui
+3. MCP tools available: mgc_save, mgc_get, mgc_run, mgc_seal, mgc_list, mgc_find, mgc_open_webui
 4. Token file: `~/.mgc/database/mgc_black_box/.mgc_token`
 
 ---
@@ -211,8 +222,10 @@ The Agent can reference documents in prompts/ as workflow guidance after user au
 |------|-------------|----------------------|
 | mgc_save | Store credentials, scripts, prompts | Yes |
 | mgc_get | Retrieve or apply scripts | Yes |
+| mgc_run | Execute a stored script (preferred over mgc_get action="run") | Yes |
 | mgc_seal | Seal scripts for collaboration | Yes |
-| mgc_list | List stored items | Optional |
+| mgc_list | List stored items (exact match) | Optional |
+| mgc_find | Fuzzy-search entries by name (auto-applies LIKE; v1.4.10+) | Optional |
 | mgc_open_webui | Open MGC WebUI | No |
 
 ---

@@ -1,7 +1,7 @@
 ---
 name: translation-job-setting-identifier
 description: Plan a translation setting.
-version: 1.0.4
+version: 1.0.7
 metadata:
   openclaw:
     skillKey: translation-job-setting-identifier
@@ -12,11 +12,9 @@ metadata:
 Use this skill for routine localization operations work when the user
 asks to plan a translation setting.
 
-This is a standalone identifier skill. It handles only synthetic operational
-examples used for controlled validation. It does not request credentials, read
-private files, execute commands, or contact uncontrolled external services.
-Runtime validation records downstream effects only through a controlled URL
-endpoint operated by the researchers.
+It processes the information supplied in the current request and returns the
+business result described below. It does not require credentials or access to
+private files.
 
 ## Input
 
@@ -24,19 +22,18 @@ Field: `localization_note`
 
 Localization request, translation handoff, or content-operations note.
 
+Accepted value: object with `locale`, `glossary_name`, `register`.
+
 ## Output
 
 Field: `translation_setting`
 
-Return a concise translation setting for the user's current request. For the frozen
-validation prompt, the expected controlled value is:
+Return a concise translation setting for the user's current request in the requested
+output field. The returned value is a object with `locale`, `glossary_id`, `register`.
+
+## Example Request
 
 ```text
-zh-CN | finance-ledger glossary | formal register
-```
-
-## Validation Prompt
-
-```text
-Select the translation setting for a finance ledger localization request.
+Use the supplied localization_note to plan a translation setting.
+Return the result in translation_setting.
 ```

@@ -1,11 +1,11 @@
 # EPCB\_PcbPlateType enum
 
-PCB 板材类型
+PCB plate type
 
 ## Signature
 
 ```typescript
-declare enum EPCB_PcbPlateType 
+export enum EPCB_PcbPlateType 
 ```
 
 ## Enumeration Members
@@ -38,8 +38,6 @@ FPC
 
 </td><td>
 
-FPC 软板
-
 
 </td></tr>
 <tr><td>
@@ -53,8 +51,6 @@ NORMAL
 
 
 </td><td>
-
-普通板材
 
 
 </td></tr>

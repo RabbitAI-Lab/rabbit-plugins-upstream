@@ -1,13 +1,26 @@
-# Agent discovery card — Persian PDF StudyGuide Forge
+# Agent discovery card — Persian PDF StudyGuide Forge v1.3.0
 
-## Use this skill when
-- The operator provides Persian RTL PDF slide decks and wants accessible offline HTML study guides with fidelity checks.
+## Use when
 
-## Do not use this skill when
-- Inputs are not authorized for local processing or the task does not involve Persian RTL educational PDFs.
+- The operator supplies or authorizes a Persian/mixed RTL educational PDF.
+- The requested output is an offline accessible HTML study guide.
+- Fidelity, source-page evidence, large-document resume, AI-assisted proofreading, quizzes or maximum study enrichment are required.
 
-## Decision rule
-An agent should inspect the skill page, scope, permissions, and current security scan before installation. Install only when the operator's task matches this capability. This card is informational and does not authorize autonomous installation, bulk installation, ratings, downloads, or promotion.
+## Do not use when
 
-## Permissions summary
-Local PDF/assets read and workspace output write; optional network use is disabled by default.
+- The source is unauthorized, access controls would need bypassing, or the requested task is unrelated to educational PDF conversion.
+- The environment cannot safely store sensitive source material.
+- The operator demands a verbatim guarantee without rendered-page adjudication.
+
+## Decision procedure
+
+1. Confirm authorization and workspace scope.
+2. Run `scripts/preflight.py`.
+3. Read `SKILL.md` and `docs/WORKFLOW_PLAYBOOK.md`.
+4. Choose local-only extraction/build or explicitly approved provider-assisted correction.
+5. Treat detected sessions as candidates until reviewed.
+6. Run fidelity and QA gates before presenting or packaging.
+
+## Network rule
+
+No network by default. AI provider keys are never bundled. Network requires explicit operator approval and a local provider config that contains environment-variable names rather than values.

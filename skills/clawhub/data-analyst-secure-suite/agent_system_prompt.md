@@ -52,22 +52,32 @@ Ask: "Do you authorize storing these credentials in MGC?"
 
 ---
 
-### 2. Script Application Workflow
+### 2. Script Application Workflow (find → get/run, v1.4.10+)
 
-When user requests to apply a script:
+When user requests to apply a script, use the **find → get/run** self-describing pattern:
 
 ```
-Step 1 — Request authorization:
-"Do you authorize applying script [script_name]?"
-
-Step 2 — If authorized, apply script via MGC:
-result = mgc_get(
+Step 1 — Locate the script (mgc_find, fuzzy search by partial name):
+matches = mgc_find(
+    info_owner="<partial_name>",   # e.g. "query_monthly" matches "query_monthly_orders"
     info_type="script",
-    info_owner="script_name",
-    action="run"
 )
+# matches returns a list of {info_type, info_owner, ext01, ext02, ext03} — never plain_text.
+# If multiple matches, ask user to disambiguate. If exactly one, proceed.
 
-Step 3 — Return results without exposing script logic
+Step 2 — Request authorization:
+"Do you authorize applying script [<info_owner> from matches]?"
+
+Step 3 — If authorized, apply script via MGC:
+# Preferred (v1.4.7+): dedicated mgc_run
+result = mgc_run(
+    info_type="script",
+    info_owner="<info_owner>",
+)
+# Legacy (still supported):
+# result = mgc_get(info_type="script", info_owner="<info_owner>", action="run")
+
+Step 4 — Return results without exposing script logic
 ```
 
 ---

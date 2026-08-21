@@ -2,7 +2,7 @@
 
 ## Live Requirement
 
-Validated demand: Agent users show strong demand for Multi Search Engine-style workflows on Clawhub. They need practical help fixing bugs, hardening setup and safety, improving reliability, or creating adjacent skills inspired by the same job-to-be-done. This requirement is supported by 8 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Agent users show strong demand for Multi Search Engine-style workflows on Clawhub. They need practical help fixing bugs, hardening setup and safety, improving reliability, or creating adjacent skills inspired by the same job-to-be-done. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
 ## Audience
 
@@ -20,12 +20,12 @@ Demand: 70/70
 
 Local feasibility: 30/30
 
-Evidence coverage: 8 signals across 3 source families.
+Evidence coverage: 12 signals across 4 source families.
 
 Scoring rationale:
 
-- Evidence count: 8; required minimum: 3.
-- Distinct source families: 3; sources: clawhub, github, hacker-news.
+- Evidence count: 12; required minimum: 3.
+- Distinct source families: 4; sources: clawhub, csdn, github, hacker-news.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
@@ -33,14 +33,18 @@ Scoring rationale:
 
 ## Evidence
 
-- clawhub-popular-skill (2026-05-11T07:50:52.489000+00:00): [Popular Clawhub skill demand: ontology has 194,572 downloads](https://clawhub.ai/skills/ontology)
-- clawhub-popular-skill (2026-05-11T07:53:37.068000+00:00): [Popular Clawhub skill demand: Multi Search Engine has 157,964 downloads](https://clawhub.ai/skills/multi-search-engine)
-- clawhub-popular-skill (2026-05-11T07:50:48.771000+00:00): [Popular Clawhub skill demand: Agent Browser has 150,439 downloads](https://clawhub.ai/skills/agent-browser-clawdbot)
-- clawhub-popular-skill (2026-05-18T20:48:27.565000+00:00): [Popular Clawhub skill demand: Nano Banana Pro has 105,522 downloads](https://clawhub.ai/skills/nano-banana-pro)
-- clawhub-popular-skill (2026-05-11T09:27:32.688000+00:00): [Popular Clawhub skill demand: Tavily 搜索 has 101,840 downloads](https://clawhub.ai/skills/openclaw-tavily-search)
-- hacker-news-ask-hn (2026-07-25T09:20:28+00:00): [Ask HN: Is neuromorphic computing going to replace traditional AI?](https://news.ycombinator.com/item?id=49045970)
-- github-issues (2026-07-26T12:03:14+00:00): [[Track B] Apply startup behavior setting on launch](https://github.com/lolren/stepper-browser/issues/22)
-- github-issues (2026-07-26T11:52:51+00:00): [ENH: Add ConceptDiffTool for 85% Token Reduction on Web Scrapes](https://github.com/huggingface/smolagents/issues/2571)
+- clawhub-popular-skill (2026-05-11T07:50:52.489000+00:00): [Popular Clawhub skill demand: ontology has 196,661 downloads](https://clawhub.ai/skills/ontology)
+- clawhub-popular-skill (2026-05-11T07:53:37.068000+00:00): [Popular Clawhub skill demand: Multi Search Engine has 159,613 downloads](https://clawhub.ai/skills/multi-search-engine)
+- clawhub-popular-skill (2026-05-11T07:50:48.771000+00:00): [Popular Clawhub skill demand: Agent Browser has 153,706 downloads](https://clawhub.ai/skills/agent-browser-clawdbot)
+- clawhub-popular-skill (2026-05-18T20:48:27.565000+00:00): [Popular Clawhub skill demand: Nano Banana Pro has 106,255 downloads](https://clawhub.ai/skills/nano-banana-pro)
+- clawhub-popular-skill (2026-05-11T09:27:32.688000+00:00): [Popular Clawhub skill demand: Tavily 搜索 has 104,120 downloads](https://clawhub.ai/skills/openclaw-tavily-search)
+- hacker-news-ask-hn (2026-08-20T16:17:06+00:00): [Google Cloud us-west1 down](https://news.ycombinator.com/item?id=49376696)
+- hacker-news-ask-hn (2026-08-19T20:57:15+00:00): [Ask HN: If you write release notes, what stops you from being specific?](https://news.ycombinator.com/item?id=49367131)
+- hacker-news-ask-hn (2026-08-20T13:36:42+00:00): [Is this AWS RI/SP simulation engine interesting / valuable?](https://news.ycombinator.com/item?id=49374412)
+- hacker-news-ask-hn (2026-08-20T08:28:22+00:00): [Offline RAG on iOS with Spatial Integration](https://news.ycombinator.com/item?id=49371913)
+- github-issues (2026-08-17T10:37:19+00:00): [[Skills 周报] 2026-08-17 ClawHub 热门 Skills Top 10](https://github.com/shufanli/AI-Product-Compass/issues/48)
+- github-issues (2026-08-15T20:10:23+00:00): [Plugin multi-engine search](https://github.com/Ishannaik/harbour/issues/58)
+- csdn-search (2026-08-21T05:27:06.630497+00:00): [connector - search - engine ：该项目现在由OCA在以下网址维护：https：github.comOCAsearch - engine](https://wenku.csdn.net/doc/6eh6y1wop5?ops_request_misc=elastic_search_misc&request_id=bee54770e43c44009028e4dc3e1973ee&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-3-6eh6y1wop5-null-null.142^v102^pc_search_result_base3&utm_term=multi-search-engine%20multi%20search%20engine)
 
 ## How The Skill Meets The Requirement
 

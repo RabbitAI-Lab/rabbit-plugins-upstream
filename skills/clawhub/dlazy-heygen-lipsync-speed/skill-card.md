@@ -1,45 +1,64 @@
-## Description: <br>
-Runs dLazy's HeyGen Lipsync Speed workflow through the dLazy CLI for fast lip-sync generation from user-supplied media. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HeyGen Lipsync Speed is a dLazy CLI wrapper for fast lip-sync generation from supplied video and audio inputs.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to run a hosted lip-sync generation workflow when rapid video and audio synchronization is needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dLazy CLI stores an API key in a local user configuration file when authenticated. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY where appropriate, and rotate or revoke organization keys from the dLazy dashboard if access changes. <br>
-Risk: Video and audio inputs supplied to the command are uploaded to dLazy's hosted service for processing. <br>
-Mitigation: Confirm the selected media is appropriate for third-party cloud processing before invoking the skill. <br>
-Risk: A persistent global install adds a pinned third-party CLI binary to the user's environment. <br>
-Mitigation: Use the pinned npx invocation when a temporary execution path is preferred. <br>
+## Use Case:
 
+External users and developers use this skill to invoke dLazy's HeyGen Lipsync Speed service for rapid lip-sync generation. It supports video and audio inputs plus optional captions, dynamic duration, music removal, speech enhancement, partial synchronization, and asynchronous task polling.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-heygen-lipsync-speed) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files] <br>
-**Output Format:** [JSON with generated media URLs or async task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted files.dlazy.com media URLs; async mode returns a generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: The skill uses a third-party cloud CLI that stores or reads a dLazy API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Authenticate only with a trusted dLazy account, keep the key scoped to the intended organization, and rotate or revoke it from the dLazy dashboard when access is no longer needed.
+
+Risk: Local video or audio inputs may be uploaded to dLazy-hosted endpoints for processing.
+
+Mitigation: Use only media that is appropriate to send to dLazy, and avoid uploading confidential or regulated content unless the user's organization has approved that workflow.
+
+Risk: Global installation persists the dLazy CLI on the system.
+
+Mitigation: Use npx @dlazy/cli@1.2.3 for on-demand execution when a persistent global install is not desired.
+
+Risk: Generation can fail because of missing API keys, insufficient credits, unavailable local files, service errors, or asynchronous task failure.
+
+Mitigation: Check authentication and credits before execution, validate local file paths, use dry-run or asynchronous status polling when appropriate, and surface service-returned errors to the user.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-heygen-lipsync-speed)
+- [dLazy CLI source](https://github.com/dlazyai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, JSON, guidance]
+
+**Output Format:** [JSON responses with generated output URLs or asynchronous task status, plus concise user-facing guidance for authentication, credits, and errors]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Media inputs may be uploaded to dLazy endpoints; completed results are returned as files.dlazy.com URLs.]
+
+## Skill Version(s):
+
+1.3.9 (source: ClawHub server release metadata; artifact frontmatter reports 1.3.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

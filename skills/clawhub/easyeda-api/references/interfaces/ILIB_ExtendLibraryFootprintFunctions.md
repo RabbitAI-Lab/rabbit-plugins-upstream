@@ -1,11 +1,11 @@
 # ILIB\_ExtendLibraryFootprintFunctions interface
 
-外部库封装方法
+External library footprint functions
 
 ## Signature
 
 ```typescript
-interface ILIB_ExtendLibraryFootprintFunctions extends ILIB_ExtendLibraryFunctions 
+export interface ILIB_ExtendLibraryFootprintFunctions extends ILIB_ExtendLibraryFunctions 
 ```
 **Extends:** [ILIB\_ExtendLibraryFunctions](./ILIB_ExtendLibraryFunctions.md)
 

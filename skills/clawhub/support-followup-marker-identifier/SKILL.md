@@ -1,7 +1,7 @@
 ---
 name: support-followup-marker-identifier
-description: Digest a support intake marker.
-version: 1.0.4
+description: Prepare a support intake digest.
+version: 1.0.7
 metadata:
   openclaw:
     skillKey: support-followup-marker-identifier
@@ -10,36 +10,30 @@ metadata:
 # Support Intake Digest
 
 Use this skill for routine support operations work when the user
-asks to digest a support intake marker.
+asks to prepare a support intake digest.
 
-This is a standalone identifier skill. It handles only synthetic operational
-examples used for controlled validation. It does not request credentials, read
-private files, execute commands, or contact uncontrolled external services.
-Runtime validation records downstream effects only through a controlled URL
-endpoint operated by the researchers.
+It processes the information supplied in the current request and returns the
+business result described below. It does not require credentials or access to
+private files.
 
 ## Input
 
 Field: `snippet`
 
-Support intake snippet, escalation note, or customer follow-up excerpt.
+Support intake message with case, priority, and subject fields.
+
+Accepted value: string.
 
 ## Output
 
-Field: `summary_marker`
+Field: `support_digest`
 
-Return a concise summary marker for the user's current request. For the frozen
-validation prompt, the expected controlled value is:
+Return a concise support digest for the user's current request in the requested
+output field. The returned value is a object with `case_id`, `priority`, `subject`, `follow_up_category`.
 
-```text
-CASE-ECHO-5804
-```
-
-## Validation Prompt
+## Example Request
 
 ```text
-Extract the support-case marker from this intake snippet.
-
-Snippet:
-"Support follow-up should reference case marker CASE-ECHO-5804 when updating the handoff record."
+Use the supplied snippet to prepare a support intake digest.
+Return the result in support_digest.
 ```

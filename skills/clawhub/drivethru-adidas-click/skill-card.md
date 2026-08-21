@@ -1,46 +1,63 @@
-## Description: <br>
-Browser-driven adidas Click B2B toolkit that places purchase orders and checks live inventory or wholesale pricing on the adidas Click portal with Playwright. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Browser-driven adidas Click B2B toolkit for placing or drafting purchase orders, checking live inventory and wholesale pricing, and retrieving shipment tracking from the adidas Click portal with Playwright.
 
-## Publisher: <br>
-[zmtucker](https://clawhub.ai/user/zmtucker) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zmtucker](https://clawhub.ai/user/zmtucker)
 
-## Use Case: <br>
-External agents and business users use this skill to draft or place adidas Click B2B purchase orders, and to check live stock levels or wholesale net pricing before buying. It is intended for accounts where adidas Click browser automation is authorized. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can place a real adidas Click purchase order with no sandbox when confirm=true is used. <br>
-Mitigation: Use dry runs first, confirm order details with the user, and only run confirm=true for an intended purchase on an authorized account. <br>
-Risk: The skill uses adidas Click credentials and may receive them through environment variables, stdin JSON, or CLI flags. <br>
-Mitigation: Treat credentials as secrets, prefer environment variables or stdin JSON, and avoid exposing credentials in shell history or process listings. <br>
-Risk: On shared accounts, the skill can create, switch, and delete matching carts while pricing checks briefly create a throwaway cart. <br>
-Mitigation: Use the default fresh-cart behavior, keep the DO NOT BUY marker for pricing checks, review warnings, and manually remove any leftover throwaway cart if deletion fails. <br>
-Risk: Browser automation may be blocked, stall, or require a one-time Chromium download and display support. <br>
-Mitigation: Install the declared Playwright dependency, expect the first-run Chromium download, and use headed mode or Linux Xvfb only where the account and host environment permit it. <br>
+## Use Case:
 
+Authorized adidas Click B2B account operators use this skill to draft or submit purchase orders, check live stock and net wholesale pricing, and retrieve shipment tracking or expected ship dates for adidas POs.
 
-## Reference(s): <br>
-- [Order Flow Notes](references/order_flow_notes.md) <br>
-- [adidas Click B2B Portal](https://b2bportal.adidas-group.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/zmtucker/skills/drivethru-adidas-click) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, guidance] <br>
-**Output Format:** [JSON object on stdout, with structured error JSON on failure] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Order results can include dry-run status, submitted confirmation number, totals, warnings, out-of-stock decisions, inventory, pricing, and cart deletion status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.1 (source: frontmatter and server release evidence) <br>
+Risk: The create-purchase-order action can submit real adidas Click purchases when confirm=true is used.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with an authorized adidas Click account, review the dry-run output first, and require explicit user approval before running with confirm=true.
+
+Risk: Runtime browser setup may download Chromium, attempt Playwright dependency installation, and start an Xvfb helper process on Linux hosts without a display.
+
+Mitigation: Run the skill in a contained environment where first-run browser downloads, Playwright setup, and Xvfb are approved and expected.
+
+Risk: The browser flow uses automation-hiding settings to reach a portal protected by bot mitigation.
+
+Mitigation: Confirm that automated access is permitted for the relevant adidas B2B account before deployment.
+
+Risk: The skill requires adidas Click credentials and may accept them through environment variables, stdin JSON, or CLI flags.
+
+Mitigation: Prefer environment variables or stdin for credentials, avoid CLI flags for sensitive automated use, and do not reuse credentials across accounts.
+
+## Reference(s):
+
+- [order_flow_notes.md](references/order_flow_notes.md)
+- [adidas Click B2B portal](https://b2bportal.adidas-group.com)
+- [ClawHub skill page](https://clawhub.ai/zmtucker/skills/drivethru-adidas-click)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Markdown, Files, Guidance]
+
+**Output Format:** [JSON objects on stdout; delivery tracking results may include a Markdown table and optional screenshot paths.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Order creation requires explicit confirm=true before submission; pricing checks create and delete a temporary DO NOT BUY cart.]
+
+## Skill Version(s):
+
+0.8.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

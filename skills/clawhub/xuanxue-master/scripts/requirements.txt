@@ -1,0 +1,6 @@
+# 玄学专家技能 Python 依赖 (可选)
+# lunardate 用于紫微斗数排盘的精确农历转换, 未安装时自动降级到内置数据表
+# lunar_python 用于八字排盘的精确节气计算(年柱/月柱分界), 未安装时降级到近似公式
+# 安装命令: pip install lunardate lunar_python
+lunardate>=1.2.0
+lunar_python>=1.4.0

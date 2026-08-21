@@ -1,6 +1,6 @@
 ---
 name: wikipedia
-version: 1.1.0
+version: 1.1.3
 description: Access Wikipedia via MCP — search articles, get summaries, random facts, dinosaur facts, and today's featured article. Multi-language support (10 wikis). Great for research, content hooks, and general knowledge lookups.
 ---
 
@@ -18,6 +18,7 @@ Access Wikipedia via Model Context Protocol (MCP). No API key required.
 | `did_you_know` | Random "Did You Know" fact |
 | `dino_fact` | Dinosaur/prehistory fact (specific species or random) |
 | `featured_article` | Today's Wikipedia Featured Article |
+| `on_this_day` | Historical events that happened on today's date |
 
 All tools accept an optional `lang` parameter (default `en`; supported: `en`, `de`, `es`, `fr`, `ja`, `zh`, `pt`, `it`, `ru`, `nl`).
 
@@ -71,6 +72,8 @@ mcporter call wikipedia dino_fact --args '{"species": "Spinosaurus"}'
 mcporter call wikipedia dino_fact
 mcporter call wikipedia did_you_know
 mcporter call wikipedia featured_article
+mcporter call wikipedia on_this_day
+mcporter call wikipedia on_this_day --args '{"count": 8}'
 mcporter call wikipedia summary --args '{"title": "Berlin", "lang": "de"}'
 ```
 
@@ -83,8 +86,17 @@ Uses Wikipedia's free public REST API — no API key required.
 
 ## Notes
 
-- User-Agent is `wikipedia-mcp/1.1.0` per Wikipedia API etiquette
+- User-Agent is `wikipedia-mcp/1.1.3` per Wikipedia API etiquette
 - All responses include links back to the source article
 - `dino_fact` falls back to a random species if the requested one isn't found (instead of erroring)
 - `featured_article` returns today's curated Featured Article — great for daily content hooks
+- `on_this_day` returns historical events for today's UTC date from Wikipedia's "On This Day" feed — pairs with featured_article for daily "today in history" content hooks
 - Multi-language: pass `lang` to any tool to query de/es/fr/ja/zh/pt/it/ru/nl Wikipedia
+
+## ClawHub
+
+This skill is published on ClawHub as **Wikipedia** under the canonical slug `wikipedia` (1.6k+ downloads, 40 installs as of Aug 20 2026).
+
+Do **NOT** publish to slug `wikipedia-mcp` — that is the abandoned duplicate skill (140 DL, 0 installs, lowercase "wikipedia" display name).
+
+GitHub source: https://github.com/evanfoglia/wikipedia-mcp

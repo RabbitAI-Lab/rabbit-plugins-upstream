@@ -1,45 +1,62 @@
-## Description: <br>
-Kiln lets AI agents design, slice, print, monitor, and recover physical 3D printing jobs through MCP and CLI control. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kiln lets AI agents design, slice, print, monitor, and recover physical 3D-printing jobs through an MCP server and CLI.
 
-## Publisher: <br>
-[codeofaxel](https://clawhub.ai/user/codeofaxel) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[codeofaxel](https://clawhub.ai/user/codeofaxel)
 
-## Use Case: <br>
-Developers, makers, and print-farm operators use Kiln to let AI agents generate or find 3D models, slice them, control printer queues, and monitor physical prints with human supervision for high-risk actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+AGPL-3.0
 
-## Known Risks and Mitigations: <br>
-Risk: Agent control of real 3D printers can heat hardware, move motors, start or cancel prints, or send G-code without adequate supervision. <br>
-Mitigation: Keep printers supervised, require explicit approval before physical actions, and limit printer/API credentials to the minimum access needed. <br>
-Risk: Camera, webhook, cloud sync, plugin, or self-update features can expand the exposure of printer access or workspace data. <br>
-Mitigation: Disable camera, webhooks, cloud sync, plugins, and self-update paths unless they are intentionally required and reviewed. <br>
-Risk: Model generation, marketplace search, slicing, and fulfillment can produce unsafe, incorrect, infringing, or costly physical outcomes. <br>
-Mitigation: Review models, slicer settings, material choices, costs, and fulfillment orders before execution. <br>
+## Use Case:
 
+Developers, operators, and makers use Kiln to let MCP-capable agents manage 3D-printing workflows, including model search, text-to-3D generation, slicing, printer control, camera monitoring, fleet operations, and fulfillment quotes.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/codeofaxel/skills/kiln) <br>
-- [Kiln website](https://kiln3d.com) <br>
-- [Kiln documentation](https://kiln3d.com/docs) <br>
-- [PyPI package](https://pypi.org/project/kiln3d/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and plain text with shell commands and JSON configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May trigger physical printer actions through configured credentials; require operator approval for heating, printing, canceling, sending G-code, and fulfillment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server evidence release and target metadata) <br>
+Risk: Agents can control real 3D printers and related services, creating physical safety and equipment risks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep preview and confirmation gates enabled, supervise first runs, verify emergency-stop access, and avoid unattended prints without fire precautions.
+
+Risk: Fulfillment workflows can create paid external orders.
+
+Mitigation: Set spend limits before use and require explicit review before fulfillment quotes become orders.
+
+Risk: Camera, cloud sync, and webhook features can expose sensitive operational data when enabled.
+
+Mitigation: Disable unused camera, cloud sync, and webhook features, protect API keys, and use scoped credentials where available.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/codeofaxel/skills/kiln)
+- [Project repository](https://github.com/codeofaxel/Kiln)
+- [PyPI package](https://pypi.org/project/kiln3d/)
+- [Kiln website](https://kiln3d.com)
+- [Kiln documentation](https://kiln3d.com/docs)
+- [Agent guide](https://kiln3d.com/agents)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and plain text guidance with inline shell commands, JSON configuration, and MCP tool-oriented instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May cause agents to operate real printers, access cameras, manage files, and initiate paid fulfillment workflows when connected to configured services.]
+
+## Skill Version(s):
+
+1.4.1 (source: server release metadata and artifact/server.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

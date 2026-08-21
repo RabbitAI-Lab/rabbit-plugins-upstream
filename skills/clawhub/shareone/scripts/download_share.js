@@ -5,6 +5,7 @@ const path = require('path');
 const {
     CREDENTIAL_MODE_SUDOWORK_PROXY,
     detectCredentialMode,
+    extractShareRef,
     requestShareOneBuffer,
     resolveDirectApiKey,
 } = require('./shareone_client');
@@ -64,25 +65,6 @@ if (!ref) {
     process.exit(1);
 }
 
-function extractShareRef(value) {
-    const raw = String(value || '').trim();
-    if (!raw) return null;
-    try {
-        const parsed = raw.includes('://') ? new URL(raw) : null;
-        const path = parsed ? parsed.pathname : raw.split('?')[0].split('#')[0];
-        const parts = path.split('/').filter(Boolean);
-        if (parts.length === 0) return raw;
-        if (parts[0] === 'file' && parts.length >= 2) return parts[1];
-        if (parts[0] === 'api' && parts.includes('shares')) {
-            const index = parts.indexOf('shares');
-            return parts[index + 1] || raw;
-        }
-        return parts[parts.length - 1] || raw;
-    } catch (_) {
-        return raw;
-    }
-}
-
 async function tryOwnerDownload(credentialMode) {
     if (publicOnly) return null;
     const hasKey = credentialMode.mode === CREDENTIAL_MODE_SUDOWORK_PROXY
@@ -139,6 +121,11 @@ function emitDownloadInfo(headers) {
     const filename = parseFilenameFromDisposition(headers['content-disposition']);
     if (filename) console.error(`INFO:FILENAME:${filename}`);
     if (headers['content-type']) console.error(`INFO:CONTENT_TYPE:${headers['content-type']}`);
+    const remoteSource = headers['x-remote-source-url'];
+    if (remoteSource) {
+        console.error(`INFO:REMOTE_SOURCE:${remoteSource}`);
+        console.error('HINT:EDIT_AT_SOURCE');
+    }
 }
 
 function sanitizeFilename(name) {

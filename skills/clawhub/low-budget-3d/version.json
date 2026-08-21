@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-18",
+      "changes": [
+        "Initial build from niulai.md design spec v2",
+        "7-step Pipeline: Intent Parser -> Style Constitution -> Subject Rebuilder -> Character & World Design -> Production & Render -> Prompt Compiler -> Style Validator",
+        "6 reference files: style-constitution, subject-rebuilder, character-director, world-builder, production-and-render, prompt-compiler, style-validator",
+        "Budget level system (level 1 default, level 2 optional)",
+        "Style Score 7-dimension validation with 75-point threshold",
+        "Style drift detection with auto-replacement"
+      ]
+    }
+  ]
+}

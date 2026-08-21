@@ -757,11 +757,7 @@
             .map((def, i) => {
               const v = kpiVal(kpis, def.key);
               const p =
-                def.key === "spend"
-                  ? prev.spend != null
-                    ? prev.spend
-                    : prev.cost
-                  : prev[def.key];
+                def.key === "spend" ? (prev.spend != null ? prev.spend : prev.cost) : prev[def.key];
               const color = PALETTE[i % PALETTE.length];
               const delta = deltaKeys.has(def.key) ? deltaLabel(v, p) : "";
               return `<div class="kpi" style="--kpi-color:${color}">
@@ -1144,7 +1140,8 @@
               return `<div class="rec-card">${num}<div class="rec-body">${title}<div class="rec-content">${escapeHtml(r?.content || "")}</div></div></div>`;
             })
             .join("");
-          const body = recs.length > 0 ? `<div class="recommendation-list">${cards}</div>` : emptyNoteHtml();
+          const body =
+            recs.length > 0 ? `<div class="recommendation-list">${cards}</div>` : emptyNoteHtml();
           return `
 <section id="sec-recommendations">
   ${sectionHead("10", "优化建议汇总", "跨维度归纳优先级，须与各 section 分析一致")}
@@ -1276,7 +1273,13 @@
             echarts
               .init(campaignsEl)
               .setOption(
-                hBarOption(campaigns, "campaignName", currency, "rgba(99,102,241,0.55)", PALETTE[1]),
+                hBarOption(
+                  campaigns,
+                  "campaignName",
+                  currency,
+                  "rgba(99,102,241,0.55)",
+                  PALETTE[1],
+                ),
               );
           }
 

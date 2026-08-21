@@ -1,40 +1,61 @@
-## Description: <br>
-Claude Code plugin lifecycle management for creating, installing, updating, maintaining, and troubleshooting plugins. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Claude Code plugin lifecycle management for creating, installing, updating, cleaning, troubleshooting, and configuring plugin-related workflows.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineers use this skill to manage Claude Code plugin authoring, marketplace setup, cache cleanup, local development reflection, HUD configuration, plugin clustering, and plugin troubleshooting workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide persistent changes to local Claude Code plugin state. <br>
-Mitigation: Use dry-run paths first, review backups before enabling plugins, and inspect changes before applying them. <br>
-Risk: Plugin troubleshooting guidance may involve running build code from installed plugin content. <br>
-Mitigation: Run cache sync only for trusted marketplace content and inspect package.json or lockfiles before following npm install or build instructions. <br>
+## Use Case:
 
+Developers and engineers use this skill to manage Claude Code plugin authoring, marketplace cloning and updates, cache cleanup, local dev reflection, HUD configuration, plugin troubleshooting, and skill bundle planning.
 
-## Reference(s): <br>
-- [Cc Plugin on ClawHub](https://clawhub.ai/drumrobot/skills/cc-plugin) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, code snippets, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Some workflows can propose or run local plugin-state changes; use dry-run options and review generated changes before applying them.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.1 (source: ClawHub release metadata) <br>
+Risk: The skill can guide persistent changes to Claude Code plugin settings, marketplace clones, and runtime cache content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use dry-run paths first, review proposed filesystem and settings edits, and back up plugin settings and directories before applying changes.
+
+Risk: Marketplace update and reflection workflows can pull or copy plugin content from local or remote repositories.
+
+Mitigation: Enable only plugins from trusted local repositories or marketplaces, and review repository changes before updating or reflecting them.
+
+Risk: Cache cleanup can remove older plugin cache versions and temporary directories.
+
+Mitigation: Run cache cleanup with --dry-run before deletion and keep a backup when the current runtime state is important.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/cc-plugin)
+- [Skill overview](artifact/SKILL.md)
+- [Cache cleanup guide](artifact/cache.md)
+- [Dev reflect guide](artifact/dev-reflect.md)
+- [Troubleshooting guide](artifact/troubleshoot.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose filesystem and settings changes for Claude Code plugin state; users should review commands and use dry-run options where provided.]
+
+## Skill Version(s):
+
+0.6.0 (source: server release metadata and changelog, released 2026-08-20)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

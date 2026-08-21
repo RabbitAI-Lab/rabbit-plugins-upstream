@@ -1,42 +1,60 @@
-## Description: <br>
-Helps AI-agent users, skill authors, maintainers, and teams turn self-improving and proactive agent workflow demand into practical local workflows, checklists, analysis, code changes, or decision support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps AI-agent users, skill authors, maintainers, and teams create practical self-improving and proactive workflow plans, checklists, analyses, code changes, and verification notes.
 
-## Publisher: <br>
-[kyro-ma](https://clawhub.ai/user/kyro-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kyro-ma](https://clawhub.ai/user/kyro-ma)
 
-## Use Case: <br>
-AI-agent users, skill authors, maintainers, and teams use this skill to clarify requested outcomes, plan self-improving or proactive agent workflows, create reusable checklists or artifacts, and validate the result against stated success criteria. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger words may cause the skill to be invoked for unrelated requests. <br>
-Mitigation: Narrow activation wording before deployment or confirm invocation intent when the request is not clearly about self-improving or proactive agent workflows. <br>
+## Use Case:
 
+External developers, skill authors, maintainers, and teams use this skill to turn requests about self-improving or proactive agent workflows into actionable plans, artifacts, checklists, analysis, implementation support, and verification notes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kyro-ma/skills/work-productivity-self-improving-workflow-helper) <br>
-- [Requirement plan](references/requirement-plan.md) <br>
-- [Popular ClawHub skill demand: self-improving agent](https://clawhub.ai/skills/self-improving-agent) <br>
-- [Popular ClawHub skill demand: Proactive Agent](https://clawhub.ai/skills/proactive-agent) <br>
-- [Popular ClawHub skill demand: Self-Improving + Proactive Agent](https://clawhub.ai/skills/self-improving) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown or plain text with optional code, shell command, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include reusable checklists, work plans, validation notes, assumptions, limits, and follow-up risks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20260725.110246 (source: server release evidence) <br>
+Risk: The skill may activate on broad language about self-improvement, proactivity, learning, or bug fixes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Narrow triggers or route explicitly in multi-skill environments when precise activation matters.
+
+Risk: Generated workflow, checklist, code, shell command, or configuration guidance can be incorrect or mismatched to the user's environment.
+
+Mitigation: Review proposed changes before use and validate the result against the stated success criteria.
+
+## Reference(s):
+
+- [Requirement Plan](artifact/references/requirement-plan.md)
+- [ClawHub Skill Page](https://clawhub.ai/kyro-ma/skills/work-productivity-self-improving-workflow-helper)
+- [Popular ClawHub skill demand: self-improving agent](https://clawhub.ai/skills/self-improving-agent)
+- [Popular ClawHub skill demand: Proactive Agent](https://clawhub.ai/skills/proactive-agent)
+- [Popular ClawHub skill demand: Self-Improving + Proactive Agent](https://clawhub.ai/skills/self-improving)
+- [Hacker News discussion signal](https://news.ycombinator.com/item?id=49356808)
+- [OpenClaw skill roundup signal](https://segmentfault.com/a/1190000047666647)
+- [Self-improving Agent CSDN signal](https://blog.csdn.net/qq_42540492/category_13024655.html?ops_request_misc=elastic_search_misc&request_id=cc6aa199b1794bcab9952f845e54ca5b&biz_id=&utm_medium=distribute.pc_search_result.none-task-special_column-2~all~ElasticSearch~search_v2-2-13024655-null-null.142^v102^pc_search_result_base6&utm_term=self-improving-proactive-agent%20self%20improving%20proactive)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown responses with optional code blocks, shell commands, checklists, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces tailored artifacts and verification notes; artifact evidence contains no executable code.]
+
+## Skill Version(s):
+
+0.20260819.45504 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

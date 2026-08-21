@@ -19,11 +19,15 @@
   "ts": "2026-07-11T03:00:00+08:00",
   "tenant_id": "t_sweepingmonk_001",
   "skill_slug": "sweeping-monk",
-  "skill_version": "1.7.2",
+  "skill_version": "1.9.3",
   "ref_hit": ["misdiagnosis.md", "three-gates.md"],
   "confidence": "high",
   "corrected": false,
   "trigger_class": "偏误",
+  "method_layer": "L3",
+  "event": "helpful",
+  "weight": 5,
+  "signal_id": "3f1a2b9c-7d4e-4c8a-9b2f-1e6c5d4a3b21",
   "anon_id": "<本机一次性随机UUID>",
   "turn": 12,
   "coverage_gap": {
@@ -36,17 +40,22 @@
 ```
 
 > **`coverage_gap` 为可选字段**：仅在出现覆盖缺口时携带（见 §八），常规信号不含此字段。
+> **`signal_id` / `method_layer` / `event` / `weight` 为采集必填（v1.9.3 新增）**：由 agent 在末步 one-liner 直写（不再依赖 `ref_hit`→层码解析），是上传端到端去重的幂等键 + 直传字段（见 §七）。
 
 | 字段 | 含义 | 取值 |
 |------|------|------|
 | `ts` | 本地时间戳 | ISO8601 |
 | `tenant_id` | 租户标识（本期固定单机值） | `t_sweepingmonk_001` |
 | `skill_slug` | 技能标识 | `sweeping-monk` |
-| `skill_version` | 本次应答时的技能版本号 | 如 `1.7.2`，用于检测发版后完成率骤降（G 类回归） |
-| `ref_hit` | 本次命中的参考文件列表 | 如 `["three-gates.md"]` |
-| `confidence` | 本次给出的置信度判词 | `high` / `medium` / `low` |
-| `corrected` | 用户是否纠正了老衲的判断 | `true` / `false` |
-| `trigger_class` | 触发类 | `偏误`/`根因`/`开题`/`中国场景`/`未知未知`/`关系层`/`其他` |
+| `skill_version` | 本次应答时的技能版本号 | 如 `1.9.3`，用于检测发版后完成率骤降（G 类回归） |
+| `ref_hit` | 本次命中的参考文件列表（本地蒸馏用） | 如 `["three-gates.md"]` |
+| `confidence` | 本次给出的置信度判词（本地蒸馏用） | `high` / `medium` / `low` |
+| `corrected` | 用户是否纠正了老衲的判断（本地蒸馏用） | `true` / `false` |
+| `trigger_class` | 触发类（映射为云端 `note`） | `偏误`/`根因`/`开题`/`中国场景`/`未知未知`/`关系层`/`其他` |
+| `method_layer` | **层码（L1–L7，agent 直写）** | 如 `"L3"`，直传云端，不再经 layer_index 解析 |
+| `event` | **会话信号事件类（agent 直写）** | 6 类之一（见 §七） |
+| `weight` | **信号强度（agent 直写）** | 1–5 整数 |
+| `signal_id` | **幂等键（采集时生成 UUIDv4）** | 端到端去重，服务端 `client_signal_id` 唯一约束 |
 | `anon_id` | 本机一次性随机匿名 ID | UUIDv4，存于 `.anon_id` |
 | `turn` | 本轮会话序号 | 正整数 |
 
@@ -87,7 +96,17 @@
    - 有 `off` → 全程不写，不重复提醒。用户说「再开」→ 写 `.optin=on`。
    - 有 `on` → 继续下一步。
 2. 首次 `on` 时生成 `.anon_id`（`python -c "import uuid;print(uuid.uuid4())"` 或等价），本机持久、不随会话变。
-3. 每次应答后，若 `on` → 用 `Bash` 追加一行 JSONL 到 `signals-log.jsonl`（文件首次写时自动建）。
+3. **每次应答末步（若 `on`）必须执行下方 one-liner**，向 `signals-log.jsonl` 追加一行（含 `signal_id` + 直写 `method_layer`/`event`/`weight`）。这是采集的唯一确定性机制——替代旧版"智能体自觉追加"。文件首次写时自动建；命令失败静默，绝不阻塞用户。
+   ```bash
+   # 末步执行（替换 <dir>/<触发类>/<L1..L7>/<event>/<1-5>）：
+   printf '%s\n' "$(python -c "
+   import json,uuid,datetime,os
+   d='<dir>'
+   rec={'ts':datetime.datetime.now().astimezone().isoformat(),'signal_id':str(uuid.uuid4()),'skill_slug':'sweeping-monk','skill_version':'1.9.3','ref_hit':[],'confidence':'medium','corrected':False,'trigger_class':'<触发类>','method_layer':'<L1..L7>','event':'<event>','weight':<1-5>,'anon_id':open(d+'/.anon_id').read().strip() if os.path.exists(d+'/.anon_id') else '','turn':1}
+   print(json.dumps(rec,ensure_ascii=False))")" >> "<dir>/signals-log.jsonl"
+   ```
+   - `<dir>` = 本技能目录（如 `~/.workbuddy/skills/sweeping-monk`）；本地字段 `ref_hit`/`confidence`/`corrected`/`turn` 已给默认值，agent 若明确可改（`ref_hit` 填命中参考文件列表、`corrected` 填 `True`/`False`）。
+   - `method_layer`/`event`/`weight`/`trigger_class` 由 agent 按本轮判断直写（不再依赖 `ref_hit`→层码解析）。`signal_id` 当场生成，是端到端去重幂等键。
 4. 退出：用户说「别记了」→ 写 `.optin=off` + 删 `.anon_id`。
 
 ### 云端回传（第二层，安装即开）
@@ -124,14 +143,17 @@
 | 本地字段 | 云端字段 | 转换规则 |
 |----------|----------|----------|
 | `skill_slug` | `slug` | 直接映射（改名） |
-| `method_layer`（层码） | `method_layer` | 直接透传（如 `"L3"`）。若本地信号仅带 `ref_hit`（参考文件名），由 `references/layer_index.json` 解析为层码后写入本字段（**层维度与文件维度解耦**，修复旧版把文件名塞进 method_layer 导致规则永不命中的 bug） |
-| `ref_hit` (array) | —（本地元数据，不上传） | 仅本地：①经 `layer_index.json` 解析层码 ②溯源。云端白名单不含此字段，不上传 |
-| `corrected` (bool) | `event` | `true` → `"unhelpful"`；`false` → `"helpful"` |
-| `confidence` (string) | `weight` (int) | `high` → `5`；`medium` → `3`；`low` → `1` |
+| `method_layer`（层码） | `method_layer` | **agent 直写透传**（v1.9.3 起采集时即带，如 `"L3"`）。仅当本地信号缺 `method_layer` 时，才由 `references/layer_index.json` 以 `ref_hit` 兜底解析为层码（兼容旧日志） |
+| `event` | `event` | **agent 直写透传**（v1.9.3 起采集时即带，6 类之一） |
+| `weight` | `weight` | **agent 直写透传**（v1.9.3 起采集时即带，1–5 整数） |
+| `signal_id` | `client_signal_id` | **agent 直写透传（幂等键）**——服务端 UNIQUE 约束去重 |
+| `ref_hit` (array) | —（本地元数据，不上传） | 仅本地：①经 `layer_index.json` 兜底解析层码 ②溯源。云端白名单不含此字段，不上传 |
+| `corrected` (bool) | `event` | 仅当本地信号缺 `event` 时兜底：`true` → `"unhelpful"`；`false` → `"helpful"` |
+| `confidence` (string) | `weight` (int) | 仅当本地信号缺 `weight` 时兜底：`high` → `5`；`medium` → `3`；`low` → `1` |
 | `trigger_class` | `note` | 直接放入 note 字段（PII 安全：仅触发类标签） |
 | `skill_version` | `skill_version` | 直接透传 |
 | `anon_id` | `anon_id` | 直接透传 |
-| —（新增） | `mode` | 固定 `"cloud"`（标识此信号来自云端授权用户） |
+| —（固定） | `mode` | 固定 `"cloud"`（标识此信号来自云端授权用户） |
 | `coverage_gap`（object，可选） | `event` + `note` | 若 JSONL 行含 `coverage_gap` → 上行时 `event="suggestion"`；`note` = JSON 字符串 `{"gap_type":"...","dimension":"...","value":"...","in_taxonomy":...}`（已脱敏、零原文）。`method_layer` = `"L9"`（扫地僧知识边界层） |
 | `ts` | — | 丢弃（云端用服务端时间戳） |
 | `tenant_id` | — | 丢弃（云端从用户 token 解析） |
@@ -142,6 +164,8 @@
 `method_layer` 是**层维度**（L1–L7，语义来自 SKILL.md §四 七层能力模型），`ref_hit` 是**文件维度**（命中的参考文件名）。二者独立，旧版用 `join` 把文件名塞进 `method_layer` 是维度混用——规则库按层码匹配，永远不会命中，且上传云端时 `method_layer` 为非法值（云端 `signal_validate` 期望层码）。
 
 修正：新增 `references/layer_index.json`，建立 `文件名 → 层码` 映射。蒸馏端（`distill.py` 的 `_read_local_jsonl`）优先信任信号自带的 `method_layer`（agent 直写层码的新形态）；若信号只带 `ref_hit`，则经 layer_index 解析层码写入 `method_layer`。**新增参考文件时须同步更新此映射表。**
+
+> **v1.9.3 起**：采集 one-liner 已**直写** `method_layer`/`event`/`weight`/`signal_id`，上传端（`upload_signals.py`）直接读取，不再依赖 layer_index 解析；layer_index 仅作"旧日志 / 缺字段信号"的兜底。本地蒸馏（`distill.py`）同样优先读直写字段。
 
 ### 云端 API 规范
 

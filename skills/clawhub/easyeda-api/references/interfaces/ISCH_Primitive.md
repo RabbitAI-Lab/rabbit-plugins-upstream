@@ -1,11 +1,11 @@
 # ISCH\_Primitive interface
 
-原理图图元
+Schematic primitive
 
 ## Signature
 
 ```typescript
-interface ISCH_Primitive 
+export interface ISCH_Primitive 
 ```
 
 ## Properties

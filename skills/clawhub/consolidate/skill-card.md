@@ -1,48 +1,63 @@
-## Description: <br>
-Consolidate and respond to external PR and issue feedback by gathering AI reviews, classifying findings, posting review summaries, and registering deferred items. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Consolidate gathers external PR feedback, runs internal review fallback, classifies findings, and helps post an AI Review Summary, Formal Review, status line, and deferred-item tracking.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and maintainers use this skill to consolidate external pull request or issue feedback, classify findings by validity and severity, decide review posture, post summaries, and carry forward deferred follow-up work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make persistent GitHub review and repository tracking changes. <br>
-Mitigation: Use interactive review for drafted posts and run only with accounts and repositories where review-state mutation authority is intended. <br>
-Risk: Headless execution may post REQUEST_CHANGES, comments, or tracking updates without sufficient user review. <br>
-Mitigation: Avoid headless runs on repositories where automatic review or tracking-file edits would be inappropriate. <br>
+## Use Case:
 
+Developers and maintainers use this skill to review pull-request feedback from CodeRabbit, Copilot, and internal review, decide what to fix or defer, and publish consistent GitHub review summaries.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/consolidate) <br>
-- [README](README.md) <br>
-- [Skill Definition](SKILL.md) <br>
-- [PR Workflow](pr.md) <br>
-- [Collect AI Reviews](collect.md) <br>
-- [Analyze and Classify](classify.md) <br>
-- [Decide Review Response](decide.md) <br>
-- [Post Summary and Review](post.md) <br>
-- [Next Action Ask](next.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown review summaries, GitHub review or comment bodies, status text, shell commands, and tracking guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may lead to persistent GitHub review state changes and deferred-item tracking updates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: frontmatter, release evidence, and changelog released 2026-07-23) <br>
+Risk: The skill can post or patch GitHub review comments and formal review decisions, which may affect repository review state or mergeability.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use interactive mode for normal operation and review generated GitHub posts before publication.
+
+Risk: The skill uses the caller's gh authentication and can request reviewers, edit promotion PR bodies, and write local tracking records.
+
+Mitigation: Install it only for active GitHub PR review workflows and run it in workspaces where those repository actions and tracking writes are intended.
+
+Risk: Incorrect consolidation can omit findings or create misleading PR review summaries.
+
+Mitigation: Use the bundled verification workflow and keep Internal Code Review and AI Review Summary outputs paired and sequential.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/consolidate)
+- [README](artifact/README.md)
+- [Workflow index](artifact/SKILL.md)
+- [PR workflow](artifact/pr.md)
+- [Collect AI reviews](artifact/collect.md)
+- [Analyze and classify](artifact/classify.md)
+- [Post summary and formal review](artifact/post.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries, GitHub comments or reviews, shell commands, and local tracking entries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May use gh-authenticated API calls to read and post PR comments or reviews and write local deferred tracking records.]
+
+## Skill Version(s):
+
+0.6.0 (source: frontmatter, release evidence, CHANGELOG released 2026-08-20)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

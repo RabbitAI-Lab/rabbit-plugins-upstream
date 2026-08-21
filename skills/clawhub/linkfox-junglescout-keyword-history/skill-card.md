@@ -1,45 +1,59 @@
-## Description: <br>
-Queries weekly historical exact-match Amazon keyword search volume from Jungle Scout across supported marketplaces and helps summarize trends, seasonality, peaks, and lows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries weekly exact-match Amazon keyword search-volume history from Jungle Scout across 10 marketplaces for trend and seasonality analysis.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Amazon sellers, e-commerce analysts, and agent users use this skill to retrieve weekly historical keyword search volume for a specified Amazon marketplace and date range, then interpret demand trends, seasonality, and peak or low periods. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and consumes LinkFox credits for keyword-history lookups. <br>
-Mitigation: Confirm API-key access and expected credit cost before running repeated or multi-marketplace queries. <br>
-Risk: The skill saves full API responses locally, which may include complete query results and metadata. <br>
-Mitigation: Run it only in an appropriate workspace and review saved response files before sharing or committing generated outputs. <br>
-Risk: The skill includes automatic external feedback reporting instructions. <br>
-Mitigation: Review the feedback behavior before use and disable or avoid feedback calls if external reporting is not acceptable. <br>
-Risk: If the active workspace is not writable, saved data may be written outside the active project. <br>
-Mitigation: Use a writable project workspace or set workspace paths deliberately before running the script. <br>
+## Use Case:
 
+External sellers, marketplace analysts, and agents use this skill to query historical Amazon keyword search volume, identify seasonality, compare periods, and summarize demand trends.
 
-## Reference(s): <br>
-- [Jungle Scout Keyword History API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-keyword-history) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown summaries and tables with saved JSON response files or inline JSON for small responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill can save full API responses locally, summarize large responses, and cache identical parameter combinations for 24 hours.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill handles LinkFox/Jungle Scout account setup, API keys, and payment-order workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer creating accounts, adding credits, and storing API keys through first-party LinkFox pages, then verify endpoint environment variables before use.
+
+Risk: Keyword-history queries consume paid credits, and repeated calls can add cost.
+
+Mitigation: Confirm the intended marketplace, keyword, and date range before running queries, and avoid automatic retries or exploratory repeated calls without user approval.
+
+Risk: The skill saves full API responses, including queried keywords and returned data, under a local linkfox directory or fallback location.
+
+Mitigation: Review the local output location and avoid querying sensitive keywords unless local storage is acceptable.
+
+## Reference(s):
+
+- [Jungle Scout keyword history API reference](artifact/references/api.md)
+- [LinkFox authentication and billing onboarding](artifact/references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-keyword-history)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON files, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses saved to local files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Queries consume paid credits; full responses are saved under a local linkfox dated session directory, with stdout summarized for larger responses unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

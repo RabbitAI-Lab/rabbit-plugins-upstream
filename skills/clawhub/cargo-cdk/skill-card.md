@@ -1,51 +1,66 @@
-## Description: <br>
-Cargo Cdk helps agents define, type, preview, and deploy Cargo workspaces as TypeScript workspace-as-code using cargo-ai cdk. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage a Cargo workspace as code by defining connectors, models, plays, tools, agents, MCP servers, segments, context, folders, files, workers, and apps in TypeScript, then reconciling them with cargo-ai cdk.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and engineers use this skill when they want to manage a Cargo workspace reproducibly from code: scaffold projects, define connectors, models, tools, agents, MCP servers, apps, and workers, then plan and deploy the graph with Cargo CDK. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Deploy, destroy, and deploy --prune can change or remove live Cargo workspace resources. <br>
-Mitigation: Review cargo-ai cdk plan output before deploys, use --prune deliberately, and gate destructive operations behind human review or protected CI workflows. <br>
-Risk: Using the wrong selected workspace or token could reconcile code into the wrong Cargo environment. <br>
-Mitigation: Verify the selected workspace before deployment and keep separate state files or branches for separate environments. <br>
-Risk: API tokens and connector secrets are required for some deployments. <br>
-Mitigation: Store tokens and secret() environment variables in a secure secret store or CI secret configuration, and avoid committing secret values. <br>
-Risk: Losing cargo.state.json can orphan resources such as deployed plays and agents that do not have stable slugs. <br>
-Mitigation: Commit cargo.state.json after deploys and use cargo-ai cdk import to recover bindings for existing live resources when needed. <br>
+## Use Case:
 
+Developers and RevOps engineers use this skill to scaffold, author, review, and deploy reproducible Cargo workspaces as TypeScript-managed infrastructure.
 
-## Reference(s): <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Authoring resources guide](guides/authoring-resources.md) <br>
-- [Deploy and state guide](guides/deploy-and-state.md) <br>
-- [Typed config guide](guides/typed-config.md) <br>
-- [Command reference](references/commands.md) <br>
-- [Resource reference](references/resources.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Full workspace example](references/examples/full-workspace.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with TypeScript and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Cargo CDK project structure, configuration advice, and commands to plan, deploy, import, or destroy workspace resources.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can guide changes to live Cargo workspace resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review cargo-ai cdk plan before deploys and confirm the active workspace with cargo-ai whoami.
+
+Risk: Destructive or broad commands can remove resources or apply production-impacting changes.
+
+Mitigation: Treat destroy --all, deploy --prune, and CI --yes as deliberate, reviewed actions.
+
+Risk: Secrets and API tokens may be exposed if handled directly in code or committed files.
+
+Mitigation: Store tokens only as secrets and use environment-backed secret handling for deploy-time credentials.
+
+Risk: Losing cargo.state.json can break the link between code and deployed resources.
+
+Mitigation: Keep cargo.state.json committed and review state changes as part of deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/cargo-ai/skills/cargo-cdk)
+- [Cargo skills repository](https://github.com/getcargohq/cargo-skills)
+- [Cargo cookbooks](https://github.com/getcargohq/cargo-cookbooks)
+- [Command reference](artifact/references/commands.md)
+- [Resource reference](artifact/references/resources.md)
+- [Troubleshooting](artifact/references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with TypeScript examples, shell commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include deployment review steps for live Cargo workspace changes.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

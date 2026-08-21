@@ -1,11 +1,11 @@
 ---
 name: dlazy-video-generate
 version: 1.4.6
-description: 视频生成技能。根据提示词自动选择最佳的 dlazy CLI 视频生成模型。
+description: "视频生成技能。根据提示词自动选择最佳的 dlazy CLI 视频生成模型。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，请自动选择对应的 dlazy 子命令执行。"}}
 ---
 
-# dlazy-video-generate
+# 视频生成 Video Generate
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

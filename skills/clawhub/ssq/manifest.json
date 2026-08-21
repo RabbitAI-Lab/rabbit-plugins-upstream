@@ -1,0 +1,50 @@
+{
+  "name": "drawing-parser",
+  "version": "1.0.0",
+  "description": "建筑图纸解析引擎，支持DWG/DXF/PDF/图片格式的结构化数据提取",
+  "author": "yfg305",
+  "license": "MIT",
+  "keywords": ["建筑", "图纸解析", "CAD", "PDF", "OCR", "ezdxf", "PP-OCR"],
+  "repository": "https://github.com/yfg305/drawing-parser",
+  "homepage": "https://github.com/yfg305/drawing-parser#readme",
+  "bugs": {
+    "url": "https://github.com/yfg305/drawing-parser/issues"
+  },
+  "engines": {
+    "python": ">=3.8"
+  },
+  "dependencies": {
+    "pymupdf": ">=1.23.0",
+    "ezdxf": ">=1.4.0",
+    "openpyxl": ">=3.1.0",
+    "numpy": ">=1.24.0",
+    "matplotlib": ">=3.7.0"
+  },
+  "optional_dependencies": {
+    "ocr-v6": ["rapidocr"],
+    "ocr-dl": ["onnxruntime", "opencv-python-headless"],
+    "cad-v4": ["oda-file-converter"],
+    "cad-v3": ["autocad"]
+  },
+  "scripts": {
+    "parse-cad": "python scripts/cad_parser.py",
+    "parse-pdf": "python scripts/pdf_parser.py",
+    "install-deps": "pip install -r requirements.txt"
+  },
+  "files": [
+    "SKILL.md",
+    "manifest.json",
+    "scripts/**/*.py",
+    "scripts/ocr_service/**/*",
+    "models/**/*",
+    "examples/**/*",
+    "LICENSE",
+    "README.md"
+  ],
+  "hana_integration": {
+    "skill_type": "tool",
+    "trigger_keywords": ["解析图纸", "读图", "CAD解析", "PDF解析", "提取图纸数据"],
+    "entry_point": "scripts/main.py",
+    "output_schema": "project_data.json"
+  }
+}

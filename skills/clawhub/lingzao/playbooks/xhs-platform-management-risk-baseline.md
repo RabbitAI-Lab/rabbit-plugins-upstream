@@ -101,7 +101,7 @@ Before producing Xiaohongshu copy or advice, scan these layers:
 | Keywords | Are tags carrying WeChat/private-domain/contact words? | Remove unless analyzing risk itself. |
 | Pinned content | Is it comment-gated or benefit-gated? | Use non-transactional follow-up. |
 | Brand Brief | Does the brand require QR/link/group/contact? | Mark as risk and request safe replacement. |
-| Image generation | Is risky text being baked into the image? | Fix text before spending image credits. |
+| Image generation | Is risky text being baked into the image? | Fix text before generating another image. |
 
 ## Output Contract
 

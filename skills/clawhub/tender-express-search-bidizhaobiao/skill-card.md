@@ -1,46 +1,66 @@
-## Description: <br>
-地方标讯极速检索-比地招标，当用户指定省份、城市或特定地域进行下沉标讯搜索时调用，必须严格应用地域过滤器参数，快速返回按时间倒序排列的地方采购公告及预算金额。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches local Chinese tender and procurement notices by geography, keyword, amount, and date, and supports related company, market, account, and registration API workflows.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External procurement analysts, sales teams, and agent users use this skill to search Chinese tender notices by keyword, geography, amount, and date, then retrieve details or summarize local opportunities. It also supports company, competitor, contact, and market-intelligence lookups when those broader procurement-analysis workflows are requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security summary flags that this skill exposes broader company, contact, competitor, and market-intelligence features than the local tender-search description suggests. <br>
-Mitigation: Use it only when the full procurement-intelligence scope is acceptable, and require explicit user intent before company expansion, contact lookup, competitor analysis, or market aggregation. <br>
-Risk: The skill requires a sensitive API key and can consume account quota. <br>
-Mitigation: Use a dedicated ZLBX_API_KEY, store it in the agent environment or approved secret store, monitor quota, and avoid exposing the key in prompts or logs. <br>
-Risk: Search terms, company names, and contact lookups may reveal sensitive business interests to an external procurement API. <br>
-Mitigation: Avoid confidential search terms, apply region filters when needed, and review results before sharing them outside the intended workflow. <br>
+## Use Case:
 
+External procurement, sales, and business-development users can search regional Chinese tender notices, inspect bid details, and analyze companies, suppliers, purchasers, brands, pricing, and account usage through a provider API.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/tender-express-search-bidizhaobiao) <br>
-- [Bidizhaobiao API key setup](https://ai.zhiliaobiaoxun.com/?ch=s27) <br>
-- [Tender Search API Reference](references/api-search.md) <br>
-- [Company Analysis API Reference](references/api-company.md) <br>
-- [Market Analysis API Reference](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown summaries with JSON API request examples and retrieved procurement data] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and may consume API quota for each request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata) <br>
+Risk: The release is advertised as local tender search but also enables broader business intelligence, contact lookup, account handling, device-based registration, and persistent API-key storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the full tool scope before installation and enable only when the broader procurement and business-intelligence integration is acceptable.
+
+Risk: Auto-registration can send device-derived features to the provider and store a generated API key locally.
+
+Mitigation: Prefer configuring a manually issued ZLBX_API_KEY, and use auto-registration only after explicit user consent.
+
+Risk: Contact lookup and account or billing queries may expose sensitive operational information in shared or regulated environments.
+
+Mitigation: Limit use to authorized users and avoid displaying API keys or unnecessary account details in shared conversations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/liu-jiapeng/skills/tender-express-search-bidizhaobiao)
+- [Publisher Profile](https://clawhub.ai/user/liu-jiapeng)
+- [Skill Definition](artifact/SKILL.md)
+- [Tender Search API Reference](artifact/references/api-search.md)
+- [Company Analysis API Reference](artifact/references/api-company.md)
+- [Market Analysis API Reference](artifact/references/api-market.md)
+- [Account API Reference](artifact/references/api-account.md)
+- [Auto Registration Reference](artifact/references/auto-register.md)
+- [Provider API Base](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool})
+- [Provider API Key Portal](https://ai.zhiliaobiaoxun.com/?ch=s27)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON request and response examples plus API-derived text summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or provider configuration; responses may include procurement, company, contact, account, and billing data.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

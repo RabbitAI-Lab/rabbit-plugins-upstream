@@ -7,7 +7,7 @@ description: Create a shareable RooQuiz preview scorecard — a scored questionn
 
 POST a scorecard as JSON to RooQuiz's open preview endpoint and instantly get a **short-lived (~1 hour)**, **browser-openable** preview link. The creation endpoint is public (`access.create => true`), so this needs **no account, login, API key, or credentials** — anything that can make an HTTP request can use it.
 
-A **scorecard** (`scene: "scorecard"`) is a scored questionnaire: there's no "correct" answer — instead each option carries a point value, the `report.formula` totals them, and `report.levels` buckets the total into a result band (e.g. "Needs Work" → "Healthy"). It produces a **temporary preview**, not a permanently published form — the link expires automatically (recreate it in RooQuiz if you need to keep it).
+A **scorecard** (`scene: "scored_quiz"`) is a scored questionnaire: there's no "correct" answer — instead each option carries a point value, the `report.formula` totals them, and `report.levels` buckets the total into a result band (e.g. "Needs Work" → "Healthy"). It produces a **temporary preview**, not a permanently published form — the link expires automatically (recreate it in RooQuiz if you need to keep it).
 
 Two sibling skills cover the other assessment types — pick the one that matches:
 - **preview-quiz** — a right/wrong assessment where correct answers earn points and the taker gets a graded score.
@@ -17,7 +17,7 @@ Two sibling skills cover the other assessment types — pick the one that matche
 
 1. **Build the scorecard JSON** (structure below).
 2. **Create it:** `POST {PREVIEW_BASE}/api/preview-forms` with the JSON as the body and header `Content-Type: application/json`. Returns `{ doc: { publicToken, expiresAt }, message }`.
-3. **Hand back the link:** `{QUIZ_BASE}/b/{publicToken}` (append `?secret={secret}` only if you set a `secret` when creating).
+3. **Hand back the link:** `{QUIZ_BASE}/b/{publicToken}` — that is the whole link, nothing to append.
 
 ### Endpoints
 
@@ -59,26 +59,24 @@ Read `doc.publicToken` and build the preview link to hand the user:
 https://quizster.app/b/<publicToken>
 ```
 
-If you set a `secret` in the JSON, append `?secret=<secret>` to that link. For a self-hosted RooQuiz, swap the two hosts for your deployment's preview-API and quiz hosts (see the endpoints table above).
+That is the complete link — nothing to append. For a self-hosted RooQuiz, swap the two hosts for your deployment's preview-API and quiz hosts (see the endpoints table above).
 
 ## Scorecard JSON — top level
 
 ```jsonc
 {
-  "scene": "scorecard",            // required & fixed for this skill. Sets allowed question types and scoring. Cannot change after creation.
+  "scene": "scored_quiz",            // required & fixed for this skill. Sets allowed question types and scoring. Cannot change after creation.
   "title": "My Scorecard",         // required
   "description": "Optional intro",
   "language": "en_US",             // form language; default zh_CN. See "language values" in Notes.
-  "personalized": {                // appearance; omit to use defaults (list layout, light theme)
+  "personalized": {                // appearance; omit to use defaults (light theme)
     "key": "default",
-    "theme": { "name": "light" },
-    "layout": "card"               // "list" | "card"
+    "theme": { "name": "light" }
   },
   "indexDisplayMode": "number",    // question numbering: none (default) | number | uppercase | roman
   "fields": [ /* questions — see "Question types" and "Scoring" */ ],
   "report": { /* results page — see "Report configuration" */ },
-  "rules": [],                     // conditional-display rules (scorecard-only feature); usually []
-  "secret": "optional; if set, the preview link must include ?secret="
+  "rules": []                      // conditional-display rules (scorecard-only feature); usually []
 }
 ```
 
@@ -86,11 +84,10 @@ Key points:
 - Every question needs a **unique `code`** (string); option `code`s must be unique within their question. A `code` must be a valid identifier — start with a letter or `_`, then only letters/digits/`_` (no `-`, spaces, or leading digit), max 64 chars, and not a reserved math word (`e`, `E`, `pi`, `PI`, `tau`, `phi`, `i`, `Infinity`, `NaN`, `true`, `false`, `null`, `undefined`). The server rejects violations with HTTP 400. Codes are also what the `formula` references.
 - `name` is the question text; `description` is optional helper text.
 - Unknown top-level fields are silently ignored by the server (no error).
-- **`secret`**: omit it for a clean link that works with just the token (tokens are random 8-char and expire in ~1 hour — fine for previews). Set it to make the token unguessable, at the cost of requiring `?secret=` on the link. Default: omit.
 
 ## Themes
 
-`personalized.theme.name` sets the visual theme. Omit `theme` to default to `light`. Set it as `"personalized": { "key": "default", "theme": { "name": "synthwave" }, "layout": "card" }` (`layout` is still only `list` or `card`).
+`personalized.theme.name` sets the visual theme. Omit `theme` to default to `light`. Set it as `"personalized": { "key": "default", "theme": { "name": "synthwave" } }`. There is no `personalized.layout` — card is the only answering layout. (The per-field `layout` (`list`/`grid`) is a different thing and still valid.)
 
 Pick a theme that fits the questionnaire's topic/mood. **To use a random theme** — when the user asks for one, wants variety, or has no preference — just choose a random `name` from this list when building the JSON (there's no server-side "random" option). Recommended palette:
 
@@ -168,7 +165,7 @@ These wrong patterns get reached for out of habit; the server rejects them with 
 - **Option lists are `choices`, never `options`.** Every choice question uses `"choices": [{ "code": "a", "value": "Label" }]`. There is no `options` key.
 - **Codes must be valid identifiers, not arbitrary text** — no hyphens (`type-a`), spaces, or leading digits (`1q`), and not reserved math words. Watch out for **5+ options coded `a,b,c,d,e`**: `e` (Euler's number) is reserved and rejected — use `o1, o2, …` or another non-reserved identifier.
 - **Scoring is a field-level `partialScoring` array, not a value nested inside each choice.** Correct: `"partialScoring": [{ "value": "a", "score": 5 }]` next to `choices`. Wrong: `{ "code": "a", "value": "…", "score": 5 }` on the option itself.
-- **Don't set `correctAnswer`/`exactScoring`** — those are for the right/wrong quiz scene and are rejected here.
+- **Don't set `correctAnswer`/`exactScoring`** — those are for the right/wrong knowledge_quiz scene and are rejected here.
 - **Provide a `formula`** that references your question codes — without it the total won't add up. And `report.overallAnalysis` is required.
 
 ## Complete example
@@ -177,10 +174,10 @@ The `personalized.theme.name` is matched to the topic (see **Themes** above) —
 
 ```json
 {
-  "scene": "scorecard",
+  "scene": "scored_quiz",
   "title": "Healthy Habits Score",
   "language": "en_US",
-  "personalized": { "key": "default", "theme": { "name": "forest" }, "layout": "card" },
+  "personalized": { "key": "default", "theme": { "name": "forest" } },
   "fields": [
     {
       "type": "SingleCheck", "code": "q1", "name": "How often do you exercise?",
@@ -226,6 +223,6 @@ The `personalized.theme.name` is matched to the topic (see **Themes** above) —
 
 - **Expiry:** previews self-destruct after about **1 hour** (`expiresAt`); the link 404s afterward. Recreate it in RooQuiz to keep it permanently.
 - **Rate limit:** anonymous creation is capped at about **10 previews per hour** per IP.
-- **Validation errors:** a 400 response includes `errors[].path` and `message` — fix the JSON and retry. Most common: a question type or scoring style that doesn't match `scene: "scorecard"`, non-contiguous `levels`, or a `formula` referencing a code that isn't a question.
+- **Validation errors:** a 400 response includes `errors[].path` and `message` — fix the JSON and retry. Most common: a question type or scoring style that doesn't match `scene: "scored_quiz"`, non-contiguous `levels`, or a `formula` referencing a code that isn't a question.
 - **Results page looks empty?** This is a preview (no submission backend); results are computed in the browser from the returned questions + `report`. Make sure `report.overallAnalysis` exists with a `formula`, and scored questions carry `partialScoring`.
 - **`language` values:** `en_US` `de_DE` `es` `pt_BR` `fr` `zh_CN` (default) `zh_TW` `ja_JP` `ko_KR`.

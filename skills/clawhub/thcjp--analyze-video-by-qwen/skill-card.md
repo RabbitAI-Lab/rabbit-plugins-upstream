@@ -1,43 +1,58 @@
-## Description: <br>
-Analyzes local or remote video with Alibaba Cloud Qwen multimodal models, using configurable prompts and frame sampling to produce scene descriptions, object and action analysis, summaries, content review, and Q&A-style answers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes local video files or public video URLs with Alibaba Cloud DashScope/Qwen multimodal models to produce scene descriptions, object and action observations, summaries, content review notes, and prompt-directed answers.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, content teams, media asset managers, educators, and operations reviewers use this skill to inspect videos, summarize scenes, identify objects or actions, and ask targeted questions about local files or public video URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Video content and prompts may be sent to Alibaba Cloud DashScope/Qwen, including sensitive or regulated footage. <br>
-Mitigation: Use only videos and prompts approved for that provider, and avoid private or regulated footage unless organizational policy allows it. <br>
-Risk: DashScope API keys can be exposed if commands print configuration files or secrets to terminal output or chat logs. <br>
-Mitigation: Read keys only from the configured local file, avoid commands that echo or grep secrets, and redact any accidental secret output. <br>
-Risk: The skill uses shell execution to drive analysis workflows. <br>
-Mitigation: Review proposed commands before execution and run only commands needed for the requested video analysis. <br>
+## Use Case:
 
+Developers, content teams, media operators, educators, and automated workflows use this skill to ask an agent for video understanding tasks such as scene description, object and action recognition, video summarization, content review, and question-answer analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/analyze-video-by-qwen) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Qwen video analysis results, execution notes, configuration guidance, and structured JSON-style examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Local or sensitive videos may be sent to Alibaba Cloud DashScope/Qwen during analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only videos that are approved for that provider and avoid private, regulated, or confidential footage until data-handling terms are confirmed.
+
+Risk: The artifact shows cat/grep API-key commands that can expose secrets in terminal output or logs.
+
+Mitigation: Do not run those commands; configure DashScope credentials through a clearly scoped secret mechanism and avoid echoing keys.
+
+Risk: The artifact contains inconsistent credential paths and incomplete command examples.
+
+Mitigation: Review and correct credential configuration and execution commands before using the skill in production workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/analyze-video-by-qwen)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and optional JSON-shaped result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are prompt-directed video analysis results; higher FPS may increase cost and latency.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

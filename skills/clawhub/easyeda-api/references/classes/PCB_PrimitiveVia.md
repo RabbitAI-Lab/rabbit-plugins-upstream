@@ -1,11 +1,11 @@
 # PCB\_PrimitiveVia class
 
-PCB &amp; 封装 / 过孔图元类
+PCB &amp; footprint / via primitive class
 
 ## Signature
 
 ```typescript
-declare class PCB_PrimitiveVia implements IPCB_PrimitiveAPI 
+export class PCB_PrimitiveVia implements IPCB_PrimitiveAPI 
 ```
 **Implements:** [IPCB\_PrimitiveAPI](../interfaces/IPCB_PrimitiveAPI.md)
 
@@ -37,7 +37,7 @@ Description
 
 </td><td>
 
-创建过孔
+Create Via
 
 
 </td></tr>
@@ -51,7 +51,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除过孔
+**_(BETA)_** Delete Via
 
 
 </td></tr>
@@ -65,7 +65,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取过孔
+**_(BETA)_** Get Via
 
 
 </td></tr>
@@ -79,7 +79,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取过孔
+**_(BETA)_** Get Via
 
 
 </td></tr>
@@ -93,7 +93,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有过孔
+**_(BETA)_** Get all Via
 
 
 </td></tr>
@@ -107,7 +107,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有过孔图元 ID
+**_(BETA)_** Get all Via primitive ID
 
 
 </td></tr>
@@ -121,7 +121,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改过孔
+**_(BETA)_** Modify Via
 
 
 </td></tr>
@@ -135,12 +135,12 @@ Description
 
 # PCB\_PrimitiveVia.create() method
 
-创建过孔
+Create Via
 
 ## Signature
 
 ```typescript
-create(net: string, x: number, y: number, holeDiameter: number, diameter: number, viaType?: EPCB_PrimitiveViaType, designRuleBlindViaName?: string | null, solderMaskExpansion?: IPCB_PrimitiveSolderMaskAndPasteMaskExpansion | null, primitiveLock?: boolean): Promise<IPCB_PrimitiveVia | undefined>;
+public create(net: string, x: number, y: number, holeDiameter: number, diameter: number, viaType?: EPCB_PrimitiveViaType, designRuleBlindViaName?: string | null, solderMaskExpansion?: IPCB_PrimitiveSolderMaskAndPasteMaskExpansion | null, primitiveLock?: boolean): Promise<IPCB_PrimitiveVia | undefined>;
 ```
 
 ## Parameters
@@ -173,7 +173,7 @@ string
 
 </td><td>
 
-网络名称
+Net name
 
 
 </td></tr>
@@ -189,7 +189,7 @@ number
 
 </td><td>
 
-坐标 X
+X coordinate
 
 
 </td></tr>
@@ -205,7 +205,7 @@ number
 
 </td><td>
 
-坐标 Y
+Y coordinate
 
 
 </td></tr>
@@ -221,7 +221,7 @@ number
 
 </td><td>
 
-孔径
+Hole diameter
 
 
 </td></tr>
@@ -237,7 +237,7 @@ number
 
 </td><td>
 
-外径
+Outer diameter
 
 
 </td></tr>
@@ -253,7 +253,7 @@ viaType
 
 </td><td>
 
-_(Optional)_ 过孔类型
+_(Optional)_ Via type
 
 
 </td></tr>
@@ -269,7 +269,7 @@ string \| null
 
 </td><td>
 
-_(Optional)_ 盲埋孔设计规则项名称，定义过孔的开始层与结束层，`null` 表示非盲埋孔
+_(Optional)_ Blind/buried via design rule item name, which defines the start and end layers of the via. `null` means it is not a blind/buried via
 
 
 </td></tr>
@@ -285,7 +285,7 @@ solderMaskExpansion
 
 </td><td>
 
-_(Optional)_ 阻焊/助焊扩展，`null` 表示跟随规则
+_(Optional)_ Solder mask/paste mask expansion. `null` means following the rules
 
 
 </td></tr>
@@ -301,7 +301,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -313,7 +313,27 @@ _(Optional)_ 是否锁定
 
 Promise&lt;[IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md) \| undefined&gt;
 
-过孔图元对象
+Via primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成随机放置坐标，避免与画布上已有的过孔重合
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+
+// 2. 创建通孔：孔径 20mil、外径 40mil，不挂网络、不锁定（viaType 省略时默认通孔 0）
+const via = await eda.pcb_PrimitiveVia.create('', x, y, 20, 40);
+
+// 3. 创建类保留现场，不删除图元
+console.log('primitiveId:', via.getState_PrimitiveId());
+console.log('primitiveType:', via.getState_PrimitiveType());
+console.log('net:', via.getState_Net());
+console.log('holeDiameter:', via.getState_HoleDiameter());
+console.log('diameter:', via.getState_Diameter());
+console.log('x:', via.getState_X(), 'y:', via.getState_Y());
+```
 
 ### delete
 
@@ -321,12 +341,12 @@ Promise&lt;[IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md) \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除过孔
+Delete Via
 
 ## Signature
 
 ```typescript
-delete(primitiveIds: string | IPCB_PrimitiveVia | Array<string> | Array<IPCB_PrimitiveVia>): Promise<boolean>;
+public delete(primitiveIds: string | IPCB_PrimitiveVia | Array<string> | Array<IPCB_PrimitiveVia>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -359,7 +379,7 @@ string \| [IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md) \| Array&lt;string&gt; \|
 
 </td><td>
 
-过孔的图元 ID 或过孔图元对象
+Via primitive ID or Via primitive object
 
 
 </td></tr>
@@ -371,7 +391,30 @@ string \| [IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md) \| Array&lt;string&gt; \|
 
 Promise&lt;boolean&gt;
 
-删除操作是否成功
+Delete Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 创建两个待删除的测试过孔（随机坐标避免重合）
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+const via1 = await eda.pcb_PrimitiveVia.create('', x, y, 20, 40);
+const via2 = await eda.pcb_PrimitiveVia.create('', x, y + 500, 20, 40);
+
+// 2. 记录删除前的过孔数量
+const beforeCount = (await eda.pcb_PrimitiveVia.getAll()).length;
+
+// 3. 以 ID 数组形式批量删除两个过孔
+const deleted = await eda.pcb_PrimitiveVia.delete([via1.getState_PrimitiveId(), via2.getState_PrimitiveId()]);
+
+// 4. 删除类保留现场（图元已删除，不恢复）
+const afterCount = (await eda.pcb_PrimitiveVia.getAll()).length;
+
+console.log('deleted:', deleted);
+console.log('beforeCount:', beforeCount, '→ afterCount:', afterCount);
+```
 
 ### get
 
@@ -379,12 +422,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取过孔
+Get Via
 
 ## Signature
 
 ```typescript
-get(primitiveIds: string): Promise<IPCB_PrimitiveVia | undefined>;
+public get(primitiveIds: string): Promise<IPCB_PrimitiveVia | undefined>;
 ```
 
 ## Parameters
@@ -417,7 +460,7 @@ string
 
 </td><td>
 
-过孔的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Via primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -429,7 +472,31 @@ string
 
 Promise&lt;[IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md) \| undefined&gt;
 
-过孔图元对象，`undefined` 表示获取失败
+Via primitive object, `undefined` indicates that the retrieval failed
+
+## Example
+
+
+```javascript
+// 1. 创建两个测试过孔（随机坐标避免重合），尺寸不同便于区分
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+const via1 = await eda.pcb_PrimitiveVia.create('', x, y, 20, 40);
+const via2 = await eda.pcb_PrimitiveVia.create('', x, y + 500, 30, 60);
+
+// 2. 传单个 ID 字符串，返回单个过孔对象
+const single = await eda.pcb_PrimitiveVia.get(via1.getState_PrimitiveId());
+
+// 3. 传 ID 数组，返回过孔对象数组
+const arr = await eda.pcb_PrimitiveVia.get([via1.getState_PrimitiveId(), via2.getState_PrimitiveId()]);
+
+// 4. 清理测试图元（查询类需要清理）
+await eda.pcb_PrimitiveVia.delete([via1.getState_PrimitiveId(), via2.getState_PrimitiveId()]);
+
+console.log('single holeDiameter:', single.getState_HoleDiameter());
+console.log('array length:', arr.length);
+console.log('via2 diameter:', arr[1].getState_Diameter());
+```
 
 ### get_1
 
@@ -437,12 +504,12 @@ Promise&lt;[IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md) \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取过孔
+Get Via
 
 ## Signature
 
 ```typescript
-get(primitiveIds: Array<string>): Promise<Array<IPCB_PrimitiveVia>>;
+public get(primitiveIds: Array<string>): Promise<Array<IPCB_PrimitiveVia>>;
 ```
 
 ## Parameters
@@ -475,7 +542,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-过孔的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Via primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -487,11 +554,11 @@ Array&lt;string&gt;
 
 Promise&lt;Array&lt;[IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md)<!-- -->&gt;&gt;
 
-过孔图元对象，空数组表示获取失败
+Via primitive object; an empty array indicates that the retrieval failed
 
 ## Remarks
 
-如若传入多个图元 ID，任意图元 ID 未匹配到不影响其它图元的返回，即可能返回少于传入的图元 ID 数量的图元对象
+If multiple primitive IDs are passed in, a primitive ID that is not matched will not affect the return of other primitives; that is, fewer primitive objects than the number of primitive IDs passed in may be returned.
 
 ### getall
 
@@ -499,12 +566,12 @@ Promise&lt;Array&lt;[IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md)<!-- -->&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有过孔
+Get all Via
 
 ## Signature
 
 ```typescript
-getAll(net?: string, primitiveLock?: boolean): Promise<Array<IPCB_PrimitiveVia>>;
+public getAll(net?: string, primitiveLock?: boolean): Promise<Array<IPCB_PrimitiveVia>>;
 ```
 
 ## Parameters
@@ -537,7 +604,7 @@ string
 
 </td><td>
 
-_(Optional)_ 网络名称
+_(Optional)_ Net name
 
 
 </td></tr>
@@ -553,7 +620,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -565,7 +632,31 @@ _(Optional)_ 是否锁定
 
 Promise&lt;Array&lt;[IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md)<!-- -->&gt;&gt;
 
-过孔图元对象数组
+Array of Via primitive objects
+
+## Example
+
+
+```javascript
+// 1. 创建一个挂网络的测试过孔作为过滤目标（网络不存在会自动创建，随机坐标避免重合）
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+const via = await eda.pcb_PrimitiveVia.create('嘉立创示例_NET1', x, y, 20, 40);
+const viaId = via.getState_PrimitiveId();
+
+// 2. 不带参数：获取 PCB 上全部过孔
+const all = await eda.pcb_PrimitiveVia.getAll();
+
+// 3. 按网络过滤：只取挂在该网络下的过孔
+const netVias = await eda.pcb_PrimitiveVia.getAll('嘉立创示例_NET1');
+
+// 4. 清理测试图元（查询类需要清理）
+await eda.pcb_PrimitiveVia.delete([viaId]);
+
+console.log('total vias:', all.length);
+console.log('vias on demo net:', netVias.length);
+console.log('marker via found:', netVias.some(v => v.getState_PrimitiveId() === viaId));
+```
 
 ### getallprimitiveid
 
@@ -573,12 +664,12 @@ Promise&lt;Array&lt;[IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md)<!-- -->&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有过孔图元 ID
+Get all Via primitive ID
 
 ## Signature
 
 ```typescript
-getAllPrimitiveId(net?: string, primitiveLock?: boolean): Promise<Array<string>>;
+public getAllPrimitiveId(net?: string, primitiveLock?: boolean): Promise<Array<string>>;
 ```
 
 ## Parameters
@@ -611,7 +702,7 @@ string
 
 </td><td>
 
-_(Optional)_ 网络名称
+_(Optional)_ Net name
 
 
 </td></tr>
@@ -627,7 +718,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -639,7 +730,31 @@ _(Optional)_ 是否锁定
 
 Promise&lt;Array&lt;string&gt;&gt;
 
-过孔的图元 ID 数组
+Array of Via primitive IDs
+
+## Example
+
+
+```javascript
+// 1. 创建一个挂网络的测试过孔作为查找目标（随机坐标避免重合）
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+const via = await eda.pcb_PrimitiveVia.create('嘉立创示例_NET1', x, y, 20, 40);
+const viaId = via.getState_PrimitiveId();
+
+// 2. 获取全部过孔的图元 ID
+const allIds = await eda.pcb_PrimitiveVia.getAllPrimitiveId();
+
+// 3. 按网络过滤：只取挂在该网络下过孔的图元 ID
+const netIds = await eda.pcb_PrimitiveVia.getAllPrimitiveId('嘉立创示例_NET1');
+
+// 4. 清理测试图元（查询类需要清理）
+await eda.pcb_PrimitiveVia.delete([viaId]);
+
+console.log('total via ids:', allIds.length);
+console.log('demo net via ids:', netIds.length);
+console.log('marker id in filtered list:', netIds.includes(viaId));
+```
 
 ### modify
 
@@ -647,22 +762,12 @@ Promise&lt;Array&lt;string&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改过孔
+Modify Via
 
 ## Signature
 
 ```typescript
-modify(primitiveId: string | IPCB_PrimitiveVia, property: {
-        net?: string;
-        x?: number;
-        y?: number;
-        holeDiameter?: number;
-        diameter?: number;
-        viaType?: EPCB_PrimitiveViaType;
-        designRuleBlindViaName?: string | null;
-        solderMaskExpansion?: IPCB_PrimitiveSolderMaskAndPasteMaskExpansion | null;
-        primitiveLock?: boolean;
-    }): Promise<IPCB_PrimitiveVia | undefined>;
+public modify(primitiveId: string | IPCB_PrimitiveVia, property: { net?: undefined | string; x?: undefined | number; y?: undefined | number; holeDiameter?: undefined | number; diameter?: undefined | number; viaType?: undefined | EPCB_PrimitiveViaType.VIA | EPCB_PrimitiveViaType.BLIND | EPCB_PrimitiveViaType.SUTURE; designRuleBlindViaName?: undefined | null | string; solderMaskExpansion?: undefined | null | IPCB_PrimitiveSolderMaskAndPasteMaskExpansion; primitiveLock?: undefined | false | true }): Promise<IPCB_PrimitiveVia | undefined>;
 ```
 
 ## Parameters
@@ -695,7 +800,7 @@ string \| [IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md)
 
 </td><td>
 
-图元 ID
+Primitive ID
 
 
 </td></tr>
@@ -706,12 +811,12 @@ property
 
 </td><td>
 
-{ net?: string; x?: number; y?: number; holeDiameter?: number; diameter?: number; viaType?: [EPCB\_PrimitiveViaType](../enums/EPCB_PrimitiveViaType.md)<!-- -->; designRuleBlindViaName?: string \| null; solderMaskExpansion?: [IPCB\_PrimitiveSolderMaskAndPasteMaskExpansion](../interfaces/IPCB_PrimitiveSolderMaskAndPasteMaskExpansion.md) \| null; primitiveLock?: boolean; }
+{ net?: undefined \| string; x?: undefined \| number; y?: undefined \| number; holeDiameter?: undefined \| number; diameter?: undefined \| number; viaType?: undefined \| [EPCB\_PrimitiveViaType.VIA](../enums/EPCB_PrimitiveViaType.md) \| [EPCB\_PrimitiveViaType.BLIND](../enums/EPCB_PrimitiveViaType.md) \| [EPCB\_PrimitiveViaType.SUTURE](../enums/EPCB_PrimitiveViaType.md)<!-- -->; designRuleBlindViaName?: undefined \| null \| string; solderMaskExpansion?: undefined \| null \| [IPCB\_PrimitiveSolderMaskAndPasteMaskExpansion](../interfaces/IPCB_PrimitiveSolderMaskAndPasteMaskExpansion.md)<!-- -->; primitiveLock?: undefined \| false \| true }
 
 
 </td><td>
 
-修改参数
+Modify Parameter
 
 
 </td></tr>
@@ -723,4 +828,30 @@ property
 
 Promise&lt;[IPCB\_PrimitiveVia](./IPCB_PrimitiveVia.md) \| undefined&gt;
 
-过孔图元对象
+Via primitive object
+
+## Example
+
+
+```javascript
+// 1. 创建待修改的测试过孔：孔径 20mil、外径 40mil（随机坐标避免重合）
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+const via = await eda.pcb_PrimitiveVia.create('', x, y, 20, 40);
+const viaId = via.getState_PrimitiveId();
+
+// 2. 读取修改前的孔径与外径
+const beforeHole = via.getState_HoleDiameter();
+const beforeDiameter = via.getState_Diameter();
+
+// 3. 批量修改：孔径从 20 调大到 30，外径从 40 调大到 60
+await eda.pcb_PrimitiveVia.modify(viaId, { holeDiameter: 30, diameter: 60 });
+
+// 4. modify 返回后需要重新 get() 才能读到画布上的最新值
+const refreshed = await eda.pcb_PrimitiveVia.get(viaId);
+
+// 5. 修改类保留现场，供观察修改结果
+console.log('primitiveId:', viaId);
+console.log('holeDiameter:', beforeHole, '→', refreshed.getState_HoleDiameter());
+console.log('diameter:', beforeDiameter, '→', refreshed.getState_Diameter());
+```

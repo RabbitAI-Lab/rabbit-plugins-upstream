@@ -1,53 +1,63 @@
-## Description: <br>
-得到大脑（Get笔记） helps an agent save, search, view, update, delete, share, and organize a user's GetNote notes and knowledge bases through the GetNote cloud API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过官方 getnote CLI 连接得到大脑，完成浏览器授权、连接诊断、CLI 升级，以及保存、查询、搜索、整理和管理用户的真实笔记。
 
-## Publisher: <br>
-[iswalle](https://clawhub.ai/user/iswalle) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iswalle](https://clawhub.ai/user/iswalle)
 
-## Use Case: <br>
-External users use this skill to let an agent capture text, links, images, and source material into GetNote, recall existing notes with semantic search, and manage notes, tags, knowledge bases, and sharing actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read, modify, delete, and share private notes through broad natural-language triggers. <br>
-Mitigation: Use explicit user commands, configure owner checking where possible, and require confirmation before destructive changes or share-link generation. <br>
-Risk: Public share links can expose private note content outside the user's account. <br>
-Mitigation: Generate share links only after the user clearly asks to share a note, and distinguish private internal note links from public share links. <br>
-Risk: Note queries, links, images, and management actions are handled by GetNote's cloud API. <br>
-Mitigation: Install only when cloud processing by GetNote is acceptable for the user's note content and account. <br>
-Risk: Incorrect note IDs or unverified API outcomes could lead to wrong edits, deletions, or misleading success messages. <br>
-Mitigation: Use note IDs returned by the API, preserve large IDs as strings, check API success fields, and poll asynchronous save tasks until a final status is returned. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent operate their own GetNote/得到大脑 account through the official getnote CLI, including authentication, diagnostics, note capture, search, knowledge-base organization, subscriptions, and tag management.
 
-## Reference(s): <br>
-- [GetNote homepage](https://biji.com) <br>
-- [GetNote OpenAPI base URL](https://openapi.biji.com) <br>
-- [GetNote Open Platform](https://www.biji.com/openapi) <br>
-- [API details](references/api-details.md) <br>
-- [OAuth configuration](references/oauth.md) <br>
-- [Save notes](references/save.md) <br>
-- [Search notes](references/search.md) <br>
-- [List, update, delete, and share notes](references/list.md) <br>
-- [Knowledge base management](references/knowledge.md) <br>
-- [Tag management](references/tags.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with API results, inline shell commands, configuration snippets, and status guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include GetNote note IDs, search results, task progress, authorization status, and share links returned by the GetNote API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.9 (source: server release evidence and package.json) <br>
+Risk: Authorized CLI actions can change remote GetNote account data, including saves, updates, archives, shares, deletes, tag replacement, folder removals, subscriptions, and updates.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval for destructive, public, replacement, subscription, folder-removal, and update actions, then verify the final server state with getnote JSON results before reporting success.
+
+Risk: Authentication or private note content could be exposed if handled directly in chat.
+
+Mitigation: Use browser-based getnote CLI authorization, never request or display API keys, cookies, or Authorization values, and avoid expanding private full text in shared contexts unless the user explicitly requests it.
+
+Risk: Asynchronous saves, network failures, or partial command results can leave write outcomes uncertain.
+
+Mitigation: Check exit codes and success fields, poll task IDs to final status, preserve request IDs on failure, and query existing results before retrying writes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iswalle/skills/getnote)
+- [Skill instructions](artifact/SKILL.md)
+- [Authentication, diagnostics, and updates](artifact/references/auth.md)
+- [Notes](artifact/references/note.md)
+- [Search](artifact/references/search.md)
+- [Knowledge bases](artifact/references/kb.md)
+- [Tags](artifact/references/tag.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown text with inline shell commands and JSON-derived command results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include real note titles, note IDs, note URLs, summaries, status messages, confirmation prompts, and request IDs.]
+
+## Skill Version(s):
+
+2.0.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

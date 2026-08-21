@@ -1,42 +1,64 @@
-## Description: <br>
-Iterate automates multi-round code review and iteration by running configurable parallel review dimensions, applying atomic fixes, routing architectural fixes for approval, validating, merging, and pushing until no findings remain or a configured round limit is reached. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fully automated multi-round code iteration with configurable N-dimension parallel review, onboarding/personalization, and a cross-assistant installer/update system with mandatory SHA256 checksum verification.
 
-## Publisher: <br>
-[jingzhao-l](https://clawhub.ai/user/jingzhao-l) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jingzhao-l](https://clawhub.ai/user/jingzhao-l)
 
-## Use Case: <br>
-Developers and engineering teams use Iterate before release, during refactoring, or at iteration wrap-up to systematically review code across correctness, security, performance, architecture, tests, and related dimensions, then apply validated fixes under its workflow controls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact code changes and git operations, including commits, merges, and pushes. <br>
-Mitigation: Install only for explicitly invoked automation, verify the target branch, consider setting git.push_per_round to false, and review generated commits plus the decision log before allowing remote updates. <br>
-Risk: Project-configured validation commands may run during the iteration workflow. <br>
-Mitigation: Review validation.commands and command whitelists before use so only trusted project commands are executed. <br>
+## Use Case:
 
+Developers and software engineering teams use Iterate to run multi-round code review, bug fixing, security hardening, validation, and project onboarding across AI coding assistants. It can also run in review-only mode to produce read-only health-check reports without changing files.
 
-## Reference(s): <br>
-- [Server-resolved GitHub provenance](https://github.com/jingzhao-l/iterate-skill) <br>
-- [ClawHub release page](https://clawhub.ai/jingzhao-l/skills/iterate-skill) <br>
-- [Agent Skills](https://agentskills.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and structured text with code edits, shell commands, configuration guidance, and decision-log entries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces an iterative workflow for review findings, fixes, validation results, commits, merges, pushes, and summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: The skill may use broad repository read/write access, shell validation, and git operations during normal iteration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that access is acceptable, keep work on isolated branches or worktrees, and review generated changes before merging.
+
+Risk: Automatic merge or push could publish unintended changes if explicitly enabled.
+
+Mitigation: Keep auto_merge and push_per_round disabled unless the repository has appropriate review and branch protection controls.
+
+Risk: Installer and update flows can place a PATH command and download release assets.
+
+Mitigation: Use --no-cli if a PATH command is not desired, prefer verified installer paths, and avoid curl-pipe-shell installation flows.
+
+Risk: Passing GitHub tokens on a command line can expose credentials through shell history or process listings.
+
+Mitigation: Do not pass GitHub tokens on the command line; use safer credential handling and remove unnecessary tokens.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/jingzhao-l/skills/iterate-skill)
+- [Publisher Profile](https://clawhub.ai/user/jingzhao-l)
+- [Project Repository](https://github.com/jingzhao-l/iterate-skill)
+- [npm Installer](https://www.npmjs.com/package/iterate-skill-installer)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown reports with code edits, shell command plans, and configuration files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Normal mode may modify repository files and git state; review-only mode produces read-only reports.]
+
+## Skill Version(s):
+
+2.5.0 (source: frontmatter, pyproject.toml, changelog, ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

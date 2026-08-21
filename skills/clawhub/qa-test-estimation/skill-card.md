@@ -1,40 +1,48 @@
-## Description: <br>
-Helps QA teams estimate testing effort from requirement complexity, change scope, historical baselines, and risk factors, producing phased estimates with confidence intervals and risk buffers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA teams estimate test effort from requirement complexity, change scope, historical baselines, and risk factors, producing staged estimates with confidence ranges and risk buffers.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA engineers, test leads, and project managers use this skill during release planning to estimate testing effort, resource needs, confidence levels, and risk buffers for scoped requirements.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Testing estimates may be used to change release schedules or staffing plans without sufficient review.
+
+Mitigation: Review estimates with the project manager and validate scope, historical baselines, adjustment factors, and risk buffers before making planning changes.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, test leads, and project managers use this skill during release planning to estimate testing person-hours or person-days for smoke, functional, regression, and specialized testing. It is intended to turn scoped requirements and test strategy inputs into traceable estimates rather than approved schedule changes. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Testing estimates could be mistaken for approved release schedules or staffing commitments. <br>
-Mitigation: Treat outputs as planning estimates and require project manager confirmation before changing schedules, release plans, or resource allocations. <br>
-Risk: The skill may activate on broad scheduling or resource-planning requests that are not specifically about QA test effort. <br>
-Mitigation: Confirm the request is about testing effort before relying on the estimate for project planning. <br>
+**Output Format:** [Markdown report with structured estimation tables, risk-buffer guidance, confidence assessment, and review checklists]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-estimation) <br>
+**Other Properties Related to Output:** [May include workspace assessment files; estimates are advisory and require project-manager review before schedule or staffing changes.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured estimation report sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include an EST-XXXX traceability ID, estimation result, work breakdown, risk buffer, confidence level, and safety guidance for human review.] <br>
+1.7.0 (source: server release metadata and SKILL.md frontmatter)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,39 +1,64 @@
-## Description: <br>
-Screens and ranks U.S.-listed common stocks, ordinary shares, and ADR/ADS for low-float extreme-move candidates using point-in-time price, liquidity, share supply, gap, turnover, VWAP, catalyst, corporate-action, halt, dilution, and data-quality checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Screens and ranks U.S.-listed common stocks, ordinary shares, and ADR/ADS securities for extreme low-float squeeze moves by checking point-in-time price action, liquidity, share supply, issuer news, SEC filings, halts, splits, dilution, and data quality.
 
-## Publisher: <br>
-[qinjobs](https://clawhub.ai/user/qinjobs) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qinjobs](https://clawhub.ai/user/qinjobs)
 
-## Use Case: <br>
-Traders, quantitative researchers, and agents use this skill to turn U.S. premarket movers or candidate CSV/JSON files into ranked screening states, opening confirmation checklists, and risk controls. Its outputs are research workflow labels and risk guidance, not personalized investment advice or automated trading instructions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/qinjobs/skills/money-claw-us-stocks) <br>
-- [Factor model reference](references/factor-model.md) <br>
-- [2026 case-study reference](references/case-studies-2026.md) <br>
+External investors and traders, especially Asia-Pacific users monitoring U.S. sessions, use this skill to convert premarket, regular-session, and after-hours micro-cap movers into auditable candidate rankings, watch states, and risk checklists. It supports research workflow outputs and batch CSV/JSON scoring, but its model states are not personalized investment advice or automatic trading instructions.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown decision summaries with optional JSON batch-scoring output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses fixed decision states, path types, risk flags, and evidence scores; evidence scores are completeness and strength indicators, not probability forecasts.] <br>
+Global, with primary trading timestamps in U.S. Eastern Time and optional secondary local-time references for Asia-Pacific users.
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill analyzes volatile low-float stocks and can produce trading-state labels or position-sizing examples that may be mistaken for personalized trading advice.
+
+Mitigation: Treat outputs as research workflow states only; independently verify issuer news, SEC filings, liquidity, suitability, and local regulatory obligations before any real trade.
+
+Risk: Market data, share counts, float, corporate actions, and news can be delayed, incomplete, or inconsistent during fast premarket, regular-session, and after-hours moves.
+
+Mitigation: Use timestamped point-in-time sources, preserve UNKNOWN for missing fields, and confirm material data through brokers, exchanges, regulators, issuer pages, and SEC filings.
+
+Risk: Extreme micro-cap moves can halt, gap through stops, become illiquid, or expose users to dilution and supply overhang risk.
+
+Mitigation: Block EXECUTE when supply risk is confirmed, avoid stale halt quotes and market-order chasing, and revalidate VWAP, spread, turnover, and first-five-minute structure after resumption or the next session.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qinjobs/skills/money-claw-us-stocks)
+- [Factor model reference](references/factor-model.md)
+- [2026 case studies](references/case-studies-2026.md)
+- [500% extreme-move intraday playbook](references/intraday-500pct-playbook.md)
+- [CYCU 2026-07-30 case study](references/cycu-2026-07-30.md)
+- [CYCU company press release](https://investors.cycurion.com/pr/cycurion-lands-largest-contract-in-company-history-546-million-10year-award-with-top5-global-consulting-firm)
+- [CYCU SEC S-1](https://www.sec.gov/Archives/edgar/data/1868419/000149315226031976/forms-1.htm)
+- [CYCU SEC Form 8-K](https://www.sec.gov/Archives/edgar/data/1868419/000162828026048496/cycu-20260710.htm)
+
+## Skill Output:
+
+**Output Type(s):** [analysis, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown briefs and checklists, plus optional JSON or Markdown batch-scoring output from Python scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses explicit model states such as EXECUTE, WAIT_OPEN, WAIT_DATA, WATCH, and EXCLUDE; evidence scores are rankings, not probability forecasts.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

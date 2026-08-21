@@ -1,43 +1,59 @@
-## Description: <br>
-Neural Memory provides an associative persistent memory layer for storing, recalling, and auto-capturing agent context across sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+NeuralMemory provides associative memory with spreading activation for persistent, intelligent recall across agent sessions without requiring an LLM dependency.
 
-## Publisher: <br>
-[nhadaututtheky](https://clawhub.ai/user/nhadaututtheky) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nhadaututtheky](https://clawhub.ai/user/nhadaututtheky)
 
-## Use Case: <br>
-Developers and agent users use this skill to add local persistent memory to agent workflows, retrieve relevant past context, and capture decisions, errors, preferences, and TODOs for future recall. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic capture and reuse of conversation-derived memories can persist sensitive or unintended context across agent runs. <br>
-Mitigation: Before enabling autoContext or autoCapture, decide which conversations may be saved and establish a process to inspect or delete saved memories. <br>
-Risk: A shared brain can mix context across projects or users. <br>
-Mitigation: Use separate brain names for different projects or users and verify NEURALMEMORY_BRAIN before running the skill. <br>
-Risk: Optional embedding providers could send memory content outside the local machine. <br>
-Mitigation: Keep local operation unless an external embedding provider is explicitly approved for the data being stored. <br>
+## Use Case:
 
+Developers and agent users use this skill to add persistent associative memory to OpenClaw or MCP-based workflows. It helps agents store decisions, preferences, errors, TODOs, and other context, then recall related memories across sessions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/nhadaututtheky/skills/neural-memory) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/nhadaututtheky) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes install commands, OpenClaw plugin configuration, MCP configuration, and memory-tool usage examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.59.1 (source: server release evidence) <br>
+Risk: The skill can create an agent-wide persistent memory layer with broad automatic capture and recall of conversation context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OpenClaw configuration before enabling it and consider setting autoCapture and autoContext to false until memory capture and recall are explicitly approved.
+
+Risk: Stored memories may include secrets, credentials, regulated data, or private conversations if users allow unrestricted capture.
+
+Mitigation: Avoid storing sensitive data unless there is a retention, access, and deletion plan appropriate for the deployment.
+
+Risk: Additional indexing, sync, and backup tools can expand where persistent memory data is copied or retained.
+
+Mitigation: Review and limit indexing, sync, backup, autoFlush, and autoConsolidate behavior before deploying the skill in shared or production environments.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/nhadaututtheky/skills/neural-memory)
+- [Publisher Profile](https://clawhub.ai/user/nhadaututtheky)
+- [Skill Homepage](https://github.com/nhadaututtheky/neural-memory)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash, PowerShell, and JSON code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent-facing memory workflow guidance and configuration examples; runtime behavior may read from and write to a local persistent memory store.]
+
+## Skill Version(s):
+
+4.62.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,111 +1,231 @@
 ---
-name: keyword-trend-hunter
-description: Discover hot or emerging domain-registration keywords, validate each detected spike against an aligned new-registration cohort from the global open domain market using .com participation, concentration, persistence, and naming-structure signals, and optionally surface related lifecycle inventory without recommending acquisition. Use when a user wants to browse registration trends. For a full evidence analysis of one known keyword use keyword-intel; for a specific domain use domain-analyze; for market news use domain-market-beat.
+name: domain-keyword-intelligence
+description: Discover domain investment opportunities from emerging keyword spikes. Filters junk signals from real multi-party market activity using registration profiling, catalyst research, and NRDS position analysis. Powered by DomainKits MCP.
+homepage: https://domainkits.com/mcp
+metadata: {"openclaw":{"emoji":"📈","primaryEnv":"DOMAINKITS_API_KEY"}}
+
 ---
 
-# Keyword Registration Trend Hunter
+# Domain Keyword Intelligence
 
-**What this does:** discovers keyword spikes, checks whether each spike is supported by broad participation in the same new-registration event cohort, and optionally surfaces related dropped, expiring, or listed inventory. It evaluates open-market registration participation, not aftermarket demand or investment merit.
+Spot domain market trends before they peak. This skill transforms raw keyword spike data into actionable investment signals by separating real multi-party demand from single-operator noise.
 
-**Data interfaces it needs.** DomainKits MCP supplies part of the evidence through the tools below; it is not the complete analysis engine. Use equivalent sources when available and use host-provided web access for public-page checks. Never assume a field exists merely because the workflow needs it. Mark an unavailable field or capability `Unavailable` and continue.
+## Why This Skill?
 
-- Keyword registration trends and source-computed aggregate metrics (hot, emerging, prefix), DomainKits: `keywords_trends`. Read registrar Top-1 / Top-3 only from this trend source when returned.
-- Newly registered domain rows for naming-pattern and coarse timing detail, DomainKits: `nrds`. It does not provide registrar / provider, so never calculate registrar concentration from it.
-- Registrable / expiring / listed inventory, DomainKits: `deleted` / `expired` / `aged`
-- Availability confirmation, DomainKits: `bulk_available`
-- Web access for a lightweight brand-dominance and collision check before candidate inventory is surfaced
+Raw `keywords_trends(emerging)` data typically returns 50-100 keywords — most are junk. This skill's value is extracting signal from noise:
 
-**Skill boundary:** this skill owns trend discovery, event-cohort integrity, preliminary open-market validation, and optional lifecycle inventory. Use `keyword-intel` for the full evidence picture of a selected keyword, including search-audience, advertiser, installed supply, active offers, and completed transactions. Do not reproduce those layers here.
+- **Profile every spike** — Is it "one person" bulk-registering, or a genuine multi-party market?
+- **Research the catalyst** — What news, product launch, or domain sale is driving registrations?
+- **Analyze positioning** — How are registrants combining this keyword? Where are the gaps?
 
-## Open-market participation model
+## Setup
 
-This skill evaluates trends within the global, general-purpose open domain market. Its core evidence is new-registration participation: `.com` participation is necessary confirmation of open-market interest, but it is never sufficient by itself. The full model requires broad, persistent, and structurally diverse participation rather than one concentrated registration pattern.
+### Prerequisites
 
-`.com` is the primary confirmation layer because it is the most established global namespace and aftermarket: registration cost and quality-name scarcity are higher, global recognition and end use are broader, secondary-market liquidity is stronger, and registering a `.com` means accepting more competition. It remains the largest single TLD by registration volume. A keyword trend with little or no `.com` participation is not considered validated by the open domain market, especially when registrations are concentrated in one low-cost TLD, one registrar, or a repeated naming pattern.
+This skill requires the **DomainKits MCP** connection and access to **web_search**.
 
-This model does not claim a non-.com ecosystem cannot be active. It means such activity has not been validated as a broad open-market domain trend. Country-specific ccTLD markets and extension-native ecosystems require a separate model.
+- **DomainKits MCP**: Provides `keywords_trends`, `nrds`, and other domain intelligence tools
+- **web_search**: Platform built-in tool, used for mandatory catalyst research
 
-Independent participation, not raw `.com` count. A large `.com` block created through one concentrated pattern is not broad participation. Read the cohort from seven signals together: absolute `.com` count, `com_ratio`, registrar concentration, naming-pattern diversity, persistence across windows, low-base status, and single-TLD concentration. Registrar concentration is a necessary participant-diversity proxy, not registrant identity or a direct participant count. Use the trend provider's aggregate registrar distribution; use `nrds` only for the domain-row signals it actually returns.
+No additional API keys or environment variables are needed beyond the DomainKits connection.
 
-## Event-cohort integrity
+### Option 1: Claude.ai / OpenClaw
 
-The trend record and the detailed `nrds` sample must describe the same event before their signals are combined.
+Connect DomainKits via Settings → Connectors. The platform handles authentication automatically.
 
-- Record the detected keyword, provider-defined match semantics, provider-supplied window or bucket definition, data date when supplied, query observation time, TLD or feed coverage, and event-cohort total from `keywords_trends`. Do not manufacture exact event start or end dates from the query date. If the source exposes only a nominal rolling window, report that window and mark exact boundaries `Unavailable`.
-- Pull `nrds` for the same keyword and constrain it to the same dates and TLD or feed coverage where the interface permits. If exact alignment is impossible, label `nrds` as supplemental and do not merge its ratios or concentration metrics into the provider's event-cohort figures.
-- For domains reviewed from `nrds` or inventory, include the keyword only when it is an exact label, a hyphen-delimited component, or an unambiguous component in a concatenated label. Exclude accidental substrings and ambiguous segmentations from the primary sample; variants belong in a separately labeled secondary sample.
-- Before calculating any ratio from `nrds`, deduplicate the sample and record returned count, pagination completed, result cap, and whether the source claims completeness. When coverage is incomplete or unknown, label ratios as `observed-sample ratios`. If the missing data could materially change `.com` participation, concentration, or persistence, the outcome is uncertain.
+### Option 2: Claude Code / MCP Config
 
-## Signal thresholds (heuristic bands)
+Add to your MCP config:
+```json
+{
+  "mcpServers": {
+    "domainkits": {
+      "baseUrl": "https://api.domainkits.com/v1/mcp"
+    }
+  }
+}
+```
 
-The following bands are heuristic starting points, not statistical laws. Treat a value near a band edge as uncertain, not decisive, and always show the underlying figure.
+With API key (for higher limits):
+```json
+{
+  "mcpServers": {
+    "domainkits": {
+      "baseUrl": "https://api.domainkits.com/v1/mcp",
+      "headers": {
+        "X-API-Key": "$env:DOMAINKITS_API_KEY"
+      }
+    }
+  }
+}
+```
 
-Data semantics: all ratios and concentration metrics are calculated from registrations contributing to the detected keyword spike, not from the total installed domain base. They therefore describe revealed choices within the incremental event cohort.
+Get your API key at https://domainkits.com
 
-- `com_ratio`: core-market participation. Roughly, higher (around 0.15 and up) is consistent with genuine open-market interest; very low (around 0.05 and below) is consistent with bulk activity on cheap TLDs.
-- `most_tld_ratio`: single-suffix concentration. High (around 0.7 and up) on a non-.com TLD is consistent with concentration in one suffix rather than broad demand.
-- `digit_ratio`: naming-structure signal. High (around 0.2 and up) is consistent with template or bulk-driven registration.
-- Registration persistence: measure as the number of distinct time windows (for example days within the cohort period) that carry new registrations, and the share of the cohort falling in its single busiest window. Persistent is roughly activity in several windows with no single window dominating (busiest-window share well under half); a single-day burst (one window holding most of the cohort) is not persistent. Show the per-window counts.
-- Registrar / provider concentration and pattern concentration: use source-computed registrar shares from `keywords_trends`, reporting the single largest registrar's share and the Top-3 cumulative share when each is returned, stated with the provider cohort size. Do not reconstruct Top-3 from `nrds` or from an incomplete registrar list. Measure pattern concentration from the aligned domain-row sample as the share following one repeated template. A largest-registrar share around half and up weakens the evidence of broad participation but does not establish how many actors exist. A dominant template is direct evidence of structural concentration. Interpret registrar concentration together with pattern, suffix, and time concentration; never convert it into a registrant count.
-- Low base: flag whenever the cohort total is small enough that ratios are unstable (for example a cohort in the low tens or fewer, or any single suffix or window driven by only a handful of names). A low-base flag caps the outcome at uncertain regardless of how the ratios read.
+## Tools Used
 
-If these bands have been back-tested on historical data, state it and record: the calibration sample's date range; which TLDs the sample covers; the label used for a "validated" trend; and whether the bands are updated periodically. If they have not been back-tested, keep them as heuristic bands: the model supports the direction of each signal, but the specific numbers are not derived laws. Do not present a specific cutoff as a proven threshold without that calibration record.
+This skill orchestrates the following tools:
 
-## Evidence discipline
+- `keywords_trends` — Fetch emerging keyword spikes (DomainKits MCP)
+- `nrds` — Search newly registered domains by keyword and position (DomainKits MCP)
+- `web_search` — Investigate catalysts behind registration spikes (platform built-in)
 
-- **Use a fixed outcome order.** Classify each selected trend in this order:
-  1. `Brand-specific / model not applied` when the keyword mainly identifies one existing brand; do not surface candidate inventory.
-  2. `Uncertain` when the cohort has a low base, cannot be aligned, has materially incomplete coverage, or is missing a signal that could change the result.
-  3. `Not validated by the open market` when an adequately covered cohort has no `.com` participation or falls in the very-low `.com` band.
-  4. `Concentrated` when `.com` participates but suffix, template, time, or combined registrar-plus-structure evidence shows the spike is materially concentrated.
-  5. `Open-market validated` only when `.com` participation is meaningful, the cohort is not low-base, activity persists across windows, naming patterns are diverse, and no material concentration signal contradicts the reading.
-  Mixed evidence that fits none of these rules is `Uncertain`. Always show the underlying figures. These are open-market registration outcomes, not investment instructions.
-- **Read participation from multiple signals**, per the model above; never from `.com` count alone.
-- **Brand boundary.** Run a lightweight public-web check on a selected keyword before validation is finalized or candidates are surfaced. If it mainly identifies one existing brand, report the observed spike only as brand-specific registration activity, stop the open-market model, and do not surface registrable, expiring, or listed names as opportunities. State that the check is not trademark clearance or legal advice.
-- **Do not infer a cause.** Registration concentration, timing, or naming co-occurrence does not establish a promotion, sale, news event, or other catalyst. Use `keyword-intel` or `domain-market-beat` when the user asks for deeper market or event evidence.
-- **Lifecycle verification is stage-specific.** `bulk_available` confirms only whether a name can be registered now, so it applies to `deleted` candidates. It does not validate `expired` (confirm backorder / auction status and provider) or `aged` (a current listing, not a sale). For an `aged` listing, attempt to re-check it against `aged` or the named marketplace before presenting it. If that re-check succeeds, record the verification source; if the marketplace cannot be reached, present the tool-reported listing labeled "listing not re-verified" and treat it as weaker evidence rather than dropping the candidate. Record status and observation time either way.
+Optional follow-up tools (user-driven):
+- `deleted` — Recently dropped domains
+- `expired` — Backorderable domains
+- `aged` — Domains listed for sale
+- `keyword_intel` — Deep keyword analysis
+- `domain_generator` — Creative name ideas
 
-## Workflow
+## Instructions
 
-Proceed end to end when the user names a keyword, requests a fixed number of trends, or explicitly asks for candidates. Pause after discovery only when the user must choose which surfaced keyword to validate. Pause before `expired` or `aged` only when willingness to backorder or purchase a registered name is unknown. Do not force phase-by-phase confirmation when the user's requested scope is already clear.
+### Step 1: Fetch Emerging Keyword Data
 
-1. **Discover.** Surface trending keywords with `keywords_trends` (hot, emerging, or prefix). For each surfaced keyword, deliver a fixed set so runs stay comparable, marking any field the source does not provide as Unavailable rather than omitting it:
-   - the provider-supplied cohort window or bucket definition, any provider data date, and the separate query observation timestamp. Never stamp or reconstruct event boundaries from the current date; if only a nominal rolling window is known, say so;
-   - the coverage the source provides (which TLDs or feeds the cohort is drawn from, and whether it is a sample or claims completeness), so a difference between runs is not mistaken for a real change;
-   - the spike / event-cohort total (how many new registrations define the trend);
-   - the absolute `.com` count in that cohort when the source returns it, alongside `com_ratio`; never derive a supposedly exact count from a rounded ratio, and mark the count `Unavailable` otherwise;
-   - the pre-computed structure metrics `digit_ratio`, `most_tld`, and `most_tld_ratio` (single-TLD concentration);
-   - a preliminary participation reading from the provider's available metrics, using the heuristic bands and showing every underlying figure; never label it the final open-market outcome while registrar concentration, pattern diversity, or persistence remains Pending;
-   - a low-base flag whenever the cohort total is small.
-   - registrar Top-1 and Top-3 shares from `keywords_trends` when returned; mark either metric `Unavailable` when absent rather than attempting to recreate it from `nrds`;
-   Pattern diversity and detailed time structure come from `nrds` in step 2, so mark those fields Pending here. Two cohorts are comparable only when their provider window, data date, coverage, and keyword-match semantics align. If the user has not chosen a keyword or requested an end-to-end top-N analysis, ask which keyword(s) to validate; otherwise continue.
+Call `keywords_trends(type="emerging")` to get keywords with registration volume spikes in the last 7-14 days. The tool returns per-keyword data including registration volume (w3/w4), com_ratio, forsale_pct, might_use_count, top_registrar, and other dimensions needed for Step 2 analysis.
 
-2. **Validate the event cohort.** For each selected keyword:
-   - Apply the brand boundary and event-cohort integrity rules.
-   - Pull `nrds` for the aligned cohort and report its matching rule, returned count, pagination / result-cap status, naming-pattern diversity, hyphen / digit / length structure, repeated-template share, and the coarse time clustering supported by `registered_date` or the available recency buckets. Do not report registrar Top-1 or Top-3 from `nrds`. If it cannot be aligned to the trend record, keep it supplemental and make the outcome uncertain rather than merging unlike samples.
-   - Apply the fixed outcome order to all seven signals. Report the outcome, confidence, exact figures, cohort dates, observation date, coverage, and unavailable fields.
-   - If the user requests search-audience, advertiser, supply, offer, transaction, or catalyst evidence for the chosen keyword, use `keyword-intel`; do not rebuild those layers here.
+### Step 2: Multi-Dimensional Profile Analysis (Core Logic)
 
-3. **Surface lifecycle candidates when requested.** Skip this phase for a brand-specific keyword. Filter every result through the same keyword-matching rule used for the event cohort:
-   - `deleted` for dropped names, each re-confirmed registrable with `bulk_available`.
-   - `expired` only when the user accepts backorder (confirm lifecycle / provider).
-   - `aged` with `has_sale=true` for current listings (a listing, not a sale).
-   Present each candidate with: domain; exact keyword component and position; matching category (exact / hyphen-delimited / unambiguous concatenation); relation to the validated trend; lifecycle stage; acquisition path; verification source and result; price type, amount, currency, and date where applicable; observation date; and any brand-collision caveat. Exclude ambiguous matches. Mark unavailable fields explicitly. Present candidates as options, not recommendations.
+#### How the domain market works
 
-## Next steps
+The domain market is a multi-party ecosystem. After registering a domain, a person can only do one of three things with it:
 
-Only if the user asks: use `keyword-intel` for a full evidence analysis of a selected keyword, `domain-analyze` for one domain, monitoring for later changes, or repeat discovery for another trend set. Do not push acquisition or tell the user to act.
+1. **Sell it** — list on aftermarket platforms and wait for buyers. This is investor behavior. Their presence shows up in `forsale_pct`.
 
-## Key principles
+2. **Use it (maybe)** — point it to infrastructure (Cloudflare, AWS, Vercel). Their presence shows up in `might_use_count` — but this only indicates the domain was configured beyond default parking, not that it is genuinely in use. It could be a real project or a site farm. Only meaningful when registrar distribution is diverse.
 
-- Judge trends against the global open domain market by aligned new-registration evidence; `.com` is necessary confirmation, not sufficient proof and not evidence of aftermarket transactions.
-- Keep `keywords_trends` and `nrds` in one event cohort when their provider window, data date, coverage, and keyword-match semantics can align. Otherwise do not merge them and cap the outcome at uncertain. Never fabricate exact event boundaries.
-- Read all seven signals together. Registrar concentration is a participant-diversity proxy, not registrant identity or participant count; interpret it with pattern, suffix, and time concentration.
-- Compute each derivable signal a fixed, disclosed way so runs are reproducible: persistence as distinct active windows and busiest-window share; pattern concentration as largest-template share; low-base as a small-cohort flag. Read registrar concentration as the provider-reported largest-registrar and Top-3 shares from `keywords_trends`, without reconstructing missing distribution data. Show the underlying figures, never a bare "high / low", and do not switch measures between runs. A set low-base flag caps the outcome at uncertain.
-- Thresholds are heuristic bands, not statistical laws; show the figures, treat edge values as uncertain, and only call a cutoff proven if a calibration record exists.
-- Apply the fixed outcome order: brand-specific, uncertain, not validated, concentrated, then validated. Mixed evidence is uncertain.
-- Record returned sample size, pagination, result cap, completeness claim, time window, observation date, and TLD / feed coverage. Partial ratios are observed-sample ratios, not population claims.
-- Use one reproducible keyword-matching rule and exclude ambiguous segmentations from both cohort detail and candidate inventory.
-- Keep full known-keyword intelligence in `keyword-intel`; do not duplicate search, advertising, supply, transaction, or catalyst analysis here.
-- Do not surface candidates for a brand-specific keyword. A public-web collision check is not trademark clearance or legal advice.
-- Verify lifecycle by stage: `bulk_available` only for registrability; confirm `expired` backorderability and provider; treat `aged` as a listing, not a sale. Surface options without recommending acquisition.
+3. **Unknown** — the domain sits on default NS, neither listed for sale nor pointed to any infrastructure. The registrant's intent is unclear. This is the remainder after subtracting forsale and might_use from total registrations.
+
+These three states account for every registered domain. Like any financial market, a healthy keyword market requires **liquidity** — active trading, not just ownership.
+
+`forsale_pct` is the market's trading volume. If forsale is very low, market participation is low — this is not a healthy market signal. A keyword with high com_ratio, dispersed registrars, and high might_use_count but near-zero forsale has registrations but no market.
+
+Two hard rules:
+- **If forsale is below 3%, discard.** Do not explain it away with "end-user driven" or "terminal demand" — low forsale means low market participation, period.
+- **Never make recommendations or judgments without data.** Labels like "NFL-related", "Chinese pinyin demand", "gaming keyword" are speculation unless confirmed by web_search. If you have not searched, do not guess. Output data only, not narratives. Potential healthy keywords must be verified through NRDS registration analysis (Step 3) before being presented as opportunities.
+
+Two cross-cutting dimensions apply to all three participant types:
+
+- **`com_ratio`** — the "blue chip ratio." High com_ratio means participants are investing in .com — the most expensive TLD. Low com_ratio means activity is concentrated on cheap TLDs.
+
+- **`top_registrar.pct`** — the "exchange concentration." Registrars are channels, not identity labels. High concentration (e.g., above 80%) on a single registrar reduces confidence that many independent parties are involved. A real multi-party market almost always shows distributed registrar usage.
+
+**The core question for every keyword is: Is this data from "one person" or "a market"?**
+
+When analyzing a keyword, check whether each participant type is present. When a type is absent, ask why — the answer tells you what's really happening. When a type overwhelmingly dominates, ask whether that makes sense for a real market or whether it points to a single operator.
+
+#### Filtering Process
+
+1. Calculate w4/w3 growth rate for each keyword
+2. Profile each keyword across all dimensions — check whether all three participant types are present and whether the two cross-cutting dimensions are reasonable
+3. Classify as `junk` (single operator or missing participant roles) or `healthy` (genuine multi-party market)
+4. Sort healthy keywords by w4/w3 growth rate
+5. Take Top 5-8 for deep analysis
+
+#### Output Format
+
+Summarize filtering results concisely:
+- N total emerging keywords
+- Excluded X junk signals — each in under 10 words (e.g., "ethereum: single registrar, all forsale, no .com")
+- Identified Z healthy market signals
+
+List healthy keywords with key profile data:
+```
+llm — W3: 794 → W4: 979 (↑23%)
+  com_ratio: 82.6% | forsale: 36.8% | might_use: 63 | top_registrar: Unstoppable Domains 29.7%
+  Profile: Multi-party participation, .com dominant, mix of investment and usage. Healthy signal.
+```
+
+### Step 2.5: Catalyst Research (web_search MANDATORY)
+
+For each healthy keyword identified in Step 2, use `web_search` to investigate what is driving the registration spike. Domain registration spikes are predominantly driven by technology and internet industry events — product launches, AI model releases, platform announcements, viral open-source projects, regulatory changes, major acquisitions, or high-profile domain sales.
+
+Profile analysis tells you WHETHER a signal is healthy. Catalyst research tells you WHY — and "why" determines whether the opportunity is worth pursuing.
+
+For each healthy keyword, search with a technology lens. Prioritize the last 3 days — emerging spikes are almost always driven by very recent events. If nothing is found within 3 days, extend to 10 days maximum:
+1. `{keyword} news` — look for product launches, funding rounds, open-source projects, platform announcements, regulatory changes
+2. `{keyword} domain sold price` — a high-value domain sale is the single strongest catalyst for registration spikes
+
+#### Output: Catalyst Verification Table
+
+Present catalyst findings as this table. The Source column must contain a real URL from web_search results. No URL = keyword does not appear in the table. Do not substitute with training data.
+```
+| Keyword | W4 | forsale% | Catalyst | Source |
+|---------|-----|---------|----------|--------|
+| molt    | 576 | 17.2%   | OpenClaw/Moltbot AI agent project | [CNBC](url) |
+| nemo    | 374 | 29.7%   | Nvidia NeMo/NemoClaw, GTC 2026 | [TradingView](url) |
+| llm     | 768 | 28.6%   | PrivateLLM.com sold $250K | [DomainInvesting](url) |
+```
+
+Rules:
+- Source = actual URL from web_search. Not training data.
+- No catalyst found AND no URL → keyword excluded from table. Note "no catalyst identified" in the filtering summary and move on.
+- forsale < 3% → never reaches this table (killed at Step 2).
+- Only keywords in this table proceed to Step 3.
+
+### Step 3: NRDS Registration Position Analysis
+
+**This step bridges "macro trend" to "micro execution."**
+
+For each healthy keyword, call `nrds` to examine actual registration patterns:
+```
+nrds(keyword="<keyword>", position="start", tld="com", no_hyphen="true", sort="reg_date_desc", days_range="0-10")
+nrds(keyword="<keyword>", position="end", tld="com", no_hyphen="true", sort="reg_date_desc", days_range="0-10")
+```
+
+#### Analysis Points
+
+1. **Position distribution**:
+   - `position=start` (e.g., llmtools.com, llmagent.ai) → keyword as category anchor
+   - `position=end` (e.g., myllm.com, bestllm.io) → keyword as modifier
+   - Comparing volumes reveals how the market positions this keyword
+
+2. **Popular combinations**: Extract high-frequency combination words from registrations. E.g., llm + agent, llm + chat, llm + tools. These represent the market's view on the keyword's most valuable applications
+
+3. **Registration quality**:
+   - Length distribution (short names taken = fierce competition; short names available = window open)
+   - `period` (registration term): 6+ years = serious project, 1 year = speculative trial
+   - `prefix_tld_count`: high = prefix registered across many TLDs = strong recognition
+
+4. **Investor vs end-user behavior**:
+   - NS: afternic.com / sedo.com / thisdomain.forsale = investor listing
+   - NS: cloudflare / aws / vercel = domain configured for use (could be real project or site farm — check if naming patterns are diverse or template-like)
+   - Ratio reveals speculation phase vs adoption phase
+
+#### Output Format
+```
+llm — NRDS Registration Analysis
+  position=start: 287 domains (llmtools, llmagent, llmchat, llmcode...)
+  position=end: 143 domains (myllm, bestllm, openllm, smartllm...)
+  Popular combos: agent (42), tools (28), chat (23), code (19), hub (15)
+  Market direction: Heavy llm+agent combinations suggest bullish sentiment on LLM Agent space
+  Quality: Short domains (<10 char) largely taken, 10-15 char range still has room
+```
+
+### Step 4: Next Steps
+
+After presenting the trend analysis and NRDS findings, let the user know they can use DomainKits' other tools to explore domain opportunities for any keyword that interests them — such as `deleted` for recently dropped domains, `expired` for backorderable domains, `aged` for domains listed for sale, `keyword_intel` for deep keyword analysis, or `domain_generator` for creative name ideas. Let the user choose which keywords and directions to pursue.
+
+## Output Rules
+
+- **Language**: Follow user's language
+- **Concise**: Profile judgments in one sentence. Skip junk quickly, expand on healthy signals
+- **Data-driven**: Every judgment cites specific numbers
+- **Honest**: No catalyst found → say "cause unidentified" — never fabricate
+- **Quota-aware**: Step 3 consumes many tool calls. Show Step 2 results first and let user pick 2-3 keywords before continuing
+
+## Access
+
+Works without an API key on a guest quota. A free account raises it; paid tiers raise it further. Current per-tier limits are listed at [domainkits.com/pricing](https://domainkits.com/pricing); the `usage` tool reports the live quota for the current account.
+
+## Privacy
+
+- Works without API key (guest tier)
+- No user data stored by this skill
+- DomainKits: GDPR compliant, memory OFF by default
+
+## Links
+
+- DomainKits: https://domainkits.com/mcp
+- GitHub: https://github.com/ABTdomain/domainkits-mcp
+- Contact: info@domainkits.com
+- Developed by: https://abtdomain.com

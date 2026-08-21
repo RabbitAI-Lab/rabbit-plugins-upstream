@@ -2,69 +2,37 @@
 
 import asyncio  # noqa: F401
 import json  # noqa: F401
-import math
 import os  # noqa: F401
 import re  # noqa: F401
 import time  # noqa: F401
 from typing import Optional  # noqa: F401
 
 from .binding import bind_runtime
+from .fund_estimate_helpers import (
+    estimate_evidence_summary as _estimate_evidence_summary,
+    estimate_frame_available as _estimate_frame_available,
+    sanitize_estimate_frame as _sanitize_estimate_frame,
+    sanitize_source_preview_payload as _sanitize_source_preview_payload,
+    validate_public_data_source_mode as _validate_public_data_source_mode,
+)
+from .fund_history_helpers import (
+    get_strict_item_history as _get_strict_item_history,
+    search_fund as _search_fund,
+)
 from ..quant_validation import (
     validate_quant_current_frame as _validate_quant_current_frame,
     validate_quant_view as _validate_quant_view,
 )
 
 _RUNTIME_DEPENDENCIES = ("_fetch_estimates", "_get", "_post", "_require_token", "_validate_fund_code")
-_DATA_SOURCE_MODES = {"huahua", "a", "b", "c"}
-
 if False:  # pragma: no cover - populated by bind() before tool registration
     _fetch_estimates = None
     _get = None
     _post = None
     _require_token = None
     _validate_fund_code = None
-
-
 def bind(runtime_globals: dict) -> None:
     bind_runtime(globals(), runtime_globals, _RUNTIME_DEPENDENCIES)
-
-
-def _estimate_frame_available(item: dict) -> bool:
-    if not isinstance(item, dict) or not item:
-        return False
-    source = str(item.get("source") or "").strip().lower()
-    if source in {"reset", "timeout", "unavailable"}:
-        return False
-
-    def to_float(value) -> float:
-        if isinstance(value, bool):
-            return float("nan")
-        try:
-            return float(str(value).replace("%", ""))
-        except (TypeError, ValueError):
-            return float("nan")
-
-    previous_nav = to_float(item.get("prev_dwjz") or item.get("prevNav"))
-    estimated_nav = to_float(item.get("estimatedNav") or item.get("nav"))
-    change_percent = item.get("estimatedChangePercent")
-    if change_percent is None:
-        change_percent = item.get("gszzl")
-    parsed_change_percent = to_float(change_percent)
-    return (
-        math.isfinite(previous_nav)
-        and previous_nav > 0
-        and (
-            (math.isfinite(estimated_nav) and estimated_nav > 0)
-            or math.isfinite(parsed_change_percent)
-        )
-    )
-
-
-def _validate_public_data_source_mode(value, field: str) -> str:
-    normalized = str(value or "").strip().lower()
-    if normalized not in _DATA_SOURCE_MODES:
-        raise ValueError(f"{field} 仅支持 huahua、a、b 或 c")
-    return normalized
 
 
 async def search_item(query: str) -> list:
@@ -76,13 +44,7 @@ async def search_item(query: str) -> list:
         query: 搜索关键词，如 "000001"、"华夏"
     """
     _require_token()
-    normalized = str(query or "").strip()
-    if not normalized:
-        raise ValueError("搜索关键词不能为空")
-    if len(normalized) > 100:
-        raise ValueError("搜索关键词过长，最多 100 字符")
-    data = await _get("/api/search", params={"key": normalized})
-    return data if isinstance(data, list) else []
+    return await _search_fund(_get, query)
 
 
 async def get_item_detail(code: str) -> dict:
@@ -101,20 +63,38 @@ async def get_item_detail(code: str) -> dict:
 
 async def get_item_estimate(
     codes: list[str],
-    default_data_source_mode: str = "huahua",
+    default_data_source_mode: str = "source_a",
     data_source_mode_by_code: Optional[dict] = None,
 ) -> dict:
     """
     批量获取项目今日实时估算净值（最多 50 个）。
     适合查询"现在涨了多少""今天净值多少"等日常行情问题，不会附带量化计算。
-    结果在同一 session 内缓存 60 秒，与 get_records 共享缓存，无重复网络请求。
+    可用的当前新鲜帧在同一 session 内缓存 60 秒，与 get_records
+    共享缓存。reset/unavailable/cache-only miss 或 stale 帧不写入该缓存，
+    避免遮蔽后续物化恢复。
     支持新版后端多行情源：default_data_source_mode / data_source_mode_by_code。
-    返回 requestedCodes、missingCodes、invalidCodes、unavailableCodes、timeoutCodes 和 complete；
-    部分失败或不可用占位帧不会伪装成完整结果。
+    返回 requestedCodes、missingCodes、invalidCodes、unavailableCodes、timeoutCodes、
+    staleCodes、decisionUnavailableCodes、partialCodes、complete 和 evidenceComplete。
+    complete 只表示每个代码都有可用数值；evidenceComplete 还要求没有代理、
+    汇率省略或输入不完整。每项 estimateEvidence 可给出 coverage、proxyCoverage、
+    fxStatus/fxDegraded，并在 QDII 持仓模型存在时给出统一的 calibration
+    （applied/reason/weight/modelVersion）。汇率 omitted 仍可保留本地资产涨幅和
+    可用净值，但证据为 partial；部分失败、过期或决策不可用帧不会伪装成完整结果。
+    来源 A/B 对部分基金没有覆盖时，只影响对应基金或来源；必须按上述集合逐项判断，
+    不能把单来源缺失解释成整批基金请求失败。
+    显式选择 A/B 但该源无覆盖时，后端会继续回退花花来源。所有可信主路径和
+    同日快照均失败时，后端可能使用带审计标记的市场因子、QDII 市场代理或板块
+    关联兜底。普通回答只给估值时间、类型、来源、涨幅、净值和官方日期，不主动
+    枚举 partial、FX 或覆盖率；用户明确要求诊断时才展开审计证据，并且不能把
+    代理估算描述成持仓股票完整覆盖。
+
+    日期字段中，display_date 是估算展示/T 帧日期，target_nav_date 是当前帧对应的
+    目标净值 D 日，last_nav_date 是最新官方净值 D 日；可靠收益 G 日只能读取
+    get_records().returnAttributionDate，为 null 时不得用 D 日代替。
 
     Args:
         codes: 项目编号列表，如 ["000001", "110022"]，最多 50 个
-        default_data_source_mode: 默认行情源模式：huahua/a/b/c。
+        default_data_source_mode: 默认行情源模式：source_a/source_b/huahua。
         data_source_mode_by_code: 可选，每只基金单独指定行情源模式。
     """
     _require_token()
@@ -159,6 +139,11 @@ async def get_item_estimate(
             "invalidCodes": invalid_codes,
             "unavailableCodes": [],
             "timeoutCodes": [],
+            "staleCodes": [],
+            "decisionUnavailableCodes": [],
+            "partialCodes": [],
+            "fxDegradedCodes": [],
+            "evidenceComplete": not invalid_codes,
             "complete": not invalid_codes,
         }
     estimate_map = await _fetch_estimates(
@@ -166,10 +151,15 @@ async def get_item_estimate(
         default_data_source_mode=validated_default_mode,
         data_source_mode_by_code=validated_mode_by_code,
     )
-    normalized_map = {
-        str(code): value
-        for code, value in estimate_map.items()
-    }
+    normalized_map = {}
+    for code, value in estimate_map.items():
+        item = _sanitize_estimate_frame(value)
+        if isinstance(item, dict):
+            item = {
+                **item,
+                "estimateEvidence": _estimate_evidence_summary(item),
+            }
+        normalized_map[str(code)] = item
     missing_codes = [code for code in validated_codes if code not in normalized_map]
     unavailable_codes = [
         code
@@ -181,6 +171,42 @@ async def get_item_estimate(
         for code in unavailable_codes
         if str(normalized_map[code].get("source") or "").strip().lower() == "timeout"
     ]
+    stale_codes = [
+        code
+        for code in unavailable_codes
+        if normalized_map[code].get("stale") is True
+        or normalized_map[code].get("estimateStale") is True
+        or str(
+            normalized_map[code].get("freshness")
+            or normalized_map[code].get("estimateFreshness")
+            or ""
+        ).strip().lower() == "stale"
+    ]
+    decision_unavailable_codes = [
+        code
+        for code in unavailable_codes
+        if isinstance(normalized_map[code].get("estimateDecision"), dict)
+        and str(
+            normalized_map[code]["estimateDecision"].get("status") or ""
+        ).strip().lower() == "unavailable"
+    ]
+    partial_codes = [
+        code
+        for code in validated_codes
+        if code in normalized_map
+        and isinstance(normalized_map[code], dict)
+        and isinstance(normalized_map[code].get("estimateEvidence"), dict)
+        and normalized_map[code]["estimateEvidence"].get("partial") is True
+    ]
+    fx_degraded_codes = [
+        code
+        for code in validated_codes
+        if code in normalized_map
+        and isinstance(normalized_map[code], dict)
+        and isinstance(normalized_map[code].get("estimateEvidence"), dict)
+        and normalized_map[code]["estimateEvidence"].get("fxDegraded") is True
+    ]
+    complete = not missing_codes and not invalid_codes and not unavailable_codes
     return {
         "data": [
             normalized_map[code]
@@ -192,30 +218,45 @@ async def get_item_estimate(
         "invalidCodes": invalid_codes,
         "unavailableCodes": unavailable_codes,
         "timeoutCodes": timeout_codes,
-        "complete": not missing_codes and not invalid_codes and not unavailable_codes,
+        "staleCodes": stale_codes,
+        "decisionUnavailableCodes": decision_unavailable_codes,
+        "partialCodes": partial_codes,
+        "fxDegradedCodes": fx_degraded_codes,
+        "evidenceComplete": complete and not partial_codes,
+        "complete": complete,
     }
 
 
 async def get_fund_source_previews(code: str) -> dict:
     """
-    获取单只基金在多个行情源下的实时估算预览。
+    获取单只基金在多个行情源下的来源预览。
     适合用户询问"不同数据源现在差多少"或需要选择基金级 dataSourceMode 时调用。
+    净值公布后，只有同日收盘前归档估值才会出现在 last_estimate_snap；
+    当前官方净值不会被改名为 A/B 的历史估值。数据来源 A/B 缺失表示
+    单来源证据不足，不代表整个请求失败。
+    花花项主路径均未命中时可能使用板块、市场因子或 QDII 市场代理作低置信
+    partial 兜底；该结果不会再回流进聚合池。`last_estimate_snap` 会保留同日的
+    market_factor_proxy_estimate / qdii_market_proxy_estimate 历史证据。
 
     Args:
         code: 项目编号，如 "000001"
 
     Returns:
-        dict 包含 code 和 data，其中 data 通常是 huahua/a/b/c 到估算帧的映射。
+        dict 包含 code 和 data。data 是 source_a/source_b/huahua 的部分映射；
+        普通基金可能缺少未覆盖的 A/B，官方净值帧可通过 last_estimate_snap
+        保留最后估值证据。
     """
     _require_token()
     validated_code = _validate_fund_code(code)
-    return await _get(f"/api/estimate/source-previews/{validated_code}")
+    return _sanitize_source_preview_payload(
+        await _get(f"/api/estimate/source-previews/{validated_code}")
+    )
 
 
 async def get_daily_rank() -> dict:
     """
-    获取今日涨幅榜和跌幅榜。
-    返回涨幅最大和跌幅最大的项目列表，以及板块概览。
+    获取已形成今日估值或官方净值快照的活跃基金涨跌榜。
+    返回当前活跃快照池中的涨幅、跌幅和板块概览，不代表全市场全量基金。
     """
     _require_token()
     return await _get("/api/fund/today-rank")
@@ -223,15 +264,14 @@ async def get_daily_rank() -> dict:
 
 async def get_item_history(code: str) -> list:
     """
-    获取项目历史净值数据（用于查看过去走势）。
+    获取项目历史净值数据（用于查看过去走势）。服务端会严格校验最新应有
+    官方净值日；刷新失败且只能取得过期历史时，本工具报错而不返回旧列表。
 
     Args:
         code: 项目编号，如 "000001"
     """
     _require_token()
-    validated_code = _validate_fund_code(code)
-    data = await _get(f"/api/history/{validated_code}")
-    return data if isinstance(data, list) else []
+    return await _get_strict_item_history(_get, _validate_fund_code, code)
 
 
 async def get_item_dividends(code: str) -> list:
@@ -247,15 +287,16 @@ async def get_item_dividends(code: str) -> list:
     return data if isinstance(data, list) else []
 
 
-async def get_fund_timeline(code: str, source_mode: str = "huahua") -> list:
+async def get_fund_timeline(code: str, source_mode: str = "source_a") -> list:
     """
     获取指定项目今日分时估值走势（每隔几分钟一个数据点，盘中更新）。
-    适合了解今日净值走势曲线，判断入场时机。
+    仅用于观察曲线；当前量化结论必须另外调用 get_item_estimate 并检查
+    complete/staleCodes/evidenceComplete，不能把曲线尾点当作新鲜行情证明。
     非交易日或盘前返回空列表。
 
     Args:
         code: 项目编号，如 "000001"
-        source_mode: 行情源模式：huahua/a/b/c。
+        source_mode: 行情源模式：source_a/source_b/huahua。
     """
     _require_token()
     validated_code = _validate_fund_code(code)
@@ -408,6 +449,8 @@ async def get_fund_quant_metrics(
     risk=中长期收益/回撤/波动；full=完整数据。必须按问题选择视图。
     默认使用最新官方净值；如已通过 get_item_estimate 取得盘中估算值，可传
     technical_value 和 value_basis="live_estimate"，避免 Agent 拉取净值历史重复计算。
+    必须检查 historyFreshness/historyExpectedAsOf、metrics.complete 与 current.status；
+    stale/missing/unknown 会 fail-closed，并在可行时后台刷新。
     本工具只提供数据与统计，不输出买卖方向或建议金额。
 
     Args:
@@ -466,9 +509,11 @@ async def get_batch_fund_quant_metrics(
     批量获取后端统一量化数据。technical、momentum、risk 最多 50 只，
     full 最多 10 只。服务端按视图加载依赖并批量读缓存/数据库；
     不要为每只基金并发调用单只接口。本工具不输出投资建议。
-    顶层 complete 只表示所有代码至少有一条官方净值；指标视图的 251 点窗口检查
-    item.metrics.complete，full 检查 item.official.metrics.complete；历史统计检查
-    item.current.status。computing 可按 retryAfterMs 稍后重试，
+    顶层 complete 仅在所有代码都有官方净值且 freshness 可验证时为 true；指标视图的
+    251 点窗口检查 item.metrics.complete，full 检查 item.official.metrics.complete；还必须检查
+    staleCodes、unverifiedCodes、refreshingCodes 与 item.historyFreshness。历史统计检查
+    item.current.status。过期历史会 fail-closed 为 complete=false/computing，并后台刷新；
+    computing 可按 retryAfterMs 稍后重试，
     insufficient_history / insufficient_samples 是当前数据集下的终态。
 
     Args:

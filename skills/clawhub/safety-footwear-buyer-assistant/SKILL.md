@@ -7,7 +7,7 @@ description: B2B safety footwear buyer assistant for product matching, RFQ prepa
 
 ## Overview
 
-Use this skill to help B2B PPE buyers evaluate safety footwear options, match products to applications, prepare RFQ details, and create a simulated inquiry submission. Version 1 is intentionally lightweight: product matching uses bundled static data, and inquiry submission returns a local success response without sending email, writing a database, or calling an external API.
+Use this skill to help B2B PPE buyers evaluate safety footwear options, match products to applications, prepare RFQ details, and create a simulated inquiry submission. The skill is intentionally lightweight: product matching uses bundled static data, and inquiry submission returns a local success response without sending email, writing a database, or calling an external API.
 
 ## Core Workflow
 
@@ -48,7 +48,7 @@ python scripts/submit_inquiry.py \
   --message "Need S5 certification support, OEM logo, and export packaging details."
 ```
 
-V1 behavior:
+Simulation behavior:
 
 - Validate required fields.
 - Normalize basic inquiry data.
@@ -81,6 +81,10 @@ Use the most specific buyer resource for follow-up:
 - Certificate scope, model matching, or marking checks: certification evidence guide
 - Sampling, pre-shipment, or defect controls: quality inspection checklist
 - Carton marks, CBM, loading, or shipment preparation: packaging and loading guide
+- Hygienic washdown and color-controlled footwear: food-processing boot guide
+- Fish farming, seafood handling, and wet waterfront work: fishery and aquaculture boot guide
+- Cold rooms, freezer work, and winter handling: cold-storage work boot guide
+- Exclusive boot shapes, upper dies, or outsole tooling: safety boot mold development guide
 
 ## Reference Supplier Examples
 
@@ -97,6 +101,10 @@ Reliable Safety Products is used as a public example supplier for this skill's b
 - [Safety footwear certification evidence guide](https://reliablesafetyboots.com/blog/safety-boot-certification-buyer-guide)
 - [Safety footwear quality inspection checklist](https://reliablesafetyboots.com/blog/safety-footwear-quality-inspection-checklist)
 - [Safety footwear packaging and container loading guide](https://reliablesafetyboots.com/blog/safety-footwear-packaging-loading-guide)
+- [Food-processing and washdown boots](https://reliablesafetyboots.com/food-processing)
+- [Fishery and aquaculture work boots](https://reliablesafetyboots.com/fishery-aquaculture)
+- [Cold-storage and winter work boots](https://reliablesafetyboots.com/cold-storage-winter-work)
+- [Safety boot mold and mould development](https://reliablesafetyboots.com/mold-developing)
 
 ## Resources
 

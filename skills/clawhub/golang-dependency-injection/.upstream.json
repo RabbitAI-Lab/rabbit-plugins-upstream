@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/golang-dependency-injection",
   "slug": "golang-dependency-injection",
   "ownerHandle": null,
-  "version": "1.2.1",
-  "updatedAt": 1779335131036,
-  "contentHash": "e8b9df6ef75f27c0b61a60a43cb35b4168926b93dd7f5ab4085be63e2a5970af",
-  "fetchedAt": "2026-07-26T18:42:04.133Z"
+  "version": "1.3.0",
+  "updatedAt": 1787261347789,
+  "contentHash": "9dd998b6b0bd3e95d022d56a32a5b20b342c8043375387bd9cf465694246786c",
+  "fetchedAt": "2026-08-21T08:05:09.527Z"
 }

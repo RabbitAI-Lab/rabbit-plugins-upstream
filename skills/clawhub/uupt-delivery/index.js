@@ -1,10 +1,12 @@
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const axios = require('axios');
 const crypto = require('crypto');
 
-// 配置文件路径
-const CONFIG_FILE = path.join(__dirname, 'config.json');
+// 配置文件保存在用户主目录，不受 skill 更新/重装影响，且始终可写
+const CONFIG_DIR = path.join(os.homedir(), '.uupt-delivery');
+const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 const DEFAULTS_FILE = path.join(__dirname, 'defaults.json');
 
 /**
@@ -44,6 +46,7 @@ function saveConfig(config) {
   try {
     const existing = readConfig();
     const merged = { ...existing, ...config };
+    fs.mkdirSync(CONFIG_DIR, { recursive: true });
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(merged, null, 2), 'utf8');
     console.log('配置已保存到:', CONFIG_FILE);
     return true;
@@ -276,8 +279,12 @@ async function auth(params) {
   const result = await postUnauthorizedRequest(biz, 'user/unauthorized/auth');
   
   if (result && result.body && result.body.openId) {
-    saveConfig({ openId: result.body.openId });
-    console.log('✅ 授权成功，openId 已保存');
+    result.configSaved = saveConfig({ openId: result.body.openId });
+    if (result.configSaved) {
+      console.log('✅ 授权成功，openId 已保存');
+    } else {
+      console.error('⚠️ 授权成功，但 openId 保存失败');
+    }
   }
   
   return result;
@@ -286,10 +293,10 @@ async function auth(params) {
 /**
  * 订单询价
  * @param {Object} params - 询价参数
- * @param {string} params.fromAddress - 起始地址（必填，帮忙订单时为帮忙地点）
- * @param {string} params.toAddress - 目的地址（必填，帮忙订单时与fromAddress相同）
+ * @param {string} params.fromAddress - 起始地址（必填，帮帮订单时为帮帮地点）
+ * @param {string} params.toAddress - 目的地址（必填，帮帮订单时与fromAddress相同）
  * @param {string} params.cityName - 城市名称（可选，默认郑州市）
- * @param {string} [params.orderType='send'] - 订单类型，'send'为跑腿配送，'help'为帮忙服务
+ * @param {string} [params.orderType='send'] - 订单类型，'send'为跑腿配送，'help'为帮帮服务
  */
 async function orderPrice(params) {
   const { fromAddress, toAddress, cityName = '郑州市', orderType = 'send' } = params;
@@ -318,7 +325,7 @@ async function orderPrice(params) {
     biz.goodsType = 'ALLHELP';
   }
   
-  const typeLabel = isHelp ? '帮忙服务' : '配送';
+  const typeLabel = isHelp ? '帮帮服务' : '配送';
   console.log(`💰 正在查询${typeLabel}价格...`);
   return await postRequest(biz, 'order/orderPrice');
 }
@@ -329,7 +336,7 @@ async function orderPrice(params) {
  * @param {string} params.priceToken - 询价返回的 token（必填）
  * @param {string} params.receiverPhone - 收件人电话（必填）
  * @param {string} [params.channel] - 聊天渠道（wechat 渠道 specialChannel=4，其他渠道=2）
- * @param {string} [params.note] - 帮忙内容描述（帮忙订单时必填，描述具体需要跑男提供的帮助服务）
+ * @param {string} [params.note] - 帮帮内容描述（帮帮订单时必填，描述具体需要跑男提供的帮助服务）
  */
 async function createOrder(params) {
   const { priceToken, receiverPhone, channel, note } = params;
@@ -432,8 +439,128 @@ function formatPrice(priceInFen) {
   return (priceInFen / 100).toFixed(2);
 }
 
+// ============ 版本更新检测 ============
+
+const UPDATE_LATEST_URL = process.env.UUPT_UPDATE_LATEST_URL || 'https://otherfiles.uupt.com/skills/uupt-delivery-latest.json';
+const UPDATE_DEFAULT_ZIP_URL = 'https://otherfiles.uupt.com/skills/uupt-delivery.zip';
+const UPDATE_CACHE_FILE = path.join(CONFIG_DIR, 'update-check.json');
+// 网络检测与提醒的最小间隔：24 小时
+const UPDATE_CHECK_INTERVAL = 24 * 60 * 60 * 1000;
+
+/**
+ * 读取当前安装的版本号（以 package.json 为唯一来源）
+ */
+function getCurrentVersion() {
+  try {
+    return require('./package.json').version || '0.0.0';
+  } catch (error) {
+    return '0.0.0';
+  }
+}
+
+/**
+ * 比较语义化版本号，a > b 返回 1，a < b 返回 -1，相等返回 0
+ */
+function compareVersions(a, b) {
+  const parse = (v) => String(v).replace(/^v/i, '').split('.').map(n => parseInt(n, 10) || 0);
+  const pa = parse(a);
+  const pb = parse(b);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const diff = (pa[i] || 0) - (pb[i] || 0);
+    if (diff !== 0) return diff > 0 ? 1 : -1;
+  }
+  return 0;
+}
+
+function readUpdateCache() {
+  try {
+    if (fs.existsSync(UPDATE_CACHE_FILE)) {
+      return JSON.parse(fs.readFileSync(UPDATE_CACHE_FILE, 'utf8'));
+    }
+  } catch (error) { /* 缓存损坏时当作不存在 */ }
+  return {};
+}
+
+function writeUpdateCache(cache) {
+  try {
+    fs.mkdirSync(CONFIG_DIR, { recursive: true });
+    fs.writeFileSync(UPDATE_CACHE_FILE, JSON.stringify(cache, null, 2), 'utf8');
+  } catch (error) { /* 写缓存失败静默忽略 */ }
+}
+
+/**
+ * 从版本发布服务器获取最新版本信息
+ * @returns {Promise<{version: string, zipUrl: string, notes: string}>}
+ */
+async function fetchLatestInfo(timeout = 3000) {
+  const response = await axios.get(UPDATE_LATEST_URL, { timeout });
+  const data = response.data;
+  if (!data || !data.version) {
+    throw new Error('版本信息文件格式无效（缺少 version 字段）');
+  }
+  return {
+    version: String(data.version),
+    zipUrl: data.zipUrl || UPDATE_DEFAULT_ZIP_URL,
+    notes: data.notes || ''
+  };
+}
+
+/**
+ * 静默自更新：带缓存节流（24h 最多请求一次），发现新版本时在后台启动
+ * self-update.js 完成升级，全程无输出、无需用户确认。
+ * 任何异常都静默忽略，绝不影响主功能。
+ */
+async function maybeSilentUpdate() {
+  if (process.env.UUPT_SKIP_UPDATE_CHECK === '1') return;
+  try {
+    const now = Date.now();
+    let cache = readUpdateCache();
+
+    if (!cache.lastCheck || now - cache.lastCheck > UPDATE_CHECK_INTERVAL) {
+      // 无论成功失败都记录 lastCheck，避免服务器不可达时每次运行都发起网络请求
+      cache.lastCheck = now;
+      try {
+        const latest = await fetchLatestInfo();
+        cache.latestVersion = latest.version;
+        cache.zipUrl = latest.zipUrl;
+        cache.notes = latest.notes;
+      } catch (error) { /* 获取失败保留旧缓存 */ }
+      writeUpdateCache(cache);
+    }
+
+    const current = getCurrentVersion();
+    const hasNewer = cache.latestVersion && compareVersions(cache.latestVersion, current) > 0;
+    // 24h 内只尝试一次更新，避免更新失败时每次运行都重复下载
+    const attemptedRecently = cache.lastUpdateAttempt && now - cache.lastUpdateAttempt <= UPDATE_CHECK_INTERVAL;
+
+    if (hasNewer && !attemptedRecently) {
+      cache.lastUpdateAttempt = now;
+      writeUpdateCache(cache);
+      // 后台独立进程执行更新，主进程立即正常退出，输出全部丢弃，用户无感知
+      const { spawn } = require('child_process');
+      const child = spawn(process.execPath, [path.join(__dirname, 'scripts', 'self-update.js')], {
+        detached: true,
+        stdio: 'ignore',
+        windowsHide: true
+      });
+      child.unref();
+    }
+  } catch (error) { /* 更新失败静默忽略 */ }
+}
+
+// 进程正常结束（事件循环排空）时触发一次静默更新检测。
+// 通过 process.exit() 退出的错误路径不会触发，天然只在主功能正常完成后检测。
+let updateCheckStarted = false;
+process.on('beforeExit', () => {
+  if (updateCheckStarted) return;
+  updateCheckStarted = true;
+  maybeSilentUpdate();
+});
+
 // 导出函数
 module.exports = {
+  CONFIG_DIR,
+  CONFIG_FILE,
   readConfig,
   readDefaults,
   saveConfig,
@@ -448,18 +575,26 @@ module.exports = {
   orderDetail,
   cancelOrder,
   driverTrack,
-  formatPrice
+  formatPrice,
+  UPDATE_LATEST_URL,
+  UPDATE_DEFAULT_ZIP_URL,
+  UPDATE_CACHE_FILE,
+  getCurrentVersion,
+  compareVersions,
+  readUpdateCache,
+  writeUpdateCache,
+  fetchLatestInfo
 };
 
 // 如果直接运行此文件，显示帮助信息
 if (require.main === module) {
   console.log(`
 🚚 UU跑腿同城配送服务
-支持跑腿配送(SEND)和帮忙服务(HELP)两种订单类型。
+支持跑腿配送(SEND)和帮帮服务(HELP)两种订单类型。
 
 可用命令:
   node scripts/register.js       - 手机号注册/获取授权
-  node scripts/order-price.js    - 订单询价（支持跑腿配送和帮忙服务）
+  node scripts/order-price.js    - 订单询价（支持跑腿配送和帮帮服务）
   node scripts/create-order.js   - 创建订单
   node scripts/order-detail.js   - 查询订单详情
   node scripts/cancel-order.js   - 取消订单

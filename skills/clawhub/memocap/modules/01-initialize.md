@@ -11,7 +11,7 @@
 3. 运行初始化命令:
 
 ```bash
-python3 /home/fslong/.config/opencode/skills/忆时/scripts/memory_core.py init
+python3 /home/fslong/.local/share/忆时/scripts/memory_core.py init
 ```
 
 4. 确认输出包含"忆时记忆系统初始化完成"
@@ -50,9 +50,9 @@ ChromaDB 内会创建以下集合:
 
 ## 模型安装
 
-本技能使用 all-MiniLM-L6-v2 embedding 模型。
-首次初始化时会自动安装：有离线包则解压 `models/onnx.tar.gz`，否则从 Chroma S3 下载。
-安装后模型文件位于 `models/all-MiniLM-L6-v2/onnx/` 目录。
+本技能使用 **bge-base-zh-v1.5**（BAAI 中文语义模型，768 维），**无回退**。
+引擎检测 `~/.local/share/忆时/models/bge-base-zh-v1.5/`，缺失即报错。
+安装命令——详见 modules/08-setup.md。
 
 > ⚠️ 模型不会写入 `~/.cache/chroma/`，清缓存不会被删除。
 
@@ -60,4 +60,4 @@ ChromaDB 内会创建以下集合:
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
-| YISHI_DATA_DIR | ~/.config/opencode/skills/忆时/data | ChromaDB 存储路径 |
+| MEMO_DIR | ~/.local/share/忆时/data | ChromaDB 存储路径 |

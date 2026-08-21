@@ -1,0 +1,8 @@
+interface:
+  version: 0.4.3
+  display_name: "协作雷达"
+  short_description: "从群聊和会议纪要提取进展、待办、风险与依赖，自动脱敏、优先级排序、生成雷达图"
+  default_prompt: "Use $office-collaboration-radar 当用户提供群聊记录、会议纪要等协作材料，或提到项目进展、待办提取、风险阻断、Owner/DDL、跨部门依赖、需确认项时，提取一张稳定的协作状态卡片，并自动脱敏、强制证据留痕、标记冲突、优先级排序、生成雷达图。"
+
+policy:
+  allow_implicit_invocation: true

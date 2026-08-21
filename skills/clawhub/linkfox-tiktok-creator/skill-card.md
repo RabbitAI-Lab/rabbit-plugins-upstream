@@ -1,43 +1,62 @@
-## Description: <br>
-Provides TikTok Shop creator profile, shop product, showcase product, shoppable video pre-check, posting, and status workflows through the LinkFox gateway using a creator access token. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides TikTok Shop creator profile, product, showcase, and shoppable-video API guidance through LinkFox creator API calls, requiring a creator access token from linkfox-tiktok-video-auth.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External operators and developers use this skill to inspect TikTok creator data, retrieve creator-linked products, and run shoppable video publishing support workflows after obtaining a creator access token. It is intended for LinkFox-mediated TikTok Shop creator API calls, not creator authorization itself. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and TikTok creator access token, which can expose creator, shop, and video posting data if used in an untrusted workspace. <br>
-Mitigation: Install only when LinkFox is trusted, keep tokens out of shared logs, restrict gateway environment variables, and display creator tokens only in masked form. <br>
-Risk: Responses and cached results may persist locally and can include creator or shop data. <br>
-Mitigation: Prefer --no-cache for sensitive sessions, review saved JSON files before sharing the workspace, and remove local LinkFox output directories when retention is not needed. <br>
-Risk: The workflow can post shoppable videos or send feedback through network APIs. <br>
-Mitigation: Require explicit user confirmation before posting videos or sending feedback, and verify TikTok business status codes before treating an operation as successful. <br>
+## Use Case:
 
+External commerce operators and developers use this skill to query TikTok Shop creator profiles, creator-linked products, showcase products, and shoppable-video publishing or status APIs after obtaining a valid creator access token.
 
-## Reference(s): <br>
-- [TikTok Creator API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-tiktok-creator) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON, files, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response summaries; full API responses are written as JSON files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a 24-hour local cache by default, supports --no-cache, and should mask creator access tokens in displayed output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill performs real TikTok creator operations and requires creator access tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only valid creator tokens, mask tokens in user-visible output, and review TikTok response codes before taking follow-up actions.
+
+Risk: The skill can store TikTok creator and business API responses in the workspace.
+
+Mitigation: Install or run it only where local storage of these responses is acceptable, and review saved files before sharing the workspace.
+
+Risk: Endpoint environment variables can redirect calls to non-default LinkFox services.
+
+Mitigation: Verify LinkFox endpoint environment variables are trusted before running API calls.
+
+Risk: The onboarding flow can collect phone and SMS login details, generate API keys, create payment orders, and save payment QR files.
+
+Mitigation: Use onboarding only when needed for authentication or billing, and confirm account, payment, and API-key handling with the user before proceeding.
+
+## Reference(s):
+
+- [TikTok Creator API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, JSON files, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API request or response output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are written to a local linkfox session directory; large responses are summarized in stdout.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

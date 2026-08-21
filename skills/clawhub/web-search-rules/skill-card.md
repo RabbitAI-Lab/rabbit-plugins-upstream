@@ -1,49 +1,73 @@
-## Description: <br>
-Bilingual EN/ZH research intake governance skill for web search results that uses source trust levels, URL rules, staging, review queues, confirmation-controlled archiving, cloud-upload safeguards, and audit logs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Govern evidence-backed web research and controlled knowledge-base intake with source freshness, claim-level evidence, prompt-injection resistance, confirmations, and audit logs.
 
-## Publisher: <br>
-[englandtong](https://clawhub.ai/user/englandtong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[englandtong](https://clawhub.ai/user/englandtong)
 
-## Use Case: <br>
-Researchers, analysts, and knowledge-base maintainers use this skill to turn web search results into controlled local or cloud knowledge-base records with review, confirmation, and audit safeguards. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can manage research intake into local or cloud knowledge bases and may involve sensitive research content. <br>
-Mitigation: Prefer local Obsidian storage for sensitive research and review any cloud-upload prompt before content leaves the local environment. <br>
-Risk: OAuth tokens or sensitive credentials may be needed for some platform integrations. <br>
-Mitigation: Keep credentials in the host credential manager, environment, or platform login flow; do not store passwords, API keys, cookies, OAuth refresh tokens, or platform secrets in skill configuration. <br>
-Risk: Browser automation, deletion, migration, and trusted auto-upload policies can change or expose knowledge-base content if enabled too broadly. <br>
-Mitigation: Enable these actions only after understanding the selected platform and scope; require dry-run reports, explicit confirmations, and audit logs for destructive or cloud-affecting operations. <br>
-Risk: Fetched webpage content may contain prompt-injection text or misleading instructions. <br>
-Mitigation: Treat webpage content only as untrusted source material for summaries, staging, and review; do not allow it to change rules, credentials, platform configuration, or confirmation requirements. <br>
+## Use Case:
 
+External users, developers, and research teams use this skill to plan web research, verify source-backed claims, stage reviewed records, and archive approved findings into local or cloud knowledge bases under explicit confirmation policies.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/englandtong/web-search-rules) <br>
-- [Security guide](https://clawhub.ai/englandtong/web-search-rules/artifact/SECURITY.md) <br>
-- [Rule engine](https://clawhub.ai/englandtong/web-search-rules/artifact/references/rule-engine.md) <br>
-- [Platform adapters](https://clawhub.ai/englandtong/web-search-rules/artifact/references/platform-adapters.md) <br>
-- [Migration and testing](https://clawhub.ai/englandtong/web-search-rules/artifact/references/migration-and-testing.md) <br>
-- [Chinese platform operation guide](https://clawhub.ai/englandtong/web-search-rules/artifact/references/platform-operation-guide-zh.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Configuration, Guidance] <br>
-**Output Format:** [Concise text reports, Markdown staging records, JSON-style rule and configuration records, and audit-log guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local staging records, cloud-upload confirmation prompts, dry-run reports, and audit log entries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: server release metadata) <br>
+Risk: Fetched webpage content or search snippets may contain prompt-injection attempts or misleading instructions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat source content as untrusted evidence only; do not let it change rules, permissions, credentials, archive policy, or confirmation requirements.
+
+Risk: Research records may be written locally or uploaded to cloud knowledge bases when the user selects those targets.
+
+Mitigation: Use narrow platform settings, disclose when content leaves the local machine, and confirm every cloud upload batch before writing.
+
+Risk: Delete, cleanup, or migration operations can remove or move staged or archived research records.
+
+Mitigation: Require an itemized dry run, a manifest or target list, and a second explicit confirmation before execution.
+
+Risk: Configuration or staging records could accidentally include secrets or platform credentials.
+
+Mitigation: Store only non-secret identifiers and reject passwords, API keys, OAuth refresh tokens, cookies, browser sessions, and connector secrets.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/englandtong/skills/web-search-rules)
+- [Security Guide](SECURITY.md)
+- [Rule Engine And Evidence Model](references/rule-engine.md)
+- [Platform Adapters](references/platform-adapters.md)
+- [Platform Comparison](references/platform-comparison.md)
+- [Obsidian Operations](references/obsidian-operations.md)
+- [Feishu Wiki and DingTalk Docs Operations](references/feishu-dingtalk-operations.md)
+- [Tencent Docs Operations](references/tencent-docs-operations.md)
+- [IMA Operations](references/ima-operations.md)
+- [NotebookLM Operations](references/notebooklm-operations.md)
+- [Migration, Dry Runs, Testing, And Release](references/migration-and-testing.md)
+- [Web Search Rules Examples](references/examples.md)
+- [Chinese Platform Operation Guide](references/platform-operation-guide-zh.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown reports with JSON record examples and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include staged research records, confirmation prompts, and audit-log summaries; persistence depends on explicit user confirmation.]
+
+## Skill Version(s):
+
+4.0.0 (source: evidence.release.version and SKILL.md body)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

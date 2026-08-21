@@ -111,7 +111,7 @@ def call_api(endpoint: str, params: dict) -> dict:
         method="POST",
     )
     try:
-        with urlopen(req, timeout=120) as response:
+        with urlopen(req, timeout=150) as response:
             return json.loads(response.read().decode("utf-8"))
     except HTTPError as e:
         body = e.read().decode("utf-8") if e.fp else ""
@@ -127,7 +127,7 @@ def get_store_tokens(seller_id: str, region: str) -> dict:
 def developer_proxy_put(
     region: str,
     path: str,
-    access_token: str,
+    seller_id: str,
     query_string: str,
     body_obj: Dict[str, Any],
 ) -> dict:
@@ -135,7 +135,7 @@ def developer_proxy_put(
         "region": region,
         "path": path,
         "method": "PUT",
-        "amzAccessToken": access_token,
+        "sellerId": seller_id,
         "queryString": query_string,
         "body": json.dumps(body_obj, ensure_ascii=False),
         "contentType": "application/json",
@@ -245,13 +245,7 @@ def main() -> None:
     }
 
     path = _path_put(seller_id, sku)
-    tokens = get_store_tokens(seller_id, region)
-    if "error" in tokens or "accessToken" not in tokens:
-        print(json.dumps(tokens, indent=2, ensure_ascii=False))
-        sys.exit(1)
-
-    access_token = tokens["accessToken"]
-    proxy = developer_proxy_put(region, path, access_token, query_string, body_obj)
+    proxy = developer_proxy_put(region, path, seller_id, query_string, body_obj)
 
     out: Dict[str, Any] = {
         "developerProxy": proxy,

@@ -1,44 +1,59 @@
-## Description: <br>
-Identifies negative emotions such as crying, anger, fear, and distress in children's surveillance footage and produces alerts, soothing reminders, and caregiver-facing reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes child surveillance images or videos to identify negative emotions such as crying, anger, fear, and distress, then returns structured reports, reminders, notifications, and report links.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External caregivers, daycare operators, and developers use this skill to analyze child-focused images or video for negative emotion signals and to retrieve cloud-hosted historical analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Children's images, videos, remote media URLs, report history requests, and account-linked identifiers may be sent to configured Life Emergence cloud services. <br>
-Mitigation: Install and operate only after confirming consent, legal basis, retention and deletion terms, and who can access historical reports. <br>
-Risk: The skill silently creates or reuses identity for report association. <br>
-Mitigation: Review identity handling before deployment and restrict report-history access to authorized operators. <br>
-Risk: The authoritative security verdict is suspicious because consent and retention controls are unclear. <br>
-Mitigation: Treat deployment as requiring security and privacy review before use with real children's media. <br>
+## Use Case:
 
+External caregivers, parents, daycare operators, and developers use this skill to analyze uploaded or URL-based child images and videos for emotion signals and to retrieve historical cloud reports.
 
-## Reference(s): <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-emotion-recognition-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-backed text output from Python CLI commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links and optional local output files when the CLI --output parameter is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.15 (source: server release evidence) <br>
+Risk: The skill may upload child images or videos to LifeEmergence services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with guardian and operator consent, and confirm retention, deletion, and notification-recipient expectations before deployment.
+
+Risk: The skill may create or reuse an internal account identity and store tokens in a workspace SQLite database.
+
+Mitigation: Run it in an isolated workspace, protect the local database, avoid shared machines, and rotate or revoke credentials if the workspace is exposed.
+
+Risk: The skill can retrieve prior cloud reports for sensitive child surveillance analysis.
+
+Mitigation: Limit historical-report access to authorized users and verify the account context before running report-list queries.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-emotion-recognition-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Child emotion recognition API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON]
+
+**Output Format:** [Markdown text with JSON-formatted structured analysis or report-list content.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include LifeEmergence report export links; results can optionally be written to a user-specified output file.]
+
+## Skill Version(s):
+
+1.0.22 (source: ClawHub release evidence; artifact frontmatter reports 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -203,8 +203,8 @@ curl -X POST {接口地址} \
 |------|---------|------|
 | Agnes AI | agnes-2.0-flash | 多模态模型 |
 | 智谱 BigModel | glm-4.7-flash | 文本生成模型 |
-| 商汤 SenseNova | sensenova-6.7-flash-lite | 文本生成模型 |
-| 小米 MIMO | mimo-v2.5-pro | 文本生成模型 |
+| 商汤 SenseNova | sensenova-6.8-flash-lite / sensenova-u1-fast / deepseek-v4-flash / glm-5.2 | 文本生成 / 信息图生成 / 对话推理模型 |
+| 小米 MIMO | mimo-v2.5-pro / mimo-v2.5 / mimo-v2.5-asr / mimo-v2.5-tts 系列 | 文本生成 / 全模态 / 语音识别 / 语音合成模型 |
 | 美团 LongCat | LongCat-2.0 | 文本生成模型 |
 
 2. **模型配置**：
@@ -307,13 +307,46 @@ curl -X POST {接口地址} \
     "useCustomProtocol": false
   },
   {
-    "id": "sensenova-6.7-flash-lite",
-    "name": "sensenova-6.7-flash-lite",
+    "id": "sensenova-6.8-flash-lite",
+    "name": "sensenova-6.8-flash-lite",
     "vendor": "Custom",
     "url": "https://token.sensenova.cn/v1",
     "apiKey": "your_api_key_here",
     "supportsToolCall": true,
     "supportsImages": true,
+    "supportsReasoning": true,
+    "useCustomProtocol": false
+  },
+  {
+    "id": "sensenova-u1-fast",
+    "name": "sensenova-u1-fast",
+    "vendor": "Custom",
+    "url": "https://token.sensenova.cn/v1",
+    "apiKey": "your_api_key_here",
+    "supportsToolCall": false,
+    "supportsImages": true,
+    "supportsReasoning": false,
+    "useCustomProtocol": false
+  },
+  {
+    "id": "deepseek-v4-flash",
+    "name": "deepseek-v4-flash",
+    "vendor": "Custom",
+    "url": "https://token.sensenova.cn/v1",
+    "apiKey": "your_api_key_here",
+    "supportsToolCall": true,
+    "supportsImages": false,
+    "supportsReasoning": true,
+    "useCustomProtocol": false
+  },
+  {
+    "id": "glm-5.2",
+    "name": "glm-5.2",
+    "vendor": "Custom",
+    "url": "https://token.sensenova.cn/v1",
+    "apiKey": "your_api_key_here",
+    "supportsToolCall": true,
+    "supportsImages": false,
     "supportsReasoning": true,
     "useCustomProtocol": false
   },
@@ -326,6 +359,61 @@ curl -X POST {接口地址} \
     "supportsToolCall": true,
     "supportsImages": true,
     "supportsReasoning": true,
+    "useCustomProtocol": false
+  },
+  {
+    "id": "mimo-v2.5",
+    "name": "mimo-v2.5",
+    "vendor": "Custom",
+    "url": "https://token-plan-cn.xiaomimimo.com/v1",
+    "apiKey": "your_api_key_here",
+    "supportsToolCall": true,
+    "supportsImages": true,
+    "supportsReasoning": true,
+    "useCustomProtocol": false
+  },
+  {
+    "id": "mimo-v2.5-asr",
+    "name": "mimo-v2.5-asr",
+    "vendor": "Custom",
+    "url": "https://token-plan-cn.xiaomimimo.com/v1",
+    "apiKey": "your_api_key_here",
+    "supportsToolCall": false,
+    "supportsImages": false,
+    "supportsReasoning": false,
+    "useCustomProtocol": false
+  },
+  {
+    "id": "mimo-v2.5-tts",
+    "name": "mimo-v2.5-tts",
+    "vendor": "Custom",
+    "url": "https://token-plan-cn.xiaomimimo.com/v1",
+    "apiKey": "your_api_key_here",
+    "supportsToolCall": false,
+    "supportsImages": false,
+    "supportsReasoning": false,
+    "useCustomProtocol": false
+  },
+  {
+    "id": "mimo-v2.5-tts-voiceclone",
+    "name": "mimo-v2.5-tts-voiceclone",
+    "vendor": "Custom",
+    "url": "https://token-plan-cn.xiaomimimo.com/v1",
+    "apiKey": "your_api_key_here",
+    "supportsToolCall": false,
+    "supportsImages": false,
+    "supportsReasoning": false,
+    "useCustomProtocol": false
+  },
+  {
+    "id": "mimo-v2.5-tts-voicedesign",
+    "name": "mimo-v2.5-tts-voicedesign",
+    "vendor": "Custom",
+    "url": "https://token-plan-cn.xiaomimimo.com/v1",
+    "apiKey": "your_api_key_here",
+    "supportsToolCall": false,
+    "supportsImages": false,
+    "supportsReasoning": false,
     "useCustomProtocol": false
   },
   {
@@ -412,8 +500,14 @@ curl -X POST https://apihub.agnes-ai.com/v1 \
 | Agnes AI | agnes-image-2.0-flash | POST https://apihub.agnes-ai.com/v1/images/generations | 图像生成 |
 | Agnes AI | agnes-video-v2.0 | POST https://apihub.agnes-ai.com/v1/videos | 视频生成 |
 | 智谱 BigModel | glm-4.7-flash | POST https://open.bigmodel.cn/api/paas/v4/chat/completions | 文本生成 |
-| 商汤 SenseNova | sensenova-6.7-flash-lite | POST https://token.sensenova.cn/v1/chat/completions | 文本生成 |
+| 商汤 SenseNova | sensenova-6.8-flash-lite | POST https://token.sensenova.cn/v1/chat/completions | 文本生成 |
+| 商汤 SenseNova | sensenova-u1-fast | POST https://token.sensenova.cn/v1/images/generations | 信息图生成 |
+| 商汤 SenseNova | deepseek-v4-flash | POST https://token.sensenova.cn/v1/chat/completions | 对话推理 |
+| 商汤 SenseNova | glm-5.2 | POST https://token.sensenova.cn/v1/chat/completions | 对话推理 |
 | 小米 MIMO | mimo-v2.5-pro | POST https://token-plan-cn.xiaomimimo.com/v1/chat/completions | 文本生成 |
+| 小米 MIMO | mimo-v2.5 | POST https://token-plan-cn.xiaomimimo.com/v1/chat/completions | 全模态理解 |
+| 小米 MIMO | mimo-v2.5-asr | POST https://token-plan-cn.xiaomimimo.com/v1/audio/transcriptions | 语音识别 |
+| 小米 MIMO | mimo-v2.5-tts / -voiceclone / -voicedesign | POST https://token-plan-cn.xiaomimimo.com/v1/audio/speech | 语音合成 |
 | 美团 LongCat | LongCat-2.0 | POST https://api.longcat.chat/openai/chat/completions | 文本生成 |
 
 2. **请求参数**：

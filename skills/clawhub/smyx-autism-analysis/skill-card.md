@@ -1,45 +1,60 @@
-## Description: <br>
-Performs video-based analysis of autism-related child behavior characteristics, identifies core symptom features, and returns structured reports with intervention recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Performs special video analysis on behavioral characteristics of children with autism, identifies core symptom features, provides structured analysis reports and intervention recommendations. | 孤独症谱系障碍行为分析工具，针对儿童孤独症行为特征进行专项视频分析，识别核心症状特征，提供结构化分析报告和干预建议
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, caregivers, educators, and professionals can use this skill to submit child video files or URLs for preliminary autism spectrum behavior analysis, structured screening-style reports, and intervention guidance. The output is for early screening support and does not replace professional medical diagnosis or clinical evaluation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may send child videos or video URLs to the publisher's remote service for analysis. <br>
-Mitigation: Use only with proper guardian consent and only when the publisher's privacy, retention, deletion, and access-control terms are acceptable. <br>
-Risk: The skill can create or reuse an internal identity, query cloud-stored report history, and persist local authentication tokens. <br>
-Mitigation: Run in a controlled environment, review local token storage before deployment, and clear local credentials and report access when no longer needed. <br>
-Risk: The analysis is autism-related screening support and may be mistaken for a clinical diagnosis. <br>
-Mitigation: Present outputs as preliminary screening information and direct users to qualified medical professionals for diagnosis or clinical evaluation. <br>
+## Use Case:
 
+External users such as parents, educators, and relevant professionals use this agent to submit child behavior videos or URLs for ASD-oriented screening analysis, structured reports, and intervention suggestions. The agent can also return cloud-sourced historical report lists associated with the user's identity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-autism-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with recommendations and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a local file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
+Risk: Sensitive child-health videos, URLs, and identity-linked report requests are sent to the publisher's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with appropriate consent and after reviewing the publisher's retention, deletion, and access practices.
+
+Risk: The skill may create or reuse local workspace state containing identifiers and tokens.
+
+Mitigation: Install in a controlled workspace, restrict file access, and remove local state or tokens when no longer needed.
+
+Risk: ASD-oriented analysis output may be mistaken for a clinical diagnosis.
+
+Mitigation: Present outputs as screening support only and route concerning findings to qualified medical professionals for evaluation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-autism-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](references/api_doc.md)
+- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Structured analysis reports, Markdown tables, report links, and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include risk or recognition results, intervention suggestions, and cloud-sourced historical report listings.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata, SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

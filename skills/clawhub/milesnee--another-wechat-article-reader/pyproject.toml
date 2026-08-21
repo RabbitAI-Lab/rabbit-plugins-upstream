@@ -1,0 +1,10 @@
+[project]
+name = "another-wechat-article-reader"
+version = "0.2.0"
+description = "Stable WeChat mp article reader: curl_cffi impersonation + content_noencode paid-wall fallback"
+readme = "SKILL.md"
+requires-python = ">=3.10"
+dependencies = [
+    "curl_cffi>=0.7",
+    "beautifulsoup4>=4.12",
+]

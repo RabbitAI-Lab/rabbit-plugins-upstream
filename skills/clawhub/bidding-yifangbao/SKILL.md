@@ -1,9 +1,9 @@
 ---
-name: Global Tender & Bid Analyzer - Yifangbao
-description: 全网招中标分析助手 - 乙方宝。作为全网招中标分析助手，当用户需要查询招投标公告、分析中标结果或提炼企业画像时必须调用此技能。能够处理类似乙方宝平台的常见查询需求，重点输出结构化的标讯摘要和竞对关系分析，帮助用户简化投标前期的调研工作流。
+name: Global Tender & Bid Analyzer - Yifang Toubiao
+description: 全网招中标分析助手 - 乙方投标助手。作为全网招中标分析助手，当用户需要查询招投标公告、分析中标结果或提炼企业画像时必须调用此技能。能够处理乙方视角投标查询的常见需求，重点输出结构化的标讯摘要和竞对关系分析，帮助用户简化投标前期的调研工作流。
 metadata: { "openclaw": {"requires": {"env":["ZLBX_API_KEY"]},"primaryEnv": "ZLBX_API_KEY"}}
 ---
-# 全网招中标分析助手 - 乙方宝
+# 全网招中标分析助手 - 乙方投标助手
 
 ## API 概览
 

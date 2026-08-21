@@ -1,46 +1,59 @@
-## Description: <br>
-Queries Zhihuiya (PatSnap) for a single patent's current legal standing, validity status, and legal event history by patent ID or publication number. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries Zhihuiya (PatSnap) patent legal status data to help users check patent validity, lifecycle status, and legal event history by patent ID or publication number.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Patent professionals, legal operations teams, and agents use this skill to check a single patent's legal status, validity, and legal events through the LinkFox Zhihuiya/PatSnap endpoint. It is suited for direct patent status lookups, not broader patent search, valuation, freedom-to-operate analysis, or family/citation analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends patent identifiers and query context to LinkFox/Zhihuiya services. <br>
-Mitigation: Use only when sharing the patent query with those services is acceptable, and avoid confidential patent work unless the environment's data-handling controls are appropriate. <br>
-Risk: Full API responses and cache files can persist locally under linkfox output directories. <br>
-Mitigation: Review and manage local output/cache files, especially in shared workspaces or when query results may be sensitive. <br>
-Risk: The security review notes silent feedback reporting and remote onboarding installation behavior. <br>
-Mitigation: Review before installing and control feedback/onboarding behavior in the target environment. <br>
-Risk: The endpoint consumes credits and supports only one patent per request. <br>
-Mitigation: Confirm user intent before additional or repeated lookups, especially for multiple patents or retry attempts. <br>
+## Use Case:
 
+Patent professionals, developers, and external users use this skill to query one or more patents for current legal standing, detailed lifecycle status, and events such as transfers, licenses, pledges, litigation, invalidation, or re-examination.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-legal-status) <br>
-- [API reference](artifact/references/api.md) <br>
-- [Zhihuiya legal status endpoint](https://tool-gateway.linkfox.com/zhihuiya/legalStatus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Files, JSON, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Structured patent legal-status guidance with JSON API responses saved locally and optional stdout JSON or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Queries one patent per request; responses may be cached for 24 hours and full API responses are written under a local linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: evidence.release.version) <br>
+Risk: The skill uses LinkFox and PatSnap network services and may handle sensitive patent, account, API key, and billing information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when those services are acceptable for the task, avoid sharing confidential patent or business information unnecessarily, and review API key handling before use.
+
+Risk: The onboarding helper can guide SMS login, expose an API key in command output, and create paid order flows.
+
+Mitigation: Use authentication and payment helpers only after explicit user intent, and confirm plan and payment choices before creating an order.
+
+Risk: The skill stores complete lookup responses locally and includes automatic feedback reporting instructions.
+
+Mitigation: Review local saved response files for sensitive content and disable or review feedback reporting before using the skill with confidential material.
+
+## Reference(s):
+
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-legal-status)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration guidance, JSON files]
+
+**Output Format:** [Markdown guidance with structured tables, API response summaries, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The lookup script stores full responses under a local linkfox directory; large responses are summarized unless inline output is explicitly requested.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
