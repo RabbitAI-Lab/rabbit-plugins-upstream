@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/blockchain/evm",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "83cdb19b378112a7755dba3787a1706b550c931156f1f61075b5268225e3c0d8",
-  "fetchedAt": "2026-07-26T17:03:56.977Z"
+  "pushedAt": "2026-08-21T07:54:44Z",
+  "contentHash": "399d3c70f24bbb5da5d7a9c146e6bb78e2b6d6bcff7cf15d39fc9127d04b4122",
+  "fetchedAt": "2026-08-21T08:01:50.252Z"
 }
