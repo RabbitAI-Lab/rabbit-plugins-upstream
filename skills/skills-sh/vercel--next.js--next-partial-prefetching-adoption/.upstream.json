@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel/next.js/next-partial-prefetching-adoption",
+  "repo": "vercel/next.js",
+  "skillId": "next-partial-prefetching-adoption",
+  "branch": "canary",
+  "pushedAt": "2026-08-21T07:53:35Z",
+  "contentHash": "54287d819faf3cfcbaa9900a690dc478565a5465327b529d88308d6a14d991ae",
+  "fetchedAt": "2026-08-21T08:03:25.981Z"
+}

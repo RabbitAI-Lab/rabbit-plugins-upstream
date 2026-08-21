@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/elevenlabs-dubbing",
+  "repo": "inference-sh/skills",
+  "skillId": "elevenlabs-dubbing",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "c49775796897e26e786580d908fbb3658b44f1d61b254b8295c53bdebfda3d5e",
+  "fetchedAt": "2026-08-21T08:01:18.248Z"
+}

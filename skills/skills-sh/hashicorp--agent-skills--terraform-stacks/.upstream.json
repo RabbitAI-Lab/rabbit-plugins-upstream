@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/terraform-stacks",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "terraform-stacks",
+  "branch": "main",
+  "pushedAt": "2026-08-20T16:10:13Z",
+  "contentHash": "7906dd9bcc6c12422072cee9f44475b3b86a3f33a23f7520859028720ed15a69",
+  "fetchedAt": "2026-08-21T08:03:14.001Z"
+}

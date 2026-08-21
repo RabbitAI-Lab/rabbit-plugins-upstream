@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/mblode/agent-skills/scaffold-nextjs",
+  "repo": "mblode/agent-skills",
+  "skillId": "scaffold-nextjs",
+  "branch": "main",
+  "pushedAt": "2026-08-19T05:51:19Z",
+  "contentHash": "9bf8c15584811dae5f683e971756f132291940d0bc0b7ac155d10fb5eb2b22cb",
+  "fetchedAt": "2026-08-21T08:03:29.660Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/okx/agent-skills/okx-cex-bot",
+  "repo": "okx/agent-skills",
+  "skillId": "okx-cex-bot",
+  "branch": "github-main",
+  "pushedAt": "2026-08-20T06:31:21Z",
+  "contentHash": "4f6911d16c816a90e32323f7504ff66af21a72ee7508473b0ab0df6bb9c0b799",
+  "fetchedAt": "2026-08-21T08:03:15.031Z"
+}

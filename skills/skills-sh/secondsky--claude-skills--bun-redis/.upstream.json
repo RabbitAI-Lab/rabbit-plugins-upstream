@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/bun-redis",
+  "repo": "secondsky/claude-skills",
+  "skillId": "bun-redis",
+  "branch": "main",
+  "pushedAt": "2026-08-20T08:18:42Z",
+  "contentHash": "6a7ab515d9eacb8bff8dd2ee4cd604b7900fe912b27845731048c1b7a1333415",
+  "fetchedAt": "2026-08-21T08:03:52.764Z"
+}

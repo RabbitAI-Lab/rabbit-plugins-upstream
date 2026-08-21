@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/coinglass",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "coinglass",
+  "branch": "main",
+  "pushedAt": "2026-08-21T05:49:38Z",
+  "contentHash": "888596bbb8f94c2a7b777828574a513a1d44fbb72d54da1a823720523fbcc1bf",
+  "fetchedAt": "2026-08-21T08:03:05.125Z"
+}

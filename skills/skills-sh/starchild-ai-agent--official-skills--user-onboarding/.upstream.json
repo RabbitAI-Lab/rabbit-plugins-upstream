@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/user-onboarding",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "user-onboarding",
+  "branch": "main",
+  "pushedAt": "2026-08-21T05:49:38Z",
+  "contentHash": "d3007810bbe8a6acc0e9d20d6859079d9eb1d8b2dd0abe17d5cf392f791c82b3",
+  "fetchedAt": "2026-08-21T08:03:05.275Z"
+}
