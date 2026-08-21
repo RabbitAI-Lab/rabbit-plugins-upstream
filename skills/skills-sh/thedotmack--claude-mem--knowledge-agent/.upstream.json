@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/thedotmack/claude-mem/knowledge-agent",
+  "repo": "thedotmack/claude-mem",
+  "skillId": "knowledge-agent",
+  "branch": "main",
+  "pushedAt": "2026-08-20T16:23:20Z",
+  "contentHash": "1db552f78ceb28b09fb7b6b08bc56192a2c763e1a1fe94c4874effe3d9e94e69",
+  "fetchedAt": "2026-08-21T08:03:50.740Z"
+}

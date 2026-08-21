@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/okx/agent-skills/okx-cex-portfolio",
+  "repo": "okx/agent-skills",
+  "skillId": "okx-cex-portfolio",
+  "branch": "github-main",
+  "pushedAt": "2026-08-20T06:31:21Z",
+  "contentHash": "91a2d2425b60a0f5910d28765a0e7fd988a1ee1db37327d1d33d84cd4d2595d9",
+  "fetchedAt": "2026-08-21T08:03:15.030Z"
+}

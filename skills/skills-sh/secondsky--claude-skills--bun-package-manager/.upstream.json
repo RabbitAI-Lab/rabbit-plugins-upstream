@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/bun-package-manager",
+  "repo": "secondsky/claude-skills",
+  "skillId": "bun-package-manager",
+  "branch": "main",
+  "pushedAt": "2026-08-20T08:18:42Z",
+  "contentHash": "bc842960d3c839edc35848142911d3ba830e24094f262426ace0acf3add012de",
+  "fetchedAt": "2026-08-21T08:03:51.826Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-cloudflare-sdk",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-cloudflare-sdk",
+  "branch": "main",
+  "pushedAt": "2026-08-14T00:44:59Z",
+  "contentHash": "46924268c13481c469519aae0722586cfe85a52bab7baea73c9db5fd75440b02",
+  "fetchedAt": "2026-08-21T08:03:55.036Z"
+}

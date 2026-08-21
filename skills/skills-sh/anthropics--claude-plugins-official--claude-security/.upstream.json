@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/claude-security",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "claude-security",
+  "branch": "main",
+  "pushedAt": "2026-08-21T07:44:07Z",
+  "contentHash": "4daa61cf9aa389faecd32be4a21b59f19769bec3d8787c9ba95da548edc0d54c",
+  "fetchedAt": "2026-08-21T08:01:34.335Z"
+}
