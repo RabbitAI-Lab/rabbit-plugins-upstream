@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/tg-bot-binding",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "tg-bot-binding",
+  "branch": "main",
+  "pushedAt": "2026-08-21T09:24:30Z",
+  "contentHash": "45987c9931f2bde275a3d4cde202964b89663fe249e565d19c5fc4ea989d08d8",
+  "fetchedAt": "2026-08-22T07:51:16.591Z"
+}

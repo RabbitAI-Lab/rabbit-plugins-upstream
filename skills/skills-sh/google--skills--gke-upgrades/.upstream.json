@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-upgrades",
+  "repo": "google/skills",
+  "skillId": "gke-upgrades",
+  "branch": "main",
+  "pushedAt": "2026-08-21T20:38:11Z",
+  "contentHash": "0beba67a3f75b3d9fd5b4904c1ca4bd5b04afeb8b4bd5eb7b8c65b746e78b0c4",
+  "fetchedAt": "2026-08-22T07:51:06.148Z"
+}

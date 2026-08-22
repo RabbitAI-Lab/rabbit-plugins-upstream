@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/agent-ui",
+  "repo": "inference-sh/skills",
+  "skillId": "agent-ui",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "0dd9af55f120cdbc4c0e6f3bf85e0c685718193fb182b7681e3005717d780d95",
+  "fetchedAt": "2026-08-22T07:49:31.173Z"
+}

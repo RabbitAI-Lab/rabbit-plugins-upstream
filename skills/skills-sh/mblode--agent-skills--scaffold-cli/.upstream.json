@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/mblode/agent-skills/scaffold-cli",
+  "repo": "mblode/agent-skills",
+  "skillId": "scaffold-cli",
+  "branch": "main",
+  "pushedAt": "2026-08-21T22:14:49Z",
+  "contentHash": "2c033da81022162017ec1bfae1e849f412e1451157a0d45b4f36f792f2309247",
+  "fetchedAt": "2026-08-22T07:51:40.796Z"
+}
