@@ -22,6 +22,7 @@ applies_to: [claude-code, cursor, cline, windsurf, hermes, codex, openclaw]
 
 > 跑前必读 / Read first: 本文件末尾《核心规则 / Core Rules》章节（鉴权、字段名、2 QPS 并发、双档时效、错误处理 R-9、R-11 先查 capabilities 再下结论）——已内联，自包含。
 > 这是 **MCP-native** skill：所有数据都走 MCP tool，**没有本地脚本、没有 Python、不需要 API key 环境变量**（key 在 client 注入的 MCP URL 里）。
+> **来源标记硬规则**：本 Skill 发起的每次 MCP tool 调用，都必须在 `arguments` 顶层加入 `"clientSource":"skill"`，不得省略。
 
 ## 何时用 / When to use
 
@@ -95,7 +96,8 @@ applies_to: [claude-code, cursor, cline, windsurf, hermes, codex, openclaw]
   "sellerId": "ATVPDKIKX0DER", "site": "amz_us", "pageCount": 1
 }}
 ```
-**Extract**: `data.json[0].data.results[]`。`sellerId` 从某 PDP 的 `seller.id`（"sold by" 链接）拿。`pageCount` 可一次累计前 N 页（≤3，跨页合并）；`categoryId` 可按类目过滤店铺商品。Amazon 自营 `sellerId="ATVPDKIKX0DER"`。
+**Extract**: `data.json[0].data.results[]`（每行 `asin/title/price/star/rating/rank/img`）。`sellerId` 从某 PDP 的 `seller.id`（"sold by" 链接）拿。`pageCount` 可一次累计前 N 页（≤3，跨页合并）；`categoryId` 可按类目过滤店铺商品。Amazon 自营 `sellerId="ATVPDKIKX0DER"`。
+**串联避坑（"店铺卖什么 + 按排名/销量排序"）**: 每行已带 `rank`（店内展示顺序），**直接按 `rank` 排序 + 配 `star`/`rating` 出表即可，这一次调用就够**。❌ 绝不"对店铺每个 ASIN 都跑 `get_amazon_product` 取小类 BSR 再排序"——几十上百 SKU 逐个打 PDP 会撞 2 QPS（R-4b）、N 次扣费、爆 Fast 档预算。✅ 只有用户明确要"全局小类 BSR 精确值"时，才对**列表 `rank` 靠前的少量头部 ASIN（前 5-10 个）**单独跑 `get_amazon_product` 取 `bestSellersRankItems[]`，分批 ≤2 并发。
 
 ### 5. 热销榜 / Best Sellers — `list_bestsellers`
 
@@ -157,6 +159,7 @@ applies_to: [claude-code, cursor, cline, windsurf, hermes, codex, openclaw]
 - ❌ Fast 档调 `get_amazon_reviews` —— 5pt/页超预算（R-4a）。
 - ❌ 引用不存在字段：`monthlySoldVolume`（用 `sales`）/ `bsr_category_path`（用 `bestSellersRankItems[]`）/ `buy_box_seller`（用 `seller.name`）/ `bullet_points`（用 `features[]`）。见 R-10。
 - ❌ 抓非 Amazon 平台 —— 本 skill 仅 Amazon。
+- ❌ 为给店铺在售品排序，对每个 ASIN 都跑一次 `get_amazon_product` —— `list_seller_products` 的 `results[]` 已带 `rank`，直接排序即可；全店逐个打 PDP 撞 2 QPS、N 次扣费、爆 Fast 档（小类 BSR 精确值仅对头部 5-10 个 ASIN 受控深拆）。
 - ❌ 先凭直觉说"抓不到"再实测可查 —— 违反 R-11，先调 `pangolinfo_capabilities`。
 
 ## 🎯 示例 Prompt / Quick-start prompts
@@ -177,17 +180,17 @@ applies_to: [claude-code, cursor, cline, windsurf, hermes, codex, openclaw]
 Pangolinfo 有**两套独立的 key 注入路径**，对应两种运行形态：
 
 - **Skill 侧（本文件所在形态）**：AI 从**环境变量 `PANGOLINFO_API_KEY`** 读取 key。这是 skill 默认的 key 来源——由用户在运行环境里设好，AI **直接读、不要反复追问用户**。
-- **MCP server 侧**：key 走 MCP 配置（CLI `--api-key=pgl_xxx` / 同名 env `PANGOLINFO_API_KEY` / `~/.pangolinfo/config.json` / hosted URL `?api_key=pgl_xxx` 或 HTTP 头 `Authorization: Bearer pgl_xxx`）。
+- **MCP server 侧**：key 走 MCP 配置（CLI `--api-key=<key>` / 同名 env `PANGOLINFO_API_KEY` / `~/.pangolinfo/config.json` / hosted URL `?api_key=<key>` 或 HTTP 头 `Authorization: Bearer <key>`）。
 
-两者**互相独立**：skill 侧改 env var 不会影响已连上的 MCP server，反之亦然。key 前缀均为 **`pgl_`**。
+两者**互相独立**：skill 侧改 env var 不会影响已连上的 MCP server，反之亦然。**key 是 JWT 格式（`eyJhbGci...` 三段式、点分隔），不是 `pgl_` 前缀**——从官网控制台复制出来长什么样就照原样用，别因为不是 `pgl_` 开头就判成无效。
 
 ### First-time setup（工具没注册 / 首次 AUTH 失败时）
 若 `pangolinfo_capabilities` 探针发现工具**未注册**，或任一 tool 直接返回 **AUTH**，说明 key 尚未配好。此时**停止跑 SOP**，引导用户：
 
-1. 到 **https://www.pangolinfo.com** 登录，复制 API Key（`pgl_` 开头；新用户有免费额度）。
+1. 到 **https://www.pangolinfo.com** 登录，复制 API Key（JWT 格式，`eyJhbGci...` 开头；新用户有免费额度）。
 2. 配置 key：
-   - Skill 形态 → 设环境变量 `export PANGOLINFO_API_KEY="pgl_xxx"`。
-   - MCP 形态 → 写进 `~/.pangolinfo/config.json`，或 MCP URL `?api_key=pgl_xxx`，或头 `Authorization: Bearer pgl_xxx`。
+   - Skill 形态 → 设环境变量 `export PANGOLINFO_API_KEY="eyJhbGci..."`。
+   - MCP 形态 → 写进 `~/.pangolinfo/config.json`，或 MCP URL `?api_key=eyJhbGci...`，或头 `Authorization: Bearer eyJhbGci...`。
 3. **重启 / 重连**（env var 与 MCP 配置都不热加载）。
 4. 让用户配好后再来。AI **不能**替用户改配置或重连。
 
@@ -398,7 +401,7 @@ MCP server 已把每个错误渲染成结构化三行（`[CODE]` + 可否重试 
 
 ### R-12c api_key 无效判断（别原地打转）
 
-- key 来源**两套**:skill 侧读 env var `PANGOLINFO_API_KEY`;MCP 侧走 CLI/config/URL(`?api_key=pgl_xxx` 或 `Authorization: Bearer pgl_xxx`)。前缀均 `pgl_`。
+- key 来源**两套**:skill 侧读 env var `PANGOLINFO_API_KEY`;MCP 侧走 CLI/config/URL(`?api_key=<key>` 或 `Authorization: Bearer <key>`)。**key 是 JWT(`eyJhbGci...`),不是 `pgl_` 前缀**。
 - **AUTH 是 terminal**:同 key 重试一定再失败 → **绝不重试**。坑:invalid key 在后端是 bizCode **1004**(不是 HTTP 401),别因"不是 401"误判成 SERVER。
 - 处理:停 SOP → 引导用户到 `https://www.pangolinfo.com` 拿 key → 写 env/config → **重启/重连**(不热加载;agent 无法替用户改配置或重连)。详见 R-1 / R-9。
 

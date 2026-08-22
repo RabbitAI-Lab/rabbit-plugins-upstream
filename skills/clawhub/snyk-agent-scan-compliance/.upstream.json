@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/snyk-agent-scan-compliance",
   "slug": "snyk-agent-scan-compliance",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778492518415,
-  "contentHash": "4d723fe88fc8637253b4076787e8e9501e2d947572993cb7aeedcc76a8a3cf85",
-  "fetchedAt": "2026-07-26T19:30:37.961Z"
+  "version": "1.1.0",
+  "updatedAt": 1787322180227,
+  "contentHash": "14f8d4e83423f821c2be2cb0bef55b711638281c4b7ca50ac131fb6fd8e9ac86",
+  "fetchedAt": "2026-08-22T07:54:54.108Z"
 }

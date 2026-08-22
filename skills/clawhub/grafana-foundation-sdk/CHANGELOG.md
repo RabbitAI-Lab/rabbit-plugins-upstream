@@ -7,6 +7,26 @@ and this skill adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.2.4] - 2026-08-21
+
+### Changed
+
+- Declared ClawHub browse categories (`operations, development`) and topics in `metadata`, so the release pipeline publishes them instead of leaving the skill in the `other` category.
+
+### Removed
+
+- `skill-card.md`. The ClawHub CLI strips a root `skill-card.md` from every publish and the registry generates its own card, so the authored file never reached ClawHub.
+
+## [0.2.3] - 2026-08-07
+
+### Removed
+
+- "Project-Specific Context" section that hardcoded one private repo's Helm chart layout and paths into the published skill.
+
+### Changed
+
+- Genericized example queries and provisioning workflow: `namespace="x402"` -> `namespace="myapp"`, private chart paths -> generic `deploy/dashboards/` layout, `helmfile sync` step -> provisioning-mechanism-agnostic wording.
+
 ## [0.2.2] - 2026-07-22
 
 ### Added

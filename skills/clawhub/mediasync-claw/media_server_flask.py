@@ -13,6 +13,7 @@ Architecture:
 
 import os
 import json
+import hashlib
 import asyncio
 import threading
 from urllib.parse import quote_plus
@@ -26,34 +27,46 @@ from media_file_util import get_media_directory, get_media_files
 
 # ── Initialize Flask + SocketIO (same port, no extra FRP proxy needed) ──
 app = Flask(__name__, template_folder='templates')
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app)
 
 # ── Global state for WebRTC ──
 async_loop = None          # asyncio event loop running in a background thread
 peer_connections = {}      # sid -> RTCPeerConnection
 
+def generate_md5_checksum(s: str) -> str:
+    encoded_data = s.encode('utf-8')
+    return hashlib.md5(encoded_data).hexdigest()
 
 # ══════════════════════════════════════════════════════════════
 #  Flask HTTP Routes
 # ══════════════════════════════════════════════════════════════
 
-@app.route('/api/openclaw', methods=['POST'])
-def handle_api_openclaw():
+@app.route('/api/list_files', methods=['POST'])
+def handle_api_list_files():
     """WhatsApp API endpoint — returns a playlist of WebRTC player URLs."""
-    frp_domain = get_domain()
+    try:
+        frp_domain = get_domain()
+        print(f"DEBUG: frp_domain = {frp_domain}")
 
-    txt = "🎬 *The file below is a playlist of all available media files:*\n\n"
-    media_files = get_media_files()
-    if isinstance(media_files, list) and len(media_files) > 0:
-        for media_file in media_files:
-            media_file_name = os.path.basename(media_file)
-            # WebRTC player URL — browser opens this to start P2P streaming
-            media_file_url = f"http://{frp_domain}/{media_file_name}"
-            player_url = f"https://yun-hub.chat/link/?app=aipollo&clickid=12345&videourl={quote_plus(media_file_url)}"
-            txt += f"{media_file_name}: {player_url}\n"
-    else:
-        txt += "No media files found."
-    return jsonify({"text": txt}), 200
+        # Use plain text instead of emoji to avoid encoding issues on Windows
+        txt = "*The file below is a playlist of all available media files:*\n\n"
+        media_files = get_media_files()
+        print(f"DEBUG: media_files = {media_files}")
+        if isinstance(media_files, list) and len(media_files) > 0:
+            for media_file in media_files:
+                media_file_name = os.path.basename(media_file)
+                # WebRTC player URL — browser opens this to start P2P streaming
+                media_file_url = f"http://{frp_domain}/{media_file_name}"
+                media_file_url_with_query = "videourl=" + media_file_url
+                media_file_url_with_cs = f"&cks={generate_md5_checksum(media_file_url_with_query)}"
+                aiplayer_url = f"https://yun-hub.chat/link/?app=aipollo&clickid=12345&dplink={quote_plus(media_file_url_with_query + media_file_url_with_cs)}"
+                txt += f"{media_file_name}: {aiplayer_url}\n"
+        else:
+            txt += "No media files found."
+        return jsonify({"text": txt}), 200
+    except Exception as e:
+        print(f"ERROR in handle_api_list_files: {e}")
+        return jsonify({"error": str(e)}), 500
 
 # @app.route('/play')
 # def serve_player():
@@ -101,8 +114,13 @@ def handle_connect():
         def on_message(message):
             # Handle text commands (e.g. "request:video.mp4")
             if isinstance(message, str) and message.startswith("request:"):
-                filename = message.split(":", 1)[1]
-                filepath = os.path.join(get_media_directory(), filename)
+                filename = os.path.basename(message.split(":", 1)[1])
+                media_dir = os.path.realpath(get_media_directory())
+                filepath = os.path.realpath(os.path.join(media_dir, filename))
+
+                if not filename or not filepath.startswith(media_dir + os.sep):
+                    channel.send(json.dumps({"error": "forbidden"}))
+                    return
 
                 if not os.path.isfile(filepath):
                     channel.send(json.dumps({"error": "file not found"}))

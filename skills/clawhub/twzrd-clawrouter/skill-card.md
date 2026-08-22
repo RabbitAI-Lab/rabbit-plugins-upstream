@@ -1,49 +1,70 @@
-## Description: <br>
-TWZRD Preflight for ClawRouter is a pre-spend gate that helps agents check ClawRouter or BlockRun payment readiness before routing x402 USDC spend. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TWZRD Preflight for ClawRouter helps agents check TWZRD readiness and merchant-card signals before using ClawRouter, BlockRun, OpenClaw, or related x402 payment paths.
 
-## Publisher: <br>
-[twzrd-sol](https://clawhub.ai/user/twzrd-sol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[twzrd-sol](https://clawhub.ai/user/twzrd-sol)
 
-## Use Case: <br>
-Developers and agent operators use this skill to add a TWZRD readiness check before ClawRouter or BlockRun spend flows, then continue, warn, or abort based on the returned decision. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The preflight gate can fail open when unavailable, so it should not be treated as a fail-closed payment-control system. <br>
-Mitigation: Use it as an advisory pre-spend check, keep explicit logs for skipped preflight calls, and require separate controls for high-value or policy-bound spend. <br>
-Risk: Wallet-enabled payment flows can sign transactions or spend funds through ClawRouter or BlockRun integrations. <br>
-Mitigation: Use a dedicated low-balance wallet, keep spend limits small, and avoid shared or high-value production wallets. <br>
-Risk: Coarse preflight calls without the real seller wallet provide weaker scoring. <br>
-Mitigation: Pass the server-observed seller wallet or payTo value whenever available before routing spend. <br>
-Risk: The included receipt helper is not proof that a user's own paid receipt was validated. <br>
-Mitigation: Verify real paid receipts with the TWZRD verifier or MCP receipt-verification tool and persist receipt evidence for audit. <br>
+## Use Case:
 
+Developers and agent operators use this skill to add a pre-spend trust gate before ClawRouter, BlockRun, OpenClaw, or Surf x402 payments. It provides guidance and example code for calling TWZRD preflight, checking merchant-card wash flags, and verifying receipts after paid paths.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/twzrd-sol/twzrd-clawrouter) <br>
-- [TWZRD homepage](https://intel.twzrd.xyz) <br>
-- [TWZRD x402 descriptor and receipt spec](https://intel.twzrd.xyz/.well-known/x402) <br>
-- [TWZRD MCP endpoint](https://intel.twzrd.xyz/mcp) <br>
-- [ClawRouter](https://github.com/BlockRunAI/ClawRouter) <br>
-- [BlockRun](https://blockrun.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown guidance with bash, curl, and TypeScript examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces preflight integration instructions, decision-handling guidance, and receipt-verification examples for agent payment flows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: server evidence and frontmatter) <br>
+Risk: TWZRD receives payment-intent metadata and public wallet identifiers when agents use the preflight and merchant-card checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when sharing those fields with TWZRD is acceptable, and avoid sending unnecessary identifiers or intent details.
+
+Risk: Bypassing the default enforce mode can allow a spend when TWZRD preflight or merchant-card checks are unavailable.
+
+Mitigation: Keep enforce mode as the default so unavailable checks block the spend; use advisory mode only as an explicit, logged exception.
+
+Risk: Connecting the ClawRouter proxy to an untrusted endpoint could route payment traffic outside the intended local control point.
+
+Mitigation: Set CLAWROUTER_PROXY_BASE only to a trusted local proxy that the operator controls.
+
+Risk: Sample receipt verification or ambiguous next-action command fields could be mistaken for an approval to execute or proof of a real payment.
+
+Mitigation: Do not wire the sample receipt demo or next_action.command into automatic shell execution; verify actual receipts received from the paid path.
+
+Risk: Using a high-balance wallet increases exposure if payment gating or integration code is misconfigured.
+
+Mitigation: Use a dedicated low-balance ClawRouter wallet for this integration.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/twzrd-sol/skills/twzrd-clawrouter)
+- [TWZRD Intel homepage](https://intel.twzrd.xyz)
+- [TWZRD preflight API](https://intel.twzrd.xyz/v1/intel/preflight)
+- [TWZRD MCP endpoint](https://intel.twzrd.xyz/mcp)
+- [TWZRD x402 well-known metadata](https://intel.twzrd.xyz/.well-known/x402)
+- [BlockRunAI ClawRouter](https://github.com/BlockRunAI/ClawRouter)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash, curl, and TypeScript examples plus JSON response expectations.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes preflight and merchant-card gate behavior, enforce/advisory mode guidance, receipt verification notes, and local proxy configuration guidance.]
+
+## Skill Version(s):
+
+0.2.1 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

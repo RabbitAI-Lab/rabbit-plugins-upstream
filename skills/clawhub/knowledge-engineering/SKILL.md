@@ -2,7 +2,7 @@
 name: knowledge-engineering
 description: "工业级RAG切片工具「可落地、可量化、可优化」,将RAG知识库长文档拆解为语义完整、检索就绪的原子化知识切片，内置多层质量门禁（校验→审计→检索可达性评估），确保切片可用性与RAG检索命中率。"
 keywords: ["rag", "切片", "知识库", "语义分割", "检索增强生成", "chunking", "文档拆分", "质量门禁", "embedding-hint", "self-check", "PurePythonEmbedder", "retrieval-evaluation", "cross-refs"]
-version: "5.19"
+version: "5.20"
 metadata:
   domain: "knowledge-engineering"
   author: "智慧半岛"
@@ -34,6 +34,24 @@ metadata:
 | ③ 生成 | 逐切片填充语义内容 + 写入磁盘 | Agent 按 §3 模板生成 | 带完整 YAML 的 .md 切片 | §3, §6-7 |
 | ④ 校验 | 单切片完整性 + 跨切片审计 | `validate_slice.py --fix` → `batch_audit.py` | 致命项重生成 / 警告标记 | §4, §8.2-8.3 |
 | ⑤ 终检 | 检索可达性评估（R@1/R@5/MRR） | `evaluate_retrieval.py --fix` | 检索报告 + 死片/弱片修复 | §8.5 |
+
+## Init-Step-Poll 渐进式防卡死协议
+
+长文档切片、批量知识库导入、检索评估和断点续传必须采用 Init → Step → Poll。该协议不替代标准工作流，而是把标准工作流拆成可恢复、可验证的小步，防止 Token 溢出、长时间生成中断或部分切片失败后无法归因。
+
+| 阶段 | 动作 | 输出 | 失败回退 |
+|:---|:---|:---|:---|
+| Init | 完成结构扫描、Token 预算、熔断点预演、切片计划生成和输出目录确认 | `task_id`、切片计划 JSON、总切片数、批次大小、当前进度 `0/N` | 源文件不可读、计划为空或输出目录冲突时停止，等待用户确认 |
+| Step | 每次只生成 1-2 个切片，立即写入、运行 `validate_slice.py --fix` 并记录 `SELF_CHECK` | 已生成切片 ID、校验结果、下一批切片范围 | 单片校验失败时重生成该片；仍失败则暂停并输出失败字段 |
+| Poll | 汇总已生成/已验证/失败/待生成数量，必要时运行 `batch_audit.py` 或检索抽检 | `running/success/failed/paused`、进度百分比、失败清单、续跑入口 | 中断后从最后一个 `SELF_CHECK` 通过的切片继续，不得覆盖已验证切片 |
+
+执行约束：
+
+- Init 阶段只生成计划和任务状态，不直接批量写切片正文。
+- Step 阶段不得一次性生成全部切片；超大文档每批最多 2 片，普通文档每批最多 5 片。
+- Poll 阶段完成度只能按“已通过校验切片数 / 计划切片数”计算，未校验切片不得计入完成。
+- 出现 Token 溢出、索引跳号、死链或检索死片时，必须先 Poll 当前状态，再回到对应 Step 修复。
+- 最终交付前必须执行 `batch_audit.py` 和 `evaluate_retrieval.py`，并输出审计/检索验证证据。
 
 ## Goal
 作为 RAG/知识库管线的核心 ETL 引擎，将长文档拆解为**语义完整、物理隔离、自包含、检索就绪**的 L0 级原子切片。
@@ -407,17 +425,33 @@ skill 的 `scripts/` 目录内置五个复用脚本。Agent 不得手动重写�
 
 所有错误信息必须遵循三段式格式：`[类型]: 发生了什么 → 原因: 为什么发生 → 操作: 如何修复`。
 
-| 错误类型 | 症状 | 处理方式 | 仍失败兜底 |
-|:---|:---|:---|:---|
-| 源文件不可读 | 切片计划为空、文件不存在或无权限 | `python -c "from pathlib import Path; print(Path('<路径>').exists())"` 验证路径可达性；网络驱动器走 `python_executor` | 终止当前任务，等待用户提供正确路径 |
-| 切片数异常 | 实际生成数与计划不符、全部切片为空 | `python scripts/slice_generator.py "<源文件>" <output_dir> --json` 获取修正计划 | 对比 `<analysis>` 标题统计与脚本输出数量，排查遗漏 |
-| 校验致命失败 | `validate_slice.py` 返回 FAIL，YAML 缺字段/内容截断 | `python scripts/validate_slice.py "<切片路径>" --fix --json` 输出完整日志 | 搜索 `SELF_CHECK` 注释中 `fatal_failed: true` 定位失败字段后重生成 |
-| 索引不连续 | `batch_audit.py` 报告 index 跳跃 | `python scripts/batch_audit.py "<切片目录>"` 列出缺失索引 | 断点续传：`python scripts/slice_generator.py "<源文件>" <output_dir> --resume` |
-| 死链 | `cross_refs` 引用的切片文件不存在 | `python scripts/batch_audit.py "<切片目录>" --fix` 自动检测死链并修复 | 手动打开死链来源切片，更新 `cross_refs` 为实际存在的切片 ID |
-| 依赖缺失 | `ModuleNotFoundError: sentence-transformers` | `pip install sentence-transformers numpy pyyaml` 后重新运行评估 | 系统自动降级 PurePythonEmbedder（TF-IDF），零外部依赖 |
-| 检索死片 | `evaluate_retrieval.py` 报告 R@1=0 | `python scripts/evaluate_retrieval.py "<切片目录>"` 输出死片清单 | 逐一打开死片文件，重写 `embedding_hint` 加入正文精确关键词 |
-| Token 溢出 | 生成中断、上下文超限 | 使用 §5 分批确认机制，手动控制每批 ≤2 片 | `python scripts/slice_generator.py "<源文件>" <output_dir> --json` 查看完整计划后分阶段执行 |
-| 编码错误 | 切片中文变乱码 | `python -c "import chardet; print(chardet.detect(open('<文件>','rb').read()))"` 检测实际编码 | 若非 UTF-8，重新以正确编码读取后另存为 UTF-8 |
+### 10.1 异常速查表
+
+| 错误类型 | 症状 | 通俗解释 | 处理方式 | 仍失败兜底 |
+|:---|:---|:---|:---|:---|
+| 源文件不可读 | 切片计划为空、文件不存在或无权限 | "你想切的文件找不到，可能是路径写错了或者文件被移动了" | `python -c "from pathlib import Path; print(Path('<路径>').exists())"` 验证路径可达性；网络驱动器走 `python_executor` | 终止当前任务，等待用户提供正确路径 |
+| 切片数异常 | 实际生成数与计划不符、全部切片为空 | "生成出来的切片数量和预期不对，可能源文件格式有问题" | `python scripts/slice_generator.py "<源文件>" <output_dir> --json` 获取修正计划 | 对比 `<analysis>` 标题统计与脚本输出数量，排查遗漏 |
+| 校验致命失败 | `validate_slice.py` 返回 FAIL，YAML 缺字段/内容截断 | "切片质量检查没通过，缺少必要信息或内容被截断了" | `python scripts/validate_slice.py "<切片路径>" --fix --json` 输出完整日志 | 搜索 `SELF_CHECK` 注释中 `fatal_failed: true` 定位失败字段后重生成 |
+| 索引不连续 | `batch_audit.py` 报告 index 跳跃 | "生成的切片编号有缺漏，前面的序号跳过了" | `python scripts/batch_audit.py "<切片目录>"` 列出缺失索引 | 断点续传：`python scripts/slice_generator.py "<源文件>" <output_dir> --resume` |
+| 死链 | `cross_refs` 引用的切片文件不存在 | "切片A指向切片B的链接失效了，B可能被改名或没生成" | `python scripts/batch_audit.py "<切片目录>" --fix` 自动检测死链并修复 | 手动打开死链来源切片，更新 `cross_refs` 为实际存在的切片 ID |
+| 依赖缺失 | `ModuleNotFoundError: sentence-transformers` | "检索评估工具缺少必要的组件（约90MB），需要下载安装" | `pip install sentence-transformers numpy pyyaml` 后重新运行评估 | 系统自动降级为内置评估工具（TF-IDF），精度稍低但不影响切片生成 |
+| 检索死片 | `evaluate_retrieval.py` 报告 R@1=0 | "生成的切片在知识库中搜不到——切片描述词和正文内容对不上" | `python scripts/evaluate_retrieval.py "<切片目录>"` 输出死片清单 | 逐一打开死片文件，重写 `embedding_hint` 加入正文精确关键词 |
+| Token 溢出 | 生成中断、上下文超限 | "源文件太大了，一次处理会超出系统容量限制" | 使用 §5 分批确认机制，手动控制每批 ≤2 片 | `python scripts/slice_generator.py "<源文件>" <output_dir> --json` 查看完整计划后分阶段执行 |
+| 编码错误 | 切片中文变乱码 | "文件的文字编码格式不是标准 UTF-8，导致中文显示异常" | `python -c "import chardet; print(chardet.detect(open('<文件>','rb').read()))"` 检测实际编码 | 若非 UTF-8，重新以正确编码读取后另存为 UTF-8 |
+
+### 10.2 通俗错误速查指南
+
+> 面向普通用户，不要求理解技术术语。Agent 遇到下列情况时自动按对应方案处理。
+
+| 你遇到的问题 | 实际是什么 | Agent 会自动怎么做 |
+|:---|:---|:---|
+| "文件找不到" / "路径不对" | 源文件路径写错了，或文件被移走/删除了 | 先检查路径是否正确，网络盘路径会自动切换处理方式 |
+| "提示缺某个包" / "ModuleNotFoundError" | 评估切片质量用的工具没装（约90MB） | 自动安装所需组件。安装失败则切换到内置评估工具 |
+| "切片生成了但搜不到" | 切片描述词和正文内容不匹配，类似"书名写错了" | 自动跑检索测试，找出搜不到的切片后修正描述词 |
+| "生成到一半断了" | 源文件太大超出单次处理上限 | 自动改成分批模式，每次处理少量切片，支持断点续传 |
+| "切片编号有跳号" / "索引不连续" | 某些切片生成失败未被察觉 | 自动检测缺失编号并补充生成 |
+| "切片里的链接打不开" / "死链" | 切片之间互相引用的链接失效了 | 自动检测失效链接并修正 |
+| "中文显示乱码" | 源文件不是标准 UTF-8 编码 | 自动检测真实编码并转换 |
 
 > 完整异常处理（含静默失败防护清单、错误信息格式示例）见 [REFERENCE.md §12](REFERENCE.md)。
 

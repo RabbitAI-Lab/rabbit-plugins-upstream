@@ -146,7 +146,8 @@ Notes:
 
 ### `pexo-billing-confirm.sh`
 
-This command approves a pending billable batch. It must only be called after explicit user approval.
+This command approves a pending billable batch. It must only be called after explicit user approval
+and requires the `--user-approved` flag. Without that flag it exits before making a network request.
 
 Local validation failures:
 
@@ -161,7 +162,9 @@ Local validation failures:
 Real statuses:
 
 - `401`: auth failure — see Auth and Proxy Errors above.
+- `403`: the account is not subscribed or watermark-whitelisted, or object storage denied access.
 - `404`: the file does not exist, or it belongs to a different project. Verify the asset_id and project_id.
+- `412`: the requested asset derivative is still processing. Retry after a short delay.
 - `500`: an unexpected server error occurred. Retry in a moment; if the problem persists, contact support at pexo.ai.
 
 Secondary download failures after metadata fetch:
@@ -172,8 +175,9 @@ Secondary download failures after metadata fetch:
 
 Notes:
 
-- The script downloads the file into `~/.pexo/tmp/` (or `$PEXO_TMP_DIR`) and returns both `url` and `localPath`.
-- If the asset metadata exists but `downloadUrl` is absent, the script returns `localPath: null`.
+- The script downloads without a watermark by default. Pass `--with-watermark` only when the user explicitly requests it.
+- The script downloads the file into `~/.pexo/tmp/` (or `$PEXO_TMP_DIR`) and returns `url`, `localPath`, and `withWatermark`.
+- If the asset is still uploading or has no ready download URL, the script returns `localPath: null`.
 
 ### `pexo-doctor.sh`
 
@@ -231,7 +235,7 @@ The project is waiting for a decision on a billable generation batch.
 
 1. Read `confirmation.estimated_credits`, `confirmation.available_credits`, and `confirmation.sufficient`.
 2. If `sufficient` is `true`, explain the estimate and ask the user for explicit approval.
-3. After approval, run `pexo-billing-confirm.sh <project_id> <confirmation_id>`, then resume polling.
+3. After approval, run `pexo-billing-confirm.sh <project_id> <confirmation_id> --user-approved`, then resume polling.
 4. If `sufficient` is `false`, direct the user to purchase credits. Do not submit approval.
 5. If the user changes the request, send the revised message with `pexo-chat.sh`; this cancels the pending confirmation.
 
@@ -264,8 +268,8 @@ Signed URLs are temporary.
 Action:
 
 1. Re-run `pexo-asset-get.sh <project_id> <asset_id>`.
-2. The script will fetch a fresh `downloadUrl` and re-download the file into `~/.pexo/tmp/`.
-3. Deliver the fresh `downloadUrl`.
+2. The script will fetch a fresh download URL for the default clean variant and re-download the file into `~/.pexo/tmp/`.
+3. Deliver the fresh `downloadUrl` and report the `withWatermark` value.
 
 ### Upload fails locally with “unsupported file type”
 

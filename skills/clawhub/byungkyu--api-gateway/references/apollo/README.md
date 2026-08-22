@@ -2,6 +2,13 @@
 
 > **Safety:** All write operations (POST, PUT, PATCH, DELETE) require explicit user confirmation before execution. Verify the target resource and intended effect with the user first. See the main [SKILL.md](../SKILL.md#security--permissions) for full security policy.
 
+> **⚠ Calls send data to Apollo, a third-party data broker.** Authentication is automatic — the gateway injects the user's previously connected Apollo API key — so a request here reaches an outside company under the user's account without any further prompt. Two consequences worth stating to the user before acting:
+>
+> - **Anything submitted leaves the user's systems.** Search terms, names, email addresses, domains, and any CRM or sales records pushed into Apollo are disclosed to Apollo and become part of that account's data. Never send a person's details to Apollo to "look them up" unless the user asked for that specific enrichment, and never relay records pulled from another connected app (a CRM, a mailbox, a spreadsheet) into Apollo without saying so first.
+> - **What comes back is third-party personal data.** Contact and enrichment results are names, work emails, phone numbers, and employment details about people who did not provide them to the user. Retrieve only what the task needs, do not bulk-collect, and treat onward use as the user's compliance decision, not a default.
+>
+> Writes (creating or updating contacts, accounts, sequences) modify the user's real Apollo account and, for sequences, can cause outbound email to real recipients. Confirm the specific records and the intended effect first. Email enrichment also consumes paid credits.
+
 **App name:** `apollo`
 **Base URL proxied:** `api.apollo.io`
 

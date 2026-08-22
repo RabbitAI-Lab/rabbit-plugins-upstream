@@ -1,45 +1,60 @@
-## Description: <br>
-Answers event staffing procurement and vendor-onboarding questions, then bridges a real event into a staffing plan. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Answers event staffing procurement and vendor-onboarding questions from TempGuru policy data, then helps a buyer turn a real US or Canadian event into a staffing plan and buyer-operated quote-form handoff.
 
-## Publisher: <br>
-[kissmyabs32](https://clawhub.ai/user/kissmyabs32) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kissmyabs32](https://clawhub.ai/user/kissmyabs32)
 
-## Use Case: <br>
-External buyers, procurement teams, venues, and agents use this skill to answer TempGuru vendor-onboarding, COI, W-9, payment, cancellation, and approved-vendor questions from published policy data. After procurement questions are answered, the skill helps gather event details and move toward a human-reviewed staffing quote. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States and Canada <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Scanner confidence is limited because the security evidence reports blocked local artifact inspection. <br>
-Mitigation: Review the artifact contents and install only when the publisher and skill purpose are familiar. <br>
-Risk: Incorrect procurement terms could mislead buyers about insurance, payment, cancellation, tax, or onboarding requirements. <br>
-Mitigation: Use live TempGuru policy data and label unpublished values as coordinator-confirmed instead of estimating or inventing terms. <br>
-Risk: Quote submission sends contact and event details for human follow-up. <br>
-Mitigation: Call the quote request workflow only after the user reviews the plan and explicitly confirms submission. <br>
+## Use Case:
 
+External buyers, procurement teams, and venues use this skill to answer COI, W-9, insurance, payment, cancellation, MSA, and vendor-onboarding questions, then create a staffing plan for temporary event staff. It is intended for operational procurement guidance and staffing handoff, not legal advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kissmyabs32/skills/tempguru-event-staffing-procurement) <br>
-- [TempGuru AI developer docs](https://tempguru.co/ai) <br>
-- [TempGuru machine-readable overview](https://tempguru.co/llms.txt) <br>
-- [TempGuru MCP endpoint](https://mcp.tempguru.co/mcp) <br>
+### Deployment Geography for Use:
 
+United States and Canada
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text, API calls] <br>
-**Output Format:** [Markdown or plain text responses with MCP tool calls when live policy or staffing data is needed.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Procurement terms must come from published policy data or be labeled coordinator-confirmed; quote submission requires explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.0 (source: server release metadata) <br>
+Risk: The skill calls TempGuru's external MCP for policy, planning, pricing, compliance, and handoff data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only where calling that external service is acceptable, and review the disclosed endpoint and tool dependency before use.
+
+Risk: Personal contact details could be exposed if a user provides them directly to the agent instead of the TempGuru form.
+
+Mitigation: Do not enter contact details into the agent; the buyer should submit contact and onboarding details only on the TempGuru-owned form after confirming the plan.
+
+Risk: Procurement terms, availability, legal posture, or price estimates may be misunderstood as binding commitments.
+
+Mitigation: Use only policy values returned by TempGuru, treat unpublished details as coordinator-confirmed, present rate ranges as planning estimates, and avoid legal advice.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/kissmyabs32/skills/tempguru-event-staffing-procurement)
+- [TempGuru MCP endpoint](https://mcp.tempguru.co/mcp)
+- [TempGuru AI agent documentation](https://tempguru.co/ai-agents)
+- [TempGuru machine-readable overview](https://tempguru.co/llms.txt)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, API calls]
+
+**Output Format:** [Markdown or plain text answers with structured staffing plan details and quote-form links when confirmed by the buyer.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses TempGuru's disclosed external MCP for policy, city, role, pricing, compliance, saved-plan, and quote-handoff data.]
+
+## Skill Version(s):
+
+1.7.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

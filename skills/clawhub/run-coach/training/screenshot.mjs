@@ -5,9 +5,10 @@
 //
 // Usage: node screenshot.mjs <input.html> <output.png>
 
-import { chromium } from '/app/node_modules/playwright-core/index.mjs';
+import { chromium } from 'playwright-core';
 import { readdirSync, existsSync } from 'fs';
-import { join } from 'path';
+import { join, resolve } from 'path';
+import { pathToFileURL } from 'url';
 
 const [,, htmlFile, outFile] = process.argv;
 if (!htmlFile || !outFile) {
@@ -15,9 +16,11 @@ if (!htmlFile || !outFile) {
   process.exit(1);
 }
 
-// Auto-detect chrome-headless-shell binary path using native fs only
+// Auto-detect chrome-headless-shell binary path using native fs (no child_process)
 function findHeadlessShell() {
-  const base = '/home/node/.cache/ms-playwright';
+  // Standard Playwright cache locations; override with PLAYWRIGHT_BROWSERS_PATH
+  const base = process.env.PLAYWRIGHT_BROWSERS_PATH
+    || join(process.env.HOME || '', '.cache', 'ms-playwright');
   if (!existsSync(base)) return null;
   for (const dir of readdirSync(base)) {
     const candidate = join(base, dir, 'chrome-headless-shell-linux64', 'chrome-headless-shell');
@@ -44,7 +47,7 @@ const context = await browser.newContext({
 });
 
 const page = await context.newPage();
-await page.goto('file://' + htmlFile, { waitUntil: 'networkidle' });
+await page.goto(pathToFileURL(resolve(htmlFile)).href, { waitUntil: 'networkidle' });
 await page.screenshot({ path: outFile, type: 'png', fullPage: true });
 await browser.close();
 

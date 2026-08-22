@@ -1,46 +1,57 @@
-## Description: <br>
-Generate and edit video with Kling through RunAPI, using the RunAPI CLI for one-off generation and SDKs for application or backend integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit video with Kling through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agent operators use this skill to create, edit, transform, and test Kling video-generation workflows through RunAPI. It supports one-off CLI tasks and guides production integrations toward official RunAPI SDKs rather than shelling out from application code. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and referenced media are sent to the RunAPI/Kling service, and optional RUNAPI_API_KEY or saved CLI login credentials may be used. <br>
-Mitigation: Confirm the user is comfortable with RunAPI/Kling service use before execution and manage API keys or saved CLI login state carefully. <br>
-Risk: Generated file URLs are temporary and may expire. <br>
-Mitigation: Download and store generated videos or other outputs in durable storage within 7 days when they need to be retained. <br>
-Risk: Using the CLI as a production runtime integration layer can create brittle application behavior. <br>
-Mitigation: Use the language-specific RunAPI SDK integration path for app, backend, worker, or production workflow integrations. <br>
+## Use Case:
 
+Developers and external users use this skill to generate, edit, or transform video with Kling through RunAPI, using the CLI for one-off work and SDK references for application integration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-kling) <br>
-- [RunAPI Kling model page](https://runapi.ai/models/kling) <br>
-- [RunAPI Kling documentation](https://runapi.ai/models/kling.md) <br>
-- [RunAPI Kuaishou provider page](https://runapi.ai/providers/kuaishou.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown guidance with CLI commands, SDK package names, request-field notes, and configuration details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference temporary generated media URLs that should be downloaded to durable storage within 7 days.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.13 (source: server release evidence) <br>
+Risk: Prompts, request metadata, and selected local media may be sent to RunAPI/Kling for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use API credentials intentionally and avoid submitting sensitive source media unless upload is intended.
+
+Risk: Generated media download URLs may need review before files are saved locally.
+
+Mitigation: Inspect returned URLs and verify downloaded files are non-empty and match the expected media type.
+
+## Reference(s):
+
+- [RunAPI Kling homepage](https://runapi.ai/models/kling)
+- [Kling model documentation](https://runapi.ai/models/kling.md)
+- [Kuaishou provider overview](https://runapi.ai/providers/kuaishou.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [Kling SDK integration](https://github.com/runapi-ai/kling-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON request handling]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create request, task, result, and downloaded media files during agent execution.]
+
+## Skill Version(s):
+
+0.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

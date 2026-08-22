@@ -1,5 +1,9 @@
 # Suggestion Patterns
 
+## Cross-cutting rule — PR/issue references in options require the full URL (HARD STOP)
+
+**When any option disposes of a PR or issue, expose the clickable full URL (`https://github.com/<owner>/<repo>/pull/<N>`) in the question text or that option's description.** A bare "PR #N" — even with the repo name attached — is insufficient: the ask is a self-contained decision UI, and the user must be able to open and inspect the PR before deciding, without hunting through scroll-back. Applies to every "After PR" pattern below. Enforced by the `block-tasklist-id-in-conversation.sh` PR-URL gate (a PR reference with no PR URL anywhere in the questions payload is denied). Recurrence history: see failed-attempts.md (grep "bare PR").
+
 ## Cross-cutting rule — Minor-or-below severity bundling across PRs (HARD STOP)
 
 **When composing next-action options after a PR is consolidated / merged, do NOT recommend addressing that PR's Minor/Nitpick deferred findings as a standalone follow-up (single-PR batch).** Minor-or-below severity findings should be bundled across related PRs, not surfaced per-PR.
@@ -130,6 +134,26 @@ cosmetic / style-only · already worked around · an external outage you cannot 
 2. SCOPE met (shared/production surface) AND ≥1 escalation test true? → If yes, it is Recommended #1 (or handled before the ask), not a diversity slot
 3. Before proposing a fix, did I confirm the cause is self-fixable vs external via primary evidence? → external → track, don't ship a speculative fix
 4. Excluded class (cosmetic / local-test / external outage / user-deferred)? → normal option, do not force first
+
+## After analysis / review producing multiple findings (HARD STOP)
+
+**Precondition**: The just-completed work (code review, issue-comment analysis, audit, verification) produced **N ≥ 2 discrete findings** whose handling the user must decide — include in a comment, apply, correct, drop, or defer.
+
+**One question per finding — never bundle findings into one option.** Each finding is an independent decision axis. Packing N findings into a single option description ("post the review comment with all 4 findings") strips the user's per-finding authority: they can only take all-or-nothing. Automated ask-guards may not catch description-level bundling (descriptions are excluded from axis detection to avoid false positives), so this composition rule is the first line of defense.
+
+**Pattern (two-stage ask)**:
+
+1. **Per-finding call**: one question per finding via the `questions` array (max 4 questions per call; when N > 4, chunk into sequential calls of ≤4 — never drop the tail). Options per finding: `Include / Apply` · `Exclude / Drop` · `Defer` (+ auto "Other").
+2. **Disposition call**: after the per-finding answers arrive, ask the overall action (post the comment / record locally only / hold), composed from what the user selected. Phrase it without re-enumerating finding counts (a "N findings" token in a single question is itself a bundling signal).
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | One option labeled "post comment with all N findings" | One question per finding first, disposition ask second |
+| 2 | `questions.length == 1` with the findings enumerated inside an option description | Split into the `questions` array — description-level bundling evades keyword/path axis detection |
+| 3 | Pre-deciding which findings are "obviously worth including" and bundling the rest | Obviousness is not a substitute for the user's per-finding decision |
+| 4 | Handling N > 4 by silently dropping low-priority findings | Chunk into sequential ≤4-question calls; every finding gets its own question |
+
+**Self-check (before any ask that disposes of analysis/review results)**: Did the completed work produce ≥2 discrete findings? → per-finding questions first, disposition second.
 
 ## After code writing/modification
 
@@ -302,6 +326,8 @@ gh api 'orgs/<org>/copilot/billing' --jq '{
 
 **Availability gate (HARD STOP)**: If query 3 returns `active: 0` or `management: "disabled"` or fails with "Not Found", **Copilot reviewer registration is NOT possible for this PR**. The "Request Copilot review" option in the "Copilot absent" branch becomes inactive — skip the option set and self-decide on `consolidate (CodeRabbit only)` instead. Do not present an ask whose Recommended option is impossible to execute.
 
+**CI-gate-only base branch gate (HARD STOP — check BEFORE the reviewer-matrix queries)**: some long-lived branches exist purely to accumulate CI-passing commits ahead of a later, separately-reviewed promotion PR (e.g. a two-tier staging model). What matters is the base branch's *role*, not its literal name — verify via `gh pr checks <N>`: a CodeRabbit line reading `Review skipped: reviews are disabled for this base branch` means this base is CI-gate-only, and no walkthrough will ever arrive (not "pending", not "rate limited"). When this signal is present, skip the reviewer-matrix branches entirely — self-decide "CI green + Test Plan + Mergeable is the full gate for this base" and route straight to `github-flow/merge.md`'s CI-gate-only exception, not any of the four branches below.
+
 Then map to a branch:
 
 | CodeRabbit walkthrough | Copilot requested | Copilot reviewed | Branch (option set) |
@@ -417,10 +443,14 @@ options: [
 
 ### Context-usage gate (HARD STOP — before offering ANY wrap-up/cleanup option, in any ask)
 
+**Dependency precondition (HARD STOP)**: this entire gate applies ONLY when a session-cleanup skill is available in the current environment. If none is available, skip the context-usage gate and never offer a cleanup / wrap-up / retrospective option — see next SKILL.md "Dependency-gated behaviors". Evaluate the conditions below only after this precondition passes.
+
 A session-cleanup / retrospective / wrap-up option — including as a diversity slot inside a regular next-action ask — may be offered only when at least one of these holds:
 
 1. The user explicitly signaled wrap-up intent (wrap-up keyword, or 2+ consecutive declines of other follow-ups), or
 2. The injected context-usage signal (a `Context usage: ... (NN%)` line in hook additionalContext, when the environment provides one) reports **≥ 45%** — **read from the LATEST injection in the transcript at ask-composition time**. The signal only refreshes on user-prompt events, and a compact/summarization boundary shrinks context, so any reading taken before the most recent injection (or before an intervening compact) is stale and **overstates** usage. A stale reading NEVER satisfies the gate: if the freshest injection is below the threshold — or no post-compact reading exists yet — treat condition 2 as NOT met.
+
+**Post-compact floor (HARD STOP)**: immediately after a compact/summarization boundary — an explicit compact command, an `isCompactSummary` entry, or a session that opened with a "continued from a previous conversation that ran out of context" summary — assume usage is **under 20% until re-measured**, and never quote a percentage that appears in the pre-compact conversation or its summary. The measurement mechanism reads the last assistant-message usage field, which still describes the pre-compact session until a new assistant turn has been generated; a figure read at that moment can overstate reality by tens of percentage points. This is the operator-facing counterpart of the injection script's own first-post-compact suppression — the script suppresses its own output, but nothing stops a composer from quoting a number it read elsewhere.
 
 When neither holds, omit the cleanup/wrap-up option entirely — fill the slot with another discovery-source candidate or present fewer options. Cleanup value scales with session fullness; offering it early pressures a premature session boundary the user did not ask for.
 
@@ -430,7 +460,7 @@ When neither holds, omit the cleanup/wrap-up option entirely — fill the slot w
 echo '{"transcript_path": "<current transcript path>"}' | bash <path-to-context-usage-injection-script>
 ```
 
-This invokes the injection script directly — it parses the transcript's last assistant-message usage field on demand and does not depend on a fresh `UserPromptSubmit` firing. Use this live number, not the stale injected line, before citing any percentage as gate justification. (Claude Code's script lives at `~/.claude/hooks/context-usage-inject.sh`; other environments provide their own equivalent or none at all — absence of a direct-invocation path means fall back to omitting the option per the paragraph above.)
+This invokes the injection script directly — it parses the transcript's last assistant-message usage field on demand and does not depend on a fresh `UserPromptSubmit` firing. Use this live number, not the stale injected line, before citing any percentage as gate justification. (**Resolve the script's path, do not assume it.** It ships with the hook-kit skill as `resources/context-usage-inject.sh`, so locate it with e.g. `ls ~/.claude/plugins/marketplaces/*/skills/*/resources/context-usage-inject.sh` rather than hardcoding an install location — note that a plain `find ~/.claude/plugins/marketplaces -name context-usage-inject.sh` returns **nothing** when the marketplace entry is a symlink into a checkout, so it needs `find -L` if you prefer find — `~/.claude/hooks/context-usage-inject.sh` was documented here previously and does **not** exist on at least one install, which turns this whole fallback into a dead end exactly when it is needed. Other environments provide their own equivalent or none at all — absence of a direct-invocation path means fall back to omitting the option per the paragraph above.)
 
 | # | Don't | Do |
 |---|-------|-----|
@@ -439,6 +469,15 @@ This invokes the injection script directly — it parses the transcript's last a
 | 3 | Treat the absence of the signal as permission to offer cleanup | No signal + no user intent = no cleanup option (conservative fallback on environments without the injection hook) |
 | 4 | Reuse a context-usage % cached from an earlier prompt ("the gate passed at /wip entry") across a long multi-ask turn chain, or across a compact boundary | Re-check the **latest** injected `Context usage:` line each time a wrap-up option is composed; a compact boundary invalidates every earlier reading. Enforcement hook: `block-cleanup-option-below-context-gate.sh` (PreToolUse:AskUserQuestion) denies wrap-up options when the transcript-latest % is below the threshold |
 | 5 | Cite an old injected % as current-state justification when a long tool-call chain (Stop-hook continuation, no new `UserPromptSubmit`) separates that reading from ask-composition time | Get a live reading via direct invocation of the context-usage injection script (feed `{"transcript_path": "<path>"}` on stdin) before citing any percentage — see "Live-check fallback" above |
+| 6 | Carry a percentage across a compact boundary — quoting a figure that appears in the pre-compact conversation or its summary, and calling it "live" | Post-compact, assume **under 20%** until re-measured (see "Post-compact floor"). Writing the word "live" in front of a number you did not measure this turn is the tell: if no measurement ran, the gate is not met |
+| 7 | Follow the "get a live reading" instruction by running a hardcoded script path, then treat `No such file or directory` as inconclusive and fall back to the stale figure | Resolve the script by search, not by assumed path. A failed resolution means the gate is NOT met — it never licenses reusing the stale number |
+| 8 | Treat a reading that was accurate when the ask was composed as still valid when the user's answer arrives, and act on a gate-justified selection without re-measuring | The gate is a point-in-time check with no validity duration. Re-measure before **executing** a selection whose justification was the percentage — see "Round-trip invalidation" below |
+
+**Round-trip invalidation — the reading can die between ask and answer (HARD STOP)**: every rule above guards the *backward* direction (a figure carried forward across a boundary that already happened). The opposite case is not covered by any of them and is the more common one on a full session: the figure is honestly measured and correct at ask-composition time, then **automatic context compression fires while the ask is open**, and the user answers against a premise that no longer exists. Verified instance: a cleanup ask composed at a genuine 84.0% (transcript peak 840,443 confirmed) was answered after an auto-compaction had already dropped the session to 33.5% — the recommendation was accurate when written and obsolete when acted on.
+
+Auto-compaction is precisely the event that invalidates the gate, and it is **not detectable after the fact**: unlike a manual compact it writes no `isCompactSummary` / `compact_boundary` entry, so neither the composer nor a `PreToolUse` hook can distinguish "the number is stale" from "the number is fine". The only reliable defence is a re-measure at execution time.
+
+Therefore: when a selection is about to be executed **and the percentage was part of that option's justification**, re-run the live measurement first. If the new reading no longer clears the threshold, say so and re-offer rather than proceeding on the dead premise — the user chose against a stated condition, so a silently-changed condition invalidates the consent, not merely the reasoning. This applies to the cleanup/wrap-up option specifically; selections justified on grounds other than context usage are unaffected.
 
 **Step 0.5 required — Read TaskList directly to identify pending entries**:
 

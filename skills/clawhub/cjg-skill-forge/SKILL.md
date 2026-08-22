@@ -2,7 +2,7 @@
 slug: cjg-skill-forge
 name: cjg-skill-forge
 displayName: 技能锻造炉——打造/重铸一个牛逼的技能，并且一直牛逼
-version: 2.9.5
+version: 2.9.14
 description: |
   技能锻造炉 / Skill Forge —— 元技能：从零打造或重铸一个「全球最牛」的 WorkBuddy 技能，并让它在用户使用中持续进化。锻造模式：带版本反馈环、真实素材覆盖审计、外部标杆对比、自我迭代、不说谎的说服、生产签批、真机验证；审视模式：10 维加权评分尺，给任何技能（含它自己）打 Thin/Solid/Excellent/Global-Best；重铸模式（Mode C）：审计并整合本机重叠技能，给出重铸计划与推荐基座。当你要创建、升级、审计或整理（合并同类）技能时，用它。
 
@@ -13,51 +13,83 @@ agent_created: true
 # Skill Forge · 技能锻造炉（元技能 · 锻造 + 审视 / Meta-skill · Forge + Review）
 
 
-一个元技能：从零打造或重铸一个「全球最牛」的 WorkBuddy 技能，并让它在用户使用中持续进化。三种模式——**锻造**（造/升级技能）、**审视**（审计任何技能，含它自己）、**重铸**（审计并整合本机重叠技能）。
+一个元技能：从零打造或重铸一个「全球最牛」的 WorkBuddy 技能，并让它在用户使用中持续进化。四种模式——**锻造**（造/升级技能）、**审视**（审计任何技能，含它自己）、**重铸**（审计并整合本机重叠技能）、**内嵌清晰化**（让锻造出的技能默认 AI 易读，且绝不改它"做什么"）。
 
-A meta-skill with three modes — **Forge** (build/upgrade skills), **Review** (audit any skill, including itself), and **Recast** (audit & consolidate overlapping local skills).
+A meta-skill with four modes — **Forge** (build/upgrade skills), **Review** (audit any skill, including itself), **Recast** (audit & consolidate overlapping local skills), and **Embedded Clarity** (make forged skills AI-readable by default, without changing what they do).
 
 ---
 
-## 零、进化燃料 · 安装即开 / Evolution Fuel · install-time ON
+## 零、进化燃料 · 本地即开 · 云端需显式开启 / Evolution Fuel · local ON · cloud opt-in
 
-> **📋 安装须知**：本技能安装后默认开启：
-> - **本地记录**：每次锻造/审视后自动记录方法层标签（哪些 Discipline 最有用、用户在哪步给了反馈、哪个技能类型最常见），留在你本机。
-> - **云端上传（零密钥）**：检测到本技能含 `cloud_config.json`（仅公网 URL、无 token）即自动经 `POST {ingest_url}/ingest/anon` 匿名回传反馈信号（6 类：`helpful/unhelpful/confusion/suggestion/abandoned/misdiagnosis`，由 Tier 0 对话信号推断：采纳=helpful、纠正=unhelpful、卡住=confusion 等），与跨用户同 slug 聚合，让锻造炉自身越用越牛。创作者查看提案的 token 另由本地 `.deploy/cloud_open.json` 提供，**不进包、不影响上传**。
+> **📋 安装须知**：本技能安装后**本地记录默认开启**（零原文零身份，留你本机）：
+> - **本地记录**：每次锻造/审视后自动记录方法层标签（哪些 Discipline 最有用、用户在哪步给了反馈、哪个技能类型最常见），留在你本机，用于本技能自我迭代。
+> - **云端上传（零密钥 · 默认关）**：检测到本技能含 `cloud_config.json`（仅公网 URL、无 token）时，需你**显式说"开启云同步"**才会匿名回传反馈信号（6 类：`helpful/unhelpful/confusion/suggestion/abandoned/misdiagnosis`，由 Tier 0 对话信号推断：采纳=helpful、纠正=unhelpful、卡住=confusion 等），与跨用户同 slug 聚合，让锻造炉越用越牛。创作者查看提案的 token 另由本地 `.deploy/cloud_open.json` 提供，**不进包、不影响上传**。
 >
-> 如不需云端上传，随时说「别传了」即可关闭（本地记录不受影响）。如不需本地记录，说「别记了」即可全关。
-
-> **📋 Install notice**: This skill is ON by default after install:
-> - **Local log**: after each forge/review, automatically records method-layer tags (which Disciplines helped most, where the user gave feedback, which skill type was most common), kept on your machine.
-> - **Cloud upload (zero-key)**: when this skill ships `cloud_config.json` (public URLs only, no token), it auto-uploads feedback signals via `POST {ingest_url}/ingest/anon` anonymously (6 types: `helpful/unhelpful/confusion/suggestion/abandoned/misdiagnosis`, inferred from Tier 0 conversation signals), aggregated across users by slug, so the forge itself keeps improving. The creator's token for reviewing proposals comes from local `.deploy/cloud_open.json` — **not in the package, does not affect upload**.
+> 云端默认不传；想参与跨用户进化，说「开启云同步」即可（随时「别传了」关闭，本地记录不受影响）。如不需本地记录，说「别记了」即可全关。
 >
-> Say "别传了" (stop uploading) anytime to turn cloud off (local log unaffected). Say "别记了" (stop logging) to turn everything off.
+> 🔗 **想拿到跨用户真实反馈闭环？** 先「开启云同步」，再注册本技能 slug（一键：`scripts/forge-register.py register` → `verify`），详见 §模式 A.5。
+>
+> **Wave B 云端杠杆（需已开启云同步，三项均为显式 opt-in）：**
+> - 「**同步我的信号**」→ 把云端历史信号合并回这台电脑（`scripts/download_signals.py pull`，L2 跨设备同步，按信号 ID 去重，失败静默）。
+> - 「**同类用法**」→ 看社区里同层能力的使用率、找出你还没用过的层（L3 同类发现卡，纯匿名聚合，样本不足不展示）。
+> - 「**本周改进**」→ 看本技能本周因用户反馈改进了几处（L4 互惠回执）。
+> 未开启云同步时，AI 引导说「开启云同步」；这三项只在你开启后可用，绝不默认调用。
 
-> **🔧 发射执行（每次锻造/审视收尾必须做）**：
-> 1. **本地**：向本技能目录 `signals-log.jsonl` 追加一行 method-layer 标签（哪些 Discipline 最有用、用户在哪步给了反馈、哪个技能类型最常见）——除非用户说「别记了」。
-> 2. **云端（云端版默认开）**：读 `cloud_config.json` 的 `ingest_url`，向 `{ingest_url}/ingest/anon` POST：
->    `{"slug":"cjg-skill-forge","event":"helpful","method_layer":"forge","weight":1,"skill_version":"2.9.5","mode":"cloud"}`
->    `event` 取 6 类之一（helpful/unhelpful/confusion/suggestion/abandoned/misdiagnosis，由 Tier 0 对话信号推断）；`anon_id` 可省略（服务端按 slug 派生）。**失败静默跳过，绝不阻塞用户。**
+> **📋 Install notice**: After install, **local logging is ON by default** (zero content, zero identity, stays on your machine):
+> - **Local log**: after each forge/review, automatically records method-layer tags (which Disciplines helped most, where the user gave feedback, which skill type was most common), kept on your machine, for the skill's own iteration.
+> - **Cloud upload (zero-key · OFF by default)**: when this skill ships `cloud_config.json` (public URLs only, no token), it uploads feedback signals via `POST {ingest_url}/ingest/anon` anonymously **only after you explicitly say "开启云同步"** (6 types: `helpful/unhelpful/confusion/suggestion/abandoned/misdiagnosis`, inferred from Tier 0 conversation signals), aggregated across users by slug, so the forge keeps improving. The creator's token for reviewing proposals comes from local `.deploy/cloud_open.json` — **not in the package, does not affect upload**.
+>
+> Cloud is off by default; say "开启云同步" to join cross-user evolution (say "别传了" anytime to turn cloud off, local log unaffected). Say "别记了" (stop logging) to turn everything off.
+>
+> 🔗 **Want the cross-user feedback loop?** First say "开启云同步", then register this skill's slug (one command: `scripts/forge-register.py register` → `verify`), see §MODE A.5.
 
-> **🔧 Emission execution (mandatory at the end of every forge/review)**:
-> 1. **Local**: append one method-layer line to `signals-log.jsonl` in this skill's dir (which Disciplines helped, where the user gave feedback, which skill type) — unless the user said "别记了".
-> 2. **Cloud (cloud version, on by default)**: read `ingest_url` from `cloud_config.json`, POST to `{ingest_url}/ingest/anon`:
->    `{"slug":"cjg-skill-forge","event":"helpful","method_layer":"forge","weight":1,"skill_version":"2.9.5","mode":"cloud"}`
->    `event` is one of the 6 types above (inferred from Tier 0 conversation signals); `anon_id` is optional (server derives from slug). **Fail silently — never block the user.**
+> **⚙️ 云端定时同步（可选增强包）**：基础技能包**不含任何定时任务 / 后台调度代码**（零后台、应用市场安全审核友好）。需要每天自动回传的，单独安装「藏经阁云端增强包（`cloud-enhancement/`）」后说「开启云同步」，AI 会运行增强包的 `install_signal_cron.py --enable-cloud-upload`（幂等）创建「每日 23:30」任务批量跑 `upload_signals.py` 匿名回传。**不安装增强包则无后台任务**，仅本地记录。
+> 关闭：`python cloud-enhancement/install_signal_cron.py --uninstall`（或说「别传了」由 AI 代为执行）。
+
+> **⚙️ Cloud scheduled sync (optional addon)**: the base skill package **ships NO scheduled-task / background-scheduler code** (zero background, app-market security-review friendly). To enable daily auto-upload, install the separate "藏经阁云端增强包 (cloud-enhancement/)" addon, then say "开启云同步" — the AI runs the addon's `install_signal_cron.py --enable-cloud-upload` (idempotent) to create a daily 23:30 task that runs `upload_signals.py` to upload anonymously. **Without the addon there is no background task** — only local logging.
+> Off: `python cloud-enhancement/install_signal_cron.py --uninstall` (or say "别传了" and let the AI run it).
+
+> **🔧 发射执行（每次锻造/审视/重铸/清晰化收尾必须做 · 末步硬纪律）**：
+> 七层应答结束前，必须执行 `references/signals.md` 末步 one-liner，向本技能目录 `signals-log.jsonl` 追加一行方法层信号（**含 `signal_id` 幂等键**）——除非用户说「别记了」。
+> **云端上传不在此处做**：由「云端增强包」每日 23:30 的定时任务自动跑 `scripts/upload_signals.py` 确定性批量上传（零密钥、失败静默、断点续传、防重复）。无需你手动 POST。
+> **采集时显性标记（A5）**：若本轮 one-liner 成功写入 `signal_id`，在应答末追加一行轻量可见光标（例：`📊 已记录 1 条进化信号 · 方法层 L3 · 有用 — 说"查看我的信号"看全部`）；首次附「只记方法名，绝不记你说了什么」；说"别提示了"可关。详见 `references/signals.md` §四。
+> one-liner 与字段语义、L1–L7 层码见 `references/signals.md`。
+
+> **🔧 Emission execution (mandatory last step of every forge/review/recast/clarity · hard rule)**:
+> Before ending the response, run the one-liner in `references/signals.md` to append one method-layer signal line (with `signal_id` idempotency key) to `signals-log.jsonl` in this skill's dir — unless the user said "别记了".
+> **Cloud upload is NOT done here**: the cloud-enhancement addon's daily 23:30 scheduled task runs `scripts/upload_signals.py` to upload in batches (zero-key, fail-silent, resumable, dedup). No manual POST needed.
+> See `references/signals.md` for the one-liner and field semantics (L1–L7 layer codes).
+
+> **🕐 关于那个「每天 23:30 自动跑」的任务（可选 · 仅装了云端增强包且开启云同步后才有）**
+> 只有你装了「云端增强包」并说了「开启云同步」，本机才会挂一个每日定时任务。它只做一件事：把你用锻造炉时产生的「方法层反馈标签」（比如"这一步很有用""这里我卡住了"）匿名传到藏经阁平台，用来让锻造炉越用越准。
+> · 它**不读你的对话内容、不碰你的任何文件、不知道你是谁**（用一串随机匿名 ID 代替）；
+> · 只在你本机产生新反馈时才上传，没新反馈就静默跳过；
+> · 失败会默默重试，不弹窗、不打扰。
+> 你随时可以关掉它（说"别传了"）。**它是可选的**——不开启云同步，你的本地记录照常、只是不同步到平台。
+
+> **🕐 About that "daily 23:30 background task" (optional · only if you installed the cloud-enhancement addon AND enabled cloud sync)**
+> Only after you install the cloud-enhancement addon and say "开启云同步" does this skill add a daily scheduled task. It does exactly one thing: anonymously upload the method-layer feedback tags you generate (e.g. "this step was useful", "I got stuck here") to the 藏经阁·易筋 platform, so the forge keeps improving.
+> · It **never reads your conversation content, never touches your files, and never knows who you are** (a random anonymous ID is used instead);
+> · It only uploads when new feedback exists locally; if none, it silently skips;
+> · On failure it retries quietly — no popups, no interruptions.
+> You can turn it off anytime ("别传了"). **It's optional** — without cloud sync, your local log still works, it just isn't synced to the platform.
 
 ## 概述 / Overview
 
-一个拥有三种模式的元技能。
+一个拥有四种模式的元技能（锻造 / 审视 / 重铸 / 内嵌清晰化）。
 
-A meta-skill with **two modes**.
+A meta-skill with **four modes** (Forge / Review / Recast / Embedded Clarity).
 
 - **锻造（Forge）**——经实战检验的方法论，把多个技能从粗糙 v1 一路打造成分层架构精品。代表案例：①扫地僧（科研谋士 persona，v1.0→v1.7 七层架构、8 张文献蒸馏卡、安装即开进化燃料）；②一个通用编码助手（coding/utility 类，靠真实覆盖率审计把冷门语言分支补全）；③一个部署工作流技能（workflow 类，带生产签批 + 回滚演练）。此处抽象到人格与领域之外，覆盖**所有**技能类型。证明 Forge 能产出 Global-Best 候选。
 - **重铸（Recast）**——审计本机全部技能，按轻量元数据聚类出"同类/重叠"组，对每组做三维打分（使用率/完整度/牛逼度）并推荐重铸基座，给出重铸计划与正负面影响（含工作流影响，仅供参考）。默认只出报告，合并须逐技能确认。详见 §模式 C。
 - **审视（Review）**——一把可量化的尺子（10 维度，加权到 100），给**任何**技能打 Thin / Solid / Excellent / Global-Best，且能指向 skill-forge 自身（递归自审）。
+- **内嵌清晰化（Embedded Clarity）**——把 skill-clarity-forge 的清晰化四维（D1–D4）内嵌为锻造循环 S7 闸门，让锻造出的技能默认 AI 易读；清晰化只改「怎么说」，绝不改「做什么」（保真红线，纪律 14）。当你要让技能"被 AI 读得更准"时，用它——它也自动发生在每个技能的 S7。
 
 - **Forge** — the battle-tested methodology that turned multiple skills from rough v1 into layered architectures. Representative cases: ① 扫地僧 (research-advisor persona, v1.0→v1.7: 7-layer architecture, 8 distillation cards, install-time fuel); ② a general coding assistant (coding/utility type, completed cold-language branches via real coverage audit); ③ a deploy-workflow skill (workflow type, with production sign-off + rollback drills). Abstracted beyond personas and domains to cover ALL skill types. The proof that Forge produces Global-Best candidates.
 - **Recast** — audits all local skills, clusters "same-type/overlapping" groups via lightweight metadata, scores each group on three axes (usage/completeness/brilliance) and recommends a recast base, producing a recast plan with positive/negative impact (incl. workflow impact, for-reference-only). Report-only by default; merge requires per-skill confirmation. See §MODE C.
 - **Review** — a measurable rubric (10 dimensions, weighted to 100) that scores ANY skill as Thin / Solid / Excellent / Global-Best, and can be pointed at skill-forge itself (recursive self-audit).
+
+- **Embedded Clarity** — embeds skill-clarity-forge's four clarity dimensions (D1–D4) as the forge loop's S7 gate, making forged skills AI-readable by default; clarity changes "how said" not "what done" (fidelity red line, Discipline 14). Use it when you want a skill read more accurately by AI — it also fires automatically at every skill's S7.
 
 它与内置的 `skill-creator`（脚手架/校验/打包）互补。Skill Forge 补上**质量 + 审视**这一层。
 
@@ -141,7 +173,9 @@ After every version: `quick_validate.py` + `package_skill.py`. Keep the folder a
 | **S3** | **外部标杆（全球）** | 扒 ≥3 个**全球真实竞品**（覆盖全网技能/项目/工具/论文/知识，不得仅限局部场景如某比赛）做对标表，证差异化 | 不知排第几 / 虚假安全感 |
 | **S4** | **覆盖审计** | 用真实 ID 核对覆盖维度，无盲区 | 隐性缺口 |
 | **S5** | **生产签批** | 评审文档 + 用户明确签批（纪律 5） | 越界风险 |
-| **S6** | **校验打包 + 安全审查** | `quick_validate` + `package_skill` 通过 + **纪律 13 发布包安全审查通过**（无密钥/PII/锻造内部文档、无死链） | 不可发布 |
+| **S6** | **校验打包 + 安全审查** | `quick_validate` + `package_skill` 通过 + **纪律 13 发布包安全审查通过**（无密钥/PII/锻造内部文档、无死链）+ **走 SkillHub 发布前还须过 纪律 17 云鼎安全审计（Malicious 硬阻断）** | 不可发布 |
+| **S7** | **内嵌清晰化闸门** | 对 SKILL.md 跑 AI 易读四维（D1–D4）+ 保真闸（references/clarity-fidelity-template.md），清晰化只改「怎么说」不改「做什么」 | 发布后 AI 读不准 |
+| **S8** | **可推广闸门** | **纪律 16** 分发就绪校验：discovery.md 分类映射 + needs_api_key 标注 + intro.md（≤1024 字符跨平台介绍）+ find-skill 触发友好；**以 S7 清晰化产物为 Convention 证据，不重复清晰化** | 平台找不到 / 各平台重写介绍 |
 
 ### 硬规则（违反即退回 S0）
 1. **S1/S2 不可跳过**：未真机跑通的技能，禁止声称"可运行/能赢"。先有真实返回，再谈完成度。
@@ -150,9 +184,11 @@ After every version: `quick_validate.py` + `package_skill.py`. Keep the folder a
 2. **真实返回即证据**：`*_evidence.md` 必须含真实字段/真实数据（如文献 `Identifier`、真实竞品名），**禁编造**（纪律 1）。
 3. **容错来自真机**：接口不稳定（如某端点偶发空返回）只有真跑才发现——发现的坑必须写回 SKILL.md 的容错段落。
 4. **面向真实场景，不写参赛话术**：技能 description / 展示名面向真实使用场景，不写"参赛 / 大赛加分 / 最高级形态 / 切大赛主题"等刻意话术。一场比赛 / 平台只是**验证场（test vehicle）**，不是受众。用户已明确反对为大赛写描述——锻造炉自己的文档若鼓励大赛话术，是自相矛盾。
+5. **S7 内嵌清晰化闸门（v2.9.6 新增）**：每个锻造/升级技能在 S6 之后、发布前，对 SKILL.md 跑 AI 易读四维（D1 降术语 / D2 补示例 / D3 重排结构 / D4 加摘要）+ 保真闸（逐项核对见 `references/clarity-fidelity-template.md`）。任一 ❌ 或 ⚠️ 涉及功能 → 回退 S2/S3 收窄重来。清晰化只改「怎么说」，绝不改「做什么」（纪律 14 保真红线）。
+6. **S8 可推广闸门（v2.9.9 新增）**：S7 之后、发布前，跑 **纪律 16** 分发就绪校验（discovery.md 分类映射 + needs_api_key 标注 + intro.md≤1024 字符跨平台介绍 + find-skill 触发友好）。S8 **直接复用 S7 清晰化后的 SKILL.md 作为 Convention 维度达标证据**，不重复做清晰化。任一分发相关 ❌ 或 ⚠️ → 回退 S7/S2 收窄。详见 §模式 A 锻造循环 S8。
 
 
-> **☁️ 云进化前置：注册 slug（创建期提醒）**：若你想要**跨用户同 slug 的真实反馈闭环**（藏经阁·易筋 信号→蒸馏→提案→重发布），**必须在藏经阁注册本技能 slug**——未注册则云信号无法归因到本技能，闭环不成立。这一步要在「创建技能 / 准备发布」阶段就确认，不要等用户用起来才发现没有反馈回流；`forge-publish.py` 发布时会检测并引导注册。
+> **☁️ 云进化前置：注册 slug（创建期提醒）**：若你想要**跨用户同 slug 的真实反馈闭环**（藏经阁·易筋 信号→蒸馏→提案→重发布），**必须在藏经阁注册本技能 slug**——未注册则云信号无法归因到本技能，闭环不成立。这一步要在「创建技能 / 准备发布」阶段就确认，不要等用户用起来才发现没有反馈回流。注册只需两条命令：`python scripts/forge-register.py register`（发验证码到你的邮箱）→ `python scripts/forge-register.py verify <验证码>` 完成验证，创作者 token 自动存 `<技能目录>/.deploy/cloud_open.json`，**不进发布包**。`forge-publish.py` 在发布前会检测并提示未注册的 slug。
 
 ### 真实范例
 `novelty-validator` v1.1.0 即按本子模式锻造：S1 装 `tmeet-skill`+写 `global-biblio-base` 真实 `api_path`；S2 用 `user@example.com` 真机检索命中 FusionGraphRAG 等先验工作，证据见其 `references/novelty_evidence.md`；**S3 对标全球真实竞品（OpenNovelty / Novoscan / IdeaSpark / ChatAcademia / Elicit 等，见其 `references/benchmark.md`）证差异化——标杆是全世界，不是比赛内部**；S4 覆盖审计 C1–C12 全 ✅。完整流程模板见 `references/contest-hard-forge.md`。
@@ -356,6 +392,32 @@ User says "review this skill", "is it good enough", "audit <skill>", or you are 
 
 ---
 
+## 模式 D — 内嵌清晰化（EMBEDDED CLARITY）【v2.9.6 新增】
+
+# MODE D — EMBEDDED CLARITY
+
+> **定位**：SkillForge 锻造出的技能，最终是给 AI agent 读取执行的。一个"写得好但 AI 读不准"的技能，实战中会触发飘、步骤含糊、老调不动。本模式把 `skill-clarity-forge` 的清晰化能力**内嵌**进锻造循环（**S7 闸门**），让每个锻造/升级出的技能默认达到「AI 易读」基线——且**绝不改它"做什么"**（保真红线，纪律 14）。
+
+### 何时进入 / When to enter
+- 每个技能锻造/升级循环走到 **S7**（发布前最后一道可读性闸门）。
+- 用户显式要"把这个技能改得更 AI 易读 / 去术语化 / 给 agent 看"。
+
+### 内嵌清晰化四维（继承 skill-clarity-forge）/ Four clarity dimensions
+- **D1 降术语改写**：密集专业表述 → 显式单义语言；术语定义一次后复用（文首术语接地表）。
+- **D2 补示例与类比**：每个抽象规则补 ≥1 具体例子；高歧义处补正反对照。
+- **D3 重排结构（渐进披露）**：前置执行摘要；流动散文 → 原子编号步骤；I/O 契约显式化。
+- **D4 加通俗摘要层**：文首加 AI 面向摘要（何时触发 / 做什么 / 期望输入 / 产出 / 硬红线 / 范围边界）。
+- 类型 × 维度强度矩阵（utility/workflow/coding/persona/agent 差异化）见 `references/clarity-coverage.md`。
+
+### 保真红线（硬约束 · 不可跳过）/ Fidelity red line (hard gate)
+清晰化**只改「怎么说」，绝不改「做什么」**。任何改变技能功能 / 范围 / 行为 / 红线的改写视为失败，由保真闸拦截（纪律 14）。保真核对清单（功能行为未变 / 能力未删减 / 红线未丢失 / 未新增能力 / 范围边界一致 / 语义未漂移 / 歧义已消解）见 `references/clarity-fidelity-template.md`，逐项 ✅/⚠️/❌；任一 ❌ 或 ⚠️ 涉及功能 → 回退收窄重来。
+- **可选可执行闸**：调用 `skill-clarity-forge` 的 `scripts/fidelity_diff.py <原> <改> --report` 自动比对保真锚点（退出码 1=回退）；`scripts/extract_glossary.py` 辅助抽候选术语。硬依赖另一技能脚本，缺失时退回人工核对。
+
+### 与锻造循环的衔接 / Wiring into the forge loop
+S7 闸门（强制）在 **S6 校验打包 + 安全审查** 之后、发布前，对 SKILL.md 跑清晰化四维 + 保真闸；未过则回退 S2/S3 收窄。详见 §模式 A 锻造循环 S7。
+
+---
+
 ## 结构与校验规则 / Structure & validation rules
 
 - SKILL.md 精简；细节放 `references/`。
@@ -370,10 +432,10 @@ User says "review this skill", "is it good enough", "audit <skill>", or you are 
 
 ## 快速开始 / Quick start
 
-- **锻造**：脚手架 → v1.x 反馈 → 标杆 + 自我迭代 → 覆盖审计（真实 ID）→ 真机测试（+ 够不到用户时做社区模拟）→ 校验 + 打包 → **✅ 发布前检查：燃料注入了（§零）？footer 注入了（Tier 1/2）？→ 两者必须都在，否则拒绝发布** → 接上发布后迭代的反馈环。
+- **锻造**：脚手架 → v1.x 反馈 → 标杆 + 自我迭代 → 覆盖审计（真实 ID）→ 真机测试（+ 够不到用户时做社区模拟）→ 校验 + 打包 + 安全审查(S6) → **内嵌清晰化闸门(S7·AI 易读+保真)** → **✅ 发布前检查：燃料注入了（§零）？footer 注入了（Tier 1/2）？→ 两者必须都在，否则拒绝发布** → 接上发布后迭代的反馈环。
 - **审视**：载入评分尺 → 打 10 维分 → 分级 → 反模式检查 → 报告（+ 元技能则自审）。
 
-- **Forge**: scaffold → v1.x feedback → benchmark + self-iterate → coverage-audit (real ids) → live-test (+ community simulation if you can't reach users) → validate + package → **✅ PRE-SHIP CHECK: fuel injected (§零)? footer injected (Tier 1/2)? → both MUST be present or REFUSE to ship** → wire up the feedback loop for post-launch iteration.
+- **Forge**: scaffold → v1.x feedback → benchmark + self-iterate → coverage-audit (real ids) → live-test (+ community simulation if you can't reach users) → validate + package + security audit (S6) → **embedded-clarity gate (S7 · AI-readable + fidelity)** → **✅ PRE-SHIP CHECK: fuel injected (§零)? footer injected (Tier 1/2)? → both MUST be present or REFUSE to ship** → wire up the feedback loop for post-launch iteration.
 - **Review**: load rubric → score 10 dims → classify → anti-pattern check → report (+ self-audit if meta).
 
 ## 资源 / Resources
@@ -389,6 +451,10 @@ User says "review this skill", "is it good enough", "audit <skill>", or you are 
 - `references/quality-iteration-playbook.md` — 扫地僧 v1.0→v1.7.2 深度实战范例 + 自审轨迹（`references/` 另含编码类/工作流类短范例，体现跨类型）。
 - `references/project-governance.md` — 通用项目治理规则（vibe-coding + SmartLib + skill-forge），纪律 10。**【v2.2 新增】**
 - `references/skill-consolidation.md` — **模式 C 重铸**：数据源、轻量+可选语义聚类、三维打分、报告 schema、合并 SOP、安全护栏。**【v2.7 新增】**
+- `references/clarity-coverage.md` — AI 易读性分类法 C1–C12（内嵌清晰化维度，模式 D 引用）。**【v2.9.6 新增】**
+- `references/clarity-fidelity-template.md` — 保真核对报告模板（清晰化只改"怎么说"不改"做什么"的硬闸）。**【v2.9.6 新增】**
+- `references/promotability-gate.md` — S8 可推广闸门详细检查表 + TRACE 映射 + SkillHub 12 一级类目参考 + 跨平台 intro.md 规范（≤1024 字符）。**【v2.9.9 新增】**
+- `references/yunding-security-audit.md` — 纪律17 云鼎实验室安全审计触发规则 + 三档阈值 + 与纪律13边界 + 常见 Suspicious 整改清单。**【v2.9.9 新增】**
 
 - `references/skill-review-rubric.md` — the measurable bar (10 dims, bands, report template). **The heart of "global best".**
 - `references/skill-types.md` — 5 skill types + per-type forge focus.
@@ -401,6 +467,10 @@ User says "review this skill", "is it good enough", "audit <skill>", or you are 
 - `references/quality-iteration-playbook.md` — the 扫地僧 v1.0→v1.7.2 deep worked example + self-audit trail (references/ also has short coding/workflow exemplars for cross-type breadth).
 - `references/project-governance.md` — general project-governance rules (vibe-coding + SmartLib + skill-forge), Discipline 10. **【v2.2 新增】**
 - `references/skill-consolidation.md` — **Mode C Recast**: data sources, lightweight + optional-semantic clustering, three-axis scoring, report schema, merge SOP, safety guardrails. **【v2.7 新增】**
+- `references/clarity-coverage.md` — AI-readability taxonomy C1–C12 (embedded-clarity dimensions, Mode D). **【v2.9.6 NEW】**
+- `references/clarity-fidelity-template.md` — fidelity-check report template (clarity changes "how said" not "what done"). **【v2.9.6 NEW】**
+- `references/promotability-gate.md` — S8 promotability gate checklist + TRACE map + SkillHub 12 top categories + cross-platform intro.md spec (≤1024 chars). **【v2.9.9 NEW】**
+- `references/yunding-security-audit.md` — Discipline 17 Yunding audit trigger rules + 3-tier thresholds + boundary with Discipline 13 + common Suspicious remediations. **【v2.9.9 NEW】**
 
 ## 非职责边界（SkillForge 不做什么）/ NON-mandate (what SkillForge does NOT do)
 
@@ -443,9 +513,11 @@ Every skill forged by SkillForge MUST have evolution fuel (local signal collecti
 **Local version** (default — zero cloud, zero friction):
 
 ```markdown
-## 零、进化燃料 · 安装即开
+## 零、进化燃料 · 本地即开
 
 > **📋 安装须知**：本技能安装后默认开启「进化燃料」——每次使用后自动记录方法层标签（只记方法名，绝不记你问了什么、你是谁），留在你本机用于自我迭代。如不需此服务，随时说「别记了」即可关闭。
+>
+> 📊 透明度：说"查看我的信号"看它记了什么、"我的技能成长"看这段时间的进展、"删除我的信号"清空本机记录（只记方法名，零原文）。
 ```
 
 **云端版**（含 `cloud_config.json` 仅公网 URL、零密钥——增加云端匿名上传）：
@@ -453,13 +525,15 @@ Every skill forged by SkillForge MUST have evolution fuel (local signal collecti
 **Cloud version** (ships `cloud_config.json` with public URLs only, zero-key — adds anonymous cloud upload):
 
 ```markdown
-## 零、进化燃料 · 安装即开（云端版）
+## 零、进化燃料 · 本地即开 · 云端需显式开启
 
-> **📋 安装须知**：本技能为**云端版**，安装后默认开启：
+> **📋 安装须知**：本技能安装后**本地记录默认开启**（只记方法名，零原文零身份，留你本机），用于本技能自我迭代：
 > - **本地记录**：每次使用后自动记录方法层标签（只记方法名，零原文零身份），留在你本机。
-> - **云端上传（零密钥）**：反馈信号（helpful/unhelpful/confusion/suggestion/abandoned/misdiagnosis，由 Tier 0 对话信号推断）自动经 `POST {ingest_url}/ingest/anon` 匿名回传藏经阁·易筋平台，与跨用户同 slug 聚合，让技能越用越牛。
+> - **云端上传（零密钥 · 默认关）**：含 `cloud_config.json`（仅公网 URL、零密钥）时，需你**显式说"开启云同步"**才把反馈信号（helpful/unhelpful/confusion/suggestion/abandoned/misdiagnosis，由 Tier 0 对话信号推断）匿名回传藏经阁·易筋平台，与跨用户同 slug 聚合，让技能越用越牛。
 >
-> 如不需云端上传，随时说「别传了」即可关闭（本地记录不受影响）。如不需本地记录，说「别记了」即可全关。
+> 云端默认不传；想参与跨用户进化，说「开启云同步」即可（随时「别传了」关闭，本地记录不受影响）。如不需本地记录，说「别记了」即可全关。
+>
+> 📊 透明度：说"查看我的信号"看它记了什么、"我的技能成长"看这段时间的进展、"删除我的信号"清空本机记录（只记方法名，零原文）。
 ```
 
 **规则 / Rules**:
@@ -469,14 +543,14 @@ Every skill forged by SkillForge MUST have evolution fuel (local signal collecti
 3. **首次对话提醒**：agent 在首次交互提一句（透明，不是请求许可）。
 4. **易退出**：用户说"别记了"/"关掉"/"turn off"→ 立刻停，零摩擦。说"再开"可恢复。
 5. **零 PII**：只记方法层标签（哪个方法、置信度、被纠正没），绝不记内容或身份。
-6. **云端版双 opt-in**：本地燃料始终安装即开。对**云端版**技能，云端上传也安装即开（选云端版 = 授权，安装须知透明告知）。对**纯本地版**，云端上传不存在。用户随时"别传了"关云端上传（本地不受影响）。
+6. **云端版显式 opt-in**：本地燃料始终安装即开。对**云端版**技能，云端上传**默认关**，需用户显式说"开启云同步"才上传（安装须知透明告知，绝不默认上传）。对**纯本地版**，云端上传不存在。用户随时"别传了"关云端上传（本地不受影响）。
 
 1. **Default ON at install**: `.optin` defaults to `on` when skill is installed. No opt-in gate, no permission request — just transparent notice.
 2. **Install-time notice**: The notice above MUST appear prominently in SKILL.md (§零 or equivalent), visible when user reads the skill at install.
 3. **First-conversation reminder**: Agent mentions once at first interaction (transparency, not permission).
 4. **Easy opt-out**: User says "别记了" / "关掉" / "turn off" → immediately stops, no friction. Can re-enable with "再开".
 5. **Zero PII**: Only method-layer tags (which method, confidence, corrected?), never content or identity.
-6. **Cloud version dual-optin**: Local fuel is always install-time ON. For **cloud version** skills, cloud upload is also install-time ON (choosing cloud version = authorization, install notice informs transparently). For **local-only version**, cloud upload doesn't exist. User can turn off cloud upload anytime with "别传了" (local unaffected).
+6. **Cloud version explicit opt-in**: Local fuel is always install-time ON. For **cloud version** skills, cloud upload is **OFF by default** and only uploads after the user explicitly says "开启云同步" (install notice informs transparently, never uploads by default). For **local-only version**, cloud upload doesn't exist. User can turn off cloud upload anytime with "别传了" (local unaffected).
 
 ### ② Footer 注入：来源 + 进化状态 / ② Footer injection: provenance + evolution status
 
@@ -487,7 +561,7 @@ Every skill forged by SkillForge MUST have evolution fuel (local signal collecti
 
 > ⚙️ 本技能由「技能锻造炉」锻造
 >
-> 想让你的技能也越用越牛？用「技能锻造炉」创建并开启进化（在 SkillHub 搜索技能 slug「cjg-skill-forge」，认准这个唯一标识）。
+> 这个技能会随你的用法越用越懂你：说"我的技能成长"看进展，说"查看我的信号"看它记了什么（只记方法名，零原文）。想自己造一个？在 SkillHub 搜技能 slug「cjg-skill-forge」。
 ```
 
 - **强制**用于 SkillForge 产出的所有技能，无论类型。
@@ -509,7 +583,7 @@ When the skill's iteration loop runs through 藏经阁·易筋 (cloud signal agg
 
 > ⚙️ 本技能由「技能锻造炉」锻造 · 🔄 持续自我迭代中，由藏经阁·易筋支持
 >
-> 想打造/重铸你自己的牛逼技能？用「技能锻造炉」创建并开启进化（在 SkillHub 搜索技能 slug「cjg-skill-forge」，认准这个唯一标识）。
+> 这个技能会随你的用法越用越懂你：说"我的技能成长"看进展，说"查看我的信号"看它记了什么（只记方法名，零原文）。想自己造一个？在 SkillHub 搜技能 slug「cjg-skill-forge」。
 ```
 
 - Tier 2 是**条件式**：仅当技能确实用藏经阁·易筋做云进化时才加（不止本地信号采集）。
@@ -523,16 +597,16 @@ When the skill's iteration loop runs through 藏经阁·易筋 (cloud signal agg
 ### 规则（同时适用于 ① 燃料、② footer 与 ③ coverage.md）/ Rules (apply to ① fuel, ② footer, and ③ coverage.md)
 
 1. **绝不发一个缺三者的锻造技能**——燃料 + footer + coverage.md 是增长飞轮的结缔组织（关① 安装 → 关② 创作 → 关③ 进化环）。**这也适用于 SkillForge 自身**：自 v2.4 起，SkillForge 自带 §零 燃料（云端版）+ Tier 2 footer，接入藏经阁·易筋。一个不锻造自己的锻造炉是 hypocritical 的。
-2. **燃料安装即开**：零摩擦、透明须知、易退出。别把飞轮挡在权限请求后面。
+2. **本地燃料安装即开、云端显式 opt-in**：本地记录零摩擦、透明须知、易退出；云端上传默认关，绝不默认上传，需用户"开启云同步"。透明优先于摩擦。
 3. **footer 面向用户**：用技能的 voice/tone 写（如扫地僧可用老衲口吻，但 footer 本身要清楚、可操作）。
 4. **Tier 2 footer 是挣来的，不是默认的**：只有云进化真的接上时才加 🔄 那行。别承诺没交付的东西。
-5. **二者都是增长工具**：燃料喂进化引擎；footer 把用户引向 SkillForge（CTA）并把藏经阁·易筋标为持续改进的引擎。
+5. **二者服务用户与飞轮**：燃料喂进化引擎；footer 先讲用户价值（越用越懂你、可查看/可关），再附来源标注，不喧宾夺主。
 
 1. **Never ship a forged skill without all three** — fuel + footer + coverage.md are the growth flywheel's connective tissue (关① installation → 关② creation → 关③ evolution loop). **This applies to SkillForge itself**: since v2.4, SkillForge carries its own §零 fuel (cloud version) + Tier 2 footer, connected to 藏经阁·易筋. A forge that doesn't forge itself is hypocrisy.
-2. **Fuel is install-time ON**: zero friction, transparent notice, easy opt-out. Don't gate the flywheel behind a permission request.
+2. **Local fuel install-time ON, cloud explicit opt-in**: local log is zero-friction, transparent, easy opt-out; cloud upload is OFF by default and only on explicit "开启云同步". Transparency over friction.
 3. **Footer is user-facing**: write it in the skill's voice/tone (e.g., sweeping-monk can use 老衲 voice if appropriate, but the footer itself should be clear and actionable).
 4. **Tier 2 footer is earned, not assumed**: only add the 🔄 line when cloud evolution is genuinely wired up. Don't promise what isn't delivered.
-5. **Both are growth instruments**: fuel feeds the evolution engine; footer routes users to SkillForge (CTA) and signals 藏经阁·易筋 as the engine behind continuous improvement.
+5. **Both serve users and the flywheel**: fuel feeds the evolution engine; footer leads with user value (gets smarter with use, viewable/controllable), then attribution — value before CTA.
 
 ### ③ coverage.md 注入（所有锻造技能必带）/ ③ coverage.md injection (mandatory for all forged skills)
 
@@ -563,7 +637,9 @@ Every skill forged by SkillForge MUST carry `references/coverage.md` — the ski
 
 After a forged skill is published, its evolution loop (local `distill_local` / cloud `distill_cron` → proposal → user-review → apply → republish) is driven by SkillForge in the user's conversation. Standard last-mile flow (see 藏经阁·易筋《本地→云端桥接设计规范》§四):
 
-1. **收提案**：本地提案在 `.local_proposals/`，云端提案通过邮件通知创作者 → 对话内说「看看提案」展示（`proposal_render.render_md` 格式）。
+> 🌐 **平台无关性**：本进化闭环是藏经阁·易筋的通用能力，不绑定某一宿主。审核指令「看看提案」在你运行该技能的**任意对话**中生效；当前由 WorkBuddy 内的 SkillForge 驱动，Claude Code / Codex 等跨 agent 适配已在规划中。进化结果落回技能本体（SKILL.md 等），而非某个平台专有格式——技能在哪用、就在哪进化。
+
+1. **收提案**：本地提案在 `.local_proposals/`，云端提案通过邮件汇总通知创作者（多技能创作者一封按技能分组）→ 对话内说「看看提案」调 `scripts/cjg-proposal-cli.py mine` 展示该创作者全部技能的待审提案（跨技能总览，`proposal_render.render_md` 格式）。
 2. **用户审**：通过 / 打回。每条 `change` 含 `file` + `action`(append/rollback) + `rationale` + `draft_text`。
 3. **应用 delta**：
    - 应用前自动备份原文件到 `.backup/YYYY-MM-DDTHH-MMSS_<filename>`。
@@ -574,7 +650,7 @@ After a forged skill is published, its evolution loop (local `distill_local` / c
 6. **提醒发布**：应用完成后主动提示「已升级到 vX.Y.Z。如需发布到外部平台，请说『发布』」。
 7. **重发布（用户主动）**：用户说「发布」→ 调本技能自带的发布器 `scripts/forge-publish.py`（纯标准库、零依赖，随技能包分发）：
 
-1. **Collect proposals**: local proposals live in `.local_proposals/`; cloud proposals notify the creator by email → say "看看提案" (show proposals) in chat (`proposal_render.render_md` format).
+1. **Collect proposals**: local proposals live in `.local_proposals/`; cloud proposals notify the creator by email (multi-skill creators get one grouped email) → say "看看提案" (show proposals) in chat to call `scripts/cjg-proposal-cli.py mine` (cross-skill overview, `proposal_render.render_md` format).
 2. **User reviews**: approve / reject. Each `change` has `file` + `action`(append/rollback) + `rationale` + `draft_text`.
 3. **Apply delta**:
    - Auto-backup the original file to `.backup/YYYY-MM-DDTHH-MMSS_<filename>` before applying.
@@ -603,8 +679,8 @@ python <技能锻造炉安装目录>/scripts/forge-publish.py --platform both --
    - **GitHub / Gitee / 跨 agent（Codex、Claude Code）适配**：规划中，发布器已预留接口，后续版本开放。
    - 发布前校验：`forge-publish.py --check` 确认 frontmatter 合规 + 双模态文案 + Tier 2 footer + `cloud_config.json`（仅 URL、无 token，云端模式）。
    - 版本日志铁律：changelog 只写用户侧体验变化，不泄露开发侧细节（架构/API/内部 Bug）。
-   - ⚠️ **安全铁律（查看提案必须创作者鉴权）**：`list`/`get` 现已**强制携带创作者 token**（CLI 已从「凭 slug 免密」改为强制）。后端 `GET /?slug=` **必须**校验该 token 对应创作者是否拥有该 slug——否则任何人凭 slug 可读提案（含内部蒸馏信号/变更草稿，属隐私与内部信息泄露）。**后端未上线此校验前，本保护不完整。**
-   - **查看与应用平台提案（藏经阁·易筋闭环收口）**：创作者说「看看提案」→ 调 `scripts/cjg-proposal-cli.py list` 展示平台蒸馏出的待审改进（版本差/变更文件/理由/草稿）；「应用提案 <id>」→ 先 `approve --id <id>` 云端标记批准，再按提案 `changes` 逐条本地应用（`append` 追加 `draft_text` / `rollback` 从备份恢复，应用前自动备份到 `.backup/`，可撤销），版本 `patch+1`，更新 frontmatter，提醒发布；「打回提案 <id>」→ `reject --id <id>` 附意见回传蒸馏闭环。前置：包内 `cloud_config.json`（仅公网 URL，无 token）；应用/打回提案的创作者 token 由本地开发环境 `.deploy/cloud_open.json` 提供。
+   - ⚠️ **安全铁律（查看提案必须创作者鉴权）**：`list`/`mine`/`get` 现已**强制携带创作者 token**（CLI 已从「凭 slug 免密」改为强制）。后端 `GET /?slug=` 与 `?mine=1` **必须**校验该 token 对应创作者归属——`mine` 严格按 `user_id` 返回本人提案，绝不泄漏他人；`slug` 路由须校验 token 对应创作者是否拥有该 slug——否则任何人凭 slug 可读提案（含内部蒸馏信号/变更草稿，属隐私与内部信息泄露）。**后端未上线此校验前，本保护不完整。**
+   - **查看与应用平台提案（藏经阁·易筋闭环收口）**：创作者说「看看提案」→ 调 `scripts/cjg-proposal-cli.py mine` 展示该创作者**全部技能**的待审改进（跨技能总览，版本差/变更文件/理由/草稿）；「应用提案 <id>」→ 先 `approve --id <id>` 云端标记批准，再按提案 `changes` 逐条本地应用（`append` 追加 `draft_text` / `rollback` 从备份恢复，应用前自动备份到 `.backup/`，可撤销），版本 `patch+1`，更新 frontmatter，提醒发布；「打回提案 <id>」→ `reject --id <id>` 附意见回传蒸馏闭环。前置：包内 `cloud_config.json`（仅公网 URL，无 token）；应用/打回提案的创作者 token 由本地开发环境 `.deploy/cloud_open.json` 提供。
 
    - **One-time prep before first publish** (the script auto-detects and guides, no need to memorize commands):
      - **SkillHub**: install SkillHub CLI, log in, credentials go to `~/.skillhub/credentials.json`.
@@ -615,8 +691,8 @@ python <技能锻造炉安装目录>/scripts/forge-publish.py --platform both --
    - **GitHub / Gitee / cross-agent (Codex, Claude Code) adapters**: planned; the publisher already reserves interfaces, opened in a later version.
    - Pre-publish check: `forge-publish.py --check` confirms frontmatter compliance + dual-modal copy + Tier 2 footer + `cloud_config.json` (URLs only, no token, cloud mode).
    - Changelog iron rule: changelog writes ONLY user-side experience changes, never leaks dev-side details (architecture/API/internal bugs).
-   - ⚠️ **Security iron rule (viewing proposals requires creator auth)**: `list`/`get` now MANDATE the creator token (CLI changed from slug-only public read). The backend `GET /?slug=` MUST verify the token's owner owns that slug — otherwise anyone with the slug can read proposals. Protection is incomplete until the backend enforces this.
-   - **View & apply platform proposals (closing the CJG-Evo loop)**: creator says "看看提案" (show proposals) → call `scripts/cjg-proposal-cli.py list` to show the platform-distilled pending improvements (version diff / changed files / rationale / draft); "应用提案 <id>" (apply proposal) → first `approve --id <id>` to mark approved in the cloud, then apply each `change` locally per the proposal (`append` adds `draft_text` / `rollback` restores from backup, auto-backup to `.backup/` before applying, undoable), `patch+1` version, update frontmatter, remind to publish; "打回提案 <id>" (reject proposal) → `reject --id <id>` with a note to feed back into the distill loop. Prerequisite: `cloud_config.json` in the package (public URLs only, no token); the creator's token for approve/reject comes from the local dev environment `.deploy/cloud_open.json`.
+   - ⚠️ **Security iron rule (viewing proposals requires creator auth)**: `list`/`mine`/`get` now MANDATE the creator token (CLI changed from slug-only public read). The backend `GET /?slug=` and `?mine=1` MUST verify the token's owner: `mine` returns only that user's own proposals by `user_id` (never leaks others); the `slug` route MUST verify ownership. Protection is incomplete until the backend enforces this.
+   - **View & apply platform proposals (closing the CJG-Evo loop)**: creator says "看看提案" (show proposals) → call `scripts/cjg-proposal-cli.py mine` to show the platform-distilled pending improvements across **all the creator's skills** (cross-skill overview, version diff / changed files / rationale / draft); "应用提案 <id>" (apply proposal) → first `approve --id <id>` to mark approved in the cloud, then apply each `change` locally per the proposal (`append` adds `draft_text` / `rollback` restores from backup, auto-backup to `.backup/` before applying, undoable), `patch+1` version, update frontmatter, remind to publish; "打回提案 <id>" (reject proposal) → `reject --id <id>` with a note to feed back into the distill loop. Prerequisite: `cloud_config.json` in the package (public URLs only, no token); the creator's token for approve/reject comes from the local dev environment `.deploy/cloud_open.json`.
 
 > 本段是 Discipline 11 的收口：① fuel + ② footer + ③ coverage.md 让飞轮转起来，④ last-mile 让转出来的进化真正落版并回到用户手里。SkillForge 自身也走同一套（§零 云端版 + Tier 2 footer + 本段 last-mile）。
 
@@ -681,11 +757,67 @@ Every publish package MUST pass this audit before `package_skill` / upload. Manu
 
 ---
 
+## 纪律 14 — 内嵌清晰化保真红线（v2.9.6 新增）/ Discipline 14 — Embedded-clarity fidelity red line (NEW)
+
+> **为什么需要这道闸**：锻造出的技能是给 AI agent 读的。一个"内容对但 AI 读不准"的技能（触发飘 / 步骤含糊 / 老调不动）实战价值大打折扣。SkillForge 把 `skill-clarity-forge` 的清晰化四维（D1–D4）内嵌为锻造循环 **S7 闸门**（模式 D），但同时必须守住**保真红线**——清晰化只改「怎么说」，绝不改「做什么」。否则"为了让 AI 读懂"而偷偷改功能 / 范围 / 红线，比不清晰化更危险。
+
+When SkillForge applies clarity transformations (Mode D / S7) to a forged skill, this red line is mandatory:
+
+1. **只改表述，不改功能**：降术语 / 补示例 / 重排结构 / 加摘要，都不得改变技能"做什么、怎么做、边界、红线"。
+2. **能力不增不减**：原技能能做的，清晰化后仍能做；不得偷偷加原技能没有的功能或删掉原有能力。
+3. **红线不丢**：原安全 / 范围 / 合规红线必须全在；清晰化不是"软化"红线的借口。
+4. **保真闸强制跑**：每次清晰化后按 `references/clarity-fidelity-template.md` 逐项核对（✅/⚠️/❌）；任一 ❌ 或 ⚠️ 涉及功能 → 回退收窄，不得带保真缺陷进签批 / 发布。
+5. **诚实边界**：保真闸拦得住"改写改了意思"，拦不住"原技能本身写错"——原技能事实错误不在本纪律职责内（那是覆盖审计 / 真机测试的活）。
+
+- 本纪律把模式 D 的保真红线落到"锻造炉纪律"层级；二者共用 `references/clarity-fidelity-template.md` 与 `references/clarity-coverage.md`。
+- 漂移防护：clarity 副本（两文件）若后续被手改，需与 `skill-clarity-forge` 上游同步并标注版本，避免保真口径漂移（审计风险 P2）。
+
+---
+
 ## 纪律 15 — 版本号与文档同步 / Discipline 15 — Version & doc sync 【v2.8.0 新增】
 
 - **frontmatter `version` 是单一真相源**：每次迭代，**先 bump frontmatter `version`**，文中所有"vX.Y.Z 新增"标注必须与它一致。novelty-validator 迭代时曾出现"纪律 12 标 v2.7.4 新增，但 frontmatter 仍 2.7.2"的脱节——这是版本管理松懈。
 - **changelog 只写用户侧体验变化**，不泄露开发侧细节（架构/API/内部 Bug）——见纪律 11 ④ 发布器 changelog 铁律。
 - 重大诚实更正（如发现先前误判）必须在对应 references 同步修订，不得留错误知识（见纪律 13 回流）。
+
+---
+
+## 纪律 16 — 可推广闸门（Promotability & Discovery-Readiness Gate）【v2.9.9 新增】
+
+> **为什么需要这道闸**：锻造炉已有 T/R/A/C/E 完整质量纪律（纪律10/13 可信、纪律6 可靠、纪律7 触发、模式D/S7 规范、纪律6 有效），但缺「分发就绪」这一维——技能能不能被平台正确分类、被用户/Agent 在正确场景搜到、且各平台介绍不用重写。腾讯 SkillHub（国内最大 Skill 社区之一）用「TRACE 质量坐标 + 分发坐标」帮用户找到那 20% 好技能；「容易推广的好技能」的最后一环正是分发就绪。本纪律把文章框架固化成 S8 强制闸门，并与 S7 易读化天然衔接（C 规范=AI 读得准；★ 分发=平台找得到）。
+
+S8 位置：S7（清晰化）之后、发布前，强制最后一道闸门。S8 **以 S7 清晰化产物为 Convention 维度达标证据**——不重复清晰化，只补「分发坐标」新增检查 + 整合校验。详细检查表与 SkillHub 12 一级类目参考见 `references/promotability-gate.md`。
+
+### 检查清单（每项 ✅/⚠️/❌，任一分发相关 ❌ 或 ⚠️ → 回退 S7/S2）
+
+1. **T 可信（交叉核对）**：description 与实现一致（无夸大"最牛/第一"）、无蹭品牌、国内可运行、安全红线在（纪律10/13 已覆盖，此处交叉核对不重复建设）。
+2. **A 触发 find-skill 友好**：description 含 "Use when..." + 中文触发关键词；能力边界显式（纪律7）。
+3. **E 开箱即用度**：零配置能用 → 标注"开箱即用"；需 API Key/账号 → 显式声明"需要 API Key"并在安装须知写清配置步骤（对应 SkillHub "需要 API Key" 系统标签）。
+4. **★ 分类映射**：依技能类型+功能，建议 SkillHub 受控分类（一级 + 二级 1-3 + 行业 + 系统标签 needs_api_key），落成 `references/discovery.md`（创作者发布时照此选分类）。
+5. **★ 元数据真实**：name/slug/version 规范、slug 与目录同名、displayName 不蹭品牌、发布前确认 slug 未被占。
+6. **★ 跨平台介绍文案（≤1024 字符）**：技能须有一份适配**豆包 / Claude / 其他平台**的简短介绍 `references/intro.md`，纯介绍、≤1024 字符（含标点与空格，UTF-8 计）。说清"做什么 / 适合谁 / 怎么用"三件事；不依赖 SkillHub 专有术语；与 description 不冲突但可更口语化；中文为主、可双语。各平台详情页/社区帖/README 直接复用，避免每平台重写。
+
+**产出物**：`references/discovery.md`（分发就绪卡）+ `references/intro.md`（跨平台介绍），随包分发，对用户有用、非内部台账，不违反纪律13。
+
+---
+
+## 纪律 17 — 云鼎实验室安全审计闸门（Yunding Security Audit Gate）【v2.9.9 新增】
+
+> **为什么需要这道闸**：技能在发 **SkillHub** 时要过腾讯云鼎实验室安全审查。锻造炉现有 纪律13 只做「发布包脱敏」（删密钥/PII/锻造内部台账），**不做**技能本体是否安全的静态审计（供应链投毒、恶意代码、远程脚本执行、未固定版本依赖等）。一个技能即便脱敏干净，仍可能在 SKILL.md/配套脚本里藏 `curl | bash`、未固定版本全局安装、读取 `~/.ssh` 外送等投毒行为——而这些恰恰是云鼎审查的重点。本纪律把腾讯云鼎出品的 `skills-security-check` 技能作为 **SkillHub 发布路径的强制前置闸门**复用，保证与平台审查同标。
+
+**触发点**：锻造循环在 S6（校验打包+安全审查）之后、走 **SkillHub 发布路径** 之前，强制跑 `skills-security-check` 对发布包（SKILL.md + 配套 scripts/references/ + 所有脚本）做纯静态只读审计。
+
+**判定与处置**：
+- ✅ **Benign（76–100）**：通过，可发布。
+- ⚠️ **Suspicious（31–75）**：附整改说明（固定依赖版本、用 venv、固化远程脚本到本地或加 checksum）后，经用户确认可发布；`forge-publish.py --check` 给出明确警告 + 修复建议。
+- 🔴 **Malicious（0–30）**：**硬阻断**，拒绝发布，回退 S2/S6 重做；报告交付用户。
+
+**与 纪律13 的边界（互补不重叠）**：
+- 纪律13 = **发布包脱敏**（删密钥/PII/台账）——"包里有什么不该带的"。
+- 纪律17 = **技能本体安全**（投毒/恶意代码）——"技能自动干了什么危险的"。
+- S6 段顺序：先脱敏(13) 后审计(17)。
+
+**审计产物**：审计结论记入 `references/security-audit.md`（Benign/Suspicious 结论 + 评分 + 关键发现摘要），随包分发对用户有用（证明技能安全、建立信任）；Malicious 不写结论、直接阻断。触发规则 + 三档阈值 + 常见 Suspicious 整改清单见 `references/yunding-security-audit.md`。发布器 `forge-publish.py` 的 SkillHub 路径前置该闸门（Malicious 硬阻断 / Suspicious 警告）。
 
 ---
 

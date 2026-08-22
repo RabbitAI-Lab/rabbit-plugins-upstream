@@ -1,51 +1,66 @@
-## Description: <br>
-Manages Amazon Store A+ Content documents through LinkFox and Amazon SP-API A+ Content Management v2020-11-01, including search, create, get, update, ASIN relations, validation, publish records, approval submission, and suspend submission. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Amazon Store A+ Content through LinkFox and Amazon SP-API operations for searching, creating, reading, updating, validating, associating ASINs, submitting approvals, checking publish records, and suspending A+ display.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketplace operators, and their agents use this skill to manage authorized Amazon A+ Content documents and their ASIN relationships. It supports operational workflows for inspecting content, preparing updates, validating document-to-ASIN eligibility, submitting content for approval, reviewing publish records, and suspending front-end display. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, submit, suspend, or replace ASIN relations for live Amazon A+ Content. <br>
-Mitigation: Use it only in private authorized workspaces, require explicit user confirmation before write actions, and review contentReferenceKey, marketplaceId, and the full asinSet before execution. <br>
-Risk: Full API responses may be saved locally and can include sensitive storefront data. <br>
-Mitigation: Inspect and protect files written under linkfox session directories, and remove or restrict access to saved responses when no longer needed. <br>
-Risk: ASIN replacement is full-set replacement, so omitting existing ASINs can suspend content for those ASINs. <br>
-Mitigation: Submit the complete intended asinSet and verify current associations before replacing them. <br>
+## Use Case:
 
+External sellers, agencies, and developers use this skill to operate Amazon A+ Content workflows through LinkFox, including document management, ASIN association checks, approval submission, publish-record lookup, and suspension requests.
 
-## Reference(s): <br>
-- [Amazon Store A+ Content Management API Reference](references/api.md) <br>
-- [Amazon SP-API searchContentDocuments](https://developer-docs.amazon.com/sp-api/reference/searchcontentdocuments) <br>
-- [Amazon SP-API createContentDocument](https://developer-docs.amazon.com/sp-api/reference/createcontentdocument) <br>
-- [Amazon SP-API getContentDocument](https://developer-docs.amazon.com/sp-api/reference/getcontentdocument) <br>
-- [Amazon SP-API updateContentDocument](https://developer-docs.amazon.com/sp-api/reference/updatecontentdocument) <br>
-- [Amazon SP-API postContentDocumentAsinRelations](https://developer-docs.amazon.com/sp-api/reference/postcontentdocumentasinrelations) <br>
-- [Amazon SP-API validateContentDocumentAsinRelations](https://developer-docs.amazon.com/sp-api/reference/validatecontentdocumentasinrelations) <br>
-- [Amazon SP-API searchContentPublishRecords](https://developer-docs.amazon.com/sp-api/reference/searchcontentpublishrecords) <br>
-- [Amazon SP-API postContentDocumentApprovalSubmission](https://developer-docs.amazon.com/sp-api/reference/postcontentdocumentapprovalsubmission) <br>
-- [Amazon SP-API postContentDocumentSuspendSubmission](https://developer-docs.amazon.com/sp-api/reference/postcontentdocumentsuspendsubmission) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON API responses saved to local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts write full API responses under linkfox/<date>/<session>/data and print full or summarized JSON to stdout.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill can handle LinkFox account login, SMS verification, API key creation, subscription ordering, and payment QR generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use onboarding flows only when the user initiated them, use trusted LinkFox endpoint environment variables, and treat verification codes, API keys, stdout, and logs as secret-bearing.
+
+Risk: The skill stores Amazon A+ response data persistently in the workspace.
+
+Mitigation: Run it only in trusted workspaces, review saved response files for sensitive store data, and remove retained data when it is no longer needed.
+
+Risk: Write operations can change live Amazon A+ Content, including replacing ASIN associations, submitting approval, or suspending display.
+
+Mitigation: Confirm user intent before write operations and verify seller, region, marketplace, contentReferenceKey, and ASIN inputs before execution.
+
+## Reference(s):
+
+- [Amazon Store A+ Content Management API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [Amazon SP-API searchContentDocuments](https://developer-docs.amazon.com/sp-api/reference/searchcontentdocuments)
+- [Amazon SP-API createContentDocument](https://developer-docs.amazon.com/sp-api/reference/createcontentdocument)
+- [Amazon SP-API getContentDocument](https://developer-docs.amazon.com/sp-api/reference/getcontentdocument)
+- [Amazon SP-API updateContentDocument](https://developer-docs.amazon.com/sp-api/reference/updatecontentdocument)
+- [Amazon SP-API postContentDocumentAsinRelations](https://developer-docs.amazon.com/sp-api/reference/postcontentdocumentasinrelations)
+- [Amazon SP-API validateContentDocumentAsinRelations](https://developer-docs.amazon.com/sp-api/reference/validatecontentdocumentasinrelations)
+- [Amazon SP-API postContentDocumentApprovalSubmission](https://developer-docs.amazon.com/sp-api/reference/postcontentdocumentapprovalsubmission)
+- [Amazon SP-API postContentDocumentSuspendSubmission](https://developer-docs.amazon.com/sp-api/reference/postcontentdocumentsuspendsubmission)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, API Calls, Files]
+
+**Output Format:** [Markdown guidance, JSON command arguments, API response summaries, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts persist full LinkFox and Amazon A+ responses under the current workspace's linkfox session data directory and may print full responses when inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

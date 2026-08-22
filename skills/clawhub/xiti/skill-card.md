@@ -1,41 +1,53 @@
-## Description: <br>
-析题 helps agents write heuristic Chinese competitive-programming solution explanations that teach problem-solving reasoning rather than only presenting answers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates heuristic, student-facing competitive-programming explanations that teach problem-solving thinking instead of only presenting final answers.
 
-## Publisher: <br>
-[fslong520](https://clawhub.ai/user/fslong520) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fslong520](https://clawhub.ai/user/fslong520)
 
-## Use Case: <br>
-External users, educators, and competitive-programming learners use this skill to turn problem statements, URLs, or standard solution files into Chinese heuristic explanations. It produces annotated C++ solutions, complexity analysis, preserved samples, common pitfalls, and optional fill-in-the-blank practice when requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated explanations or C++ solutions may be incorrect or incomplete for a specific contest problem. <br>
-Mitigation: Review the reasoning, test the code against official samples and edge cases, and verify complexity claims before publishing or submitting. <br>
-Risk: The skill can request file reads, writes, and edits while preparing or delivering explanations. <br>
-Mitigation: Keep file operations inside the intended contest or problem workspace and review any requested write or edit before allowing it. <br>
+## Use Case:
 
+Students, educators, and competitive-programming authors use this skill to turn problem statements, URLs, and reference code into explanatory Chinese writeups. It emphasizes intuition, wrong-turn analysis, annotated C++ code, complexity analysis, faithful samples, and iframe-friendly single-file HTML lessons.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fslong520/skills/xiti) <br>
-- [Publisher profile](https://clawhub.ai/user/fslong520) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, guidance] <br>
-**Output Format:** [Markdown with C++ code blocks, LaTeX math, tables, and Mermaid diagrams] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese heuristic explanation style; asks for depth preference after assessing difficulty; optional fill-in-the-blank mode only when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Generated HTML lessons can depend on third-party CDN assets for formulas, syntax highlighting, diagrams, and animations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review deployment environments for external network access and privacy requirements before publishing or embedding generated HTML.
+
+Risk: Problem URLs, statements, and reference code from untrusted sources may lead to inaccurate or unsafe generated explanations if accepted without review.
+
+Mitigation: Review the generated lesson, code, samples, and any browser-rendered output before sharing it with students or deploying it in a teaching platform.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fslong520/skills/xiti)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, configuration, guidance]
+
+**Output Format:** [Chinese instructional prose with annotated C++ code and single-file HTML lesson output when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [HTML outputs may include inline CSS, Mermaid diagrams, KaTeX formulas, highlight.js code highlighting, and anime.js step-through visualizations.]
+
+## Skill Version(s):
+
+1.5.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

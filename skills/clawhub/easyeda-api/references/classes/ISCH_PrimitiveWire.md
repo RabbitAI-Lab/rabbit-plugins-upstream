@@ -1,15 +1,19 @@
 # ISCH\_PrimitiveWire class
 
-导线图元
+Wire primitive
 
 ## Signature
 
 ```typescript
-declare class ISCH_PrimitiveWire implements ISCH_Primitive 
+export class ISCH_PrimitiveWire implements ISCH_Primitive 
 ```
 **Implements:** [ISCH\_Primitive](../interfaces/ISCH_Primitive.md)
 
 ## Remarks
+
+Unresolved issues:
+
+The `ISCH_PrimitiveWire.net` global net name property involves multi-sheet refresh, so the currently obtained value may be \*\*incorrect\*\*. When you try to set multiple names for a wire or bus (by placing multiple net labels), the obtained `net` property may not be the latest. You need to wait for the canvas event to asynchronously refresh the global nets before reading it again.
 
 
 ## Methods
@@ -40,7 +44,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 将对图元的更改应用到画布
+**_(BETA)_** Apply the changes to the primitives to the canvas
 
 
 </td></tr>
@@ -54,7 +58,7 @@ Description
 
 </td><td>
 
-获取属性状态：总线颜色
+Get the property state: bus color
 
 
 </td></tr>
@@ -68,7 +72,7 @@ Description
 
 </td><td>
 
-获取属性状态：多段线坐标组
+Get the property state: polyline coordinate group
 
 
 </td></tr>
@@ -82,7 +86,7 @@ Description
 
 </td><td>
 
-获取属性状态：线型
+Get the property state: line type
 
 
 </td></tr>
@@ -96,7 +100,7 @@ Description
 
 </td><td>
 
-获取属性状态：线宽
+Get the property state: Line width
 
 
 </td></tr>
@@ -110,7 +114,7 @@ Description
 
 </td><td>
 
-获取属性状态：网络名称
+Get the property state: net name
 
 
 </td></tr>
@@ -124,7 +128,7 @@ Description
 
 </td><td>
 
-获取属性状态：图元 ID
+Get the property state: primitive ID
 
 
 </td></tr>
@@ -138,7 +142,7 @@ Description
 
 </td><td>
 
-获取属性状态：图元类型
+Get the property state: primitive type
 
 
 </td></tr>
@@ -152,7 +156,7 @@ Description
 
 </td><td>
 
-查询图元是否为异步图元
+Query whether the primitive is an async primitive
 
 
 </td></tr>
@@ -166,7 +170,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：导线颜色
+**_(BETA)_** Set the property state: wire color
 
 
 </td></tr>
@@ -180,7 +184,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：多段线坐标组
+**_(BETA)_** Set the property state: polyline coordinate group
 
 
 </td></tr>
@@ -194,7 +198,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：线型
+**_(BETA)_** Set the property state: line type
 
 
 </td></tr>
@@ -208,7 +212,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：线宽
+**_(BETA)_** Set the property state: Line width
 
 
 </td></tr>
@@ -222,7 +226,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：网络名称
+**_(BETA)_** Set the property state: net name
 
 
 </td></tr>
@@ -236,7 +240,7 @@ Description
 
 </td><td>
 
-将图元转换为异步图元
+Convert Primitive to Async primitive
 
 
 </td></tr>
@@ -250,7 +254,7 @@ Description
 
 </td><td>
 
-将图元转换为同步图元
+Convert Primitive to Sync primitive
 
 
 </td></tr>
@@ -266,12 +270,12 @@ Description
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-将对图元的更改应用到画布
+Apply the changes to the primitives to the canvas
 
 ## Signature
 
 ```typescript
-done(): Promise<ISCH_PrimitiveWire>;
+public done(): Promise<ISCH_PrimitiveWire>;
 ```
 
 
@@ -279,18 +283,44 @@ done(): Promise<ISCH_PrimitiveWire>;
 
 Promise&lt;[ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)<!-- -->&gt;
 
-导线图元对象
+Wire primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试导线重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+
+// 2. 创建一条测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([x, y, x + 400, y], 'SIG_A');
+
+// 3. 切换异步模式，累计两处修改（改网络 + 改颜色）
+const asyncWire = wire.toAsync();
+asyncWire.setState_Net('SIG_B');
+asyncWire.setState_Color('#00AA00');
+
+// 4. 一次性提交到画布
+await asyncWire.done();
+
+// 5. 从画布重新读取，确认两处修改都已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveWire.get(wire.getState_PrimitiveId());
+
+console.log('net:', 'SIG_A', '→', refetched.getState_Net());
+console.log('color:', '#00AA00', '→', refetched.getState_Color());
+```
 
 ### getstate_color
 
 # ISCH\_PrimitiveWire.getState\_Color() method
 
-获取属性状态：总线颜色
+Get the property state: bus color
 
 ## Signature
 
 ```typescript
-getState_Color(): string | null;
+public getState_Color(): string | null;
 ```
 
 
@@ -298,18 +328,34 @@ getState_Color(): string | null;
 
 string \| null
 
-总线颜色
+Bus color
+
+## Example
+
+
+```javascript
+// 1. 创建一条红色测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([1000, 1000, 1400, 1000], null, '#FF0000', 6, 1);
+
+// 2. 读取导线颜色
+const color = wire.getState_Color();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitiveWire.delete([wire.getState_PrimitiveId()]);
+
+console.log('color:', color);
+```
 
 ### getstate_line
 
 # ISCH\_PrimitiveWire.getState\_Line() method
 
-获取属性状态：多段线坐标组
+Get the property state: polyline coordinate group
 
 ## Signature
 
 ```typescript
-getState_Line(): Array<number> | Array<Array<number>>;
+public getState_Line(): Array<number> | Array<Array<number>>;
 ```
 
 
@@ -317,18 +363,34 @@ getState_Line(): Array<number> | Array<Array<number>>;
 
 Array&lt;number&gt; \| Array&lt;Array&lt;number&gt;&gt;
 
-多段线坐标组
+Polyline coordinate group
+
+## Example
+
+
+```javascript
+// 1. 创建一条水平测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([1000, 1000, 1400, 1000]);
+
+// 2. 读取多段线坐标组（返回画布规格化后的坐标，段内端点顺序可能与创建时相反）
+const line = wire.getState_Line();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitiveWire.delete([wire.getState_PrimitiveId()]);
+
+console.log('line:', JSON.stringify(line));
+```
 
 ### getstate_linetype
 
 # ISCH\_PrimitiveWire.getState\_LineType() method
 
-获取属性状态：线型
+Get the property state: line type
 
 ## Signature
 
 ```typescript
-getState_LineType(): ESCH_PrimitiveLineType | null;
+public getState_LineType(): ESCH_PrimitiveLineType | null;
 ```
 
 
@@ -336,18 +398,34 @@ getState_LineType(): ESCH_PrimitiveLineType | null;
 
 [ESCH\_PrimitiveLineType](../enums/ESCH_PrimitiveLineType.md) \| null
 
-线型
+Line type
+
+## Example
+
+
+```javascript
+// 1. 创建一条虚线（DASHED=1）测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([1000, 1000, 1400, 1000], null, null, null, 1);
+
+// 2. 读取线型
+const lineType = wire.getState_LineType();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitiveWire.delete([wire.getState_PrimitiveId()]);
+
+console.log('lineType:', lineType);
+```
 
 ### getstate_linewidth
 
 # ISCH\_PrimitiveWire.getState\_LineWidth() method
 
-获取属性状态：线宽
+Get the property state: Line width
 
 ## Signature
 
 ```typescript
-getState_LineWidth(): number | null;
+public getState_LineWidth(): number | null;
 ```
 
 
@@ -355,18 +433,34 @@ getState_LineWidth(): number | null;
 
 number \| null
 
-线宽
+Line width
+
+## Example
+
+
+```javascript
+// 1. 创建一条线宽 6 的测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([1000, 1000, 1400, 1000], null, null, 6, null);
+
+// 2. 读取线宽
+const lineWidth = wire.getState_LineWidth();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitiveWire.delete([wire.getState_PrimitiveId()]);
+
+console.log('lineWidth:', lineWidth);
+```
 
 ### getstate_net
 
 # ISCH\_PrimitiveWire.getState\_Net() method
 
-获取属性状态：网络名称
+Get the property state: net name
 
 ## Signature
 
 ```typescript
-getState_Net(): string;
+public getState_Net(): string;
 ```
 
 
@@ -374,18 +468,34 @@ getState_Net(): string;
 
 string
 
-网络名称
+Net name
+
+## Example
+
+
+```javascript
+// 1. 创建一条属于 SIG_A 网络的测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([1000, 1000, 1400, 1000], 'SIG_A');
+
+// 2. 读取网络名称
+const net = wire.getState_Net();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitiveWire.delete([wire.getState_PrimitiveId()]);
+
+console.log('net:', net);
+```
 
 ### getstate_primitiveid
 
 # ISCH\_PrimitiveWire.getState\_PrimitiveId() method
 
-获取属性状态：图元 ID
+Get the property state: primitive ID
 
 ## Signature
 
 ```typescript
-getState_PrimitiveId(): string;
+public getState_PrimitiveId(): string;
 ```
 
 
@@ -393,18 +503,36 @@ getState_PrimitiveId(): string;
 
 string
 
-图元 ID
+Primitive ID
+
+## Example
+
+
+```javascript
+// 1. 创建一条测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([1000, 1000, 1400, 1000]);
+
+// 2. 读取图元 ID
+const primitiveId = wire.getState_PrimitiveId();
+
+// 3. 用该 ID 反查同一图元，验证 ID 有效（查询类案例不留测试对象）
+const refetched = await eda.sch_PrimitiveWire.get(primitiveId);
+await eda.sch_PrimitiveWire.delete([primitiveId]);
+
+console.log('primitiveId:', primitiveId);
+console.log('refetch matched:', refetched.getState_PrimitiveId() === primitiveId);
+```
 
 ### getstate_primitivetype
 
 # ISCH\_PrimitiveWire.getState\_PrimitiveType() method
 
-获取属性状态：图元类型
+Get the property state: primitive type
 
 ## Signature
 
 ```typescript
-getState_PrimitiveType(): ESCH_PrimitiveType;
+public getState_PrimitiveType(): ESCH_PrimitiveType;
 ```
 
 
@@ -412,18 +540,34 @@ getState_PrimitiveType(): ESCH_PrimitiveType;
 
 [ESCH\_PrimitiveType](../enums/ESCH_PrimitiveType.md)
 
-图元类型
+Primitive type
+
+## Example
+
+
+```javascript
+// 1. 创建一条测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([1000, 1000, 1400, 1000]);
+
+// 2. 读取图元类型
+const primitiveType = wire.getState_PrimitiveType();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitiveWire.delete([wire.getState_PrimitiveId()]);
+
+console.log('primitiveType:', primitiveType);
+```
 
 ### isasync
 
 # ISCH\_PrimitiveWire.isAsync() method
 
-查询图元是否为异步图元
+Query whether the primitive is an async primitive
 
 ## Signature
 
 ```typescript
-isAsync(): boolean;
+public isAsync(): boolean;
 ```
 
 
@@ -431,7 +575,26 @@ isAsync(): boolean;
 
 boolean
 
-是否为异步图元
+Whether Is async primitive
+
+## Example
+
+
+```javascript
+// 1. 创建一条测试导线，创建后默认处于异步模式
+const wire = await eda.sch_PrimitiveWire.create([1000, 1000, 1400, 1000]);
+const asyncOnCreate = wire.isAsync();
+
+// 2. 切换到同步模式再查询一次，对比两种模式
+wire.toSync();
+const asyncAfterToSync = wire.isAsync();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitiveWire.delete([wire.getState_PrimitiveId()]);
+
+console.log('isAsync on create:', asyncOnCreate);
+console.log('isAsync after toSync:', asyncAfterToSync);
+```
 
 ### setstate_color
 
@@ -439,12 +602,12 @@ boolean
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：导线颜色
+Set the property state: wire color
 
 ## Signature
 
 ```typescript
-setState_Color(color: string | null): ISCH_PrimitiveWire;
+public setState_Color(color: string | null): ISCH_PrimitiveWire;
 ```
 
 ## Parameters
@@ -477,7 +640,7 @@ string \| null
 
 </td><td>
 
-导线颜色
+Wire color
 
 
 </td></tr>
@@ -489,7 +652,32 @@ string \| null
 
 [ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)
 
-导线图元对象
+Wire primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试导线重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+
+// 2. 创建一条红色测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([x, y, x + 400, y], null, '#FF0000', 6, 1);
+
+// 3. 读取修改前的颜色
+const before = wire.getState_Color();
+
+// 4. 切换异步模式并改为绿色
+const asyncWire = wire.toAsync();
+asyncWire.setState_Color('#00AA00');
+await asyncWire.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveWire.get(wire.getState_PrimitiveId());
+
+console.log('color:', before, '→', refetched.getState_Color());
+```
 
 ### setstate_line
 
@@ -497,12 +685,12 @@ string \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：多段线坐标组
+Set the property state: polyline coordinate group
 
 ## Signature
 
 ```typescript
-setState_Line(line: Array<number> | Array<Array<number>>): ISCH_PrimitiveWire;
+public setState_Line(line: Array<number> | Array<Array<number>>): ISCH_PrimitiveWire;
 ```
 
 ## Parameters
@@ -535,7 +723,7 @@ Array&lt;number&gt; \| Array&lt;Array&lt;number&gt;&gt;
 
 </td><td>
 
-多段线坐标组
+Polyline coordinate group
 
 
 </td></tr>
@@ -547,7 +735,32 @@ Array&lt;number&gt; \| Array&lt;Array&lt;number&gt;&gt;
 
 [ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)
 
-导线图元对象
+Wire primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试导线重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+
+// 2. 创建一条水平单段测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([x, y, x + 400, y]);
+
+// 3. 读取修改前的路径
+const before = wire.getState_Line();
+
+// 4. 切换异步模式并改为 L 形两段（先水平再垂直，段间共享端点）
+const asyncWire = wire.toAsync();
+asyncWire.setState_Line([x, y, x + 400, y, x + 400, y + 400]);
+await asyncWire.done();
+
+// 5. 从画布重新读取，确认路径已更新（返回画布规格化坐标，保留现场供观察）
+const refetched = await eda.sch_PrimitiveWire.get(wire.getState_PrimitiveId());
+
+console.log('line:', JSON.stringify(before), '→', JSON.stringify(refetched.getState_Line()));
+```
 
 ### setstate_linetype
 
@@ -555,12 +768,12 @@ Array&lt;number&gt; \| Array&lt;Array&lt;number&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：线型
+Set the property state: line type
 
 ## Signature
 
 ```typescript
-setState_LineType(lineType: ESCH_PrimitiveLineType | null): ISCH_PrimitiveWire;
+public setState_LineType(lineType: ESCH_PrimitiveLineType | null): ISCH_PrimitiveWire;
 ```
 
 ## Parameters
@@ -593,7 +806,7 @@ lineType
 
 </td><td>
 
-线型
+Line type
 
 
 </td></tr>
@@ -605,7 +818,32 @@ lineType
 
 [ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)
 
-导线图元对象
+Wire primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试导线重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+
+// 2. 创建一条虚线（DASHED=1）测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([x, y, x + 400, y], null, null, null, 1);
+
+// 3. 读取修改前的线型
+const before = wire.getState_LineType();
+
+// 4. 切换异步模式并改为点线（DOTTED=2）
+const asyncWire = wire.toAsync();
+asyncWire.setState_LineType(2);
+await asyncWire.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveWire.get(wire.getState_PrimitiveId());
+
+console.log('lineType:', before, '→', refetched.getState_LineType());
+```
 
 ### setstate_linewidth
 
@@ -613,12 +851,12 @@ lineType
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：线宽
+Set the property state: Line width
 
 ## Signature
 
 ```typescript
-setState_LineWidth(lineWidth: number | null): ISCH_PrimitiveWire;
+public setState_LineWidth(lineWidth: number | null): ISCH_PrimitiveWire;
 ```
 
 ## Parameters
@@ -651,7 +889,7 @@ number \| null
 
 </td><td>
 
-线宽
+Line width
 
 
 </td></tr>
@@ -663,7 +901,32 @@ number \| null
 
 [ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)
 
-导线图元对象
+Wire primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试导线重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+
+// 2. 创建一条线宽 6 的测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([x, y, x + 400, y], null, null, 6, null);
+
+// 3. 读取修改前的线宽
+const before = wire.getState_LineWidth();
+
+// 4. 切换异步模式并加粗到 10
+const asyncWire = wire.toAsync();
+asyncWire.setState_LineWidth(10);
+await asyncWire.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveWire.get(wire.getState_PrimitiveId());
+
+console.log('lineWidth:', before, '→', refetched.getState_LineWidth());
+```
 
 ### setstate_net
 
@@ -671,12 +934,12 @@ number \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：网络名称
+Set the property state: net name
 
 ## Signature
 
 ```typescript
-setState_Net(net: string): ISCH_PrimitiveWire;
+public setState_Net(net: string): ISCH_PrimitiveWire;
 ```
 
 ## Parameters
@@ -709,7 +972,7 @@ string
 
 </td><td>
 
-网络名称
+Net name
 
 
 </td></tr>
@@ -721,18 +984,43 @@ string
 
 [ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)
 
-导线图元对象
+Wire primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试导线重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+
+// 2. 创建一条属于 SIG_A 网络的测试导线（SCH 坐标单位 10mil）
+const wire = await eda.sch_PrimitiveWire.create([x, y, x + 400, y], 'SIG_A');
+
+// 3. 读取修改前的网络名称
+const before = wire.getState_Net();
+
+// 4. 切换异步模式并改为 SIG_B
+const asyncWire = wire.toAsync();
+asyncWire.setState_Net('SIG_B');
+await asyncWire.done();
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveWire.get(wire.getState_PrimitiveId());
+
+console.log('net:', before, '→', refetched.getState_Net());
+```
 
 ### toasync
 
 # ISCH\_PrimitiveWire.toAsync() method
 
-将图元转换为异步图元
+Convert Primitive to Async primitive
 
 ## Signature
 
 ```typescript
-toAsync(): ISCH_PrimitiveWire;
+public toAsync(): ISCH_PrimitiveWire;
 ```
 
 
@@ -740,18 +1028,43 @@ toAsync(): ISCH_PrimitiveWire;
 
 [ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)
 
-导线图元对象
+Wire primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试导线重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+
+// 2. 创建一条测试导线（创建后默认处于异步模式）
+const wire = await eda.sch_PrimitiveWire.create([x, y, x + 400, y], null, null, 6, null);
+
+// 3. 转换为异步图元
+const asyncWire = wire.toAsync();
+
+// 4. 异步模式下累计修改并提交
+asyncWire.setState_LineWidth(10);
+await asyncWire.done();
+
+// 5. 从画布重新读取，确认提交生效（保留现场供观察）
+const refetched = await eda.sch_PrimitiveWire.get(wire.getState_PrimitiveId());
+
+console.log('isAsync after toAsync:', wire.isAsync());
+console.log('lineWidth:', 6, '→', refetched.getState_LineWidth());
+```
 
 ### tosync
 
 # ISCH\_PrimitiveWire.toSync() method
 
-将图元转换为同步图元
+Convert Primitive to Sync primitive
 
 ## Signature
 
 ```typescript
-toSync(): ISCH_PrimitiveWire;
+public toSync(): ISCH_PrimitiveWire;
 ```
 
 
@@ -759,4 +1072,21 @@ toSync(): ISCH_PrimitiveWire;
 
 [ISCH\_PrimitiveWire](./ISCH_PrimitiveWire.md)
 
-导线图元对象
+Wire primitive object
+
+## Example
+
+
+```javascript
+// 1. 创建一条测试导线（创建后默认处于异步模式）
+const wire = await eda.sch_PrimitiveWire.create([1000, 1000, 1400, 1000]);
+
+// 2. 转换为同步图元，isAsync() 变为 false
+const syncWire = wire.toSync();
+const isAsyncAfterToSync = syncWire.isAsync();
+
+// 3. 清理测试图元（本案例只演示模式转换，不修改画布）
+await eda.sch_PrimitiveWire.delete([wire.getState_PrimitiveId()]);
+
+console.log('isAsync after toSync:', isAsyncAfterToSync);
+```

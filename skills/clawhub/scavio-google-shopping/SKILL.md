@@ -29,7 +29,7 @@ Use this skill when the user asks to:
 
 ## Setup
 
-Get a free API key at https://scavio.dev (50 free credits to get started, no card required):
+Get a free API key at [scavio.dev](https://scavio.dev/?utm_source=clawhub&utm_medium=skill&utm_campaign=scavio-google-shopping) (50 free credits to get started, no card required):
 
 ```bash
 export SCAVIO_API_KEY=sk_live_your_key
@@ -101,10 +101,13 @@ Authorization: Bearer $SCAVIO_API_KEY
 ## Example
 
 ```python
-import os, requests
+import requests
 
 BASE = "https://api.scavio.dev"
-HEADERS = {"Authorization": f"Bearer {os.environ['SCAVIO_API_KEY']}"}
+# Your key from https://scavio.dev. Load it from your environment or secret
+# store in real code - keep it out of source control.
+API_KEY = "sk_your_key_here"
+HEADERS = {"Authorization": f"Bearer {API_KEY}"}
 
 # 1. Search products, cheapest first, under $1500
 search = requests.post(f"{BASE}/api/v2/google/shopping", headers=HEADERS,

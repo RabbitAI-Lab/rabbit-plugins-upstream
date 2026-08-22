@@ -1,39 +1,52 @@
-## Description: <br>
-Helps QA and engineering teams build quality metric reports and dashboards across process quality, product quality, testing efficiency, and quality health trends. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA teams design and summarize quality metrics across process quality, product outcomes, testing efficiency, and quality health trends for release and management reporting.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA engineers, test leads, and release stakeholders use this skill to turn test execution, defect, and historical baseline data into quality dashboards, trend analysis, and improvement recommendations.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Quality reports may expose business-sensitive testing, defect, release, or product quality trends.
+
+Mitigation: Limit inputs and generated reports to data appropriate for quality reporting and the intended audience.
+
+Risk: Quality metrics may be misused as a simplistic scorecard or may hide negative trends if only favorable indicators are reported.
+
+Mitigation: Review reports for balanced trend coverage, explicit target comparisons, and actionable improvement recommendations before sharing.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, test leads, and engineering managers use this skill to quantify software quality, prepare quality dashboards, analyze defect and test trends, and turn testing data into management-facing reports. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Broad requests such as trend analysis may produce QA-oriented metric guidance when the user intended a different domain. <br>
-Mitigation: Invoke the skill for testing metrics, defect quality, quality dashboards, or QA reporting work, and route unrelated trend-analysis requests elsewhere. <br>
-Risk: Quality metrics can become misleading if used only as scorecards instead of trend signals. <br>
-Mitigation: Review metric definitions, compare them against baselines, and include improvement recommendations with the report. <br>
+**Output Format:** [Markdown quality metrics report with dashboard sections, trend analysis, and recommendations]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Reports are expected to include traceability identifiers such as METRIC-XXXX when generated from the skill template.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Analysis] <br>
-**Output Format:** [Markdown quality metric reports with structured dashboard sections and metric formulas] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include a METRIC-XXXX traceability ID and cover process quality, product quality, testing efficiency, and quality health dimensions.] <br>
+1.7.0 (source: frontmatter and release evidence)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

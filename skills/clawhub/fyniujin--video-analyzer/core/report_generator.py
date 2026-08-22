@@ -29,6 +29,11 @@ class ReportGenerator:
         highlights,  # 接受 dict (HighlightExtractor 输出) 或 None
         media_info: Dict,
         output_dir: str,
+        platform_analysis=None,
+        platform_meta=None,
+        editing_result=None,
+        viral_result=None,
+        live_stats=None,
     ) -> Dict[str, str]:
         """
         生成所有格式的报告文件。
@@ -54,21 +59,27 @@ class ReportGenerator:
         if "html" in formats:
             html_path = self._generate_html(
                 transcript, scenes, visual_data, aligned_data,
-                fused_data, highlights, media_info, output_dir, assets_dir
+                fused_data, highlights, media_info, output_dir, assets_dir,
+                platform_analysis, platform_meta, editing_result,
+                viral_result, live_stats
             )
             output_paths["html"] = html_path
         
         if "json" in formats:
             json_path = self._generate_json(
                 transcript, scenes, visual_data, aligned_data,
-                fused_data, highlights, media_info, output_dir
+                fused_data, highlights, media_info, output_dir,
+                platform_analysis, platform_meta, editing_result,
+                viral_result, live_stats
             )
             output_paths["json"] = json_path
         
         if "md" in formats:
             md_path = self._generate_markdown(
                 transcript, scenes, visual_data, aligned_data,
-                fused_data, highlights, media_info, output_dir
+                fused_data, highlights, media_info, output_dir,
+                platform_analysis, platform_meta, editing_result,
+                viral_result, live_stats
             )
             output_paths["md"] = md_path
         
@@ -85,11 +96,18 @@ class ReportGenerator:
         media_info: Dict,
         output_dir: str,
         assets_dir: str,
+        platform_analysis=None,
+        platform_meta=None,
+        editing_result=None,
+        viral_result=None,
+        live_stats=None,
     ) -> str:
         """生成交互式 HTML 报告"""
         
         html_content = self._build_html_document(
-            transcript, scenes, fused_data, highlights, media_info, aligned_data
+            transcript, scenes, fused_data, highlights, media_info, aligned_data,
+            platform_analysis, platform_meta, editing_result,
+            viral_result, live_stats
         )
         
         output_path = os.path.join(output_dir, "report.html")
@@ -107,6 +125,11 @@ class ReportGenerator:
         highlights: List[Dict],
         media_info: Dict,
         aligned_data: Dict,
+        platform_analysis=None,
+        platform_meta=None,
+        editing_result=None,
+        viral_result=None,
+        live_stats=None,
     ) -> str:
         """构建完整 HTML 文档"""
         
@@ -141,6 +164,18 @@ class ReportGenerator:
         
         # 构建精华片段 HTML
         highlights_html = self._build_highlights_html(highlights)
+        
+        # 构建平台分析 HTML
+        platform_html = self._build_platform_html(platform_analysis, platform_meta)
+        
+        # 构建剪辑建议 HTML
+        editing_html = self._build_editing_html(editing_result)
+        
+        # 构建爆款预测 HTML
+        viral_html = self._build_viral_html(viral_result)
+        
+        # 构建实时直播分析 HTML
+        live_html = self._build_live_html(live_stats)
         
         return f"""<!DOCTYPE html>
 <html lang="zh-CN">
@@ -274,9 +309,9 @@ class ReportGenerator:
 </head>
 <body>
     <div class="container">
-        <div class="header">
+            <div class="header">
             <h1>视频分析报告</h1>
-            <div class="subtitle">由 video-analyzer v3.0.0 生成 · {datetime.now().strftime("%Y-%m-%d %H:%M")}</div>
+            <div class="subtitle">由 video-analyzer v4.2.0 生成 · {datetime.now().strftime("%Y-%m-%d %H:%M")}</div>
         </div>
 
         <div class="card">
@@ -302,6 +337,14 @@ class ReportGenerator:
         </div>
 
         {highlights_html}
+
+        {platform_html}
+
+        {editing_html}
+
+        {viral_html}
+
+        {live_html}
 
         <div class="footer">
             video-analyzer · 视频分析处理 Skill<br>
@@ -436,15 +479,301 @@ class ReportGenerator:
         </div>
         """
     
+    def _build_platform_html(self, platform_analysis=None, platform_meta=None) -> str:
+        """构建平台分析 HTML"""
+        if not platform_analysis and not platform_meta:
+            return ""
+        
+        meta_html = ""
+        if platform_meta:
+            meta_html = f"""
+            <h3>平台元数据</h3>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-value">{platform_meta.platform}</div>
+                    <div class="metric-label">平台</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{platform_meta.author}</div>
+                    <div class="metric-label">作者</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{platform_meta.like_count}</div>
+                    <div class="metric-label">点赞</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{platform_meta.comment_count}</div>
+                    <div class="metric-label">评论</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{platform_meta.view_count}</div>
+                    <div class="metric-label">播放</div>
+                </div>
+            </div>
+            """
+        
+        analysis_html = ""
+        if platform_analysis:
+            opening = platform_analysis.opening_3s
+            ecommerce = platform_analysis.ecommerce_analysis
+            rhythm = platform_analysis.rhythm_analysis
+            
+            analysis_html = f"""
+            <h3>短视频分析</h3>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-value">{opening.get('hook_type', '未知')}</div>
+                    <div class="metric-label">开场类型</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{'是' if ecommerce.get('is_ecommerce') else '否'}</div>
+                    <div class="metric-label">带货视频</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{rhythm.get('rhythm_type', '未知')}</div>
+                    <div class="metric-label">节奏类型</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{opening.get('visual_changes', 0)}</div>
+                    <div class="metric-label">前3秒画面变化</div>
+                </div>
+            </div>
+            """
+            
+            # 带货详情
+            if ecommerce.get('is_ecommerce'):
+                analysis_html += f"""
+                <h3>带货分析</h3>
+                <div class="summary-text">
+                    促销词: {', '.join(ecommerce.get('promotion_keywords', []))}<br>
+                    价格: {', '.join(ecommerce.get('price_mentions', []))}<br>
+                    行动号召: {', '.join(ecommerce.get('call_to_action', []))}
+                </div>
+                """
+        
+        return f"""
+        <div class="card">
+            <h2>📱 平台分析</h2>
+            {meta_html}
+            {analysis_html}
+        </div>
+        """
+    
+    def _build_viral_html(self, viral_result=None) -> str:
+        """构建爆款预测 HTML"""
+        if not viral_result:
+            return ""
+        
+        score = viral_result.get("viral_score", 0)
+        level = viral_result.get("level", "未知")
+        method = viral_result.get("method", "rule_based")
+        benchmark = viral_result.get("benchmark", {})
+        
+        # 特征雷达
+        features_html = ""
+        features = viral_result.get("features", {})
+        for name, data in features.items():
+            if isinstance(data, dict):
+                fscore = data.get("score", 0)
+                label = name.replace("_", " ").title()
+                bar_width = min(fscore, 100)
+                features_html += f"""
+                <div style="margin:4px 0; display:flex; align-items:center;">
+                    <span style="width:120px;font-size:12px;">{label}</span>
+                    <div style="flex:1;background:#333;border-radius:4px;height:16px;overflow:hidden;">
+                        <div style="width:{bar_width}%;background:{highlight_color};height:100%;border-radius:4px;"></div>
+                    </div>
+                    <span style="width:40px;text-align:right;font-size:12px;margin-left:8px;">{fscore:.0f}</span>
+                </div>
+                """
+        
+        # 建议列表
+        suggestions = viral_result.get("suggestions", [])
+        suggestions_html = ""
+        if suggestions:
+            items = []
+            for s in suggestions:
+                items.append(f'<div class="highlight-item"><strong>{s.get("title", "")}</strong><div style="font-size:12px;color:#888;margin-top:4px;">{s.get("description", "")}</div></div>')
+            suggestions_html = f"<h3>改进建议</h3>{''.join(items)}"
+        
+        return f"""
+        <div class="card">
+            <h2>🔥 爆款预测</h2>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-value">{score}</div>
+                    <div class="metric-label">爆款得分 (0-100)</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{level}</div>
+                    <div class="metric-label">等级</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{benchmark.get("percentile", "未知")}</div>
+                    <div class="metric-label">分位</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{method}</div>
+                    <div class="metric-label">方法</div>
+                </div>
+            </div>
+            <h3>特征评分</h3>
+            {features_html}
+            {suggestions_html}
+        </div>
+        """
+
+    def _build_live_html(self, live_stats=None) -> str:
+        """构建实时直播分析 HTML"""
+        if not live_stats:
+            return ""
+        
+        risk_level = live_stats.get("risk_level", "未知")
+        duration = live_stats.get("duration", 0)
+        total_segments = live_stats.get("total_segments", 0)
+        total_sensitive = live_stats.get("total_sensitive_detected", 0)
+        total_alerts = live_stats.get("total_alerts", 0)
+        sensitive_rate = live_stats.get("sensitive_rate", 0)
+        
+        # 风险颜色
+        risk_color = {"安全": "#4caf50", "低风险": "#8bc34a", "中风险": "#ff9800", "高风险": "#f44336"}.get(risk_level, "#888")
+        
+        return f"""
+        <div class="card">
+            <h2>🔴 实时直播分析</h2>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-value">{duration:.1f}s</div>
+                    <div class="metric-label">运行时长</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{total_segments}</div>
+                    <div class="metric-label">总段数</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{total_sensitive}</div>
+                    <div class="metric-label">敏感词次数</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{total_alerts}</div>
+                    <div class="metric-label">告警次数</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{sensitive_rate:.3f}</div>
+                    <div class="metric-label">敏感词率</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value" style="color:{risk_color}">{risk_level}</div>
+                    <div class="metric-label">风险等级</div>
+                </div>
+            </div>
+        </div>
+        """
+
+    def _build_editing_html(self, editing_result=None) -> str:
+        """构建剪辑建议 HTML"""
+        if not editing_result:
+            return ""
+        
+        highlights = editing_result.get("highlights", [])
+        redundancies = editing_result.get("redundancies", [])
+        timeline = editing_result.get("timeline", {})
+        
+        highlights_html = ""
+        if highlights:
+            items = []
+            for h in highlights[:10]:
+                items.append(f"""
+                <div class="highlight-item">
+                    <span class="highlight-score">⭐ {h.get('score', 0)}</span>
+                    <strong>{self._format_time(h.get('start', 0))} - {self._format_time(h.get('end', 0))}</strong>
+                    <span class="tag">{h.get('type', '')}</span>
+                </div>
+                """)
+            highlights_html = f"""
+            <h3>高光片段 ({len(highlights)} 个)</h3>
+            {''.join(items)}
+            """
+        
+        redundancies_html = ""
+        if redundancies:
+            items = []
+            for r in redundancies[:10]:
+                items.append(f"""
+                <div class="highlight-item">
+                    <span class="highlight-score" style="background:#ff980022;color:#ff9800;">
+                        {self._format_time(r.get('start', 0))} - {self._format_time(r.get('end', 0))}
+                    </span>
+                    <strong>{r.get('type', '')}</strong>
+                    <div style="color:#888;font-size:12px;margin-top:4px;">{r.get('reason', '')}</div>
+                    <div style="color:#4caf50;font-size:12px;">💡 {r.get('suggestion', '')}</div>
+                </div>
+                """)
+            redundancies_html = f"""
+            <h3>冗余片段 ({len(redundancies)} 个)</h3>
+            {''.join(items)}
+            """
+        
+        timeline_html = ""
+        if timeline:
+            timeline_html = f"""
+            <h3>剪辑时间线</h3>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-value">{len(timeline.get('clips', []))}</div>
+                    <div class="metric-label">片段数</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{self._format_time(timeline.get('total_duration', 0))}</div>
+                    <div class="metric-label">输出时长</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{int(timeline.get('compression_ratio', 0) * 100)}%</div>
+                    <div class="metric-label">压缩比</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">{timeline.get('transition_count', 0)}</div>
+                    <div class="metric-label">转场数</div>
+                </div>
+            </div>
+            """
+        
+        return f"""
+        <div class="card">
+            <h2>🎬 自动剪辑建议</h2>
+            {timeline_html}
+            {highlights_html}
+            {redundancies_html}
+        </div>
+        """
+    
     def _generate_json(self, *args, **kwargs) -> str:
         """生成 JSON 结构化数据"""
         import json
-        transcript, scenes, visual_data, aligned_data, fused_data, highlights, media_info, output_dir = args
+        
+        # 解析参数（支持新旧两种调用方式）
+        viral_result = kwargs.get("viral_result")
+        live_stats = kwargs.get("live_stats")
+        
+        if len(args) >= 13:
+            transcript, scenes, visual_data, aligned_data, fused_data, highlights, media_info, output_dir, platform_analysis, platform_meta, editing_result, viral_result, live_stats = args[:13]
+        elif len(args) >= 11:
+            transcript, scenes, visual_data, aligned_data, fused_data, highlights, media_info, output_dir, platform_analysis, platform_meta, editing_result = args[:11]
+        elif len(args) >= 8:
+            transcript, scenes, visual_data, aligned_data, fused_data, highlights, media_info, output_dir = args[:8]
+            platform_analysis = kwargs.get("platform_analysis")
+            platform_meta = kwargs.get("platform_meta")
+            editing_result = kwargs.get("editing_result")
+        else:
+            transcript, scenes, visual_data, aligned_data, fused_data, highlights, media_info, output_dir = args
+            platform_analysis = kwargs.get("platform_analysis")
+            platform_meta = kwargs.get("platform_meta")
+            editing_result = kwargs.get("editing_result")
         
         data = {
             "meta": {
                 "generator": "video-analyzer",
-                "version": "3.0.0",
+                "version": "4.2.0",
                 "generated_at": datetime.now().isoformat(),
             },
             "media_info": media_info,
@@ -454,21 +783,45 @@ class ReportGenerator:
             "alignment": aligned_data,
             "fusion": fused_data,
             "highlights": highlights,
+            "platform_analysis": platform_analysis,
+            "platform_meta": platform_meta,
+            "editing_result": editing_result,
+            "viral_result": viral_result,
+            "live_stats": live_stats,
         }
         
         output_path = os.path.join(output_dir, "data.json")
         with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+            json.dump(data, f, ensure_ascii=False, indent=2, default=str)
         
         logger.info(f"JSON 数据已保存: {output_path}")
         return output_path
     
     def _generate_markdown(self, *args, **kwargs) -> str:
         """生成 Markdown 剧本"""
-        transcript, scenes, visual_data, aligned_data, fused_data, highlights, media_info, output_dir = args
+        
+        # 解析参数
+        viral_result = kwargs.get("viral_result")
+        live_stats = kwargs.get("live_stats")
+        
+        if len(args) >= 13:
+            transcript, scenes, visual_data, aligned_data, fused_data, highlights, media_info, output_dir, platform_analysis, platform_meta, editing_result, viral_result, live_stats = args[:13]
+        elif len(args) >= 11:
+            transcript, scenes, visual_data, aligned_data, fused_data, highlights, media_info, output_dir, platform_analysis, platform_meta, editing_result = args[:11]
+        elif len(args) >= 8:
+            transcript, scenes, visual_data, aligned_data, fused_data, highlights, media_info, output_dir = args[:8]
+            platform_analysis = kwargs.get("platform_analysis")
+            platform_meta = kwargs.get("platform_meta")
+            editing_result = kwargs.get("editing_result")
+        else:
+            transcript, scenes, visual_data, aligned_data, fused_data, highlights, media_info, output_dir = args
+            platform_analysis = kwargs.get("platform_analysis")
+            platform_meta = kwargs.get("platform_meta")
+            editing_result = kwargs.get("editing_result")
         
         md = self._build_markdown_content(
-            transcript, scenes, fused_data, highlights, media_info
+            transcript, scenes, fused_data, highlights, media_info,
+            platform_analysis, platform_meta, editing_result
         )
         
         output_path = os.path.join(output_dir, "script.md")
@@ -485,6 +838,11 @@ class ReportGenerator:
         fused_data: Dict,
         highlights: List[Dict],
         media_info: Dict,
+        platform_analysis=None,
+        platform_meta=None,
+        editing_result=None,
+        viral_result=None,
+        live_stats=None,
     ) -> str:
         """构建 Markdown 内容"""
         duration = media_info.get("duration", 0)
@@ -542,6 +900,136 @@ class ReportGenerator:
                     f"(评分: {h.get('score', 0)}) — "
                     f"{h.get('text_preview', '')[:60]}"
                 )
+        
+        # 平台分析
+        if platform_meta or platform_analysis:
+            lines.extend([
+                "",
+                "## 📱 平台分析",
+                "",
+            ])
+            
+            if platform_meta:
+                lines.extend([
+                    f"**平台:** {platform_meta.platform}",
+                    f"**标题:** {platform_meta.title}",
+                    f"**作者:** {platform_meta.author}",
+                    f"**点赞:** {platform_meta.like_count} | **评论:** {platform_meta.comment_count} | **播放:** {platform_meta.view_count}",
+                    "",
+                ])
+            
+            if platform_analysis:
+                opening = platform_analysis.opening_3s
+                ecommerce = platform_analysis.ecommerce_analysis
+                rhythm = platform_analysis.rhythm_analysis
+                
+                lines.extend([
+                    f"**开场类型:** {opening.get('hook_type', '未知')}",
+                    f"**带货视频:** {'是' if ecommerce.get('is_ecommerce') else '否'}",
+                    f"**节奏类型:** {rhythm.get('rhythm_type', '未知')}",
+                    "",
+                ])
+                
+                if ecommerce.get('is_ecommerce'):
+                    lines.extend([
+                        "### 带货分析",
+                        f"- 促销词: {', '.join(ecommerce.get('promotion_keywords', []))}",
+                        f"- 价格: {', '.join(ecommerce.get('price_mentions', []))}",
+                        f"- 行动号召: {', '.join(ecommerce.get('call_to_action', []))}",
+                        "",
+                    ])
+        
+        # 爆款预测
+        if viral_result:
+            lines.extend([
+                "",
+                "## 🔥 爆款预测",
+                "",
+                f"**爆款得分:** {viral_result.get('viral_score', 0)}/100",
+                f"**等级:** {viral_result.get('level', '未知')}",
+                f"**方法:** {viral_result.get('method', 'rule_based')}",
+                "",
+            ])
+            
+            benchmark = viral_result.get("benchmark", {})
+            if benchmark:
+                lines.extend([
+                    f"**分位:** {benchmark.get('percentile', '未知')}",
+                    f"**对比:** {benchmark.get('comparison', '未知')}",
+                    f"**潜力:** {benchmark.get('potential', '未知')}",
+                    "",
+                ])
+            
+            suggestions = viral_result.get("suggestions", [])
+            if suggestions:
+                lines.extend([
+                    "### 改进建议",
+                    "",
+                ])
+                for s in suggestions:
+                    lines.append(f"- **{s.get('title', '')}:** {s.get('description', '')}")
+                lines.append("")
+        
+        # 实时直播分析
+        if live_stats:
+            lines.extend([
+                "",
+                "## 🔴 实时直播分析",
+                "",
+                f"**运行时长:** {live_stats.get('duration', 0):.1f}s",
+                f"**总段数:** {live_stats.get('total_segments', 0)}",
+                f"**敏感词次数:** {live_stats.get('total_sensitive_detected', 0)}",
+                f"**告警次数:** {live_stats.get('total_alerts', 0)}",
+                f"**风险等级:** {live_stats.get('risk_level', '未知')}",
+                "",
+            ])
+        
+        # 剪辑建议
+        if editing_result:
+            lines.extend([
+                "",
+                "## 🎬 自动剪辑建议",
+                "",
+            ])
+            
+            highlights_list = editing_result.get("highlights", [])
+            redundancies = editing_result.get("redundancies", [])
+            timeline = editing_result.get("timeline", {})
+            
+            if timeline:
+                lines.extend([
+                    "### 时间线",
+                    f"- 片段数: {len(timeline.get('clips', []))}",
+                    f"- 输出时长: {self._format_time(timeline.get('total_duration', 0))}",
+                    f"- 压缩比: {int(timeline.get('compression_ratio', 0) * 100)}%",
+                    "",
+                ])
+            
+            if highlights_list:
+                lines.extend([
+                    "### 高光片段",
+                    "",
+                ])
+                for h in highlights_list[:10]:
+                    lines.append(
+                        f"- **{self._format_time(h.get('start', 0))} - "
+                        f"{self._format_time(h.get('end', 0))}** "
+                        f"(评分: {h.get('score', 0)}) - {h.get('type', '')}"
+                    )
+                lines.append("")
+            
+            if redundancies:
+                lines.extend([
+                    "### 冗余片段",
+                    "",
+                ])
+                for r in redundancies[:10]:
+                    lines.append(
+                        f"- **{self._format_time(r.get('start', 0))} - "
+                        f"{self._format_time(r.get('end', 0))}** "
+                        f"- {r.get('type', '')} - {r.get('reason', '')}"
+                    )
+                lines.append("")
         
         return "\n".join(lines)
     

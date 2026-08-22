@@ -1,46 +1,59 @@
-## Description: <br>
-Yufluentcn Product Pick analyzes user-provided or authorized marketplace product data from Amazon, TikTok Shop, and AliExpress to score product opportunities, surface blue-ocean candidates, and flag inventory and IP risks through Yufluent's cloud service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+选品分析 helps agents analyze Amazon, TikTok Shop, and AliExpress product candidates using BSR, sales signals, pricing, reviews, margin, competition, and IP-risk signals through Yufluent's cloud product-pick service.
 
-## Publisher: <br>
-[metahuan](https://clawhub.ai/user/metahuan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[metahuan](https://clawhub.ai/user/metahuan)
 
-## Use Case: <br>
-E-commerce operators, sourcing teams, and agents use this skill to evaluate product candidates, compare marketplace demand and competition signals, and prepare go, watch, or no-go sourcing recommendations. It is intended for authorized marketplace data, pasted candidate tables, or approved API exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product candidates, search terms, pricing, cost, margin, and inventory-capital context are sent to Yufluent's cloud API. <br>
-Mitigation: Use the skill only with data approved for cloud processing, avoid unnecessary sensitive business details, and scope TOKENAPI_KEY to trusted use. <br>
-Risk: Automatic marketplace discovery can collect and submit browser-extracted marketplace data. <br>
-Mitigation: Run discovery only on authorized pages or approved data sources and review discovered candidates before submitting them for analysis. <br>
-Risk: Go, watch, no-go and IP-risk suggestions may be incomplete or unsuitable for final sourcing decisions. <br>
-Mitigation: Treat results as decision support, verify IP and compliance risks manually, and perform business review before purchasing inventory. <br>
-Risk: Misconfigured TOKENAPI_KEY or BROWSER_SERVICE_URL could expose credentials or route data to an untrusted service. <br>
-Mitigation: Store credentials in environment variables or a secure secret manager and point browser and API settings only at trusted services. <br>
+## Use Case:
 
+E-commerce operators, sourcing teams, and agents use this skill to turn browser-extracted, pasted, or authorized API product data into go, watch, or no-go product-selection guidance. It is intended for product research, inventory planning, blue-ocean screening, and competition or IP-risk review before procurement decisions.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/metahuan/skills/yufluentcn-product-pick) <br>
-- [Yufluent homepage](https://claw.changzhiai.com) <br>
-- [Publisher profile](https://clawhub.ai/user/metahuan) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or text explanations with JSON skill-run results and optional saved output files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires TOKENAPI_KEY. Optional browser discovery uses BROWSER_SERVICE_URL and sends product candidates, search terms, pricing, margin, and inventory-capital context to Yufluent's cloud API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Product candidate data, search terms, and browser-extracted market data are sent to Yufluent's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that data sharing is acceptable for the workflow and account.
+
+Risk: Browser-based discovery depends on the configured Browser Service and the pages it can access.
+
+Mitigation: Keep BROWSER_SERVICE_URL pointed at a trusted local or managed Browser Service and use authorized pages or approved data exports.
+
+Risk: The skill depends on the requests package for network calls.
+
+Mitigation: Pin or constrain the requests dependency before production deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/metahuan/skills/yufluentcn-product-pick)
+- [Yufluent Product Pick homepage](https://www.changzhiai.com/skills/product-pick)
+- [Yufluent API console](https://claw.changzhiai.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Formatted text or JSON product research report with CLI metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include blue_ocean_score, competition_score, ip_risk, capital_impact, and verdict fields from the Yufluent product-pick API.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

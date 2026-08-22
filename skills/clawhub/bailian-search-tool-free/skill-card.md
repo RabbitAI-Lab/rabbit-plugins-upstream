@@ -1,43 +1,58 @@
-## Description: <br>
-bailian-search-tool-free helps agents query Alibaba Cloud Bailian WebSearch-style sources and return concise search results for fact lookup, lightweight research, and real-time information gathering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+百炼搜索工具-免费版 helps agents run AI-optimized web searches through the Bailian API and return concise multi-source results for personal developers.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Use this skill when an agent needs public web-search context, quick factual lookup, or lightweight multi-topic research through Bailian-style search results. It is not appropriate for sensitive searches, private business terms, advertising management, black-hat SEO, or search manipulation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Usable wherever the agent environment, network policy, and applicable terms allow access to ClawHub, Alibaba Cloud Bailian or DashScope services, and the public web sources queried by the skill. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The authoritative security review marks the skill as suspicious because it appears intended for external web search but uses broader, less-scoped instructions than a simple read-only search tool should. <br>
-Mitigation: Review the skill before installing, restrict use to non-sensitive public searches, and keep agent permissions limited to the minimum needed for search execution. <br>
-Risk: The artifact describes command-line search behavior and an installed script, but the inspected artifact only includes SKILL.md. <br>
-Mitigation: Confirm the expected script or runtime integration is present in the installed package before relying on the skill in an agent workflow. <br>
-Risk: Search queries may be sent to external services and public web providers. <br>
-Mitigation: Do not submit secrets, credentials, private business terms, regulated data, or user-sensitive content as search queries. <br>
+## Use Case:
 
+Developers and AI-agent builders use this skill to run web searches for facts, keyword research, SEO analysis, and early topic research, then pass concise multi-source results into downstream agent responses. The artifact states it is not suited for black-hat SEO, search-engine manipulation, or paid ad management.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/bailian-search-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Search result text or structured command output, typically including titles, links, summaries, cleaned content, status fields, logs, and optional saved markdown/text files.] <br>
-**Output Parameters:** [Search query text and an optional result count, with artifact evidence describing a default of 5 and a maximum of 20 results.] <br>
-**Other Properties Related to Output:** [Requires network access and a configured DASHSCOPE_API_KEY for Bailian or DashScope access; results should be reviewed for accuracy and source quality before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 <br>
+Risk: Shell and write-style authority may allow commands or local file operations beyond basic searching.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation and run only the specific search commands needed in a constrained workspace.
+
+Risk: Search queries, cached results, and saved research files can expose confidential or regulated topics on disk.
+
+Mitigation: Use the skill only for non-sensitive web search or keyword research, and avoid saving or caching confidential queries or results.
+
+Risk: The artifact gives broad examples for creating, deleting, saving, and caching data.
+
+Mitigation: Treat file-modifying examples as optional and require explicit user confirmation before executing them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/bailian-search-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and plain-text search result output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search result count is configurable in the artifact from 1 to 20 results.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

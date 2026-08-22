@@ -1,43 +1,63 @@
-## Description: <br>
-Retrieves translated patent claim text from the Zhihuiya (PatSnap) patent database in Chinese, English, or Japanese for one patent at a time. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+从智慧芽专利数据库获取翻译后的专利权利要求，支持按专利 ID 或公开号查询中文、英文或日文权利要求文本。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users, developers, and patent analysts use this skill to retrieve translated claim text for a known patent ID or publication number. It is suited to single-patent claim review, claim translation, and family-patent fallback when the original claims are unavailable. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Patent identifiers, API credentials, and session metadata are sent to LinkFox services. <br>
-Mitigation: Use only when those disclosures are acceptable, and avoid confidential patent work unless the deployment has appropriate data-handling controls. <br>
-Risk: Full API responses are cached or written locally in the linkfox session data directory. <br>
-Mitigation: Review, protect, and clean up saved linkfox data according to the workspace's retention and access-control requirements. <br>
-Risk: The skill can report feedback automatically without a clear consent step. <br>
-Mitigation: Review feedback behavior before deployment and disable or avoid feedback reporting where user consent or confidentiality requirements apply. <br>
+## Use Case:
 
+External users and patent-analysis agents use this skill to retrieve translated patent claim text for known patent IDs or publication numbers, including optional family-patent substitution when original claims are unavailable.
 
-## Reference(s): <br>
-- [API reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-claim-data-translated) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses and saved JSON files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes complete API responses under a local linkfox session data directory; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The skill contacts LinkFox/PatSnap services with an API key and patent query identifiers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a key intended for this service, confirm identifiers and language before calling, and avoid sending sensitive patent lists unless the data-sharing path is acceptable.
+
+Risk: Full patent-query results are saved locally in the current workspace.
+
+Mitigation: Run the skill from an appropriate workspace and review or remove saved LinkFox result and cache files when they contain sensitive information.
+
+Risk: Authentication and billing recovery can involve account login, OTP handling, API-key generation, and payment-order creation.
+
+Mitigation: Only enter OTP codes or create payment orders when intentionally managing a LinkFox account, and prefer a secure secret store for API keys.
+
+Risk: Queries consume LinkFox credits based on returned patent-claim result count.
+
+Mitigation: Tell the user before additional calls that credits may be consumed, especially for batch queries or retries.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-claim-data-translated)
+- [API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with JSON API responses and saved JSON result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full patent-query responses under a local linkfox session directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.8 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

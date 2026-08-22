@@ -1,42 +1,64 @@
-## Description: <br>
-Helps agents manage authorized Shopee Shop Flash Sale campaigns through LinkFox scripts for time-slot lookup, creation, listing, item management, updates, and deletion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance and scripts for managing Shopee Shop Flash Sale campaigns, including time-slot lookup and creating, updating, listing, adding items to, and deleting flash-sale campaigns.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketplace operators, and developers use this skill to administer Shop Flash Sale activity for already authorized Shopee stores. It is suited for retrieving eligible time slots and campaign details, adding or updating sale items, and deleting campaigns or items when explicitly requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, add to, or delete Shopee Shop Flash Sale campaigns for an authorized store. <br>
-Mitigation: Confirm every write or delete action, including target shop, campaign, item list, and requested payload, before running the corresponding script. <br>
-Risk: Full API responses may be persisted locally and can include operational store or campaign data. <br>
-Mitigation: Use a controlled workspace and periodically delete generated linkfox response archives, especially on shared, backed-up, or reused machines. <br>
+## Use Case:
 
+External sellers, operators, and developers use this skill to manage authorized Shopee Shop Flash Sale activity through LinkFox-provided scripts and reference guidance.
 
-## Reference(s): <br>
-- [Skill API Reference](references/api.md) <br>
-- [Shopee Shop Flash Sale API](https://open.shopee.com/documents/v2/v2.shop_flash_sale.get_time_slot_id?module=123&type=1) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-shop-flash-sale) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses saved to local files with stdout summaries or full inline JSON when requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts may call LinkFox gateway APIs for an authorized Shopee store and write response archives under a local linkfox directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill requires LinkFox API-key access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the publisher is trusted and keep API keys scoped, private, and revocable.
+
+Risk: The skill can create, update, and delete Shopee flash-sale data.
+
+Mitigation: Review shop identifiers, campaign identifiers, item lists, prices, and time slots before running write or delete operations.
+
+Risk: The evidence notes account, billing, payment-order, and inconsistent cost-disclosure concerns.
+
+Mitigation: Confirm expected costs and plan terms with the publisher before using billing or onboarding commands.
+
+Risk: Custom LinkFox endpoint environment variables can redirect requests.
+
+Mitigation: Avoid custom endpoint settings unless the destination is known and trusted.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-shop-flash-sale)
+- [Shopee Shop Flash Sale API Reference](https://open.shopee.com/documents/v2/v2.shop_flash_sale.get_time_slot_id?module=123&type=1)
+- [Shop Flash Sale API Overview](references/api.md)
+- [LinkFox Onboarding and Account Guidance](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON, Files, Configuration]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes complete API responses to dated JSON files and may print summaries for responses over 8 KB.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

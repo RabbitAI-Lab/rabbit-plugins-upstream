@@ -1,16 +1,16 @@
-# Evolution Protocol：紧箍咒自进化协议
+# 紧箍咒 自进化协议
 
 > "今天最好的表现，是明天最低的要求。" —— 这不是旁白，这是机制。
 
 ## 核心理念
 
-紧箍咒默认是无状态的——每次会话冷启动，不记得上次做了什么。自进化协议让 紧箍咒 变成有状态的：**记住你做过的最好，然后永远不允许你低于那个水平。**
+紧箍咒 v3 默认是无状态的——每次会话冷启动，不记得上次做了什么。自进化协议让 紧箍咒 变成有状态的：**记住你做过的最好，然后永远不允许你低于那个水平。**
 
-这就是仙班的"Only up"规矩：修为只能涨不能跌，标准只能抬不能降。
+这就是大厂的"Only up"文化：绩效只能上不能下，标准只能抬不能降。
 
 ## 运行时状态文件
 
-`data/evolution.md` 是自进化的持久化存储。不存在时自动创建。
+`~/.xuanzang/evolution.md` 是自进化的持久化存储。不存在时自动创建。
 
 ### 文件结构
 
@@ -40,7 +40,7 @@
 
 ### 阶段一：会话启动 — 加载基线
 
-检查 `data/evolution.md` 是否存在：
+检查 `~/.xuanzang/evolution.md` 是否存在：
 
 ```
 evolution.md 存在？
@@ -141,6 +141,32 @@ evolution.md 存在？
 - 2026-03-14 修了 user.ts 的空指针但没扫 admin.ts → 教训：修完一个扫同模块
 ```
 
+## 基线初始化模板
+
+首次创建 `~/.xuanzang/evolution.md` 时使用：
+
+```markdown
+# 紧箍咒 自进化基线
+
+## 性能统计
+- 最近会话 [紧箍咒生效] 次数: 0
+- 历史最高: 0
+- 最近 5 次平均: 0
+- 连续达标会话: 0
+
+## 当前基线（上次会话最佳实践）
+（首次启动，暂无基线。本次会话的表现将成为基线。）
+
+## 已内化模式（每次必做）
+（暂无。当某个主动行为重复出现 3+ 次后自动晋升。）
+
+## 项目级记忆
+（暂无。在项目中发现有价值的信息时自动记录。）
+
+## 反模式记录
+（暂无。踩坑后自动记录。）
+```
+
 ## 与现有系统的集成点
 
 | 系统 | 集成方式 |
@@ -152,26 +178,6 @@ evolution.md 存在？
 | **/pua:kpi** | KPI 报告卡纳入进化统计 |
 | **P9 验收** | P9 可以看到 P8 的进化轨迹 |
 | **auto memory** | evolution.md 的"项目级记忆"与 auto memory 互补（evolution 记行为模式，memory 记项目事实） |
-
-## CLI 命令参考
-
-三阶段协议通过 `scripts/evolution-engine.py` 落地执行：
-
-| 阶段 | 命令 | 用法 | 说明 |
-|------|------|------|------|
-| 阶段一 | `init` | `evolution-engine.py init` | 首次启动：创建 `data/evolution.md`，已存在时回退为 `load` |
-| 阶段一 | `load` | `evolution-engine.py load` | 会话启动：加载基线、已内化模式、项目记忆 |
-| 阶段二 | `track` | `evolution-engine.py track <behavior> <category>` | 追踪单个主动行为，分类写入会话事件 |
-| 阶段二 | `add-memory` | `evolution-engine.py add-memory <key> <value>` | 记录项目级记忆（构建命令、已知陷阱等） |
-| 阶段二 | `add-antipattern` | `evolution-engine.py add-antipattern <trap> <lesson>` | 记录反模式（踩坑 + 教训） |
-| 阶段三 | `complete` | `evolution-engine.py complete` | 任务完成：集合比对基线、更新统计、输出升级/降级 |
-| — | `status` | `evolution-engine.py status` | `load` 的别名，扫 stale state 并输出状态摘要 |
-
-**调度规则**：
-- `init` / `load` 由 P8 在技能加载时调用，后续会话仅调 `load`
-- `track` 每次 [紧箍咒生效 🔥] 标记时触发
-- `add-memory` / `add-antipattern` 由 P8 在方法论沉淀阶段按需写入
-- `complete` 在主要任务完成后由 P8 调用，刷新基线
 
 ## 防滥用
 

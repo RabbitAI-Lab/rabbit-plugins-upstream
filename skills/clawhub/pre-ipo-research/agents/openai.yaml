@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pre-IPO Research"
+  short_description: "查询 Jarsy Live 与 Presale 标的、估值及数据更新时间"
+  default_prompt: "Use $pre-ipo-research to query current Pre-IPO assets, valuations, and freshness."

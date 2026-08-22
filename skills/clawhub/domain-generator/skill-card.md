@@ -1,41 +1,59 @@
-## Description: <br>
-Generate modern brandable domains from a user-supplied keyword, concept, or specific taken domain. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered domain naming consultation that helps users turn a vague project idea into candidate registrable domain names through a guided conversation and DomainKits availability checks.
 
-## Publisher: <br>
-[abtdomain](https://clawhub.ai/user/abtdomain) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[abtdomain](https://clawhub.ai/user/abtdomain)
 
-## Use Case: <br>
-External users, founders, marketers, and developers use this skill when they already have a keyword, concept, or taken target and want a small shortlist of creative domain candidates checked for availability at that moment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Domain availability and pricing can change after the skill checks a candidate. <br>
-Mitigation: Treat results as point-in-time signals and verify availability, standard or premium status, and registration and renewal price before acting. <br>
-Risk: A domain that appears available may still create brand collision or trademark risk. <br>
-Mitigation: Use the skill's public-web collision check as a screening step only and complete independent legal and trademark review before launch. <br>
+## Use Case:
 
+External users and developers use this skill to clarify a project concept, explore brand-name directions, and check domain acquisition options with DomainKits before choosing a name.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/abtdomain/skills/domain-generator) <br>
-- [Publisher profile](https://clawhub.ai/user/abtdomain) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown shortlist with domain candidates, naming territory, formation, creative rationale, seed connection, availability timestamp, pricing, provider, and caveats.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Availability is explicitly point-in-time; inconclusive checks are separated from verified candidates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 <br>
+Risk: Users may share sensitive launch plans or business details while asking for domain ideas.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only the details needed for naming and avoid confidential strategy, customer, or launch information.
+
+Risk: API keys may be exposed if pasted into chat or configuration text.
+
+Mitigation: Use platform-managed connector authentication or environment secret handling for DOMAINKITS_API_KEY.
+
+Risk: Domain availability and pricing can be misleading if suggestions are presented without live verification.
+
+Mitigation: Label domains as available only after DomainKits bulk availability checks and treat prices as current search results.
+
+## Reference(s):
+
+- [DomainKits MCP](https://domainkits.com/mcp)
+- [DomainKits Pricing](https://domainkits.com/pricing)
+- [ClawHub Skill Page](https://clawhub.ai/abtdomain/skills/domain-generator)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Conversational Markdown with domain candidates, availability layers, pricing notes, and optional MCP configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a DomainKits MCP connection; directly registrable domains should only be labeled available after bulk availability verification.]
+
+## Skill Version(s):
+
+1.1.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

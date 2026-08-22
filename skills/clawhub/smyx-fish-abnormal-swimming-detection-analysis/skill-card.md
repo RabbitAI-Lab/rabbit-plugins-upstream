@@ -1,46 +1,58 @@
-## Description: <br>
-Analyzes fixed-camera aquarium images or videos to identify abnormal fish swimming posture, quantify abnormal-duration ratios, and produce structured monitoring reports with suggested next actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes aquarium camera images or videos to flag side-swimming, upside-down posture, axial rotation, floating or sinking behavior, and report abnormal-duration ratios for fish health monitoring.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Aquarium keepers, aquarium operators, and developers use this skill to analyze fixed-camera fish media for side-swim, upside-down posture, axial rotation, floating or sinking behavior, and abnormal-duration ratios. The skill supports visual posture monitoring and report generation, not fish disease diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local or URL-based aquarium media may be sent to lifeemergence.com services for cloud analysis. <br>
-Mitigation: Use only authorized aquarium media and confirm that users understand remote processing before execution. <br>
-Risk: The skill may create or reuse an internal identity and store service tokens in the workspace data database. <br>
-Mitigation: Run in a controlled workspace, review stored credentials after use, and rotate or remove service tokens when access is no longer needed. <br>
-Risk: History queries can retrieve cloud-stored report records automatically. <br>
-Mitigation: Limit history-query use to authorized users and review report links before sharing outputs. <br>
-Risk: Visual posture findings can be mistaken for veterinary diagnosis. <br>
-Mitigation: Present outputs as posture monitoring only and direct significant or persistent abnormalities to aquarium professionals or ornamental fish veterinarians. <br>
+## Use Case:
 
+External aquarists, aquarium operators, ornamental fish farms, and smart-aquarium integrators use this skill to analyze fixed-camera fish-tank video or image inputs and review structured posture-health reports. The skill supports visual monitoring and suggested next actions, not veterinary diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-abnormal-swimming-detection-analysis) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON report with posture classifications, abnormal-duration metrics, recommended actions, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a user-specified file and may query historical cloud reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+Risk: Aquarium videos, video URLs, and history queries are sent to the publisher's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with consent for remote processing, disclose cloud submission before deployment, and avoid sending sensitive or unauthorized footage.
+
+Risk: The skill can silently create or reuse a persistent internal identity and store tokens locally.
+
+Mitigation: Require explicit opt-in for identity creation and history lookup, document token storage and database location, and provide a way to inspect, reset, or delete local identity state.
+
+Risk: Visual posture analysis may be mistaken for a medical diagnosis or may misclassify species with naturally unusual swimming postures.
+
+Mitigation: Present outputs as visual monitoring signals only, configure species-specific baselines and thresholds, and direct users to qualified aquarium or veterinary professionals for health decisions.
+
+## Reference(s):
+
+- [API documentation](artifact/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files, Guidance]
+
+**Output Format:** [Markdown text with structured JSON report content and optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports can include abnormal posture classifications, observed duration metrics, abnormal-ratio summaries, history listings, and export links.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence; artifact frontmatter says 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

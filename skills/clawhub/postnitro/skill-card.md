@@ -1,47 +1,60 @@
-## Description: <br>
-Create on-brand social media carousels and single-image posts and schedule them to LinkedIn, Instagram, TikTok, and Threads from a single command. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PostNitro helps an agent create on-brand social media carousels, single-image posts, and short videos, then draft or schedule them across LinkedIn, Instagram, TikTok, and Threads.
 
-## Publisher: <br>
-[iammuneeb](https://clawhub.ai/user/iammuneeb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iammuneeb](https://clawhub.ai/user/iammuneeb)
 
-## Use Case: <br>
-External users, marketers, and developers use PostNitro to create, import, and schedule branded carousel or single-image social posts through a scriptable CLI workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses PostNitro credentials and publishing permissions to create or schedule social posts. <br>
-Mitigation: Install it only for intended PostNitro publishing workflows, prefer an environment variable or per-command API key on shared machines, and clear saved credentials when they are no longer needed. <br>
-Risk: A SCHEDULED post can publish live to selected social accounts. <br>
-Mitigation: Confirm the target account and scheduled time before using SCHEDULED, and use DRAFT when the publishing details are uncertain. <br>
-Risk: Delete and disconnect commands can cancel scheduled posts or affect linked social accounts. <br>
-Mitigation: Use destructive commands only with explicit confirmation and review the selected schedule or social account before passing --yes. <br>
-Risk: Large batches or AI image generation can consume paid PostNitro credits. <br>
-Mitigation: Warn users before large batch runs or AI image generation and verify that the account has the required subscription and quota. <br>
+## Use Case:
 
+External users and developers use this skill to automate PostNitro workflows for generating or importing social content, rendering designs or videos, and scheduling drafts or live posts through connected social accounts.
 
-## Reference(s): <br>
-- [PostNitro CLI command reference](references/cli-reference.md) <br>
-- [PostNitro skill examples](examples/EXAMPLES.md) <br>
-- [PostNitro homepage](https://postnitro.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/iammuneeb/skills/postnitro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands emit JSON output and can create drafts, schedule posts, or manage linked social accounts when executed with valid PostNitro credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+Risk: A connected PostNitro workspace can schedule or publish real social posts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the account, platform, content, and scheduled time before any SCHEDULED action, and use DRAFT when unsure.
+
+Risk: The PostNitro API key grants access to the user's PostNitro automation workflow.
+
+Mitigation: Prefer POSTNITRO_API_KEY or --api-key on shared machines, avoid persistent credentials when possible, and restrict any saved config file permissions.
+
+Risk: Some documented CLI commands delete schedules, disconnect social accounts, or delete audio records.
+
+Mitigation: Require an explicit user confirmation for destructive commands and verify target IDs before using commands that require --yes.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/iammuneeb/skills/postnitro)
+- [PostNitro Homepage](https://postnitro.ai)
+- [PostNitro CLI Reference](references/cli-reference.md)
+- [PostNitro CLI Examples](examples/EXAMPLES.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill's documented CLI workflow returns JSON from PostNitro commands and may produce design, PDF, PNG, or MP4 URLs through the service.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

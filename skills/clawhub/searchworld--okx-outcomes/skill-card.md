@@ -1,48 +1,65 @@
-## Description: <br>
-OKX Outcomes helps agents browse YES/NO event-contract markets, guide OAuth and wallet setup, inspect account state, and prepare confirmed CLOB or CTF trading commands through the okx-outcomes CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for OKX Outcomes YES/NO event-contract markets via the okx-outcomes binary, including market discovery, account views, order workflows, CTF actions, setup, authentication, and wallet binding.
 
-## Publisher: <br>
-[searchworld](https://clawhub.ai/user/searchworld) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[searchworld](https://clawhub.ai/user/searchworld)
 
-## Use Case: <br>
-Developers and trading-support agents use this skill to operate OKX Outcomes workflows: discover event markets, review prices and positions, complete setup, and prepare order, cancellation, split, merge, or redeem actions with user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, subject to OKX Outcomes regional availability and the configured Global or US endpoint. <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Install guidance includes an unverified remote shell installer in a high-impact financial workflow. <br>
-Mitigation: Prefer a pinned release, checksum or signature verification, and manual review before executing any installer. <br>
-Risk: The workflow can read account state and, after confirmation, place or cancel orders and run CTF actions. <br>
-Mitigation: Use the documented dry-run preview, require an explicit confirmation before writes, and verify account orders or positions after execution. <br>
-Risk: Private keys or signing material could be exposed if shared in chat or passed directly to commands. <br>
-Mitigation: Never paste private keys into chat; rely on the local keyring and setup bind flow, and rotate credentials if a key is exposed. <br>
+## Use Case:
 
+External users and developers use this skill to operate OKX Outcomes event markets from an agent, including browsing markets, checking balances and positions, preparing trades, and completing setup or authentication flows.
 
-## Reference(s): <br>
-- [OKX](https://www.okx.com) <br>
-- [Setup & Authentication](references/setup-auth.md) <br>
-- [Cross-Command Workflows](references/workflows.md) <br>
-- [Account Commands](references/account-commands.md) <br>
-- [Data Commands](references/data-commands.md) <br>
-- [CLOB Commands](references/clob-commands.md) <br>
-- [CTF Commands](references/ctf-commands.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with CLI command examples and JSON-oriented workflow steps] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires okx and okx-outcomes binaries; write actions require a dry-run preview, explicit user confirmation, and post-action verification.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata and skill metadata) <br>
+Risk: The skill can guide financial trading actions that use local OAuth and signing-key access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require a dry-run preview, verify order details, and proceed with write actions only after the user gives the required confirmation.
+
+Risk: The release includes an unverified raw curl-to-shell installer path for the outcomes binary.
+
+Mitigation: Prefer the versioned npm package or a signed, versioned release with checksum verification before installing the CLI.
+
+Risk: A signing private key could be exposed if entered into chat or passed directly to commands.
+
+Mitigation: Do not accept private keys in chat; use the setup and keyring flow, and tell the user to revoke or rotate any pasted key.
+
+## Reference(s):
+
+- [OKX](https://www.okx.com)
+- [OKX Outcomes CLI Releases](https://github.com/okx/outcomes-cli/releases)
+- [OKX Outcomes CLI Reference](https://github.com/okx/outcomes-cli/blob/main/docs/cli-reference.md)
+- [Setup & Authentication](references/setup-auth.md)
+- [Data / Search Commands](references/data-commands.md)
+- [Account Commands](references/account-commands.md)
+- [CLOB Commands](references/clob-commands.md)
+- [CTF Commands](references/ctf-commands.md)
+- [Cross-Command Workflows](references/workflows.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Markdown]
+
+**Output Format:** [Markdown with inline shell commands and JSON command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include dry-run trade previews, setup prompts, and explicit user confirmation gates for write actions.]
+
+## Skill Version(s):
+
+1.4.4 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

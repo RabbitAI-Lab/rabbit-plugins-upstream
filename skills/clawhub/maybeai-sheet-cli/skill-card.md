@@ -1,56 +1,67 @@
-## Description: <br>
-Use when the user works with MaybeAI spreadsheets through the mbs CLI for workbook inspection, local or remote-URL file import, native cross-workbook import/export, worksheet/range/table writes, full worksheet data refreshes that keep headers, formulas, worksheet styling, chart/image CRUD, dashboard validate/refresh flows, or sharing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when the user works with MaybeAI spreadsheets through the mbs CLI for workbook inspection, local or remote-URL file import, native cross-workbook import/export, worksheet/range/table writes, full worksheet data refreshes that keep headers, formulas, worksheet styling, chart/image CRUD, dashboard validate/refresh/export-template flows, or sharing.
 
-## Publisher: <br>
-[no7dw](https://clawhub.ai/user/no7dw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[no7dw](https://clawhub.ai/user/no7dw)
 
-## Use Case: <br>
-Developers and operators use this skill to drive MaybeAI spreadsheet work through the mbs CLI, including workbook inspection, imports, targeted reads and writes, formulas, styling, chart and image operations, dashboard refreshes, and sharing. It is intended for deliberate spreadsheet automation where commands are inspected, targeted, and verified before results are reported. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Spreadsheet automation can expose sensitive workbook data or use a MaybeAI API token against unintended data. <br>
-Mitigation: Install only if you trust MaybeAI with the referenced spreadsheet data and token; prefer worksheet listing or narrow reads before broad profiling of sensitive workbooks. <br>
-Risk: Sharing commands can grant unintended workbook access. <br>
-Mitigation: Confirm the exact workbook, recipient, and viewer/editor/public setting before running sharing commands. <br>
-Risk: Exports can write spreadsheet files to unapproved or conflicting local paths. <br>
-Mitigation: Export only to approved, non-conflicting local paths. <br>
-Risk: Writes, imports, refreshes, formulas, and styling can modify the wrong worksheet or create misleading spreadsheet results. <br>
-Mitigation: Inspect workbook metadata first, target worksheets explicitly, use dry runs where available, pass --verify on supported writes, and read back or check errors before reporting success. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect, import, edit, style, validate, export, and share MaybeAI spreadsheets through the mbs CLI while choosing the correct Sheet, Base Table, or SQL Config workflow.
 
-## Reference(s): <br>
-- [MaybeAI Uni Homepage](https://github.com/OmniMCP-AI/maybeai-uni) <br>
-- [Command Catalog](references/cli-commands.md) <br>
-- [Read and Write Reference](references/read-write.md) <br>
-- [File Management Reference](references/file-management.md) <br>
-- [Workbook Profile Reference](references/workbook-profile.md) <br>
-- [Sharing and Permissions Reference](references/permission-sharing.md) <br>
-- [Formulas and SQL Reference](references/formulas-sql.md) <br>
-- [Pivot Tables Reference](references/pivot-tables.md) <br>
-- [Lineage Trace Reference](references/lineage-trace.md) <br>
-- [Charts and Formatting Reference](references/charts-formatting.md) <br>
-- [Errors and Recovery Reference](references/errors-recovery.md) <br>
-- [Clickable References Guide](references/clickable-refs.md) <br>
-- [SQL Formula Showcase](references/sql-formula-showcase.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should name exact workbooks, worksheets, ranges, files, and verification steps when proposing or reporting spreadsheet actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.16.2 (source: frontmatter and server release evidence) <br>
+Risk: The skill can guide an agent to change, share, delete, restore, or migrate MaybeAI workbooks using MAYBEAI_API_TOKEN.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval before public links, editor grants, workbook deletion, history restore, or one-way conversion, and verify workbook metadata plus post-operation results.
+
+Risk: Spreadsheet operations may touch sensitive business or personal data.
+
+Mitigation: Confirm the intended workbook, worksheet, and data classification before import, export, sharing, or write operations; avoid public or editor access unless specifically approved.
+
+Risk: The skill includes environment-changing install and setup guidance.
+
+Mitigation: Review package installation and setup commands before execution and install only in approved environments.
+
+## Reference(s):
+
+- [MaybeAI Sheet CLI Skill Page](https://clawhub.ai/no7dw/skills/maybeai-sheet-cli)
+- [MaybeAI CLI Homepage](https://github.com/OmniMCP-AI/maybeai-uni)
+- [README](README.md)
+- [Command Catalog](references/cli-commands.md)
+- [Read and Write Reference](references/read-write.md)
+- [Base Mode Verification](references/base-mode-verification.md)
+- [File Management](references/file-management.md)
+- [Formulas and SQL](references/formulas-sql.md)
+- [Permission and Sharing](references/permission-sharing.md)
+- [Charts and Formatting](references/charts-formatting.md)
+- [Pivot Tables](references/pivot-tables.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON/configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires mbs and MAYBEAI_API_TOKEN for live spreadsheet operations.]
+
+## Skill Version(s):
+
+0.20.6 (source: SKILL.md frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,59 @@
-## Description: <br>
-Using a fixed camera with microphone in the living room, the skill analyzes audio and video to estimate sound intensity, body-movement intensity, and a low, medium, or high family conflict intensity level. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Using a fixed camera with microphone in the living room, the skill analyzes audio and video to estimate sound intensity, body-movement intensity, and family conflict intensity level as low, medium, or high.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and family-support professionals use this skill to process consented household audio/video or video URLs and produce conflict-intensity indicators, gentle reminders, and report links. It is intended as an auxiliary monitoring and reporting tool, not a legal, psychological, or emergency-response service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Household audio/video or video URLs may be sent to external LifeEmergence services for processing. <br>
-Mitigation: Use only with explicit informed consent from affected household members and only where cloud processing is acceptable; prefer minimized, masked, or metric-only workflows when available. <br>
-Risk: The skill may create or reuse account identity, persist token data, and retrieve account-linked historical conflict reports. <br>
-Mitigation: Review local identity and token storage before installation, restrict access to report history, and remove stored credentials or identifiers when the deployment no longer needs them. <br>
-Risk: Conflict intensity estimates can be wrong or misleading in sensitive household situations. <br>
-Mitigation: Treat outputs as advisory indicators; do not label people as perpetrators or victims, do not use the skill as a substitute for legal or mental-health support, and do not trigger emergency actions without prior consent and human review. <br>
+## Use Case:
 
+External users and developers can use this skill to analyze consented living-room audio/video or URLs for structured conflict-intensity reports and gentle reminder guidance. It is intended as an auxiliary awareness and reporting tool, not as legal, therapeutic, or safety advice.
 
-## Reference(s): <br>
-- [Family Conflict Intensity API Documentation](artifact/references/api_doc.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-family-conflict-intensity-detect-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured report text with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include acoustic metrics, visual metrics, conflict intensity level, alert type, gentle reminder text, recommended action, and report export URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact SKILL.md frontmatter reports 1.0.6) <br>
+Risk: The skill processes highly sensitive household audio/video and may send media or URLs to a backend.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with clear consent from every affected household member, and avoid bystander or minor recordings unless there is a lawful basis.
+
+Risk: Reports may be associated with persistent identifiers and identity records may be stored locally.
+
+Mitigation: Review identity and report-retention behavior before deployment, and define a deletion process for local records and remote reports.
+
+Risk: Conflict-intensity results could be misused as determinations about legal, therapeutic, or personal safety status.
+
+Mitigation: Present results only as auxiliary acoustic and visual indicators, and avoid using the skill as legal, therapeutic, or emergency-response advice.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-family-conflict-intensity-detect-analysis)
+- [Skill API Documentation](references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-style structured analysis results with report links when available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include acoustic metrics, visual metrics, conflict intensity level, alert type, gentle reminder text, suggested action, and history-report tables.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter says 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/amazon-review-insights",
   "slug": "amazon-review-insights",
   "ownerHandle": null,
-  "version": "1.2.3",
-  "updatedAt": 1783352749960,
-  "contentHash": "42169a8234f38be36ac39aa49d1b96ff72e0a442209fa3b328b249d03963b4da",
-  "fetchedAt": "2026-07-26T18:19:37.633Z"
+  "version": "1.2.4",
+  "updatedAt": 1787378869612,
+  "contentHash": "f771ccb4e5235a30d8370f5ba1e82afbbf6a099cee5a32d8ea77e712ce40635a",
+  "fetchedAt": "2026-08-22T07:51:11.238Z"
 }

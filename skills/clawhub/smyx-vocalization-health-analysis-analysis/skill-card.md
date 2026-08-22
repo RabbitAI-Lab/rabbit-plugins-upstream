@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes acoustic features of livestock and poultry vocalizations to detect abnormal sounds such as coughing, wheezing, painful screams, and hoarse calls, then outputs respiratory health risk hints. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes acoustic features (frequency, duration, pitch, intensity) of livestock and poultry vocalizations to detect abnormal sounds such as coughing, wheezing, painful screams and hoarse calls, and outputs respiratory health risk hints.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and farm operators use this skill to screen livestock or poultry audio and video recordings for abnormal vocalization patterns, respiratory risk hints, and historical analysis reports. It supports non-contact herd health monitoring but does not provide veterinary diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Recordings, media URLs, and report queries are sent to the LifeEmergence/Smyx backend. <br>
-Mitigation: Use only recordings and URLs approved for that backend, and avoid sensitive farm audio, incidental human speech, or private report history unless the account linkage and retention model are acceptable. <br>
-Risk: The skill can create or reuse a persistent local identity and token cache automatically. <br>
-Mitigation: Run it in a controlled environment, review account linkage before installation, and clear local cached credentials when the skill should no longer access prior reports. <br>
-Risk: The output provides respiratory health risk hints rather than a veterinary diagnosis. <br>
-Mitigation: Treat results as screening signals and confirm health decisions with professional veterinary review and appropriate laboratory testing. <br>
+## Use Case:
 
+External developers and farm operations teams use this skill to analyze livestock or poultry audio and video for acoustic signs of abnormal vocalizations, then review respiratory-health risk hints and historical report links. The output is intended for non-contact herd or flock screening, not veterinary diagnosis or treatment planning.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-vocalization-health-analysis-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Smyx Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON text, with optional saved output files when requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include abnormal sound categories, event timing, respiratory risk level, historical report records, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release metadata; artifact frontmatter lists 1.0.2) <br>
+Risk: Submitted media is processed by cloud backend services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only recordings approved for cloud processing, avoid media containing unrelated sensitive audio, and review the configured service endpoints before deployment.
+
+Risk: The skill can silently create or reuse a backend identity and store account tokens or profile data locally.
+
+Mitigation: Run it in an isolated workspace, review identity and token handling before use, and clear or manage the workspace data database when persistent identity reuse is not desired.
+
+Risk: Respiratory-health outputs are screening hints rather than clinical diagnoses.
+
+Mitigation: Treat results as triage signals and confirm animal health decisions with a qualified veterinarian and appropriate lab testing.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-vocalization-health-analysis-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Interface Documentation](references/api_doc.md)
+- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, JSON, Files]
+
+**Output Format:** [Markdown text with structured JSON report content and report links; optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local audio/video files or URLs, historical report listing, and basic, standard, or json detail modes.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact frontmatter says 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

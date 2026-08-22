@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/alibabacloud-ecs-gpu-diagnosis",
   "slug": "alibabacloud-ecs-gpu-diagnosis",
   "ownerHandle": null,
-  "version": "0.0.1",
-  "updatedAt": 1782358414297,
-  "contentHash": "3ad96595fc19514e48cc8fcf17f6f7d9df56c277ecbd5a7f84e63c93475104f4",
-  "fetchedAt": "2026-07-26T18:23:50.005Z"
+  "version": "0.0.2",
+  "updatedAt": 1786947034621,
+  "contentHash": "5ddd28b2925b5fcc7ecd41cd75732cf1f26c45fd37bc86102a07d6d9e96f37f6",
+  "fetchedAt": "2026-08-22T08:09:25.974Z"
 }

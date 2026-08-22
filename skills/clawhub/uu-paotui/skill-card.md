@@ -1,43 +1,58 @@
-## Description: <br>
-uupaotui helps agents use UU Paotui same-city delivery and on-site help services for quotes, order creation, order lookup, cancellation, and courier tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+uupaotui lets an agent quote, place, inspect, cancel, and track UU Paotui same-city delivery and errand orders.
 
-## Publisher: <br>
-[uupt-mcp](https://clawhub.ai/user/uupt-mcp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[uupt-mcp](https://clawhub.ai/user/uupt-mcp)
 
-## Use Case: <br>
-External users and delivery operators use this skill through an agent to price, place, manage, cancel, and track real same-city courier or help-service orders. Developers can also use the included Node.js and Python command wrappers to connect agent workflows to the UU Paotui API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or cancel real courier orders using phone numbers, addresses, payment links, and rider tracking data. <br>
-Mitigation: Require explicit final user confirmation before order creation or cancellation, and disclose what personal and payment data will be sent to UU Paotui. <br>
-Risk: WeChat QR generation can share a payment URL with an external QR-code service. <br>
-Mitigation: Avoid QR generation unless the user accepts that sharing, or send the payment URL directly through a trusted channel. <br>
-Risk: Registration can automatically query public-IP services. <br>
-Mitigation: Prefer manual IP entry when privacy-sensitive users do not want automatic public-IP lookup. <br>
+## Use Case:
 
+Agents serving users who need same-city courier, pickup, purchasing, or errand help can use this skill to estimate costs, create UU Paotui orders, provide payment links when needed, view order details, cancel orders, and track couriers.
 
-## Reference(s): <br>
-- [UU Paotui Open Platform](https://open.uupt.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/uupt-mcp/skills/uu-paotui) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, API calls, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires node or python3, UU Paotui credentials, and user-supplied order details such as addresses and phone numbers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter says 1.0.6 and package.json says 1.0.0) <br>
+Risk: The skill handles phone numbers, SMS codes, addresses, payment links, and courier details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in trusted environments, collect only the information needed for the order, and protect the saved openId and local configuration files.
+
+Risk: The skill can create paid real-world delivery or errand orders without a final confirmation.
+
+Mitigation: Require an explicit user confirmation after price review and before running the create-order command.
+
+Risk: The skill includes a silent self-update path that can replace its own code from a remote source.
+
+Mitigation: Disable or remove silent self-update behavior and pin a reviewed version before operational use.
+
+## Reference(s):
+
+- [UU Paotui Open Platform](https://open.uupt.com)
+- [ClawHub Skill Page](https://clawhub.ai/uupt-mcp/skills/uu-paotui)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown]
+
+**Output Format:** [Markdown with inline shell commands and structured command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local configuration and payment QR-code files during registration or payment flows.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release, SKILL.md frontmatter, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

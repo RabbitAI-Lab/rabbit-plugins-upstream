@@ -1,44 +1,54 @@
-## Description: <br>
-UU Paotui delivery service skill helps an agent quote, create, manage, cancel, and track same-city delivery and on-site help orders through UU Paotui APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+UU跑腿同城配送服务，帮助代理处理同城帮送、帮取、帮买和现场帮办任务，并支持询价、下单、订单查询、取消订单和跑男位置追踪。
 
-## Publisher: <br>
-[uupt-mcp](https://clawhub.ai/user/uupt-mcp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[uupt-mcp](https://clawhub.ai/user/uupt-mcp)
 
-## Use Case: <br>
-External users and agents use this skill to arrange same-city courier delivery or on-site help, including price quotes, order creation, payment handoff, order lookup, cancellation, and courier tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can place real-world delivery or help orders and may not enforce a final confirmation before create-order actions. <br>
-Mitigation: Require explicit user confirmation after reviewing address, phone number, service details, price, and payment implications before running any create-order command. <br>
-Risk: The skill handles delivery addresses, phone numbers, courier tracking data, payment links, and account authorization data. <br>
-Mitigation: Minimize data shared with the agent, avoid broad automatic triggers, and store credentials in environment variables or a secret store instead of plaintext config files. <br>
-Risk: Payment QR generation and automatic public-IP lookup can contact third-party services outside the delivery API. <br>
-Mitigation: Use QR generation and automatic IP lookup only when necessary, disclose the external contact to users, and prefer a manually supplied IP when appropriate. <br>
+## Use Case:
 
+External users and agents use this skill to arrange local UU Paotui delivery or on-site errand services, including price checks, order creation, payment handoff, order lookup, cancellation, and courier tracking. It is appropriate only when the user intends to interact with real delivery services and provides the required phone, address, and order details.
 
-## Reference(s): <br>
-- [UU Paotui Open Platform](https://open.uupt.com) <br>
-- [ClawHub skill page](https://clawhub.ai/uupt-mcp/skills/uupt-delivery) <br>
-- [Publisher profile](https://clawhub.ai/user/uupt-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Files] <br>
-**Output Format:** [Markdown guidance with shell command examples, JSON API responses, payment links, and optional QR image files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local config.json during registration and payment_qrcode.png when QR-code payment is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server release evidence) <br>
+Risk: The skill can send phone numbers, addresses, public IP information, order details, and payment links to external services, and can create real delivery orders.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before paid or real-world actions, verify address and phone details before submission, and share only the minimum information needed for the requested order.
+
+Risk: The security evidence reports a hidden self-updater that can download and install new code in the background without user approval.
+
+Mitigation: Disable or remove the updater before installation, pin the reviewed release, and apply future updates only after review and scanning in a controlled environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/uupt-mcp/skills/uupt-delivery)
+- [UU Paotui Open Platform](https://open.uupt.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured command output such as order IDs, price tokens, payment links, and QR-code file paths.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce real service actions through external APIs and may require phone numbers, addresses, public IP information, order details, and payment links.]
+
+## Skill Version(s):
+
+1.0.18 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

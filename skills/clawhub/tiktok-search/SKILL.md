@@ -1,6 +1,6 @@
 ---
 name: tiktok-search
-description: Search TikTok videos, collect creator videos, and run product, trend, competitor, and content insights through Gecho Bridge MCP. Requires the Gecho Chrome extension, an active TikTok session, and the Gecho Bridge MCP server.
+description: Search TikTok videos, collect creator videos, retrieve detail data and comments for one known video, and run product, trend, competitor, and content insights through Gecho Bridge MCP. Requires the Gecho Chrome extension, an active TikTok session, and the Gecho Bridge MCP server.
 metadata:
   openclaw:
     os: ["darwin", "linux", "win32"]
@@ -16,7 +16,7 @@ metadata:
 
 Search TikTok from an AI chat, collect structured video metadata, and run async product or trend insight jobs through the official Gecho Bridge MCP workflow.
 
-This is the default TikTok aggregate Skill for Gecho. It covers TikTok video search, creator collection, and TikTok insight. Single-tool TikTok Skills may exist for distribution and search traffic, but this Skill is the recommended default for users who want the complete TikTok research workflow.
+This is the default TikTok aggregate Skill for Gecho. It covers TikTok video search, creator collection, one-video detail and comment collection, and TikTok insight. Single-tool TikTok Skills may exist for distribution and search traffic, but this Skill is the recommended default for users who want the complete TikTok research workflow.
 
 ## Critical prerequisite: read before use
 
@@ -55,6 +55,7 @@ After setup is complete, return to the OpenClaw dashboard or Hermes and ask: "Se
 
 - Finds high-performing TikTok videos for a keyword.
 - Collects titles, authors, engagement data, and video links.
+- Retrieves detail data, comments, and replies for one known TikTok video URL.
 - Saves full raw result sets to a local JSON file.
 - Starts async insight jobs for product research, competitor analysis, and trend discovery.
 
@@ -64,12 +65,13 @@ Best-fit prompts:
 - "Find winning hooks for cat toy videos."
 - "Run product opportunity insight for outdoor picnic mat."
 - "Check the status of my previous TikTok insight job."
+- "Get the details and comments for this TikTok video: https://www.tiktok.com/@user/video/123."
 
 ## Important: Skill-only install is not enough
 
 This Skill is the instruction layer. It tells the AI when and how to use Gecho.
 
-To actually run TikTok searches, the user also needs:
+To actually run TikTok searches, video-detail collection, or insight jobs, the user also needs:
 
 - the Gecho Bridge MCP server
 - the Gecho Chrome extension
@@ -147,11 +149,12 @@ For videos and support links, see the official links section above.
 | User goal | Use tool | Notes |
 |---|---|---|
 | Search TikTok videos and collect metadata | `tiktok_search` | Returns results directly |
+| Collect detail data, comments, and replies from one known video | `tiktok_video` | Requires a TikTok video URL |
 | Collect videos from a TikTok creator | `tiktok_influencer` | Uses the creator's `uniqueId` |
 | Analyze a niche, product, trend, or competitor opportunity | `tiktok_insight` | Starts an async job and returns a `jobId` |
 | Check an existing async insight job | `check_insight_status` | Use the `jobId` returned by `tiktok_insight` |
 
-Use this aggregate Skill for broad TikTok research requests. If the user explicitly asks for one exact raw tool only, such as "run tiktok_search", a matching single-tool distribution Skill may be used instead when available.
+Use this aggregate Skill for broad TikTok research requests. If the user explicitly asks for one exact raw tool only, such as "run tiktok_video", a matching single-tool distribution Skill may be used instead when available.
 
 ## Official MCP tools
 
@@ -169,6 +172,20 @@ Expected result:
 
 - A JSON array of video metadata, plus a saved local file path when results are written successfully.
 
+### `tiktok_video`
+
+Gets TikTok video detail data and comments. It opens the video detail page, expands comments, and continues scrolling to collect comments and replies.
+
+Parameters:
+
+- `url` string, required: TikTok video detail-page URL, for example `https://www.tiktok.com/@user/video/123...`.
+- `targetCount` number, optional: maximum number of comments and replies to collect; default and maximum are `200`.
+- `save_dir` string, optional: absolute directory path for saving results. Do not pass a `.json` filename. Omit this parameter if no reliable absolute directory is available.
+
+Expected result:
+
+- Structured video detail data, comments, and replies, plus a saved local file path when results are written successfully.
+
 ### `tiktok_influencer`
 
 Collects videos published by one TikTok creator.
@@ -177,6 +194,7 @@ Parameters:
 
 - `uniqueId` string, required: the creator's TikTok `uniqueId` (for example, `zachking`).
 - `targetCount` number, optional: requested video count; defaults to `100`. Keep requests at or below `500`.
+- `save_dir` string, optional: absolute directory path for saving results. Do not pass a `.json` filename. Omit this parameter if no reliable absolute directory is available.
 
 ### `tiktok_insight`
 
@@ -205,16 +223,18 @@ Expected result:
 
 ## Agent execution rules
 
-Use this Skill before calling any Gecho TikTok MCP tool when the user asks to search TikTok, find trending videos, analyze competitors, collect TikTok metadata, discover winning products, or research keyword trends.
+Use this Skill before calling any Gecho TikTok MCP tool when the user asks to search TikTok, inspect a known video, find trending videos, analyze competitors, collect TikTok metadata, discover winning products, or research keyword trends.
 
 Core rules:
 
-- Use only the official Gecho MCP tools: `tiktok_search`, `tiktok_influencer`, `tiktok_insight`, and `check_insight_status`.
+- Use only the official Gecho MCP tools: `tiktok_search`, `tiktok_video`, `tiktok_influencer`, `tiktok_insight`, and `check_insight_status`.
 - Do not replace Gecho with WebSearch, browser automation, terminal scrapers, mcporter, unofficial APIs, or hand-written TikTok scraping.
 - Do not start more than one Gecho scraping or insight job in the same conversational turn.
 - Do not run Gecho scraping jobs in parallel because the workflow depends on one live browser tab and extension session.
 - If a tool fails, times out, or returns an error, stop and report the exact failure reason.
 - If `tiktok_search` returns no items, do not rewrite, translate, broaden, or retry the keyword automatically.
+- If the user requests video details but does not provide a video URL, ask for the exact URL instead of guessing or silently starting a keyword search.
+- If a known video is private, deleted, unavailable, or blocked, report that state instead of inventing details or comments.
 - If `tiktok_insight` starts successfully, report the `jobId` and explain that the user should check status later.
 - If `check_insight_status` says the job is still running, tell the user to wait before checking again.
 - If the official Gecho MCP tools are unavailable in the current session, provide setup instructions instead of probing the environment.
@@ -237,6 +257,15 @@ Allowed status behavior:
 3. Call `tiktok_search`.
 4. If the result is empty, say that the exact keyword returned no results and stop.
 5. If results are present, summarize only the top 3 to 5 items and provide the saved file path.
+
+### Video detail workflow
+
+1. Confirm that the user supplied a TikTok video detail URL, normally containing `/video/`.
+2. Preserve the URL as provided and do not substitute another video.
+3. If the user did not provide `save_dir`, choose a safe absolute directory path in the current workspace. If no reliable directory is available, omit `save_dir` and let Gecho use its default data directory.
+4. Pass the URL, a bounded `targetCount` when requested, and `save_dir` when reliable to `tiktok_video`.
+5. Wait for the single job to finish; do not run another Gecho scraping job in parallel.
+6. Summarize available video details and a representative sample of comments and replies, including the saved path when available.
 
 ### Insight workflow
 
@@ -290,7 +319,7 @@ Gecho Bridge is not ready yet.
 
 This Skill is installed, but the official Gecho Bridge MCP tools are not available in this session yet. Installing the Skill alone does not start the TikTok search service.
 
-Gecho requires all 3 items below before TikTok search or insight can run:
+Gecho requires all 3 items below before TikTok search, video-detail collection, or insight can run:
 
 1. Gecho Bridge MCP is configured.
 2. The Gecho Chrome extension is installed and logged in to a Gecho account.
@@ -332,7 +361,7 @@ hermes restart
 Open TikTok in Chrome, log in, and keep the logged-in TikTok tab open.
 
 After setup, return to OpenClaw Dashboard or Hermes and ask again, for example:
-"Search computers on TikTok"
+"Search computers on TikTok" or provide a full TikTok video URL for detail collection.
 
 
 **Related links**
@@ -349,6 +378,7 @@ After setup, return to OpenClaw Dashboard or Hermes and ask again, for example:
 **Related Gecho Skills**
 
 - `tiktok-video-search`: TikTok video search and metadata collection.
+- `tiktok-video`: detail data, comments, and replies for one known TikTok video URL.
 - `tiktok-insight`: TikTok product, trend, competitor, and content insight jobs.
 - `tiktok-search`: complete TikTok search and insight workflow.
 ````
@@ -364,6 +394,8 @@ After setup, return to OpenClaw Dashboard or Hermes and ask again, for example:
 | CAPTCHA or login wall | Ask the user to resolve it manually in Chrome, then retry in a later turn. |
 | Request timeout | Report the timeout, mention stuck page/network/CAPTCHA as likely causes, and stop. |
 | Empty search results | Say the exact keyword returned no results and ask the user to choose another keyword manually. |
+| Video URL is missing | Ask for the exact TikTok video detail URL; do not guess or switch to keyword search without the user's request. |
+| Video is private, deleted, or unavailable | Report the page state and ask the user to provide an accessible video URL if appropriate. |
 | Insight still running | Report running status and recommend checking again after about 60 seconds. |
 | Failed to save results | Ask the user to provide a valid absolute directory path with write permission. |
 
@@ -379,6 +411,10 @@ TikTok limits content access for logged-out users. After you log in, the extensi
 
 Gecho does not ask for or collect your TikTok password, private account information, or publish anything on your behalf.
 
+### Is this the same as TikTok video search?
+
+No. `tiktok_search` discovers videos by keyword, while `tiktok_video` handles one known video URL and collects its detail data, comments, and replies. Use the matching single-tool Skill when the user wants only one of these focused workflows.
+
 ### Need help?
 
 Join the [WeCom group](https://github.com/gecho-ai/gecho-bridge/blob/main/qywx.jpg) for community support, or scan the [1:1 support QR code](https://github.com/gecho-ai/gecho-bridge/blob/main/wx.jpg) for personal help.
@@ -392,6 +428,13 @@ For successful search:
 - Include saved file path if available.
 - Show top 3 to 5 results only.
 - Do not paste the full raw JSON into chat.
+
+For successful video-detail collection:
+
+- Say that the requested TikTok video was opened and processed.
+- Summarize available identity and engagement fields without inventing missing values.
+- Report the number of comments and replies collected when available.
+- Show a bounded representative sample and include the saved path when available.
 
 For successful insight start:
 
@@ -419,6 +462,7 @@ This Skill should:
 
 - Help users complete the official Gecho setup when prerequisites are missing.
 - Route TikTok search and insight requests to the official Gecho MCP tools.
+- Route known TikTok video-detail requests to the official `tiktok_video` MCP tool.
 - Keep search, insight, and status-check flows explicit.
 - Summarize results without flooding the chat.
 
@@ -426,6 +470,7 @@ This Skill must never:
 
 - Pretend the Skill page alone is enough when MCP is missing.
 - Pretend `tiktok_insight` is synchronous.
+- Turn a missing video URL into an automatic keyword search.
 - Use unofficial TikTok scraping workflows.
 - Invent results when the tool returns no data.
 - Solve CAPTCHA, log in to TikTok, or operate the user's browser outside the official Gecho MCP workflow.

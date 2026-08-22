@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>紫微斗数命理报告</title>
+<style>
+  /* ===== 全局 ===== */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "STKaiti", "KaiTi", "SimSun", serif;
+    background: linear-gradient(160deg, #eef0f7 0%, #dfe3ee 100%);
+    color: #2c3350;
+    line-height: 1.8;
+    padding: 40px 20px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  .banner {
+    background: linear-gradient(135deg, #1b2a5e 0%, #2e4a8f 55%, #5b3a8f 100%);
+    color: #f2ecf9;
+    text-align: center;
+    padding: 60px 30px;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 30px rgba(27, 42, 94, 0.35);
+  }
+  .banner::before {
+    content: "";
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border: 2px solid rgba(242, 236, 249, 0.2);
+    border-radius: 50%;
+  }
+  .banner h1 {
+    font-size: 40px;
+    letter-spacing: 12px;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+  }
+  .banner .sub { font-size: 16px; letter-spacing: 4px; opacity: 0.9; }
+  .banner .star {
+    width: 0; height: 0;
+    margin: 18px auto 0;
+    font-size: 30px;
+    color: #e8d44d;
+    text-shadow: 0 0 12px rgba(232, 212, 77, 0.6);
+  }
+
+  /* ===== 卡片 ===== */
+  .card {
+    background: #fbfcff;
+    border: 1px solid #d5dcee;
+    border-radius: 10px;
+    padding: 30px 35px;
+    margin-bottom: 28px;
+    box-shadow: 0 3px 14px rgba(44, 51, 80, 0.08);
+  }
+  .card h2 {
+    font-size: 24px;
+    color: #2e4a8f;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #8f9bc9;
+    letter-spacing: 4px;
+  }
+  .card h2::before {
+    content: "✦";
+    color: #8f9bc9;
+    margin-right: 10px;
+  }
+
+  /* ===== 命盘宫位网格 ===== */
+  .palace-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 8px;
+    margin: 15px 0;
+  }
+  .palace {
+    background: #f4f6fc;
+    border: 1px solid #cdd6ee;
+    border-radius: 8px;
+    padding: 12px 8px;
+    min-height: 100px;
+    text-align: center;
+  }
+  .palace .palace-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #2e4a8f;
+    letter-spacing: 2px;
+    border-bottom: 1px dashed #c3cdec;
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+  }
+  .palace .palace-name.ming { color: #b03a2e; }
+  .palace .main-star {
+    font-size: 15px;
+    color: #1b2a5e;
+    font-weight: bold;
+    line-height: 1.5;
+  }
+  .palace .aux-star {
+    font-size: 12px;
+    color: #6d7aa8;
+    line-height: 1.5;
+  }
+  .palace .palace-ganzhi {
+    font-size: 11px;
+    color: #9aa5c6;
+    margin-top: 4px;
+  }
+
+  /* ===== 表格 ===== */
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+  th, td {
+    border: 1px solid #d5dcee;
+    padding: 10px 12px;
+    text-align: center;
+    font-size: 15px;
+  }
+  th { background: #eef1fa; color: #2e4a8f; font-weight: bold; }
+  tr:nth-child(even) td { background: #f7f9fd; }
+
+  /* ===== 标签 ===== */
+  .tag {
+    display: inline-block;
+    background: #2e4a8f;
+    color: #eef1fa;
+    padding: 3px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin: 4px 6px 4px 0;
+    letter-spacing: 1px;
+  }
+  .tag.gold { background: #8f6a2e; color: #faf3e4; }
+  .tag.purple { background: #5b3a8f; color: #f2ecf9; }
+
+  /* ===== 提示框 ===== */
+  .highlight {
+    background: #f3f6fd;
+    border-left: 4px solid #2e4a8f;
+    padding: 12px 18px;
+    margin: 15px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .highlight.good { border-left-color: #4a7a4e; }
+  .highlight.warn { border-left-color: #b03a2e; }
+
+  /* ===== 大限 ===== */
+  .dayun-item {
+    background: #eef1fa;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .dayun-item .age { font-size: 13px; color: #6d7aa8; }
+  .dayun-item .palace { font-size: 15px; font-weight: bold; color: #1b2a5e; }
+  .dayun-item .desc { font-size: 13px; color: #4a557a; }
+
+  /* ===== 页脚 ===== */
+  .footer {
+    text-align: center;
+    color: #8a93b5;
+    font-size: 12px;
+    padding: 20px;
+    border-top: 1px dashed #c9d1e8;
+    margin-top: 20px;
+  }
+  @media (max-width: 600px) {
+    .banner h1 { font-size: 26px; letter-spacing: 6px; }
+    .card { padding: 20px; }
+    .palace-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 封面 -->
+  <div class="banner">
+    <h1>紫微斗数命理</h1>
+    <div class="sub">十二宫位 · 十四主星 · 四化飞星 · 大限流年</div>
+    <div class="star">★</div>
+    <div style="margin-top:12px; font-size:14px; opacity:0.85;">
+      求测者：{GENDER} · 农历：{LUNAR_DATETIME} · 五行局：{WUXING_JU}
+    </div>
+  </div>
+
+  <!-- 一、命盘总览 -->
+  <div class="card">
+    <h2>一、命盘总览</h2>
+    <table>
+      <tr>
+        <th>命宫</th><td>{MING_PALACE}</td>
+        <th>身宫</th><td>{SHEN_PALACE}</td>
+      </tr>
+      <tr>
+        <th>五行局</th><td>{WUXING_JU}</td>
+        <th>命宫干支</th><td>{MING_GANZHI}</td>
+      </tr>
+    </table>
+
+    <div style="margin-top:12px;">
+      <span class="tag">命宫主星：{MING_MAIN_STAR}</span>
+      <span class="tag gold">身宫主星：{SHEN_MAIN_STAR}</span>
+      <span class="tag purple">四化：{SIHUA}</span>
+    </div>
+  </div>
+
+  <!-- 二、十二宫命盘 -->
+  <div class="card">
+    <h2>二、十二宫命盘</h2>
+    <div class="palace-grid">
+      {PALACE_GRID}
+    </div>
+  </div>
+
+  <!-- 三、主星解读 -->
+  <div class="card">
+    <h2>三、主星特质</h2>
+    <h3 style="color:#1b2a5e; margin-bottom:8px;">命宫主星 · {MING_MAIN_STAR}</h3>
+    <p>{MING_STAR_INTERPRETATION}</p>
+
+    <h3 style="color:#1b2a5e; margin:18px 0 8px;">身宫主星 · {SHEN_MAIN_STAR}</h3>
+    <p>{SHEN_STAR_INTERPRETATION}</p>
+  </div>
+
+  <!-- 四、宫位分析 -->
+  <div class="card">
+    <h2>四、重要宫位分析</h2>
+
+    <h3 style="color:#2e4a8f; margin-bottom:8px;">财帛宫</h3>
+    <p>{CAIBO_ANALYSIS}</p>
+
+    <h3 style="color:#2e4a8f; margin-bottom:8px;">官禄宫</h3>
+    <p>{GUANLU_ANALYSIS}</p>
+
+    <h3 style="color:#2e4a8f; margin-bottom:8px;">夫妻宫</h3>
+    <p>{FUQI_ANALYSIS}</p>
+
+    <h3 style="color:#2e4a8f; margin-bottom:8px;">迁移宫</h3>
+    <p>{QIANYI_ANALYSIS}</p>
+
+    <h3 style="color:#2e4a8f; margin-bottom:8px;">疾厄宫</h3>
+    <p>{JIE_ANALYSIS}</p>
+  </div>
+
+  <!-- 五、四化与格局 -->
+  <div class="card">
+    <h2>五、四化飞星与格局</h2>
+    <div class="highlight">
+      <strong>四化分布：</strong>{SIHUA_DETAIL}
+    </div>
+    <div class="highlight good">
+      <strong>吉格：</strong>{GOOD_PATTERNS}
+    </div>
+    <div class="highlight warn">
+      <strong>需留意：</strong>{WARN_PATTERNS}
+    </div>
+  </div>
+
+  <!-- 六、大限流年 -->
+  <div class="card">
+    <h2>六、大限流年</h2>
+    {DAYUN_LIST}
+
+    <div class="highlight">
+      <strong>当前大限：</strong>{CURRENT_DAYUN}
+    </div>
+  </div>
+
+  <!-- 七、开运建议 -->
+  <div class="card">
+    <h2>七、开运建议</h2>
+    <ul>
+      <li><strong>发展方位：</strong>{LUCKY_DIRECTION}</li>
+      <li><strong>贵人类型：</strong>{NOBLE_TYPE}</li>
+      <li><strong>适宜领域：</strong>{SUITABLE_FIELD}</li>
+      <li><strong>需要注意：</strong>{CAUTION}</li>
+    </ul>
+    <div class="highlight good">
+      <strong>综合建议：</strong>{OVERALL_ADVICE}
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>本报告基于传统命理文化（紫微斗数）生成，仅供文化研究与娱乐参考。</p>
+    <p>不构成医疗、法律、投资等专业建议。请理性看待，积极生活。</p>
+    <p style="margin-top:8px;">生成时间：{GENERATE_TIME}</p>
+  </div>
+
+</div>
+</body>
+</html>

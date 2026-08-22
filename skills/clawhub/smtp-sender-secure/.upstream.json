@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/smtp-sender-secure",
   "slug": "smtp-sender-secure",
   "ownerHandle": null,
-  "version": "2.0.0",
-  "updatedAt": 1784187562490,
-  "contentHash": "7f14dec65bc40fd5ec108d2a30600657cdc10853c9640d596949cf793d74505c",
-  "fetchedAt": "2026-07-26T18:13:32.662Z"
+  "version": "2.1.1",
+  "updatedAt": 1787192916701,
+  "contentHash": "fc8ad03e57e69a3aaa2b2a5b7d40d8fb8e30831e825fc0be9f37c42bdea231ba",
+  "fetchedAt": "2026-08-22T08:00:53.400Z"
 }

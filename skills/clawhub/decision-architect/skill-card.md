@@ -1,43 +1,58 @@
-## Description: <br>
-Decision Architect helps agents structure high-stakes choices with framework matching, cognitive-bias checks, risk-profile learning, and decision retrospectives. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+决策架构师 helps agents structure decisions by comparing options, matching decision frameworks, flagging potential cognitive-bias signals, and prompting later reviews.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, product managers, and decision owners use this skill to compare options, surface potential cognitive biases, record decision rationale, and run later retrospectives. It is intended for product, technical, business, personal, high-risk, irreversible, or audit-sensitive decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks agents to persist decision history and risk-profile memory while declaring only read access. <br>
-Mitigation: Review and explicitly approve any local write behavior before installation or use; prefer a read-only configuration unless storage locations and retention are documented. <br>
-Risk: The input schema mentions callback_url even though the skill claims no network use. <br>
-Mitigation: Avoid callback_url unless network behavior, destination approval, and payload limits are documented and approved. <br>
-Risk: Stored decision history and risk-profile files may contain sensitive personal, product, business, or technical context. <br>
-Mitigation: Treat local memory files as sensitive data, avoid storing credentials or regulated data, and review retention and access controls before use. <br>
+## Use Case:
 
+Developers, teams, and agent users use this skill when a conversation contains a meaningful tradeoff and they need structured option comparison, framework-guided analysis, bias checks, and review notes. It is suited to product, technical, business, and personal decision support where the user remains responsible for the final decision.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/decision-architect) <br>
-- [Skill Homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with structured decision analysis, bias findings, confidence labels, and retrospective notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May request or maintain local decision history, risk-profile, and retrospective files when the host agent permits file writes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The release security summary says declared command and file permissions are broader than the skill documentation says it needs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in agent environments where file and command access can be reviewed and scoped to the decision-architect working directory.
+
+Risk: The release security guidance flags persistent local decision-memory access.
+
+Mitigation: Avoid storing sensitive third-party data, credentials, medical information, or legal facts in decision memory, and review retained records periodically.
+
+Risk: The release security guidance notes conflicting API and network documentation.
+
+Mitigation: Confirm the skill does not require network or API-key access before enabling it, and prefer a version with the conflicting documentation removed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/decision-architect)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance, Files]
+
+**Output Format:** [Structured decision analysis with option comparisons, framework notes, cognitive-bias signals, confidence labels, and optional local decision-memory records.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May maintain local decision-memory files for preferences, decision records, and reversals when the host agent grants file access.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata; artifact frontmatter lists 2.0.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

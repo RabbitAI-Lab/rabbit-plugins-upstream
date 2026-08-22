@@ -1,0 +1,17 @@
+name: ai-literacy-expert-v7.3A
+version: 8.1.0-aipc
+release_codename: V8.1-AIPC
+build_date: 2026-08-20 23:50:00
+codename: AIPC 端云协同 + 全互动控件完整性门控
+format: SemVer 2.0
+changelog: CHANGELOG.md
+readme: README.md
+skill_entry: run.ps1 (Windows) / run.sh (Linux/macOS)
+env_install: install-env.ps1 (Windows) / install-env.sh (Linux/macOS)
+runtime_config: info.json
+meta: meta.json
+tests: ≈ 148 unit tests (V8.1-AIPC, 8 files; 100% pass for isolated modules)
+author: AI Literacy Expert Team
+new_in_v81_aipc: tests/test_p5js_interactive.py - p5.js 课件/游戏每个互动控件 27 项完整性门控 (B1-B9 + S/Se/I/C/K/T/D)
+new_in_v80_aipc: tests/test_p5js_buttons.py - p5.js 课件/游戏每个按钮 9 项功能完整性门控 (B1-B9)
+new_in_v74_aipc: work_summary.py - 每次工作后自动输出本地 vs 云端对比

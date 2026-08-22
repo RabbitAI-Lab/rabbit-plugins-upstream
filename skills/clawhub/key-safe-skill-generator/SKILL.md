@@ -2,14 +2,27 @@
 
 spec: usk/3.0
 id: key_safe_skill_generator
-version: 1.1.0
+version: 1.3.0
 name: Key‑Safe Skill Generator
-description: A documentation‑only meta‑skill that teaches AI agents how to generate secure, zero‑exposure skills using MGC Blackbox for credential management. Contains no executable code.
+description: A documentation‑only meta‑skill that teaches AI agents how to generate secure, zero‑exposure skills using MGC Blackbox 1.4.10. Credentials are stored encrypted; local scripts read them via HTTP API at runtime, while AI agents never touch plaintext.
 author: MirginCipher Team
 license: MIT
-tags: zero-exposure, mgc, security, credential-management, skill-generator, meta-skill
+tags: zero-exposure, mgc, security, credential-management, skill-generator, meta-skill, mgc_run, mgc_find
 platform_compatibility: windows, macos, linux
 changelog:
+  - version: 1.3.0
+    changes:
+      - Upgraded to adapt to MGC 1.4.10
+      - Refactored zero-exposure flow (mgc_run + HTTP API; credentials never enter AI context)
+      - Replaced mgc_get with mgc_run for sealed-script execution (1.4.7+ blackbox)
+      - Added mgc_find (1.4.10 fuzzy search) and mgc_open_webui; removed mgc_get
+      - Documented mgc_seal returning dict, ext02 auto-parse, multi-line PEM for ext04
+      - Added update_if_exists=true for credential updates
+      - Fixed Invalid key format troubleshooting
+      - Added 1.4.9 sandbox mode note
+      - Updated MGC main skill doc reference to WebUI MGC Skills button (1.4.7+) and mgc --status
+      - Templates updated with parse_known_args and HTTP API pattern
+      - Added two anti-patterns (AI calling mgc_get, password as ext02)
   - version: 1.1.0
     changes:
       - Added complete example section with copy‑and‑paste templates
@@ -36,6 +49,31 @@ This skill contains **no executable code** and is safe for automatic approval.
 
 ---
 
+# ⚠️ Critical: True Zero‑Exposure Means AI Never Sees Credentials
+
+The wrong way (breaks zero‑exposure):
+
+```
+AI → mgc_get(config) → returns plaintext JSON (incl. password) → AI uses password
+```
+
+The right way (1.4.10 true zero‑exposure):
+
+```
+User → mgc_save(config with credentials)
+User / Script Agent → mgc_save(script that reads config via HTTP API)
+Executor Agent → mgc_run(script) → MGC blackbox executes
+                              └─ script reads credentials via HTTP API
+                              └─ script performs the sensitive operation
+                              └─ script writes result to file
+                              └─ MGC returns only {pid, status}
+AI → reads result file → only sees operation result, NEVER password
+```
+
+> **Never call `mgc_get` from AI**. `mgc_get` returns plaintext and breaks zero‑exposure. Use `mgc_run` for blackbox execution instead.
+
+---
+
 # What This Skill Enables
 
 After reading this documentation, an AI agent will understand how to:
@@ -45,7 +83,7 @@ After reading this documentation, an AI agent will understand how to:
 - Structure a Zero‑Exposure skill using **USK v3 conventions**
 - Guide users to prepare and store credentials safely
 - Generate a complete skill package (SKILL.md + README + local script)
-- Ensure all sensitive operations happen **outside the AI model**
+- Ensure all sensitive operations happen **outside the AI model** (via `mgc_run` blackbox)
 
 ---
 
@@ -57,19 +95,19 @@ Use Key‑Safe in the following scenarios:
 
 1. **AI needs credentials but must not see them**
    - Example: AI needs to send emails via SMTP but should never see the password
-   - Solution: Store credentials in MGC, retrieve via local script
+   - Solution: Store credentials in MGC, retrieve via local script through `mgc_run` blackbox
 
 2. **Multi‑node collaboration**
    - Example: Node A creates a script, Node B executes it
-   - Solution: Use `mgc_seal` to encrypt the script with Node B's public key
+   - Solution: Use `mgc_seal` to encrypt the script with Node B's public key; Node B calls `mgc_run`
 
 3. **Automation tasks requiring credentials**
    - Example: Scheduled tasks that need API keys
-   - Solution: Credentials stored in MGC, accessed by local scripts
+   - Solution: Credentials stored in MGC, accessed by local scripts via `mgc_run`
 
 4. **Sensitive script execution**
    - Example: Scripts that perform privileged operations
-   - Solution: Credentials never passed through AI, retrieved directly by scripts
+   - Solution: Credentials never passed through AI, retrieved by scripts inside `mgc_run` blackbox
 
 ## Example Triggers
 
@@ -86,16 +124,9 @@ Use Key‑Safe in the following scenarios:
 Key‑Safe is not needed in these scenarios:
 
 1. **Public APIs without authentication**
-   - Example: Calling public REST APIs that require no API key
-
-2. **Demo / testing environments**
-   - Example: Using mock credentials for testing purposes
-
+2. **Demo / testing environments** (mock credentials)
 3. **Skills that only read public data**
-   - Example: Fetching weather data from public APIs
-
 4. **Manual operations where user provides credentials each time**
-   - Example: Interactive scripts that prompt for password each run
 
 ---
 
@@ -103,30 +134,31 @@ Key‑Safe is not needed in these scenarios:
 
 To build a Zero‑Exposure skill, users must:
 
-1. Install MGC Blackbox: `pip install mgc-blackbox`
-2. Start the MGC service: `mgc` (runs at http://127.0.0.1:57219)
-3. Use **MCP tools** (`mgc_save`, `mgc_get`) for credential management
-4. Store credentials in MGC under a chosen identifier
-5. Use a local script to retrieve credentials and perform sensitive operations
+1. Install MGC Blackbox 1.4.10+: `pip install mgc-blackbox`
+2. Start the MGC service: `mgc` (API at http://127.0.0.1:57219, WebUI at 57218)
+3. Use **MCP tools** (`mgc_save`, `mgc_run`, `mgc_list`, `mgc_find`, `mgc_seal`, `mgc_open_webui`) for credential management
+4. Store credentials in MGC under a chosen identifier (`info_type="config"`, `info_owner="<name>"`)
+5. Write a local script that retrieves credentials via HTTP API and performs sensitive operations
+6. AI invokes the script via `mgc_run` (blackbox) — AI never touches credential plaintext
 
-> **Important:** For AI agents, use **MCP tools** (`mgc_save`, `mgc_get`). CLI may have port conflicts in some environments.
+> **Important:** AI agents should only use `mgc_save`, `mgc_run`, `mgc_list`, `mgc_find`, `mgc_seal`, `mgc_open_webui`. **Never use `mgc_get` from AI** — it returns plaintext.
+
+> **Sandbox mode (1.4.9+)**: When running inside a sandbox Agent (Trae Work / Workbuddy), install MGC in the system environment; otherwise MCP operations may be limited — in that case, call FastAPI directly at `/api/mgc/sensitive/run`.
 
 ---
 
 # Full Example: Complete Zero‑Exposure Workflow
 
-This section demonstrates a complete flow from credential creation to usage.
-
 ## Step 1: Store Credentials in MGC
 
-Using the `mgc_save` MCP tool:
+User stores credentials (via WebUI or `mgc_save` on explicit instruction):
 
 ```
 Tool: mgc_save
 Parameters:
-  info_type:   "config"           # Type of stored data (user‑defined)
+  info_type:   "config"           # Type of stored data
   info_owner:  "smtp_server"      # Identifier for this credential set
-  content:     "{                 # Actual credential content
+  content:     "{
     \"host\": \"smtp.example.com\",
     \"port\": 587,
     \"username\": \"your_email@example.com\",
@@ -135,77 +167,195 @@ Parameters:
   }"
 ```
 
-> **Note:** Replace the placeholder values with actual credentials. The `info_owner` value is your reference name—you'll use this same value when retrieving credentials.
+> **Updating credentials**: call `mgc_save` again with the same `info_type`/`info_owner` AND `update_if_exists=true`. The old entry is replaced.
 
-## Step 2: Retrieve Credentials in Your Skill
+## Step 2: Reference Credentials in Your Skill
 
-When building a skill that needs credentials, reference the stored identifier:
-
-```
+```markdown
 # In your SKILL.md or local script template:
 
 credential_reference:
   info_type:  "config"
   info_owner: "smtp_server"
 
-# The AI never sees the actual credentials, only the reference
+# AI references the identifier only — never embeds credentials.
 ```
 
-## Step 3: Use MCP Tool to Retrieve Credentials
+## Step 3: Local Script Retrieves Credentials via HTTP API
 
+```python
+import os
+import json
+import requests
+
+MGC_BASE_URL = "http://127.0.0.1:57219"
+TOKEN_FILE = os.path.expanduser("~/.mgc/database/mgc_black_box/.mgc_token")
+
+
+def get_credentials(info_owner, info_type="config"):
+    """Read credentials via HTTP API. Script-internal only; AI never calls this."""
+    if not os.path.exists(TOKEN_FILE):
+        raise RuntimeError("MGC token file missing")
+    with open(TOKEN_FILE, "r") as f:
+        token = f.read().strip()
+    url = f"{MGC_BASE_URL}/api/mgc/sensitive/get"
+    headers = {"X-MGC-Token": token, "Content-Type": "application/json"}
+    resp = requests.post(
+        url,
+        json={"info_type": info_type, "info_owner": info_owner, "action": "run"},
+        headers=headers,
+        timeout=10,
+    )
+    resp.raise_for_status()
+    result = resp.json()
+    if isinstance(result, str):
+        return json.loads(result)
+    return result.get("data", {}).get("data_field", {})
 ```
-Tool: mgc_get
-Parameters:
-  info_type:  "config"
-  info_owner: "smtp_server"
+
+## Step 4: Local Script Performs Sensitive Operation
+
+```python
+import argparse
+import datetime
+import smtplib
+import os
+
+
+def main():
+    # ✅ Literal defaults only — MGC 1.4.10 auto-parses into ext02
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--credential_ref", default="smtp_server")
+    parser.add_argument("--to", default="")
+    parser.add_argument("--subject", default="")
+    parser.add_argument("--body", default="")
+    args, _ = parser.parse_known_args()  # ✅ parse_known_args avoids exit on unknown params
+
+    creds = get_credentials(args.credential_ref)
+
+    msg = f"Subject: {args.subject}\n\n{args.body}".encode("utf-8")
+    with smtplib.SMTP(creds["host"], creds["port"]) as s:
+        s.starttls()
+        s.login(creds["username"], creds["password"])
+        s.sendmail(creds["username"], [args.to], msg)
+
+    # Write result to file so AI can read it (mgc_run returns pid+status)
+    out_dir = os.path.expanduser("~/mgc_outputs")
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(
+        out_dir, f"email_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+    )
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(f"Email sent to {args.to}\n")
+    print(f"RESULT_FILE:{out_path}")
 ```
 
-The MCP tool returns the stored JSON content. The AI receives:
-- Connection details (host, port)
-- Username (if non‑sensitive)
-- But **never** the password
+## Step 5: Store Script and Execute via `mgc_run`
 
-## Step 4: Execute Sensitive Operation
+```python
+# 5a. Script Agent stores the script in MGC
+mgc_save(
+    info_type="script",
+    info_owner="send_email_via_mgc",
+    ext01="python",
+    content="<script body from steps 3-4>",
+    update_if_exists=True
+)
+# MGC 1.4.10 auto-parses argparse literal defaults into ext02
 
-A local script performs the actual operation:
-
+# 5b. Executor Agent runs the script (1.4.7+ blackbox)
+result = mgc_run(
+    info_type="script",
+    info_owner="send_email_via_mgc",
+    diff_1="send_email_via_mgc",  # schema 必填的区分字段；多条同 owner 时消歧，单条时任意非空字符串均可
+    ext02='["--to", "user@example.com", "--subject", "Hi", "--body", "Hello"]'
+)
+# Returns: {"pid": 12345, "status": "started"}
+# AI reads the result file printed on stdout (mgc returned it via the file output convention).
+# AI never sees the SMTP password.
 ```
-# Conceptual script flow (NOT executable):
 
-1. Call mgc_get with info_owner="smtp_server"
-2. Parse returned JSON for host, port, username, password
-3. Use smtplib to send email
-4. Return only: "Email sent successfully" or error message
-5. NEVER log or expose the password
-```
+---
 
-## Multi‑Node Example: Sealing Scripts for Other Nodes
-
-When Node A needs Node B to execute a script:
+# Multi‑Node Example: Sealing Scripts for Other Nodes (1.4.10)
 
 ### Node A: Seal the script
 
-```
-Tool: mgc_seal
-Parameters:
-  info_type:   "script"
-  info_owner:  "send_email_via_mgc"
-  ext04:       "-----BEGIN PUBLIC KEY-----\n...Node B's public key...\n-----END PUBLIC KEY-----"
+```python
+# Get Node B's public key (multi-line PEM, real \n)
+node_pub = mgc_get(info_type="__NODE_PUB__", info_owner="__NODE_PUB__")
+
+# Store original script first
+mgc_save(
+    info_type="script",
+    info_owner="send_email_via_mgc",
+    ext01="python",
+    content="<script body>"
+)
+# 1.4.10 auto-fills ext02 from argparse literal defaults
+
+# Seal with Node B's public key
+sealed = mgc_seal(
+    info_owner="send_email_via_mgc",
+    ext04=node_pub
+)
+# sealed = {content, ext_01, ext_02, ext_03}
+# ⚠️ ext04 MUST be multi-line PEM with real newlines
 ```
 
-Returns: Encrypted capsule containing the script
+### Node B: Store and execute the sealed capsule
 
-### Node B: Execute the sealed script
+```python
+# Store the sealed capsule (must include ext02 from source)
+mgc_save(
+    info_type="script",
+    info_owner="send_email_via_mgc",
+    ext01=sealed["ext_01"],
+    ext02=sealed["ext_02"],            # default args from source argparse
+    content=sealed["content"],
+    ext03=sealed["ext_03"],            # RSA-encrypted AES key (only Node B can decrypt)
+    update_if_exists=True
+)
 
+# Execute via mgc_run (1.4.7+ blackbox)
+mgc_run(
+    info_type="script",
+    info_owner="send_email_via_mgc",
+    diff_1="send_email_via_mgc",
+    ext02='["--to", "user@example.com"]'
+)
+# Node B executes with its own private key; credentials are read from Node B's local MGC.
 ```
-Tool: mgc_get
-Parameters:
-  info_type:  "script"
-  info_owner: "send_email_via_mgc"
-  action:     "run"
-```
 
-Node B uses its private key to decrypt and execute. Node A's script content is never exposed to Node B.
+> **Credential consistency**: Node B must also store the SMTP credential with the **same `info_type`/`info_owner`** as Node A. Otherwise the sealed script will fail to find credentials.
+
+---
+
+# MCP Tools Reference
+
+| Tool | Purpose | Notes |
+|------|---------|-------|
+| `mgc_save` | Store credentials / scripts | `info_type="config"` for credentials, `"script"` for scripts |
+| `mgc_run` | Blackbox script execution (1.4.7+) | `ext02` MUST be a JSON array string; `diff_1` is schema-required (any non-empty string for a single entry) |
+| `mgc_list` | List entries (exact match) | metadata only, no plaintext |
+| `mgc_find` | Fuzzy search (1.4.10) | `match_mode`: substring/prefix/suffix/exact |
+| `mgc_seal` | Seal script for target node | returns dict `{content, ext_01, ext_02, ext_03}`; `ext04` MUST be multi-line PEM with real newlines |
+| `mgc_open_webui` | Open WebUI for user to store credentials | browser opens automatically |
+| ~~`mgc_get`~~ | ~~DO NOT USE FROM AI~~ | Returns plaintext — breaks zero‑exposure |
+
+---
+
+# Quick Reference: AI Behaviour Rules
+
+When this skill is active, the AI MUST:
+
+- ✅ **Use `mgc_run`** to execute sensitive scripts; AI never touches plaintext
+- ✅ **Use `mgc_find`** to locate available scripts (`match_mode="substring"`)
+- ✅ **Use `mgc_open_webui`** to help user store credentials
+- ✅ Reference scripts/credentials by `info_owner` only; never include passwords in prompts
+- ❌ **Never call `mgc_get`** — returns plaintext
+- ❌ **Never embed credentials** in SKILL.md, prompts, or AI context
+- ❌ **Never ask the user** to paste the password in chat
 
 ---
 
@@ -213,187 +363,170 @@ Node B uses its private key to decrypt and execute. Node A's script content is n
 
 ## MGC Related
 
-### Q: What if MGC is not installed?
-**A:** Install MGC Blackbox by running: `pip install mgc-blackbox`
+**Q: What if MGC is not installed?**
+A: `pip install mgc-blackbox>=1.4.9`. Requires Python 3.10+.
 
-### Q: What if MGC is not running?
-**A:** Start MGC by running: `mgc` in a terminal. The service runs at http://127.0.0.1:57219
+**Q: What if MGC is not running?**
+A: Start with `mgc`. WebUI at http://127.0.0.1:57218, API at http://127.0.0.1:57219.
 
-### Q: How do I check if MGC is running?
-**A:** Open http://127.0.0.1:57219 in a browser. If you see a response, MGC is running.
+**Q: How do I check MGC version?**
+A: `mgc --status` (1.4.9+). Also shown in WebUI's Settings panel.
 
-### Q: What if MGC version is too old?
-**A:** Update MGC: `pip install mgc-blackbox --upgrade`
+**Q: Port 57219 is already in use?**
+A: Stop other apps on that port, or run MGC with a different port.
 
-### Q: Port 57219 is already in use
-**A:** Stop other applications using that port, or configure MGC to use a different port in its configuration file.
+**Q: Where can I read the MGC main skill documentation?**
+A: WebUI → MGC Skills button (1.4.7+) or `~/.mgc/database/mgc_black_box/.mgc_skills/`.
 
 ## Credential Management
 
-### Q: What if credentials are not found?
-**A:**
-1. Verify the `info_owner` value matches exactly (case‑sensitive)
-2. Verify `info_type` matches
-3. List all stored credentials using `mgc_list` to check what exists
+**Q: What if credentials are not found?**
+A: 1) Verify `info_owner` exactly (case-sensitive); 2) `mgc_find(info_owner="...", match_mode="substring")`; 3) `mgc_list()`.
 
-### Q: How should I name info_type and info_owner?
-**A:**
-- `info_type`: Category of data (e.g., "config", "credential", "script", "api_key")
-- `info_owner`: Unique identifier that describes the purpose
-  - Good: "smtp_gmail", "github_token", "slack_bot"
-  - Bad: "test", "foo", "abc123"
+**Q: How should I name info_type and info_owner?**
+A: `info_type` = category (`"config"`, `"credential"`, `"script"`, `"api_key"`); `info_owner` = unique purpose identifier (good: `"smtp_gmail"`, bad: `"test"`).
 
-### Q: How do I update stored credentials?
-**A:** Call `mgc_save` again with the same `info_type` and `info_owner`. The old value will be replaced.
+**Q: How do I update stored credentials?**
+A: `mgc_save` with same `info_type`/`info_owner` AND `update_if_exists=true`.
 
-### Q: How do I delete stored credentials?
-**A:** Use the `mgc_delete` MCP tool (if available) or overwrite with empty content.
+**Q: How do I delete stored credentials?**
+A: Use WebUI delete (info_type + diff_1/2/3 conditions) — MCP delete is intentionally not supported to prevent AI-triggered deletion.
 
 ## ext01 / ext02 Fields
 
-### Q: What should I put in ext01?
-**A:** The programming language or script type:
-- `"python"` for Python scripts
-- `"bash"` for shell scripts
-- `"javascript"` for Node.js
+**Q: What should I put in ext01?**
+A: Programming language or script type: `"python"`, `"bash"`, `"javascript"`.
 
-### Q: What should I put in ext02?
-**A:** Optional metadata. Common uses:
-- Version string (e.g., "1.0.0")
-- Description
-- Empty string if not needed
+**Q: What should I put in ext02?**
+A: Runtime parameters as a JSON array string `["--flag","value"]`. Since 1.4.10, MGC **auto-fills** ext02 from argparse literal defaults when storing a script — you only need to set it when calling `mgc_run` to override defaults. Dynamic defaults (`datetime.now()`, `os.path.expanduser()`) trigger `dynamic_args_detected` warning; use literal defaults instead.
 
-### Q: What is ext04 used for?
-**A:** Target node's public key when using `mgc_seal`. **Never put your credentials here.**
+**Q: What is ext04 used for?**
+A: Target node's public key when using `mgc_seal`. **Never put credentials here in.** Must be multi-line PEM with real newlines.
 
 ## Security
 
-### Q: How do I ensure AI never exposes keys?
-**A:**
-1. Never include credentials in SKILL.md prompts
-2. Never pass credentials as parameters to AI
-3. Always use MGC to store credentials
-4. Local scripts retrieve credentials directly from MGC
-5. AI only receives non‑sensitive results
+**Q: How do I ensure AI never exposes keys?**
+A: 1) Never include credentials in SKILL.md prompts; 2) Never pass credentials as parameters to AI; 3) Always use MGC to store credentials; 4) Local scripts retrieve credentials via HTTP API inside `mgc_run` blackbox; 5) AI only receives non-sensitive operation results.
 
-### Q: Can AI read credentials from MGC?
-**A:** Yes, if AI calls `mgc_get`. **Never call mgc_get unless you want AI to process the result.** For zero‑exposure, use local scripts that call MGC, not AI directly.
+**Q: Can AI read credentials from MGC?**
+A: **No — never call `mgc_get` from AI.** `mgc_get` returns plaintext and breaks zero-exposure. Credentials must be read by local scripts via HTTP API inside MGC blackbox execution.
 
-### Q: What if AI accidentally logs credentials?
-**A:** Ensure your local script:
-- Never prints or logs credential values
-- Only logs non‑sensitive information
-- Uses secure logging practices
+**Q: What if AI accidentally logs credentials?**
+A: Local scripts must: never `print`/`log` password values; only log non-sensitive info (host, recipient, etc.).
 
-## Multi‑Node Scenarios
+## Multi-Node Scenarios
 
-### Q: How do I use Key‑Safe for multi‑node collaboration?
-**A:**
-1. Each node generates an RSA key pair
-2. Nodes exchange public keys
-3. Use `mgc_seal` with the target node's public key
-4. Target node uses private key to decrypt and execute
+**Q: How to share a script across nodes?**
+A: 1) Node A stores script; 2) `mgc_seal(info_owner=..., ext04=node_b_pubkey)`; 3) Node B stores capsule with `ext02`/`ext03`; 4) Node B calls `mgc_run`.
 
-### Q: Can I seal a script for multiple nodes?
-**A:** Currently, `mgc_seal` targets one node at a time. For multiple nodes, seal separately with each node's public key.
+**Q: Can I seal for multiple nodes?**
+A: Not in one call — seal separately for each node. Use `mgc_find` to track which nodes have copies.
 
-### Q: What if a node's private key is compromised?
-**A:** Regenerate the key pair and redistribute the new public key to collaborators. Any previously sealed scripts will need to be re‑sealed.
+**Q: What if a node's private key is compromised?**
+A: Regenerate the key pair and redistribute the new public key. Any previously sealed scripts must be re-sealed.
 
 ---
 
-# Anti‑Patterns
+# Anti-Patterns
 
-## Common Mistakes and Correct Practices
-
-### ❌ Anti‑Pattern 1: Embedding Keys in Scripts
+## ❌ Anti-Pattern 1: AI calling mgc_get to retrieve credentials
 
 ```python
-# WRONG - Never do this
+# WRONG — breaks zero-exposure, password enters AI context
+creds = mgc_get(info_type="config", info_owner="smtp_server")
+print(creds["password"])  # NEVER
+```
+
+**Correct**: AI only calls `mgc_run`; the script internally uses HTTP API.
+
+---
+
+## ❌ Anti-Pattern 2: Embedding Keys in Scripts
+
+```python
+# WRONG
 def send_email():
     password = "my_secret_password"  # Exposed!
     smtp.login("user@example.com", password)
 ```
 
-**Correct Practice:**
-```python
-# RIGHT - Retrieve from MGC
-def send_email():
-    # Local script calls mgc_get, not AI
-    credentials = get_credentials_from_mgc("smtp_server")
-    smtp.login(credentials["username"], credentials["password"])
-```
+**Correct**: Read from MGC via HTTP API inside `mgc_run` blackbox; password is never in source code.
 
 ---
 
-### ❌ Anti‑Pattern 2: AI Directly Reading Keys
+## ❌ Anti-Pattern 3: AI Directly Reading Keys
 
 ```markdown
-# WRONG - In SKILL.md
+# WRONG — In SKILL.md
 Use the following credentials:
 - Username: user@example.com
 - Password: secret123
 ```
 
-**Correct Practice:**
+**Correct**:
 ```markdown
-# RIGHT - In SKILL.md
-Credentials are stored securely in MGC.
+Credentials are stored encrypted in MGC.
 Reference: info_owner="smtp_server"
-AI should NOT handle credentials directly.
+AI references the identifier only; local script reads via HTTP API inside mgc_run.
 ```
 
 ---
 
-### ❌ Anti‑Pattern 3: Putting Keys in ext04
+## ❌ Anti-Pattern 4: Putting Password in ext04
 
 ```json
 // WRONG
 {
   "info_owner": "my_api",
-  "ext04": "api_key=secret123"  // This is NOT for credentials!
+  "ext04": "password=secret123"  // ext04 is for public keys only
 }
 ```
 
-**Correct Practice:**
+**Correct**:
 ```json
-// RIGHT
 {
-  "info_owner": "my_api",
-  "info_type": "config",
+  "info_owner": "my_script",
+  "info_type": "script",
   "ext04": "-----BEGIN PUBLIC KEY-----\nNodeB_Public_Key...\n-----END PUBLIC KEY-----"
 }
-// ext04 is ONLY for public keys when sealing
 ```
 
 ---
 
-### ❌ Anti‑Pattern 4: Storing Keys in Plain Text Files
+## ❌ Anti-Pattern 5: Passing Password as mgc_run ext02
+
+```python
+# WRONG — password enters AI context via ext02 string
+mgc_run(
+    info_owner="send_email_via_mgc",
+    ext02=json.dumps(["--password", "my_secret"])  # NEVER
+)
+```
+
+**Correct**: Password is `info_type="config"` stored separately; script reads via HTTP API inside blackbox. `ext02` only carries non-sensitive runtime args (`--to`, `--subject`, `--body`).
+
+---
+
+## ❌ Anti-Pattern 6: Storing Keys in Plain Text Files
 
 ```bash
 # WRONG
 echo "password=secret" > credentials.txt
 ```
 
-**Correct Practice:**
-```bash
-# RIGHT
-# Store in MGC using mgc_save
-# Never write credentials to disk files
-```
+**Correct**: Store in MGC; never write credentials to plain files.
 
 ---
 
-### ❌ Anti‑Pattern 5: Passing Credentials as Prompt Parameters
+## ❌ Anti-Pattern 7: Passing Credentials as Prompt Parameters
 
 ```markdown
 # WRONG
 Send an email using password: {user_password}
 ```
 
-**Correct Practice:**
+**Correct**:
 ```markdown
-# RIGHT
 Send an email using credentials stored in MGC.
 Reference: info_owner="smtp_gmail"
 The local script handles credential retrieval.
@@ -401,240 +534,90 @@ The local script handles credential retrieval.
 
 ---
 
-### ❌ Anti‑Pattern 6: Logging Credentials
+## ❌ Anti-Pattern 8: Logging Credentials
 
 ```python
 # WRONG
-def send_email(credentials):
-    print(f"Using password: {credentials['password']}")  # Exposed!
-    smtp.sendmail(...)
+print(f"Using password: {credentials['password']}")  # Exposed!
 ```
 
-**Correct Practice:**
+**Correct**:
 ```python
-# RIGHT
-def send_email(credentials):
-    logger.info("Connecting to SMTP server...")  # No credentials logged
-    smtp.sendmail(...)
+logger.info("Connecting to SMTP server...")  # No credentials logged
 ```
 
 ---
 
 # Troubleshooting
 
-## Common Errors and Solutions
+## Error: "Credential not found"
 
-### Error: "Credential not found"
+1. Verify `info_owner` matches exactly (case-sensitive)
+2. `mgc_find(info_owner="...", match_mode="substring")` to locate
+3. `mgc_list()` to enumerate all entries
 
-**Symptoms:** `mgc_get` returns empty or error
+## Error: "Update not allowed" / "Entry exists"
 
-**Solutions:**
-1. Verify `info_owner` matches exactly (case‑sensitive)
-2. Verify `info_type` matches
-3. List all credentials: `mgc_list`
-4. Re‑store credentials if needed
+`mgc_save` requires `update_if_exists=true` to overwrite by default (1.4.10 strictness).
 
----
+## Error: "Invalid PEM format" (during mgc_seal)
 
-### Error: "info_type mismatch"
+`ext04` must be **multi-line PEM with real newlines**. Copy verbatim from `mgc_get(info_type='__NODE_PUB__')`. Do NOT concatenate into a single line.
 
-**Symptoms:** API returns wrong data or error
+## Error: "dynamic_args_detected" (when saving script)
 
-**Solutions:**
-1. Check the `info_type` used when saving
-2. Use the same `info_type` when retrieving
-3. Common types: "config", "credential", "script", "api_key"
+Script uses dynamic argparse defaults (`datetime.now()`, `os.path.expanduser()`). Switch to literal defaults or pass `ext02` manually when calling `mgc_run`.
 
----
+## Error: "args_not_recognized" (during mgc_run)
 
-### Error: "info_owner not found"
+Source script's argparse did not recognize the args passed via `ext02`. Check `add_argument` definitions and the `ext02` JSON array.
 
-**Symptoms:** Specific identifier not found
+## Error: "MGC not running"
 
-**Solutions:**
-1. List all stored items: `mgc_list`
-2. Check for typos in `info_owner`
-3. Remember: "smtp_server" and "SMTP_SERVER" are different
+1. `mgc` in a terminal
+2. Check http://127.0.0.1:57219 responds
+3. Verify token file: `~/.mgc/database/mgc_black_box/.mgc_token`
 
----
+## Error: "MCP tool call failed"
 
-### Error: "Invalid key format"
-
-**Symptoms:** RSA key parsing errors
-
-**Solutions:**
-1. Ensure public key includes proper headers/footers:
-   ```
-   -----BEGIN PUBLIC KEY-----
-   ...
-   -----END PUBLIC KEY-----
-   ```
-2. Ensure key is on a single line (escape newlines)
-3. Verify key is valid RSA public key
+1. Confirm MGC ≥ 1.4.9; upgrade via WebUI Settings or `pip install --upgrade mgc-blackbox`
+2. Verify MCP server config has `PYTHONIOENCODING=utf-8` env (Windows)
 
 ---
 
-### Error: "MGC version too old"
+# Zero-Exposure Workflow (Conceptual)
 
-**Symptoms:** API incompatibility errors
+A Zero-Exposure skill follows this pattern:
 
-**Solutions:**
-1. Check version: `pip show mgc-blackbox`
-2. Update: `pip install mgc-blackbox --upgrade`
-3. Restart MGC service after update
-
----
-
-### Error: "MCP tool call failed"
-
-**Symptoms:** Tool execution error
-
-**Solutions:**
-1. Verify MGC is running: `mgc` in terminal
-2. Check service URL: http://127.0.0.1:57219
-3. Verify token file exists: `~/.mgc/database/mgc_black_box/.mgc_token`
-4. Restart MGC if needed
+1. **User stores credentials in MGC** (`info_type="config"`, `info_owner="<name>"`)
+2. **Script Agent stores a local script in MGC** (`info_type="script"`)
+3. **Executor Agent invokes the script via `mgc_run`** — script runs inside blackbox
+4. **Script reads credentials via HTTP API** (localhost, MGC token required)
+5. **Script performs the sensitive operation** (SMTP, API call, etc.)
+6. **AI receives only the result** (via result file or stdout path)
 
 ---
 
-### Error: "Connection refused"
-
-**Symptoms:** Cannot connect to MGC
-
-**Solutions:**
-1. Start MGC: `mgc`
-2. Check if port 57219 is available
-3. Check firewall settings
-4. Verify localhost resolution
-
----
-
-### Error: "Permission denied"
-
-**Symptoms:** Cannot access MGC storage
-
-**Solutions:**
-1. Check file permissions on `~/.mgc/`
-2. Verify token file is readable
-3. Run MGC with appropriate permissions
-
----
-
-# MCP Tools Reference
-
-This section documents the MCP tools available for Key‑Safe implementation.
-
-## mgc_save
-
-Store credentials securely.
-
-```
-Tool: mgc_save
-Parameters:
-  info_type:   string   # Type category (e.g., "config", "credential")
-  info_owner:  string   # Unique identifier
-  content:     string   # JSON string of credential data
-
-Returns:
-  success: true/false
-  msg: status message
-```
-
----
-
-## mgc_get
-
-Retrieve stored credentials.
-
-```
-Tool: mgc_get
-Parameters:
-  info_type:   string   # Must match saved type
-  info_owner:  string   # Must match saved identifier
-  action:      string   # Optional: "run" for script execution
-
-Returns:
-  content: stored data
-  ext_01: language type (for scripts)
-  ext_03: signature
-```
-
----
-
-## mgc_list
-
-List all stored credentials.
-
-```
-Tool: mgc_list
-Parameters: (none required)
-
-Returns:
-  items: array of stored credential references
-```
-
----
-
-## mgc_seal
-
-Create encrypted capsule for trusted nodes.
-
-```
-Tool: mgc_seal
-Parameters:
-  info_type:   string   # "script"
-  info_owner:  string   # Script identifier
-  ext04:       string   # Target node's public key (PEM format)
-
-Returns:
-  content: encrypted capsule
-  ext_01: script language
-  ext_03: signature
-```
-
----
-
-# Zero‑Exposure Workflow (Conceptual)
-
-A Zero‑Exposure skill follows this pattern:
-
-1. **User stores credentials in MGC**
-   Example identifiers: smtp_config, slack_bot_token, github_token.
-
-2. **Skill references the identifier**
-   The AI never sees the actual credentials.
-
-3. **Local script retrieves credentials from MGC**
-   The script communicates with the local MGC service to fetch encrypted content.
-
-4. **Local script performs the sensitive operation**
-   Examples: sending email, calling an API, pushing to Git.
-
-5. **AI receives only the result**
-   No secrets are ever exposed.
-
----
-
-# Common Zero‑Exposure Patterns
+# Common Zero-Exposure Patterns
 
 ## Email Sender
 
 - User stores SMTP credentials in MGC
-- Local script retrieves them
+- Local script retrieves them via HTTP API inside `mgc_run` blackbox
 - Script sends email
-- AI provides only subject/body/recipient
+- AI provides only subject/body/recipient (non-sensitive args)
 
 ## API Client
 
 - User stores API key in MGC
-- Local script retrieves it
+- Local script retrieves it via HTTP API
 - Script performs authenticated request
 - AI provides endpoint and payload
 
 ## Git Automation
 
 - User stores GitHub token in MGC
-- Local script retrieves it
+- Local script retrieves it via HTTP API
 - Script performs push/pull/commit
 - AI provides commit message
 
@@ -645,17 +628,17 @@ A Zero‑Exposure skill follows this pattern:
 ## What This Skill Guarantees
 
 - **No credentials in prompts**: AI never receives credential values
-- **No credentials in code**: Scripts retrieve from MGC, not hardcoded
-- **No credentials in logs**: Only non‑sensitive information logged
+- **No credentials in code**: Scripts retrieve from MGC via HTTP API inside `mgc_run`
+- **No credentials in logs**: Only non-sensitive information logged
 - **No credentials in memory**: Credentials stay in MGC, not AI context
 - **Encrypted storage**: All credentials encrypted at rest
 
 ## Critical Rules
 
 1. **Never** include actual credentials in SKILL.md
-2. **Never** pass credentials as prompt parameters
+2. **Never** pass credentials as prompt parameters or `ext02`
 3. **Always** use MGC for credential storage
-4. **Always** use local scripts for credential retrieval
+4. **Always** use local scripts via `mgc_run` for credential retrieval
 5. **Never** log credential values
 6. **Always** validate credential references, not values
 
@@ -664,13 +647,13 @@ A Zero‑Exposure skill follows this pattern:
 # Entrypoint
 
 This skill has **no runtime entrypoint**.
-It is a documentation‑only instructional skill.
+It is a documentation-only instructional skill.
 
 ---
 
-# Template: Zero‑Exposure SKILL.md Structure
+# Template: Zero-Exposure SKILL.md Structure
 
-When creating a new skill using Key‑Safe patterns, use this structure:
+When creating a new skill using Key-Safe patterns, use this structure:
 
 ```markdown
 ---
@@ -679,7 +662,7 @@ spec: usk/3.0
 id: your_skill_id
 version: 1.0.0
 name: Your Skill Name
-description: Brief description of what this skill does
+description: Brief description
 author: Your Name
 license: MIT
 tags: zero-exposure, mgc, your_tags
@@ -693,12 +676,13 @@ What this skill does.
 
 # Prerequisites
 
-- Install MGC Blackbox
-- Store credentials in MGC (info_owner: "your_reference")
+- MGC Blackbox ≥ 1.4.9
+- Store credentials in MGC (info_type: "config", info_owner: "your_reference")
+- Install required dependencies
 
 # Usage
 
-How to use this skill.
+How to use this skill via mgc_run.
 
 # Credentials
 
@@ -708,10 +692,8 @@ How to use this skill.
 
 # Security
 
-This skill uses Zero‑Exposure design.
-Credentials are stored in MGC, never exposed to AI.
-
----
+This skill uses Zero-Exposure design.
+Credentials are stored encrypted in MGC and read by local scripts via HTTP API inside mgc_run blackbox execution. AI agents never touch plaintext.
 
 # Entrypoint
 
@@ -720,47 +702,79 @@ Describe how to use this skill.
 
 ---
 
-# Template: Zero‑Exposure Local Script Structure
+# Template: Zero-Exposure Local Script Structure
 
-When creating a local script for your skill:
+When creating a local script for your skill, store it as an MGC script and invoke via `mgc_run`:
 
 ```python
-# Template structure (documentation only)
+"""Zero-Exposure script template. Store in MGC; execute via mgc_run."""
 
+import os
 import json
-import requests  # or appropriate library
+import argparse
+import requests
+import datetime
 
-# MGC Configuration
 MGC_BASE_URL = "http://127.0.0.1:57219"
-TOKEN_FILE = "~/.mgc/database/mgc_black_box/.mgc_token"
+TOKEN_FILE = os.path.expanduser("~/.mgc/database/mgc_black_box/.mgc_token")
 
-def get_mgc_token():
-    # Read token from file
-    pass
 
 def get_credentials(info_owner, info_type="config"):
-    # Call MGC API to retrieve credentials
-    # Return: dict of credential data
-    pass
+    """Read credentials from MGC via HTTP API. Script-internal only."""
+    if not os.path.exists(TOKEN_FILE):
+        raise RuntimeError("MGC token file missing")
+    with open(TOKEN_FILE, "r") as f:
+        token = f.read().strip()
+    url = f"{MGC_BASE_URL}/api/mgc/sensitive/get"
+    headers = {"X-MGC-Token": token, "Content-Type": "application/json"}
+    resp = requests.post(
+        url,
+        json={"info_type": info_type, "info_owner": info_owner, "action": "run"},
+        headers=headers,
+        timeout=10,
+    )
+    resp.raise_for_status()
+    result = resp.json()
+    if isinstance(result, str):
+        return json.loads(result)
+    return result.get("data", {}).get("data_field", {})
+
 
 def perform_sensitive_operation(credentials, operation_params):
-    # Use credentials to perform operation
-    # NEVER log credential values
-    # Return: non‑sensitive result only
-    pass
+    """Use credentials to perform the operation. NEVER log credential values."""
+    # Replace this with your actual logic
+    raise NotImplementedError
+
 
 def main():
-    # 1. Get credentials from MGC
-    creds = get_credentials(info_owner="your_reference")
+    # ✅ Literal defaults only — MGC 1.4.10 auto-parses into ext02
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--credential_ref", default="your_reference")
+    parser.add_argument("--param", default="default")
+    args, _ = parser.parse_known_args()  # ✅ parse_known_args
 
-    # 2. Perform operation
-    result = perform_sensitive_operation(creds, params)
+    creds = get_credentials(args.credential_ref)
 
-    # 3. Return result (not credentials!)
-    print(result)
+    result = perform_sensitive_operation(creds, {"param": args.param})
+
+    out_dir = os.path.expanduser("~/mgc_outputs")
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(
+        out_dir, f"result_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+    )
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(str(result))
+    print(f"RESULT_FILE:{out_path}")
+
 
 if __name__ == "__main__":
     main()
 ```
 
+> This template is meant to be stored in MGC as a script (`mgc_save`) and executed by AI via `mgc_run`. The AI provides non-sensitive args via `ext02` JSON array string; credentials are read inside MGC blackbox; AI only sees the result file.
+
 ---
+
+# License
+
+MIT

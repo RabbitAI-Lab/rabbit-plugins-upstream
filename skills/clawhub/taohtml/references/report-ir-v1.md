@@ -5,7 +5,7 @@ Report IR v1 是 TaoHtml 的可重新编译报告源，不是客户问卷、固�
 ## v1 minor 版本与 Workflow Profile 所有权
 
 - `1.0` 是 legacy unbound：顶层不得出现 `workflow_profile`。Validator、Compiler
-  和 pilot 编排器不得从文件名、标题、`archetype`、关键词、主题、企业视觉
+  和 IR 编排器不得从文件名、标题、`archetype`、关键词、主题、企业视觉
   `profile_ref`、材料内容或其他字段猜测场景。
 - `1.1` 是 Profile-bound：必须包含一个封闭的顶层 `workflow_profile`，只记录
   `primary_profile_id`、当前 `definition_version=2.0`、已确认业务目标/语义依据
@@ -14,12 +14,12 @@ Report IR v1 是 TaoHtml 的可重新编译报告源，不是客户问卷、固�
 - 九个 `primary_profile_id` / `source_profile_id` 只接受 Workflow Profile 合同中的
   稳定 id。binding 不保存完整 Profile 文档、场景特有设计简报、HTML/CSS/JS、
   页面模板或企业视觉资产，也不创建九套 IR。
-- 新建的 Report IR engineering pilot 必须从已确认简报写出 `1.1`。既有 `1.0`
+- 新建的 Report IR 工程必须从已确认简报写出 `1.1`。既有 `1.0`
   工程仍可验证和编译为 `legacy_unbound`；兼容不等于为旧工程静默补场景。
 - Workflow Profile binding 归属上游业务语义来源；`build_binding.enterprise` 仍只归属
   企业视觉 Profile/Enterprise Binding。两者字段、名称、验证和用途相互独立。
 
-Profile 选择本身不启动 IR。只有独立授权的 Report IR engineering pilot 才可以从
+Profile 选择本身不启动 IR。只有独立授权的 Report IR 工程才可以从
 已确认简报派生并写入新的 `1.1` binding；单独的 Report IR 工程请求可以检查、验证、
 编译或 Patch 已提供的 `1.0`/`1.1` 源，但不得推断或制造缺失 binding。Direct HTML
 仍是默认生产路径。binding 不替代 `design_brief_ref`、`design_brief_sha256`、设计简报
@@ -115,7 +115,7 @@ python scripts/validate_report_ir.py report-ir.json \
 - 接受任意章节数、任意页数和稳定 ID，不依赖五页测试顺序；
 - 把 Headline、Claim、Evidence、Dataset、Process、Comparison、Image 等语义 Block 编译为可追踪 DOM；
 - 把单调展开的 State Sequence 编译为现有 `fragment-v1` Runtime 步骤；
-- 同一份语义图可以切换四套内置视觉系统，不重新生成内容；
+- 同一份语义图可以切换八套内置视觉系统，不重新生成内容；
 - 输出 `index.html`、规范化 IR、Source Map 和 Build Manifest；
 - Build Manifest 分别记录 IR、语义图、主题、Compiler、Runtime 和输出哈希；
 - Build Manifest 原样传递确定性的 Workflow Profile 记录：`binding_state`、主 Profile、
@@ -150,7 +150,7 @@ Compiler 不调用模型，也不读取/解释 Profile definition。`workflow_pr
 证据、Project Theme、Enterprise Binding 或 Runtime 的选择。Compiler 内部版本随本次
 兼容变化更新，但这不是 TaoHtml 公共版本号。
 
-当前 Compiler 开发版本已经接入四套内置主题、客户参考重构主题和企业模板固定壳。
+当前 Compiler 开发版本已经接入八套内置主题、客户参考重构主题和企业模板固定壳。
 企业保真编译会为任意页数按页面语义路由 cover / toc / section / content / data 壳，只向
 已验证的 editable safe region 注入报告内容，并保持固定 Logo、页眉、页脚和装饰子树不变。
 若企业 VI v1.4 显式声明 `runtime_page_number` 可替换区，固定 crop 必须先确定性移除来源页码
@@ -195,6 +195,7 @@ Build Manifest，不能被误认为已实现。
 
 ## 当前阶段边界
 
-本文件、v1 Validator 和通用主题 Compiler 是 Report IR 的研究工程节点。当前代码可用于
-研究构建与对照测试，但在复杂构图、增量编译和完整跨模型回归基准完成前，
-不对客户声称 Report IR 已经是正式能力，也不进入三平台发布包。
+本文件、v1 Validator 和通用主题 Compiler 构成 TaoHtml 正式可用的 Report IR 工程路线：
+可从已确认简报生成、验证并确定性编译可重新编译的报告构建。受约束高级 Composition Graph、
+非单调状态 Runtime 和增量编译尚未接入；这些具体能力不得被误认为已经实现。Report IR
+可以随 TaoHtml 发布包提供，但仍只在用户明确请求或项目明确授权时启用。

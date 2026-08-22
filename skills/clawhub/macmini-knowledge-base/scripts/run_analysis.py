@@ -15,6 +15,53 @@ from utils import (
     convert_old_office, is_gibberish
 )
 
+# macOS NAME_MAX = 255 bytes；Linux NAME_MAX 通常 255 bytes
+# 保留 200 bytes 限额给 summary 文件名（实测 ASCII < 200 bytes 安全）
+SUMMARY_NAME_MAX = 200
+
+def sanitize_filename(name, max_length=SUMMARY_NAME_MAX):
+    """防止 OSError [Errno 63] File name too long
+    
+    策略：
+      1. 保留扩展名
+      2. 超长文件名截断 + 加 8 位 MD5 hash 防冲突
+      3. 处理 UTF-8 编码（不切碎字符）
+    
+    Args:
+        name: 原始文件名
+        max_length: 字节长度上限（默认 200）
+    
+    Returns:
+        截断后的安全文件名
+    """
+    if not name:
+        return name
+    
+    name_bytes = name.encode('utf-8')
+    if len(name_bytes) <= max_length:
+        return name
+    
+    # 分离扩展名（基于原始字符串）
+    base, ext = os.path.splitext(name)
+    ext_bytes = ext.encode('utf-8')
+    base_bytes = base.encode('utf-8')
+    
+    # 加 8 位 hash 标识
+    import hashlib
+    h = hashlib.md5(name_bytes).hexdigest()[:8]
+    
+    # 截断 base_bytes，留出 ext + "_" + 8 hash 的空间
+    reserve = len(ext_bytes) + 1 + 8  # "_" + hash + ext
+    available = max_length - reserve
+    
+    if available > 0 and len(base_bytes) > available:
+        # 安全截断（按 bytes 截断后 decode，errors='ignore' 切碎字符也无所谓）
+        truncated = base_bytes[:available].decode('utf-8', errors='ignore')
+        return f"{truncated}_{h}{ext}"
+    
+    # 兜底：极端情况（扩展名本身就超长）
+    return name[:max_length]
+
 KNOWLEDGE_DIR = os.path.expanduser("~/.openclaw/workspace/knowledge")
 STATE_FILE = os.path.join(KNOWLEDGE_DIR, ".analysis/analysis_state.json")
 SUMMARY_DIR = os.path.join(KNOWLEDGE_DIR, ".analysis/summaries")
@@ -118,12 +165,28 @@ def main():
         print(f"  分析中: {filename}")
         content = analyze_file(filepath)
 
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        safe_filename = sanitize_filename(filename)
         summary_file = os.path.join(
             SUMMARY_DIR,
-            f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{filename}.summary.txt"
+            f"{timestamp}_{safe_filename}.summary.txt"
         )
-        with open(summary_file, 'w', encoding='utf-8') as f:
-            f.write(content)
+        try:
+            with open(summary_file, 'w', encoding='utf-8') as f:
+                f.write(content)
+        except OSError as e:
+            if e.errno == 63:  # ENAMETOOLONG（File name too long）
+                # 重试：再截断 20 bytes
+                short_name = sanitize_filename(filename, max_length=180)
+                summary_file = os.path.join(
+                    SUMMARY_DIR,
+                    f"{timestamp}_{short_name}.summary.txt"
+                )
+                with open(summary_file, 'w', encoding='utf-8') as f:
+                    f.write(content)
+                print(f"    ⚠️  文件名过长已截断: {short_name[:60]}...")
+            else:
+                raise
 
         summaries.append({
             "filename": filename,

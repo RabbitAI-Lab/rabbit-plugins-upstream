@@ -1,45 +1,62 @@
-## Description: <br>
-Unbrowser performs cheap first-pass web discovery without launching Chrome: it fetches SSR pages, runs bounded JavaScript, discovers routes, forms, and API endpoints, extracts structured data, and identifies bot-wall or browser-only escalation points. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cheap first-pass web discovery without launching Chrome - fetch SSR pages, run bounded JS, find routes/forms/API endpoints, extract structured data, and detect bot-wall or browser-only escalation points.
 
-## Publisher: <br>
-[protostatis](https://clawhub.ai/user/protostatis) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[protostatis](https://clawhub.ai/user/protostatis)
 
-## Use Case: <br>
-Developers and agents use Unbrowser as a low-cost first pass for public web discovery, structured extraction, route/form/API discovery, and deciding when a task needs a managed browser. It is also used for scoped authenticated browsing only when the user explicitly provides credentials for the target site. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Session cookies can authenticate as the user who exported them. <br>
-Mitigation: Use only user-provided cookies for the exact authorized host, treat them like passwords, clear them after authenticated work, and close the session before unrelated tasks. <br>
-Risk: Authenticated browsing actions could modify a user's account or data. <br>
-Mitigation: Pause for explicit user confirmation before posting, purchasing, deleting, sending, transferring, changing settings, or running other state-changing authenticated actions. <br>
-Risk: The local challenge-cookie solver can expose browser cookies if bound beyond localhost. <br>
-Mitigation: Keep solver services bound to 127.0.0.1, use host allowlists for private or internal targets, and do not expose unauthenticated solver endpoints publicly. <br>
-Risk: The Chrome-aligned browsing profile could be misused for mass scraping or rate-limit circumvention. <br>
-Mitigation: Refuse mass scraping, denial-of-service-style volumes, credential harvesting, and circumvention of per-IP limits; escalate only when documented browser-only signals require it. <br>
+## Use Case:
 
+Developers and agents use this skill for low-cost first-pass browsing of public web pages, SSR/static sites, search results, route/form/API discovery, structured extraction, and deciding when a full managed browser is required.
 
-## Reference(s): <br>
-- [Unbrowser project homepage](https://github.com/protostatis/unbrowser) <br>
-- [Unbrowser Skill on ClawHub](https://clawhub.ai/protostatis/skills/unbrowser) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON-RPC examples and shell or Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes escalation guidance, operational safety rules, and bounded browsing workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.17 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Cookies supplied to the skill can act as account credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat cookies as sensitive credentials, scope them to the authorized host, clear them after authenticated use, and close the session before unrelated work.
+
+Risk: Authenticated actions could change user account state.
+
+Mitigation: Require explicit user approval before posts, purchases, deletes, transfers, settings changes, or other state-changing actions.
+
+Risk: Challenge-cookie solving can expose browser cookies if bound or routed too broadly.
+
+Mitigation: Keep cookie solving local and host-scoped, use explicit allowlists for private or internal targets, and do not expose unauthenticated solver endpoints publicly.
+
+Risk: Page JavaScript and DOM content are untrusted.
+
+Mitigation: Use eval only for diagnostic or extraction code written by the agent, and never execute strings extracted from a page.
+
+## Reference(s):
+
+- [unbrowser upstream repository](https://github.com/protostatis/unbrowser)
+- [unbrowser ClawHub release](https://clawhub.ai/protostatis/skills/unbrowser)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell, JSON-RPC, and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes host-scoped cookie handling, session isolation, and managed-browser escalation guidance.]
+
+## Skill Version(s):
+
+0.0.21 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

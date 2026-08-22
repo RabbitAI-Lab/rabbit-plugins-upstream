@@ -1,23 +1,25 @@
-# AGENTS.md — ct-samplesize v3.4.8
+# AGENTS.md — ct-samplesize v4.0.7
 
-## Overview / 技能概述
+## Overview
 
-`ct-samplesize`: An easy-to-use sample size & power tool for clinical trial practitioners. Powered by R + 20+ packages (rpact/gsDesign/TrialSize/PowerTOST etc.), it performs 37 complex calculations via natural-language prompts (English by default, auto-Chinese on Chinese-OS). The generated R code is shown in SAFE PREVIEW (not executed unless --yes) and can be provided in full on request for verification, submission, or re-run. / ct-samplesize：面向临床试验从业者的易用型样本量与检验效能计算工具。后台以 R 软件及 rpact/gsDesign/TrialSize/PowerTOST 等 20+ R工具包为依托，用户只需使用自然语言对话方式的提示词，即可完成（默认英文输出，OS 中文环境时自动切换中文）37 种复杂专业的样本量与检验效能计算工作。生成的 R 代码默认以安全预览展示（不执行，除非加 --yes），也可应要求完整提供，供用户核查、递交代码或修改后重跑。
+`ct-samplesize`: An easy-to-use sample size & power tool for clinical trial practitioners. The **default authoritative engine is a remote coze R compute service** (rpact/gsDesign/TrialSize/PowerTOST etc., 20+ packages running server-side — no local R required); it performs all 49 test types via natural-language prompts (output in Chinese or English per OS language setting, prompt can force-switch). In the published skill **no R or shell runs locally**; only trial-design parameters are sent to coze, and full R code can be returned on request for verification, submission, or re-run. A pure-Python fallback covers 5 basic superiority tests offline.
 
 ---
 
-## Core Rules / 核心规则
+## Core Rules
 
-### 1. R Environment Detection / R 环境检测
-- Detect R via PATH or RSCRIPT_PATH env
-- Installed → report version + check packages
-- Not installed → recommend install + offer Python fallback
+### 1. Compute Backend Detection (coze primary)
+- **Default / production:** the skill calls the coze R service (`CTSS_COZE_ENDPOINT`); no local R needed. If unset, set `CTSS_COZE_MOCK=1` for a local demo.
+- **Offline fallback (published):** the 5 basic superiority tests (`ttest_ind`, `ttest_one`, `ttest_paired`, `proportion_one`, `proportion_two`) compute via the built-in pure-Python backend — clearly labeled non-authoritative.
+- **Dev / local-R backend:** only if `adapters/r-assets/` is present and `CTSS_BACKEND=local-r` (or `CTSS_FORCE_R=1` with no coze) — then R is detected via PATH/RSCRIPT_PATH and run locally behind `--yes`.
 
-### 2. Extended Tool Selection / 扩展工具选择
+### 2. Extended Tool Selection
 
-| User Need 用户需求 | Path 路径 |
+> All rows below run **server-side on coze** in the published skill (only design params are sent). The local pure-Python fallback covers only `ttest_ind` / `ttest_one` / `ttest_paired` / `proportion_one` / `proportion_two`.
+
+|User Need|Path|
 |:----------|:-----|
-| Basic stats (t-test/ANOVA/proportion) | Python → auto gen R code |
+| Basic stats (t-test/ANOVA/proportion) | coze (R) — 5 basic superiority tests also have a local pure-Python fallback |
 | Longitudinal / Repeated measures | R: `simr` (mixed model) |
 | Diagnostic trial | R: `pROC` (ROC formula) |
 | Count data / Recurrent events | R: custom Wald test |
@@ -41,42 +43,62 @@
 | Dunnett comparisons | R: `MCPAN` |
 | Mediation | R: `powerMediation` |
 
-### 3. Code Execution / 代码执行规范
-- R via subprocess (Rscript), path: auto-detect (RSCRIPT_PATH env or PATH search)
-- Python via Anaconda (`C:\Tools\anaconda3\python.exe`)
-- **Default: dry-run mode.** R code is displayed; execution requires `-y`/`--yes`
-- Temp R files written to system temp dir (`tempfile.gettempdir()`), auto-cleaned after run
+### 3. Code Execution
+- **Published skill:** no local R/shell. The orchestration layer (`scripts/samplesize_power.py`) routes to `CozeBackend` (default), `LocalPythonBackend` (5 basic tests offline), or `LocalRBackend` (dev only, in `adapters/r-assets/`).
+- **Default: safe preview.** `--dry-run` prints the exact coze request envelope (no send); `--yes` is accepted but not required for coze (it's a stateless compute service). The legacy `--yes` gate applies only to the optional local-R backend.
+- Python (orchestration + fallback) via the bundled interpreter; figures from coze are written to `CTSS_OUTPUT_DIR` (default `./outputs`).
 
-### 4. Result Output / 结果输出标准 (v3.4.4)
+### 4. Result Output (v3.4.4)
 
 Every analysis includes:
 - Input parameters + defaults used
 - Calculation result (sample size / power / effect size)
 - Dropout adjustment (if applicable)
 - Assumptions & limitations
-- **Default = SAFE PREVIEW (code shown, NOT executed)**; use `--yes`/`-y` to execute & compute, `--show-code` to display the code (no execution), or `--dry-run` to preview only
-- R code is generated and shown by default but NOT run unless `--yes` is given; `-y`/`--yes` explicitly executes and computes
-- **`--test adaptive_simulate`**: primary engine is the standalone pure base-R function library `scripts/adaptive_sim.R` — the CLI sources it and calls `run_adaptive_sim()` (SAFE PREVIEW, `--yes` to run, base R only, no extra packages). You can also `source("scripts/adaptive_sim.R")` in R yourself and call `run_adaptive_sim()` / `simulate_*()` directly. When R is unavailable, the skill automatically falls back to the equivalent pure-Python module `scripts/adaptive_simulator.py`. See `references/adaptive_simulator.md`. / `--test adaptive_simulate`：主引擎为独立纯 base-R 函数库 `scripts/adaptive_sim.R`——CLI 通过 `source()` 它并调用 `run_adaptive_sim()`（安全预览默认、`--yes` 执行，仅需 base R）；你也可在 R 中自行 `source("scripts/adaptive_sim.R")` 后直接调用 `run_adaptive_sim()`/`simulate_*()`。未装 R 时自动回退至等价的纯 Python 模块 `scripts/adaptive_simulator.py`。详见 `references/adaptive_simulator.md`。
+- **Default = SAFE PREVIEW (coze request envelope shown, NOT sent)**; use `--yes`/`-y` to send to coze & compute, `--show-code` to display the coze request JSON (no send), or `--dry-run` to preview only. coze is a stateless compute service, so no local code ever executes.
+- The optional local-R dev backend (adapters/r-assets) behaves like v3.x: R code is shown but NOT run unless `--yes` is given; `-y`/`--yes` explicitly executes locally.
+- **`--test adaptive_simulate`**: the authoritative engine is the inlined pure base-R function library `ADAPTIVE_SIM_R` (maintained in `adapters/r-assets/local_r_backend.py`, no extra packages) running **server-side on coze** in the published skill. A legacy pure-Python module `adapters/r-assets/legacy/adaptive_simulator.py` is retained for offline dev/testing. The CLI shows the coze request envelope in SAFE PREVIEW and computes via coze. See `references/adaptive_simulator.md`.
 
-### 5. Language Detection / 语言检测
-- **Default English / 默认英文**: All user-facing prompt content defaults to English. / 所有面向用户的提示内容默认使用英文。
-- **Auto-switch to Chinese on Chinese-OS / OS 中文环境自动切换中文**: When the OS is detected as Chinese (locale contains `zh`/`CN`, e.g. `LANG=zh_CN.UTF-8`, Windows UI language `zh-CN`), prompt content auto-switches to Chinese without explicit user request. / 当检测到操作系统为中文环境（locale 含 `zh`/`CN`，如 `LANG=zh_CN.UTF-8`、Windows UI 语言 `zh-CN`）时，给用户的提示内容自动切换为中文，无需用户显式要求。
-  - **Detection method / 检测方法**: Linux/macOS read `LANG`/`LC_ALL`/`LANGUAGE`; Windows use `Get-Culture`/`Get-WinSystemLocale` or `os` env to check if the language code starts with `zh`; if the `<response_language>` tag specifies a language, follow it. / Linux/macOS 读 `LANG`/`LC_ALL`/`LANGUAGE`；Windows 用 `Get-Culture`/`Get-WinSystemLocale` 或 `os` 环境变量判断语言代码是否以 `zh` 开头；若 `<response_language>` 标签明确指定，则服从该标签。
-- **Common modules must prepare bilingual / 常用模块须备双语**: English + Chinese prompt content for common test types, report template, quick menu, flag reference. / 常用检验类型、报告模板、快速引导菜单、参数速查表须准备英文 + 中文两套提示内容。
-- **Complex/rare modules may be English-only / 复杂/少用模块可暂只英文**: e.g. `group_sequential`, `adaptive`, `mixed_model`, `bayesian`, `win_ratio`, `mams`, `vaccine_efficacy` etc. / 如 `group_sequential`、`adaptive`、`mixed_model`、`bayesian`、`win_ratio`、`mams`、`vaccine_efficacy` 等。
-- **This policy does not affect code output / 此策略不影响代码输出**: R/Python code is always English, shown per `--show-code`. / R/Python 代码始终英文，按 `--show-code` 展示。
+### 5. Language Detection
+- **Follow OS language setting**: Output language (Chinese or English) follows the OS language setting — Chinese on a Chinese-OS, English otherwise.
+- **Prompt can force-switch**: The user may override the OS-based default anytime via an explicit language request (e.g. "switch to English").
+- **Detection method**: Linux/macOS read `LANG`/`LC_ALL`/`LANGUAGE`; Windows use `Get-Culture`/`Get-WinSystemLocale` or `os` env to check if the language code starts with `zh`; if the `<response_language>` tag specifies a language, follow it.
+- **Docs are English-only (ct-base §4)**: The skill documentation (SKILL.md, AGENTS.md, references, etc.) is English-only. Runtime output for common modules may still be English + Chinese per OS setting; complex/rare modules are English-only.
+- **Complex/rare modules may be English-only**: e.g. `group_sequential`, `adaptive`, `mixed_model`, `bayesian`, `win_ratio`, `mams`, `vaccine_efficacy` etc.
+- **This policy does not affect code output**: R/Python code is always English, shown per `--show-code`.
 
-### 6. Mixed Model Specifics / 混合模型特别说明
+### 6. Mixed Model Specifics
 - Use `simr::makeLmer()` / `makeGlmer()` to build model from literature parameters
 - Run `powerSim()` with nsim ≥ 500 for stable estimates
 - Always run `powerCurve()` to find minimum sample size
 - Report computation time (can be 1-5 min for complex models)
 
+### 7. Menu Navigation Design — Non-Exclusive
+- The interactive "quick menu" that guides users to pick a test type MUST NOT be a mutually-exclusive tree. The same test can appear under multiple top-level entries, mirroring PASS's menu design.
+- Rationale: with 49 test types, classification dimensions intersect (design family × endpoint type). A strict tree would hide reachable paths. The menu is a *navigation aid*, not a taxonomy.
+- Example: sequential survival analysis (`gsd_survival` = `group_sequential` + survival endpoint) must be reachable BOTH from a **Survival Analysis** top-level menu AND from a **Sequential Group-Sequential Design** top-level menu.
+- Rule of thumb for future extensions: any test classifiable along multiple axes (e.g. sequential/adaptive × means/proportion/survival/rate) must be listed under every relevant top-level entry — do NOT hang it on a single node.
+- **Menu structure is now formalized in `references/menu.md`** (primary tree by endpoint + design-family cross-index) and surfaced in SKILL.md `## Quick Menu`. When guiding a user to pick a test, read `references/menu.md` to stay consistent with the canonical classification.
+
+### 8. Triage (ct-base §6.2) — Four-Way Interaction
+
+Before any user interaction, triage first (ct-base §6.2) into **Simple / Middle / Complex / Vague**, then decide whether / how to show a menu.
+
+|Class|Trigger|Action|
+|:---|:---|:---|
+|**Simple**|Direct t-test/ANOVA/proportion-style question with clear how/why|Answer directly; 1–2 turns; pick from the 49 test types; no menu|
+|**Middle**|Single-point but deep (ICH guidance detail, statistical parameter, compliance gray zone; needs 3–4 points)|Still answer directly, **no menu** (same path as Simple); mark `difficulty = "middle"` for a richer multi-point answer. When Simple vs Middle is unclear, prefer **Middle**|
+|**Complex**|Multi-step or design-family question (sequential/adaptive/mixed/survival)|Consult `references/menu.md` → present the relevant menu; guide step-by-step|
+|**Vague**|Under-specified ask (missing endpoint, design, or effect size)|Use `grill-me` to ask 1–3 clarifying questions → then re-triage|
+
+- Choose menu depth based on simple vs complex.
+- `references/menu.md` defines the **Complex** path; Simple and Vague rarely need the full menu.
+
 ---
 
 ## Security Fixes (v3.3+)
 
-| Fix 修复 | Implementation 实现 |
+|Fix|Implementation|
 |:----|:--------------|
 | Default dry-run | R code displayed, not executed unless `-y` confirmed |
 | Output sanitization | `sanitize_output()` strips paths, truncates |
@@ -89,29 +111,30 @@ Every analysis includes:
 
 ---
 
-## Dependencies / 依赖
+## Dependencies
 
-### R Packages (install on demand) / R 包（按需安装）
-R packages do NOT need to be pre-installed all at once. When the skill detects a missing package it prints the install command in output; the user runs it once. / R 包不需要全部预装。技能检测到某包缺失时会在输出中提示安装命令。用户只需执行一次即可。
+### R Packages (dev / coze-side — NOT in published skill)
+In the published skill, all R packages run **server-side on coze**; you never install them locally. This section applies only when running the optional local-R backend (`CTSS_BACKEND=local-r`, requires `adapters/r-assets/`):
+R packages do NOT need to be pre-installed all at once. When the dev backend detects a missing package it prints the install command in output; the user runs it once.
 
-| Tier 依赖层级 | Package 包 | Used for 用到时 |
+|Tier|Package|Used for|
 |:---|:---|:---|
-| **Core (high-freq) / 核心（高频）** | `TrialSize`, `pwr`, `rpact`, `gsDesign`, `PowerTOST`, `powerSurvEpi` | NI, equivalence, survival, superiority margin, group-sequential, BE etc. / 非劣效、等效、生存、优效界值、组序贯、BE 等 |
-| **Aux (mid-freq) / 辅助（中频）** | `simr`, `lme4`, `pROC`, `survival` | mixed model, ROC, exact survival / 混合模型、ROC、精确生存 |
-| **Low-freq / 低频** | `BayesCTDesign`, `escalation`, `BuyseTest`, `RBesT`, `MCPAN`, `powerMediation`, `BlandAltmanLeh` | vaccine, dose escalation, Win-Ratio, historical control, Dunnett, mediation / 疫苗、剂量递增、Win-Ratio、历史对照、Dunnett、中介 |
-| **No R package / 无需 R 包** | — | `ttest_*` (partial), `anova`, `poisson`, `cluster`, `bland_altman`, `vaccine_efficacy`, `bayesian`, `dose_escalation`, `assurance`, `multiple_endpoints`, `must_win`, `mediation` |
+|**Core (high-freq)**|`TrialSize`, `pwr`, `rpact`, `gsDesign`, `PowerTOST`, `powerSurvEpi`|NI, equivalence, survival, superiority margin, group-sequential, BE etc.|
+|**Aux (mid-freq)**|`simr`, `lme4`, `pROC`, `survival`|mixed model, ROC, exact survival ROC|
+|**Low-freq**|`BayesCTDesign`, `escalation`, `BuyseTest`, `RBesT`, `MCPAN`, `powerMediation`, `BlandAltmanLeh`|vaccine, dose escalation, Win-Ratio, historical control, Dunnett, mediation|
+|**No R package**|—|`ttest_*` (partial), `anova`, `poisson`, `cluster`, `bland_altman`, `vaccine_efficacy`, `bayesian`, `dose_escalation`, `assurance`, `multiple_endpoints`, `must_win`, `mediation`|
 
-**When the user requests one-click install, run / 用户要求一键安装时，执行：**
+**When the user requests one-click install, run**
 ```r
 install.packages(c("TrialSize", "pwr", "rpact", "gsDesign", "PowerTOST", "simr", "lme4", "pROC", "powerSurvEpi", "survival"))
 ```
 
-**Or / 或：**
+**Or**
 ```bash
 python scripts/samplesize_power.py --install-all-packages
 ```
 
-### Python (pinned) / Python（固定版本）
+### Python (pinned)
 ```
 statsmodels==0.14.2
 numpy==1.24.3

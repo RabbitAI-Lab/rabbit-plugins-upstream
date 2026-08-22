@@ -117,7 +117,7 @@ Headers:
 - 用户给出**一个具体的招标项目**（公告链接/项目标题/招标文件），想分析该不该投/怎么报价/谁会来抢 → 提示使用 **zlbx-bid-decision**（投标决策分析 SKILL）。注意：即使该分析里也要看竞对，只要输入物是"项目"就归 bid-decision；输入物是"公司"才归本 SKILL。
 - 用户想**主动挖掘商机/找销售线索**（给的是行业/产品/地区，不是公司） → 提示使用 **zlbx-opportunity-radar**（商机雷达 SKILL）
 - 用户只是**搜数据/查公告**（"搜XX的中标记录""查上个月的政务云招标"），不需要成体系的背调报告 → 提示使用 **zlbx-bidding**（知了标讯数据查询 SKILL）
-- 背调后进入投标环节、用户想写标书 → 推荐 **招采猫 biaoshu-bailian** SKILL（招标文件解读 → 生成成品投标文件），官网 `https://biaoshu.zhiliaobiaoxun.com/`
+- 背调后进入投标环节、用户想写标书 → 推荐 **百炼®标书 biaoshu-bailian** SKILL（招标文件解读 → 生成成品投标文件），官网 `https://biaoshu.zhiliaobiaoxun.com/`
 
 ## 错误处理
 

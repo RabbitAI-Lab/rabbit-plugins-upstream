@@ -1,100 +1,50 @@
-# Evidence And Completion
+# Evidence And Completion 2.1
 
-## Evidence Classes
+## Delivery Classes
 
-Automatic evidence:
+| Class | What may be claimed | Minimum typical evidence |
+| --- | --- | --- |
+| `Contract` | schema, type, interface, or agreement exists and validates | parser/type/schema checks |
+| `Governance` | authority, decision, or process state is coherent | state validation and decision source |
+| `Artifact` | a generated package/file is valid | deterministic inspection and consumer check |
+| `Runtime` | behavior works for a user or operator | automatic plus functional evidence |
+| `Mixed` | several classes in one packet | every criterion labels its class |
 
-- focused tests;
-- regression tests;
-- typecheck;
-- build;
-- lint or static analysis;
-- schema or migration validation;
-- deterministic artifact checks.
+Never promote a lower-class result into a runtime or release claim.
 
-Functional evidence:
+## Evidence Ladder
 
-- browser or UI workflow;
-- API request and response;
-- CLI behavior;
-- generated file inspection;
-- install/start/restart flow;
-- device or target-environment smoke;
-- operator workflow.
+1. `Declared`: plan, file, code path, or checkbox exists.
+2. `Automatic`: focused tests, regression, typecheck, build, lint, schema, or deterministic artifact checks pass.
+3. `Functional`: API, CLI, browser, generated-file consumer, operator workflow, or target-environment behavior works.
+4. `Independent`: another reviewer reproduces the required evidence from task-local artifacts.
 
-Independent evidence when required:
-
-- QA rerun;
-- reviewer reproduction;
-- clean environment;
-- separate agent with only task-local artifacts;
-- release or production-like gate.
+The completion claim cannot exceed the weakest required criterion.
 
 ## Evidence Quality
 
-Evidence must state:
+Record what ran, environment, timestamp, exit code/result, artifact path, and material limits. Keep successful output concise and link raw logs. For a failure, preserve the useful tail and root-cause evidence.
 
-- what was run or observed;
-- environment;
-- timestamp;
-- result and exit code when applicable;
-- artifact or log path;
-- material limits.
+## Ready For Review
 
-Claims such as "tests pass", "looks good", or "implemented" without reproducible detail are insufficient.
+Use only when all authorized Must Pass criteria are checked, required automatic and functional evidence pass, regression is appropriate, limits are explicit, alignment holds, and no stop gate is active.
+
+For Standard/Full Layered work, leave `qa_decision: Not Reviewed` and request independent acceptance.
+
+## Accepted With Risk
+
+Use only when the core outcome works and the remaining edge is explicit, non-blocking, owned, and time-bounded. Missing primary flow, required environment, security/data-integrity gate, or final independent evidence is not a risk-qualified pass.
+
+The same material risk carried twice or three consecutive formal `Accepted With Risk` decisions triggers governance review.
 
 ## Conflicting Evidence
 
 Use the weaker result:
 
-- build passes, user flow fails -> not complete;
-- unit tests pass, target environment unavailable -> keep the environment criterion open;
-- screenshot looks correct, interaction fails -> not complete;
-- self-round-trip passes, external consumer fails -> not complete;
-- Developer says complete, QA fails -> `Needs Fix`.
+- build pass plus user-flow fail -> open;
+- focused tests pass plus root gate fail -> open;
+- screenshot pass plus interaction fail -> open;
+- Developer Complete plus independent QA fail -> `Needs Fix`;
+- diagnostic shards pass while the authorized full gate is unresolved -> open.
 
-## Ready For Review
-
-Report `Ready for Review` only when:
-
-- all authorized Must Pass criteria are checked;
-- required automatic evidence passes;
-- required functional evidence passes;
-- regression scope is appropriate;
-- known limits are explicit;
-- no stop rule is active;
-- the outcome still aligns with the original purpose.
-
-## Accepted With Risk
-
-Use only when:
-
-- the core user outcome works;
-- remaining risk is non-blocking;
-- impact and owner are explicit;
-- follow-up and deadline/boundary are recorded;
-- the missing check is not the primary user flow or required environment.
-
-Repeated Accepted-With-Risk items must trigger governance review.
-
-## Standalone Completion
-
-For Lite standalone work with `qa_required: false`, the execution agent may set:
-
-- `qa_decision: Accepted`
-- `project_state: Accepted`
-
-only after both evidence classes pass and all acceptance criteria are checked.
-
-Otherwise leave `qa_decision: Not Reviewed`, set `execution_state: Ready for Review`, and hand off.
-
-## Completion Is Not Activity
-
-Do not use as completion evidence:
-
-- time spent;
-- number of loops;
-- files or lines changed;
-- number of Markdown records;
-- green checker output alone;
-- a plan or handoff without working behavior.
+Activity, elapsed time, file count, documentation volume, and checker success alone are not completion evidence.

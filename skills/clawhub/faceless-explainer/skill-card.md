@@ -1,45 +1,62 @@
-## Description: <br>
-Turns arbitrary text into a faceless explainer video with invented visuals such as typography, abstract graphics, diagrams, and data visualization for topic explainers, concept breakdowns, how-tos, and listicles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Faceless Explainer turns arbitrary text into a HyperFrames explainer video with invented scene visuals such as typography, abstract graphics, diagrams, and data visualizations.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External creators, video producers, and agent operators use this skill to turn text, notes, topics, or briefs into HyperFrames explainer videos with storyboard, narration, invented visuals, HTML frame compositions, captions, and a final MP4. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill tells the agent to silently update global HyperFrames skills from the network during normal use. <br>
-Mitigation: Require explicit approval before running update commands, and review the updated global skill set before continuing with video generation. <br>
-Risk: Generated HTML or caption output may rely on CDN dependencies, which can matter in offline or locked-down rendering environments. <br>
-Mitigation: Review generated HTML and CDN references before deployment, and replace or approve dependencies according to the target environment's policy. <br>
+## Use Case:
 
+Creators, marketers, and developers use this skill to turn articles, notes, topics, or briefs into faceless explainer videos in HyperFrames. It is intended for topic explainers, concept breakdowns, how-tos, and listicles where the visuals are invented rather than captured from a website or product.
 
-## Reference(s): <br>
-- [Faceless Explainer ClawHub page](https://clawhub.ai/heygen-com/skills/faceless-explainer) <br>
-- [Story design](artifact/references/story-design.md) <br>
-- [Visual design](artifact/references/visual-design.md) <br>
-- [Motion language](artifact/references/motion-language.md) <br>
-- [Cut catalog](artifact/references/cut-catalog.md) <br>
-- [Frame worker delta](artifact/sub-agents/frame-worker.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown project files, JSON metadata, shell commands, HTML frame compositions, captions, and rendered MP4 artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates project-local video assets under videos/<project>; audio and media behavior depends on HyperFrames, HeyGen sign-in status, and available local fallbacks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.16 (source: server release evidence) <br>
+Risk: The workflow may update the global HyperFrames skill set through npx/GitHub-based skill update behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve update behavior before installation or execution, and run the skill only in an environment where global skill-set changes are acceptable.
+
+Risk: Audio workflows may use HeyGen credentials when the user is signed in.
+
+Mitigation: Check authentication status before setup continues, confirm whether to use signed-in or offline providers, and avoid running with credentials in untrusted workspaces.
+
+Risk: Generated HTML previews or renders may contact jsDelivr to load GSAP.
+
+Mitigation: Preview and render only where public CDN access is allowed, or review generated HTML and provide an approved local dependency path before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/faceless-explainer)
+- [Story design](references/story-design.md)
+- [Visual design](references/visual-design.md)
+- [Motion language](references/motion-language.md)
+- [Cut catalog](references/cut-catalog.md)
+- [Frame worker delta](sub-agents/frame-worker.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, video files]
+
+**Output Format:** [Markdown guidance with shell commands, generated project files, HTML frame code, and rendered video artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a HyperFrames project under videos/<project> and typically renders to renders/video.mp4]
+
+## Skill Version(s):
+
+1.0.26 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

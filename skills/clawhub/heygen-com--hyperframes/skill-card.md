@@ -1,48 +1,61 @@
-## Description: <br>
-HyperFrames routes video, animation, and motion-graphics requests into the right workflow, resumes existing projects, and manages project inspection, validation, preview, rendering, publishing, and batch rendering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HyperFrames routes video, animation, motion-graphic, slideshow, Remotion-port, and existing-project requests into the appropriate HyperFrames workflow, using supplied URLs, PRs, Figma designs, briefs, footage, or music as inputs.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill as the entry point for creating, editing, validating, rendering, and publishing HyperFrames video projects from briefs, URLs, GitHub PRs, Figma inputs, existing footage, or music. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run npx-based HyperFrames commands and install or refresh related workflow skills. <br>
-Mitigation: Review command summaries, keep projects under version control, and run HyperFrames validation after upgrades or workflow changes. <br>
-Risk: Site capture, Figma or GitHub inputs, media generation, and publishing can use networked services when requested. <br>
-Mitigation: Confirm external inputs and publishing intent before use, and avoid sending sensitive material to networked services unless approved. <br>
-Risk: Project edits, renders, and publishing actions may create or update video project artifacts. <br>
-Mitigation: Inspect diffs, previews, and validation results before treating generated output as final or public. <br>
+## Use Case:
 
+Creators, developers, and agent operators use this skill as the entry point for HyperFrames video work. It resumes existing projects, clarifies fresh requests, selects the owning workflow, and guides editing, validation, rendering, or publishing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes) <br>
-- [Publisher profile](https://clawhub.ai/user/heygen-com) <br>
-- [HyperFrames entry point](SKILL.md) <br>
-- [Intent interview](references/intent-interview.md) <br>
-- [Capability menu](references/capability-menu.md) <br>
-- [Skill lifecycle](references/skill-lifecycle.md) <br>
-- [Workflow route contracts](references/routes/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, code, configuration, and project artifact descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include workflow routing decisions, project file changes, validation summaries, preview or render commands, and publishing guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.19 (source: server release metadata) <br>
+Risk: The skill can run HyperFrames npm/npx tooling and update workflow skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only in projects where those commands are expected, and review command output before relying on generated or modified project artifacts.
+
+Risk: Video workflows may read supplied URLs, media, GitHub PRs, Figma inputs, credentials, and publish targets.
+
+Mitigation: Use project-scoped inputs, avoid unnecessary sensitive material, and review allowed URLs, credentials, and publish commands for sensitive projects.
+
+Risk: Website capture and publishing can expose content or create public links when requested.
+
+Mitigation: Confirm capture scope and publishing intent before running those workflow steps, especially for private or unreleased material.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes)
+- [Capability menu](references/capability-menu.md)
+- [Intent interview](references/intent-interview.md)
+- [Skill lifecycle](references/skill-lifecycle.md)
+- [Workflow route contracts](references/routes/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and project-file instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May route to workflow skills that create or update HyperFrames project files, render media, capture websites, or publish outputs when requested.]
+
+## Skill Version(s):
+
+1.0.23 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
