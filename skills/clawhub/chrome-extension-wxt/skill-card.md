@@ -1,47 +1,58 @@
-## Description: <br>
-Build Chrome extensions using WXT framework with TypeScript, React, Vue, or Svelte for browser extensions, cross-browser add-ons, and Chrome Web Store projects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build Chrome extensions using WXT framework with TypeScript, React, Vue, or Svelte.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill to create and maintain WXT-based browser extensions, including project setup, Manifest V3 entry points, UI framework integration, Chrome API usage, packaging, and store submission preparation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated extension code may include security-sensitive patterns that need review before use. <br>
-Mitigation: Review and adjust generated extension code before use; avoid shipping unsafe-eval CSP, prefer content scripts or narrowly scoped trusted injection, keep host permissions minimal, and do not store secrets in browser.storage.sync. <br>
+## Use Case:
 
+Developers and engineers use this skill to create, configure, and troubleshoot Chrome and cross-browser extensions built with WXT, TypeScript, and optional UI frameworks such as React, Vue, Svelte, or Solid.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/chrome-extension-wxt) <br>
-- [Release metadata homepage](https://github.com/tenequm/skills/tree/main/skills/chrome-extension-wxt) <br>
-- [WXT Docs](https://wxt.dev) <br>
-- [Chrome Extension Docs](https://developer.chrome.com/docs/extensions) <br>
-- [MDN Firefox Add-ons](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons) <br>
-- [Best Practices](references/best-practices.md) <br>
-- [Chrome 140+ Features](references/chrome-140-features.md) <br>
-- [Chrome API Reference](references/chrome-api.md) <br>
-- [React Integration](references/react-integration.md) <br>
-- [WXT API Reference](references/wxt-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline TypeScript, configuration, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference WXT, Chrome Extension APIs, React/Vue/Svelte/Solid integration, and browser extension security practices.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.2 (source: frontmatter and server release metadata) <br>
+Risk: Browser extension examples may encourage unsafe credential handling if long-lived API keys are stored in synced extension storage or broad permissions are copied without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use short-lived tokens or backend-mediated authentication, keep secrets out of synced storage, prefer local-only storage when needed, and request the minimum required extension permissions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/chrome-extension-wxt)
+- [Source Homepage](https://github.com/tenequm/skills/tree/main/skills/chrome-extension-wxt)
+- [WXT Documentation](https://wxt.dev)
+- [Chrome Extensions Documentation](https://developer.chrome.com/docs/extensions)
+- [Firefox Extension Documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons)
+- [Chrome Extension Best Practices with WXT](references/best-practices.md)
+- [Chrome 140+ Features](references/chrome-140-features.md)
+- [Chrome Extension API Reference](references/chrome-api.md)
+- [React Integration with WXT](references/react-integration.md)
+- [WXT API Reference](references/wxt-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with TypeScript, HTML, JSON, and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include project structure examples, extension manifest configuration, browser API usage, and store packaging commands.]
+
+## Skill Version(s):
+
+1.1.4 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,16 +1,16 @@
 # SYS\_Message class
 
-系统 / 消息通知类
+System / message notification class
 
 ## Signature
 
 ```typescript
-declare class SYS_Message 
+export class SYS_Message 
 ```
 
 ## Remarks
 
-生成各种对用户的非侵入式提醒
+Generate various non-intrusive reminders for users
 
 ## Methods
 
@@ -40,7 +40,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 移除跟随鼠标的提示
+**_(BETA)_** Remove the follow-mouse tip
 
 
 </td></tr>
@@ -54,7 +54,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 展示跟随鼠标的提示
+**_(BETA)_** Show the follow-mouse tip
 
 
 </td></tr>
@@ -68,7 +68,7 @@ Description
 
 </td><td>
 
-显示吐司消息
+Show a toast message
 
 
 </td></tr>
@@ -84,12 +84,12 @@ Description
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-移除跟随鼠标的提示
+Remove the follow-mouse tip
 
 ## Signature
 
 ```typescript
-removeFollowMouseTip(tip?: string): Promise<void>;
+public removeFollowMouseTip(tip?: string): Promise<void>;
 ```
 
 ## Parameters
@@ -122,7 +122,7 @@ string
 
 </td><td>
 
-_(Optional)_ 提示内容，如若传入，则仅当当前提示为指定内容时才移除
+_(Optional)_ Tip content. If passed in, the tip is only removed when the current tip matches the specified content
 
 
 </td></tr>
@@ -136,7 +136,29 @@ Promise&lt;void&gt;
 
 ## Remarks
 
-移除当前或指定的跟随鼠标的提示
+Remove the current or specified follow-mouse tip
+
+## Example
+
+
+```javascript
+// 1. 展示一条持续提示（不传时间参数，不会自动消失）
+eda.sys_Message.showFollowMouseTip('嘉立创示例_待移除的提示');
+console.log('鼠标提示已显示');
+
+// 2. 传入不匹配的内容：当前提示内容不同，不会被移除
+eda.sys_Message.removeFollowMouseTip('嘉立创示例_另一条提示');
+console.log('传入内容与当前提示不匹配，提示仍在显示');
+
+// 3. 传入匹配的内容：内容一致时移除
+eda.sys_Message.removeFollowMouseTip('嘉立创示例_待移除的提示');
+console.log('传入内容与当前提示一致，提示已移除');
+
+// 4. 不传参数：无论内容直接移除当前提示
+eda.sys_Message.showFollowMouseTip('嘉立创示例_新的提示');
+eda.sys_Message.removeFollowMouseTip();
+console.log('不传参数已直接移除当前提示');
+```
 
 ### showfollowmousetip
 
@@ -144,12 +166,12 @@ Promise&lt;void&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-展示跟随鼠标的提示
+Show the follow-mouse tip
 
 ## Signature
 
 ```typescript
-showFollowMouseTip(tip: string, msTimeout?: number): Promise<void>;
+public showFollowMouseTip(tip: string, msTimeout?: number): Promise<void>;
 ```
 
 ## Parameters
@@ -182,7 +204,7 @@ string
 
 </td><td>
 
-提示内容
+Tip content
 
 
 </td></tr>
@@ -198,7 +220,7 @@ number
 
 </td><td>
 
-_(Optional)_ 展示时间，以毫秒（ms）为单位，如若不传入则持续展示，直到调用 [removeFollowMouseTip](./SYS_Message.md) 或被其它提示覆盖
+_(Optional)_ Display duration in milliseconds (ms). If not passed in, the tip is displayed continuously until [removeFollowMouseTip](./SYS_Message.md) is called or it is covered by another tip
 
 
 </td></tr>
@@ -212,18 +234,36 @@ Promise&lt;void&gt;
 
 ## Remarks
 
-同一时间只能展示一条提示，如果展示新的提示，则之前的提示将被自动移除
+Only one tip can be shown at a time. If a new tip is shown, the previous tip will be automatically removed
+
+## Example
+
+
+```javascript
+// 1. 限时提示：2000 毫秒后自动消失，无需手动清理
+eda.sys_Message.showFollowMouseTip('嘉立创示例_这条提示 2 秒后自动消失', 2000);
+console.log('限时鼠标提示已显示，2 秒后自动消失');
+
+// 2. 持续提示：不传时间参数则一直展示，直到被移除或被新提示覆盖
+eda.sys_Message.showFollowMouseTip('嘉立创示例_这条提示会一直跟随鼠标');
+console.log('持续鼠标提示已显示（新提示覆盖了上一条）');
+
+// 3. 持续提示必须手动收尾，避免遗留（自建自删，保证案例可重复运行）
+await new Promise(r => setTimeout(r, 1000));
+eda.sys_Message.removeFollowMouseTip();
+console.log('持续鼠标提示已手动移除');
+```
 
 ### showtoastmessage
 
 # SYS\_Message.showToastMessage() method
 
-显示吐司消息
+Show a toast message
 
 ## Signature
 
 ```typescript
-showToastMessage(message: string, messageType?: ESYS_ToastMessageType, timer?: number, bottomPanel?: ESYS_BottomPanelTab, buttonTitle?: string, buttonCallbackFn?: string): void;
+public showToastMessage(message: string, messageType?: ESYS_ToastMessageType, timer?: number, bottomPanel?: ESYS_BottomPanelTab, buttonTitle?: string, buttonCallbackFn?: string): void;
 ```
 
 ## Parameters
@@ -256,7 +296,7 @@ string
 
 </td><td>
 
-消息内容
+Message content
 
 
 </td></tr>
@@ -272,7 +312,7 @@ messageType
 
 </td><td>
 
-_(Optional)_ 消息类型
+_(Optional)_ Message type
 
 
 </td></tr>
@@ -288,7 +328,7 @@ number
 
 </td><td>
 
-_(Optional)_ 自动关闭倒计时秒数，`0` 为不自动关闭
+_(Optional)_ Auto-close countdown in seconds. `0` means it will not auto-close
 
 
 </td></tr>
@@ -304,7 +344,7 @@ bottomPanel
 
 </td><td>
 
-_(Optional)_ 展开底部信息面板
+_(Optional)_ Expand the bottom information panel
 
 
 </td></tr>
@@ -320,7 +360,7 @@ string
 
 </td><td>
 
-_(Optional)_ 回调按钮标题
+_(Optional)_ Callback button title
 
 
 </td></tr>
@@ -336,7 +376,7 @@ string
 
 </td><td>
 
-_(Optional)_ 回调函数内容，字符串形式，会被自动解析并执行
+_(Optional)_ Callback function content, in string form. It will be automatically parsed and executed
 
 
 </td></tr>
@@ -347,3 +387,27 @@ _(Optional)_ 回调函数内容，字符串形式，会被自动解析并执行
 ## Returns
 
 void
+
+## Example
+
+
+```javascript
+// 1. 最简调用：默认信息类型，默认 3 秒后自动关闭
+eda.sys_Message.showToastMessage('嘉立创示例 工程已自动保存');
+console.log('信息吐司已显示，3 秒后自动关闭');
+
+// 2. 指定消息类型与倒计时秒数：成功图标，2 秒后自动关闭
+eda.sys_Message.showToastMessage('嘉立创示例 导出完成', 'success', 2);
+console.log('成功吐司已显示，2 秒后自动关闭');
+
+// 3. 带回调按钮与底部面板联动：点击按钮执行回调并展开日志面板
+eda.sys_Message.showToastMessage(
+  '嘉立创示例 检查完成，详见日志面板',
+  'warn',
+  5,
+  'log',
+  '查看日志',
+  'console.log("嘉立创示例 按钮回调被执行")'
+);
+console.log('警告吐司已显示，附带查看日志按钮，5 秒后自动关闭');
+```

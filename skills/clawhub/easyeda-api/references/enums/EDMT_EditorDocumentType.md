@@ -1,11 +1,11 @@
 # EDMT\_EditorDocumentType enum
 
-编辑器文档类型
+Editor document type
 
 ## Signature
 
 ```typescript
-declare enum EDMT_EditorDocumentType 
+export enum EDMT_EditorDocumentType 
 ```
 
 ## Enumeration Members
@@ -38,8 +38,6 @@ BLANK
 
 </td><td>
 
-空白页
-
 
 </td></tr>
 <tr><td>
@@ -53,8 +51,6 @@ FOOTPRINT
 
 
 </td><td>
-
-封装
 
 
 </td></tr>
@@ -70,8 +66,6 @@ HOME
 
 </td><td>
 
-开始页
-
 
 </td></tr>
 <tr><td>
@@ -85,8 +79,6 @@ PANEL
 
 
 </td><td>
-
-面板
 
 
 </td></tr>
@@ -102,8 +94,6 @@ PANEL\_3D\_PREVIEW
 
 </td><td>
 
-面板 3D 预览
-
 
 </td></tr>
 <tr><td>
@@ -117,8 +107,6 @@ PANEL\_LIBRARY
 
 
 </td><td>
-
-面板库
 
 
 </td></tr>
@@ -134,8 +122,6 @@ PCB
 
 </td><td>
 
-PCB
-
 
 </td></tr>
 <tr><td>
@@ -149,8 +135,6 @@ PCB\_2D\_PREVIEW
 
 
 </td><td>
-
-PCB 2D 预览
 
 
 </td></tr>
@@ -166,7 +150,19 @@ PCB\_3D\_PREVIEW
 
 </td><td>
 
-PCB 3D 预览
+
+</td></tr>
+<tr><td>
+
+PROJECT
+
+
+</td><td>
+
+`5`
+
+
+</td><td>
 
 
 </td></tr>
@@ -182,7 +178,61 @@ SCHEMATIC\_PAGE
 
 </td><td>
 
-原理图图页
+
+</td></tr>
+<tr><td>
+
+SIMULATION\_SCHEMATIC\_PAGE\_NGSPICE
+
+
+</td><td>
+
+`8`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+SIMULATION\_SCHEMATIC\_PAGE\_SIMULIDE
+
+
+</td><td>
+
+`9`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+SIMULATION\_SYMBOL\_COMPONENT\_NGSPICE
+
+
+</td><td>
+
+`7`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+SIMULATION\_SYMBOL\_COMPONENT\_SIMULIDE
+
+
+</td><td>
+
+`32`
+
+
+</td><td>
 
 
 </td></tr>
@@ -198,8 +248,6 @@ SYMBOL\_CBB
 
 </td><td>
 
-复用模块符号
-
 
 </td></tr>
 <tr><td>
@@ -213,8 +261,6 @@ SYMBOL\_COMPONENT
 
 
 </td><td>
-
-元件符号
 
 
 </td></tr>
@@ -230,8 +276,6 @@ SYMBOL\_DRAWING
 
 </td><td>
 
-图纸符号
-
 
 </td></tr>
 <tr><td>
@@ -245,8 +289,6 @@ SYMBOL\_NET\_FLAG
 
 
 </td><td>
-
-网络标识符号
 
 
 </td></tr>
@@ -262,8 +304,6 @@ SYMBOL\_NET\_PORT
 
 </td><td>
 
-网络端口符号
-
 
 </td></tr>
 <tr><td>
@@ -278,7 +318,19 @@ SYMBOL\_NON\_ELECTRICAL
 
 </td><td>
 
-无电气符号
+
+</td></tr>
+<tr><td>
+
+SYMBOL\_OFF\_PAGE\_CONNECTOR\_FLAG
+
+
+</td><td>
+
+`25`
+
+
+</td><td>
 
 
 </td></tr>
@@ -293,8 +345,6 @@ SYMBOL\_SHORT\_CIRCUIT\_FLAG
 
 
 </td><td>
-
-短接标识符号
 
 
 </td></tr>

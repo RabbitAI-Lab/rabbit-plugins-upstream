@@ -1,3 +1,18 @@
+Smart Files v2.2.0 — Security Audit Remediation (2026-07-31)
+
+ClawHub security audit fixes (3 HIGH findings):
+  - Content snippets now OPT-IN via --snippets; default search output shows
+    only paths + match scores (no content exposure)
+  - --force flag propagates to watch mode; workspace boundary enforced
+    unless --force is explicit
+  - Permissions declared in clawhub.yaml + SKILL.md frontmatter
+    (fs.read_recursive, fs.write, fs.watch_persist, fs.external_path)
+  - README: removed false "automatic redaction" claims; documented that
+    snippets are NOT redacted; added watch-mode journal disclosure
+    (location, contents, how to clear)
+  - SKILL.md: added "Security Audit Remediation" section + safety defaults
+    table (content snippets hidden by default)
+
 Smart Files v99.0.1 — Retag Release
 
 This version is functionally identical to v2.1.0 (same smart-files.js source code), 

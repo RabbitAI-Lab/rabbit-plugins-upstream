@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>占卜解读报告</title>
+<style>
+  /* ===== 全局 ===== */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "STKaiti", "KaiTi", "SimSun", serif;
+    background: linear-gradient(160deg, #f4efe8 0%, #eae2d4 100%);
+    color: #3d3226;
+    line-height: 1.8;
+    padding: 40px 20px;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+  .banner {
+    background: linear-gradient(135deg, #3d4a2e 0%, #5d7a4e 55%, #8a9a5e 100%);
+    color: #f4f7ec;
+    text-align: center;
+    padding: 55px 30px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 30px rgba(61, 74, 46, 0.3);
+  }
+  .banner h1 {
+    font-size: 38px;
+    letter-spacing: 10px;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+  }
+  .banner .sub { font-size: 15px; letter-spacing: 3px; opacity: 0.9; }
+  .banner .hexagram {
+    font-size: 26px;
+    margin-top: 16px;
+    letter-spacing: 6px;
+    color: #e8dda8;
+  }
+
+  /* ===== 卡片 ===== */
+  .card {
+    background: #fdfaf4;
+    border: 1px solid #e2d5bc;
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin-bottom: 26px;
+    box-shadow: 0 3px 14px rgba(61, 50, 38, 0.08);
+  }
+  .card h2 {
+    font-size: 23px;
+    color: #3d4a2e;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    border-bottom: 2px solid #a8b57e;
+    letter-spacing: 4px;
+  }
+  .card h2::before { content: "☯"; color: #8a9a5e; margin-right: 10px; }
+
+  /* ===== 卦象展示 ===== */
+  .hex-box {
+    text-align: center;
+    background: #f4f2e6;
+    border: 1px dashed #c9c2a0;
+    border-radius: 10px;
+    padding: 24px;
+    margin: 16px 0;
+  }
+  .hex-lines { font-size: 28px; letter-spacing: 8px; line-height: 1.6; color: #3d4a2e; }
+  .hex-name { font-size: 24px; font-weight: bold; color: #5d7a4e; margin: 8px 0; }
+
+  /* ===== 标签 ===== */
+  .tag {
+    display: inline-block;
+    padding: 3px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin: 4px 6px 4px 0;
+    letter-spacing: 1px;
+  }
+  .tag.ji { background: #5d7a4e; color: #f2f7ec; }
+  .tag.xiong { background: #b03a2e; color: #fdf0ec; }
+  .tag.ping { background: #8a7a5e; color: #f7f2e8; }
+
+  /* ===== 爻列表 ===== */
+  .yao-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f7f4ea;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin: 6px 0;
+  }
+  .yao-item .position { font-size: 13px; color: #8a7a5e; width: 60px; }
+  .yao-item .symbol { font-size: 22px; width: 50px; text-align: center; }
+  .yao-item .text { flex: 1; font-size: 14px; }
+
+  /* ===== 提示框 ===== */
+  .highlight {
+    background: #fbf3df;
+    border-left: 4px solid #8a9a5e;
+    padding: 12px 18px;
+    margin: 15px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .highlight.good { border-left-color: #5d7a4e; }
+  .highlight.warn { border-left-color: #b03a2e; }
+
+  /* ===== 页脚 ===== */
+  .footer {
+    text-align: center;
+    color: #9a8a6e;
+    font-size: 12px;
+    padding: 20px;
+    border-top: 1px dashed #d9c9a8;
+    margin-top: 20px;
+  }
+  @media (max-width: 600px) {
+    .banner h1 { font-size: 26px; letter-spacing: 5px; }
+    .card { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 封面 -->
+  <div class="banner">
+    <h1>占卜解读</h1>
+    <div class="sub">{DIVINATION_METHOD} · 一事一占</div>
+    <div class="hexagram">{HEXAGRAM_SYMBOL}</div>
+    <div style="margin-top:12px; font-size:13px; opacity:0.85;">所问之事：{QUESTION}</div>
+  </div>
+
+  <!-- 一、起卦信息 -->
+  <div class="card">
+    <h2>一、起卦信息</h2>
+    <table style="width:100%; border-collapse:collapse; margin:10px 0;">
+      <tr><td style="padding:8px; border:1px solid #e2d5bc; background:#f7f4ea;"><strong>方法</strong></td><td style="padding:8px; border:1px solid #e2d5bc;">{DIVINATION_METHOD}</td></tr>
+      <tr><td style="padding:8px; border:1px solid #e2d5bc; background:#f7f4ea;"><strong>时间</strong></td><td style="padding:8px; border:1px solid #e2d5bc;">{DIVINATION_TIME}</td></tr>
+      <tr><td style="padding:8px; border:1px solid #e2d5bc; background:#f7f4ea;"><strong>所问</strong></td><td style="padding:8px; border:1px solid #e2d5bc;">{QUESTION}</td></tr>
+    </table>
+  </div>
+
+  <!-- 二、卦象 -->
+  <div class="card">
+    <h2>二、卦象呈现</h2>
+    <div class="hex-box">
+      <div class="hex-lines">{HEXAGRAM_LINES}</div>
+      <div class="hex-name">{HEXAGRAM_NAME}</div>
+      <div>{HEXAGRAM_DESC}</div>
+    </div>
+    {CHANGE_INFO}
+    <div style="margin-top:12px;">
+      {VERDICT_TAGS}
+    </div>
+  </div>
+
+  <!-- 三、卦辞爻辞 -->
+  <div class="card">
+    <h2>三、卦辞与动爻解读</h2>
+    <h3 style="color:#3d4a2e; margin-bottom:8px;">卦辞</h3>
+    <p>{GUACI}</p>
+
+    <h3 style="color:#3d4a2e; margin:18px 0 8px;">动爻解读</h3>
+    {YAO_LIST}
+
+    <h3 style="color:#3d4a2e; margin:18px 0 8px;">变卦</h3>
+    <p>{BIAN_GUA_DESC}</p>
+  </div>
+
+  <!-- 四、综合解读 -->
+  <div class="card">
+    <h2>四、综合解读</h2>
+    <p>{OVERALL_INTERPRETATION}</p>
+
+    <div class="highlight good">
+      <strong>有利方面：</strong>{GOOD_POINTS}
+    </div>
+    <div class="highlight warn">
+      <strong>需注意：</strong>{WARN_POINTS}
+    </div>
+  </div>
+
+  <!-- 五、建议 -->
+  <div class="card">
+    <h2>五、行动建议</h2>
+    <ul>
+      {ADVICE_LIST}
+    </ul>
+    <div class="highlight">
+      <strong>应期参考：</strong>{YINGQI}
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>本解读基于传统占卜文化（{DIVINATION_METHOD}）生成，仅供文化研究与娱乐参考。</p>
+    <p>不构成医疗、法律、投资等专业建议。请理性看待，积极生活。</p>
+    <p style="margin-top:8px;">生成时间：{GENERATE_TIME}</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+{
+  "cases": [
+    {
+      "name": "plain_continue_uses_next_skill",
+      "state": {"next_skill": "jys-s2", "waiting_for": ""},
+      "user_input": "继续",
+      "expected_skill": "jys-s2",
+      "ask_user": false
+    },
+    {
+      "name": "waiting_choice_stays_in_current_skill",
+      "state": {"current_skill": "jys-s2", "next_skill": "jys-s2", "waiting_for": "人物组合选择"},
+      "user_input": "我选第二组",
+      "expected_skill": "jys-s2",
+      "ask_user": false
+    },
+    {
+      "name": "explicit_skill_overrides_default",
+      "state": {"next_skill": "jys-s2", "waiting_for": ""},
+      "user_input": "$jys-s3 我先确认产品",
+      "expected_skill": "jys-s3",
+      "ask_user": false
+    },
+    {
+      "name": "hook_change_during_s2",
+      "state": {"current_stage": "S2", "next_skill": "jys-s2"},
+      "user_input": "把前几秒的钩子改强一点",
+      "expected_skill": "jys-s2",
+      "ask_user": false
+    },
+    {
+      "name": "hook_change_during_s4",
+      "state": {"current_stage": "S4", "next_skill": "jys-s4"},
+      "user_input": "第一句话换一下",
+      "expected_skill": "jys-s4",
+      "ask_user": false
+    },
+    {
+      "name": "unknown_product_routes_to_s1",
+      "state": {"current_stage": "S3", "next_skill": "jys-s3"},
+      "user_input": "我要用数据库里没有的新产品",
+      "expected_skill": "jys-s1",
+      "ask_user": false
+    },
+    {
+      "name": "s2_and_s3_confirmed_routes_to_s4",
+      "state": {"s2": "confirmed", "s3": "confirmed", "next_skill": "jys-s4"},
+      "user_input": "好的，继续",
+      "expected_skill": "jys-s4",
+      "ask_user": false
+    },
+    {
+      "name": "final_confirmation_completes_workflow",
+      "state": {"s5_delivery": "confirmed", "final_confirmation": "pending", "next_skill": "jys-s5"},
+      "user_input": "最终确认，就用这一版",
+      "expected_skill": "jys-s5",
+      "expected_updates": {"final_confirmation": "confirmed", "next_skill": ""},
+      "ask_user": false
+    }
+  ]
+}
+

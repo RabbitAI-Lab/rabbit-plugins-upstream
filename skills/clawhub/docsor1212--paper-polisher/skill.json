@@ -1,0 +1,7 @@
+{
+  "name": "paper-polisher-pro",
+  "version": "2.0.0",
+  "description": "Academic AI detector + 4-layer DeAI gate. Fingerprints Chinese LLMs (9-layer word engine), catches AI-paraphrased text via stylometric features (word blacklists cannot), weighted fusion verdict, terminology protection, bilingual, 100% local.",
+  "author": "docsor1212",
+  "changelog": "v2.0.0: 4-layer DeAI gate (word patterns + translation smell + stylometric style features + terminology) with weighted fusion composite score; catches AI-paraphrased drafts that dodge word blacklists; EVAL gap 49.2. v1.1.0: 9-layer engine, 1002 patterns, F1 98.3%"
+}

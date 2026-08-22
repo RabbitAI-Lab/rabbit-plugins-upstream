@@ -1,47 +1,60 @@
-## Description: <br>
-Recognizes standing, sitting, lying down, bending, raised hands, running, falling, and other human poses, with abnormal posture recognition and fall-warning support for monitoring and elder-care scenarios. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recognizes various poses such as standing, sitting, lying down, bending, raising hands, running, and falling, and supports abnormal pose recognition and fall warnings for security monitoring and elderly care.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Developers, operators, and care-monitoring teams can use this skill to analyze video files or video URLs for human posture recognition, fall detection, abnormal posture alerts, and structured report retrieval. It is intended for security monitoring and elder-care workflows where reviewers still need to confirm urgent situations directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may upload sensitive video or video URLs to the publisher's cloud service for analysis. <br>
-Mitigation: Use only with footage approved for that external cloud processing, and avoid private home, workplace, health, elder-care, or security footage unless the data handling is acceptable. <br>
-Risk: The skill can create or reuse a local identity and associate report history with that identity. <br>
-Mitigation: Review identity and report-history behavior before deployment, and run in an environment where persistent account linkage is expected. <br>
-Risk: The skill can persist service tokens locally. <br>
-Mitigation: Limit installation to trusted runtimes, protect local skill storage, and rotate or remove tokens if the environment is shared or decommissioned. <br>
-Risk: Fall detection and abnormal posture outputs may be incomplete or inaccurate. <br>
-Mitigation: Treat results as monitoring support only and require human confirmation and emergency procedures for urgent care or safety decisions. <br>
+## Use Case:
 
+External users and operators use this skill to analyze local or URL-based video for human posture classification, fall detection, abnormal posture monitoring, and historical posture-analysis reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-human-posture-recognition-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API interface documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, json, files, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text with optional saved report files and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports basic, standard, and JSON detail levels; history queries return cloud report records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence; artifact frontmatter reports 1.0.8) <br>
+Risk: Sensitive local videos, image or video URLs, and identity or tenant metadata may be sent to configured remote services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with appropriate consent, review the remote service configuration before installation, and avoid submitting sensitive or regulated footage unless the service is approved.
+
+Risk: Packaged configuration and local token handling may expose deployments to unintended endpoints or weak credential control.
+
+Mitigation: Replace packaged defaults with approved production endpoints and credential storage before deployment, and avoid passing secrets on the command line.
+
+Risk: Historical report queries may return records associated with generated or existing user identifiers.
+
+Mitigation: Limit report-history access to authorized users and verify tenant and user scoping before enabling history queries.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-human-posture-recognition-analysis)
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [API documentation](references/api_doc.md)
+- [smyx analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown reports, JSON details, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include posture-analysis results, fall-warning status, report links, and history tables.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,66 @@
-## Description: <br>
-Skill Kit helps Claude Code agents create, lint, merge, upgrade, route, convert, discover, graph, and publish-check multi-topic skills, including trigger and hook registration guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Claude Code skill authoring and management toolkit for creating, linting, merging, upgrading, routing, publishing, dependency graphing, trigger registration, discovery, and invocation discipline.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent builders use Skill Kit to create, validate, refactor, discover, and publish-check Claude Code skills. It is also used to generate dependency graphs and manage trigger and hook workflows for skill ecosystems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent Claude Code hook or settings changes may be applied. <br>
-Mitigation: Use dry-run and per-project modes first, and review settings.json plus generated hook scripts before applying changes. <br>
-Risk: Global or unattended skill installs can affect more projects than intended. <br>
-Mitigation: Avoid global -g -y installs for untrusted skills and prefer per-project installation when evaluating behavior. <br>
-Risk: Converted, merged, or deduplicated skills may not behave as expected after file moves. <br>
-Mitigation: Keep backups until the converted or merged skill has been reviewed, validated, and exercised in the target environment. <br>
+## Use Case:
 
+Developers and agent operators use this skill to create, maintain, validate, consolidate, publish, discover, and route Claude Code skills. It also supports trigger compilation, dependency graph extraction, language consistency checks, and invocation discipline for multi-topic skill workflows.
 
-## Reference(s): <br>
-- [Skill Kit on ClawHub](https://clawhub.ai/drumrobot/skills/skill-kit) <br>
-- [Publisher profile](https://clawhub.ai/user/drumrobot) <br>
-- [README](README.md) <br>
-- [Skill definition](SKILL.md) <br>
-- [Skills CLI ecosystem](https://skills.sh/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with code fences, command examples, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose skill files, hook scripts, settings changes, dependency graphs, and validation reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: ClawHub release metadata and CHANGELOG, released 2026-07-23) <br>
+Risk: Trigger compilation can persistently change local hook scripts and ~/.claude/settings.json.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run trigger dry-run first, inspect the proposed hook and settings changes, and verify settings JSON before enabling generated hooks.
+
+Risk: Skill discovery and installation workflows can install third-party skills globally and skip confirmation.
+
+Mitigation: Review source and publisher reputation before installing, prefer project-local installs when possible, and avoid -g -y for unreviewed skills.
+
+Risk: Merge, deduplication, conversion, and upgrade workflows can move or remove skill and agent files.
+
+Mitigation: Keep backups until converted or merged skills are verified, and require explicit confirmation before delete or cross-skill write operations.
+
+Risk: Upgrade workflows can stage and commit changes with broad repository impact.
+
+Mitigation: Inspect git status and changed files before committing, isolate public-skill work on the intended branch, and commit only the files in scope.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/skill-kit)
+- [README](artifact/README.md)
+- [Skill Definition](artifact/SKILL.md)
+- [Trigger Guide](artifact/trigger.md)
+- [Find Skills Guide](artifact/find.md)
+- [Skills CLI Ecosystem](https://skills.sh/)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline code blocks, shell commands, configuration examples, and generated skill files or scripts when used by an agent.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose or perform file edits, hook registration, skill installation, backups, commits, and dependency graph generation depending on the selected topic and user confirmation.]
+
+## Skill Version(s):
+
+0.7.0 (source: server release metadata and changelog, released 2026-08-20)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

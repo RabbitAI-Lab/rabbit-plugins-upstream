@@ -1,44 +1,58 @@
-## Description: <br>
-Generates opening hooks for long-form English or French articles, including blogs, newsletters, opinion essays, reported features, and technical deep dives. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates English or French opening hooks and post titles for long-form articles, proposes distinct psychological angles, and asks the user to choose before continuing.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Writers, editors, marketers, and agent users apply this skill to draft and compare article opening hooks before committing to an introduction. It is intended for long-form article contexts and excludes social posts, ads, email openers, press releases, SEO metadata, fiction openings, and script intros. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill declares broader file and agent tools than a writing-only workflow normally requires. <br>
-Mitigation: Review any proposed file edits or subagent use before allowing the agent to act while this skill is active. <br>
-Risk: Generated hooks can overstate claims, rely on weak statistics, or use unsupported authority cues. <br>
-Mitigation: Check candidate hooks against the article evidence and reject vague statistics, misattributed quotes, and promises the article cannot deliver. <br>
+## Use Case:
 
+External writers, editors, marketers, and developers using an agent harness use this skill to draft opening hooks or post titles for long-form English or French articles while preserving article-type fit and avoiding common copywriting anti-patterns.
 
-## Reference(s): <br>
-- [Copywriting Hooks on ClawHub](https://clawhub.ai/samber/copywriting-hooks) <br>
-- [OpenClaw homepage](https://github.com/samber/cc-skills) <br>
-- [Anglophone vs Francophone Traditions](references/anglophone-vs-francophone.md) <br>
-- [Hook Anti-Patterns](references/anti-patterns.md) <br>
-- [30 Hook Formulas: EN and FR Templates](references/formulas.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with structured hook options and follow-up guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces 3 to 4 hook options with two candidates each, then waits for user selection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: The skill may trigger on broad hook, intro, headline, or title requests that overlap with adjacent copywriting workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm publication context before use and keep it scoped to long-form article hooks or post titles, excluding social posts, email subjects, ads, landing-page headlines, press releases, SEO metadata, fiction, scripts, and body rewrites.
+
+Risk: Generated persuasive copy can become misleading if it overpromises, uses unsupported statistics, or opens a curiosity gap the article does not close.
+
+Mitigation: Review candidates against the article's evidence, payoff, audience, and the bundled anti-pattern guidance before using them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/copywriting-hooks)
+- [cc-skills repository](https://github.com/samber/cc-skills)
+- [Anglophone vs Francophone Traditions](references/anglophone-vs-francophone.md)
+- [Hook Anti-Patterns](references/anti-patterns.md)
+- [30 Hook Formulas: EN and FR Templates](references/formulas.md)
+- [Post Title Formula Catalog](references/title-formulas.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown option sets with labeled candidates and follow-up selection prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces 3-4 hook options with two candidates each, or 3-5 title candidates, then waits for user selection.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -85,7 +85,7 @@ def call_api(endpoint: str, params: dict) -> dict:
         method="POST",
     )
     try:
-        with urlopen(req, timeout=120) as response:
+        with urlopen(req, timeout=150) as response:
             return json.loads(response.read().decode("utf-8"))
     except HTTPError as e:
         body = e.read().decode("utf-8") if e.fp else ""
@@ -102,7 +102,7 @@ def developer_proxy_call(
     region: str,
     path: str,
     method: str,
-    access_token: str,
+    seller_id: str,
     query_string: Optional[str] = None,
     body: Optional[str] = None,
     content_type: str = "application/json",
@@ -111,7 +111,7 @@ def developer_proxy_call(
         "region": region,
         "path": path,
         "method": method,
-        "amzAccessToken": access_token,
+        "sellerId": seller_id,
     }
     if query_string:
         params["queryString"] = query_string

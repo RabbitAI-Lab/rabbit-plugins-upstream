@@ -1,11 +1,11 @@
 # ESYS\_ImportProjectBoardOutlineSource enum
 
-导入工程板边框来源
+Import project board outline source
 
 ## Signature
 
 ```typescript
-declare enum ESYS_ImportProjectBoardOutlineSource 
+export enum ESYS_ImportProjectBoardOutlineSource 
 ```
 
 ## Enumeration Members
@@ -33,12 +33,10 @@ FROM\_KEEPOUT\_LAYER
 
 </td><td>
 
-`"keepout"`
+`'keepout'`
 
 
 </td><td>
-
-从 Keepout 层
 
 
 </td></tr>
@@ -49,12 +47,10 @@ FROM\_MECHANICAL\_LAYER\_1
 
 </td><td>
 
-`"mechanical"`
+`'mechanical'`
 
 
 </td><td>
-
-从机械层 1
 
 
 </td></tr>
@@ -62,4 +58,4 @@ FROM\_MECHANICAL\_LAYER\_1
 
 ## Remarks
 
-仅 `fileType` 为 `Altium Designer` 或 `Protel` 时才可以指定该属性，否则将被忽略
+This property can only be specified when `fileType` is `Altium Designer` or `Protel`<!-- -->; otherwise it will be ignored

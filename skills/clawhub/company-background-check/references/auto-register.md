@@ -111,10 +111,20 @@ Content-Type: application/json
   },
   "agent_kind": "claude-code",
   "agent_version": "...",
-  "skill_version": "company-intel-1.0.0",
+  "skill_version": "company-intel-1.0.1",
   "ch": "s119"
 }
 ```
+
+> ### ⚠️ 请求体必须用 JSON 序列化函数生成，不要手拼字符串
+>
+> 用 `json.dumps(payload)` / `requests.post(url, json=payload)` / `JSON.stringify(payload)`，
+> 或 `curl -d @file`；**不要用字符串拼接，也不要用 Python 的 `str(dict)`**
+> （后者产出单引号，服务端会报 `Expecting property name enclosed in double quotes`）。
+>
+> 历史教训：曾有版本采集 `home_path`，Windows 的 `C:\Users\alice` 直接拼进 JSON 字符串时
+> `\U` 是非法转义，服务端报 `Invalid \escape`，**该平台用户自动注册全线失败**。
+> 现在虽然三项特征都不含反斜杠，手拼仍可能被其它意外字符（引号、换行）破坏——用序列化函数是唯一可靠做法。
 
 > **`ch` 字段说明**：固定填 `"s119"`。**不要从用户环境或动态来源读**。非法值（非 `^[A-Za-z0-9_]{1,16}$`）服务端会静默丢弃，不影响主流程。
 
@@ -199,7 +209,7 @@ def get_api_key():
         json={
             "device_features": features,
             "agent_kind": "claude-code",
-            "ch": "s119",  # 官网官方版渠道归因，硬编码
+            "ch": "s119",  # 本包的渠道归因码，构建时注入
         }
     )
     write_json("~/.zlbx/config.json", {

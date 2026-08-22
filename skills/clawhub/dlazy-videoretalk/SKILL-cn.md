@@ -1,11 +1,11 @@
 ---
 name: dlazy-videoretalk
 version: 1.3.5
-description: 通义声动人像 VideoRetalk 口型同步（对口型、lip sync / lip-sync、配音对嘴）视频模型，输入一段人物讲话视频与一段人声音频，生成讲话口型与音频匹配的新视频；适用于让人物视频的口型对上新的语音。当视频中存在多张人脸时，可额外提供人脸参考图来指定要替换口型的目标人物。
+description: "通义声动人像 VideoRetalk 口型同步（对口型、lip sync / lip-sync、配音对嘴）视频模型，输入一段人物讲话视频与一段人声音频，生成讲话口型与音频匹配的新视频；适用于让人物视频的口型对上新的语音。当视频中存在多张人脸时，可额外提供人脸参考图来指定要替换口型的目标人物。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy videoretalk -h 查看帮助信息。"}}
 ---
 
-# dlazy-videoretalk
+# 视频对口型 Video Retalk
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

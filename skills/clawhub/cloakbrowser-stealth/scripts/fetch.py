@@ -1,4 +1,4 @@
-#!/Users/deepak/.venv/cloakbrowser/bin/python3
+#!/usr/bin/env python3
 """
 CloakBrowser Stealth Fetch — Unified wrapper for protected site scraping.
 

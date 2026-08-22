@@ -1,199 +1,136 @@
 ---
 name: code-review
-description: 代码审查 Skill - 自动化代码质量检查与报告生成工具。支持从 GitHub 仓库克隆代码、执行多维度代码质量检查、生成结构化审查报告并按场景保存与分发。当用户提到"代码审查"、"code review"、"检查代码质量"、"审查报告"等操作时，或 当用户主动提及使用本 skill / 调用本技能 时，请使用本 skill。
-version: 1.1.1
-author: code-review
+description: 代码审查 Skill - 自动化代码质量检查与报告生成工具。支持从 GitHub 等仓库克隆代码、执行多维度代码质量检查、生成结构化审查报告并按场景保存与分发。当用户提到"代码审查"、"code review"、"检查代码质量"、"审查报告"等审查操作时，或当用户明确提到对 code-review（本技能）执行"安装 / 更新 / 升级"操作时，或当用户主动提及使用本 skill / 调用本技能时，请使用本 skill。
+version: 1.3.5
+author: tinycen
 ---
 
 # 代码审查 Skill 使用指南
 
-本 Skill 提供自动化代码审查能力，支持从 GitHub 仓库克隆代码、执行多维度代码质量检查、生成结构化审查报告并按场景保存与分发。
+本 Skill 提供自动化代码审查能力。本文档为入口导航页，具体执行规范拆分到 `workflows/` 与 `references/` 下的对应文件中。
 
-> 路径规则：`<workspace>/repos/<域名>/<仓库名>`，其中 `<workspace>` 为与技能根目录（本 SKILL.md 所在目录）平级的 `workspace` 目录（即 `<skill_root>/../workspace`）；域名根据仓库地址自动识别（github.com → github，cnb.cool → cnb）。所有克隆/拉取操作必须显式指定该绝对路径，禁止依赖默认目录或相对路径。
+> 路径规则与仓库获取规范详见 [references/repository_access.md](references/repository_access.md)。
+
+---
+
+## 🔧 工作流
+
+`workflows/` 目录包含本 Skill 的核心执行流程，按触发场景分为以下工作流：
+
+| 工作流 | 说明 | 文档 |
+|--------|------|------|
+| 工作流一：手动触发 | 用户主动要求审查单个仓库时使用，无条件执行完整审查流程。 | [workflows/manual_workflow.md](workflows/manual_workflow.md) |
+| 工作流二：定时触发 | 定时任务或自动化调度触发单个仓库审查时使用，先检查版本是否变化，仅在有变化时执行审查。 | [workflows/scheduled_workflow.md](workflows/scheduled_workflow.md) |
+| 工作流三：前后端跨仓库联调审查 | 用户显式指明前后端仓库对照关系时使用，分别审查前后端单仓质量，并检查联调一致性。支持手动与定时两种触发模式。 | [workflows/cross_repo_integration_workflow.md](workflows/cross_repo_integration_workflow.md) |
+
+工作流执行时可按需启用并行加速策略：
+
+- 环境支持子代理时，跨仓库联调审查、多仓库批量审查等场景可按 [workflows/strategies/subagent_strategy.md](workflows/strategies/subagent_strategy.md) 拆分任务并行执行，以缩短整体耗时。
+- 子代理策略为可选策略，环境不支持时自动降级为串行执行，不影响审查流程完整性。
+
+执行前必须先确定当前场景并选择对应工作流，禁止混用。跨仓库联调审查必须确认用户已显式指明前后端对照关系，不得仅凭两个仓库地址自动推断。
+
+> 💡 **技能安装 / 更新 / 升级**：若用户要求的是安装、更新或升级本技能本身（而非执行代码审查），请直接阅读 [references/installation.md](references/installation.md)，根据当前环境选择对应的安装或更新方式（Prompt 安装、OpenClaw CLI、IDE / 其他 CLI、国内镜像）执行，**无需**进入上述审查工作流。
+
+---
 
 ## 🎯 场景路由表
 
-| 场景 | 参考文档 |
-|------|---------|
-| 代码审查流程与规则 | `references/review_process.md` |
-| 审查报告模板 | `references/report_template.md` |
-| 仓库获取规范 | `references/repository_access.md` |
-| 安装与更新 | `references/installation.md` |
+| 场景 | 文档 |
+|------|------|
+| 手动触发代码审查（用户主动要求 / 本地审查 / 远程对话） | [workflows/manual_workflow.md](workflows/manual_workflow.md) |
+| 定时触发代码审查（自动化调度 / 定时任务） | [workflows/scheduled_workflow.md](workflows/scheduled_workflow.md) |
+| 前后端跨仓库联调审查（用户显式指明前后端对照关系） | [workflows/cross_repo_integration_workflow.md](workflows/cross_repo_integration_workflow.md) |
+| 仓库获取、SSH 配置、版本信息获取 | [references/repository_access.md](references/repository_access.md) |
+| 审查规则、检查维度、问题分级 | [references/review_process.md](references/review_process.md) |
+| 报告格式、保存、分发与通知 | [references/report_delivery.md](references/report_delivery.md) |
+| 单仓审查报告模板 | [references/templates/report.md](references/templates/report.md) |
+| 跨仓库联调审查报告模板 | [references/templates/cross_repo_report.md](references/templates/cross_repo_report.md) |
+| 已忽略与误报问题清单模板 | [references/templates/ignored_issues_template.md](references/templates/ignored_issues_template.md) |
+| 安装与更新 | [references/installation.md](references/installation.md) |
+
+---
 
 ## 📁 文件目录结构
 
 ```
 code-review/
-├── SKILL.md                        # 入口文件（本文件），全局导航与核心规则
-├── references/                     # 参考文档
-│   ├── review_process.md           # 代码审查流程与规则
-│   ├── report_template.md          # 审查报告模板
-│   ├── repository_access.md        # 仓库获取规范
-│   └── installation.md             # 安装与更新
+├── SKILL.md                        # 入口文件（本文件），场景路由
+├── workflows/                      # 工作流编排
+│   ├── manual_workflow.md          # 工作流一：手动触发
+│   ├── scheduled_workflow.md       # 工作流二：定时触发
+│   ├── cross_repo_integration_workflow.md  # 工作流三：前后端跨仓库联调审查
+│   └── strategies/                 # 工作流执行策略
+│       └── subagent_strategy.md    # 子代理并行审查策略
+└── references/                     # 参考文档
+    ├── review_process.md           # 代码审查流程与规则
+    ├── cross_repo_integration_checks.md  # 跨仓库联调一致性检查维度
+    ├── report_delivery.md          # 报告保存、分发与通知
+    ├── templates/                  # 报告与清单模板
+    │   ├── report.md               # 单仓审查报告模板
+    │   ├── cross_repo_report.md    # 跨仓库联调审查报告模板
+    │   └── ignored_issues_template.md  # 已忽略与误报问题清单模板
+    ├── repository_access.md        # 仓库获取规范
+    ├── installation.md             # 安装与更新
+    ├── python_dependency_installation/          # Python 依赖安装
+    │   ├── review_tools.md                      # 审查工具依赖安装
+    │   └── project_dependencies.md              # 项目业务依赖安装
+    ├── frontend_dependency_installation/        # 前端依赖安装
+    │   ├── node_environment.md                  # Node 环境管理（Volta）
+    │   └── project_dependencies.md              # 前端项目业务依赖安装
+    └── language_checks/                         # 语言专项检查
+        ├── python_type_check.md                 # Python 类型检查
+        ├── python_pypi_packaging.md             # Python PyPI 包依赖与打包
+        └── typescript_javascript_check.md       # TypeScript/JavaScript 检查
 ```
 
-## 🔧 核心工作流
+---
 
-> **场景判断**：执行前必须先确定当前场景，选择对应工作流，**禁止混用**。
-> - 若用户主动要求审查代码（如"帮我审查代码"、"检查代码质量"），使用**工作流一（手动触发）**—— 无条件执行完整审查。
-> - 若当前为定时任务、自动化调度触发，或用户明确说"定时触发"、"scheduled trigger"，使用**工作流二（定时触发）**—— 必须按条件判断是否触发审查，条件不满足时直接终止流程。
+## 📂 报告输出目录结构
 
-### 工作流一：手动触发代码审查
+审查报告默认输出到被审查项目的 `docs/code_reviews/` 目录。
 
+**单仓审查**（工作流一、工作流二）：
 ```
-步骤 1：确定审查场景与目标位置
-  → 判断当前为本地审查场景还是远程对话场景
-  → 远程对话场景 / 插件工具场景（如 Open Claw）：
-     - 用户提供仓库 SSH 地址（如 git@github.com:org/repo.git）
-     - 解析域名与仓库名，按照路径规则计算本地绝对路径
-     - 进入步骤 2
-  → 本地审查场景（含在代码仓库内直接触发此技能）：
-     - 用户直接提供本地代码路径，或当前工作目录即为目标代码仓库
-     - 若路径不存在：终止流程并报告本地仓库路径不存在
-     - 若路径存在：直接使用当前本地代码，记录来源为「本地已存在」
-
-步骤 2：获取远程代码（仅远程对话场景执行）
-  → 若目标为 GitHub 仓库：先执行「仓库获取规范 > GitHub SSH 密钥检查与配置」流程
-  → 按路径规则计算目标本地绝对路径，检查该路径是否已存在仓库代码
-  → 若已存在：按「仓库获取规范 > 更新本地仓库」执行更新，记录来源为「本地已存在」
-  → 若不存在：按「仓库获取规范 > 克隆仓库」执行克隆，记录实际使用的来源方式
-  → 若克隆/推送过程中因权限被拒绝：执行「仓库获取规范 > GitHub SSH 权限重试」流程
-
-步骤 3：获取版本信息
-  → 执行 git describe --tags --abbrev=0 获取最新 tag 版本号
-  → 执行 git log -1 --pretty=format:"%H %s" 获取最近提交信息（截止提交）
-
-步骤 4：执行代码审查
-  → 按照 references/review_process.md 定义的审查规则执行
-  → 检查范围：命名规范、方法逻辑、代码质量、依赖管理、类型与弃用检查（Python / TypeScript/JavaScript 项目）等
-  → 问题分级：严重bug、注意问题、一般问题、轻微问题
-  → Python 项目特殊说明：
-     - 若仓库包含 Python 文件，优先执行 Pyright 类型检查作为辅助线索
-     - ⚠️ **强制四步 fallback 链**：详见 `review_process.md > 检查维度 > 类型与弃用检查 > Pyright 安装与执行`，必须按顺序执行，每步失败才进入下一步，禁止在任何中间步骤直接跳过类型检查
-     - 若项目存在配置文件（`setup.py`、`pyproject.toml`、`setup.cfg` 等），还需执行过时语法检查（pyupgrade）和弃用 API 检查（Ruff），详见 `python_type_check.md > 过时与弃用代码检查`
-     - 执行检查时跳过 `.gitignore` 指定的文件和目录
-     - Pyright 的诊断信息仅作为问题线索，必须结合代码上下文阅读分析后，按 review_process.md 的参考映射判断真实问题及级别，禁止机械映射
-
-步骤 5：生成审查报告
-  → 按照 references/report_template.md 生成 Markdown 格式报告
-  → 报告必须包含截止提交信息（最新 commit hash 与 message）
-  → 报告文件名：<检测日期>-<当前大模型的名称>-代码审查报告.md
-  → 某级别没有问题时不展示该级别板块
-
-步骤 6：保存与分发审查报告
-  → 根据沟通场景和保存规则输出报告（详见「核心规则 > 报告保存与分发」）
-  → 优先使用用户指定的保存方式（如有）
-  → 默认保存：将报告保存到项目 `docs/code_reviews/` 目录（若目录不存在则自动创建）
-  → 远程对话场景 / 插件工具场景（如 Open Claw）：在完成默认保存后，优先尝试 git 提交并推送报告文件（仅提交报告，不修改其他代码，不创建 tag 标签）
-     - ⚠️ 推送失败保护：若 `git push` 失败（如 SSH 权限拒绝、网络超时、连接重置等），必须自动重试，最多重试 3 次，每次重试间隔 5 秒
-     - 记录每次重试的失败原因（stderr 输出）
-     - 若 3 次重试后仍失败：
-       1. 向用户明确反馈推送失败及原因：「报告已生成本地保存，但推送至远程仓库失败。失败原因：`<stderr>`。请检查 SSH 密钥权限、网络连接或远程仓库配置。」
-       2. 随后依次尝试文件收发技能发送报告，或直接发送报告内容给用户
-  → 本地审查场景：仅执行默认保存，无需额外推送或发送
-  → 获取报告访问路径或链接用于通知
-
-步骤 7：发送审查通知
-  → 输出审查概要（问题总数、各级别数量）
-  → 根据沟通场景推送通知（对话渠道或本地输出）
-  → 附带报告链接或文件路径
+docs/code_reviews/
+├── <日期>-<模型>-代码审查报告.md    # 新生成的审查报告（待用户处理）
+├── fixed/                          # 待工具扫描的收件箱（用户手动放入已审阅报告）
+│   └── <日期>-<模型>-代码审查报告.md
+├── archived/                       # 已被工具扫描归档的报告（不再重复扫描）
+│   ├── <日期>-<模型>-代码审查报告.md
+│   └── ...
+└── ignored_issues.md               # 已忽略与误报问题清单（自动维护，跨次审查持久化）
 ```
 
-### 工作流二：定时触发代码审查
+**跨仓库联调审查**（工作流三）：
+- 前端单仓报告：`前端仓库/docs/code_reviews/<日期>-<模型>-前端代码审查报告.md`
+- 后端单仓报告：`后端仓库/docs/code_reviews/<日期>-<模型>-后端代码审查报告.md`
+- 联调报告：`主仓库/docs/code_reviews/<日期>-<模型>-前后端联调审查报告.md`
+- 忽略与误报清单：`主仓库/docs/code_reviews/ignored_issues.md`
 
-```
-步骤 1：确定目标位置
-  → 根据配置的仓库 SSH 地址，按照路径规则计算本地绝对路径
-  → 若该路径不存在：按「仓库获取规范 > 克隆仓库」尝试克隆；若克隆失败，终止流程
+> `fixed/` 与 `archived/` 目录说明：
+> - **`fixed/`（收件箱）**：用户查看报告后，将已确认处理（标记了忽略、误报或修复了问题）的报告移至 `fixed/` 目录。
+> - **`archived/`（归档）**：工具在审查前扫描 `fixed/` 目录中的报告提取忽略与误报标记后，**自动把 `fixed/` 下全部报告移动到 `archived/` 目录**，使 `fixed/` 保持为空。下次审查只扫描用户新放入 `fixed/` 的报告，避免重复扫描。
+> - **报告扫描范围**：仅扫描 `fixed/`，不扫描 `archived/`（已归档），也不扫描根目录下的新生成报告。
+> - **原报告引用**：`ignored_issues.md` 中「原报告」字段只记录文件名，对应文件已归档于 `docs/code_reviews/archived/` 子目录。
 
-步骤 2：准备与本地版本检查
-  → 进入按路径规则计算的本地绝对路径
-  → 检查本地仓库是否有未提交的修改（git status --short）
-     - 若有修改：自动执行 git reset --hard HEAD 与 git clean -fd 撤销所有本地修改（仅限定时任务或远程沟通场景执行此操作，本地审查场景禁止自动撤销）
-  → 检查仓库是否存在 tag 标签：
-     - 存在 tag：获取本地最新 tag（git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1)），记录该 tag，进入步骤 3
-       （说明：获取仓库中全局最新 tag，而非当前 HEAD 的 describe 结果，避免本地分支状态干扰）
-     - 不存在 tag：获取本地 HEAD（git rev-parse HEAD），记录该 HEAD，进入步骤 4
+---
 
-步骤 3：版本号检查（存在 tag 时执行，优先）
-  → 获取远程最新 tag：git ls-remote --tags --sort=-creatordate origin | grep -v '\^{}' | head -n 1 | awk '{print $2}' | sed 's|refs/tags/||'
-     （说明：直接从远程获取 tag 列表并解析最新一个，不依赖远程分支 HEAD 的 describe 状态，避免审查报告推送后产生的提交距离后缀干扰）
-  → ⚠️ 远程获取失败保护：
-     - 若上述命令返回空值（网络超时或连接失败），必须立即重试，最多重试 3 次，每次重试间隔 5 秒
-     - 记录每次重试的错误输出（stderr）供排查
-     - 若 3 次重试后仍为空值：终止审查流程，向用户反馈错误信息：「无法获取远程仓库 tag 信息，请检查网络连接、仓库访问权限或远程仓库是否可达。原始错误：`<stderr>`」
-  → 远程获取成功（非空值）后，对比本地（fetch 之前）和远程最新 tag 名称是否一致
-  → 若 tag 不一致：执行 git fetch origin --tags 拉取远程代码及标签，触发审查
-  → 若 tag 一致：⚠️ 强制终止流程，不执行任何后续步骤，向用户反馈「本地 tag 与远程一致（`{本地tag}` == `{远程tag}`），版本未变化，跳过本次审查」。此规则无条件适用，绝不允许以"例行检查"、"周期审查"等任何理由绕过此条件。
+## ❓ 常见问题
 
-步骤 4：代码变更检查（不存在 tag 时执行）
-  → 获取远程 HEAD：git ls-remote origin HEAD | awk '{print $1}'
-  → ⚠️ 远程获取失败保护：
-     - 若上述命令返回空值（网络超时或连接失败），必须立即重试，最多重试 3 次，每次重试间隔 5 秒
-     - 记录每次重试的错误输出（stderr）供排查
-     - 若 3 次重试后仍为空值：终止审查流程，向用户反馈错误信息：「无法获取远程仓库 HEAD 信息，请检查网络连接、仓库访问权限或远程仓库是否可达。原始错误：`<stderr>`」
-  → 远程获取成功（非空值）后，对比本地 HEAD（fetch 之前）与远程 HEAD
-  → 若不一致：执行 git fetch origin --tags 拉取远程代码，触发审查
-  → 若一致：⚠️ 强制终止流程，不执行任何后续步骤，向用户反馈「本地 HEAD 与远程一致（`{本地HEAD}` == `{远程HEAD}`），版本未变化，跳过本次审查」。此规则无条件适用，绝不允许以"例行检查"、"周期审查"等任何理由绕过此条件。
+详见 [FAQ.md](FAQ.md)。
 
-步骤 5：执行审查（同工作流一步骤 4-7）
-  → 触发条件满足时执行完整审查流程
-```
+---
 
-## 📦 仓库获取规范
+## 📦 安装与更新
 
-远程仓库的克隆、更新、SSH 密钥检查及对应 Git 操作命令，详见 [references/repository_access.md](references/repository_access.md)。
-
-## 📋 审查问题分级
-
-| 级别 | 标识 | 说明 |
-|------|------|------|
-| 🔴 严重bug | CRITICAL | 必须立即修复的严重问题，可能导致程序崩溃、数据丢失或安全漏洞 |
-| 🟠 注意问题 | WARNING | 需要关注的问题，可能影响程序稳定性或可维护性 |
-| 🟡 一般问题 | INFO | 代码质量问题，建议优化以提高可读性和可维护性 |
-| 🟢 轻微问题 | MINOR | 代码风格问题，建议改进以保持一致性 |
-
-## 核心规则
-
-- **仓库下载**：优先使用 SSH 克隆，失败时依次尝试 HTTPS、镜像加速等备选方式，确保下载成功率
-- **来源记录**：审查报告必须记录仓库代码的实际获取来源；若来源为「本地已存在」，则报告中不展示「仓库来源」板块
-- **版本检查**：定时触发时优先检查版本号（tag）。若仓库存在 tag，仅当本地与远程最新 tag 不一致时触发审查；若仓库不存在 tag，则按本地 commit 与远程是否不一致（代码发生变更）决定是否触发审查
-- **报告格式**：审查报告默认使用 Markdown 格式
-- **报告命名**：<检测日期>-<当前大模型的名称>-代码审查报告.md
-- **不含质量评分**：报告中禁止包含任何维度的百分制评分或综合评分（如"可维护性 80/100"）。审查应输出具体问题与可执行的修复建议，避免主观、无行动指导意义的抽象数字
-- **不含改进计划/排期**：报告中禁止包含按周或按优先级划分的时间排期与工时估算（如"第一周完成高优先级任务"）。修复优先级由问题分级（🔴/🟠/🟡/🟢）直接体现，具体排期属于团队内部项目管理决策，不应由审查工具输出
-- **不含总结与建议板块**：报告头部已包含问题统计，足以体现整体情况。禁止在报告末尾添加【总结与建议】板块，避免冗余的抽象评价与重复内容
-- **报告保存与分发**：根据审查场景选择输出方式，优先级如下：
-  1. **用户指定优先**：若用户在沟通中明确指定了报告保存方式，严格按照用户要求执行。
-  2. **默认保存**：将报告文件创建并输出到对应项目的 `docs/code_reviews/` 目录中（若目录不存在则自动创建）。
-  3. **远程对话 / 插件工具追加推送**：若通过对话工具或插件工具（如 Open Claw）远程执行，在完成默认保存后：
-     - 优先尝试将报告文件通过 git 提交并推送到远程仓库（仅提交 `docs/code_reviews/` 下的报告文件，不得修改其他任何代码）。
-     - ⚠️ **推送失败保护**：若 `git push` 失败（如 SSH 权限拒绝、网络超时、连接重置等），必须自动重试，最多重试 3 次，每次重试间隔 5 秒。
-     - 记录每次重试的失败原因（stderr 输出）。
-     - 若 3 次重试后仍失败：
-       1. 向用户明确反馈推送失败及原因：「报告已生成本地保存，但推送至远程仓库失败。失败原因：`<stderr>`。请检查 SSH 密钥权限、网络连接或远程仓库配置。」
-       2. 随后检查是否存在文件收发相关技能；若存在，使用该技能将报告文件发送给用户。
-       3. 若不存在文件收发技能，直接将报告内容发送给用户。
-  4. **本地审查**：若对本地代码进行审查，且未通过对话工具远程沟通，仅执行默认保存，无需额外推送或发送。
-- **通知机制**：审查完成后根据场景推送通知。远程对话及插件工具场景通过对话渠道通知并附带报告；本地审查场景在本地输出报告路径。
-
-## 问题定位指南
-
-### 常见问题
-
-| 问题 | 解决方案 |
-|------|---------|
-| SSH 克隆失败 | 1. 按「仓库获取规范 > GitHub SSH 密钥检查与配置」流程自动检查/生成密钥并发送给用户；2. 若自动流程后仍失败，尝试切换到 HTTPS 方式克隆 |
-| HTTPS 克隆失败（网络超时/连接重置） | 1. 检查网络连接；2. 尝试使用镜像加速（如 ghproxy.com、ghps.cc 等）；3. 检查是否需配置 HTTP 代理 |
-| 无 Git 配置（git 命令不存在） | 1. 提示用户安装 Git；2. 若无法安装，尝试使用 curl/wget 下载 ZIP 包解压作为备选 |
-| Tag 不存在 | 使用 git tag -l 查看可用 tag，或使用 commit hash 替代 |
-| 文件夹不存在 | 自动创建 CodeReview 及项目子文件夹 |
-| Pyright 未安装（Python 项目） | ⚠️ **禁止中间跳过**：必须按以下四步强制 fallback 链执行，每步失败才进入下一步：1. `pip install pyright` → 成功后使用 `python -m pyright`；2. 若 pip 失败，`npm install -g pyright` → 成功后使用全局 `pyright`；3. 若 npm 失败，`npx pyright`（首次自动下载）；4. 若全部失败，才跳过类型检查维度，在报告中注明「Pyright 安装失败，未执行类型检查」 |
-| Pyright 检查报错（内存/超时） | 1. 尝试增加 Node 内存限制：`NODE_OPTIONS="--max-old-space-size=4096" pyright`；2. 检查是否存在循环导入或超大文件导致分析超时；3. 若仍失败，跳过类型检查维度 |
-| Pyright 版本不兼容 | 1. 检查项目 `pyrightconfig.json` 或 `pyproject.toml` 中是否指定了 Python 版本；2. 升级 Pyright 到最新版：`pip install --upgrade pyright` 或 `npm update -g pyright` |
-| pyupgrade 未安装 | ⚠️ **禁止中间跳过**：必须按三步强制 fallback 链执行：1. `pip install pyupgrade` → 使用 `pyupgrade --py<VERSION>-plus --diff`（VERSION 取项目最高支持版本）；2. 若 pip 失败，`pipx install pyupgrade`；3. 若全部失败，才跳过该子项，在报告中注明 |
-| Ruff 未安装 | ⚠️ **禁止中间跳过**：必须按三步强制 fallback 链执行：1. 优先使用项目已配置的 `ruff check`；2. 若无配置，`pip install ruff` → 使用 `ruff check --select DEP --output-format=json`；3. 若全部失败，才跳过该子项，在报告中注明 |
-
-## 安装与更新
+### 技能安装
 
 Skill 的安装说明与更新步骤，详见 [references/installation.md](references/installation.md)。
+
+### 审查环境准备
+
+执行审查前需准备所需的审查工具与项目业务依赖：
+- Python 审查工具依赖（Pyright、Pyrefly、pyupgrade、Ruff 等）的环境检测、安装与升级，详见 [references/python_dependency_installation/review_tools.md](references/python_dependency_installation/review_tools.md)。
+- 被审查 Python 项目业务依赖的安装策略，详见 [references/python_dependency_installation/project_dependencies.md](references/python_dependency_installation/project_dependencies.md)。
+- 被审查前端项目的 Node 环境准备（Volta）与业务依赖安装策略，分别详见 [references/frontend_dependency_installation/node_environment.md](references/frontend_dependency_installation/node_environment.md) 和 [references/frontend_dependency_installation/project_dependencies.md](references/frontend_dependency_installation/project_dependencies.md)。

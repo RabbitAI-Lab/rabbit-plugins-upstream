@@ -1,39 +1,32 @@
-# 旧状态迁移
+# 旧状态迁移 2.1
 
-高风险工作正在进行时不要强制迁移。v2 可以读取旧项目状态。
+兼容旧项目，但正常执行不再无限期停留在多文件兼容模式。
+
+## Bootstrap 规则
+
+没有 Active Packet 时：先只读 Legacy Bootstrap，大小写不敏感定位 Docs，只检查当前权威文件和明确链接，检测权限/路线/判定/交付类别冲突；只有无冲突且显式 `--write` 才写一份 Packet；旧历史全部保留不改。
+
+冲突返回 exit code 2 且零写入，必须先由治理流程解决。
 
 ## 旧文件映射
 
-| 旧文件 | v2 角色 |
+| 旧文件 | 2.1 作用 |
 | --- | --- |
-| `TARGET.md` | 更高权限的结果和 Non-Goals |
-| `ACCEPTANCE.md` | 更高权限的验收标准 |
-| `WORK_ORDER.md` 或编号工单 | 当前范围权限 |
-| `STATUS.md` | 当前证据输入，不是范围权限 |
-| `NEXT_ACTIONS.md` | 候选下一步 |
-| `PENDING.md` | 阻塞、决策和以后想法 |
-| `EVALUATION.md` | 历史决定 |
-| `LOOP_RUNS.jsonl` | 只追加的执行证据 |
-| `LOOP_STATE.md` | Active Packet 的 Lite 前身 |
+| `TARGET.md` | 高权威目标与 Non-Goals |
+| `ACCEPTANCE.md` | 验收项与证据要求 |
+| 活跃 `WORK_ORDER*.md` | 当前范围权限 |
+| `STATUS.md`、`CMS.md`、角色说明 | 当前状态候选，不高于权威文件 |
+| `NEXT_ACTIONS.md` | 下一步候选 |
+| `PENDING.md` | 阻塞、决定和以后想法 |
+| QA 文件 | 保留判定；后续推翻决定优先但必须显式 |
+| `LOOP_RUNS.jsonl` | 追加证据；旧记录只聚合，不重写 |
 
-## 采用 v2
+## 迁移后
 
-1. 保留历史文件；
-2. 创建 `Docs/ACTIVE_PACKET.md`；
-3. 链接当前权威 TARGET、ACCEPTANCE 和 Work Order；
-4. 只复制当前阶段投影，不复制历史；
-5. 执行前解决冲突；
-6. 继续向 `LOOP_RUNS.jsonl` 追加精简记录；
-7. 停止扩展重复状态日志。
+- Active Packet 是当前投影；
+- 停止日常写入重复状态日志；
+- 只有稳定范围需要时保留一个当前 Work Order；
+- Standard / Full 只保留一个最终 Independent QA Decision；
+- 只在发布/月度自然边界归档，不删除历史。
 
-## 只使用旧协议
-
-没有 Active Packet 时：
-
-- 读取 target、acceptance、当前 Work Order、最新状态、阻塞和一个下一步；
-- 保留项目已有状态枚举；
-- 只写项目已采用的状态文件；
-- 在自然边界建议迁移，不在紧急修复中强制迁移。
-
-范围权限不明确时设置 `Invalid State`。
-
+authority fingerprint 改变时停止执行，先对齐再刷新 Packet。

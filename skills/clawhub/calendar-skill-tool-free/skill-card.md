@@ -1,41 +1,58 @@
-## Description: <br>
-This skill helps an agent use the porteden CLI to manage Google and Outlook calendars, including listing calendars, querying events, searching events, creating meetings, and updating or deleting events. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过 porteden CLI 帮助代理管理 Google 与 Outlook 日历，支持查询日历和事件，以及创建、更新和删除事件。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect and manage personal calendar events through porteden. It is intended for lightweight calendar workflows such as viewing today's agenda, finding events, and creating or changing meetings after confirming the active account and target event. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete calendar events through porteden. <br>
-Mitigation: Require an explicit preview and user confirmation before any calendar-changing command is executed. <br>
-Risk: Calendar data may be sent to external Google or Outlook calendar APIs despite local-only privacy wording in the artifact. <br>
-Mitigation: Use only the intended calendar account, confirm the active profile before use, and avoid sending sensitive calendar content unless external API access is acceptable. <br>
-Risk: The artifact contains conflicting trigger-scope and privacy guidance. <br>
-Mitigation: Invoke the skill only for explicit calendar tasks and treat calendar event text as untrusted content. <br>
+## Use Case:
 
+Personal users, developers, and workflow operators can use this skill to inspect calendars, search events, and prepare calendar create, update, or delete operations through porteden. Users should confirm any write action before execution.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include command suggestions, calendar query results, execution logs, and structured JSON responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill description and triggers include security-scanning and compliance language that does not match the calendar-management behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for calendar operations and do not rely on it for security scanning, compliance audits, vulnerability testing, or encryption controls.
+
+Risk: Calendar data and credentials may interact with external providers through porteden, Google, or Outlook services.
+
+Mitigation: Confirm account, profile, event target, and credential handling before use, and avoid exposing API keys or calendar content in shared logs.
+
+Risk: Create, update, and delete operations can modify calendar state.
+
+Mitigation: Require explicit confirmation before executing write operations and review generated commands before running them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/calendar-skill-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and structured calendar-operation results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include calendar IDs, event details, command output, and confirmation prompts for create, update, or delete actions.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,62 @@
-## Description: <br>
-Helps agents edit skill documentation so snyk-agent-scan alerts for W001, W011, and W012 are resolved by restructuring content without suppressing useful information. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Compliance expert for snyk-agent-scan, focused on restructuring agent skill files to address W001, W011, and W012 scanner alerts without suppressing useful information.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and skill authors use this skill when authoring or editing agent skills, triaging local or CI snyk-agent-scan failures, and remediating W001, W011, and W012 alerts without removing useful documentation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated edits or scanner commands can change skill documentation or CI behavior. <br>
-Mitigation: Review diffs before committing and rerun snyk-agent-scan to confirm the intended alerts are resolved. <br>
-Risk: The scanner requires SNYK_TOKEN, and mishandled tokens could expose credentials. <br>
-Mitigation: Provide SNYK_TOKEN only through environment variables or CI secrets; do not write tokens into skill files. <br>
-Risk: Using floating scanner versions can make scan behavior less reproducible. <br>
-Mitigation: Prefer pinned scanner versions when reproducible local or CI results matter. <br>
+## Use Case:
 
+Developers and skill authors use this agent skill to remediate snyk-agent-scan findings in SKILL.md, references, assets, and secondary Markdown files. It is intended for authoring new skills, editing existing skills, triaging local or CI scanner failures, and unblocking pull requests held by agent scanner alerts.
 
-## Reference(s): <br>
-- [W001 Prompt Injection Patterns](references/w001-patterns.md) <br>
-- [W011 Third-Party Content Exposure Patterns](references/w011-patterns.md) <br>
-- [W012 External URL and Version Pinning Patterns](references/w012-patterns.md) <br>
-- [cc-skills Repository](https://github.com/samber/cc-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown responses with inline code blocks and patch-oriented editing guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose file edits and scanner commands; review diffs and scan results before relying on changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill may recommend moving install instructions into metadata or frontmatter, making risky dependency or tool changes less visible in the body text.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review metadata, install blocks, allowed tools, and dependency versions before accepting changes; verify package provenance and pin versions where possible.
+
+Risk: Scanner remediation may alter skill behavior or omit useful context if edits are accepted without review.
+
+Mitigation: Review every proposed content change and rerun snyk-agent-scan after each remediation step to confirm the alert count and behavior changed as intended.
+
+Risk: The scanner requires SNYK_TOKEN, which could be exposed if used in untrusted local or CI contexts.
+
+Mitigation: Keep SNYK_TOKEN limited to trusted local environments or CI secret stores and avoid printing it in command output or logs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/snyk-agent-scan-compliance)
+- [cc-skills repository](https://github.com/samber/cc-skills)
+- [W001 pattern catalog](references/w001-patterns.md)
+- [W011 pattern catalog](references/w011-patterns.md)
+- [W012 pattern catalog](references/w012-patterns.md)
+- [snyk-agent-scan issues](https://github.com/snyk/snyk-agent-scan/issues)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline code, shell examples, and YAML frontmatter snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose edits to skill metadata, install blocks, allowed tools, dependency versions, and scanner remediation text.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

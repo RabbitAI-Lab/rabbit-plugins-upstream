@@ -137,6 +137,8 @@ siluzan-cso workflow load-libraries --platform <平台> --out <file_path>
 
 ### 第 4 步：读取并遵循必读文件指导创作文案
 
+**新生成视频脚本的最终阶段附加规则**：仅当宿主原有选题及方案/提纲确认已经完成、即将正式写稿时，完整读取 `video-script-final.workflow.md`，再按其规则处理本次三库并成稿；确认未完成时禁止提前读取。该文件不得改变前述选题、RAG、方案卡或确认流程。非视频任务忽略本段。
+
 **单轨**
 
 - 阅读 `collaboration.md`，理解协作要点

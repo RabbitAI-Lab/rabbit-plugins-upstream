@@ -1,11 +1,11 @@
 # ESYS\_Theme enum
 
-主题
+Theme
 
 ## Signature
 
 ```typescript
-declare enum ESYS_Theme 
+export enum ESYS_Theme 
 ```
 
 ## Enumeration Members
@@ -33,12 +33,10 @@ DARK
 
 </td><td>
 
-`"dark"`
+`'dark'`
 
 
 </td><td>
-
-深色
 
 
 </td></tr>
@@ -49,12 +47,10 @@ LIGHT
 
 </td><td>
 
-`"light"`
+`'light'`
 
 
 </td><td>
-
-浅色
 
 
 </td></tr>

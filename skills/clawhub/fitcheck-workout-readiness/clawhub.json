@@ -1,0 +1,33 @@
+{
+  "slug": "fitcheck-workout-readiness",
+  "displayName": "FitCheck: Workout Readiness & Recovery",
+  "version": "1.1.1",
+  "description": "A live emotional mirror. Challenge yourself, challenge your friends: grill them and watch the deception, stress and voice meters react, check any video, run before-and-after scans around workouts, dates, big calls. On-device, nothing uploaded. Ends with a shareable emotional x-ray. Powered by EmoPulse.",
+  "author": "emopulse",
+  "homepage": "https://emo.city?utm_source=clawhub&utm_medium=skill",
+  "repository": "https://github.com/gv66co/Emo-City",
+  "license": "PROPRIETARY",
+  "tags": [
+    "challenge",
+    "stress",
+    "fitness",
+    "heart-rate",
+    "mood",
+    "deception-game",
+    "workout",
+    "recovery",
+    "wellness",
+    "mediapipe"
+  ],
+  "categories": [
+    "lifestyle",
+    "health",
+    "productivity"
+  ],
+  "source": {
+    "kind": "github",
+    "url": "https://github.com/gv66co/Emo-City",
+    "repo": "gv66co/Emo-City",
+    "path": "skills/emocity-biometric-scan"
+  }
+}

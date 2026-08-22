@@ -1,45 +1,59 @@
-## Description: <br>
-Meituan Travel helps an agent query Meituan travel services for hotels, flights, trains, attraction tickets, discounts, price comparison, and itinerary planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Meituan Travel helps users plan and query hotels, flights, trains, attraction tickets, vacation options, discounts, prices, and itineraries through Meituan travel services.
 
-## Publisher: <br>
-[meituan-travel-ai](https://clawhub.ai/user/meituan-travel-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[meituan-travel-ai](https://clawhub.ai/user/meituan-travel-ai)
 
-## Use Case: <br>
-External users and travel-support agents use this skill to answer travel planning and booking-related queries against Meituan travel services, including hotels, flights, trains, attraction tickets, discounts, and itinerary options. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends travel queries to Meituan's external travel service using a Meituan token. <br>
-Mitigation: Install only when that external service use is acceptable, scope and protect the token, and avoid sending secrets, passport numbers, payment details, or unrelated private context. <br>
-Risk: The skill depends on an npm package invoked through npx or a global install. <br>
-Mitigation: Pin or review the npm package before production use, and confirm requests go to the documented Meituan endpoint. <br>
-Risk: Returned travel content may include links, marketing text, pricing, or other external service output. <br>
-Mitigation: Preserve booking links needed by users, but apply product policy review or filtering before displaying content in higher-risk user experiences. <br>
+## Use Case:
 
+External users use this skill as a travel assistant for Meituan hotel, flight, train, attraction ticket, vacation, discount, price comparison, and itinerary queries. The agent authenticates with Meituan Passport when needed and relays Meituan CLI results to the user.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/meituan-travel-ai/meituan-travel) <br>
-- [Meituan developer site](https://developer.meituan.com) <br>
-- [Meituan API token documentation](https://developer.meituan.com/zh/v2/dev/token) <br>
-- [Meituan travel service endpoint](https://mcp-open-cater.meituan.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown travel results by default, with optional raw JSON when requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MEITUAN_HT_TOKEN; MEITUAN_RAW_JSON can request raw JSON output; npx is required for command execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata) <br>
+Risk: The skill uses a Meituan Passport login token and may silently reuse cached authorization for travel queries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that credential use is acceptable, review cached authorization behavior before deployment, and prefer a version that asks before reusing cached credentials.
+
+Risk: The skill sends the user's full original travel request to the Meituan CLI.
+
+Mitigation: Avoid submitting sensitive personal details that are not needed for the travel query and disclose this data flow to users before use.
+
+Risk: The skill runs or installs npm packages at runtime without tight pinning or user control.
+
+Mitigation: Prefer a version that pins npm packages, avoids automatic global installs, and runs in an environment where npm execution is reviewed and controlled.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/meituan-travel-ai/skills/meituan-travel)
+- [Meituan developer portal](https://developer.meituan.com)
+- [Meituan Passport reference](artifact/meituan-passport-user-auth/reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown travel results and authentication prompts, with shell commands executed by the agent]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [CLI output is expected to be passed through without deletion, including links, prices, ratings, and images when present.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

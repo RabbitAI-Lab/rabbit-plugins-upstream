@@ -1,45 +1,59 @@
-## Description: <br>
-Tracks crypto news, coin sentiment, social trend rankings, and macroeconomic calendar signals through read-only OKX CLI commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance for read-only OKX crypto news aggregation, coin sentiment analysis, social trend checks, and macro-economic calendar queries through the OKX CLI.
 
-## Publisher: <br>
-[searchworld](https://clawhub.ai/user/searchworld) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[searchworld](https://clawhub.ai/user/searchworld)
 
-## Use Case: <br>
-External users and developers use this skill to build crypto market briefings, coin-specific news searches, sentiment analyses, anomaly reports, and macroeconomic calendar summaries from OKX data. It is intended for read-only market intelligence, not trading, account management, or price/candle retrieval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The OKX npm CLI install downloads a persistent helper binary and requires trust in the OKX package. <br>
-Mitigation: Install only if the OKX CLI package is trusted, prefer the pinned 1.4.0 release, and review the package before use. <br>
-Risk: The skill uses live OKX credentials configured in ~/.okx/config.toml. <br>
-Mitigation: Use a dedicated OKX profile or read-only subaccount API credentials where possible, and review the local OKX configuration before running commands. <br>
-Risk: Briefings may combine OKX results with web-search results when OKX coverage is sparse. <br>
-Mitigation: Label OKX API results separately from web-search context so users can judge source reliability. <br>
-Risk: Economic-calendar queries have a strict rate limit and counterintuitive time-window parameters that can produce noisy or misleading results if used incorrectly. <br>
-Mitigation: Use both time bounds for future-event windows, avoid repeated calls, and verify timestamps before presenting calendar results. <br>
+## Use Case:
 
+External users and developers use this skill to route crypto news, sentiment, social buzz, and economic-calendar requests to the appropriate read-only OKX CLI commands and to format the results as market briefings or analysis.
 
-## Reference(s): <br>
-- [Cross-Skill Workflows](references/workflows.md) <br>
-- [OKX](https://www.okx.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, markdown, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and optional JSON-producing CLI calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only OKX news and sentiment workflows; sparse OKX coverage may be supplemented with clearly labeled web-search context.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release evidence and skill metadata) <br>
+Risk: Live OKX credential use can expose sensitive account access if credentials are over-scoped or entered directly in chat or command lines.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only, least-privilege API keys, configure credentials outside chat, and review the skill before installation in live-account environments.
+
+Risk: Account-position and trading-impact workflows may be treated as financial decision support.
+
+Mitigation: Require explicit user consent before account-aware analysis and keep any position or TP/SL discussion advisory unless the user separately confirms an action.
+
+Risk: Economic-calendar queries have counterintuitive time-window semantics and sparse or empty results can mislead users.
+
+Mitigation: Use both time bounds for future windows, respect the documented rate limit, and clearly report when results are sparse or supplemented from web search.
+
+## Reference(s):
+
+- [Cross-Skill Workflows & MCP Tool Reference](references/workflows.md)
+- [OKX](https://www.okx.com)
+- [ClawHub Skill Page](https://clawhub.ai/searchworld/skills/okx-sentiment-tracker)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and optional JSON CLI output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include OKX CLI command sequences, report tables, source labels, and fallback guidance for sparse results.]
+
+## Skill Version(s):
+
+1.4.4 (source: server evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

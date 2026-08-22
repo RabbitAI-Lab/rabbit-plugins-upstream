@@ -1,0 +1,15 @@
+{
+  "region": "cn-north-4",
+  "project_id": "your-project-id-here",
+  "auth": {
+    "ak_env": "HWCLOUD_AK",
+    "sk_env": "HWCLOUD_SK"
+  },
+  "examples": [
+    "python3 scripts/hcs-obs-metaquery.py capability-list --mock",
+    "python3 scripts/hcs-obs-metaquery.py scalar-search --bucket my-bucket --mock",
+    "python3 scripts/hcs-obs-metaquery.py semantic-search --bucket my-bucket --query landscape --mock",
+    "python3 scripts/hcs-obs-metaquery.py enable-ai --bucket my-bucket --ai-type image --mock",
+    "python3 scripts/hcs-obs-metaquery.py bucket-stats --bucket my-bucket --mock"
+  ]
+}

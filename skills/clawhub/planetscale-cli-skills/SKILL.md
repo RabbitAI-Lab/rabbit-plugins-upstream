@@ -1,6 +1,6 @@
 ---
 name: planetscale-cli-skills
-description: Comprehensive PlanetScale CLI (pscale) command reference and workflows for database management via terminal. Use when user mentions PlanetScale CLI, pscale commands, database branches, deploy requests, schema migrations, SQL queries, Cloudflare D1 imports, or any PlanetScale terminal operations. Routes to specialized sub-skills for auth, branches, deploy requests, SQL, D1 imports, databases, backups, and other pscale commands. Triggers on pscale, PlanetScale CLI, database branch, deploy request, schema migration, pscale sql, pscale import d1, Cloudflare D1 migration, PlanetScale automation.
+description: PlanetScale CLI (pscale) command reference and workflows. Use for authentication, organizations and members, databases, branches, branch maintenance, extension catalogs, metrics, insights, diagnostics, SQL, deploy requests, schema migrations, keyspaces, VTGate sizing, database/deploy/tablet throttlers, aggressive cutover, Postgres switchovers, Traffic Control, PgBouncers, Postgres IP restrictions, read-only regions, backups, audit logs, service tokens, passwords, Cloudflare D1 imports, and automation. Routes to specialized pscale sub-skills. Triggers on PlanetScale CLI, pscale, pscale maintenance, maintenance window, pscale metrics, performance report, pscale insights, pscale inspect, pscale sql, deploy request, deploy queue, unblock deploy, aggressive cutover, branch maintenance, branch extensions, branch switchover, traffic control, force cutover, storage readiness, keyspace routing rules, database settings, database branch, VTGate resize, pgbouncer, backup policy, database diagnostics, org member, or pscale import d1.
 requirements:
   binaries:
     - pscale
@@ -15,10 +15,11 @@ metadata:
   openclaw:
     purpose: >
       Provide command reference and automation for PlanetScale CLI (pscale) operations only.
-      Scope is limited to: database and branch management, deploy requests, non-interactive SQL queries, Cloudflare D1 imports,
-      backups, passwords, service tokens, and organization management via the pscale CLI tool.
+      Scope is limited to: database and branch management, maintenance schedule inspection, dedicated PostgreSQL PgBouncers, Postgres Traffic Control, VTGate sizing, Vitess read-only-region access, deploy requests,
+      non-interactive SQL queries, historical/current performance metrics, query insights, read-only diagnostics, Cloudflare D1 imports, backups, audit-log exports, passwords,
+      authentication-attempt exports, service tokens, and organization management via the pscale CLI tool.
     capabilities:
-      - Run pscale CLI commands to manage PlanetScale databases, branches, deploy requests, D1 imports, and non-interactive SQL queries
+      - Run pscale CLI commands to manage PlanetScale databases, branches, maintenance inspection, dedicated PgBouncers, Postgres Traffic Control, deploy requests, D1 imports, non-interactive SQL queries, performance metrics, query insights, read-only diagnostics, audit-log exports, and authentication-attempt exports
       - Execute bundled automation scripts (create-branch-for-mr.sh, deploy-schema-change.sh, sync-branch-with-main.sh)
       - Read PlanetScale CLI output and help users interpret results
     install_mechanism: >
@@ -49,19 +50,33 @@ Comprehensive `pscale` command reference and workflows for managing PlanetScale 
 
 The PlanetScale CLI brings database branches, deploy requests, and schema migrations to your fingertips. This skill provides command references, automation scripts, and decision trees for all `pscale` operations.
 
+## Configuration and credential safety
+
+- Directory-local `.pscale.yml` files are project configuration, not trusted credential configuration. The CLI accepts only `org`, `database`, and `branch` from them and warns while ignoring keys such as API endpoints or tokens.
+- Keep API URLs and credentials in the user config, environment/secret manager, or explicit approved flags. Never commit them to a repository-local config.
+- `pscale api` follows cross-host redirects without forwarding authentication or caller-supplied headers. Even with this protection, pass secret-bearing headers only to an explicitly verified API host and do not expose them in logs.
+- When `--format json` is active, API error codes are preserved in the top-level `code` field instead of being collapsed to `COMMAND_FAILED`. Branch automation should branch on exact codes when present; for `schema_mutation_blocked`, wait for the active vtctld mutation or deploy to finish before retrying.
+
 ## Sub-Skills
 
 | Command | Skill | Use When |
 |---------|-------|----------|
 | **auth** | `pscale-auth` | Login, logout, service tokens, authentication management |
-| **branch** | `pscale-branch` | Create, delete, promote, diff, list branches, inspect branch infra, manage Postgres size/replicas/parameters, download/query-stream query pattern reports, manage Vitess MoveTables workflows |
-| **deploy-request** | `pscale-deploy-request` | Create, review, deploy, revert schema changes |
-| **database** | `pscale-database` | Create, list, show, delete databases |
+| **branch** | `pscale-branch` | Create, rename, protect, delete, promote, diff, list, and switchover branches; inspect branch infra, manage Postgres size/replicas/parameters/maintenance/extensions, resize Vitess VTGates, manage live keyspace routing rules and tablet throttling, manage query pattern reports, manage Vitess MoveTables workflows |
+| **deploy-request** | `pscale-deploy-request` | Create, review, inspect queues/operations, check storage, throttle, deploy, update auto-apply/auto-delete settings, unblock failed deploy/revert queues, force cutover, and revert schema changes |
+| **database** | `pscale-database` | Create, list, show, update, delete, and dump databases; manage database-level Vitess throttler/aggressive-cutover defaults, keyspaces, PostgreSQL IP restrictions, and read-only regions |
+| **maintenance** | `pscale-maintenance` | Inspect Vitess Enterprise maintenance schedules, pending versions, deadlines, and historical windows |
 | **sql** | `pscale-sql` | Run non-interactive SQL queries with JSON output and ephemeral credentials |
+| **metrics** | `pscale-metrics` | Query historical/current branch metrics and engine-aware grouped performance reports |
+| **insights** | `pscale-insights` | Analyze production query statistics, execution samples, query tags, error details, anomaly correlations, and schema recommendations |
+| **traffic-control** | `pscale-traffic-control` | Inventory and safely manage Postgres Traffic Control budgets and fingerprint/keyspace/tag rules |
+| **inspect** | `pscale-inspect` | Run point-in-time, read-only MySQL/Vitess and PostgreSQL diagnostic checks |
 | **import d1** | `pscale-import-d1` | Import Cloudflare D1 SQLite exports into PlanetScale Postgres |
-| **backup** | `pscale-backup` | Create, list, show, delete branch backups |
-| **password** | `pscale-password` | Create, list, delete connection passwords |
-| **org** | `pscale-org` | List, show, switch organizations |
+| **backup** | `pscale-backup` | Create, list, show, restore, and delete branch backups; manage scheduled backup policies |
+| **audit-log** | `pscale-audit-log` | List audit events and export filtered authentication attempts |
+| **password** | `pscale-password` | Create, list, show, update, delete, and scope Vitess connection passwords to read-only regions |
+| **pgbouncer** | `pscale-pgbouncer` | List, inspect, create, resize, cancel, and delete dedicated PostgreSQL PgBouncers |
+| **org** | `pscale-org` | List, show, switch organizations, and inspect or manage members |
 | **service-token** | `pscale-service-token` | Create, manage CI/CD service tokens |
 
 ## Decision Trees
@@ -181,19 +196,58 @@ pscale branch list <database>
 pscale branch delete <database> <branch>
 pscale branch parameters list <database> <branch> --format json
 pscale branch resize status <database> <branch> --format json
+pscale branch vtgate show <database> <branch> --format json
+pscale branch update <database> <branch> --deletion-protected=true --format json
+
+# Discover and use a Vitess read-only region
+pscale keyspace read-only-regions <database> <branch> <keyspace> --format json
+pscale keyspace read-only-regions add <database> <branch> <keyspace> <region> --cluster-size <size> --replicas <count>
+pscale password create <database> <branch> <name> --read-only-region <region> --format json
 
 # Deploy requests
 pscale deploy-request create <database> <branch>
 pscale deploy-request list <database>
+pscale deploy-request storage-check <database> <number> --format json
+pscale deploy-request operations <database> <number> --format json
 pscale deploy-request deploy <database> <number>
+
+# Dedicated PostgreSQL PgBouncers
+pscale pgbouncer list <database> <branch> --format json
+pscale pgbouncer show <database> <branch> <name> --format json
 
 # Database operations
 pscale database create <database> --org <org>
 pscale database list
+pscale database show <database> --format json
+pscale database ip-restriction list <database> --format json
+pscale database throttler show <database> --org <org> --format json
+pscale database aggressive-cutover show <database> --org <org> --format json
 pscale shell <database> <branch>
+
+# Maintenance schedules and windows (Vitess Enterprise)
+pscale maintenance list <database> --org <org> --format json
+pscale maintenance windows <database> <schedule-id> --org <org> --format json
+
+# Backup policies and authentication-attempt exports
+pscale backup policy list <database> --format json
+pscale audit-log auth-attempts download --org <org> --since 24h --outcome deny
 
 # Non-interactive read query for agents/scripts
 pscale sql <database> <branch> --org <org> --format json --query "SELECT 1"
+
+# Point-in-time diagnostics, branch metrics, and query-fingerprint analysis
+pscale inspect all <database> <branch> --org <org> --format json
+pscale metrics report <database> <branch> --org <org> --period 1d --format json
+pscale metrics show <database> <branch> --org <org> --metric queries --metric latency_p99 --period 1h --format json
+pscale insights queries <database> <branch> --org <org> --sort p99Latency --period 1h --format json
+pscale insights queries samples <database> <branch> <fingerprint> --org <org> --keyspace <keyspace> --format json
+pscale insights tags summaries <database> <branch> --org <org> --tags app --sort totalTime --format json
+pscale insights errors show <database> <branch> <full-error-fingerprint> --org <org> --format json
+pscale insights anomalies show <database> <branch> <anomaly-id> --org <org> --format json
+pscale insights recommendations <database> --org <org> --format json
+
+# Postgres Traffic Control inventory
+pscale traffic-control budget list <database> <branch> --org <org> --format json
 
 # Cloudflare D1 import dry-run
 pscale import d1 start <database> <branch> --input ./d1-export.sql --dry-run --format json

@@ -48,13 +48,13 @@ python3 scripts/zcm.py compliance <project_id> 投标文件.docx --report html -
 
 ## 第 1 步：凭证
 
-凭证默认存在 **skill 内 `config.json`**（权限 600，含真实 Key——**绝不上传发布包/提交仓库**，发布包不含配置文件）。读取优先级：环境变量 > skill 内 config.json（旧版 `~/.zcm/config.json` 仍可读，兼容已有安装）。`ZCM_CONFIG` 可改凭证文件路径。
+凭证默认存在 **skill 内 `config.json`**（权限 600，含真实 Key——**绝不上传发布包/提交仓库**，发布包不含配置文件）。App Key 只从 **skill 内 config.json** 读取（路径固定，不经环境变量、无旧目录回退、不可重定向）。
 
 **只需 App Key 一项**，由用户**自行到官网获取**（本 skill 不代注册、不收集手机号/验证码）。获取全路径（转述时逐步骤完整给出，链接原样显示完整 URL）：
 打开官网 https://biaoshu.zhiliaobiaoxun.com/ → 手机号 + 短信验证码注册并登录（新用户赠积分）→ 点**左侧菜单『Skill 接入 → 获取 APP Key』**，在弹出面板中查看/复制 App Key（首次打开自动生成，形如 `bk_live_xxxxx`，重置后旧 Key 立即失效）。
 
 **配置方式（唯一引导方式：用户本人写入本地凭证文件，Key 不进对话）**：
-指导用户在本 skill 目录下创建 `config.json`，写入一行 `{"app_key": "bk_live_xxxxx"}`（把 Key 换成自己的）。**不要索取、让用户粘贴或在回复中复述 Key**（会话记录、截图、链接预览都可能泄露凭证）。可选字段：`base` 自定义 API 地址、`output_dir` 成品存放目录。配好后先跑 `me` 自检连通与余额。
+指导用户在本 skill 目录下创建 `config.json`，写入一行 `{"app_key": "bk_live_xxxxx"}`（把 Key 换成自己的）。**不要索取、让用户粘贴或在回复中复述 Key**（会话记录、截图、链接预览都可能泄露凭证）。可选字段仅保留 `output_dir` 成品存放目录；开放 API 地址固定为官方生产环境，不接受本地覆盖。配好后先跑 `me` 自检连通与余额。
 
 - 缺凭证时脚本会打印官网获取指引并退出（码 2），把指引转述给用户即可。
 - 先 `python3 scripts/zcm.py me` 确认连通与积分余额（生成会扣分）。
@@ -84,6 +84,7 @@ python3 scripts/zcm.py interpret /path/招标文件.pdf      # 仅本地路径
 python3 scripts/zcm.py packages <project_id>
 ```
 - 把返回的 `packages` 呈现给用户挑选，收集选中的 `package_ids`。
+- `max_total_pages` 当前上限为 **500**；用户想指定页数时，以抽包结果里的上限为准。
 - `is_multi_package=false` → 跳过选包，第 4 步不带 `--package-ids`。
 
 ## 第 4 步：生成成品标书
@@ -98,6 +99,9 @@ python3 scripts/zcm.py generate <project_id> --package-ids 11,12 --total-pages 8
 ```
 - 存放目录优先级：`-o` > `ZCM_OUTPUT_DIR` > `login` 存的 `output_dir` > 默认 `biaoshu-bailian-files/`。
 - 自动轮询（默认超时 3600s，`--timeout` 可调）。完成后打印**成品完整路径**+所在目录，**两项都告诉用户**。
+- 后端会按「选包 → 抽需求 → 生成大纲 → 生成正文 → 填充制式模板 → 导出」串行完成；页数规划会综合分包结构、技术/商务内容、表格和图表，`total_pages` 最高 500。
+- 制式表格/范本会尽量自动填充；无法确认的公司资料、日期、报价、签章等信息会保留为待填项，不要替用户编造。
+- **跟用户解释积分时分两层说**：解读 / 合规 / 生成三个入口提交前都会先看余额，余额 < 1 会被拦住；但**真正扣积分的只有生成**。不要把“余额门槛”说成“解读/合规也扣积分”。
 - ⏱ **生成可能耗时 >10 分钟**（实测 30 页约 15 分钟）。脚本本身轮询不会超时，但**前端/工具调用常有 ~10 分钟上限**会把命令杀掉——**注意：后端任务不受影响、仍在跑，切勿重新提交（会重复扣费）**。长任务推荐：`generate <pid> --no-wait` 拿 `job_id`，再用 `progress-stream <job_id>`（配合 Monitor 后台实时播报）续查到终态，最后 `result <job_id> -o <路径>` 下载并打印全路径。万一命令被杀，用同一 `job_id` 续查即可，不要重发 generate。
 
 ## 第 5 步：合规审查
@@ -111,7 +115,8 @@ python3 scripts/zcm.py compliance <project_id> /path/投标A.docx /path/投标B.
 # 暗标/电子标：加 --blind / --electronic
 ```
 - **不支持云端链接**：传链接会被脚本拒绝，请用户先自行下载到本地。
-- **直接把合规结果展示给用户**——含 `summary`（风险计数 + 一句话结论）、`issues[]`（风险等级/招标依据/投标证据/修改建议）、`similarity_issues[]`（多文件雷同）、`manual_items[]`（人工核查清单）。优先讲高风险与结论。字段见 [api.md 附录 B](api.md)。
+- **直接把合规结果展示给用户**——含 `summary`（风险计数 + 一句话结论 + 语义审查状态）、`partial_summary`（阶段性/部分结果统计）、`scope_summary_lines`（检查范围）、`issues[]`（风险等级/招标依据/投标证据/修改建议）、`similarity_issues[]`（多文件雷同）、`manual_items[]`（人工核查清单）。优先讲高风险、结论与审查完整性。字段见 [api.md 附录 B](api.md)。
+- 若 `summary.conclusion_phase`、`summary.semantic_review` 或 `partial_summary` 表示语义审查处理中、部分完成或只完成规则检查，必须如实说明“当前为部分结果/语义审查未完整完成”，不要说成完整审查完成。
 - `risk_level` 实测为 `high`/`review`/`tip`，脚本输出与报告**已自动转中文**（高风险/待复核/提示），直接用中文呈现。
 - 未解读就调 → 409；投标文件缺失/类型不对 → 422（两份输入缺一不可）。
 - 展示后**主动问是否生成合规报告**（见下）。
@@ -131,7 +136,7 @@ python3 scripts/zcm.py report --job <JOB_ID> --name 招标文件.pdf --format bo
 - **默认只出 HTML**；用户明确要 Word 才 `docx`/`both`。
 - 命名：`招标文件名_智能解读` / `招标文件名_合规审查`。取名优先级：`--name` > 结果自动识别（`original_filename` / `project_info.项目名称` / 本地缓存）> `标签_时间戳`。
   - `interpret` 自动用上传文件名；`generate` 自动用缓存名；**`compliance`/`report --job` 拿不到招标文件名时务必带 `--name`**，否则退化时间戳。
-- 报告内容依赖后端按 [api.md 附录 A/B](api.md) 返回完整结果；`/result` 只回句柄或字段空时，报告注明「无明细」而不报错。
+- 报告内容依赖后端按 [api.md 附录 A/B](api.md) 返回完整结果；合规 HTML 总览会展示检查范围、结论、语义审查状态和部分结果摘要；`/result` 只回句柄或字段空时，报告注明「无明细」而不报错。
 
 ## 关键约定
 
@@ -150,4 +155,4 @@ python3 scripts/zcm.py report --job <JOB_ID> --name 招标文件.pdf --format bo
 - **幂等**：网络重试给提交命令加 `--idempotency-key <UUID>`，避免重复建任务/重复扣费。
 - **续接已有 project**：用户解读后直接说「帮我生成」，沿用 `project_id` 从第 3 步继续，不重传。
 - **错误处理**：脚本已把 401/402/404/422/429 转中文。常见——402 余额不足让用户充值；整层 404 多为开放 API 总开关未开，让管理员开启；429 退避重试。完整对照见 [api.md](api.md)。
-- **积分不足（402）**：脚本只打印**不含凭证参数的官网充值链接**，照原样转达即可；错误体里带 `bind_key` 的 `recharge_url`/`bind_url` 一律不转发（见第 1 步「凭证保护」）。
+- **积分不足（402）**：先区分“余额门槛”与“实际扣积分”——开放 API / Skill 下，解读、生成、合规提交前都要余额 > 0；但真实扣积分仍只有生成。脚本只打印**不含凭证参数的官网充值链接**，照原样转达即可；错误体里带 `bind_key` 的 `recharge_url`/`bind_url` 一律不转发（见第 1 步「凭证保护」）。

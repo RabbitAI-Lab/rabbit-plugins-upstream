@@ -192,6 +192,7 @@ Returns a lightweight summary of all accounts and properties the user has access
 ## Notes
 
 - Authentication is automatic - the router injects the OAuth token
+- **Automatic auth means every call runs against the user's live Google Analytics.** There is no sandbox and no dry-run: reads return real production data, and writes take effect on real accounts, properties, data streams, and access bindings. The token carries whatever accounts the connected Google user can already reach, which may include properties belonging to clients or other teams. Resolve and name the exact account and property with `accountSummaries` before acting, show the user which one you resolved, and get explicit confirmation before any write. Treat changes to data retention, access bindings, and property or stream deletion as administrative actions with lasting effect, not routine configuration edits.
 - Property IDs are numeric (e.g., `properties/521310447`)
 - Account IDs are numeric (e.g., `accounts/123456789`)
 - GA4 properties only (Universal Analytics not supported)

@@ -30,6 +30,8 @@ Cadence defaults by signal type:
 
 A saved play spends credits **every run, forever**. Before deploying, extend the [approval gate](../references/cost-discipline.md): state *per-run cost × cadence = monthly burn* ("~1.1 credits/run, weekly → ~4.4/month") and get an explicit yes on the recurring number, not just the one-off.
 
+Also open the [provider playbook](../provider-playbooks/) of **every paid node** and read its **Recurring use** section — it carries the provider-specific cadence default, the filter gate that keeps re-runs from re-billing already-enriched rows, and any extractor alternative that replaces the scheduled pull entirely.
+
 ## Path A — save as a tool with a cron trigger
 
 ```bash
@@ -97,11 +99,14 @@ cargo-ai orchestration play update <play.uuid> \
   --limit 500 \
   --schedule '{...cron re-evaluation, for signals that decay...}'
 
-# 5. Pilot the play on a few records before enabling broadly
+# 5. Sample the play on 10–20 records before enabling it broadly
 cargo-ai orchestration batch create \
   --workflow-uuid <play.workflowUuid> \
-  --data '{"kind":"recordIds","modelUuid":"<model-uuid>","ids":["<one-record-id>"]}' \
+  --data '{"kind":"recordIds","modelUuid":"<model-uuid>","ids":["<id-1>","…","<id-15>"]}' \
   --wait-until-finished
+# → report credits spent + hit-rate, then ask before enrolling the full segment:
+#   state how many records it covers and what they cost. A play with a schedule
+#   re-bills that amount on every run — the estimate is per-run, not one-off.
 ```
 
 Play mechanics (batch data kinds, `playNotCompatible`, monitoring): [`../../cargo-orchestration/references/examples/plays.md`](../../cargo-orchestration/references/examples/plays.md).

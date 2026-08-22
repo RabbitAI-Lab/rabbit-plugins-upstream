@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Engineering"
+  short_description: "先读懂真实仓库，再完成架构、开发、验证与交付"
+  default_prompt: "使用 $project-engineering 理解当前仓库，并按项目约束完成这项开发工作。"

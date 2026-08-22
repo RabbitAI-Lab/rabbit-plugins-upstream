@@ -43,7 +43,7 @@ export CUSTOMER_INSIGHTS_API_KEY="your-api-key-here"
 
 ### Feature Tiers
 
-| Feature | Requires Desktop Client | Requires API Key |
+| Feature | Requires Collection Channel (desktop client recommended; browser extension requires user environment ready, see below) | Requires API Key |
 |---------|------------------------|-----------------|
 | Query completed analysis results | No | Yes |
 | Create collection-only task | Yes (online) | Yes |
@@ -53,15 +53,20 @@ export CUSTOMER_INSIGHTS_API_KEY="your-api-key-here"
 
 > Tip: If you only need to query completed analysis results, you can use the API Key directly without downloading the desktop client.
 
-### Desktop Client
+### Collection Channel: Desktop Client (Recommended)
 
-Creating tasks requires the AstrMap desktop client running online.
+Creating tasks requires a collection channel running online. **The AstrMap desktop client is recommended** (download/install/login guide below):
 
-**When device is offline** (`check_device` returns 1001 error):
+> The browser extension can also collect at the system level (`check_device` may return an online endpoint with `endpoint_type=extension`),
+> but it depends on the user's browser environment (extension installed + Amazon account logged in on Chrome + proxy enabled), which **the Agent cannot verify**;
+> **When creating tasks via Skill/API, use the desktop client as the recommended channel** unless the user explicitly confirms the extension is ready.
 
-1. **Ask the user**: "The desktop client is not running. Have you installed it?"
+**When the collection channel is offline** (`check_device` returns `is_alive=false` with `endpoint_id`/`endpoint_type` `null` — a normal response, not an error code):
+
+1. **Ask the user**: "No collection device is online. Have you installed and started the AstrMap desktop client?"
 2. **If not installed**: Ask if you should help download, then guide through extraction and startup
-3. **If installed but not running**: Prompt user to start the desktop client, then re-check online status
+3. **If installed but not running**: Prompt the user to start the desktop client
+4. **Re-check**: Run `check_device` again; confirm `is_alive=true` before creating the task
 
 ### Desktop Client Download & Installation
 
@@ -246,9 +251,12 @@ Status flow: `COLLECTED` → `PROCESSING` → `ANALYZING` → `SUCCESS`
 
 ## Error Handling
 
+> Note: `api_client` throws `API Error: {msg}` for any non-zero `code` — rely on the returned **msg** for diagnosis;
+> an offline collection channel is **not** an error code, but `check_device`'s normal `is_alive=false` response.
+
 | Error Code | Description | Handling |
 |-----------|-------------|----------|
-| 1001 | Device offline | Desktop client not running. Ask if installed; if not, provide download guide |
+| Device offline | `check_device` returns `is_alive=false` (normal response, not an error code) | No collection channel online; guide the user to install/start the desktop client (recommended) |
 | 1002 | Insufficient points | Prompt user to recharge at https://www.astrmap.com/ |
 | 2001 | Invalid API Key | Check if API Key is correct |
 | 2002 | API Key disabled | Prompt user to create new API Key |

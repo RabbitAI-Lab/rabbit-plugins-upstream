@@ -1,38 +1,52 @@
-## Description: <br>
-Helps QA testers turn incomplete requirements into structured questions for product managers and developers before test design. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides structured question templates for QA, testing, product clarification, boundary confirmation, business rule discovery, and technical detail follow-up before test design.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA engineers, testers, product managers, and developers use this skill to identify information gaps and ask targeted clarification questions before writing test cases, reviewing requirements, or reporting bugs.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Clarification prompts may invite users to share customer, identity, payment, order, screenshot, or production data.
+
+Mitigation: Mask or omit sensitive production data before using the skill, consistent with the security guidance and the skill's own safety warning.
+
+Risk: The skill may activate for broad clarification-style prompts and produce QA guidance outside the intended testing or requirements context.
+
+Mitigation: Use it for QA, testing, product handoff, developer handoff, and requirement-review workflows, and review the generated questions before acting on them.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers and testers use this skill when requirements are unclear or incomplete and they need structured prompts for requirement discovery, boundary confirmation, business-rule exploration, technical-detail follow-up, test-case review, bug reporting, or retrospective analysis. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [guidance, markdown, text]
 
-## Known Risks and Mitigations: <br>
-Risk: Users may provide sensitive customer, identity, payment, screenshot, or production data while gathering QA context. <br>
-Mitigation: Mask or remove real sensitive data before use, and avoid providing production data unless it has been sanitized. <br>
+**Output Format:** [Markdown with structured question lists and checklists]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-question-framework) <br>
+**Other Properties Related to Output:** [May include clarification needs, exploration areas, and question lists tailored to the supplied testing context.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with structured question lists, exploration areas, and clarification needs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces question frameworks rather than unique traceability IDs; question depth is adjusted to the size of the information gap.] <br>
+1.7.0 (source: frontmatter and server release evidence)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,16 +1,16 @@
 # PCB\_Drc class
 
-PCB &amp; 封装 / 设计规则检查（DRC）类
+PCB &amp; footprint / design rule check (DRC) class
 
 ## Signature
 
 ```typescript
-declare class PCB_Drc 
+export class PCB_Drc 
 ```
 
 ## Remarks
 
-检查、设定 DRC 规则
+Check and set DRC rules
 
 ## Methods
 
@@ -40,7 +40,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 将网络添加到等长网络组
+**_(BETA)_** Add a net to an equal-length net group
 
 
 </td></tr>
@@ -54,7 +54,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 将网络添加到网络类
+**_(BETA)_** Will net add to net class
 
 
 </td></tr>
@@ -68,7 +68,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 将焊盘对添加到焊盘对组
+**_(BETA)_** Add a pad pair to a pad pair group
 
 
 </td></tr>
@@ -82,7 +82,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 检查 DRC
+**_(BETA)_** Check DRC
 
 
 </td></tr>
@@ -96,7 +96,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 检查 DRC
+**_(BETA)_** Check DRC
 
 
 </td></tr>
@@ -110,7 +110,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 创建差分对
+**_(BETA)_** Create a differential pair
 
 
 </td></tr>
@@ -124,7 +124,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 创建等长网络组
+**_(BETA)_** Create an equal-length net group
 
 
 </td></tr>
@@ -138,7 +138,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 创建网络类
+**_(BETA)_** Create Net class
 
 
 </td></tr>
@@ -152,7 +152,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 创建焊盘对组
+**_(BETA)_** Create a pad pair group
 
 
 </td></tr>
@@ -166,7 +166,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除差分对
+**_(BETA)_** Delete the differential pair
 
 
 </td></tr>
@@ -180,7 +180,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除等长网络组
+**_(BETA)_** Delete the equal-length net group
 
 
 </td></tr>
@@ -194,7 +194,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除网络类
+**_(BETA)_** Delete Net class
 
 
 </td></tr>
@@ -208,7 +208,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除焊盘对组
+**_(BETA)_** Delete the pad pair group
 
 
 </td></tr>
@@ -222,7 +222,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除设计规则配置
+**_(BETA)_** Delete Design rule configuration
 
 
 </td></tr>
@@ -236,7 +236,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有差分对的详细属性
+**_(BETA)_** Get the detailed properties of all differential pairs
 
 
 </td></tr>
@@ -250,7 +250,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有等长网络组的详细属性
+**_(BETA)_** Get the detailed properties of all equal-length net groups
 
 
 </td></tr>
@@ -264,7 +264,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有网络类的详细属性
+**_(BETA)_** Get all Net class detailed properties of
 
 
 </td></tr>
@@ -278,7 +278,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有焊盘对组的详细属性
+**_(BETA)_** Get the detailed properties of all pad pair groups
 
 
 </td></tr>
@@ -292,7 +292,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有设计规则配置
+**_(BETA)_** Get all Design rule configuration
 
 
 </td></tr>
@@ -306,7 +306,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取当前设计规则配置
+**_(BETA)_** Get Current design rule configuration
 
 
 </td></tr>
@@ -320,7 +320,7 @@ Description
 
 </td><td>
 
-获取当前设计规则配置名称
+Get Current design rule configuration name
 
 
 </td></tr>
@@ -334,7 +334,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取新建 PCB 默认设计规则配置的名称
+**_(BETA)_** Get the name of the default design rule configuration for new PCBs
 
 
 </td></tr>
@@ -348,7 +348,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取网络-网络规则
+**_(BETA)_** Get Net - net rules
 
 
 </td></tr>
@@ -362,7 +362,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取网络规则
+**_(BETA)_** Get Net rules
 
 
 </td></tr>
@@ -376,7 +376,21 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取焊盘对组最短导线长度
+**_(BETA)_** Get the minimum wire length of a pad pair group
+
+
+</td></tr>
+<tr><td>
+
+[getRealTimeDrcStatus()](./PCB_Drc.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Get Real-time DRC check state
 
 
 </td></tr>
@@ -390,7 +404,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取区域规则
+**_(BETA)_** Get region rules
 
 
 </td></tr>
@@ -404,7 +418,7 @@ Description
 
 </td><td>
 
-获取指定设计规则配置
+Get Specify design rule configuration
 
 
 </td></tr>
@@ -418,7 +432,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改差分对的名称
+**_(BETA)_** Modify the name of the differential pair
 
 
 </td></tr>
@@ -432,7 +446,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改差分对负网络
+**_(BETA)_** Modify the negative net of the differential pair
 
 
 </td></tr>
@@ -446,7 +460,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改差分对正网络
+**_(BETA)_** Modify the positive net of the differential pair
 
 
 </td></tr>
@@ -460,7 +474,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改等长网络组的名称
+**_(BETA)_** Modify the name of the equal-length net group
 
 
 </td></tr>
@@ -474,7 +488,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改网络类的名称
+**_(BETA)_** Modify Net class name of
 
 
 </td></tr>
@@ -488,7 +502,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改焊盘对组的名称
+**_(BETA)_** Modify the name of the pad pair group
 
 
 </td></tr>
@@ -502,7 +516,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 覆写目前规则配置
+**_(BETA)_** Overwrite current design rule configuration
 
 
 </td></tr>
@@ -516,7 +530,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 覆写网络-网络规则
+**_(BETA)_** Overwrite net - net rules
 
 
 </td></tr>
@@ -530,7 +544,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 覆写网络规则
+**_(BETA)_** Overwrite net rules
 
 
 </td></tr>
@@ -544,7 +558,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 覆写区域规则
+**_(BETA)_** Overwrite region rules
 
 
 </td></tr>
@@ -558,7 +572,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 从等长网络组中移除网络
+**_(BETA)_** Remove a net from an equal-length net group
 
 
 </td></tr>
@@ -572,7 +586,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 从网络类中移除网络
+**_(BETA)_** From net class in remove net
 
 
 </td></tr>
@@ -586,7 +600,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 从焊盘对组中移除焊盘对
+**_(BETA)_** Remove a pad pair from a pad pair group
 
 
 </td></tr>
@@ -600,7 +614,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 重命名设计规则配置
+**_(BETA)_** Rename the design rule configuration
 
 
 </td></tr>
@@ -614,7 +628,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 保存设计规则配置
+**_(BETA)_** Save Design rule configuration
 
 
 </td></tr>
@@ -628,7 +642,35 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置为新建 PCB 默认设计规则配置
+**_(BETA)_** Set as the default design rule configuration for new PCBs
+
+
+</td></tr>
+<tr><td>
+
+[startRealTimeDrc()](./PCB_Drc.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Start real-time DRC check
+
+
+</td></tr>
+<tr><td>
+
+[stopRealTimeDrc()](./PCB_Drc.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Stop real-time DRC check
 
 
 </td></tr>
@@ -644,12 +686,12 @@ Description
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-将网络添加到等长网络组
+Add a net to an equal-length net group
 
 ## Signature
 
 ```typescript
-addNetToEqualLengthNetGroup(equalLengthNetGroupName: string, net: string | Array<string>): Promise<boolean>;
+public addNetToEqualLengthNetGroup(equalLengthNetGroupName: string, net: string | Array<string>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -682,7 +724,7 @@ string
 
 </td><td>
 
-等长网络组名称
+Equal-length net group name
 
 
 </td></tr>
@@ -698,7 +740,7 @@ string \| Array&lt;string&gt;
 
 </td><td>
 
-网络名称
+Net name
 
 
 </td></tr>
@@ -710,7 +752,26 @@ string \| Array&lt;string&gt;
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 准备三个真实网络（放带网络的测试焊盘，模拟一组数据总线）
+const x = 3000 + Math.floor(Math.random() * 20000);
+await eda.pcb_PrimitivePad.create(1, '1', x, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_D0', null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '2', x + 500, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_D1', null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '3', x + 1000, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_D2', null, 0, 0, 0, false, 0);
+
+// 2. 先建空等长组，再逐个/批量添加网络
+await eda.pcb_Drc.createEqualLengthNetGroup('嘉立创示例_等长网络组', [], { r: 0, g: 255, b: 0, alpha: 1 });
+const addedOne = await eda.pcb_Drc.addNetToEqualLengthNetGroup('嘉立创示例_等长网络组', 'JLC_DEMO_D0');
+const addedBatch = await eda.pcb_Drc.addNetToEqualLengthNetGroup('嘉立创示例_等长网络组', ['JLC_DEMO_D1', 'JLC_DEMO_D2']);
+
+console.log('addedOne:', addedOne);
+console.log('addedBatch:', addedBatch);
+```
 
 ### addnettonetclass
 
@@ -718,12 +779,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-将网络添加到网络类
+Will net add to net class
 
 ## Signature
 
 ```typescript
-addNetToNetClass(netClassName: string, net: string | Array<string>): Promise<boolean>;
+public addNetToNetClass(netClassName: string, net: string | Array<string>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -756,7 +817,7 @@ string
 
 </td><td>
 
-网络类名称
+Net class name
 
 
 </td></tr>
@@ -772,7 +833,7 @@ string \| Array&lt;string&gt;
 
 </td><td>
 
-网络名称
+Net name
 
 
 </td></tr>
@@ -784,7 +845,26 @@ string \| Array&lt;string&gt;
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 准备三个真实网络（放带网络的测试焊盘）
+const x = 3000 + Math.floor(Math.random() * 20000);
+await eda.pcb_PrimitivePad.create(1, '1', x, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_P', null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '2', x + 500, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_N', null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '3', x + 1000, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_CLK', null, 0, 0, 0, false, 0);
+
+// 2. 先建网络类，再逐个/批量添加网络
+await eda.pcb_Drc.createNetClass('嘉立创示例_网络类', [], { r: 255, g: 0, b: 0, alpha: 1 });
+const addedOne = await eda.pcb_Drc.addNetToNetClass('嘉立创示例_网络类', 'JLC_DEMO_P');
+const addedBatch = await eda.pcb_Drc.addNetToNetClass('嘉立创示例_网络类', ['JLC_DEMO_N', 'JLC_DEMO_CLK']);
+
+console.log('addedOne:', addedOne);
+console.log('addedBatch:', addedBatch);
+```
 
 ### addpadpairtopadpairgroup
 
@@ -792,12 +872,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-将焊盘对添加到焊盘对组
+Add a pad pair to a pad pair group
 
 ## Signature
 
 ```typescript
-addPadPairToPadPairGroup(padPairGroupName: string, padPair: [string, string] | Array<[string, string]>): Promise<boolean>;
+public addPadPairToPadPairGroup(padPairGroupName: string, padPair: [string, string] | Array<[string, string]>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -830,7 +910,7 @@ string
 
 </td><td>
 
-焊盘对组名称
+Pad pair group name
 
 
 </td></tr>
@@ -846,7 +926,7 @@ padPair
 
 </td><td>
 
-焊盘对
+Pad for
 
 
 </td></tr>
@@ -858,11 +938,11 @@ padPair
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ## Example
 
-有三种不同的用法，确保画布上已有对应的焊盘。 分别是 一，游离焊盘-游离焊盘；二，器件焊盘 - 器件焊盘；三，器件焊盘 - 游离焊盘 await eda.pcb\_Drc.addPadPairToPadPairGroup('test',\['e0','e1'\]) // 游离焊盘-游离焊盘 await eda.pcb\_Drc.addPadPairToPadPairGroup('test',\['R1:1','R1:2'\]) // 器件焊盘 - 器件焊盘 await eda.pcb\_Drc.addPadPairToPadPairGroup('test',\['R1:1','e1'\]) // 器件焊盘 - 游离焊盘
+There are three different usages, and make sure the corresponding pads already exist on the canvas. They are: 1. Free pad - free pad; 2. Device pad - device pad; 3. Device pad - free pad await eda.pcb\_Drc.addPadPairToPadPairGroup('test',\['e0','e1'\]) // 游离焊盘-游离焊盘 await eda.pcb\_Drc.addPadPairToPadPairGroup('test',\['R1:1','R1:2'\]) // 器件焊盘 - 器件焊盘 await eda.pcb\_Drc.addPadPairToPadPairGroup('test',\['R1:1','e1'\]) // 器件焊盘 - 游离焊盘
 
 ### check
 
@@ -870,12 +950,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-检查 DRC
+Check DRC
 
 ## Signature
 
 ```typescript
-check(strict: boolean, userInterface: boolean, includeVerboseError: false): Promise<boolean>;
+public check(strict: boolean, userInterface: boolean, includeVerboseError: false): Promise<boolean>;
 ```
 
 ## Parameters
@@ -908,7 +988,7 @@ boolean
 
 </td><td>
 
-是否严格检查，当前 PCB 统一为严格检查模式
+Whether strict checking is enabled. The current PCB is uniformly in strict checking mode
 
 
 </td></tr>
@@ -924,7 +1004,7 @@ boolean
 
 </td><td>
 
-是否显示 UI（呼出底部 DRC 窗口）
+Whether to show the UI (open the bottom DRC window)
 
 
 </td></tr>
@@ -940,7 +1020,7 @@ false
 
 </td><td>
 
-是否在返回值中包含详细错误信息，如若为 `true`<!-- -->，则返回值将始终为数组
+Whether to include detailed error information in the return value. If it is `true`<!-- -->, the return value will always be an array
 
 
 </td></tr>
@@ -952,7 +1032,23 @@ false
 
 Promise&lt;boolean&gt;
 
-DRC 检查是否通过
+Whether the DRC check passed
+
+## Example
+
+
+```javascript
+// 1. 详细模式：返回全部违规项（含描述），无违规则为空数组
+const details = await eda.pcb_Drc.check(true, false, true);
+console.log('violationCount:', details.length);
+details.forEach((d, i) => {
+  console.log('[' + i + ']', typeof d === 'string' ? d : JSON.stringify(d));
+});
+
+// 2. 布尔模式：只返回是否全部通过
+const passed = await eda.pcb_Drc.check(true, false, false);
+console.log('allPassed:', passed);
+```
 
 ### check_1
 
@@ -960,12 +1056,12 @@ DRC 检查是否通过
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-检查 DRC
+Check DRC
 
 ## Signature
 
 ```typescript
-check(strict: boolean, userInterface: boolean, includeVerboseError: true): Promise<Array<any>>;
+public check(strict: boolean, userInterface: boolean, includeVerboseError: true): Promise<Array<any>>;
 ```
 
 ## Parameters
@@ -998,7 +1094,7 @@ boolean
 
 </td><td>
 
-是否严格检查，当前 PCB 统一为严格检查模式
+Whether strict checking is enabled. The current PCB is uniformly in strict checking mode
 
 
 </td></tr>
@@ -1014,7 +1110,7 @@ boolean
 
 </td><td>
 
-是否显示 UI（呼出底部 DRC 窗口）
+Whether to show the UI (open the bottom DRC window)
 
 
 </td></tr>
@@ -1030,7 +1126,7 @@ true
 
 </td><td>
 
-是否在返回值中包含详细错误信息，如若为 `true`<!-- -->，则返回值将始终为数组
+Whether to include detailed error information in the return value. If it is `true`<!-- -->, the return value will always be an array
 
 
 </td></tr>
@@ -1042,7 +1138,7 @@ true
 
 Promise&lt;Array&lt;any&gt;&gt;
 
-DRC 检查的详细结果
+Detailed results of the DRC check
 
 ### createdifferentialpair
 
@@ -1050,12 +1146,12 @@ DRC 检查的详细结果
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-创建差分对
+Create a differential pair
 
 ## Signature
 
 ```typescript
-createDifferentialPair(differentialPairName: string, positiveNet: string, negativeNet: string): Promise<boolean>;
+public createDifferentialPair(differentialPairName: string, positiveNet: string, negativeNet: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1088,7 +1184,7 @@ string
 
 </td><td>
 
-差分对名称
+Differential pair name
 
 
 </td></tr>
@@ -1104,7 +1200,7 @@ string
 
 </td><td>
 
-正网络名称
+Positive net name
 
 
 </td></tr>
@@ -1120,7 +1216,7 @@ string
 
 </td><td>
 
-负网络名称
+Negative net name
 
 
 </td></tr>
@@ -1132,7 +1228,28 @@ string
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的网络名和差分对名（差分对名和网络名不能与其他差分对重复）
+const ts = Date.now();
+const netP = 'JLC_DEMO_DP_P_' + ts;
+const netN = 'JLC_DEMO_DP_N_' + ts;
+
+// 2. 放两个带差分网络的焊盘，让网络进入网表
+const x = 3000 + Math.floor(Math.random() * 20000);
+const padP = await eda.pcb_PrimitivePad.create(1, '1', x, 3000, 0, ['ELLIPSE', 60, 60], netP, null, 0, 0, 0, false, 0);
+const padN = await eda.pcb_PrimitivePad.create(1, '2', x + 500, 3000, 0, ['ELLIPSE', 60, 60], netN, null, 0, 0, 0, false, 0);
+
+// 3. 创建差分对（保留现场供观察）
+const created = await eda.pcb_Drc.createDifferentialPair('嘉立创示例_差分对_' + ts, netP, netN);
+
+console.log('pairName:', '嘉立创示例_差分对_' + ts);
+console.log('created:', created);
+```
 
 ### createequallengthnetgroup
 
@@ -1140,12 +1257,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-创建等长网络组
+Create an equal-length net group
 
 ## Signature
 
 ```typescript
-createEqualLengthNetGroup(equalLengthNetGroupName: string, nets: Array<string>, color: IPCB_EqualLengthNetGroupItem['color']): Promise<boolean>;
+public createEqualLengthNetGroup(equalLengthNetGroupName: string, nets: Array<string>, color: IPCB_EqualLengthNetGroupItem['color']): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1178,7 +1295,7 @@ string
 
 </td><td>
 
-等长网络组名称
+Equal-length net group name
 
 
 </td></tr>
@@ -1194,7 +1311,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-网络名称数组
+Net name array
 
 
 </td></tr>
@@ -1210,7 +1327,7 @@ color
 
 </td><td>
 
-等长网络组颜色
+Equal-length net group color
 
 
 </td></tr>
@@ -1222,7 +1339,17 @@ color
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 创建一个空的等长网络组，指定面板显示颜色（保留现场供观察）
+const created = await eda.pcb_Drc.createEqualLengthNetGroup('嘉立创示例_等长网络组', [], { r: 0, g: 255, b: 0, alpha: 1 });
+
+console.log('created:', created);
+```
 
 ### createnetclass
 
@@ -1230,12 +1357,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-创建网络类
+Create Net class
 
 ## Signature
 
 ```typescript
-createNetClass(netClassName: string, nets: Array<string>, color: IPCB_EqualLengthNetGroupItem['color']): Promise<boolean>;
+public createNetClass(netClassName: string, nets: Array<string>, color: IPCB_EqualLengthNetGroupItem['color']): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1268,7 +1395,7 @@ string
 
 </td><td>
 
-网络类名称
+Net class name
 
 
 </td></tr>
@@ -1284,7 +1411,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-网络名称数组
+Net name array
 
 
 </td></tr>
@@ -1300,7 +1427,7 @@ color
 
 </td><td>
 
-网络类颜色
+Net class color
 
 
 </td></tr>
@@ -1312,7 +1439,22 @@ color
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 放两个带网络的测试焊盘，让 JLC_DEMO_P / JLC_DEMO_N 进入网表
+const x = 3000 + Math.floor(Math.random() * 20000);
+const padP = await eda.pcb_PrimitivePad.create(1, '1', x, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_P', null, 0, 0, 0, false, 0);
+const padN = await eda.pcb_PrimitivePad.create(1, '2', x + 500, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_N', null, 0, 0, 0, false, 0);
+
+// 2. 创建网络类并纳入这两个网络，颜色用于面板区分（保留现场供观察）
+const created = await eda.pcb_Drc.createNetClass('嘉立创示例_网络类', ['JLC_DEMO_P', 'JLC_DEMO_N'], { r: 255, g: 0, b: 0, alpha: 1 });
+
+console.log('created:', created);
+```
 
 ### createpadpairgroup
 
@@ -1320,12 +1462,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-创建焊盘对组
+Create a pad pair group
 
 ## Signature
 
 ```typescript
-createPadPairGroup(padPairGroupName: string, padPairs: Array<[string, string]>): Promise<boolean>;
+public createPadPairGroup(padPairGroupName: string, padPairs: Array<[string, string]>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1358,7 +1500,7 @@ string
 
 </td><td>
 
-焊盘对组名称
+Pad pair group name
 
 
 </td></tr>
@@ -1374,7 +1516,7 @@ Array&lt;\[string, string\]&gt;
 
 </td><td>
 
-焊盘对数组
+Pad for array
 
 
 </td></tr>
@@ -1386,11 +1528,11 @@ Array&lt;\[string, string\]&gt;
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ## Example
 
-有三种不同的用法，确保画布上已有对应的焊盘。 分别是 一，游离焊盘-游离焊盘；二，器件焊盘 - 器件焊盘；三，器件焊盘 - 游离焊盘 await eda.pcb\_Drc.createPadPairGroup('test',\[\['e0','e1'\]\]) // 游离焊盘-游离焊盘 await eda.pcb\_Drc.createPadPairGroup('test',\[\['R1:1','R1:2'\],\['R2:1','R2:2'\]\]) // 器件焊盘 - 器件焊盘 await eda.pcb\_Drc.createPadPairGroup('test',\[\['R1:1','e0'\],\['R1:2','e1'\]\]) // 器件焊盘 - 游离焊盘
+There are three different usages, and make sure the corresponding pads already exist on the canvas. They are: 1. Free pad - free pad; 2. Device pad - device pad; 3. Device pad - free pad await eda.pcb\_Drc.createPadPairGroup('test',\[\['e0','e1'\]\]) // 游离焊盘-游离焊盘 await eda.pcb\_Drc.createPadPairGroup('test',\[\['R1:1','R1:2'\],\['R2:1','R2:2'\]\]) // 器件焊盘 - 器件焊盘 await eda.pcb\_Drc.createPadPairGroup('test',\[\['R1:1','e0'\],\['R1:2','e1'\]\]) // 器件焊盘 - 游离焊盘
 
 ### deletedifferentialpair
 
@@ -1398,12 +1540,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除差分对
+Delete the differential pair
 
 ## Signature
 
 ```typescript
-deleteDifferentialPair(differentialPairName: string): Promise<boolean>;
+public deleteDifferentialPair(differentialPairName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1436,7 +1578,7 @@ string
 
 </td><td>
 
-差分对名称
+Differential pair name
 
 
 </td></tr>
@@ -1448,7 +1590,29 @@ string
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的网络名和差分对名（网络不能属于其他差分对）
+const ts = Date.now();
+const netP = 'JLC_DEMO_DP_P_' + ts;
+const netN = 'JLC_DEMO_DP_N_' + ts;
+
+// 2. 放带差分网络的焊盘并创建差分对
+const x = 3000 + Math.floor(Math.random() * 20000);
+await eda.pcb_PrimitivePad.create(1, '1', x, 3000, 0, ['ELLIPSE', 60, 60], netP, null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '2', x + 500, 3000, 0, ['ELLIPSE', 60, 60], netN, null, 0, 0, 0, false, 0);
+const pairName = '嘉立创示例_待删差分对_' + ts;
+await eda.pcb_Drc.createDifferentialPair(pairName, netP, netN);
+
+// 3. 删除该差分对
+const result = await eda.pcb_Drc.deleteDifferentialPair(pairName);
+
+console.log('result:', result);
+```
 
 ### deleteequallengthnetgroup
 
@@ -1456,12 +1620,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除等长网络组
+Delete the equal-length net group
 
 ## Signature
 
 ```typescript
-deleteEqualLengthNetGroup(equalLengthNetGroupName: string): Promise<boolean>;
+public deleteEqualLengthNetGroup(equalLengthNetGroupName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1494,7 +1658,7 @@ string
 
 </td><td>
 
-等长网络组名称
+Equal-length net group name
 
 
 </td></tr>
@@ -1506,7 +1670,20 @@ string
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 建一个待删除的等长网络组（重名创建是幂等的，重复运行也安全）
+await eda.pcb_Drc.createEqualLengthNetGroup('嘉立创示例_待删等长组', [], { r: 0, g: 255, b: 0, alpha: 1 });
+
+// 2. 删除该等长网络组
+const result = await eda.pcb_Drc.deleteEqualLengthNetGroup('嘉立创示例_待删等长组');
+
+console.log('result:', result);
+```
 
 ### deletenetclass
 
@@ -1514,12 +1691,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除网络类
+Delete Net class
 
 ## Signature
 
 ```typescript
-deleteNetClass(netClassName: string): Promise<boolean>;
+public deleteNetClass(netClassName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1552,7 +1729,7 @@ string
 
 </td><td>
 
-网络类名称
+Net class name
 
 
 </td></tr>
@@ -1564,7 +1741,20 @@ string
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 建一个待删除的网络类（重名创建是幂等的，重复运行也安全）
+await eda.pcb_Drc.createNetClass('嘉立创示例_待删网络类', [], { r: 255, g: 0, b: 0, alpha: 1 });
+
+// 2. 删除该网络类
+const result = await eda.pcb_Drc.deleteNetClass('嘉立创示例_待删网络类');
+
+console.log('result:', result);
+```
 
 ### deletepadpairgroup
 
@@ -1572,12 +1762,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除焊盘对组
+Delete the pad pair group
 
 ## Signature
 
 ```typescript
-deletePadPairGroup(padPairGroupName: string): Promise<boolean>;
+public deletePadPairGroup(padPairGroupName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1610,7 +1800,7 @@ string
 
 </td><td>
 
-焊盘对组名称
+Pad pair group name
 
 
 </td></tr>
@@ -1622,7 +1812,7 @@ string
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ### deleteruleconfiguration
 
@@ -1630,12 +1820,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除设计规则配置
+Delete Design rule configuration
 
 ## Signature
 
 ```typescript
-deleteRuleConfiguration(configurationName: string): Promise<boolean>;
+public deleteRuleConfiguration(configurationName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -1668,7 +1858,7 @@ string
 
 </td><td>
 
-配置名称
+Configuration name
 
 
 </td></tr>
@@ -1680,11 +1870,25 @@ string
 
 Promise&lt;boolean&gt;
 
-删除是否成功
+Delete Whether Successful
 
 ## Remarks
 
-系统配置不允许删除
+The system configuration does not allow deletion
+
+## Example
+
+
+```javascript
+// 1. 读取当前配置并保存为待删除的自定义配置
+const current = await eda.pcb_Drc.getCurrentRuleConfiguration();
+await eda.pcb_Drc.saveRuleConfiguration(current.config, '嘉立创示例_待删配置', true);
+
+// 2. 删除该自定义配置
+const result = await eda.pcb_Drc.deleteRuleConfiguration('嘉立创示例_待删配置');
+
+console.log('result:', result);
+```
 
 ### getalldifferentialpairs
 
@@ -1692,28 +1896,50 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有差分对的详细属性
+Get the detailed properties of all differential pairs
 
 ## Signature
 
 ```typescript
-getAllDifferentialPairs(): Promise<Array<IPCB_DifferentialPairItem> | {
-        [key: string]: any;
-    }>;
+public getAllDifferentialPairs(): Promise<Array<IPCB_DifferentialPairItem> | Record<string, any>>;
 ```
 
 
 ## Returns
 
-Promise&lt;Array&lt;[IPCB\_DifferentialPairItem](../interfaces/IPCB_DifferentialPairItem.md)<!-- -->&gt; \| { \[key: string\]: any; }&gt;
+Promise&lt;Array&lt;[IPCB\_DifferentialPairItem](../interfaces/IPCB_DifferentialPairItem.md)<!-- -->&gt; \| Record&lt;string, any&gt;&gt;
 
-所有差分对的详细属性
+Detailed properties of all differential pairs
 
 ## Remarks
 
-BREAKING CHANGE since EDA v3.4
+- The return value type is changed to an object BREAKING CHANGE since EDA v3.4
 
-- 返回值类型更改为对象
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的网络名和差分对名，创建测试差分对
+const ts = Date.now();
+const netP = 'JLC_DEMO_DP_P_' + ts;
+const netN = 'JLC_DEMO_DP_N_' + ts;
+const x = 3000 + Math.floor(Math.random() * 20000);
+await eda.pcb_PrimitivePad.create(1, '1', x, 3000, 0, ['ELLIPSE', 60, 60], netP, null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '2', x + 500, 3000, 0, ['ELLIPSE', 60, 60], netN, null, 0, 0, 0, false, 0);
+const pairName = '嘉立创示例_查询差分对_' + ts;
+await eda.pcb_Drc.createDifferentialPair(pairName, netP, netN);
+
+// 2. 查询所有差分对（v3.4 起返回结构可能为数组或对象，先按数组遍历）
+const pairs = await eda.pcb_Drc.getAllDifferentialPairs();
+const list = Array.isArray(pairs) ? pairs : Object.values(pairs);
+console.log('count:', list.length);
+list.forEach((p, i) => {
+  console.log('[' + i + '] name:', p.name, 'positiveNet:', p.positiveNet, 'negativeNet:', p.negativeNet);
+});
+
+// 3. 清理测试差分对（查询类清理现场）
+await eda.pcb_Drc.deleteDifferentialPair(pairName);
+```
 
 ### getallequallengthnetgroups
 
@@ -1721,12 +1947,12 @@ BREAKING CHANGE since EDA v3.4
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有等长网络组的详细属性
+Get the detailed properties of all equal-length net groups
 
 ## Signature
 
 ```typescript
-getAllEqualLengthNetGroups(): Promise<Array<IPCB_EqualLengthNetGroupItem>>;
+public getAllEqualLengthNetGroups(): Promise<Array<IPCB_EqualLengthNetGroupItem>>;
 ```
 
 
@@ -1734,7 +1960,25 @@ getAllEqualLengthNetGroups(): Promise<Array<IPCB_EqualLengthNetGroupItem>>;
 
 Promise&lt;Array&lt;[IPCB\_EqualLengthNetGroupItem](../interfaces/IPCB_EqualLengthNetGroupItem.md)<!-- -->&gt;&gt;
 
-所有等长网络组的详细属性
+Detailed properties of all equal-length net groups
+
+## Example
+
+
+```javascript
+// 1. 建一个测试等长组作为查询对象
+await eda.pcb_Drc.createEqualLengthNetGroup('嘉立创示例_查询等长组', [], { r: 0, g: 255, b: 0, alpha: 1 });
+
+// 2. 查询所有等长网络组
+const groups = await eda.pcb_Drc.getAllEqualLengthNetGroups();
+console.log('count:', groups.length);
+groups.forEach((g, i) => {
+  console.log('[' + i + '] name:', g.name);
+});
+
+// 3. 清理测试等长组（查询类清理现场）
+await eda.pcb_Drc.deleteEqualLengthNetGroup('嘉立创示例_查询等长组');
+```
 
 ### getallnetclasses
 
@@ -1742,12 +1986,12 @@ Promise&lt;Array&lt;[IPCB\_EqualLengthNetGroupItem](../interfaces/IPCB_EqualLeng
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有网络类的详细属性
+Get all Net class detailed properties of
 
 ## Signature
 
 ```typescript
-getAllNetClasses(): Promise<Array<IPCB_NetClassItem>>;
+public getAllNetClasses(): Promise<Array<IPCB_NetClassItem>>;
 ```
 
 
@@ -1755,7 +1999,25 @@ getAllNetClasses(): Promise<Array<IPCB_NetClassItem>>;
 
 Promise&lt;Array&lt;[IPCB\_NetClassItem](../interfaces/IPCB_NetClassItem.md)<!-- -->&gt;&gt;
 
-所有网络类的详细属性
+Detailed properties of all net classes
+
+## Example
+
+
+```javascript
+// 1. 建一个测试网络类作为查询对象
+await eda.pcb_Drc.createNetClass('嘉立创示例_查询网络类', [], { r: 255, g: 0, b: 0, alpha: 1 });
+
+// 2. 查询所有网络类
+const classes = await eda.pcb_Drc.getAllNetClasses();
+console.log('count:', classes.length);
+classes.forEach((c, i) => {
+  console.log('[' + i + '] name:', c.name);
+});
+
+// 3. 清理测试网络类（查询类清理现场）
+await eda.pcb_Drc.deleteNetClass('嘉立创示例_查询网络类');
+```
 
 ### getallpadpairgroups
 
@@ -1763,12 +2025,12 @@ Promise&lt;Array&lt;[IPCB\_NetClassItem](../interfaces/IPCB_NetClassItem.md)<!--
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有焊盘对组的详细属性
+Get the detailed properties of all pad pair groups
 
 ## Signature
 
 ```typescript
-getAllPadPairGroups(): Promise<Array<IPCB_PadPairGroupItem>>;
+public getAllPadPairGroups(): Promise<Array<IPCB_PadPairGroupItem>>;
 ```
 
 
@@ -1776,7 +2038,24 @@ getAllPadPairGroups(): Promise<Array<IPCB_PadPairGroupItem>>;
 
 Promise&lt;Array&lt;[IPCB\_PadPairGroupItem](../interfaces/IPCB_PadPairGroupItem.md)<!-- -->&gt;&gt;
 
-所有焊盘对组的详细属性
+Detailed properties of all pad pair groups
+
+## Example
+
+
+```javascript
+// 1. 查询所有焊盘对组
+const groups = await eda.pcb_Drc.getAllPadPairGroups();
+
+// 2. 输出每个组的名称和焊盘对
+console.log('count:', groups.length);
+groups.forEach((g, i) => {
+  console.log('[' + i + '] name:', g.name);
+  g.padPairs.forEach((pair, j) => {
+    console.log('    pair[' + j + ']:', pair[0], '↔', pair[1]);
+  });
+});
+```
 
 ### getallruleconfigurations
 
@@ -1784,14 +2063,12 @@ Promise&lt;Array&lt;[IPCB\_PadPairGroupItem](../interfaces/IPCB_PadPairGroupItem
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有设计规则配置
+Get all Design rule configuration
 
 ## Signature
 
 ```typescript
-getAllRuleConfigurations(includeSystem?: boolean): Promise<Array<{
-        [key: string]: any;
-    }>>;
+public getAllRuleConfigurations(includeSystem?: boolean): Promise<Array<Record<string, any>>>;
 ```
 
 ## Parameters
@@ -1824,7 +2101,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否获取系统设计规则配置
+_(Optional)_ Whether Get System design rule configuration
 
 
 </td></tr>
@@ -1834,9 +2111,23 @@ _(Optional)_ 是否获取系统设计规则配置
 
 ## Returns
 
-Promise&lt;Array&lt;{ \[key: string\]: any; }&gt;&gt;
+Promise&lt;Array&lt;Record&lt;string, any&gt;&gt;&gt;
 
-所有设计规则配置
+All design rule configurations
+
+## Example
+
+
+```javascript
+// 1. 查询全部设计规则配置（含系统配置）
+const all = await eda.pcb_Drc.getAllRuleConfigurations(true);
+
+// 2. 输出配置数量和名称
+console.log('count:', all.length);
+all.forEach((c, i) => {
+  console.log('[' + i + '] name:', c.name);
+});
+```
 
 ### getcurrentruleconfiguration
 
@@ -1844,33 +2135,31 @@ Promise&lt;Array&lt;{ \[key: string\]: any; }&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取当前设计规则配置
+Get Current design rule configuration
 
 ## Signature
 
 ```typescript
-getCurrentRuleConfiguration(): Promise<{
-        [key: string]: any;
-    } | undefined>;
+public getCurrentRuleConfiguration(): Promise<Record<string, any> | undefined>;
 ```
 
 
 ## Returns
 
-Promise&lt;{ \[key: string\]: any; } \| undefined&gt;
+Promise&lt;Record&lt;string, any&gt; \| undefined&gt;
 
-当前设计规则配置，`undefined` 为获取失败
+Current design rule configuration; `undefined` indicates that the retrieval failed
 
 ### getcurrentruleconfigurationname
 
 # PCB\_Drc.getCurrentRuleConfigurationName() method
 
-获取当前设计规则配置名称
+Get Current design rule configuration name
 
 ## Signature
 
 ```typescript
-getCurrentRuleConfigurationName(): Promise<string | undefined>;
+public getCurrentRuleConfigurationName(): Promise<string | undefined>;
 ```
 
 
@@ -1878,7 +2167,7 @@ getCurrentRuleConfigurationName(): Promise<string | undefined>;
 
 Promise&lt;string \| undefined&gt;
 
-当前设计规则配置名称，`undefined` 为获取失败
+Current design rule configuration name; `undefined` indicates that the retrieval failed
 
 ### getdefaultruleconfigurationname
 
@@ -1886,12 +2175,12 @@ Promise&lt;string \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取新建 PCB 默认设计规则配置的名称
+Get the name of the default design rule configuration for new PCBs
 
 ## Signature
 
 ```typescript
-getDefaultRuleConfigurationName(): Promise<string | undefined>;
+public getDefaultRuleConfigurationName(): Promise<string | undefined>;
 ```
 
 
@@ -1899,7 +2188,7 @@ getDefaultRuleConfigurationName(): Promise<string | undefined>;
 
 Promise&lt;string \| undefined&gt;
 
-默认设计规则配置的名称，`undefined` 为获取失败
+Default design rule configuration name of; `undefined` indicates that the retrieval failed
 
 ### getnetbynetrules
 
@@ -1907,22 +2196,20 @@ Promise&lt;string \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取网络-网络规则
+Get Net - net rules
 
 ## Signature
 
 ```typescript
-getNetByNetRules(): Promise<{
-        [key: string]: any;
-    }>;
+public getNetByNetRules(): Promise<Record<string, any>>;
 ```
 
 
 ## Returns
 
-Promise&lt;{ \[key: string\]: any; }&gt;
+Promise&lt;Record&lt;string, any&gt;&gt;
 
-当前 PCB 的所有网络-网络规则
+All net-by-net rules of the current PCB
 
 ### getnetrules
 
@@ -1930,22 +2217,20 @@ Promise&lt;{ \[key: string\]: any; }&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取网络规则
+Get Net rules
 
 ## Signature
 
 ```typescript
-getNetRules(): Promise<Array<{
-        [key: string]: any;
-    }>>;
+public getNetRules(): Promise<Array<Record<string, any>>>;
 ```
 
 
 ## Returns
 
-Promise&lt;Array&lt;{ \[key: string\]: any; }&gt;&gt;
+Promise&lt;Array&lt;Record&lt;string, any&gt;&gt;&gt;
 
-当前 PCB 的所有网络规则
+All net rules of the current PCB
 
 ### getpadpairgroupminwirelength
 
@@ -1953,12 +2238,12 @@ Promise&lt;Array&lt;{ \[key: string\]: any; }&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取焊盘对组最短导线长度
+Get the minimum wire length of a pad pair group
 
 ## Signature
 
 ```typescript
-getPadPairGroupMinWireLength(padPairGroupName: string): Promise<Array<IPCB_PadPairMinWireLengthItem>>;
+public getPadPairGroupMinWireLength(padPairGroupName: string): Promise<Array<IPCB_PadPairMinWireLengthItem>>;
 ```
 
 ## Parameters
@@ -1991,7 +2276,7 @@ string
 
 </td><td>
 
-焊盘对组名称
+Pad pair group name
 
 
 </td></tr>
@@ -2003,7 +2288,32 @@ string
 
 Promise&lt;Array&lt;[IPCB\_PadPairMinWireLengthItem](../interfaces/IPCB_PadPairMinWireLengthItem.md)<!-- -->&gt;&gt;
 
-所有焊盘对的最短导线长度
+The minimum wire lengths of all pad pairs
+
+### getrealtimedrcstatus
+
+# PCB\_Drc.getRealTimeDrcStatus() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Get Real-time DRC check state
+
+## Signature
+
+```typescript
+public getRealTimeDrcStatus(): Promise<boolean>;
+```
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+Real-time DRC check status. If real-time DRC is stopped, not in a PCB, or the retrieval fails, `false` is returned
+
+## Remarks
+
+ADD since EDA v4.2
 
 ### getregionrules
 
@@ -2011,35 +2321,31 @@ Promise&lt;Array&lt;[IPCB\_PadPairMinWireLengthItem](../interfaces/IPCB_PadPairM
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取区域规则
+Get region rules
 
 ## Signature
 
 ```typescript
-getRegionRules(): Promise<Array<{
-        [key: string]: any;
-    }>>;
+public getRegionRules(): Promise<Array<Record<string, any>>>;
 ```
 
 
 ## Returns
 
-Promise&lt;Array&lt;{ \[key: string\]: any; }&gt;&gt;
+Promise&lt;Array&lt;Record&lt;string, any&gt;&gt;&gt;
 
-- 当前 PCB 的所有区域规则
+- All region rules of the current PCB
 
 ### getruleconfiguration
 
 # PCB\_Drc.getRuleConfiguration() method
 
-获取指定设计规则配置
+Get Specify design rule configuration
 
 ## Signature
 
 ```typescript
-getRuleConfiguration(configurationName: string): Promise<{
-        [key: string]: any;
-    } | undefined>;
+public getRuleConfiguration(configurationName: string): Promise<Record<string, any> | undefined>;
 ```
 
 ## Parameters
@@ -2072,7 +2378,7 @@ string
 
 </td><td>
 
-配置名称
+Configuration name
 
 
 </td></tr>
@@ -2082,9 +2388,9 @@ string
 
 ## Returns
 
-Promise&lt;{ \[key: string\]: any; } \| undefined&gt;
+Promise&lt;Record&lt;string, any&gt; \| undefined&gt;
 
-设计规则配置，`undefined` 为不存在该设计规则
+Design rule configuration, `undefined` is does not exist this design rules
 
 ### modifydifferentialpairname
 
@@ -2092,12 +2398,12 @@ Promise&lt;{ \[key: string\]: any; } \| undefined&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改差分对的名称
+Modify the name of the differential pair
 
 ## Signature
 
 ```typescript
-modifyDifferentialPairName(originalDifferentialPairName: string, differentialPairName: string): Promise<boolean>;
+public modifyDifferentialPairName(originalDifferentialPairName: string, differentialPairName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2130,7 +2436,7 @@ string
 
 </td><td>
 
-原差分对名称
+Original differential pair name
 
 
 </td></tr>
@@ -2146,7 +2452,7 @@ string
 
 </td><td>
 
-新差分对名称
+New differential pair name
 
 
 </td></tr>
@@ -2158,7 +2464,31 @@ string
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的网络名和差分对名（网络不能属于其他差分对）
+const ts = Date.now();
+const netP = 'JLC_DEMO_DP_P_' + ts;
+const netN = 'JLC_DEMO_DP_N_' + ts;
+
+// 2. 放带差分网络的焊盘并创建差分对
+const x = 3000 + Math.floor(Math.random() * 20000);
+await eda.pcb_PrimitivePad.create(1, '1', x, 3000, 0, ['ELLIPSE', 60, 60], netP, null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '2', x + 500, 3000, 0, ['ELLIPSE', 60, 60], netN, null, 0, 0, 0, false, 0);
+const pairName = '嘉立创示例_差分对_' + ts;
+await eda.pcb_Drc.createDifferentialPair(pairName, netP, netN);
+
+// 3. 改名（保留现场供观察）
+const newName = '嘉立创示例_差分对_改_' + ts;
+const result = await eda.pcb_Drc.modifyDifferentialPairName(pairName, newName);
+
+console.log('newName:', newName);
+console.log('result:', result);
+```
 
 ### modifydifferentialpairnegativenet
 
@@ -2166,12 +2496,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改差分对负网络
+Modify the negative net of the differential pair
 
 ## Signature
 
 ```typescript
-modifyDifferentialPairNegativeNet(differentialPairName: string, negativeNet: string): Promise<boolean>;
+public modifyDifferentialPairNegativeNet(differentialPairName: string, negativeNet: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2204,7 +2534,7 @@ string
 
 </td><td>
 
-差分对名称
+Differential pair name
 
 
 </td></tr>
@@ -2220,7 +2550,7 @@ string
 
 </td><td>
 
-负网络名称
+Negative net name
 
 
 </td></tr>
@@ -2232,7 +2562,32 @@ string
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的网络名（避免与其他差分对冲突）
+const ts = Date.now();
+const netP = 'JLC_DEMO_DP_P_' + ts;
+const netN = 'JLC_DEMO_DP_N_' + ts;
+const newNetN = 'JLC_DEMO_DP_N2_' + ts;
+
+// 2. 放三个带网络的焊盘并创建差分对
+const x = 3000 + Math.floor(Math.random() * 20000);
+await eda.pcb_PrimitivePad.create(1, '1', x, 3000, 0, ['ELLIPSE', 60, 60], netP, null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '2', x + 500, 3000, 0, ['ELLIPSE', 60, 60], netN, null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '3', x + 1000, 3000, 0, ['ELLIPSE', 60, 60], newNetN, null, 0, 0, 0, false, 0);
+const pairName = '嘉立创示例_差分对_' + ts;
+await eda.pcb_Drc.createDifferentialPair(pairName, netP, netN);
+
+// 3. 把负网络替换为 newNetN（保留现场供观察）
+const result = await eda.pcb_Drc.modifyDifferentialPairNegativeNet(pairName, newNetN);
+
+console.log('newNegativeNet:', newNetN);
+console.log('result:', result);
+```
 
 ### modifydifferentialpairpositivenet
 
@@ -2240,12 +2595,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改差分对正网络
+Modify the positive net of the differential pair
 
 ## Signature
 
 ```typescript
-modifyDifferentialPairPositiveNet(differentialPairName: string, positiveNet: string): Promise<boolean>;
+public modifyDifferentialPairPositiveNet(differentialPairName: string, positiveNet: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2278,7 +2633,7 @@ string
 
 </td><td>
 
-差分对名称
+Differential pair name
 
 
 </td></tr>
@@ -2294,7 +2649,7 @@ string
 
 </td><td>
 
-正网络名称
+Positive net name
 
 
 </td></tr>
@@ -2306,7 +2661,32 @@ string
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的网络名（避免与其他差分对冲突）
+const ts = Date.now();
+const netP = 'JLC_DEMO_DP_P_' + ts;
+const netN = 'JLC_DEMO_DP_N_' + ts;
+const newNetP = 'JLC_DEMO_DP_P2_' + ts;
+
+// 2. 放三个带网络的焊盘并创建差分对
+const x = 3000 + Math.floor(Math.random() * 20000);
+await eda.pcb_PrimitivePad.create(1, '1', x, 3000, 0, ['ELLIPSE', 60, 60], netP, null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '2', x + 500, 3000, 0, ['ELLIPSE', 60, 60], netN, null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '3', x + 1000, 3000, 0, ['ELLIPSE', 60, 60], newNetP, null, 0, 0, 0, false, 0);
+const pairName = '嘉立创示例_差分对_' + ts;
+await eda.pcb_Drc.createDifferentialPair(pairName, netP, netN);
+
+// 3. 把正网络替换为 newNetP（保留现场供观察）
+const result = await eda.pcb_Drc.modifyDifferentialPairPositiveNet(pairName, newNetP);
+
+console.log('newPositiveNet:', newNetP);
+console.log('result:', result);
+```
 
 ### modifyequallengthnetgroupname
 
@@ -2314,12 +2694,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改等长网络组的名称
+Modify the name of the equal-length net group
 
 ## Signature
 
 ```typescript
-modifyEqualLengthNetGroupName(originalEqualLengthNetGroupName: string, equalLengthNetGroupName: string): Promise<boolean>;
+public modifyEqualLengthNetGroupName(originalEqualLengthNetGroupName: string, equalLengthNetGroupName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2352,7 +2732,7 @@ string
 
 </td><td>
 
-原等长网络组名称
+Original equal-length net group name
 
 
 </td></tr>
@@ -2368,7 +2748,7 @@ string
 
 </td><td>
 
-新等长网络组名称
+New equal-length net group name
 
 
 </td></tr>
@@ -2380,7 +2760,22 @@ string
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 建一个待改名的等长网络组
+await eda.pcb_Drc.createEqualLengthNetGroup('嘉立创示例_等长网络组', [], { r: 0, g: 255, b: 0, alpha: 1 });
+
+// 2. 改名（用时间戳后缀避免与之前保留的现场重名，保留现场供观察）
+const newName = '嘉立创示例_等长网络组_改_' + Date.now();
+const result = await eda.pcb_Drc.modifyEqualLengthNetGroupName('嘉立创示例_等长网络组', newName);
+
+console.log('newName:', newName);
+console.log('result:', result);
+```
 
 ### modifynetclassname
 
@@ -2388,12 +2783,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改网络类的名称
+Modify Net class name of
 
 ## Signature
 
 ```typescript
-modifyNetClassName(originalNetClassName: string, netClassName: string): Promise<boolean>;
+public modifyNetClassName(originalNetClassName: string, netClassName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2426,7 +2821,7 @@ string
 
 </td><td>
 
-原网络类名称
+Original net class name
 
 
 </td></tr>
@@ -2442,7 +2837,7 @@ string
 
 </td><td>
 
-新网络类名称
+New net class name
 
 
 </td></tr>
@@ -2454,7 +2849,22 @@ string
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 建一个待改名的网络类
+await eda.pcb_Drc.createNetClass('嘉立创示例_网络类', [], { r: 255, g: 0, b: 0, alpha: 1 });
+
+// 2. 改名（用时间戳后缀避免与之前保留的现场重名，保留现场供观察）
+const newName = '嘉立创示例_网络类_改_' + Date.now();
+const result = await eda.pcb_Drc.modifyNetClassName('嘉立创示例_网络类', newName);
+
+console.log('newName:', newName);
+console.log('result:', result);
+```
 
 ### modifypadpairgroupname
 
@@ -2462,12 +2872,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改焊盘对组的名称
+Modify the name of the pad pair group
 
 ## Signature
 
 ```typescript
-modifyPadPairGroupName(originalPadPairGroupName: string, padPairGroupName: string): Promise<boolean>;
+public modifyPadPairGroupName(originalPadPairGroupName: string, padPairGroupName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2500,7 +2910,7 @@ string
 
 </td><td>
 
-原焊盘对组名称
+Original pad pair group name
 
 
 </td></tr>
@@ -2516,7 +2926,7 @@ string
 
 </td><td>
 
-新焊盘对组名称
+New pad pair group name
 
 
 </td></tr>
@@ -2528,7 +2938,7 @@ string
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ### overwritecurrentruleconfiguration
 
@@ -2536,14 +2946,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-覆写目前规则配置
+Overwrite current design rule configuration
 
 ## Signature
 
 ```typescript
-overwriteCurrentRuleConfiguration(ruleConfiguration: {
-        [key: string]: any;
-    }): Promise<boolean>;
+public overwriteCurrentRuleConfiguration(ruleConfiguration: Record<string, any>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2571,10 +2979,12 @@ ruleConfiguration
 
 </td><td>
 
-\{ \[key: string\]: any; \}
+Record&lt;string, any&gt;
 
 
 </td><td>
+
+Design rule configuration
 
 
 </td></tr>
@@ -2586,11 +2996,25 @@ ruleConfiguration
 
 Promise&lt;boolean&gt;
 
-覆写是否成功
+Overwrite whether it is successful
 
 ## Remarks
 
-将会覆写当前 PCB 的目前规则管理，请注意数据丢失风险
+It will overwrite the current design rule configuration of the PCB. Please note the risk of data loss
+
+## Example
+
+
+```javascript
+// 1. 读取当前设计规则配置（返回 { config, name }，规则数据在 config 里）
+const current = await eda.pcb_Drc.getCurrentRuleConfiguration();
+
+// 2. 整体写回当前配置（原样写回演示覆写成功，实际使用时可先修改 config 中的字段）
+const result = await eda.pcb_Drc.overwriteCurrentRuleConfiguration(current.config);
+
+console.log('configName:', current.name);
+console.log('result:', result);
+```
 
 ### overwritenetbynetrules
 
@@ -2598,14 +3022,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-覆写网络-网络规则
+Overwrite net - net rules
 
 ## Signature
 
 ```typescript
-overwriteNetByNetRules(netByNetRules: {
-        [key: string]: any;
-    }): Promise<boolean>;
+public overwriteNetByNetRules(netByNetRules: Record<string, any>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2633,12 +3055,12 @@ netByNetRules
 
 </td><td>
 
-\{ \[key: string\]: any; \}
+Record&lt;string, any&gt;
 
 
 </td><td>
 
-网络-网络规则
+Net - net rules
 
 
 </td></tr>
@@ -2650,11 +3072,25 @@ netByNetRules
 
 Promise&lt;boolean&gt;
 
-覆写是否成功
+Overwrite whether it is successful
 
 ## Remarks
 
-将会覆写当前 PCB 的所有网络-网络规则，请注意数据丢失风险
+It will overwrite all net-by-net rules of the current PCB. Please note the risk of data loss
+
+## Example
+
+
+```javascript
+// 1. 读取当前所有网络-网络规则（对象，键是规则类别名）
+const netByNetRules = await eda.pcb_Drc.getNetByNetRules();
+
+// 2. 整体写回（原样写回演示覆写成功，实际使用时可先修改对象字段）
+const result = await eda.pcb_Drc.overwriteNetByNetRules(netByNetRules);
+
+console.log('ruleKeys:', Object.keys(netByNetRules).join(', '));
+console.log('result:', result);
+```
 
 ### overwritenetrules
 
@@ -2662,14 +3098,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-覆写网络规则
+Overwrite net rules
 
 ## Signature
 
 ```typescript
-overwriteNetRules(netRules: Array<{
-        [key: string]: any;
-    }>): Promise<boolean>;
+public overwriteNetRules(netRules: Array<Record<string, any>>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2697,12 +3131,12 @@ netRules
 
 </td><td>
 
-Array&lt;{ \[key: string\]: any; }&gt;
+Array&lt;Record&lt;string, any&gt;&gt;
 
 
 </td><td>
 
-网络规则
+Net rules
 
 
 </td></tr>
@@ -2714,11 +3148,25 @@ Array&lt;{ \[key: string\]: any; }&gt;
 
 Promise&lt;boolean&gt;
 
-覆写是否成功
+Overwrite whether it is successful
 
 ## Remarks
 
-将会覆写当前 PCB 的所有网络规则，请注意数据丢失风险
+It will overwrite all net rules of the current PCB. Please note the risk of data loss
+
+## Example
+
+
+```javascript
+// 1. 读取当前所有网络规则（数组）
+const netRules = await eda.pcb_Drc.getNetRules();
+
+// 2. 整体写回（原样写回演示覆写成功，实际使用时可先增删改数组元素）
+const result = await eda.pcb_Drc.overwriteNetRules(netRules);
+
+console.log('ruleCount:', netRules.length);
+console.log('result:', result);
+```
 
 ### overwriteregionrules
 
@@ -2726,14 +3174,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-覆写区域规则
+Overwrite region rules
 
 ## Signature
 
 ```typescript
-overwriteRegionRules(regionRules: Array<{
-        [key: string]: any;
-    }>): Promise<boolean>;
+public overwriteRegionRules(regionRules: Array<Record<string, any>>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2761,12 +3207,12 @@ regionRules
 
 </td><td>
 
-Array&lt;{ \[key: string\]: any; }&gt;
+Array&lt;Record&lt;string, any&gt;&gt;
 
 
 </td><td>
 
-区域规则
+Region rules
 
 
 </td></tr>
@@ -2778,11 +3224,25 @@ Array&lt;{ \[key: string\]: any; }&gt;
 
 Promise&lt;boolean&gt;
 
-覆写是否成功
+Overwrite whether it is successful
 
 ## Remarks
 
-将会覆写当前 PCB 的所有区域规则，请注意数据丢失风险
+It will overwrite all region rules of the current PCB. Please note the risk of data loss
+
+## Example
+
+
+```javascript
+// 1. 读取当前所有区域规则（数组）
+const regionRules = await eda.pcb_Drc.getRegionRules();
+
+// 2. 整体写回（原样写回演示覆写成功，实际使用时可先增删改数组元素）
+const result = await eda.pcb_Drc.overwriteRegionRules(regionRules);
+
+console.log('ruleCount:', regionRules.length);
+console.log('result:', result);
+```
 
 ### removenetfromequallengthnetgroup
 
@@ -2790,12 +3250,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-从等长网络组中移除网络
+Remove a net from an equal-length net group
 
 ## Signature
 
 ```typescript
-removeNetFromEqualLengthNetGroup(equalLengthNetGroupName: string, net: string | Array<string>): Promise<boolean>;
+public removeNetFromEqualLengthNetGroup(equalLengthNetGroupName: string, net: string | Array<string>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2828,7 +3288,7 @@ string
 
 </td><td>
 
-等长网络组名称
+Equal-length net group name
 
 
 </td></tr>
@@ -2844,7 +3304,7 @@ string \| Array&lt;string&gt;
 
 </td><td>
 
-网络名称
+Net name
 
 
 </td></tr>
@@ -2856,7 +3316,27 @@ string \| Array&lt;string&gt;
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 准备两个真实网络（放带网络的测试焊盘）
+const x = 3000 + Math.floor(Math.random() * 20000);
+await eda.pcb_PrimitivePad.create(1, '1', x, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_D0', null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '2', x + 500, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_D1', null, 0, 0, 0, false, 0);
+
+// 2. 建等长组并纳入网络
+await eda.pcb_Drc.createEqualLengthNetGroup('嘉立创示例_等长网络组', ['JLC_DEMO_D0', 'JLC_DEMO_D1'], { r: 0, g: 255, b: 0, alpha: 1 });
+
+// 3. 先单个移除，再批量移除
+const removedOne = await eda.pcb_Drc.removeNetFromEqualLengthNetGroup('嘉立创示例_等长网络组', 'JLC_DEMO_D0');
+const removedBatch = await eda.pcb_Drc.removeNetFromEqualLengthNetGroup('嘉立创示例_等长网络组', ['JLC_DEMO_D1']);
+
+console.log('removedOne:', removedOne);
+console.log('removedBatch:', removedBatch);
+```
 
 ### removenetfromnetclass
 
@@ -2864,12 +3344,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-从网络类中移除网络
+From net class in remove net
 
 ## Signature
 
 ```typescript
-removeNetFromNetClass(netClassName: string, net: string | Array<string>): Promise<boolean>;
+public removeNetFromNetClass(netClassName: string, net: string | Array<string>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2902,7 +3382,7 @@ string
 
 </td><td>
 
-网络类名称
+Net class name
 
 
 </td></tr>
@@ -2918,7 +3398,7 @@ string \| Array&lt;string&gt;
 
 </td><td>
 
-网络名称
+Net name
 
 
 </td></tr>
@@ -2930,7 +3410,27 @@ string \| Array&lt;string&gt;
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 准备两个真实网络（放带网络的测试焊盘）
+const x = 3000 + Math.floor(Math.random() * 20000);
+await eda.pcb_PrimitivePad.create(1, '1', x, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_P', null, 0, 0, 0, false, 0);
+await eda.pcb_PrimitivePad.create(1, '2', x + 500, 3000, 0, ['ELLIPSE', 60, 60], 'JLC_DEMO_N', null, 0, 0, 0, false, 0);
+
+// 2. 建网络类并纳入网络
+await eda.pcb_Drc.createNetClass('嘉立创示例_网络类', ['JLC_DEMO_P', 'JLC_DEMO_N'], { r: 255, g: 0, b: 0, alpha: 1 });
+
+// 3. 先单个移除，再批量移除
+const removedOne = await eda.pcb_Drc.removeNetFromNetClass('嘉立创示例_网络类', 'JLC_DEMO_P');
+const removedBatch = await eda.pcb_Drc.removeNetFromNetClass('嘉立创示例_网络类', ['JLC_DEMO_N']);
+
+console.log('removedOne:', removedOne);
+console.log('removedBatch:', removedBatch);
+```
 
 ### removepadpairfrompadpairgroup
 
@@ -2938,12 +3438,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-从焊盘对组中移除焊盘对
+Remove a pad pair from a pad pair group
 
 ## Signature
 
 ```typescript
-removePadPairFromPadPairGroup(padPairGroupName: string, padPair: [string, string] | Array<[string, string]>): Promise<boolean>;
+public removePadPairFromPadPairGroup(padPairGroupName: string, padPair: [string, string] | Array<[string, string]>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -2976,7 +3476,7 @@ string
 
 </td><td>
 
-焊盘对组名称
+Pad pair group name
 
 
 </td></tr>
@@ -2992,7 +3492,7 @@ padPair
 
 </td><td>
 
-焊盘对
+Pad for
 
 
 </td></tr>
@@ -3004,11 +3504,11 @@ padPair
 
 Promise&lt;boolean&gt;
 
-操作是否成功
+Whether the operation is successful
 
 ## Example
 
-有三种不同的用法，确保画布上已有对应的焊盘。 分别是 一，游离焊盘-游离焊盘；二，器件焊盘 - 器件焊盘；三，器件焊盘 - 游离焊盘 await eda.pcb\_Drc.removePadPairFromPadPairGroup('test',\['e0','e1'\]) // 游离焊盘-游离焊盘 await eda.pcb\_Drc.removePadPairFromPadPairGroup('test',\['R1:1','R1:2'\]) // 器件焊盘 - 器件焊盘 await eda.pcb\_Drc.removePadPairFromPadPairGroup('test',\['R1:2','e1'\]) // 器件焊盘 - 游离焊盘
+There are three different usages, and make sure the corresponding pads already exist on the canvas. They are: 1. Free pad - free pad; 2. Device pad - device pad; 3. Device pad - free pad await eda.pcb\_Drc.removePadPairFromPadPairGroup('test',\['e0','e1'\]) // 游离焊盘-游离焊盘 await eda.pcb\_Drc.removePadPairFromPadPairGroup('test',\['R1:1','R1:2'\]) // 器件焊盘 - 器件焊盘 await eda.pcb\_Drc.removePadPairFromPadPairGroup('test',\['R1:2','e1'\]) // 器件焊盘 - 游离焊盘
 
 ### renameruleconfiguration
 
@@ -3016,12 +3516,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-重命名设计规则配置
+Rename the design rule configuration
 
 ## Signature
 
 ```typescript
-renameRuleConfiguration(originalConfigurationName: string, configurationName: string): Promise<boolean>;
+public renameRuleConfiguration(originalConfigurationName: string, configurationName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -3054,7 +3554,7 @@ string
 
 </td><td>
 
-原设计规则配置名称
+Original design rule configuration name
 
 
 </td></tr>
@@ -3070,7 +3570,7 @@ string
 
 </td><td>
 
-新设计规则配置名称
+New design rule configuration name
 
 
 </td></tr>
@@ -3082,11 +3582,28 @@ string
 
 Promise&lt;boolean&gt;
 
-重命名是否成功
+Whether the rename was successful
 
 ## Remarks
 
-只有自定义配置可以重命名，系统配置不允许重命名
+Only custom configurations can be renamed. System configurations cannot be renamed
+
+## Example
+
+
+```javascript
+// 1. 读取当前配置并保存为待改名的自定义配置（allowOverwrite=true 重复运行安全）
+const current = await eda.pcb_Drc.getCurrentRuleConfiguration();
+await eda.pcb_Drc.saveRuleConfiguration(current.config, '嘉立创示例_待改配置', true);
+
+// 2. 静默清掉上次运行保留的目标名（首次运行时目标不存在，删除返回 false 属正常）
+await eda.pcb_Drc.deleteRuleConfiguration('嘉立创示例_改名后配置');
+
+// 3. 重命名（保留现场供观察）
+const result = await eda.pcb_Drc.renameRuleConfiguration('嘉立创示例_待改配置', '嘉立创示例_改名后配置');
+
+console.log('result:', result);
+```
 
 ### saveruleconfiguration
 
@@ -3094,14 +3611,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-保存设计规则配置
+Save Design rule configuration
 
 ## Signature
 
 ```typescript
-saveRuleConfiguration(ruleConfiguration: {
-        [key: string]: any;
-    }, configurationName: string, allowOverwrite?: boolean): Promise<boolean>;
+public saveRuleConfiguration(ruleConfiguration: Record<string, any>, configurationName: string, allowOverwrite?: boolean): Promise<boolean>;
 ```
 
 ## Parameters
@@ -3129,12 +3644,12 @@ ruleConfiguration
 
 </td><td>
 
-\{ \[key: string\]: any; \}
+Record&lt;string, any&gt;
 
 
 </td><td>
 
-设计规则配置
+Design rule configuration
 
 
 </td></tr>
@@ -3150,7 +3665,7 @@ string
 
 </td><td>
 
-配置名称
+Configuration name
 
 
 </td></tr>
@@ -3166,7 +3681,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否允许覆写同名设计规则配置，`false` 则将在遇到同名设计规则配置时返回 `false`<!-- -->，请注意可能的数据丢失风险
+_(Optional)_ Whether to allow overwriting a design rule configuration with the same name. If `false`<!-- -->, `false` will be returned when a configuration with the same name is encountered. Please note the possible risk of data loss
 
 
 </td></tr>
@@ -3178,11 +3693,24 @@ _(Optional)_ 是否允许覆写同名设计规则配置，`false` 则将在遇�
 
 Promise&lt;boolean&gt;
 
-保存是否成功
+Save Whether Successful
 
 ## Remarks
 
-只有自定义配置可以覆盖保存，系统配置不允许修改和覆盖
+Only custom configurations can be overwritten and saved. System configurations cannot be modified or overwritten
+
+## Example
+
+
+```javascript
+// 1. 读取当前设计规则配置作为数据源（规则数据在 config 字段里）
+const current = await eda.pcb_Drc.getCurrentRuleConfiguration();
+
+// 2. 另存为自定义配置，允许同名覆盖（保留现场供观察）
+const saved = await eda.pcb_Drc.saveRuleConfiguration(current.config, '嘉立创示例_规则配置', true);
+
+console.log('saved:', saved);
+```
 
 ### setasdefaultruleconfiguration
 
@@ -3190,12 +3718,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置为新建 PCB 默认设计规则配置
+Set as the default design rule configuration for new PCBs
 
 ## Signature
 
 ```typescript
-setAsDefaultRuleConfiguration(configurationName: string): Promise<boolean>;
+public setAsDefaultRuleConfiguration(configurationName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -3228,7 +3756,7 @@ string
 
 </td><td>
 
-配置名称
+Configuration name
 
 
 </td></tr>
@@ -3240,8 +3768,72 @@ string
 
 Promise&lt;boolean&gt;
 
-设置是否成功
+Set Whether Successful
 
 ## Remarks
 
-返回值为结果导向，重复设置相同的设计规则为默认设计规则也将返回 `true`
+The return value is result-oriented. Repeatedly setting the same design rule as the default will also return `true`
+
+## Example
+
+
+```javascript
+// 1. 读取当前配置并保存为自定义配置（作为待指定的默认配置）
+const current = await eda.pcb_Drc.getCurrentRuleConfiguration();
+await eda.pcb_Drc.saveRuleConfiguration(current.config, '嘉立创示例_默认规则配置', true);
+
+// 2. 把它设置为新建 PCB 的默认设计规则配置
+const result = await eda.pcb_Drc.setAsDefaultRuleConfiguration('嘉立创示例_默认规则配置');
+
+console.log('result:', result);
+```
+
+### startrealtimedrc
+
+# PCB\_Drc.startRealTimeDrc() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Start real-time DRC check
+
+## Signature
+
+```typescript
+public startRealTimeDrc(): Promise<boolean>;
+```
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+Whether Successful enable real-time DRC check
+
+## Remarks
+
+The return value of this API is result-oriented. If real-time DRC check was already enabled before calling this API, `true` will also be returned ADD since EDA v4.2
+
+### stoprealtimedrc
+
+# PCB\_Drc.stopRealTimeDrc() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Stop real-time DRC check
+
+## Signature
+
+```typescript
+public stopRealTimeDrc(): Promise<boolean>;
+```
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+Whether real-time DRC check was successfully disabled
+
+## Remarks
+
+The return value of this API is result-oriented. If real-time DRC check was already disabled before calling this API, `true` will also be returned ADD since EDA v4.2

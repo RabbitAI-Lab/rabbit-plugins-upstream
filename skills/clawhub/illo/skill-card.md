@@ -1,53 +1,70 @@
-## Description: <br>
-Creates original editorial illustrations, explainer diagrams, mini-comics, and transparent mascot cutouts where a recurring character performs the idea in one of the bundled looks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates original editorial illustrations, explainer diagrams, mini-comics, and transparent character cutouts with a recurring mascot in bundled visual looks, using configured Codex, Grok, Grok Bot, or OpenRouter image-generation paths.
 
-## Publisher: <br>
-[tmchow](https://clawhub.ai/user/tmchow) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[tmchow](https://clawhub.ai/user/tmchow)
 
-## Use Case: <br>
-Developers, writers, and creative teams use Illo to turn articles, concepts, flows, and mascot requests into original illustration prompts and generated image artifacts. It supports article images, one-off concepts, explainer diagrams, mini-comics, character cutouts, custom mascots, community character packs, and backend/model selection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill delegates user-derived prompts to general-purpose AI CLIs or OpenRouter with network access and workspace write access. <br>
-Mitigation: Install and run it only in workspaces where those agent actions are acceptable, and review generated artifacts and proposed commands before relying on them. <br>
-Risk: OpenRouter usage requires a credential and can incur pay-per-image charges. <br>
-Mitigation: Keep API keys in the documented config file or platform secret store, avoid chat or command-line arguments for secrets, and require explicit paid fallback before spending. <br>
-Risk: Community character pack installs and updates can change local character assets or behavior. <br>
-Mitigation: Review character pack installs and updates before accepting them, especially in sensitive project directories. <br>
+## Use Case:
 
+External users, developers, and content teams use Illo to turn article URLs, post ideas, brand concepts, mascot prompts, or cutout requests into styled illustration assets and supporting generation commands.
 
-## Reference(s): <br>
-- [Illo homepage](https://illo-skill.com) <br>
-- [ClawHub skill page](https://clawhub.ai/tmchow/skills/illo) <br>
-- [README](artifact/README.md) <br>
-- [Backends - the three-backend image engine](artifact/references/backends.md) <br>
-- [Composition](artifact/references/composition.md) <br>
-- [Prompt recipe](artifact/references/prompt-recipe.md) <br>
-- [Quality bar](artifact/references/quality-bar.md) <br>
-- [Character builder](artifact/references/character-builder.md) <br>
-- [Community character packs - install and publish](artifact/references/pack-sharing.md) <br>
-- [Models - friendly names, ids, traits](artifact/references/models.md) <br>
-- [Character cutout register](artifact/references/cutout.md) <br>
-- [Surprise mode](artifact/references/surprise.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with inline shell commands, configuration directions, generated image file paths, and optional gallery artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May generate workspace image files through Codex, Grok, or OpenRouter backends; transparent cutouts require a cutout-capable backend.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.32.1 (source: frontmatter and server release metadata) <br>
+Risk: The skill may run logged-in Codex or Grok CLI sessions in headless or auto-approved modes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that behavior is acceptable, review generated commands before use, and prefer a dedicated workspace for untrusted prompts.
+
+Risk: The OpenRouter backend can use a paid account and requires a locally stored API key.
+
+Mitigation: Use the OpenRouter path only with explicit user consent, keep the key in the skill config or platform secret store, and avoid sharing the key in chat or command arguments.
+
+Risk: Character pack installation or updates may apply external pack content.
+
+Mitigation: Review pack content before installing or updating packs, especially from third-party sources.
+
+Risk: Recurring update checks or automated backend fallback may be surprising in sensitive environments.
+
+Mitigation: Leave recurring update checks disabled unless explicitly desired and require opt-in for paid fallback behavior.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tmchow/skills/illo)
+- [Illo homepage](https://illo-skill.com)
+- [SKILL.md](artifact/SKILL.md)
+- [README.md](artifact/README.md)
+- [Backend reference](artifact/references/backends.md)
+- [Composition reference](artifact/references/composition.md)
+- [Cutout reference](artifact/references/cutout.md)
+- [Model reference](artifact/references/models.md)
+- [Pack sharing reference](artifact/references/pack-sharing.md)
+- [Quality bar reference](artifact/references/quality-bar.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and generated image file paths or attachments]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local image files, transparent PNG cutouts, galleries, and user-specific configuration files depending on the selected backend and request.]
+
+## Skill Version(s):
+
+0.34.4 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

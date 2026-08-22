@@ -1,54 +1,76 @@
-## Description: <br>
-LinkFox Amazon Product Selection helps agents research Amazon product opportunities across competitor lookup, keyword analysis, reviews, niche trends, historical product data, and market opportunity reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LinkFox Amazon Product Selection helps agents research Amazon products, keywords, competitors, reviews, niches, and trends across 33 sub-capabilities.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and e-commerce researchers use this skill to investigate Amazon product selection, market demand, competitor positioning, keyword traffic, review themes, and niche opportunities. Agents can call the bundled scripts to retrieve LinkFox-backed research data and summarize it for product decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authenticated network calls may send Amazon research queries, ASINs, keywords, uploaded images, and session metadata to the LinkFox gateway. <br>
-Mitigation: Use only in approved environments, keep API keys scoped, and avoid sending confidential product plans or sensitive media unless that data sharing is permitted. <br>
-Risk: The skill stores full API responses and cache files locally, which may include product research results or user-provided query details. <br>
-Mitigation: Run it from an approved workspace, review the generated linkfox output and cache directories, and clean or exclude them before sharing the workspace. <br>
-Risk: Artifact documentation references installing an external LinkFox onboarding companion skill. <br>
-Mitigation: Do not install or run the companion skill unless it has been separately reviewed and approved. <br>
-Risk: Market, keyword, review, and product data may be incomplete, stale, or source-dependent. <br>
-Mitigation: Treat outputs as decision support and verify important findings against source marketplaces or approved business data before acting commercially. <br>
+## Use Case:
 
+External sellers, e-commerce analysts, and developers use this skill to evaluate Amazon product opportunities, compare competitors, analyze keywords, inspect reviews, and track sales or price trends across supported marketplaces.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-product-selection) <br>
-- [Skill Definition](SKILL.md) <br>
-- [Amazon Search Reference](references/linkfox-amazon-search.md) <br>
-- [Amazon Product Detail Reference](references/linkfox-amazon-product-detail.md) <br>
-- [Amazon Reviews Reference](references/linkfox-amazon-reviews-list.md) <br>
-- [Amazon Opportunity Report Reference](references/linkfox-amazon-opportunity-report-by-keyword.md) <br>
-- [Keepa Product Request Reference](references/linkfox-keepa-product-request.md) <br>
-- [Jungle Scout Product Database Reference](references/linkfox-junglescout-product-database.md) <br>
-- [SellerSprite Product Search Reference](references/linkfox-sellersprite-product-search.md) <br>
-- [SIF Keyword Overview Reference](references/linkfox-sif-keyword-overview.md) <br>
-- [Jiimore Niche Info Reference](references/linkfox-jiimore-get-niche-info-by-keyword.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries, shell commands, and JSON data files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts can write full API responses and cached results under a local linkfox workspace directory while printing either full JSON or a compact summary.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill handles API credentials and can send product research queries, images, and onboarding data to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only in trusted workspaces, keep credentials in environment variables, and avoid sending confidential business data unless LinkFox is approved for that use.
+
+Risk: Endpoint override variables could route requests to an untrusted host.
+
+Mitigation: Do not set LINKFOX_TOOL_GATEWAY or related endpoint variables unless the destination has been verified.
+
+Risk: Complete API responses are persisted locally under linkfox directories.
+
+Mitigation: Review saved output paths and remove locally stored research data when it is no longer needed.
+
+Risk: Onboarding fallback instructions reference a remote package installation.
+
+Mitigation: Do not allow an agent to auto-install the remote onboarding ZIP without separate verification and approval.
+
+Risk: Repeated calls can consume paid or rate-limited third-party credits.
+
+Mitigation: Ask for user confirmation before retrying, changing parameters, or paginating after empty or failed results.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-product-selection)
+- [Amazon Product Search](references/linkfox-amazon-search.md)
+- [Amazon Search by Image](references/linkfox-amazon-search-by-image.md)
+- [Amazon Product Detail Lookup](references/linkfox-amazon-product-detail.md)
+- [Amazon Product Reviews](references/linkfox-amazon-reviews-list.md)
+- [Amazon Market Opportunity Report](references/linkfox-amazon-opportunity-report-by-keyword.md)
+- [Keepa Product Request](references/linkfox-keepa-product-request.md)
+- [Jungle Scout Keyword by Keyword](references/linkfox-junglescout-keyword-by-keyword.md)
+- [SellerSprite Product Search](references/linkfox-sellersprite-product-search.md)
+- [SIF ASIN Keyword Analysis](references/linkfox-sif-asin-keywords.md)
+- [Jiimore Niche Info by Keyword](references/linkfox-jiimore-get-niche-info-by-keyword.md)
+- [Authentication and Credits](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON request or response data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save complete responses under local linkfox directories and may print summaries for large responses unless inline output is requested.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

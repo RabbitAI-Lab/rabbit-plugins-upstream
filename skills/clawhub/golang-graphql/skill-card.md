@@ -1,47 +1,65 @@
-## Description: <br>
-Implements GraphQL APIs in Go using gqlgen or graph-gophers/graphql-go for schema design, resolver work, subscriptions, and integration with existing Go HTTP services. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Implements GraphQL APIs in Golang using gqlgen or graphql-go.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineers use this skill to build or review Go GraphQL servers, including schema design, resolver implementation, DataLoader batching, subscriptions, testing, and production safety controls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Proposed file edits, generated code, dependency changes, or Go commands such as go get and go generate could alter application behavior or supply chain state. <br>
-Mitigation: Review diffs, dependency changes, generated files, and commands before applying them, especially in sensitive repositories. <br>
-Risk: GraphQL implementation guidance affects production controls such as query limits, introspection exposure, authorization checks, error handling, subscription cancellation, and DataLoader scoping. <br>
-Mitigation: Verify complexity or depth limits, production introspection gating, per-request DataLoaders, safe error formatting, authorization policy, and subscription cancellation against project requirements. <br>
+## Use Case:
 
+Developers and engineers use this skill to build, review, and maintain Go GraphQL services with gqlgen or graph-gophers/graphql-go, including schema design, resolver implementation, subscriptions, testing, and production safety checks.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/samber/golang-graphql) <br>
-- [Source Homepage](https://github.com/samber/cc-skills-golang) <br>
-- [gqlgen Reference](references/gqlgen.md) <br>
-- [graph-gophers/graphql-go Reference](references/graphql-go.md) <br>
-- [Testing GraphQL in Go](references/testing.md) <br>
-- [gqlgen](https://github.com/99designs/gqlgen) <br>
-- [graph-gophers/graphql-go](https://github.com/graph-gophers/graphql-go) <br>
-- [Relay Cursor Connections Specification](https://relay.dev/graphql/connections.htm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with Go, GraphQL SDL, YAML configuration, and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose file edits, dependency updates, gqlgen code generation, tests, and Go tooling commands for review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.3 (source: artifact SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill can help an agent read and edit Go GraphQL code and run Go-related commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed code changes and command effects before applying them in production repositories.
+
+Risk: Generated gqlgen files and configuration can be overwritten or misconfigured during code generation.
+
+Mitigation: Keep custom logic outside generated files, review gqlgen configuration, and rerun tests after generation.
+
+Risk: Public GraphQL handlers can expose schema details or allow expensive nested queries if production safeguards are omitted.
+
+Mitigation: Require handler review for introspection gating, query complexity or depth limits, and error sanitization before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/golang-graphql)
+- [Publisher profile](https://clawhub.ai/user/samber)
+- [Project homepage](https://github.com/samber/cc-skills-golang)
+- [gqlgen reference](references/gqlgen.md)
+- [graph-gophers/graphql-go reference](references/graphql-go.md)
+- [Testing reference](references/testing.md)
+- [gqlgen](https://github.com/99designs/gqlgen)
+- [graph-gophers/graphql-go](https://github.com/graph-gophers/graphql-go)
+- [Relay cursor connections spec](https://relay.dev/graphql/connections.htm)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline Go, GraphQL, YAML, and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May suggest Go source edits, generated-code workflows, gqlgen configuration, resolver tests, and production GraphQL hardening steps.]
+
+## Skill Version(s):
+
+0.2.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

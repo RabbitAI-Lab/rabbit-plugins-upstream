@@ -7,6 +7,22 @@ and this skill adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.6.4] - 2026-08-21
+
+### Changed
+
+- Declared ClawHub browse categories (`development`) and topics in `metadata`, so the release pipeline publishes them instead of leaving the skill in the `other` category.
+
+### Removed
+
+- `skill-card.md`. The ClawHub CLI strips a root `skill-card.md` from every publish and the registry generates its own card, so the authored file never reached ClawHub.
+
+## [0.6.3] - 2026-08-07
+
+### Changed
+
+- Rewrote the frontmatter description: dropped the "Comprehensive" opener and the 14-subsystem enumeration, folded the distinguishing import specifiers into a natural clause, and removed the trailing trigger dump.
+
 ## [0.6.2] - 2026-07-22
 
 ### Added

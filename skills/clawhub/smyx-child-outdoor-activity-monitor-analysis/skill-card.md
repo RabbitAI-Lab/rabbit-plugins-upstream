@@ -1,45 +1,64 @@
-## Description: <br>
-Analyzes fixed-camera doorway or balcony video to detect child exit and return events, estimate daily outdoor activity duration, and produce activity alerts and reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitors fixed-camera footage at a home entrance or balcony door to count a child's indoor/outdoor transitions, estimate daily outdoor duration, and produce structured reminders when the configured activity target is not met.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Families, schools, kindergartens, and child-health application developers can use this skill to analyze doorway or balcony camera footage for child outdoor activity sessions, daily duration totals, and parent-facing reminders. It is intended for visual activity statistics and friendly reminders, not medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends sensitive child and home camera footage to cloud services and keeps account-linked report history. <br>
-Mitigation: Use only with guardian consent, avoid private or internal URLs, and confirm that cloud processing and report retention match the deployment's privacy requirements. <br>
-Risk: The security assessment notes local storage of identity and authentication tokens. <br>
-Mitigation: Limit installation to trusted environments and remove local workspace databases and tokens when the skill is no longer used. <br>
-Risk: Outdoor time estimates are based on doorway or balcony movement events and may not represent actual exercise or medical status. <br>
-Mitigation: Treat outputs as visual activity statistics and reminders, and route health concerns to qualified professionals. <br>
+## Use Case:
 
+External users and developers use this skill to analyze home entrance or balcony-door video, summarize a child's outdoor-session counts and durations, and generate parent-facing activity reminders. It is intended for visual activity statistics and friendly reminders, not medical diagnosis or medical advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-outdoor-activity-monitor-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Child outdoor activity monitoring API documentation](artifact/references/api_doc.md) <br>
-- [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis reports, with optional shell commands for running analysis or listing historical reports.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include detected events, daily duration totals, alert levels, recommendations, report links, and saved result files when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release metadata) <br>
+Risk: The skill may process sensitive video of children and home entrances.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with explicit guardian consent, confirm the video source is appropriate, and define retention and deletion expectations before analysis.
+
+Risk: Analysis may upload files or URLs and query cloud-hosted historical reports.
+
+Mitigation: Confirm the configured service endpoints are trusted and approved before running analysis or history queries.
+
+Risk: The skill may silently manage an identity value and persist tokens locally.
+
+Mitigation: Review local credential storage and account-linking behavior before installation, and clear stored tokens when the skill is no longer needed.
+
+Risk: Outdoor duration is inferred from door or balcony transitions and may not equal true exercise or time outdoors.
+
+Mitigation: Treat the report as visual activity statistics and combine it with caregiver judgment; do not use it for medical diagnosis or medical advice.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-child-outdoor-activity-monitor-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [Child Outdoor Activity Monitoring API Documentation](references/api_doc.md)
+- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON-style structured analysis reports with optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include activity metrics, alert type and level, recommendations, report links, or a Markdown table of historical reports.]
+
+## Skill Version(s):
+
+1.0.9 (source: ClawHub release metadata; artifact frontmatter lists 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

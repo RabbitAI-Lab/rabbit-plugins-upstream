@@ -1,42 +1,61 @@
-## Description: <br>
-Maintain the GitLab agent profile page and static contribution performance chart. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Maintain the GitLab agent profile page and static contribution performance chart.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to keep a GitLab profile repository updated with monthly contribution charts and proof records for owner and agent activity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses GitLab credentials that may read configured projects. <br>
-Mitigation: Use a least-privilege GitLab token and limit configured projects to repositories needed for the profile update. <br>
-Risk: The skill can run unattended and commit or push generated profile assets. <br>
-Mitigation: Run it in a dedicated profile repository and review the cron configuration before enabling scheduled execution. <br>
-Risk: Output paths and image conversion tooling can affect local files or invoke optional external converters. <br>
-Mitigation: Keep output paths relative to the intended workspace and avoid the npm or ImageMagick conversion fallback unless the tooling is pinned or sandboxed. <br>
+## Use Case:
 
+Developers and maintainers use this skill to keep a GitLab agent profile current with monthly contribution statistics, static chart assets, and a JSON proof file.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent-profile) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Files] <br>
-**Output Format:** [Markdown guidance plus generated SVG, WebP, and JSON asset files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses GitLab CLI authentication and configurable environment variables for project selection, output paths, owner, agent, and month count.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.75.3 (source: release evidence) <br>
+Risk: The skill can use a GitLab token through the GitLab CLI to read contribution data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use scoped GitLab credentials and confirm the authenticated account before running the update helper.
+
+Risk: The update routine writes profile assets and may lead to remote pushes when the generated assets are committed.
+
+Mitigation: Review generated diffs before committing or pushing, and constrain output paths with the documented environment variables.
+
+Risk: The bootstrap cron creates recurring automation if enabled.
+
+Mitigation: Keep the cron disabled unless recurring updates are intended, and review its schedule and workspace target before enabling it.
+
+Risk: The WebP conversion path can fall back to npm-based tooling.
+
+Mitigation: Prefer controlled ImageMagick or Python image dependencies, or ensure npm dependencies are pinned and trusted before allowing that fallback.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent-profile)
+
+## Skill Output:
+
+**Output Type(s):** [files, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands; generated SVG, WebP, and JSON files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes profile assets under assets/ by default and uses GitLab-related environment variables for project, owner, agent, month, and output settings.]
+
+## Skill Version(s):
+
+1.84.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
