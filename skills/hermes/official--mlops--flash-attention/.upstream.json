@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/mlops/flash-attention",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "8966964f91de4d348e243fdebae2d8a91ff140f64b213c38b9e9dcab6b443bbf",
-  "fetchedAt": "2026-07-26T17:03:57.002Z"
+  "pushedAt": "2026-08-22T07:34:18Z",
+  "contentHash": "a2e8d061481eb1e2c9263c8b327dc7f0f682589248c5bae04a53cc274f1b8d9a",
+  "fetchedAt": "2026-08-22T07:49:47.813Z"
 }
