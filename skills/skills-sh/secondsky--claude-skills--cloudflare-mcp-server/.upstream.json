@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/cloudflare-mcp-server",
+  "repo": "secondsky/claude-skills",
+  "skillId": "cloudflare-mcp-server",
+  "branch": "main",
+  "pushedAt": "2026-08-20T08:18:42Z",
+  "contentHash": "1ff0511c56a3861b20625e844f1d2d8fb77500cb8cd44c89131e008d2af1dd6d",
+  "fetchedAt": "2026-08-22T07:52:04.936Z"
+}
