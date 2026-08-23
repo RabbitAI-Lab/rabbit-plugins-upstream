@@ -1,0 +1,88 @@
+{
+  "updated": "2026-08-21",
+  "price": 4676.1,
+  "rsi": 88.0,
+  "ema20": 4337.6,
+  "sma50": 4177.0,
+  "sma200": 4498.9,
+  "bollinger_upper": 4650.2,
+  "bias": "BULLISH",
+  "overbought": true,
+  "above_bollinger": true,
+  "support_levels": [
+    [
+      5303.8,
+      2
+    ],
+    [
+      5020.0,
+      3
+    ],
+    [
+      4855.8,
+      4
+    ],
+    [
+      4581.2,
+      7
+    ],
+    [
+      4512.6,
+      6
+    ],
+    [
+      4480.4,
+      3
+    ]
+  ],
+  "resistance_levels": [
+    [
+      2525.7,
+      2
+    ],
+    [
+      2672.1,
+      5
+    ],
+    [
+      2728.25,
+      5
+    ],
+    [
+      2789.0,
+      2
+    ],
+    [
+      2942.9,
+      4
+    ],
+    [
+      4152.1,
+      5
+    ]
+  ],
+  "setups": [
+    {
+      "type": "BUY_LIMIT",
+      "entry": 4581.2,
+      "sl": 4524.5,
+      "tp": 4765.2,
+      "rr": 3.25,
+      "basis": "support 4581.2 (pullback uptrend)",
+      "score": 80,
+      "verdict": "STRONG",
+      "risk_ok": true
+    },
+    {
+      "type": "BUY_STOP",
+      "entry": 4770.2,
+      "sl": 4755.2,
+      "tp": 4800.2,
+      "rr": 2.0,
+      "basis": "breakout 4765.2",
+      "score": 75,
+      "verdict": "STRONG",
+      "risk_ok": true
+    }
+  ]
+}

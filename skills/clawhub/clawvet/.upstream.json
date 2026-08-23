@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/clawvet",
   "slug": "clawvet",
   "ownerHandle": null,
-  "version": "0.8.1",
-  "updatedAt": 1784969755903,
-  "contentHash": "b50dff2704bfd06513780fd6ad9d255f3c869e76d13cbe90a2e0c8432d5d24cf",
-  "fetchedAt": "2026-07-26T18:04:09.584Z"
+  "version": "0.11.0",
+  "updatedAt": 1787247568710,
+  "contentHash": "af508bdf1a2a3cc42ec9c98d1fb533aafd82abf3d4885b27e4f4f2484df870cf",
+  "fetchedAt": "2026-08-23T08:02:25.915Z"
 }

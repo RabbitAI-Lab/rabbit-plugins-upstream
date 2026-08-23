@@ -30,6 +30,12 @@ Actions:
                                "DO NOT BUY" cart, reads the priced checkout, then
                                deletes it. {"check": "inventory|pricing|both",
                                "lines": [{"style", "size?", "quantity?"}]}
+    get-order-tracking         Get carrier tracking numbers for one or more PO
+                               numbers. READ — searches the order book per PO,
+                               opens each matching order, and reads its Delivery
+                               Tracking table; an order that has not shipped
+                               reports its EXPECTED ship dates instead. Nothing
+                               is written. {"po_numbers": ["P13434", "P13433"]}
 """
 
 from __future__ import annotations
@@ -44,11 +50,13 @@ from _cli import run  # noqa: E402
 from adidas_tools import (  # noqa: E402
     adidas_check_inventory_pricing,
     adidas_create_purchase_order,
+    adidas_get_order_tracking,
 )
 
 ACTIONS = {
     "create-purchase-order": adidas_create_purchase_order,
     "check-inventory-pricing": adidas_check_inventory_pricing,
+    "get-order-tracking": adidas_get_order_tracking,
 }
 
 

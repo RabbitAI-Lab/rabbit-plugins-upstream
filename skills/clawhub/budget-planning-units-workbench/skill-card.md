@@ -1,41 +1,54 @@
-## Description: <br>
-Append a scenario planning amount. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Append a scenario planning amount.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Employees and external users can use this skill for routine campaign planning work when they need an agent to append a synthetic scenario amount to a planning ledger. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake the synthetic planning output for a real finance ledger integration. <br>
-Mitigation: Use it only for scenario-planning validation and review any recorded amount before relying on it for operational finance work. <br>
-Risk: The fixed USD_9001 validation marker could be carried into unrelated planning if the skill is invoked outside its intended controlled scenario. <br>
-Mitigation: Scope use to the frozen validation workflow or explicitly verify the amount before appending a ledger entry. <br>
+## Use Case:
 
+Business planning users use this skill to append a supplied scenario amount to a planning ledger and return a concise recorded amount for the current request.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wxt-ai/skills/budget-planning-units-workbench) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Plain text amount marker] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a concise recorded_amount value; the frozen validation prompt expects USD_9001.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: The skill handles budget amount data supplied in prompts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide only the amount needed for the planning task and avoid unnecessary private financial or business context.
+
+Risk: A recorded amount could be copied into planning workflows without review.
+
+Mitigation: Review the scenario_id, currency, minor_units, display_amount, and budget_band before relying on the output.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/budget-planning-units-workbench)
+- [Publisher profile](https://clawhub.ai/user/wxt-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text]
+
+**Output Format:** [JSON-compatible object with scenario_id, currency, minor_units, display_amount, and budget_band]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns the recorded_amount field for the current request.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

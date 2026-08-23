@@ -74,6 +74,7 @@ See [cli-tools.md](./references/cli-tools.md) for Click patterns, argparse, and 
 **asyncio patterns:**
 - `asyncio.gather(*tasks)` for concurrent I/O -- use `return_exceptions=True` for partial failure tolerance
 - `asyncio.TaskGroup` (3.11+) for structured concurrency -- automatic cancellation of sibling tasks on failure; prefer over `gather` when all tasks must succeed
+- A bare `asyncio.create_task(...)` whose result is discarded can vanish mid-flight: the event loop holds only a weak reference, so an unreferenced task may be garbage-collected before it finishes, and any exception it raised is swallowed with at most a "Task exception was never retrieved" warning. Keep a strong reference (`_bg = set()`; `t = asyncio.create_task(c)`; `_bg.add(t)`; `t.add_done_callback(_bg.discard)`) or use `TaskGroup`, which holds its children until they finish
 - `asyncio.Semaphore(n)` to limit concurrency (rate limiting external APIs)
 - `asyncio.wait_for(coro, timeout=N)` for timeouts
 - `asyncio.Queue` for producer-consumer
@@ -96,7 +97,7 @@ See [fastapi.md](./references/fastapi.md) for project structure, lifespan, confi
 - Return job ID immediately, process async. Client polls `/jobs/{id}` for status
 - **Celery**: `@app.task(bind=True, max_retries=3, autoretry_for=(ConnectionError,))` -- exponential backoff: `raise self.retry(countdown=2**self.request.retries * 60)`
 - **Alternatives**: Dramatiq (modern Celery), RQ (simple Redis), cloud-native (SQS+Lambda, Cloud Tasks)
-- **Idempotency is mandatory** -- tasks may retry. Use idempotency keys for external calls, check-before-write, upsert patterns
+- **Idempotency is mandatory** -- tasks may retry. Use idempotency keys for external calls and atomic upserts for writes (`ON CONFLICT DO UPDATE`, `INSERT ... ON DUPLICATE KEY UPDATE`). A read-then-write pair is not idempotent under concurrent retry: two workers both read "absent" and both insert. Uniqueness has to be enforced by a database constraint, not by the preceding read
 - Dead letter queue for permanently failed tasks after max retries
 - Task workflows: `chain(a.s(), b.s())` for sequential, `group(...)` for parallel, `chord(group, callback)` for fan-out/fan-in
 
@@ -117,7 +118,7 @@ def call_api(url: str) -> dict: ...
 
 - Retry only transient errors: network, 429/502/503/504. Never retry 4xx (except 429), auth errors, validation errors
 - Every network call needs a timeout
-- `@fail_safe(default=[])` decorator for non-critical paths -- return cached/default on failure
+- `@fail_safe(default=[])` decorator for non-critical paths -- return cached/default on failure. **Never on a path where the call is the security decision** (authz check, trust score, entitlement or license gate): there the default has to be deny, and a `default=[]` or `default=None` that a caller reads as "no restrictions" is a fail-open with a decorator on it. Any fail-open allowance scopes to transport failure alone -- `ConnectError`, `ConnectTimeout`. A response that arrived but cannot be trusted (4xx/5xx, malformed JSON, a body that fails schema validation, an unrecognized verdict string) stays denied, because the endpoint was reached and did not answer. Same for a "no record yet" state: reject by default, allow only through an explicit onboarding opt-in
 - `functools.lru_cache(maxsize=N)` for pure-function memoization; `functools.cache` (unbounded) for small domains
 - Stack decorators: `@traced @with_timeout(30) @retry(...)` -- separate infra from business logic
 

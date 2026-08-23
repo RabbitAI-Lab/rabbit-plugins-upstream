@@ -1,11 +1,11 @@
 ---
 name: dlazy-veo-3.1-fast
 version: 1.3.4
-description: 使用 Google Veo 3.1 Fast 极速版模型，快速响应并生成短时长的文生视频或图生视频。
+description: "使用 Google Veo 3.1 Fast 极速版模型，快速响应并生成短时长的文生视频或图生视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy veo-3.1-fast -h 查看帮助信息。"}}
 ---
 
-# dlazy-veo-3.1-fast
+# 快速视频生成 Veo 3.1 Fast
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

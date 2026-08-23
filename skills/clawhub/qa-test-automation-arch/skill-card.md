@@ -1,42 +1,52 @@
-## Description: <br>
-Helps teams design maintainable QA test automation architecture using patterns such as Page Object, layered testing, keyword-driven testing, data-driven testing, test data separation, and CI integration planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Designs maintainable test automation architectures using Page Object, layered testing, keyword-driven, and data-driven patterns, with framework selection, data management, and CI integration guidance.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, QA engineers, and test automation architects use this skill to plan or refactor automation frameworks before writing test code. It helps select UI, API, and unit testing layers, separate test data from scripts, and define maintainability and CI integration practices.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Automation architecture prompts may include real customer, payment, identity, production, or financial data.
+
+Mitigation: Use sanitized or masked test data and avoid pasting real sensitive or production data into prompts.
+
+Risk: Broad framework or automation requests may invoke the skill even when implementation code or operational changes are expected.
+
+Mitigation: Confirm the task is architecture guidance and review recommendations before applying them to production workflows.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, developers, and test automation leads use this skill when designing or refactoring automation frameworks for UI, API, unit, integration, E2E, mobile, and CI/CD testing. It is intended to produce architecture guidance before test implementation, including framework selection, layer design, maintenance strategy, and traceable ARCH-XXXX design identifiers. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Guidance, Markdown, Configuration]
 
-## Known Risks and Mitigations: <br>
-Risk: Users may paste real customer, payment, identity, production, or screenshot data while asking for QA architecture help. <br>
-Mitigation: Use anonymized or synthetic examples and redact sensitive values before sharing project context with the agent. <br>
-Risk: Architecture guidance may be incomplete or mismatched to the project if the input strategy, technology selection, or constraints are underspecified. <br>
-Mitigation: Review the proposed architecture before implementation and ensure it covers layer architecture, tool integration, and maintenance strategy. <br>
-Risk: The skill allows project inspection tools and Bash when the hosting agent enables them. <br>
-Mitigation: Run the skill in a controlled workspace and review any proposed shell commands before execution. <br>
+**Output Format:** [Structured Markdown guidance with architecture recommendations, framework selection, layer design, and maintenance strategy]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-automation-arch) <br>
+**Other Properties Related to Output:** [Architecture designs include traceability IDs and should cover layered architecture, tool integration, and maintenance strategy.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown architecture guidance with structured sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should include a unique ARCH-XXXX traceability identifier and cover layer architecture, tool integration, and maintenance strategy.] <br>
+1.7.0 (source: frontmatter and server release metadata)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

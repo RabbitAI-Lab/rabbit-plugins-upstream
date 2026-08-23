@@ -20,7 +20,9 @@ from decimal import Decimal, InvalidOperation
 
 # Add shared lib to path
 try:
-    sys.path.insert(0, os.path.join(os.path.expanduser(os.environ.get("ERPCLAW_HOME", "~/.openclaw/erpclaw")), "lib"))
+    import importlib.util
+    if importlib.util.find_spec("erpclaw_lib") is None:
+        sys.path.insert(0, os.path.join(os.path.expanduser(os.environ.get("ERPCLAW_HOME", "~/.openclaw/erpclaw")), "lib"))
     from erpclaw_lib.db import get_connection, ensure_db_exists, DEFAULT_DB_PATH
     from erpclaw_lib.decimal_utils import to_decimal, round_currency
     from erpclaw_lib.validation import check_input_lengths
@@ -2841,6 +2843,16 @@ def cancel_purchase_invoice(conn, args):
         except ValueError:
             reversal_sle_ids = []
 
+    # Release the payment allocations this cancel voids (M46/F1). Cash applied
+    # to a bill that no longer exists in the books is not applied cash: the
+    # allocation is delinked, its per-allocation PLE rows are closed out, and
+    # the payment's residual comes back. Same voucher_type this function uses
+    # for its GL and PLE handling, executed by the neutral clearing lib so
+    # buying never writes payments' tables itself.
+    from erpclaw_lib.payment_clearing import release_allocations_on_document
+    release = release_allocations_on_document(
+        conn, "purchase_invoice", args.purchase_invoice_id)
+
     # Cancel PLE entries
     ple_t = Table("payment_ledger_entry")
     q = (Q.update(ple_t)
@@ -2878,10 +2890,19 @@ def cancel_purchase_invoice(conn, args):
            args.purchase_invoice_id,
            new_values={"reversed": True})
     conn.commit()
-    ok({"purchase_invoice_id": args.purchase_invoice_id,
-         "status": "cancelled",
-         "gl_reversals": len(reversal_gl_ids),
-         "sle_reversals": len(reversal_sle_ids)})
+    payload = {"purchase_invoice_id": args.purchase_invoice_id,
+               "status": "cancelled",
+               "gl_reversals": len(reversal_gl_ids),
+               "sle_reversals": len(reversal_sle_ids)}
+    # Reported only when something was actually released or skipped, so the
+    # no-allocation cancel keeps its exact shipped payload (F1 pin 4). A SKIP
+    # (payment not submitted, correction C2) is surfaced with the payment id
+    # and status, never dropped.
+    if release.get("released"):
+        payload["allocations_released"] = release["released"]
+    if release.get("skipped"):
+        payload["allocations_release_skipped"] = release["skipped"]
+    ok(payload)
 
 
 # ---------------------------------------------------------------------------
@@ -3002,6 +3023,25 @@ def update_invoice_outstanding(conn, args):
     if payment_amount <= 0:
         err("--amount must be > 0")
 
+    # Summary ≡ detail (INV-25, ADR-0031): this action moves the SUMMARY
+    # (outstanding_amount), so it must move the DETAIL (payment_ledger_entry)
+    # in the SAME transaction — sweep W6 re-disposition, QA round-1 DEFECT 1.
+    # Reuse the invoice's posting-time PLE row for voucher bucket / account /
+    # currency so the adjustment nets inside INV-25's own-voucher branch and is
+    # swept by the same cancel-delink predicate. Looked up BEFORE any write so
+    # a broken-ledger invoice (no active posting row) errors with zero writes.
+    src_ple = conn.execute(
+        """SELECT voucher_type, account_id, currency FROM payment_ledger_entry
+           WHERE voucher_id = ?
+             AND voucher_type IN ('purchase_invoice', 'debit_note')
+             AND delinked = 0
+           ORDER BY created_at LIMIT 1""",
+        (args.purchase_invoice_id,)).fetchone()
+    if src_ple is None:
+        err(f"Purchase invoice {args.purchase_invoice_id} has no active payment "
+            "ledger posting; cannot apply a payment against it (summary and "
+            "detail must move together, INV-25)")
+
     # Delegate compute-and-write to the neutral payment-clearing lib so this
     # action and erpclaw-payments share ONE canonical clearing rule (no drift).
     # Decision 2: over-payment now REJECTS (was silently clamped to 0) to match
@@ -3013,15 +3053,36 @@ def update_invoice_outstanding(conn, args):
     except ValueError as e:
         err(str(e))
 
+    # Adjustment PLE row (−applied) in the invoice's own voucher bucket, same
+    # transaction as the outstanding write. PyPika — mirrors the submit-time
+    # PLE insert idiom above ('supplier' literal); all values bound params.
+    adj_ple_id = str(uuid.uuid4())
+    adj_amount = str(round_currency(-payment_amount))
+    adj_ple_t = Table("payment_ledger_entry")
+    adj_q = (Q.into(adj_ple_t)
+             .columns("id", "posting_date", "account_id", "party_type",
+                      "party_id", "voucher_type", "voucher_id", "amount",
+                      "amount_in_account_currency", "currency", "remarks")
+             .insert(P(), P(), P(), ValueWrapper("supplier"), P(), P(), P(),
+                     P(), P(), P(), P()))
+    conn.execute(adj_q.get_sql(),
+        (adj_ple_id, _today(), src_ple["account_id"], pi["supplier_id"],
+         src_ple["voucher_type"], args.purchase_invoice_id,
+         adj_amount, adj_amount, src_ple["currency"],
+         f"Payment applied to purchase_invoice {args.purchase_invoice_id} "
+         f"via update-purchase-outstanding"))
+
     audit(conn, "erpclaw-buying", "update-invoice-outstanding", "purchase_invoice",
            args.purchase_invoice_id,
            new_values={"payment_amount": str(payment_amount),
                        "new_outstanding": res["outstanding_amount"],
-                       "new_status": res["status"]})
+                       "new_status": res["status"],
+                       "payment_ledger_entry_id": adj_ple_id})
     conn.commit()
     ok({"purchase_invoice_id": args.purchase_invoice_id,
          "outstanding_amount": res["outstanding_amount"],
-         "status": res["status"]})
+         "status": res["status"],
+         "payment_ledger_entry_id": adj_ple_id})
 
 
 # ---------------------------------------------------------------------------
@@ -4645,6 +4706,30 @@ def generate_recurring_bills(conn, args):
                                        "error": "GL posting failed"})
                         conn.rollback()
                         continue
+
+                    # Voucher-level PLE (+grand_total) — same row submit-purchase-
+                    # invoice posts. Without it an auto-submitted recurring bill
+                    # carries outstanding=grand_total with a zero PLE net, breaking
+                    # INV-25 (AR/AP summary ≡ detail) on a legitimate flow and
+                    # INV-22 the day the bill is paid (S1.4 writer-sweep fix W13,
+                    # planning/simlogs/wavef-s14-inv25_SIM_2026-07-25.md).
+                    rb_ple_t = Table("payment_ledger_entry")
+                    rb_ple_q = (Q.into(rb_ple_t)
+                                .columns("id", "posting_date", "account_id",
+                                         "party_type", "party_id",
+                                         "voucher_type", "voucher_id",
+                                         "against_voucher_type",
+                                         "against_voucher_id", "amount",
+                                         "amount_in_account_currency", "remarks")
+                                .insert(P(), P(), P(), ValueWrapper("supplier"),
+                                        P(), P(), P(), P(), P(), P(), P(), P()))
+                    rb_ple_amount = str(round_currency(grand_total))
+                    conn.execute(rb_ple_q.get_sql(),
+                        (str(uuid.uuid4()), next_date, payable_account,
+                         supplier_id, "purchase_invoice", pi_id,
+                         "purchase_invoice", pi_id,
+                         rb_ple_amount, rb_ple_amount,
+                         f"Recurring Bill from template {template_id}"))
 
                 uq_pi = (Q.update(pi_t)
                          .set("status", ValueWrapper("submitted"))

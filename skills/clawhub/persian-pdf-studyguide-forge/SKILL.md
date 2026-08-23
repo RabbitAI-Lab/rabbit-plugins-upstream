@@ -1,129 +1,135 @@
 ---
 name: persian-pdf-studyguide-forge
-description: Convert Persian RTL PDF slide decks into offline-first, accessible, exam-review HTML study-guide bundles using a staged fidelity-first workflow, evidence-based corrections, and automated QA.
+version: 1.3.0
+author: orionshaowswmw
+license: MIT-0
+description: Executable fidelity-first pipeline that converts authorized Persian RTL PDFs into accessible offline HTML study guides using dual OCR, rendered-page evidence, optional multi-model primary/reviewer correction, session-grounded maximum enrichment, self-contained images, interactive search/quizzes, measured fidelity, QA gates, and verified ZIP packaging. v1.3.0 adds robust Persian/Arabic ref-and-answer coercion, post-hoc flashcard answer verification, and stricter QA gates.
+categories: [knowledge, productivity, creative]
+topics: [persian, pdf, study-guide, rtl, accessibility]
 permissions:
-  file_read:
-    required: true
-    scope:
-      - Read operator-provided PDFs, existing HTML bundles, local assets, and local reference materials.
-  file_write:
-    required: true
-    scope:
-      - Create or patch HTML guides, local assets, reports, backups, QA logs, and a local ZIP export in the workspace.
-  network:
-    required: false
-    scope:
-      - No network is required by default. Only use operator-approved sources for optional supplementary educational images or fonts.
-  shell:
-    required: true
-    scope:
-      - Run local PyMuPDF extraction, image rendering, integrity checks, and archive creation inside the workspace only.
+  file_read: {required: true, scope: [Operator-authorized PDFs, optional reference HTML, local templates and assets]}
+  file_write: {required: true, scope: [Workspace extraction evidence, OCR cache, HTML, QA reports, manifests and ZIPs]}
+  shell: {required: true, scope: [Local Poppler, Tesseract, Python, optional Node syntax check and ZIP operations]}
+  network: {required: false, scope: [Disabled by default; optional operator-approved PDF download and AI provider APIs named in providers.json]}
 metadata:
   openclaw:
-    audit:
-      category: Creative
-      permissions:
-        file-read: true
-        file-write: true
-        network: false
-        shell: true
+    emoji: "📘"
+    requires:
+      bins: [python3, pdfinfo, pdftotext, pdftoppm, tesseract]
+      optional_bins: [node]
+      python: [beautifulsoup4]
+      optional_python: [pymupdf, pillow]
 ---
 
-# Persian PDF StudyGuide Forge
+# Persian PDF StudyGuide Forge v1.2.2 — complete executable pipeline
 
-Turn operator-provided Persian (`fa`, RTL) PDF slide decks into self-contained, offline-first, accessible exam-review HTML bundles. This skill is **fidelity-first**: source-slide text is preserved inside `<pre>` blocks; editorial enrichment is clearly separated; every transformation is audited.
+Convert an operator-authorized Persian/English RTL lecture PDF into a polished offline study guide without confusing OCR, AI reconstruction, or enrichment with source evidence.
 
-## Operating contract
+## Capabilities included in this artifact
 
-1. Work locally and preserve original uploads in `uploads_backup_original/`.
-2. Never claim a count, complete transcription, or visual match that has not been measured.
-3. Apply surgical, asserted patches. Do not regenerate an established guide when a scoped change is sufficient.
-4. Create a snapshot before each round, write a round report, and update `CHANGES_APPLIED.md`.
-5. Keep shared guide CSS and scripts byte-identical across sibling guides.
-6. Keep the bundle offline-first: embedded CSS/scripts, local fonts/assets, no trackers/CDNs.
-7. Use Persian digits and RTL in authored Persian UI. Preserve Latin technical terms where clinically appropriate.
-8. Clearly label all material that is not source-slide content.
+- authorized HTTPS download with PDF-magic, size and SHA-256 verification;
+- measured `pdfinfo` intake and page-count safeguards;
+- PyMuPDF or `pdftotext` logical extraction;
+- independent Tesseract `fas+eng` OCR over high-resolution grayscale pages;
+- compact rendered-page JPEGs for visual adjudication and HTML fidelity;
+- Persian NFKC/letter/digit/whitespace normalization while preserving ZWNJ;
+- resumable multi-provider reasoning-team correction with strict JSON contracts;
+- primary model rotation plus independent reviewer pass;
+- retry/backoff, provider failover, cache/resume, and local OCR fallback;
+- session candidate detection plus mandatory boundary review;
+- session-grounded tables, flashcards, mnemonics, summaries, quizzes and scenarios;
+- balanced and maximum enrichment modes;
+- exact duplicate rejection and page-range-constrained references;
+- self-contained Base64 images or linked local-image mode;
+- established RTL shell: search, session map, foldable source units, dark mode, responsive tables, print, reduced motion, quiz scoring and deep links;
+- per-page fidelity metrics and manual-review queue;
+- measured HTML QA gates and verified ZIP/SHA-256 packaging;
+- robust Persian/Arabic coercion: «صفحهٔ ۳» references, «الف/ب/ج/د» answer labels, bare JSON arrays and partial batches are normalized instead of silently dropped (v1.3.0);
+- post-hoc independent flashcard answer verification against source pages via `scripts/verify_flashcards.py` (v1.3.0);
+- stricter QA gates: no bare-letter flashcard answers and no duplicated option letter prefixes (v1.3.0).
 
-## Inputs and outputs
+Full procedures, failure recovery, and production tricks: [`docs/WORKFLOW_PLAYBOOK.md`](docs/WORKFLOW_PLAYBOOK.md).
 
-**Inputs:** PDFs; optionally an existing HTML bundle, local assets, and a design reference.
+## Quick start
 
-**Outputs:** `index.html`, one `NN_topic_review.html` per PDF, `assets/`, reports, reusable scripts, and a fresh ZIP excluding input PDFs unless requested.
+```bash
+python3 scripts/preflight.py
+python3 scripts/extract_dual_ocr.py authorized.pdf --out work/extraction
 
-Use `templates/build_manifest.yaml` to record actual files, source page counts, kept/dropped units, figure counts, and design constraints. Do not copy example target counts from a reference project into a new project.
+# Optional network-assisted correction. providers.json stores ENV NAMES only.
+export GEMINI_API_KEY='set-in-your-secret-manager'
+python3 scripts/reasoning_team_correct.py work/extraction/evidence.json \
+  --providers providers.json --out work/corrections
 
-## Workflow
+python3 scripts/detect_session_candidates.py work/corrections/final.json \
+  --out work/session_candidates.json
+# Review candidates against rendered pages, then create work/sessions.json.
 
-### 1. Ingest and classify
+python3 scripts/reasoning_team_enrich.py work/corrections/final.json work/sessions.json \
+  --providers providers.json --out work/enrichment --maximum
 
-- Extract each page with PyMuPDF `page.get_text("text")` in logical order.
-- Render each source page locally (about 150–220 dpi) for adjudication and visual QA.
-- Classify pages as educational, ceremonial, or image-only. Record each decision and reason.
-- Keep educational image-only pages with an honest notice that text was not extractable.
-- Extract embedded educational figures where possible; filter repeated template decorations, tiny assets, and logos.
+# Optional but recommended: independently verify flashcard answers against source pages.
+python3 scripts/verify_flashcards.py work/corrections/final.json work/enrichment/all.json \
+  --providers providers.json --out work/enrichment/all.verified.json
 
-### 2. Normalize without altering evidence
+python3 scripts/build_selfcontained_html.py work/corrections/final.json work/extraction \
+  work/enrichment/all.verified.json --output work/studyguide.html --title 'عنوان درس'
+# (use work/enrichment/all.json if you skipped verification)
 
-Maintain two representations: original extraction for fidelity evidence and normalized text for search/display work. Normalize NFKC, Arabic `ي/ك` to Persian `ی/ک`, Arabic-Indic digits contextually to Persian digits, unwanted bidi controls, and obvious watermark/page-number noise. Preserve ZWNJ. Escape raw HTML-sensitive text. Never silently “correct” uncertain clinical or source wording.
+python3 scripts/fidelity_audit.py work/extraction/evidence.json \
+  work/corrections/final.json --out work/fidelity.json
+python3 scripts/qa_gates.py work/studyguide.html
+python3 scripts/verify_zip.py work work/final-studyguide.zip
+```
 
-For search, normalize both query and cached haystack with the same function; make `ی/ي`, `ک/ك`, and digit variants searchable. Debounce input and cap highlights per element.
+`run_pipeline.sh` executes through correction and then intentionally pauses for reviewed session boundaries. It prints exact continuation commands.
 
-### 3. Build a shared offline shell
+## Important evidence rule
 
-Each guide uses `lang="fa" dir="rtl"`, local `@font-face`, semantic metadata, a skip link, hero, sticky navigation, main content, footer, to-top control, and embedded scripts. Use accessible labels, visible focus states, reduced-motion support, responsive tables, lazy local images, and print rules.
+Three layers remain distinct:
 
-Build the instructional order as:
-`search → overview → text → comparisons → flashcards → mnemonics → review → quiz → bank`.
+1. `evidence.json`: untouched/raw extraction evidence;
+2. `corrections/final.json`: edited teaching/source reconstruction;
+3. `enrichment/all.json`: clearly separate study aids.
 
-The source corpus uses contiguous or documented source-page IDs, foldable `<article class="source-unit">` structures, deep-linkable unit anchors, a unit TOC, and previous/index/next navigation. Open folds on desktop, collapse them on narrow screens, and automatically open a deep-linked fold.
+Never place AI additions inside source evidence. Never claim verbatim transcription when reconstruction occurred. Rendered pages remain the final adjudication source for unreadable text and digits.
 
-### 4. Fidelity audit and repair
+## Network and key handling
 
-- Audit meaningful normalized words from each kept source page against its corresponding source unit.
-- Compare against the **pre-correction extraction**, not merely post-correction text.
-- Fix omissions only after inspecting the local rendered page when extraction is ambiguous.
-- Keep author-source oddities if the rendered source confirms them.
-- For formatting/reflow changes, assert order-sensitive skeleton equality; for verified transposition repairs, assert sorted skeleton multiset equality.
-- Any digit restoration must cite rendered-page evidence.
+Network use is optional and requires operator approval. `providers.example.json` contains `api_key_env` names, never key values. Scripts read keys from environment variables, never print request headers, and cache response bodies without credentials. Do not commit provider configuration containing literal secrets.
 
-### 5. Curate and enrich honestly
+## Included executable files
 
-Drop only recorded ceremonial material. Never mix additions into a source `<pre>`. Put educational additions in a labelled supplement with source-unit links. Ensure comparison tables, flashcards, mnemonics, review bullets, quizzes, and scenario questions trace to source units. Each question needs four options, one answer, and a valid unit reference; provide a usable no-JavaScript fallback.
-
-Optional external educational images require operator approval, local storage, visual inspection, provenance labeling, and no watermarks, tracking, or misleading claims.
-
-### 6. Polish and package
-
-Polish only editorial UI and teaching text, never the verified source corpus. Keep the visual system consistent across guides; use semantic tables, captions, `scope`, image alt text, and `aria-hidden="true"` on decorative emoji spans. Package only freshly built output and verify that no files are newer than the ZIP.
-
-## Required QA gates
-
-Run and report, at minimum:
-
-- balanced key HTML tags and one intended style/script set;
-- all fragment links resolve and question references point to source units;
-- declared structure counts match measured counts;
-- every question satisfies its four-option/one-answer/one-reference contract;
-- all local image/font paths exist and no forbidden rendered-slide asset paths remain;
-- guide shared styles/scripts are hash-identical;
-- CSS and accessibility checks pass;
-- no third-party loading URLs;
-- source corpus residual scan and correction invariants pass;
-- coverage audit reports missing content honestly;
-- index statistics, hero statistics, and footer claims match measured data;
-- fresh ZIP contains the promised deliverables and excludes source PDFs by default.
+- `scripts/preflight.py`
+- `scripts/download_authorized_pdf.py`
+- `scripts/extract_dual_ocr.py`
+- `scripts/reasoning_team_correct.py`
+- `scripts/detect_session_candidates.py`
+- `scripts/reasoning_team_enrich.py`
+- `scripts/verify_flashcards.py`
+- `scripts/build_selfcontained_html.py`
+- `scripts/fidelity_audit.py`
+- `scripts/filter_figures.py`
+- `scripts/qa_gates.py`
+- `scripts/verify_zip.py`
+- `scripts/run_pipeline.sh`
+- `scripts/common.py`
+- `templates/guide.css`
+- `templates/app.js`
+- `templates/providers.example.json`
+- `templates/sessions.example.json`
+- `templates/build_manifest.json`
 
 ## Guardrails
 
-- Do not fabricate a transcription, source citation, medical fact, image provenance, or QA pass.
-- Do not download or publish copyrighted assets without authorization.
-- Do not use external network resources by default.
-- Do not process files outside the operator-provided workspace.
-- If inputs are insufficient, produce a precise manifest of what is missing rather than inventing content.
+- Process only authorized material.
+- Do not bypass access controls or copy secrets into artifacts.
+- Do not fabricate source text, citation, medical fact, image provenance, counts or QA results.
+- Do not silently delete image-only or difficult pages.
+- Do not treat automated fidelity scores as semantic proof.
+- Do not publish or distribute copyrighted source pages without permission.
+- Inspect and validate all generated medical education before reliance.
 
-## Deliverable report
+## Definition of done
 
-Write `improvements_report.md` and per-round reports containing: change, rationale, method, measured count, QA outcome, backup/snapshot location, and deferred items. Present `index.html` and the final report; provide the ZIP when requested.
-## Agent discovery
-
-See `AGENT_DISCOVERY.md` for a concise, operator-respecting use/not-use decision card. It is informational only and never authorizes autonomous installation or engagement.
+A guide is complete only when actual source-unit/image counts match measured PDF pages, every reference resolves, every question contract passes, duplicates are removed, no forbidden external browser resources remain, fidelity exceptions were reviewed, displayed counts match measured counts, and packaging verification succeeds.

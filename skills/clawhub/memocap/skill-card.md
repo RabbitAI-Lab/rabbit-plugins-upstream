@@ -1,43 +1,58 @@
-## Description: <br>
-忆时 is a local OpenCode memory capsule system that simulates human-like recall, stores long-term memories in ChromaDB, and supports active association and time capsules. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+memocap is a local memory skill that guides an agent to retrieve, store, forget, capsule, visualize, and profile durable memories for later recall.
 
-## Publisher: <br>
-[fslong520](https://clawhub.ai/user/fslong520) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fslong520](https://clawhub.ai/user/fslong520)
 
-## Use Case: <br>
-External developers and OpenCode users use this skill to give an agent persistent local memory, retrieve prior context, manage time-capsule memories, and import or export memory archives. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic recall, storage, backup, and resurfacing of conversation details can expose or reintroduce sensitive personal context. <br>
-Mitigation: Install only when persistent local memory is intended, review or disable the auto-loaded yishi-instructions, and require explicit confirmation before saving or recalling sensitive memories. <br>
-Risk: Bulk import, export, and backup workflows can preserve or transfer private memory records outside the active ChromaDB store. <br>
-Mitigation: Avoid importing sensitive files, protect exported Markdown and JSON files, protect the JSONL backup, and delete or encrypt exported memory artifacts when they are no longer needed. <br>
-Risk: Aggressive automatic recall and storage can cause stale, misleading, or unwanted memories to influence later agent responses. <br>
-Mitigation: Review recalled memories before relying on them and use update, delete, forget, or archive workflows to correct or retire stale records. <br>
+## Use Case:
 
+External users and developers use memocap to give an agent durable local memory for preferences, decisions, tasks, context, time capsules, visualization, and profile-style recall.
 
-## Reference(s): <br>
-- [ChromaDB API reference](artifact/references/chroma-api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/fslong520/memocap) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and CLI text, with optional JSON or Markdown export files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read, store, retrieve, archive, back up, import, and export local memory records depending on the configured OpenCode instructions and CLI command.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: The skill can persist broad personal context automatically in local memory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when durable local memory is desired, review stored data regularly, and use forget or export controls for sensitive or outdated memories.
+
+Risk: Common triggers such as "remember" or "recall" may activate the skill unexpectedly.
+
+Mitigation: Narrow activation triggers where possible and review proposed memory actions before allowing storage.
+
+Risk: Local scripts and data under the memory directory influence future recall behavior.
+
+Mitigation: Review the local scripts and data before use and confirm that the configured memory directory is writable only by trusted users.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fslong520/skills/memocap)
+- [Publisher profile](https://clawhub.ai/user/fslong520)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and concise status text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write, retrieve, export, delete, and visualize local memory data under the user's configured memory directory.]
+
+## Skill Version(s):
+
+2.5.10 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

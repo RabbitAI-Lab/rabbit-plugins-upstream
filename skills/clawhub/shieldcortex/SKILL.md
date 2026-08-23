@@ -4,7 +4,7 @@ description: "Memory and defence for AI agents: semantic recall, knowledge graph
 license: MIT-0
 metadata:
   author: Drakon Systems
-  version: 4.47.16
+  version: 4.54.11
   mcp-server: shieldcortex
   category: memory-and-security
   tags: [memory, security, knowledge-graph, mcp, iron-dome, openclaw-plugin, audit]
@@ -22,8 +22,10 @@ install:
   minVersion: "20"
   note: >
     Run the installed `shieldcortex` binary directly. The quickstart command
-    detects your environment and guides MCP server registration. All data stays
-    local in ~/.shieldcortex/. No account or API key needed for local use.
+    detects your environment. Claude Code and OpenClaw get hooks that can deny;
+    Codex/Cursor/VS Code get an MCP memory server only (not a tool gate).
+    All data stays local in ~/.shieldcortex/. No account or API key needed
+    for local use.
 permissions:
   filesystem: readwrite
   network: optional
@@ -52,8 +54,8 @@ permissions:
     - ~/.claude/mcp.json, ~/.cursor/mcp.json (MCP server registration, when user runs setup)
   network_endpoints:
     - https://api.shieldcortex.ai (Cloud sync, licence validation — only when Cloud is enabled by user)
-    - http://localhost:3001 (local dashboard server — loopback only)
-    - http://localhost:3030 (local worker health check — loopback only)
+    - http://localhost:3001 (local REST API + WebSocket — loopback only)
+    - http://localhost:3030 (local dashboard UI; also the worker health check — loopback only)
   env:
     - SHIELDCORTEX_CONFIG_DIR: Override config directory (default ~/.shieldcortex/)
     - SHIELDCORTEX_API_KEY: Cloud sync API key (optional; only used when Cloud is enabled)
@@ -66,7 +68,7 @@ permissions:
 
 # ShieldCortex — Persistent Memory & Security for AI Agents
 
-Memory system with built-in security. Gives agents persistent memory (semantic search, knowledge graphs, decay, contradiction detection) and protects it with a 6-layer defence pipeline (prompt injection, credential leaks, poisoning, privilege escalation, PII filtering, behavioural analysis). Skill threat patterns (tool injection, scope escalation, data exfiltration, persistence, supply-chain, agent manipulation, stealth instructions) block at memory-write time, not just on skill-file scans.
+Memory system with built-in security. Gives agents persistent memory (semantic search, knowledge graphs, decay, contradiction detection) and protects it with a 6-layer defence pipeline (input sanitisation → trust scoring → firewall → sensitivity classification → fragmentation detection → credential-leak detection). Skill threat patterns (tool injection, scope escalation, data exfiltration, persistence, supply-chain, agent manipulation, stealth instructions) block at memory-write time, not just on skill-file scans.
 
 This is an enforcing memory boundary, not a passive scanner. Across the read/write boundary it actively: **quarantines or blocks** poisoned/credential-bearing writes; **trust/ACL-filters recalled memory** (RESTRICTED isolation, own-only for low-trust callers) before it reaches the agent, on both the prompt hooks and the MCP read tools; runs a **tool-output firewall** that, in enforce mode, redacts or withholds malicious tool results before the model sees them (advisory by default); and keeps a **provenance ledger** recording read/write/delete operations with content hashes for forensics. Enforcement that could surprise is opt-in (the tool-output firewall defaults to advisory; `shieldcortex config --tool-firewall-enforce` turns on blocking).
 
@@ -75,7 +77,7 @@ This is an enforcing memory boundary, not a passive scanner. Across the read/wri
 | Signal | Value |
 |--------|-------|
 | **Publisher** | [Drakon Systems Ltd](https://github.com/Drakon-Systems-Ltd) (UK company) |
-| **Source code** | [github.com/Drakon-Systems-Ltd/ShieldCortex](https://github.com/Drakon-Systems-Ltd/ShieldCortex) — fully open, MIT-0 licence |
+| **Source code** | [github.com/Drakon-Systems-Ltd/ShieldCortex](https://github.com/Drakon-Systems-Ltd/ShieldCortex) — fully open, **MIT** licence (this skill file itself is published MIT-0, per the frontmatter) |
 | **npm package** | [npmjs.com/package/shieldcortex](https://www.npmjs.com/package/shieldcortex) — every release git-tagged with a matching GitHub release |
 | **npm audit** | Clean — `npm audit` returns 0 vulnerabilities |
 | **Downloads** | 11,000+/month (July 2026) |
@@ -87,7 +89,7 @@ This is an enforcing memory boundary, not a passive scanner. Across the read/wri
 
 This section explains every privileged operation the tool performs and why.
 
-- **Active interception, not scan-only.** Beyond read-only scans, ShieldCortex *enforces* at the boundary: writes failing the pipeline are quarantined/blocked; recalled memory is trust/ACL-filtered before the agent sees it; in enforce mode the tool-output firewall redacts/withholds malicious tool results; and the OpenClaw `before_tool_call` interceptor + Iron Dome kill-switch can block operations. Surprising enforcement is opt-in (tool-output firewall defaults to advisory). `shieldcortex status` and `iron-dome status` report which controls are active.
+- **Active interception, not scan-only — on hosts that can deny.** Writes failing the pipeline are quarantined/blocked; recalled memory is trust/ACL-filtered before the agent sees it. Tool-call denial is **bound** on Claude Code (PreToolUse), OpenClaw (`before_tool_call`), and Hermes (`pre_tool_call`, enforce by default). Codex, Cursor, Copilot, and generic MCP get a memory server / scanner the model may ignore — they are **not bound**. Tool-output firewall defaults to advisory. `shieldcortex doctor` and `shieldcortex lease` report bound / not-bound / unknown per plane.
 - **Setup is user-initiated, with one bounded exception.** Installing hooks, registering the MCP server, and migrating data are manual steps the user runs in their terminal, and `quickstart` asks before each action. The npm postinstall script (disclosed in the trust table above) never adds integrations that weren't already present — on global installs it only prints instructions, checks the native binding, seeds default config on first install, and refreshes an existing OpenClaw hook/plugin install. The exception: the bundled cortex-memory hook performs a small automatic self-heal at gateway bootstrap, documented in full under **"Automatic self-heal at gateway bootstrap"** below.
 - **Setup migrates legacy data.** The first `quickstart`/`setup` run may move or remove legacy config/memory directories (e.g. `~/.claude-cortex/`, `~/.claude-memory/`) into `~/.shieldcortex/` and copy hook files into place. This happens only on the user-run setup command — never on `npm install` (the postinstall script does not touch memory or config data beyond seeding defaults on a first-ever global install).
 - **Destructive `forget` is bounded and gated.** Per-memory and filtered bulk deletes go through a delete ACL (own-only) and are recorded in the audit ledger. Revoke-by-source (`forget --fromSource`, bulk-delete every memory from one source — for purging a poisoned agent) is **disabled by default** and only enabled by an out-of-band human action (`shieldcortex config --allow-revoke-by-source`); even then it is bounded by a trust-hierarchy ACL (you must own the source or out-rank it) and a per-call row cap. A compromised agent cannot mass-delete your memory.
@@ -155,7 +157,7 @@ ShieldCortex is **local-first**: memory, scanning, and audit run entirely on you
 
 - **What it reads.** With the lifecycle handlers enabled (opt-in at setup), ShieldCortex reads your agent **session transcripts — both your prompts and the assistant's replies** — to auto-extract memorable context. PreCompact (before context compaction) reads the recent transcript; the SessionEnd and Stop handlers are **off by default**; the OpenClaw integration extracts from assistant output and explicit keyword triggers. SessionStart does **not** read transcripts (it only loads existing local memory and scans project rule files).
 - **What it stores, and for how long.** Saved and auto-extracted memories are written to a **local SQLite database at `~/.shieldcortex/memories.db`** — title and content verbatim — and **persist across sessions** until you remove them (decay/consolidation prune low-value entries over time). Nothing is stored remotely unless you enable Cloud sync. Delete a memory with the `forget` tool, or remove the database to wipe everything.
-- **Secrets & credentials.** Every write — manual or auto-extracted — passes the defence pipeline first; high-confidence credential patterns (keys/tokens across 11+ providers) and content classified RESTRICTED are **blocked or quarantined before storage**, not saved as live memory. This is a strong filter, not a guarantee: low-confidence or low-entropy secrets can still be stored. On sensitive work, **review what auto-memory captures** and disable auto-extraction (`shieldcortex config --openclaw-auto-memory false`; the Claude Code handlers can be removed from `~/.claude/settings.json`).
+- **Secrets & credentials.** Every write — manual or auto-extracted — passes the defence pipeline first; high-confidence credential patterns (49 patterns across 25 providers) and content classified RESTRICTED are **blocked or quarantined before storage**, not saved as live memory. This is a strong filter, not a guarantee: low-confidence or low-entropy secrets can still be stored. On sensitive work, **review what auto-memory captures** and disable auto-extraction (`shieldcortex config --openclaw-auto-memory false`; the Claude Code handlers can be removed from `~/.claude/settings.json`).
 - **Triggers capture surrounding context.** Keyword auto-save triggers (e.g. "remember this", "don't forget") capture the *nearby* text, which may include more than you intend — treat them as "save the recent context," not "save exactly this line." They're capped (auto-extracts never outrank explicit saves) and run through the same credential/injection scan.
 - **Subprocess execution.** The OpenClaw integration spawns short-lived `npx mcporter` subprocesses (via `execFile`, argv-array, no shell) to talk to your **local** ShieldCortex MCP server over stdio. One caveat for completeness: when ShieldCortex is not installed locally, the hook's fallback server command is `npx -y shieldcortex`, and `npx -y` will download the package from the npm registry on first use before executing it. Install `shieldcortex` globally (or set `binaryPath` in `~/.shieldcortex/config.json`) to guarantee no network fetch on that path.
 - **Cloud sync — off by default, opt-in, explicit.** No data leaves your machine unless you run `shieldcortex config --cloud-enable --cloud-api-key <key>`. When enabled:
@@ -190,8 +192,11 @@ shieldcortex uninstall           # Remove from project
 
 ### Memory
 ```bash
-# Memory is typically used via MCP server, not CLI directly.
-# The MCP server exposes: store, recall, search, forget, consolidate, graph.
+# Memory is typically used via the MCP server, not the CLI directly. The tools are:
+#   remember · recall · forget · get_context · get_memory · get_related
+#   consolidate · graph_query · graph_entities · scan_memories · memory_stats
+#   start_session · end_session
+# (there is no `store`, `search` or bare `graph` tool — use remember/recall/graph_query)
 shieldcortex graph backfill      # Build knowledge graph from stored memories
 shieldcortex stats               # Memory statistics
 ```
@@ -207,26 +212,33 @@ shieldcortex iron-dome status               # Iron Dome behavioural protection s
 
 ### Cortex — Mistake Learning
 ```bash
-shieldcortex cortex capture --task "..." --mistake "..." --fix "..."  # Log a mistake
+# capture requires all four flags: --category --what --why --rule
+shieldcortex cortex capture --category code --what "Guessed API endpoints" \
+  --why "Didn't check the docs" --rule "Verify endpoints in API docs before calling"
 shieldcortex cortex preflight --task "deploy to production"           # Pre-task check
 shieldcortex cortex review                                            # Pattern analysis
 shieldcortex cortex list                                              # View mistake log
+shieldcortex cortex search "<query>"                                  # Full-text search
 shieldcortex cortex stats                                             # Category breakdown
+shieldcortex cortex confirm --category code --what "..." \
+  --why-worked "..." --when-repeat "..."                              # Capture what worked
+shieldcortex cortex graduate                                          # Archive mastered rules
 ```
 
 ### Dashboard & Services
 ```bash
-shieldcortex dashboard           # Open local web dashboard (localhost:3001)
-shieldcortex api                 # Start API server
+shieldcortex dashboard           # Dashboard on localhost:3030 (starts the API on :3001 too)
+shieldcortex api                 # Start the API server only (localhost:3001)
 shieldcortex worker              # Background sync + heartbeat worker
 shieldcortex service start|stop|status  # Manage background service
 ```
 
 ### Integrations
 ```bash
-shieldcortex openclaw setup      # Set up OpenClaw realtime plugin
-shieldcortex copilot setup       # Set up VS Code / Cursor MCP server
-shieldcortex codex setup         # Set up Codex CLI MCP server
+# subcommand is `install`, not `setup` (also: status, uninstall; openclaw adds repair, skill)
+shieldcortex openclaw install    # Hook + realtime plugin — tool gate BOUND
+shieldcortex copilot install     # VS Code / Cursor MCP memory server — NOT a tool gate
+shieldcortex codex install       # Codex CLI MCP memory server — NOT a tool gate
 shieldcortex config --openclaw-auto-memory true   # Enable auto-memory in OpenClaw
 shieldcortex config --proactive-recall true|false  # Enable/disable proactive recall
 ```

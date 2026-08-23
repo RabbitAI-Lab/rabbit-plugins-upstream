@@ -12,10 +12,11 @@
 - `update_workspace`, `update_member_role`
 - `invite_workspace_member`, `resend_workspace_invite` — require an exact-recipient preview and approval
 - `add_email_domain`, `verify_email_domain` — require Developer-plan access
-- `create_mailbox`, `update_mailbox_settings`
+- `create_mailbox` — list first; `body` requires `email` and `name`, while `workspaceId` is optional for credential-bound MCP when the live schema permits omission. Pass the exact resolved workspace ID when CLI, REST, or another live transport requires it. Make one explicitly authorized provision with no blind write retry.
+- `update_mailbox_settings`
 
 ## Destructive
 
-- `delete_workspace`, `remove_workspace_member`, `delete_email_domain`
+- `remove_workspace_member`, `delete_email_domain`
 
-Require explicit approval and a single-use token from `prepare_destructive_action`. Workspace deletion must include a clear impact warning before approval.
+Require explicit approval and a single-use token from `prepare_destructive_action`. The current MCP catalog does not expose `delete_workspace`; do not invent or call that removed tool.

@@ -1,48 +1,65 @@
-## Description: <br>
-Guide for using wjx-cli (Wenjuanxing CLI) to create surveys, query responses, and analyze data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in using wjx-cli to create Wenjuanxing surveys, query responses, analyze survey data, and manage contacts, departments, and sub-accounts.
 
-## Publisher: <br>
-[orzwq](https://clawhub.ai/user/orzwq) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orzwq](https://clawhub.ai/user/orzwq)
 
-## Use Case: <br>
-Developers and operators use this skill to help an agent install and use wjx-cli for Wenjuanxing survey creation, response retrieval, local analytics, and contact or account management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can let an agent use a Wenjuanxing API key for broad account and data-changing actions. <br>
-Mitigation: Use the least-privileged API key available, avoid exposing secrets in chat where possible, and require explicit confirmation before exports, response submission or import, score changes, SSO link generation, contact or account changes, response clearing, or survey deletion. <br>
-Risk: The setup flow may rely on global npm installation, sudo, or pipe-to-shell Node.js installation commands. <br>
-Mitigation: Review the source before installation and prefer user-scoped or reviewed installation paths when possible. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent perform Wenjuanxing survey workflows through wjx-cli, including survey creation, response retrieval, exports, local analytics, and organization contact management.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orzwq/wjx-cli-use) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/orzwq) <br>
-- [Survey command reference](references/survey-commands.md) <br>
-- [Response command reference](references/response-commands.md) <br>
-- [Contact and account command reference](references/contacts-commands.md) <br>
-- [Analytics command reference](references/analytics-commands.md) <br>
-- [Question type reference](references/question-types.md) <br>
-- [DSL syntax reference](references/dsl-syntax.md) <br>
-- [Node.js installation reference](references/install-nodejs.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSONL examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use Wenjuanxing API credentials and may produce or execute wjx-cli commands for account and survey operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.3 (source: server release evidence) <br>
+Risk: The skill asks agents to handle Wenjuanxing API keys and account credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure credentials locally or through a secure secret mechanism, avoid pasting secrets into chat, and stop authenticated workflows when API-key errors occur.
+
+Risk: The skill covers high-impact account, SSO, contact, department, administrator, and deletion operations.
+
+Mitigation: Review every destructive or account-management action before execution and confirm successful or failed API responses before reporting outcomes.
+
+Risk: The bundled setup flow can install wjx-cli globally and may fall back to sudo.
+
+Mitigation: Use the global or sudo install path only in environments where package-install risk is accepted; otherwise install and test wjx-cli in an isolated environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/orzwq/skills/wjx-cli-use)
+- [Wenjuanxing](https://www.wjx.cn)
+- [Survey command reference](references/survey-commands.md)
+- [Response command reference](references/response-commands.md)
+- [Question type reference](references/question-types.md)
+- [Analytics command reference](references/analytics-commands.md)
+- [Contacts, departments, admins, accounts, and SSO reference](references/contacts-commands.md)
+- [Formula helper guide](references/formula-helper.md)
+- [Node.js installation guide](references/install-nodejs.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSONL examples and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce local JSONL survey definitions, CLI command plans, and configuration guidance; authenticated operations depend on locally configured Wenjuanxing credentials.]
+
+## Skill Version(s):
+
+0.3.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

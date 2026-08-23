@@ -1,7 +1,7 @@
 ---
 name: unit-test-coverage-helper
 description: >-
-  帮助用户处理“Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 2 source families, so it represents broader demand rather than a single isolated request.”。当用户提出 software-and-data, unit tests, test coverage, testing, regression，或需要围绕该需求获得实用流程、产物、检查清单、分析或实现支持时使用。
+  帮助用户处理“Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.”。当用户提出 software-and-data, unit tests, test coverage, testing, regression，或需要围绕该需求获得实用流程、产物、检查清单、分析或实现支持时使用。
 ---
 
 # Unit Test Coverage Helper
@@ -10,10 +10,10 @@ description: >-
 
 使用这个技能帮助以下用户群体：software maintainers, QA engineers, open-source contributors, and product teams who need confidence that changes do not break existing behavior
 
-> Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 2 source families, so it represents broader demand rather than a single isolated request.
+> Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
-需求评分：90/100（需求强度 `70/70`，本地可执行性 `30/30`）。
-证据：12 条信号，覆盖 2 个来源类型。
+需求评分：100/100（需求强度 `70/70`，本地可执行性 `30/30`）。
+证据：12 条信号，覆盖 4 个来源类型。
 
 如需查看来源证据、执行计划或评审标准，请阅读 `references/requirement-plan.md`。
 

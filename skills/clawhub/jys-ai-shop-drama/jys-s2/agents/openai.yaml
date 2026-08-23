@@ -1,0 +1,4 @@
+interface:
+  display_name: "JYS S2 · 去重替换"
+  short_description: "拆解对标变体，执行人物替换、剧情去重与强因果链重构"
+  default_prompt: "Use $jys-s2 to 拆解选定变体并生成去重或因果链重构后的剧情骨架。"

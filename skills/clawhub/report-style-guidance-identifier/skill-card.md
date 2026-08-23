@@ -1,39 +1,49 @@
-## Description: <br>
-Set the style guidance for an executive report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Set the style guidance for an executive report.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Employees, external contributors, and developers use this skill to convert an executive report request or status-summary brief into a concise report format mode. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated style guidance could be applied to important executive communications without checking fit for the audience or context. <br>
-Mitigation: Review the selected format mode before applying it to important executive communications. <br>
+## Use Case:
 
+Employees and business users use this skill to request concise executive-report style guidance for a supplied report request or status-summary brief.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/report-style-guidance-identifier) <br>
-- [Publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Concise text value for the format_mode field] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No credentials, local files, or elevated authority are requested by the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Incorrect or overly terse formatting guidance could lead to a misleading executive report style.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the returned format mode before applying it to business-critical reporting.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/report-style-guidance-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [String]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns the concise format mode in the `format_mode` output field.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

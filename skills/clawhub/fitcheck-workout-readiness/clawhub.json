@@ -1,0 +1,33 @@
+{
+  "slug": "fitcheck-workout-readiness",
+  "displayName": "FitCheck: Workout Readiness & Recovery",
+  "version": "1.1.2",
+  "description": "Camera check-in for training days: stress, recovery, mood and a heart-rate estimate before or after a workout, all on-device in your browser, nothing uploaded. Wellness insight, not a medical tool. Powered by EmoPulse.",
+  "author": "emopulse",
+  "homepage": "https://emo.city?utm_source=clawhub&utm_medium=skill",
+  "repository": "https://github.com/gv66co/Emo-City",
+  "license": "PROPRIETARY",
+  "tags": [
+    "fitness",
+    "workout",
+    "recovery",
+    "readiness",
+    "heart-rate",
+    "stress",
+    "wellness",
+    "mood",
+    "training",
+    "mediapipe"
+  ],
+  "categories": [
+    "health",
+    "lifestyle",
+    "productivity"
+  ],
+  "source": {
+    "kind": "github",
+    "url": "https://github.com/gv66co/Emo-City",
+    "repo": "gv66co/Emo-City",
+    "path": "skills/emocity-biometric-scan"
+  }
+}

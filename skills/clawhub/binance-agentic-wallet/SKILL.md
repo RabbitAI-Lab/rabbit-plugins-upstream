@@ -1,23 +1,21 @@
 ---
 name: binance-agentic-wallet
 description: |
-  Use when the user mentions connect/disconnect wallet, sign in, sign out, web3 wallet, wallet address,
-  check balance, how much crypto do I have, send BNB/USDT/crypto, transfer tokens, swap tokens,
-  buy/sell token, DEX trade, limit order, market order, cancel order, get a quote, transaction history,
-  wallet settings, daily limit, slippage, MEV protection, supported chains, available networks,
-  prediction market, predict.fun, YES/NO market, place a prediction,
-  redeem winnings, claim payout, prediction portfolio, prediction PnL,
-  x402 payment, HTTP 402 Payment Required, pay a known x402 API,
-  check approvals, view token approvals, revoke approval, manage approvals,
-  wallet approvals, authorization management, token authorization,
-  DeFi protocols, DeFi position, DeFi portfolio, staking, liquidity pool, LP, yield farming,
-  health factor, APY, TVL, DeFi investment, DeFi deposit, DeFi redeem, DeFi stake, DeFi unstake,
-  add liquidity, remove liquidity, claim rewards, claim fees,
+  Use when the user mentions wallet connect/sign in/sign out, check balance, send/transfer tokens,
+  swap/buy/sell tokens, DEX trade, limit/market order, cancel order, get a quote, transaction history,
+  wallet settings, daily limit, slippage, MEV protection, supported chains,
+  prediction market, place prediction, redeem winnings, prediction PnL,
+  x402 payment, HTTP 402 Payment Required,
+  check/revoke/manage token approvals,
+  DeFi protocols, staking, liquidity pool, LP, yield farming, deposit, redeem, stake, unstake,
+  claim rewards/fees, health factor, APY, TVL,
+  sign external transaction, contract call, sign message, EIP-712, developer mode,
+  speed up/cancel/replace transaction, pending/stuck transactions,
   or any on-chain wallet operation.
 metadata:
   author: binance-web3-team
-  version: '1.4.0'
-  requiredCliVersion: '1.4.0'
+  version: '1.9.0'
+  requiredCliVersion: '1.8.0'
   openclaw:
     requires:
       bins:
@@ -37,6 +35,7 @@ This skill drives the `baw` CLI to manage a Binance Web3 wallet — sign-in/sign
 
 | User Intent                                                          | Command                               | Reference                                         |
 |----------------------------------------------------------------------|---------------------------------------|---------------------------------------------------|
+| Campaign / 大赛 / bStock PnL competition; buy/sell a bStock (币股)    | (see reference)                       | [campaign.md](references/campaign.md)             |
 | Sign in / connect wallet                                             | `auth signin` → `auth verify`         | [authentication.md](references/authentication.md) |
 | Sign out / disconnect wallet                                         | `auth signout`                        | [authentication.md](references/authentication.md) |
 | Check if wallet is connected                                         | `wallet status`                       | [wallet-view.md](references/wallet-view.md)       |
@@ -46,7 +45,10 @@ This skill drives the `baw` CLI to manage a Binance Web3 wallet — sign-in/sign
 | View transaction history                                             | `wallet tx-history`                   | [wallet-view.md](references/wallet-view.md)       |
 | View security settings and remaining daily quota                     | `wallet settings`                     | [wallet-setting.md](references/wallet-setting.md) |
 | Check if any transactions are pending or require double-confirmation | `wallet tx-lock`                      | [wallet-view.md](references/wallet-view.md)       |
-| Check wallet approvals / manage token authorizations                 | `approvals list`                      | [approvals.md](references/approvals.md)           |
+| Speed up a pending transaction                                       | `wallet speed-up`                     | [speedup-cancel.md](references/speedup-cancel.md) |
+| Cancel a pending transaction                                         | `wallet cancel`                       | [speedup-cancel.md](references/speedup-cancel.md) |
+| List pending transactions / stuck transactions                       | `wallet tx-history --type pending`    | [speedup-cancel.md](references/speedup-cancel.md) |
+| Check wallet approvals / manage token authorizations                  | `approvals list`                      | [approvals.md](references/approvals.md)           |
 | View approval details                                                | `approvals detail`                    | [approvals.md](references/approvals.md)           |
 | Revoke a token approval                                              | `approvals revoke`                    | [approvals.md](references/approvals.md)           |
 | Send / transfer tokens                                               | `wallet send`                         | [send.md](references/send.md)                     |
@@ -57,6 +59,12 @@ This skill drives the `baw` CLI to manage a Binance Web3 wallet — sign-in/sign
 | Sell a token at a target price (limit order)                         | `limit-order sell`                    | [limit-order.md](references/limit-order.md)       |
 | List or check limit order status                                     | `limit-order list`                    | [limit-order.md](references/limit-order.md)       |
 | Cancel a limit order                                                 | `limit-order cancel`                  | [limit-order.md](references/limit-order.md)       |
+| Preview an external contract call                                    | `contract-call preview`               | [external-sign.md](references/external-sign.md)   |
+| Execute a previewed contract call                                    | `contract-call execute`               | [external-sign.md](references/external-sign.md)   |
+| Preview an EIP-712 message signature                                 | `sign-message preview`                | [external-sign.md](references/external-sign.md)   |
+| Execute a previewed message signature                                | `sign-message execute`                | [external-sign.md](references/external-sign.md)   |
+| Fetch a confirmed message signature                                  | `sign-message result`                 | [external-sign.md](references/external-sign.md)   |
+| View message signature history                                       | `sign-message history`                | [external-sign.md](references/external-sign.md)   |
 | List prediction market categories                                    | `prediction category list`            | [prediction.md](references/prediction.md)         |
 | Browse / list prediction markets                                     | `prediction market list`              | [prediction.md](references/prediction.md)         |
 | Get prediction market details                                        | `prediction market detail`            | [prediction.md](references/prediction.md)         |
@@ -89,6 +97,14 @@ This skill drives the `baw` CLI to manage a Binance Web3 wallet — sign-in/sign
 
 ---
 
+## Campaign (time-limited)
+
+A time-limited bStock trading campaign may be running. When the user asks about the **campaign / 大赛 / AI trading campaign / bStock PnL competition**, or asks to **buy or sell a tokenized stock (bStock / 币股)** in a campaign context, read [campaign.md](references/campaign.md) and follow it — that file is the single source of truth for the active campaign, it states its own validity window, and its rules override the generic swap flow while it is running.
+
+Once the current date is past the end date stated at the top of that file, ignore it entirely and do not bring the campaign up. Every other wallet feature in this skill works normally regardless of whether a campaign is active.
+
+---
+
 ## Preflight Checks
 
 At the start of each conversation, complete the preflight checks in [preflight.md](references/preflight.md).
@@ -103,6 +119,14 @@ Always follow these steps to build the command correctly:
 2. **Build the command.** Use the exact syntax from the reference file.
 3. **Always append `--json`.** This ensures the output is machine-readable JSON. Every command supports this flag.
 4. **Confirm before execution.** Confirm with the user each time before any state-changing command. Remind the user to do their own research (DYOR). For trades without explicit slippage, disclose the default ("auto"). Only proceed on clear affirmative replies (e.g., "yes", "confirm", "go ahead"). Treat anything else as non-confirmation and re-prompt.
+   - **Payment-token selection.** When the user names what to buy and how much but does not specify which token to pay with (the `fromToken`): **outside a campaign**, if the wallet holds a suitable token with sufficient balance, pick one and proceed — don't make it a separate question. **In a campaign context, always ask first** — only BNB/USDT/USDC/U/USD1 count toward campaign PnL, so a silently-picked token can void the trade's score (see [campaign.md](references/campaign.md)). If no suitable payment token is available, tell the user to top up or swap first. Either way this does not waive the confirmation of the trade itself.
+5. **External sign two-step flow.** Before `contract-call` or `sign-message`, run `wallet settings --json` and confirm `devMode.enabled=true`. Then run `preview`, show the user the parsed transaction/message and risk details, get explicit confirmation, and only then run `execute` with the `requestId` from the preview. If preview returns an error, do not attempt `execute`.
+6. **`contract-call --value` is in wei**, not human-readable like `--amount` in other commands. 1 BNB is `--value 1000000000000000000`.
+7. **Conditional/triggered instructions: never silently downgrade to immediate execution.** When the user's instruction carries a *condition* — "sell when it hits $310", "buy if it drops to $Y", "when the price reaches Z" — that is a **trigger order** (use `limit-order`), NOT an immediate market order. If the conditional order cannot be placed (e.g. `limit-order` returns an error such as `Ondo-related tokens cannot be traded`, or the asset/venue doesn't support limit orders):
+   - **Do NOT fall back to `market-order swap` to execute immediately at the current price.** Executing now at a price the user did not agree to violates their intent and is irreversible.
+   - **Stop and tell the user** what failed (relay the actual CLI error), then offer explicit choices: (a) hold and have them tell you to sell when the price actually reaches the target, (b) execute now at the *current* market price — state it and how far it is from their target, or (c) pick a different asset. **Wait for the user to choose before doing anything.**
+   - Determine support **at runtime from the CLI's actual response** (try the `limit-order`, read the result) — do not hard-code which assets do or don't support limit orders, since that changes as the platform evolves.
+   - General principle: any action that diverges from the user's stated intent must be surfaced explicitly and confirmed before execution — never resolved by silently substituting a different action.
 
 ---
 
@@ -122,6 +146,7 @@ Always follow these steps to build the command correctly:
 - **No token judgments**: Never provide investment advice. Only present factual audit data; let the user decide.
 - **Fail-closed**: If the security check API is unreachable, inform the user and require acknowledgment before proceeding.
 - **Swap pre-check**: Before `market-order swap`, `limit-order buy`, or `limit-order sell`, complete the pre-check in [security.md](references/security.md).
+- **External sign pre-check**: Before `contract-call execute` or `sign-message execute`, always show the user the preview output (`parsedTx` / `parsedMessage`, `risks`, and `authorityChanges` when present) and get explicit confirmation. External transactions are user-built, so the user must verify exactly what they are signing.
 
 ---
 
@@ -139,7 +164,19 @@ When a `baw` command returns an error message, follow these guidelines:
 
 When the user refers to any of these tokens by name (e.g., "send USDT", "swap BNB to USDT"), use the corresponding address from the following tables. For token names not listed here, use the `query-token-info` skill to look up the contract address. If that skill is not installed, ask the user: "Install `query-token-info` from https://github.com/binance/binance-skills-hub to look up this token?" and install only after a clear "yes" (or another clear affirmative).
 
-If the user refers to a US stock by ticker or company name, use the `binance-tokenized-securities-info` skill to resolve the contract and fetch on-chain price / market status. If not installed, ask: "Install `binance-tokenized-securities-info` from https://github.com/binance/binance-skills-hub to look up its info?" and install only after a clear "yes".
+If the user refers to a US stock by ticker or company name, resolve it through the RWA token list API's `type` filter — **`type=1` = Ondo (`…on`), `type=2` = xStocks-style (`…x`), `type=3` = bStock (`…B`)**:
+
+```
+GET https://www.binance.com/bapi/defi/v1/public/wallet-direct/buw/wallet/market/token/rwa/stock/detail/list/ai?type=<n>
+```
+
+The same ticker often exists under more than one provider (e.g. both `DRAMon` and `DRAMB`), so pick the one the user means:
+
+- **Explicit suffix** — a `…B` symbol (e.g. "DRAMb") → `type=3` bStock; a `…on` symbol → `type=1` Ondo. Resolve directly, no need to ask.
+- **Campaign context** (a campaign is running and the user is trading for it) → `type=3` bStock; see [campaign.md](references/campaign.md).
+- **Bare ticker with no suffix** (e.g. "buy the DRAM stock token") — **do not default to Ondo. Ask the user which provider they mean** before resolving, then proceed.
+
+The `binance-tokenized-securities-info` skill is optional — it wraps the same API and adds live price / market status. Older versions of it only know `type=1` (Ondo), so resolve bStock against the endpoint above rather than assuming that skill can. If the user wants it and it is not installed, ask: "Install `binance-tokenized-securities-info` from https://github.com/binance/binance-skills-hub to look up its info?" and install only after a clear "yes".
 
 ### BNB Smart Chain (BSC)
 
@@ -148,6 +185,8 @@ If the user refers to a US stock by ticker or company name, use the `binance-tok
 | BNB (Native) | `0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE` |
 | USDT         | `0x55d398326f99059fF775485246999027B3197955` |
 | USDC         | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` |
+| U            | `0xcE24439F2D9C6a2289F741120FE202248B666666` |
+| USD1         | `0x8d0D000Ee44948FC98c9B98A4FA4921476f08B0d` |
 
 ### Solana
 

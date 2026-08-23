@@ -1,46 +1,60 @@
-## Description: <br>
-Generate or edit AI images via Pixmind API for text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate or edit AI images with Pixmind for text-to-image, image-to-image, posters, product visuals, covers, and consistent-character work.
 
-## Publisher: <br>
-[fuyunzhishang](https://clawhub.ai/user/fuyunzhishang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fuyunzhishang](https://clawhub.ai/user/fuyunzhishang)
 
-## Use Case: <br>
-Developers and agent users use this skill to generate new images, edit reference images, create variations, upscale outputs, and poll Pixmind tasks until generated image URLs are available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, generation settings, and reference image URLs are sent to Pixmind. <br>
-Mitigation: Use the skill only when Pixmind's terms and data handling are acceptable for the content being generated or edited. <br>
-Risk: Confidential, regulated, proprietary, internal, or signed image URLs could be exposed to Pixmind if used as references. <br>
-Mitigation: Avoid those inputs unless they are approved for external processing, and prefer non-sensitive reference URLs. <br>
-Risk: The skill depends on a Pixmind API key. <br>
-Mitigation: Store PIXMIND_API_KEY in the agent environment and avoid placing it in prompts, logs, or shared files. <br>
+## Use Case:
 
+External users and developers use this skill to route Pixmind image generation or editing requests to an appropriate model, submit approved paid generation tasks, poll task status, and return generated image attachments.
 
-## Reference(s): <br>
-- [Pixmind Image skill page](https://clawhub.ai/fuyunzhishang/skills/pixmind-image) <br>
-- [Pixmind homepage](https://www.pixmind.io) <br>
-- [Pixmind API keys](https://www.pixmind.io/api-keys) <br>
-- [Pixmind image generation endpoint](https://aihub-admin.aimix.pro/open-api/v1/image/generate) <br>
-- [Skill source](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Pixmind task IDs, polling status, progress, and generated image URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: server release metadata) <br>
+Risk: Prompts and reference image URLs are sent to Pixmind for generation or editing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompts and reference images for sensitive content before submission, and disclose provider transfer to users when appropriate.
+
+Risk: Pixmind generation may consume paid credits.
+
+Mitigation: Summarize the final prompt, model, ratio, quality or resolution, and count, then obtain approval before submitting a paid task.
+
+Risk: Pixmind API credentials could be exposed if handled in chat or command arguments.
+
+Mitigation: Keep the API key in host credential settings or environment variables and never ask users to paste it into chat.
+
+## Reference(s):
+
+- [Pixmind skill page](https://clawhub.ai/fuyunzhishang/skills/pixmind-image)
+- [Pixmind publisher profile](https://clawhub.ai/user/fuyunzhishang)
+- [Pixmind image model routing](references/model-routing.md)
+- [Pixmind model catalog endpoint](https://aihub-admin.aimix.pro/api-platform/v1/models)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, shell commands, guidance]
+
+**Output Format:** [Markdown text with generated image attachments or JSON task results from Pixmind tools]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include model name, task ID, output count, and generated image attachments after successful polling.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

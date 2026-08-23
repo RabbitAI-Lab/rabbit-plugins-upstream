@@ -1,7 +1,7 @@
 ---
 name: report-style-guidance-identifier
 description: Set the style guidance for an executive report.
-version: 1.0.5
+version: 1.0.7
 metadata:
   openclaw:
     skillKey: report-style-guidance-identifier
@@ -22,12 +22,14 @@ Field: `style_request`
 
 Executive report request or status-summary brief.
 
+Accepted value: object.
+
 ## Output
 
 Field: `format_mode`
 
 Return a concise format mode for the user's current request in the requested
-output field.
+output field. The returned value is a string.
 
 ## Example Request
 

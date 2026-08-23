@@ -1,11 +1,11 @@
 ---
 name: dlazy-keling-tts
 version: 1.3.5
-description: Convert text into high-quality, emotional speech reading using Kling TTS. 使用可灵 (Kling) TTS 模型，将文本转化为高质量、情感丰富的语音朗读。
+description: "Convert text into high-quality, emotional speech reading using Kling TTS. 使用可灵 (Kling) TTS 模型，将文本转化为高质量、情感丰富的语音朗读。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy keling-tts -h for help."}}
 ---
 
-# dlazy-keling-tts
+# 语音合成 可灵 Kling TTS
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

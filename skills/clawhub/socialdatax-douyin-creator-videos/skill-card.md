@@ -1,41 +1,58 @@
-## Description: <br>
-Helps agents retrieve and summarize Douyin creator works, image/text posts, short-drama series, and recent publishing activity using SocialDataX. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于抖音达人数据、抖音达人作品、作品列表、图文列表、短剧/合集列表、近期发布、内容调研和创作者内容分析。覆盖 Douyin creator works and series，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to inspect Douyin creator content lists and short-drama series for content research, creator benchmarking, recent publishing review, and account tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unbounded pagination with --all can trigger large data pulls or unexpected API usage. <br>
-Mitigation: Use bounded options such as --max-items, --pages, or --since-days unless complete retrieval is explicitly needed. <br>
-Risk: The skill uses a user-provided SocialDataX API key at runtime. <br>
-Mitigation: Provide SOCIALDATAX_API_KEY through the environment only when intending to use SocialDataX; do not store API keys in skill files. <br>
+## Use Case:
 
+External analysts, marketers, and developers use this skill to retrieve and summarize Douyin creator works, image/text posts, recent publishing activity, and short-drama series from SocialDataX. It supports creator benchmarking, account tracking, and content research through CLI or MCP tool calls.
 
-## Reference(s): <br>
-- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-creator-videos) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands; SocialDataX data calls return JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY at runtime and supports bounded pagination options such as --max-items, --pages, and --since-days.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: The skill uses an npx-based SocialDataX package, so dependency trust matters before execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the npm package as part of normal third-party package approval before running the CLI.
+
+Risk: SOCIALDATAX_API_KEY is required for data calls and could be exposed if pasted into prompts, files, or logs.
+
+Mitigation: Provide the key through the environment and avoid embedding it in commands, generated files, or shared transcripts.
+
+Risk: Unbounded --all runs can consume API credits because the skill has no default item or page cap.
+
+Mitigation: Use --max-items, --pages, or a recent --since-days window unless a full crawl is intentional.
+
+## Reference(s):
+
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-creator-videos)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON results from SocialDataX CLI or MCP tools]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY and Node.js/npm; multi-page creator results include page_count, item_count, and next_page_token when returned.]
+
+## Skill Version(s):
+
+0.1.18 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

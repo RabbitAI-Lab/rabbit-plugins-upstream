@@ -1,49 +1,58 @@
-## Description: <br>
-Chezmoi helps agents manage chezmoi dotfiles through interactive diff review, template consolidation, cross-platform diagnostics, environment checks, and MCP server synchronization. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+chezmoi helps agents manage dotfile workflows, including diff-reviewed applies, template consolidation, cross-platform fixes, environment checks, and MCP configuration synchronization.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineers use this skill to review and apply chezmoi dotfile changes safely, consolidate duplicated templates, troubleshoot macOS and Windows compatibility, validate required helper files, and keep MCP server configuration synchronized across tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The bundled launcher can start Claude with permission checks disabled and resumed context. <br>
-Mitigation: Review before installing and remove or edit bin/claude-source.sh unless that persistent launcher behavior is intentionally required. <br>
-Risk: Dotfile and MCP configuration changes can propagate across multiple local tools. <br>
-Mitigation: Run and review chezmoi diff before applying changes, and get explicit user approval for the affected files. <br>
-Risk: Secrets or tokens could be stored in chezmoi-managed files during MCP or UTCP configuration work. <br>
-Mitigation: Do not store plaintext tokens in managed files; prefer environment variables or a dedicated secret-management flow. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect and apply chezmoi dotfile changes, consolidate reusable modify scripts, troubleshoot macOS and Windows compatibility, and synchronize MCP server configuration across local tools.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/chezmoi) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
-- [Apply Guide](artifact/apply.md) <br>
-- [Diff Required Guide](artifact/diff-required.md) <br>
-- [Cross-Platform Guide](artifact/cross-platform.md) <br>
-- [MCP Sync Guide](artifact/mcp-sync.md) <br>
-- [Doctor Guide](artifact/doctor.md) <br>
-- [Template Consolidation Guide](artifact/consolidate.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON examples, TOML snippets, and review prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user approval before applying chezmoi changes; outputs may include file-specific apply choices and configuration edits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: server release metadata and changelog, released 2026-07-07) <br>
+Risk: The bundled SourceGit helper starts Claude with permission checks disabled and resumes a session against a supplied repository.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install or invoke the helper only when that behavior is intended, review it before copying it into ~/bin, and avoid using it on untrusted repositories.
+
+Risk: Dotfile and MCP synchronization workflows can move sensitive values into plain chezmoi-managed configuration files.
+
+Mitigation: Keep secrets encrypted or in a separate secret store, and review generated configuration before applying changes.
+
+Risk: Applying chezmoi changes without a visible diff can overwrite or misconfigure local application settings.
+
+Mitigation: Run and show chezmoi diff before apply, skip empty diffs, and apply only after explicit user approval.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/chezmoi)
+- [Publisher profile](https://clawhub.ai/user/drumrobot)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON/TOML snippets, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user review of diffs before applying dotfile changes.]
+
+## Skill Version(s):
+
+0.4.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -441,6 +441,80 @@
   --ri-metric-value-line-height: 1.22;
 }
 
+.deck[data-theme="deep-data-dashboard"]:is([data-report-ir-version="1.0"], [data-report-ir-version="1.1"]) {
+  --ri-accent: #51e5ff;
+  --ri-accent-2: #ff8a5b;
+  --ri-canvas: #0b1020;
+  --ri-ink: #edf4ff;
+  --ri-muted: #98a8c9;
+  --ri-surface: #121d38;
+  --ri-line: #3c4e77;
+  --ri-shadow: 0 18px 40px rgba(0, 0, 0, .22);
+  --ri-radius: 0;
+}
+.deck[data-theme="deep-data-dashboard"] .ri-page { background: #0b1020; }
+.deck[data-theme="deep-data-dashboard"] .ri-page::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: linear-gradient(90deg, #51e5ff, transparent 62%); }
+.deck[data-theme="deep-data-dashboard"] .ri-title { font-family: Arial Black, Arial, "PingFang SC", sans-serif; font-weight: 900; letter-spacing: -.04em; }
+.deck[data-theme="deep-data-dashboard"] .ri-block { border-color: #3c4e77; }
+.deck[data-theme="deep-data-dashboard"]:is([data-report-ir-version="1.0"], [data-report-ir-version="1.1"]):is(:lang(zh), :lang(ja), :lang(ko)) {
+  --ri-title-line-height: 1.5;
+  --ri-hero-title-line-height: 1.5;
+  --ri-metric-value-line-height: 1.3;
+}
+
+.deck[data-theme="warm-brand-narrative"]:is([data-report-ir-version="1.0"], [data-report-ir-version="1.1"]) {
+  --ri-accent: #e5b65d;
+  --ri-accent-2: #d66740;
+  --ri-canvas: #f5ede2;
+  --ri-ink: #39271f;
+  --ri-muted: #765448;
+  --ri-surface: #fff7ec;
+  --ri-line: #c9a78c;
+  --ri-shadow: 0 14px 32px rgba(57, 39, 31, .08);
+  --ri-radius: 2px;
+}
+.deck[data-theme="warm-brand-narrative"] .ri-page { background: #f5ede2; }
+.deck[data-theme="warm-brand-narrative"] .ri-page::after { content: ""; position: absolute; left: 0; top: 0; width: 64%; height: 8px; background: linear-gradient(90deg, #d66740 0 38%, #e5b65d 38%); }
+.deck[data-theme="warm-brand-narrative"] .ri-title { font-family: Georgia, "Songti SC", serif; font-weight: 700; }
+.deck[data-theme="warm-brand-narrative"] .ri-block:nth-child(even) { transform: translateY(8px); }
+
+.deck[data-theme="minimal-product-whitespace"]:is([data-report-ir-version="1.0"], [data-report-ir-version="1.1"]) {
+  --ri-accent: #2658f4;
+  --ri-accent-2: #ff5c54;
+  --ri-canvas: #fff;
+  --ri-ink: #17191d;
+  --ri-muted: #667080;
+  --ri-surface: #f4f6fa;
+  --ri-line: #d7dce5;
+  --ri-shadow: 0 16px 35px rgba(27, 38, 60, .08);
+  --ri-radius: 8px;
+}
+.deck[data-theme="minimal-product-whitespace"] .ri-page { background: #fff; }
+.deck[data-theme="minimal-product-whitespace"] .ri-page::after { content: ""; position: absolute; left: 68px; top: 48px; width: 42px; height: 4px; background: #2658f4; }
+.deck[data-theme="minimal-product-whitespace"] .ri-title { font-family: Arial Black, Arial, "PingFang SC", sans-serif; font-weight: 900; letter-spacing: -.055em; }
+.deck[data-theme="minimal-product-whitespace"] .ri-block { border-color: #d7dce5; }
+.deck[data-theme="minimal-product-whitespace"]:is([data-report-ir-version="1.0"], [data-report-ir-version="1.1"]):is(:lang(zh), :lang(ja), :lang(ko)) {
+  --ri-title-line-height: 1.5;
+  --ri-hero-title-line-height: 1.5;
+  --ri-metric-value-line-height: 1.3;
+}
+
+.deck[data-theme="formal-government-bluewhite"]:is([data-report-ir-version="1.0"], [data-report-ir-version="1.1"]) {
+  --ri-accent: #2a8acb;
+  --ri-accent-2: #c65353;
+  --ri-canvas: #f8fafc;
+  --ri-ink: #102945;
+  --ri-muted: #60778d;
+  --ri-surface: #fff;
+  --ri-line: #bbcad9;
+  --ri-shadow: 0 8px 18px rgba(24, 60, 101, .06);
+  --ri-radius: 2px;
+}
+.deck[data-theme="formal-government-bluewhite"] .ri-page { background: #f8fafc; }
+.deck[data-theme="formal-government-bluewhite"] .ri-page::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 46px; background: #102945; }
+.deck[data-theme="formal-government-bluewhite"] .ri-title { font-family: Arial, "PingFang SC", sans-serif; font-weight: 800; }
+.deck[data-theme="formal-government-bluewhite"] .ri-block { border-color: #bbcad9; }
+
 @media (max-width: 1200px) {
   .ri-adaptive-items .ri-item-columns-3,
   .ri-adaptive-items .ri-item-columns-4 {

@@ -1,40 +1,57 @@
-## Description: <br>
-Anygen Diagram Tool Free helps agents use the AnyGen CLI to generate diagrams and visual structures from natural-language descriptions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AnyGen图表生成-免费版 helps agents generate flowcharts, architecture diagrams, organization charts, and other visual structures from natural-language prompts through the AnyGen CLI.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Personal document authors, students, and knowledge workers use this skill through an agent with shell access to turn natural-language diagram descriptions into flowcharts, architecture diagrams, organization charts, mind maps, and sequence diagrams via the AnyGen CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be invoked for unrelated API, webhook, or system-integration work because some artifact instructions are broader than diagram generation. <br>
-Mitigation: Use it only for diagram generation and avoid relying on it for webhook setup, API integration, system connection work, or tasks outside AnyGen diagram creation. <br>
-Risk: Diagram prompts are sent to an external AnyGen CLI service and may include sensitive architecture details. <br>
-Mitigation: Do not include secrets, private architecture details, credentials, or other confidential data in diagram descriptions. <br>
+## Use Case:
 
+External users, developers, and knowledge workers use this skill to turn natural-language diagram descriptions into rendered visual assets through the AnyGen CLI. It is suited for documentation, study notes, architecture sketches, and workflow diagrams, but not for real-time stream processing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/anygen-diagram-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands; generated diagram results are returned by the AnyGen CLI as image URLs or file paths.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires AnyGen CLI access and AnyGen authentication through browser login, API key, or ANYGEN_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata and skill metadata) <br>
+Risk: Diagram descriptions may be sent to AnyGen's remote service and could expose secrets, regulated data, or confidential architecture details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not include sensitive or regulated information unless organizational policy approves that service for the data.
+
+Risk: The skill requires AnyGen authentication through an API key or browser login.
+
+Mitigation: Use environment variables or the AnyGen CLI login flow for credentials, avoid hardcoding keys, and rotate any exposed key.
+
+Risk: The workflow uses command-line execution to call the AnyGen CLI.
+
+Mitigation: Review commands before execution and limit execution to expected AnyGen CLI invocations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/anygen-diagram-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return diagram URLs or local file paths from the AnyGen CLI; requires authentication and remote service access.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

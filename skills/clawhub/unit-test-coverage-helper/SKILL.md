@@ -1,7 +1,7 @@
 ---
 name: unit-test-coverage-helper
 description: >-
-  Help users with Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 2 source families, so it represents broader demand rather than a single isolated request.. Use when a user asks for software-and-data, unit tests, test coverage, testing, regression, or needs a practical workflow, artifact, checklist, analysis, or implementation support for this requirement.
+  Help users with Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.. Use when a user asks for software-and-data, unit tests, test coverage, testing, regression, or needs a practical workflow, artifact, checklist, analysis, or implementation support for this requirement.
 ---
 
 # Unit Test Coverage Helper
@@ -10,10 +10,10 @@ description: >-
 
 Use this skill to help software maintainers, QA engineers, open-source contributors, and product teams who need confidence that changes do not break existing behavior with:
 
-> Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 2 source families, so it represents broader demand rather than a single isolated request.
+> Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
-Demand score: 90/100 (`70/70` demand, `30/30` local feasibility).
-Evidence: 12 signals across 2 source families.
+Demand score: 100/100 (`70/70` demand, `30/30` local feasibility).
+Evidence: 12 signals across 4 source families.
 
 Read `references/requirement-plan.md` when source evidence, planning details, or review criteria are needed.
 

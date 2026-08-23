@@ -8,7 +8,7 @@ license: MIT
 compatibility: Requires the global openquok CLI on PATH (see homepage). Installing this skill does not add the binary.
 prerequisites:
   commands: [openquok]
-metadata: {"openclaw":{"emoji":"📮","always":true,"requires":{"bins":["openquok"]},"homepage":"https://www.npmjs.com/package/@openquok/auto-cli"},"hermes":{"tags":["social-media","openquok","scheduling"],"category":"social-media","requires_toolsets":["terminal"]}}
+metadata: {"openclaw":{"emoji":"📮","always":true,"requires":{"bins":["openquok"]},"homepage":"https://www.npmjs.com/package/@openquok/auto-cli"},"hermes":{"tags":["social-media","openquok","scheduling"],"category":"social-media","requires_toolsets":["terminal"]},"grok-bot":{"tags":["social-media","openquok","scheduling"],"category":"social-media","requires_toolsets":["terminal"],"workspace_skill_path":"/workspace/openquok-core/SKILL.md"}}
 ---
 
 <!-- SPDX-FileCopyrightText: 2026 Rati Montreewat -->
@@ -72,7 +72,7 @@ media_json() { openquok upload "$1" | jq -c '[{id: .data.id, path: (.data.path /
 openquok posts:create -c "…" -s "2026-01-01T12:00:00Z" -i "<uuid>" -m "$(media_json ./photo.jpg)"
 ```
 
-Verify upload stdout with `jq` (require `id` and `path`/`filePath`). Remote assets: `openquok upload-from-url "https://…"`.
+Verify upload stdout with `jq` (require `data.id` and `data.filePath`). Pass `filePath` as `media[].path`. Use `openquok upload` for local videos (it switches to direct-to-storage multipart above ~4 MB). Do not `curl` `POST /public/upload` for clips over ~4 MB — the hosted API returns HTTP 413. Remote assets: `openquok upload-from-url "https://…"`.
 
 ---
 
@@ -212,6 +212,7 @@ Provider settings overview: [resources/provider-settings.md](./resources/provide
 | LinkedIn | `linkedin` | personal profile posts, images, video, text comments, internal plugs | [linkedin-examples.md](./resources/linkedin-examples.md) |
 | LinkedIn Page | `linkedin-page` | Page picker, document carousel, internal + global plugs, Page + post analytics | [linkedin-page-examples.md](./resources/linkedin-page-examples.md) |
 | X | `x` | text/media, thread replies, finisher, reply settings, internal + global plugs, analytics | [x-examples.md](./resources/x-examples.md) |
+| Dev.to | `devto` | markdown article, title/tags/cover/canonical/org/series, `tags` + `organizations` tools, analytics | [devto-examples.md](./resources/devto-examples.md) |
 
 Threads publish failures: [threads-publish.md](./resources/threads-publish.md).
 

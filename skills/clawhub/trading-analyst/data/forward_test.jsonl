@@ -1,0 +1,15 @@
+{"date":"2026-08-22","symbol":"XAUUSD","type":"BUY_LIMIT","entry":4635,"sl":4580,"tp1":4690,"tp2":4865,"rr":2.3,"basis":"demand zone 4588-4635 (fresh Jan26)","status":"PENDING","note":"harga 4676 di atas demand, tunggu pullback"}
+{"date":"2026-08-22","symbol":"XAUUSD","type":"BUY_LIMIT","entry":4512,"sl":4460,"tp":4690,"rr":3.5,"basis":"support 4512 (6x touch)","status":"PENDING"}
+{"date":"2026-08-22","symbol":"XAUUSD","type":"BUY_BREAKOUT","entry":4700,"sl":4620,"tp":4865,"rr":2.1,"basis":"tutup harian >4690 (60d high)","status":"PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_LIMIT", "entry": 4581.2, "sl": 4524.5, "tp": 4765.2, "rr": 3.25, "score": null, "verdict": "?", "status": "PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_STOP", "entry": 4770.2, "sl": 4755.2, "tp": 4800.2, "rr": 2.0, "score": null, "verdict": "?", "status": "PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_LIMIT", "entry": 4581.2, "sl": 4524.5, "tp": 4765.2, "rr": 3.25, "score": null, "verdict": "?", "status": "PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_STOP", "entry": 4770.2, "sl": 4755.2, "tp": 4800.2, "rr": 2.0, "score": null, "verdict": "?", "status": "PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_LIMIT", "entry": 4581.2, "sl": 4524.5, "tp": 4765.2, "rr": 3.25, "score": 50, "verdict": "WEAK/NO-TRADE", "status": "PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_STOP", "entry": 4770.2, "sl": 4755.2, "tp": 4800.2, "rr": 2.0, "score": 45, "verdict": "WEAK/NO-TRADE", "status": "PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_LIMIT", "entry": 4581.2, "sl": 4524.5, "tp": 4765.2, "rr": 3.25, "score": 95, "verdict": "STRONG", "status": "PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_STOP", "entry": 4770.2, "sl": 4755.2, "tp": 4800.2, "rr": 2.0, "score": 90, "verdict": "STRONG", "status": "PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_LIMIT", "entry": 4581.2, "sl": 4524.5, "tp": 4765.2, "rr": 3.25, "score": 80, "verdict": "STRONG", "status": "PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_STOP", "entry": 4770.2, "sl": 4755.2, "tp": 4800.2, "rr": 2.0, "score": 75, "verdict": "STRONG", "status": "PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_LIMIT", "entry": 4581.2, "sl": 4524.5, "tp": 4765.2, "rr": 3.25, "score": 80, "verdict": "STRONG", "status": "PENDING"}
+{"date": "2026-08-21", "symbol": "XAUUSD", "type": "BUY_STOP", "entry": 4770.2, "sl": 4755.2, "tp": 4800.2, "rr": 2.0, "score": 75, "verdict": "STRONG", "status": "PENDING"}

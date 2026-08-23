@@ -1,11 +1,11 @@
 ---
 name: dlazy-elevenlabs-music
 version: 1.3.4
-description: ElevenLabs music_v1 model — generates 10–300s original music from a natural-language prompt. Good for BGM, ads, and short-video soundtracks. ElevenLabs music_v1 音乐生成模型，根据自然语言提示生成 10–300 秒原创音乐。适合 BGM、广告配乐与短视频音轨。
+description: "ElevenLabs music_v1 model — generates 10–300s original music from a natural-language prompt. Good for BGM, ads, and short-video soundtracks. ElevenLabs music_v1 音乐生成模型，根据自然语言提示生成 10–300 秒原创音乐。适合 BGM、广告配乐与短视频音轨。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy elevenlabs-music -h for help."}}
 ---
 
-# dlazy-elevenlabs-music
+# 音乐生成 ElevenLabs Music
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

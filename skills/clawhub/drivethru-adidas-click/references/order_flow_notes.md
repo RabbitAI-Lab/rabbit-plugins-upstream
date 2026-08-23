@@ -33,10 +33,15 @@ build one step at a time. For each step the user pastes the page **URL** and the
 relevant **HTML** (the form / table / controls), Claude extracts the selectors,
 implements the driver method, and flips that step's `*_IMPLEMENTED` flag.
 
-**Build complete** — nothing left to capture. A second action,
+**Build complete** — nothing left to capture for ordering. A second action,
 `check-inventory-pricing`, was added on top of these steps (inventory read /
 wholesale-pricing lookup that never orders) — see "Inventory / pricing checks"
 below. It captured **no new selectors**; it reuses steps 1–4.
+
+A third action, `get-order-tracking`, drives a **different, read-only surface**
+(order book → order detail → delivery tracking) and *did* capture new selectors
+— see "Delivery tracking" at the end of this file. It shares only Step 1
+(login) with the ordering flow.
 
 ### Step map / gates (`scripts/adidas_browser.py`)
 
@@ -47,6 +52,7 @@ below. It captured **no new selectors**; it reuses steps 1–4.
 | 3. Checkout (PO + delivery + shipping) | `CHECKOUT_IMPLEMENTED` | `fill_checkout()` | ✅ implemented (incl. dropship + shipping) |
 | 4. Checkout → calc net price → order now | `FINAL_SUBMIT_IMPLEMENTED` | `price_cart()` + `complete_submission()` | ✅ implemented |
 | Check. Inventory / pricing (no order) | — (reuses 1–4) | `read_inventory()` / `price_cart()` / `delete_cart()` / `check_inventory_pricing()` | ✅ implemented |
+| Track. Delivery tracking (read-only) | — (reuses 1 only) | `find_orders_for_po()` / `open_order()` / `read_delivery_tracking()` / `read_expected_ship_dates()` / `get_order_tracking()` | ✅ implemented (live run pending) |
 
 ### Insufficient-availability decision point ✅ IMPLEMENTED
 
@@ -56,7 +62,7 @@ treats `"300+"`/blank as sufficient, exact numbers as the count). A line is
 **short** when its exact available count < requested. Then per
 `OrderRequest.on_insufficient_stock`:
 
-- **`pause`** (default) + any shortfall → raise `_InsufficientStockPause`; the
+- **`pause`** (default) + any shortfall → raise `_OrderPause`; the
   entry point returns `status="needs_confirmation"` with `out_of_stock`
   (`[{style, size, requested, available}]`) and a `message` listing the choices,
   and places **nothing** (even with `confirm: true`, because this happens before
@@ -72,6 +78,34 @@ re-runs with `on_insufficient_stock: "order"` / `"skip"`, or **substitutes** by
 editing `lines` and re-running. Pre-authorizing phrases in the user's prompt
 ("order anything out of stock" / "remove out-of-stock items") let the agent set
 the flag up front and skip the pause. See SKILL.md "Out-of-stock handling".
+
+### Missing-product decision point ✅ IMPLEMENTED
+
+Same shape, second axis: a style adidas serves **no product page** for is a
+decision for the caller, not a crash. `_open_product(style, missing_ok=True)`
+returns False and records the style in `driver.missing_products`
+(`[{style, sizes, requested, reason, detail}]`); `_prepare_lines` marks that
+style's lines `not_found`. Then per `OrderRequest.on_missing_product`:
+
+- **`pause`** (default) → the same `_OrderPause` (it carries both
+  `out_of_stock` and `missing_products`), so the entry point returns
+  `status="needs_confirmation"` and places **nothing**.
+- **`skip`** → drop those lines (quantity 0, `not offered …` note), order the
+  rest. All lines missing → the "No lines could be ordered" error names the
+  styles.
+- **`error`** → `missing_ok=False`, so `_open_product` raises `AdidasAPIError`
+  (the pre-0.7 behavior).
+
+`check_inventory_pricing` forces `skip` internally (a check reports what it can
+read and never aborts mid-run) and then re-escalates itself: if anything landed
+in `missing_products`, the result flips to `status="needs_confirmation"` unless
+the caller asked for `skip`. Its `add_lines` fallback also catches
+`AdidasAPIError` now, so a line that fails to resolve can never strand the
+throwaway `DO NOT BUY` cart.
+
+Detection details and the still-uncaptured not-found markup: see "Style adidas
+does not carry" under Step 2. See SKILL.md "Missing / unlisted product
+handling".
 
 ---
 
@@ -145,6 +179,47 @@ alternative to search),
   so there is **no color picker** — landing on the URL is landing on the color.
   `_open_product` uses this and waits for `#CartModule-SizeTable`.
 
+#### Style adidas does not carry (⚠️ tell NOT captured — text-matched)
+
+A style this account isn't offered (or a wrong article number) has **no size
+table to wait for**. The portal's empty/not-found product markup has **not been
+captured**, so — deliberately, rather than inventing a selector — `_open_product`
+decides with two signals it can trust:
+
+1. **URL**: after `goto`, the page is no longer under `/reorder/product/`
+   (the portal bounced it) → `reason: "not_found"`.
+2. **Text**: the visible body matches `_PRODUCT_MISSING_TELL_RE` ("no results",
+   "not found", "no longer available", …) once `_LOGGED_IN_MARKER` has painted
+   → `reason: "not_found"`.
+
+Neither firing within `_PRODUCT_WAIT_MS` (15s, polled every 400ms rather than
+one blocking `wait_for_selector`, so a bad style doesn't burn the full 30s
+timeout) gives `reason: "unresolved"` — reported as *unconfirmed*, never as
+"this style doesn't exist". A false positive is safe by construction: it can
+only route the style into the `on_missing_product` escalation, which places
+nothing and asks the user.
+
+**Next capture:** open a style the account isn't offered and record the real
+not-found page's id/markup, then swap the text match for that selector (keeping
+the text match as a fallback).
+
+### Step 2a — Availability date gate (✅ wired)
+
+Above the size table sits a draggable date-tab strip
+(`#DateTabs-DraggableTable`); the active tab is `#DateTabButton` and its inner
+text is a formatted date (e.g. `"Jul 31, 2026"`). This is the **earliest date
+the product can ship**, and the size-tile inventory numbers refer to _that_
+date. If it isn't today, the size table is describing future stock —
+**nothing is orderable now** regardless of what the tiles show.
+
+`_product_available_today()` reads `#DateTabButton`, parses `%b %d, %Y`, and
+compares to today's date. Both the order flow (`_prepare_lines`) and the
+inventory read (`read_inventory`) call it right after `_open_product` and
+before touching any tile; when it returns False, every requested line for that
+style is classified `unavailable` with a `"not available until {date}"` note
+and the size-tile read is skipped. Fail-open on a missing/unparseable date
+(logs a warning) so a portal shape change doesn't silently block every order.
+
 ### Step 2b — Size table (✅ mapping + inventory wired)
 
 Container `#CartModule-SizeTable`. ⚠️ **The grid sits below the fold and
@@ -213,6 +288,43 @@ resolves the requested size label to its code.
 
 `_read_inventory()` surfaces the availability text; `add_lines()` groups lines
 by style, opens each product once, and fills all its sizes.
+
+### Step 2b-2 — Re-stock date (✅ IMPLEMENTED, hover-read)
+
+A size that adidas will replenish carries a small calendar icon in the tile's
+top-right corner. Captured markup:
+
+```html
+<div class="restockIcon--O65EH " id="CartModule-SizeTile-RestockIndicator-KD5434-240">
+  <div class="m-restockWeekIndicator">
+    <svg viewBox="0 0 24 24" class="a-icon -calendarInactive">…</svg></div></div>
+```
+
+The id follows the same `{style}-{code}` convention as the other tile ids
+(`_SIZE_TILE_RESTOCK_ID`), so its **presence** is a reliable "this size gets
+restocked" tell. The **date is not in that markup** — the portal renders it only
+in a tooltip on hover (*"Re-stock in Nov 8, 2026"*).
+
+`_read_restock_date` therefore:
+
+1. checks `title` / `aria-label` / `data-tooltip` / `data-title` on the icon and
+   its descendants first (free, in case a build exposes it as an attribute);
+2. otherwise hovers the icon, waits 400 ms, and matches the page text against
+   `_RESTOCK_TOOLTIP_RE` — anchored on the word "re-stock" so an unrelated date
+   elsewhere on the page can never be picked up. The **tooltip's own markup is
+   not captured**, so no selector is invented for it;
+3. moves the mouse to (0, 0) in a `finally` so the tooltip closes and the next
+   size reads its own date, not this one fading out.
+
+Called **only for a `short` size** (`_classify_size`), so an in-stock check
+costs no hovers, and never for the `X` cell — a flatly unavailable size has no
+restock date by definition.
+
+Surfaced as `restock_date` (as shown) + `restock_date_iso` (via `_iso_date`,
+which reuses the tracking flow's `%b %d, %Y` parser) on `OrderLineResult`,
+`CheckLineResult`, and each `out_of_stock` entry, and woven into the per-line
+`note` and the `needs_confirmation` message — including the explicit "no restock
+date posted" wording when adidas showed none.
 
 ### Step 2c — Quantity input (✅ IMPLEMENTED)
 
@@ -493,3 +605,142 @@ catches and falls back to an inventory-only report (then still deletes the cart)
 qty > 0) to those lines and derives `unit_price` = net ÷ qty; `order_total` is
 their sum. Same positional assumption as the order flow, but filtered to entered
 lines so dropped/unavailable lines don't shift the alignment.
+
+---
+
+## Delivery tracking (`get-order-tracking`)  ✅ IMPLEMENTED (live run pending)
+
+A **read-only** walk over a different part of the portal: the order book, an
+order's detail page, and its Delivery Tracking table. Shares only **Step 1
+(login)** with the ordering flow — no cart, no checkout, no writes. Entry point:
+`adidas_browser.get_order_tracking()`; tool `adidas_get_order_tracking`; result
+models `TrackingResult` / `TrackingPO` / `TrackingOrder` / `TrackingShipment` in
+`scripts/schemas.py`.
+
+**Status:** selectors captured from pasted HTML (order-book row, tracking-link
+button, delivery table, article week toggle/header) and the whole flow exercised
+end to end against a **local replica** of those pages (multi-order PO, multi-
+delivery order, unshipped order, unknown PO, unreadable order). **Not yet run
+against the live portal** — watch the first real run, especially the order-book
+grid (virtualized rows) and the article toggle's expand/collapse semantics.
+
+### T1 — Order book search (per PO, one PO at a time)
+
+`GET /adidas/reorder/my/order-book?searchText={PO}&page={n}&size=20&filterByRDD=false`
+
+Searching and paging are done **through the URL**, so no search-form or pager
+selectors were needed. Pages are walked (`page` 0,1,2…, cap `_ORDER_BOOK_MAX_PAGES`
+= 10) until a page returns fewer than `size` rows or adds nothing new.
+
+Captured row (inside an ag-grid cell — the wrapping `id="cell-id-30"` is
+positional and **not** used):
+
+```html
+<div class="m-orderHeaderData -overview">
+  <h2 class="a-heading -s -regular" id="OrderHeaderRow6279266468Heading">6279266468</h2>
+  <ul class="m-orderHeaderData__items">
+    <li class="m-orderHeaderData__item"><span>P13433</span></li>
+    <li class="m-orderHeaderData__item"><div class="a-orderType -reorder">Re-Order</div></li>
+  </ul>
+</div>
+```
+
+| What | Selector |
+| --- | --- |
+| Row | `div.m-orderHeaderData` (`_ORDER_ROW`) |
+| Order number | `h2[id^="OrderHeaderRow"]` text; the id (`OrderHeaderRow{order}Heading`) is the fallback |
+| Customer PO | `.m-orderHeaderData__item span` (first) |
+| Order type | `.m-orderHeaderData__item .a-orderType` ("Re-Order") |
+
+Two live-site behaviours are handled up front:
+
+- **Virtualized rows** — `_collect_order_rows` scrolls and re-scans, deduping by
+  order number, until two consecutive passes add nothing. A PO's *later* orders
+  are exactly the ones a tracking lookup must not silently drop.
+- **Prefix matches** — adidas's `searchText` also matches PO prefixes (searching
+  `P1343` surfaces `P13433` **and** `P13434`). Rows are flagged `exact` on the
+  PO cell; only exact ones are tracked, and the rest are reported in a
+  `warning` so nobody gets tracking for a PO they did not ask about.
+
+### T2 — Order detail → "has it shipped?"
+
+`GET /adidas/reorder/my/order-book/{order}` (derived from the tracking link's
+captured href, which is that path + `/deliveries`).
+
+The **presence** of the Delivery Tracking link is the portal's own "this order
+has shipments" tell:
+
+```html
+<a class="m-button -tertiary -backButton" id="OrderTrackingButtonLink"
+   href="/adidas/reorder/my/order-book/6279266468/deliveries">
+  <svg class="a-icon -delivery">…</svg><span class="a-label -large -bold">Delivery Tracking</span></a>
+```
+
+`open_order()` polls (`_ORDER_DETAIL_WAIT_MS` 20s) for **either**
+`#OrderTrackingButtonLink` (→ shipped) **or** the article rows
+(`.o-orderDetailArticle__weekToggle button` → page is up); once the article rows
+are up the link still gets a 2s grace window, so a slow render is never read as
+"not shipped". If neither appears the order is reported `unreadable` (never
+"not shipped") and the run continues with the other orders.
+
+### T3a — Shipped: the Delivery Tracking table
+
+Click the link (falls back to navigating its href /
+`/adidas/reorder/my/order-book/{order}/deliveries`), then read one row per
+`.o-deliveryTrackingOverview__item`:
+
+| Field | Selector (scoped to the item) |
+| --- | --- |
+| Delivery note | `a[id^="DownloadPdfCtaLink"]` text (the id repeats across rows — always scope to the item) |
+| Ship date | `.o-deliveryTrackingOverview__shipDate` ("Aug 3, 2026") |
+| Carrier code | `.o-deliveryTrackingOverview__carrier` ("UPSN") |
+| Tracking number + URL | `.m-trackingNumber__trackingNumber a` (text + `href`) |
+
+`carrier_name` is derived from the tracking URL's host (`ups.com` → UPS,
+`fedex.com` → FedEx, …) since adidas shows only its own code. One order can have
+several deliveries, and **one delivery note can appear on more than one row**
+(multiple parcels) — every row is returned, nothing is deduped.
+
+> ⚠️ **The delivery-note PDF link carries a bearer token** in its href
+> (`…/download?access_token=Bearer 00D58…`). It is deliberately **not** read or
+> returned — only the note number is taken from the link's text.
+
+### T3b — Not shipped: expected ship dates
+
+No tracking link ⇒ nothing has shipped. Each article row has a chevron toggle
+that reveals its week list, whose header is the expected ship date:
+
+```html
+<div class="o-orderDetailArticle__weekToggle"><button class="m-toggleLabel -isActive">…</button></div>
+<header class="o-orderDetailArticle__weekItemHeader">
+  <span class="o-orderDetailArticle__weekItemHeaderName">Feb 4, 2027</span></header>
+```
+
+`read_expected_ship_dates()` clicks every toggle **that is not already
+expanded** — expansion is decided by whether that article already shows a
+`…__weekItemHeaderName`, not by the `-isActive` class, whose polarity is not
+captured — so the pass is idempotent and cannot collapse an already-open row.
+
+The article **container** (`.o-orderDetailArticle`) is *inferred* from the BEM
+block of the two captured elements; it is used only to group dates per article
+(and to label them from the block's first `h2, h3, .a-heading`). If it does not
+match the live markup, every date found is still returned as one order-level
+entry — the dates are never lost, only their per-article grouping.
+
+`expected_ship_date` is the earliest date parsed with `%b %d, %Y` / `%B %d, %Y`,
+falling back to the first date shown if the format ever changes.
+
+### Design decisions
+
+- **Read-only, and shaped like the other actions' escalations.** A PO with no
+  orders (`not_found`) or an order whose page would not load (`unreadable`)
+  flips the result to `needs_confirmation` with the details in `warnings` —
+  the same "hand the gap back to the user" contract as `missing_products`.
+- **One login, POs looped one at a time** (`po_numbers` is a list, a
+  comma/whitespace string, or a single `po_number`; duplicates collapse).
+- **A `table` field** (Markdown, PO → order → tracking rows, unshipped rows
+  annotated `*(expected)*`) is built server-side so the calling agent hands back
+  one consistent table instead of re-deriving one per call.
+- **Never guess a shipment.** Expected ship dates are labelled expected in the
+  data *and* in the table, and an unreadable order is never reported as "not
+  shipped".

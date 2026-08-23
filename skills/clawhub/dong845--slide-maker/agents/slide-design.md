@@ -51,6 +51,8 @@ sameness, no hero, dead layout, thoughtless motion, decorative icons — is your
   `references/form-selection.md` (content-shape → candidate forms + tie-breaker),
   `references/design-gallery.md` (presets + component catalogue), `scripts/presets.py` (the preset menu),
   `references/design-by-purpose.md` (name-the-bias look per purpose),
+  `references/design-by-topic.md` (domain → apt presets → ANTI-PICK + cliché guard — the topic-adapted pick),
+  `references/bespoke-registers.md` (verified invented registers to ADAPT — the growing library),
   `references/design-principles.md` (full C.R.A.P., deck rhythm, whitespace, AI-slop tells),
   `references/semantic-color-contract.md`, `references/data-viz.md`, `references/schematic-diagrams.md`,
   `references/icons.md`, `references/animation.md`, `references/image-generation.md`,
@@ -90,7 +92,35 @@ sameness, no hero, dead layout, thoughtless motion, decorative icons — is your
 The component library and preset menu have grown rich — which makes the lazy path ("pick a
 preset, fill in components") ever more tempting and its output ever more same-looking. Taste is
 an order of operations, and you guard it:
-- **Blank-canvas sketch first.** For the deck's design language, and again for every non-obvious
+- **🔴 THREE CONCEPTS FOR THE DECK, before any of this.** Before the design language, before the
+  preset, before a single slide: name **what this deck's idea is a PICTURE of** — three times, three
+  different pictures — then pick one and say why the other two lost. Not three styles and not three
+  layouts: three *governing images* for the same approved argument. For a deck about an AI agent:
+  *an intelligence network* · *a digital organism* · *a human hand and a machine hand doing one job*.
+  Each of those wants a different motif, a different colour logic, a different cover, and a different
+  diagram — which is exactly why the choice has to be made HERE and not discovered on slide 7.
+
+  This is the one divergence the pipeline never had. The direction gate diverges on STYLE — its own
+  preview page says so, "the same four slide types … only the *style* differs" — and form-selection
+  diverges on LAYOUT, per slide. Both hold the picture constant. The emotional curve and the arc are
+  already chosen upstream and are inputs here, not competitors: the concept is what makes that arc
+  *visible*. And the motif is not a substitute for it — a motif picked as an attribute of a preset
+  you chose first, then capped at ≤3 appearances, is a decoration; a concept is what the deck IS.
+
+  Draw the three from the bold-reference pass you already run, and keep them cheap — they are three
+  sentences, not three renders. No extra dispatch, no extra round trip. **Record them on the Design
+  plan as `concept:` — the winner WITH the two middle rungs that produced it, then the two rejected,
+  each with the clause that lost it:**
+
+      concept: <the governing picture> · via <core concepts> → <visual language>
+               beat: <rejected> — <why it lost> · <rejected> — <why it lost>
+
+  Two rejected concepts that are the winner in other words is a single sketch relabelled, and the
+  gate says so. **A winner with no middle rungs is the same failure one step earlier** — a picture
+  that arrived rather than one that was derived (the ladder, and why the middle rung is the one that
+  matters, is under §1 "DERIVE the motif down a LADDER").
+- **Blank-canvas sketch first** — now IN SERVICE of the chosen concept. For the deck's design
+  language, and again for every non-obvious
   slide, first describe in one or two clauses what the ideal page would look like **as if the
   library didn't exist** — driven only by this content, this audience, this feeling ("the gap
   should feel like a cliff — one hollow bar towering over the filled one" · "this should read
@@ -134,7 +164,7 @@ an order of operations, and you guard it:
   exactly where the art director earns the fee.
 
 **This design intelligence is HOW you design — it runs on EVERY deck / each case, never opt-in per
-deck.** The design self-verify (a–q) and the `references/design-intelligence-addendum.md` gates
+deck.** The design self-verify (a–s, incl. h2) and the `references/design-intelligence-addendum.md` gates
 (concept→viz reasoning, block audit, evenness / one-hero-per-slide, semantic colour where colour is
 used, rhythm, WOW) apply to every deck and **scale down gracefully** — a 4-slide deck still gets one
 hero per slide, no card-grid reflex, semantic colour, and one memorable moment; you just do less of it,
@@ -153,9 +183,15 @@ feel art-directed rather than defaulted, and it's yours to set once and hold. Pi
 > `eastern_traditional` · dark fashion/luxury → `luxury_dark` · memorial/exhibition → `museum_memorial` ·
 > modernist geometric → `bauhaus` · warm retro (Eames-era) → `midcentury` · CLI/phosphor CRT →
 > `terminal` · retro-future neon → `synthwave` (**18 total** — full menu in `design-gallery.md`).
-- **Name the bias and beat it** (`design-by-purpose.md`): don't reflex to the safe light/minimal/blue
-  default. Range across light↔dark, warm↔cool, serif↔sans, restrained↔bold to fit *this* purpose; a
-  custom look is fine. Record the **palette · type pairing · surface · ONE signature motif · the
+- **Name the bias and beat it — on BOTH axes, purpose AND topic.** `design-by-purpose.md` keys the
+  look on *what kind of talk* it is; **`design-by-topic.md` keys it on *what the subject IS*** (its
+  DOMAIN → apt presets → ANTI-PICK), and the topic axis is what makes the look *fit the subject* rather
+  than default. Run its ranked contest (shortlist by domain → drop veto-trippers → score four axes →
+  crown one, name the rejected rival) and record the **`style pick:` line** (Design-language output
+  below; self-verify (s)). Don't reflex to the safe light/minimal/blue default — **and don't reflex the
+  domain cliché either** (`dark_tech`/`synthwave` for "AI/tech", `terminal` for every dev deck): the
+  CLICHÉ GUARD is a hard veto. Range across light↔dark, warm↔cool, serif↔sans, restrained↔bold to fit
+  *this* purpose AND subject; a custom look is fine. Record the **palette · type pairing · surface · ONE signature motif · the
   preset's guard line** (honored literally; guards survive the vary-it rule) — the
   *system* (palette, type, spacing, chrome geometry) repeats on every slide (CRAP Repetition); the
   **motif itself is DOSED, not stamped** (chrome budget, next bullet).
@@ -223,6 +259,107 @@ feel art-directed rather than defaulted, and it's yours to set once and hold. Pi
   *across decks* is the same failure as one template *across slides*. (Skip this cross-deck variation
   when the look is LOCKED per §0 — a registered/provided template the user chose is *meant* to repeat
   across decks; vary only the unlocked foundations, e.g. signature device and per-deck motifs.)
+- **🔴 DERIVE the motif down a LADDER, never in one jump — and record the rungs.** "Content-born"
+  above is the *requirement*; this is the *method*, and without it the step quietly depends on a good
+  image happening to arrive. Four rungs, three sentences of work:
+
+      topic  →  core concepts  →  visual language  →  motif
+
+  **The middle rung is the one that gets skipped, and skipping it is what produces industry
+  stereotype.** Jump straight from *an MRI deck* to a picture and you get a scanner; go through
+  *frequency · sampling* and you get a k-space grid — same content, and a motif that can carry an
+  argument. Two worked rungs so the shape is unambiguous:
+
+  | topic | core concepts | visual language | motif |
+  |---|---|---|---|
+  | MRI reconstruction | frequency · sampling | grid · trajectory | the acquired-vs-skipped sampling row |
+  | the Dutch 17th century | double-entry · an account that cannot close | ruled columns · a struck rule | a ledger page whose balance rule breaks |
+
+  🔴 **The core-concepts rung is ABSTRACT and belongs to THIS deck — never to its industry.**
+  `AI → knowledge graph`, `medical → diagnostic grid`, `cloud → mesh` are lookups keyed by *field*,
+  and a lookup keyed by field is precisely the stereotype this section exists to prevent — it also
+  breaks rung 1, because a topic is not a concept. **Test: if your middle rung could have been
+  written before you read the material, you did not do it.** Resolve rung 3 through the addendum's
+  **§3 dictionary**, which is domain-neutral by construction and already maps concept → visual
+  language across ~35 concepts; §3's rows then give the per-slide FORM, while the motif is the
+  deck-level object that same language implies. One table, used at two altitudes.
+  *(Gate: the design plan's `concept:` line carries the middle two rungs — Design-language output
+  below. A `concept:` line with no rungs records a picture someone thought of, which is the exact
+  failure the three-candidate rule was already reaching for.)*
+- **🔴 A motif must GENERATE, not merely RECUR — name three things it makes besides itself.**
+  `carried_by` asks whether the idea does structural work on 2–3 slides; this asks the prior question,
+  whether the motif is *productive at all*. A motif that can only repeat is an ornament with a
+  schedule. A motif that generates hands the deck a coherent visual system — which is the difference
+  between a deck that looks designed and one that looks decorated, and it is the half of "make it
+  beautiful" that no amount of palette work supplies. Name all three in the plan:
+  - **background** — what the motif makes the canvas *do* (a ruled field, a faint scanline, an edge
+    register), or `flat by register — <reason>`;
+  - **markers** — the numeral / icon / bullet system it implies, so the small furniture belongs to the
+    same idea instead of being chosen separately from a library;
+  - **one page** — the slide whose GEOMETRY is the motif rather than a slide that carries it. 🔴 **Not
+    necessarily a diagram**: a chart's frame, a rail, a picture hang, a type composition all qualify.
+    **Never invent an artifact so this field has an answer** — a deck with no diagram in its content
+    does not acquire one to satisfy a motif, which would be the "inventing a stage so the tower gets
+    its fifth floor" failure named under the constructed-object rule. `none — <the deck has no page
+    whose geometry this idea could own>` is a legitimate answer and is worth more than a forced one.
+
+  Two "nothing obvious" answers means the motif is a shape you liked: re-sketch it, **or step down to
+  a quiet register signature and say so in one clause — a first-class answer, not a concession.** A
+  sober register (defense, regulatory, status readout) that carries only a quiet signature has
+  answered this correctly; **`boldness: conservative` satisfies the whole triple with that one
+  clause**, on the same logic that makes its signature move optional. And a **1–2 slide tiny ask
+  skips the triple** — the same carve the anchor proof takes, for the same reason. *(Gate: the
+  `motif generates:` line on the design checkpoint; self-verify (n).)*
+- **🔴 With NO generated imagery, the motif carries the WHOLE visual load — hold it to the full
+  contract.** On the generated-template branch a hero plate and its interior echoes do most of the
+  atmospheric work and the motif can afford to be quiet beside them. On **branch (c) "design a clean
+  one"** there is nothing else: the motif *is* the deck's visual design, and it is what every page
+  the reader meets is wearing. There the derivation ladder, the generativity triple and the STRANGER
+  TEST are **required rather than weighed** — a motif that is merely inoffensive leaves the deck
+  looking untouched, and the reader has no imagery to be impressed by instead.
+  🔴 **A LOCKED look is the exception, and the split is precise** (§0's LOCKED-look carve, which this
+  must not override): on a **registered or provided template**, or a Mode-A mimic, the template's own
+  device IS the motif and **you do not run the ladder on it** — deriving a replacement re-litigates
+  an identity the user already approved. What still binds there is everything about *use*: the
+  STRANGER TEST (a borrowed device can be just as opaque as an invented one), **ONE form ONE meaning**
+  (a template's rule means what the template means by it, and you may not quietly assign it a second
+  job), and the generativity triple applied to **what you ADD** — the markers and page geometry you
+  introduce must belong to the template's idea rather than to a library. Ladder for an invented look;
+  discipline for a borrowed one.
+- **A motif may be a CONSTRUCTED OBJECT, not only a shape (user feedback, 2026-08).** Every
+  content-born example above — ring, taper, axis, lockup — is an abstract diagram shape, and a deck
+  whose motif is an abstract shape tends to *repeat* it. The other class is an object made of this
+  deck's own subject, **assembled across the deck**: it gains a part per beat instead of appearing
+  again per beat. That is the difference between a badge and a motif that does structural work, and
+  it is what `carried_by` asks for and rarely gets — the object's next part IS the slide's content,
+  so the geometry cannot be stamped on afterwards.
+  **Derive it from THIS deck, and do not shop from a list.** There is deliberately no catalogue here:
+  a menu of objects would become the next house style, which is the failure this whole section
+  exists to prevent. The question is what this material would build if you built it — a thing that
+  grows, a thing that is dismantled, a thing that gets crossed, a thing assembled from parts, a body
+  that gains a capability, a route walked end to end. Whatever the answer is, the test is the same:
+  **could this object belong to any other deck?** If yes, it is an ornament and you have not
+  answered the question yet.
+  Two constraints keep it honest and both already exist: it must pass the STRANGER TEST below (an
+  object nobody can name is worse than no motif), and building it must not cost fidelity — the
+  object carries the argument's SHAPE, never its numbers.
+  **WHEN it is the right answer.** The class fits when the argument ACCUMULATES — a system assembled
+  stage by stage, a capability that grows, a route walked end to end, something dismantled to show
+  what is inside. There the object is not an illustration of the content, it *is* the content's
+  shape, and each slide has an obvious next part.
+  **WHEN it is the wrong answer, which is more of the time.** (a) The argument is a COMPARISON —
+  this against that, four methods on one metric. An object cannot hold a comparison; a grid or a
+  split can, and forcing one is how a motif becomes a costume. (b) The findings are INDEPENDENT —
+  nothing accumulates, so any object you pick is arbitrary and the deck would carry it as decoration.
+  (c) The register is sober by purpose — a regulatory readout, a safety case, a defense's results
+  section — where a built object reads as whimsy against the room's expectation
+  (`references/design-by-purpose.md`). (d) The object would need structure the material does not
+  have: if you find yourself inventing a stage so the tower gets its fifth floor, stop — that is the
+  fidelity floor, and it does not yield to a motif.
+  In those cases the abstract content-born device (a taper, an axis, a rail, a ring) or a quiet
+  register signature is the correct answer, and choosing it deliberately is not a failure to be bold
+  — it is the same judgement working. **What generalises here is the QUESTION — "what would this
+  material build, and does anything actually accumulate?" — never the objects in the examples.**
 - **The STRANGER TEST — a motif must be legible, not just topical (user feedback, 2026-07).** Being
   content-born is necessary but not sufficient: a first-time viewer should be able to say what the
   motif *means* without the presenter explaining. Abstract encodings (two glows = two strategy
@@ -234,6 +371,35 @@ feel art-directed rather than defaulted, and it's yours to set once and hold. Pi
   checkpoint's motif line must state the meaning in words ("twin rails = the two engines"), so the
   user can veto an opaque device before the build. Self-check: ask what a stranger would call the
   shape — "two ellipses" instead of "the two engines" = fail; label it.
+  **FOUR things this rule did NOT catch, each measured on a real deck (the first three: user
+  feedback, 2026-07-31 — a low horizontal rule on nine pages that the user had to ask the meaning
+  of; the fourth: user feedback, 2026-08-14 — the same question asked again, of a different device):**
+  - **A reading that DEFERS is not a reading.** The motif line said "it is the same line throughout;
+    they understand it on slide 9" — meaning arriving eight pages after first appearance, which is
+    the definition of failing at first appearance. If the stated reading contains *later / by page N /
+    once they see X*, the device is unlabelled and the test is FAILED, however confident the sentence
+    sounds. A viewer decodes what is in front of them now, or not at all.
+  - **Removal is a first-class fix, usually the better one.** This rule listed label / figurative /
+    legend and framed the remedy as "label it", so an opaque device gets a caption bolted on to
+    justify keeping it. State it plainly instead: **make it read, or take it out.** A motif that needs
+    a sentence of explanation to earn its place has already told you the answer — and a deck loses
+    nothing when unreadable furniture leaves, because it was carrying no meaning to begin with.
+  - **Position dictates reading, and it outranks intent.** A thin rule low on the page reads as a
+    divider or footer rule, because that slot already has an established meaning in every deck the
+    viewer has seen; a strip down one side reads as a sidebar; a mark in a corner reads as chrome.
+    You cannot assign a new meaning to a position that is already spoken for — a horizon needs
+    content ABOVE it and real sky, not a line under the body text. Ask what the SLOT says before
+    asking what the shape says.
+  - **🔴 ONE form, ONE meaning — deck-wide.** A device that means one thing on the cover and a
+    different thing inside is two motifs wearing the same clothes, and nothing tells the reader the
+    meaning changed. This passes every other arm of the test: each reading is correct *on its own
+    page*, each is labelled or inferable, neither defers. Only the pair is wrong. **Measured: a pair
+    of vertical rules read as *the two sides of the account* on a cover and as *the amount column* on
+    every interior page — and the user asked what they meant, which is this test failing by
+    definition.** Before the build, list every REPEATED form (rules, bands, corner marks, columns)
+    and write the one thing each means. Two entries against one form is the finding: change one of
+    them, or make them different enough in weight, position or count that nobody reads them as the
+    same device. *(Self-verify (n) now reads this list, not just the motif line.)*
 - **Declare the TYPE SCALE as a contract — with real drama and a real floor.** Fix the deck's modular
   scale once, as named tokens the builder must use (e.g. on the default 10×5.625in canvas:
   `display 40 · title 22 · body 14 · caption 9.5`), instead of improvising sizes per slide (the
@@ -395,7 +561,7 @@ each slide in isolation and can't retrofit rhythm, so this is yours.
   PNGs** at the design checkpoint and letting the user pick via option prompt — slides are code,
   so a second take on the ONE slide that decides the meeting costs minutes, not hours (never do
   this for every slide; one or two beats at most).
-- **~50–70% whitespace target — but whitespace must be DESIGNED, not leftover.** When a slide feels
+- **Occupancy band by role (~25–35 cover · ~45–60 exec · ~55–70 technical, measured as INK by the render-time lint) — and whitespace must be DESIGNED, not leftover.** When a slide feels
   thin, diagnose which failure it is: **(a) the point is under-served** — the far more common case —
   fix it UPSTREAM with substance (send it back to the content plan: add the supporting detail,
   example, stat, or mini-diagram the point deserves, or merge two thin neighbours — the frame-fill
@@ -504,7 +670,10 @@ fall and stage each built slide FULLY (think SMART, not by quota):
 - **A content plate only where it helps the audience UNDERSTAND or feel the content** — a concept clearer
   *shown than told*, the real thing they should picture, or section atmosphere. Name in one phrase **what
   it DEPICTS about that slide's point** — it must be **highly topical**, not a generic gradient/orb that
-  could sit on any slide. **Propose, don't assume it ships.** A content plate is NOT a header (that's
+  could sit on any slide. 🔴 **And topical is not enough — dodge the DOMAIN CLICHÉ too** (`image-generation.md`
+  CLICHÉ GUARD + `design-by-topic.md`'s per-domain anti-pick): a neon/HUD sci-fi hero for "AI/tech", a
+  green globe for climate, ink-wash-by-reflex for a Chinese topic are *on-topic yet stereotyped* — the
+  generated art-direction obeys the same anti-pick as a preset, and the choice is recorded in `style pick:`. **Propose, don't assume it ships.** A content plate is NOT a header (that's
   `title_bar`/`editorial_header`'s job); never where evidence belongs (figures/charts/screenshots/logos
   stay real). Plan `fit` (usually `contain`) so the subject stays whole; for real subjects, note the
   facts the generator gets wrong (scale/count/colour/arrangement) so the prompt states them and the
@@ -528,8 +697,10 @@ fall and stage each built slide FULLY (think SMART, not by quota):
   the reference's grammar (incl. the `searched, none found → …` rungs); a bare filename is
   incomplete — same gate pattern as the logo token.
 - **LOGO PRINCIPLE (a real design principle — general, any domain; repeated user feedback, so it is
-  gated, not advisory).** Decide by SITUATION — every deck matches exactly one row, and the row's
-  default fires unless the user overrides it:
+  gated, not advisory).** Decide by SITUATION — every deck matches exactly one row for the DECK, and the row's default
+  fires unless the user overrides it. **The ROSTER row is scored per SLIDE, not per deck**, so it
+  co-exists with whichever deck-level row applies: a landscape survey can be `named inline as text`
+  overall and still owe real marks on the one slide whose form is a named set.
 
   | Situation | Logo default |
   |---|---|
@@ -537,8 +708,10 @@ fall and stage each built slide FULLY (think SMART, not by quota):
   | **Presented BY/FOR the user's org** — affiliation known from the material or registry (thesis, lab talk, course, internal review) | That org's logo per its deck norms (cover + footer), from the registered template when one exists |
   | **Tool / framework / model / vendor named as content** (research talk, teaching deck, status deck) | The REAL logo **inline at the mention** or on the landscape/ecosystem slide — never global chrome |
   | **Multi-entity survey / landscape / comparison** | Entities named inline as text; a logo *wall* only when a slide's chosen form IS an ecosystem map — never per-mention chrome |
+  | **ROSTER of named real entities** — a slide whose form IS a named set: an ecosystem/hub map, a member list of a real alliance, a logo wall, a comparison whose ROWS are institutions or companies | The marks are **CONTENT, not chrome** — source the real ones for that slide. A reader scanning a named set recognises marks faster than they read names, which is the entire reason the form was chosen. 🔴 **A generic placeholder glyph standing where a mark belongs — a coloured square, a bullet dot, a stock building icon repeated per row — is worse than plain text**: it is decoration impersonating information, and it fails the 1-second decodability floor. Either the real marks, or plain type. Never a shape that looks like it means something |
   | **User's OWN / new / fictional product with no official mark** | DESIGN a clean typographic wordmark / monogram — flagged as a designer's stand-in |
   | **Provided / registered template already carries the mark** | Don't double it |
+  | **THIRD-PARTY ASSESSMENT of an entity** — the deck is *about* a company/product but is not *from* it, and carries material that entity would not publish about itself (open recalls, a "first but not unique" correction, competitor counter-evidence, a limitations page) | **No official livery, on any page.** Set the entity's name in the deck's OWN type. The test is authorship, not sentiment: a reader seeing the mark concludes the entity produced or endorsed this, and for an independent assessment that is a misattribution — the same class of error as an unsourced number, committed in the chrome. Record `n/a — third-party assessment` + the finding that makes it so |
 
   - **FLOW (evidence required — this is the gate):** (1) ALWAYS web-search for the entity's REAL logo
     (+ brand colours/fonts) — part of the always-on web research; official press/brand pages and
@@ -548,8 +721,18 @@ fall and stage each built slide FULLY (think SMART, not by quota):
     wordmark-only logotype is a full pass. (3) **Not found →** design a wordmark (recipe:
     `references/image-generation.md`), flagged. (4) The DESIGN checkpoint's **`logo plan:` line MUST
     carry the evidence**: `official asset — <source>` · or `searched, none found → designed wordmark
-    (flagged)` · or `n/a — <multi-entity | template carries it | user opted out>`. A bare "wordmark"
-    or "text only" **without a recorded search**, or an omitted line on a single-entity deck, is an
+    (flagged)` · or `n/a — <named inline as text | template carries it | third-party assessment |
+    user opted out>` — and a **ROSTER slide additionally carries `entity marks: <N of M sourced |
+    none — reason>`**, since one line cannot answer both "the deck's own mark" and "the eight
+    institutions on slide 5". `multi-entity` is no longer a value: it named the deck's SHAPE and
+    was read as a blanket exemption, which is exactly how a roster slide shipped eight identical
+    blue squares. The replacement names the DECISION — you looked, and chose type. **The third-party arm is decided BEFORE the search, not after it** — it is a question about
+    who wrote the deck, so a found logo does not overturn it and "not found" is not its reason; say
+    which finding makes the deck independent (a real one: a briefing carrying two open Class I recalls
+    and a "first, but not alone" correction went to build in the subject's brand colours until this was
+    caught by hand, and the row now exists so it is a default instead of a save). A bare "wordmark"
+    or "text only" **without a recorded search**, or an omitted line on ANY deck that names a real
+    entity — including a roster slide — is an
     INVALID plan — the checkpoint is incomplete (this exact miss shipped: a stakeholder deck went to
     build with a typeset wordmark and no search; the user had asked for the rule before).
   - **FIDELITY GUARD (critical):** a designed wordmark is a **clearly-labelled designer's stand-in**,
@@ -588,6 +771,19 @@ This section always carries ONE required line — `taste profile: <n dials appli
 freshness: varied <foundation> vs <last look-history line>`, or the alternate arm `look LOCKED
 (registered/provided template) — carve applies` — the line that makes the freshness rule checkable
 (self-verify (j) reads it; the Step-2 design gate requires it; `references/user-taste.md`).
+
+It also carries the **`style pick:` line — the TOPIC-adapted look choice** (this is what makes the
+look fit the SUBJECT, not a reflex): `style pick: <preset|bespoke> for <domain> · beat <nearest rival>
+because <one clause> · anti-pick avoided: <the cliché the domain tempts>`, derived by the ranked
+contest in **`references/design-by-topic.md`** (domain → apt presets → ANTI-PICK, the guardrail vetoes,
+the CLICHÉ GUARD, and the per-preset beats-its-rival). On a LOCKED look (registered/provided template
+or a Mode-A mimic) the look is not domain-picked — write `style pick: n/a — <locked: template | mimic
+| provided>`. When the subject has a visual world of its own, a bespoke register from
+`references/bespoke-registers.md` (adapt, never transplant) beats every preset here — name it as the
+pick. **This line is a gate** (self-verify (s); the Step-2 design gate + `render_deck.py --gate-check`'s
+`design_plan.style_pick` require it) — it exists because the look was keyed on PURPOSE only, and a tech
+deck defaulted to the `dark_tech`/`synthwave` cliché the domain map warns against (measured on this
+skill's own Tesla deck: the user overrode the reflex to `editorial_report`, this table's #1 for AI/ML).
 
 It also carries the **BOLDNESS + SIGNATURE MOVE contract — two required lines** (this is the balance
 mechanism: stable floors, one protected act of daring):
@@ -674,7 +870,7 @@ Then run the **Block Dependency Audit** (the parallel/unordered/equal-weight/ind
 passes · the non-block alternative considered · keep-or-redesign*. This qualitative gate catches the
 visual sameness the family count misses, so it and the diversity gate both must pass.
 
-### Design self-verify (a–q)
+### Design self-verify (a–s, plus h2 — TWENTY checks)
 State the plan is **not ready** unless these DISTINCT checks pass — each weighed with judgment
 (considered + applied where it helps, one-clause-justified where a slide legitimately doesn't need it,
 NOT a blanket per-slide quota):
@@ -756,14 +952,40 @@ NOT a blanket per-slide quota):
   frame-fill rule; thin rows merged/enriched or their quiet register named in one clause), and no
   canvas value flip appears exactly once (any flip recurs as a divider family or bookend; on the
   generated-template branch, no canvas flip at all — imagery-strength beats only).
-- **(n) motif passes the STRANGER TEST** — the plan's motif line states the device AND its meaning in
-  words ("twin rails = the two engines"), and names HOW a first-time viewer learns it: labeled at
-  first appearance / figurative enough to read unaided / on-canvas legend (§1 STRANGER TEST). A motif
-  whose meaning appears only in the plan text fails.
+- **(n) motif is DERIVED, GENERATES, and passes the STRANGER TEST** — three things, because a motif
+  can be legible and still be an ornament, and it can be beautiful and still be undeducible:
+  - **derived** — the `concept:` line carries its middle rungs (`via <core concepts> → <visual
+    language>`, §1's ladder). A concept with no rungs is a picture that occurred to someone; the
+    middle rung is also the only thing standing between this deck and an industry stereotype.
+  - **generates** — the `motif generates:` line names all three (background · markers · one PAGE whose
+    geometry IS the motif — not necessarily a diagram, and `none — <reason>` beats an invented one),
+    or steps down to a quiet register with a stated reason. Two "nothing obvious" answers means
+    re-sketch. *Carves: `conservative` answers the triple with its `deliberately restrained` clause; a
+    1–2 slide tiny ask skips it; a locked template applies it to what you ADD, not to its own device.*
+  - **reads** — the motif line states the device AND its meaning in words ("twin rails = the two
+    engines") and names HOW a first-time viewer learns it. **FOUR arms** (§1 STRANGER TEST): labeled
+    at first appearance / figurative enough to read unaided / on-canvas legend / **REMOVED — and
+    removal is first-class, usually the better fix**. A motif whose meaning appears only in the plan
+    text fails. **FOUR tells** that a passing sentence is really a failing one: a reading that
+    **DEFERS** is not a reading ("it becomes clear on slide 7" is a failure written as a promise);
+    **position dictates reading and outranks intent** (if the slot says something other than what you
+    meant, the viewer reads the slot); a stranger who can only name the **shape** ("two ellipses")
+    rather than the meaning; and **ONE form, ONE meaning deck-wide** — check the repeated-forms list,
+    because two meanings on one device passes every per-page check and still sends the user asking.
+  🔴 **On branch (c) all three are REQUIRED, not weighed** (§1): there the motif is the entire visual
+  design, so "considered and skipped" is not an available answer. On a **locked look** the ladder is
+  not re-run — the template's device is the motif — while "reads" and the ADDED half of "generates"
+  still bind.
+  *(`references/checkpoint-convention.md` spells out the checkpoint fields — the tick you write here
+  must match the checkpoint you post.)*
 - **(o) logo plan carries evidence** — the `logo plan:` line matches the LOGO PRINCIPLE's situation
   table AND carries its evidence token (`official asset — <source>` / `searched, none found →
-  designed wordmark (flagged)` / `n/a — <reason>`). On a single-entity deck a bare "wordmark", "text only",
-  or missing line fails — the search was not run or not recorded.
+  designed wordmark (flagged)` / `n/a — <reason>`, the reasons including **`third-party assessment`** —
+  a deck ABOUT an entity but not FROM it, decided BEFORE the search, which a found logo does not
+  overturn). On ANY deck that names a real entity — including a roster slide — a bare "wordmark",
+  "text only", or a missing line fails: the search was not run or not recorded. A **roster slide
+  additionally owes `entity marks: <N of M sourced | none — reason>`**, and a generic placeholder
+  glyph is not an acceptable value for it.
 - **(p) image rows carry source tokens on-contract — split by owner:** at YOUR (agent) time, every
   Image opt-in row declares its depicted-subject **referent class + INTENDED source class** from the
   REFERENT-RULE grammar (`references/image-generation.md` step 5) — no `generated` claiming
@@ -789,7 +1011,26 @@ NOT a blanket per-slide quota):
   register — <reason>)` — so the critic's Lens-B `register_interiors` check (`agents/critic.md`,
   `references/review-rubrics.md`) can read it; a bare style whose register stops at the cover, with no
   named `none`-carve, is an interiors-bookends-only finding.
-Fix any failing check before the DESIGN checkpoint.
+- **(r) the `density:` line is on the checkpoint, as two NUMBERS the gate can be compared against** —
+  planned **median** words/slide, planned count **over 70**, and how many content slides have a
+  protagonist that is not text (`references/checkpoint-convention.md` owns the wording). Text-heavy
+  is the greedy default of every first draft, and it is the one design failure the user has raised
+  twice: on the second occasion 12 of 12 slides were over budget. The per-slide `TEXT WALL` warning
+  was correct both times and dismissed both times, so density is now hard-gated at hand-off
+  (`render_deck.py --gate-check`). This item is where the number gets DECIDED rather than discovered:
+  a design plan that never states its density has already chosen text by default.
+- **(s) the look is TOPIC-ADAPTED, via a ranked contest** — the Design language carries the
+  `style pick:` line (`references/design-by-topic.md`): the preset or bespoke register chosen for the
+  SUBJECT's DOMAIN (not the reflex), the nearest rival it beat + the one separating clause, and the
+  domain cliché it avoided (the CLICHÉ GUARD — no reflex `dark_tech`/`synthwave` for "AI/tech",
+  `terminal` for every dev deck, `glassmorphism` for every SaaS). On a locked look
+  (registered/provided template or Mode-A mimic) write `style pick: n/a — <reason>`. A plan that
+  picked a look by purpose or habit without checking domain fit is not ready. This is the item that
+  makes the look fit the SUBJECT; it is hard-gated (`render_deck.py --gate-check` /
+  `codex_delivery_gate.py` require `design_plan.style_pick`).
+Fix any failing check before the DESIGN checkpoint. **Twenty checks — (a)…(s) plus (h2). If your
+sweep stopped at (r), you skipped (s), the topic-adapted `style pick:` line — the item that keeps the
+look from being a domain reflex, hard-gated alongside (r) at hand-off.**
 
 ### Design-critic checklist
 Confirm the deck answers the 10 checks the critic's design lens will apply (design bible):

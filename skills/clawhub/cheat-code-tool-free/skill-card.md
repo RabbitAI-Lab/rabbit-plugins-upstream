@@ -1,44 +1,58 @@
-## Description: <br>
-Cheat Code Tool Free helps an AI agent perform external knowledge lookups for current technical documentation, API specifications, and domain knowledge beyond its training data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an AI agent to send authorized lookup queries to an external knowledge service and integrate structured technical, API, or domain information into its responses.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent retrieve structured external knowledge when its built-in training data may be stale or incomplete. Typical use cases include checking current technical documentation, API specifications, standards, and domain facts before composing an answer. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The documented authority and triggers are broader than a user may expect for a read-only external lookup helper. <br>
-Mitigation: Use the skill only for explicit user-directed lookup requests and review proposed actions before execution. <br>
-Risk: External lookup requests may send user-provided content to a knowledge service. <br>
-Mitigation: Use a least-privilege token and avoid sending sensitive, regulated, or confidential content. <br>
-Risk: The artifact mentions create/export operations and callback URLs without clear behavior guarantees. <br>
-Mitigation: Treat create/export and callback behavior as undefined unless the publisher provides clearer documentation. <br>
+## Use Case:
 
+Individual developers and agent builders use this skill to let an agent retrieve recent structured knowledge when its training data may be incomplete or outdated. It is suited for single-query technical documentation, API specification, and domain knowledge lookups.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cheat-code-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Artifact skill definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a knowledge-service token and network access; free edition documentation describes single-query usage and daily query limits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The agent may send lookup queries, and possibly surrounding context, to an external knowledge service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with non-sensitive prompts unless the provider endpoint, retention policy, and logging policy are acceptable.
+
+Risk: The skill requests broad file and shell authority that is wider than the lookup purpose requires.
+
+Mitigation: Install it in a constrained workspace and grant only the tools needed for the intended lookup workflow.
+
+Risk: External lookup results can be incomplete, stale, or unsuitable for high-impact decisions.
+
+Mitigation: Have the agent cite retrieved sources, cross-check important claims, and keep retrieved facts separate from inference.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cheat-code-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell environment setup commands and JSON-style response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include structured lookup results, execution logs, metadata, and error details returned by an external knowledge service.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

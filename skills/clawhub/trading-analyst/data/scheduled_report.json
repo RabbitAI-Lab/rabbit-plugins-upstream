@@ -1,0 +1,50 @@
+{
+  "symbol": "XAU/USD",
+  "generated_at": "2026-08-22 23:08 WIB",
+  "trend_h4": "Bullish",
+  "ema50_h4": 4470.86,
+  "ema200_h4": 4259.09,
+  "adx_h4": 68.8,
+  "momentum_h1": {
+    "rsi": 51.22,
+    "macd": "Bearish",
+    "macd_hist": -2.82,
+    "stochastic": [
+      51.88,
+      51.88
+    ]
+  },
+  "levels": {
+    "resistance": [
+      4631.91,
+      4608.38
+    ],
+    "support": [
+      4354.07,
+      4608.11
+    ],
+    "fibo": {
+      "0.382": 4525.78,
+      "0.5": 4492.99,
+      "0.618": 4460.21
+    },
+    "pivot": {
+      "P": 4608.25,
+      "R1": 4608.38,
+      "R2": 4608.52,
+      "R3": 4608.66,
+      "S1": 4608.11,
+      "S2": 4607.97,
+      "S3": 4607.83
+    },
+    "atr_h1": 0.3
+  },
+  "price": 4608.2451,
+  "confirmations": [
+    "H4 bullish",
+    "H1 MACD bear cross"
+  ],
+  "setup": null,
+  "recommendation": "Tunggu",
+  "note": "CANDIDATE only \u2014 not financial advice. NO-ICT (S/R + multi-TF + PA). Require >=3 confirmations."
+}

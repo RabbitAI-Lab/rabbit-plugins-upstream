@@ -1,0 +1,27 @@
+{
+  "should_trigger": [
+    {"text": "帮我从头做一个带货短剧", "family": "full_workflow", "expected_skill": "jys"},
+    {"text": "继续上次那个JYS项目", "family": "resume_project", "expected_skill": "jys"},
+    {"text": "这个带货短剧下一步继续", "family": "default_resume", "expected_skill": "state.next_skill"},
+    {"text": "把这个短剧的开头钩子改一下", "family": "stage_aware_hook", "expected_skill": "jys"}
+  ],
+  "should_not_trigger": [
+    {"text": "帮我写一个普通品牌广告文案", "family": "non_jys_copywriting"},
+    {"text": "总结一下这份剧本", "family": "summary_only"},
+    {"text": "把这篇文章翻译成英文", "family": "translation_only"}
+  ],
+  "near_neighbor": [
+    {"text": "分析这个短剧为什么好看，但不要制作新剧本", "family": "analysis_only"},
+    {"text": "给已有成片想六个标题，不需要JYS流程", "family": "title_only"},
+    {"text": "录入一个产品，但不要绑定到当前JYS项目", "family": "library_maintenance", "expected_skill": "jys-s1"}
+  ],
+  "routing_cases": [
+    {"text": "$jys-s1 帮我录入这个新产品", "expected_skill": "jys-s1"},
+    {"text": "$jys-s2 继续完成人物替换", "expected_skill": "jys-s2"},
+    {"text": "$jys-s3 确认当前项目的产品", "expected_skill": "jys-s3"},
+    {"text": "$jys-s4 继续写下一段台词", "expected_skill": "jys-s4"},
+    {"text": "$jys-s5 整理最终拍摄模板", "expected_skill": "jys-s5"},
+    {"text": "执行S3", "expected_skill": "jys", "reason": "自然语言步骤请求先由主控校验状态"}
+  ]
+}
+

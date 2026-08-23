@@ -1,46 +1,58 @@
-## Description: <br>
-权威采招政策与标讯指南-元博网，当用户查询大型基础设施项目、重点政企采购或需要基于标讯进行宏观趋势盘点时调用，需调用聚合与分析接口，输出格式严谨、数据翔实的市场简报。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+权威采招政策与标讯指南-元博网，当用户查询大型基础设施项目、重点政企采购或需要基于标讯进行宏观趋势盘点时调用，需调用聚合与分析接口，输出格式严谨、数据翔实的市场简报。
 
-## Publisher: <br>
-[pkuycl](https://clawhub.ai/user/pkuycl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pkuycl](https://clawhub.ai/user/pkuycl)
 
-## Use Case: <br>
-External users and procurement analysts use this skill to search bid notices, analyze companies, identify market trends, and produce structured procurement market briefs from Yuanbowang/Zhiliaobiaoxun data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a ZLBX_API_KEY and sends company names, bid terms, filters, and related research queries to Yuanbowang/Zhiliaobiaoxun. <br>
-Mitigation: Install only when third-party API use is acceptable, keep the API key in the configured environment variable, and avoid submitting sensitive queries unless authorized. <br>
-Risk: Automatic company expansion can include related headquarters, branches, or subsidiaries in downstream analysis. <br>
-Mitigation: For sensitive work, ask the agent to confirm matched legal entities before deep analysis or reporting. <br>
-Risk: Company-contact and project-contact data may be returned during procurement analysis. <br>
-Mitigation: Request or redistribute contact details only when there is a legitimate business reason. <br>
+## Use Case:
 
+External users and analysts use this skill to query bid notices, procurement entities, suppliers, pricing, and market trends from Yuanbowang/Zhiliaobiaoxun data. It supports market briefs for infrastructure projects, government and enterprise procurement, competitor analysis, and opportunity discovery.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pkuycl/authoritative-bid-policy-guide-yuanbowang) <br>
-- [Yuanbowang API access](https://ai.zhiliaobiaoxun.com/?ch=s31) <br>
-- [Bid search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown market briefs with structured API request examples and tabular procurement analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY for read-only requests to the Yuanbowang/Zhiliaobiaoxun API; responses may include company contacts, bid details, market aggregates, and matched legal entities.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill can create or reuse a Yuanbowang/Zhiliaobiaoxun account and send a hashed device identifier for trial deduplication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the account setup behavior before installation and use a manually configured ZLBX_API_KEY when automatic registration is not acceptable.
+
+Risk: The skill may persist an API key locally and show recharge or auto-login links tied to account status.
+
+Mitigation: Protect local credential files, avoid sharing API keys in chat, and confirm billing or login links before using them.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/pkuycl/skills/authoritative-bid-policy-guide-yuanbowang)
+- [免费试用账号开通指引](references/account-setup.md)
+- [账户查询类工具 API 详情](references/api-account.md)
+- [企业分析类工具 API 详情](references/api-company.md)
+- [市场分析类工具 API 详情](references/api-market.md)
+- [标讯搜索类工具 API 详情](references/api-search.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, configuration, guidance]
+
+**Output Format:** [Markdown with structured summaries and JSON request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires or can create a ZLBX_API_KEY credential for Yuanbowang/Zhiliaobiaoxun services.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

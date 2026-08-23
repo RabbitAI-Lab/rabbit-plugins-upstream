@@ -1,44 +1,65 @@
-## Description: <br>
-Monitors infant images or videos with visual AI to identify high-risk behaviors such as rolling over, mouth/nose obstruction, climbing, fence crossing, and fall risks, then returns safety warnings and care suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes infant activity images or videos with visual AI to identify high-risk behaviors such as rolling over, mouth/nose obstruction, climbing, fence crossing, and fall risk, then returns warnings, care suggestions, and report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External caregivers, parents, and developers use this skill to analyze infant image or video inputs for safety hazards and retrieve structured reports or historical report lists. Results are advisory and do not replace real-time human supervision or professional care. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive infant image or video inputs and sends inputs or URLs to a cloud service. <br>
-Mitigation: Install only when the publisher is trusted, obtain appropriate consent for child media, and avoid submitting unnecessary or highly sensitive footage. <br>
-Risk: The skill can silently create or reuse an internal identity and store returned service tokens locally. <br>
-Mitigation: Review account linkage and token storage before deployment, restrict execution to trusted environments, and clear local credentials when access should end. <br>
-Risk: The skill can query cloud-stored historical reports. <br>
-Mitigation: Confirm that cloud retention, access control, and report-sharing behavior match the deployment's privacy expectations. <br>
+## Use Case:
 
+Parents, caregivers, and developers use this skill to analyze infant activity media for possible safety risks and to retrieve cloud report history for prior analyses. It is an assistive monitoring workflow and is not a replacement for real-time supervision or professional care.
 
-## Reference(s): <br>
-- [婴儿智能安全看护分析 API 文档](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-safety-monitoring-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown safety report or structured JSON, with optional report links and saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call cloud APIs for analysis and historical report retrieval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter says 1.0.11) <br>
+Risk: Sensitive infant or home videos and URLs may be sent to a configured cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit consent, review the configured endpoint and retention terms, and avoid submitting unnecessary or identifying media.
+
+Risk: Report history is associated with an automatically resolved local identity.
+
+Mitigation: Confirm per-user scoping and account isolation before shared or production use.
+
+Risk: Account tokens may be stored in a workspace SQLite database.
+
+Mitigation: Restrict workspace access, rotate credentials when needed, and prefer a release with documented token storage controls.
+
+Risk: The skill provides assistive safety analysis and may miss or misclassify hazards.
+
+Mitigation: Keep caregiver supervision in place and treat reports as supplemental information, not professional care advice.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-safety-monitoring-analysis)
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [Infant safety monitoring API documentation](references/api_doc.md)
+- [Analysis API reference](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON analysis report with structured findings, safety warnings, care suggestions, and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud-hosted history/report links and optional saved report output.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata; artifact frontmatter reports 1.0.17)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,6 +1,6 @@
 # rune-rescue
 
-> Rune L1 Skill | orchestrator | model: tier:mid
+> Rune L1 Skill | orchestrator | model: tier:heavy
 
 
 # rescue

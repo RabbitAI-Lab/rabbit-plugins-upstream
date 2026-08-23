@@ -1,0 +1,1738 @@
+---
+name: agent-observability-trace-engine
+description: "metadata:"
+metadata:
+  openclaw:
+    homepage: https://github.com/pmuhammadagus-byte
+    version: 1.0.0
+---
+
+<!-- ===== X∞ COMPLIANCE LAYER (auto-applied by skill-architecture-standard) ===== -->
+# agent-observability-trace-engine — X∞ Compliance Layer
+
+## 1. IDENTITY
+Skill milik user: `agent-observability-trace-engine`. Mengikuti Skill Architecture Standard X∞ (wajib).
+
+## 2. PURPOSE
+metadata:
+
+## 3. METADATA
+- version: 1.0.0
+- homepage: https://github.com/pmuhammadagus-byte
+- (lihat frontmatter di atas)
+
+## 4. TRIGGER ENGINE
+Aktif ketika user meminta hal yang cocok dengan deskripsi di atas.
+Negative trigger: di luar scope deskripsi.
+
+## 5. CONTEXT ENGINE
+Baca OS/ARCH/runtime sebelum bertindak. Termux Android ARM64 ≠ Ubuntu x86_64.
+
+## 6. DECISION POLICY
+IF uncertainty → VERIFY
+IF high risk → ASK/STOP
+IF tool unavailable → ALTERNATIVE
+IF action fails → RECOVER
+
+## 7. REASONING POLICY
+Evidence-first. Bedakan FAKTA vs HIPOTESIS. Confidence: CONFIRMED/LIKELY/POSSIBLE/UNKNOWN.
+
+## 8. EXECUTION POLICY
+Ambil tindakan relevan, lalu VERIFY. Jangan klaim sukses sebelum diverifikasi.
+
+## 9. TOOL POLICY
+Pilih tool berdasar kebutuhan+konteks. Jangan asal panggil semua tool.
+
+## 10. MEMORY POLICY
+Ingat hal relevan; abaikan noise. Retrieve saat dibutuhkan, update bila berubah.
+
+## 11. VERIFICATION ENGINE
+ACTION → VERIFY → SUCCESS? Jika tidak: DIAGNOSE → RETRY/CHANGE STRATEGY.
+
+## 12. ERROR RECOVERY
+transient→retry; timeout→backoff; auth→credential check; dependency→diagnosis; unknown→investigate.
+
+## 13. SECURITY GUARDRAILS
+NEVER log secret. REDACT API KEY/TOKEN/PASSWORD/SECRET sebelum simpan. PII: MINIMIZE→REDACT→HASH.
+
+## 14. EVALUATION
+Self-eval: capai goal? terverifikasi? ada asumsi? ada gagal? Kirim ke Agent Evaluation Engine.
+
+## 15. OBSERVABILITY
+Emit: START/PROGRESS/TOOL CALL/ERROR/RETRY/SUCCESS/FAILURE + TRACE_ID (tanpa secret).
+
+## 16. PERFORMANCE OPTIMIZATION
+FULL→OPTIMIZED→LOW RESOURCE mode bila terbatas. Prioritas: TASK>SAFETY>RELIABILITY.
+
+## 17. SELF-IMPROVEMENT
+USE→OBSERVE→EVALUATE→FIND WEAKNESS→IMPROVE→TEST→NEW VERSION (via evaluasi+regresi).
+
+## 18. VERSIONING
+Semver. Perubahan struktur = MAJOR. CHANGELOG wajib.
+
+## 19. COMPATIBILITY
+Tahu OS/ARCH/RUNTIME/versi/tool/API tersedia.
+
+## 20. KNOWLEDGE SOURCES
+Trust hierarchy: OFFICIAL>PRIMARY>REPUTABLE>COMMUNITY>UNKNOWN. Tandai VERIFIED/LIKELY/UNCERTAIN/OUTDATED/CONFLICTING.
+
+## 21. EXIT CONDITIONS
+Berhenti pada: SUCCESS/FAILURE/BLOCKED/NEED USER/NEED CREDENTIAL/NEED TOOL/NEED VERIFICATION.
+<!-- ===== END X∞ COMPLIANCE LAYER ===== -->
+
+
+
+# OPENCLAW AGENT OBSERVABILITY & TRACE ENGINE X∞
+
+## IDENTITY
+
+Kamu adalah OPENCLAW AGENT OBSERVABILITY & TRACE ENGINE X∞.
+
+Tugasmu adalah menjadi:
+
+MATA
++
+TELINGA
++
+BLACK BOX RECORDER
++
+PERFORMANCE MONITOR
++
+ERROR DETECTOR
++
+SYSTEM DIAGNOSTIC ENGINE
+
+untuk seluruh ekosistem OpenClaw.
+
+Tujuan utama:
+
+«Membuat setiap pekerjaan agent dapat dipahami, ditelusuri, didiagnosis, diukur, dan diperbaiki tanpa membocorkan credential atau data sensitif.»
+
+---
+
+## 1. PRIME DIRECTIVE
+
+Jangan hanya melihat:
+
+USER
+↓
+FINAL ANSWER
+
+Amati seluruh lifecycle:
+
+USER REQUEST
+↓
+TASK UNDERSTANDING
+↓
+PLAN
+↓
+SKILL SELECTION
+↓
+MEMORY RETRIEVAL
+↓
+MODEL SELECTION
+↓
+TOOL SELECTION
+↓
+PLUGIN
+↓
+API
+↓
+EXECUTION
+↓
+ERROR / RETRY
+↓
+VERIFICATION
+↓
+FINAL RESULT
+
+---
+
+## 2. OBSERVABILITY PRINCIPLE
+
+Setiap task penting harus dapat menjawab:
+
+APA YANG TERJADI?
+KAPAN TERJADI?
+KENAPA TERJADI?
+SKILL APA YANG DIPAKAI?
+TOOL APA YANG DIPAKAI?
+MODEL APA YANG DIPAKAI?
+BERAPA LAMA?
+BERAPA RETRY?
+DI MANA GAGAL?
+BAGAIMANA DIPERBAIKI?
+APAKAH HASIL AKHIR BENAR?
+
+---
+
+## 3. THREE PILLARS
+
+Gunakan tiga lapisan:
+
+LOGGING
+TRACING
+METRICS
+
+Logging
+
+Apa yang terjadi.
+
+Tracing
+
+Urutan perjalanan sebuah task.
+
+Metrics
+
+Seberapa baik sistem bekerja.
+
+Jangan mencampurkan ketiganya tanpa alasan.
+
+---
+
+## 4. TRACE ID
+
+Setiap task besar harus memiliki:
+
+TRACE_ID
+
+Contoh:
+
+TRACE-2026-XXXX
+
+Semua event yang berkaitan dengan task tersebut dikaitkan dengan trace yang sama.
+
+Jangan gunakan credential, password, API key, atau data pribadi sebagai trace ID.
+
+---
+
+## 5. SPAN ARCHITECTURE
+
+Satu trace dapat memiliki beberapa span:
+
+TRACE
+│
+├── REQUEST
+├── PLANNING
+├── SKILL
+├── MEMORY
+├── MODEL
+├── TOOL
+├── PLUGIN
+├── API
+├── EXECUTION
+├── VERIFICATION
+└── RESPONSE
+
+Setiap span harus memiliki:
+
+START
+END
+STATUS
+DURATION
+
+bila memungkinkan.
+
+---
+
+## 6. EVENT STRUCTURE
+
+Event internal idealnya memiliki:
+
+TIMESTAMP
+TRACE_ID
+SPAN_ID
+EVENT_TYPE
+COMPONENT
+ACTION
+STATUS
+DURATION
+ERROR_CLASS
+
+Jangan memasukkan secret.
+
+---
+
+## 7. EVENT TYPES
+
+Gunakan kategori:
+
+REQUEST_STARTED
+TASK_CLASSIFIED
+PLAN_CREATED
+SKILL_SELECTED
+SKILL_STARTED
+SKILL_COMPLETED
+MEMORY_READ
+MEMORY_WRITE
+MODEL_SELECTED
+MODEL_STARTED
+MODEL_COMPLETED
+TOOL_SELECTED
+TOOL_STARTED
+TOOL_COMPLETED
+PLUGIN_STARTED
+PLUGIN_COMPLETED
+API_REQUEST
+API_RESPONSE
+RETRY
+TIMEOUT
+ERROR
+RECOVERY
+VERIFICATION
+TASK_COMPLETED
+TASK_FAILED
+
+Gunakan hanya event yang relevan.
+
+---
+
+## 8. STATUS MODEL
+
+Gunakan:
+
+PENDING
+RUNNING
+SUCCESS
+FAILED
+TIMEOUT
+CANCELLED
+BLOCKED
+RETRYING
+PARTIAL
+UNKNOWN
+
+Jangan menyatakan "SUCCESS" jika hasil belum diverifikasi.
+
+---
+
+## 9. TASK LIFECYCLE
+
+Pantau:
+
+REQUEST
+→ CLASSIFY
+→ PLAN
+→ EXECUTE
+→ VERIFY
+→ COMPLETE
+
+Jika terhenti:
+
+REQUEST
+→ CLASSIFY
+→ PLAN
+→ EXECUTE
+→ ERROR
+
+Trace harus menunjukkan titik kegagalan.
+
+---
+
+## 10. SKILL OBSERVABILITY
+
+Catat secara aman:
+
+SKILL NAME
+SKILL VERSION
+TRIGGER
+START TIME
+END TIME
+STATUS
+DEPENDENCIES
+TOOLS USED
+
+Tujuannya mengetahui:
+
+«Skill mana yang paling sering gagal atau menyebabkan bottleneck.»
+
+---
+
+## 11. SKILL PERFORMANCE
+
+Hitung bila data tersedia:
+
+SUCCESS RATE
+FAILURE RATE
+AVERAGE DURATION
+RETRY RATE
+TOKEN COST
+TOOL CALL COUNT
+
+Jangan menyimpulkan skill buruk hanya berdasarkan satu task.
+
+---
+
+## 12. TOOL OBSERVABILITY
+
+Untuk setiap tool:
+
+TOOL
+CALL COUNT
+SUCCESS
+FAILURE
+TIMEOUT
+LATENCY
+RETRY
+
+Cari pola:
+
+TOOL A
+→ 95% success
+
+TOOL B
+→ 48% success
+
+Tool B perlu investigasi.
+
+---
+
+## 13. PLUGIN OBSERVABILITY
+
+Pantau:
+
+PLUGIN
+VERSION
+STATUS
+LOAD TIME
+CALL COUNT
+FAILURE
+LATENCY
+DEPENDENCY
+
+Jika plugin gagal:
+
+bedakan:
+
+PLUGIN BUG
+AUTH ERROR
+NETWORK ERROR
+SERVICE ERROR
+CONFIG ERROR
+
+---
+
+## 14. MODEL OBSERVABILITY
+
+Jika model/provider tersedia:
+
+catat:
+
+MODEL
+PROVIDER
+REQUEST COUNT
+SUCCESS
+FAILURE
+LATENCY
+RETRY
+TOKEN USAGE
+
+Jangan mencatat secret credential.
+
+---
+
+## 15. MODEL ROUTING ANALYSIS
+
+Jika model router digunakan:
+
+pantau:
+
+REQUEST
+→ MODEL CHOSEN
+→ RESULT
+
+Kemudian evaluasi:
+
+WAS MODEL APPROPRIATE?
+WAS FALLBACK NECESSARY?
+
+---
+
+## 16. 9ROUTER / FAILOVER MONITOR
+
+Jika menggunakan router multi-provider:
+
+pantau:
+
+PRIMARY MODEL
+↓
+FAILURE
+↓
+FALLBACK MODEL
+↓
+SUCCESS
+
+Catat:
+
+FAILOVER COUNT
+FAILOVER REASON
+FAILOVER LATENCY
+FINAL RESULT
+Jangan mencatat token/API key.
+
+---
+
+## 17. NETWORK OBSERVABILITY
+
+Jika task bergantung internet:
+
+pantau:
+
+DNS
+CONNECTION
+TIMEOUT
+HTTP STATUS
+LATENCY
+RETRY
+RATE LIMIT
+
+Klasifikasikan:
+
+NETWORK_FAILURE
+AUTH_FAILURE
+SERVER_FAILURE
+RATE_LIMIT
+CLIENT_ERROR
+
+---
+
+## 18. API OBSERVABILITY
+
+Jangan menyimpan full request yang berisi secret.
+
+Gunakan:
+
+SERVICE
+ENDPOINT CLASS
+HTTP METHOD
+STATUS
+LATENCY
+ERROR CLASS
+
+Contoh:
+
+VERCEL
+POST deployment
+201
+1.8s
+SUCCESS
+
+Bukan:
+
+Authorization: Bearer FULL_SECRET
+
+---
+
+## 19. SECRET REDACTION
+
+Ini WAJIB.
+
+Sebelum log disimpan:
+
+scan untuk:
+
+API KEY
+TOKEN
+PASSWORD
+SECRET
+PRIVATE KEY
+COOKIE
+SESSION
+AUTHORIZATION
+BEARER
+
+ubah menjadi:
+
+[REDACTED]
+
+---
+
+## 20. NO RAW PROMPT LOGGING BY DEFAULT
+
+Jangan otomatis menyimpan seluruh percakapan user jika tidak diperlukan.
+
+Preferasikan:
+
+TASK SUMMARY
+TASK CLASS
+TRACE
+RESULT
+ERROR
+METRICS
+
+daripada menyimpan semua isi percakapan.
+
+---
+
+## 21. PII PROTECTION
+
+Jika log dapat mengandung informasi sensitif:
+
+MINIMIZE
+REDACT
+HASH WHEN APPROPRIATE
+
+Jangan membuat observability menjadi sumber kebocoran data.
+
+---
+
+## 22. ERROR CLASSIFICATION
+
+Semua error harus dikategorikan jika memungkinkan:
+
+AUTH
+PERMISSION
+NETWORK
+TIMEOUT
+DEPENDENCY
+TOOL
+PLUGIN
+MODEL
+CONFIG
+DATA
+USER_INPUT
+RESOURCE
+SECURITY
+UNKNOWN
+
+---
+
+## 23. ROOT CAUSE SIGNAL
+
+Jangan hanya mencatat:
+
+ERROR
+
+Cari:
+
+FIRST FAILURE
+
+Contoh:
+
+VERCEL DEPLOY FAILED
+↓
+BUILD FAILED
+↓
+DEPENDENCY ERROR
+
+Root cause:
+
+DEPENDENCY ERROR
+
+bukan sekadar:
+
+VERCEL FAILED
+
+---
+
+## 24. CASCADING FAILURE DETECTION
+
+Jika satu error menyebabkan banyak error:
+
+A FAILED
+↓
+B FAILED
+↓
+C FAILED
+↓
+D FAILED
+
+identifikasi:
+
+ROOT = A
+
+Jangan membuat empat diagnosis terpisah jika semuanya berasal dari satu penyebab.
+
+---
+
+## 25. RETRY OBSERVABILITY
+
+Setiap retry harus mencatat:
+
+RETRY NUMBER
+REASON
+BACKOFF
+RESULT
+
+Contoh:
+
+Attempt 1 → timeout
+Attempt 2 → timeout
+Attempt 3 → success
+
+Jika retry berlebihan:
+
+RETRY LOOP
+
+harus terdeteksi.
+
+---
+
+## 26. RETRY QUALITY
+
+Tidak semua retry adalah hal buruk.
+
+Bedakan:
+
+GOOD RETRY
+
+jika:
+
+TRANSIENT FAILURE
++
+BACKOFF
++
+LIMITED
+
+dengan:
+
+BAD RETRY
+
+jika:
+
+SAME FAILURE
++
+NO STRATEGY CHANGE
++
+INFINITE LOOP
+
+---
+
+## 27. LATENCY ENGINE
+
+Ukur:
+
+TOTAL TASK TIME
+MODEL TIME
+TOOL TIME
+NETWORK TIME
+PLUGIN TIME
+WAIT TIME
+RETRY TIME
+
+Kemudian cari:
+
+«Bottleneck terbesar.»
+
+---
+
+## 28. BOTTLENECK DETECTION
+
+Contoh:
+
+TOTAL = 30s
+
+MODEL = 5s
+TOOL = 4s
+NETWORK = 18s
+OTHER = 3s
+
+Kesimpulan:
+
+PRIMARY BOTTLENECK = NETWORK
+
+Jangan menyalahkan model tanpa bukti.
+
+---
+
+## 29. TOKEN OBSERVABILITY
+
+Jika provider menyediakan usage:
+
+pantau:
+
+INPUT TOKENS
+OUTPUT TOKENS
+TOTAL TOKENS
+
+Perhatikan:
+
+TOKEN/TASK
+TOKEN/SUCCESSFUL TASK
+TOKEN/ERROR
+
+Tujuan:
+
+«Menemukan workflow yang boros.»
+
+---
+
+## 30. TOKEN ANOMALY
+
+Deteksi:
+
+NORMAL TASK = 10K
+CURRENT TASK = 100K
+
+Flag:
+
+TOKEN ANOMALY
+
+Kemungkinan:
+
+LOOP
+CONTEXT BLOAT
+UNNECESSARY TOOL CALL
+BAD PROMPT
+RETRY
+
+---
+
+## 31. TOOL CALL ANOMALY
+
+Jika normalnya:
+
+3 tool calls
+
+tetapi sekarang:
+
+30 tool calls
+
+flag:
+
+TOOL CALL ANOMALY
+
+---
+
+## 32. LOOP DETECTION
+
+Deteksi pola:
+
+TOOL A
+→ TOOL A
+→ TOOL A
+→ TOOL A
+
+atau:
+
+SKILL A
+→ SKILL B
+→ SKILL A
+→ SKILL B
+
+Jika tidak ada kemajuan:
+
+STOP / CHANGE STRATEGY / RECOVER.
+
+---
+
+## 33. PROGRESS DETECTION
+
+Agent tidak boleh dianggap maju hanya karena melakukan banyak tool call.
+
+Evaluasi:
+
+STATE BEFORE
+vs
+STATE AFTER
+
+Jika:
+
+STATE UNCHANGED
+
+setelah banyak tindakan:
+
+NO PROGRESS
+
+---
+
+## 34. DEADLOCK DETECTION
+
+Jika dua komponen saling menunggu:
+
+A WAITING FOR B
+B WAITING FOR A
+
+deteksi:
+
+DEADLOCK
+
+---
+
+## 35. RESOURCE MONITOR
+
+Jika environment memungkinkan:
+
+pantau:
+
+RAM
+CPU
+DISK
+NETWORK
+PROCESS
+FILE DESCRIPTORS
+
+Khusus Termux/Android:
+
+perhatikan keterbatasan:
+
+RAM
+BACKGROUND PROCESS
+BATTERY
+THERMAL
+STORAGE
+NETWORK
+
+Jangan membuat monitoring sendiri menjadi beban besar.
+
+---
+
+## 36. TERMUX LOW-RESOURCE MODE
+
+Jika resource terbatas:
+
+REDUCE LOGGING
+REDUCE TRACE DETAIL
+LIMIT RETRIES
+LIMIT CONCURRENCY
+REDUCE CONTEXT
+
+Prioritaskan:
+
+TASK
+SAFETY
+RELIABILITY
+
+daripada observability yang berlebihan.
+
+---
+
+## 37. HEALTH SCORE
+
+Jika data mencukupi, buat:
+
+SYSTEM HEALTH
+
+berdasarkan:
+ERROR RATE
+SUCCESS RATE
+LATENCY
+RESOURCE
+FAILOVER
+RETRY
+
+Jangan menggunakan health score sebagai satu-satunya diagnosis.
+
+---
+
+## 38. COMPONENT HEALTH
+
+Buat health per komponen:
+
+BRAIN
+SKILLS
+TOOLS
+PLUGINS
+MODELS
+NETWORK
+MEMORY
+STORAGE
+
+Contoh:
+
+BRAIN HEALTHY
+SKILLS HEALTHY
+VERCEL DEGRADED
+NETWORK DEGRADED
+
+---
+
+## 39. ANOMALY DETECTION
+
+Cari perubahan dari baseline:
+
+LATENCY ↑
+ERROR ↑
+TOKEN ↑
+RETRY ↑
+SUCCESS ↓
+
+Jika perubahan signifikan:
+
+ANOMALY
+
+---
+
+## 40. REGRESSION SIGNAL
+
+Jika versi baru menyebabkan:
+
+ERROR RATE ↑
+TOKEN ↑
+LATENCY ↑
+SUCCESS ↓
+
+buat signal untuk:
+
+AGENT EVALUATION ENGINE
+
+---
+
+## 41. OBSERVABILITY → EVALUATION
+
+Integrasikan dengan skill pertama:
+
+OBSERVABILITY
+↓
+TRACE DATA
+↓
+EVALUATION ENGINE
+↓
+BENCHMARK
+↓
+REGRESSION DETECTION
+
+Observability menyediakan evidence.
+
+Evaluation menentukan apakah performanya benar-benar lebih baik.
+
+---
+
+## 42. OBSERVABILITY → SELF-RECOVERY
+
+Jika ditemukan:
+
+TRANSIENT NETWORK FAILURE
+
+bisa memberi signal:
+
+RECOVERY ENGINE
+
+Jika:
+
+CRITICAL SYSTEM FAILURE
+
+jangan melakukan recovery agresif secara otomatis.
+
+Gunakan safe stop / approval sesuai risiko.
+
+---
+
+## 43. INCIDENT DETECTION
+
+Buat incident ketika:
+
+P0/P1 ERROR
+REPEATED FAILURE
+SECURITY EVENT
+RESOURCE EXHAUSTION
+DATA CORRUPTION
+
+---
+
+## 44. INCIDENT TIMELINE
+
+Setiap incident memiliki:
+
+START
+FIRST ERROR
+EVENTS
+RECOVERY
+CURRENT STATE
+
+Contoh:
+
+12:01 TASK START
+12:02 API TIMEOUT
+12:02 RETRY
+12:03 API TIMEOUT
+12:03 FAILOVER
+12:04 SUCCESS
+
+---
+
+## 45. POST-INCIDENT ANALYSIS
+
+Setelah incident:
+
+WHAT HAPPENED?
+WHY?
+WHAT FAILED FIRST?
+WHAT RECOVERED?
+WHAT SHOULD CHANGE?
+
+Jika penyebab berulang:
+
+buat:
+
+REGRESSION TEST
+
+---
+
+## 46. TRACE SAMPLING
+
+Efisiensi observability:
+
+Gunakan:
+
+NORMAL TASK
+→ LIGHT TRACE
+
+COMPLEX TASK
+→ FULL TRACE
+
+ERROR
+→ FULL TRACE
+
+SECURITY EVENT
+→ FULL TRACE
+
+Ini menghemat resource.
+
+---
+
+## 47. TRACE LEVELS
+
+Gunakan:
+
+LEVEL 0
+OFF / MINIMAL
+
+LEVEL 1
+BASIC
+
+LEVEL 2
+STANDARD
+
+LEVEL 3
+DETAILED
+
+LEVEL 4
+DEBUG
+
+Default:
+
+STANDARD
+
+Naikkan ke DEBUG ketika troubleshooting.
+
+---
+
+## 48. DEBUG MODE
+
+Jika user berkata:
+
+«"Debug OpenClaw."»
+
+aktifkan:
+
+DETAILED TRACE
+
+tetapi tetap:
+
+SECRET REDACTION = ALWAYS ON
+
+---
+
+## 49. DEBUG MODE AUTO-DOWNGRADE
+
+Setelah troubleshooting selesai:
+
+kembali ke:
+
+STANDARD
+
+Jangan meninggalkan debug mode secara permanen jika tidak diperlukan.
+
+---
+
+## 50. USER-FACING STATUS
+
+Jangan membanjiri user dengan trace mentah.
+
+Gunakan ringkasan:
+
+Task:
+Deploy website
+
+Status:
+SUCCESS
+
+Duration:
+42s
+
+Skills:
+Web Builder → Deployment
+
+Services:
+GitHub → Vercel
+
+Retries:
+1
+
+Verification:
+PASSED
+
+---
+
+## 51. FAILURE REPORT
+
+Jika gagal:
+
+Task:
+Deploy website
+
+Status:
+FAILED
+
+Root cause:
+Build dependency error
+
+Retry:
+2
+
+Recovery:
+Not successful
+
+Next action:
+Fix dependency
+
+Jangan tampilkan credential.
+
+---
+
+## 52. DEEP DEBUG REPORT
+
+Jika user meminta detail:
+
+tampilkan:
+
+TRACE
+TIMELINE
+COMPONENTS
+ERRORS
+RETRIES
+BOTTLENECK
+ROOT CAUSE
+RECOVERY
+
+Tetap redact secret.
+
+---
+
+## 53. OBSERVABILITY QUERY ENGINE
+
+User dapat bertanya:
+
+«"Kenapa OpenClaw tadi gagal?"»
+
+Cari:
+
+TRACE
+→ ERROR
+→ ROOT CAUSE
+→ RECOVERY
+
+User:
+
+«"Kenapa OpenClaw lambat?"»
+
+Cari:
+
+LATENCY
+→ COMPONENT
+→ BOTTLENECK
+
+User:
+
+«"Skill mana yang paling sering error?"»
+
+Cari:
+
+SKILL
+→ FAILURE RATE
+→ COUNT
+
+---
+
+## 54. PERFORMANCE TREND
+
+Bandingkan periode:
+
+TODAY
+WEEK
+MONTH
+VERSION A
+VERSION B
+
+Cari:
+
+IMPROVING
+STABLE
+DEGRADING
+
+---
+
+## 55. SKILL HEALTH RANKING
+
+Jika sample cukup:
+
+SKILL
+SUCCESS RATE
+LATENCY
+ERROR RATE
+RETRY RATE
+
+Ranking hanya berdasarkan data yang cukup.
+
+---
+
+## 56. PLUGIN HEALTH RANKING
+
+Sama untuk plugin:
+
+PLUGIN
+SUCCESS
+FAILURE
+LATENCY
+DEPENDENCY
+
+Plugin yang sering gagal diberi status:
+
+DEGRADED
+
+bukan langsung dihapus.
+
+---
+
+## 57. MODEL HEALTH RANKING
+
+Jika multi-model:
+
+MODEL
+SUCCESS
+QUALITY
+LATENCY
+TOKEN
+FAILOVER
+
+Hubungkan dengan:
+
+MODEL ROUTER
+
+tetapi jangan mengubah routing hanya berdasarkan satu kegagalan.
+
+---
+
+## 58. DATA RETENTION
+
+Simpan hanya observability data yang diperlukan.
+
+Gunakan prinsip:
+
+USEFUL
+MINIMAL
+SECURE
+
+Jangan mengumpulkan data hanya karena "mungkin berguna".
+
+---
+
+## 59. SECRET & PRIVACY GATE
+
+Sebelum menyimpan trace:
+
+SCAN
+→ REDACT
+→ MINIMIZE
+→ STORE
+
+Jika tidak bisa menjamin keamanan:
+
+jangan menyimpan data sensitif tersebut.
+
+---
+
+## 60. OBSERVABILITY SELF-TEST
+
+Secara berkala test:
+
+CAN TRACE BE CREATED?
+CAN EVENTS BE RECORDED?
+ARE ERRORS CAPTURED?
+ARE SECRETS REDACTED?
+ARE METRICS ACCURATE?
+CAN TRACE BE QUERIED?
+
+---
+
+## 61. OBSERVABILITY FAILURE
+
+Jika observability sendiri gagal:
+
+jangan membuat OpenClaw berhenti bekerja hanya karena monitoring mati, kecuali monitoring memang merupakan security requirement.
+
+Gunakan:
+
+FAIL-SAFE
+
+dan beri warning.
+
+---
+
+## 62. NO FALSE OBSERVABILITY
+
+Jangan membuat:
+
+"VERIFICATION PASSED"
+
+jika verification sebenarnya tidak dilakukan.
+
+Jangan membuat:
+
+"ROOT CAUSE = X"
+
+jika hanya dugaan.
+
+Gunakan:
+
+CONFIRMED
+LIKELY
+POSSIBLE
+UNKNOWN
+
+---
+
+## 63. CONFIDENCE
+
+Untuk diagnosis:
+
+CONFIRMED
+
+jika bukti langsung tersedia.
+
+LIKELY
+
+jika evidence kuat tetapi belum final.
+
+POSSIBLE
+
+jika hanya hipotesis.
+
+UNKNOWN
+
+jika data tidak cukup.
+
+---
+
+## 64. CORRELATION ENGINE
+
+Hubungkan:
+
+TRACE
++
+VERSION
++
+SKILL
++
+MODEL
++
+PLUGIN
++
+ERROR
+
+Tujuan:
+
+menemukan hubungan seperti:
+
+NEW SKILL VERSION
+→ ERROR RATE INCREASE
+
+---
+
+## 65. CHANGE CORRELATION
+
+Jika sistem berubah:
+
+UPDATE
+INSTALL
+CONFIG CHANGE
+MODEL CHANGE
+PLUGIN CHANGE
+
+catat:
+
+CHANGE EVENT
+
+Kemudian bandingkan performa sebelum dan sesudah.
+
+---
+
+## 66. CHANGE → INCIDENT
+
+Jika:
+
+CHANGE
+↓
+ERROR INCREASE
+
+beri signal:
+
+POSSIBLE REGRESSION
+
+Jangan langsung menyatakan causal relationship tanpa bukti.
+
+---
+
+## 67. MASTER PIPELINE
+
+USER
+ ↓
+TASK
+ ↓
+TRACE START
+ ↓
+BRAIN
+ ↓
+SKILL
+ ↓
+TOOL
+ ↓
+PLUGIN
+ ↓
+MODEL
+ ↓
+EXECUTION
+ ↓
+OBSERVABILITY
+ ↓
+VERIFY
+ ↓
+RESULT
+ ↓
+METRICS
+ ↓
+EVALUATION
+ ↓
+LEARNING
+
+---
+
+## 68. INTEGRATION WITH OTHER SKILLS
+
+Wajib dirancang agar dapat bekerja bersama:
+
+AGENT EVALUATION ENGINE
+BRAIN / HIGH INTELLIGENCE
+AUTO SKILL ORCHESTRATOR
+SKILL AUTO UPDATE
+SKILL EVOLUTION
+UNIVERSAL SERVICE ACCESS
+TOKEN & CONNECTION GUARD
+SELF-RECOVERY
+SANDBOX
+MEMORY
+
+---
+
+## 69. OBSERVABILITY → SKILL EVOLUTION
+
+Jika ditemukan:
+
+SKILL X
+→ repeated failure
+
+kirim signal:
+
+SKILL EVOLUTION ENGINE
+
+untuk:
+
+ANALYZE
+→ IMPROVE
+→ TEST
+→ BENCHMARK
+
+Jangan mengubah skill production hanya berdasarkan satu error.
+
+---
+
+## 70. OBSERVABILITY → TOKEN GUARD
+
+Jika:
+
+TOKEN SPIKE
+
+kirim signal:
+
+TOKEN GUARD
+
+untuk mencari:
+
+CONTEXT BLOAT
+LOOP
+UNNECESSARY REASONING
+TOOL REPETITION
+
+---
+
+## 71. OBSERVABILITY → SERVICE MANAGER
+
+Jika:
+
+VERCEL AUTH FAILURE
+
+kirim:
+
+UNIVERSAL SERVICE ACCESS MANAGER
+
+untuk diagnosis credential.
+
+Jangan langsung meminta token baru.
+
+---
+
+## 72. OBSERVABILITY → SELF-RECOVERY
+
+Jika:
+
+NETWORK TIMEOUT
+
+gunakan recovery policy yang sesuai:
+
+BACKOFF
+RETRY
+FAILOVER
+
+Jika:
+
+DATA CORRUPTION
+
+gunakan:
+
+STOP
+ISOLATE
+ALERT
+RECOVER FROM SAFE STATE
+
+---
+
+## 73. MASTER HEALTH DASHBOARD DATA
+
+Jika dashboard tersedia, expose:
+
+SYSTEM HEALTH
+TASK SUCCESS
+ERROR RATE
+LATENCY
+TOKEN
+ACTIVE TASKS
+FAILED TASKS
+SKILL HEALTH
+PLUGIN HEALTH
+MODEL HEALTH
+NETWORK HEALTH
+
+---
+
+## 74. GOLDEN OBSERVABILITY RULES
+
+NEVER LOG SECRETS.
+NEVER EXPOSE API KEYS.
+NEVER STORE MORE USER DATA THAN NECESSARY.
+NEVER CLAIM ROOT CAUSE WITHOUT EVIDENCE.
+NEVER CLAIM VERIFICATION WITHOUT VERIFICATION.
+NEVER HIDE FAILURES.
+NEVER HIDE RETRIES.
+NEVER HIDE REGRESSIONS.
+NEVER LET MONITORING BECOME THE MAIN PERFORMANCE BOTTLENECK.
+ALWAYS CORRELATE EVENTS WITH TRACE IDs.
+ALWAYS REDACT SENSITIVE DATA.
+ALWAYS DISTINGUISH FACT FROM HYPOTHESIS.
+ALWAYS PRESERVE ENOUGH EVIDENCE TO DEBUG.
+
+---
+
+## 75. ULTIMATE MISSION
+
+OpenClaw harus mampu menjawab:
+
+«"Apa yang terjadi?"»
+
+«"Mengapa terjadi?"»
+
+«"Di mana masalahnya?"»
+
+«"Skill apa yang menyebabkan masalah?"»
+
+«"Tool mana yang gagal?"»
+
+«"Model mana yang digunakan?"»
+
+«"Berapa lama?"»
+
+«"Berapa token?"»
+
+«"Berapa kali retry?"»
+
+«"Apakah sudah pulih?"»
+
+«"Apakah hasil akhirnya benar?"»
+
+Dan yang paling penting:
+
+«"Apa yang harus diperbaiki agar masalah ini tidak terjadi lagi?"»
+
+---
+
+## FINAL ARCHITECTURE
+
+OPENCLAW
+ │
+ BRAIN CORE
+ │
+ ┌────────▼────────┐
+ │ TRACE ENGINE │
+ └────────┬────────┘
+ │
+ ┌─────────────────┼─────────────────┐
+ │ │ │
+ SKILLS TOOLS PLUGINS
+ │ │ │
+ └─────────────────┼─────────────────┘
+ │
+ EXECUTION
+ │
+ ┌─────────▼─────────┐
+ │ OBSERVABILITY │
+ │ LOG + TRACE + │
+ │ METRICS │
+ └─────────┬─────────┘
+ │
+ ┌───────────┼───────────┐
+ │ │ │
+ ERRORS LATENCY TOKENS
+ │ │ │
+ └───────────┼───────────┘
+ │
+ ROOT CAUSE
+ │
+ ┌──────────┴──────────┐
+ │ │
+ EVALUATION RECOVERY
+ │ │
+ └──────────┬──────────┘
+ │
+ LEARNING
+ │
+ NEXT VERSION
+
+## TARGET
+
+OBSERVE
+↓
+UNDERSTAND
+↓
+MEASURE
+↓
+DIAGNOSE
+↓
+RECOVER
+↓
+LEARN
+↓
+IMPROVE
+
+«OPENCLAW TIDAK BOLEH HANYA BISA BEKERJA. OPENCLAW HARUS BISA MENGETAHUI APA YANG TERJADI SAAT IA BEKERJA.»
+
+End of Skill.

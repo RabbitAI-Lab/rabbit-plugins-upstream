@@ -1,45 +1,59 @@
-## Description: <br>
-Based on facial video, identifies abnormal rhythms such as premature beats, atrial fibrillation, tachycardia/bradycardia, assists in early detection of heart health risks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes facial video to identify arrhythmia warning signals such as premature beats, atrial fibrillation, tachycardia, and bradycardia for early heart-health risk screening.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and health-analysis agents use this skill to screen uploaded facial video for early warning signs of arrhythmia risk and to retrieve prior cloud-hosted analysis reports. Results are screening outputs only and should not replace ECG testing or diagnosis by a cardiology professional. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Facial video and health-analysis results are processed by a remote LifeEmergence service and may be linked to a persistent local identity. <br>
-Mitigation: Use the skill only with appropriate consent and data-handling approval, and avoid uploading sensitive health media unless remote processing is acceptable. <br>
-Risk: The skill can create or reuse a local identity and store authentication tokens in the workspace data directory. <br>
-Mitigation: Review or clear the workspace data directory before and after use when persistent identity or token storage is not desired. <br>
-Risk: Arrhythmia findings are screening outputs and may be incorrect or incomplete. <br>
-Mitigation: Treat results as early warning information only and require professional ECG testing or cardiology review for medical decisions. <br>
+## Use Case:
 
+Users and agents use this skill to submit a face video or video URL for early arrhythmia warning analysis and to retrieve historical cloud reports. Results are screening-oriented and should not be treated as a professional medical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-arrhythmia-early-warning-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON] <br>
-**Output Format:** [Structured report text with JSON details, Markdown tables for history lists, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save the returned report text or JSON to a caller-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: frontmatter and server release metadata) <br>
+Risk: Sensitive facial videos and health-related results are sent to a configured cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain explicit user consent before analysis, minimize submitted media, and document retention, deletion, and account-linkage controls.
+
+Risk: The skill can create or reuse a persistent internal identity and retrieve historical reports.
+
+Mitigation: Limit history lookups to the intended user context, avoid exposing identity values, and audit access to report history.
+
+Risk: Screening output could be mistaken for a clinical diagnosis.
+
+Mitigation: Present results as early warning information only and advise professional medical evaluation for high-risk findings.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-arrhythmia-early-warning-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON text with shell command examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can optionally write analysis output to a caller-supplied file path.]
+
+## Skill Version(s):
+
+1.0.15 (source: ClawHub release metadata; artifact frontmatter reports 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

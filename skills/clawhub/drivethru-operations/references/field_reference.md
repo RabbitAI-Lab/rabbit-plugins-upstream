@@ -235,13 +235,19 @@ with `ops_list_model_fields {"model": "mrp.production.batch"}`.
 | --- | --- | --- |
 | `name` | char | Batch name/number. |
 | `state` | selection | Batch lifecycle stage. |
-| `date_planned_start` / `date_planned_finished` | datetime | Scheduled start / finish on its machine. |
+| `sequence` | integer | **Run order** — the batch's rank in the production queue. Lower runs first. This is the primary scheduling signal. |
+| `manual_sequence` | boolean | A manufacturing manager pinned this batch's run order by hand; the scheduling agent won't re-rank it. |
+| `date_planned_start` / `date_planned_finished` | datetime | *Planned* start / finish on its machine. Often unset — the run order is the decision, the slot is a refinement. |
+| `datetime_started` | datetime | When the batch actually started on the floor (Start Batch on the scanned worksheet, or first transition to In Progress). |
+| `datetime_done` | datetime | When the batch actually finished (stamped on the transition to Done). |
 | `ship_date` | date | Date the batch must ship by. Compare to `date_planned_finished` to catch slippage. |
 | `event_date` | date | Customer in-hands/event date. |
 | `production_center_id` | many2one | Assigned production center. |
 | `primary_workcenter_id` | many2one | The machine it's scheduled on; **unset ⇒ not yet placed**. |
 | `piece_count` | integer | Total pieces (compute, searchable=no). |
 | `is_late` | boolean | Past its ship date (compute, searchable=no). |
+| `print_decals_status` | selection | Whether this batch's DTF / Heat Press decals have printed: `na` (none to print), `no`, `partial`, `sample`, `yes`. Anything but `na`/`yes` blocks the job. |
+| `art_status` | selection | Artwork rollup across the batch's decorations and digitize demands: `not_started`, `in_progress`, `digitize`, `hold_clc`, `done`. Only `done` clears it (compute, searchable=no). |
 | `production_ids` | one2many | The MOs in the batch. |
 
 ### mrp.production — manufacturing order (MO)
