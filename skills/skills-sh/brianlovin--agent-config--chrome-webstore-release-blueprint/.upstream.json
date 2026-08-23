@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/brianlovin/agent-config/chrome-webstore-release-blueprint",
+  "repo": "brianlovin/agent-config",
+  "skillId": "chrome-webstore-release-blueprint",
+  "branch": "main",
+  "pushedAt": "2026-03-25T17:52:51Z",
+  "contentHash": "99d3db0744c20fcc94f2c58268aba890af39f1ad78ff2057edfe96c74cc86e35",
+  "fetchedAt": "2026-08-23T07:51:23.924Z"
+}

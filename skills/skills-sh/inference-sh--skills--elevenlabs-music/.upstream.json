@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/elevenlabs-music",
+  "repo": "inference-sh/skills",
+  "skillId": "elevenlabs-music",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "d65bdc451da110976a7c973c235681d070ce21c8bc9370fe959ae16f5a16183f",
+  "fetchedAt": "2026-08-23T07:51:18.202Z"
+}

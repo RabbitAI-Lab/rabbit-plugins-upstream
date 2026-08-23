@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/create-learning-path",
+  "repo": "cursor/plugins",
+  "skillId": "create-learning-path",
+  "branch": "main",
+  "pushedAt": "2026-08-21T03:10:06Z",
+  "contentHash": "5a200117d2bd1962df21a9bde9a01ec1642ad0021fd3d515a5c638a2467f666f",
+  "fetchedAt": "2026-08-23T07:52:40.337Z"
+}

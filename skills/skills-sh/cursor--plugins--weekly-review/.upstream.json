@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/weekly-review",
+  "repo": "cursor/plugins",
+  "skillId": "weekly-review",
+  "branch": "main",
+  "pushedAt": "2026-08-21T03:10:06Z",
+  "contentHash": "312a270c253c5874b0e6ab99f8b690d576061dc1642eb780b3dac30026145ec2",
+  "fetchedAt": "2026-08-23T07:52:40.181Z"
+}

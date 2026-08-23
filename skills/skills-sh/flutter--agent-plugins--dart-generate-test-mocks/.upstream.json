@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/flutter/agent-plugins/dart-generate-test-mocks",
+  "repo": "flutter/agent-plugins",
+  "skillId": "dart-generate-test-mocks",
+  "branch": "main",
+  "pushedAt": "2026-08-21T18:42:05Z",
+  "contentHash": "6b3394142d344c3c084a5f97f0f6c5a90242fb9ca7542bd27970851a29a40c4c",
+  "fetchedAt": "2026-08-23T07:51:19.798Z"
+}

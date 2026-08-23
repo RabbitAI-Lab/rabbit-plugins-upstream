@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/bun-cloudflare-workers",
+  "repo": "secondsky/claude-skills",
+  "skillId": "bun-cloudflare-workers",
+  "branch": "main",
+  "pushedAt": "2026-08-20T08:18:42Z",
+  "contentHash": "24bc711bdb4f3989b0b5fefe096c4771473672ecfdfe391f45c9a4e3003c6ef0",
+  "fetchedAt": "2026-08-23T07:53:22.819Z"
+}
