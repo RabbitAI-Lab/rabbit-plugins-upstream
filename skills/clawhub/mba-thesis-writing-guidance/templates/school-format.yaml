@@ -1,0 +1,17 @@
+# 学校硬约束。由 Agent 在 00-intake 写入论文项目根目录的同名文件。
+# 用户不必手填本模板。未向用户确认前保持 null，禁止把「常见值」写进论文冒充已确认。
+
+school: ""
+template: ""              # 培养手册或学位论文模板路径
+
+requirements:
+  min_body_words: null    # 常见 ≥30000，以学校为准
+  max_copy_rate: null     # 常见 <15% 或 <20%
+  min_references: null    # 通用底线见 format-standards.md（≥50），学校优先
+  foreign_ref_ratio: null
+  recent_5y_ratio: null
+  chapter_system: null    # 5 / 6 / 学校指定
+  citation_style: null    # 常见 GB/T 7714 顺序编码或著者-出版年，未确认前不要写进论文
+
+ai_policy: ""             # 学校是否允许 AI 辅助、如何声明
+notes: ""

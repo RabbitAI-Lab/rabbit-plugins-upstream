@@ -1,44 +1,60 @@
-## Description: <br>
-Analyzes pet-alone video to identify separation-anxiety behaviors, estimate anxiety level, and return behavior observations with comfort recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet camera images or videos for separation-anxiety behaviors, returns structured observations, severity levels, comfort recommendations, and report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, pet owners, boarding centers, and developers use this skill to analyze pet camera footage from owner-away periods, detect likely separation-anxiety behaviors, and produce structured monitoring results and intervention guidance. The output is for behavior observation only, not medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet and home media may be sent to the publisher's cloud service. <br>
-Mitigation: Use only pet-focused media that avoids people, sensitive rooms, private camera URLs, and audio unless the publisher's service and retention practices are acceptable. <br>
-Risk: The skill may create or reuse a persistent local identity and store tokens locally. <br>
-Mitigation: Review identity and token storage before deployment, avoid shared machines for sensitive use, and remove or rotate stored credentials when access should end. <br>
-Risk: Behavior analysis can be mistaken for professional veterinary or behavioral diagnosis. <br>
-Mitigation: Treat outputs as observation and triage guidance, and refer severe or persistent anxiety cases to a veterinarian or qualified behavior professional. <br>
+## Use Case:
 
+External users, pet owners, and pet boarding operators use this skill to analyze pet-alone camera media for likely separation-anxiety behavior and to receive observation-oriented intervention suggestions. The skill is not a medical diagnostic tool.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-separation-anxiety-relief-analysis) <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown report with optional JSON detail and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save analysis output to a file and can query cloud-hosted historical reports for the current identity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter says 1.0.5) <br>
+Risk: Pet-camera media may be uploaded or referenced by a remote service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media you are authorized to share, avoid sensitive household footage where possible, and confirm service retention and deletion controls before use.
+
+Risk: The skill may create or reuse local identity state and retain authentication tokens for report history.
+
+Mitigation: Run it in an isolated workspace, limit access to local state files, and remove stored identity or token state when the workflow is complete.
+
+Risk: Behavior analysis and intervention suggestions may be mistaken for medical diagnosis.
+
+Mitigation: Treat results as observation support only and consult a veterinarian or qualified behavior specialist for severe, persistent, or self-harming behavior.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-separation-anxiety-relief-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Pet separation anxiety API documentation](references/api_doc.md)
+- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON-style structured analysis with optional report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May query historical reports and may write an output file when requested.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

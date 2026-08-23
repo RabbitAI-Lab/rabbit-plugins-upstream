@@ -15,6 +15,7 @@ Two guards keep the linter's verdicts trustworthy:
     python3 tests/run.py            # check (exit 1 on any mismatch)
     python3 tests/run.py --update   # re-freeze goldens after an intended change
 """
+import importlib.util
 import json
 import os
 import re
@@ -60,14 +61,46 @@ def check_orientation(failures):
         print(f"{GREEN}✓{RESET} orientation table: spec derives to frozenTable; cycle law holds")
 
 
+def find_actions_ts():
+    """Locate extension/src/actions.ts for the TS cross-check.
+
+    Order: $EASYEDA_AGENT_ROOT (explicit repo root, for standalone skill
+    installs / CI), then the in-monorepo relative path. Returns
+    (path_or_None, all_candidate_paths)."""
+    candidates = []
+    env_root = os.environ.get('EASYEDA_AGENT_ROOT')
+    if env_root:
+        candidates.append(os.path.join(env_root, 'extension', 'src', 'actions.ts'))
+    candidates.append(os.path.normpath(
+        os.path.join(ROOT, '..', '..', '..', 'extension', 'src', 'actions.ts')))
+    for c in candidates:
+        if os.path.exists(c):
+            return c, candidates
+    return None, candidates
+
+
 def check_ts_consistency(failures):
     """The connector (TS) hand-writes the same 4 facts the linter (Python) reads
     from orientation.json. Nothing else forces them to agree, so assert it here —
     a drift means connect_pin would WRITE a rotation the linter then flags as
     wrong (or misses). This is the cross-language half of the single-source rule."""
-    actions = os.path.normpath(os.path.join(ROOT, '..', '..', '..', 'extension', 'src', 'actions.ts'))
-    if not os.path.exists(actions):
-        print(f"{DIM}· skipped TS cross-check (actions.ts not found at {actions}){RESET}")
+    actions, candidates = find_actions_ts()
+    if actions is None:
+        if os.environ.get('EASYEDA_AGENT_ROOT'):
+            # An explicit opt-in that points nowhere is a failure, not a skip —
+            # otherwise a typo'd path silently disables the drift guard.
+            failures.append(
+                f"ts: EASYEDA_AGENT_ROOT is set but actions.ts not found at {candidates[0]} "
+                f"(point it at the easyeda-agent repo root)")
+            return
+        print(f"{DIM}· SKIPPED TS cross-check: extension/src/actions.ts not found "
+              f"(standalone skill install — no monorepo checkout){RESET}")
+        for c in candidates:
+            print(f"{DIM}    looked in: {c}{RESET}")
+        print(f"{DIM}    This guard catches Python-linter vs TS connect_pin orientation-table "
+              f"drift; without it that drift goes undetected here.{RESET}")
+        print(f"{DIM}    To enable: run inside the easyeda-agent repo, or set "
+              f"EASYEDA_AGENT_ROOT=/path/to/easyeda-agent{RESET}")
         return
     src = open(actions).read()
     spec = orient.load_spec()
@@ -87,6 +120,22 @@ def check_ts_consistency(failures):
 
     if not failures:
         print(f"{GREEN}✓{RESET} connector (actions.ts) facts match orientation.json")
+
+
+def check_bulk_connect_envelope(failures):
+    """Guard the installed helper against silently dropping enveloped sch findings."""
+    path = os.path.join(ROOT, 'bulk-connect.py')
+    spec = importlib.util.spec_from_file_location('bulk_connect', path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    finding = {'type': 'floating-pin'}
+    enveloped = {'id': 'x', 'type': 'schematic.check',
+                 'result': {'summary': {'total': 1}, 'findings': [finding]}}
+    got = module.result_payload(enveloped)
+    if got.get('findings') != [finding]:
+        failures.append('bulk-connect: did not unwrap sch check result.findings')
+    else:
+        print(f"{GREEN}✓{RESET} bulk-connect parses enveloped sch check findings")
 
 
 def run_lint(path):
@@ -172,6 +221,7 @@ def main():
     failures = []
     check_orientation(failures)
     check_ts_consistency(failures)
+    check_bulk_connect_envelope(failures)
     check_fixtures(update, failures)
     check_diffs(update, failures)
     if update:

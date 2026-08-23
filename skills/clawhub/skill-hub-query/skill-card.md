@@ -1,40 +1,64 @@
-## Description: <br>
-Query, install, update, and edit AI agent skills on compatible Skill Hubs, including self-hosted hubs that implement the documented API contract. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query, install, update, and edit AI agent skills on compatible Skill Hubs, using authenticated API access when configured and public fallback behavior otherwise.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Developers and agent users use this skill to search hub catalogs, inspect skill versions, install or update skills, diagnose hub configuration, and edit owned skill card metadata when the target hub supports editing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports a local file-handling flaw in edit-backup cleanup that deserves review before installation, especially for users who plan to use card editing. <br>
-Mitigation: Review the skill before installing, use ordinary slug formats, require explicit confirmation before installs or card edits, and prefer a dedicated credentials file with restrictive permissions for long-lived tokens. <br>
+## Use Case:
 
+Developers and agent operators use this skill to discover, inspect, install, and update skills on compatible or self-hosted Skill Hubs. Owners can also manage card metadata through a guarded edit flow when their Hub supports it.
 
-## Reference(s): <br>
-- [Skill Hub Query on ClawHub](https://clawhub.ai/songhonglei/skills/skill-hub-query) <br>
-- [Skill Hub API Reference](references/api.md) <br>
-- [skillhub.cn](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and user-readable tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run local shell scripts that call compatible Hub APIs and read or write local cache, credentials, backups, and installed skill files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release evidence, SKILL.md, and changelog released 2026-07-17) <br>
+Risk: An agent may install or update the wrong skill, version, author, or Hub target.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact slug, version, author, and Hub before state-changing install or update actions.
+
+Risk: Hub tokens can expose private skill access or account capabilities if handled carelessly.
+
+Mitigation: Use tokens with the minimum needed scope, keep credentials private, and avoid echoing or committing full tokens.
+
+Risk: Remote card metadata edits can unintentionally change an owned skill's public presentation.
+
+Mitigation: Use the guarded GET, diff, backup, confirm, PUT, verify, and rollback flow; set SKILL_HUB_DISABLE_EDIT=1 when editing is not needed.
+
+Risk: Downloaded skill archives can write files during installation.
+
+Mitigation: Review and scan skills before deployment; rely on the included slug validation and ZIP path checks before extraction.
+
+## Reference(s):
+
+- [Skill Hub API Reference](references/api.md)
+- [README](README.md)
+- [Changelog](CHANGELOG.md)
+- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/skill-hub-query)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with shell command invocations and JSON configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May execute local scripts that call configured Hub APIs and write cache, backup, or installed skill files.]
+
+## Skill Version(s):
+
+1.3.0 (source: evidence.release.version and artifact CHANGELOG.md, released 2026-08-23)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

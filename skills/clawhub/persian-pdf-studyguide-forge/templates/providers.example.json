@@ -1,0 +1,17 @@
+{
+  "providers": [
+    {
+      "name": "gemini-reviewer",
+      "kind": "gemini",
+      "model": "gemini-2.5-flash",
+      "api_key_env": "GEMINI_API_KEY"
+    },
+    {
+      "name": "openai-compatible-primary",
+      "kind": "openai",
+      "base_url": "https://YOUR_AUTHORIZED_PROVIDER.example/v1",
+      "model": "YOUR_MODEL",
+      "api_key_env": "SECOND_PROVIDER_API_KEY"
+    }
+  ]
+}

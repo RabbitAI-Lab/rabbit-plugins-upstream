@@ -1,41 +1,59 @@
-## Description: <br>
-用于快手数据分析、快手作品详情、作品数据、互动指标、内容调研和内容分析，覆盖 Kuaishou / Kwai work details，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于快手数据分析、快手作品详情、作品数据、互动指标、内容调研和内容分析，覆盖 Kuaishou / Kwai work details，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and analysts use this skill to retrieve read-only Kuaishou/Kwai work detail data through SocialDataX, including work metadata, author details, publish time, interaction counts, images, and media summaries when available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill invokes the SocialDataX npm package and uses SOCIALDATAX_API_KEY for SocialDataX queries. <br>
-Mitigation: Confirm the SocialDataX npm package is trusted before installation and provide SOCIALDATAX_API_KEY only when intending to query SocialDataX. <br>
-Risk: The optional media download command can write files locally. <br>
-Mitigation: Use the download command only with an explicit output path or output directory chosen by the user. <br>
+## Use Case:
 
+External users and agents use this skill to retrieve structured Kuaishou work details by photo ID or URL for content research, interaction metrics, and media summaries.
 
-## Reference(s): <br>
-- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-kuaishou-detail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON API results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY for SocialDataX detail lookups; optional media downloads write only to the user-selected output path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: The skill uses SOCIALDATAX_API_KEY for SocialDataX-backed detail lookups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide the API key only through the intended environment variable and confirm the requester is comfortable sharing it with SocialDataX-backed commands.
+
+Risk: The preferred direct CLI runs the socialdatax-skills npm package through npx.
+
+Mitigation: Install or run the package only in an environment where executing npm packages is approved.
+
+Risk: Optional media download can write files locally.
+
+Mitigation: Provide an output path only when local saving is intended, and use a specific output directory.
+
+## Reference(s):
+
+- [SocialDataX API access and documentation](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-kuaishou-detail)
+- [ClawHub publisher profile](https://clawhub.ai/user/devinchen2014)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON result descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY for detail lookups; optional local media saving writes only to a user-specified output path.]
+
+## Skill Version(s):
+
+0.1.18 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

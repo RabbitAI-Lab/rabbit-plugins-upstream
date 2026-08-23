@@ -1,46 +1,60 @@
-## Description: <br>
-Through fixed enclosure cameras or supplied image and video inputs, this skill analyzes a snake's open-mouth imagery for visual signs associated with stomatitis risk, including mucosa color, pus points, ulcers, necrotic tissue, image quality, and contextual exclusion signals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes snake mouth images or videos for visual signs associated with stomatitis risk, including mucosa color changes, pus points, ulcers, necrotic tissue, image quality, and relevant husbandry context.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, reptile keepers, breeders, reptile veterinary teams, and developers can use this skill to analyze snake mouth images or videos, produce structured visual risk reports, and query cloud-hosted historical reports. It is intended to support observation and escalation to a qualified reptile veterinarian, not to diagnose disease or prescribe treatment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Snake mouth images, videos, URLs, and account-linked report queries are sent to a remote Life Emergence/SMYX cloud service. <br>
-Mitigation: Use the skill only with media and URLs approved for remote processing, and confirm the service's retention, deletion, and access controls before deployment. <br>
-Risk: The skill can silently create or reuse local identity records and tokens. <br>
-Mitigation: Avoid shared workspaces or existing smyx-api-key.txt/user databases unless identity reuse is intended; isolate deployments by workspace and review stored credentials before installation. <br>
-Risk: Visual health analysis may be mistaken for veterinary diagnosis or treatment advice. <br>
-Mitigation: Present outputs as visual risk observations only, avoid drug or procedure recommendations, and direct urgent or repeated findings to a qualified reptile veterinarian. <br>
-Risk: Poor image quality or missing context can produce unreliable findings. <br>
-Mitigation: Require clear, well-lit open-mouth imagery, species and husbandry context, and return an unreliable-signal result when the mouth is obscured, under-resolution, reflective, or captured during feeding. <br>
+## Use Case:
 
+External users, reptile caretakers, breeding facilities, and reptile veterinary workflows can use this skill to generate structured visual risk reports from snake open-mouth media. The skill is intended to support observation and escalation decisions, not to provide a veterinary diagnosis or treatment prescription.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-snake-stomatitis-detection-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Structured analysis report, Markdown history table, JSON detail mode, and optional output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include visual findings, risk level, recommended non-prescriptive actions, disclaimers, and report links when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Snake images, videos, and history queries are sent to the configured LifeEmergence backend.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media and report queries appropriate for remote processing, and confirm retention and handling expectations before using sensitive material.
+
+Risk: The skill creates or reuses a local identity and stores backend tokens in a workspace SQLite database.
+
+Mitigation: Run the skill only in a trusted workspace, restrict access to the workspace data directory, and remove local data when the identity or tokens should no longer persist.
+
+Risk: Cloud history queries can return reports associated with the local identity.
+
+Mitigation: Verify that the active workspace identity is appropriate before listing or sharing historical report links.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-snake-stomatitis-detection-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Interface Documentation](references/api_doc.md)
+- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Markdown or JSON structured analysis report with risk level, observed visual findings, recommendations, and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save output to a caller-specified file path; history listings are formatted from cloud API results when requested.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact frontmatter says 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

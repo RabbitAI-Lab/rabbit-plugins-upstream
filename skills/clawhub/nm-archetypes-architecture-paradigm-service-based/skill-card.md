@@ -1,43 +1,62 @@
-## Description: <br>
-Applies coarse-grained service architecture for deployment independence. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies coarse-grained service architecture for deployment independence.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and architecture teams use this skill to evaluate and describe service-based architectures for systems that need independently deployable components while retaining coarse-grained services or shared data constraints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may appear in broad architecture or modularity conversations because of its activation keywords. <br>
-Mitigation: Use the guidance when service-based architecture is relevant, and review recommendations before applying them to a system design. <br>
-Risk: Service-based guidance can still influence architecture decisions even though the skill has no executable behavior. <br>
-Mitigation: Validate service boundaries, data ownership, contracts, deployment plans, and rollback plans with the responsible architecture and engineering teams. <br>
-Risk: Shared databases can couple services and degrade the architecture into a distributed monolith. <br>
-Mitigation: Assign schema ownership, control breaking changes through review, track coupling, and use views, replication, or schema deprecation schedules where appropriate. <br>
+## Use Case:
 
+Developers and architects use this skill to evaluate when a service-based architecture fits systems that need independent component deployment while shared databases or ERP constraints make full microservices impractical. It helps outline adoption steps, service contracts, database ownership, delivery artifacts, and architecture risks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-service-based) <br>
-- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown prose with architecture checklists and recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no executable behavior, data access, or persistence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence; artifact frontmatter reports 1.9.8) <br>
+Risk: Broad trigger words may cause the skill to appear in more conversations than intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use or enable it for architecture discussions where service-based architecture, SOA, modular systems, or shared-database constraints are relevant.
+
+Risk: The artifact references a separate Claude Code plugin for the full experience.
+
+Mitigation: Evaluate that plugin separately before installing it.
+
+Risk: Shared-database coupling can make changes cascade across services.
+
+Mitigation: Use database views, replication, or a formal schema deprecation schedule, and assign explicit schema or table ownership.
+
+Risk: Weak governance can let a service-based architecture degrade into a distributed monolith.
+
+Mitigation: Track coupling metrics and enforce clear service and data ownership.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-service-based)
+- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Text-only advisory prompt; no code execution, data access, persistence, or hidden behavior according to ClawHub security evidence.]
+
+## Skill Version(s):
+
+1.9.18 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

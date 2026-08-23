@@ -1,5 +1,77 @@
 # Changelog
 
+## [0.9.0](https://github.com/es6kr/skills/compare/git-repo-v0.8.1...git-repo-v0.9.0) (2026-08-20)
+
+
+### Features
+
+* promote next-feat staging (lifecycle guards, triage automation, and workflow safety procedures) ([77d58ac](https://github.com/es6kr/skills/commit/77d58ac3a771a4897043c9eea8b149ea1e8ba2ff))
+
+
+### Bug Fixes
+
+* **git-repo:** document conflict root-cause diagnosis (staleness vs divergence) ([f034168](https://github.com/es6kr/skills/commit/f0341685d6bf07c9d16e9375c93c22fea88b454f))
+* **git-repo:** document conflict root-cause diagnosis (staleness vs divergence) ([3f8e492](https://github.com/es6kr/skills/commit/3f8e4924bd8a656ea3fc1eeb573c9a629fea80cd))
+* promote next-fix batch (hook path repair, topic-dispatch scoping, conflict diagnosis) ([eb7ecb6](https://github.com/es6kr/skills/commit/eb7ecb61dda9701d78f12dc810781dc7cb687caa))
+
+## [0.8.1](https://github.com/es6kr/skills/compare/git-repo-v0.8.0...git-repo-v0.8.1) (2026-08-17)
+
+
+### Bug Fixes
+
+* **git-repo:** add worktree-ancestry divergence pre-check for staging-branch model ([d28bbdb](https://github.com/es6kr/skills/commit/d28bbdb29a76306d143c812bef6363afb5c66fea))
+* **git-repo:** let rename-worktree base a new branch somewhere other than stale HEAD ([98e9201](https://github.com/es6kr/skills/commit/98e92018b94a9b52bb2c585fdabf158c2347379a))
+* promote next-fix staging (30 fixes across 14 skills) ([ee467c0](https://github.com/es6kr/skills/commit/ee467c045d779d7b80d30f160763ec3534a9742b))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.8.0](https://github.com/es6kr/skills/compare/git-repo-v0.7.2...git-repo-v0.8.0) (2026-08-16)
+
+
+### Features
+
+* merge next-feat into main ([#313](https://github.com/es6kr/skills/issues/313)) ([2d9308a](https://github.com/es6kr/skills/commit/2d9308ab3e7e0086a88a7f64d3ed4d5c4d36e017))
+
+## [0.7.2](https://github.com/es6kr/skills/compare/git-repo-v0.7.1...git-repo-v0.7.2) (2026-08-09)
+
+
+### Bug Fixes
+
+* **consolidate:** address CodeRabbit/Copilot review findings on PR [#270](https://github.com/es6kr/skills/issues/270) ([3b11a73](https://github.com/es6kr/skills/commit/3b11a730b5ad68803d35a8264eda540e48265d75))
+* **git-repo:** add worktree-reuse path-canonicality pre-check helper ([#267](https://github.com/es6kr/skills/issues/267)) ([020a94e](https://github.com/es6kr/skills/commit/020a94ee989596941c5669995a7f7ba340742313))
+* **git-repo:** preserve tracked mode in stage-isolated-content.sh cacheinfo ([#259](https://github.com/es6kr/skills/issues/259)) ([161f07d](https://github.com/es6kr/skills/commit/161f07d13bd19f17b190800062955d767e83bf04))
+* **git-repo:** validate worktree path canonicality before reuse ([#240](https://github.com/es6kr/skills/issues/240)) ([e44076b](https://github.com/es6kr/skills/commit/e44076bebe2e952bd042f0539b45322984cd3d72))
+* promote accumulated next-fix fixes to main ([95656e9](https://github.com/es6kr/skills/commit/95656e9b551ee0bb77904a0a571d49c53bc01cc9))
+
+## [0.7.1](https://github.com/es6kr/skills/compare/git-repo-v0.7.0...git-repo-v0.7.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+
+## [0.7.0](https://github.com/es6kr/skills/compare/git-repo-v0.6.1...git-repo-v0.7.0) (2026-08-03)
+
+
+### Features
+
+* promote next-feat to main ([4fbe313](https://github.com/es6kr/skills/commit/4fbe31332c58bf24327d819cc9204ebda2d4afa8))
+
+
+### Bug Fixes
+
+* **git-repo:** add --push flag to local-to-staging-pr.sh ([#191](https://github.com/es6kr/skills/issues/191)) ([7eec556](https://github.com/es6kr/skills/commit/7eec556a6411352781de33121c42da0e186512b3))
+
+## [0.6.1](https://github.com/es6kr/skills/compare/git-repo-v0.6.0...git-repo-v0.6.1) (2026-07-28)
+
+
+### Bug Fixes
+
+* **git-repo:** add commit-worktree-cherry-pick-draft-PR section + resolve stray merge markers ([4417701](https://github.com/es6kr/skills/commit/44177013a9e7af8a49cff79e1f7c82436410645e))
+* **git-repo:** add commit-worktree-cherry-pick-draft-PR section + resolve stray merge markers ([9f2dc23](https://github.com/es6kr/skills/commit/9f2dc2351874fda79e9ef4fe7608f51a6a5c5d68))
+* **git-repo:** scope conflict-resolution to next-fix, add missing script ([a23f749](https://github.com/es6kr/skills/commit/a23f749bfbf8ad8702f887ed5e85c0bd6fdff860))
+* **next-fix:** promote staged fixes across hook-kit, next, cleanup, fix-plan ([34f1c67](https://github.com/es6kr/skills/commit/34f1c67beee3a8279e0e80de4ab3a87ba2223d5c))
+* resolve PR [#197](https://github.com/es6kr/skills/issues/197) review findings (CodeRabbit + Copilot + Internal Review) ([b54236a](https://github.com/es6kr/skills/commit/b54236a4fa4b3fef23645dfc3b184916980b7f65))
+
 ## [0.6.0](https://github.com/es6kr/skills/compare/git-repo-v0.5.0...git-repo-v0.6.0) (2026-07-23)
 
 

@@ -224,22 +224,18 @@ OpenClaw operators: use the [plugin + skill route](#openclaw-plugin--skill-route
 
 ### Install gennearaccount
 
-Download and install the CLI tool:
-```bash
-wget http://nbg1.your-objectstorage.com/identyclaw/gennearaccount_1.0_amd64.deb
-sudo dpkg -i gennearaccount_1.0_amd64.deb
-```
+⚠️ **Security:** Prefer HTTPS downloads. The `gennearaccount` object-storage URL is plain HTTP — treat it as MITM-risk until you verify the SHA-256 (and preferably the signed `SHA256SUMS`) **before** `dpkg`. Never install a `.deb` you have not checksum-verified.
 
-### Verify Download Integrity (Required)
+**Required order:** download → verify integrity → install (never install first).
 
-Before installing, verify checksums for published binaries:
+Expected checksums:
 
 - `gennearaccount_1.0_amd64.deb`: `fb227cd3e0f35deb10127aa110781013daa698c20a417fb782966c075dda25dd`
 - `near-cli-rs-ai.deb`: `8f4e227151bb1951cd9fe330d8b20342789b538033974629fcb417127b10afd0`
 - Release signing key fingerprint: `FCC4 83E7 AFD8 E01D D619 0BEA 8DCE EB70 EEF8 986F`
 
-End-user signature and checksum verification:
 ```bash
+# 1) Fetch signed checksums over HTTPS
 curl -fL https://identyclaw.ams3.cdn.digitaloceanspaces.com/RELEASE_SIGNING_KEY.asc -o RELEASE_SIGNING_KEY.asc
 curl -fL https://identyclaw.ams3.cdn.digitaloceanspaces.com/SHA256SUMS -o SHA256SUMS
 curl -fL https://identyclaw.ams3.cdn.digitaloceanspaces.com/SHA256SUMS.sig -o SHA256SUMS.sig
@@ -247,10 +243,21 @@ gpg --import RELEASE_SIGNING_KEY.asc
 gpg --fingerprint 8DCEEB70EEF8986F
 # Confirm fingerprint equals FCC4 83E7 AFD8 E01D D619 0BEA 8DCE EB70 EEF8 986F
 gpg --verify SHA256SUMS.sig SHA256SUMS
+
+# 2) Download packages (HTTPS preferred; HTTP only if no HTTPS mirror)
 curl -fL http://nbg1.your-objectstorage.com/identyclaw/gennearaccount_1.0_amd64.deb -o gennearaccount_1.0_amd64.deb
 curl -fL https://identyclaw.ams3.cdn.digitaloceanspaces.com/near-cli-rs-ai.deb -o near-cli-rs-ai.deb
+
+# 3) Verify before any install
 sha256sum -c SHA256SUMS
+# Or at minimum for gennearaccount alone:
+echo 'fb227cd3e0f35deb10127aa110781013daa698c20a417fb782966c075dda25dd  gennearaccount_1.0_amd64.deb' | sha256sum -c
+
+# 4) Install only after checksums match
+sudo dpkg -i gennearaccount_1.0_amd64.deb
 ```
+
+**OpenClaw operators:** skip `gennearaccount` — use the plugin path instead ([OpenClaw plugin + skill route](#openclaw-plugin--skill-route)).
 
 ### NEAR Credentials Storage (Required)
 
@@ -428,10 +435,11 @@ Trait categories, index ranges, and allowed value strings are defined in **[Faci
 - Perfect for: High-traffic SaaS, large deployments
 - **Negotiable pricing for volume deployments**
 
-**Collectible Tier** (496 NEAR one-time, immortal):
+**Collectible Tier** (**9 NEAR** one-time temporary offer through end of August 2026; regular 496 NEAR, immortal):
 - 496 requests per minute
 - Fixed one-time fee, no renewal
 - Token never expires (immortal)
+- **Temporary price:** 9 NEAR until the end of August 2026 (then returns to 496 NEAR)
 - Perfect for: Permanent identity records, collectibles, historical archives
 
 **What You Get**:
@@ -487,7 +495,7 @@ See the login authentication documentation for complete login flow and troublesh
      -H "Content-Type: application/json" \
      -d '{"accountid":"<your 64-char account id>","timestamp":<unix from step 1>,"base64url_signature":"<signature from step 3>"}'
    ```
-   Note: The `timestamp` field (Unix seconds) is optional. If omitted, the server will use the current time.
+   **Required:** send exactly one of `timestamp` (Unix seconds) or `timestamp_iso` from the **same** `GET /api/login/timestamp` challenge used for signing. Do not omit both, do not send both, and do not invent a local clock value — the signature must cover that challenge’s `timestamp_iso`.
 
 5. **Receive JWT token**:
    - Response contains `jwt_token` field with JWT access token for API calls
@@ -538,12 +546,14 @@ After successful login, retrieve your identity information and save it to `IDENT
 
 **Critical Notes**:
 - ⚠️ Store the gennearaccount JSON on **non-volatile storage** with your other secrets; back it up to encrypted operator storage (see [NEAR Credentials Storage](#near-credentials-storage-required))
-- ⚠️ The private key in `<credentials-dir>/<account_id>.json` signs authentication messages - keep it in a secure local store and access it only from trusted runtime code
+- ⚠️ The private key in `<credentials-dir>/<account_id>.json` signs authentication messages — keep it in a secure local store and access it only from trusted runtime code
+- ⚠️ **Never** paste `private_key`, JWT, or credentials JSON into chat, logs, tickets, or shell history; prefer plugin/Gateway config over ad-hoc scripts
 - ⚠️ Use the exact `private_key` string (ed25519:...) from the credentials file for signing
 - ⚠️ API login signs `accountid + timestamp_iso`; the signed message must match the accountid in the JSON body exactly
 - ⚠️ Use `timestamp` and `timestamp_iso` from the same `/api/login/timestamp` response object
 - ⚠️ For every retry, session, or agent process, fetch a new login timestamp pair and use it once
 - ⚠️ The IdentyClaw Passport ID (12-letter) is used for HOLA protocol, not for API login (use accountid for login)
+- ⚠️ Passport metadata may include DN, ContactURI, geo, and facial/biometric-style fields — minimize collection, treat as sensitive PII, and do not log full identity payloads
 
 ## Troubleshooting
 

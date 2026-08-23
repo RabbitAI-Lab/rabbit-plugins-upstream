@@ -1,40 +1,57 @@
-## Description: <br>
-A free news-fetching agent skill that uses a public news API to retrieve daily news lists, hot-topic rankings, article details, and category-filtered results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The skill helps an agent retrieve daily Chinese news, hot rankings, category-filtered lists, and article details from an external news API.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users use this skill to ask an agent for daily news summaries, historical daily news by date, hot news rankings, and article details from a news API. It is intended for personal news browsing and quick information retrieval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation and unrelated data-analysis or reporting language could cause the skill to run outside explicit news-fetching requests. <br>
-Mitigation: Enable the skill only for clear news-list, news-detail, date-based news, hot-news, or category-filtering requests. <br>
-Risk: The skill asks the agent to use shell commands for API calls and includes examples that write summaries or cache files to the user's home directory. <br>
-Mitigation: Review commands before execution, use trusted news API endpoints, and limit file writes to expected summary or cache paths. <br>
+## Use Case:
 
+External users and personal agent users use this skill to query daily Chinese news, inspect hot stories, filter by category, and read article details. The skill is best scoped to news retrieval and presentation tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-news-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call an external news API and may write optional news summaries or cache files under the user's home directory when the agent follows the provided examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and frontmatter) <br>
+Risk: Instructions broaden beyond news retrieval into database, analytics, file-processing, and command-execution use cases without clear limits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Constrain activation and review to the news-list, hot-ranking, category-filter, and article-detail workflows before installation.
+
+Risk: The skill can prompt an agent to run shell commands and write local cache or summary files.
+
+Mitigation: Require explicit user approval for shell execution and file writes, and restrict commands to reviewed API calls and JSON/text processing.
+
+Risk: The skill depends on an external news API and may return network errors, unavailable dates, or untrusted remote content.
+
+Mitigation: Validate date and article parameters, handle non-200 API responses, preserve source dates, and avoid treating returned news content as authoritative without review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-news-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON API response shapes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include date parameters, article identifiers, category filters, and optional local cache or summary file paths when the agent follows command examples.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact metadata reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

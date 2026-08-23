@@ -1,7 +1,7 @@
 ---
 name: ops-maintenance
-version: 3.1.0
-description: 运维助手 v3.1 - 支持本地、远程、多服务器集群监控、安全审计、智能日志分析、配置变更追踪、告警通知、定时巡检、Docker容器健康巡检、SSL证书监控
+version: 3.3.0
+description: 运维助手 v3.3 - 支持本地、远程、多服务器集群监控、安全审计、智能日志分析、配置变更追踪、告警通知、定时巡检、Docker容器健康巡检、SSL证书监控
 userInvocable: true
 argumentHint: <health|security|logs|config|report|perf|ports|process|disk|cluster|alert|patrol|docker-health|ssl|add-server|remove-server|upload|download|list|audit> [args]
 allowedTools:
@@ -9,11 +9,11 @@ allowedTools:
  - Read
 ---
 
-# 运维助手 (ops-maintenance) v3.1
+# 运维助手 (ops-maintenance) v3.3.0
 
 专业的运维助手，支持单服务器和多服务器集群监控、安全审计、智能日志分析、配置变更追踪、告警通知、定时巡检、Docker容器健康巡检、SSL证书监控。
 
-## v3.1 新功能
+## v3.2 新功能
 
 ### Docker 容器健康巡检
 - **全面巡检**: 自动检查所有容器的健康状况
@@ -67,6 +67,17 @@ allowedTools:
 - **告警升级**: 按阈值从高到低，优先触发最高级别
 - **持久化存储**: 告警记录保存在 ~/.config/ops-maintenance/alerts.json
 
+#### 邮件通知配置
+```bash
+# 配置SMTP邮件通知 (QQ邮箱示例)
+ops alert notify email '{"smtpHost":"smtp.qq.com","smtpPort":465,"smtpUser":"xxx@qq.com","smtpPass":"授权码","from":"xxx@qq.com","to":["收件人@qq.com"]}'
+
+# 其他SMTP服务商
+# 163: smtp.163.com:465
+# Gmail: smtp.gmail.com:587
+# Outlook: smtp.office365.com:587
+```
+
 ### 定时巡检调度
 - **自动巡检**: 按配置间隔自动执行 health/disk/memory/load/cpu/service 检查
 - **2种默认任务**: 基础健康巡检(5分钟)、服务状态巡检(1分钟)
@@ -74,7 +85,50 @@ allowedTools:
 - **手动触发**: 随时手动执行单个或全部巡检任务
 - **告警联动**: 巡检结果自动评估告警规则并触发通知
 
-## CLI 命令 (v3.1)
+### CLI 命令增强 (v3.2)
+- **告警管理**: `ops alert rules/list/notify/stats/silence/cleanup` — 完整的告警生命周期管理
+- **巡检管理**: `ops patrol list/run/start/stop` — 定时巡检任务的启动/停止/手动触发
+- **邮件通知**: 支持 SMTP 配置 (QQ/163/Gmail/Outlook)，通过 `ops alert notify email <config>` 设置
+- **批量操作**: 支持多服务器并行执行命令，默认5并发
+- **JSON输出**: 所有命令支持 `--json` 选项，便于程序化处理
+
+## v3.3 新功能
+
+### 多渠道通知增强 (v3.3)
+- **Slack 支持**: 通过 `ops alert notify slack <config>` 配置 Slack Webhook
+- **钉钉支持**: 通过 `ops alert notify dingtalk <config>` 配置钉钉机器人
+- **通用 Webhook**: 支持任意 HTTP POST 回调
+
+### CLI 健壮性修复 (v3.3)
+- **patrol start 不再阻塞**: 启动后自动退出，后台运行
+- **完整的错误处理**: 所有命令失败时返回适当退出码
+
+### 测试覆盖提升 (v3.3)
+- **49 个单元测试**: 覆盖安全、告警、巡检、SSL、Docker 核心功能
+- **ESM 兼容**: 所有 `require()` 替换为 `import`
+
+### 通知渠道配置示例
+```bash
+# 飞书
+ops alert notify feishu '{"webhookUrl":"https://open.feishu.cn/open-apis/bot/v2/hook/xxx"}'
+
+# 企业微信
+ops alert notify wechat '{"webhookUrl":"https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxx"}'
+
+# 邮件 (SMTP)
+ops alert notify email '{"smtpHost":"smtp.qq.com","smtpPort":465,"smtpUser":"xxx@qq.com","smtpPass":"授权码","from":"xxx@qq.com","to":["收件人@qq.com"]}'
+
+# Webhook
+ops alert notify webhook '{"url":"https://hooks.slack.com/services/xxx"}'
+
+# Slack
+ops alert notify slack '{"webhookUrl":"https://hooks.slack.com/services/xxx","channel":"#alerts","username":"OpsBot"}'
+
+# 钉钉
+ops alert notify dingtalk '{"webhookUrl":"https://oapi.dingtalk.com/robot/send?access_token=xxx"}'
+```
+
+## CLI 命令 (v3.3)
 
 ```
 ops health              # 系统健康检查

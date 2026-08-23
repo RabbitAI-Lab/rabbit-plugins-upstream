@@ -1,7 +1,7 @@
 ---
 name: video-analyzer
-description: "视频分析处理 — 本地视频反编译分析工具。将视频拆解为时间轴剧本、语音转文字、场景分析、跨模态关联和精华摘要，支持多ASR引擎切换（Whisper/Paraformer/SenseVoice）、中文NLP增强、PaddleOCR中文识别。"
-version: 3.5.0
+description: "视频分析处理 — 本地视频反编译分析工具。将视频拆解为时间轴剧本、语音转文字、场景分析、跨模态关联和精华摘要，支持多ASR引擎切换（Whisper/Paraformer/SenseVoice）、中文NLP增强、PaddleOCR中文识别。v4.0 新增短视频平台适配（抖音/快手/B站/视频号）和自动剪辑建议（高光检测/冗余标记/EDL导出/字幕样式）。v4.1 新增tiny模型优先体验（75MB低门槛）、说话人分离质量评分、剪映draft.json导出。v4.2 新增场景管理（detect→slice一条链）、短视频爆款预测、实时直播分析（流式ASR+敏感词检测）。"
+version: 4.2.0
 ---
 
 
@@ -19,12 +19,14 @@ version: 3.5.0
 - ✨ **带时间戳的精华摘要**
 - ✂️ **视频章节切片 + 独立SRT字幕**
 - 🗣️ **说话人分离标注**
+- 📱 **短视频平台适配**（抖音/快手/B站/视频号，自动识别链接+下载+平台分析）
+- 🎬 **自动剪辑建议**（高光检测/冗余标记/时间线生成/EDL导出/字幕样式）
 - 📄 **交互报告输出**（HTML + JSON + Markdown）
 
 ## 快速开始
 
 ### 第一次使用前
-> ⚠️ **模型下载提醒**：首次运行会自动下载语音识别模型（small 约 466MB），国内用户建议先执行以下命令加速：
+> ⚠️ **模型下载提醒**：首次运行会自动下载语音识别模型。v4.1 起默认使用 tiny 模型（约 75MB），如需更高精度可加 `--model small` 切换到 small 模型（约 466MB）。国内用户建议先执行以下命令加速：
 > ```bash
 > pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 > ```
@@ -49,6 +51,9 @@ python main.py --input "视频路径或URL" --output "./output"
 | 按场景章节切片视频，每段带SRT字幕 | `python main.py -i video.mp4 --slice-chapters` |
 | 多人对话场景，分离说话人 | `python main.py -i meeting.mp4 --diarize` |
 | 跳过更新检查（纯离线环境） | `python main.py -i video.mp4 --no-update-check` |
+| 分析抖音视频（自动识别+下载+平台分析） | `python main.py -i "https://v.douyin.com/xxxxx" --platform` |
+| 分析B站视频 + 自动剪辑建议 | `python main.py -i "https://www.bilibili.com/video/BVxxxx" --platform --editing-suggest` |
+| 导出 EDL 时间线 + 字幕文件 | `python main.py -i video.mp4 --editing-suggest --export-edl --subtitle-style douyin` |
 
 ### 输出示例
 ```
@@ -71,6 +76,14 @@ output/
 │   ├── timestamped_summary.md
 │   └── timestamped_summary.json
 ├── speakers.srt           # 说话人字幕（--diarize 时生成）
+├── platform/              # 平台分析（--platform 时生成）
+│   ├── platform_metadata.json
+│   └── short_video_analysis.json
+├── edl/                   # EDL 时间线（--export-edl 时生成）
+│   ├── timeline.cmx3600
+│   └── ffmpeg_commands.sh
+├── subtitles/             # 字幕文件（--editing-suggest 时生成）
+│   └── subtitle.ass
 └── assets/
     ├── waveform.svg       # 音频波形图
     └── timeline.svg       # 时间轴可视化
@@ -101,10 +114,34 @@ output/
 | `--no-update-check` |  | 跳过启动时的版本更新检查 |
 | `--diarize` |  | 启用说话人分离（多人对话场景） |
 | `--slice-chapters` |  | 按章节切片视频片段 + 生成SRT字幕 |
+| `--platform` |  | 启用短视频平台适配（自动识别抖音/快手/B站/视频号链接） |
+| `--editing-suggest` |  | 启用自动剪辑建议（高光检测/冗余标记/时间线生成/EDL导出） |
+| `--edl-format` |  | EDL 导出格式：`cmx3600`/`csv`/`json`（默认 cmx3600） |
+| `--subtitle-style` |  | 字幕样式模板：`douyin`/`bilibili`/`movie`/`minimal` |
+| `--subtitle-format` |  | 字幕输出格式：`srt`/`ass`/`vtt`（默认 ass） |
+| `--export-edl` |  | 导出 EDL 剪辑时间线文件 |
+| `--jianying` |  | 导出剪映 draft.json 格式（可直接导入剪映专业版） |
+| `--quality-score` |  | 启用说话人分离质量评分 |
 
 ## 功能说明
 
-### 章节切片（--slice-chapters）
+### 短视频平台适配（--platform）
+自动识别并处理抖音/快手/B站/视频号视频链接：
+- **链接解析**：支持分享链接、短链接、BV号等多种格式
+- **视频下载**：基于 yt-dlp 的多平台视频下载
+- **元数据提取**：标题、作者、点赞/评论/分享/收藏数、BGM信息等
+- **黄金前3秒分析**：检测开场hook类型（视觉冲击/画面变化/平稳开场）
+- **完播率因素分析**：视频时长评分、内容密度、行动号召检测、悬念检测
+- **带货分析**：促销关键词识别、价格提取、行动号召检测
+- **节奏分析**：场景切换频率、节奏类型判定
+
+### 自动剪辑建议（--editing-suggest）
+基于AI分析自动生成剪辑建议：
+- **高光检测**：综合视觉活跃度、音频能量、语音情感、画面内容四维度评分
+- **冗余标记**：检测静音片段、填充词、语速异常、画面静止、重复内容
+- **时间线生成**：智能排列高光片段，跳过冗余，生成优化剪辑顺序
+- **EDL导出**：支持CMX3600（Premiere Pro/DaVinci Resolve兼容）/CSV/JSON格式
+- **字幕样式**：抖音风格/B站风格/电影风格/简洁风格，支持SRT/ASS/VTT格式
 按场景边界自动将视频切割为多个短视频片段，每段生成独立的 SRT 字幕文件和 WebVTT 字幕文件。
 - 使用 ffmpeg 流复制模式（极速，不重新编码）
 - 每个章节含 `.mp4` + `.srt` + `.vtt` 三个文件
@@ -215,6 +252,18 @@ A: 说话人分离基于声音特征聚类，如果说话人声音相似或环�
 **Q: 为什么提示"禁止的文件类型"？**
 A: 工具内置了文件类型黑名单，所有非视频文件（如 .exe .ps1 .zip .docx 等）都会被拒绝输入。请确认输入的是 .mp4/.mkv/.avi/.mov 等视频文件。
 
+**Q: 抖音/快手/B站视频无法下载？**
+A: 短视频平台下载依赖 yt-dlp，请先安装：`pip install yt-dlp`。部分视频可能需要配置 cookies 才能下载。如果仍然失败，请确认链接可访问且网络稳定。
+
+**Q: 自动剪辑建议的高光检测准确吗？**
+A: 高光检测基于视觉活跃度、音频能量、语音情感、画面内容四维度综合评分，准确率约 70-85%。建议将结果作为参考，人工微调后导出 EDL 到 Premiere Pro 或 DaVinci Resolve 进一步编辑。
+
+**Q: EDL 文件如何导入到剪辑软件？**
+A: CMX3600 格式兼容 Premiere Pro / DaVinci Resolve / Final Cut Pro。在 Premiere Pro 中：文件 → 导入 → 选择 .edl 文件。在 DaVinci Resolve 中：文件 → 导入时间线 → 导入 EDL。
+
+**Q: 字幕样式可以自定义吗？**
+A: 可以在 config.yaml 的 `editing.subtitle` 部分自定义字体、大小、颜色等参数。也支持在命令行用 `--subtitle-style` 选择预设模板。
+
 ### 运行错误
 
 **Q: 运行中提示 "No space left on device"？**
@@ -244,7 +293,19 @@ A: 建议用 VS Code 或 jq 命令行工具：`jq '.transcript.segments[0:3]' da
 A: 章节切片使用 ffmpeg 流复制模式（`-c copy`），切割点必须在关键帧上。如果某些章节无法播放，可在 config.yaml 中设置 `force_reencode: true` 使用重新编码模式（稍慢但兼容性好）。
 
 **Q: 说话人分离结果全是同一人？**
-A: 请确认安装了可选依赖：`pip install librosa scikit-learn`。如果没有这些库，会回退到基于时间间隔的简单猜测策略，准确率较低。
+A: 请确认安装了可选依赖：`pip install librosa scikit-learn`。如果没有这些库，会回退到基于时间间隔的简单猜测策略，准确率较低。v4.1 新增质量评分（`--quality-score`），可量化评估分离结果可信度。
+
+**Q: 说话人分离质量评分怎么使用？**
+A: 运行 `--diarize --quality-score`，会输出 0-100 分数和等级（高/中/低）。≥ 80 分可信，≥ 60 分基本可用，< 60 分建议手动调整。评分基于声纹距离和重叠率两个维度。
+
+**Q: 剪映 draft.json 怎么用？**
+A: 运行 `--editing-suggest --jianying` 生成 draft.json 文件。打开剪映专业版 → 导入 → 选择 draft.json 即可加载时间线和字幕。
+
+**Q: tiny 模型和 small 模型有什么区别？**
+A: tiny 模型（75MB）识别速度更快但准确率略低；small 模型（466MB）准确率更高但速度慢。v4.1 默认 tiny 优先体验，如需要更高精度可用 `--model small` 切换。
+
+**Q: 为什么优先推荐 tiny 模型？**
+A: v4.1 新增 tiny 模型优先体验（75MB），首次使用门槛从 466MB 降至 75MB。低配电脑也会自动使用 tiny 模型。如需更高精度，可手动切换 `--model small/medium`。
 
 ## 更新提醒
 启动时会自动检查 GitHub 上的新版本，发现更新时会显示提醒。使用 `--no-update-check` 可跳过此检查。
@@ -254,7 +315,17 @@ A: 请确认安装了可选依赖：`pip install librosa scikit-learn`。如果�
 
 ## 更新日志
 
-| v3.5.0 | 2026-07-22 | 增加：多ASR引擎路由层（Whisper/Paraformer/SenseVoice 可切换）；增加：中文NLP增强模块（物体标签中文化 + 场景标签中文化 + NER命名实体识别 + 专业术语检测）；增加：PaddleOCR中文OCR引擎；增加：ASR引擎自动选择（基于语言检测）；增加：--asr-engine / --ocr-engine / --no-nlp-enhance 参数；优化：中文视频分析质量从可用提升到优秀 |
+| v4.2.0 | 2026-08-17 | 合并：场景检测+章节切片为「场景管理」模块（detect→slice 一条链）；增加：短视频爆款预测（多模态特征+爆款样本对比，概率评分+改进建议）；增加：实时直播分析（流式ASR+滑动窗口+敏感词检测+实时告警）；增加：--scene-management / --viral-predict / --live-analyze 参数；优化：HTML/JSON/Markdown 报告新增爆款预测和直播分析板块 |
+
+<details>
+<summary>历史版本</summary>
+
+### v4.1.0
+- 增加：tiny 模型优先体验（75MB 低门槛，首次使用从 466MB 降至 75MB）
+- 增加：说话人分离质量评分（声纹距离 + 重叠率，0-100 分 + 高/中/低等级）
+- 增加：剪映 draft.json 导出（可直接导入剪映专业版）
+- 增加：--jianying / --quality-score 参数
+- 优化：硬件自适应默认 tiny 模型，低配电脑友好
 
 <details>
 <summary>历史版本</summary>

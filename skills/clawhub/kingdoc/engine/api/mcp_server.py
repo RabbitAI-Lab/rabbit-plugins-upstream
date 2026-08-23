@@ -36,7 +36,7 @@ from engine.hardware import get_recommended_settings
 from engine.update_check import build_reminder, FEEDBACK_EMAIL
 from engine.exceptions import KingDocError
 
-APP_VERSION = "3.3.0"
+APP_VERSION = "3.8.0"
 
 # 配置路径：环境变量优先，其次 skill 根目录 config.json
 CONFIG_PATH = os.environ.get("KINGDOC_CONFIG", str(SKILL_ROOT / "config.json"))
@@ -580,6 +580,669 @@ async def kdoc_conflict_resolve(base_text: str, version_a: str, version_b: str,
         return _to_text(result)
     except Exception as e:
         return f"[ERR] 冲突解决失败：{e}"
+
+
+# ===========================================================================
+# 十二、文档内容合规检查（v3.4.0 新增，自研正则+规则引擎）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_compliance_sensitive(text: str, custom_words: str = "") -> str:
+    """【免密钥】敏感词扫描：内置敏感词库（适配中国监管），标注命中位置。
+
+    custom_words: 逗号分隔的额外敏感词
+    本地正则匹配，零配置可用。"""
+    try:
+        from engine.compliance_check import scan_sensitive
+        words = [w.strip() for w in custom_words.split(",") if w.strip()] if custom_words else None
+        result = scan_sensitive(text, custom_words=words)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 敏感词扫描失败：{e}"
+
+@mcp.tool()
+async def kdoc_compliance_leak(text: str) -> str:
+    """【免密钥】数据泄露检测：扫描手机号/身份证号/银行卡号/邮箱等敏感信息。
+
+    返回风险等级+脱敏显示。本地正则匹配，零配置可用。"""
+    try:
+        from engine.compliance_check import detect_leak
+        result = detect_leak(text)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 泄露检测失败：{e}"
+
+@mcp.tool()
+async def kdoc_compliance_format(file_path: str) -> str:
+    """【免密钥】格式规范检查：按企业文档规范逐项检查，生成不合规清单。
+
+    支持 .docx / .pptx / .txt / .md 格式。本地 XML 解析，零配置可用。"""
+    try:
+        from engine.compliance_check import check_format
+        result = check_format(file_path)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 格式检查失败：{e}"
+
+@mcp.tool()
+async def kdoc_compliance_classify(text: str) -> str:
+    """【免密钥】密级自动标注：根据内容建议密级（公开/内部/秘密/机密）。
+
+    本地关键词+规则引擎，零配置可用。"""
+    try:
+        from engine.compliance_check import classify
+        result = classify(text)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 密级标注失败：{e}"
+
+
+# ===========================================================================
+# 十三、实时协同编辑（v3.5.0 新增，序列 CRDT 自研实现）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_realtime_create(client_id: str, session_id: str = "") -> str:
+    """【免密钥】创建实时协同文档。
+
+    client_id: 当前客户端标识
+    session_id: 会话 ID（留空则自动创建）
+    本地 CRDT 引擎，零配置可用。"""
+    try:
+        from engine.realtime_collab import CRDTDocument
+        doc = CRDTDocument(client_id)
+        return _to_text({"client_id": client_id, "status": "created", "doc_id": id(doc)})
+    except Exception as e:
+        return f"[ERR] 创建协同文档失败：{e}"
+
+@mcp.tool()
+async def kdoc_realtime_insert(client_id: str, pos: int, text: str) -> str:
+    """【免密钥】在协同文档中插入文本。
+
+    client_id: 当前客户端标识
+    pos: 插入位置
+    text: 插入的文本
+    本地 CRDT 引擎，零配置可用。"""
+    try:
+        from engine.realtime_collab import CRDTDocument
+        doc = CRDTDocument(client_id)
+        ops = doc.local_insert(pos, text)
+        return _to_text({"client_id": client_id, "text": doc.get_text(), "ops_count": len(ops)})
+    except Exception as e:
+        return f"[ERR] 插入失败：{e}"
+
+@mcp.tool()
+async def kdoc_realtime_delete(client_id: str, pos: int, length: int = 1) -> str:
+    """【免密钥】在协同文档中删除文本。
+
+    client_id: 当前客户端标识
+    pos: 删除起始位置
+    length: 删除长度
+    本地 CRDT 引擎，零配置可用。"""
+    try:
+        from engine.realtime_collab import CRDTDocument
+        doc = CRDTDocument(client_id)
+        ops = doc.local_delete(pos, length)
+        return _to_text({"client_id": client_id, "text": doc.get_text(), "ops_count": len(ops)})
+    except Exception as e:
+        return f"[ERR] 删除失败：{e}"
+
+@mcp.tool()
+async def kdoc_realtime_get_text(client_id: str) -> str:
+    """【免密钥】获取协同文档当前文本。
+
+    client_id: 当前客户端标识
+    本地 CRDT 引擎，零配置可用。"""
+    try:
+        from engine.realtime_collab import CRDTDocument
+        doc = CRDTDocument(client_id)
+        return _to_text({"client_id": client_id, "text": doc.get_text()})
+    except Exception as e:
+        return f"[ERR] 获取文本失败：{e}"
+
+@mcp.tool()
+async def kdoc_realtime_stats(client_id: str) -> str:
+    """【免密钥】获取协同文档统计信息。
+
+    client_id: 当前客户端标识
+    本地 CRDT 引擎，零配置可用。"""
+    try:
+        from engine.realtime_collab import CRDTDocument
+        doc = CRDTDocument(client_id)
+        return _to_text(doc.get_stats())
+    except Exception as e:
+        return f"[ERR] 获取统计失败：{e}"
+
+
+# ===========================================================================
+# 十三、WPS AI 深度集成（v3.6.0 新增，段落级 AI 操作）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_wps_ai_rewrite(paragraph: str, style: str = "formal") -> str:
+    """【免密钥】AI 段落改写：将指定段落按目标风格改写。
+
+    style: formal(正式) / casual(口语) / concise(简洁) / elaborate(详细)
+    本地降级占位，WPS AI API 开放后升级为原生。"""
+    try:
+        from engine.wps_ai.adapter import get_adapter
+        result = get_adapter().rewrite_paragraph(paragraph, style)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 段落改写失败：{e}"
+
+@mcp.tool()
+async def kdoc_wps_ai_summarize(paragraph: str, max_length: int = 100) -> str:
+    """【免密钥】AI 段落总结：提取段落核心要点。
+
+    max_length: 最大摘要字数
+    本地降级占位，WPS AI API 开放后升级为原生。"""
+    try:
+        from engine.wps_ai.adapter import get_adapter
+        result = get_adapter().summarize_paragraph(paragraph, max_length)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 段落总结失败：{e}"
+
+@mcp.tool()
+async def kdoc_wps_ai_continue(paragraph: str, direction: str = "") -> str:
+    """【免密钥】AI 段落续写：根据方向继续写作。
+
+    direction: 续写方向（如"详细说明"、"举例"、"总结"）
+    本地降级占位，WPS AI API 开放后升级为原生。"""
+    try:
+        from engine.wps_ai.adapter import get_adapter
+        result = get_adapter().continue_paragraph(paragraph, direction)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 段落续写失败：{e}"
+
+
+# ===========================================================================
+# 十五、文档模板市场（v3.6.0 新增）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_template_list(category: str = "") -> str:
+    """【免密钥】列出所有可用模板。
+
+    category: 按类别筛选（可选）
+    本地模板市场，零配置可用。"""
+    try:
+        from engine.template_marketplace import list_templates
+        result = list_templates(category)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 获取模板列表失败：{e}"
+
+@mcp.tool()
+async def kdoc_template_search(keyword: str) -> str:
+    """【免密钥】搜索模板。
+
+    keyword: 搜索关键词
+    本地模板市场，零配置可用。"""
+    try:
+        from engine.template_marketplace import search_templates
+        result = search_templates(keyword)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 搜索模板失败：{e}"
+
+@mcp.tool()
+async def kdoc_template_use(name: str, variables: str = "{}") -> str:
+    """【免密钥】使用模板（变量替换）。
+
+    name: 模板名称
+    variables: JSON 格式变量，如 '{"title": "周报", "author": "张三"}'
+    本地模板市场，零配置可用。"""
+    try:
+        import json
+        from engine.template_marketplace import use_template
+        vars_dict = json.loads(variables) if variables else {}
+        result = use_template(name, vars_dict)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 使用模板失败：{e}"
+
+@mcp.tool()
+async def kdoc_template_refresh() -> str:
+    """【免密钥】刷新模板仓库（git pull）。
+
+    本地模板市场，零配置可用。"""
+    try:
+        from engine.template_marketplace import refresh_templates
+        result = refresh_templates(force=True)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 刷新模板失败：{e}"
+
+
+# ===========================================================================
+# 十六、文档对比（v3.5.0 新增，复用 difflib 引擎）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_compare_diff(text_a: str, text_b: str,
+                            label_a: str = "版本A", label_b: str = "版本B") -> str:
+    """【免密钥】文档对比：两版文档差异高亮。
+
+    返回差异行列表+统计+相似度。本地 difflib 算法，零配置可用。"""
+    try:
+        from engine.doc_comparator import compare_documents
+        result = compare_documents(text_a, text_b, label_a, label_b)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 文档对比失败：{e}"
+
+@mcp.tool()
+async def kdoc_compare_summary(text_a: str, text_b: str) -> str:
+    """【免密钥】变更摘要：两版文档增删改统计+关键变化。
+
+    本地 difflib 算法，零配置可用。"""
+    try:
+        from engine.doc_comparator import change_summary
+        result = change_summary(text_a, text_b)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 变更摘要失败：{e}"
+
+@mcp.tool()
+async def kdoc_compare_export(text_a: str, text_b: str,
+                              format: str = "markdown") -> str:
+    """【免密钥】导出对比报告。
+
+    format: markdown(默认) | html
+    本地 difflib 算法，零配置可用。"""
+    try:
+        from engine.doc_comparator import export_report
+        result = export_report(text_a, text_b, format)
+        return result
+    except Exception as e:
+        return f"[ERR] 导出报告失败：{e}"
+
+
+# ===========================================================================
+# 十七、多维表格视图增强（v3.7.0 新增，对标 Airtable）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_view_render(view_type: str, data: str, config: str = "") -> str:
+    """【免密钥】多维表格视图渲染：看板/日历/甘特图。
+
+    view_type: kanban / calendar / gantt
+    data: JSON 字符串，格式 {"records": [...], "fields": [...]}
+    config: JSON 字符串（可选），如 {"mode": "month"}
+
+    本地渲染引擎，零配置可用。"""
+    try:
+        import json
+        from engine.views import render_view
+        data_obj = json.loads(data)
+        config_obj = json.loads(config) if config else None
+        result = render_view(view_type, data_obj, config_obj)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 视图渲染失败：{e}"
+
+@mcp.tool()
+async def kdoc_view_list() -> str:
+    """【免密钥】列出所有可用的多维表格视图类型。
+
+    本地规则引擎，零配置可用。"""
+    return _to_text({
+        "views": [
+            {"type": "kanban", "name": "看板", "description": "按状态字段分组卡片"},
+            {"type": "calendar", "name": "日历", "description": "按日期字段月/周布局"},
+            {"type": "gantt", "name": "甘特图", "description": "时间轴+任务依赖箭头"},
+        ]
+    })
+
+
+# ===========================================================================
+# 十八、手写/公式识别 OCR（v3.7.0 新增，教育场景）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_ocr_formula(image_path: str, output_format: str = "latex") -> str:
+    """【免密钥】数学公式识别：图片 → LaTeX/MathML。
+
+    image_path: 公式图片路径
+    output_format: latex（默认）| mathml | text
+
+    本地 Tesseract + 符号映射，零配置可用。"""
+    try:
+        from engine.ocr.formula_recognizer import FormulaRecognizer
+        recognizer = FormulaRecognizer()
+        result = recognizer.recognize(image_path, output_format)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 公式识别失败：{e}"
+
+@mcp.tool()
+async def kdoc_ocr_education(image_path: str, scene: str = "auto") -> str:
+    """【免密钥】教育场景 OCR：手写公式/试卷/题目识别。
+
+    image_path: 图片路径
+    scene: auto（自动检测）| handwriting | formula | mixed
+
+    自动判断手写体/印刷公式/混合内容，零配置可用。"""
+    try:
+        from engine.ocr.education import EducationOCR
+        ocr = EducationOCR()
+        result = ocr.recognize(image_path, scene)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 教育 OCR 失败：{e}"
+
+
+# ===========================================================================
+# 十九、历史管理（v3.7.0 新增，合并回收站+版本历史）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_history_list(source: str = "trash", limit: int = 20, offset: int = 0,
+                            file_id: str = "") -> str:
+    """列出历史记录：回收站文件 或 文档历史版本。
+
+    source: trash（回收站）| version（版本历史，需传 file_id）
+    limit: 数量限制
+    offset: 分页偏移（仅 trash）
+    file_id: 文档 ID（仅 version 需要）"""
+    try:
+        from engine.history import HistoryManager
+        mgr = HistoryManager(backend=None)
+        if source == "version" and file_id:
+            result = mgr.list_versions(file_id, limit)
+        else:
+            result = mgr.list_history(source, limit, offset)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 获取历史列表失败：{e}"
+
+@mcp.tool()
+async def kdoc_history_restore(file_id: str, source: str = "trash",
+                               version: int = 0) -> str:
+    """恢复文件：从回收站还原 或 回滚到指定版本。
+
+    file_id: 文件 ID
+    source: trash | version
+    version: 版本号（仅 version 需要，≥1）"""
+    try:
+        from engine.history import HistoryManager
+        mgr = HistoryManager(backend=None)
+        result = mgr.restore(file_id, source, version)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 恢复失败：{e}"
+
+@mcp.tool()
+async def kdoc_history_destroy(file_id: str) -> str:
+    """⚠️ 危险操作（不可逆）：彻底删除回收站文件。执行前必须向用户二次确认。"""
+    try:
+        from engine.history import HistoryManager
+        mgr = HistoryManager(backend=None)
+        result = mgr.destroy(file_id)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 删除失败：{e}"
+
+
+# ===========================================================================
+# 二十、智能画布元素级编辑（v3.8.0 新增，对标腾讯文档）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_element_read(file_id: str, element_id: str = "") -> str:
+    """【免密钥】读取智能画布元素。
+
+    file_id: 文档 ID
+    element_id: 元素 ID（空则返回全量结构化数据）
+    本地降级模式，零配置可用。"""
+    try:
+        from engine.element_engine import CanvasElementEditor
+        editor = CanvasElementEditor(backend=None)
+        result = editor.read_element(file_id, element_id)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 元素读取失败：{e}"
+
+@mcp.tool()
+async def kdoc_element_insert(file_id: str, element_type: str, content: str,
+                              position: int = -1, attributes: str = "") -> str:
+    """【免密钥】在指定位置插入新元素。
+
+    file_id: 文档 ID
+    element_type: text / heading / image / table / divider / code / quote
+    content: 元素内容
+    position: 插入位置（-1 末尾）
+    attributes: JSON 字符串（可选，如 {"level": 2}）
+    本地降级模式，零配置可用。"""
+    try:
+        import json
+        from engine.element_engine import CanvasElementEditor
+        editor = CanvasElementEditor(backend=None)
+        attrs = json.loads(attributes) if attributes else None
+        result = editor.insert_element(file_id, element_type, content, position, attrs)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 元素插入失败：{e}"
+
+@mcp.tool()
+async def kdoc_element_update(file_id: str, element_id: str, content: str,
+                              attributes: str = "") -> str:
+    """【免密钥】更新指定元素。
+
+    file_id: 文档 ID
+    element_id: 元素 ID
+    content: 新内容
+    attributes: JSON 字符串（可选）
+    本地降级模式，零配置可用。"""
+    try:
+        import json
+        from engine.element_engine import CanvasElementEditor
+        editor = CanvasElementEditor(backend=None)
+        attrs = json.loads(attributes) if attributes else None
+        result = editor.update_element(file_id, element_id, content, attrs)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 元素更新失败：{e}"
+
+@mcp.tool()
+async def kdoc_element_delete(file_id: str, element_id: str) -> str:
+    """【免密钥】删除指定元素。
+
+    file_id: 文档 ID
+    element_id: 元素 ID
+    本地降级模式，零配置可用。"""
+    try:
+        from engine.element_engine import CanvasElementEditor
+        editor = CanvasElementEditor(backend=None)
+        result = editor.delete_element(file_id, element_id)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 元素删除失败：{e}"
+
+@mcp.tool()
+async def kdoc_element_append_md(file_id: str, markdown_content: str,
+                                 position: int = -1) -> str:
+    """【免密钥】向文档末尾追加 Markdown 内容（增量，不改已有内容）。
+
+    file_id: 文档 ID
+    markdown_content: Markdown 内容
+    position: 插入位置（-1 末尾）
+    本地降级模式，零配置可用。"""
+    try:
+        from engine.element_engine import CanvasElementEditor
+        editor = CanvasElementEditor(backend=None)
+        result = editor.append_markdown(file_id, markdown_content, position)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] Markdown 追加失败：{e}"
+
+
+# ===========================================================================
+# 二十一、空间节点管理增强（v3.8.0 新增，对标腾讯文档）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_space_tree(folder_id: str = "", depth: int = 3) -> str:
+    """【免密钥】列出空间目录树（递归）。
+
+    folder_id: 文件夹 ID（空字符串表示根目录）
+    depth: 递归深度（默认 3 层）
+    本地降级模式，零配置可用。"""
+    try:
+        from engine.space_tree import SpaceTreeManager
+        mgr = SpaceTreeManager(backend=None)
+        result = mgr.list_tree(folder_id, depth=depth)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 目录树查询失败：{e}"
+
+@mcp.tool()
+async def kdoc_space_tree_visualize(folder_id: str = "", format: str = "json") -> str:
+    """【免密钥】目录可视化（JSON/Markdown 树形）。
+
+    folder_id: 文件夹 ID（空字符串表示根目录）
+    format: json | markdown
+    本地降级模式，零配置可用。"""
+    try:
+        from engine.space_tree import SpaceTreeManager
+        mgr = SpaceTreeManager(backend=None)
+        result = mgr.visualize_tree(folder_id, format=format)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 目录可视化失败：{e}"
+
+@mcp.tool()
+async def kdoc_space_node_create(parent_id: str, name: str, target_id: str,
+                                 node_type: str = "shortcut") -> str:
+    """【免密钥】创建链接节点（快捷方式/引用）。
+
+    parent_id: 父文件夹 ID
+    name: 节点名称
+    target_id: 目标文件/文件夹 ID
+    node_type: shortcut | reference
+    本地降级模式，零配置可用。"""
+    try:
+        from engine.space_tree import SpaceTreeManager
+        mgr = SpaceTreeManager(backend=None)
+        result = mgr.create_link_node(parent_id, name, target_id, node_type)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 节点创建失败：{e}"
+
+@mcp.tool()
+async def kdoc_space_delete_recursive(folder_id: str, dry_run: bool = True) -> str:
+    """⚠️ 危险操作：递归删除文件夹及其所有子内容。
+
+    folder_id: 要删除的文件夹 ID
+    dry_run: True 时仅预览不执行（默认安全模式）
+    本地降级模式，零配置可用。"""
+    try:
+        from engine.space_tree import SpaceTreeManager
+        mgr = SpaceTreeManager(backend=None)
+        result = mgr.delete_recursive(folder_id, dry_run)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 递归删除失败：{e}"
+
+
+# ===========================================================================
+# 二十二、文档内容全文搜索（v3.8.0 新增，超越腾讯）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_content_search(query: str, file_id: str = "", limit: int = 20) -> str:
+    """【免密钥】全文搜索文档内容（超越腾讯：搜内容+结果定位高亮）。
+
+    query: 搜索关键词
+    file_id: 限定搜索范围（空字符串搜索全部文档）
+    limit: 返回结果数量限制
+    本地降级模式，零配置可用。"""
+    try:
+        from engine.content_search import ContentSearchEngine
+        engine = ContentSearchEngine(backend=None)
+        result = engine.search(query, file_id, limit)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 全文搜索失败：{e}"
+
+@mcp.tool()
+async def kdoc_content_search_in_document(file_id: str, query: str) -> str:
+    """【免密钥】在指定文档内搜索，返回匹配行及上下文。
+
+    file_id: 文档 ID
+    query: 搜索关键词
+    本地降级模式，零配置可用。"""
+    try:
+        from engine.content_search import ContentSearchEngine
+        engine = ContentSearchEngine(backend=None)
+        result = engine.search_in_document(file_id, query)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 文档内搜索失败：{e}"
+
+
+# ===========================================================================
+# 二十三、统一删除（v3.8.0 新增，合并 delete + trash destroy）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_file_delete_unified(file_id: str, force: bool = False,
+                                  from_trash: bool = False) -> str:
+    """文件删除统一入口（合并软删除/彻底删除/直接删除）。
+
+    file_id: 文件 ID
+    force: True 时直接彻底删除（跳过回收站，⚠️ 需二次确认）
+    from_trash: True 时从回收站彻底删除；False 时软删除到回收站
+
+    用法：
+        delete(file_id)                    → 软删除到回收站
+        delete(file_id, from_trash=True)   → 从回收站彻底删除
+        delete(file_id, force=True)       → 直接彻底删除（⚠️）
+    需配置金山 App Key 后可用。"""
+    try:
+        from engine.history import HistoryManager
+        mgr = HistoryManager(backend=None)
+        result = mgr.delete(file_id, force=force, from_trash=from_trash)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 删除失败：{e}"
+
+
+# ===========================================================================
+# 二十四、本地 OCR 升级（v3.7.0 升级提示）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_local_ocr_extract(image_path: str, lang: str = "chi_sim+eng") -> str:
+    """【免密钥】本地 OCR 提取图片文字：强制本地 Tesseract（数据不出域）。
+
+    未安装 Tesseract 给出安装指引，不调用任何外部 API。"""
+    try:
+        from engine.local.ocr import extract_text
+        res = extract_text(image_path, lang=lang)
+        if res["source"] == "none":
+            return f"[OCR 未就绪] {res['hint']}"
+        return _to_text(res)
+    except Exception as e:
+        return f"[ERR] OCR 失败：{e}"
+
+
+# ===========================================================================
+# 十五、品类管理（v3.5.0 新增，9 品类 + 子类型识别）
+# ===========================================================================
+@mcp.tool()
+async def kdoc_category_resolve(user_input: str) -> str:
+    """【免密钥】品类识别：根据用户输入自动识别文档品类（9 品类）。
+
+    返回品类 ID、名称、子类型、编辑方式。本地规则引擎，零配置可用。"""
+    try:
+        from engine.categories import resolve_category
+        result = resolve_category(user_input)
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 品类识别失败：{e}"
+
+@mcp.tool()
+async def kdoc_category_list() -> str:
+    """【免密钥】列出所有可用品类（9 品类）。
+
+    本地规则引擎，零配置可用。"""
+    try:
+        from engine.categories import list_categories
+        result = list_categories()
+        return _to_text(result)
+    except Exception as e:
+        return f"[ERR] 获取品类列表失败：{e}"
 
 
 def main():

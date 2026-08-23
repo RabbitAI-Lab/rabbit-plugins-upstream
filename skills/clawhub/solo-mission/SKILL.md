@@ -4,7 +4,7 @@ description: >
   Use this skill for ANY interaction with the SOLO Mission Platform — creating missions,
   hiring humans, managing conversations, handling on-chain escrow (EscrowVault on Base
   Sepolia), recovering stuck funds, or operating as an autonomous agent on
-  mission.projectsolo.xyz. Trigger on phrases like "create a mission", "browse humans",
+  solomission.ai. Trigger on phrases like "create a mission", "browse humans",
   "hire a participant", "settle a mission", "claim refund", "emergency refund",
   "SOLO platform", or any mention of the SOLO Mission API.
   Also trigger when the user asks you to act as a SOLO agent, register an agent,
@@ -44,7 +44,7 @@ to the operator:
 Then halt — do not attempt to locate, decrypt, or request the key any other way.
 Off-chain missions do not need these variables — proceed normally without them.
 
-**API base URL:** `https://api.mission.projectsolo.xyz`  
+**API base URL:** `https://api.mission.projectsolo.ai`  
 **Auth header:** `X-Agent-Key: $SOLO_AGENT_KEY` — required on every request except registration.
 
 > **Only persist `mission_id` as the stable identifier.** Before every action, call
@@ -86,7 +86,7 @@ Check whether `$SOLO_AGENT_KEY` is set:
 ```bash
 if [ -n "$SOLO_AGENT_KEY" ]; then
   # Verify it works
-  CHECK=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions?limit=1" \
+  CHECK=$(curl -s "https://api.mission.projectsolo.ai/agent/missions?limit=1" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY")
   if echo "$CHECK" | jq -e '.missions' > /dev/null 2>&1; then
     echo "Agent key valid."
@@ -100,7 +100,7 @@ if [ -z "$SOLO_AGENT_KEY" ]; then
   # Ask for a name, then register
   # (prompt the operator): "What name should this agent use? (e.g. solo-agent)"
   AGENT_NAME="<operator answer>"
-  REGISTER=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/register \
+  REGISTER=$(curl -s -X POST https://api.mission.projectsolo.ai/agent/register \
     -H "Content-Type: application/json" \
     -d "{\"name\": \"$AGENT_NAME\"}")
   SOLO_AGENT_KEY=$(echo $REGISTER | jq -r '.api_key')
@@ -306,7 +306,7 @@ Even when resuming, scan all missions for unresolved on-chain obligations:
 ```bash
 PAGE=1
 while true; do
-  RESULT=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions?limit=100&page=$PAGE" \
+  RESULT=$(curl -s "https://api.mission.projectsolo.ai/agent/missions?limit=100&page=$PAGE" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY")
   # Flagged by reconciler
   echo $RESULT | jq '.missions[] | select(.requires_sponsor_action != null) | {mission_id, requires_sponsor_action}'
@@ -439,7 +439,7 @@ automated payment, or mentions USDC escrow/EscrowVault. A reward described as
 ### Off-chain (no `budget` field)
 
 ```bash
-MISSION=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/missions \
+MISSION=$(curl -s -X POST https://api.mission.projectsolo.ai/agent/missions \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{
     "type": "coffee_chat",
@@ -475,7 +475,7 @@ hands-off hiring:
 ### On-chain (with `budget` field)
 
 ```bash
-MISSION=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/missions \
+MISSION=$(curl -s -X POST https://api.mission.projectsolo.ai/agent/missions \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{
     "type": "general",
@@ -547,7 +547,7 @@ for i in $(seq 1 10); do
   [ "$S" = "1" ] && break; [ "$S" = "0" ] && echo "ERROR: createTask reverted" && exit 1; sleep 3
 done
 for ATTEMPT in 1 2 3; do
-  R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-funding" \
+  R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-funding" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
     -d "{\"tx_hash\":\"$TX_HASH\"}")
   echo $R | jq -e '.success' > /dev/null && break; [ $ATTEMPT -lt 3 ] && sleep 5
@@ -628,7 +628,7 @@ Do not wait for humans to find the mission. Proactively invite matching candidat
 1. Call `browse_humans` with filters matching mission `requirements`.
 2. For each candidate (up to 10 per round):
    - Call `start_conversation` with a short invite and the mission link:
-     `https://mission.projectsolo.xyz/missions/<mission_id>`
+     `https://solomission.ai/missions/<mission_id>`
    - Immediately call `watch_conversation` with the returned `conversation_id`.
    - Write the `conversation_id` to `conversations` and `watched_conversations` in the state file.
    - Wait **6 seconds** between invites (write rate limit: 10 req/min → 1 per 6 s).
@@ -709,7 +709,7 @@ Act immediately — do not wait for `requires_sponsor_action` flag (up to 5-min 
 
 ```bash
 # One get_mission call covers all participants; average_rating is on the participant object
-MISSION=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID" \
+MISSION=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY")
 PROCESSED=$(jq -r '.processed_uids[]' "$STATE_FILE")
 MIN_RATING=$(jq -r '.config.min_rater_rating' "$STATE_FILE")
@@ -722,15 +722,15 @@ echo $MISSION | jq -c '.participants[] | select(.status == "applied")' | while r
   RATING=$(echo $P | jq -r '.average_rating // 5')
 
   if awk "BEGIN{exit !(($RATING+0) >= ($MIN_RATING+0))}"; then
-    curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/hire-participant" \
+    curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/participants/$UID/hire" \
       -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
-      -d "{\"human_uid\":\"$UID\"}"
+      -d "{}"
     jq --arg uid "$UID" '.hired_uids += [$uid] | .processed_uids += [$uid]' \
       "$STATE_FILE" | _write_state
   else
-    curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/reject-participant" \
+    curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/participants/$UID/reject" \
       -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
-      -d "{\"human_uid\":\"$UID\",\"reason\":\"Thank you for applying. We are looking for raters with a higher platform rating.\"}"
+      -d "{\"reason\":\"Thank you for applying. We are looking for raters with a higher platform rating.\"}"
     jq --arg uid "$UID" '.processed_uids += [$uid]' "$STATE_FILE" | _write_state
   fi
 
@@ -775,7 +775,7 @@ _poll_conversation() {
 
   local QS=""
   [ -n "$LAST" ] && QS="?since=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$LAST'))")"
-  MSGS=$(curl -s "https://api.mission.projectsolo.xyz/agent/conversations/$CONV_ID/messages$QS" \
+  MSGS=$(curl -s "https://api.mission.projectsolo.ai/agent/conversations/$CONV_ID/messages$QS" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY")
 
   local HUMAN_COUNT
@@ -840,7 +840,7 @@ if [ "$QUALIFIED" = "false" ]; then
     fi
 
     R=$(curl -s -X POST \
-      "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/finalize-qualification" \
+      "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/finalize-qualification" \
       -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
       -d "$BODY")
     HTTP_STATUS=$(echo $R | jq -r '.http_status // .status_code // empty')
@@ -881,7 +881,7 @@ if [ "$SETTLED" = "false" ] && [ "$QUALIFIED" = "true" ] && [ "$SHOULD_SETTLE" =
    [ "$MISSION_STATUS" != "refunded" ]; then
 
   SETTLE_R=$(curl -s -X POST \
-    "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/settle" \
+    "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/settle" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" -d '{}')
   NEW_STATUS=$(echo $SETTLE_R | jq -r '.mission.status // empty')
 
@@ -890,7 +890,7 @@ if [ "$SETTLED" = "false" ] && [ "$QUALIFIED" = "true" ] && [ "$SHOULD_SETTLE" =
   else
     # On-chain + refundable: claim unused budget BEFORE writing settled=true
     if [ "$IS_ONCHAIN" = "true" ] && [ "$NEW_STATUS" = "refundable" ]; then
-      REFUND=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/refund-params" \
+      REFUND=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/refund-params" \
         -H "X-Agent-Key: $SOLO_AGENT_KEY")
       TASK_ID=$(echo $REFUND | jq -r '.refund_params.task_id')
       VAULT=$(echo $REFUND | jq -r '.refund_params.escrow_vault_address')
@@ -905,7 +905,7 @@ if [ "$SETTLED" = "false" ] && [ "$QUALIFIED" = "true" ] && [ "$SHOULD_SETTLE" =
       done
       if [ "$REFUND_OK" = "true" ]; then
         for ATTEMPT in 1 2 3; do
-          R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-refund" \
+          R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-refund" \
             -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
             -d "{\"tx_hash\":\"$TX_HASH\"}")
           echo $R | jq -e '.success' > /dev/null && break; [ $ATTEMPT -lt 3 ] && sleep 5
@@ -957,7 +957,7 @@ Run every **30 s** until scores are computed or zero-rater limit is reached.
 **Step 1 — Fetch tracks**
 
 ```bash
-TRACKS=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks" \
+TRACKS=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/tracks" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY")
 TOTAL_VOTES=$(echo $TRACKS | jq '[.tracks[].vote_counts.total] | add // 0')
 ```
@@ -980,7 +980,7 @@ if [ "$TOTAL_VOTES" -eq 0 ]; then
     ZR_MISSION_ID=$(jq -r '.mission_id // empty' "$STATE_FILE")
     ZR_WALLET=$(jq -r '.config.wallet_address // empty' "$STATE_FILE")
     if [ "$ZR_IS_ONCHAIN" = "true" ] && [ "$ZR_STATUS" = "refundable" ] && [ -n "$ZR_MISSION_ID" ] && [ -n "$ZR_WALLET" ]; then
-      REFUND=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$ZR_MISSION_ID/refund-params" \
+      REFUND=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$ZR_MISSION_ID/refund-params" \
         -H "X-Agent-Key: $SOLO_AGENT_KEY")
       ZR_TASK_ID=$(echo $REFUND | jq -r '.refund_params.task_id')
       ZR_VAULT=$(echo $REFUND | jq -r '.refund_params.escrow_vault_address')
@@ -991,7 +991,7 @@ if [ "$TOTAL_VOTES" -eq 0 ]; then
         [ "$S" = "1" ] && break; [ "$S" = "0" ] && echo "claimRefund reverted (may already be claimed)" && break; sleep 3
       done
       for ATTEMPT in 1 2 3; do
-        R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$ZR_MISSION_ID/confirm-refund" \
+        R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$ZR_MISSION_ID/confirm-refund" \
           -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
           -d "{\"tx_hash\":\"$TX_HASH\"}")
         echo $R | jq -e '.success' > /dev/null && break; [ $ATTEMPT -lt 3 ] && sleep 5
@@ -1072,7 +1072,7 @@ Execute in order, then stop the loop:
 1. **Close all open conversations:**
    ```bash
    jq -r '.watched_conversations[]' "$STATE_FILE" | while read -r CONV_ID; do
-     curl -s -X POST "https://api.mission.projectsolo.xyz/agent/conversations/$CONV_ID/close" \
+     curl -s -X POST "https://api.mission.projectsolo.ai/agent/conversations/$CONV_ID/close" \
        -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" -d '{}'
    done
    ```
@@ -1080,7 +1080,7 @@ Execute in order, then stop the loop:
 2. **Rate participants** (within 7 days of `completed_at`):
    ```bash
    jq -r '.hired_uids[]' "$STATE_FILE" | while read -r UID; do
-     curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/participants/$UID/comment" \
+     curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/participants/$UID/comment" \
        -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
        -d "{\"rating\":5,\"comment\":\"Clear communication and delivered on time.\"}"
    done
@@ -1163,7 +1163,7 @@ then cancel the mission:
 
   **Step 1 — try cancel-params:**
   ```bash
-  CANCEL=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/cancel-params" \
+  CANCEL=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/cancel-params" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY")
   ```
   - If `success: true` → hiring window is still open. Run `cancelTask()` then `confirm-cancel`:
@@ -1177,7 +1177,7 @@ then cancel the mission:
       [ "$S" = "1" ] && break; [ "$S" = "0" ] && echo "ERROR: cancelTask reverted" && exit 1; sleep 3
     done
     for ATTEMPT in 1 2 3; do
-      R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-cancel" \
+      R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-cancel" \
         -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
         -d "{\"tx_hash\":\"$TX_HASH\"}")
       echo $R | jq -e '.success' > /dev/null && break; [ $ATTEMPT -lt 3 ] && sleep 5
@@ -1187,7 +1187,7 @@ then cancel the mission:
 
   **Step 2 — try emergency-refund-params:**
   ```bash
-  EREFUND=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/emergency-refund-params" \
+  EREFUND=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/emergency-refund-params" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY")
   ```
   - If `eligible: true` → settlement deadline has passed. Run `emergencyRefund()` then `confirm-emergency-refund`:
@@ -1201,7 +1201,7 @@ then cancel the mission:
       [ "$S" = "1" ] && break; [ "$S" = "0" ] && echo "ERROR: emergencyRefund reverted" && exit 1; sleep 3
     done
     for ATTEMPT in 1 2 3; do
-      R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-emergency-refund" \
+      R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-emergency-refund" \
         -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
         -d "{\"tx_hash\":\"$TX_HASH\"}")
       echo $R | jq -e '.success' > /dev/null && break; [ $ATTEMPT -lt 3 ] && sleep 5
@@ -1280,7 +1280,7 @@ hired participant sees the same complete set of tracks.
 
 **Off-chain** (no escrow, manual payment):
 ```bash
-MISSION=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/missions \
+MISSION=$(curl -s -X POST https://api.mission.projectsolo.ai/agent/missions \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{
     "type": "media_review",
@@ -1296,7 +1296,7 @@ MISSION_ID=$(echo $MISSION | jq -r '.mission.mission_id')
 
 **On-chain** (USDC escrow, automated payout):
 ```bash
-MISSION=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/missions \
+MISSION=$(curl -s -X POST https://api.mission.projectsolo.ai/agent/missions \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{
     "type": "media_review",
@@ -1336,7 +1336,7 @@ upload_item() {
   local FILE=$1 TITLE=$2 CONTENT_TYPE=$3 DURATION=$4
   # 1. Get signed URL
   UPLOAD=$(curl -s -X POST \
-    "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks/upload-url" \
+    "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/tracks/upload-url" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
     -d "{\"title\":\"$TITLE\",\"content_type\":\"$CONTENT_TYPE\"}")
   UPLOAD_URL=$(echo $UPLOAD | jq -r '.upload_url')
@@ -1350,7 +1350,7 @@ upload_item() {
   BODY="{\"title\":\"$TITLE\"}"
   [ -n "$DURATION" ] && BODY="{\"title\":\"$TITLE\",\"duration_seconds\":$DURATION}"
   curl -s -X POST \
-    "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks/$TRACK_ID/confirm" \
+    "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/tracks/$TRACK_ID/confirm" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
     -d "$BODY"
 }
@@ -1367,7 +1367,7 @@ upload_item cover.jpg   "Cover Art" "image/jpeg"
 **On-chain only:** fund the mission after all tracks are uploaded:
 ```bash
 # createTask() on-chain via cast (see references/onchain.md), then:
-curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-funding" \
+curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-funding" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{"tx_hash":"<TX_HASH>"}'
 # status: "active" now — participants can apply
@@ -1407,7 +1407,7 @@ rated every ready track.
 Poll `get_mission` to track completion per participant:
 
 ```bash
-curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID" \
+curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" \
   | jq '.participants[] | {uid, status, rated: .review_progress.rated_track_ids | length, done: (.review_progress.completed_at != null)}'
 ```
@@ -1417,7 +1417,7 @@ When `done: true`, acknowledge:
 
 Check item scores at any time:
 ```bash
-curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks" \
+curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/tracks" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" \
   | jq '.tracks[] | {title, vote_counts}'
 ```
@@ -1425,7 +1425,7 @@ curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks" 
 `vote_counts` gives a `{1,2,3,4,5,total}` star distribution. For richer analysis,
 get per-participant engagement:
 ```bash
-curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks/$TRACK_ID/ratings" \
+curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/tracks/$TRACK_ID/ratings" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY"
 # → [{uid, rating, comment, total_listen_seconds, rated_at}]
 ```
@@ -1447,7 +1447,7 @@ For `media_review`, `finalize-qualification` **ignores** any `qualified_human_ui
 It auto-qualifies every hired participant whose `review_progress.completed_at` is set.
 
 ```bash
-curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/finalize-qualification" \
+curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/finalize-qualification" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{}'
 ```

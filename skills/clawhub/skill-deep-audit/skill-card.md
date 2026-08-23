@@ -1,43 +1,57 @@
-## Description: <br>
-Skill Deep Audit helps an agent audit agent-skill folders with deterministic static and read-only dry-run checks, scoring, findings, and fix guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+skill-deep-audit audits agent skills with deterministic L1/L2 checks across seven dimensions, producing scored ERR/WARN findings and guarded fix guidance.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Developers and skill maintainers use this skill to check whether an agent skill is ready to ship, identify ERR and WARN findings across seven audit dimensions, and receive a scorecard with prioritized remediation guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A normal audit may write an AUDIT-{date}.md report into the target skill folder, and fix mode can edit that target skill after explicit authorization. <br>
-Mitigation: Run it only on skill directories you are comfortable having read and annotated, review proposed fixes before authorizing them, and rely on the documented backup step before any fix workflow. <br>
-Risk: Static and read-only dry-run checks can miss context or produce findings that need human judgment. <br>
-Mitigation: Review the generated scorecard, especially ERR and WARN items, before using its results for release or deployment decisions. <br>
+## Use Case:
 
+Developers and skill maintainers use this skill to evaluate whether an agent skill is ready to ship by running static or read-only dry-run checks and receiving a scored audit report with findings and fix guidance.
 
-## Reference(s): <br>
-- [Check Rules](references/check-rules.md) <br>
-- [Controlled Domains](references/controlled-domains.md) <br>
-- [Audit Report Output Template](references/output-template.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/songhonglei/skill-deep-audit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown scorecard file plus concise text summary] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces an AUDIT-{date}.md scorecard with ERR/WARN findings, scoring, citations, dependency notes, and fix recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill reads the target skill folder and creates an AUDIT-YYYY-MM-DD.md report in that folder.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it on a copy when the target directory must remain unchanged, and review the generated report before using findings for release decisions.
+
+Risk: Fix mode can edit audited skill files.
+
+Mitigation: Use fix mode only after explicit authorization and rely on the documented backup workflow before applying changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/skill-deep-audit)
+- [Check rules](references/check-rules.md)
+- [Output template](references/output-template.md)
+- [Scan commands](references/scan-commands.md)
+- [Controlled domains](references/controlled-domains.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Files, Shell commands, Guidance]
+
+**Output Format:** [Markdown scorecard file and concise text summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes ERR/WARN severity, score totals, cited findings, dependency notes, and fix recommendations.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata and artifact documentation)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

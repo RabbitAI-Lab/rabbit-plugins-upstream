@@ -1,16 +1,16 @@
 # SYS\_FontManager class
 
-系统 / 字体管理类
+System / font manager class
 
 ## Signature
 
 ```typescript
-declare class SYS_FontManager 
+export class SYS_FontManager 
 ```
 
 ## Remarks
 
-配置嘉立创 EDA 专业版允许调用的系统字体列表
+Configure the list of system fonts that EasyEDA Pro is allowed to use
 
 ## Methods
 
@@ -40,7 +40,7 @@ Description
 
 </td><td>
 
-添加字体到字体列表
+Add Font to font list
 
 
 </td></tr>
@@ -54,7 +54,7 @@ Description
 
 </td><td>
 
-删除字体列表内的指定字体
+Delete the specified font from the font list
 
 
 </td></tr>
@@ -68,7 +68,7 @@ Description
 
 </td><td>
 
-获取当前已经配置的字体列表
+Get the currently configured font list
 
 
 </td></tr>
@@ -82,12 +82,12 @@ Description
 
 # SYS\_FontManager.addFont() method
 
-添加字体到字体列表
+Add Font to font list
 
 ## Signature
 
 ```typescript
-addFont(fontName: string): Promise<boolean>;
+public addFont(fontName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -120,7 +120,7 @@ string
 
 </td><td>
 
-字体名称
+Font name
 
 
 </td></tr>
@@ -132,18 +132,35 @@ string
 
 Promise&lt;boolean&gt;
 
-添加操作是否成功
+Add Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 添加一个字体到字体列表
+const added = await eda.sys_FontManager.addFont('嘉立创示例_测试字体');
+
+// 2. 确认字体已进入列表
+const fonts = await eda.sys_FontManager.getFontsList();
+
+// 3. 清理测试字体，恢复原有配置
+await eda.sys_FontManager.deleteFont('嘉立创示例_测试字体');
+
+console.log('添加结果：', added);
+console.log('已进入字体列表：', fonts.includes('嘉立创示例_测试字体'));
+```
 
 ### deletefont
 
 # SYS\_FontManager.deleteFont() method
 
-删除字体列表内的指定字体
+Delete the specified font from the font list
 
 ## Signature
 
 ```typescript
-deleteFont(fontName: string): Promise<boolean>;
+public deleteFont(fontName: string): Promise<boolean>;
 ```
 
 ## Parameters
@@ -176,7 +193,7 @@ string
 
 </td><td>
 
-字体名称
+Font name
 
 
 </td></tr>
@@ -188,18 +205,35 @@ string
 
 Promise&lt;boolean&gt;
 
-删除操作是否成功
+Delete Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 准备一个待删除的测试字体
+await eda.sys_FontManager.addFont('嘉立创示例_测试字体');
+
+// 2. 从字体列表删除该字体
+const deleted = await eda.sys_FontManager.deleteFont('嘉立创示例_测试字体');
+
+// 3. 确认字体已不在列表中
+const fonts = await eda.sys_FontManager.getFontsList();
+
+console.log('删除结果：', deleted);
+console.log('已不在字体列表：', !fonts.includes('嘉立创示例_测试字体'));
+```
 
 ### getfontslist
 
 # SYS\_FontManager.getFontsList() method
 
-获取当前已经配置的字体列表
+Get the currently configured font list
 
 ## Signature
 
 ```typescript
-getFontsList(): Promise<Array<string>>;
+public getFontsList(): Promise<Array<string>>;
 ```
 
 
@@ -207,4 +241,16 @@ getFontsList(): Promise<Array<string>>;
 
 Promise&lt;Array&lt;string&gt;&gt;
 
-字体列表
+Font list
+
+## Example
+
+
+```javascript
+// 1. 获取当前已配置的字体列表
+const fonts = await eda.sys_FontManager.getFontsList();
+
+// 2. 输出字体数量与全部字体名
+console.log('字体数量：', fonts.length);
+console.log('字体列表：', fonts.join('、'));
+```

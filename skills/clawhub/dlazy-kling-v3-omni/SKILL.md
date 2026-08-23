@@ -1,11 +1,11 @@
 ---
 name: dlazy-kling-v3-omni
 version: 1.3.4
-description: Versatile video generation with Kling v3 Omni. Supports multi-modal inputs to generate stunning dynamic videos. 使用可灵 (Kling) v3 Omni 全能视频生成模型，支持多模态输入（图片、提示词）生成震撼的动态视频。
+description: "Versatile video generation with Kling v3 Omni. Supports multi-modal inputs to generate stunning dynamic videos. 使用可灵 (Kling) v3 Omni 全能视频生成模型，支持多模态输入（图片、提示词）生成震撼的动态视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy kling-v3-omni -h for help."}}
 ---
 
-# dlazy-kling-v3-omni
+# 全能视频生成 可灵 Kling V3 Omni
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

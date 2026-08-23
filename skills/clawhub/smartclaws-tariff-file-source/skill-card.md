@@ -1,43 +1,58 @@
-## Description: <br>
-Local tariff data source contract for SmartClaws master agents that defines the tariff snapshot file schema and how to use it during control decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Local tariff data source contract for SmartClaws master agents that defines the tariff snapshot file schema and how to use it during control decisions.
 
-## Publisher: <br>
-[eduv09](https://clawhub.ai/user/eduv09) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[eduv09](https://clawhub.ai/user/eduv09)
 
-## Use Case: <br>
-External developers and SmartClaws operators use this skill to tell a master agent how to read, validate, and apply a local off-chain electricity tariff snapshot during control cycles. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: An agent could treat stale, missing, or malformed tariff data as authoritative. <br>
-Mitigation: Validate the snapshot schema and freshness timestamp before each control cycle; when the data is missing, stale, or invalid, run a conservative control cycle and report the tariff source issue. <br>
-Risk: A local tariff source could be misread as permission to access unrelated local files. <br>
-Mitigation: Provide only the intended tariff snapshot path in SMARTCLAWS.md and keep the skill scoped to that path. <br>
-Risk: Local tariff data could be published to device channels unintentionally. <br>
-Mitigation: Keep tariff data local unless the owner explicitly instructs the agent to publish it. <br>
+## Use Case:
 
+Developers and operators using SmartClaws master agents use this skill to define a local tariff snapshot file and guide load-control decisions from current and lookahead tariff data.
 
-## Reference(s): <br>
-- [SmartClaws homepage](https://github.com/skalenetwork/smartclaws) <br>
-- [ClawHub skill page](https://clawhub.ai/eduv09/skills/smartclaws-tariff-file-source) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with a JSON tariff snapshot schema] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to read a local tariff snapshot, validate freshness and schema fields, and choose conservative behavior when data is unavailable or invalid.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The configured tariff snapshot path could point to the wrong local file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, confirm that snapshotFile points only to the intended tariff JSON file.
+
+Risk: Stale, missing, or malformed tariff data could lead to poor control decisions.
+
+Mitigation: Use freshness checks, treat invalid tariff data as non-authoritative, run a conservative control cycle, and report the tariff source issue.
+
+Risk: Publishing local tariff data to device channels could expose data or alter system behavior.
+
+Mitigation: Do not publish tariff data to device channels unless explicitly instructed by the owner.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/eduv09/skills/smartclaws-tariff-file-source)
+- [SmartClaws homepage](https://github.com/skalenetwork/smartclaws)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown with YAML and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Defines local-file schema, freshness checks, and master-agent usage constraints; it does not add code, persistence, network behavior, or privileged actions.]
+
+## Skill Version(s):
+
+1.0.1 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

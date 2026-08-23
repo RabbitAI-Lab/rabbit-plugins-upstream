@@ -30,7 +30,7 @@ class ApiClient {
             return this.handleError(error);
         }
     }
-    async upload(endpoint, params, file, timeout) {
+    async upload(endpoint, params, file, timeout, fieldName = "file") {
         try {
             const form = new form_data_1.default();
             form.append("userNo", this.credential.userNo);
@@ -38,7 +38,7 @@ class ApiClient {
             for (const [key, value] of Object.entries(params)) {
                 form.append(key, value);
             }
-            form.append("file", file.data, { filename: file.name });
+            form.append(fieldName, file.data, { filename: file.name });
             const response = await axios_1.default.post(`${this.baseUrl}${endpoint}`, form, {
                 headers: form.getHeaders(),
                 timeout,
@@ -56,6 +56,10 @@ class ApiClient {
         return data;
     }
     handleError(error) {
+        const responseData = error?.response?.data;
+        if (responseData != null && typeof responseData.code !== "undefined") {
+            return this.parseResponse(responseData);
+        }
         if (error?.code === "ECONNABORTED" || error?.code === "ETIMEDOUT") {
             return { code: -500, message: "请求超时，请检查网络连接后重试" };
         }

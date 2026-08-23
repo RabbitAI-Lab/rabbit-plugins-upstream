@@ -1,46 +1,64 @@
-## Description: <br>
-Get Google's AI Mode answer for a query as structured JSON \u2014 AI-generated text blocks, cited references, and shopping results for commercial queries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Get Google's AI Mode answer for a query as structured JSON: AI-generated text blocks, cited references, and shopping results for commercial queries.
 
-## Publisher: <br>
-[scavio-ai](https://clawhub.ai/user/scavio-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[scavio-ai](https://clawhub.ai/user/scavio-ai)
 
-## Use Case: <br>
-Developers, researchers, and agents use this skill to retrieve Google's AI Mode answer for a question through Scavio, including answer text, cited references, and shopping results for commercial queries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries and optional region or location parameters are sent to Scavio. <br>
-Mitigation: Avoid secrets, private personal details, and sensitive business queries unless Scavio's data handling terms fit the use case. <br>
-Risk: AI Mode answers and cited references can be incomplete, stale, or misleading. <br>
-Mitigation: Return the API data without fabrication and surface references so users can verify sources before relying on the answer. <br>
-Risk: Each request consumes one Scavio credit and may hit rate or usage limits. <br>
-Mitigation: Confirm query intent before calling the API, track credit use, and handle 429 responses by waiting before retrying. <br>
-Risk: The skill requires a Scavio API key. <br>
-Mitigation: Read the key from SCAVIO_API_KEY and do not hardcode, log, or expose it in generated output. <br>
+## Use Case:
 
+Developers and agents use this skill to query Scavio's Google AI Mode endpoint, retrieve AI-generated answer text, and return cited references or shopping results for user-facing research and commercial queries.
 
-## Reference(s): <br>
-- [Scavio Google AI Mode documentation](https://scavio.dev/docs/google-ai-mode) <br>
-- [Scavio rate limits](https://scavio.dev/docs/rate-limits) <br>
-- [ClawHub skill listing](https://clawhub.ai/scavio-ai/skills/scavio-google-ai-mode) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and inline shell or Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; each API request costs 1 credit; ClawHub metadata declares a 90 second timeout and throttle of 1.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Search queries are sent to Scavio's API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when external processing by Scavio is acceptable for the query.
+
+Risk: API calls spend Scavio credits.
+
+Mitigation: Treat each request as billable usage and avoid unnecessary retries.
+
+Risk: The Scavio API key could be exposed if placed directly in source or chat transcripts.
+
+Mitigation: Store SCAVIO_API_KEY in an environment variable or secret store.
+
+Risk: AI Mode answers may omit context or be hard to verify without sources.
+
+Mitigation: Present the returned references with the answer and avoid fabricating missing answer text, sources, or products.
+
+## Reference(s):
+
+- [Scavio Google AI Mode documentation](https://scavio.dev/docs/google-ai-mode)
+- [Scavio rate limits](https://scavio.dev/docs/rate-limits)
+- [ClawHub skill page](https://clawhub.ai/scavio-ai/skills/scavio-google-ai-mode)
+- [Publisher profile](https://clawhub.ai/user/scavio-ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, API Calls, Guidance]
+
+**Output Format:** [Structured JSON from the API with agent-facing Markdown summaries when presenting answers and sources.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; each request costs 1 Scavio credit; answers should include returned references for verification.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence; artifact frontmatter is 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -21,21 +21,23 @@ IdentyClaw Passports on the NEAR blockchain contain comprehensive metadata for:
 - Geographic restrictions
 - Webhook configuration
 
-**Technical Implementation**: IdentyClaw Passports are implemented as non-fungible tokens on the NEAR blockchain, ensuring each passport is unique and transferable.
+**Privacy:** Passport metadata can include DN attributes, ContactURI, geographic restrictions, and facial/biometric-style encodings. Treat these as sensitive personal data: collect only what you need, do not log full identity payloads, and follow applicable consent/retention rules. Example strings in this doc are fictional placeholders.
+
+**Technical Implementation**: IdentyClaw Passports are implemented as non-fungible tokens on the NEAR blockchain, ensuring each passport is universally unique and transferable.
 
 ## Uniqueness and exclusivity
 
-IdentyClaw identities are designed to be **singular and attributable** — one verifiable entity per Passport, not an unbounded set of indistinguishable instances sharing a secret.
+IdentyClaw identities are **universally unique**, not merely unique inside one tenant, API, or local namespace. A handle can be unique on a single platform and still collide everywhere else. A Passport `token_id` is a globally attributable identifier: one verifiable entity per Passport, the same identity across channels, hosts, and verifiers — not an unbounded set of indistinguishable instances sharing a secret.
 
 | Guarantee | Mechanism | Notes |
 | --- | --- | --- |
-| **On-chain uniqueness** | Each `token_id` is a distinct NFT within a RODiT contract deployment | Same 12-letter id cannot be duplicated |
+| **Universal uniqueness** | Each `token_id` is a distinct NFT on the trusted RODiT contract; the 12-letter facial ID is the identity everywhere (`did:rodit:{tokenId}` does not encode a local namespace) | Same 12-letter id cannot be duplicated; not a locally scoped handle |
 | **Facial checksum** | Twelfth character encodes a checksum over trait selections | API exposes `face.checksumValid`; invalid encoding is detectable |
 | **Cryptographic binding** | Actions require Ed25519 signatures from the current on-chain owner (or delegated subagent key) | Shared API keys cannot impersonate a Passport without the owner's key material |
 | **Sybil resistance** | Economic stake at mint time ([pricing philosophy](pricing-philosophy.md)) | Raises cost of mass-producing fake identities |
 | **Lifecycle exclusivity** | Expired Passports are inactive for new proofs | Prevents abandoned credentials from accumulating ambiguous actors |
 
-**What uniqueness does not mean:** DN metadata (`NNSWF`, `Creature`, ContactURI, etc.) is **self-declared**. Another party can mint a **different** Passport with similar-looking metadata. Uniqueness is anchored on the **`token_id`**, not on display strings. Legitimate holders should publish their canonical `token_id` on channels they control; verifiers compare claims against that attestation. See [Guard against impersonation](finding-agents.md#5-guard-against-impersonation).
+**What universal uniqueness does not mean:** DN metadata (`NNSWF`, `Creature`, ContactURI, etc.) is **self-declared**. Another party can mint a **different** Passport with similar-looking metadata. Universal uniqueness is anchored on the **`token_id`**, not on display strings. Legitimate holders should publish their canonical `token_id` on channels they control; verifiers compare claims against that attestation. See [Guard against impersonation](finding-agents.md#5-guard-against-impersonation).
 
 **DID identifier:** `did:rodit:{tokenId}` — one DID per Passport ([`did-rodit-method.md`](did-rodit-method.md)).
 
@@ -83,7 +85,7 @@ Each Passport DN carries **one** `ContactURI`. Pick the channel you monitor most
 
 | Scheme | Example | Notes |
 | --- | --- | --- |
-| `email` | `email:example.com:IdentyClaw@example.com` | Preferred for async agent mail; pairs with [`inter-agent-communication.md`](inter-agent-communication.md) |
+| `email` | `email:example.com:IdentyClaw@example.com` | Preferred for async agent mail; optional patterns in MCP `doc:reference:inter-agent-communication` (not part of this ClawHub skill) |
 | `twitter` | `twitter:x.com:username` | Public @handle |
 | `telegram` | `telegram:telegram.com:username` | Bot or user handle without `@` |
 | `phone` | `phone:ES:34683493049` | Country code + national number (no `+`) |
@@ -181,7 +183,7 @@ This section lists category order, index ranges, and allowed value strings for f
 
 Each passport `token_id` includes eleven categorical facial selections plus a trailing checksum character (twelve characters total). How selections are represented in those characters is an implementation detail—**not specified here.** After authentication, `GET /api/me/identity` returns `face.categories` (selected label per category) and `face.checksumValid`.
 
-This 12-letter value is your Passport facial ID. Because DN metadata is self-declared, legitimate holders should publish their canonical `token_id` on official channels (website, verified social accounts, etc.) so others can detect copycat passports. See [Guard against impersonation](finding-agents.md#5-guard-against-impersonation) in the finding-agents guide.
+This 12-letter value is your Passport facial ID — a **universally unique** identifier, not a handle unique only inside one tenant or API. Because DN metadata is self-declared, legitimate holders should publish their canonical `token_id` on official channels (website, verified social accounts, etc.) so others can detect copycat passports. See [Guard against impersonation](finding-agents.md#5-guard-against-impersonation) in the finding-agents guide.
 
 ### Category order and index ranges
 
@@ -463,7 +465,7 @@ IdentyClaw Passports contain comprehensive API access control metadata:
   "token_id": "bfskljshznld",
   "owner_id": "abc123...def.near",
   "userselected_dn": "NNSWF=Alice,ContactURI=email:example.com:alice@example.com",
-  "facial_description": "pale-skinned Nordic oval-faced teenage-person...",
+  "facial_description": "<facial-description-placeholder>",
   "metadata": {
   "openapijson_url": "https://api.identyclaw.com/openapi.json",
   "not_after": "2027-04-19T00:00:00Z",

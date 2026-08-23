@@ -1,11 +1,11 @@
 ---
 name: dlazy-sync-lipsync-3
 version: 1.3.5
-description: fal.ai sync-lipsync v3 唇形对齐模型，输入一段视频和一段音频，输出说话人嘴型与音频对齐的新视频。适合配音、外语本地化、虚拟人重新对口型。
+description: "fal.ai sync-lipsync v3 唇形对齐模型，输入一段视频和一段音频，输出说话人嘴型与音频对齐的新视频。适合配音、外语本地化、虚拟人重新对口型。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy sync-lipsync-3 -h 查看帮助信息。"}}
 ---
 
-# dlazy-sync-lipsync-3
+# 对口型 Sync Lipsync 3
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

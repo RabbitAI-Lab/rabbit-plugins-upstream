@@ -1,43 +1,57 @@
-## Description: <br>
-日语会话作业AI批改，支持语音转写、CEFR分级评价、纠错与Canvas成绩录入。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Japanese conversation grading skill for A1/A2/B1 learners that transcribes audio with faster-whisper, creates teacher-reviewed content, accuracy, and fluency pre-scores, and generates teacher and student feedback.
 
-## Publisher: <br>
-[bianmaxingkong](https://clawhub.ai/user/bianmaxingkong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bianmaxingkong](https://clawhub.ai/user/bianmaxingkong)
 
-## Use Case: <br>
-Teachers use this skill to grade Japanese conversation audio assignments, produce concise student feedback, and record grades in Canvas. It supports classroom workflows that require transcription, CEFR-aligned assessment, correction guidance, and class summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow handles sensitive student records, local audio files, transcripts, and submission maps. <br>
-Mitigation: Restrict access to authorized staff, avoid shared temporary storage, and delete local audio, transcripts, and maps after grading. <br>
-Risk: The workflow can upload Canvas grades and feedback. <br>
-Mitigation: Require human review before uploads and confirm the Canvas assignment is configured for controlled grade release. <br>
-Risk: Use may be subject to school privacy, records, and grading policies. <br>
-Mitigation: Confirm institutional approval and policy compliance before installation or classroom use. <br>
+## Use Case:
 
+External language teachers use this skill to review Japanese conversation-test recordings, generate preliminary scores and feedback, and export grade summaries while keeping final grading under teacher review.
 
-## Reference(s): <br>
-- [日语会话作业批改 - 详细流程](artifact/references/workflow.md) <br>
-- [ClawHub skill page](https://clawhub.ai/bianmaxingkong/skills/japanese-conversation-scorer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown feedback templates with inline shell commands and Canvas workflow guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce student feedback, grade values, transcript references, and class summary guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.6 (source: server-resolved release metadata) <br>
+Risk: Student audio, transcripts, grades, and feedback may be sensitive educational records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the school permits AI-assisted processing before use and keep student data within approved local or institutional workflows.
+
+Risk: Optional course-platform adapters may access submissions or post grades and feedback.
+
+Mitigation: Prefer the default CSV workflow unless an adapter has been reviewed, keep API tokens in local configuration or environment variables, and require teacher confirmation before posting grades.
+
+Risk: ASR and automated scoring can misread speech or produce uncertain preliminary scores.
+
+Mitigation: Use the skill's confidence checks, exclude low-confidence AI scores from student-facing output, and require teacher review before final grading or error deductions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/bianmaxingkong/skills/japanese-conversation-scorer)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown feedback, local text reports, CSV summaries, and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces separate teacher-facing detailed feedback and student-facing concise feedback; low-confidence ASR results require teacher grading.]
+
+## Skill Version(s):
+
+1.1.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

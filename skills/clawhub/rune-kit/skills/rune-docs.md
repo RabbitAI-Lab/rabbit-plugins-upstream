@@ -122,6 +122,8 @@ Structure:
 ## Overview
 [System diagram in text/mermaid — components and data flow]
 
+> The ARCHITECTURE overview may call `rune-diagram.md` for a designed system figure (type `architecture`) instead of raw Mermaid — `suggested_next: diagram`.
+
 ## Key Decisions
 [Detected patterns: framework choice, state management, DB, auth approach]
 
@@ -181,7 +183,7 @@ Delegate to `rune:git changelog` to produce a changelog entry from commits since
 
 #### Step 4 — Cross-Doc Consistency Pass
 
-> From gstack (garrytan/gstack, 50.9k★): "Cross-document consistency prevents the #2 docs problem: docs that exist but contradict each other."
+Cross-document consistency prevents the second-most-common docs problem: docs that exist but contradict each other.
 
 After updating any doc, verify consistency across all project documentation:
 

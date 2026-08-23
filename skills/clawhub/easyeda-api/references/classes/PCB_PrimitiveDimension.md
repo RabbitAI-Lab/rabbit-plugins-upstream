@@ -1,11 +1,11 @@
 # PCB\_PrimitiveDimension class
 
-PCB &amp; 封装 / 尺寸标注图元类
+PCB &amp; footprint / dimension primitive class
 
 ## Signature
 
 ```typescript
-declare class PCB_PrimitiveDimension implements IPCB_PrimitiveAPI 
+export class PCB_PrimitiveDimension implements IPCB_PrimitiveAPI 
 ```
 **Implements:** [IPCB\_PrimitiveAPI](../interfaces/IPCB_PrimitiveAPI.md)
 
@@ -37,7 +37,7 @@ Description
 
 </td><td>
 
-创建尺寸标注
+Create a dimension
 
 
 </td></tr>
@@ -51,7 +51,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除尺寸标注
+**_(BETA)_** Delete the dimension
 
 
 </td></tr>
@@ -65,7 +65,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取尺寸标注
+**_(BETA)_** Get the dimension
 
 
 </td></tr>
@@ -79,7 +79,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取尺寸标注
+**_(BETA)_** Get the dimension
 
 
 </td></tr>
@@ -93,7 +93,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有尺寸标注
+**_(BETA)_** Get all dimensions
 
 
 </td></tr>
@@ -107,7 +107,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有尺寸标注的图元 ID
+**_(BETA)_** Get the primitive IDs of all dimensions
 
 
 </td></tr>
@@ -121,7 +121,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改尺寸标注
+**_(BETA)_** Modify the dimension
 
 
 </td></tr>
@@ -135,12 +135,12 @@ Description
 
 # PCB\_PrimitiveDimension.create() method
 
-创建尺寸标注
+Create a dimension
 
 ## Signature
 
 ```typescript
-create(dimensionType: EPCB_PrimitiveDimensionType, coordinateSet: TPCB_PrimitiveDimensionCoordinateSet, layer?: TPCB_LayersOfDimension, unit?: ESYS_Unit.MILLIMETER | ESYS_Unit.CENTIMETER | ESYS_Unit.INCH | ESYS_Unit.MIL, lineWidth?: number, precision?: number, primitiveLock?: boolean): Promise<IPCB_PrimitiveDimension | undefined>;
+public create(dimensionType: EPCB_PrimitiveDimensionType, coordinateSet: TPCB_PrimitiveDimensionCoordinateSet, layer?: TPCB_LayersOfDimension, unit?: ESYS_Unit.MILLIMETER | ESYS_Unit.CENTIMETER | ESYS_Unit.INCH | ESYS_Unit.MIL, lineWidth?: number, precision?: number, primitiveLock?: boolean): Promise<IPCB_PrimitiveDimension | undefined>;
 ```
 
 ## Parameters
@@ -173,7 +173,7 @@ dimensionType
 
 </td><td>
 
-尺寸标注类型
+Dimension type
 
 
 </td></tr>
@@ -189,7 +189,7 @@ coordinateSet
 
 </td><td>
 
-尺寸标注坐标集
+Dimension coordinate set
 
 
 </td></tr>
@@ -205,7 +205,7 @@ layer
 
 </td><td>
 
-_(Optional)_ 层
+_(Optional)_ Layer
 
 
 </td></tr>
@@ -221,7 +221,7 @@ unit
 
 </td><td>
 
-_(Optional)_ 单位
+_(Optional)_ Unit
 
 
 </td></tr>
@@ -237,7 +237,7 @@ number
 
 </td><td>
 
-_(Optional)_ 线宽
+_(Optional)_ Line width
 
 
 </td></tr>
@@ -253,7 +253,7 @@ number
 
 </td><td>
 
-_(Optional)_ 精度，取值范围 `0`<!-- -->-`4`
+_(Optional)_ Precision, value range `0`<!-- -->-`4`
 
 
 </td></tr>
@@ -269,7 +269,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -281,7 +281,36 @@ _(Optional)_ 是否锁定
 
 Promise&lt;[IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md) \| undefined&gt;
 
-尺寸标注图元对象
+Dimension primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成随机基准坐标，避免与画布上已有的标注重合
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+
+// 2. 在顶层丝印（3）创建长度标注：测量 (x, y) 到 (x+2000, y) 的水平距离，
+//    箭头端点向内收 200mil，单位毫米（mm），线宽 10mil，精度 2 位小数
+const dim = await eda.pcb_PrimitiveDimension.create(
+  'Length Dimension',
+  [x, y, x, y - 200, x + 2000, y - 200, x + 2000, y],
+  3,
+  'mm',
+  10,
+  2,
+  false
+);
+
+// 3. 创建类保留现场，不删除图元
+console.log('primitiveId:', dim.getState_PrimitiveId());
+console.log('dimensionType:', dim.getState_DimensionType());
+console.log('layer:', dim.getState_Layer());
+console.log('unit:', dim.getState_Unit());
+console.log('lineWidth:', dim.getState_LineWidth());
+console.log('precision:', dim.getState_Precision());
+```
 
 ### delete
 
@@ -289,12 +318,12 @@ Promise&lt;[IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md) \| undefined
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除尺寸标注
+Delete the dimension
 
 ## Signature
 
 ```typescript
-delete(primitiveIds: string | IPCB_PrimitiveDimension | Array<string> | Array<IPCB_PrimitiveDimension>): Promise<boolean>;
+public delete(primitiveIds: string | IPCB_PrimitiveDimension | Array<string> | Array<IPCB_PrimitiveDimension>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -327,7 +356,7 @@ string \| [IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md) \| Array&lt;s
 
 </td><td>
 
-尺寸标注的图元 ID 或尺寸标注图元对象
+Primitive ID of the dimension or the dimension primitive object
 
 
 </td></tr>
@@ -339,7 +368,41 @@ string \| [IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md) \| Array&lt;s
 
 Promise&lt;boolean&gt;
 
-删除操作是否成功
+Delete Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 创建两个待删除的测试标注（随机坐标避免重合）
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+const dim1 = await eda.pcb_PrimitiveDimension.create(
+  'Length Dimension',
+  [x, y, x, y - 200, x + 2000, y - 200, x + 2000, y],
+  3
+);
+const dim2 = await eda.pcb_PrimitiveDimension.create(
+  'Length Dimension',
+  [x, y + 1000, x, y + 800, x + 2000, y + 800, x + 2000, y + 1000],
+  3
+);
+
+// 2. 记录删除前的标注数量
+const beforeCount = (await eda.pcb_PrimitiveDimension.getAll()).length;
+
+// 3. 以 ID 数组形式批量删除两个标注
+const deleted = await eda.pcb_PrimitiveDimension.delete([
+  dim1.getState_PrimitiveId(),
+  dim2.getState_PrimitiveId()
+]);
+
+// 4. 删除类保留现场（图元已删除，不恢复）
+const afterCount = (await eda.pcb_PrimitiveDimension.getAll()).length;
+
+console.log('deleted:', deleted);
+console.log('beforeCount:', beforeCount, '→ afterCount:', afterCount);
+```
 
 ### get
 
@@ -347,12 +410,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取尺寸标注
+Get the dimension
 
 ## Signature
 
 ```typescript
-get(primitiveIds: string): Promise<IPCB_PrimitiveDimension | undefined>;
+public get(primitiveIds: string): Promise<IPCB_PrimitiveDimension | undefined>;
 ```
 
 ## Parameters
@@ -385,7 +448,7 @@ string
 
 </td><td>
 
-尺寸标注的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Primitive ID of the dimension, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -397,7 +460,48 @@ string
 
 Promise&lt;[IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md) \| undefined&gt;
 
-尺寸标注图元对象，`undefined` 表示获取失败
+Dimension primitive object, `undefined` indicates that the retrieval failed
+
+## Example
+
+
+```javascript
+// 1. 创建两个测试标注（随机坐标避免重合）
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+const dim1 = await eda.pcb_PrimitiveDimension.create(
+  'Length Dimension',
+  [x, y, x, y - 200, x + 2000, y - 200, x + 2000, y],
+  3,
+  'mm'
+);
+const dim2 = await eda.pcb_PrimitiveDimension.create(
+  'Length Dimension',
+  [x, y + 1000, x, y + 800, x + 2000, y + 800, x + 2000, y + 1000],
+  3,
+  'mil'
+);
+
+// 2. 传单个 ID 字符串，返回单个标注对象
+const single = await eda.pcb_PrimitiveDimension.get(dim1.getState_PrimitiveId());
+
+// 3. 传 ID 数组，返回标注对象数组
+const arr = await eda.pcb_PrimitiveDimension.get([
+  dim1.getState_PrimitiveId(),
+  dim2.getState_PrimitiveId()
+]);
+
+// 4. 清理测试图元（查询类需要清理）
+await eda.pcb_PrimitiveDimension.delete([
+  dim1.getState_PrimitiveId(),
+  dim2.getState_PrimitiveId()
+]);
+
+console.log('single dimensionType:', single.getState_DimensionType());
+console.log('single unit:', single.getState_Unit());
+console.log('array length:', arr.length);
+console.log('dim2 unit:', arr[1].getState_Unit());
+```
 
 ### get_1
 
@@ -405,12 +509,12 @@ Promise&lt;[IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md) \| undefined
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取尺寸标注
+Get the dimension
 
 ## Signature
 
 ```typescript
-get(primitiveIds: Array<string>): Promise<Array<IPCB_PrimitiveDimension>>;
+public get(primitiveIds: Array<string>): Promise<Array<IPCB_PrimitiveDimension>>;
 ```
 
 ## Parameters
@@ -443,7 +547,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-尺寸标注的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Primitive ID of the dimension, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -455,11 +559,11 @@ Array&lt;string&gt;
 
 Promise&lt;Array&lt;[IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md)<!-- -->&gt;&gt;
 
-尺寸标注图元对象，空数组表示获取失败
+Dimension primitive object; an empty array indicates that the retrieval failed
 
 ## Remarks
 
-如若传入多个图元 ID，任意图元 ID 未匹配到不影响其它图元的返回，即可能返回少于传入的图元 ID 数量的图元对象
+If multiple primitive IDs are passed in, a primitive ID that is not matched will not affect the return of other primitives; that is, fewer primitive objects than the number of primitive IDs passed in may be returned.
 
 ### getall
 
@@ -467,12 +571,12 @@ Promise&lt;Array&lt;[IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md)<!--
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有尺寸标注
+Get all dimensions
 
 ## Signature
 
 ```typescript
-getAll(layer?: TPCB_LayersOfDimension, primitiveLock?: boolean): Promise<Array<IPCB_PrimitiveDimension>>;
+public getAll(layer?: TPCB_LayersOfDimension, primitiveLock?: boolean): Promise<Array<IPCB_PrimitiveDimension>>;
 ```
 
 ## Parameters
@@ -505,7 +609,7 @@ layer
 
 </td><td>
 
-_(Optional)_ 层
+_(Optional)_ Layer
 
 
 </td></tr>
@@ -521,7 +625,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -533,7 +637,35 @@ _(Optional)_ 是否锁定
 
 Promise&lt;Array&lt;[IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md)<!-- -->&gt;&gt;
 
-尺寸标注图元对象数组
+Dimension primitive object array
+
+## Example
+
+
+```javascript
+// 1. 创建一个顶层丝印（3）测试标注作为过滤目标（随机坐标避免重合）
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+const dim = await eda.pcb_PrimitiveDimension.create(
+  'Length Dimension',
+  [x, y, x, y - 200, x + 2000, y - 200, x + 2000, y],
+  3
+);
+const dimId = dim.getState_PrimitiveId();
+
+// 2. 不带参数：获取 PCB 上全部尺寸标注
+const all = await eda.pcb_PrimitiveDimension.getAll();
+
+// 3. 按层过滤：只取顶层丝印（3）的标注
+const topSilk = await eda.pcb_PrimitiveDimension.getAll(3);
+
+// 4. 清理测试图元（查询类需要清理）
+await eda.pcb_PrimitiveDimension.delete([dimId]);
+
+console.log('total dimensions:', all.length);
+console.log('top silkscreen dimensions:', topSilk.length);
+console.log('marker dimension found:', topSilk.some(d => d.getState_PrimitiveId() === dimId));
+```
 
 ### getallprimitiveid
 
@@ -541,12 +673,12 @@ Promise&lt;Array&lt;[IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md)<!--
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有尺寸标注的图元 ID
+Get the primitive IDs of all dimensions
 
 ## Signature
 
 ```typescript
-getAllPrimitiveId(layer?: TPCB_LayersOfDimension, primitiveLock?: boolean): Promise<Array<string>>;
+public getAllPrimitiveId(layer?: TPCB_LayersOfDimension, primitiveLock?: boolean): Promise<Array<string>>;
 ```
 
 ## Parameters
@@ -579,7 +711,7 @@ layer
 
 </td><td>
 
-_(Optional)_ 层
+_(Optional)_ Layer
 
 
 </td></tr>
@@ -595,7 +727,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -607,7 +739,35 @@ _(Optional)_ 是否锁定
 
 Promise&lt;Array&lt;string&gt;&gt;
 
-尺寸标注的图元 ID 数组
+Array of dimension primitive IDs
+
+## Example
+
+
+```javascript
+// 1. 创建一个顶层丝印（3）测试标注作为查找目标（随机坐标避免重合）
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+const dim = await eda.pcb_PrimitiveDimension.create(
+  'Length Dimension',
+  [x, y, x, y - 200, x + 2000, y - 200, x + 2000, y],
+  3
+);
+const dimId = dim.getState_PrimitiveId();
+
+// 2. 获取全部尺寸标注的图元 ID
+const allIds = await eda.pcb_PrimitiveDimension.getAllPrimitiveId();
+
+// 3. 按层过滤：只取顶层丝印（3）标注的图元 ID
+const topSilkIds = await eda.pcb_PrimitiveDimension.getAllPrimitiveId(3);
+
+// 4. 清理测试图元（查询类需要清理）
+await eda.pcb_PrimitiveDimension.delete([dimId]);
+
+console.log('total dimension ids:', allIds.length);
+console.log('top silkscreen dimension ids:', topSilkIds.length);
+console.log('marker id in top silkscreen list:', topSilkIds.includes(dimId));
+```
 
 ### modify
 
@@ -615,20 +775,12 @@ Promise&lt;Array&lt;string&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改尺寸标注
+Modify the dimension
 
 ## Signature
 
 ```typescript
-modify(primitiveId: string | IPCB_PrimitiveDimension, property: {
-        dimensionType?: EPCB_PrimitiveDimensionType;
-        coordinateSet?: TPCB_PrimitiveDimensionCoordinateSet;
-        layer?: TPCB_LayersOfDimension;
-        unit?: ESYS_Unit.MILLIMETER | ESYS_Unit.CENTIMETER | ESYS_Unit.INCH | ESYS_Unit.MIL;
-        lineWidth?: number;
-        precision?: number;
-        primitiveLock?: boolean;
-    }): Promise<IPCB_PrimitiveDimension | undefined>;
+public modify(primitiveId: string | IPCB_PrimitiveDimension, property: { dimensionType?: undefined | EPCB_PrimitiveDimensionType.RADIUS | EPCB_PrimitiveDimensionType.LENGTH | EPCB_PrimitiveDimensionType.ANGLE; coordinateSet?: undefined | any | any; layer?: undefined | EPCB_LayerId.TOP_SILKSCREEN | EPCB_LayerId.BOTTOM_SILKSCREEN | EPCB_LayerId.DOCUMENT | EPCB_LayerId.MECHANICAL | EPCB_LayerId.CUSTOM_1 | EPCB_LayerId.CUSTOM_2 | EPCB_LayerId.CUSTOM_3 | EPCB_LayerId.CUSTOM_4 | EPCB_LayerId.CUSTOM_5 | EPCB_LayerId.CUSTOM_6 | EPCB_LayerId.CUSTOM_7 | EPCB_LayerId.CUSTOM_8 | EPCB_LayerId.CUSTOM_9 | EPCB_LayerId.CUSTOM_10 | EPCB_LayerId.CUSTOM_11 | EPCB_LayerId.CUSTOM_12 | EPCB_LayerId.CUSTOM_13 | EPCB_LayerId.CUSTOM_14 | EPCB_LayerId.CUSTOM_15 | EPCB_LayerId.CUSTOM_16 | EPCB_LayerId.CUSTOM_17 | EPCB_LayerId.CUSTOM_18 | EPCB_LayerId.CUSTOM_19 | EPCB_LayerId.CUSTOM_20 | EPCB_LayerId.CUSTOM_21 | EPCB_LayerId.CUSTOM_22 | EPCB_LayerId.CUSTOM_23 | EPCB_LayerId.CUSTOM_24 | EPCB_LayerId.CUSTOM_25 | EPCB_LayerId.CUSTOM_26 | EPCB_LayerId.CUSTOM_27 | EPCB_LayerId.CUSTOM_28 | EPCB_LayerId.CUSTOM_29 | EPCB_LayerId.CUSTOM_30; unit?: undefined | ESYS_Unit.MILLIMETER | ESYS_Unit.CENTIMETER | ESYS_Unit.INCH | ESYS_Unit.MIL; lineWidth?: undefined | number; precision?: undefined | number; primitiveLock?: undefined | false | true }): Promise<IPCB_PrimitiveDimension | undefined>;
 ```
 
 ## Parameters
@@ -661,7 +813,7 @@ string \| [IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md)
 
 </td><td>
 
-图元 ID
+Primitive ID
 
 
 </td></tr>
@@ -672,12 +824,12 @@ property
 
 </td><td>
 
-{ dimensionType?: [EPCB\_PrimitiveDimensionType](../enums/EPCB_PrimitiveDimensionType.md)<!-- -->; coordinateSet?: [TPCB\_PrimitiveDimensionCoordinateSet](../types/TPCB_PrimitiveDimensionCoordinateSet.md)<!-- -->; layer?: [TPCB\_LayersOfDimension](../types/TPCB_LayersOfDimension.md)<!-- -->; unit?: [ESYS\_Unit.MILLIMETER](../enums/ESYS_Unit.md) \| [ESYS\_Unit.CENTIMETER](../enums/ESYS_Unit.md) \| [ESYS\_Unit.INCH](../enums/ESYS_Unit.md) \| [ESYS\_Unit.MIL](../enums/ESYS_Unit.md)<!-- -->; lineWidth?: number; precision?: number; primitiveLock?: boolean; }
+{ dimensionType?: undefined \| [EPCB\_PrimitiveDimensionType.RADIUS](../enums/EPCB_PrimitiveDimensionType.md) \| [EPCB\_PrimitiveDimensionType.LENGTH](../enums/EPCB_PrimitiveDimensionType.md) \| [EPCB\_PrimitiveDimensionType.ANGLE](../enums/EPCB_PrimitiveDimensionType.md)<!-- -->; coordinateSet?: undefined \| any \| any; layer?: undefined \| [EPCB\_LayerId.TOP\_SILKSCREEN](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.BOTTOM\_SILKSCREEN](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.DOCUMENT](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.MECHANICAL](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_1](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_2](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_3](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_4](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_5](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_6](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_7](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_8](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_9](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_10](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_11](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_12](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_13](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_14](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_15](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_16](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_17](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_18](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_19](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_20](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_21](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_22](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_23](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_24](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_25](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_26](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_27](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_28](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_29](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.CUSTOM\_30](../enums/EPCB_LayerId.md)<!-- -->; unit?: undefined \| [ESYS\_Unit.MILLIMETER](../enums/ESYS_Unit.md) \| [ESYS\_Unit.CENTIMETER](../enums/ESYS_Unit.md) \| [ESYS\_Unit.INCH](../enums/ESYS_Unit.md) \| [ESYS\_Unit.MIL](../enums/ESYS_Unit.md)<!-- -->; lineWidth?: undefined \| number; precision?: undefined \| number; primitiveLock?: undefined \| false \| true }
 
 
 </td><td>
 
-修改参数
+Modify Parameter
 
 
 </td></tr>
@@ -689,4 +841,37 @@ property
 
 Promise&lt;[IPCB\_PrimitiveDimension](./IPCB_PrimitiveDimension.md) \| undefined&gt;
 
-尺寸标注图元对象
+Dimension primitive object
+
+## Example
+
+
+```javascript
+// 1. 创建待修改的测试标注（随机坐标避免与画布已有标注重合）
+const x = 2000 + Math.floor(Math.random() * 100000);
+const y = 2000 + Math.floor(Math.random() * 100000);
+const dim = await eda.pcb_PrimitiveDimension.create(
+  'Length Dimension',
+  [x, y, x, y - 200, x + 2000, y - 200, x + 2000, y],
+  3,
+  'mm',
+  10,
+  2
+);
+const dimId = dim.getState_PrimitiveId();
+
+// 2. 读取修改前的线宽与精度
+const beforeWidth = dim.getState_LineWidth();
+const beforePrecision = dim.getState_Precision();
+
+// 3. 批量修改：线宽 10 → 20，精度 2 → 3
+await eda.pcb_PrimitiveDimension.modify(dimId, { lineWidth: 20, precision: 3 });
+
+// 4. modify 返回后需要重新 get() 才能读到画布上的最新值
+const refreshed = await eda.pcb_PrimitiveDimension.get(dimId);
+
+// 5. 修改类保留现场，供观察修改结果
+console.log('primitiveId:', dimId);
+console.log('lineWidth:', beforeWidth, '→', refreshed.getState_LineWidth());
+console.log('precision:', beforePrecision, '→', refreshed.getState_Precision());
+```

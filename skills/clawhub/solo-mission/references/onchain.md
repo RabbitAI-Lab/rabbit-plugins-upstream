@@ -137,7 +137,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-funding" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-funding" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
@@ -212,7 +212,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-cancel" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-cancel" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
@@ -259,7 +259,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-refund" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-refund" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
@@ -287,7 +287,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-emergency-refund" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-emergency-refund" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 

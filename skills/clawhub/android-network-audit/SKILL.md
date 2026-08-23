@@ -1,0 +1,413 @@
+---
+name: android-network-audit
+description: "changelog: ClawHub professional standard: Overview, When to Use, How to Use, Common Mistakes, Red Flags, Rationalizations, Quick Reference"
+metadata:
+  openclaw:
+    homepage: description: "Use when auditing Android/Termux network exposure, connectivity, proxies, listeners, and unsafe ports from the device.
+    version: homepage: https://github.com/pmuhammadagus-byte/openclaw-settings
+---
+
+<!-- ===== X∞ COMPLIANCE LAYER (auto-applied by skill-architecture-standard) ===== -->
+# android-network-audit — X∞ Compliance Layer
+
+## 1. IDENTITY
+Skill milik user: `android-network-audit`. Mengikuti Skill Architecture Standard X∞ (wajib).
+
+## 2. PURPOSE
+changelog: ClawHub professional standard: Overview, When to Use, How to Use, Common Mistakes, Red Flags, Rationalizations, Quick Reference
+
+## 3. METADATA
+- version: homepage: https://github.com/pmuhammadagus-byte/openclaw-settings
+- homepage: description: "Use when auditing Android/Termux network exposure, connectivity, proxies, listeners, and unsafe ports from the device.
+- (lihat frontmatter di atas)
+
+## 4. TRIGGER ENGINE
+Aktif ketika user meminta hal yang cocok dengan deskripsi di atas.
+Negative trigger: di luar scope deskripsi.
+
+## 5. CONTEXT ENGINE
+Baca OS/ARCH/runtime sebelum bertindak. Termux Android ARM64 ≠ Ubuntu x86_64.
+
+## 6. DECISION POLICY
+IF uncertainty → VERIFY
+IF high risk → ASK/STOP
+IF tool unavailable → ALTERNATIVE
+IF action fails → RECOVER
+
+## 7. REASONING POLICY
+Evidence-first. Bedakan FAKTA vs HIPOTESIS. Confidence: CONFIRMED/LIKELY/POSSIBLE/UNKNOWN.
+
+## 8. EXECUTION POLICY
+Ambil tindakan relevan, lalu VERIFY. Jangan klaim sukses sebelum diverifikasi.
+
+## 9. TOOL POLICY
+Pilih tool berdasar kebutuhan+konteks. Jangan asal panggil semua tool.
+
+## 10. MEMORY POLICY
+Ingat hal relevan; abaikan noise. Retrieve saat dibutuhkan, update bila berubah.
+
+## 11. VERIFICATION ENGINE
+ACTION → VERIFY → SUCCESS? Jika tidak: DIAGNOSE → RETRY/CHANGE STRATEGY.
+
+## 12. ERROR RECOVERY
+transient→retry; timeout→backoff; auth→credential check; dependency→diagnosis; unknown→investigate.
+
+## 13. SECURITY GUARDRAILS
+NEVER log secret. REDACT API KEY/TOKEN/PASSWORD/SECRET sebelum simpan. PII: MINIMIZE→REDACT→HASH.
+
+## 14. EVALUATION
+Self-eval: capai goal? terverifikasi? ada asumsi? ada gagal? Kirim ke Agent Evaluation Engine.
+
+## 15. OBSERVABILITY
+Emit: START/PROGRESS/TOOL CALL/ERROR/RETRY/SUCCESS/FAILURE + TRACE_ID (tanpa secret).
+
+## 16. PERFORMANCE OPTIMIZATION
+FULL→OPTIMIZED→LOW RESOURCE mode bila terbatas. Prioritas: TASK>SAFETY>RELIABILITY.
+
+## 17. SELF-IMPROVEMENT
+USE→OBSERVE→EVALUATE→FIND WEAKNESS→IMPROVE→TEST→NEW VERSION (via evaluasi+regresi).
+
+## 18. VERSIONING
+Semver. Perubahan struktur = MAJOR. CHANGELOG wajib.
+
+## 19. COMPATIBILITY
+Tahu OS/ARCH/RUNTIME/versi/tool/API tersedia.
+
+## 20. KNOWLEDGE SOURCES
+Trust hierarchy: OFFICIAL>PRIMARY>REPUTABLE>COMMUNITY>UNKNOWN. Tandai VERIFIED/LIKELY/UNCERTAIN/OUTDATED/CONFLICTING.
+
+## 21. EXIT CONDITIONS
+Berhenti pada: SUCCESS/FAILURE/BLOCKED/NEED USER/NEED CREDENTIAL/NEED TOOL/NEED VERIFICATION.
+<!-- ===== END X∞ COMPLIANCE LAYER ===== -->
+
+
+
+# ANDROID NETWORK AUDIT
+
+Gunakan skill ini ketika:
+- ingin mengecek eksposur jaringan di Android/Termux;
+- ingin memeriksa port yang terbuka;
+- ingin melihat proxy atau konfigurasi jaringan;
+- ingin memverifikasi apakah device terhubung dengan aman;
+- ingin mencari potensi masalah jaringan sebelum push/deploy.
+
+Jangan gunakan untuk:
+- penetration testing tanpa izin;
+- operasi destruktif pada jaringan;
+- pengganti tools keamanan khusus;
+- akses jaringan orang lain tanpa otorisasi.
+
+---
+
+## QUICK REFERENCE / CHECKLIST
+
+Ikuti urutan read-only berikut. Hentikan & laporkan jika langkah gagal diverifikasi.
+
+- [ ] **Platform** — Deteksi Termux (`$PREFIX`/`$HOME` mengandung `com.termux`) vs Android restricted vs unknown.
+- [ ] **Connectivity** — `ping` host publik singkat; jika gagal → NO_INTERNET, stop lanjut.
+- [ ] **Interface/IP** — `ip addr` (fallback `ifconfig`/`/proc/net/fib_trie`); catat interface UP, IP, VPN/tunnel.
+- [ ] **DNS** — `/etc/resolv.conf`, `getprop net.dns1/2`.
+- [ ] **Proxy** — `env | grep -i proxy`, `getprop http_proxy/https_proxy`.
+- [ ] **Listening ports** — `ss -tulpen` (fallback `netstat`/`/proc/net/tcp`); waspadai `0.0.0.0`/`::`.
+- [ ] **Risk** — Klasifikasi LOW/MEDIUM/HIGH (lihat §Exposure Risk Classification).
+- [ ] **Report** — Format laporan di §OUTPUT FORMAT. Read-only: jangan ubah config tanpa izin.
+
+**Examples (user says X → you do Y)**
+- "Cek apakah ada port terbuka di Termux" → jalankan `ss -tulpen`, list LISTEN, flag `0.0.0.0`, beri risiko.
+- "Kenapa koneksi gagal?" → mulai dari Connectivity Check; jika ping gagal, beri recovery (airplane mode, wifi/data, permission).
+- "Aman nggak jaringannya?" → jalankan seluruh checklist, klasifikasi Exposure Risk, beri Recommendation.
+
+**Gotchas**
+- Skill ini READ-ONLY; jangan modifikasi jaringan/proxy除非 user minta.
+- Jangan cetak credential yang muncul di env/config.
+- Jangan kirim laporan lengkap ke channel publik.
+- Tool bisa absen; selalu siapkan fallback (`/proc`, `getprop`) sebelum klaim gagal.
+
+---
+
+## PURPOSE
+
+Mengaudit jaringan Android/Termux dari perangkat itu sendiri:
+- cek connectivity
+- cek interface/IP
+- cek listening ports
+- cek proxy
+- cek routing/DNS
+- laporkan risiko exposure
+
+---
+
+## WHEN TO USE
+
+- saat setup environment baru
+- sebelum menjalankan service di Termux
+- saat debugging koneksi bermasalah
+- saat ingin memastikan tidak ada listener tidak aman
+- saat ingin verifikasi routing/proxy/DNS
+
+## WHEN NOT TO USE
+
+- jika tool jaringan tidak tersedia
+- jika butuh audit jaringan remote (gunakan tool khusus)
+- jika environment bukan Android/Termux
+- jika hanya ingin cek internet tanpa detail audit
+
+---
+
+## REQUIREMENTS
+
+Di Termux, package yang umum dibutuhkan:
+- `net-tools`
+- `iproute2`
+- `termux-tools`
+- `procps`
+
+Jika belum terinstall:
+- gunakan fallback yang tersedia
+- laporkan dan minta install jika perlu
+
+Di Android non-Termux:
+- akses terminal mungkin terbatas
+- gunakan API atau fallback yang tersedia
+
+---
+
+## PLATFORM DETECTION
+
+IF `$PREFIX` contains `com.termux` OR `$HOME` contains `com.termux`:
+  PLATFORM = TERMUX
+  FALLBACK_CHAIN = net-tools > iproute2 > termux-tools > /proc
+ELSE IF Android non-Termux:
+  PLATFORM = ANDROID_RESTRICTED
+  FALLBACK_CHAIN = termux-tools unavailable > dumpsys > /proc
+ELSE:
+  PLATFORM = UNKNOWN
+
+---
+
+## AUDIT WORKFLOW
+
+### 1. Connectivity Check
+
+Tujuan: memastikan device bisa keluar ke internet.
+
+Coba:
+- ping host publik singkat
+- cek routing default
+
+Jika gagal:
+- laporkan NO_INTERNET
+- hentikan audit jaringan lanjutan
+- berikan recovery: cek airplane mode, wifi/mobile data, permission
+
+### 2. Interface and IP Audit
+
+Tujuan: melihat interface aktif dan IP assigned.
+
+Gunakan:
+- `ip addr`
+- `ifconfig` sebagai fallback
+
+Ekstrak:
+- interface yang UP
+- IP lokal
+- apakah ada VPN/tunnel aktif
+
+Jika tidak ada tool:
+- baca `/proc/net/fib_trie` atau `/proc/net/route` sebagai fallback parsial
+
+### 3. DNS Audit
+
+Tujuan: melihat resolver DNS yang digunakan.
+
+Cek:
+- `/etc/resolv.conf`
+- `getprop net.dns1` / `net.dns2`
+
+Laporkan:
+- DNS server yang aktif
+- apakah DNS custom atau operator
+
+### 4. Proxy Audit
+
+Tujuan: memeriksa proxy sistem atau environment.
+
+Cek:
+- `env | grep -i proxy`
+- `getprop http_proxy` / `https_proxy`
+- `/system/etc/proxy_settings` jika bisa diakses
+
+Laporkan:
+- proxy aktif atau tidak
+- host/port jika ada
+- apakah HTTPS juga lewat proxy
+
+### 5. Listening Port Audit
+
+Tujuan: mencari port yang terbuka di lokal device.
+
+Gunakan:
+- `ss -tulpen`
+- `netstat -tulpen`
+- `/proc/net/tcp` dan `/proc/net/tcp6` sebagai fallback
+
+Laporkan:
+- port yang LISTEN
+- proses/pid pemilik jika bisa diambil
+- interface yang dilibatkan: `0.0.0.0` lebih rentan daripada `127.0.0.1`
+
+Jika port mencurigakan:
+- laporkan WARNING
+- jelaskan risiko exposure
+
+### 6. Exposure Risk Classification
+
+Klasifikasikan temuan:
+
+LOW:
+- hanya localhost listener
+- tidak ada port terbuka yang tidak biasa
+
+MEDIUM:
+- listener di `0.0.0.0` atau `::`
+- service tanpa autentikasi
+- proxy terbuka tanpa batas
+
+HIGH:
+- port sensitif terbuka ke semua interface
+- kombinasi proxy + listener + tanpa firewall lokal
+- informasi ekspos yang bisa diakses perangkat lain di jaringan yang sama
+
+---
+
+## ERROR HANDLING
+
+DEPENDENCY ERROR
+→ Laporkan package yang hilang
+→ Berikan cara install di Termux
+→ Gunakan fallback `/proc` jika ada
+
+TOOL ERROR
+→ Laporkan pesan error
+→ Jangan lanjut jika output tidak bisa dipercaya
+
+PERMISSION ERROR
+→ Laporkan path yang ditolak
+→ Minta izin atau gunakan sumber lain
+
+NETWORK ERROR
+→ Laporkan koneksi gagal
+→ Gunakan fallback offline parsial
+
+ENVIRONMENT ERROR
+→ Laporkan platform mismatch
+→ Gunakan pendekatan konservatif
+
+OUTPUT ERROR
+→ Laporkan output yang tidak sesuai ekspektasi
+→ Validasi ulang
+
+UNKNOWN ERROR
+→ Laporkan ERROR
+→ Jangan lanjut dengan asumsi
+
+---
+
+## OUTPUT FORMAT
+
+Berikan laporan ringkas:
+
+NETWORK AUDIT
+Platform: TERMUX / ANDROID_RESTRICTED / UNKNOWN
+Connectivity: OK / FAILED
+DNS: <ringkasan>
+Proxy: <aktif/tidak, host/port jika ada>
+Interfaces: <ringkasan>
+Listening Ports: <daftar port + risiko>
+Exposure Risk: LOW / MEDIUM / HIGH
+Recommendation: <tindakan yang disarankan>
+
+---
+
+## SECURITY
+
+- Jangan kirim laporan lengkap ke channel publik
+- Jangan menampilkan credential jika terdeteksi di environment/config
+- Jangan memodifikasi konfigurasi jaringan tanpa izin
+- Audit hanya baca, kecuali user minta aksi perbaikan
+
+---
+
+## SELF-CHECK
+
+Sebelum menyatakan audit selesai:
+
+[ ] Connectivity terverifikasi
+[ ] Interface/IP terdeteksi
+[ ] DNS terperiksa
+[ ] Proxy terperiksa
+[ ] Port listening terdaftar
+[ ] Risk classification diberikan
+[ ] Error handling aktif
+[ ] Tidak ada modifikasi jaringan tanpa izin
+
+---
+
+## QUALITY GATE
+
+Target: 90+ untuk production-ready.
+
+Evaluasi:
+- apakah audit lengkap tanpa mengabaikan bagian penting
+- apakah fallback berjalan jika tool hilang
+- apakah output mudah dipahami
+- apakah risiko exposure dijelaskan dengan jelas
+- apakah tidak ada asumsi Linux desktop
+
+Jika di bawah 90: perbaiki skill sebelum dianggap siap.
+
+---
+
+## GOLDEN RULE
+
+Audit harus aman, read-only, dan tidak mengubah sistem.
+Jika ragu, laporkan sebagai WARNING, bukan menyelesaikan dengan asumsi.
+
+## Common Mistakes
+
+| Mistake | Fix |
+|---------|-----|
+| Auditing without permission context | Check Termux storage & background limits first |
+| Ignoring localhost vs LAN interfaces | Report both — LAN exposure is the real risk |
+| Forgetting proxy settings | Check env vars (http_proxy, HTTPS_PROXY, ALL_PROXY) |
+| Missing process-level listeners | Audit by PID, not just port numbers |
+| Assuming root | Most checks work without root; note what needs it |
+
+## Red Flags
+
+- Reporting an open port without identifying the owning process
+- Claiming "secure" without checking listening interfaces
+- Ignoring IPv6 listeners (often overlooked)
+- Missing the proxy/pac configuration
+
+## Rationalization Prevention
+
+| Excuse | Reality |
+|--------|---------|
+| "The port is localhost only" | Verify bind address — 0.0.0.0 vs 127.0.0.1 |
+| "I checked the main ports" | Audit ALL listening ports and processes |
+| "It's just a dev tool" | Dev tools are still network exposure. |
+
+## How to Use
+
+1. **Gather context**: Check Termux permissions, storage, and background limits.
+2. **Audit interfaces**: Enumerate listening ports with owning processes (IPv4 + IPv6).
+3. **Check connectivity**: DNS, proxy env vars, and reachability tests.
+4. **Report**: Categorize findings by severity with fixes.
+
+See AUDIT WORKFLOW for the full procedure.
+
+## Toolkit / Files
+
+- `scripts/audit_net.sh` — read-only network exposure audit (connectivity, interfaces/IP, DNS, proxy masked, listening ports, risk classification). Never modifies the system. Example:
+  `bash scripts/audit_net.sh` or `bash scripts/audit_net.sh --json`

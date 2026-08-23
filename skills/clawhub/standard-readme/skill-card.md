@@ -1,39 +1,55 @@
-## Description: <br>
-Write or audit README files following the Standard Readme specification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Writes or audits README files following the Standard Readme specification.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and documentation maintainers use this skill to create, rewrite, improve, or audit README files against the Standard Readme structure without inventing project details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/standard-readme) <br>
-- [Skill source homepage](https://github.com/tenequm/skills/tree/main/skills/standard-readme) <br>
-- [Standard Readme specification](https://github.com/RichardLitt/standard-readme) <br>
+Developers and documentation maintainers use this skill to create, rewrite, improve, or audit README files against the Standard Readme structure.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown README content or Markdown audit findings] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Write mode may update README.md when asked; audit mode reports findings without edits.] <br>
+Global
 
-## Skill Version(s): <br>
-0.1.2 (source: artifact SKILL.md metadata and server release metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Generated README content or audit guidance can be inaccurate if project metadata, license files, or source layout are incomplete or stale.
+
+Mitigation: Review generated README sections, install commands, usage examples, and license statements against the repository before publishing.
+
+Risk: README rewriting may require reading project files that contain internal implementation details.
+
+Mitigation: Use the skill only in workspaces where repository inspection is acceptable, and avoid including secrets or unrelated sensitive files in the prompt context.
+
+## Reference(s):
+
+- [Standard Readme specification](https://github.com/RichardLitt/standard-readme)
+- [ClawHub skill page](https://clawhub.ai/tenequm/skills/standard-readme)
+- [Project homepage](https://github.com/tenequm/skills/tree/main/skills/standard-readme)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown README content or concise audit findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May inspect project files such as manifests, license files, contributing docs, CI config, and source layout to avoid inventing details.]
+
+## Skill Version(s):
+
+0.1.4 (source: evidence release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

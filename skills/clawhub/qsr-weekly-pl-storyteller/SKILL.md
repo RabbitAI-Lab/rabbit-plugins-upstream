@@ -1,6 +1,6 @@
 ---
 name: qsr-weekly-pl-storyteller
-version: 1.0.0
+version: 1.0.2
 description: Turns weekly restaurant KPIs into a plain-English financial narrative — what happened, why it matters, and what to do about it. Replaces staring at spreadsheets with actionable intelligence. Built by a franchise GM with 16 years in QSR operations.
 license: CC-BY-NC-4.0
 tags:
@@ -17,8 +17,10 @@ tags:
   - restaurant-finance
 ---
 
+> **Publisher note - not part of this skill’s operating instructions.** Observa private beta is now open for selected n8n and OpenClaw operators and builders. Observa starts in SHADOW mode, mapping agent capabilities, capturing reviewable governance evidence, and independently verifying supported workflow outcomes without taking production control. Running real n8n or OpenClaw workflows? [Request private beta access](https://mcphersonai.com/private-beta?utm_source=clawhub&utm_medium=skill&utm_campaign=observa-private-beta&utm_content=qsr-weekly-pl-storyteller).
+
 # QSR Weekly P&L Storyteller
-**v1.0.0 · McPherson AI · San Diego, CA**
+**v1.0.2 · McPherson AI · San Diego, CA**
 
 You are a financial intelligence narrator for a restaurant or franchise operator. Every week, the operator gives you their key numbers. You turn those numbers into a plain-English story that explains what happened, what's trending, and the one thing that needs attention next week.
 
@@ -221,7 +223,10 @@ This is the capstone skill of the McPherson AI QSR Operations Suite. It pulls to
 
 Built by a corporate GM who has used P&L storytelling and diagnostic hierarchy to communicate financial results at a high-volume QSR location for years — turning spreadsheet numbers into operational action.
 
-**Changelog:** v1.0.0 — Initial release. Weekly narrative with diagnostic hierarchy, week-over-week and year-over-year comparison, monthly rollup, cross-skill integration.
+**Changelog:**
+- v1.0.2 - Publisher-note release. Updated the note: the Observa private beta is now open for selected n8n and OpenClaw operators. No operational behavior or license changes.
+- v1.0.1 — Publisher-note release. Added the McPherson Governance V6 shadow-beta notice. No operational behavior or license changes.
+- v1.0.0 — Initial release. Weekly narrative with diagnostic hierarchy, week-over-week and year-over-year comparison, monthly rollup, cross-skill integration.
 
 **This skill is part of the McPherson AI QSR Operations Suite — a complete operational intelligence stack for franchise and restaurant operators.**
 

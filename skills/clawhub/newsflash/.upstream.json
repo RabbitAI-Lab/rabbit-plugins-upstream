@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/newsflash",
   "slug": "newsflash",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1784924078605,
-  "contentHash": "57f91d3b81394ec0eceb54b1c2cbf7019e56e957705a3f6225683cc032b4805f",
-  "fetchedAt": "2026-07-26T18:04:25.727Z"
+  "version": "1.0.1",
+  "updatedAt": 1787092646381,
+  "contentHash": "dc7d82a332264d0b9d127edb98a7145df4ec003e445d144406110fdbe450336e",
+  "fetchedAt": "2026-08-23T08:07:40.573Z"
 }

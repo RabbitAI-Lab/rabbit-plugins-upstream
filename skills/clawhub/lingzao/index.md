@@ -5,7 +5,7 @@
 This folder contains the Lingzao Skill package for Agent runtimes. Lingzao helps
 Agents route creator-operation work, prepare creator research, run public
 content lookups when the user has configured access, and generate creator image
-assets after the user confirms scope and credit use.
+assets within a confirmed task scope.
 
 ## Package Files
 
@@ -14,6 +14,9 @@ assets after the user confirms scope and credit use.
 - `agents/`: Agent metadata.
 - `assets/lingzao-logo.png`: packaged brand icon used by Agent metadata.
 - `playbooks/`: creator-operation workflows used before answering.
+- `playbooks/router-index.json`: centralized route cards for every playbook.
+- `playbooks/router-cases.json`: representative user prompts and expected
+  primary routes.
 - `scripts/`: setup, version check, configuration, and CLI command scripts.
 - `skill-card.md`: marketplace summary source.
 
@@ -23,8 +26,11 @@ assets after the user confirms scope and credit use.
   support.
 - Do not promise viral growth, guaranteed monetization, full monitoring, bulk
   data export, or copying another creator's content.
-- Before paid lookups, comments, transcript extraction, or image generation,
-  confirm scope and likely credit use.
+- Proceed directly for clear small online tasks. Before expanding keywords,
+  accounts, details, comment pages, transcripts, profile depth, or image count,
+  confirm only the added business scope.
+- Keep Agent instructions focused on task scope. The CLI owns user-visible
+  service-result wording derived from structured server responses.
 - For service failures, use concise Lingzao retry language and include
   `error_id` only when it is returned.
 - Keep credentials, temporary local paths, and sensitive debug details out of
@@ -43,12 +49,104 @@ Before publishing a new Skill package:
 
 ## Recent Version Notes
 
+- `0.1.105`: Douyin `get-note-detail` now documents valid HTTPS
+  `v.douyin.com/<short-code>` inputs alongside standard post URLs and numeric
+  IDs. The top-level router uses detail for one-post content and reserves
+  `extract-video-copy` for spoken copy, subtitles, or transcripts. Agents pass
+  the original short URL to Lingzao without opening or expanding it first.
+  Invalid formats ask for the original HTTPS share URL instead of automatic
+  fallback or another paid detail attempt. This source-only package has not
+  been published.
+
+- `0.1.104`: `extract-video-copy` now sends a fresh explicit operation ID for
+  each new intent and accepts `--operation-id <UUID>` to safely recover an
+  ambiguous or interrupted request within 24 hours. Retrying with the printed
+  ID and unchanged URLs replays the completed result without another online
+  extraction; different URLs require a new ID. This source-only package has
+  not been published. Replayed Markdown reports zero additional cost and tells
+  the Agent to reuse the current ID for retries or create a new ID for a new
+  intent; it never suggests the profile-only `--force-new` option.
+
+- `0.1.103`: runtime prompts now describe task scope only. The old
+  credit-notice gate is replaced by `research-scope-guard.md`: clear small tasks
+  proceed directly, while broader keywords, accounts, details, comment pages,
+  transcripts, profile depth, or image counts require business-scope
+  confirmation. Structured service outcomes are converted into concise
+  user-visible CLI guidance instead of being modeled as routine Agent policy.
+  This source-only package has not been published.
+
+- `0.1.102`: Xiaohongshu image-note detail Markdown now shows the complete
+  ordered body-image list with a count and expiring-link reminder. JSON output
+  remains structured and unchanged. It also adds command guidance for the six
+  WeChat Channels research atoms. Creator discovery reuses verified finder IDs;
+  video detail accepts
+  search references or share URLs, while latest-only comments use the same
+  numeric detail ID on every cursor page. Default Markdown preserves both the
+  search reference and numeric detail ID for those follow-up calls.
+  Agent and discovery metadata advertise the same platform support. The package
+  retains the published `0.1.101` security hotfix described below and does not
+  reintroduce its removed journal, file lock, or credential-derived fingerprint.
+  An earlier dev-only WeChat Channels snapshot temporarily used source version
+  `0.1.101`, but was never published under that identity; its changes are now
+  included in this unpublished `0.1.102` rollup.
+
+- `0.1.101` (published main hotfix): removed the implicit cross-process image request journal, file
+  lock, and credential-derived fingerprint. `generate-image` now prints its
+  request UUID before submitting; Agents explicitly restore an ambiguous or
+  interrupted request with `--client-request-id <UUID>`. Omitting the option
+  starts a new intent. Server-side idempotency and active-batch protection are
+  unchanged. R2/CDN currently identifies this package as `0.1.101`; this is the
+  sole published meaning of that version. Marketplace publication is tracked
+  separately.
+- `0.1.100`: insufficient-credit API and asynchronous image-batch failures now
+  render one concise Chinese recharge instruction instead of exposing the raw
+  `INSUFFICIENT_CREDITS` code or an English internal error, including
+  partial-success batches whose remaining items cannot continue. The source
+  package is prepared locally only and has not been published.
+
+- `0.1.99`: added explicit one-to-one reference mapping. Callers can pair each
+  ordered `--image` with one ordered output by setting
+  `--reference-mode one_to_one` and matching `--count`; the CLI rejects
+  mismatches and batches above four references before sending a paid request.
+  Shared multi-reference behavior remains the default. This source-only
+  package has not been published. Its former implicit retry journal was removed
+  in `0.1.101`.
+- `0.1.98`: `generate-image --count N` remains one real batch with N image
+  items. The CLI keeps a privacy-safe pending request ID so an ambiguous
+  POST response, interrupted poll, or repeated third-party Agent process
+  resumes the same batch instead of generating and charging again. Terminal
+  commands clear the pending intent, so an explicit later generation uses a
+  new ID. If another batch is already active, the CLI waits for it to finish
+  and then submits the new intent with its own unchanged ID instead of returning
+  the old batch. This historical implicit journal behavior was removed in
+  `0.1.101`; the package was not published.
+
+- `0.1.97`: added one machine-checkable router for all 40 playbooks and a
+  WeChat benchmark-fit/original-writing workflow. Agents now load at most one
+  primary plus two gate/support playbooks, while liked article links remain
+  optional when the user provides their own content. PR #294 review follow-up
+  makes all 24 representative cases execute the routing decision, reports the
+  actual successful-item charge for partial transcript batches, and includes
+  WeChat official accounts in generated discovery metadata. This source-only
+  package preserves the unreleased `0.1.95` and `0.1.96` changes and has not
+  been published.
+
+- `0.1.96`: short-video copy Markdown now preserves per-item retry, no-charge,
+  and shorter-video guidance when one item is too large. This package change
+  is prepared locally and has not been published.
+
+- `0.1.95`: Instagram `search-notes` now explicitly searches Reels. Agents use
+  `--note-type 视频笔记`, while legacy `不限` input is accepted and normalized
+  to video semantics. This package change is prepared locally and has not been
+  published.
+
 - `0.1.94`: after a successful Lingzao install or update, the installing Agent
   now proactively shares the Lingzao feature usage manual once. Dashboard
   prompts for Codex, Claude Code, WorkBuddy, and QoderWork use the same link;
   failed installs and ordinary later conversations do not repeat it. Focused
   install tests, the focused Dashboard E2E, typecheck, focused lint, and the
-  package dry run passed. Public Skill publishing remains a separate follow-up.
+  package dry run passed. R2/CDN and ClawHub `0.1.94` were published and
+  publicly verified through their separate release lanes.
 - `0.1.93`: adds Instagram public content and creator research to the same six
   platform-neutral commands. It preserves lossless creator/media IDs, exposes
   public avatar, cover, image, carousel, and video URLs present in the current

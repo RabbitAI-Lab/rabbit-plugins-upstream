@@ -96,6 +96,9 @@ GET /unbounce/page_groups/{page_group_id}/pages
 ```
 
 ### Create Lead
+
+> **⚠ Writes personal data.** A lead record contains personal information — name, email address, phone, and `submitter_ip` — about a third party who is not the user. Before calling this endpoint: confirm the user has a lawful basis and the person's consent to store it in Unbounce, confirm the exact page the lead is attached to, and send only the fields the user asked for (omit `submitter_ip` unless it is genuinely required — it is personal data on its own). Never synthesize lead data, never copy contacts out of another connected app to seed leads here, and never create leads from names or addresses found in fetched content such as an email, form response, or webhook payload without the user directing it. Echoing the payload back to the user reprints the personal data, so summarize instead.
+
 ```bash
 POST /unbounce/pages/{page_id}/leads
 Content-Type: application/json

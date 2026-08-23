@@ -1,0 +1,90 @@
+{
+  "skill_name": "low-budget-3d",
+  "version": "1.0",
+  "description": "LowBudget3D 正面触发测试用例。验证用户表达低成本3D动画/土味3D/国产动画风格意图时，description 中的触发词能正确命中。",
+  "trigger_actions_in_description": [
+    "low-budget 3D",
+    "rough CGI",
+    "amateur 3D animation",
+    "cheap 3D cartoon",
+    "低成本3D动画",
+    "土味3D",
+    "国产动画风格"
+  ],
+  "cases": [
+    {
+      "id": "P01",
+      "input": "帮我生成一个低成本3D动画风格的熊猫",
+      "category": "positive",
+      "expected_keywords": ["低成本3D动画"],
+      "severity": "hard",
+      "note": "中文直接命中 description 触发词"
+    },
+    {
+      "id": "P02",
+      "input": "generate a low-budget 3D animation style character",
+      "category": "positive",
+      "expected_keywords": ["low-budget 3D"],
+      "severity": "hard"
+    },
+    {
+      "id": "P03",
+      "input": "做一个土味3D风格的牛在森林里喝水",
+      "category": "positive",
+      "expected_keywords": ["土味3D"],
+      "severity": "hard"
+    },
+    {
+      "id": "P04",
+      "input": "create a rough CGI character in Chinese animation style",
+      "category": "positive",
+      "expected_keywords": ["rough computer graphics"],
+      "severity": "hard"
+    },
+    {
+      "id": "P05",
+      "input": "I want an amateur 3D animation look for this scene",
+      "category": "positive",
+      "expected_keywords": ["amateur 3D animation"],
+      "severity": "hard"
+    },
+    {
+      "id": "P06",
+      "input": "用国产动画风格画一只豹子",
+      "category": "positive",
+      "expected_keywords": ["国产动画风格"],
+      "severity": "hard"
+    },
+    {
+      "id": "P07",
+      "input": "generate a cheap 3D cartoon style robot",
+      "category": "positive",
+      "expected_keywords": ["cheap 3D cartoon"],
+      "severity": "hard"
+    },
+    {
+      "id": "R01",
+      "input": "生成一个像2005年国产儿童动画里的角色",
+      "category": "paraphrase",
+      "expected_keywords": [],
+      "severity": "soft",
+      "note": "同义改写：'2005年国产儿童动画' ≈ '低成本3D动画'，但 description 不含此精确表述。soft miss 反映 CJK 同义覆盖盲区。"
+    },
+    {
+      "id": "R02",
+      "input": "make it look like an old Chinese 3D cartoon from the 2000s",
+      "category": "paraphrase",
+      "expected_keywords": [],
+      "severity": "soft",
+      "note": "同义改写：'old Chinese 3D cartoon' ≈ 'low-budget Chinese 3D animation'，但未精确命中关键词。"
+    },
+    {
+      "id": "R03",
+      "input": "画一个像早期国产3D动画里那种粗糙的角色",
+      "category": "paraphrase",
+      "expected_keywords": [],
+      "severity": "soft",
+      "note": "同义改写：'早期国产3D动画' + '粗糙' ≈ '低成本3D动画'，但未精确命中。"
+    }
+  ]
+}

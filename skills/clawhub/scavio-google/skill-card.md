@@ -1,42 +1,55 @@
-## Description: <br>
-Searches Google through Scavio and returns the full structured SERP as JSON, including organic results, ads, knowledge graph data, AI overview content, related questions, and related searches. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google and get the full structured SERP as JSON: organic results, ads, knowledge graph, AI overview, related questions, and more.
 
-## Publisher: <br>
-[scavio-ai](https://clawhub.ai/user/scavio-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[scavio-ai](https://clawhub.ai/user/scavio-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to retrieve current Google search results and SERP features as structured JSON for web research, source discovery, and up-to-date answers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries are sent to an external Scavio service. <br>
-Mitigation: Do not submit passwords, API keys, private documents, or confidential business details unless sharing them with the provider is acceptable. <br>
-Risk: Search results and SERP features can be incomplete, stale, or misleading. <br>
-Mitigation: Use returned source URLs for citations and review important results before relying on them. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve current Google search results and structured SERP features through Scavio when an answer requires up-to-date web information.
 
-## Reference(s): <br>
-- [Scavio Search API documentation](https://scavio.dev/docs/search-api) <br>
-- [Scavio Google skill on ClawHub](https://clawhub.ai/scavio-ai/skills/scavio-google) <br>
-- [scavio-ai publisher profile](https://clawhub.ai/user/scavio-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Guidance, Code, Shell commands] <br>
-**Output Format:** [Markdown guidance with JSON response examples and inline Python and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY and sends search queries to the Scavio external service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: release evidence and skill frontmatter) <br>
+Risk: Search queries are sent to Scavio's external service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not send passwords, private internal text, customer data, or other sensitive material unless that use has been approved by the organization.
+
+Risk: The skill requires a Scavio API key.
+
+Mitigation: Store SCAVIO_API_KEY in an environment variable or approved secret store and keep it out of source control.
+
+## Reference(s):
+
+- [Scavio Search API documentation](https://scavio.dev/docs/search-api)
+- [Scavio rate limits](https://scavio.dev/docs/rate-limits)
+- [ClawHub skill listing](https://clawhub.ai/scavio-ai/skills/scavio-google)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Markdown, Guidance]
+
+**Output Format:** [Structured SERP JSON from the Scavio Google API, usually summarized for the user in Markdown with cited source URLs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; supports localization, pagination, recency filters, SafeSearch, AI Overview resolution, and optional raw HTML.]
+
+## Skill Version(s):
+
+3.0.3 (source: server release evidence; artifact frontmatter lists 3.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

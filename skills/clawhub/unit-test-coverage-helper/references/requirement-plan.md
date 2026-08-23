@@ -2,7 +2,7 @@
 
 ## Live Requirement
 
-Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 2 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
 ## Audience
 
@@ -14,37 +14,36 @@ software-and-data
 
 ## Requirement Score
 
-Total: 90/100
+Total: 100/100
 
 Demand: 70/70
 
 Local feasibility: 30/30
 
-Evidence coverage: 12 signals across 2 source families.
+Evidence coverage: 12 signals across 4 source families.
 
 Scoring rationale:
 
 - Evidence count: 12; required minimum: 3.
-- Distinct source families: 2; sources: github, hacker-news.
+- Distinct source families: 4; sources: github, hacker-news, segmentfault, v2ex.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
-- Score capped because corroborating evidence does not come from at least three different source families.
 
 ## Evidence
 
-- github-issues (2026-07-24T03:40:51+00:00): [spec: trustworthy centred Mumble experience, performance, and platform parity](https://github.com/mongre25-droid/mumble/issues/12)
-- github-issues (2026-07-25T14:17:05+00:00): [WAL replay caches a query plan per batch with no eviction — unbounded memory growth on large rebuilds](https://github.com/verveguy/liminis-context-graph/issues/238)
-- github-issues (2026-07-24T05:31:22+00:00): [[Contract] — Multi-Outcome (Categorical) Markets](https://github.com/Arena1X/InsightArena/issues/1329)
-- github-issues (2026-07-23T18:58:18+00:00): [[devkit/integration] Add integration test CI job](https://github.com/StellarCommons/stellar-fee-tracker/issues/499)
-- github-issues (2026-07-26T10:21:07+00:00): [Table UI Definition: derive the "Cell components" list from the SELECT query, not from the whole schema](https://github.com/kitamura-tetsuo/outliner/issues/4238)
-- github-issues (2026-07-23T13:19:56+00:00): [Reject empty payment batch payloads](https://github.com/mux-labs/mux-backend/issues/597)
-- github-issues (2026-07-23T13:19:57+00:00): [Document Docker Compose local setup](https://github.com/mux-labs/mux-backend/issues/598)
-- hacker-news-search (2026-07-26T09:20:47+00:00): [Clinical failure rates over the decades: yikes](https://news.ycombinator.com/item?id=49056211)
-- hacker-news-search (2026-07-26T01:40:01+00:00): [LLM Usage in Debian: Three Proposals](https://news.ycombinator.com/item?id=49053737)
-- hacker-news-search (2026-07-26T00:58:31+00:00): [Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49053524)
-- hacker-news-search (2026-07-25T19:42:51+00:00): [Engineering management after the cost of code collapsed](https://news.ycombinator.com/item?id=49050839)
-- hacker-news-search (2026-07-25T09:21:07+00:00): [Buz – A fork of Bun using modern Zig, with sub-1s incremental builds](https://news.ycombinator.com/item?id=49045975)
+- hacker-news-ask-hn (2026-08-21T15:15:14+00:00): [Coding Agents killed my identity. How do you feel?](https://news.ycombinator.com/item?id=49389408)
+- github-issues (2026-08-21T06:22:35+00:00): [client-details (aba Vendedores): gestão administrativa vincular/editar/remover vendedores (MANAGER)](https://github.com/ControleOnline/ui-customers/issues/20)
+- v2ex-latest (2026-08-22T22:41:42+00:00): [OpenAI image API too expensive for n8n? Four cheaper options for product ads](https://www.v2ex.com/t/1236498)
+- github-issues (2026-08-23T03:59:49+00:00): [🐞 [BUG] Normalize live GitHub PR merge timestamps for delivery verification](https://github.com/kburson/ai-task-manager/issues/1390)
+- segmentfault-search (2026-08-23T04:03:51.500214+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
+- segmentfault-search (2026-08-23T04:03:51.500214+00:00): [javascript](https://segmentfault.com/t/javascript)
+- segmentfault-search (2026-08-23T04:03:51.500214+00:00): [typescript](https://segmentfault.com/t/typescript)
+- segmentfault-search (2026-08-23T04:03:51.500214+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
+- segmentfault-search (2026-08-23T04:03:51.500943+00:00): [Writing Great Unit Tests: Best and Worst Practices](https://segmentfault.com/a/1190000009709754)
+- segmentfault-search (2026-08-23T04:03:51.500943+00:00): [Android自动化测试一 UiAutomator官方介绍](https://segmentfault.com/a/1190000045114982)
+- segmentfault-search (2026-08-23T04:03:51.500943+00:00): [CSCI 2134](https://segmentfault.com/a/1190000041402955)
+- hacker-news-search (2026-08-22T23:41:29+00:00): [A week of using Codex more than Claude](https://news.ycombinator.com/item?id=49404922)
 
 ## How The Skill Meets The Requirement
 

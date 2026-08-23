@@ -10,6 +10,7 @@ import { promisify } from 'util'
 import * as tls from 'tls'
 import * as https from 'https'
 import { getAuditLogger } from './audit-logger.js'
+import { readFileSync } from 'fs'
 
 const execAsync = promisify(exec)
 
@@ -307,7 +308,6 @@ export class SSLMonitor {
    */
   static loadDomainsFromConfig(configPath: string): string[] {
     try {
-      const fs = require('fs')
       const content = fs.readFileSync(configPath, 'utf-8')
       const config = JSON.parse(content)
       return Array.isArray(config.domains) ? config.domains : []

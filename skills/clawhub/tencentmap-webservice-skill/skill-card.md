@@ -1,50 +1,59 @@
-## Description: <br>
-Guides developers through Tencent Maps WebService HTTP APIs for geocoding, place search, route planning, distance matrices, IP location, weather, coordinate conversion, and district queries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+腾讯地图 JavaScript GL（JSAPIGL）开发指南，帮助 agents 编写、审查和调试地图初始化、覆盖物、图层、事件、控件、可视化、检索、路线规划、地理编码、行政区划、IP 定位、几何计算和 3D 模型相关代码。
 
-## Publisher: <br>
-[tencent-adm](https://clawhub.ai/user/tencent-adm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tencent-adm](https://clawhub.ai/user/tencent-adm)
 
-## Use Case: <br>
-Developers and external builders use this skill to integrate Tencent Maps WebService JSON APIs into applications, select the right endpoint, generate request examples, handle API keys, and interpret service errors. It can also guide an optional temporary-key application flow when no official key is configured. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The temporary-key flow sends a phone number, SMS verification code, and session token to Tencent endpoints. <br>
-Mitigation: Prefer an official Tencent Maps key via environment variable when possible, review the Tencent agreements before using the flow, and avoid entering real user personal data in examples. <br>
-Risk: Temporary key records, including the phone number and generated key, may be written to ~/.tencentmap/tempkey.json in plaintext. <br>
-Mitigation: Protect or delete the local temp-key file after testing, avoid shared machines for the temporary-key flow, and use a managed secret store for production keys. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to answer Tencent Map JSAPI GL questions and produce implementation guidance grounded in bundled API documentation and demo code. It is suited for building and troubleshooting web map features that use Tencent Map keys and optional visualization libraries.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tencent-adm/skills/tencentmap-webservice-skill) <br>
-- [Tencent Maps WebService Overview](https://lbs.qq.com/service/webService/webServiceGuide/webServiceOverview) <br>
-- [Tencent Maps Key Management](https://lbs.qq.com/dev/console/key/manage) <br>
-- [Tencent Maps Quota Documentation](https://lbs.qq.com/dev/console/quotaImprove) <br>
-- [Tencent Maps Status Codes](https://lbs.qq.com/service/webService/webServiceGuide/status) <br>
-- [Geocoder API Reference](references/api-geocoder.md) <br>
-- [Search API Reference](references/api-search.md) <br>
-- [Direction API Reference](references/api-direction.md) <br>
-- [Location and Weather API Reference](references/api-location-weather.md) <br>
-- [Coordinate Tools API Reference](references/api-tools.md) <br>
-- [Temporary Key Guide](tempkey-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with HTTP request examples, JSON response notes, Python helper script commands, and local configuration instructions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Tencent Maps WebService key for live API calls; the optional temporary-key flow may send phone verification data to Tencent endpoints and store phone-linked key data in a local plaintext JSON file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release metadata) <br>
+Risk: The no-key flow can ask the assistant to handle a phone number, SMS code, temporary tokens, and Tencent Map key values during account-linked provisioning.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer setting TMAP_JSAPI_KEY manually; use the no-key flow only after reviewing the Tencent agreements and accepting that account-linked values may pass through the conversation.
+
+Risk: The temporary-key flow can store phone-linked key data locally in plaintext under ~/.tencentmap/tempkey.json.
+
+Mitigation: Avoid the temporary-key flow on shared machines, remove the local file when it is no longer needed, or provide a pre-created key through the environment instead.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tencent-adm/skills/tencentmap-webservice-skill)
+- [Tencent Map JSAPI GL overview](https://lbs.qq.com/webApi/javascriptGL/glGuide/glOverview)
+- [Skill entry and workflow](artifact/SKILL.md)
+- [Tencent Map API reference](artifact/tencentmap-jsapi-gl-skill/references/api_reference.md)
+- [JSAPI GL documentation](artifact/tencentmap-jsapi-gl-skill/references/jsapigl/docs/)
+- [Visualization documentation](artifact/tencentmap-jsapi-gl-skill/references/visualization/docs/)
+- [Temporary key guide](artifact/tencentmap-jsapi-gl-skill/tempkey-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with code snippets, command examples, and configuration notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference TMAP_JSAPI_KEY and Tencent Map temporary-key setup when a user lacks an API key.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

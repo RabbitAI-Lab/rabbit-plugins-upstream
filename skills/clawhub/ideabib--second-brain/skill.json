@@ -1,0 +1,26 @@
+{
+  "name": "second-brain",
+  "version": "1.0.0",
+  "description": "Ingest, organize, and query your personal Second Brain database. Automatically handles note creation, article metadata extraction, video frame analysis, and Step 2.5 security screening.",
+  "main": "SKILL.md",
+  "author": "Buntea",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/buntea/second-brain-skill"
+  },
+  "keywords": [
+    "second-brain",
+    "knowledge-base",
+    "note-taking",
+    "video-frames",
+    "yt-dlp",
+    "security-screening",
+    "openclaw",
+    "antigravity"
+  ],
+  "scripts": {
+    "process": "scripts/process.py"
+  },
+  "dependencies": {}
+}

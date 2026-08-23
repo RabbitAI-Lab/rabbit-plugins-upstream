@@ -1,49 +1,70 @@
-## Description: <br>
-医疗大健康采招雷达-医疗招标采购网，当搜索词包含医院、医疗、卫生、体检时触发，重点提取采购方（医院）和中标方（医药公司/代理商），分析特定医院的Top供应商体系。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents search and analyze medical and health procurement notices, with emphasis on purchasing hospitals, winning suppliers, supplier relationships, competitors, brands, prices, and procurement trends.
 
-## Publisher: <br>
-[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack)
 
-## Use Case: <br>
-External users and procurement analysts use this skill to search medical and healthcare bidding data, inspect purchaser and supplier patterns, and compare companies, brands, prices, expiring projects, and market activity through the Zhiliaobiaoxun API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends procurement searches and API credentials to an external Zhiliaobiaoxun service. <br>
-Mitigation: Install only if that provider is trusted for the intended searches, and use a limited API key through ZLBX_API_KEY. <br>
-Risk: Broad company or subsidiary matching can produce ambiguous business analysis. <br>
-Mitigation: Confirm ambiguous company matches before relying on subsidiary-wide analysis or downstream conclusions. <br>
-Risk: Returned project contact details may contain sensitive business or personal information. <br>
-Mitigation: Handle contact data according to the user's privacy, compliance, and retention requirements. <br>
-Risk: Confidential procurement strategy could be exposed through submitted queries. <br>
-Mitigation: Avoid submitting confidential strategy or sensitive internal plans unless that use is acceptable under the provider's terms. <br>
+## Use Case:
 
+External procurement, sales, and market-analysis users use this skill to search Chinese medical and health tenders, identify purchasing hospitals and winning suppliers, compare vendors, and analyze procurement trends. It can also guide account setup and quota checks for the vendor API service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thuanlynham-stack/medical-health-bid-radar-yiliaozhaobiaocaigouwang) <br>
-- [Bid search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [Zhiliaobiaoxun API key portal](https://ai.zhiliaobiaoxun.com/?ch=s36) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown and structured API request or response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY for authenticated Zhiliaobiaoxun API access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill uses a third-party vendor API service and requires a ZLBX_API_KEY or a vendor-issued trial key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer setting a user-managed ZLBX_API_KEY before use, and review the vendor service and account terms before relying on the skill.
+
+Risk: If no API key is configured, the artifact can guide consent-gated trial registration that sends platform, CPU architecture, and a SHA256 hash of a MAC address for deduplication.
+
+Mitigation: Proceed with auto-registration only after explicit user consent; decline the flow and use the manual registration link when device-feature collection is not acceptable.
+
+Risk: An automatically issued API key may be stored locally under ~/.zlbx/config.json.
+
+Mitigation: Treat the local config file as sensitive, restrict access to the user account, and rotate or remove the key if the workspace is shared.
+
+Risk: Aggregated group, supplier, and company analysis can be misleading when company names are ambiguous or matched across related entities.
+
+Mitigation: Verify company identity, matched subsidiaries, and source bid records before making business decisions from the analysis.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thuanlynham-stack/skills/medical-health-bid-radar-yiliaozhaobiaocaigouwang)
+- [Publisher profile](https://clawhub.ai/user/thuanlynham-stack)
+- [Skill instructions](artifact/SKILL.md)
+- [Account setup reference](artifact/references/account-setup.md)
+- [Account API reference](artifact/references/api-account.md)
+- [Bid search API reference](artifact/references/api-search.md)
+- [Company analysis API reference](artifact/references/api-company.md)
+- [Market analysis API reference](artifact/references/api-market.md)
+- [Vendor API service](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool})
+- [Manual account registration](https://ai.zhiliaobiaoxun.com/?ch=s36)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries with JSON request examples and occasional shell commands or configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include procurement search results, company or market analysis, API request guidance, account status, quota guidance, and links to vendor pages.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

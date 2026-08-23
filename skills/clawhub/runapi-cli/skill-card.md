@@ -1,47 +1,64 @@
-## Description: <br>
-Install and use the RunAPI CLI as the universal execution layer for RunAPI models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Install and use the RunAPI CLI for one-off artifacts and results from registered CLI-backed services.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to install, authenticate, inspect, and automate RunAPI CLI workflows from terminals, servers, and CI jobs. It supports running RunAPI model tasks, passing JSON requests, polling async jobs, managing local callback listeners, and handling temporary media file uploads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes a remote installer script piped directly into a shell, including for server and CI use. <br>
-Mitigation: Prefer the documented Homebrew formula or use a download-and-verify workflow before executing installer content in automation. <br>
-Risk: RunAPI authentication can persist in local configuration. <br>
-Mitigation: Prefer environment credentials or stdin token import for headless use, keep config file permissions restricted, and avoid placing API keys directly in command arguments. <br>
-Risk: Listener operations can expose Listen Signing Secrets. <br>
-Mitigation: Keep listener secrets out of logs and project config, rotate exposed secrets for the selected key, update local verifiers, and restart affected listeners. <br>
-Risk: Local files passed as model media inputs may be uploaded to RunAPI. <br>
-Mitigation: Review file paths before submission and avoid sending sensitive local media unless the upload is intended. <br>
+## Use Case:
 
+Developers and agent operators use this skill to discover supported RunAPI CLI services, compose JSON-first service requests, run or wait for tasks, manage uploads and files, and handle authentication safely for one-off terminal workflows.
 
-## Reference(s): <br>
-- [RunAPI model and CLI catalog](https://runapi.ai/models.md) <br>
-- [RunAPI models homepage](https://runapi.ai/models) <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-cli) <br>
-- [RunAPI publisher profile](https://clawhub.ai/user/runapi-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code] <br>
-**Output Format:** [Markdown with inline shell commands, JSON examples, and TOML configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may reference RUNAPI_API_KEY, local RunAPI config, task JSON, callback key IDs, listener secrets, and temporary file URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.11 (source: server release evidence) <br>
+Risk: RunAPI credentials, callback listener secrets, uploaded files, and cross-agent skill installation commands are sensitive user-approved actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer environment credentials or stdin token import, avoid exposing secrets in process arguments or project config, and keep listener secrets out of logs.
+
+Risk: Service commands, actions, flags, or request fields can drift from the installed CLI catalog.
+
+Mitigation: Inspect `runapi --help`, service help, and action help before composing requests, then update the CLI if documented behavior is unavailable.
+
+Risk: Generated file URLs are temporary and may not satisfy durable artifact requirements.
+
+Mitigation: Download every requested URL, verify a non-empty file and expected MIME type, and move generated assets into durable storage within the documented retention window.
+
+Risk: The headless installer executes a remote installation script.
+
+Mitigation: Prefer the Homebrew install path when available; if headless installation is needed, run it only from a trusted network and account and consider inspecting or verifying the installer first.
+
+## Reference(s):
+
+- [RunAPI model and CLI service catalog](https://runapi.ai/models.md)
+- [RunAPI models homepage](https://runapi.ai/models)
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-cli)
+- [RunAPI publisher profile](https://clawhub.ai/user/runapi-ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance emphasizes inspecting installed CLI help before composing service commands and preserving generated artifacts outside temporary URLs.]
+
+## Skill Version(s):
+
+0.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,11 +1,11 @@
 # ISYS\_HeaderMenuTopMenuItem interface
 
-顶部一级菜单项
+Top-level primary menu item
 
 ## Signature
 
 ```typescript
-interface ISYS_HeaderMenuTopMenuItem 
+export interface ISYS_HeaderMenuTopMenuItem 
 ```
 
 ## Properties
@@ -46,7 +46,7 @@ string
 
 </td><td>
 
-菜单项 ID，不可重复
+Menu item ID, cannot be repeated
 
 
 </td></tr>
@@ -65,26 +65,7 @@ Array&lt;[ISYS\_HeaderMenuSub1MenuItem](./ISYS_HeaderMenuSub1MenuItem.md) \| nul
 
 </td><td>
 
-_(Optional)_ 子菜单项
-
-
-</td></tr>
-<tr><td>
-
-[registerFn?](./ISYS_HeaderMenuTopMenuItem.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-_(Optional)_ 注册方法名称（需要在扩展入口文件导出该方法）
+_(Optional)_ Sub-menu item
 
 
 </td></tr>
@@ -103,7 +84,7 @@ string
 
 </td><td>
 
-菜单项标题
+Menu item title
 
 
 </td></tr>
@@ -117,7 +98,7 @@ string
 
 # ISYS\_HeaderMenuTopMenuItem.id property
 
-菜单项 ID，不可重复
+Menu item ID, cannot be repeated
 
 ## Signature
 
@@ -129,7 +110,7 @@ id: string;
 
 # ISYS\_HeaderMenuTopMenuItem.menuItems property
 
-子菜单项
+Sub-menu item
 
 ## Signature
 
@@ -141,27 +122,10 @@ menuItems?: Array<ISYS_HeaderMenuSub1MenuItem | null>;
 
 # ISYS\_HeaderMenuTopMenuItem.title property
 
-菜单项标题
+Menu item title
 
 ## Signature
 
 ```typescript
 title: string;
-```
-
-
----
-
-## 方法详情
-
-### registerfn
-
-# ISYS\_HeaderMenuTopMenuItem.registerFn property
-
-注册方法名称（需要在扩展入口文件导出该方法）
-
-## Signature
-
-```typescript
-registerFn?: string;
 ```

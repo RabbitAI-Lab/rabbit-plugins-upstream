@@ -1,44 +1,60 @@
-## Description: <br>
-Image replicate tool that analyzes a source image's visuals, composition, colors, lighting, and style, builds a replicate prompt, and uses Seedream 4.5 to generate a new image in the same style. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Image Replicate analyzes a source image's visuals, composition, colors, lighting, and style, then uses dLazy's hosted image generation service to produce a new image in a similar style.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to invoke the dLazy CLI for image replication workflows, including sending reference images to a hosted generation service and receiving generated image output URLs or async task identifiers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a third-party dLazy CLI and hosted cloud service with a required API key. <br>
-Mitigation: Confirm the user is comfortable using the third-party service, prefer per-invocation DLAZY_API_KEY when local key persistence is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: User-supplied media may be uploaded to dLazy storage and generated outputs are hosted by dLazy. <br>
-Mitigation: Avoid submitting sensitive or restricted media unless the user has approved that cloud upload and hosted output handling. <br>
+## Use Case:
 
+External users and developers use this skill to replicate the style of reference images through the dLazy CLI. The skill helps an agent authenticate, submit image-replication requests, and interpret JSON responses that contain generated image URLs or async task status.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-replicate) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results may include hosted image URLs or an async generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and selected image files are sent to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not submit sensitive or restricted content unless the user accepts dLazy's data handling for the task.
+
+Risk: Logging in can store a dLazy API key in the local CLI configuration.
+
+Mitigation: Use DLAZY_API_KEY for per-invocation authentication when persistence is not desired, and rotate or revoke keys that are no longer needed.
+
+Risk: The skill depends on an external CLI and hosted API availability.
+
+Mitigation: Use the pinned npx invocation when possible and handle unauthorized, insufficient-balance, and async task failures before reporting completion.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-replicate)
+- [dLazy homepage](https://github.com/dlazyai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance, JSON, Image URLs]
+
+**Output Format:** [Markdown guidance with bash commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated image outputs are returned as hosted URLs; async runs can return a task identifier for later polling.]
+
+## Skill Version(s):
+
+1.3.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

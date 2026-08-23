@@ -1,11 +1,11 @@
 # TPCB\_LayersOfObject type
 
-二进制内嵌对象所属层
+Layers of binary embedded objects
 
 ## Signature
 
 ```typescript
-type TPCB_LayersOfObject = EPCB_LayerId.TOP_SILKSCREEN | EPCB_LayerId.BOTTOM_SILKSCREEN | EPCB_LayerId.DOCUMENT;
+export type TPCB_LayersOfObject = EPCB_LayerId.TOP_SILKSCREEN | EPCB_LayerId.BOTTOM_SILKSCREEN | EPCB_LayerId.DOCUMENT;
 ```
 ## References
 

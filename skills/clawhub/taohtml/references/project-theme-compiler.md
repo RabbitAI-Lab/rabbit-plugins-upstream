@@ -140,7 +140,7 @@ project-theme/
 - `templates.html` provides five reusable, grammar-selected DOM variants using the same placeholders and `fragment` / `data-step` syntax as the built-in systems. Corporate-family mode routes `cover`, `toc`, `section`, `content`, and `data` to the matching shell, embeds only that shell's fixed crops, and wraps report DOM in its confirmed editable region. It never embeds a complete source screenshot.
 - `provenance.json` records every VI item, eligibility, actual compiled state, concrete usage targets, every neutral fallback, the source/crop hashes, and the motion boundary.
 
-The output is project-local. Do not copy it into `assets/visual-systems/`, rename it to one of the four built-in ids, add it to the built-in router, or treat it as a globally available style.
+The output is project-local. Do not copy it into `assets/visual-systems/`, rename it to one of the eight built-in ids, add it to the built-in router, or treat it as a globally available style.
 
 ## Boundary Compilation Policy
 
@@ -206,7 +206,7 @@ Use `--source-kind verified` only when the local image is grounded in confirmed 
 
 The renderer validates the four project-theme files, rejects symlinks, extra files, remote assets, invalid selectors, and incomplete templates. For every machine-executed layout field it also checks that manifest value, structure source, provenance status/value/compiled flag/usage targets, neutral fallback when applicable, and template `data-layout` ids agree. It then injects project CSS and pages into `assets/html-deck-template/index.html`. Do not fork the Runtime or add a project-specific state machine.
 
-The four built-in calls remain unchanged:
+The eight built-in calls remain unchanged:
 
 ```bash
 python scripts/render_visual_system.py \

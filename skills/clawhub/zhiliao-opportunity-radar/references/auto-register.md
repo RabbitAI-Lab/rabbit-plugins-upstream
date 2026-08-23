@@ -18,6 +18,14 @@
 
 如果上述任何一条命中，**直接使用该 key 并停止阅读本文档**。
 
+**进入自动注册前必须先征得用户同意**（一句话即可，示例）：
+
+> 未检测到 API Key。我帮你自动开通一个免费试用账号？新账号送 100 次免费调用；开通仅采集 3 项非身份设备特征（系统类型/CPU架构/MAC哈希）做试用去重，不采集任何个人信息。
+
+- 用户同意 → 继续步骤 1
+- 用户拒绝 → 输出手动注册链接 `https://ai.zhiliaobiaoxun.com/?ch=s88`，本流程终止
+- **同意之前不得执行任何采集命令、不得发起任何注册请求**
+
 > 用户主动配过 key（无论环境变量还是 config.json 但 `source` 不是 `"auto"`）时，本 SKILL **不要**输出任何关于自动注册、自动登录、绑定手机号的引导内容。
 
 ---
@@ -103,10 +111,20 @@ Content-Type: application/json
   },
   "agent_kind": "claude-code",
   "agent_version": "...",
-  "skill_version": "opportunity-radar-1.0.0",
+  "skill_version": "opportunity-radar-1.0.1",
   "ch": "s88"
 }
 ```
+
+> ### ⚠️ 请求体必须用 JSON 序列化函数生成，不要手拼字符串
+>
+> 用 `json.dumps(payload)` / `requests.post(url, json=payload)` / `JSON.stringify(payload)`，
+> 或 `curl -d @file`；**不要用字符串拼接，也不要用 Python 的 `str(dict)`**
+> （后者产出单引号，服务端会报 `Expecting property name enclosed in double quotes`）。
+>
+> 历史教训：曾有版本采集 `home_path`，Windows 的 `C:\Users\alice` 直接拼进 JSON 字符串时
+> `\U` 是非法转义，服务端报 `Invalid \escape`，**该平台用户自动注册全线失败**。
+> 现在虽然三项特征都不含反斜杠，手拼仍可能被其它意外字符（引号、换行）破坏——用序列化函数是唯一可靠做法。
 
 > **`ch` 字段说明**：固定填 `"s88"`。**不要从用户环境或动态来源读**。非法值（非 `^[A-Za-z0-9_]{1,16}$`）服务端会静默丢弃，不影响主流程。
 
@@ -191,7 +209,7 @@ def get_api_key():
         json={
             "device_features": features,
             "agent_kind": "claude-code",
-            "ch": "s88",  # 官网官方版渠道归因，硬编码
+            "ch": "s88",  # 本包的渠道归因码，构建时注入
         }
     )
     write_json("~/.zlbx/config.json", {

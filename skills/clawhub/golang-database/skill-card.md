@@ -1,52 +1,70 @@
-## Description: <br>
-Comprehensive guide for Go database access: parameterized queries, struct scanning, NULLable columns, transactions, isolation levels, SELECT FOR UPDATE, connection pool, batch processing, context propagation, and migration tooling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Comprehensive guide for Go database access: parameterized queries, struct scanning, NULLable columns, transactions, isolation levels, SELECT FOR UPDATE, connection pools, batch processing, context propagation, and migration tooling.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineers use this skill when writing, reviewing, or debugging Go code that interacts with PostgreSQL, MariaDB, MySQL, or SQLite. It guides safe database access patterns, transaction handling, testing, performance review, and migration-tool selection while avoiding schema generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Generated or edited Go database code may be incorrect for a repository's schema, workload, or production constraints. <br>
-Mitigation: Review generated code before applying it and validate behavior with unit and integration tests against non-production databases. <br>
-Risk: Database integration tests or exploratory commands could affect live data if pointed at production services. <br>
-Mitigation: Keep integration tests and agent-run database tooling scoped to test databases, fixtures, or disposable containers. <br>
-Risk: Schema, index, or migration suggestions can cause performance, locking, or data integrity problems if applied blindly. <br>
-Mitigation: Use the skill's guidance to avoid generating schemas directly, route migration SQL through human review, and measure index or query changes before deployment. <br>
+## Use Case:
 
+Developers and engineers use this skill when writing, reviewing, or debugging Go code that interacts with PostgreSQL, MariaDB, MySQL, or SQLite. It helps agents produce database access guidance, Go code patterns, review findings, and testing recommendations while avoiding schema generation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/samber/golang-database) <br>
-- [Publisher profile](https://clawhub.ai/user/samber) <br>
-- [Project homepage](https://github.com/samber/cc-skills-golang) <br>
-- [Database Performance](references/performance.md) <br>
-- [Struct Scanning and NULLable Columns](references/scanning.md) <br>
-- [Testing Database Code](references/testing.md) <br>
-- [Transactions, Isolation Levels, and Locking](references/transactions.md) <br>
-- [Go database/sql tutorial](https://go.dev/doc/database/) <br>
-- [sqlx](https://github.com/jmoiron/sqlx) <br>
-- [pgx](https://github.com/jackc/pgx) <br>
-- [golang-migrate](https://github.com/golang-migrate/migrate) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Go code examples, SQL snippets, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide an agent to inspect repository patterns, edit files, run Go tooling, and launch scoped sub-agents.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Generated database code or review guidance may still contain incorrect SQL, unsafe transaction handling, or misleading assumptions about an application's data model.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated Go and SQL changes, run unit and integration tests, and verify behavior against the target database before deployment.
+
+Risk: Advice about migrations, indexes, schema design, or financial transactions can affect live data integrity and production performance.
+
+Mitigation: Require human engineering review and staging validation before applying database migrations, DDL, index changes, or high-value transaction logic.
+
+Risk: The skill can read and edit Go files and propose Go tooling commands when invoked in a repository.
+
+Mitigation: Use it in the intended Go workspace, inspect diffs and commands before applying them, and avoid connecting tests or commands to production databases.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/golang-database)
+- [ClawHub publisher profile](https://clawhub.ai/user/samber)
+- [Project homepage](https://github.com/samber/cc-skills-golang)
+- [Transactions](references/transactions.md)
+- [Testing Database Code](references/testing.md)
+- [Database Performance](references/performance.md)
+- [Struct Scanning and NULLable Columns](references/scanning.md)
+- [database/sql tutorial](https://go.dev/doc/database/)
+- [sqlx](https://github.com/jmoiron/sqlx)
+- [pgx](https://github.com/jackc/pgx)
+- [golang-migrate](https://github.com/golang-migrate/migrate)
+- [Flyway](https://flywaydb.org/)
+- [Atlas](https://atlasgo.io/)
+- [go-sqlmock](https://github.com/DATA-DOG/go-sqlmock)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with Go, SQL, JSON, and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include review findings, repository code changes, database testing patterns, and Go tooling commands.]
+
+## Skill Version(s):
+
+1.3.0 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

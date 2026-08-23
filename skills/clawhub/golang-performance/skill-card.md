@@ -1,47 +1,61 @@
-## Description: <br>
-Golang Performance helps agents diagnose Go performance bottlenecks and choose optimization patterns for allocations, CPU efficiency, memory layout, garbage collection, pooling, caching, and hot paths. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Golang performance optimization patterns and methodology - if X bottleneck, then apply Y.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineering agents use this skill when profiling or benchmarks identify a Go performance bottleneck, or when reviewing Go code for likely allocation, CPU, memory, runtime, caching, I/O, or observability improvements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Server security evidence marks the release as suspicious and advises review before enabling it outside a trusted maintainer environment. <br>
-Mitigation: Review the skill and allowed tools before installation, enable it only in trusted workspaces, and use stricter sandboxing or reduced tool authority where available. <br>
-Risk: Performance recommendations or code edits can degrade correctness, shift bottlenecks, or produce misleading gains if applied without measurement. <br>
-Mitigation: Require profiling, tests, baseline benchmarks, one change at a time, and benchstat comparison before relying on any proposed optimization. <br>
+## Use Case:
 
+Developers and engineers use this skill to review and optimize Go code after profiling or benchmarks identify a bottleneck. It helps select appropriate allocation, CPU, memory layout, runtime, caching, I/O, observability, and hot-path optimization patterns.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/samber/golang-performance) <br>
-- [Project homepage](https://github.com/samber/cc-skills-golang) <br>
-- [Caching Patterns](references/caching.md) <br>
-- [CPU Optimization](references/cpu.md) <br>
-- [I/O & Networking Optimization](references/io-networking.md) <br>
-- [Memory Optimization](references/memory.md) <br>
-- [Production Observability for Performance](references/observability.md) <br>
-- [Runtime Tuning](references/runtime.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Go code examples, shell commands, and optional YAML configuration.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Recommendations should be validated with profiling, tests, benchmarks, and benchstat comparisons before adoption.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: server release metadata and artifact frontmatter) <br>
+Risk: The skill may use benchmarks, profiling tools, Go tooling, git commands, web lookups, and code edits during optimization work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed commands and changes before applying them to production systems, and run profiling or benchmarks in a controlled environment.
+
+Risk: Performance changes can be misleading if they are made without a measured baseline or statistical comparison.
+
+Mitigation: Start from profile or benchmark evidence, change one thing at a time, and re-measure with tools such as benchstat before accepting an optimization.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/samber/skills/golang-performance)
+- [Project Homepage](https://github.com/samber/cc-skills-golang)
+- [Memory Optimization](references/memory.md)
+- [CPU Optimization](references/cpu.md)
+- [I/O & Networking Optimization](references/io-networking.md)
+- [Runtime Tuning](references/runtime.md)
+- [Caching Patterns](references/caching.md)
+- [Production Observability for Performance](references/observability.md)
+- [Prometheus Alert Rules](assets/prometheus-alerts.yml)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline code blocks and command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include benchmark comparison guidance, profiling recommendations, code edits, and configuration snippets.]
+
+## Skill Version(s):
+
+1.3.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

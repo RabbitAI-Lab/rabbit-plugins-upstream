@@ -1,52 +1,70 @@
-## Description: <br>
-Guides agents through Go benchmarking, profiling, benchmark comparison, CI regression detection, and production performance investigation using Go tools such as pprof, trace, and benchstat. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Golang benchmarking, profiling, and performance measurement for writing, running, comparing, and interpreting Go benchmarks, pprof profiles, execution traces, CI regressions, and Prometheus runtime metrics.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineers use this skill to write and run Go benchmarks, interpret profiles and traces, compare before/after performance, and set up regression checks for Go projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: pprof or trace endpoints can expose operational details when used against real services. <br>
-Mitigation: Restrict access to profiling endpoints and avoid exposing them publicly. <br>
-Risk: Profiles and traces can contain stack traces, identifiers, paths, and other sensitive operational information. <br>
-Mitigation: Review and redact captured benchmark, profile, and trace artifacts before sharing them. <br>
-Risk: Insecure TLS settings can weaken safety when collecting production performance data. <br>
-Mitigation: Use secure transport settings and avoid disabling TLS verification during profiling or metric collection. <br>
+## Use Case:
 
+Developers and engineers use this skill to create statistically sound Go benchmarks, compare optimization variants, profile CPU and memory hot paths, inspect traces, and set up benchmark regression checks. It is intended for Go projects where performance claims need measurement, reproducibility, and clear interpretation.
 
-## Reference(s): <br>
-- [Golang Benchmark on ClawHub](https://clawhub.ai/samber/golang-benchmark) <br>
-- [Publisher Profile](https://clawhub.ai/user/samber) <br>
-- [Project Homepage](https://github.com/samber/cc-skills-golang) <br>
-- [benchstat Reference](references/benchstat.md) <br>
-- [CI Benchmark Regression Detection](references/ci-regression.md) <br>
-- [Compiler Analysis Reference](references/compiler-analysis.md) <br>
-- [Investigation Session Setup](references/investigation-session.md) <br>
-- [pprof Reference](references/pprof.md) <br>
-- [Prometheus Go Runtime Metrics Reference](references/prometheus-go-metrics.md) <br>
-- [Diagnostic Tools Quick Reference](references/tools.md) <br>
-- [Execution Trace Reference](references/trace.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Go code examples, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include benchmark commands, pprof and trace workflows, benchstat interpretation, CI regression guidance, and reviewable code or configuration changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.4 (source: frontmatter and server release metadata) <br>
+Risk: Profiles, traces, goroutine dumps, and Prometheus investigation data can expose sensitive runtime behavior or application details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat diagnostic artifacts as sensitive, share them only with authorized reviewers, and store or delete them according to the project's data-handling rules.
+
+Risk: pprof and trace HTTP endpoints or browser UIs can expose diagnostics if reachable beyond the local investigation context.
+
+Mitigation: Keep pprof and trace UIs local or behind access controls, and disable temporary investigation endpoints after the session.
+
+Risk: Insecure TLS profile collection can weaken confidentiality when used against production services.
+
+Mitigation: Use verified TLS and appropriate client credentials for production diagnostics; reserve insecure TLS examples for controlled non-production environments.
+
+Risk: Privileged CPU-tuning commands for benchmark runners can affect host behavior and other workloads.
+
+Mitigation: Run sudo CPU-tuning commands only on dedicated benchmark runners administered for that purpose, and restore runner settings after measurement.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/golang-benchmark)
+- [Homepage](https://github.com/samber/cc-skills-golang)
+- [pprof Reference](references/pprof.md)
+- [benchstat Reference](references/benchstat.md)
+- [Trace Reference](references/trace.md)
+- [Diagnostic Tools Quick Reference](references/tools.md)
+- [Compiler Analysis Reference](references/compiler-analysis.md)
+- [CI Benchmark Regression Detection](references/ci-regression.md)
+- [Investigation Session Setup](references/investigation-session.md)
+- [Prometheus Go Runtime Metrics Reference](references/prometheus-go-metrics.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with Go code snippets and shell command blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose benchmark commands, profile collection steps, PromQL queries, CI configuration, and Go code changes for measurement workflows.]
+
+## Skill Version(s):
+
+1.3.0 (source: artifact frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

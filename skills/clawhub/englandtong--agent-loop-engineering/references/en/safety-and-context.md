@@ -1,64 +1,44 @@
-# Safety And Context
+# Safety And Context 2.1
+
+## Real-Path Write Boundary
+
+Resolve the workspace with `realpath`. Resolve every existing target and the nearest existing parent of every new target. Reject the operation when the relative real path escapes the workspace, including symlinks and junctions.
+
+`write_scope: "."` never authorizes a path outside the workspace. Reads of installed skill instructions or explicitly referenced public documentation do not expand write authority.
 
 ## Hard Stops
 
-Stop before:
+Stop before secrets, account sessions, production/customer data, paid resources, public/production changes, system-level installs, privilege changes, destructive or irreversible actions, protected architecture/data/stack changes, or action outside current authority.
 
-- requesting, reading, storing, or exposing secrets;
-- account login or session reuse;
-- production or non-sanitized customer data;
-- paid resources or production changes;
-- system-level installation or privileged host configuration;
-- destructive deletion, migration, overwrite, reset, force push, or history rewrite;
-- protected architecture, security policy, or technology-stack replacement;
-- action outside current authority.
+Ask for exact scope, impact, rollback, and evidence plan only when such a gate is genuinely reached.
 
-Ask for approval with exact scope, impact, rollback, and evidence plan. Record the approval source and expiry without recording secret values.
+## Project-Local Autonomy
 
-## Safe Project-Local Actions
+Unless project rules prohibit it, Bounded Autopilot may inspect files, edit authorized source/tests, install declared project dependencies, create disposable fixtures, start local development services, run project-local checks, and repair defects caused or exposed by current scope.
 
-Unless project rules prohibit them, the agent may usually:
+Do not confuse project-local dependency installation with host-wide installation.
 
-- inspect repository files;
-- edit authorized source and tests;
-- install declared project dependencies;
-- run project-local builds and tests;
-- create local fixtures and disposable test output;
-- update authorized project-local state.
+## Context Profiles
 
-Do not confuse project-local dependency installation with system-level installation.
+| Profile | Typical use | Soft ceiling |
+| --- | --- | --- |
+| `Compact` Small | narrow local behavior | 6 files / 30k characters |
+| `Compact` Medium | subsystem or important flow | 10 files / 60k characters |
+| `Compact` Large | cross-subsystem authorized work | 16 files / 100k characters |
+| `Audit` | read-only whole-project review | explicit per-audit budget |
 
-## Context Budget
+Normal execution reads the packet, current action, affected source/tests, verification config, and last three loop records. Reuse authority by fingerprint; do not reload unchanged governing files.
 
-Default read order:
+When a soft ceiling is exceeded, state the named evidence need, summarize current facts into the packet, discard duplicate output, and continue only with the smaller working set. Budget exhaustion is not completion.
 
-1. Active Packet.
-2. One current action and linked acceptance criteria.
-3. Relevant source and tests.
-4. Verification config.
-5. Last three to five loop records.
+## Tool Output
 
-Do not read all historical logs or Milestones unless debugging drift or state inconsistency.
-
-Keep:
-
-- Active Packet under roughly 200 lines;
-- current context summary under roughly 40 lines;
-- one immediate next action;
-- command summaries short, with paths to raw logs.
-
-Stop as `Blocked` or `Invalid State` when the required context cannot be made coherent within budget.
+- Use quiet reporters where trustworthy.
+- Record full output to disposable evidence only when required.
+- Return concise success summaries.
+- Return the useful failure tail, not thousands of repeated warnings.
+- Aggregate validation findings by code; expand with `--strict-history` only for migration audits.
 
 ## Persistent Data
 
-Never store:
-
-- secrets or environment values;
-- private customer data;
-- full private documents;
-- full chat transcripts;
-- hidden reasoning;
-- large logs;
-- unnecessary machine-specific paths.
-
-Store evidence references and concise observable summaries.
+Never store secrets, private customer data, full private documents, transcripts, hidden reasoning, full command logs, or unnecessary absolute machine paths. Store evidence references, hashes, concise observable summaries, and optional usage metrics exposed by the platform.

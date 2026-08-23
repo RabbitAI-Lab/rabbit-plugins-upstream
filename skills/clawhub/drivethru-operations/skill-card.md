@@ -1,44 +1,61 @@
-## Description: <br>
-Internal operations agent for the purchasing-to-manufacturing-to-shipping side of Odoo ERP over the `drivethru_mcp` MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Drivethru Operations helps internal teams query, analyze, and coordinate purchasing, manufacturing, inventory, receiving, shipping, replenishment, and accounts-payable workflows in Odoo through the drivethru_mcp MCP server.
 
-## Publisher: <br>
-[zmtucker](https://clawhub.ai/user/zmtucker) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zmtucker](https://clawhub.ai/user/zmtucker)
 
-## Use Case: <br>
-Operations employees use this skill to query and analyze purchase orders, receipts, shipments, inventory moves, replenishment, and manufacturing records in Odoo. It also supports scheduled Drive Thru routine reports and guarded purchasing, stock, pricing, and vendor-bill workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authenticated Odoo MCP access can make live ERP changes, including purchase order, stock, pricing, and vendor-bill updates. <br>
-Mitigation: Connect only to a tightly scoped Odoo MCP server, limit the token to intended Odoo roles, and require human approval before any write action. <br>
-Risk: Incorrect operations queries can produce misleading counts, totals, or lists for purchasing, inventory, and manufacturing decisions. <br>
-Mitigation: Use the self-describing field dictionary, report counts from `total_matched` or server-side aggregates, and include the query method next to reported numbers. <br>
+## Use Case:
 
+Employees and operations teams use this skill to answer Odoo Discuss questions and scheduled routine prompts about purchase orders, receipts, deliveries, inventory, manufacturing, replenishment, and vendor billing. It supports read-only analysis by default and can guide live ERP write workflows when a human gives explicit approval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zmtucker/skills/drivethru-operations) <br>
-- [Odoo](https://www.odoo.com) <br>
-- [Operations field reference](references/field_reference.md) <br>
-- [Operations query patterns](references/query_patterns.md) <br>
-- [Drive Thru routine guide](references/routines.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with JSON tool results and inline shell commands when invoking the MCP helper] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires `ODOO_MCP_URL`, `ODOO_MCP_TOKEN`, `python3`, and the `mcp>=1.9.0` Python package.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can invoke live Odoo write tools, including purchasing, stock, replenishment, and vendor-bill actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privilege Odoo MCP token scoped to the intended company, user role, and operations tools, and require explicit human approval before any write action.
+
+Risk: The MCP token grants ERP access and is sent as a bearer credential.
+
+Mitigation: Provide credentials only through ODOO_MCP_URL and ODOO_MCP_TOKEN environment variables, keep the token out of chat and logs, and rotate it if exposure is suspected.
+
+Risk: A broad MCP call interface may expose more tools than this operations workflow needs.
+
+Mitigation: Confirm the MCP server exposes only approved tools before installation and remove administrator or accounting permissions unless they are required for the release.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zmtucker/skills/drivethru-operations)
+- [Odoo](https://www.odoo.com)
+- [Operations field reference](references/field_reference.md)
+- [Operations query patterns](references/query_patterns.md)
+- [Drive Thru routines](references/routines.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown responses with JSON tool-call arguments, shell command snippets, and concise operational reports.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses ODOO_MCP_URL and ODOO_MCP_TOKEN for MCP access; tool results are JSON; write actions require explicit human approval.]
+
+## Skill Version(s):
+
+0.5.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

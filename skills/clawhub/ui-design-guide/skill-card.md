@@ -1,39 +1,53 @@
-## Description: <br>
-Use when users need visual direction, interface hierarchy, layout decisions, design specifications, or prototypes before implementing a Web or mini program UI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when users need visual direction, interface hierarchy, layout decisions, design specifications, or prototypes before implementing a Web or mini program UI.
 
-## Publisher: <br>
-[binggg](https://clawhub.ai/user/binggg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[binggg](https://clawhub.ai/user/binggg)
 
-## Use Case: <br>
-Developers and design-oriented coding agents use this skill to plan visual direction, interface hierarchy, layout, typography, color, and prototype implementation for web or mini program UIs before writing interface code. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can steer generated UIs toward specific aesthetics, fonts, icon libraries, and external media sources that may not fit a project's brand, licensing, accessibility, or delivery constraints. <br>
-Mitigation: Review generated UI choices against project brand rules, license requirements, accessibility standards, and implementation constraints before accepting code. <br>
+## Use Case:
 
+Developers and design-focused agents use this skill to establish visual direction, hierarchy, layout, typography, and styling decisions before creating Web or mini program interfaces.
 
-## Reference(s): <br>
-- [UI Design Activation Checklist](checklist.md) <br>
-- [ClawHub skill page](https://clawhub.ai/binggg/skills/ui-design-guide) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands] <br>
-**Output Format:** [Markdown guidance with design specifications, implementation recommendations, code examples, and self-audit shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Steers generated UI work toward explicit aesthetic choices, professional icon libraries, real media assets, and pre-submission design audits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.18.14 (source: server release metadata) <br>
+Risk: Remote UI asset downloads may retrieve untrusted files or contact private or internal hosts if an agent follows arbitrary asset URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each asset URL before download, avoid private or internal hosts, prefer HTTPS sources you trust, and check file type and size before using the asset.
+
+Risk: Design and implementation guidance may introduce unsuitable UI choices or commands into a project if accepted without review.
+
+Mitigation: Review generated design specifications, code, and shell commands before applying them, especially when they alter project assets or styling conventions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/binggg/skills/ui-design-guide)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands]
+
+**Output Format:** [Markdown guidance with optional code and shell command blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include design specifications, UI audit checks, and prototype implementation guidance.]
+
+## Skill Version(s):
+
+1.18.37 (source: server release metadata); artifact frontmatter reports 2.31.0
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

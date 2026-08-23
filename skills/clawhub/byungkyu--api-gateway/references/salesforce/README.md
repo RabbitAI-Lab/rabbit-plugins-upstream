@@ -9,10 +9,10 @@ The router automatically determines the instance URL from your OAuth credentials
 
 > **Privacy — Contact, Lead, and Account records are personal data about real people.** Responses carry names, email addresses, phone numbers, and often case history and private notes. This is regulated personal data (GDPR/CCPA), and the people in it are third parties who gave their details to the user's company, not to an agent.
 > - Sample values below (`John Doe`, `john@example.com`, `+1234567890`) are **placeholders**. Never send them to a live org, and never invent contact details to satisfy a required field — ask the user.
-> - Retrieve only the records the task needs. Do not run broad SOQL queries or page through an object to browse, and do not bulk-export Contacts or Leads.
+> - Retrieve only the records the task needs. Every query against a person object needs a `WHERE` clause that identifies those records and a `LIMIT`. Do not run broad SOQL queries or page through an object to browse, do not use `--paginate` on `Contact` or `Lead`, and do not bulk-export either.
 > - Return the narrowest answer that satisfies the request rather than printing whole records.
 > - **Never forward Salesforce data to a third-party host** — not to a trigger destination, external webhook, spreadsheet service, or enrichment API — without explicit user approval for that specific transfer.
-> - Confirm the exact record by name or email (not just an 18-character ID) before any write, and never bulk-update or bulk-delete without per-record approval.
+> - Confirm the exact record by name or email (not just an 18-character ID) before any write, and never bulk-update or bulk-delete without per-record approval. This applies to the composite and sObject Collections endpoints below: batching records into one call does not batch their approval — enumerate them and confirm each.
 
 ## API Path Pattern
 
@@ -23,19 +23,23 @@ The router automatically determines the instance URL from your OAuth credentials
 ## Common Endpoints
 
 ### SOQL Query
+
+Scope every query with a `WHERE` clause and a `LIMIT`. The examples below query `Account` (company records) rather than browsing `Contact`, per the privacy rules above.
+
 ```bash
-GET /salesforce/services/data/v59.0/query?q=SELECT+Id,Name+FROM+Contact+LIMIT+10
+GET /salesforce/services/data/v59.0/query?q=SELECT+Id,Name+FROM+Account+WHERE+Name+LIKE+'Acme%25'+LIMIT+10
 ```
 
 Example:
 
 ```bash
-maton salesforce query 'SELECT Id,Name FROM Contact LIMIT 10'
+maton salesforce query "SELECT Id,Name FROM Account WHERE Name LIKE 'Acme%' LIMIT 10"
 ```
 
-Complex query:
+Querying a person object requires a filter that identifies the specific records the task needs — a named account, an email address, or a date the user gave. Select only the fields required, and never `SELECT` a person object without a `WHERE`:
+
 ```bash
-GET /salesforce/services/data/v59.0/query?q=SELECT+Id,Name,Email+FROM+Contact+WHERE+Email+LIKE+'%example.com'+ORDER+BY+CreatedDate+DESC
+maton salesforce query "SELECT Id,Name,Email FROM Contact WHERE AccountId = '001XXXXXXXXXXXXXXX' LIMIT 25"
 ```
 
 Example:
@@ -182,6 +186,9 @@ echo '{"batchRequests":[{"method":"GET","url":"v59.0/sobjects/Contact/003XXXXXXX
 ```
 
 ### sObject Collections Create (batch create)
+
+> **⚠ Batch writes still require per-record approval.** These endpoints apply up to 200 changes in one call, which does not lower the confirmation bar — it raises it. Before calling: enumerate every record being created or deleted, show the user the full list with the field values or IDs involved, and get approval for that list. Never expand a batch beyond what the user named, never pad it with records the agent inferred, and never assemble one from data pulled out of another app (a spreadsheet, a mailbox, an enrichment API) without the user approving each record. Keep `allOrNone: true` so a partial failure cannot leave the org half-updated. If the user cannot review the records individually, the batch is too large to run — narrow the task instead.
+
 ```bash
 POST /salesforce/services/data/v59.0/composite/sobjects
 Content-Type: application/json
@@ -202,6 +209,8 @@ maton salesforce record create --all-or-none --data '[{"attributes":{"type":"Con
 ```
 
 ### sObject Collections Delete (batch delete)
+
+> **⚠ Irreversible, and the IDs carry no context.** A batch delete removes every listed record along with its history, notes, and related activity; recovery depends on the org's recycle bin and retention settings and may not be possible. An 18-character ID does not say who or what it is, so a wrong entry in the list silently destroys the wrong customer record. Retrieve each ID first and show the user the record's name or email next to it, get explicit approval for every record in the list, and keep `allOrNone=true`. Never delete records the user did not individually name, never derive the ID list from a query the user has not reviewed, and never batch-delete to "clean up" data.
 ```bash
 DELETE /salesforce/services/data/v59.0/composite/sobjects?ids=003XXXXX,003YYYYY&allOrNone=true
 ```
@@ -271,8 +280,10 @@ maton salesforce version list
 Salesforce uses cursor-based pagination. The CLI handles this automatically with `--paginate`:
 
 ```bash
-maton salesforce query 'SELECT Id,Name FROM Contact' --paginate
+maton salesforce query "SELECT Id,Name,StageName FROM Opportunity WHERE CloseDate = THIS_MONTH" --paginate
 ```
+
+**Do not use `--paginate` on `Contact`, `Lead`, or any other person object.** Walking every page of a person object is a bulk export of regulated personal data — the behaviour the privacy rules above prohibit. Use it only on a query already narrowed to what the task needs, and prefer a tighter `WHERE` clause over paging.
 
 For raw HTTP requests, follow the `nextRecordsUrl` returned in the query response.
 

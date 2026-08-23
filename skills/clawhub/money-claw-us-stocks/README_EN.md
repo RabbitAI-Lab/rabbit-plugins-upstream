@@ -2,7 +2,7 @@
 
 [中文](README.md)
 
-> **Stop chasing premarket leaderboards by instinct. Install Money Claw and turn unusual moves into a verifiable, repeatable, and executable quantitative workflow.**
+> **Stop chasing premarket or after-hours leaderboards by instinct. Install Money Claw and turn unusual moves into a verifiable, repeatable, and executable quantitative workflow.**
 
 [Install Now](#installation) · [Try the Prompts](#usage-examples) · [Purchase a Custom Quant SKILL](#purchase-a-custom-quant-skill)
 
@@ -10,9 +10,20 @@
 
 > **Legal notice:** The public edition and all custom development are limited to general-purpose software, data processing, and quantitative research tools. They do not provide personalized stock recommendations, securities or futures advice, brokerage, custody, discretionary management, or automated trading on a client's behalf.
 
-A Codex SKILL for U.S. low-float, low-priced, and extreme-squeeze stocks. It starts with premarket movers, then validates share supply, baseline liquidity, premarket quality, the official opening gap, VWAP, turnover, halts, and dilution risk before producing an executable watchlist and risk checklist.
+A Codex SKILL for U.S. low-float, low-priced, and extreme-squeeze stocks. It starts with premarket or after-hours movers, then validates share supply, catalyst quality, baseline liquidity, gaps, VWAP, turnover, halts, and dilution risk before producing an executable watchlist and risk checklist.
 
 The model researches and screens extreme events that may reach a `+500%` intraday high. It does not predict guaranteed returns.
+
+## Built for Asia-Pacific Users
+
+Money Claw primarily serves investors and traders in Asia-Pacific countries who follow U.S.-listed
+stocks overnight or alongside their local session. English is the default delivery language unless
+the user requests another language.
+
+All market-event timestamps use U.S. Eastern Time (ET) as the primary reference. When a user provides
+an Asia-Pacific location or time zone, the workflow also reports the corresponding local date and time.
+It never assumes that one Asia-Pacific time zone applies to all users. Original issuer-news and SEC
+titles, URLs, and filing labels remain in English.
 
 ## Research Cases
 
@@ -22,9 +33,22 @@ The workflow has covered the following extreme-move cases in historical research
 
 These tickers validate the model across different price-volume paths. They were not necessarily all identified as live pre-event calls, and they do not imply future returns. Exact research definitions remain in the internal references; this README intentionally omits per-stock dates and performance figures.
 
+## After-Hours Discovery Routes: FGI, GXAI, and Issuer News
+
+The after-hours leaderboard is a next-session discovery layer, not a direct buy signal. The workflow separates candidates into three auditable routes:
+
+- `AFTER_HOURS_EARNINGS`: a GXAI-style route requiring verifiable earnings support or an official company disclosure.
+- `AFTER_HOURS_OFFICIAL_NEWS`: a dated original release posted on the issuer's website, IR page, or newsroom. It records the URL, title, time, and factual category; it is an order catalyst only when customer, contract, value/term, or revenue facts are disclosed.
+- `AFTER_HOURS_LOW_SUPPLY`: an FGI-style route requiring verified low total shares/float and no unresolved ATM, registered resale, warrant, PIPE, equity-line, or other supply overhang.
+
+> **FGI case review:** The user reports that Money Claw identified FGI from the after-hours leaderboard and that the subsequent trade was profitable. In the user-provided point-in-time screenshot, FGI showed approximately `1.931 million` total shares and a gain of about `+147.78%`, illustrating the research value of the “after-hours move + tight supply + next-session confirmation” route. This user-reported case is not independently audited and is provided only to explain the workflow. It is not a typical result or a pre-trade performance promise, and it is not indicative of future performance.
+
+FGI and GXAI support the same principle: the leaderboard is only the entry point. The reusable edge is “catalyst/supply explanation → liquidity gates → next-session premarket and opening revalidation.” A qualified after-hours candidate can receive at most `WATCH`, never an immediate `EXECUTE`.
+A fresh official release may be a verified catalyst even before an 8-K appears. However, strategy, relaunch, or partnership language without order facts receives `OFFICIAL_NEWS_NOT_ORDER`; it must not be described as a new-order signal. Positive website news never overrides confirmed SEC supply risk.
+
 ## Why Install It
 
-- **Reduce screening noise**: convert the premarket leaderboard into structural, event, and execution layers.
+- **Reduce screening noise**: convert premarket and after-hours leaderboards into structural, event, and execution layers.
 - **Reject vague signals**: return `WAIT_DATA` instead of guessing float, gap, VWAP, or dilution fields.
 - **Get a consistent model state**: standardize every candidate as `EXECUTE`, `WAIT_OPEN`, `WAIT_DATA`, `WATCH`, or `EXCLUDE`; these are quantitative gate labels, not personalized trading advice.
 - **Reuse it at scale**: analyze screenshots and live quotes with Codex or batch-score CSV/JSON universes with Python.
@@ -36,9 +60,13 @@ If you manually scan premarket movers, verify share counts, read filings, and ca
 
 ```mermaid
 flowchart LR
-    A["Market universe / premarket movers"] --> B["Security type and point-in-time data"]
+    A["Market universe / premarket and after-hours movers"] --> B["Security type and point-in-time data"]
     B --> C["Low price + low baseline liquidity + tight supply"]
-    C --> D["Premarket gap, turnover, spread, and fade"]
+    C --> AH{"After-hours candidate?"}
+    AH -->|"Yes"| AR["Earnings / issuer official news / verified tight supply"]
+    AR --> AW["WATCH: revalidate next session"]
+    AW --> D["Premarket gap, turnover, spread, and fade"]
+    AH -->|"No"| D
     D --> E{"Official-open path"}
     E -->|"Gap ≥ 100%"| F["Conventional Gap"]
     E -->|"Gap < 20% + warm-up"| G["CPHI Subtype"]
@@ -52,7 +80,7 @@ The model separates three layers:
 
 1. **Structural candidate**: prior close of `$0.30–$5.00`, 20-day median dollar volume no higher than `$1.00m`, and low float or total shares.
 2. **Event confirmation**: premarket strength, official opening gap, supply turnover, and VWAP structure.
-3. **Executable trade**: first-five-minute structure, spread, halt status, and dilution overhang must all pass.
+3. **Executable trade**: first-five-minute structure, spread, halt status, and the premarket share-supply review must all pass; confirmed supply risk is an immediate `EXCLUDE`.
 
 Core formulas:
 
@@ -63,6 +91,10 @@ pre_turnover      = pre_volume / supply_shares
 regular_turnover  = regular_volume / supply_shares
 spread_pct        = (ask - bid) / ((ask + bid) / 2) * 100
 pre_high_fade_pct = (pre_price / pre_high - 1) * 100
+after_gap_pct      = (after_price / regular_close - 1) * 100
+after_turnover     = after_volume / supply_shares
+after_spread_pct   = (after_ask - after_bid) / ((after_ask + after_bid) / 2) * 100
+after_high_fade_pct= (after_price / after_high - 1) * 100
 ```
 
 ## Installation
@@ -95,6 +127,15 @@ Use $money-claw-us-stocks to evaluate a halted intraday mover and provide resump
 ```
 
 ```text
+Use $money-claw-us-stocks to analyze today's after-hours leaderboard, separate earnings-supported and tight-supply routes, exclude new supply risk, and build a next-session revalidation checklist.
+```
+
+```text
+Use $money-claw-us-stocks to reconcile today's issuer newsroom releases with SEC filings, classify
+the catalyst, and distinguish a verified order from a strategy-only announcement.
+```
+
+```text
 使用 $money-claw-us-stocks 分析今天盘前涨幅榜，筛选暴涨候选并给出开盘确认清单。
 ```
 
@@ -111,13 +152,16 @@ Primary inputs include:
 
 - Structure: `security_type`, `listed_days`, `prev_close`, `float_shares`, `total_shares`, `median_dollar_volume_20`
 - Premarket: `pre_price`, `pre_high`, `pre_volume`, `bid`, `ask`
+- After-hours: `regular_close`, `after_price`, `after_high`, `after_volume`, `after_bid`, `after_ask`, `after_hours_catalyst_quality`, `after_hours_supply_thesis`
+- Official issuer news: `issuer_news_status`, `issuer_news_checked_at`, `issuer_news_title`, `issuer_news_published_at`, `issuer_news_url`, `issuer_news_type`, `issuer_news_materiality`
 - Open: `open_price`, `last_price`, `regular_volume`, `vwap`, `first_5m_structure`
 - CPHI path: `prior_abnormal_volume_warmup`, `turnover_expanding`
-- Risk: `split_today`, `post_split`, `halted`, `dilution_overhang`
+- Risk: `split_today`, `post_split`, `halted`, `dilution_overhang`, `premarket_supply_risk`, and `supply_risk_type/source/checked_at`
 
 Additional JSON output:
 
-- `path_type`: `CONVENTIONAL_GAP`, `CPHI_SUBTYPE`, or `NONE`
+- `path_type`: `CONVENTIONAL_GAP`, `CPHI_SUBTYPE`, `AFTER_HOURS_EARNINGS`, `AFTER_HOURS_OFFICIAL_NEWS`, `AFTER_HOURS_LOW_SUPPLY`, or `NONE`
+- `official_issuer_news`: ET verification window, title, published time, original URL, factual category, and order-evidence status
 - `risk_flags`: halt, dilution, post-split, supply proxy, and missing-data risks
 - `evidence_score`: an evidence score, not a probability forecast
 
@@ -128,8 +172,8 @@ Additional JSON output:
 | `EXECUTE` | Quantitative gates are confirmed; this is not a buy recommendation or order instruction |
 | `WAIT_OPEN` | Strong premarket candidate awaiting the official open |
 | `WAIT_DATA` | Required fields are missing |
-| `WATCH` | Partial match, failed execution gate, or active halt |
-| `EXCLUDE` | Security type, same-day split, structure, or event-strength gate failed |
+| `WATCH` | Partial match, failed execution gate, active halt, or a confirmed after-hours route awaiting next-session revalidation |
+| `EXCLUDE` | Security type, same-day split, structure/event-strength failure, or confirmed premarket share-supply risk |
 
 ## Risk Controls
 

@@ -1,11 +1,15 @@
 ---
 name: magicpay
-description: Handle approved login, identity, checkout, donation, subscription,
-  payment pages, and typed action approvals through the magicpay CLI.
-homepage: https://www.npmjs.com/package/@mercuryo-ai/magicpay-cli
+description: MagicPay handles first-time setup, exact balance checks, crypto
+  transfers and reconciliation, plus approved login, identity, checkout,
+  donation, subscription, and payment workflows. It applies when a task needs
+  protected Memory, payment operations, or approval; an open-ended purchase or
+  booking without a checkout URL routes through MagicSearch before browser
+  navigation or generic web search.
+homepage: https://www.npmjs.com/package/@nuanu-ai/magicpay-cli
 metadata:
   openclaw:
-    homepage: https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/openclaw/marketplace/README.md
+    homepage: https://github.com/nuanu-ai/skills/blob/main/docs/magicpay/openclaw/marketplace/README.md
     requires:
       bins:
         - magicpay
@@ -13,45 +17,294 @@ metadata:
     install:
       - id: npm
         kind: node
-        package: "@mercuryo-ai/magicpay-cli@latest"
+        package: "@nuanu-ai/magicpay-cli@latest"
         bins:
           - magicpay
         label: Install MagicPay CLI (npm)
 ---
 
-MagicPay is for approved product workflows that need stored user data and
-explicit approval on a login, identity, checkout, donation, subscription,
-payment, or other sensitive page. A MagicPay product workflow session is the
-parent. Browser launch or attach happens after `magicpay start-session` and is
-recorded as a child resource inside that active session.
+<!-- magicpay-continuation-contract:v1 -->
+MagicPay is your gateway to the agentic economy.
+It gives an AI agent one unified balance that users top up and spend through
+supported agent-native and traditional payment rails: x402, crypto transfers,
+MagicCard/card payments, and online checkout. MagicPay handles supported
+provider inventory, conversion, and settlement behind the scenes instead of
+making users manage a separate wallet or network balance per payment.
+Protected payment and identity details stay outside chat and the model prompt. The agent
+asks the user to approve the exact consequential action; approval is permission,
+and success requires confirmed terminal settlement. Memory `plan-fill` and
+`apply-fill` bring approved saved values to forms without exposing raw values.
 
-Stored values come from user-approved MagicPay Memory items — logins,
-identities, payment cards, wallets, and reusable profile fields that the user
-saved earlier. This skill's job is to bring those approved values to the
-current form through Memory `plan-fill` and `apply-fill` without raw values
-passing through the LLM prompt. MagicPay hides stored raw values from the
-calling model; it does **not** make an untrusted runtime safe. If the browser,
-OS, or shell is compromised, MagicPay alone does not protect against that.
+Terms are fixed: request means a user-owned wait state; approval means permission for one consequential action;
+field means a page input; session means a
+product-level run; workflow means an ordered procedure. Exact names stay unchanged.
 
-MagicPay also cannot protect secrets that the user already typed into the
-agent chat. The safest path is to use saved MagicPay Memory or a MagicPay
-request path that keeps raw values out of the agent prompt.
+For open-ended purchase or booking discovery, default to MagicSearch. Use a safe
+alternative only when unavailable, blocked, or empty. For ordinary navigation,
+use the owner of the bound browser; switch only when it cannot continue.
 
-Use this skill when the remaining product work is to:
+For failures, use the statuses reference and its troubleshooting table.
+Unfamiliar terms (`itemRef`, `fieldRef`, `targetRef`, `session_stop`, etc.) are
+defined in their references.
 
-- preflight MagicPay status and configuration;
-- start or continue a product workflow session with `start-session`;
-- launch or attach an approved browser inside that active session;
-- plan Memory field fill from the current page with `magicpay plan-fill`;
-- apply the active Memory fill plan with `magicpay apply-fill`;
-- recover a missed or wrongly targeted field with `magicpay fill-field`;
-- run sensitive actions through the same request model after explicit approval;
-- recover from a confirmed CAPTCHA on the current browser child with
-  `solve-captcha`.
+## References
 
-MagicPay works best as a focused companion to a browsing tool. It owns the
-protected product workflow; the browser is only the execution resource used
-inside that workflow.
+Open an extra reference only when it helps:
+
+- [references/commands.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicpay/references/commands.md)
+- [references/guardrails.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicpay/references/guardrails.md)
+- [references/payment-operations.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicpay/references/payment-operations.md)
+- [references/setup.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicpay/references/setup.md)
+- [references/statuses.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicpay/references/statuses.md)
+- [references/workflow.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicpay/references/workflow.md)
+
+## Native Payment Operations
+
+For exact balances, funding, crypto sends, x402 resources, status, results, or reconciliation, follow [references/payment-operations.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicpay/references/payment-operations.md). Keep one session, idempotency key, and operation; approval is permission, reservation is in flight, and only `completed` is settlement.
+
+Keep hosted links and direct addresses separate: generic top-up and link requests use only
+`magicpay top-up-link`; available direct methods use `magicpay top-up-address`, and one USDT/USDC address adds `--asset <symbol>`.
+Run both only when explicitly requested; presentation and retry rules are in the commands reference.
+
+## Core Flow
+<!-- magicpay-continuation:v1 id=core-flow-plan-apply action=plan-apply -->
+After `magicpay plan-fill`, execute its exact returned `applyCommand`.
+<!-- /magicpay-continuation:v1 -->
+A known x402 resource URL uses Native Payment Operations: skip MagicSearch and never launch, attach, or commit a browser; bind `x402-purchase` to one payment intent session instead. Contract with a usable destination that is ordinary non-x402: `status → start-session → (launch [url] | attach <cdp-url>) → plan-fill → returned applyCommand → [typed approval] → end-session`.
+For a purchase or booking intent with no usable destination, run `magicsearch query`; keep currency inside the refined prompt and never add `--currency`. Resolve any actual purchase choice before `magicpay start-session`; use the selected URL in the product workflow. Retain the workflow's active-session exception for `magicsearch discover` provider execution. For other MagicPay work, do not invoke MagicSearch; run `magicpay start-session` before browser preparation.
+Page work between MagicPay steps stays with the page-control owner.
+
+### 1. Preflight
+
+Preflight with `magicpay status`. If it reports a missing key, a
+   `cliUpdate`, or still fails after `init` (in which case run
+   `magicpay doctor`), follow the recovery rules in the workflow reference.
+
+If `magicpay status` reports the CLI is not configured, read the setup
+reference and complete setup first.
+
+For an explicitly selected branch or preview project, also run `magicpay doctor` before starting a session. Compare the `status`/`doctor` API URL and doctor executable/build provenance with the requested project and local build; a matching package version alone is insufficient. If either does not match, do not start the protected workflow—repair the profile or installation first.
+
+### 2. Start the product workflow
+
+With a known x402 resource URL, follow Native Payment Operations without MagicSearch or a browser. With a usable checkout or booking URL that is ordinary non-x402, skip MagicSearch and run `magicpay start-session [name]` directly.
+   For a purchase or booking intent with no usable destination, follow Purchase Discovery With MagicSearch first; keep currency inside the refined prompt and never add `--currency`. Its provider-execution exception explains when `magicsearch discover` needs an active session. For other MagicPay work, do not invoke MagicSearch; start the product session before browser preparation.
+   Starting the product workflow creates its session and telemetry root before any browser child is required.
+### 3. Bind a browser (optional)
+
+Bind a browser inside the active product workflow:
+   - run `magicpay launch [url]` when the flow has not started in a browser
+     yet; the new child is the browser for the whole flow, and the `launch`
+     result includes the child's `cdpUrl` so a page-control tool can
+     drive the same browser (for example `magicbrowse attach <cdpUrl>`);
+   - run `magicpay attach <cdp-url>` when the page was already prepared in a
+     CDP-reachable browser: your own page-control session, or a private
+     browser the user approved for this task. `launch` cannot adopt a page
+     prepared elsewhere;
+     if that already-open page is not CDP-reachable, keep the destination URL unknown and ask for the actual approved CDP endpoint or actual page URL; never write or launch a sample URL;
+   - re-attach only when the endpoint changed or the browser child binding
+     needs refresh.
+   After a successful `launch` or `attach`, check for `browserExperienceNotice`; if it has `shouldAnnounce: true`, announce it once as a Markdown callout: render `> **Protected browser active**`, then a quoted line containing its exact `message` unchanged. Continue immediately without asking for confirmation. When absent, do not invent or repeat a beta notice.
+### 4. Resolve a confirmed CAPTCHA (optional)
+
+If a real CAPTCHA is confirmed on the current bound browser page, run `magicpay solve-captcha [--timeout <s>]` directly without calling `magicpay commit` to confirm it.
+   - **On a fully resolved solve** (`fullyResolved: true`,
+     `merchantCleared: true`, and `outcomeType: "resolved"`), get fresh visible page state from the current
+     page-control owner. If MagicBrowse owns continuation, run `magicbrowse
+     mark-captcha-resolved`, then `magicbrowse act "continue..."`, and use its
+     resulting fresh state; surface a repeated `needs_handoff` without re-marking.
+     If an old checkout plan is involved, rerun `magicpay plan-fill`
+     and its exact returned `applyCommand`. Do not invent or run a page-state
+     CLI such as `magicbrowse get-page-state`; that command is not documented.
+     Obtain fresh visible state only through the existing page-control owner's
+     documented continuation. No `magicpay observe` command is documented in
+     this bundle.
+     CAPTCHA clearance alone does not authorize `magicpay commit`; commit only
+     at the normal matching-approval and current-live-facts boundary.
+   - **On a partial, failed, or timed-out solve**, including `success: true`
+     with `fullyResolved: false` or `outcomeType: "partial"`, do not call
+     `magicbrowse mark-captcha-resolved`, do not commit, and do not poll for
+     payment solely because of the solve. Surface the unresolved challenge to
+     the user. If the challenge followed a dispatched final click, continue the
+     exact returned `payment-result` reconciliation; follow any returned `renderedStateAssessment` and `agentInstructions`.
+     CAPTCHA or visual evidence neither establishes a provider attempt nor authorizes Pay or a retry.
+     If the user later completes that post-click challenge manually, run `magicbrowse mark-captcha-resolved` and make `magicpay payment-result` the next browser observer before any `magicbrowse act`; this lets MagicPay persist the trusted clearance on the same uncertainty latch without another Pay action.
+### 5. Plan the Memory fill
+
+Plan the Memory fill: `magicpay plan-fill`. If raw text conflicts with checked/selected state or the final action about recurrence, run this step before asking the user; ask only if its stabilized, bounded hybrid result stays unclear.
+<!-- magicpay-continuation:v1 id=core-plan-apply action=plan-apply -->
+After `magicpay plan-fill`, execute its exact returned `applyCommand`.
+<!-- /magicpay-continuation:v1 -->
+   If the planner needs context, pass a short human-readable `--planner-hint <text>`. Do not pass page targets, target matches, Memory
+   catalogs, raw values, materializers, or browser writers.
+   If the plan output says `nextAction: "apply-fill"` or includes
+   `memoryRequestHandoff.status: "requires_apply_fill"`, the returned command is
+   required. Run exactly the returned `applyCommand` immediately. Do not
+   summarize missing passenger, contact,
+   login, identity, or payment Memory to the user until `apply-fill` has had a
+   chance to create a secure `requestUrl`.
+   - If the returned plan has a non-blocking blocker
+     `payment_card.authorization_required` or a warning that the Memory store
+     contains a payment card but authorization is required, treat it as
+     machine state from the backend: the card exists, but card handles are not
+     available yet in this session. That advisory alone must not trigger card authorization. Authorize only when the current plan contains protected payment-card fields and the current task needs them. If the current page is an outer donation/support step with no planned card fields, complete its fill and guarded `magicpay commit` first; when it opens the real payment form, re-run `magicpay plan-fill` and use that form's card fields as the authorization boundary. Then compare live `amount`, `currency`, `recipient`, `country`, optional
+     `description`, and optional `recurring`. Keep missing live facts unknown.
+     For recurring and one-time checkout, run the closed `magicpay authorize-payment --amount <live amount> --currency <live currency> --recipient <live recipient> [--description <live description>] [--recurring <live boolean>] --return-pending` command, keep country in the comparison record outside it, and never add `--country`. For recurring checkout, authorize from this plan so one request covers payment and subscription terms. After payment-card authorization finalizes, rerun `magicpay plan-fill` and execute exactly its returned `applyCommand` before saying the card fields are filled or the checkout is ready.
+### 6. Execute the returned fill command
+
+Never write, show, or execute a hand-written or sample `magicpay apply-fill`, `magicpay wait-request`, or `magicpay wait-memory`; run only the exact returned `applyCommand`, `pollCommand`, or `resumeCommand` for the active identity.
+   MagicPay refreshes the page state, materializes approved Memory values, and
+   fills only planned fields through the browser bridge. It does not click Pay,
+   Book, Send, Submit, or other final commitment controls.
+   - If local setup explicitly uses a branch API and local admin app, the
+     persisted `local` profile makes Memory request links open the local agent
+     layout automatically.
+   - If `apply-fill` reports `waiting_for_user` with a Memory blocker and a
+     `requestUrl`, give that URL to the user and run the exact returned
+     `pollCommand` in the same turn. Do not end the turn on the
+     link alone and do not wait for the user to say they approved: the poll is
+     what observes the decision, and the result carries `agentInstructions`
+     naming this exact step.
+     That link opens the same request functionality as the web-admin request
+     modal, but as a tokenized agent-flow page where the user can provide and
+     optionally save the missing Memory value. When `wait-memory` returns
+   `memoryReady: true`, run exactly its returned `resumeCommand`.
+<!-- magicpay-continuation:v1 id=core-memory-poll-resume action=poll-before-resume -->
+Run exactly the returned `pollCommand` before exactly the returned `resumeCommand`.
+<!-- /magicpay-continuation:v1 -->
+   - For `pendingAction.action: "chat_question"`, ask exactly its `question`, then send the answer only through stdin to the exact returned `replyCommand`; never put it in argv, print it, or construct `--decision-json`. The command maps, submits with `save:false`, claims, and resumes.
+   - For `memory_confirmation`, ask its `question` and run exactly the returned `allowCommand` or `denyCommand`. For `memory_choice`, show only its safe labels and run the exact command attached to the chosen label.
+   - Payment-card availability never uses Memory. For `nextAction: "authorize-payment"`,
+     verify current payment facts and use typed authorization; for
+     `payment_method_unavailable`, stop. Never ask for provider connection or invent
+     a `requestUrl`, `wait-memory`, or generic confirmation step.
+   - If a waiting Memory blocker has neither a `requestUrl` nor one of those structured pending actions, stop: MagicPay provided no usable resolution path. Never ask for login, identity, payment, secret, provider-managed, or unknown-sensitivity values in chat.
+### 7. Recover a missed field (optional)
+
+If a visible field is still empty because the plan missed it or targeted
+   the wrong field, follow the Fill Recovery Ladder. Use
+   `magicpay fill-field --field-ref <fieldRef> --target <target>` only with
+   value-free Memory refs and a currently observed target id; never pass raw
+   values or use it as a replacement for `plan-fill`.
+### 8. Continue page work and seek typed approval (optional)
+
+Continue with the page-control owner from the filled page. Ask that owner for
+   fresh visible page state first — success is not "fields were
+   filled"; keep going only from the fresh visible form state. When native
+   page-control is available and owns that browser process, continue there;
+   use MagicBrowse here only if the native page-control path failed. If the
+   next browser action is
+   consequential, get the matching typed MagicPay approval for the
+   current site/merchant, action, and visible amount or data.
+   - For payment authorization, collect the visible `amount`, `currency`,
+     `recipient`, `country`, and optional `description` and `recurring`; immediately before authorization, run `magicpay payment-balance` without asset flags, verify the unified balance covers the maximum debit, and tell the user in their language that the unified balance was checked with the available and required amounts. Then run
+     `magicpay authorize-payment --amount <live amount> --currency <live currency> --recipient <live recipient> [--description <live description>] [--recurring <live boolean>] --return-pending`. Use `--item-ref` only as the existing Memory item
+     selector. Use the closed normal-checkout command shape in `references/commands.md`. Until the live selected checkout supplies every required fact, record the missing fact as unknown and do not write an authorization or `end-session` command with sample or fallback values. Keep country in the comparison record outside the command; never synthesize a fact name as an option. Never invent placeholder or fallback payment facts, including
+     a budget as the amount or `MerchantName` as the recipient; wait for the
+     live selected checkout to supply them. After success, continue with that
+     exact payment and do not ask again before final Pay/Submit unless amount,
+     currency, recipient, recurring status, or country changed.
+   - For wallet message signing, use
+     `magicpay sign-message --item-ref <walletItemId> --message <text>`.
+     After success, sign that exact message; ask again if the message changed.
+   - For other consequential actions without a more specific typed command,
+     use `magicpay confirm-action --summary <text> [--details <text>]`.
+   - Always add `--return-pending` to the typed action command. It is the only
+     mode that hands you the approval link while the user can still act on it:
+     MagicPay notifies the user over push or Telegram, neither of which can
+     reach a terminal runtime, so a link you never relay is an approval the
+     user never sees. Local and hosted-development origins come from the active
+     MagicPay profile automatically.
+     Follow the One User-Request Loop and its matrix. Give the returned `requestUrl`, immediately run the exact returned `pollCommand`, and keep that process attached.
+     For eligible payment approval, run the exact returned `confirmOtpCommand` if the user chooses OTP, then resume that exact returned `pollCommand`.
+     Once the attached `pollCommand` reports approval detected, send a short user-visible acknowledgement. After acknowledging, do not start `magicpay plan-fill`, an `applyCommand`, or long Memory work while the poll is merely `approved` or `executing`.
+     Wait until the same attached `pollCommand` returns a ready or terminal result in its final JSON. Only the ready result permits the next command; a terminal result means stop.
+     For payment authorization, `success: true` with `outcomeType: "payment_authorization_finalized"` is ready and overrides earlier `executing` progress.
+     Acknowledgement is not settlement.
+<!-- magicpay-continuation:v1 id=core-approval-watch action=run-exact-returned-attached field=pollCommand -->
+Immediately run the exact returned `pollCommand` and remain attached to that process.
+<!-- /magicpay-continuation:v1 -->
+### 9. Handle unresolved required fields (optional)
+
+If required fields remain unresolved after Memory fill, ask the user how to
+   proceed or stop. Do not invent values or run a deterministic field matcher.
+### 10. Commit payment (optional)
+
+Run exactly `magicpay commit`. Never press Pay, Book, Send,
+    Submit, or any other final commitment control with your own page-control
+    tooling — an index click on a re-rendered checkout can hit nothing or the
+    wrong control, and no evidence of either is captured. `commit` presses the
+    plan's own final-commitment target with a fresh observation, physical
+    target identity, and page-progress evidence, and it refuses when payment
+    authorization is missing. Interpret its result strictly:
+    - `commitment_submitted_evidence`: continue to `payment-result`. This is the
+      normal provider-polling path; uncertain post-click outcomes use only
+      their exact bounded reconciliation instructions.
+    - `commitment_clicked_unverified` / `commitment_post_click_unreadable`:
+      submission is unconfirmed and the active product session is latched
+      against another commit. Run the exact returned `payment-result`; do not
+      re-observe/re-plan as permission to click again. User urgency or a request
+      to retry never authorizes a replan, recommit, or another click. Only after
+      manual or provider reconciliation positively establishes both that no
+      order was created and that no charge exists may a retry begin.
+      Before that retry, provider evidence is terminal. Then make a fresh observation, create a fresh
+      plan, and obtain a fresh explicit `magicpay authorize-payment` approval
+      for the verified live payment facts before committing that fresh plan.
+      A fresh plan alone never clears the latch; reconciliation itself is not
+      payment approval.
+    - `commitment_opened_payment_form` / `replan_and_fill_payment_form`: nothing
+      was submitted. Re-observe the page, run `magicpay plan-fill`, run exactly
+      the fresh plan's returned `applyCommand`, then run
+      `magicpay commit` on the payment form's own Pay
+      control. Do not run `payment-result` between the two commitment stages.
+    - `commitment_no_observable_effect`: the final click was dispatched but the
+      page gave no trustworthy result. Run the exact returned `payment-result`
+      and do not commit again. Page silence is not proof that the provider
+      received nothing.
+    - `commitment_blocked_by_validation`: fix the flagged fields via the fill
+      loop, then commit again.
+    - `commitment_blocked_by_challenge`: a human-verification wall appeared
+      after the final click. Run the exact returned `payment-result` first.
+      Do not commit again. `solverVerified` alone is provisional; even
+      `merchantCleared` does not clear the submission-uncertainty latch. Solve
+      the confirmed challenge only when payment-result returns
+      `nextAction: "solve_challenge"`, then continue the same provider
+      reconciliation without pressing Pay. Only after provider-terminal evidence
+      establishes no order and no charge, get fresh page state from the
+      page-control owner, rerun `magicpay plan-fill`, execute exactly its
+      returned `applyCommand`, obtain fresh authorization, and then run
+      `magicpay commit`.
+    - `ambiguous_final_commitment_target`: the page offers several commitment
+      controls, so `commit` refuses to guess and returns `candidates`. Pick the
+      one matching the payment facts the user approved and pass it as
+      `--target <targetRef>`. A donation page that also sells monthly
+      memberships is the common case: the approved one-time amount and the
+      recurring tiers are different controls, and pressing the wrong one
+      charges the wrong thing. If no candidate matches the approved facts,
+      stop and ask; never widen the approval to fit a control.
+    - `no_final_commitment_target`: re-run `magicpay plan-fill` on the current
+      page. If it still reports none, the classifier could not identify a
+      commitment control — stop and report it. Do not press anything yourself.
+    - a blocked/stale result: re-observe and re-plan, then commit again.
+### 11. Verify payment result (optional)
+
+After a commit that returns `pollCommand: "magicpay payment-result"`, run that
+    exact command. Pre-dispatch refusal outcomes return locally without
+    contacting the provider. If it returns `nextAction: "solve_challenge"`, resolve the confirmed CAPTCHA in the same session without pressing Pay, then run `magicpay payment-result` again; the uncertainty latch remains.
+    If it returns `payment_initiated` with `nextAction: "await_notification"`, immediately tell the user: "Your transfer has been initiated. It can take a few minutes to settle. You will receive a MagicPay notification when it is complete." Do not run `magicpay payment-result` again, and do not end or cancel the session; durable settlement continues in the background.
+    If it returns `payment_pending` or `payment_unknown` with an exact `pollCommand`, keep the session open and rerun only that command. If it returns `nextAction: "contact_support"` with no poll command, stop automatic polling and request review; do not commit, retry, or obtain another authorization. When the result carries a `diagnosis` field, follow its `userMessage` instead of blind re-polling.
+    If it opens recovery, share its `userMessage` and returned links, then immediately run the exact returned `recovery.pollCommand`; a retry requires a fresh `authorize-payment` approval. Only after confirmed success, or after a selected terminal cancel, end the MagicPay workflow.
+    `magicpay end-session` does not define browser cleanup. Return page control
+    to the page-control owner, or run `magicpay close` only when you need to
+    close or clear the browser child while keeping product workflow semantics separate.
+    If the user canceled or cleanup is blocked by a hung approval during
+    cancellation, use `magicpay end-session --cancel` instead of plain
+    `end-session`.
+
+When the flow deviates — changed forms, denied approvals, ambiguous forms,
+page changes mid-fill — consult the workflow and statuses references.
+
+
 
 ## OpenClaw Page-Control First
 
@@ -64,9 +317,7 @@ that MagicPay will attach to: opening pages, checking tabs, reading snapshots,
 taking screenshots, clicking controls, filling ordinary fields, and continuing
 after MagicPay applies Memory fill.
 
-This does not change the MagicPay product order. If the user task is a MagicPay
-workflow, run `magicpay status` or config recovery, then `magicpay start-session`
-before browser preparation. The active MagicPay product workflow is the parent;
+This does not change the conditional MagicPay product order. Run `magicpay status` or config recovery. For a purchase or booking intent with no usable destination, run `magicsearch query`, keeping currency inside the refined prompt and never adding `--currency`, and resolve any actual purchase choice before `magicpay start-session`; with a usable or selected URL, run `magicpay start-session` directly. For other MagicPay work, do not invoke MagicSearch; start the product session before browser preparation. Retain the installed workflow's active-session exception for `magicsearch discover`. The active MagicPay product workflow is the parent;
 OpenClaw's built-in page-control tool is the normal page-work owner when it
 owns an attachable browser process. MagicPay binds a browser child only when a
 MagicPay browser-dependent command needs one. If the built-in page-control
@@ -81,343 +332,45 @@ mentions browser continuation.
 
 ## Hard Rules
 
-> **Plan the browser process and page-control path before page preparation.** MagicPay fills and
-> authorizes only inside its bound browser child: one it launched
-> (`magicpay launch`) or one reachable over an approved private CDP
-> endpoint (`magicpay attach`). Attachability is a property of the browser
-> process, not of how it was driven: the browser must have been started
-> with remote debugging or by a CDP-owning tool, and CDP cannot be enabled
-> on an already-running browser without a restart. A typical already-open
-> desktop browser — including one driven through screen control or a
-> browser extension — has no such endpoint, so page state prepared there
-> is stranded and the flow must be redone. For a MagicPay-bound task,
-> confirm the endpoint exists before opening the first page; if none is
-> available, launch the child with `magicpay launch` and prepare pages in
-> that browser (for example through `magicbrowse attach` to the same
-> endpoint).
-
 > **Consequential actions require matching typed approval.** Before any submit,
-> protected action, purchase, login, identity submission, account change, or
-> other consequential action, get the matching typed MagicPay approval:
-> `authorize-payment`, `sign-message`, or `confirm-action`. After typed
-> approval, proceed with exactly that action; do not ask for a second approval
-> unless the approved page facts changed. MagicPay fills planned fields only;
-> the page-control owner handles continuation.
+> purchase, login, identity submission, account change, or similar action, run
+> one matching typed command: `authorize-payment`, `sign-message`, or
+> `confirm-action`. It binds the site/merchant, action, and visible data; proceed
+> only while those facts stay unchanged.
 
 > **Payment authorization facts are collected by the agent.** Before
-> `magicpay authorize-payment`, collect visible `amount`, `currency`,
-> `recipient`, and optional `description` and `recurring` from the current
-> page and the user's task. Ask the user when the amount, currency, recipient,
-> recurring status, or task/page facts are ambiguous. Do not change existing
-> `itemRef` selector behavior; `itemRef` remains a selector, not an action
-> param. A successful `authorize-payment` covers the matching payment form
-> fill and final Pay/Submit action while those facts stay unchanged.
+> `magicpay authorize-payment`, collect live amount, currency, recipient,
+> country, optional description, and recurring status. Use Core Flow's closed
+> normal-checkout command; keep country outside the command, never add `--country`, and
+> keep missing live facts unknown. Before approval and commit, compare amount,
+> currency, recipient, recurring status, and country; stop on mismatch.
+> Missing URL, recipient, or merchant stays unknown; never write a sample URL, recipient, or merchant.
+> `itemRef` remains a selector. Approval covers fill
+> and Pay/Submit while facts stay unchanged. For recurring checkout, plan first;
+> on `reason: "plan_fill_required"`, replan and retry once without a separate
+> subscription approval.
 
-> **Fill and hand back.** Use `magicpay plan-fill` to build a value-free
-> Memory plan, then `magicpay apply-fill` to materialize approved values and
-> write the planned fields. MagicPay stops before final commitment controls.
-> Continue the browser task with the page-control owner. When the runtime has
-> native page-control available and it drives the same browser process, keep
-> that path as the normal continuation owner.
+> **Fill and hand back.** Run `magicpay plan-fill`, then exactly its returned
+> `applyCommand`. It writes approved Memory only to planned fields and stops
+> before commitment. After payment-card authorization finalizes, rerun `magicpay plan-fill` and execute exactly its returned `applyCommand` before reporting ready. Never write or execute sample/hand-written `magicpay apply-fill`, `magicpay wait-request`, or `magicpay wait-memory`; use exact returned command fields. Only `magicpay commit` may press the final control. Return
+> page work to the same browser's controller.
 
-> **Product session first.** Normal MagicPay product work starts with
-> `magicpay status` or config recovery, then `magicpay start-session`. Only
-> after the active product workflow exists should you run `magicpay launch` or
-> `magicpay attach <cdp-url>` to bind a browser child. Do not launch or attach
-> a standalone browser as the first MagicPay product step. This same
-> product-session-first order applies even when native page-control is
-> used for page preparation and continuation.
-
-> **Approval is channel-neutral.** A pending MagicPay approval can be completed
-> in MagicPay web/mobile UI or by OTP when the user chooses that channel. Do
-> not ask for OTP before a pending approval request exists, do not claim OTP is
-> mandatory, and do not reveal, store, repeat, or summarize OTP digits.
-
-> **Credential and browser authority are sensitive.** Do not print, log, or
-> share `MAGICPAY_API_KEY`, the local MagicPay config file
-> (`~/.magicpay/config.json` by default or `$MAGICPAY_HOME/config.json`), or
-> CDP endpoints.
-> Memory refs and item ids are operational refs: pass them only between
-> MagicPay commands; do not show them to the user, include them in reports, or
-> send them to external tools.
-> Use `magicpay attach` only for a private browser/session the user approved
-> for this task, and only inside the active product workflow. If the machine
-> or workspace is shared or compromised, stop and ask the user to
-> rotate/revoke the key.
-
-> **Browser cleanup is separate.** MagicPay owns the protected workflow, not
-> the browser. `magicpay close` closes or clears the browser child while
-> keeping the product workflow active. `magicpay end-session` completes only
-> the MagicPay workflow and deliberately leaves browser teardown to the browser
-> owner unless the user explicitly approved cleanup.
-
-> **Memory plans stay value-free.** `magicpay plan-fill` observes the current
-> page, fetches value-free Memory descriptors, and asks the Memory matcher for
-> semantic target matches. It must not receive raw values, precomputed target
-> matches, catalogs, materializers, or browser writers from the agent. If the
-> matcher is unavailable, fail closed and surface that state.
-
-> **Provider-backed cards need payment authorization before reveal.**
-> `magicpay plan-fill` may report a non-blocking blocker with
-> `kind: "payment_card.authorization_required"` when MagicPay Memory has a
-> provider-backed payment card but the active workflow session has not been
-> authorized to reveal card handles. This is not a matcher failure and not
-> permission to inspect, infer, print, or ask the user for PAN/CVV. If that
-> card is needed for the payment, collect the visible payment facts and run
-> `magicpay authorize-payment`; after approval, rerun `plan-fill` and then
-> `apply-fill` for the current page.
-
-> **CAPTCHA solving is recovery-only.** Only call
-> `magicpay solve-captcha [--timeout <s>]` when a real CAPTCHA is confirmed
-> present on the current browser child inside the active MagicPay workflow. It
-> must not be used as generic page waiting or challenge detection. When
-> continuing through MagicBrowse after a successful solve, call
-> `magicbrowse mark-captcha-resolved` before the next
-> `magicbrowse act "continue..."`.
-
-## Fill Recovery Ladder
-
-Use the highest-level safe fill path that can explain its result. Do not jump
-straight to direct browser typing or to `fill-field`.
-
-1. **Plan from the live page.** Run `magicpay plan-fill` on the current
-   bound browser page. Use `--planner-hint <text>` only for short context
-   about the form. Never pass raw values, target matches, target lists, Memory
-   catalogs, materializers, or browser writers.
-2. **Apply the active plan.** Run `magicpay apply-fill`. It materializes
-   approved values internally, fills only planned fields, and stops before any
-   final commitment control. If `apply-fill` asks the user to choose between
-   Memory candidates, show only the safe labels and continue with
-   `magicpay choose-memory --choice <choiceId>`.
-3. **Replan when page evidence changed.** If the page changed, the browser
-   binding became stale, a target disappeared, or `apply-fill` reports
-   `target_not_found` / `stale_target`, refresh or re-observe the page and
-   return to `plan-fill`. Do not reuse the old plan.
-4. **Use `fill-field` only for targeting recovery.** If `plan-fill` /
-   `apply-fill` missed a visible field or chose the wrong observed target, and
-   the agent can identify the correct Memory item/field plus the current
-   observed `targetRef`, run:
-
-   ```bash
-   magicpay fill-field --request-json '{"assignments":[{"itemRef":"mem_profile","fieldRef":"field.email","targetRef":"selector:1"}]}'
-   ```
-
-   `fill-field` accepts value-free assignments only: `itemRef` or `itemId`,
-   `fieldRef`, `targetRef`, and optional `projectionPart`. It fetches the
-   current Memory catalog, resolves backend handles, refreshes target state,
-   validates approvals/provider state/target writability/projection, and
-   writes through the same browser bridge as `apply-fill`. It returns the same
-   apply-style result shape: `status`, `fields`, `fieldDiagnostics`, and
-   `completedLedger`.
-5. **Stop or ask instead of guessing.** `fill-field` is not a fallback for
-   `matcher_unavailable`, missing browser connection, auth/CAPTCHA walls,
-   missing Memory, denied approval, unsupported targets, or raw-value entry.
-   For those states, follow `references/statuses.md`: rebind, replan, ask the
-   user, use typed approval, or stop.
-
-Use `projectionPart` only for a visibly split typed value target. Supported
-parts are `year`, `month`, `day`, `country_code`, `national_number`, `given`,
-`family`, `segment_1`, `segment_2`, `segment_3`, and `segment_4`.
-Projection diagnostics mean the part or target shape is unsafe; refine only
-from visible evidence, otherwise ask, skip optional fields, or stop.
-
-## What MagicPay Stores
-
-MagicPay Memory holds saved items and field descriptors. The public fill path
-uses value-free descriptors and opaque refs during planning, then materializes
-only the approved values needed by the active plan during apply.
-
-Treat a Memory item as a user-owned reusable data record, not as a single field.
-The item label is the human-readable name for that record and should describe
-the group of fields that future fills may choose together. Good labels name the
-purpose: `Airline login`, `Traveler profile`, `Home shipping address`, `Wallet`,
-or `Facts about user`. Do not put raw values in the label, do not use one field
-name as the item label when the item contains a broader record, and do not create
-one item per field unless the user is saving one truly standalone fact.
-
-Use `Facts about user` only for global profile facts with no narrower record.
-Use narrower labels for site/account-specific logins, traveler profiles,
-addresses, wallets, payment-related records, and other coherent groups. When
-chat-provided reusable facts need saving, list Memory items first, update the
-semantically suitable editable item, and create a new item only when no suitable
-record exists.
-
-The user's MagicPay Memory holds reusable items with human field labels,
-human-readable hints, opaque `fieldRef` identifiers, and optional public value
-types. Use labels such as `Login email`, `Password`, `Full name`, `Date of
-birth`, or `Phone` for user-facing text and matcher evidence; use `fieldRef`
-for existing-field identity in update/apply flows. Hints explain when a field is
-useful without containing raw values.
-
-Public editable value types are only:
-
-- `date` — canonical value `YYYY-MM-DD`;
-- `phone_number` — canonical E.164 value, for example `+14155550100`;
-- `person_name` — non-empty full name string.
-
-When no value type is present, Memory fill treats the field as ordinary direct
-fill and does not split or normalize it. Internal card value types such as
-`payment_card_number` and `payment_card_expiry` belong only to provider-backed
-payment-card Memory surfaced by MagicPay after authorization; do not set or
-request those types through public Memory CRUD.
-
-Do not assume emptiness or abundance from prior context. If you need to know
-whether saved Memory can fill the current page, run `magicpay plan-fill` and
-branch on its result. If you need to list Memory items manually, pass the
-current page URL with `magicpay list-memory-items --url <current-url>`; use
-`--all-sites` only for explicit global Memory review or editing. Do not read or
-print raw Memory contents yourself.
-
-For Memory CRUD, list first and use stable refs. Create a new item with
-`magicpay create-memory-item --item-label <label>` plus field shortcuts such as
-`--text "Login email=ada@example.com"`, `--date "Date of birth=1815-12-10"`,
-`--phone "Phone=+14155550100"`, or `--person "Full name=Ada Lovelace"`.
-Use `--secret-text`, `--secret-date`, `--secret-phone`, or `--secret-person`
-when the new field should be hidden in display/logging. For existing fields,
-never address by label: use `magicpay update-memory-field --field-ref
-<fieldRef>` or `magicpay delete-memory-field --field-ref <fieldRef>`. Use
-`magicpay add-memory-field --item-id <itemId> --label <label> --value <value>`
-to add one field to an existing item. `--secret true|false` is mutable
-display/logging metadata for any field, not encryption. Use raw JSON only when
-the user explicitly asks for a service/debug payload.
-Provider-backed payment cards are special: before payment authorization,
-`plan-fill` can show that a card exists through an
-`authorization_required` Memory availability entry, but it does not expose
-card field handles. Card handles appear only inside the active MagicPay
-workflow session after the matching payment authorization is approved.
-
-## Prerequisites
-
-- `magicpay` CLI on `PATH`. Install the reviewed package version with
-  `npm i -g @mercuryo-ai/magicpay-cli@latest` if missing.
-- A MagicPay API key saved via `magicpay init <apiKey>` (or
-  `MAGICPAY_API_KEY` in the environment). Sign up at
-  `https://agents.mercuryo.io/signup`.
-- For browser-dependent steps, either let MagicPay launch a browser child with
-  `magicpay launch [url]` after `start-session`, or use an approved private CDP
-  endpoint for `magicpay attach <cdp-url>` inside the active session.
-
-## Reading Results
-
-MagicPay workflow commands print one JSON result object to stdout. Branch on
-fields in this order: `success`, then
-`outcomeType`, then command-specific `error`, `reason`, or `fill.outcome`.
-Use `message` and prose `reason` as user-facing text only. Do not parse text
-to discover whether a result is `memory_fill_required`,
-`secret_validation_failed`, `verification_required`, or another machine code.
-
-## Core Flow
-
-Contract: `status → start-session → (launch [url] | attach <cdp-url>) →
-plan-fill → apply-fill → [typed approval] → end-session`. Page work between
-MagicPay steps stays with the page-control owner.
-
-1. Preflight with `magicpay status`. If it reports a missing key, a
-   `cliUpdate`, or still fails after `init` (in which case run
-   `magicpay doctor`), follow the recovery rules in
-   [references/workflow.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/workflow.md).
-2. Start the product workflow: `magicpay start-session [name]`. This creates
-   the product session and product telemetry root before any browser child is
-   required.
-3. Bind a browser inside the active product workflow:
-   - run `magicpay launch [url]` when the flow has not started in a browser
-     yet; the new child is the browser for the whole flow, and the `launch`
-     result includes the child's `cdpUrl` so a page-control tool can
-     drive the same browser (for example `magicbrowse attach <cdpUrl>`);
-   - run `magicpay attach <cdp-url>` when the page was already prepared in a
-     CDP-reachable browser: your own page-control session, or a private
-     browser the user approved for this task. `launch` cannot adopt a page
-     prepared elsewhere;
-   - re-attach only when the endpoint changed or the browser child binding
-     needs refresh.
-4. If a real CAPTCHA is confirmed on the current bound browser page, run
-   `magicpay solve-captcha [--timeout <s>]`.
-   - **On a successful solve**, if the continuation is owned by MagicBrowse,
-     run `magicbrowse mark-captcha-resolved`, then `magicbrowse act
-"continue..."`. If that `act` returns `needs_handoff` again, the wall
-     is not actually cleared — surface to the user, do not re-mark.
-     Otherwise (continuation stays in MagicPay or another browser tool)
-     continue the normal browser or MagicPay form flow on the same page.
-   - **On a failed or timed-out solve**, do not call
-     `magicbrowse mark-captcha-resolved`. Surface the failure to the user.
-5. Plan the Memory fill: `magicpay plan-fill`.
-   If the planner needs context, pass a short human-readable
-   `--planner-hint <text>`. Do not pass page targets, target matches, Memory
-   catalogs, raw values, materializers, or browser writers.
-   - If the returned plan has a non-blocking blocker
-     `payment_card.authorization_required` or a warning that the Memory store
-     contains a payment card but authorization is required, treat it as
-     machine state from the backend: the card exists, but card handles are not
-     available yet in this workflow session. If the current task needs that
-     card, collect `amount`, `currency`, `recipient`, optional `description`,
-     and optional `recurring`, run `magicpay authorize-payment`, then rerun
-     `plan-fill`.
-6. Apply the active plan: `magicpay apply-fill`.
-   MagicPay refreshes the page state, materializes approved Memory values, and
-   fills only planned fields through the browser bridge. It does not click Pay,
-   Book, Send, Submit, or other final commitment controls.
-   - If `apply-fill` reports `memory.choose_candidate`, use candidate labels
-     only for explaining choices to the user. Submit the selected backend-owned
-     `choiceId` with `magicpay choose-memory --choice <choiceId>`, then let
-     that command continue the fill.
-7. If a visible field is still empty because the plan missed it or targeted
-   the wrong element, follow the Fill Recovery Ladder. Use
-   `magicpay fill-field --request-json <json>` only with value-free Memory refs
-   and a currently observed `targetRef`; never pass raw values or use it as a
-   replacement for `plan-fill`.
-8. Continue with the page-control owner from the filled page. Refresh the page
-   state first (`observe` or the equivalent) — success is not "fields were
-   filled"; keep going only from the fresh visible form state. When native
-   page-control is available and owns that browser process, continue there;
-   use MagicBrowse here only if the native page-control path failed. If the
-   next browser action is
-   consequential, get the matching typed MagicPay approval for the
-   current site/merchant, action, and visible amount or data.
-   - For payment authorization, collect the visible `amount`, `currency`,
-     `recipient`, and optional `description` and `recurring`, then run
-     `magicpay authorize-payment --amount <number> --currency <code>
---recipient <name> ...`. Use `--item-ref` only as the existing Memory item
-     selector. After success, continue with that exact payment and do not
-     ask again before final Pay/Submit unless amount, currency, recipient, or
-     recurring status changed.
-   - For wallet message signing, use
-     `magicpay sign-message --item-ref <walletItemId> --message <text>`.
-     After success, sign that exact message; ask again if the message changed.
-   - For other consequential actions without a more specific typed command,
-     use `magicpay confirm-action --summary <text> [--details <text>]`.
-   - For non-blocking approval handoff, add `--return-pending` to the typed
-     action command. Tell the user they can approve the same request in
-     MagicPay UI or provide the OTP they received. If they provide OTP, run
-     `magicpay confirm-otp --otp <digits>`, then run `magicpay wait-request`.
-     If they approve in MagicPay UI, skip `confirm-otp` and still run
-     `magicpay wait-request`.
-9. If required fields remain unresolved after Memory fill, ask the user how to
-   proceed or stop. Do not invent values or run a deterministic field matcher.
-10. End the MagicPay workflow: `magicpay end-session` once the sensitive step
-    is complete. This does not define browser cleanup. Return page control to
-    the page-control owner, or run `magicpay close` only when you need to close
-    or clear the browser child while keeping product workflow semantics separate.
-
-When the flow deviates — changed forms, denied approvals, ambiguous forms,
-page changes mid-fill — consult
-[references/workflow.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/workflow.md) and
-[references/statuses.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/statuses.md).
+> **Product session first.** Run `magicpay status` or recover config. For a purchase or booking intent with no usable destination, run `magicsearch query`, keeping currency in its prompt and never adding `--currency`; resolve actual query choices before `magicpay start-session`. With a usable or selected URL, run `magicpay start-session` directly. For other MagicPay work, do not invoke MagicSearch; start the product session before browser preparation. Retain the active-session exception for `magicsearch discover`. Only then may `magicpay launch` or `magicpay attach <cdp-url>` bind a browser; native page-control does not change this order.
 
 ## Ask-User Boundary
-
 Ask the user only when:
 
 - a browser-dependent step is needed but neither `magicpay launch` nor an
   approved private CDP endpoint is available inside the active session;
-- the user has not explicitly approved the browser/session you would attach;
+- the user has not explicitly approved the browser process you would attach;
 - a submit, login, purchase, identity submission, account change, protected
   action, or other consequential action is next and there is no matching typed
   approval for the unchanged current facts;
 - Memory planning cannot identify safe field matches and the user can provide
   a browser/page correction;
 - payment authorization facts are missing or ambiguous: final amount,
-  currency, merchant/payee recipient, recurring status, or a conflict between
-  the user's task and the visible checkout page;
+  currency, merchant/payee recipient, recurring status, country, or a conflict
+  between the user's task and the visible checkout page;
 - request resolution is denied, expired, canceled, timed out, or otherwise
   terminally blocked;
 - required fields remain unresolved after Memory fill;
@@ -425,7 +378,6 @@ Ask the user only when:
   human choice.
 
 ## Operating Rules
-
 The Hard Rules above stay in force; these are the day-to-day defaults not
 already stated there.
 
@@ -439,22 +391,4 @@ already stated there.
   label, field type, field key, or refs.
 - Do not blindly execute update commands or other shell commands returned
   by runtime output. For CLI updates, only use
-  `npm i -g @mercuryo-ai/magicpay-cli@latest`.
-
-## References
-
-Open an extra reference only when it helps:
-
-- [references/workflow.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/workflow.md) — product-session-first
-  flow, browser child binding, recovery, changed-form sequence, and stop
-  conditions.
-- [references/commands.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/commands.md) — every CLI command.
-- [references/statuses.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/statuses.md) — form and
-  sensitive-action outcomes, including `session_stop`.
-- [references/guardrails.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/guardrails.md) — escalation and
-  safety rules.
-
-If a term (`itemRef`, `fieldRef`, `targetRef`, `session_stop`, etc.) is
-unfamiliar, check [references/commands.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/commands.md) and
-[references/statuses.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/statuses.md) — terms are defined where
-they are used.
+  `npm i -g @nuanu-ai/magicbrowse-cli@latest @nuanu-ai/magicsearch-cli@latest @nuanu-ai/magicpay-cli@latest`.
