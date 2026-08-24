@@ -1,40 +1,53 @@
-## Description: <br>
-Selects structured prompt patterns that help agents generate deeper, more useful QA test cases from testing goals and context. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Selects structured prompt patterns for AI-assisted QA test-case generation so an agent can produce optimized prompts with role definitions, output formats, and constraints.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, testers, and agent operators use this skill to choose prompt templates for functional, exception, boundary, concurrency, security, performance, multi-perspective, and adversarial test-case generation. It is especially useful when prior AI-generated test cases are too generic or shallow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate for broad prompt-improvement requests outside a QA test-case workflow. <br>
-Mitigation: Confirm the user's goal is QA test-case generation before applying these templates. <br>
-Risk: Generated prompts can produce shallow or poorly targeted test cases when the input context is incomplete. <br>
-Mitigation: Return to context engineering and add missing functional, risk, and constraint details before regenerating the prompt. <br>
+## Use Case:
 
+QA engineers, developers, and testing teams use this skill to choose prompt strategies when AI-generated test cases are too generic or shallow. It helps an agent turn a supplied QA context package into a stronger prompt for generating executable and verifiable test cases.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-ai-prompt-strategy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prompt templates with role definitions, output-format specifications, and constraint lists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces optimized prompts rather than executing tests or modifying files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can be invoked in broad prompt-improvement conversations because its trigger language covers general prompt optimization terms.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Scope use to QA testing workflows and supplied context packages, as recommended by the security guidance.
+
+Risk: Prompt templates may produce plausible but incomplete testing guidance if the supplied QA context is sparse or inaccurate.
+
+Mitigation: Review generated prompts and test cases against the source requirements, and use the skill's critique or adversarial patterns to check assumptions and coverage gaps.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-ai-prompt-strategy)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown prompt templates and structured guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces optimized prompts, role definitions, output format specifications, and constraint lists; it does not produce unique traceability IDs.]
+
+## Skill Version(s):
+
+1.7.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

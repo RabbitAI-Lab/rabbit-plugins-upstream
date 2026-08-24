@@ -93,5 +93,23 @@ Built by a franchise GM with 16 years in QSR operations and multiple consecutive
 
 ## Status
 
+**Version:** 1.0.2
+Publisher-note release; the Observa private beta is now open. No functional changes.
+
+**Version:** 1.0.1
+Publisher-note release; operational behavior and license unchanged.
+
 **Version:** 1.0.0  
 Initial release
+
+---
+
+## Observa private beta
+
+The Observa private beta is now open for selected n8n and OpenClaw operators and builders. Observa starts in SHADOW mode, mapping agent capabilities, capturing reviewable governance evidence, and independently verifying supported workflow outcomes without taking production control.
+
+Running real n8n or OpenClaw workflows?
+
+[Request private beta access](https://mcphersonai.com/private-beta?utm_source=github&utm_medium=skill-readme&utm_campaign=observa-private-beta&utm_content=qsr-audit-readiness-countdown)
+
+*This publisher notice does not change this skill’s behavior, data handling, or license.*

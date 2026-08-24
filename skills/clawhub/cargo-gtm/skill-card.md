@@ -1,50 +1,63 @@
-## Description: <br>
-Front door for any GTM task on Cargo - sourcing, waterfall enrichment, email/phone/LinkedIn lookup, email verification, scoring, qualification, sequencing, CRM sync, and signal monitoring (job changes, funding, tech-stack/hiring intent). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cargo GTM helps agents perform B2B go-to-market work on Cargo, including account and buying-committee research, licensed contact enrichment and verification, lead scoring, permission-based outreach drafting, CRM sync, and buying-signal monitoring.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-GTM, RevOps, sales, and growth teams use this skill to plan and execute prospecting, enrichment, verification, scoring, outreach, CRM sync, and signal-monitoring workflows in Cargo. It guides agents through task-specific docs, recipes, provider playbooks, cost controls, and quality checks before running paid or sensitive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can process prospect, customer, and contact data through many third-party enrichment, LLM, web-search, scraping, CRM, sequencer, and LinkedIn integrations. <br>
-Mitigation: Minimize fields sent to providers, confirm lawful basis and internal policy approval, and treat signed URLs and downloaded outputs as sensitive data. <br>
-Risk: CRM, sequencer, LinkedIn, recurring workflow, visitor identification, phone lookup, reverse lookup, and personality analysis actions can have privacy or operational impact. <br>
-Mitigation: Require explicit user confirmation before these actions and keep the skill's pilot, approval, receipt, and cost-cap gates in place. <br>
-Risk: The security evidence flags the release for review because privacy and confirmation guardrails are not consistent across all workflows. <br>
-Mitigation: Review the skill before deployment and scan any local changes, especially provider playbooks and recipes that execute paid or data-writing actions. <br>
+## Use Case:
 
+Sales, marketing, RevOps, and GTM teams use this skill to move from an ICP or account list to researched, enriched, verified, scored, and sequencer-ready B2B prospect data. Agents use it to choose appropriate Cargo provider playbooks, apply consent and suppression gates, control paid fan-out, and produce compliant outreach drafts or activation handoffs.
 
-## Reference(s): <br>
-- [Cargo GTM Skill on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-gtm) <br>
-- [Cargo Skills Homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Finding companies and contacts](guides/finding-companies-and-contacts.md) <br>
-- [Enriching and researching](guides/enriching-and-researching.md) <br>
-- [Writing outreach](guides/writing-outreach.md) <br>
-- [Cost discipline](references/cost-discipline.md) <br>
-- [Contact accuracy](references/contact-accuracy.md) <br>
-- [Output retrieval](references/output-retrieval.md) <br>
-- [Stage action map](references/stage-action-map.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline JSON and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct agents to create or retrieve structured Cargo workflow outputs, CSV/JSON downloads, CRM updates, sequencer handoffs, or recurring plays after user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.0 (source: frontmatter and release evidence) <br>
+Risk: The skill can support B2B prospecting and enrichment workflows that handle professional contact data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for approved B2B use cases, require lawful-basis, suppression-list, relevance, retention, and data-provider controls, and store downloaded or intermediate prospect data privately until it is deleted.
+
+Risk: Paid fan-out, recurring extractors, CRM or ads writes, phone lookups, and LinkedIn actions can create spend, privacy, or account-action exposure.
+
+Mitigation: Require explicit approval before these actions, sample before full runs, honor provider playbooks, and keep phone lookups limited to qualified leads with explicit user request.
+
+Risk: Outreach drafts could be misused for unsolicited or deceptive bulk messaging.
+
+Mitigation: Use the documented refusal rules for consumer targeting, purchased or scraped lists, suppression evasion, disguised sender identity, auto-dialing, SMS blasts, and undifferentiated fan-out.
+
+## Reference(s):
+
+- [Cargo skills repository](https://github.com/getcargohq/cargo-skills)
+- [Cargo GTM skill page](https://clawhub.ai/cargo-ai/skills/cargo-gtm)
+- [Acceptable use](artifact/references/acceptable-use.md)
+- [Cost discipline](artifact/references/cost-discipline.md)
+- [Contact accuracy](artifact/references/contact-accuracy.md)
+- [Stage action map](artifact/references/stage-action-map.md)
+- [Output retrieval](artifact/references/output-retrieval.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown, Code]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON configuration examples, and local TypeScript QA scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are gated by task-specific phase guides, provider playbooks, approval steps for paid actions, and local QA checks for contact data.]
+
+## Skill Version(s):
+
+1.16.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

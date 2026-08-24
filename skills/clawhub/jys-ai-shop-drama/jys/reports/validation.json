@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "suite_root": "C:\\Users\\Administrator\\.codex\\skills",
+  "skills": [
+    "jys",
+    "jys-s1",
+    "jys-s2",
+    "jys-s3",
+    "jys-s4",
+    "jys-s5"
+  ],
+  "checked_markdown_files": 125,
+  "failures": [],
+  "warnings": [],
+  "evidence": {
+    "static_suite_validation": "pass",
+    "provider_backed_routing_eval": "missing evidence",
+    "human_end_to_end_review": "missing evidence"
+  }
+}

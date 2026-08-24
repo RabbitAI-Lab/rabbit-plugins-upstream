@@ -1,45 +1,58 @@
-## Description: <br>
-Guides agents in writing, reviewing, auditing, and debugging production-ready Go tests using table-driven tests, testify helpers and mocks, parallel tests, fuzzing, fixtures, goroutine leak detection, coverage, and integration-test patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Production-ready Go testing guidance for writing, reviewing, auditing, and debugging table-driven tests, testify suites and mocks, parallel tests, fuzzing, coverage, integration tests, and flaky or slow test behavior.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to create and assess Go test suites, choose appropriate unit, integration, fuzz, mock, benchmark, and concurrency-test patterns, and diagnose flaky or failing tests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to read and edit Go project files, run Go-related test commands, and install the gotests helper. <br>
-Mitigation: Review proposed file changes, generated tests, and tool installation commands before applying them. <br>
-Risk: Integration-test examples may involve Docker Compose services or local databases. <br>
-Mitigation: Review integration-test scaffolding and environment-specific commands before running them. <br>
+## Use Case:
 
+Developers and engineers use this skill to create and evaluate Go test suites that emphasize observable behavior, idiomatic structure, useful assertions, isolation, race and leak detection, and maintainable CI-ready coverage.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/samber/golang-testing) <br>
-- [Project Homepage](https://github.com/samber/cc-skills-golang) <br>
-- [Test Helpers](references/helpers.md) <br>
-- [HTTP Handler Testing](references/http-testing.md) <br>
-- [Integration Testing](references/integration-testing.md) <br>
-- [Mocking and Test Fixtures](references/mocking.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Go code examples, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose file edits, Go test commands, linter commands, dependency installation commands, and integration-test scaffolding for review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: server release evidence and frontmatter metadata) <br>
+Risk: Generated or modified tests may assert incorrect behavior or mask defects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed test changes and run the relevant Go test suite before committing.
+
+Risk: The skill may edit repository files and run Go, gotests, golangci-lint, and git commands in the workspace.
+
+Mitigation: Use it only in projects where those file edits and commands are acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/golang-testing)
+- [Project homepage](https://github.com/samber/cc-skills-golang)
+- [HTTP Handler Testing](references/http-testing.md)
+- [Integration Testing](references/integration-testing.md)
+- [Mocking and Test Fixtures](references/mocking.md)
+- [Test Helpers](references/helpers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with Go code snippets, shell commands, configuration examples, review findings, and proposed test changes.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May recommend or make repository file edits and test command runs; review generated tests before committing.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

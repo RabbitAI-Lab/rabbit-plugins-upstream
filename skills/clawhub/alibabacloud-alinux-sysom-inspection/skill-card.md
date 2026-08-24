@@ -1,44 +1,58 @@
-## Description: <br>
-Inspect ECS instance health, detect anomalies in memory, disk, CPU, load, and resource leaks, and trigger memory-focused diagnosis when critical memory issues are detected. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Inspects ECS instance health, detects memory, disk, CPU, load, and resource-leak anomalies, and can trigger deep SysOM diagnosis for critical memory issues.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Developers and cloud operations engineers use this skill to run Alibaba Cloud SysOM inspections on ECS instances, review anomalies, and optionally trigger memory diagnosis for troubleshooting and risk warning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use Alibaba Cloud credentials for SysOM operations including activation, agent installation, inspection, and diagnosis. <br>
-Mitigation: Use a least-privilege RAM policy, review interactive prompts, and run only for intended ECS instances. <br>
-Risk: Broad instance listing can expose more infrastructure scope than needed. <br>
-Mitigation: Pass --instance-id when possible and limit RAM permissions to the required SysOM actions. <br>
-Risk: Automatic memory diagnosis may start follow-up diagnosis after a memory anomaly is detected. <br>
-Mitigation: Use --disable-memgraph-diagnosis when automatic diagnosis is not desired. <br>
+## Use Case:
 
+Cloud operations engineers and support teams use this skill to inspect Alibaba Cloud ECS instance health, identify resource anomalies, and produce diagnosis-oriented inspection reports for troubleshooting and routine risk checks.
 
-## Reference(s): <br>
-- [RAM Policies](references/ram-policies.md) <br>
-- [Inspection Report Template](references/report-template.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/sdk-team/skills/alibabacloud-alinux-sysom-inspection) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Terminal text, optional JSON, and Markdown inspection reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write inspection reports under inspection-reports/ and can prompt before SysOM activation or agent installation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.3 (source: server release metadata; artifact frontmatter and pyproject.toml show 0.1.0) <br>
+Risk: The skill can direct users to install the SysOM CLI through a curl-to-sudo installer.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the installer only after trusting the upstream SysOM path and reviewing the command in the target environment.
+
+Risk: Inspection flows can activate SysOM and install a persistent agent on cloud instances.
+
+Mitigation: Run with deliberately scoped regions and instance lists, confirm activation prompts intentionally, and treat agent installation as an infrastructure change.
+
+Risk: Alibaba Cloud credentials and generated reports may expose operational details.
+
+Mitigation: Use least-privilege RAM permissions, avoid sharing AK/SK values in the agent session, and handle local report files as sensitive operational data.
+
+## Reference(s):
+
+- [RAM Policies](references/ram-policies.md)
+- [Inspection Report Template](references/report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and optional JSON CLI output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local Markdown inspection reports under inspection-reports/ during fallback CLI execution.]
+
+## Skill Version(s):
+
+0.0.4 (source: ClawHub release metadata; artifact frontmatter version is 0.2.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,50 +1,66 @@
-## Description: <br>
-Quark Drive Skill helps agents authenticate with Quark Drive and upload, download, share, transfer, search, organize media, and use file summary or Q&A features. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+quarkclouddrive lets an agent authenticate with Quark Drive to upload, read, search, share, transfer, organize, summarize, and answer questions over cloud files.
 
-## Publisher: <br>
-[quarkdrive](https://clawhub.ai/user/quarkdrive) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[quarkdrive](https://clawhub.ai/user/quarkdrive)
 
-## Use Case: <br>
-External users and agents use this skill to operate a Quark Drive account from conversation: manage cloud files, save shared links, find files, organize personal media, and ask summary or Q&A questions over stored files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The installer may change the local Node.js installation and download updated skill code or instructions from a remote service. <br>
-Mitigation: Run it only in an environment where package changes and remote self-updates are acceptable, and review the publisher and release before installation. <br>
-Risk: Commands may send original user prompts for service-quality tracking. <br>
-Mitigation: Avoid using the skill with sensitive prompts unless sharing that text with the service is acceptable. <br>
-Risk: Reading cloud files may persist copies on local storage. <br>
-Mitigation: Use the skill in a workspace where local file copies are expected and clean up downloaded files when they are no longer needed. <br>
+## Use Case:
 
+External users and agents use this skill to operate Quark Drive accounts from an agent workflow, including file upload, reading, search, sharing, transfer, media organization, and file-based AI summary or question answering.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/quarkdrive/skills/quarkclouddrive) <br>
-- [Publisher profile](https://clawhub.ai/user/quarkdrive) <br>
-- [Quark Drive](https://pan.quark.cn) <br>
-- [Authorization and account management](references/auth.md) <br>
-- [File search](references/file-search.md) <br>
-- [File upload](references/file-upload.md) <br>
-- [File sharing](references/file-share.md) <br>
-- [Album organization](references/file-organize.md) <br>
-- [Assistant capabilities](references/assistant.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; CLI command results may include NDJSON, links, and local file paths.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js and a Quark Drive authorization flow before account-specific operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release evidence and skill frontmatter) <br>
+Risk: The skill requires Quark Drive account authorization and can operate on cloud files and shares.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Authorize only an account whose files you are comfortable letting the agent access, and review file-changing requests before allowing upload, move, share, transfer, organize, or uninstall actions.
+
+Risk: The installer can download or update skill code and may change the local Node.js installation.
+
+Mitigation: Run the installer only in an environment where installer-managed downloads and Node.js changes are acceptable, and review installation output before continued use.
+
+Risk: The skill passes original user prompts for service tracking and may use remote AI processing for file summary, question answering, search, or organization.
+
+Mitigation: Avoid highly sensitive prompts or files unless raw prompt telemetry and remote AI processing are acceptable for the intended account and workflow.
+
+## Reference(s):
+
+- [Quark Drive](https://pan.quark.cn)
+- [Authorization and account management](references/auth.md)
+- [File upload](references/file-upload.md)
+- [File read](references/file-read.md)
+- [File search](references/file-search.md)
+- [File sharing](references/file-share.md)
+- [Share transfer](references/file-saveas.md)
+- [File operations](references/file-ops.md)
+- [Photo and video organization](references/file-organize.md)
+- [AI assistant](references/assistant.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with command invocations and structured cloud-file results.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Quark Drive links, local file paths, OAuth prompts, search-result tables, and AI-generated summaries or answers.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata; artifact frontmatter says 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

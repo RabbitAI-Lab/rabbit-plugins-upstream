@@ -1,40 +1,48 @@
-## Description: <br>
-Helps QA practitioners turn decomposed requirements into structured scenario trees covering happy paths, alternative paths, exception paths, business rules, and data-flow scenarios. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transforms decomposed requirements into structured QA scenario trees covering happy paths, alternative paths, exception paths, and data-flow scenarios with traceable scenario IDs.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA engineers, test designers, and developers use this skill after requirement decomposition to build scenario trees for complex business workflows, page transitions, state changes, branch coverage, exception handling, and data-flow validation.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Requirement examples may include production, customer, financial, or identity data.
+
+Mitigation: Mask or remove sensitive data before using the skill, and review generated scenario trees before downstream test design.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, developers, and product teams use this skill after requirements decomposition to design scenario coverage for complex workflows with page transitions, state changes, branching behavior, and exception handling. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Example QA inputs may include customer, payment, identity, screenshot, or production data. <br>
-Mitigation: Mask or remove sensitive data before using the skill, and use synthetic or sanitized test examples whenever possible. <br>
-Risk: Scenario trees can miss branches or grow too large for practical test planning. <br>
-Mitigation: Review generated scenarios against the requirements decomposition, prioritize critical P0-P1 branches, and reclassify misplaced happy-path, alternative-path, exception-path, and data-flow scenarios. <br>
+**Output Format:** [Markdown scenario-tree guidance with structured scenario IDs, requirement traceability, path categories, checklists, and example scenario descriptions.]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [Qa Scenario Tree on ClawHub](https://clawhub.ai/kokxi/skills/qa-scenario-tree) <br>
+**Other Properties Related to Output:** [Outputs are intended for workspace use and should be reviewed for completeness, overlap, and priority before test-case design.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured scenario IDs, requirement links, path categories, expected results, data changes, and risk levels.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scenario outputs use SC-XXXX identifiers, link back to REQ-XXXX requirements, and separate happy-path, alternative-path, exception-path, and data-flow coverage.] <br>
+1.7.0 (source: frontmatter and ClawHub release evidence)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

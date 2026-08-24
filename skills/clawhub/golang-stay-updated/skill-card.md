@@ -1,43 +1,62 @@
-## Description: <br>
-Provides resources to stay updated with Golang news, communities and people to follow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides resources to stay updated with Golang news, communities and people to follow.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineers use this skill to find curated Go ecosystem resources, including official documentation, newsletters, community channels, blogs, videos, and people to follow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is a Go resource guide, but the security evidence says it declares broader local editing, shell, git, and agent permissions than the guide appears to need. <br>
-Mitigation: Review before installing and prefer a version limited to read, search, and web access unless a clear user-directed workflow requires editing files or running Go or git commands. <br>
+## Use Case:
 
+Developers and Go practitioners use this skill to find curated Go ecosystem resources, newsletters, communities, blogs, video channels, and people to follow for language and library updates.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/samber/golang-stay-updated) <br>
-- [Source Homepage](https://github.com/samber/cc-skills-golang) <br>
-- [Go Official Website](https://go.dev/) <br>
-- [Go Package Documentation](https://pkg.go.dev/) <br>
-- [Go Blog](https://go.dev/blog) <br>
-- [Go Wiki](https://go.dev/wiki/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown resource recommendations with links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include external links to Go resources, communities, newsletters, blogs, videos, and people to follow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: server release metadata and skill frontmatter) <br>
+Risk: The scanner verdict is suspicious because the skill declares broad editing, shell, git, Agent, and web permissions for a resource-guide use case.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after confirming those permissions are needed, or narrow allowed tools to read-only and web/search capabilities before deployment.
+
+Risk: The skill's recommendations may become stale because Go ecosystem resources, social profiles, and community channels change over time.
+
+Mitigation: Review the referenced resources periodically and verify external links before relying on them in user-facing guidance.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/samber/skills/golang-stay-updated)
+- [Metadata Homepage](https://github.com/samber/cc-skills-golang)
+- [Go Official Website](https://go.dev/)
+- [Go Packages](https://pkg.go.dev/)
+- [Go Blog](https://go.dev/blog)
+- [Go Wiki](https://go.dev/wiki/)
+- [Golang Weekly](https://golangweekly.com/)
+- [Awesome Go Newsletter](https://go.libhunt.com/)
+- [Go Forum](https://forum.golangbridge.org)
+- [golang-nuts](https://groups.google.com/g/golang-nuts)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown resource recommendations with links and concise lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include external web links and social/profile references for Go ecosystem resources.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

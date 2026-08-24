@@ -1,45 +1,60 @@
-## Description: <br>
-Based on computer vision, this skill analyzes pet camera or feeder media for feeding, drinking, excretion, mental state, vomiting, and limping indicators, then outputs health monitoring reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet camera or feeder images, videos, local files, and URLs for daily health indicators such as eating, drinking, excretion, mental state, vomiting, and limping, then returns health monitoring reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External pet-care users and developers use this skill to submit pet monitoring media or media URLs to the publisher's cloud service, receive structured pet health reports, and query historical monitoring reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet media or supplied URLs are sent to the publisher's cloud service for analysis and may reveal household context or routines. <br>
-Mitigation: Use only media suitable for the provider to process; avoid footage containing people, interiors, or sensitive routines unless the provider's retention and access practices are acceptable. <br>
-Risk: The skill creates or reuses a local identity and stores service tokens locally for API access. <br>
-Mitigation: Review local identity and token storage before installing, restrict workspace access, and clear stored identity or token data when the skill is no longer needed. <br>
-Risk: Health analysis reports are informational and can be incomplete or wrong. <br>
-Mitigation: Treat outputs as pet health reference material and consult a veterinarian for diagnosis, treatment, or urgent symptoms. <br>
+## Use Case:
 
+External pet owners and agents use this skill to analyze pet monitoring media and retrieve historical pet health reports. The generated health reports can support routine monitoring but should not replace professional veterinary diagnosis.
 
-## Reference(s): <br>
-- [Pet health analysis API documentation](artifact/references/api_doc.md) <br>
-- [smyx analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-health-monitoring-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Plain text or Markdown report with optional JSON detail and optional saved output file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include cloud report export links; local video files are limited to mp4, avi, or mov up to 10 MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: frontmatter and server release evidence) <br>
+Risk: The skill sends pet camera or feeder media, video URLs, report requests, and an internal identity to configured lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with media the user is authorized to share, and ask the publisher for retention, deletion, and authorization details before relying on historical reports.
+
+Risk: The skill stores an account cache containing tokens locally.
+
+Mitigation: Run it in a trusted workspace, restrict access to local cache files, and clear or rotate stored tokens before sharing the environment.
+
+Risk: Health analysis reports may be incomplete or unsuitable for medical decisions.
+
+Mitigation: Treat reports as pet health monitoring references and consult a veterinarian when abnormal behavior or health concerns are detected.
+
+## Reference(s):
+
+- [Pet Health Analysis API Documentation](references/api_doc.md)
+- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-health-monitoring-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files]
+
+**Output Format:** [Markdown reports and tables, JSON detail output, and optional saved result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include health report links and export URLs returned by the configured service.]
+
+## Skill Version(s):
+
+1.0.13 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

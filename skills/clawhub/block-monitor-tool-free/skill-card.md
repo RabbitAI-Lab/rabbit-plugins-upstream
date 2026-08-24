@@ -1,41 +1,57 @@
-## Description: <br>
-Content validation gateway free edition for AI application developers, providing basic AI-generated content policy checks, blocklist and allowlist management, content classification, and verification result logging. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI生成内容验证与策略检查工具,支持黑白名单管理、内容分类与基础策略执行,适合个人开发者内容审核。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External developers and individual AI application builders use this skill to perform basic content review before publishing or returning AI-generated output. It helps manage local policy terms, classify sensitive content, filter blocked terms, and record verification outcomes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist content previews or other sensitive snippets in local verification logs. <br>
-Mitigation: Avoid logging raw prompts, credentials, personal data, or regulated content unless the logging example is modified to redact or omit previews. <br>
-Risk: The release has an unresolved callback_url field while also claiming local-only handling. <br>
-Mitigation: Treat callback behavior as unresolved and review any network-related use before deploying the skill in workflows that process sensitive data. <br>
-Risk: The skill relies on command execution and local file writes for rule, output, and log management. <br>
-Mitigation: Run it only in an appropriate workspace, review proposed commands before execution, and limit write access to intended rule, output, and log locations. <br>
+## Use Case:
 
+Developers and individual builders use this skill to check AI-generated content against basic blocklist and allowlist rules, classify sensitive content, and record validation results before publication.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with Python and bash code blocks, JSON-shaped result examples, and local file path conventions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local rule, filtered-output, and verification log files when the suggested commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill can persist previews of sensitive user content in local verification logs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disable logging, redact previews, or avoid processing secrets, regulated data, and confidential content unless logging behavior is changed.
+
+Risk: The skill has broad activation language for a tool with read and command execution access.
+
+Mitigation: Invoke it only for explicit content moderation, rule management, and validation tasks, and review proposed shell commands before execution.
+
+Risk: Filtering examples can create local *_filtered.txt files.
+
+Mitigation: Check target paths and existing filtered files before running filtering commands.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/block-monitor-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline Python and bash code blocks, plus JSON-style validation result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local rule files, verification logs, and filtered text files when the agent executes the provided examples.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter metadata lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

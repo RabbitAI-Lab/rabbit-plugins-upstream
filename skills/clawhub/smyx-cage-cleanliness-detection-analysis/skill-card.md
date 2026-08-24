@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes cage images or videos to estimate feces and urine coverage, score cleanliness, trigger threshold-based cleaning alerts, and return reports for pet boarding, shop, hospital, or breeding settings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet cage floor images or videos to estimate feces and urine coverage, score cage cleanliness, trigger cleaning alerts, and return structured reports with report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External pet-care facility operators and developers use this skill to analyze cage floor media, estimate waste coverage, and retrieve cloud-backed reports for hygiene monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cage images or videos and report activity are sent to the publisher's cloud service. <br>
-Mitigation: Use the skill only for footage that is approved for cloud processing by the publisher, and review retention expectations before deployment. <br>
-Risk: The skill may create or reuse a local identity and persist account tokens in a workspace SQLite database. <br>
-Mitigation: Run it in an isolated workspace and review or remove stored local identity and token data when access is no longer needed. <br>
-Risk: Cloud report history can be retrieved automatically when report-list intents are triggered. <br>
-Mitigation: Limit use to operators authorized to view the associated reports and avoid using shared workspaces for sensitive facility footage. <br>
+## Use Case:
 
+External operators and developers use this skill to analyze cage floor media from boarding kennels, pet shops, animal hospitals, or breeding facilities and identify when waste coverage exceeds cleaning thresholds. It is intended for environmental hygiene management and does not provide medical diagnosis or treatment advice.
 
-## Reference(s): <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [API接口文档](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-cage-cleanliness-detection-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, files] <br>
-**Output Format:** [Markdown or JSON structured analysis report, with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cleanliness scores, threshold alerts, report links, and history tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release metadata) <br>
+Risk: Media submitted for analysis is sent to the Life Emergence cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable the skill only where uploaded images or videos may be processed by that service, and review data-retention expectations before use in sensitive environments.
+
+Risk: The skill can automatically create or reuse an account-linked identity, read a workspace identity file, and store tokens locally for future report access.
+
+Mitigation: Administrators should review account provisioning and local token storage before enabling the skill in shared workspaces, and remove or revoke stored credentials when access should end.
+
+Risk: Historical report queries return account-linked cloud report data.
+
+Mitigation: Restrict use to users authorized to access those reports and review report-access controls before deployment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-cage-cleanliness-detection-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [Cage Cleanliness API Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files]
+
+**Output Format:** [Markdown or JSON-like structured text, with optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cleanliness scores, waste coverage estimates, alerts, recommendations, history tables, and cloud report links.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata; artifact frontmatter says 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

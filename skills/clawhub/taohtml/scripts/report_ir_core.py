@@ -42,6 +42,10 @@ BUILT_IN_THEME_IDS = {
     "rigorous-consulting-report",
     "corporate-annual-report",
     "editorial-collage",
+    "deep-data-dashboard",
+    "warm-brand-narrative",
+    "minimal-product-whitespace",
+    "formal-government-bluewhite",
 }
 STANDARD_PAGE_ROLES = {
     "orient",

@@ -1,41 +1,59 @@
-## Description: <br>
-Zero-exposure cross-device script authorization using MGC Blackbox seal functionality, where scripts are encrypted with a target node's public key, transferred as ciphertext, and decrypted only during execution on the authorized node. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zero-exposure cross-device script authorization using MGC Blackbox seal functionality, where scripts are encrypted with a target node's RSA public key, transferred as ciphertext, and decrypted only during execution on the authorized node.
 
-## Publisher: <br>
-[zkeviny](https://clawhub.ai/user/zkeviny) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zkeviny](https://clawhub.ai/user/zkeviny)
 
-## Use Case: <br>
-Developers and security teams use this documentation skill to guide agents through sealing scripts for cross-device execution with MGC Blackbox while keeping script contents encrypted during transfer and storage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill teaches users to run encrypted scripts they cannot inspect. <br>
-Mitigation: Only run sealed scripts from fully trusted sources, prefer signed or hash-verified payloads, and use a constrained sandbox or least-privilege environment. <br>
-Risk: Users may treat encryption as proof that a hidden script is safe. <br>
-Mitigation: Review provenance and authorization separately from encryption status, and do not execute sealed payloads when the publisher or payload integrity cannot be verified. <br>
+## Use Case:
 
+Developers and operators use this skill to seal, transfer, store, and run MGC Blackbox scripts across devices without exposing plaintext script content. It is intended for cross-organization script sharing, trusted partner automation, and delegated task execution.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zkeviny/skills/cross-node-script-auth) <br>
-- [MGC Blackbox Repository](https://github.com/zkeviny/MGC-Blackbox) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python and JSON examples and shell setup commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; it does not produce executable artifacts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and artifact frontmatter) <br>
+Risk: Sealed scripts are opaque to the receiving agent and can execute unreviewable code on the target machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only run sealed scripts from independently trusted parties, confirm provenance through a separate mechanism, and execute under a least-privilege or sandboxed account.
+
+Risk: The documented capsule transfer flow protects confidentiality but does not by itself prove integrity.
+
+Mitigation: Verify capsule integrity out of band and use a trusted transfer channel before storing or running the sealed script.
+
+Risk: Overwrite workflows can replace an existing same-name script without enough operator review.
+
+Mitigation: Avoid overwrite-by-default use, check the target script identifier before saving, and require explicit approval when replacing an existing sealed script.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zkeviny/skills/cross-node-script-auth)
+- [MGC Blackbox Repository](https://github.com/zkeviny/MGC-Blackbox)
+- [MGC Blackbox Issues](https://github.com/zkeviny/MGC-Blackbox/issues)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with Python and JSON code blocks and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only skill; generated guidance may include MGC tool calls and local execution steps.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata; artifact frontmatter reports 1.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

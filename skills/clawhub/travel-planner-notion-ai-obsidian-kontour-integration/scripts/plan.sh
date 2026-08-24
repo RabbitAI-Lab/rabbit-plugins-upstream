@@ -1149,6 +1149,75 @@ def build_output_polish(ctx, dest_data, destination_comparison, risk_fallbacks):
         'checks': validation_checks,
     }
 
+    review_queue_items = []
+    if open_decisions:
+        review_queue_items.append({
+            'priority': 1,
+            'owner': 'user',
+            'severity': 'blocker',
+            'task': next_question or f"Clarify {open_decisions[0]}",
+            'source': 'open_decisions[0]',
+            'done_when': 'Traveler answer resolves the highest-priority missing input before itinerary expansion.',
+        })
+    if risk_fallbacks:
+        review_queue_items.append({
+            'priority': len(review_queue_items) + 1,
+            'owner': 'operator',
+            'severity': 'warning',
+            'task': f"Validate fallback viability for {risk_fallbacks[0]['fallback']['nearest_viable_alternative']}",
+            'source': 'risk_fallbacks[0]',
+            'done_when': 'Fallback is compatible with the same constraints and can replace the primary anchor if live checks fail.',
+        })
+    if ctx.get('suggested_places') or destination_comparison:
+        review_queue_items.append({
+            'priority': len(review_queue_items) + 1,
+            'owner': 'operator',
+            'severity': 'required',
+            'task': f"Run live viability checks for {summary_subject}",
+            'source': 'suggested_places[0]' if ctx.get('suggested_places') else 'destination_comparison.recommended_option',
+            'done_when': 'Hours, transit, pricing, and availability are acceptable or the recommendation is reranked.',
+        })
+    if ctx.get('constraint_details'):
+        review_queue_items.append({
+            'priority': len(review_queue_items) + 1,
+            'owner': 'operator',
+            'severity': 'required',
+            'task': 'Confirm active constraints are preserved in the next response',
+            'source': 'constraint_details',
+            'done_when': 'Budget, pace, neighborhood, hours, food, and weather constraints remain visible or caveated.',
+        })
+    if ctx.get('day_plan_continuity'):
+        review_queue_items.append({
+            'priority': len(review_queue_items) + 1,
+            'owner': 'operator',
+            'severity': 'advisory',
+            'task': 'Check day-flow continuity before timed expansion',
+            'source': 'day_plan_continuity',
+            'done_when': 'Morning, afternoon, and evening anchors still avoid unnecessary backtracking after live routing checks.',
+        })
+    if not review_queue_items:
+        review_queue_items.append({
+            'priority': 1,
+            'owner': 'operator',
+            'severity': 'advisory',
+            'task': actions[0],
+            'source': 'next_step_actions[0]',
+            'done_when': 'The next planning move is completed or converted into a traveler clarification.',
+        })
+    for index, item in enumerate(review_queue_items[:5], start=1):
+        item['priority'] = index
+    operator_review_queue = {
+        'audience': 'operator',
+        'format': 'prioritized review queue',
+        'recommended_focus': summary_subject,
+        'queue_status': 'blocked' if open_decisions else 'needs_validation' if (risk_fallbacks or ctx.get('suggested_places') or destination_comparison) else 'ready',
+        'items': review_queue_items[:5],
+        'copy_text': '\n'.join(
+            f"{item['priority']}. [{item['owner']}/{item['severity']}] {item['task']} — done when: {item['done_when']}"
+            for item in review_queue_items[:5]
+        ),
+    }
+
     constraint_compliance_checks = []
     budget_context = ctx.get('budget') or {}
     if isinstance(budget_context, dict) and budget_context.get('cap'):
@@ -1702,6 +1771,78 @@ def build_output_polish(ctx, dest_data, destination_comparison, risk_fallbacks):
         'copy_line': f"Risk: {risk_level}; send mode: {traveler_send_mode}; next: {operator_action}",
     }
 
+    if open_decisions:
+        send_decision = 'hold_and_ask'
+        send_as = 'clarifying question'
+        can_send_final = False
+        primary_blocker = next_question or f"Clarify {open_decisions[0]}"
+        hold_reason = 'Highest-priority user decision is still open; do not present a final itinerary yet.'
+    elif risk_fallbacks:
+        send_decision = 'send_provisional'
+        send_as = 'provisional recommendation with fallback'
+        can_send_final = False
+        primary_blocker = risk_fallbacks[0]['warning']
+        hold_reason = 'Fallback warning is active; send only as a provisional plan.'
+    elif ctx.get('suggested_places') or destination_comparison:
+        send_decision = 'send_provisional'
+        send_as = 'provisional recommendation after live checks'
+        can_send_final = False
+        primary_blocker = f"Verify live hours, transit, pricing, and availability for {summary_subject}"
+        hold_reason = 'Offline recommendation still needs operator live validation before it can be treated as final.'
+    else:
+        send_decision = 'send_ready'
+        send_as = 'ready itinerary expansion'
+        can_send_final = True
+        primary_blocker = 'None'
+        hold_reason = 'No first-pass send blocker; expand with standard live-availability caveats.'
+
+    must_ask_or_include = []
+    if open_decisions:
+        must_ask_or_include.append(f"Ask: {next_question or f'Clarify {open_decisions[0]}'}")
+    if risk_fallbacks:
+        must_ask_or_include.append(
+            f"Keep {risk_fallbacks[0]['fallback']['nearest_viable_alternative']} visible as fallback"
+        )
+    must_ask_or_include.append(
+        f"Keep {summary_subject} labeled as {finalization_gate['safe_presentation_mode']}"
+    )
+    must_ask_or_include = must_ask_or_include[:3]
+
+    if can_send_final:
+        copy_prefix = 'OK to send.'
+    else:
+        copy_prefix = 'HOLD as final plan.'
+    if send_as == 'clarifying question':
+        copy_action = f"Send a clarifying question: {primary_blocker}"
+    elif send_as == 'provisional recommendation with fallback':
+        copy_action = (
+            f"Send a provisional recommendation with fallback: "
+            f"{risk_fallbacks[0]['fallback']['nearest_viable_alternative']}"
+        )
+    elif send_as == 'provisional recommendation after live checks':
+        copy_action = f"Send a provisional recommendation after live checks for {summary_subject}."
+    else:
+        copy_action = f"Send the next itinerary expansion for {summary_subject}."
+    if risk_fallbacks and not can_send_final:
+        copy_tail = (
+            f"Keep {summary_subject} labeled as a {finalization_gate['safe_presentation_mode']} "
+            f"and {risk_fallbacks[0]['fallback']['nearest_viable_alternative']} visible as fallback."
+        )
+    else:
+        copy_tail = f"Keep {summary_subject} labeled as a {finalization_gate['safe_presentation_mode']}."
+    send_decision_card = {
+        'audience': 'operator',
+        'format': 'send/hold decision card',
+        'recommended_focus': summary_subject,
+        'decision': send_decision,
+        'can_send_final': can_send_final,
+        'send_as': send_as,
+        'primary_blocker': primary_blocker,
+        'must_ask_or_include': must_ask_or_include,
+        'hold_reason': hold_reason,
+        'copy_text': f"{copy_prefix} {copy_action} {copy_tail}",
+    }
+
     return {
         'compact_sections': sections,
         'decision_summary': decision_summary,
@@ -1719,6 +1860,7 @@ def build_output_polish(ctx, dest_data, destination_comparison, risk_fallbacks):
         'operator_preflight_card': operator_preflight_card,
         'final_reply_preview': final_reply_preview,
         'validation_summary': validation_summary,
+        'operator_review_queue': operator_review_queue,
         'constraint_compliance_card': constraint_compliance_card,
         'itinerary_expansion_brief': itinerary_expansion_brief,
         'finalization_gate': finalization_gate,
@@ -1737,6 +1879,7 @@ def build_output_polish(ctx, dest_data, destination_comparison, risk_fallbacks):
         'presentation_contract_check': presentation_contract_check,
         'reply_readiness_score': reply_readiness_score,
         'decision_risk_meter': decision_risk_meter,
+        'send_decision_card': send_decision_card,
         'presentation_markdown': {
             'format': 'compact markdown draft',
             'sections': markdown_sections,

@@ -1,41 +1,57 @@
-## Description: <br>
-Structured error handling in Golang with samber/oops, covering error builders, stack traces, error codes, error context, wrapping, attributes, user-facing messages, panic recovery, and logger integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Structured error handling in Golang with samber/oops — error builders, stack traces, error codes, error context, error wrapping, error attributes, user-facing vs developer messages, panic recovery, and logger integration.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineers use this skill when adopting or maintaining samber/oops in Go services. It helps agents generate and review structured error handling patterns for wrapping errors, propagating context, separating public and technical messages, recovering panics, and integrating logs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated error-handling examples may attach sensitive user, request, response, query, credential, or raw input data to errors that flow into logs or observability systems. <br>
-Mitigation: Keep request and response bodies disabled by default, avoid emails, tokens, cookies, authorization headers, credentials, and raw user input in error attributes, and use allowlisted, redacted, truncated, or hashed fields for observability exports. <br>
+## Use Case:
 
+Developers and engineers use this skill when adopting or maintaining Go code that uses github.com/samber/oops for structured errors, panic recovery, public messages, and logging integration.
 
-## Reference(s): <br>
-- [Skill homepage](https://github.com/samber/cc-skills-golang) <br>
-- [samber/oops repository](https://github.com/samber/oops) <br>
-- [samber/oops Go package documentation](https://pkg.go.dev/github.com/samber/oops) <br>
-- [Advanced patterns](references/advanced.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with Go code examples and optional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May rely on the Go toolchain and samber/oops documentation for validation and examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.3 (source: release evidence and frontmatter) <br>
+Risk: Generated error-handling examples may attach personal data, request or response details, sensitive headers, or raw payloads to errors that are later logged or exported.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated error attributes before use; prefer opaque identifiers, avoid emails and raw bodies, and sanitize payloads before they are stored in error context or sent to logs or APM systems.
+
+Risk: Verbose stack traces and source fragments can expose internal implementation details in external error tracking systems.
+
+Mitigation: Configure stack trace depth and source fragment behavior deliberately before deployment, and confirm exported error output matches the service's data handling policy.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/golang-samber-oops)
+- [Skill homepage](https://github.com/samber/cc-skills-golang)
+- [github.com/samber/oops](https://github.com/samber/oops)
+- [pkg.go.dev/github.com/samber/oops](https://pkg.go.dev/github.com/samber/oops)
+- [samber/oops Advanced Patterns](references/advanced.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with Go code examples and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Go tooling when validating generated examples or diagnostics.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,54 @@
-## Description: <br>
-Discard the accumulated drafts and framings from this thread and re-derive the task from a clean problem statement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discards accumulated drafts and framings from a thread, then re-derives the task from a clean problem statement when the user asks for a reset or fresh take.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Agents use this skill when a conversation has drifted or become anchored on earlier drafts. It helps extract the facts worth keeping, then either continue from a clean brief or hand the task to a fresh context for higher-stakes work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The reset pattern intentionally deprioritizes earlier drafts, which can drop useful context if the extracted brief is incomplete. <br>
-Mitigation: Review the extracted brief before continuing on sensitive work. <br>
-Risk: For deep contamination or high-stakes work, continuing in the same conversation can preserve unwanted anchoring. <br>
-Mitigation: Move the clean brief to a fresh subagent or a new session when the skill identifies deep contamination. <br>
+## Use Case:
 
+Agents and their users use this skill to recover from stale, circular, or contaminated conversation framing by extracting durable facts and re-deriving the task from a cleaner brief. For deep contamination or high-stakes work, the skill directs the agent to hand the brief to a fresh context instead of attempting an in-thread reset.
 
-## Reference(s): <br>
-- [Skill homepage](https://github.com/tenequm/skills/tree/main/skills/reset-context-contamination) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text] <br>
-**Output Format:** [Markdown or plain text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompt-only; no files, shell commands, or configuration are produced.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: frontmatter and server release metadata) <br>
+Risk: Broad activation wording may reset conversation framing when the user intended only a casual fresh perspective.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use narrower trigger wording or ask for confirmation before applying the reset in ambiguous cases.
+
+Risk: In deep contamination or high-stakes work, an in-thread reset may preserve flawed assumptions from the existing conversation.
+
+Mitigation: Extract only durable facts and constraints, then hand the brief to a fresh context or recommend a new session.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/reset-context-contamination)
+- [Metadata Homepage](https://github.com/tenequm/skills/tree/main/skills/reset-context-contamination)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown or plain-language guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No code execution, shell commands, data access, or generated files are required by the skill.]
+
+## Skill Version(s):
+
+0.1.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

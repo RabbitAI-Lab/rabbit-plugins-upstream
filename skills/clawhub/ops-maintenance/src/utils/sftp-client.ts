@@ -6,6 +6,7 @@
 
 import SftpClient from 'ssh2-sftp-client'
 import { ConnectionConfig, getSSHPool } from './ssh-pool.js'
+import { readFileSync } from 'fs'
 
 export interface FileTransferOptions {
   localPath: string
@@ -42,7 +43,7 @@ export class SFTPManager {
       host: config.host,
       port: config.port || 22,
       username: config.user || 'root',
-      privateKey: config.keyFile ? require('fs').readFileSync(config.keyFile) : undefined,
+      privateKey: config.keyFile ? readFileSync(config.keyFile) : undefined,
       password: config.password,
       readyTimeout: 15000
     })

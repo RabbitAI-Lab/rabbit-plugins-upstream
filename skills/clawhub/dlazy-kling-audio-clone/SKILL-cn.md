@@ -1,11 +1,11 @@
 ---
 name: dlazy-kling-audio-clone
 version: 1.3.4
-description: 使用可灵 (Kling) 声音克隆模型，通过上传参考音频，生成高度还原该音色的定制语音。
+description: "使用可灵 (Kling) 声音克隆模型，通过上传参考音频，生成高度还原该音色的定制语音。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy kling-audio-clone -h 查看帮助信息。"}}
 ---
 
-# dlazy-kling-audio-clone
+# 声音克隆 可灵 Kling Audio Clone
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

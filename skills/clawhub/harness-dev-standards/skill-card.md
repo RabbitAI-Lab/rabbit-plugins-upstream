@@ -1,45 +1,57 @@
-## Description: <br>
-Provides a development quality standards framework for checking requirements, architecture, code, dependencies, environment configuration, and delivery readiness. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Harness Dev Standards provides quality gates, checklists, remediation guidance, and shell scripts for reviewing TypeScript, JavaScript, and Node.js project readiness before delivery.
 
-## Publisher: <br>
-[ai-acheng](https://clawhub.ai/user/ai-acheng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ai-acheng](https://clawhub.ai/user/ai-acheng)
 
-## Use Case: <br>
-Developers and engineering teams use this skill before delivery to apply quality gates, run dependency and quality checks, and follow remediation guidance for common project issues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill gives agents broad automatic remediation authority over dependencies, code, and local project state. <br>
-Mitigation: Use it in trusted repositories and require approval before editing files, changing dependencies, installing tools, creating environment files, running dev or build commands, or stopping processes. <br>
-Risk: Bundled scripts can invoke npm, npx, npm audit, project build scripts, and a global depcheck installation. <br>
-Mitigation: Review package scripts first and run checks in an isolated working tree or disposable environment before applying fixes. <br>
-Risk: The server security verdict is suspicious because approval and rollback controls are not clearly defined. <br>
-Mitigation: Keep source control checkpoints, review proposed diffs, and rerun checks after each approved change. <br>
+## Use Case:
 
+Developers and small teams use this skill before delivery to run quality checks, apply review checklists, and receive remediation guidance for TypeScript and JavaScript projects, especially Next.js, Node.js, and React library work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ai-acheng/harness-dev-standards) <br>
-- [Detailed file structure and naming standards](references/standards.md) <br>
-- [Delivery checklist](references/checklist.md) <br>
-- [Remediation strategies](references/remediation.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and checklist items] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run local quality checks and propose remediation steps for dependencies, code, environment configuration, and build readiness.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence and artifact/skill.json) <br>
+Risk: The skill encourages automatic code, dependency, and environment changes without enough user control.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before dependency changes, source edits, npm audit fix, global package installation, .env edits, or terminating processes; review diffs before applying changes.
+
+Risk: Bundled scripts can install depcheck globally and run npm audit, npx tsc, npx eslint, and npm run build in the active project.
+
+Mitigation: Run scripts only from the intended project root, review package manager effects before accepting fixes, and keep secret values out of command output and logs.
+
+## Reference(s):
+
+- [Server-resolved GitHub provenance](https://github.com/AI-aCheng/harness-dev-standards)
+- [ClawHub skill page](https://clawhub.ai/ai-acheng/skills/harness-dev-standards)
+- [Standards reference](references/standards.md)
+- [Delivery checklist](references/checklist.md)
+- [Remediation guide](references/remediation.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell command snippets and checklist-style reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory results; script outputs depend on the target project's package.json, TypeScript, ESLint, dependency, environment, and build setup.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

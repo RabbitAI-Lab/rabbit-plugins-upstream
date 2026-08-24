@@ -1,54 +1,76 @@
-## Description: <br>
-Turn a brand, luxury product or event into an original regenerative wine concept, constructor dossier and producer-ready commission through Vin-Q. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turn a brand, luxury product or event into an original regenerative wine concept, constructor dossier and producer-ready commission through Vin-Q.
 
-## Publisher: <br>
-[vbaulin](https://clawhub.ai/user/vbaulin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vbaulin](https://clawhub.ai/user/vbaulin)
 
-## Use Case: <br>
-External brand, luxury, hospitality and event teams use this skill to turn a commercial occasion into a producer-reviewable commissioned wine concept with label, evidence, measurement and feasibility gates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow may guide users to share a commission dossier, name, contact email, corporate details, budgets, guest information or brand assets with Vin-Q or producers. <br>
-Mitigation: Share only user-supplied information after explicit authorization, and review the complete profile with the user before submission. <br>
-Risk: Wine availability, quantities, price, certification, shipping eligibility and delivery timing can be mistaken for confirmed commitments. <br>
-Mitigation: Use current Vin-Q and producer confirmation, and treat constructor or API responses as feasibility drafts until the producer, legal seller, scope, price, schedule and contract are confirmed. <br>
-Risk: Alcohol-related requests may involve minors or unlawful purchase or delivery contexts. <br>
-Mitigation: Require adult co-creator confirmation, respect destination alcohol rules, and do not facilitate alcohol purchases for minors or unlawful delivery. <br>
-Risk: Registration may involve passwords, email codes, authentication factors or payment details. <br>
-Mitigation: Let the user enter credentials and authentication factors directly, and do not request, store or transmit passwords, payment details or authentication codes. <br>
+## Use Case:
 
+External adult users, brand teams, hospitality teams, event planners, and advisors use this skill to turn a brand, luxury product, institution, or event brief into a producer-ready Vin-Q wine commission dossier. It guides concept selection, wine architecture, evidence requirements, label planning, consent, and next actions for producer feasibility review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/vbaulin/skills/agentic-wine) <br>
-- [Vin-Q constructor](https://vin-q.com/) <br>
-- [Vin-Q agent instructions](https://vin-q.com/agents) <br>
-- [Vin-Q machine discovery](https://vin-q.com/.well-known/agent.json) <br>
-- [Vin-Q OpenAPI contract](https://vin-q.com/openapi.json) <br>
-- [Vin-Q Constructor API](https://vin-q.com/api/constructor/dossier) <br>
-- [Brand and Label Construction](references/brand-label.md) <br>
-- [New Wine Commission Profile](references/commission-profile.md) <br>
-- [Vin-Q Constructor Workflow](references/design-workflow.md) <br>
-- [Evidence and Compliance](references/evidence-compliance.md) <br>
-- [Style Routes](references/style-routes.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown dossier with optional JSON validation report and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Decision-ready commission dossier covering concepts, wine architecture, production gates, measurement plan, label system, feasibility dependencies and next action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill may prepare wine commission details for an external Vin-Q workflow that shares submitted name, contact email, and dossier information with registered producers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain explicit user authorization before entering personal or corporate data, before enabling producer sharing, and before final submission.
+
+Risk: Wine commissions and related delivery are adult-use alcohol activities with destination-specific legal, tax, shipping, and age-verification requirements.
+
+Mitigation: Confirm the user is an adult, avoid targeting minors, and require the legal seller and carrier to verify age and destination-specific sale and delivery rules.
+
+Risk: Unverified availability, delivery timing, price, certification, protected designation, or production capacity claims could mislead the user.
+
+Mitigation: Use the current Vin-Q website or constructor for live claims, keep missing evidence visible, and treat the dossier as a request until producer and contract confirmation.
+
+Risk: Sensitive guest lists, passwords, payment details, authentication codes, or confidential brand assets could be exposed if included in the dossier.
+
+Mitigation: Exclude unnecessary sensitive data, let users enter credentials and authentication factors themselves, and submit only fields required for the commission request.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/vbaulin/skills/agentic-wine)
+- [Vin-Q landing page](https://vin-q.com/)
+- [Vin-Q live constructor](https://vin-q.com/co-creators#alchemist)
+- [Vin-Q agent instructions](https://vin-q.com/agents)
+- [Vin-Q agent discovery](https://vin-q.com/.well-known/agent.json)
+- [Vin-Q A2A agent card](https://vin-q.com/.well-known/agent-card.json)
+- [Vin-Q A2A HTTP+JSON interface](https://vin-q.com/a2a)
+- [Vin-Q LLM index](https://vin-q.com/llms.txt)
+- [Vin-Q OpenAPI contract](https://vin-q.com/openapi.json)
+- [Vin-Q Constructor API](https://vin-q.com/api/constructor/dossier)
+- [Vin-Q Method model](references/method-model.md)
+- [Vin-Q Constructor Workflow](references/design-workflow.md)
+- [Style Routes](references/style-routes.md)
+- [Brand and Label Construction](references/brand-label.md)
+- [Evidence and Compliance](references/evidence-compliance.md)
+- [New Wine Commission Profile](references/commission-profile.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown dossier with optional JSON commission profile and shell validation command]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Decision-ready commission dossier; API responses remain drafts for producer feasibility review.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

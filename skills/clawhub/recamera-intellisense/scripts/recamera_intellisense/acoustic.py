@@ -11,7 +11,7 @@ if __name__ == "__main__" and __package__ is None:
 
     raise SystemExit(main())
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from . import _config, _http
 
@@ -20,7 +20,7 @@ __all__ = ["get_active_acoustic_model"]
 PATH_ACTIVE = "/extension/acousticslab/api/v1/active"
 
 
-def get_active_acoustic_model(device_name: str) -> Optional[Dict[str, Any]]:
+def get_active_acoustic_model(device_name: Optional[str] = None) -> Optional[Dict[str, Any]]:
     """Return the active sound-event model, or `None`.
 
     Keys: `runtime_head_id`, `labels`, `n_classes?`, `sha256?`,
@@ -44,6 +44,3 @@ def get_active_acoustic_model(device_name: str) -> Optional[Dict[str, Any]]:
 
 
 COMMANDS = {"get_active_acoustic_model": get_active_acoustic_model}
-COMMAND_SCHEMAS = {
-    "get_active_acoustic_model": {"required": {"device_name"}, "optional": set()}
-}

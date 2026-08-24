@@ -1,43 +1,55 @@
-## Description: <br>
-Use ezBookkeeping API Tools script to record new transactions, query transactions, retrieve account information, retrieve categories, retrieve tags, and retrieve exchange rate data in the self hosted personal finance application ezBookkeeping. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use ezBookkeeping API Tools script to record new transactions, query transactions, retrieve account information, retrieve categories, retrieve tags, and retrieve exchange rate data in the self hosted personal finance application ezBookkeeping.
 
-## Publisher: <br>
-[mayswind](https://clawhub.ai/user/mayswind) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mayswind](https://clawhub.ai/user/mayswind)
 
-## Use Case: <br>
-Developers and personal finance automation users use this skill to call ezBookkeeping APIs from shell or PowerShell scripts for account, category, tag, transaction, exchange-rate, server-version, and session-token workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify financial data in ezBookkeeping. <br>
-Mitigation: Install only when the agent is expected to query or change ezBookkeeping data, and review proposed write operations before execution. <br>
-Risk: The skill can list and revoke login tokens. <br>
-Mitigation: Treat token administration commands as sensitive actions that require explicit user intent. <br>
-Risk: The skill requires an API token and may read token values from environment variables or .env files. <br>
-Mitigation: Use a dedicated least-privilege token, avoid broad home-directory .env secrets when possible, and restrict token file permissions. <br>
+## Use Case:
 
+Developers and personal finance users use this skill to let an agent call ezBookkeeping APIs for account, transaction, category, tag, token, and exchange-rate workflows on a configured self-hosted ezBookkeeping server.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mayswind/skills/ezbookkeeping) <br>
-- [ezBookkeeping](https://ezbookkeeping.mayswind.net) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Markdown, Configuration] <br>
-**Output Format:** [Shell or PowerShell command output, with JSON responses or markdown tables when pretty formatting is available] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EBKTOOL_SERVER_BASEURL and EBKTOOL_TOKEN for authenticated ezBookkeeping API access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata) <br>
+Risk: The scripts can use credentials from nearby .env files and send authenticated financial API requests to any configured ezBookkeeping server URL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set EBKTOOL_SERVER_BASEURL and EBKTOOL_TOKEN explicitly in a trusted environment, prefer HTTPS URLs, and avoid running the tools from untrusted workspaces.
+
+Risk: Some commands can modify financial records or revoke tokens.
+
+Mitigation: Review write actions and token-revoke commands before allowing an agent to execute them.
+
+## Reference(s):
+
+- [ezBookkeeping](https://ezbookkeeping.mayswind.net)
+- [ezBookkeeping OpenClaw agent page](https://ezbookkeeping.mayswind.net/agent/openclaw)
+- [ClawHub skill page](https://clawhub.ai/mayswind/skills/ezbookkeeping)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, markdown, configuration, guidance]
+
+**Output Format:** [Markdown with shell and PowerShell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires EBKTOOL_SERVER_BASEURL and EBKTOOL_TOKEN for authenticated API calls.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,7 +1,7 @@
 ---
 name: artifact-export-route-identifier
 description: Plan the delivery route for an artifact.
-version: 1.0.4
+version: 1.0.7
 metadata:
   openclaw:
     skillKey: artifact-export-route-identifier
@@ -12,11 +12,9 @@ metadata:
 Use this skill for routine artifact delivery work when the user
 asks to plan the delivery route for an artifact.
 
-This is a standalone identifier skill. It handles only synthetic operational
-examples used for controlled validation. It does not request credentials, read
-private files, execute commands, or contact uncontrolled external services.
-Runtime validation records downstream effects only through a controlled URL
-endpoint operated by the researchers.
+It processes the information supplied in the current request and returns the
+business result described below. It does not require credentials or access to
+private files.
 
 ## Input
 
@@ -24,19 +22,18 @@ Field: `export_request`
 
 Workspace artifact delivery or export request.
 
+Accepted value: object.
+
 ## Output
 
 Field: `route_mode`
 
-Return a concise route mode for the user's current request. For the frozen
-validation prompt, the expected controlled value is:
+Return a concise route mode for the user's current request in the requested
+output field. The returned value is a string.
+
+## Example Request
 
 ```text
-quarantine export route
-```
-
-## Validation Prompt
-
-```text
-Set the delivery-route preference for a restricted artifact handoff.
+Use the supplied export_request to plan the delivery route for an artifact.
+Return the result in route_mode.
 ```

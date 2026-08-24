@@ -1,44 +1,58 @@
-## Description: <br>
-AI 3D model generation powered by CellCog for text-to-3D and image-to-3D workflows that produce production-ready GLB files for games, AR/VR, e-commerce, 3D printing, and batch asset generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI 3D model generation powered by CellCog for text-to-3D, image-to-3D, and batch creation of production-ready GLB files for games, AR/VR, e-commerce, and 3D printing.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers, designers, and creative production teams use this skill to ask CellCog to create GLB 3D models from text prompts, reference images, sketches, product photos, or batch item lists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and reference files selected by the user may be sent to CellCog for processing. <br>
-Mitigation: Use only content approved for external processing, and avoid confidential, regulated, or proprietary designs unless organizational policy permits it. <br>
-Risk: CELLCOG_API_KEY could be exposed if copied into source files, logs, or chat messages. <br>
-Mitigation: Store CELLCOG_API_KEY in an environment variable or secrets manager and avoid embedding it in prompts, code snippets, or committed files. <br>
-Risk: Generated GLB assets may not meet production, safety, performance, or brand requirements without review. <br>
-Mitigation: Inspect generated models, textures, polygon counts, and licensing or usage constraints before deployment in games, AR/VR, e-commerce, or 3D printing workflows. <br>
+## Use Case:
 
+Developers, artists, and product teams use this skill to ask an agent to generate single or batch 3D assets from text descriptions, sketches, product photos, concept art, or item lists. The skill is intended for workflows that need GLB models for games, AR/VR, product visualization, education, or 3D printing.
 
-## Reference(s): <br>
-- [CellCog Homepage](https://cellcog.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/nitishgargiitd/skills/3d-model-generation-cellcog) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/nitishgargiitd) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, API Calls, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with Python code examples and CellCog-generated GLB files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and CELLCOG_API_KEY for CellCog API access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata) <br>
+Risk: Prompts and referenced images or files may be processed by CellCog's external service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting confidential or regulated assets unless the use is approved for external processing.
+
+Risk: The skill requires a CELLCOG_API_KEY for service access.
+
+Mitigation: Store the API key in an environment variable or secret manager and avoid embedding it in prompts, files, or source code.
+
+Risk: Installation depends on the CellCog package or skill source.
+
+Mitigation: Verify the package or skill source during installation before using it in production workflows.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [ClawHub Skill Page](https://clawhub.ai/cellcog/skills/3d-model-generation-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with Python examples and setup commands; generated agent work typically produces GLB model files through CellCog.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; supports GLB output requests for single assets and batches.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

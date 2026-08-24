@@ -1,11 +1,11 @@
 # ISCH\_PrimitivePolygon class
 
-多边形（折线）图元
+Polygon (polyline) primitive
 
 ## Signature
 
 ```typescript
-declare class ISCH_PrimitivePolygon implements ISCH_Primitive 
+export class ISCH_PrimitivePolygon implements ISCH_Primitive 
 ```
 **Implements:** [ISCH\_Primitive](../interfaces/ISCH_Primitive.md)
 
@@ -40,7 +40,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 将对图元的更改应用到画布
+**_(BETA)_** Apply the changes to the primitives to the canvas
 
 
 </td></tr>
@@ -54,7 +54,7 @@ Description
 
 </td><td>
 
-获取属性状态：颜色
+Get the property state: color
 
 
 </td></tr>
@@ -68,7 +68,7 @@ Description
 
 </td><td>
 
-获取属性状态：填充颜色
+Get the property state: fill color
 
 
 </td></tr>
@@ -82,7 +82,7 @@ Description
 
 </td><td>
 
-获取属性状态：坐标组
+Get the property state: coordinate group
 
 
 </td></tr>
@@ -96,7 +96,7 @@ Description
 
 </td><td>
 
-获取属性状态：线型
+Get the property state: line type
 
 
 </td></tr>
@@ -110,7 +110,7 @@ Description
 
 </td><td>
 
-获取属性状态：线宽
+Get the property state: Line width
 
 
 </td></tr>
@@ -124,7 +124,7 @@ Description
 
 </td><td>
 
-获取属性状态：图元 ID
+Get the property state: primitive ID
 
 
 </td></tr>
@@ -138,7 +138,7 @@ Description
 
 </td><td>
 
-获取属性状态：图元类型
+Get the property state: primitive type
 
 
 </td></tr>
@@ -152,7 +152,7 @@ Description
 
 </td><td>
 
-查询图元是否为异步图元
+Query whether the primitive is an async primitive
 
 
 </td></tr>
@@ -166,7 +166,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 将异步图元重置为当前画布状态
+**_(BETA)_** Reset the async primitive to the current canvas state
 
 
 </td></tr>
@@ -180,7 +180,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：颜色
+**_(BETA)_** Set the property state: color
 
 
 </td></tr>
@@ -194,7 +194,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：填充颜色
+**_(BETA)_** Set the property state: fill color
 
 
 </td></tr>
@@ -208,7 +208,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：坐标组
+**_(BETA)_** Set the property state: coordinate group
 
 
 </td></tr>
@@ -222,7 +222,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：线型
+**_(BETA)_** Set the property state: line type
 
 
 </td></tr>
@@ -236,7 +236,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 设置属性状态：线宽
+**_(BETA)_** Set the property state: Line width
 
 
 </td></tr>
@@ -250,7 +250,7 @@ Description
 
 </td><td>
 
-将图元转换为异步图元
+Convert Primitive to Async primitive
 
 
 </td></tr>
@@ -264,7 +264,7 @@ Description
 
 </td><td>
 
-将图元转换为同步图元
+Convert Primitive to Sync primitive
 
 
 </td></tr>
@@ -280,185 +280,12 @@ Description
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-将对图元的更改应用到画布
+Apply the changes to the primitives to the canvas
 
 ## Signature
 
 ```typescript
-done(): ISCH_PrimitivePolygon;
-```
-
-
-## Returns
-
-[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)
-
-多边形图元对象
-
-### getstate_color
-
-# ISCH\_PrimitivePolygon.getState\_Color() method
-
-获取属性状态：颜色
-
-## Signature
-
-```typescript
-getState_Color(): string | null;
-```
-
-
-## Returns
-
-string \| null
-
-颜色
-
-### getstate_fillcolor
-
-# ISCH\_PrimitivePolygon.getState\_FillColor() method
-
-获取属性状态：填充颜色
-
-## Signature
-
-```typescript
-getState_FillColor(): string | null;
-```
-
-
-## Returns
-
-string \| null
-
-填充颜色
-
-### getstate_line
-
-# ISCH\_PrimitivePolygon.getState\_Line() method
-
-获取属性状态：坐标组
-
-## Signature
-
-```typescript
-getState_Line(): Array<number>;
-```
-
-
-## Returns
-
-Array&lt;number&gt;
-
-坐标组
-
-### getstate_linetype
-
-# ISCH\_PrimitivePolygon.getState\_LineType() method
-
-获取属性状态：线型
-
-## Signature
-
-```typescript
-getState_LineType(): ESCH_PrimitiveLineType | null;
-```
-
-
-## Returns
-
-[ESCH\_PrimitiveLineType](../enums/ESCH_PrimitiveLineType.md) \| null
-
-线型
-
-### getstate_linewidth
-
-# ISCH\_PrimitivePolygon.getState\_LineWidth() method
-
-获取属性状态：线宽
-
-## Signature
-
-```typescript
-getState_LineWidth(): number | null;
-```
-
-
-## Returns
-
-number \| null
-
-线宽
-
-### getstate_primitiveid
-
-# ISCH\_PrimitivePolygon.getState\_PrimitiveId() method
-
-获取属性状态：图元 ID
-
-## Signature
-
-```typescript
-getState_PrimitiveId(): string;
-```
-
-
-## Returns
-
-string
-
-图元 ID
-
-### getstate_primitivetype
-
-# ISCH\_PrimitivePolygon.getState\_PrimitiveType() method
-
-获取属性状态：图元类型
-
-## Signature
-
-```typescript
-getState_PrimitiveType(): ESCH_PrimitiveType;
-```
-
-
-## Returns
-
-[ESCH\_PrimitiveType](../enums/ESCH_PrimitiveType.md)
-
-图元类型
-
-### isasync
-
-# ISCH\_PrimitivePolygon.isAsync() method
-
-查询图元是否为异步图元
-
-## Signature
-
-```typescript
-isAsync(): boolean;
-```
-
-
-## Returns
-
-boolean
-
-是否为异步图元
-
-### reset
-
-# ISCH\_PrimitivePolygon.reset() method
-
-> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
-
-将异步图元重置为当前画布状态
-
-## Signature
-
-```typescript
-reset(): Promise<ISCH_PrimitivePolygon>;
+public done(): Promise<ISCH_PrimitivePolygon>;
 ```
 
 
@@ -466,7 +293,371 @@ reset(): Promise<ISCH_PrimitivePolygon>;
 
 Promise&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)<!-- -->&gt;
 
-多边形图元对象
+Polygon primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试多边形重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+const line = [x, y, x + 400, y, x + 400, y + 300, x, y + 300];
+
+// 2. 创建一个测试多边形：4 顶点矩形、线宽 6（SCH 坐标单位 10mil）
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000', null, 6, 0);
+
+// 3. 切换异步模式，累计两处修改（加粗边线 + 改颜色）
+const asyncPolygon = polygon.toAsync();
+asyncPolygon.setState_LineWidth(10);
+asyncPolygon.setState_Color('#00AA00');
+
+// 4. 一次性提交到画布
+await asyncPolygon.done();
+
+// 5. 从画布重新读取，确认两处修改都已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitivePolygon.get(polygon.getState_PrimitiveId());
+
+console.log('lineWidth:', 6, '→', refetched.getState_LineWidth());
+console.log('color:', '#00AA00', '→', refetched.getState_Color());
+```
+
+### getstate_color
+
+# ISCH\_PrimitivePolygon.getState\_Color() method
+
+Get the property state: color
+
+## Signature
+
+```typescript
+public getState_Color(): string | null;
+```
+
+
+## Returns
+
+string \| null
+
+Color
+
+## Example
+
+
+```javascript
+// 1. 创建一个红色轮廓的测试多边形（SCH 坐标单位 10mil）
+const line = [400, 300, 800, 300, 800, 600, 400, 600];
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000');
+
+// 2. 读取轮廓颜色
+const color = polygon.getState_Color();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitivePolygon.delete([polygon.getState_PrimitiveId()]);
+
+console.log('color:', color);
+```
+
+### getstate_fillcolor
+
+# ISCH\_PrimitivePolygon.getState\_FillColor() method
+
+Get the property state: fill color
+
+## Signature
+
+```typescript
+public getState_FillColor(): string | null;
+```
+
+
+## Returns
+
+string \| null
+
+Fill color
+
+## Example
+
+
+```javascript
+// 1. 创建一个黄色填充的测试多边形（SCH 坐标单位 10mil）
+const line = [400, 300, 800, 300, 800, 600, 400, 600];
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000', '#FFFF00');
+
+// 2. 读取填充颜色
+const fillColor = polygon.getState_FillColor();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitivePolygon.delete([polygon.getState_PrimitiveId()]);
+
+console.log('fillColor:', fillColor);
+```
+
+### getstate_line
+
+# ISCH\_PrimitivePolygon.getState\_Line() method
+
+Get the property state: coordinate group
+
+## Signature
+
+```typescript
+public getState_Line(): Array<number>;
+```
+
+
+## Returns
+
+Array&lt;number&gt;
+
+Coordinate group
+
+## Example
+
+
+```javascript
+// 1. 创建一个 4 顶点矩形测试多边形（SCH 坐标单位 10mil）
+const line = [400, 300, 800, 300, 800, 600, 400, 600];
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000');
+
+// 2. 读取顶点坐标组
+const coords = polygon.getState_Line();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitivePolygon.delete([polygon.getState_PrimitiveId()]);
+
+console.log('line:', JSON.stringify(coords));
+```
+
+### getstate_linetype
+
+# ISCH\_PrimitivePolygon.getState\_LineType() method
+
+Get the property state: line type
+
+## Signature
+
+```typescript
+public getState_LineType(): ESCH_PrimitiveLineType | null;
+```
+
+
+## Returns
+
+[ESCH\_PrimitiveLineType](../enums/ESCH_PrimitiveLineType.md) \| null
+
+Line type
+
+## Example
+
+
+```javascript
+// 1. 创建一个虚线边框的测试多边形（末参 1 = DASHED，SCH 坐标单位 10mil）
+const line = [400, 300, 800, 300, 800, 600, 400, 600];
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000', null, 6, 1);
+
+// 2. 读取线型
+const lineType = polygon.getState_LineType();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitivePolygon.delete([polygon.getState_PrimitiveId()]);
+
+console.log('lineType:', lineType);
+```
+
+### getstate_linewidth
+
+# ISCH\_PrimitivePolygon.getState\_LineWidth() method
+
+Get the property state: Line width
+
+## Signature
+
+```typescript
+public getState_LineWidth(): number | null;
+```
+
+
+## Returns
+
+number \| null
+
+Line width
+
+## Example
+
+
+```javascript
+// 1. 创建一个线宽 6 的测试多边形（SCH 坐标单位 10mil）
+const line = [400, 300, 800, 300, 800, 600, 400, 600];
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000', null, 6, 0);
+
+// 2. 读取线宽
+const lineWidth = polygon.getState_LineWidth();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitivePolygon.delete([polygon.getState_PrimitiveId()]);
+
+console.log('lineWidth:', lineWidth);
+```
+
+### getstate_primitiveid
+
+# ISCH\_PrimitivePolygon.getState\_PrimitiveId() method
+
+Get the property state: primitive ID
+
+## Signature
+
+```typescript
+public getState_PrimitiveId(): string;
+```
+
+
+## Returns
+
+string
+
+Primitive ID
+
+## Example
+
+
+```javascript
+// 1. 创建一个测试多边形：4 个顶点构成矩形（SCH 坐标单位 10mil，line 为 [x1,y1, x2,y2, x3,y3, x4,y4] 扁平数组）
+const line = [400, 300, 800, 300, 800, 600, 400, 600];
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000');
+
+// 2. 读取图元 ID
+const primitiveId = polygon.getState_PrimitiveId();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitivePolygon.delete([polygon.getState_PrimitiveId()]);
+
+console.log('primitiveId:', primitiveId);
+```
+
+### getstate_primitivetype
+
+# ISCH\_PrimitivePolygon.getState\_PrimitiveType() method
+
+Get the property state: primitive type
+
+## Signature
+
+```typescript
+public getState_PrimitiveType(): ESCH_PrimitiveType;
+```
+
+
+## Returns
+
+[ESCH\_PrimitiveType](../enums/ESCH_PrimitiveType.md)
+
+Primitive type
+
+## Example
+
+
+```javascript
+// 1. 创建一个测试多边形（SCH 坐标单位 10mil）
+const line = [400, 300, 800, 300, 800, 600, 400, 600];
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000');
+
+// 2. 读取图元类型
+const primitiveType = polygon.getState_PrimitiveType();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitivePolygon.delete([polygon.getState_PrimitiveId()]);
+
+console.log('primitiveType:', primitiveType);
+```
+
+### isasync
+
+# ISCH\_PrimitivePolygon.isAsync() method
+
+Query whether the primitive is an async primitive
+
+## Signature
+
+```typescript
+public isAsync(): boolean;
+```
+
+
+## Returns
+
+boolean
+
+Whether Is async primitive
+
+## Example
+
+
+```javascript
+// 1. 创建一个测试多边形，创建后默认处于异步模式（SCH 坐标单位 10mil）
+const line = [400, 300, 800, 300, 800, 600, 400, 600];
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000');
+const asyncOnCreate = polygon.isAsync();
+
+// 2. 切换到同步模式再查询一次，对比两种模式
+polygon.toSync();
+const asyncAfterToSync = polygon.isAsync();
+
+// 3. 清理测试图元（查询类案例不留测试对象）
+await eda.sch_PrimitivePolygon.delete([polygon.getState_PrimitiveId()]);
+
+console.log('isAsync on create:', asyncOnCreate);
+console.log('isAsync after toSync:', asyncAfterToSync);
+```
+
+### reset
+
+# ISCH\_PrimitivePolygon.reset() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Reset the async primitive to the current canvas state
+
+## Signature
+
+```typescript
+public reset(): Promise<ISCH_PrimitivePolygon>;
+```
+
+
+## Returns
+
+Promise&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)<!-- -->&gt;
+
+Polygon primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试多边形重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+const line = [x, y, x + 400, y, x + 400, y + 300, x, y + 300];
+
+// 2. 创建一个线宽 6 的测试多边形（SCH 坐标单位 10mil）
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000', null, 6, 0);
+
+// 3. 切换异步模式，累计一处未提交的线宽修改（6 → 99）
+const asyncPolygon = polygon.toAsync();
+asyncPolygon.setState_LineWidth(99);
+
+// 4. 重置：丢弃未提交的修改，回到画布当前状态
+await asyncPolygon.reset();
+
+// 5. 从画布重新读取，线宽仍是 6（保留现场供观察）
+const refetched = await eda.sch_PrimitivePolygon.get(polygon.getState_PrimitiveId());
+
+console.log('lineWidth after reset:', refetched.getState_LineWidth());
+```
 
 ### setstate_color
 
@@ -474,12 +665,12 @@ Promise&lt;[ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)<!-- -->&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：颜色
+Set the property state: color
 
 ## Signature
 
 ```typescript
-setState_Color(color: string | null): ISCH_PrimitivePolygon;
+public setState_Color(color: string | null): ISCH_PrimitivePolygon;
 ```
 
 ## Parameters
@@ -512,7 +703,7 @@ string \| null
 
 </td><td>
 
-颜色
+Color
 
 
 </td></tr>
@@ -524,7 +715,30 @@ string \| null
 
 [ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)
 
-多边形图元对象
+Polygon primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试多边形重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+const line = [x, y, x + 400, y, x + 400, y + 300, x, y + 300];
+
+// 2. 创建一个红色轮廓的测试多边形（SCH 坐标单位 10mil）
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000');
+
+// 3. 切换异步模式并改为绿色
+const asyncPolygon = polygon.toAsync();
+asyncPolygon.setState_Color('#00AA00');
+await asyncPolygon.done();
+
+// 4. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitivePolygon.get(polygon.getState_PrimitiveId());
+
+console.log('color:', '#FF0000', '→', refetched.getState_Color());
+```
 
 ### setstate_fillcolor
 
@@ -532,12 +746,12 @@ string \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：填充颜色
+Set the property state: fill color
 
 ## Signature
 
 ```typescript
-setState_FillColor(fillColor: string | null): ISCH_PrimitivePolygon;
+public setState_FillColor(fillColor: string | null): ISCH_PrimitivePolygon;
 ```
 
 ## Parameters
@@ -570,7 +784,7 @@ string \| null
 
 </td><td>
 
-填充颜色
+Fill color
 
 
 </td></tr>
@@ -582,7 +796,30 @@ string \| null
 
 [ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)
 
-多边形图元对象
+Polygon primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试多边形重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+const line = [x, y, x + 400, y, x + 400, y + 300, x, y + 300];
+
+// 2. 创建一个黄色填充的测试多边形（SCH 坐标单位 10mil）
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000', '#FFFF00');
+
+// 3. 切换异步模式并改为浅绿填充
+const asyncPolygon = polygon.toAsync();
+asyncPolygon.setState_FillColor('#AAFFAA');
+await asyncPolygon.done();
+
+// 4. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitivePolygon.get(polygon.getState_PrimitiveId());
+
+console.log('fillColor:', '#FFFF00', '→', refetched.getState_FillColor());
+```
 
 ### setstate_line
 
@@ -590,12 +827,12 @@ string \| null
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：坐标组
+Set the property state: coordinate group
 
 ## Signature
 
 ```typescript
-setState_Line(line: Array<number>): ISCH_PrimitivePolygon;
+public setState_Line(line: Array<number>): ISCH_PrimitivePolygon;
 ```
 
 ## Parameters
@@ -628,7 +865,7 @@ Array&lt;number&gt;
 
 </td><td>
 
-坐标组
+Coordinate group
 
 
 </td></tr>
@@ -640,7 +877,30 @@ Array&lt;number&gt;
 
 [ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)
 
-多边形图元对象
+Polygon primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试多边形重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+
+// 2. 创建一个 4 顶点矩形测试多边形（SCH 坐标单位 10mil）
+const rect = [x, y, x + 400, y, x + 400, y + 300, x, y + 300];
+const polygon = await eda.sch_PrimitivePolygon.create(rect, '#FF0000');
+
+// 3. 切换异步模式，改为 3 顶点三角形
+const asyncPolygon = polygon.toAsync();
+asyncPolygon.setState_Line([x, y, x + 400, y, x + 200, y + 350]);
+await asyncPolygon.done();
+
+// 4. 从画布重新读取，确认形状已替换（保留现场供观察）
+const refetched = await eda.sch_PrimitivePolygon.get(polygon.getState_PrimitiveId());
+
+console.log('line:', JSON.stringify(rect), '→', JSON.stringify(refetched.getState_Line()));
+```
 
 ### setstate_linetype
 
@@ -648,12 +908,12 @@ Array&lt;number&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：线型
+Set the property state: line type
 
 ## Signature
 
 ```typescript
-setState_LineType(lineType: ESCH_PrimitiveLineType | null): ISCH_PrimitivePolygon;
+public setState_LineType(lineType: ESCH_PrimitiveLineType | null): ISCH_PrimitivePolygon;
 ```
 
 ## Parameters
@@ -686,7 +946,7 @@ lineType
 
 </td><td>
 
-线型
+Line type
 
 
 </td></tr>
@@ -698,7 +958,30 @@ lineType
 
 [ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)
 
-多边形图元对象
+Polygon primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试多边形重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+const line = [x, y, x + 400, y, x + 400, y + 300, x, y + 300];
+
+// 2. 创建一个实线边框的测试多边形（末参 0 = SOLID）
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000', null, 6, 0);
+
+// 3. 切换异步模式并改为虚线（1 = DASHED）
+const asyncPolygon = polygon.toAsync();
+asyncPolygon.setState_LineType(1);
+await asyncPolygon.done();
+
+// 4. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitivePolygon.get(polygon.getState_PrimitiveId());
+
+console.log('lineType:', 0, '→', refetched.getState_LineType());
+```
 
 ### setstate_linewidth
 
@@ -706,12 +989,12 @@ lineType
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-设置属性状态：线宽
+Set the property state: Line width
 
 ## Signature
 
 ```typescript
-setState_LineWidth(lineWidth: number | null): ISCH_PrimitivePolygon;
+public setState_LineWidth(lineWidth: number | null): ISCH_PrimitivePolygon;
 ```
 
 ## Parameters
@@ -744,7 +1027,7 @@ number \| null
 
 </td><td>
 
-线宽
+Line width
 
 
 </td></tr>
@@ -756,18 +1039,41 @@ number \| null
 
 [ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)
 
-多边形图元对象
+Polygon primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试多边形重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+const line = [x, y, x + 400, y, x + 400, y + 300, x, y + 300];
+
+// 2. 创建一个线宽 6 的测试多边形（SCH 坐标单位 10mil）
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000', null, 6, 0);
+
+// 3. 切换异步模式并加粗到 10
+const asyncPolygon = polygon.toAsync();
+asyncPolygon.setState_LineWidth(10);
+await asyncPolygon.done();
+
+// 4. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitivePolygon.get(polygon.getState_PrimitiveId());
+
+console.log('lineWidth:', 6, '→', refetched.getState_LineWidth());
+```
 
 ### toasync
 
 # ISCH\_PrimitivePolygon.toAsync() method
 
-将图元转换为异步图元
+Convert Primitive to Async primitive
 
 ## Signature
 
 ```typescript
-toAsync(): ISCH_PrimitivePolygon;
+public toAsync(): ISCH_PrimitivePolygon;
 ```
 
 
@@ -775,18 +1081,42 @@ toAsync(): ISCH_PrimitivePolygon;
 
 [ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)
 
-多边形图元对象
+Polygon primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试多边形重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+const line = [x, y, x + 400, y, x + 400, y + 300, x, y + 300];
+
+// 2. 创建一个测试多边形（创建后默认已处于异步模式）
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000');
+
+// 3. 转换为异步图元，修改边线颜色后提交
+const asyncPolygon = polygon.toAsync();
+asyncPolygon.setState_Color('#00AA00');
+await asyncPolygon.done();
+
+// 4. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitivePolygon.get(polygon.getState_PrimitiveId());
+
+console.log('isAsync after toAsync:', polygon.isAsync());
+console.log('color:', '#00AA00', '→', refetched.getState_Color());
+```
 
 ### tosync
 
 # ISCH\_PrimitivePolygon.toSync() method
 
-将图元转换为同步图元
+Convert Primitive to Sync primitive
 
 ## Signature
 
 ```typescript
-toSync(): ISCH_PrimitivePolygon;
+public toSync(): ISCH_PrimitivePolygon;
 ```
 
 
@@ -794,4 +1124,29 @@ toSync(): ISCH_PrimitivePolygon;
 
 [ISCH\_PrimitivePolygon](./ISCH_PrimitivePolygon.md)
 
-多边形图元对象
+Polygon primitive object
+
+## Example
+
+
+```javascript
+// 1. 生成本次运行专用的坐标，避免与之前保留的测试多边形重合
+const x = 2000 + Math.floor(Math.random() * 8000);
+const y = 2000 + Math.floor(Math.random() * 8000);
+const line = [x, y, x + 400, y, x + 400, y + 300, x, y + 300];
+
+// 2. 创建一个测试多边形（创建后默认处于异步模式）
+const polygon = await eda.sch_PrimitivePolygon.create(line, '#FF0000', null, 6, 0);
+
+// 3. 转换为同步图元
+const syncPolygon = polygon.toSync();
+
+// 4. 同步模式下加粗边线，立即生效，无需 done()
+syncPolygon.setState_LineWidth(15);
+
+// 5. 从画布重新读取，确认修改已生效（保留现场供观察）
+const refetched = await eda.sch_PrimitivePolygon.get(polygon.getState_PrimitiveId());
+
+console.log('isAsync after toSync:', polygon.isAsync());
+console.log('lineWidth:', 6, '→', refetched.getState_LineWidth());
+```

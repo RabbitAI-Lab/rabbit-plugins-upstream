@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/golang-grpc",
   "slug": "golang-grpc",
   "ownerHandle": null,
-  "version": "1.1.4",
-  "updatedAt": 1781109255710,
-  "contentHash": "de916b11618f44cbeb9cf0809d514fb35a3afb293ddc7eb648e44d2426f165c8",
-  "fetchedAt": "2026-07-26T18:29:57.411Z"
+  "version": "1.2.0",
+  "updatedAt": 1787322160418,
+  "contentHash": "f65d5d8b6574d67e99728ed976cb845b55e7c163f637378ec7ad6ad3910c756f",
+  "fetchedAt": "2026-08-24T08:39:52.471Z"
 }

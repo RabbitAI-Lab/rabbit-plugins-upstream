@@ -1,44 +1,51 @@
-## Description: <br>
-Assess API or website conformance with the Graceful Boundaries specification and provide concrete guidance or implementation changes for clearer rate-limit and error communication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audits APIs and websites for Graceful Boundaries conformance, including structured refusals, 429 responses, limits discovery, and proactive rate-limit headers, then produces an evidence-based level assessment and improvement guidance.
 
-## Publisher: <br>
-[snapsynapse](https://clawhub.ai/user/snapsynapse) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[snapsynapse](https://clawhub.ai/user/snapsynapse)
 
-## Use Case: <br>
-Developers, engineers, and agent operators use this skill to audit HTTP services for Graceful Boundaries conformance, identify gaps in structured refusals and proactive limit discovery, and implement response patterns that help agents avoid blind retries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Auditing a service can send HTTP requests to the target and may be inappropriate for systems the user does not own or have permission to test. <br>
-Mitigation: Run audits only against owned or authorized services, and avoid internal or sensitive network targets unless that is the intended scope. <br>
-Risk: Builder-mode guidance can modify application error handling, rate-limit disclosure, and response headers. <br>
-Mitigation: Review generated code changes before committing or deploying, and verify behavior against the service's actual security and operational requirements. <br>
+## Use Case:
 
+Developers and API operators use this skill to evaluate how a service communicates operational limits to agents and to get concrete steps for improving Graceful Boundaries conformance.
 
-## Reference(s): <br>
-- [Graceful Boundaries ClawHub release](https://clawhub.ai/snapsynapse/graceful-boundaries) <br>
-- [Graceful Boundaries specification site](https://gracefulboundaries.dev) <br>
-- [Specification](artifact/spec.md) <br>
-- [Implementation guide](artifact/docs/implementation-guide.md) <br>
-- [curl examples](artifact/docs/curl-examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline JSON, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include conformance findings, gap analysis, implementation snippets, and verification commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: release evidence) <br>
+Risk: The skill makes HTTP requests to user-provided URLs, which could inspect services the user is not authorized to assess.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only on services the user is allowed to inspect, and avoid load testing or forcing rate-limit failures.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/snapsynapse/skills/graceful-boundaries)
+- [Graceful Boundaries specification site](https://gracefulboundaries.dev)
+- [Publisher profile](https://clawhub.ai/user/snapsynapse)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Markdown assessment with HTTP findings, gap analysis, implementation examples, and security notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces an evidence-based conformance level assessment without deliberately triggering rate limits.]
+
+## Skill Version(s):
+
+1.5.3 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

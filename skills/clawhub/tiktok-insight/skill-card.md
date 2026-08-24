@@ -1,47 +1,58 @@
-## Description: <br>
-Run async TikTok product, trend, competitor, and content insight jobs through Gecho Bridge MCP, and check existing insight job status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Run async TikTok product, trend, competitor, and content insight jobs with Gecho Bridge MCP, and check job status.
 
-## Publisher: <br>
-[gecho-ai](https://clawhub.ai/user/gecho-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gecho-ai](https://clawhub.ai/user/gecho-ai)
 
-## Use Case: <br>
-Developers, operators, and social commerce researchers use this skill to start TikTok insight jobs for product opportunity analysis, trend discovery, competitor research, and content strategy through Gecho Bridge MCP, then check job status and summarize completed results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow depends on Gecho's MCP bridge and Chrome extension using the user's logged-in browser session to collect TikTok research data. <br>
-Mitigation: Confirm trust in the Gecho bridge package and Chrome extension before installation, keep TikTok access within the official Gecho workflow, and review returned insight data before acting on it. <br>
-Risk: TikTok insight jobs can fail when MCP tools, the Gecho extension login, the TikTok web login, or the live browser tab are missing or blocked. <br>
-Mitigation: Complete the documented setup checklist, keep the extension online and TikTok tab open, and resolve CAPTCHA or login walls manually before retrying. <br>
-Risk: Async insight jobs may still be running or may return errors instead of final insight data. <br>
-Mitigation: Report the returned jobId, check status later with the official status tool, and avoid inventing conclusions when completed data is unavailable. <br>
+## Use Case:
 
+External users and developers use this skill to start TikTok product, trend, competitor, and content insight jobs through Gecho Bridge MCP, then check asynchronous job status and summarize completed insight results.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gecho-ai/skills/tiktok-insight) <br>
-- [Gecho Website](https://gecho.ai/) <br>
-- [Gecho Bridge README](https://github.com/gecho-ai/gecho-bridge/blob/main/README.md) <br>
-- [Gecho Chrome Extension](https://chromewebstore.google.com/detail/pjkaeenpekolahdbccjfenjcmanemlbj?utm_source=item-share-cb) <br>
-- [OpenClaw Setup Video](https://www.youtube.com/watch?v=ggwY9hISHcQ) <br>
-- [Hermes Setup Video](https://www.youtube.com/watch?v=zHKnuWnxt_c) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Configuration instructions, Analysis, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands, job IDs, status summaries, and result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include a TikTok insight jobId, saved result path, setup instructions, or concise summary of completed insight data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.29 (source: server release metadata and artifact _meta.json) <br>
+Risk: The workflow depends on Gecho Bridge, the Gecho Chrome extension, and the user's logged-in TikTok browser session.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after confirming trust in Gecho Bridge and the Chrome extension, and keep TikTok access under the user's active browser session.
+
+Risk: A skill-only install cannot run TikTok insight jobs without the external MCP server and browser prerequisites.
+
+Mitigation: Configure Gecho Bridge MCP, install and log in to the Gecho Chrome extension, and keep TikTok web logged in before starting insight jobs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gecho-ai/skills/tiktok-insight)
+- [Gecho Website](https://gecho.ai/)
+- [Gecho Bridge README](https://github.com/gecho-ai/gecho-bridge/blob/main/README.md)
+- [Gecho Chrome Extension](https://chromewebstore.google.com/detail/pjkaeenpekolahdbccjfenjcmanemlbj?utm_source=item-share-cb)
+- [OpenClaw Setup Video](https://www.youtube.com/watch?v=ggwY9hISHcQ)
+- [Hermes Setup Video](https://www.youtube.com/watch?v=zHKnuWnxt_c)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and short status summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a Gecho insight jobId, setup commands, saved result path, or completed insight summary when returned by the MCP tools.]
+
+## Skill Version(s):
+
+1.1.37 (source: server release evidence and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

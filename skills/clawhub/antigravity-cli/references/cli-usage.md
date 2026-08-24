@@ -12,18 +12,25 @@
 
 ## Common flags
 
-| Flag | Alias | Purpose |
-| --- | --- | --- |
-| `--print <prompt>` | `-p` | Run a single prompt non-interactively and print the response |
-| `--prompt <prompt>` | | Alias for `--print` |
-| `--print-timeout` | | Timeout for print mode, default `5m0s` |
-| `--continue` | `-c` | Continue the most recent conversation |
-| `--conversation <id>` | | Resume a specific conversation by ID |
-| `--prompt-interactive` | `-i` | Run an initial prompt interactively and keep the session alive |
-| `--sandbox` | | Run with terminal sandbox restrictions enabled |
-| `--dangerously-skip-permissions` | | Auto-approve all tool requests without prompting |
-| `--add-dir <path>` | | Add a workspace directory; repeatable |
-| `--log-file <path>` | | Override log file location |
+| Flag                             | Alias | Purpose                                                                       |
+| -------------------------------- | ----- | ----------------------------------------------------------------------------- |
+| `--print <prompt>`               | `-p`  | Run a single prompt non-interactively and print the response                  |
+| `--prompt <prompt>`              |       | Alias for `--print`                                                           |
+| `--print-timeout`                |       | Timeout for print mode, default `5m0s`                                        |
+| `--continue`                     | `-c`  | Continue the most recent conversation                                         |
+| `--conversation <id>`            |       | Resume a specific conversation by ID                                          |
+| `--prompt-interactive`           | `-i`  | Run an initial prompt interactively and keep the session alive                |
+| `--effort`                       |       | Reasoning effort for the current CLI session (`low`, `medium`, `high`)        |
+| `--mode`                         |       | Set the agent execution mode (`accept-edits`, `plan`)                         |
+| `--model`                        |       | Model for the current CLI session                                             |
+| `--output-format`                |       | Output format for print mode (`text`, `json`, `stream-json`) (default `text`) |
+| `--json-schema`                  |       | Optional JSON schema string or path to enforce structured output              |
+| `--disable-slash-commands`       |       | Disable slash command and skill expansion in print mode                       |
+| `--project` / `--new-project`    |       | Project ID or create a new project for the current CLI session                |
+| `--sandbox`                      |       | Run with terminal sandbox restrictions enabled                                |
+| `--dangerously-skip-permissions` |       | Auto-approve all tool requests without prompting                              |
+| `--add-dir <path>`               |       | Add a workspace directory; repeatable                                         |
+| `--log-file <path>`              |       | Override log file location                                                    |
 
 ## Subcommands
 

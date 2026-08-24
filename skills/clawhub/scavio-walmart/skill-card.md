@@ -1,43 +1,68 @@
-## Description: <br>
-Search Walmart products and look up product details by product ID. Supports delivery speed, ZIP code, and in-store availability filters. Returns structured JSON. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Walmart and read product detail, reviews, category listings, buy-box offers, seller storefronts and a seller's catalog as structured JSON.
 
-## Publisher: <br>
-[scavio-ai](https://clawhub.ai/user/scavio-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[scavio-ai](https://clawhub.ai/user/scavio-ai)
 
-## Use Case: <br>
-External users and developers use this skill to search Walmart products, retrieve product details, and compare price, fulfillment, delivery ZIP, and in-store pickup availability. Agents should return only API-sourced product data and include product URLs so users can verify before purchasing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms, delivery ZIP codes, store filters, and product lookups may be sent to Scavio using the user's SCAVIO_API_KEY. <br>
-Mitigation: Use an approved Scavio API key, avoid sending unnecessary sensitive location details, and follow the organization's credential-handling policy. <br>
-Risk: Product prices, stock, and fulfillment speed can change, especially same-day availability. <br>
-Mitigation: Verify prices and availability on Walmart through the returned product URL before making purchase decisions. <br>
-Risk: The skill retrieves and presents shopping data but should not be treated as completing a purchase. <br>
-Mitigation: Make purchase decisions outside the skill after reviewing the seller, product page, final price, and fulfillment terms. <br>
+## Use Case:
 
+Developers and agents use this skill to query Scavio's Walmart API for product search, product detail, reviews, category listings, buy-box seller data, seller storefronts, and seller catalogs. It is suited for retail research, ecommerce monitoring, product comparison, and marketplace seller lookup workflows.
 
-## Reference(s): <br>
-- [Scavio Documentation](https://scavio.dev/docs) <br>
-- [Scavio Walmart skill on ClawHub](https://clawhub.ai/scavio-ai/scavio-walmart) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, JSON] <br>
-**Output Format:** [Markdown with shell, Python, and JSON code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; release metadata sets a 90 second timeout and 1 request per second throttle.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.3 (source: release evidence and frontmatter) <br>
+Risk: Walmart search terms, product IDs, seller IDs, and related lookup parameters are sent to Scavio.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only approved non-sensitive lookup data, and avoid confidential watchlists, sensitive competitive research, personal data, or regulated information unless that transfer is approved.
+
+Risk: Search and category requests can cost more credits when targeting walmart.com.mx.
+
+Mitigation: Check the response credits_used field and state the domain-based cost rule before making or recommending search and category requests.
+
+Risk: The Walmart API may return warnings when retired parameters are ignored, which can make an apparently successful request misleading.
+
+Mitigation: Surface any warnings returned by the API and retry with supported parameters when needed.
+
+Risk: Generated retail guidance can be wrong if product names, prices, ratings, availability, or seller details are inferred instead of read from the API response.
+
+Mitigation: Report only values returned by the API and include product URLs so users can verify details before taking action.
+
+## Reference(s):
+
+- [Scavio Walmart API documentation](https://scavio.dev/docs/walmart-api)
+- [Scavio Walmart product documentation](https://scavio.dev/docs/walmart-product)
+- [Scavio Walmart reviews documentation](https://scavio.dev/docs/walmart-reviews)
+- [Scavio Walmart category documentation](https://scavio.dev/docs/walmart-category)
+- [Scavio Walmart offers documentation](https://scavio.dev/docs/walmart-offers)
+- [Scavio Walmart seller documentation](https://scavio.dev/docs/walmart-seller)
+- [Scavio Walmart seller products documentation](https://scavio.dev/docs/walmart-seller-products)
+- [Scavio rate limits](https://scavio.dev/docs/rate-limits)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with API request examples and structured JSON response expectations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SCAVIO_API_KEY and sends selected Walmart lookup parameters to Scavio.]
+
+## Skill Version(s):
+
+3.0.3 (source: server release metadata; artifact frontmatter is 3.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

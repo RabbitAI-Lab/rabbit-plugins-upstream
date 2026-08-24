@@ -1,11 +1,11 @@
 # TPCB\_LayersOfRegion type
 
-区域所属层
+Layers of the region
 
 ## Signature
 
 ```typescript
-type TPCB_LayersOfRegion = TPCB_LayersOfCopper | EPCB_LayerId.MULTI;
+export type TPCB_LayersOfRegion = TPCB_LayersOfCopper | EPCB_LayerId.MULTI;
 ```
 ## References
 

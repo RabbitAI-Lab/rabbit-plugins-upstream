@@ -1,43 +1,56 @@
-## Description: <br>
-Competitive Product Research guides agents through dual-track competitive research, combining UX benchmarking across eight dimensions with strategic diagnostics to produce source-traceable HTML or Markdown reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dual-track competitive research: experience benchmarking across eight UX dimensions plus strategic diagnostics using SWOT, Five Forces, and PESTLE, producing source-traceable HTML or Markdown reports.
 
-## Publisher: <br>
-[chris1wang3](https://clawhub.ai/user/chris1wang3) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chris1wang3](https://clawhub.ai/user/chris1wang3)
 
-## Use Case: <br>
-Product managers, UX researchers, and strategy teams use this skill to benchmark competitors, diagnose product and market positioning, and turn source-traceable findings into decision-ready reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Competitive research may require product links, screenshots, PRDs, or internal context that could contain sensitive information. <br>
-Mitigation: Share only appropriate materials, redact external reports, and use the skill's disclosure and source-index conventions to separate verified facts from assumptions. <br>
-Risk: The bundled local Chrome regression test is intended for development of the intake form, not normal skill use. <br>
-Mitigation: Run the regression test only when intentionally modifying or validating the bundled form. <br>
+## Use Case:
 
+Product managers, UX researchers, strategy teams, and founders use this skill to benchmark competitors, diagnose experience and market-positioning gaps, and produce an evidence-linked report for planning or review.
 
-## Reference(s): <br>
-- [Research Playbook](references/research-playbook.md) <br>
-- [HTML Report Template](references/report-template-pro.html) <br>
-- [Intake Form](assets/intake-form.html) <br>
-- [Competitive Product Research on ClawHub](https://clawhub.ai/chris1wang3/skills/competitive-product-research) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [HTML or Markdown report with source index, competitive benchmark table, findings, roadmap, and disclaimer] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Key conclusions are expected to carry SRC-xxx evidence markers; external reports should be redacted.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.7 (source: server release metadata) <br>
+Risk: The intake flow may pass research parameters through the host agent flow or clipboard, which can expose private PRDs, screenshots, or internal metrics if users paste sensitive material.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat user-supplied competitive materials as sensitive, redact before external sharing, and verify that generated reports do not include confidential details unless explicitly intended.
+
+Risk: The bundled Chrome regression test is intended for form-development validation and launches a local browser session.
+
+Mitigation: Run the regression test only when modifying the intake form asset and review the local environment before executing it.
+
+## Reference(s):
+
+- [Research Playbook](artifact/references/research-playbook.md)
+- [Professional HTML Report Template](artifact/references/report-template-pro.html)
+- [Intake Form](artifact/assets/intake-form.html)
+- [ClawHub Skill Page](https://clawhub.ai/chris1wang3/skills/competitive-product-research)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, configuration, guidance]
+
+**Output Format:** [HTML or Markdown competitive research report with evidence labels, source index, key findings, benchmark tables, and roadmap recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses SRC-xxx evidence labels and requires public-source links in HTML reports to open directly when URLs are available.]
+
+## Skill Version(s):
+
+1.4.8 (source: SKILL.md frontmatter, claw.json, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/golang-lint",
   "slug": "golang-lint",
   "ownerHandle": null,
-  "version": "1.2.2",
-  "updatedAt": 1781130129695,
-  "contentHash": "b374d0f73110123e4682dababb107e7dd6fc3a23b5bc3d771b3a99a7548d7850",
-  "fetchedAt": "2026-07-26T18:29:54.916Z"
+  "version": "1.4.0",
+  "updatedAt": 1787329387444,
+  "contentHash": "f3ebda4c1026280579ae1b00d7a9b13742b6b171e72ce1ff0ed99940cf3b4d67",
+  "fetchedAt": "2026-08-24T08:39:45.118Z"
 }

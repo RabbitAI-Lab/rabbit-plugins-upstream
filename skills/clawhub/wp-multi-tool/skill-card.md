@@ -1,42 +1,58 @@
-## Description: <br>
-WordPress site health audit, performance optimization, database cleanup, autoload tuning, slow query detection, wp-config management, image size control, frontend speed fixes, and server diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WP Multitool guides agents through WordPress site health audits, performance diagnostics, database cleanup, autoload tuning, slow query review, wp-config management, image controls, frontend speed fixes, and server diagnostics using WP-CLI and the optional commercial WP Multitool plugin.
 
-## Publisher: <br>
-[marcindudekdev](https://clawhub.ai/user/marcindudekdev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[marcindudekdev](https://clawhub.ai/user/marcindudekdev)
 
-## Use Case: <br>
-Developers, site owners, and WordPress operators use this skill to inspect site health, diagnose performance bottlenecks, and apply WP-CLI based optimization or cleanup actions with confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: WP-CLI commands can inspect or change a live WordPress site. <br>
-Mitigation: Use the skill only on sites where the operator is authorized to run WP-CLI, and review proposed commands before execution. <br>
-Risk: Cleanup, configuration edits, frontend toggles, or plugin activation can modify data or site behavior. <br>
-Mitigation: Require explicit user confirmation for write operations and take a database backup before destructive cleanup commands. <br>
+## Use Case:
 
+External WordPress site owners, developers, and operators use this skill to inspect site health, identify performance bottlenecks, read WP Multitool plugin diagnostics, and prepare confirmation-gated cleanup or configuration changes.
 
-## Reference(s): <br>
-- [WP Multitool Homepage](https://wpmultitool.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool) <br>
-- [Publisher Profile](https://clawhub.ai/user/marcindudekdev) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown with WP-CLI command blocks and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only diagnostics can be proposed directly; write operations require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release metadata) <br>
+Risk: Write operations can delete or modify WordPress data, database tables, wp-config.php, or plugin options.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the target site, backup status, and intended change before allowing write commands such as transient deletion, revision cleanup, table optimization, wp-config edits, or WP Multitool cleanup and frontend toggles.
+
+Risk: Activating the WP Multitool plugin changes the target WordPress site state.
+
+Mitigation: Treat plugin activation as a confirmation-required change and verify that the user intends to activate the plugin on the selected site.
+
+Risk: Diagnostics can expose operational metadata about a WordPress site.
+
+Mitigation: Use only aggregate or non-sensitive diagnostic outputs, avoid secret configuration values, and keep command output for the user's immediate review.
+
+## Reference(s):
+
+- [WP Multitool Homepage](https://wpmultitool.com)
+- [ClawHub Skill Page](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and WP-CLI command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe JSON output modes for supported WP-CLI commands; write operations require user confirmation.]
+
+## Skill Version(s):
+
+1.9.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

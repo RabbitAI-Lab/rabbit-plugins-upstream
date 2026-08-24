@@ -46,7 +46,7 @@ def main() -> int:
     print(json.dumps({
         "ok": True,
         "status": "success",
-        "message": "Inquiry draft accepted by this local skill simulation. V1 does not transmit data externally.",
+        "message": "Inquiry draft accepted by this local skill simulation. It does not transmit data externally.",
         "inquiry": {
             "name": args.name.strip(),
             "email": args.email.strip(),

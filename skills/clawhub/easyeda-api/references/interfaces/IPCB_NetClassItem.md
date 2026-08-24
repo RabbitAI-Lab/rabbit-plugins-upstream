@@ -1,11 +1,11 @@
 # IPCB\_NetClassItem interface
 
-网络类属性
+Net class property
 
 ## Signature
 
 ```typescript
-interface IPCB_NetClassItem 
+export interface IPCB_NetClassItem 
 ```
 
 ## Properties
@@ -41,12 +41,12 @@ Description
 
 </td><td>
 
-{ r: number; g: number; b: number; alpha: number; } \| null
+{ r: number; g: number; b: number; alpha: number } \| null
 
 
 </td><td>
 
-网络类颜色
+Net class color
 
 
 </td></tr>
@@ -65,7 +65,7 @@ string
 
 </td><td>
 
-网络类名称
+Net class name
 
 
 </td></tr>
@@ -84,7 +84,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-网络名称数组
+Net name array
 
 
 </td></tr>
@@ -98,24 +98,19 @@ Array&lt;string&gt;
 
 # IPCB\_NetClassItem.color property
 
-网络类颜色
+Net class color
 
 ## Signature
 
 ```typescript
-color: {
-        r: number;
-        g: number;
-        b: number;
-        alpha: number;
-    } | null;
+color: { r: number; g: number; b: number; alpha: number } | null;
 ```
 
 ### name
 
 # IPCB\_NetClassItem.name property
 
-网络类名称
+Net class name
 
 ## Signature
 
@@ -127,7 +122,7 @@ name: string;
 
 # IPCB\_NetClassItem.nets property
 
-网络名称数组
+Net name array
 
 ## Signature
 

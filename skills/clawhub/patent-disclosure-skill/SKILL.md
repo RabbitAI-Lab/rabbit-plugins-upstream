@@ -1,100 +1,162 @@
 ---
 name: patent-disclosure-skill
-description: "中国专利：从项目文档挖掘专利点并生成可交付技术交底书（查新、脱敏成文、自检与迭代）；或将已有专利解读为通俗笔记与 Obsidian 知识图谱（叙事故事线、公开线索辅助）。| China patents: draft technical disclosures from project docs, or read existing patents into plain-language notes and an Obsidian knowledge graph."
-version: "2.0.0"
+description: "中国专利技能：专利点挖掘与交底书（发明/实用/外观）编写，通俗解读专利，嗅探政策动向，辅助审查答复。| China patents skill: mine patent points and draft disclosures (invention / utility model / design), plain-language reading, policy sniffing, assisted office-action response."
+version: "3.6.0"
 user-invocable: true
-argument-hint: "[可选：项目路径 / 技术主题 / 专利号或 PDF 路径]"
+argument-hint: "[可选：项目路径 / 专利号或 PDF / 政策动向嗅探或技能进化 / 审查答复或案例入库]"
 allowed-tools: Read, Write, Edit, Grep, Glob, WebSearch, Bash
 ---
 
-# 中国专利 · 交底书编写与通俗解读
+# 中国专利技能 · 交底编写 · 通俗解读 · 政策/审查动向嗅探 · 审查答复
 
-本技能支持两种用法；分步指令在 **`prompts/`**，执行前须 **`Read`** 对应文件。
+本技能**单包模块化**：分步指令在 **`prompts/`**，执行前须 **`Read`** 对应文件。`SKILL.md` 只做路由。
 
 | 模式 | 何时用 | 主入口 |
 |------|--------|--------|
-| **A · 交底书编写** | 从项目材料挖专利点 → 查新 → 成稿 `.md`/`.docx` → 迭代 | 下文「交底书主流程」 |
-| **B · 专利通俗解读** | 已有公开号 / PDF / 全文，原文抽象难读，要通俗叙事 + 图谱 | 下文「专利通俗解读」+ `patent_plain_reader.md` |
+| **A · 交底书编写** | 挖专利点 → 查新 → 成稿 → 迭代 | `prompts/disclosure/`（类型子目录见下） |
+| **B · 专利通俗解读** | 公开号 / PDF / 全文 → 通俗笔记 + 图谱 | `prompts/reader/patent_plain_reader.md` |
+| **C · 技能进化旁路** | 政策/审查动向嗅探 → 带时间戳清单 → **人审后**才改技能 | `prompts/evolution/`（须显式触发） |
+| **D · 审查答复辅助** | 案例脱敏入库；通知书 → 标签+向量检索 → 答复草稿 | `prompts/oa/`（须显式触发；须人审） |
 
-提供**专利号或专利全文/PDF**且意图为「读懂」时 → **优先模式 B**，**不**默认跑交底书 Step 1–8。
+提供**专利号或专利全文/PDF**且意图为「读懂」时 → **优先模式 B**，**不**默认跑交底书 Step 1–8。  
+**禁止**因写交底/读专利自动进入模式 C/D。
+
+## 目录约定（薄路由）
+
+```
+prompts/disclosure/          # 交底公共流程
+  invention/                 # 发明：挖点 / builder / template
+  utility_model/             # 实用新型：挖点 / builder / template（单独 md，勿套用发明 mermaid 主线）
+  design/                    # 外观设计：挖点 / builder / template（单独 md）
+prompts/reader/              # 通俗解读 + type_hooks
+prompts/shared/              # 写读共用：Structure / Appearance 填表 + figure_plan + 线稿（image_gen）
+prompts/evolution/           # 模式 C：政策/审查动向嗅探 · 进化清单（旁路，须显式触发）
+prompts/oa/                  # 模式 D：审查答复 / 案例入库（旁路，须显式触发）
+references/schemas/          # structure / appearance / figure_plan / formula_plan / lineart / evolution / oa_case
+references/formulas/         # 发明公式推荐范式（paradigms.yaml，可外挂扩展）
+tools/crawl/                 # 国知局等爬取
+tools/shared/                # docx/mermaid/专利类型/可选 STEP（cad-env）/ 线稿门禁；browser.py + svg_screenshot.py
+tools/patent_reader/         # 解读工具：shared/ | extract/ | analyze/ | vault/
+tools/oa/                    # 模式 D：config / embed / sqlite-vec / ingest / search
+outputs/evolution/           # 模式 C 清单默认落盘（gitignore）
+docs/evolution/              # 仅用户确认「沉淀」后可复制提交
+docs/oa/                     # 模式 D：embedding 配置模板种子（运行时在系统文档目录）
+```
 
 ## 环境与约定
 
-- **语言**：默认与用户语种一致；专利与法律术语用行业常用表述。
-- **交底书图示（Step 7）**：**3.2**/**3.4** 用 fenced **mermaid**；见工具表与 **`tools/README.md`**。
-- **解读 + Obsidian**：**强烈推荐**配置库（`PATENT_READER_OBSIDIAN_VAULT`），以完整体验索引、Canvas 知识图谱、术语网、关系图配色与公开线索旁注；无库可降级 `outputs/patent_reader/`。入库时**自动** bootstrap（CSS / Bases / 关系图），勿再引导用户手动装 CSS。用户侧 Obsidian 安装与可选社区插件见 **`docs/obsidian-setup-guide.md`**。
+- **脚本判读（尤其 Windows）**：stderr 有字 **不等于** 失败。以 **退出码 0** 和机读前缀为准：`EPUB_HITS_JSON:` / `EPUB_MERGE:`、`PROBE:` / `BROWSER:`、`MERMAID:` / `DOCX:` / `MATH:` / `omml_text_fallback=`、`CAD_VENV:` / `SVG_HTTP:` / `PIP_INDEX`。PowerShell 可能把 stderr 标成 `NativeCommandError` 或乱码；**禁止**因此重跑安装、或把查新降级 WebSearch。勿用 `2>&1` 把 JSON 混进错误流。
+- **专利类型**：未显式指定时交底**默认发明**；材料更偏实用/外观时在汇总或预览阶段**反问**（见 `disclosure/intake.md`）。
+- **交底书图示**：
+  - **发明**：3.2 / 3.4 用 fenced **mermaid** → `tools/shared/mermaid_render.py`（Playwright + 内置 mermaid.js，见 `tools/shared/browser.py`）。
+  - **实用新型**：先 `figure_plan.yaml` 排序入文图（**只入合格线稿**；CAD 投影不入文）+ 部件/关系表（见 `utility_model/disclosure_builder.md`）。
+  - **外观**：先 `figure_plan.yaml` 选视图（**干净实拍 + 线稿都入文**，写入 md 与 Word；CAD 不入文）（见 `design/disclosure_builder.md`）。
+- **STEP / CAD（可选，默认关）**：Step 2 用 `cad_scan.py` 分类；**不中断**挖点/成文。遇 `.step`/`.stp` 记下路径，交底 **落盘后再反问**是否开启解析；用户 **是** 才 `cad_venv.py`（已就绪则跳过安装）/`bootstrap_cad_venv.py` + `run_step_to_views.py --enable-step-parse`。CadQuery 只进 `tools/shared/cad-env`（Python 3.10–3.12，不强制 3.10）。PNG：有 Cairo 用 cairosvg，否则 `svg_screenshot.py` 无头浏览器截 SVG；**禁止为 CAD 安装 matplotlib**（matplotlib 只用于发明公式 PNG）。投影图是**普通材料**（`kind: cad`），**不得**当线稿、**不得**入文；打分后可能作图生图参考。仅有原生 CAD 则交付回复末尾提示导出 STEP。见 `project_scan.md`「CAD / STEP」。
+- **外观线稿（必做）**：填表后 **`Read`** `shared/image_gen.md` + `shared/design_lineart_assist.md`。不问用户。已有合格线稿则入文；否则大模型生成。干净实拍**同时入文**（md + Word），但不得标成线稿。CAD 不入文。仅用户明确不要或 `PATENT_SKILL_SKIP_LINEART=1` 才跳过。
+- **实用结构线稿（必做）**：填表后 **`Read`** `shared/image_gen.md` + `shared/structure_lineart_assist.md`。不问用户。对齐 `structure_schema.parts`；轮廓与序号分层。推荐 overlay：大模型只定位并把归一化锚点持久化到 `structure_callout_anchors.yaml`，再由 `structure_callout_overlay.py` 用 SVG 精确叠标；**叠标后须读图按部件名称核对引出线**（改 YAML 重叠标，最多 2 轮；禁止含件号二次生图或自创件号）。CAD 不得当线稿入文。**勿**与外观 `design_lineart_*` 混用。
+- **解读 + Obsidian**：强烈推荐配置库；见 **`docs/obsidian-setup-guide.md`**。
+- **技能进化 / 动向嗅探（须显式触发）**：用户点名后走模式 C（政策/审查动向嗅探 → 清单）；清单含 **观点↔信源 URL 表**；未人审确认前**不**改技能正文。
+- **审查答复（须显式触发）**：用户点名后走模式 D；向量模型**可选**（可 `skip-vector`，中途再 enable + 重建）；推荐智谱 `embedding-3`；标签检索始终可用，向量超时则回退。
 
 ---
 
 ## 触发条件
 
-- **交底书**：专利挖掘、专利点、技术交底书、交底书、查新、现有技术对比；`/patent-disclosure-skill`、`/交底书` 等。
-- **通俗解读**：专利解读、读专利、看懂专利、反向专利、专利翻译成通俗；`/patent-read`、`/读专利`；或用户给出公开号 / 专利 PDF / 全文且目标为理解而非写交底书。
-- **交底书迭代（意图识别）**：在**已有交底书**上补材料、改章节、纠错等——**无需**固定「迭代」一词，也**不必**先问是否迭代。`Read` `iteration_context.md`，再 `merger.md`（扩合并）或 `correction_handler.md`（纠错）；**另存** `{案件名}_{YYYYMMDDHHmmss}.md`/`.docx`，**不覆盖**旧稿（除非用户明确要求）。**禁止**迭代意图成立时默认回到 Step 3–4 重挖专利点。对话中已有交底书路径/附件时优先按迭代处理。
+- **交底书**：专利挖掘、交底书、查新、实用新型、外观设计等；`/patent-disclosure-skill`、`/交底书`。
+- **通俗解读**：读专利、公开号 / PDF 且目标为理解；`/patent-read`、`/读专利`。
+- **交底书迭代**：已有交底上补材料/纠错 → `disclosure/iteration_context.md` → `merger` / `correction_handler`；另存时间戳稿。
+- **技能进化旁路**：技能进化、政策/审查动向嗅探、政策雷达、审查政策更新、自进化、`/patent-evolve`、`/技能进化` → **仅此时**进入模式 C。
+- **审查答复 / 案例入库**：审查意见、意见陈述、OA、补正通知书、案例入库、`/oa`、`/审查答复` → **仅此时**进入模式 D。
 
 ---
 
 ## 工具与数据来源
 
-按任务选用；工具名以当前 Agent 环境为准。扫描含 **`.docx`/`.pptx`** 时，Step 2 阅读前须先 `docx_to_md.py` / `pptx_to_md.py`（`pip install -r requirements.txt`）。
-
-### 常见任务与建议方式
-
 | 任务 | 建议方式 |
 |------|----------|
-| 加载分步指令 | **`Read`** → `${CLAUDE_SKILL_DIR}/prompts/*.md` |
-| 读代码、设计文档、PDF、图片 | 文件读取；大仓库先检索再精读 |
-| Word / PPT → Markdown | `docx_to_md.py` / `pptx_to_md.py`（见上） |
-| 联网查新（交底书 Step 5） | **`Read`** `prior_art_search.md`。优先 **`cnipa_epub_search.py`**：先归纳 2～8 语义块，**每次工具调用仅一词**，自行按 `pub_number` 合并 `EPUB_HITS_JSON`；需 `tools/requirements-cnipa.txt` + Playwright Chromium。`abstract` 必用。异常或无果再 **WebSearch** |
-| 交底书定稿（**.md + .docx**） | **3.2/3.4** 用 mermaid；`mermaid_render.py` → PNG 并默认出 docx。见 **`tools/README.md`** |
-| 交底书落盘 | 建议 `./outputs/{案件标识}/`；文件名 **`{案件名}_{YYYYMMDDHHmmss}`**（§7.3 第 5 点，含首次与迭代） |
-| 迭代对话留档 | 案件目录追加 **`交底书修订对话记录.md`**（`iteration_dialog_log.py`） |
-| **专利通俗解读** | **`Read`** `patent_plain_reader.md`。**先** `check_obsidian_env.py`（**强烈推荐**有库；未检测到则询问并用 `--set`；用户明确不要库才跳过）。仅公开号时用 **`fetch_patent_pdf.py`**（源表 `references/patent_pdf_sources.yaml`；**禁止**会话内现写下载脚本）→ `extract` → 叙事/权要可视化 → 公开线索由 **Agent 读 URL 写 summary** → `write_patent_obsidian_note`（入库自动 bootstrap；线索脚本抓取仅 `--fetch-clues-fallback`）。交付后可选社区插件引导；库内 ≥2 篇**须反问**关联，同意后 `link_patent_notes.py` |
+| 加载分步指令 | **`Read`** → `prompts/disclosure|reader|shared|evolution/…`（完整子路径） |
+| Word / PPT → Markdown | `tools/shared/docx_to_md.py` / `pptx_to_md.py` |
+| CAD 扫描 / STEP→多视图（可选，默认关） | `tools/shared/cad_scan.py`；**交付后**用户确认才 `cad_venv.py`（就绪则跳过安装）+ `run_step_to_views.py --enable-step-parse`；投影只当材料 |
+| 线稿规划（必做） | `prompts/shared/image_gen.md`；`tools/shared/image_gen.py`（existing / img2img / txt2img） |
+| 外观线稿（必做） | `prompts/shared/design_lineart_assist.md`；门禁 `design_lineart_gate.py` |
+| 实用结构线稿（必做） | `prompts/shared/structure_lineart_assist.md`；门禁 `structure_lineart_gate.py`；锚点 `structure_callout_anchors.yaml`；叠标 `structure_callout_overlay.py` |
+| 联网查新 | **`Read`** `disclosure/prior_art_search.md`。优先 **`tools/crawl/cnipa_epub_search.py --type …`**（与 intake 类型一致）；`abstract` 必用；异常再 WebSearch。类型映射见 `references/patent_type_search.yaml` |
+| 交底定稿 | 发明：`tools/shared/mermaid_render.py` → md+docx；实用/外观：按各类型 builder（外观 md+docx 须同时嵌实拍与线稿） |
+| 专利通俗解读 | **`Read`** `reader/patent_plain_reader.md`；实用/外观另 Read `reader/type_hooks.md` + `shared/fill_*` |
+| 解读取 PDF / 入库 | `tools/patent_reader/extract/fetch_patent_pdf.py`；`…/vault/write_patent_obsidian_note.py` 等（见 `tools/patent_reader/README.md`） |
+| 政策/审查动向嗅探 | **`Read`** `evolution/intake.md` → `research.md`（WebSearch + 官网抓取）→ `emit_backlog.md`；确认后 `apply_after_confirm.md` |
+| 审查答复 / 案例库 | **`Read`** `oa/intake.md`；PDF 用 `oa/pdf_text.py` / `search_cases.py --pdf` / `ingest_case.py --pdf`；入库 `oa/ingest_case.md`；答复 `oa/respond_office_action.md`；配置 `oa/config.py` |
 
 ---
 
 ## Prompt 文件映射
 
-### 交底书编写
+### 交底书（公共 + 类型特化）
 
 | 步骤 | 文件 | 用途 |
 |------|------|------|
-| Step 1 | `prompts/intake.md` | 边界与输入 |
-| Step 2 | `prompts/project_scan.md` | 项目扫描；Office 须先转换 |
-| Step 3–4 | `prompts/patent_points_analyzer.md` | 专利点融合与选定 |
-| Step 5 | `prompts/prior_art_search.md` | 查新 |
-| Step 6 | `prompts/disclosure_preview.md` | 摘要预览 |
-| Step 7 | `prompts/disclosure_builder.md` + `template_reference.md` | 成文、脱敏、符号/公式体例、mermaid |
-| Step 8 | `prompts/disclosure_self_check.md` | 内部自检（不入正文） |
-| 迭代 | `iteration_context.md` / `merger.md` / `correction_handler.md` | 扩合并 / 纠错另存 |
+| Step 1 | `prompts/disclosure/intake.md` | 边界；**默认发明**；可反问实用/外观 |
+| Step 2 | `prompts/disclosure/project_scan.md` | 项目扫描（Office + **可选 CAD/STEP**；三类示例加扫） |
+| Step 3–4 | **发明** `disclosure/invention/patent_points_analyzer.md`；**实用** `utility_model/patent_points.md`；**外观** `design/patent_points.md` | 挖点（**分文件，勿混用**） |
+| 填表（实用/外观） | `prompts/shared/fill_structure_schema.md` / `fill_appearance_schema.md` | 图→schema + **`figure_plan.yaml`**（打分；CAD 不入文） |
+| 线稿规划 | `prompts/shared/image_gen.md` | 必做；existing / img2img / txt2img |
+| 外观线稿 | `prompts/shared/design_lineart_assist.md` | 必做；不问用户；实拍+线稿都入 md/Word；CAD 不是线稿 |
+| 实用结构线稿 | `prompts/shared/structure_lineart_assist.md` | 必做；不问用户；轮廓→按 parts 叠序号 |
+| Step 5 | `prompts/disclosure/prior_art_search.md` | 查新（`--type`） |
+| Step 6 | `prompts/disclosure/disclosure_preview.md` | 摘要预览（按类型裁剪） |
+| Step 7 | 对应类型目录 `disclosure_builder.md` + `template_reference.md` | 成文（**分文件**；发明含公式时先 `formula_plan.yaml`） |
+| Step 8 | `prompts/disclosure/disclosure_self_check.md` | 内部自检（含 §8.4 / §8.5） |
+| 迭代 | `disclosure/iteration_context.md` / `merger.md` / `correction_handler.md` | 另存 |
 
 ### 专利通俗解读
 
-| 步骤 | 文件 | 用途 |
-|------|------|------|
-| 门禁 | `check_obsidian_env.py`（见 `patent_plain_reader.md` 第 0 步） | 探测/写入库路径；强烈推荐有库 |
-| 仅公开号取 PDF | `tools/patent_reader/fetch_patent_pdf.py` + `references/patent_pdf_sources.yaml` | 固化下载（第 1 步前）；**禁止**会话内现写脚本 |
-| 主流程 | `prompts/patent_plain_reader.md` | extract / 附图 / 权树校对 / 线索 / 写笔记 / 入库（须先 Read） |
-| 写笔记时 | `prompts/obsidian_ofm_companion.md` + `references/patent_obsidian_format.md` + `assets/patent_note_template.md` | Callout / 结构 / 模板 |
-| 写笔记时（按需） | `references/ipc_application_hints.yaml` | IPC 应用场景坐标 |
-| 自检 | `prompts/patent_reader_self_check.md` | 交付前内部自检（不入笔记） |
-| 交付时（对话） | `prompts/obsidian_plugin_guide.md` | 可选社区插件引导（不入笔记） |
-| 用户文档 | `docs/obsidian-setup-guide.md` | 装 Obsidian / 社区插件（给人看，勿当主链全文 Read） |
-| 按需 | `tools/patent_reader/README.md` | 解读工具链说明 |
+| 步骤 | 文件 |
+|------|------|
+| 主流程 | `prompts/reader/patent_plain_reader.md` |
+| 类型挂钩 | `prompts/reader/type_hooks.md` |
+| 写笔记 | `reader/obsidian_ofm_companion.md` + `references/patent_obsidian_format.md` |
+| 自检 / 插件引导 | `reader/patent_reader_self_check.md` / `obsidian_plugin_guide.md` |
+| 取 PDF | `tools/patent_reader/extract/fetch_patent_pdf.py` |
+| 入库 | `tools/patent_reader/vault/write_patent_obsidian_note.py` |
 
-顺序摘要：门禁 →（仅公开号）`fetch_patent_pdf` → 主流程（extract / 附图 / 线索 / 入库）→ 写笔记时读 ofm/format/模板 → lint 后自检 → 已入库则交付引导；用户已给 PDF/全文则跳过下载；`obsidian-setup-guide` 与工具 README 仅按需查阅。
+### 技能进化旁路 · 政策/审查动向嗅探（模式 C）
+
+| 步骤 | 文件 |
+|------|------|
+| 总则 | `prompts/evolution/guardrails.md` |
+| 录入 | `prompts/evolution/intake.md` |
+| 检索/抓取 | `prompts/evolution/research.md` |
+| 出清单 | `prompts/evolution/emit_backlog.md` |
+| 确认后改技能 | `prompts/evolution/apply_after_confirm.md`（须人审） |
+| 交底交付低频提示 | `prompts/evolution/soft_nudge.md`（可选一句，不入正文） |
+| 合同 | `references/schemas/evolution_backlog.schema.yaml` |
+
+### 审查答复（模式 D）
+
+| 步骤 | 文件 |
+|------|------|
+| 总则 | `prompts/oa/guardrails.md` |
+| 录入 | `prompts/oa/intake.md` |
+| 向量对话配置 | `prompts/oa/configure_embedding.md`（问答 → set/secrets → selftest） |
+| 脱敏入库 | `prompts/oa/ingest_case.md` + `tools/oa/ingest_case.py`（支持 `--pdf`） |
+| 答复草稿 | `prompts/oa/respond_office_action.md` + `tools/oa/search_cases.py --pdf` |
+| PDF 抽取 | `tools/oa/pdf_text.py`（pymupdf；优先路径，禁止让用户手贴） |
+| 案例模板 | `prompts/oa/case_note_template.md` |
+| 合同 / 配置 | `references/schemas/oa_case.schema.yaml`；运行时 `{Documents}/…/oa/embedding.config.yaml`（仓库模板 `docs/oa/`） |
 
 ---
 
 ## 模式 A · 交底书主流程
 
-1. **`Read`** `intake.md` → Step 1  
-2. **`Read`** `project_scan.md` → Step 2  
-3. **`Read`** `patent_points_analyzer.md` → Step 3–4  
-4. **`Read`** `prior_art_search.md` → Step 5  
-5. **`Read`** `disclosure_preview.md` → Step 6（可跳过）  
-6. **`Read`** `disclosure_builder.md` + `template_reference.md` → Step 7（文件名 §7.3 第 5 点；对话附 §7.6 权利要求偏向点，**不入正文**）  
-7. **`Read`** `disclosure_self_check.md` → Step 8 内部自检后交付  
+1. **`Read`** `disclosure/intake.md` → Step 1（默认发明）  
+2. **`Read`** `disclosure/project_scan.md` → Step 2  
+3. 按类型 **`Read`** `invention|utility_model|design` 挖点；实用/外观先/并行 **`Read`** `shared/fill_*`  
+   - 填表写出 `figure_plan` 后：**`Read`** `shared/image_gen.md` + 对应 `shared/*_lineart_assist.md`（必做，不问用户）  
+4. **`Read`** `disclosure/prior_art_search.md` → Step 5（`--type` 对齐）  
+5. **`Read`** `disclosure/disclosure_preview.md` → Step 6（可跳过；此处可类型反问）  
+6. **`Read`** **同类型** `disclosure_builder` + `template_reference` → Step 7（**禁止**用发明 builder 写实用/外观）  
+7. **`Read`** `disclosure/disclosure_self_check.md` → Step 8  
+8. **交付回复末尾**：若 cad_scan 为 `ask_enable_step_parse`，交底落盘后再反问是否开启 STEP 解析；`hint_export_step` 则提示导出。未得 **是** 禁止装依赖。用户成文前已主动说「是」的除外。
 
 **禁止**：交底书正文出现「自检清单」章节。
 
@@ -102,46 +164,66 @@ allowed-tools: Read, Write, Edit, Grep, Glob, WebSearch, Bash
 
 ## 模式 B · 专利通俗解读
 
-**启用**：读懂已有专利（见触发条件），且**非**交底书迭代。
+1. **`Read`** `reader/patent_plain_reader.md`（门禁 / fetch / extract / 线索 / 入库）  
+2. 若实用新型或外观：**`Read`** `reader/type_hooks.md` + 对应 `shared/fill_*`  
+3. **`Read`** ofm + 自检；入库后可选插件引导；≥2 篇反问关联  
 
-**目标能力**（交付物应体现）：
+**与模式 A 互斥**：解读不跑交底 Step 1–8。
 
-- **取证解读**：权要树、术语、特征—说明书—附图对照  
-- **叙述故事线**：一句话 + 问题/思路/怎么做/效果/差别等连贯叙事  
-- **知识图谱**：`*_图谱.canvas`、术语双链、关系图配色；多篇可 `_专利关联.canvas`  
-- **公开线索辅助**：≤3 条公开材料，L1–L4 旁注与 `clues/`（**推测语境，非权要/说明书证据**）
+---
 
-**步骤**：
+## 模式 C · 技能进化旁路 · 政策/审查动向嗅探
 
-1. **`Read`** `patent_plain_reader.md` → **先跑** `check_obsidian_env.py`（强烈推荐有库；无库则询问路径/`--set`，或确认仅 outputs）→ **仅公开号、无本地全文时**跑 **`fetch_patent_pdf.py`**（源表 `patent_pdf_sources.yaml`；失败可 `cnipa_epub_search` 核验元数据，**勿**现写下载脚本）→ `extract_patent_text`（及附图）→ 校对 `claim_tree` / 写 `claim_deltas` → 叙事与可视化 → Agent 读线索 URL 写 summary → 写笔记 → lint → `write_patent_obsidian_note`（有库时入库并**自动** bootstrap）  
-2. **`Read`** `obsidian_ofm_companion.md` + `patent_obsidian_format.md` + 模板  
-3. **`Read`** `patent_reader_self_check.md` → lint 通过后复核  
-4. 已入库：对话末尾 **`Read`** `obsidian_plugin_guide.md`（仅可选社区插件；勿要求用户再装 CSS）  
-5. 库内 ≥2 篇解读时**须反问**是否关联；同意后 `link_patent_notes.py`  
+1. **`Read`** `evolution/guardrails.md` → `intake.md`  
+2. **`Read`** `evolution/research.md`：WebSearch + 打开国知局等官网正文；默认近 12 个月  
+3. **`Read`** `evolution/emit_backlog.md`：写入 `outputs/evolution/EVOL-YYYYMMDD-HHMM.md`  
+   - **主表必为「观点 ↔ 信源 URL」**（一行一观点，附准确 `https://` 链接）  
+   - 证据 C（自媒体等）不得单独支撑「改技能」建议  
+4. 展示人审闸门；**等待**「全部采纳 / 采纳 E… / 全部搁置 / 沉淀到 docs/evolution/」  
+5. 仅确认采纳后 → **`Read`** `apply_after_confirm.md` → 最小改动 prompts，并写 `.status.md`  
 
-**与模式 A 互斥**：解读**不**跑交底书 Step 1–8。若用户要「先解读再写交底书」，先完成模式 B 交付，再询问是否进入 intake。
+交底定稿交付后的**可选一句**提示见 `evolution/soft_nudge.md`（低频；**不**等于自动进入本模式）。
+
+**与 A/B 互斥**：进化旁路不写交底书、不做专利解读成稿。
+
+---
+
+## 模式 D · 审查答复辅助
+
+1. **`Read`** `oa/guardrails.md` → `intake.md`  
+2. **首次 / 改向量**：`Read` `oa/configure_embedding.md` → 对话问清（可跳过 / 预设 / 自定义 URL+模型+Key）→ `config.py set … --api-key …`（默认 **selftest**）→ 需重建则人确认后 `rebuild_vectors.py --confirm`  
+3. **入库**：`ingest_case.py`（支持 `--pdf`）；笔记进 `oa/cases/history/`（或 pending/drafts）；自动刷新 `_OA索引` / Canvas / Bases；无向量时仍写笔记 + 元数据  
+4. **答复**：`search_cases.py --pdf …`（标签优先过滤；向量可用则 Top-K，失败/超时回退标签，展示 `retrieval_mode` + diff）→ 策略勾选 → 草稿 → 人审  
+5. **仅刷新 Obs**：`python tools/oa/refresh_vault.py` 
+
+依赖：`pip install -r tools/oa/requirements-oa.txt`。  
+**与 A/B/C 互斥**：不写交底书主流程；草稿须复核后递交。
 
 ---
 
 ## 迭代模式（交底书 · 摘要）
 
-按自然语言意图启用（见触发条件），**不**为「是否迭代」打断用户。
-
-- **补材料 / 扩展 / §7.6 侧重点已声明**：`iteration_context.md` → `merger.md` → 另存时间戳稿 + 追加修订对话记录 + 输出合并摘要  
-- **纠错 / 与事实不符**：`iteration_context.md` → `correction_handler.md` → 另存 + 记录 + 纠正摘要；定稿仍附 §7.6 引导  
-
-新稿定稿路径上仍内部执行 `disclosure_self_check.md`。
+- 补材料 / 扩展：`iteration_context` → `merger` → 新时间戳稿（实用/外观若改图或主题须同步 **`figure_plan`**）  
+- 纠错：`iteration_context` → `correction_handler` → 新时间戳稿（同上）  
 
 ---
 
 ## Agent 自用工作流检查清单
 
 ```
-□ 已区分模式 A（交底书）/ B（解读）/ 交底书迭代，未混跑
-□ 已按步骤 Read 对应 prompts；Step 2 若含 Office，已 docx_to_md / pptx_to_md 并读产出 `.md`
-□ 「在已有交底书上改」类意图：已 Read iteration_context 并走 merger/correction；交付为新时间戳文件，未无故覆盖旧稿；已追加交底书修订对话记录.md 并输出留档摘要
-□ 查新：优先 cnipa_epub_search（分次一词并合并 EPUB_HITS_JSON）；abstract 必用；异常再 WebSearch；1.1 与区别论述已写
-□ 除用户跳过外已做摘要预览；脱敏/mermaid/§7.7/3.4.1 与 .md+.docx 时间戳文件名符合要求；正文无技能仓库类脚注
-□ 定稿对话含 §7.6 权利要求偏向点（不入正文、不捏造）；自检仅后台，正文无自检清单
-□ 【模式 B】已 check_obsidian_env；仅公开号已用 fetch_patent_pdf（未现写下载脚本）；强烈推荐有库（无库已确认降级 outputs）；叙事/线索/图谱要点已覆盖；入库自动 bootstrap，未误导用户手装 CSS；≥2 篇已反问关联并按需 link_patent_notes
+□ 已区分模式 A / B / C / D / 迭代，未混跑
+□ 交底未指定类型时已默认发明；材料偏实用/外观已按需反问
+□ Step 3–4 / Step 7 已 Read 对应类型子目录 md（非发明套用实用/外观）
+□ 查新 cnipa 已带与案件一致的 --type；abstract 必用
+□ 发明含公式：已写 formula_plan（范式∈references/formulas）且可算数值例；禁装饰音；已 check_formula_plan 或等价自检
+□ 实用/外观已走 schema 填表（shared）并写出 figure_plan（含 relevance/quality 与必要 relates_to），未看图直接长文；实用只嵌入文线稿；外观 md+docx 同时嵌实拍与线稿；CAD 未入文
+□ Step 2/补材料已 cad_scan：遇 STEP **未**中断成文、**未**装依赖；交底落盘后才反问；仅原生 CAD 则交付回复末尾提示导出 STEP；未确认不开 step_to_views；确认后先 cad_venv 探测，已就绪则跳过 bootstrap；CAD 投影只当材料
+□ 外观线稿：已 Read image_gen.md + design_lineart_assist；已有合格线稿则未再生成，否则图生图或先描述再文生图；实拍与线稿均已入 md 与 Word；CAD 未当线稿入文
+□ 实用结构线稿：已 Read image_gen.md + structure_lineart_assist；件号对齐 parts；优先 overlay；已叠标后读图核对（非仅 Python 合法）；未自创件号；CAD 未入文
+□ 迭代改材料/主题时已重评 figure_plan（含图际关联）
+□ 解读实用/外观：公开号种类码或 patent_type.py / fetch 状态已判别类型，并 Read type_hooks + 共用 schema（用户未口头声明也可）
+□ 模式 C：已显式触发；清单含观点↔URL 主表；未确认前未改技能；确认后才 apply
+□ 交底定稿交付：已按 evolution/soft_nudge 判断是否加低频一句（未每次必出、未写入正文）
+□ 模式 D：已显式触发；向量可选已反问（可跳过）；PDF 已自动抽取；入库已脱敏；检索展示 retrieval_mode；向量失败已回退标签；需重建时已人确认；草稿已人审提示
+□ 路径使用 prompts/disclosure|reader|shared|evolution|oa 与 tools/crawl|shared|oa|patent_reader/{extract,analyze,vault,shared}
 ```

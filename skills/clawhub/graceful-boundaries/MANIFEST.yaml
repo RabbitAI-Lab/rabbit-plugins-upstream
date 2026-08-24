@@ -1,0 +1,40 @@
+# Derived ClawHub consumer manifest for the audit-only skill.
+# This build artifact is not the canonical multi-skill repository manifest.
+
+bundle: graceful-boundaries-audit
+bundle_version: 5
+bundle_date: 2026-08-20
+description: >
+  Audit APIs and websites for Graceful Boundaries conformance and provide
+  evidence-based guidance for improving operational-limit communication.
+
+compatibility:
+  designed_for:
+    platform: ClawHub
+    surface: OpenClaw skill registry
+  spec_version: agentskills.io/1.0
+  frontmatter_mode: metadata
+
+origin:
+  repository: https://github.com/snapsynapse/graceful-boundaries
+  repository_commit: 759270ea3570275b9a8f7e5fc410e526d8a7b86d
+  repository_release: 1.5.3
+  canonical_url: https://gracefulboundaries.dev
+  source_file: SKILL.md
+
+distribution:
+  target: ClawHub
+  listing_slug: graceful-boundaries
+  proposed_registry_version: 1.5.3
+  proposed_release_tag: latest
+  status: prepared-not-published
+
+files:
+  - path: SKILL.md
+    role: skill
+    version: 5
+    hash: sha256:5092d2ab4ba0546854104b5503d5f6c064782296e65657961a164ce38060fab4
+    note: >
+      Canonical audit skill, internally aligned with the last normative
+      conformance-model release at specification version 1.4.0. Repository
+      releases 1.5.2 and 1.5.3 did not change the conformance model.

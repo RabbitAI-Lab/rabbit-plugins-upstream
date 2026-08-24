@@ -1,11 +1,11 @@
 ---
 name: dlazy-veo-3.1
 version: 1.3.5
-description: 使用 Google Veo 3.1 模型，生成高质量的电影级特效视频，支持文生视频与图生视频。
+description: "使用 Google Veo 3.1 模型，生成高质量的电影级特效视频，支持文生视频与图生视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy veo-3.1 -h 查看帮助信息。"}}
 ---
 
-# dlazy-veo-3.1
+# 视频生成 Veo 3.1
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

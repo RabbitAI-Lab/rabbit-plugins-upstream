@@ -1,42 +1,57 @@
-## Description: <br>
-Browser Agent Tool Free guides an agent through headless browser automation using accessibility-tree snapshots, ref-based element selection, session isolation, screenshots, PDF export, and network-aware waits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+无头浏览器自动化CLI,支持可访问性树快照与确定性元素选择,适合个人开发者。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent builders use this skill to automate multi-step browser workflows such as navigation, form filling, search result extraction, screenshots, PDF generation, and isolated session testing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can control a browser, reuse login state, and perform account-affecting web actions. <br>
-Mitigation: Install only when browser control is intended, and require explicit user approval before loading auth state, submitting forms, clicking account-affecting controls, or using logged-in accounts. <br>
-Risk: Saved state files, cookies, screenshots, PDFs, and HAR-like outputs may contain sensitive information. <br>
-Mitigation: Treat those artifacts as sensitive and limit storage, sharing, and retention to the current task need. <br>
-Risk: The workflow depends on an external npm package and browser runtime. <br>
-Mitigation: Verify the npm package and runtime requirements before installing globally. <br>
+## Use Case:
 
+Developers and automation users can use this skill to drive a headless browser CLI for navigation, ref-based interaction, page inspection, screenshots, PDFs, and session state workflows.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/browser-agent-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with bash command examples and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce screenshots, PDFs, saved browser state files, extracted page content, execution logs, and structured JSON responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and skill frontmatter) <br>
+Risk: The activation scope is broad enough that an agent may invoke browser automation for unrelated coding or deployment requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for explicit browser automation tasks and keep it disabled or out of scope for general development assistance.
+
+Risk: Saved browser state files such as auth.json, admin-auth.json, or user-auth.json may contain login state that can grant account access.
+
+Mitigation: Treat browser state files as secrets: do not commit, share, or reuse them across accounts, and store them only where secret handling is appropriate.
+
+Risk: The skill depends on installing and running a global npm browser CLI with native browser tooling.
+
+Mitigation: Install the CLI only from a trusted package source and use it in environments where global browser automation tooling is acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/browser-agent-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [Markdown with bash commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce browser state files, screenshots, PDFs, and extracted page data depending on the invoked CLI command.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

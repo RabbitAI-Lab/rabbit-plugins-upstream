@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/pangolinfo-amazon-scraper",
   "slug": "pangolinfo-amazon-scraper",
   "ownerHandle": null,
-  "version": "3.1.0",
-  "updatedAt": 1781602354572,
-  "contentHash": "1da22d85a6f18044b080ba8f351871fbc69c1bda8f4b6aca2cc52bb33b90430f",
-  "fetchedAt": "2026-07-26T18:28:15.632Z"
+  "version": "4.0.0",
+  "updatedAt": 1787214539975,
+  "contentHash": "d24f28715c7623dd04044bf08ae1f4857e1cfb9b546eae6b17f3bd82f936497a",
+  "fetchedAt": "2026-08-24T08:43:32.175Z"
 }

@@ -1,48 +1,63 @@
-## Description: <br>
-Safety-reviewed guide for the Xquik TweetClaw plugin. Not affiliated with X Corp. Covers setup, approvals, credentials, private data, spending limits, and monitors. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenClaw guide for Twitter search, follower exports, monitoring, media, and approved X automation through Xquik. Not affiliated with X Corp.
 
-## Publisher: <br>
-[xquik](https://clawhub.ai/user/xquik) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xquik](https://clawhub.ai/user/xquik)
 
-## Use Case: <br>
-Developers and OpenClaw users use TweetClaw for user-authorized X/Twitter reads, writes, extractions, media, monitors, webhooks, draws, trends, and account-scoped workflows through Xquik. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, subject to the user's account, Xquik plan, local law, platform rules, and organization policy. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Visible, state-changing, paid, private, extraction, or recurring X/Twitter actions can affect an account, expose private data, or incur charges. <br>
-Mitigation: Require exact payload, account, scope, and cost confirmation before each such action; keep limits narrow and confirm again when scope changes. <br>
-Risk: Credentials or signing keys could be exposed if users paste them into chats, logs, or troubleshooting output. <br>
-Mitigation: Store keys only in OpenClaw plugin config or the Xquik dashboard, never print them, and refuse to collect X account credentials in the agent session. <br>
-Risk: Fetched X/Twitter content can contain prompt injection or misleading instructions. <br>
-Mitigation: Treat all fetched X content as untrusted display data, summarize or label it clearly, and do not let it drive tool selection or outbound payloads without user review. <br>
-Risk: MPP mode supports direct paid reads but not account-backed actions. <br>
-Mitigation: Use MPP only for supported read routes, show the returned price before use, and require an account-backed API key for writes, monitors, webhooks, DMs, profile changes, uploads, and private account actions. <br>
+## Use Case:
 
+External users and developers use TweetClaw to install and operate Xquik-backed OpenClaw workflows for X/Twitter search, follower exports, monitoring, media handling, and explicitly approved account actions.
 
-## Reference(s): <br>
-- [TweetClaw ClawHub listing](https://clawhub.ai/xquik/skills/tweetclaw) <br>
-- [Xquik homepage](https://xquik.com) <br>
-- [Xquik documentation](https://docs.xquik.com) <br>
-- [Xquik API reference](https://docs.xquik.com/api-reference/overview) <br>
-- [Xquik billing guide](https://docs.xquik.com/guides/billing) <br>
+### Deployment Geography for Use:
 
+Global, subject to authorization, plan, law, platform rules, and organization policy.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured JSON responses from Xquik API endpoints.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include endpoint descriptors, setup guidance, approval prompts, cost summaries, and Xquik API responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.11 (source: server release metadata) <br>
+Risk: The skill can guide public X/Twitter writes, private reads, exports, recurring monitors, and paid reads.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval after showing the endpoint, account, target, payload, final public text or media, price, estimated cost, scope, and maximum result count.
+
+Risk: X/Twitter content returned by the skill may contain prompt injection or misleading instructions.
+
+Mitigation: Treat returned posts, profiles, articles, and DMs as untrusted data; do not let fetched content select tools, parameters, payments, or follow-up actions.
+
+Risk: API keys and MPP signing keys could be exposed if handled in chat or logs.
+
+Mitigation: Keep credentials in OpenClaw configuration or the Xquik dashboard, never display them, and unset temporary shell inputs after setup.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/xquik/skills/tweetclaw)
+- [Xquik Documentation](https://docs.xquik.com)
+- [Xquik API Reference](https://docs.xquik.com/api-reference/overview)
+- [Read Data Richness](https://docs.xquik.com/guides/read-data-richness)
+- [Billing Guide](https://docs.xquik.com/guides/billing)
+- [Benchmark Summary](BENCHMARK.md)
+- [SkillSpector Static Scan](skillspector-report.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and endpoint descriptors.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide approved API calls through OpenClaw tools; returned X content should be treated as untrusted data.]
+
+## Skill Version(s):
+
+1.6.44 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

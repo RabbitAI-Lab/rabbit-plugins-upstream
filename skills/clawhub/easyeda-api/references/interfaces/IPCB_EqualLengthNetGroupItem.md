@@ -1,11 +1,11 @@
 # IPCB\_EqualLengthNetGroupItem interface
 
-等长网络组属性
+Equal-length net group properties
 
 ## Signature
 
 ```typescript
-interface IPCB_EqualLengthNetGroupItem 
+export interface IPCB_EqualLengthNetGroupItem 
 ```
 
 ## Properties
@@ -41,12 +41,12 @@ Description
 
 </td><td>
 
-{ r: number; g: number; b: number; alpha: number; } \| null
+{ r: number; g: number; b: number; alpha: number } \| null
 
 
 </td><td>
 
-等长网络组颜色
+Equal-length net group color
 
 
 </td></tr>
@@ -65,7 +65,7 @@ string
 
 </td><td>
 
-等长网络组名称
+Equal-length net group name
 
 
 </td></tr>
@@ -84,7 +84,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-网络名称数组
+Net name array
 
 
 </td></tr>
@@ -98,24 +98,19 @@ Array&lt;string&gt;
 
 # IPCB\_EqualLengthNetGroupItem.color property
 
-等长网络组颜色
+Equal-length net group color
 
 ## Signature
 
 ```typescript
-color: {
-        r: number;
-        g: number;
-        b: number;
-        alpha: number;
-    } | null;
+color: { r: number; g: number; b: number; alpha: number } | null;
 ```
 
 ### name
 
 # IPCB\_EqualLengthNetGroupItem.name property
 
-等长网络组名称
+Equal-length net group name
 
 ## Signature
 
@@ -127,7 +122,7 @@ name: string;
 
 # IPCB\_EqualLengthNetGroupItem.nets property
 
-网络名称数组
+Net name array
 
 ## Signature
 

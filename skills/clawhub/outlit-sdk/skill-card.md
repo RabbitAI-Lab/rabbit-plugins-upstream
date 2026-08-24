@@ -1,49 +1,64 @@
-## Description: <br>
-Use when integrating Outlit tracking into web, server, native, or desktop apps; adding SDK event tracking, identity, consent, activation configuration, billing integrations, visitor tracking, customerId attribution, or troubleshooting @outlit/browser, @outlit/node, or the Rust outlit crate. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when integrating Outlit tracking into web, server, native, or desktop apps; adding SDK event tracking, identity, consent, activation configuration, billing integrations, visitor tracking, customerId attribution, or troubleshooting @outlit/browser, @outlit/node, or the Rust outlit crate.
 
-## Publisher: <br>
-[leo-paz](https://clawhub.ai/user/leo-paz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[leo-paz](https://clawhub.ai/user/leo-paz)
 
-## Use Case: <br>
-Developers and engineers use this skill to add or troubleshoot Outlit analytics across browser, server, native, and desktop applications while preserving existing application structure. It guides SDK choice, identity mapping, consent handling, event tracking, activation setup, billing integration, and verification. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Browser auto-tracking can create visitor storage and link activity to email, name, user ID, customer ID, or device fingerprint before consent and privacy requirements are confirmed. <br>
-Mitigation: Confirm consent, privacy notice, and data-processing requirements before enabling tracking; when consent is required, initialize with autoTrack disabled and enable tracking only from the consent flow. <br>
-Risk: Server or native events may be dropped or unattributed if required identity fields are missing or queued events are not flushed before exit. <br>
-Mitigation: Provide at least one supported identifier for server track calls and flush or shut down the SDK client before serverless handlers or processes exit. <br>
-Risk: Billing or lifecycle status can be misrepresented if custom SDK events are treated as authoritative account state. <br>
-Mitigation: Use verified billing integrations for billing status and reserve SDK events for identity and ordinary product activity. <br>
+## Use Case:
 
+Developers and engineers use this skill to add and troubleshoot Outlit analytics instrumentation across browser, server, native, and desktop applications. It guides SDK selection, identity setup, consent handling, activation events, billing integration decisions, and verification steps.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/leo-paz/skills/outlit-sdk) <br>
-- [Outlit Tracking Quickstart](https://docs.outlit.ai/tracking/quickstart) <br>
-- [Outlit Browser SDK](https://docs.outlit.ai/tracking/browser/npm) <br>
-- [Outlit React Tracking](https://docs.outlit.ai/tracking/browser/react) <br>
-- [Outlit Node.js Tracking](https://docs.outlit.ai/tracking/server/nodejs) <br>
-- [Outlit Rust and Tauri Tracking](https://docs.outlit.ai/tracking/server/rust) <br>
-- [Outlit Identity Resolution](https://docs.outlit.ai/concepts/identity-resolution) <br>
-- [Outlit Website Visitors](https://docs.outlit.ai/concepts/website-visitors) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline code blocks and implementation steps] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask for an Outlit public key, framework details, consent requirements, or activation-event confirmation before changing code.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: release evidence) <br>
+Risk: The skill helps add analytics tracking that may collect events, identifiers, form-derived identity fields, and properties.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review planned tracking behavior before installation, decide whether consent gating is required, and avoid sending secrets or unnecessary personal data.
+
+Risk: Automatic browser tracking can create visitor storage before a user has consented when configured with default tracking behavior.
+
+Mitigation: Use consent-gated tracking where required by the target app's policy or geography, such as initializing with tracking disabled and enabling it only after consent.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/leo-paz/skills/outlit-sdk)
+- [Outlit Tracking Quickstart](https://docs.outlit.ai/tracking/quickstart)
+- [How Outlit Tracking Works](https://docs.outlit.ai/tracking/how-it-works)
+- [Customer Context Graph](https://docs.outlit.ai/concepts/customer-context-graph)
+- [Website Visitors](https://docs.outlit.ai/concepts/website-visitors)
+- [Identity Resolution](https://docs.outlit.ai/concepts/identity-resolution)
+- [Browser SDK](https://docs.outlit.ai/tracking/browser/npm)
+- [React Tracking](https://docs.outlit.ai/tracking/browser/react)
+- [Next.js Tracking](https://docs.outlit.ai/tracking/browser/nextjs)
+- [Node.js Tracking](https://docs.outlit.ai/tracking/server/nodejs)
+- [Rust and Tauri Tracking](https://docs.outlit.ai/tracking/server/rust)
+- [Ingest API](https://docs.outlit.ai/api-reference/ingest)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline code examples and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill produces integration guidance and proposed code or configuration changes for the target application; it does not produce executable artifacts by itself.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
