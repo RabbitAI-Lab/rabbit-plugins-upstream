@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/playground",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "playground",
+  "branch": "main",
+  "pushedAt": "2026-08-24T07:45:15Z",
+  "contentHash": "97a30df64e4592802c7a3b7d7f23c2048c6daf7bdf4a55c10ea815c8f1127988",
+  "fetchedAt": "2026-08-24T08:09:05.152Z"
+}

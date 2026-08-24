@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/math-olympiad",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "math-olympiad",
+  "branch": "main",
+  "pushedAt": "2026-08-24T07:45:15Z",
+  "contentHash": "15a90b881754a98fc16f87a5169d8134cd3ecd06cb703246aa8ff5644c067508",
+  "fetchedAt": "2026-08-24T08:09:05.208Z"
+}
