@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/callstack/agent-device/ios-simulator",
+  "repo": "callstack/agent-device",
+  "skillId": "ios-simulator",
+  "branch": "main",
+  "pushedAt": "2026-08-24T08:01:09Z",
+  "contentHash": "03a675a8a90cbbfa6a9ab5d5bf1c552d9be300e71b4f654950225c2c6d3e5434",
+  "fetchedAt": "2026-08-24T08:10:41.320Z"
+}

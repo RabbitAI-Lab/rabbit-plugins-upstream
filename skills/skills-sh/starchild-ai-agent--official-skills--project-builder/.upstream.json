@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/project-builder",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "project-builder",
+  "branch": "main",
+  "pushedAt": "2026-08-21T09:24:30Z",
+  "contentHash": "2b8145da453df5fdfe1f761f20fa350ca18be24082011467c1ba4fad6a3e0e15",
+  "fetchedAt": "2026-08-24T08:10:43.316Z"
+}

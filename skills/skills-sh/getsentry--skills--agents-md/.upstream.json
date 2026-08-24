@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/agents-md",
+  "repo": "getsentry/skills",
+  "skillId": "agents-md",
+  "branch": "main",
+  "pushedAt": "2026-08-19T18:41:29Z",
+  "contentHash": "981ef7cda220155dc5825ccc19118d8092a13022fc720f7b420fbdca788f4538",
+  "fetchedAt": "2026-08-24T08:08:52.944Z"
+}

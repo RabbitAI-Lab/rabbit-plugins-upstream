@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/xai-grok-onboarding",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "xai-grok-onboarding",
+  "branch": "main",
+  "pushedAt": "2026-08-21T09:24:30Z",
+  "contentHash": "51836ceb2044be1ba1c4d9e1dfb292af5e35b79b36fa0a84cf8ca20137efbda3",
+  "fetchedAt": "2026-08-24T08:10:43.414Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/aspnet-core",
+  "repo": "openai/skills",
+  "skillId": "aspnet-core",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "975d7ccac5a9f84b858786a8c4e0a10c00dadcfc871e71f85520e54f6d3347a4",
+  "fetchedAt": "2026-08-24T08:10:34.322Z"
+}
