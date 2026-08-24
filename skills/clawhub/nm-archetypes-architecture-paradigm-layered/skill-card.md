@@ -1,44 +1,55 @@
-## Description: <br>
-Applies layered n-tier architecture with enforced boundaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies layered n-tier architecture with enforced boundaries.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and software architects use this skill to decide when layered or n-tier architecture fits moderate systems and to plan layer responsibilities, dependency rules, ADRs, diagrams, and architecture checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generic architecture and domain triggers may activate this guidance in broad design conversations where layered architecture is not the right fit. <br>
-Mitigation: Confirm the system context matches the skill's stated layered or n-tier use cases before following recommendations. <br>
-Risk: Strict layering can create pass-through code or latency for features that naturally cross layers. <br>
-Mitigation: Use the documented facade or exception guidance and review tradeoffs before enforcing strict layer boundaries. <br>
-Risk: Layer boundary recommendations may be applied without project-specific validation. <br>
-Mitigation: Have developers or architects review proposed ADRs, dependency diagrams, and automated checks before adopting them. <br>
+## Use Case:
 
+Developers and engineers use this skill to structure moderate systems with clear presentation, application, domain, and persistence boundaries. It helps teams define layer responsibilities, dependency direction, architecture checks, and appropriate cases where layered architecture should or should not be used.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-layered) <br>
-- [Publisher Profile](https://clawhub.ai/user/athola) <br>
-- [Project Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with architecture recommendations, deliverable outlines, and example tooling suggestions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable behavior; outputs are advisory and should be reviewed before applying to architecture decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter lists 1.9.8) <br>
+Risk: The skill can activate on broad architecture terms and provide general layered-architecture advice in contexts where another architecture pattern may fit better.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the advice against the system's scalability, deployment, latency, and team-boundary needs before adopting the pattern.
+
+Risk: The skill references a separate Claude Code plugin that is not included in this artifact.
+
+Mitigation: Review that separate plugin before installing it if plugin-specific agents, hooks, or commands are needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-layered)
+- [Publisher profile](https://clawhub.ai/user/athola)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, configuration]
+
+**Output Format:** [Markdown guidance with architecture examples, tool recommendations, and implementation checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only; produces advisory architecture content and does not execute tools or commands.]
+
+## Skill Version(s):
+
+1.9.18 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

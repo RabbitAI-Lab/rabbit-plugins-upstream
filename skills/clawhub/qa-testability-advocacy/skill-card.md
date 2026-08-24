@@ -1,39 +1,54 @@
-## Description: <br>
-Chinese-language QA guidance skill for evaluating software testability across controllability, observability, isolation, automation, and diagnosability, then producing assessment reports, improvement suggestions, refactoring guidance, and best practices. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill guides QA and engineering teams through testability assessment across controllability, observability, isolation, automation, and diagnosability, producing assessment reports and practical improvement recommendations.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill when features are difficult to test or architecture reviews need testability advocacy. It helps assess testability gaps and turn them into traceable improvement suggestions and implementation guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may suggest cleanup of test data as part of improving data-layer testability. <br>
-Mitigation: Review cleanup suggestions before applying them and limit any cleanup to non-critical test data. <br>
-Risk: Guidance may omit some testability issues for complex systems. <br>
-Mitigation: Supplement the assessment with code review when gaps are suspected, then rerun the improvement planning step. <br>
+## Use Case:
 
+Developers, QA engineers, and test leads use this skill when a system is difficult to test, needs architecture changes for better testability, or requires a structured review of mockability, observability, isolation, automation, and diagnosability.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured assessment sections and traceable suggestion IDs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a testability assessment, improvement suggestions, refactoring guidance, and best-practice recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may activate during broad software architecture or testing discussions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is asking for testability assessment, advocacy, or architecture improvement guidance before applying the skill.
+
+Risk: Data-cleanup recommendations could be misapplied outside a test environment.
+
+Mitigation: Apply cleanup guidance only to non-critical test data and verify environment boundaries before acting on any cleanup recommendation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-testability-advocacy)
+- [ClawHub publisher profile](https://clawhub.ai/user/kokxi)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown report with structured assessment tables and recommendation lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations include traceability identifiers such as ADV-XXXX when applicable.]
+
+## Skill Version(s):
+
+1.7.0 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -133,3 +133,22 @@ Before calling generic skill:
    - 2+ → AskUserQuestion for selection
 
 **Self-check**: dispatch flag exposure / 3-axis scan / branch decision / auto-supply default applied.
+
+## 6. Verify a skill's own skip/precondition checks before recommending its action (HARD STOP)
+
+**Before offering or recommending a skill's documented action as a next step (e.g., "run Internal Review", "merge now"), check that skill's own skip-condition / precondition section first.** Recommending an action, then discovering later that its own procedure would have skipped it, means the recommendation was composed from the action's name alone rather than from its actual applicability this turn.
+
+### Don't / Do
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Recommend "run Internal Review" on a PR, then read the reviewing skill's Step 2 skip conditions afterward | Read the skip-condition section first (e.g., draft-PR check) — only recommend the action if none apply |
+| 2 | Assume a skill's action always applies because it worked the same way last time | Skip conditions are evaluated per invocation (draft state, prior artifacts, branch policy) — re-check every time, not from memory |
+| 3 | Treat "the skill will catch it if it doesn't apply" as sufficient | The skill catching it after the fact still cost a wasted recommendation + user decision cycle. Check before offering, not after |
+
+### Self-check (before composing any AskUserQuestion or report that recommends invoking a skill's specific procedure)
+
+1. Does the target skill document skip conditions / preconditions for this action? Grep for a "Skip Condition" / "Step 2" / precondition section — in the relevant **topic file** for a multi-topic skill, or directly in **SKILL.md** for a single-topic (SKILL.md-only) skill. Don't assume a separate topic file exists; check whichever file actually documents the action.
+2. Have you verified those conditions against the current state (not assumed from a prior session or a similar-looking case)?
+3. If a skip condition applies, do not offer the action — state the blocked reason instead, or route to the skill's actual next applicable step.
+4. If step 1 finds **no documented precondition at all** (neither a topic file nor SKILL.md defines one for this action), that is not the same as "no precondition applies" — it means the skill's own author never specified one. Proceed with the recommendation, but note in the recommendation that no precondition check exists for this action (so the user can catch a case the skill itself doesn't guard against).

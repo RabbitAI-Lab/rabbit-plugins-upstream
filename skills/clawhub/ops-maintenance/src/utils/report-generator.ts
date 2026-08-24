@@ -8,6 +8,7 @@ import { getHealthChecker, formatHealthReport } from './health-checker.js'
 import { getSecurityAuditor } from './security-auditor.js'
 import { getSmartLogAnalyzer } from './smart-log-analyzer.js'
 import { getConfigChangeTracker } from './config-change-tracker.js'
+import os from 'os'
 
 // ============================================================
 // 类型定义
@@ -54,7 +55,7 @@ export class ReportGenerator {
   private hostname: string
 
   constructor() {
-    this.hostname = require('os').hostname()
+    this.hostname = os.hostname()
   }
 
   /**

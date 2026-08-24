@@ -1,43 +1,64 @@
-## Description: <br>
-Provides traditional Bazi reading guidance using the Di Tian Sui framework, Qiong Tong Bao Jian seasonal-balancing theory, and San Ming Tong Hui auxiliary-star references. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+八字命理分析与排盘技能，以《滴天髓》为骨架，融合《穷通宝鉴》调候与《三命通会》神煞体系，可自主从公历出生时间排出四柱、大运、十神、神煞并给出深度命理解读。
 
-## Publisher: <br>
-[tuobadaidai](https://clawhub.ai/user/tuobadaidai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tuobadaidai](https://clawhub.ai/user/tuobadaidai)
 
-## Use Case: <br>
-External users can use this skill to request Bazi-style life readings from user-provided birth-chart information, including character tendencies, near-term fortune trends, career direction, relationship themes, and practical improvement suggestions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may present traditional fortune-reading guidance in a confident style that users could over-weight for important decisions. <br>
-Mitigation: Treat outputs as cultural or reflective guidance only, and do not rely on them for medical, legal, financial, relationship, or other life-changing decisions. <br>
-Risk: Bazi readings require user-provided birth time, sex, and optional birthplace details, which may be personal information. <br>
-Mitigation: Share only information needed for the reading and avoid entering sensitive personal details beyond the requested birth-chart context. <br>
+## Use Case:
 
+External users use this skill to request a traditional Bazi reading from birth date, birth time, sex, and birthplace. The skill computes the chart and returns a structured interpretive report covering pillars, luck cycles, Ten Gods, symbolic stars, useful elements, and directional life guidance.
 
-## Reference(s): <br>
-- [Di Tian Sui outline](references/滴天髓纲要.md) <br>
-- [Qiong Tong Bao Jian seasonal-balancing notes](references/穷通宝鉴调候.md) <br>
-- [San Ming Tong Hui summary](references/三命通会精华.md) <br>
-- [ClawHub skill page](https://clawhub.ai/tuobadaidai/bazi-master) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text Bazi reading guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code execution; responses depend on user-provided birth-chart details and should be treated as cultural or reflective guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Users may share precise birth details in chat for an astrology-style reading.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user is comfortable sharing those details, and avoid requesting information beyond what is needed for the chart.
+
+Risk: Health, finance, and legal interpretations could be mistaken for professional advice.
+
+Mitigation: Treat those sections as general cultural interpretation and include the skill's stated disclaimers when those topics arise.
+
+## Reference(s):
+
+- [三命通会 精华摘要](references/三命通会精华.md)
+- [十神精义](references/十神精义.md)
+- [大运流年论断](references/大运流年论断.md)
+- [意象话术库（可选 · 默认关闭）](references/意象话术库.md)
+- [排盘示例（内部推演示范）](references/排盘示例.md)
+- [排盘算法全书](references/排盘算法全书.md)
+- [整合性解析（人生综合论断）](references/整合性解析.md)
+- [旺衰与用神实操](references/旺衰与用神实操.md)
+- [格局判定](references/格局判定.md)
+- [滴天髓 纲要](references/滴天髓纲要.md)
+- [神煞全查](references/神煞全查.md)
+- [穷通宝鉴 调候要义](references/穷通宝鉴调候.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured Markdown report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires precise birth details and includes disclaimers for health, finance, and legal topics.]
+
+## Skill Version(s):
+
+2.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

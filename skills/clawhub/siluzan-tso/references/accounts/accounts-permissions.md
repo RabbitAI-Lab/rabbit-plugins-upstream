@@ -6,7 +6,7 @@
 
 - account me / check-access / auth / reauth / delink
 - mcc-bind / mcc-unbind / share / unshare / share-detail
-- close / bm-bind / withdraw-* / bc-* / email-*
+- close / bm-bind / withdraw-_ / bc-_ / email-\*
 - 仅限网页的操作
 
 ## account — 账号管理（OAuth 授权 / 解除关联 / Google MCC / 分享）
@@ -33,22 +33,40 @@ siluzan-tso account me --check-phone 15130150466 --json-out ./snap-me
 
 ### check-access — Google 账户访问权限校验
 
-校验当前丝路赞凭据是否对指定 **Google** 广告账户有访问权限**403 通常表示该 Google 账户不在当前丝路赞账号下**（或未分享给你），应在拉数/诊断前调用，避免误用他户 ID。
+**仅支持 Google。** 无 `-m`；`-a` 只接受 Google 纯数字 `mediaCustomerId`。TikTok / MetaAd / BingV2 / Yandex / Kwai **禁止**调用本命令，授权是否失效看 `list-accounts` 的 `invalidOAuthToken`。
+
+校验当前丝路赞凭据是否对指定 **Google** 广告账户有访问权限。应在拉数/诊断前调用，避免误用他户 ID。
+
+> **硬约束**：**禁止**凭 403、空结果或经验臆测「授权/OAuth 过期」。要对用户下「授权不可用 / 需重授权」结论前，**必须**先跑本命令，以 CLI 返回的 `status` 为准；**禁止**跳过本命令直接 `reauth` 或口头推断。
+
+**套餐激活字段（可选前提）**：若 `list-accounts` 输出中**出现** `ma.scopeActivatedSources`（或 Google「套餐激活」列），须先确认有未过期条目再据此谈「授权过期」；**输出中无该字段/列时：跳过套餐判断，直接跑本命令**，且**禁止**向用户解释套餐是否激活。
+
+| 结果                               | 含义                                                                                         |
+| ---------------------------------- | -------------------------------------------------------------------------------------------- |
+| `accessible`（200 / `true`）       | 授权可用，可继续拉数/操作                                                                    |
+| `reauth_required`（200 / `false`） | 已绑定但 Google OAuth 不可用 → 走重授权                                                      |
+| `no_permission`（403 / 账户 ID）   | 网关不可访问；可与 `list-accounts` 的 `invalidOAuthToken` 交叉确认是否授权失效或不在本账号下 |
+
+**注意**：当输出能确认套餐**未激活**时，不要用本命令判断授权过期（未激活户仍可能返回 `accessible`）。无激活字段时不适用本条。
 
 ```bash
+# 1) 可选：list-accounts 核验账户；仅当输出含 scopeActivatedSources 时才看套餐
+siluzan-tso list-accounts -m Google -k <mediaCustomerId> --json-out ./snap
+
+# 2) 查网关访问 / 授权是否可用
 siluzan-tso account check-access -a <mediaCustomerId>
 siluzan-tso account check-access -a 4256317784 --json-out ./snap-access
 ```
 
-| HTTP | body            | 含义                         | CLI `status`                                  |
-| ---- | --------------- | ---------------------------- | --------------------------------------------- |
-| 200  | `true`          | 可访问                       | `accessible`（exit 0）                        |
-| 200  | `false`         | 已绑定但 Google OAuth 不可用 | `reauth_required` → Agent 优先 `present_reauth`；备选 `account reauth` |
-| 403  | 账户 ID         | 无权限（多不在本账号下）     | `no_permission`（exit 1）                                             |
-| 403  | `token不能为空` | 未绑定 Google 媒体           | `google_not_bound` → Agent 优先平台授权；备选 `account auth -m Google` |
-| 401  | 空              | 丝路赞 Token 失效            | `siluzan_token_invalid` → 重新 login          |
+| HTTP | body            | 含义                                           | CLI `status`                                                           |
+| ---- | --------------- | ---------------------------------------------- | ---------------------------------------------------------------------- |
+| 200  | `true`          | 可访问                                         | `accessible`（exit 0）                                                 |
+| 200  | `false`         | 已绑定但 Google OAuth 不可用                   | `reauth_required` → Agent 优先 `present_reauth`；备选 `account reauth` |
+| 403  | 账户 ID         | 无权限（多不在本账号下；授权失效时也可能出现） | `no_permission`（exit 1）                                              |
+| 403  | `token不能为空` | 未绑定 Google 媒体                             | `google_not_bound` → Agent 优先平台授权；备选 `account auth -m Google` |
+| 401  | 空              | 丝路赞 Token 失效                              | `siluzan_token_invalid` → 重新 login                                   |
 
-> 与 `list-accounts -k` 互补：`list-accounts` 查「是否出现在账户列表」；本接口查「Google 网关是否允许当前凭据访问该 mediaCustomerId」。
+> 与 `list-accounts -k` 互补：`list-accounts` 查「是否在列表 / `invalidOAuthToken`」（以及**若存在**则含套餐激活）；本接口查「Google 网关是否允许当前凭据访问该 mediaCustomerId」。列表批量筛失效仍优先看 `invalidOAuthToken`；单户深查用本命令。
 
 ---
 
@@ -129,12 +147,12 @@ siluzan-tso account delink --id <entityId> --i-confirm --commit "用户确认解
 siluzan-tso account delink --ids <id1,id2,id3> --i-confirm --commit "用户确认批量解绑"
 ```
 
-| 选项              | 说明                                              |
-| ----------------- | ------------------------------------------------- |
-| `--id <entityId>` | 断开单个账户（使用 `entityId`）                   |
-| `--ids <id1,id2>` | 批量断开多个账户（逗号分隔）                      |
-| `--i-confirm`     | **必填**：用户已明确同意解绑后附加                |
-| `--commit`        | **必填**：写审计说明（可写用户确认的摘要）        |
+| 选项              | 说明                                       |
+| ----------------- | ------------------------------------------ |
+| `--id <entityId>` | 断开单个账户（使用 `entityId`）            |
+| `--ids <id1,id2>` | 批量断开多个账户（逗号分隔）               |
+| `--i-confirm`     | **必填**：用户已明确同意解绑后附加         |
+| `--commit`        | **必填**：写审计说明（可写用户确认的摘要） |
 
 **示例：**
 
@@ -183,9 +201,9 @@ siluzan-tso account mcc-unbind --customers <mediaCustomerId> --mcc <MCC客户ID>
 
 查找被分享人走主站 `GET /query/account/SimpleAccountInfo?phone=…`（须带国家码；与网页一致）。
 
-| 选项              | 说明                                                                                         |
-| ----------------- | -------------------------------------------------------------------------------------------- |
-| `--id <entityId>` | 账户 `entityId`                                                                              |
+| 选项              | 说明                                                                                            |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| `--id <entityId>` | 账户 `entityId`                                                                                 |
 | `--phone <phone>` | 被分享人手机号：**裸 11 位默认补 `+86`**；已是 `+86…` / `86…` **不再重复拼接**（勿写成 `++86`） |
 
 ```bash
@@ -212,11 +230,11 @@ siluzan-tso account share --id abc123def456 --phone +8618379752858
 siluzan-tso account unshare --id <entityId> --account-id <userId> --i-confirm --commit "用户确认取消分享"
 ```
 
-| 选项                    | 说明                                   |
-| ----------------------- | -------------------------------------- |
-| `--id <entityId>`       | 账户 entityId                          |
-| `--account-id <userId>` | 被取消分享的用户 ID                    |
-| `--i-confirm`           | **必填**：用户已明确同意后附加         |
+| 选项                    | 说明                           |
+| ----------------------- | ------------------------------ |
+| `--id <entityId>`       | 账户 entityId                  |
+| `--account-id <userId>` | 被取消分享的用户 ID            |
+| `--i-confirm`           | **必填**：用户已明确同意后附加 |
 
 **示例：**
 

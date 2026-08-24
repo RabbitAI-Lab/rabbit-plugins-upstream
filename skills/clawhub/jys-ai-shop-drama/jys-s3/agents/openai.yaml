@@ -1,0 +1,4 @@
+interface:
+  display_name: "JYS S3 · 选产品"
+  short_description: "从产品库读取并确认当前项目使用的产品及明确功能机制"
+  default_prompt: "Use $jys-s3 to 帮我从产品库选择并确认当前项目使用的产品。"

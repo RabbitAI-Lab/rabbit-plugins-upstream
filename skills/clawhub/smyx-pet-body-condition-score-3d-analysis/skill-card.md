@@ -1,48 +1,60 @@
-## Description: <br>
-Analyzes pet videos or media URLs with the Life Emergence remote service to reconstruct body shape, estimate Body Condition Score from 1 to 9, classify underweight, ideal, or overweight status, and return structured observation results without diagnosing disease or prescribing treatment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet images or multi-angle videos through external health-analysis APIs to estimate a visual 3D Body Condition Score (BCS 1-9), classify body condition, and return structured reports without disease diagnosis or treatment advice.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to submit cat, dog, or other pet video inputs for BCS-oriented body shape assessment, structured reporting, and cloud history lookup. It is intended for pet weight-management workflows in smart feeders, pet cameras, and pet health platforms, not for veterinary diagnosis or treatment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet videos, images, or media URLs are sent to the Life Emergence remote service for analysis. <br>
-Mitigation: Use only media approved for external processing, avoid private or internal URLs, and confirm retention and cleanup expectations with the publisher before deployment. <br>
-Risk: The skill can create or reuse a local identity, read a workspace smyx-api-key file, and store account tokens locally. <br>
-Mitigation: Review local identity and token storage before installation, restrict workspace access, and remove stored credentials or local account data when no longer needed. <br>
-Risk: History report lookup retrieves cloud report records linked to the resolved identity. <br>
-Mitigation: Confirm the active identity before history queries and verify that cloud report access controls match the intended user or workspace. <br>
-Risk: BCS scoring is visually estimated and may differ from hands-on veterinary assessment. <br>
-Mitigation: Present results as weight-management observations only and route health decisions to a veterinarian. <br>
+## Use Case:
 
+External ClawHub users and developers use this skill to submit pet media or URLs for BCS analysis, retrieve structured analysis results, and query cloud-hosted historical reports for pet weight-management workflows.
 
-## Reference(s): <br>
-- [Pet health analysis API reference](artifact/references/api_doc.md) <br>
-- [SMYX analysis API reference](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-body-condition-score-3d-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown status text with structured JSON analysis results, report links, or an optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [History queries return cloud report lists; analysis results are reference observations and not medical advice.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.5) <br>
+Risk: Uploaded pet media or media URLs may be sent to external services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with explicit consent for media submission, documented retention expectations, and endpoint configuration scoped to approved production services.
+
+Risk: The skill can silently create or reuse an internal account identity and store auth tokens locally.
+
+Mitigation: Review identity handling before deployment, protect the workspace data directory, rotate tokens as needed, and disclose account creation or reuse behavior to users or administrators.
+
+Risk: Cloud history reports can be fetched automatically from trigger phrases with limited user control.
+
+Mitigation: Require a clear confirmation or policy gate before historical report retrieval and scope report access to the intended user identity.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-body-condition-score-3d-analysis)
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [JSON or Markdown text with structured report content and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return BCS classifications, cloud history report records, and report export links.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

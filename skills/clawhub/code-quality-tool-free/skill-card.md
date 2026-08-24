@@ -1,42 +1,61 @@
-## Description: <br>
-Code Quality Tool Free helps developers review code style, basic security issues, accessibility checkpoints, and small-project quality guidance through Markdown instructions and command examples. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides code style guidance, basic security checks, and accessibility review points for developers who need quick code-quality feedback.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, independent maintainers, and small teams use this skill to run quick code-quality checks, review common style conventions, look for simple secret and unsafe-pattern indicators, and produce lightweight remediation guidance before commits or reviews. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may inspect proprietary source code, credentials, or secret-like findings while running quality and security checks. <br>
-Mitigation: Run checks on a limited path first, confirm your agent environment keeps code and command output local, and avoid exposing sensitive repositories unless that data handling posture is acceptable. <br>
-Risk: The skill can propose shell commands, generated fixes, and git-hook changes that may affect repository behavior. <br>
-Mitigation: Review commands and generated changes before execution or installation, and apply fixes deliberately after confirming they match the project context. <br>
-Risk: The scanner identified inconsistent privacy and data-flow documentation. <br>
-Mitigation: Treat local-only claims as unverified unless the runtime environment and agent configuration explicitly support them. <br>
+## Use Case:
 
+Developers and small teams use this skill to perform lightweight code-quality reviews covering naming and formatting conventions, common security checks, and accessibility checklist items before committing or reviewing code.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/code-quality-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash, Python, and YAML examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured report fields such as status, message, data, issue categories, severity, logs, and fix suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can read project files and run local shell commands for quality checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed commands before execution, scope scans to intended directories, and confirm before running broad repository-wide checks.
+
+Risk: Security checks may detect secrets or tokens in source files.
+
+Mitigation: Report file locations and issue categories without printing full secret values.
+
+Risk: The artifact includes optional Git pre-commit hook creation, which can persistently affect local development workflow.
+
+Mitigation: Create the hook only after explicit user approval and document how to remove or disable it.
+
+Risk: Security evidence flags unclear local-only versus external API language.
+
+Mitigation: Treat network or API behavior as unconfirmed until the publisher clarifies whether any external service is contacted.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/code-quality-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown report with command snippets and structured findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May read project files and propose local grep/find-based checks; results should avoid exposing full secret values.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

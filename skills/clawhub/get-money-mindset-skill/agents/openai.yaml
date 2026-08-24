@@ -1,0 +1,4 @@
+interface:
+  display_name: "Get Money Mindset"
+  short_description: "Turn money goals into ethical, measurable earning experiments."
+  default_prompt: "Use $get-money-mindset-skill to help me turn a money goal into an ethical, measurable earning experiment."

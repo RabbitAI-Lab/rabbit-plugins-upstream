@@ -1,11 +1,11 @@
 # ISYS\_MessageBusTask interface
 
-消息总线任务
+Message bus task
 
 ## Signature
 
 ```typescript
-interface ISYS_MessageBusTask 
+export interface ISYS_MessageBusTask 
 ```
 
 ## Properties

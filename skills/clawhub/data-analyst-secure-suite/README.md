@@ -1,5 +1,7 @@
 # Secure Data Analyst Skill Suite
 
+> **Version**: 1.2.0 · **Requires**: MGC Blackbox ≥ 1.4.10
+
 A mixed-form skill suite combining **workflow prompts + an Agent system prompt template**, designed to help data analysts safely manage scripts, credentials, collaboration, and knowledge using **MGC Blackbox**.
 
 ---
@@ -199,8 +201,10 @@ Each step requires explicit user authorization. Agent cannot see script content 
 |------|-------------|
 | mgc_save | Store credentials, scripts, prompts |
 | mgc_get | Apply scripts after user authorization |
+| mgc_run | Execute a stored script (preferred over mgc_get action="run") |
 | mgc_seal | Seal scripts for collaboration |
-| mgc_list | List stored items |
+| mgc_list | List stored items (exact match) |
+| mgc_find | Fuzzy-search entries by name (auto-applies LIKE wildcards; v1.4.10+) |
 | mgc_open_webui | Open MGC WebUI |
 
 ---

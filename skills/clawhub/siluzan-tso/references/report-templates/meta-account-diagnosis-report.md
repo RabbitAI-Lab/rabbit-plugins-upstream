@@ -20,11 +20,11 @@ siluzan-tso facebook-analysis -a <id> --start <s> --end <e> --json-out ./snap-fb
 | 步骤             | 执行者       | 动作                                                                                                                                                                         |
 | ---------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **1. 拉数**      | Agent 调 CLI | `facebook-analysis -a <id> --start <s> --end <e> --json-out ./snap-fb-diagnosis`（全 7 维或默认 6 维 + 按需 `material`）                                                     |
-| **2. 分析**      | Agent        | 用 **node/python 脚本**读落盘 JSON（勿用 Read 打开业务 `*.json`），做洞察与叙事；表格数字可由 `--snapshot-dir` 按 guide 根字段自动映射                                            |
-| **3. 写 JSON**   | Agent        | 撰写 `meta-account-diagnosis-report.json`：仅 `meta.accountId` + `narrative` 为必填；`kpis`/`tables` 可省略，由 `--snapshot-dir` 自动合并                                        |
+| **2. 分析**      | Agent        | 用 **node/python 脚本**读落盘 JSON（勿用 Read 打开业务 `*.json`），做洞察与叙事；表格数字可由 `--snapshot-dir` 按 guide 根字段自动映射                                       |
+| **3. 写 JSON**   | Agent        | 撰写 `meta-account-diagnosis-report.json`：仅 `meta.accountId` + `narrative` 为必填；`kpis`/`tables` 可省略，由 `--snapshot-dir` 自动合并                                    |
 | **4. 渲染 HTML** | CLI          | `facebook-analysis diagnosis-render` — **校验 narrative 11 个分析小节必含字段**（4 个媒体未覆盖小节可标 `notAvailable`），缺项报错不生成 HTML；**禁止** Agent 手写/拼接 HTML |
 
-> `--snapshot-dir` 自动补全 `meta` / `kpis`（仅 overview；**禁止**用 ad-sets/creative 行 results 加总对比 overview）与 `tables.*`（按 `facebook-analysis-guide.md`：`adGroups`/`networks`/`countries`/`audiences`/`creatives`/`materials`）。Agent 已填字段不覆盖。
+> `--snapshot-dir` 自动补全 `meta` / `kpis`（仅 overview；**禁止**用 ad-sets/creative 行 results 加总对比 overview）与 `tables.*`（按 `facebook-analysis-guide.md`：`adGroups`/`networks`/`countries`/`audiences`/`creatives`/`materials`）。**数值一律以 CLI 快照覆盖**（`meta` 仅补空）。
 
 ### JSON 契约（`meta-account-diagnosis-report.json`）
 

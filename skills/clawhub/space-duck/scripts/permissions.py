@@ -48,7 +48,10 @@ def load_config():
     if not CONFIG_PATH.exists():
         print('ERROR: No Space Duck config found. Run setup.py first.')
         sys.exit(1)
-    return json.loads(CONFIG_PATH.read_text())
+    cfg = json.loads(CONFIG_PATH.read_text())
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
+    return cfg
 
 def _headers(cfg):
     h = {'Content-Type': 'application/json',

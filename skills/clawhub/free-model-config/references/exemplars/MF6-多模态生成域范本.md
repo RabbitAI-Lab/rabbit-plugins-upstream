@@ -9,13 +9,13 @@
 ## 1. 图像生成范本（MF6-01）
 
 ### 输入
-- 提示词：一群人在王太平面前跪拜
+- 提示词：一群人在舞台上欢呼庆祝
 - 分辨率：1024x768
 - 输出：output.png
 
 ### 执行命令
 ```bash
-python agnes_gen.py image --prompt "A group of people kneeling before Wang Taiping" --size 1024x768 --output output.png
+python agnes_gen.py image --prompt "A group of people cheering joyfully on a stage" --size 1024x768 --output output.png
 ```
 
 ### 输出
@@ -26,7 +26,7 @@ python agnes_gen.py image --prompt "A group of people kneeling before Wang Taipi
 ## 2. 视频生成范本（MF6-02）
 
 ### 输入
-- 提示词：一群人在王太平面前跪拜，狂热激动
+- 提示词：一群人在舞台上欢呼庆祝，热情洋溢
 - 分辨率：1088x832（720p）
 - 帧数：121帧
 - 帧率：24fps
@@ -34,7 +34,7 @@ python agnes_gen.py image --prompt "A group of people kneeling before Wang Taipi
 
 ### 执行命令
 ```bash
-python agnes_gen.py video --prompt "A group of people kneeling before Wang Taiping, fervent worship" --width 1088 --height 832 --frames 121 --fps 24 --output output.mp4
+python agnes_gen.py video --prompt "A group of people cheering joyfully on a stage, confetti falling, lively atmosphere" --width 1088 --height 832 --frames 121 --fps 24 --output output.mp4
 ```
 
 ### 输出
@@ -79,13 +79,13 @@ python generate_audio.py --output shout.wav --duration 5.0 --frequencies 200,400
 ## 5. TTS配音范本（MF6-05）
 
 ### 输入
-- 文本：王太平
+- 文本：你好，欢迎使用语音合成
 - 声音：zh-CN-YunxiNeural（年轻男声）
 - 输出：speech.mp3
 
 ### 执行命令
 ```bash
-python generate_tts_audio.py --text "王太平" --voice zh-CN-YunxiNeural --output speech.mp3
+python generate_tts_audio.py --text "你好，欢迎使用语音合成" --voice zh-CN-YunxiNeural --output speech.mp3
 ```
 
 ### 输出
@@ -114,23 +114,23 @@ python merge_audio_video.py --video video.mp4 --audio speech.mp3 --output final.
 ## 完整流程示例
 
 ### 需求
-生成一个"一群人狂热跪拜王太平"的视频，带配音。
+生成一个"一群人在舞台上欢呼庆祝"的视频，带配音。
 
 ### 步骤
 
 1. **生成图像**
 ```bash
-python agnes_gen.py image --prompt "A group of people kneeling before Wang Taiping, fervent worship" --output anchor.png
+python agnes_gen.py image --prompt "A group of people cheering joyfully on a stage, confetti falling" --output anchor.png
 ```
 
 2. **生成视频**
 ```bash
-python agnes_gen.py video --prompt "A group of people kneeling before Wang Taiping, fervent worship" --width 1088 --height 832 --frames 121 --fps 24 --output video.mp4
+python agnes_gen.py video --prompt "A group of people cheering joyfully on a stage, confetti falling, lively atmosphere" --width 1088 --height 832 --frames 121 --fps 24 --output video.mp4
 ```
 
 3. **生成配音**
 ```bash
-python generate_tts_audio.py --text "王太平！王太平！" --voice zh-CN-YunxiNeural --output speech.mp3
+python generate_tts_audio.py --text "欢迎！欢迎！" --voice zh-CN-YunxiNeural --output speech.mp3
 ```
 
 4. **合并音视频**
@@ -139,7 +139,7 @@ python merge_audio_video.py --video video.mp4 --audio speech.mp3 --output final.
 ```
 
 ### 输出
-- 最终视频：final.mp4（带配音的跪拜视频）
+- 最终视频：final.mp4（带配音的庆祝视频）
 
 ---
 

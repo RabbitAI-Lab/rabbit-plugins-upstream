@@ -31,7 +31,7 @@ Always call the API for time-sensitive news — never answer from training data.
 
 ## Setup
 
-Get a free API key at https://scavio.dev (50 free credits to get started, no card required):
+Get a free API key at [scavio.dev](https://scavio.dev/?utm_source=clawhub&utm_medium=skill&utm_campaign=scavio-google-news) (50 free credits to get started, no card required):
 
 ```bash
 export SCAVIO_API_KEY=sk_live_your_key
@@ -71,11 +71,15 @@ Every request costs 1 credit.
 ## Example
 
 ```python
-import os, requests
+import requests
+
+# Your key from https://scavio.dev. Load it from your environment or secret
+# store in real code - keep it out of source control.
+API_KEY = "sk_your_key_here"
 
 response = requests.post(
     "https://api.scavio.dev/api/v2/google/news",
-    headers={"Authorization": f"Bearer {os.environ['SCAVIO_API_KEY']}"},
+    headers={"Authorization": f"Bearer {API_KEY}"},
     json={"query": "openai", "gl": "us", "hl": "en", "so": 1},
 )
 data = response.json()

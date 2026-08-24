@@ -559,7 +559,7 @@ def main() -> int:
                 raise WorkflowError(
                     "routing",
                     "pilot_authorization_required",
-                    "pilot-only arguments require explicit project pilot authorization: "
+                    "Report IR arguments require explicit project Report IR authorization: "
                     + ", ".join(supplied),
                 )
             status["status"] = "direct_html_unchanged"

@@ -1,47 +1,58 @@
-## Description: <br>
-Use when a HyperFrames composition needs seek-safe 2D/3D keyframes, GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, text trails, 3D depth, or hyperframes keyframes diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Author seek-safe 2D/3D keyframes for HyperFrames compositions, including zooms, reframes, camera moves, visual handoffs, masks, SVG motion, text trails, and runtime diagnostics.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and engineers use this skill to author seek-safe HyperFrames animation keyframes and verify visible 2D, 3D, text, SVG, mask, path, and runtime behavior before rendering. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated keyframe or animation edits may change visual behavior, timing, continuity, or final frames in the active project. <br>
-Mitigation: Review generated changes and verify them with hyperframes lint, hyperframes check, hyperframes keyframes, focused shots, and snapshots before rendering or committing. <br>
-Risk: Diagnostic commands may produce output that needs interpretation before it is used to make further code changes. <br>
-Mitigation: Review command output and rerun the smallest failing diagnostic after fixes. <br>
+## Use Case:
 
+Developers and video automation engineers use this skill to author and verify seek-safe HyperFrames animation keyframes while preserving clip timing boundaries, subject identity, and final visual states.
 
-## Reference(s): <br>
-- [Keyframe Mechanism Reference](references/keyframe-patterns.md) <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes-keyframes) <br>
-- [GSAP keyframes](https://gsap.com/resources/keyframes/) <br>
-- [GSAP timeline](https://gsap.com/docs/v3/GSAP/Timeline/) <br>
-- [Anime.js documentation](https://animejs.com/documentation/) <br>
-- [MDN CSS animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations) <br>
-- [MDN @keyframes](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes) <br>
-- [Three.js AnimationMixer](https://threejs.org/docs/#api/en/animation/AnimationMixer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with code snippets and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance emphasizes deterministic, seek-safe animation code and HyperFrames diagnostics.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Generated animation edits may introduce incorrect motion, unreadable text, or wrong final visual states.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated keyframes and verify them with the HyperFrames diagnostics recommended by the skill before rendering.
+
+Risk: The skill may propose local HyperFrames verification commands.
+
+Mitigation: Run proposed commands only in trusted project workspaces and review command intent before execution.
+
+## Reference(s):
+
+- [Keyframe Mechanism Reference](references/keyframe-patterns.md)
+- [GSAP Keyframes](https://gsap.com/resources/keyframes/)
+- [GSAP Timeline](https://gsap.com/docs/v3/GSAP/Timeline/)
+- [Anime.js Documentation](https://animejs.com/documentation/)
+- [MDN CSS Animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations)
+- [Three.js AnimationMixer](https://threejs.org/docs/#api/en/animation/AnimationMixer)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline code and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include HyperFrames verification command suggestions and runtime keyframe snippets.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

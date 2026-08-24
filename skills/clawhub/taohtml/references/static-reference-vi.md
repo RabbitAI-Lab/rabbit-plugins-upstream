@@ -21,7 +21,7 @@ downgrade.
 
 Analyze only visual properties visible in the supplied static frames. Do not inspect, infer, or write rules for movement, animation, transitions, timing, or sequential states. Multiple stills establish a template family, not a timeline.
 
-Route `reconstruct` only for exactly one raster still. Route `corporate_fidelity` for one to three representative raster stills from the same template family; one still remains valid, while additional stills improve role coverage. A PPT, webpage, dynamic HTML, video, state sequence, more than three corporate stills, or multiple stills for reconstruct is unsupported, not “no clear reference.” State the boundary and ask for a supported representative input. Never infer movement or route a clear but unsupported reference to the four built-in systems unless the customer explicitly abandons it. Legacy v1.1 reconstruct fixtures may still use safe offline SVG for backward compatibility; do not offer SVG as new intake.
+Route `reconstruct` only for exactly one raster still. Route `corporate_fidelity` for one to three representative raster stills from the same template family; one still remains valid, while additional stills improve role coverage. A PPT, webpage, dynamic HTML, video, state sequence, more than three corporate stills, or multiple stills for reconstruct is unsupported, not “no clear reference.” State the boundary and ask for a supported representative input. Never infer movement or route a clear but unsupported reference to the eight built-in systems unless the customer explicitly abandons it. Legacy v1.1 reconstruct fixtures may still use safe offline SVG for backward compatibility; do not offer SVG as new intake.
 
 The model performs visual understanding, identifies each supplied corporate page role, and fills the descriptive and machine-executable contract. Ask about a role only when genuine ambiguity remains; otherwise expose the automatic identification in the VI board for correction. `scripts/render_reference_vi.py` validates data and static frames, crops every declared `canvas_bbox`, enforces the documented 16:9 tolerance, deterministically extracts fixed assets, embeds local bytes, renders the fixed HTML/CSS board, and exports PNG. It never redraws a Logo or understands an image.
 
@@ -51,7 +51,7 @@ If those facts can be located reliably, continue. If they cannot, stop and say e
 
 > 当前会话无法可靠读取参考图
 
-Then offer only two recovery paths: the customer may manually change the model at the platform/session entry and restart the reference task, or downgrade to TaoHtml's four built-in visual systems. Do not guess, do not create a partial VI board, and do not turn the failure into a model-selection interview.
+Then offer only two recovery paths: the customer may manually change the model at the platform/session entry and restart the reference task, or downgrade to TaoHtml's eight built-in visual systems. Do not guess, do not create a partial VI board, and do not turn the failure into a model-selection interview.
 
 ## Boundary Labels
 
@@ -286,4 +286,4 @@ After confirmation, retain these inputs and read `project-theme-compiler.md`:
 
 For v1.2 corporate fidelity, also retain the exact `source_image`, `locked_regions`, and `editable_regions`. For v1.3/v1.4, retain `reference_pages`, `shared_assets`, `replaceable_regions`, `shell_variants`, `shared_brand_grammar`, `extension_pages`, and `limitations`. Do not retain any complete screenshot as a reusable page background; each remains a confirmation and extraction source only.
 
-Create the machine-checkable handoff in `project-theme-compiler.md`, bind the confirmation to the exact VI JSON and ordered reference-image hashes, and compile the project-specific manifest, CSS, templates, and provenance. The compiler is a separate deterministic step: this reference renderer still does not compile theme assets. The result does not substitute or extend the four built-in themes and does not authorize report production without the remaining Report Design Brief gate.
+Create the machine-checkable handoff in `project-theme-compiler.md`, bind the confirmation to the exact VI JSON and ordered reference-image hashes, and compile the project-specific manifest, CSS, templates, and provenance. The compiler is a separate deterministic step: this reference renderer still does not compile theme assets. The result does not substitute or extend the eight built-in themes and does not authorize report production without the remaining Report Design Brief gate.

@@ -1,41 +1,50 @@
-## Description: <br>
-Analyze and improve the improvement process for skill changes by detecting regressions, assessing improvement effectiveness, and generating meta-optimization recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyze and improve the improvement process for detecting regressions and meta-optimization.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agent operators use this skill after batches of skill improvements, regressions, or periodic reviews to analyze what improvement strategies worked and what should change in future improvement workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local trace and improvement-memory records may include project names, file paths, tool targets, decisions, outcomes, and rationales. <br>
-Mitigation: Review the stored files under ~/.claude/skills/traces and improvement_memory.json, limit use on sensitive workflows, and periodically clear local records when retention is not needed. <br>
-Risk: Meta-optimization recommendations could steer future skill-improvement behavior incorrectly if based on sparse or noisy history. <br>
-Mitigation: Treat recommendations as proposals, require user approval before changing improvement strategy, and validate changes against recent outcomes before relying on them. <br>
+## Use Case:
 
+Developers and engineers use this skill to review prior skill-improvement outcomes, identify patterns behind regressions or effective changes, and propose refinements to future improvement strategy.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-metacognitive-self-mod) <br>
-- [OpenClaw metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown report with recommendations and optional local JSON insight or trace records] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Proposes changes for user approval; does not auto-apply modifications to the improvement process.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter lists 1.9.8) <br>
+Risk: The skill records and reuses persistent behavioral traces and improvement insights with limited user control or sanitization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit trace mode, exclude sensitive projects, periodically delete local trace and improvement-memory entries, and require explicit approval before meta-insights are written or reused.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-metacognitive-self-mod)
+- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/abstract)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown report with recommendations and optional code or shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May record meta-insights in local improvement memory and proposes, but does not auto-apply, changes to the improvement process.]
+
+## Skill Version(s):
+
+1.9.18 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

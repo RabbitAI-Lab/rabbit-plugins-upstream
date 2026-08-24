@@ -1,53 +1,76 @@
-## Description: <br>
-Seedancer helps agents act as AI film directors for Seedance 2.0 workflows, turning single-shot and multi-shot video generation requests into structured prompts, review checkpoints, retake plans, and sequence handoffs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Seedancer is an AIGC filmmaking workflow that helps agents turn scripts and production requests into pre-production assets, shot plans, image prompts, video prompts, and delivery-ready production artifacts.
 
-## Publisher: <br>
-[taosiuman](https://clawhub.ai/user/taosiuman) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[taosiuman](https://clawhub.ai/user/taosiuman)
 
-## Use Case: <br>
-Creators, marketers, and production teams use this skill to plan Seedance 2.0 video generation work with structured intake, mode selection, asset mapping, prompt drafting, review, retake, and sequence continuity workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security evidence is clean but explicitly low-confidence. <br>
-Mitigation: Review the marketplace page and packaged files before installation, and confirm that the skill purpose matches the expected Seedance prompt workflow. <br>
-Risk: Prompt guidance for video generation can still produce unsafe IP, likeness, or brand usage if user inputs include protected material. <br>
-Mitigation: Use the skill's safety gate and human review checkpoints to rewrite protected references into original, rights-safe descriptions before generation. <br>
-Risk: Generated prompt drafts may contain incorrect platform capability claims. <br>
-Mitigation: Verify platform capabilities, model names, pricing, and API claims against current sources before relying on them. <br>
+## Use Case:
 
+External creators, developers, and production teams use this skill to translate story material into structured AI filmmaking outputs, including story analysis, character and prop assets, storyboard-style shot groups, and model-specific prompt packages.
 
-## Reference(s): <br>
-- [Seedancer ClawHub page](https://clawhub.ai/taosiuman/seedancer) <br>
-- [Publisher profile](https://clawhub.ai/user/taosiuman) <br>
-- [Release notes](release-notes.md) <br>
-- [Anti-Slop Lexicon](references/anti-slop-lexicon.md) <br>
-- [Camera Language, Optics & Visual Style Glossary](references/camera-and-styles.md) <br>
-- [Continuation Handoff](references/continuation-handoff.md) <br>
-- [Model Mechanics](references/model-mechanics.md) <br>
-- [Mode Reference & Interaction Notes](references/modes-and-recipes.md) <br>
-- [Seedancer Recipe Collection](references/recipes.md) <br>
-- [Reference Role Map](references/reference-role-map.md) <br>
-- [Retake Protocol](references/retake-protocol.md) <br>
-- [Sequence Project State](references/sequence-project-state.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Structured conversational guidance and Markdown prompt drafts, with occasional code blocks or shell commands for setup tasks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are intended for human review before video generation or workflow execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: frontmatter, release evidence) <br>
+Risk: The skill includes guidance that may reword weapon, explosive-looking, realistic harm, or other safety-sensitive props in generated prompts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review safety-sensitive prompt content before use, reject attempts to bypass platform safety controls, and keep final outputs within the target model and deployment policies.
+
+## Reference(s):
+
+- [README](README.md)
+- [Release Notes](release-notes.md)
+- [Dialogue Capacity](references/dialogue-capacity.md)
+- [Grouping Density](references/grouping-density.md)
+- [Camera Design](references/camera-design.md)
+- [Output Format](references/output-format.md)
+- [Story Analysis](references/story-analysis.md)
+- [Emotion Curve](references/emotion-curve.md)
+- [Creative Baseline](references/creative-baseline.md)
+- [Character Assets](references/character-assets.md)
+- [Prop Assets](references/prop-assets.md)
+- [Cinedance Video Prompt](references/cinedance-video-prompt.md)
+- [Lira Image Prompt](references/lira-image-prompt.md)
+- [Acting Performance](references/acting-performance.md)
+- [Geo Spatial Layout](references/geo-spatial-layout.md)
+- [Style Prefix](references/style-prefix.md)
+- [AI Director](references/ai-director.md)
+- [Failure Codes](references/failure-codes.md)
+- [Deliverable System](references/deliverable-system.md)
+- [Model Mechanics](references/model-mechanics.md)
+- [Modes and Recipes](references/modes-and-recipes.md)
+- [Recipes](references/recipes.md)
+- [Camera and Styles](references/camera-and-styles.md)
+- [Reference Role Map](references/reference-role-map.md)
+- [Retake Protocol](references/retake-protocol.md)
+- [Sequence Project State](references/sequence-project-state.md)
+- [Continuation Handoff](references/continuation-handoff.md)
+- [Anti-Slop Lexicon](references/anti-slop-lexicon.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown with structured prompt blocks, production tables, parameter cards, and handoff notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include script analysis, pre-production briefs, character and prop specifications, storyboard-style shot groups, image prompts, video prompts, diagnostics, and production reports.]
+
+## Skill Version(s):
+
+6.0.0 (source: frontmatter, VERSION, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

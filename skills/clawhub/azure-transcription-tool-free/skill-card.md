@@ -1,42 +1,57 @@
-## Description: <br>
-Uses Azure AI to batch transcribe audio to text with basic transcription and timestamps for personal audio workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents guide users through Azure-based batch speech-to-text transcription for audio files, including basic transcript and timestamp output.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Individual creators and developers use this skill to configure Azure-based batch speech-to-text for podcasts, meeting recordings, and subtitle drafts. It is intended for audio transcription workflows that can use Azure Blob storage and Azure AI credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive meetings, interviews, or recordings may be uploaded to Blob storage and processed by Azure without the user confirming they are allowed to do so. <br>
-Mitigation: Confirm consent, data handling requirements, and retention rules before uploading audio or running transcription jobs. <br>
-Risk: The skill requires TRANSCRIPTION_KEY and related Azure configuration, which are credentials that could be exposed in commands, files, or logs. <br>
-Mitigation: Store credentials in environment variables or a secret manager, avoid committing them, and rotate keys if exposure is suspected. <br>
-Risk: The trigger text incorrectly points to translation and localization tasks, which could lead users to apply the skill outside its speech-to-text scope. <br>
-Mitigation: Use the skill only for Azure-based audio transcription and timestamped transcript generation, not translation or localization. <br>
+## Use Case:
 
+External users, independent creators, and workflow developers use this skill to prepare Azure Speech transcription jobs for podcasts, meetings, and video subtitle workflows. It helps configure Azure endpoints, keys, Blob audio URLs, language settings, and timestamped transcript handling.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/azure-transcription-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command snippets; generated transcription text or SRT-style subtitle content when executed.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses Azure transcription credentials and Blob-hosted audio inputs when the workflow is executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The skill may be invoked for unrelated translation or localization tasks because its activation guidance is broader than its Azure transcription purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for Azure-based audio transcription workflows and route translation, localization, or creative-writing requests to a more appropriate skill.
+
+Risk: Audio recordings, Blob URLs, Azure endpoints, and subscription keys are sensitive and may be exposed during setup or generated command execution.
+
+Mitigation: Confirm the target Azure resource, storage URL, output path, and credential handling before running generated Python or shell commands; keep keys in environment variables or a secret manager.
+
+Risk: The skill relies on command execution and cloud audio processing, which can cause unintended actions if commands are run without review.
+
+Mitigation: Review generated code and shell commands before execution, especially dependency installation, network access, and output file writes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/azure-transcription-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with Python and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Azure transcription setup guidance, executable examples, and transcript or subtitle file handling instructions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

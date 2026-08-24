@@ -1,55 +1,70 @@
-## Description: <br>
-This skill guides an agent in using the `baw` CLI to manage a Binance Web3 wallet, including authentication, balances, transfers, swaps, limit orders, prediction markets, x402 payments, approvals, and DeFi operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The Binance Agentic Wallet skill helps an agent use the `baw` CLI for Binance Web3 wallet sign-in, balance and history queries, token transfers, DEX swaps, limit orders, prediction markets, x402 payments, approvals, external signing, and DeFi operations.
 
-## Publisher: <br>
-[binance-skills-hub](https://clawhub.ai/user/binance-skills-hub) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[binance-skills-hub](https://clawhub.ai/user/binance-skills-hub)
 
-## Use Case: <br>
-External users and developers use this skill to route wallet-related requests into reviewed `baw` CLI commands and readable summaries. It supports wallet setup, token transfers, trading, approvals management, prediction-market actions, x402 payments, and DeFi position or transaction workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can affect real wallet funds through transfers, trades, approvals, prediction-market actions, x402 payments, and DeFi transactions. <br>
-Mitigation: Before any state-changing action, require the user to review the exact command, recipient, chain, token address, amount, order IDs, fees, and whether the action can execute later or be irreversible. <br>
-Risk: The skill instructs the agent to install or upgrade the global `@binance/agentic-wallet` npm package. <br>
-Mitigation: Install or upgrade only after the user trusts the package and publisher and has approved the global npm change. <br>
-Risk: Market, limit-order, payment, and DeFi actions can fail, remain pending, or rely on stale backend data after submission. <br>
-Mitigation: Represent transaction hashes as submission evidence only, avoid claiming completion before confirmation, and use the documented preview, security-check, and verification flows. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent prepare and run Binance Agentic Wallet CLI workflows for wallet operations, trading, token approvals, external signing, and DeFi actions. It is intended for assisted wallet operation where users review and confirm sensitive actions.
 
-## Reference(s): <br>
-- [ClawHub Release Page](https://clawhub.ai/binance-skills-hub/skills/binance-agentic-wallet) <br>
-- [Authentication](references/authentication.md) <br>
-- [Preflight Checks](references/preflight.md) <br>
-- [Security Reference](references/security.md) <br>
-- [Wallet View Commands](references/wallet-view.md) <br>
-- [Wallet Settings](references/wallet-setting.md) <br>
-- [Send Tokens](references/send.md) <br>
-- [Market Orders](references/market-order.md) <br>
-- [Limit Orders](references/limit-order.md) <br>
-- [Token Approvals](references/approvals.md) <br>
-- [Prediction Commands](references/prediction.md) <br>
-- [x402 Payment](references/x402-payment.md) <br>
-- [DeFi Commands](references/defi.md) <br>
-- [Binance Web3 Wallet Trading Fees](https://www.binance.com/en/support/faq/detail/87cbb1ca0df34a348eaecb73c26167d7) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON CLI output summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [State-changing wallet operations require explicit user confirmation; CLI commands are expected to include `--json`.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: SKILL.md frontmatter and ClawHub release evidence) <br>
+Risk: The skill can help operate a Binance Agentic Wallet, including transfers, trades, approvals, external signing, x402 payments, and DeFi actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for intended wallet operation, approve the npm CLI install intentionally, and verify each recipient, token, chain, amount, order, approval, and x402 payment before confirming.
+
+Risk: Unattended trading or signing could lead to irreversible transactions or unintended market exposure.
+
+Mitigation: Avoid unattended trading or signing, preserve explicit confirmation for state-changing actions, and use preview or pre-check flows before trading, DeFi, external signing, and x402 payment execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/binance-skills-hub/skills/binance-agentic-wallet)
+- [Authentication](references/authentication.md)
+- [Preflight Checks](references/preflight.md)
+- [Wallet View Commands](references/wallet-view.md)
+- [Wallet Settings](references/wallet-setting.md)
+- [Send Tokens](references/send.md)
+- [Market Order](references/market-order.md)
+- [Limit Order](references/limit-order.md)
+- [Token Approvals](references/approvals.md)
+- [External Sign](references/external-sign.md)
+- [Prediction Markets](references/prediction.md)
+- [x402 Payment](references/x402-payment.md)
+- [DeFi Commands](references/defi.md)
+- [Security Reference](references/security.md)
+- [Speed Up & Cancel Pending Transactions](references/speedup-cancel.md)
+- [bStock AI Trading Competition Campaign Reference](references/campaign.md)
+- [bStock eligible tokens developer docs](https://web3.binance.com/en/dev-docs/products/agentic-wallet/use-cases/campaigns/bstock-eligible-tokens)
+- [bStock PnL contest developer docs](https://web3.binance.com/en/dev-docs/products/agentic-wallet/use-cases/campaigns/bstock-pnl-contest)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with CLI commands and JSON-oriented command output summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands are expected to use machine-readable JSON output and require user confirmation for state-changing wallet actions.]
+
+## Skill Version(s):
+
+1.9.0 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

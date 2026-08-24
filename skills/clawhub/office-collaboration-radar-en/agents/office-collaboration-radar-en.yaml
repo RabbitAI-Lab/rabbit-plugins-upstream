@@ -1,0 +1,8 @@
+interface:
+  version: 0.1.1
+  display_name: "Office Collaboration Radar EN"
+  short_description: "Extract evidence-linked progress, actions, blockers, and dependencies from English collaboration records"
+  default_prompt: "Use $office-collaboration-radar-en to turn English chat logs, meeting notes, or project updates into an evidence-linked collaboration status card with redaction, conflict checks, action priority, stable JSON, and an optional radar chart."
+
+policy:
+  allow_implicit_invocation: true

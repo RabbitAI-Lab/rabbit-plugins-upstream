@@ -8,18 +8,40 @@ import openpyxl
 from datetime import datetime, timedelta
 from collections import defaultdict
 import json
+import os
+import sys
 
-# 表格路径
-EXCEL_PATH = '/home/erhao/shared/招聘邮件汇总.xlsx'
+# 本地配置文件（含 feishu_target，不随 Skill 发布）
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, SCRIPT_DIR)
+from excel_styles import EXCEL_PATH, SHEET_MAIL  # noqa: E402
+CONFIG_FILE = os.path.join(SCRIPT_DIR, 'config.json')
+
+
+def load_config():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {}
+
+
+CFG = load_config()
+FEISHU_TARGET = CFG.get('feishu_target', 'user:YOUR_FEISHU_USER_ID')
+
+# 表格路径（合并总表，读邮件 sheet）
+EXCEL_PATH = EXCEL_PATH
 
 # 简报输出路径
 BRIEFING_PATH = '/home/erhao/shared/招聘邮件每日简报.txt'
+
+# 超期自动归档阈值（超过该天数的待处理邮件自动标记为已完成）
+STALE_DAYS = 30
 
 def load_pending_emails():
     """加载待处理的邮件（状态不是已完成的）"""
     try:
         wb = openpyxl.load_workbook(EXCEL_PATH)
-        ws = wb.active
+        ws = wb[SHEET_MAIL] if SHEET_MAIL in wb.sheetnames else wb.active
         
         emails = []
         headers = [cell.value for cell in ws[1]]
@@ -46,15 +68,67 @@ def load_pending_emails():
         print(f"❌ 读取表格失败：{e}")
         return []
 
-def generate_briefing(emails):
+def parse_date(value):
+    """把表格中的日期值解析为 datetime，兼容 datetime 对象和字符串。"""
+    if isinstance(value, datetime):
+        return value
+    if isinstance(value, str):
+        for fmt in ('%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M', '%Y-%m-%d'):
+            try:
+                return datetime.strptime(value.strip(), fmt)
+            except ValueError:
+                continue
+    return None
+
+
+def auto_expire_stale_emails():
+    """自动归档超期待处理邮件：收到时间超过 STALE_DAYS 天的待处理邮件标记为已完成。
+
+    返回本次归档数量。归档后的邮件不再出现在简报中。
+    """
+    try:
+        wb = openpyxl.load_workbook(EXCEL_PATH)
+        ws = wb[SHEET_MAIL] if SHEET_MAIL in wb.sheetnames else wb.active
+        now = datetime.now()
+        archived = 0
+
+        for row in ws.iter_rows(min_row=2):
+            date_val = row[0].value if len(row) > 0 else None
+            status_cell = row[4] if len(row) > 4 else None
+            if date_val is None or status_cell is None or not status_cell.value:
+                continue
+            status = str(status_cell.value)
+            # 已完成的跳过
+            if '✅' in status or '完成' in status:
+                continue
+            dt = parse_date(date_val)
+            if dt is None:
+                continue
+            if (now - dt).days > STALE_DAYS:
+                status_cell.value = '✅ 已完成（超期自动归档）'
+                archived += 1
+
+        if archived:
+            wb.save(EXCEL_PATH)
+            print(f"🗂️ 自动归档 {archived} 封超过 {STALE_DAYS} 天的待处理邮件")
+        else:
+            print("🗂️ 无超期待处理邮件需要归档")
+        return archived
+    except Exception as e:
+        print(f"❌ 自动归档失败：{e}")
+        return 0
+
+
+def generate_briefing(emails, archived=0):
     """生成简报内容"""
     if not emails:
+        archived_note = f"\n🗂️ 本次自动归档 {archived} 封超期邮件（> {STALE_DAYS} 天）\n" if archived else ""
         return f"""
 ═══════════════════════════════════════════════════
 📧 招聘邮件每日简报
 日期：{datetime.now().strftime('%Y年%m月%d日 %A')}
 ═══════════════════════════════════════════════════
-
+{archived_note}
 ✅ 所有邮件都已处理完毕！
 
 祝你有愉快的一天！✨
@@ -90,6 +164,9 @@ def generate_briefing(emails):
 ───────────────────────────────────────────────────
 待处理邮件：{len(emails)} 封
 """
+    
+    if archived:
+        briefing += f"🗂️ 本次自动归档 {archived} 封超期邮件（> {STALE_DAYS} 天）\n"
     
     # 类型统计
     for email_type, type_emails in sorted(by_type.items()):
@@ -187,10 +264,76 @@ def generate_briefing(emails):
     
     return briefing
 
+def send_via_feishu_api(briefing):
+    """通过飞书开放平台 API 直接发送简报（不经过 Agent/LLM）。
+
+    使用 config.json 中的 feishu_app_id / feishu_app_secret 获取 tenant_access_token，
+    然后调用 im/v1/messages 接口发送文本消息。
+    成功返回 True，失败返回 False。
+    """
+    import json
+    import urllib.request
+    import urllib.error
+
+    app_id = CFG.get('feishu_app_id', '')
+    app_secret = CFG.get('feishu_app_secret', '')
+    if not app_id or not app_secret:
+        print("⚠️ 未配置 feishu_app_id/feishu_app_secret，跳过 API 直发")
+        return False
+
+    receive_id = FEISHU_TARGET.split(':', 1)[-1] if ':' in FEISHU_TARGET else FEISHU_TARGET
+
+    try:
+        # 1. 获取 tenant_access_token
+        token_url = 'https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal'
+        token_body = json.dumps({'app_id': app_id, 'app_secret': app_secret}).encode('utf-8')
+        req = urllib.request.Request(token_url, data=token_body, headers={'Content-Type': 'application/json'}, method='POST')
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            token_data = json.loads(resp.read().decode('utf-8'))
+        if token_data.get('code') != 0:
+            print(f"❌ 获取 tenant_access_token 失败：{token_data}")
+            return False
+        token = token_data['tenant_access_token']
+
+        # 2. 发送文本消息
+        msg_url = 'https://open.feishu.cn/open-apis/im/v1/messages?receive_id_type=open_id'
+        content = json.dumps({'text': briefing.strip()}, ensure_ascii=False)
+        msg_body = json.dumps({
+            'receive_id': receive_id,
+            'msg_type': 'text',
+            'content': content
+        }, ensure_ascii=False).encode('utf-8')
+        req = urllib.request.Request(msg_url, data=msg_body, headers={
+            'Content-Type': 'application/json; charset=utf-8',
+            'Authorization': f'Bearer {token}'
+        }, method='POST')
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            msg_data = json.loads(resp.read().decode('utf-8'))
+        if msg_data.get('code') == 0:
+            print(f"✅ 简报已通过飞书 API 直发成功（msg_id={msg_data.get('data', {}).get('message_id', '?')}）")
+            return True
+        else:
+            print(f"❌ 飞书发送失败：{msg_data}")
+            return False
+    except urllib.error.HTTPError as e:
+        print(f"❌ 飞书 API HTTP 错误 {e.code}：{e.read().decode('utf-8', errors='replace')}")
+        return False
+    except Exception as e:
+        print(f"❌ 飞书 API 直发异常：{e}")
+        return False
+
+
 def send_briefing(briefing):
-    """发送简报（通过 Feishu）"""
+    """保存并输出简报，默认通过飞书 API 直发。
+
+    注意：不要在 Agent 会话运行期间调用 `openclaw message send` CLI，
+    否则会因会话文件锁（SessionWriteLockTimeoutError）而失败。
+    默认走飞书开放平台 API 直发（不经过 Agent/LLM），
+    可通过环境变量 BRIEFING_SEND_API=0 关闭直发、BRIEFING_SEND_CLI=1 启用 CLI 发送。
+    """
+    import os
     import subprocess
-    
+
     # 保存简报到文件
     try:
         with open(BRIEFING_PATH, 'w', encoding='utf-8') as f:
@@ -199,40 +342,50 @@ def send_briefing(briefing):
     except Exception as e:
         print(f"❌ 保存简报失败：{e}")
     
-    # 打印简报内容
+    # 打印简报内容（cron Agent 需要把完整内容转发给用户）
     print("\n" + briefing)
-    
-    # 通过 OpenClaw CLI 发送 Feishu 消息
-    print("\n📤 正在发送 Feishu 消息...")
-    try:
-        # 发送到主人的 Feishu (ou_8de02604ccd510eeb4897ffd70d96c1d)
-        cmd = [
-            'openclaw', 'message', 'send',
-            '--channel', 'feishu',
-            '--target', 'user:ou_8de02604ccd510eeb4897ffd70d96c1d',
-            '--message', briefing.strip()
-        ]
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-        
-        if result.returncode == 0:
-            print("✅ Feishu 消息发送成功！")
-        else:
-            print(f"❌ 发送失败：{result.stderr}")
-    except subprocess.TimeoutExpired:
-        print("❌ 发送超时")
-    except Exception as e:
-        print(f"❌ 发送异常：{e}")
+
+    # 默认：飞书 API 直发（不经过 LLM）
+    if os.environ.get('BRIEFING_SEND_API', '1') != '0':
+        print("\n📤 正在通过飞书 API 直发...")
+        ok = send_via_feishu_api(briefing)
+        if ok:
+            return
+
+    # 可选：独立 CLI 发送（仅 BRIEFING_SEND_CLI=1 时启用）
+    if os.environ.get('BRIEFING_SEND_CLI') == '1':
+        print("\n📤 正在通过 CLI 发送 Feishu 消息...")
+        try:
+            cmd = [
+                'openclaw', 'message', 'send',
+                '--channel', 'feishu',
+                '--target', FEISHU_TARGET,
+                '--message', briefing.strip()
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=90)
+            if result.returncode == 0:
+                print("✅ Feishu 消息发送成功！")
+            else:
+                print(f"❌ 发送失败：{result.stderr}")
+        except subprocess.TimeoutExpired:
+            print("❌ 发送超时")
+        except Exception as e:
+            print(f"❌ 发送异常：{e}")
 
 def main():
     print('🌅 每日招聘邮件简报\n')
     print(f'生成时间：{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
     print()
     
+    # 先自动归档超期待处理邮件（>30 天标记为已完成）
+    archived = auto_expire_stale_emails()
+    print()
+
     # 加载待处理的邮件
     emails = load_pending_emails()
     
     # 生成简报
-    briefing = generate_briefing(emails)
+    briefing = generate_briefing(emails, archived)
     
     # 发送简报
     send_briefing(briefing)

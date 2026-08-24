@@ -1,11 +1,11 @@
 # SYS\_PanelControl class
 
-系统 / 面板控制类
+System / panel control class
 
 ## Signature
 
 ```typescript
-declare class SYS_PanelControl 
+export class SYS_PanelControl 
 ```
 
 ## Methods
@@ -36,7 +36,7 @@ Description
 
 </td><td>
 
-关闭底部面板
+Close the bottom panel
 
 
 </td></tr>
@@ -50,7 +50,7 @@ Description
 
 </td><td>
 
-关闭左侧面板
+Close the left panel
 
 
 </td></tr>
@@ -64,7 +64,7 @@ Description
 
 </td><td>
 
-关闭右侧面板
+Close the right panel
 
 
 </td></tr>
@@ -78,7 +78,7 @@ Description
 
 </td><td>
 
-查询底部面板是否已锁定
+Query whether the bottom panel is locked
 
 
 </td></tr>
@@ -92,7 +92,7 @@ Description
 
 </td><td>
 
-查询左侧面板是否已锁定
+Query whether the left panel is locked
 
 
 </td></tr>
@@ -106,7 +106,7 @@ Description
 
 </td><td>
 
-查询右侧面板是否已锁定
+Query whether the right panel is locked
 
 
 </td></tr>
@@ -120,7 +120,7 @@ Description
 
 </td><td>
 
-打开底部面板
+Open the bottom panel
 
 
 </td></tr>
@@ -134,7 +134,7 @@ Description
 
 </td><td>
 
-打开左侧面板
+Open the left panel
 
 
 </td></tr>
@@ -148,7 +148,7 @@ Description
 
 </td><td>
 
-打开右侧面板
+Open the right panel
 
 
 </td></tr>
@@ -162,7 +162,7 @@ Description
 
 </td><td>
 
-切换底部面板锁定状态
+Toggle the lock state of the bottom panel
 
 
 </td></tr>
@@ -176,7 +176,7 @@ Description
 
 </td><td>
 
-切换左侧面板锁定状态
+Toggle the lock state of the left panel
 
 
 </td></tr>
@@ -190,7 +190,7 @@ Description
 
 </td><td>
 
-切换右侧面板锁定状态
+Toggle the lock state of the right panel
 
 
 </td></tr>
@@ -204,46 +204,72 @@ Description
 
 # SYS\_PanelControl.closeBottomPanel() method
 
-关闭底部面板
+Close the bottom panel
 
 ## Signature
 
 ```typescript
-closeBottomPanel(): void;
+public closeBottomPanel(): void;
 ```
 
 
 ## Returns
 
 void
+
+## Example
+
+
+```javascript
+// 1. 先展开底部面板制造“已打开”状态，便于观察关闭效果
+eda.sys_PanelControl.openBottomPanel('log');
+console.log('底部面板已展开');
+
+// 2. 收起底部面板（同步调用，无返回值）
+eda.sys_PanelControl.closeBottomPanel();
+console.log('底部面板已收起');
+```
 
 ### closeleftpanel
 
 # SYS\_PanelControl.closeLeftPanel() method
 
-关闭左侧面板
+Close the left panel
 
 ## Signature
 
 ```typescript
-closeLeftPanel(): void;
+public closeLeftPanel(): void;
 ```
 
 
 ## Returns
 
 void
+
+## Example
+
+
+```javascript
+// 1. 先展开左侧面板制造“已打开”状态（不传 tab 则保持当前标签页）
+eda.sys_PanelControl.openLeftPanel();
+console.log('左侧面板已展开');
+
+// 2. 收起左侧面板（同步调用，无返回值）
+eda.sys_PanelControl.closeLeftPanel();
+console.log('左侧面板已收起');
+```
 
 ### closerightpanel
 
 # SYS\_PanelControl.closeRightPanel() method
 
-关闭右侧面板
+Close the right panel
 
 ## Signature
 
 ```typescript
-closeRightPanel(): void;
+public closeRightPanel(): void;
 ```
 
 
@@ -251,16 +277,29 @@ closeRightPanel(): void;
 
 void
 
+## Example
+
+
+```javascript
+// 1. 先展开右侧面板制造“已打开”状态（不传 tab 则保持当前标签页）
+eda.sys_PanelControl.openRightPanel();
+console.log('右侧面板已展开');
+
+// 2. 收起右侧面板（同步调用，无返回值）
+eda.sys_PanelControl.closeRightPanel();
+console.log('右侧面板已收起');
+```
+
 ### isbottompanellocked
 
 # SYS\_PanelControl.isBottomPanelLocked() method
 
-查询底部面板是否已锁定
+Query whether the bottom panel is locked
 
 ## Signature
 
 ```typescript
-isBottomPanelLocked(): Promise<boolean>;
+public isBottomPanelLocked(): Promise<boolean>;
 ```
 
 
@@ -268,18 +307,29 @@ isBottomPanelLocked(): Promise<boolean>;
 
 Promise&lt;boolean&gt;
 
-是否已锁定
+Whether Already lock
+
+## Example
+
+
+```javascript
+// 1. 查询底部面板当前锁定状态（异步方法，需要 await）
+const locked = await eda.sys_PanelControl.isBottomPanelLocked();
+
+// 2. 输出查询结果（true 表示已锁定，false 表示未锁定）
+console.log('底部面板锁定状态：', locked);
+```
 
 ### isleftpanellocked
 
 # SYS\_PanelControl.isLeftPanelLocked() method
 
-查询左侧面板是否已锁定
+Query whether the left panel is locked
 
 ## Signature
 
 ```typescript
-isLeftPanelLocked(): Promise<boolean>;
+public isLeftPanelLocked(): Promise<boolean>;
 ```
 
 
@@ -287,18 +337,29 @@ isLeftPanelLocked(): Promise<boolean>;
 
 Promise&lt;boolean&gt;
 
-是否已锁定
+Whether Already lock
+
+## Example
+
+
+```javascript
+// 1. 查询左侧面板当前锁定状态（异步方法，需要 await）
+const locked = await eda.sys_PanelControl.isLeftPanelLocked();
+
+// 2. 输出查询结果（true 表示已锁定，false 表示未锁定）
+console.log('左侧面板锁定状态：', locked);
+```
 
 ### isrightpanellocked
 
 # SYS\_PanelControl.isRightPanelLocked() method
 
-查询右侧面板是否已锁定
+Query whether the right panel is locked
 
 ## Signature
 
 ```typescript
-isRightPanelLocked(): Promise<boolean>;
+public isRightPanelLocked(): Promise<boolean>;
 ```
 
 
@@ -306,18 +367,29 @@ isRightPanelLocked(): Promise<boolean>;
 
 Promise&lt;boolean&gt;
 
-是否已锁定
+Whether Already lock
+
+## Example
+
+
+```javascript
+// 1. 查询右侧面板当前锁定状态（异步方法，需要 await）
+const locked = await eda.sys_PanelControl.isRightPanelLocked();
+
+// 2. 输出查询结果（true 表示已锁定，false 表示未锁定）
+console.log('右侧面板锁定状态：', locked);
+```
 
 ### openbottompanel
 
 # SYS\_PanelControl.openBottomPanel() method
 
-打开底部面板
+Open the bottom panel
 
 ## Signature
 
 ```typescript
-openBottomPanel(tab?: ESYS_BottomPanelTab): void;
+public openBottomPanel(tab?: ESYS_BottomPanelTab): void;
 ```
 
 ## Parameters
@@ -350,7 +422,7 @@ tab
 
 </td><td>
 
-_(Optional)_ 标签页，如若不指定则不切换标签页
+_(Optional)_ Tab. If not specified, the tab will not be switched
 
 
 </td></tr>
@@ -362,16 +434,29 @@ _(Optional)_ 标签页，如若不指定则不切换标签页
 
 void
 
+## Example
+
+
+```javascript
+// 1. 打开底部面板并切换到日志标签页（'log' 不依赖文档类型，最通用）
+eda.sys_PanelControl.openBottomPanel('log');
+console.log('底部面板已展开，并切换到日志标签页');
+
+// 2. 收起面板还原界面（自建自删，保证案例可重复运行）
+eda.sys_PanelControl.closeBottomPanel();
+console.log('底部面板已收起，界面还原');
+```
+
 ### openleftpanel
 
 # SYS\_PanelControl.openLeftPanel() method
 
-打开左侧面板
+Open the left panel
 
 ## Signature
 
 ```typescript
-openLeftPanel(tab?: ESYS_LeftPanelTab): void;
+public openLeftPanel(tab?: ESYS_LeftPanelTab): void;
 ```
 
 ## Parameters
@@ -404,7 +489,7 @@ tab
 
 </td><td>
 
-_(Optional)_ 标签页，如若不指定则不切换标签页
+_(Optional)_ Tab. If not specified, the tab will not be switched
 
 
 </td></tr>
@@ -416,16 +501,29 @@ _(Optional)_ 标签页，如若不指定则不切换标签页
 
 void
 
+## Example
+
+
+```javascript
+// 1. 打开左侧面板并切换到工程设计标签页
+eda.sys_PanelControl.openLeftPanel('projectDesign');
+console.log('左侧面板已展开，并切换到工程设计标签页');
+
+// 2. 收起面板还原界面（自建自删，保证案例可重复运行）
+eda.sys_PanelControl.closeLeftPanel();
+console.log('左侧面板已收起，界面还原');
+```
+
 ### openrightpanel
 
 # SYS\_PanelControl.openRightPanel() method
 
-打开右侧面板
+Open the right panel
 
 ## Signature
 
 ```typescript
-openRightPanel(tab?: ESYS_RightPanelTab): void;
+public openRightPanel(tab?: ESYS_RightPanelTab): void;
 ```
 
 ## Parameters
@@ -458,7 +556,7 @@ tab
 
 </td><td>
 
-_(Optional)_ 标签页，如若不指定则不切换标签页
+_(Optional)_ Tab. If not specified, the tab will not be switched
 
 
 </td></tr>
@@ -469,17 +567,30 @@ _(Optional)_ 标签页，如若不指定则不切换标签页
 ## Returns
 
 void
+
+## Example
+
+
+```javascript
+// 1. 打开右侧面板并切换到批注标签页（'annotation' 不依赖文档类型）
+eda.sys_PanelControl.openRightPanel('annotation');
+console.log('右侧面板已展开，并切换到批注标签页');
+
+// 2. 收起面板还原界面（自建自删，保证案例可重复运行）
+eda.sys_PanelControl.closeRightPanel();
+console.log('右侧面板已收起，界面还原');
+```
 
 ### togglebottompanellockstate
 
 # SYS\_PanelControl.toggleBottomPanelLockState() method
 
-切换底部面板锁定状态
+Toggle the lock state of the bottom panel
 
 ## Signature
 
 ```typescript
-toggleBottomPanelLockState(state?: boolean): void;
+public toggleBottomPanelLockState(state?: boolean): void;
 ```
 
 ## Parameters
@@ -512,7 +623,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定，如若不指定则反置当前状态
+_(Optional)_ Whether to lock. If not specified, the current state is inverted
 
 
 </td></tr>
@@ -523,17 +634,36 @@ _(Optional)_ 是否锁定，如若不指定则反置当前状态
 ## Returns
 
 void
+
+## Example
+
+
+```javascript
+// 1. 记录当前锁定状态（异步查询，需要 await）
+const before = await eda.sys_PanelControl.isBottomPanelLocked();
+
+// 2. 切换到相反状态（显式传目标值；不传参数则直接反转当前状态）
+eda.sys_PanelControl.toggleBottomPanelLockState(!before);
+
+// 3. 验证切换已生效
+const after = await eda.sys_PanelControl.isBottomPanelLocked();
+console.log('切换前：', before, '切换后：', after);
+
+// 4. 恢复原始锁定状态（不留痕迹，保证案例可重复运行）
+eda.sys_PanelControl.toggleBottomPanelLockState(before);
+console.log('已恢复原锁定状态：', before);
+```
 
 ### toggleleftpanellockstate
 
 # SYS\_PanelControl.toggleLeftPanelLockState() method
 
-切换左侧面板锁定状态
+Toggle the lock state of the left panel
 
 ## Signature
 
 ```typescript
-toggleLeftPanelLockState(state?: boolean): void;
+public toggleLeftPanelLockState(state?: boolean): void;
 ```
 
 ## Parameters
@@ -566,7 +696,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定，如若不指定则反置当前状态
+_(Optional)_ Whether to lock. If not specified, the current state is inverted
 
 
 </td></tr>
@@ -577,17 +707,36 @@ _(Optional)_ 是否锁定，如若不指定则反置当前状态
 ## Returns
 
 void
+
+## Example
+
+
+```javascript
+// 1. 记录当前锁定状态（异步查询，需要 await）
+const before = await eda.sys_PanelControl.isLeftPanelLocked();
+
+// 2. 切换到相反状态（显式传目标值；不传参数则直接反转当前状态）
+eda.sys_PanelControl.toggleLeftPanelLockState(!before);
+
+// 3. 验证切换已生效
+const after = await eda.sys_PanelControl.isLeftPanelLocked();
+console.log('切换前：', before, '切换后：', after);
+
+// 4. 恢复原始锁定状态（不留痕迹，保证案例可重复运行）
+eda.sys_PanelControl.toggleLeftPanelLockState(before);
+console.log('已恢复原锁定状态：', before);
+```
 
 ### togglerightpanellockstate
 
 # SYS\_PanelControl.toggleRightPanelLockState() method
 
-切换右侧面板锁定状态
+Toggle the lock state of the right panel
 
 ## Signature
 
 ```typescript
-toggleRightPanelLockState(state?: boolean): void;
+public toggleRightPanelLockState(state?: boolean): void;
 ```
 
 ## Parameters
@@ -620,7 +769,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定，如若不指定则反置当前状态
+_(Optional)_ Whether to lock. If not specified, the current state is inverted
 
 
 </td></tr>
@@ -631,3 +780,22 @@ _(Optional)_ 是否锁定，如若不指定则反置当前状态
 ## Returns
 
 void
+
+## Example
+
+
+```javascript
+// 1. 记录当前锁定状态（异步查询，需要 await）
+const before = await eda.sys_PanelControl.isRightPanelLocked();
+
+// 2. 切换到相反状态（显式传目标值；不传参数则直接反转当前状态）
+eda.sys_PanelControl.toggleRightPanelLockState(!before);
+
+// 3. 验证切换已生效
+const after = await eda.sys_PanelControl.isRightPanelLocked();
+console.log('切换前：', before, '切换后：', after);
+
+// 4. 恢复原始锁定状态（不留痕迹，保证案例可重复运行）
+eda.sys_PanelControl.toggleRightPanelLockState(before);
+console.log('已恢复原锁定状态：', before);
+```

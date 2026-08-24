@@ -1,41 +1,62 @@
-## Description: <br>
-析题 helps agents write heuristic Chinese competitive-programming solution explanations that teach problem-solving reasoning rather than only presenting answers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+析题 helps agents generate heuristic competitive-programming solution writeups, code explanations, and problem analyses that emphasize how to think through a problem rather than only giving an answer.
 
-## Publisher: <br>
-[fslong520](https://clawhub.ai/user/fslong520) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fslong520](https://clawhub.ai/user/fslong520)
 
-## Use Case: <br>
-External users, educators, and competitive-programming learners use this skill to turn problem statements, URLs, or standard solution files into Chinese heuristic explanations. It produces annotated C++ solutions, complexity analysis, preserved samples, common pitfalls, and optional fill-in-the-blank practice when requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated explanations or C++ solutions may be incorrect or incomplete for a specific contest problem. <br>
-Mitigation: Review the reasoning, test the code against official samples and edge cases, and verify complexity claims before publishing or submitting. <br>
-Risk: The skill can request file reads, writes, and edits while preparing or delivering explanations. <br>
-Mitigation: Keep file operations inside the intended contest or problem workspace and review any requested write or edit before allowing it. <br>
+## Use Case:
 
+External users and developers use this skill to turn programming contest statements, URLs, or reference solutions into readable Chinese teaching materials with reasoning paths, annotated code, complexity analysis, examples, and common pitfalls. It can produce single-file HTML explanations with visualizations or Typst sources intended to compile into PDF handouts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fslong520/skills/xiti) <br>
-- [Publisher profile](https://clawhub.ai/user/fslong520) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, guidance] <br>
-**Output Format:** [Markdown with C++ code blocks, LaTeX math, tables, and Mermaid diagrams] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese heuristic explanation style; asks for depth preference after assessing difficulty; optional fill-in-the-blank mode only when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: The skill can read problem or code files supplied by the user and incorporate them into generated writeups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with contest materials and code appropriate for that workflow, and review quoted or transformed code before sharing outputs.
+
+Risk: Generated HTML may load public CDN libraries for math rendering, syntax highlighting, diagrams, and animation.
+
+Mitigation: Review generated HTML before publishing and confirm that external CDN loading is acceptable for the target environment.
+
+Risk: The skill may propose or run local build and preview commands such as Typst compilation.
+
+Mitigation: Review generated commands and outputs before deployment or publication.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/fslong520/skills/xiti)
+- [AtCoder ABC457 Tasks](https://atcoder.jp/contests/abc457/tasks)
+- [AtCoder ABC460 Tasks](https://atcoder.jp/contests/abc460/tasks)
+- [KaTeX CDN Dependency](https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css)
+- [Mermaid CDN Dependency](https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js)
+- [anime.js CDN Dependency](https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance, annotated code, HTML files, Typst files, SVG/PNG-backed visual materials, and shell commands for local rendering or verification]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May read contest statements or code supplied by the user, write solution documents, run local build or preview commands, and generate HTML that loads public CDN libraries.]
+
+## Skill Version(s):
+
+1.7.0 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

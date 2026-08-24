@@ -42,3 +42,17 @@ Before promising an edition, confirm:
 - ownership of unused labels and remaining stock.
 
 An agent may prepare and enter a request with consent. The commission exists only after producer acceptance and contract confirmation.
+
+## Digital decision system
+
+The Vin-Q Constructor API applies human-authored compatibility rules and weighted criteria. It does not run a generative or adaptive model. Preserve the API response's `decisionSystem` fields, including the method, system version and requirement for human review.
+
+An external agent may use AI to interpret a brief or prepare the structured request. Tell a person when that has occurred and distinguish the agent's interpretation from the deterministic Vin-Q calculation.
+
+## Adult access and alcohol delivery
+
+- Wine commissions are for adults aged 18 or over.
+- Registration does not replace age verification by the legal seller and carrier.
+- Do not target minors or connect alcohol with health, driving, sport, sexual success, professional success or social success.
+- Confirm destination-specific sale, promotion, tax, shipping and delivery rules before presenting a route as commercially available.
+- In Catalonia, distance-sale alcohol delivery between 22:00 and 08:00 requires a confirmed statutory exception.

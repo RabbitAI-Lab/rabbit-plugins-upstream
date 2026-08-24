@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-"""Garmin Connect data sync for run-coach bot.
-Reads credentials from environment variables GARMIN_EMAIL and GARMIN_PASSWORD.
-Writes JSON activity data to the garmin/ directory for the bot to query.
+"""Garmin Connect data sync for marathon bot.
+Runs on NAS host, writes JSON to marathon workspace for bot to read.
 """
 
 import json
@@ -17,28 +16,32 @@ from garminconnect import (
     GarminConnectTooManyRequestsError,
 )
 
-# Workspace is always the directory containing this script's parent
-_WORKSPACE = Path(__file__).parent.parent
-
-GARTH_HOME = str(_WORKSPACE / "garmin" / ".garth")
-GARMIN_DIR = _WORKSPACE / "garmin"
+# All data lives next to this script (skill's garmin/ directory);
+# override with GARMIN_DATA_DIR if you keep data elsewhere.
+GARMIN_DIR = Path(os.environ.get("GARMIN_DATA_DIR", Path(__file__).resolve().parent))
+GARTH_HOME = str(GARMIN_DIR / ".garth")
 ACTIVITIES_DIR = GARMIN_DIR / "activities"
 SUMMARY_FILE = GARMIN_DIR / "summary.json"
+CREDENTIALS_FILE = GARMIN_DIR / ".credentials"
 
 
 def load_credentials():
-    """Load Garmin credentials from environment variables."""
-    email = os.environ.get("GARMIN_EMAIL", "").strip()
-    password = os.environ.get("GARMIN_PASSWORD", "").strip()
-
-    if not email or not password:
-        print("Error: GARMIN_EMAIL and GARMIN_PASSWORD environment variables must be set.")
-        print("Add them to your OpenClaw config or .env file:")
-        print("  GARMIN_EMAIL=your@email.com")
-        print("  GARMIN_PASSWORD=your_password")
+    """Load Garmin credentials from secure dotfile."""
+    if not CREDENTIALS_FILE.exists():
+        print(f"Error: {CREDENTIALS_FILE} not found.")
+        print("Create it with:")
+        print(f'  echo \'{{"email": "your@email.com", "password": "your_password"}}\' > {CREDENTIALS_FILE}')
+        print(f"  chmod 600 {CREDENTIALS_FILE}")
         sys.exit(1)
 
-    return email, password
+    with open(CREDENTIALS_FILE) as f:
+        creds = json.load(f)
+
+    if "email" not in creds or "password" not in creds:
+        print(f"Error: {CREDENTIALS_FILE} must contain 'email' and 'password' fields.")
+        sys.exit(1)
+
+    return creds["email"], creds["password"]
 
 
 def get_client():

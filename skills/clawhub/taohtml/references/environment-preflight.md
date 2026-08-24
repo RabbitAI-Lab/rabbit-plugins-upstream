@@ -16,7 +16,7 @@ so a missing module, timeout, or native crash can fail quickly and return JSON.
 | `browser` | Browser QA | Core plus Python Playwright, real Chromium launch, and a minimal PNG screenshot |
 
 Do not run `static-reference` or `browser` merely because those dependencies are
-listed. An idea-only report using one of the four built-in visual systems must not
+listed. An idea-only report using one of the eight built-in visual systems must not
 be blocked by Pillow, Playwright, or Chromium before those capabilities are used.
 Each larger profile already includes the core checks; do not run core separately.
 
@@ -83,7 +83,7 @@ Offer exactly these product choices:
 - repair or replace the environment, rerun `static-reference`, and then retry the
   chosen customer-reference route; or
 - explicitly abandon the customer-reference route and choose one of TaoHtml's
-  four built-in visual systems.
+  eight built-in visual systems.
 
 Do not offer “manual corporate fidelity.” Do not continue calling the output
 `corporate_fidelity` after bypassing deterministic fixed-element extraction, VI

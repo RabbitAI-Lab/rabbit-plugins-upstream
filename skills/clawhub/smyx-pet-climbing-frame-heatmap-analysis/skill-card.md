@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes cat tree or pet climbing-frame videos and video URLs with server-side APIs to estimate layer dwell time, jumps or transitions, activity density, and a 2D activity heatmap without providing medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes cat climbing frame or cat tree videos with remote APIs to produce activity metrics, dwell-time and jump or transition counts, and a 2D heatmap for exercise and enrichment review without disease diagnosis.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and agent operators use this skill to submit cat tree area videos or URLs for structured activity heatmap analysis, history lookup, and report-link generation. Results are intended for activity observation and enrichment review, not health diagnosis or treatment guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cat-area videos, network video URLs, and analysis requests are sent to lifeemergence backend services. <br>
-Mitigation: Avoid submitting videos or URLs that reveal people, private interiors, signed links, or other sensitive information unless the publisher provides acceptable privacy and retention terms. <br>
-Risk: The skill can silently create or reuse an account-linked identifier and store tokens in the workspace data directory. <br>
-Mitigation: Run the skill in an isolated workspace, review the publisher's account-control terms, and clear local workspace credentials when the skill is no longer needed. <br>
-Risk: The output may describe activity and wellbeing trends but is not a veterinary diagnosis. <br>
-Mitigation: Treat results as observational enrichment data and consult a qualified professional for medical or behavioral health decisions. <br>
+## Use Case:
 
+External users and agent operators use this skill to analyze cat tree video footage or video URLs, review layer-level activity distribution, and retrieve cloud report history for pet behavior monitoring. The generated results are for exercise and enrichment observation, not medical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-climbing-frame-heatmap-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown text with structured JSON-style analysis results, report links, or history listings; optionally saved to a local output file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports basic, standard, and json detail modes; input may be a local video file or a network video URL.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: release evidence; artifact frontmatter says 1.0.4) <br>
+Risk: The skill can upload home pet videos or submit video URLs to a remote service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only footage appropriate for remote processing and confirm the publisher's API destination, retention policy, and deletion process before installation.
+
+Risk: The skill can create or reuse an internal identity and store authentication tokens in a local workspace database.
+
+Mitigation: Run it only in a workspace where local identity and token storage is acceptable, and review or clear stored credentials after use.
+
+Risk: The security guidance flags dev HTTP endpoints in a published package.
+
+Mitigation: Do not use the package for production workflows until the publisher explains the endpoint configuration and provides appropriate production HTTPS endpoints.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-climbing-frame-heatmap-analysis)
+- [API interface documentation](artifact/references/api_doc.md)
+- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+- [Skill usage demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, files]
+
+**Output Format:** [Markdown text with structured JSON-style analysis, report links, and optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local video inputs are documented as mp4, avi, or mov up to 10 MB; URL inputs are submitted to the remote analysis API.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact frontmatter reports 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

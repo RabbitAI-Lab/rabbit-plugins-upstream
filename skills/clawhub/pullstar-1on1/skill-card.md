@@ -1,40 +1,57 @@
-## Description: <br>
-Generate a ready-to-use 1-on-1 brief for any engineer on your team from their GitHub activity, including patterns such as high output with low review participation, large PR sizes, and cross-repo collaboration signals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates an engineering manager 1-on-1 brief from GitHub activity using a deterministic five-tool-call agent pipeline.
 
-## Publisher: <br>
-[jacksync](https://clawhub.ai/user/jacksync) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jacksync](https://clawhub.ai/user/jacksync)
 
-## Use Case: <br>
-Engineering managers use this skill to prepare for 1-on-1 meetings by turning a direct report's GitHub activity into a concise, scan-ready brief. The workflow gathers scoped GitHub activity, scores contribution patterns locally, prepares an LLM input, and finalizes a markdown brief. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a GitHub token and may access private repository activity depending on token scope. <br>
-Mitigation: Use the narrowest GitHub token scope that still works and set GITHUB_ORG where possible to limit ingestion scope. <br>
-Risk: Generated .pullstar artifacts may contain private repository activity and PR discussion excerpts. <br>
-Mitigation: Treat .pullstar artifacts as sensitive local files and review llm_input before sending it to an AI provider, especially when PR insights are enabled. <br>
+## Use Case:
 
+Engineering managers use this skill to prepare for 1-on-1 meetings by converting a direct report's recent GitHub pull request and review activity into a concise markdown brief. The skill runs local ingestion and scoring, prepares an LLM prompt, and expects the agent to produce and finalize the brief.
 
-## Reference(s): <br>
-- [ClawHub skill release page](https://clawhub.ai/jacksync/pullstar-1on1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown brief and JSON artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes local .pullstar artifacts, including LLM input, LLM output, and final brief JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill requires GitHub read access appropriate to the repositories being analyzed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the least-privileged token that supports the intended scope, set GITHUB_ORG to narrow ingestion, and avoid passing tokens with broader access than needed.
+
+Risk: The prepared LLM prompt may be sent to the selected AI provider, and PR insights mode can include bounded raw review or comment excerpts.
+
+Mitigation: Review .pullstar/llm_input_<login>.json before inference and avoid --pr-insights for confidential discussions unless that transfer is acceptable.
+
+Risk: Sparse GitHub activity can produce a low-signal or empty meeting brief.
+
+Mitigation: Use the documented quality gate to check total_score and brief content before presenting the result.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jacksync/skills/pullstar-1on1)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON artifacts with a final Markdown 1-on-1 brief]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes local .pullstar artifacts; opt-in PR insights can include bounded pull request discussion excerpts in the LLM input.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

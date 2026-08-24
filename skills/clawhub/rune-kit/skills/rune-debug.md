@@ -1,6 +1,6 @@
 # rune-debug
 
-> Rune L2 Skill | development | model: tier:mid
+> Rune L2 Skill | development | model: tier:heavy
 
 
 # debug
@@ -287,7 +287,7 @@ Track fix attempts in the Debug Report. If this is attempt N>1 for the same symp
 
 ### 3+ Fixes as Architectural Signal
 
-> From superpowers (obra/superpowers, 84k★): "Each fix revealing new problems elsewhere = structural issue, not a bug hunt."
+Each fix revealing new problems elsewhere is a structural issue, not a bug hunt.
 
 When 3+ **distinct** fixes fail (not retries of the same fix), STOP treating it as a bug:
 

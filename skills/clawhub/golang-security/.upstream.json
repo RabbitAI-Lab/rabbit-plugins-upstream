@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/golang-security",
   "slug": "golang-security",
   "ownerHandle": null,
-  "version": "1.1.7",
-  "updatedAt": 1781257098031,
-  "contentHash": "5586e8090011c8194b10db66886bf5d96d4784e3fd0511f4b4db8a51aee5aa73",
-  "fetchedAt": "2026-07-26T18:29:30.082Z"
+  "version": "1.2.0",
+  "updatedAt": 1787445216371,
+  "contentHash": "c2ffcca91a916fb8f1b1a5937ea0e1f40a35ce5c3501c53fc20f5d13c7ea9026",
+  "fetchedAt": "2026-08-24T08:36:45.984Z"
 }

@@ -1,41 +1,55 @@
-## Description: <br>
-AI multi-image generation powered by CellCog via Nano Banana for coherent image sets, character consistency across scenes, and production-grade composition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI multi-image generation powered by CellCog via Nano Banana for coherent multi-image projects, character consistency, composition planning, image generation, and image editing.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers and creative agents use this skill to route image-generation and image-editing tasks through CellCog for coherent multi-image projects, character-consistent series, and composed visual assets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and provided images are sent to CellCog's service and may include sensitive content. <br>
-Mitigation: Avoid sending sensitive private images unless CellCog's privacy and data-handling requirements fit the deployment. <br>
-Risk: The skill depends on a CellCog API key and access to the CellCog service. <br>
-Mitigation: Store CELLCOG_API_KEY securely and verify CellCog access before relying on the skill in production workflows. <br>
+## Use Case:
 
+Developers and agent users use this skill to route image generation and editing tasks through CellCog, including multi-image visual projects, character-consistent sequences, product mockups, and style transformations.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/nitishgargiitd/skills/nano-banana-image-cellcog) <br>
-- [CellCog homepage](https://cellcog.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python code examples and shell command setup notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; prompts and provided images are sent to CellCog's service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release evidence) <br>
+Risk: Prompts and images may be sent to CellCog as a third-party image service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only if third-party service processing is acceptable; do not submit secrets, regulated data, proprietary images, or private likenesses without approval and review of CellCog privacy and retention terms.
+
+Risk: The skill requires a CELLCOG_API_KEY credential for service access.
+
+Mitigation: Store the API key in the environment or an approved secret manager and avoid embedding it in prompts, source files, logs, or shared transcripts.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [ClawHub Skill Page](https://clawhub.ai/cellcog/skills/nano-banana-image-cellcog)
+- [CellCog Publisher Profile](https://clawhub.ai/user/cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, code, shell commands, configuration, text]
+
+**Output Format:** [Markdown with Python code snippets and setup commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and CELLCOG_API_KEY for service access.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

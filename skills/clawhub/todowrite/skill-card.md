@@ -1,43 +1,64 @@
-## Description: <br>
-Todowrite routes agent TODOs to session tasks, persistent checklist files, or GitHub Issues while enforcing task-reporting and synchronization discipline. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes TODO checklists to session, file, or issue storage and gives agents discipline for TaskList references, completion reporting, fix-plan sync, priority prefixes, media separation, and task JSON management.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent operators use Todowrite to decide whether TODO work belongs in session tracking, persistent checklist files, or team-shared GitHub Issues, and to keep related task records synchronized. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update task and checklist records during task transfers, so ambiguous transfer language could move or close the wrong work item. <br>
-Mitigation: Confirm ambiguous transfer scope, require explicit direction before creating issues, and report both the source and destination updates. <br>
+## Use Case:
 
+Developers and agent operators use this skill to route TODOs to the right persistence medium and keep task status, user-visible reports, and TaskList references consistent. It also provides guidance and a CLI for managing local Claude Code or agent task JSON files.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/todowrite) <br>
-- [Task Completion Report Format](completion-report.md) <br>
-- [TaskList Conversation IDs](conversation-id.md) <br>
-- [Task-Checklist Two-Way Sync](fix-plan-sync.md) <br>
-- [Priority Prefix](priority-prefix.md) <br>
-- [Work Record Media Separation](media-separation.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with checklist and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update TaskList state, checklist files, and GitHub issue records when the user explicitly directs those routes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release metadata and changelog, released 2026-07-23) <br>
+Risk: Persistent task-file mutation and deletion can remove or alter local task JSON files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable the skill only when local task-file management is intended; require explicit user intent before add, update, delete, or transfer-style actions.
+
+Risk: Broad path controls such as --dir, CLAUDE_TASK_DIR, or AGENT_TASK_DIR can target unintended task directories.
+
+Mitigation: Use narrow task directories, avoid broad shared paths, and inspect the resolved directory before mutation.
+
+Risk: Task IDs can be confused with GitHub issue or pull request numbers in user-visible text.
+
+Mitigation: Use subject prefixes or keywords in user-visible text and avoid bare TaskList IDs unless they are clearly GitHub PR or issue references.
+
+## Reference(s):
+
+- [Skill overview](artifact/SKILL.md)
+- [Task JSON CLI topic](artifact/claude-task.md)
+- [TaskList conversation ID rules](artifact/conversation-id.md)
+- [Completion report rules](artifact/completion-report.md)
+- [Fix-plan sync rules](artifact/fix-plan-sync.md)
+- [Priority prefix rules](artifact/priority-prefix.md)
+- [Media separation guide](artifact/media-separation.md)
+- [Changelog](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Code]
+
+**Output Format:** [Markdown with inline shell commands and task-file conventions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or modify local task JSON files when the included CLI is used.]
+
+## Skill Version(s):
+
+0.8.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

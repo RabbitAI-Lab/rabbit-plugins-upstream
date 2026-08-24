@@ -1,40 +1,62 @@
-## Description: <br>
-Run one SmartClaws master control cycle: read device telemetry on-chain, decide under the owner's guidelines, command a device only when allowed, and log the decision on-chain. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Run one SmartClaws master control cycle: read device telemetry on-chain, decide under the owner's guidelines, command a device only when allowed, and log the decision on-chain.
 
-## Publisher: <br>
-[eduv09](https://clawhub.ai/user/eduv09) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[eduv09](https://clawhub.ai/user/eduv09)
 
-## Use Case: <br>
-SmartClaws owners and operators use this skill to run a single authorized control cycle for configured devices. It helps an agent read telemetry, decide whether to act under owner policy, publish one allowed command when warranted, and record an auditable decision log. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: This skill can command configured SmartClaws devices and publish durable on-chain logs. <br>
-Mitigation: Install it only where AGENTS.md and SMARTCLAWS.md clearly define authorized callers, commandable devices, channels, and policy; keep read-only audit runs distinct from command-capable runs. <br>
-Risk: A stale or malformed telemetry reading could lead to an unsafe or incorrect command decision. <br>
-Mitigation: Validate telemetry freshness and payload shape against the relevant device contract before acting, and avoid command actions unless the owner's guidelines explicitly allow them. <br>
+## Use Case:
 
+Developers and operators use this skill to run a single SmartClaws control cycle that reads device telemetry, applies the owner's configured goal and authority rules, optionally issues one authorized command, and logs the outcome on-chain.
 
-## Reference(s): <br>
-- [SmartClaws project homepage](https://github.com/skalenetwork/smartclaws) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance, API calls] <br>
-**Output Format:** [Markdown or plain text with structured decision details and transaction hashes when actions are published] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read SmartClaws telemetry, publish at most one authorized device command, and publish a decision.log event through configured plugin tools.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can command configured devices through SmartClaws when owner configuration permits it.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only in a workspace you control, review SMARTCLAWS.md and AGENTS.md, and keep commandable devices and caller permissions narrow.
+
+Risk: SmartClaws writes, disclosures, and notifications may spend wallet funds and create permanent on-chain records.
+
+Mitigation: Review wallet funding and write authority before use, and publish or disclose only when the owner configuration and task justify it.
+
+Risk: Encrypted channel disclosure may expose plaintext telemetry or messages to the agent.
+
+Mitigation: Use disclosure only for channels where the wallet is an authorized reader and the workflow requires plaintext for the control decision.
+
+Risk: Missing goals, stale telemetry, malformed payloads, or incomplete device wiring can lead to unsafe or unsupported actions.
+
+Mitigation: Stop or ask the owner when SMARTCLAWS.md lacks a goal, required device channels are missing, telemetry is stale, or a device contract does not validate the payload.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/eduv09/skills/smartclaws-master-agent)
+- [SmartClaws project homepage](https://github.com/skalenetwork/smartclaws)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API Calls, Text]
+
+**Output Format:** [Markdown status report with SmartClaws tool calls and structured on-chain messages]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include transaction hashes when SmartClaws publish or notify operations succeed.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

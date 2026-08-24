@@ -1,43 +1,58 @@
-## Description: <br>
-Sets up a local Mac Mini knowledge base and RAG search workflow with document parsing, Ollama embeddings, scheduled analysis, and optional Feishu summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps OpenClaw users set up a local Mac Mini knowledge base and RAG search workflow with document extraction, OCR fallback, catalog generation, scheduled analysis, and Feishu summary delivery.
 
-## Publisher: <br>
-[seairteng](https://clawhub.ai/user/seairteng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seairteng](https://clawhub.ai/user/seairteng)
 
-## Use Case: <br>
-Developers and technical operators use this skill to configure a local Mac Mini knowledge base, parse common document formats, generate searchable summaries, and register OpenClaw scheduled analysis jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill parses files placed in the local knowledge directory and writes plaintext summaries. <br>
-Mitigation: Avoid placing confidential files in the knowledge directory unless plaintext local summaries are acceptable. <br>
-Risk: The setup enables OpenClaw exec/process tools, installs local dependencies, and creates scheduled jobs. <br>
-Mitigation: Review the setup script and scheduled job commands before installation, and enable only the permissions required for the deployment. <br>
-Risk: Optional Feishu delivery may send generated summaries outside the local machine. <br>
-Mitigation: Skip or remove the Feishu cron setup when external notification delivery is not appropriate. <br>
+## Use Case:
 
+Developers and OpenClaw users use this skill on a personal Mac to install dependencies, configure local knowledge-base folders, extract text from common document formats, generate searchable summaries and catalogs, and schedule recurring Feishu delivery.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/seairteng/macmini-knowledge-base) <br>
-- [Ollama download](https://ollama.com/download) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local setup guidance and scripts for document analysis, catalog generation, scheduled jobs, and optional Feishu notifications.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can install packages, change OpenClaw configuration, read and write knowledge-base files, and register recurring jobs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only on a personal Mac, use the documented dry-run and confirmation prompts, and review each proposed operation before enabling it.
+
+Risk: Recurring jobs can automatically process local documents and send summaries through Feishu on the configured schedule.
+
+Mitigation: Review the cron entries, confirm the Asia/Shanghai schedule is intended, and remove unwanted jobs with the documented OpenClaw cron removal command.
+
+Risk: The Feishu webhook secret is persisted insecurely if configured.
+
+Mitigation: Avoid saving a real webhook unless it can be protected, scoped to a dedicated destination, and rotated if exposed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/seairteng/skills/macmini-knowledge-base)
+- [Ollama Download](https://ollama.com/download)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and generated local text, Markdown, and JSON files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can register recurring cron jobs and write summaries, catalog files, cache/state files, and OCR repair reports under the local knowledge workspace.]
+
+## Skill Version(s):
+
+1.4.7 (source: frontmatter, _meta.json, CHANGELOG, server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

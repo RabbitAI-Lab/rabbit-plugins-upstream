@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/golang-dependency-management",
   "slug": "golang-dependency-management",
   "ownerHandle": null,
-  "version": "1.2.3",
-  "updatedAt": 1781081562613,
-  "contentHash": "9c5f2ab9c53a26afb6280bbe9e2051ca3cde19158a31958ba58a50ac249b1a5e",
-  "fetchedAt": "2026-07-26T18:30:05.168Z"
+  "version": "1.3.0",
+  "updatedAt": 1787265728248,
+  "contentHash": "5aac2d08045e903a11f8e58cd531dbfaa482d9172dc748f6004b831a1c6dd004",
+  "fetchedAt": "2026-08-24T08:42:01.931Z"
 }

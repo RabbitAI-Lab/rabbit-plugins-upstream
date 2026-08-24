@@ -1,45 +1,60 @@
-## Description: <br>
-Guides agents through a layout-first marketing brochure workflow that gathers requirements, drafts layouts, waits for confirmation, and uses the dLazy CLI to generate brochure mock-ups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A workflow skill for marketing brochure design that guides requirements gathering, fold-type planning, layout-first generation, user confirmation, and final folded and lifestyle mock-up delivery.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Designers, marketers, and agents use this skill to plan brochure content, create confirmed brochure layouts, and generate folded and lifestyle mock-ups through the dLazy cloud image-generation service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached reference files are sent to dLazy cloud endpoints for generation. <br>
-Mitigation: Review prompts and attachments before generation and avoid sending material that should not be processed by the dLazy service. <br>
-Risk: The workflow stores or uses a dLazy API key for CLI authentication. <br>
-Mitigation: Use the documented dLazy login or environment-variable flow, keep the local configuration file protected, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Some workflow instructions are in Chinese, which can make prompt or layout confirmation harder for non-Chinese readers. <br>
-Mitigation: Confirm each prompt, layout, and mock-up step in a language the reviewer understands before allowing generation. <br>
+## Use Case:
 
+External users, designers, marketers, and agents use this skill to plan and generate brochure layouts and mock-ups for company, product, event, investment, enrollment, and portfolio promotion workflows.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-marketing-brochure) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and generated image URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires dLazy CLI authentication and explicit user confirmation before image-generation commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Using the skill requires trusting the dLazy CLI and cloud API with prompts and selected media files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after reviewing the dLazy CLI source or package, confirm prompts and media before command execution, and avoid sending sensitive content unless that use is approved.
+
+Risk: Persistent local API keys may remain available to future CLI invocations.
+
+Mitigation: Prefer the DLAZY_API_KEY environment variable for per-session use when persistence is not desired, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: Generated brochure content can be incorrect, misleading, or unsuitable for regulated industries.
+
+Mitigation: Review each layout and mock-up before use, and add required compliance disclaimers for regulated industries.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-marketing-brochure)
+- [dLazy CLI source and homepage](https://github.com/dlazyai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Image URLs]
+
+**Output Format:** [Markdown guidance with inline shell commands and generated image URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses dLazy CLI commands to request brochure layout and mock-up generation; prompts and selected media may be sent to dLazy services.]
+
+## Skill Version(s):
+
+1.3.9 (source: server release metadata; artifact frontmatter lists 1.3.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

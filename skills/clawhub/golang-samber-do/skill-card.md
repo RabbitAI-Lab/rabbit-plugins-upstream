@@ -1,46 +1,60 @@
-## Description: <br>
-Dependency injection guidance for Go projects using samber/do v2, covering service containers, lifecycle management, scopes, health checks, graceful shutdown, testing, and module organization. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dependency injection guidance for Go projects using samber/do, covering service containers, lifecycle management, scopes, health checks, graceful shutdown, module organization, and migration from manual constructor injection.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineers use this skill to add or maintain samber/do v2 dependency injection in Go codebases. It helps agents propose service registration, composition-root organization, lifecycle hooks, scopes, testing overrides, health checks, graceful shutdown, and related Go tooling commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated dependency-injection changes can alter service wiring, lifecycle behavior, or go.mod dependencies in a Go project. <br>
-Mitigation: Review go.mod, provider registration, scope, lifecycle, and shutdown changes; run the relevant Go tests and linters before relying on the result. <br>
-Risk: Guidance or code examples may be applied to the wrong samber/do major version. <br>
-Mitigation: Use samber/do v2 import paths and verify generated code does not import github.com/samber/do without the /v2 suffix. <br>
+## Use Case:
 
+Developers and engineers use this skill when adopting or maintaining samber/do dependency injection in Go applications, especially when organizing service registration, lifecycle behavior, tests, and refactors away from manual constructor wiring.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/samber/golang-samber-do) <br>
-- [Skill Homepage](https://github.com/samber/cc-skills-golang) <br>
-- [samber/do v2 Go Package](https://pkg.go.dev/github.com/samber/do/v2) <br>
-- [samber/do Documentation](https://do.samber.dev) <br>
-- [samber/do Repository](https://github.com/samber/do) <br>
-- [Advanced Usage](references/advanced.md) <br>
-- [Testing with samber/do](references/testing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Go code examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include go get, go test, and golangci-lint commands when implementation work is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release metadata and skill frontmatter metadata) <br>
+Risk: Generated dependency-injection changes may alter service construction, lifecycles, or shutdown behavior in a Go application.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed Go diffs, confirm registration lifecycles, and run the project test suite and linting before merging.
+
+Risk: The skill may suggest Go dependency commands or Go-related tooling commands.
+
+Mitigation: Run commands only in a trusted project workspace and review dependency or module file changes before committing them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/golang-samber-do)
+- [Publisher profile](https://clawhub.ai/user/samber)
+- [Skill homepage](https://github.com/samber/cc-skills-golang)
+- [samber/do package docs](https://pkg.go.dev/github.com/samber/do/v2)
+- [samber/do documentation](https://do.samber.dev)
+- [samber/do source repository](https://github.com/samber/do)
+- [Advanced Usage](references/advanced.md)
+- [Testing with samber/do](references/testing.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with Go and shell code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include dependency installation commands, Go code snippets, DI registration patterns, lifecycle guidance, and testing recommendations.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

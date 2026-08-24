@@ -1,11 +1,11 @@
 ---
 name: dlazy-kling-image-o1
 version: 1.3.5
-description: 使用可灵 (Kling) o1 模型生成精美图像，支持文生图与参考图生图。
+description: "使用可灵 (Kling) o1 模型生成精美图像，支持文生图与参考图生图。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy kling-image-o1 -h 查看帮助信息。"}}
 ---
 
-# dlazy-kling-image-o1
+# 图像生成 可灵 Kling Image O1
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

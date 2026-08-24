@@ -1,43 +1,56 @@
-## Description: <br>
-Defensive Golang coding to prevent panics, silent data corruption, and subtle runtime bugs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents review and edit Go code to prevent panics, silent data corruption, and subtle runtime bugs such as nil panics, append aliasing, unsafe map access, numeric conversion overflow, resource lifecycle issues, and missing defensive copies.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineers use this skill to review and edit Go code for nil-safety, slice and map aliasing, numeric conversion, resource lifecycle, and zero-value design issues. It is intended for Go projects where an agent should produce safer code, review findings, or scoped Go-related commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may propose repository edits and scoped Go, linter, or git commands. <br>
-Mitigation: Review proposed changes and commands before applying them in important repositories. <br>
-Risk: Some guidance depends on the target project's Go version, such as range-loop scoping and reflection type assertions. <br>
-Mitigation: Check the project's go.mod version and available Go toolchain before applying version-specific recommendations. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to make Go code safer during implementation or review, especially around nil handling, slice and map aliasing, numeric conversion, resource lifetime, and defensive-copy patterns.
 
-## Reference(s): <br>
-- [Nil Safety Deep Dive](references/nil-safety.md) <br>
-- [Slice and Map Safety Deep Dive](references/slice-map-safety.md) <br>
-- [cc-skills-golang homepage](https://github.com/samber/cc-skills-golang) <br>
-- [Golang Safety on ClawHub](https://clawhub.ai/samber/golang-safety) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Go code examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose repository edits and scoped Go, golangci-lint, and git commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server evidence and frontmatter) <br>
+Risk: The skill can edit Go source files and run go, golangci-lint, and git commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it in repositories where those actions are acceptable, then review diffs and command output before accepting changes.
+
+Risk: Safety guidance or edits may be incomplete or incorrect for project-specific APIs, concurrency assumptions, or compatibility targets.
+
+Mitigation: Run the project's Go tests and linters, and have a maintainer review changes before release.
+
+## Reference(s):
+
+- [Nil Safety Deep Dive](references/nil-safety.md)
+- [Slice and Map Safety Deep Dive](references/slice-map-safety.md)
+- [Project Homepage](https://github.com/samber/cc-skills-golang)
+- [ClawHub Skill Page](https://clawhub.ai/samber/skills/golang-safety)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, code, shell commands]
+
+**Output Format:** [Markdown guidance with Go code examples, suggested code edits, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May edit Go source files and run go, golangci-lint, and git commands when invoked.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

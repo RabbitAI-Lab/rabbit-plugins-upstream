@@ -1,43 +1,63 @@
-## Description: <br>
-Generates images from text prompts with multiple aspect ratios and standard resolution options for personal creators. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI图像生成-免费版 helps agents generate images from text prompts with multiple aspect ratios and standard resolutions for personal creative workflows.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External creators and agent users use this skill to generate basic images from text prompts for avatars, social media artwork, video covers, and creative ideation. It requires a configured external image API key and command-line execution capability. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and generated-image requests are sent to a user-configured third-party image API. <br>
-Mitigation: Avoid including secrets, personal data, confidential business details, or regulated information in prompts. <br>
-Risk: The artifact references a Python generator script that is not included in the release evidence. <br>
-Mitigation: Supply or verify the script separately before executing any generated command. <br>
-Risk: Generated image output can be incorrect, misleading, or unsuitable for high-stakes use. <br>
-Mitigation: Review generated images manually and do not use the skill for medical, legal, or deterministic decision-making workflows. <br>
+## Use Case:
 
+External creators, developers, and automation users can use this skill to turn prompt text into generated images for avatars, social media covers, concept visualization, and lightweight creative assets.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-image-gen-tool-free) <br>
-- [Configured image API endpoint](https://code.newcli.com/gemini) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to produce or save image files through a user-configured external image API; the referenced generator script is not included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The trigger language is broader than image generation and could route unrelated prompts to an external API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for explicit image-generation requests and review the requested action before any external API call.
+
+Risk: Prompts may be sent to an external image-generation provider.
+
+Mitigation: Avoid confidential, regulated, or sensitive prompt text and verify the external API provider before use.
+
+Risk: The artifact references a generation script that is not present in the submitted files.
+
+Mitigation: Confirm the required generation script or equivalent implementation exists in the runtime environment before relying on the skill.
+
+Risk: The skill requires an API key for image generation.
+
+Mitigation: Keep API keys in environment variables or managed secrets and out of source-controlled files.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-image-gen-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+- [Gemini image API endpoint referenced by artifact](https://code.newcli.com/gemini)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides an agent through API-key configuration, model selection, prompt construction, and saving generated image files.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata; artifact frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

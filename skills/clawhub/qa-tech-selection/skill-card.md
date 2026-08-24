@@ -1,40 +1,53 @@
-## Description: <br>
-Helps teams evaluate and choose QA testing tools by comparing requirements, constraints, costs, risks, and implementation plans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides QA teams through selecting testing tools by comparing requirements, team constraints, costs, risks, and implementation plans.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill when selecting automation frameworks, performance testing tools, or test management platforms. It guides requirement analysis, weighted comparisons, recommendations, risk review, POC planning, and migration guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases may route general architecture or tool-selection questions to this skill when another specialist skill is a better fit. <br>
-Mitigation: Review trigger phrases and route this skill to QA or testing technology selection; use more specific skills for broader architecture decisions. <br>
-Risk: Tool recommendations can be incomplete when requirements, technical constraints, team capability, or budget are missing. <br>
-Mitigation: Collect the missing inputs, compare at least three candidate tools across core dimensions, and re-evaluate before adopting a recommendation. <br>
+## Use Case:
 
+QA engineers, test leads, and engineering teams use this skill to evaluate and choose test automation frameworks, performance testing tools, and test management platforms. It produces comparison criteria, recommendations, POC validation plans, migration guidance, and risk notes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-tech-selection) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown report with comparison tables, checklists, recommendations, and risk notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes SEL-XXXX traceability IDs and recommends comparing at least three candidate tools across core dimensions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: evidence release and SKILL.md frontmatter) <br>
+Risk: The skill may produce advisory vendor, pricing, or migration recommendations that affect budget or engineering commitments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Independently validate vendor claims, current pricing, and migration impact before committing budget or engineering time.
+
+Risk: The skill may read project documents while gathering requirements and constraints.
+
+Mitigation: Use it only with project documents you are comfortable letting the agent read.
+
+## Reference(s):
+
+- [ClawHub skill page: qa-tech-selection](https://clawhub.ai/kokxi/skills/qa-tech-selection)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown with evaluation tables, recommendations, POC plans, and risk notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes SEL-XXXX traceability identifiers for each selection assessment.]
+
+## Skill Version(s):
+
+1.7.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,4 +1,14 @@
 # DM 城主系统更新日志
+## 1.2.0 (2026-08-19)
+
+### DND Lens 三功能子技能 · 正式发布
+- **world-lore（功能一）**：RAG 检索 `world_cards.jsonl`，世界观问答 + 费伦编年史
+- **module-forge（功能二）**：按人数/等级/时长/类型生成模组骨架 + DMG 标准 CR 平衡；新增 `--draft` 支持注入经历映射草稿
+- **echo-map（功能三）**：真实经历脱敏（防隐私泄露）+ 按 `mapping_dict` 映射为 anonymized 模组
+- **联动流水线 `scripts/lens_pipeline.py`**：经历 → echo-map → module-forge → world-lore 一站式产出
+- **修复**：module-forge 分幕遭遇补全 `xp_total`（DMG XP 数字现可见）
+- **数据资产 `data/`**：world_cards.jsonl（360 卡）/ module_paradigms.json（59 篇）/ mapping_dict.json（8 槽位）
+
 ## 1.1.8 (2026-06-09)
 
 ### 角色卡模板清理

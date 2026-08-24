@@ -1,44 +1,59 @@
-## Description: <br>
-使用 mopng.cn (MoPNG) API 进行图片处理，包括智能抠图、高清放大、智能扩图、图片翻译、文生图、图生图等功能。支持 API Key 鉴权；处理本地文件时会上传至 MoPNG 服务。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MoPNG API helps OpenClaw agents negotiate and run MoPNG Agent OpenAPI image generation and editing workflows, including text-to-image, image-to-image, background removal or replacement, outpainting, upscaling, and multi-step plans.
 
-## Publisher: <br>
-[jkin8010](https://clawhub.ai/user/jkin8010) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jkin8010](https://clawhub.ai/user/jkin8010)
 
-## Use Case: <br>
-Developers, creative operators, and external users use this skill to invoke MoPNG image APIs from agent workflows for background removal, upscaling, outpainting, image translation, text-to-image generation, image-to-image editing, and model listing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Selected images and generation or editing prompts are sent to MoPNG for processing. <br>
-Mitigation: Avoid sensitive images or prompts unless the user accepts MoPNG handling policies. <br>
-Risk: The MoPNG API key can consume account credits and may be exposed if pasted into conversations or public files. <br>
-Mitigation: Store MOPNG_API_KEY only in private client, host, or local environment configuration. <br>
-Risk: Raw main-branch install URLs can change outside the reviewed release. <br>
-Mitigation: Prefer the reviewed ClawHub release or a pinned source when installing. <br>
+## Use Case:
 
+OpenClaw users and developers use this skill to convert image generation or editing requests into a MoPNG Agent brief, review and revise the returned plan, approve execution, and deliver generated image links or text results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jkin8010/mopng-api) <br>
-- [MoPNG API documentation](https://mopng.cn/agent/docs) <br>
-- [MoPNG API key portal](https://mopng.cn/agent) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Text, Shell commands, Configuration instructions, API Calls] <br>
-**Output Format:** [Image files with text status output and MEDIA paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes generated or processed images under outputs/mopng-api; requires MOPNG_API_KEY and may consume MoPNG account credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.7 (source: server release metadata; artifact _meta.json and pyproject.toml list 0.1.0) <br>
+Risk: The skill can auto-approve paid remote image work when a returned plan is under the configured cost threshold.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use manual brief, plan, approve, and status commands, or disable auto-approval with --no-auto-approve or MOPNG_AGENT_AUTO_APPROVE_COST_POINTS=0.
+
+Risk: The release includes a broader legacy API client outside the advertised MoPNG Agent workflow.
+
+Mitigation: Use scripts/mopng_agent.py for the documented agent workflow and invoke scripts/mopng_api.py only when explicitly intending to use the older direct API client.
+
+Risk: The skill requires a MoPNG API key and submits authorized remote image jobs.
+
+Mitigation: Keep MOPNG_API_KEY in private host configuration, avoid logging it, and send only user-approved HTTPS image URLs.
+
+## Reference(s):
+
+- [Server-resolved source repository](https://github.com/jkin8010/mopng-api)
+- [ClawHub skill page](https://clawhub.ai/jkin8010/skills/mopng-api)
+- [MoPNG Agent API endpoint](https://agent-api.mopng.cn)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON API responses.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return remote result image URLs or text results from the MoPNG Agent service.]
+
+## Skill Version(s):
+
+0.1.8 (source: server release evidence; artifact pyproject.toml reports 0.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

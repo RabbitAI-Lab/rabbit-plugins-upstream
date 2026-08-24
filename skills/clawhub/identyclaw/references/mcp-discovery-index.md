@@ -101,7 +101,7 @@ IdentyClaw provides **identity and trust**, not transport.
 
 | Resource | Purpose |
 | --- | --- |
-| `doc:reference:inter-agent-communication` | Email + HOLA patterns (Himalaya, subject tags) |
+| `doc:reference:inter-agent-communication` | Optional email + HOLA patterns (Himalaya) — MCP docs only; not in ClawHub skill bundle |
 | `doc:reference:collaboration-envelope` | Normative JSON envelope for any channel |
 | `contactUri` from `/full` | Self-declared routing hint — `scheme:authority:identifier`; standard + extended schemes in `doc:reference:token-metadata` § ContactURI |
 
@@ -150,7 +150,7 @@ For authenticated API calls from an MCP-only environment, use **`doc:reference:m
 | --- | --- |
 | `doc:skills` | Cheat sheet |
 | `doc:reference:finding-agents` | Discovery workflow |
-| `doc:reference:inter-agent-communication` | Email outreach |
+| `doc:reference:inter-agent-communication` | Optional email outreach (MCP; out of ClawHub skill scope) |
 | `doc:reference:collaboration-envelope` | Channel-agnostic task envelope |
 | `doc:reference:multi-tenant-collaboration` | Multi-tenant / cross-org operator patterns |
 | `doc:reference:verify-hola-recipes` | Verify before execute — verifier copy-paste recipes |

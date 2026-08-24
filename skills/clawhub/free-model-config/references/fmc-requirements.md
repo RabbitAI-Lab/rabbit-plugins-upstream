@@ -331,7 +331,7 @@ python agnes_gen.py story-video --storyboard storyboard.json --output story.mp4
 - **提示词编写**:
   - 使用英文提示词效果更好
   - 提示词需要详细、具体，包含场景、动作、表情、服装、灯光等要素
-  - 示例："A group of people in fervent worship, kneeling with their backs parallel to the ground, bowing deeply before a proud man named Wang Taiping who stands tall with a得意 expression, all wearing clothing from the same historical era, dramatic lighting, detailed scene, realistic style"
+  - 示例："A group of people celebrating a festival in a city square, cheering joyfully, colorful banners and lanterns overhead, all wearing festive clothing, dramatic lighting, detailed scene, realistic style"
 
 - **图片上传问题**:
   - 图片上传到 catbox.moe 或 litterbox 可能超时或失败
@@ -343,7 +343,7 @@ python agnes_gen.py story-video --storyboard storyboard.json --output story.mp4
   - **TTS语音合成**（需要AI模型）：使用 edge-tts、pyttsx3、gTTS 等生成真正的语音
   - **推荐方案**：edge-tts（免费、中文效果好）
     - 安装：`pip install edge-tts`
-    - 单人配音：`edge-tts --voice zh-CN-YunxiNeural --text "王太平" --output speech.mp3`
+    - 单人配音：`edge-tts --voice zh-CN-YunxiNeural --text "你好，欢迎使用语音合成" --output speech.mp3`
     - 多人配音：使用不同声音生成多段语音，然后混合
   - **多人配音脚本**：见 scripts/generate_tts_audio.py
 
@@ -415,11 +415,11 @@ python agnes_gen.py story-video --storyboard storyboard.json --output story.mp4
 - **组装顺序**: 需求分析 → 声音选择 → 文本准备 → TTS生成 → 结果验证
 - **约束**: 需要安装 edge-tts 或其他 TTS 库
 - **格式**: 音频文件（MP3/WAV）
-- **脚本命令**: `python generate_tts_audio.py --text "王太平" --output speech.mp3`
+- **脚本命令**: `python generate_tts_audio.py --text "你好，欢迎使用语音合成" --output speech.mp3`
 - **最佳实践**:
   - 推荐使用 edge-tts（免费、中文效果好）
   - 安装：`pip install edge-tts`
-  - 单人配音：`edge-tts --voice zh-CN-YunxiNeural --text "王太平" --output speech.mp3`
+  - 单人配音：`edge-tts --voice zh-CN-YunxiNeural --text "你好，欢迎使用语音合成" --output speech.mp3`
   - 多人配音：使用不同声音生成多段语音，然后混合
 
 #### MF6-06 音视频合并
@@ -464,15 +464,15 @@ python agnes_gen.py story-video --storyboard storyboard.json --output story.mp4
 - 后台网址：https://platform.sensenova.cn/console/keys
 - 接口地址：https://token.sensenova.cn/v1
 - API Key：从后台网址生成
-- 模型名称：sensenova-6.7-flash-lite
-- 能力：文本生成
+- 模型名称：sensenova-6.8-flash-lite、sensenova-u1-fast、deepseek-v4-flash、glm-5.2
+- 能力：文本生成（sensenova-6.8-flash-lite）、信息图生成（sensenova-u1-fast）、对话推理（deepseek-v4-flash、glm-5.2）
 
 ##### 小米——MIMO
 - 后台网址：https://platform.xiaomimimo.com/console/api-keys
 - 接口地址：https://token-plan-cn.xiaomimimo.com/v1
 - API Key：从后台网址生成
-- 模型名称：mimo-v2.5-pro
-- 能力：文本生成
+- 模型名称：mimo-v2.5-pro、mimo-v2.5、mimo-v2.5-asr、mimo-v2.5-tts、mimo-v2.5-tts-voiceclone、mimo-v2.5-tts-voicedesign
+- 能力：文本生成（mimo-v2.5-pro）、全模态理解（mimo-v2.5）、语音识别（mimo-v2.5-asr）、语音合成（mimo-v2.5-tts / -voiceclone / -voicedesign）
 
 ##### 美团——LongCat
 - 后台网址：https://longcat.chat/platform/api_keys

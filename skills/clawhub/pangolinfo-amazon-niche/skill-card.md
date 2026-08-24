@@ -1,39 +1,54 @@
-## Description: <br>
-Helps agents browse and search Amazon category trees, resolve category paths, filter categories by commercial metrics, and find low-competition Amazon niches using Pangolinfo MCP tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pangolinfo Amazon Niche Finder helps agents browse and search Amazon category trees, resolve category paths, and filter categories or niches by commercial metrics such as sales, search volume, returns, growth, and competition.
 
-## Publisher: <br>
-[pangolinfo](https://clawhub.ai/user/pangolinfo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pangolinfo](https://clawhub.ai/user/pangolinfo)
 
-## Use Case: <br>
-External sellers, ecommerce analysts, and agent builders use this skill to explore Amazon category structure, compare category metrics, and identify candidate niches for product research. It is intended for category and niche intelligence, not product scraping, review scraping, listing writing, or full go-to-market reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan found conflicting credential guidance that could cause an agent or runtime to use PANGOLINFO_API_KEY without clear user understanding. <br>
-Mitigation: Review credential setup before installation, use a scoped low-quota Pangolinfo key, and confirm whether credentials are supplied through the skill environment or MCP server configuration. <br>
+## Use Case:
 
+External users and developers use this skill to guide agents through Amazon category and niche research with Pangolinfo MCP tools. It supports category tree browsing, category search, category path resolution, metric-based category filtering, and low-competition niche screening.
 
-## Reference(s): <br>
-- [Pangolinfo](https://www.pangolinfo.com) <br>
-- [ClawHub skill page](https://clawhub.ai/pangolinfo/pangolinfo-amazon-niche) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown with structured lists, tables, and inline JSON or shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should cite the Pangolinfo tool and returned field path for numerical claims, avoid raw JSON dumps, and match the user's language.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.1.0 (source: release evidence and frontmatter) <br>
+Risk: The security evidence says the skill instructs the agent to access and reason about a raw Pangolinfo API key from the environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer storing credentials in the MCP server or a managed secret store, and avoid asking the agent to print, validate, transform, or troubleshoot the raw key value.
+
+Risk: Some Pangolinfo category and niche operations consume paid credits, with niche filtering identified in the artifact as the most expensive path.
+
+Mitigation: Confirm the user's budget before expensive niche filtering and keep default runs within the skill's Fast posture unless the user asks for a deeper run.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pangolinfo/skills/pangolinfo-amazon-niche)
+- [Pangolinfo website](https://www.pangolinfo.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API Calls, Markdown]
+
+**Output Format:** [Markdown reports with structured tables, concise recommendations, and MCP tool-call guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Pangolinfo MCP tool results as the source for reported category and niche metrics; normal presentation avoids raw JSON.]
+
+## Skill Version(s):
+
+4.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
