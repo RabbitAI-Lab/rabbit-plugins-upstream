@@ -6,16 +6,23 @@ Use this router only after content and chapter structure are clear. Its purpose 
 
 A unique eligible active enterprise profile remains the automatic route defined in `profile-memory.md`; do not enter this router, reopen its reference images, or present built-in choices for that route.
 
+For every other visual route, resolve reference availability before this catalog. Unless the customer has already supplied a supported reference, explicitly named a built-in system, or explicitly delegated the built-in choice, ask exactly one customer-facing question:
+
+> 本次是否有希望参考的模板、企业母版或喜欢的意向图？有的话请上传静态截图；没有则从内置视觉系统中选择。
+
+This is a visual-source decision, not an open-ended aesthetic interview. A clear “有” or a supplied reference starts the supported static-reference route below; a clear “没有” starts this catalog route. Do not recommend, show, or choose a fallback built-in system before that decision is known. An already confirmed active enterprise Profile is a known visual binding, so it remains the sole no-repeat reuse exception; a customer request to change it reopens this reference-first choice.
+
 When the user chooses “use my reference” and supplies one supported reconstruct still or one to three supported corporate-family stills, do not use this router. Read `static-reference-vi.md`, apply its current-session readability gate, extract only visible static composition, hierarchy, image treatment, module language, and evidence treatment, render the unified VI standards board, and wait for clear confirmation of that exact current board. Do not infer dynamic rules, force one of the built-in systems, or reduce the reference to colors.
 
 If the current session cannot reliably locate static visual facts, follow the two recovery paths in `static-reference-vi.md`; do not guess or maintain a model matrix here. A clear PPT, webpage, video, state sequence, more than three corporate screenshots, or multiple reconstruct screenshots is an unsupported reference input rather than “no clear reference”: ask for a supported representative raster input and do not enter this router unless the customer explicitly abandons the reference route. Never infer movement from those sources.
 
 ## Catalog Display And Selection
 
-When no clear reference exists and no enterprise profile applies, enter this router. Apply one of these mutually exclusive rules:
+When no clear reference exists after the customer explicitly has no reference, has already named a concrete built-in system, or has explicitly delegated the built-in choice, and no enterprise profile applies, enter this router. Apply one of these mutually exclusive rules:
 
 - If the user has already specified one concrete built-in system, adopt it directly without displaying the catalog.
-- Show a category subset only when the user has proactively and explicitly constrained the acceptable range of the built-in catalog and that constraint maps unambiguously to one declared category. Determine the user's stated scope from meaning rather than literal phrase matching. The current business-oriented subset is **严谨咨询报告** and **稳重企业年报**; the current design-led or less-business-oriented subset is **黑白荧光卡片** and **杂志图文拼贴**.
+- Show a category subset only when the user has proactively and explicitly constrained the acceptable range of the built-in catalog and that constraint maps unambiguously to one declared category. Determine the user's stated scope from meaning rather than literal phrase matching. The current business-oriented subset is **严谨咨询报告**、**稳重企业年报** and **正式政企蓝白**; the current data/product-oriented subset is **深色数据面板** and **极简产品留白**; the current design-led or less-business-oriented subset is **黑白荧光卡片**、**杂志图文拼贴** and **暖色品牌叙事**.
+- For compatibility with older routing notes, the design-led or less-business-oriented subset is **黑白荧光卡片** and **杂志图文拼贴**; **暖色品牌叙事** is now included in that same design-led range.
 - Otherwise, in the same round, show every system in the complete current built-in catalog below. Include each exact customer-facing name, one-line description, and bundled preview. Never omit a catalog entry because the Agent considers it less suitable.
 
 Report goal, audience, content, report type, and reading or presentation mode are recommendation inputs only. Use them to mark one or two displayed systems as **更推荐** and briefly explain the reason, but never to shrink the catalog or treat them as a user catalog-range constraint. Recommendation may order attention, but recommendation never replaces complete catalog display or removes an entry.
@@ -46,8 +53,12 @@ TaoHtml may recommend exactly one density from the report task and delivery mode
 | 严谨咨询报告 | 白底、结论式标题、高信息密度、严谨图表 | Strategy, diagnosis, research, evidence-heavy internal decision | `assets/visual-systems/rigorous-consulting-report/preview.svg` |
 | 稳重企业年报 | 稳重配色、图文平衡、品牌化版面、适度留白 | Board update, annual review, corporate narrative, ESG | `assets/visual-systems/corporate-annual-report/preview.svg` |
 | 杂志图文拼贴 | 图片切片、错位排版、大字标题和编辑杂志感 | Brand story, culture, editorial feature, image-led thought leadership | `assets/visual-systems/editorial-collage/preview.svg` |
+| 深色数据面板 | 深色底、数据图表、系统界面与指标层级，适合经营、产品和技术型汇报 | Operations, product analytics, technology, metric-driven review | `assets/visual-systems/deep-data-dashboard/preview.svg` |
+| 暖色品牌叙事 | 暖白、品牌色、叙事大图和呼吸感留白，适合品牌、文化与年度回顾 | Brand, culture, annual story, people-centered narrative | `assets/visual-systems/warm-brand-narrative/preview.svg` |
+| 极简产品留白 | 极简大留白、产品界面与逻辑拆解，适合产品发布、软件方案和清晰型汇报 | Product launch, software proposal, clear product explanation | `assets/visual-systems/minimal-product-whitespace/preview.svg` |
+| 正式政企蓝白 | 蓝白秩序、正式信息层级与结构化版面，适合政企汇报、申报与规划方案 | Government-enterprise briefing, application, planning, formal submission | `assets/visual-systems/formal-government-bluewhite/preview.svg` |
 
-Customer-facing naming always follows a familiar layout or visual name plus one concrete picture description. Preserve the four names and descriptions exactly.
+Customer-facing naming always follows a familiar layout or visual name plus one concrete picture description. Preserve all eight names and descriptions exactly.
 
 ## Load Only The Selected System
 
@@ -57,13 +68,13 @@ After selection, load only these files from the selected directory:
 2. `theme.css` for executable tokens and component/layout styling.
 3. `templates.html` for copyable page variants and low-capability-model examples.
 
-Use `preview.svg` only when presenting the choice. Do not load all four manifests or templates into the production context.
+Use `preview.svg` only when presenting the choice. Do not load all eight manifests or templates into the production context.
 
 ## Runtime Isolation
 
 Treat `assets/html-deck-template/index.html` as the runtime shell and the selected system as the presentation layer. Replace content sections and inject theme CSS, but keep runtime controls, navigation, hash routing, reveal state, fullscreen behavior, and offline constraints unchanged. A theme switch must never add a new state machine or require a remote asset.
 
-This router remains exactly four built-in systems in the current catalog; that current asset count is not a future catalog or default-display cap. A theme compiled after current-board confirmation is project-local and must be loaded explicitly with `--project-theme` under `project-theme-compiler.md`; never add it to this table or built-in asset directory.
+This router currently contains eight built-in systems. The catalog is complete for the current release, but the count is not a future default-display cap: any later built-in addition must join the complete display and be registered across the same runtime, IR, compiler, and packaging surfaces. A theme compiled after current-board confirmation is project-local and must be loaded explicitly with `--project-theme` under `project-theme-compiler.md`; never add it to this table or built-in asset directory.
 
 Use the production renderer with an explicit source kind. For a real local source image:
 

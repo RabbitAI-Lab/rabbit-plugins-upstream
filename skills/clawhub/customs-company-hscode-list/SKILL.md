@@ -1,7 +1,7 @@
 ---
 name: customs-company-hscode-list
 description: "Query paginated HS code trade data for a company — retrieve HS codes with trade counts, amounts, and percentages for supplier product-mix analysis.\n\nTrigger: customs HS code list, paginated HS code query, company product category details, trade classification breakdown, HS code drill-down"
-metadata: {"version":"1.0.0","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🔢","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.1","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🔢","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # Customs Company HS Code Trade List
@@ -60,6 +60,15 @@ Use this script to get account information for UPKUAJING_API_KEY: `auth.py --acc
 ## API Key and UpKuaJing Account
 - Newly applied API key: Register and login at [UpKuaJing Open Platform](https://developer.upkuajing.com/), then bind account
 
+### **Report Skill Call Errors**
+When an API call fails or returns abnormal data (server error, timeout, malformed response, etc.), explain the anomaly to the user in natural language and ask whether to report it to the platform for troubleshooting. Only run the report after user confirmation:
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/customs/company/hscode/list","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"Company HS code list query failed with a server error"}'
+```
+- Do not report normal business conditions (insufficient balance, invalid API key, parameter errors) — handle them via their own flows
+- Error reporting does not incur query fees
+- **Parameters**: See [Error Report API](references/skill-error-report-api.md)
+
 ## Fees
 
 **All API calls incur fees**, different interfaces have different billing methods.
@@ -112,10 +121,12 @@ python scripts/customs_company_hscode_list.py --params '{"companyId":100001,"com
 - **API key invalid/non-existent**: Check `UPKUAJING_API_KEY` in `~/.upkuajing/.env` file
 - **Insufficient balance**: Guide user to top up
 - **Invalid parameters**: **Must first check the corresponding API documentation in references/ directory**, get correct parameter names and formats from documentation, do not guess
+- **Skill call errors / abnormal responses**: Explain to the user and, with user confirmation, report to the platform via `python scripts/error_report.py` (see [Report Skill Call Errors](#report-skill-call-errors))
 
 ### API Documentation Reference
 
 - Company HS Code List: Check [references/customs-company-hscode-list-api.md](references/customs-company-hscode-list-api.md)
+- Error Report: Check [references/skill-error-report-api.md](references/skill-error-report-api.md)
 
 ## Best Practices
 

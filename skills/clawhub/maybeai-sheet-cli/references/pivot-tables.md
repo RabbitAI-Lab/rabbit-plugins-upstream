@@ -33,7 +33,7 @@ CLI:
 ```bash
 mbs pivot preview --doc-id <DOC_ID> --worksheet-name SourceData --spec pivot-config.json --output table
 mbs pivot upsert --doc-id <DOC_ID> --target-worksheet-name PivotResult --anchor-cell A1 --spec pivot-config.json
-mbs excel-worksheet read --doc-id <DOC_ID> --worksheet-name PivotResult --range A1:H30 --output table
+mbs range read --doc-id <DOC_ID> --worksheet-name PivotResult --range A1:H30 --output table
 ```
 
 Use `--dry-run` before mutation when you need to confirm the write request
@@ -167,7 +167,7 @@ mbs pivot preview --doc-id <DOC_ID> --worksheet-name SourceData --spec pivot-con
 After `upsert`, verify the written worksheet:
 
 ```bash
-mbs excel-worksheet read --doc-id <DOC_ID> --worksheet-name PivotResult --range A1:H30 --output table
+mbs range read --doc-id <DOC_ID> --worksheet-name PivotResult --range A1:H30 --output table
 mbs workbook list-worksheets --doc-id <DOC_ID> --output table
 ```
 

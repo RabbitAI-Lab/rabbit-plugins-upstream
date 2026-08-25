@@ -1,42 +1,56 @@
-## Description: <br>
-Building edition of iaiops for facility, HVAC, BMS, and building automation work over BACnet/IP, Modbus-TCP/RTU, IO-Link, MQTT, and supervisory BAS controller REST layers with read-first workflows and MOC-gated writes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Building edition of iaiops for facility, HVAC, BMS, and building automation workflows over BACnet/IP, Modbus, IO-Link, MQTT, and BAS controller REST layers, with read-first operations and MOC-gated writes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[zw008](https://clawhub.ai/user/zw008)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, facilities engineers, and authorized building operations teams use this skill to inspect building automation systems, gather point and trend data, diagnose HVAC and dataflow issues, and prepare tightly gated equipment-changing commands.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Write-capable BACnet, BAS, and MQTT operations can affect active building equipment if used without authorization or review.
+
+Mitigation: Install only for authorized operators, keep dry-run mode and approval gates enabled, and require explicit MOC approval before write-capable actions.
+
+Risk: The skill depends on an external iaiops package whose provenance is not established by server-resolved source metadata.
+
+Mitigation: Verify the package source and release integrity before installation or deployment.
+
+Risk: Live HVAC write, COV, trend, physical RS-485, live IO-Link master, and some BAS live-device behaviors are marked as needing verification in the artifact.
+
+Mitigation: Validate these paths in a controlled environment before relying on them for production building operations.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, facility engineers, and building automation operators use this skill to discover, inspect, diagnose, and plan controlled actions across HVAC, BMS, meter, sensor, alarm, trend, and cross-protocol facility data. Write-capable actions are framed as dry-run and MOC-gated operator workflows. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Unauthorized or poorly controlled write actions could affect active building automation equipment. <br>
-Mitigation: Install only when authorized for the target systems, keep write tools in dry-run unless a real MOC approval process is in place, and require explicit operator approval before writes. <br>
-Risk: Life-safety, fire, smoke, egress, or pressurization points could be harmed if treated as ordinary control points. <br>
-Mitigation: Keep those point classes out of scope and verify they remain excluded before connecting to live systems. <br>
-Risk: Live HVAC write, COV, trend, physical RS-485, live IO-Link master, and some BAS controller behaviors may not be fully verified in every environment. <br>
-Mitigation: Use read-first discovery and snapshots, validate behavior on non-production or mock systems where possible, and treat unverified live operations as requiring human review. <br>
+**Output Format:** [Markdown and plain text with inline commands and configuration values]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [Iaiops Building ClawHub release](https://clawhub.ai/zw008/skills/iaiops-building) <br>
+**Other Properties Related to Output:** [Includes read-first workflow guidance and approval-gated write posture for building-system operations.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration instructions] <br>
-**Output Format:** [Markdown with tool names, command examples, structured findings, and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-first building automation workflows with explicit dry-run and approval gating for high-impact write operations.] <br>
+0.23.0 (source: ClawHub release evidence)
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

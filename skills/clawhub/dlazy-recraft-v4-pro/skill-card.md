@@ -1,45 +1,60 @@
-## Description: <br>
-4MP high-resolution raster image generation for print-ready assets and large-scale use. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates 4MP high-resolution raster images through the dLazy hosted Recraft V4 Pro API for print-ready assets and large-format use.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users invoke this skill to generate high-resolution raster images through the dLazy hosted Recraft V4 Pro service. It is suitable for creating print-ready visual assets and large-format imagery from prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a third-party CLI and hosted image-generation service. <br>
-Mitigation: Verify that the dLazy CLI package and service are trusted before installing or invoking the skill. <br>
-Risk: API keys may be stored in a local CLI configuration file when using persistent login. <br>
-Mitigation: Use DLAZY_API_KEY for per-invocation authentication on shared or untrusted machines, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Local media paths supplied to the CLI may be uploaded to dLazy-hosted storage. <br>
-Mitigation: Only pass files that are appropriate to upload to the third-party service. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to generate high-resolution raster images via the dLazy CLI, optionally saving generated assets locally or running jobs asynchronously.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-pro) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Images, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON responses containing generated image URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image outputs are returned as dLazy-hosted URLs; asynchronous requests may return a task identifier for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and referenced local media are sent to dLazy-controlled cloud services for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting sensitive prompts or media unless the user accepts dLazy's service handling for that content.
+
+Risk: Authentication may store a dLazy API key in the local CLI configuration.
+
+Mitigation: Use normal local credential hygiene and rotate or revoke the API key from the dLazy dashboard when needed.
+
+Risk: A global CLI install persists a third-party executable on the system.
+
+Mitigation: Use the pinned npx invocation when a non-persistent install is preferred.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-pro)
+- [dLazy CLI homepage](https://github.com/dlazyai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, JSON, image files, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated image URLs are hosted by dLazy; outputs can also be saved to a local path when requested.]
+
+## Skill Version(s):
+
+1.3.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

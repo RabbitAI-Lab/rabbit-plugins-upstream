@@ -2,7 +2,7 @@
 
 [English](README_EN.md)
 
-> **别再靠感觉追盘前涨幅榜。安装 Money Claw，把盘前异动转成可验证、可复盘、可执行的量化决策流程。**
+> **别再靠感觉追盘前或盘后涨幅榜。安装 Money Claw，把异动转成可验证、可复盘、可执行的量化决策流程。**
 
 [立即安装](#安装) · [查看使用示例](#使用示例) · [购买定制版量化-SKILL](#购买定制版量化-skill)
 
@@ -10,9 +10,20 @@
 
 > **法律提示：** 公开版及定制开发仅定位为通用软件、数据处理和量化研究工具，不提供个性化荐股、证券/期货投资咨询、代客理财、经纪撮合、资金托管或自动代客下单服务。
 
-面向美股低流通盘、低价股和 extreme squeeze 的 Codex SKILL。从盘前异动榜开始，依次验证股本供应、基线流动性、盘前质量、正式开盘 Gap、VWAP、周转速度、停牌及稀释风险，输出可执行的观察与风控清单。
+面向美股低流通盘、低价股和 extreme squeeze 的 Codex SKILL。从盘前或盘后异动榜开始，依次验证股本供应、消息质量、基线流动性、Gap、VWAP、周转速度、停牌及稀释风险，输出可执行的观察与风控清单。
 
 目标是研究和筛选可能触发日内最高涨幅 `+500%` 的极端事件，不预测确定收益。
+
+## 亚太用户与 English Delivery
+
+> **English scope:** Money Claw primarily serves investors and traders in Asia-Pacific countries who
+> monitor U.S. market sessions and issuer disclosures. The workflow keeps U.S. Eastern Time (ET) as
+> the primary trading reference and can show the user's local time zone as a secondary reference.
+
+英文为亚太跨市场使用场景的默认交付语言；用户明确指定中文或其他语言时遵从其要求。所有
+盘前、正式开盘和盘后时段均以 ET 为准；用户提供所在地或时区后，才补充对应本地日期和
+时间，避免把不同亚太国家的隔夜行情误读为同一交易日。发行人新闻稿、SEC 标题、URL 与
+申报标签保留英文原文。
 
 ## 研究案例
 
@@ -22,9 +33,26 @@
 
 这些代码用于验证模型对不同 price-volume path 的识别能力，不代表全部为事前实盘信号，也不构成未来收益承诺。精确研究口径保存在内部 reference 中，README 不展示单只股票的日期和涨幅。
 
+## 盘后榜案例：FGI 与 GXAI
+
+盘后榜不是直接买入信号，而是下一交易日候选发现层。工作流把候选拆成三条可验证路径：
+
+- `AFTER_HOURS_EARNINGS`：以 GXAI 类型为代表，必须有可核验的业绩或正式公司披露支撑。
+- `AFTER_HOURS_OFFICIAL_NEWS`：发行人官网、IR 或 newsroom 在核验窗口内直接发布的原始
+  消息。必须记录原始 URL、标题、发布时间和事实类型；只有披露客户/合同主体、金额或
+  期限、收入影响等事实时，才能称为新增订单证明。
+- `AFTER_HOURS_LOW_SUPPLY`：以 FGI 类型为代表，必须核验低总股本/低 float，同时排除 ATM、注册转售、warrant、PIPE、equity line 等新增供给风险。
+
+> **FGI 案例复盘：** 用户反馈 Money Claw 从盘后涨幅榜识别出 FGI，并在后续交易中实现盈利。用户提供的时点截图显示，FGI 总股本约 `193.10万股`、当时涨幅约 `+147.78%`，体现了“盘后异动 + 紧供应 + 次日再确认”路径的研究价值。这是未经独立审计的用户个案，仅用于说明筛选流程，不代表典型结果、事前收益承诺或未来表现。
+
+FGI 与 GXAI 说明同一件事：盘后涨幅本身只是入口，真正可复用的是“消息/供应解释 → 流动性门槛 → 次日盘前与开盘复核”。合格盘后候选最高只输出 `WATCH`，不得直接输出 `EXECUTE`。
+官网消息即使尚未对应 8-K，也可构成已核验催化；但战略规划、品牌重启或合作意向必须标记
+为 `OFFICIAL_NEWS_NOT_ORDER`，不能写成新订单发酵。官网利好消息不能覆盖 SEC 中已确认的
+ATM、注册转售、PIPE 或其他即时供给风险。
+
 ## 为什么安装
 
-- **减少盯盘噪音**：把盘前涨幅榜转换成结构、事件、执行三层筛选结果。
+- **减少盯盘噪音**：把盘前与盘后涨幅榜转换成结构、事件、执行三层筛选结果。
 - **拒绝模糊信号**：数据不足时输出 `WAIT_DATA`，不拿猜测替代 float、Gap、VWAP 或 dilution 数据。
 - **统一模型状态**：输出 `EXECUTE`、`WAIT_OPEN`、`WAIT_DATA`、`WATCH`、`EXCLUDE`；这些是量化门槛状态，不是针对用户的买卖建议。
 - **可以批量复用**：既能让 Codex 分析截图和实时行情，也能用 Python 对 CSV/JSON 股票池批量评分。
@@ -36,9 +64,13 @@
 
 ```mermaid
 flowchart LR
-    A["全市场/盘前异动榜"] --> B["证券类型与时间口径"]
+    A["全市场/盘前与盘后异动榜"] --> B["证券类型与时间口径"]
     B --> C["低价 + 低基线流动性 + 紧供应"]
-    C --> D["盘前 Gap、换手、价差、高点回撤"]
+    C --> AH{"盘后候选？"}
+    AH -->|"是"| AR["业绩 / 发行人官网消息 / 已核验紧供应"]
+    AR --> AW["WATCH：次日重新核验"]
+    AW --> D["盘前 Gap、换手、价差、高点回撤"]
+    AH -->|"否"| D
     D --> E{"正式开盘路径"}
     E -->|"Gap ≥ 100%"| F["Conventional Gap"]
     E -->|"Gap < 20% + 预热量"| G["CPHI Subtype"]
@@ -52,7 +84,7 @@ flowchart LR
 
 1. **结构候选**：前收 `$0.30–$5.00`、20日中位成交额不超过 `$1.00m`、低 float 或低总股本。
 2. **事件确认**：盘前强度、正式开盘 Gap、供应周转和 VWAP 结构。
-3. **可执行交易**：首个5分钟结构、spread、停牌和 dilution overhang 全部通过。
+3. **可执行交易**：首个5分钟结构、spread、停牌和盘前供给风险核验全部通过；确认存在供给风险直接 `EXCLUDE`。
 
 核心公式：
 
@@ -63,6 +95,10 @@ pre_turnover      = pre_volume / supply_shares
 regular_turnover  = regular_volume / supply_shares
 spread_pct        = (ask - bid) / ((ask + bid) / 2) * 100
 pre_high_fade_pct = (pre_price / pre_high - 1) * 100
+after_gap_pct      = (after_price / regular_close - 1) * 100
+after_turnover     = after_volume / supply_shares
+after_spread_pct   = (after_ask - after_bid) / ((after_ask + after_bid) / 2) * 100
+after_high_fade_pct= (after_price / after_high - 1) * 100
 ```
 
 ## 安装
@@ -95,6 +131,15 @@ Copy-Item -Recurse -Force '.\money-claw-us-stocks' (Join-Path $codexRoot 'skills
 ```
 
 ```text
+使用 $money-claw-us-stocks 分析今天盘后涨幅榜，区分业绩支撑与紧供应路径，排除新增供给风险，并生成次日复核清单。
+```
+
+```text
+Use $money-claw-us-stocks to reconcile today's issuer newsroom releases with SEC filings, classify
+the catalyst, and distinguish a verified order from a strategy-only announcement.
+```
+
+```text
 Use $money-claw-us-stocks to rank today's U.S. premarket movers and produce an opening confirmation checklist.
 ```
 
@@ -111,13 +156,16 @@ python .\scripts\score_candidates.py .\candidates.json --format json
 
 - 结构：`security_type`、`listed_days`、`prev_close`、`float_shares`、`total_shares`、`median_dollar_volume_20`
 - 盘前：`pre_price`、`pre_high`、`pre_volume`、`bid`、`ask`
+- 盘后：`regular_close`、`after_price`、`after_high`、`after_volume`、`after_bid`、`after_ask`、`after_hours_catalyst_quality`、`after_hours_supply_thesis`
+- 官网消息：`issuer_news_status`、`issuer_news_checked_at`、`issuer_news_title`、`issuer_news_published_at`、`issuer_news_url`、`issuer_news_type`、`issuer_news_materiality`
 - 开盘：`open_price`、`last_price`、`regular_volume`、`vwap`、`first_5m_structure`
 - CPHI路径：`prior_abnormal_volume_warmup`、`turnover_expanding`
-- 风险：`split_today`、`post_split`、`halted`、`dilution_overhang`
+- 风险：`split_today`、`post_split`、`halted`、`dilution_overhang`、`premarket_supply_risk`、`supply_risk_type/source/checked_at`
 
 JSON输出增加：
 
-- `path_type`：`CONVENTIONAL_GAP`、`CPHI_SUBTYPE`、`NONE`
+- `path_type`：`CONVENTIONAL_GAP`、`CPHI_SUBTYPE`、`AFTER_HOURS_EARNINGS`、`AFTER_HOURS_OFFICIAL_NEWS`、`AFTER_HOURS_LOW_SUPPLY`、`NONE`
+- `official_issuer_news`：官网消息的 ET 核验窗口、标题、发布时间、原始 URL、事实类型及订单证明状态
 - `risk_flags`：停牌、稀释、post-split、供应代理和缺失数据
 - `evidence_score`：证据评分，不是上涨概率
 
@@ -128,8 +176,8 @@ JSON输出增加：
 | `EXECUTE` | 模型门槛全部确认；不等于买入建议或自动下单指令 |
 | `WAIT_OPEN` | 强盘前候选，等待正式开盘 |
 | `WAIT_DATA` | 关键字段缺失 |
-| `WATCH` | 部分因子符合、执行门槛失败或正在停牌 |
-| `EXCLUDE` | 证券类型、当日split、结构或事件强度失败 |
+| `WATCH` | 部分因子符合、执行门槛失败、正在停牌，或盘后路径已确认但必须等待次日复核 |
+| `EXCLUDE` | 证券类型、当日split、结构/事件强度失败，或正式来源确认存在盘前供给风险 |
 
 ## 风控
 

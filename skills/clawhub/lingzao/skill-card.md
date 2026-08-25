@@ -1,48 +1,64 @@
-## Description: <br>
-灵造 helps WorkBuddy, OpenClaw, Codex, and similar agents support creator research and self-media operations across Xiaohongshu, Douyin, TikTok, Instagram, YouTube, and WeChat public-account workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lingzao helps WorkBuddy, OpenClaw, Codex, and similar agents route cross-platform creator research and self-media operations, with optional API-key access for public-content lookup, comments, video transcript extraction, WeChat article data, and creator image generation.
 
-## Publisher: <br>
-[itxiaohao](https://clawhub.ai/user/itxiaohao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[itxiaohao](https://clawhub.ai/user/itxiaohao)
 
-## Use Case: <br>
-External creators, marketers, and agent users use this skill to plan topics, diagnose accounts, design titles and covers, rewrite drafts, run pre-publish checks, review post-publish data, prepare cross-platform content packages, and call Lingzao public-data or image-generation services after confirming scope and credit use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Public links, prompts, and selected reference images may be sent to the Lingzao service when paid lookup or image generation is used. <br>
-Mitigation: Use the API key only for intended tasks, avoid private platform credentials or sensitive images, and confirm the scope before service calls. <br>
-Risk: Paid public-data lookups, comment reads, transcript extraction, article metrics, and image generation can consume Lingzao credits. <br>
-Mitigation: Keep credit-budget confirmations enabled, start with a small first-pass scope, and require explicit approval before larger plans. <br>
-Risk: Knowledge-base export or local file output can persist generated analysis beyond the chat. <br>
-Mitigation: Write or sync outputs only after the user intentionally selects the destination and confirms the export. <br>
-Risk: A custom base URL or update command could route requests somewhere unexpected. <br>
-Mitigation: Review the configured base URL and approve update or setup commands before running them. <br>
+## Use Case:
 
+External creators, content operators, and agent users use Lingzao to plan, diagnose, rewrite, check, and review creator workflows across Xiaohongshu, Douyin, TikTok, Instagram, YouTube, WeChat Channels, and WeChat official accounts. With configured online access, it can support public-content research, comment review, transcript extraction, article data lookup, and creator image generation.
 
-## Reference(s): <br>
-- [Lingzao Skill page](https://clawhub.ai/itxiaohao/skills/lingzao) <br>
-- [Lingzao dashboard and setup](https://lingzao.atian.vip) <br>
-- [Lingzao feature usage manual](https://my.feishu.cn/docx/Y2HQdj5mzoFx4vxfij3cl9TRnjh?from=from_copylink) <br>
-- [Package index](artifact/index.md) <br>
-- [Main skill instructions](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration, code, text] <br>
-**Output Format:** [Markdown, plain text, shell command examples, local files, and optional JSON from CLI commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require LINGZAO_API_KEY and confirmed credit use for public-data lookup, comments, transcript extraction, article metrics, or image generation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.94 (source: evidence.release.version and artifact/VERSION) <br>
+Risk: Online lookup and image generation can contact Lingzao services using a configured API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that online creator-research workflow is intended, configure the API key deliberately, and review the requested scope before approving expanded lookups or generation.
+
+Risk: Selected reference images, screenshots, or private visual materials may be uploaded to Lingzao for the current generation request.
+
+Mitigation: Do not provide sensitive or private images unless the user is comfortable with that upload; use per-run temporary paths and avoid storing reference images in the skill repository.
+
+Risk: Broad routing can expand into more keywords, accounts, details, comments, transcripts, profile depth, or image counts than the user first requested.
+
+Mitigation: Keep the first pass narrow and ask for confirmation before increasing the business scope of online research or generation.
+
+Risk: Creator-operation advice and publishable copy may include unsupported claims, diversion language, or implied guarantees if not reviewed.
+
+Mitigation: Apply the included platform-management and content-compliance gates before final Xiaohongshu-facing output, and avoid promises of viral growth, monetization, platform approval, or copying another creator's content.
+
+## Reference(s):
+
+- [Lingzao ClawHub skill listing](https://clawhub.ai/itxiaohao/skills/lingzao)
+- [Lingzao dashboard and setup tutorials](https://lingzao.atian.vip)
+- [Lingzao feature usage manual](https://my.feishu.cn/docx/Y2HQdj5mzoFx4vxfij3cl9TRnjh?from=from_copylink)
+- [Artifact package index](artifact/index.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Code, Files]
+
+**Output Format:** [Markdown guidance with inline shell commands, optional JSON command output, and locally saved generated image files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Online lookup and image-generation commands require a configured Lingzao API key; generated images are saved to caller-provided local output paths.]
+
+## Skill Version(s):
+
+0.1.105 (source: server release metadata and artifact VERSION)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

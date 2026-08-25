@@ -78,7 +78,7 @@ All via environment variables. Copy `.env.example` to `.env` and fill in.
 | `EDGE_TTS_CMD` | `edge-tts` | Edge TTS CLI command |
 | `SPEECHIFY_OUTPUT` | `/tmp/speech-output.ogg` | Default output path |
 | `SPEECHIFY_VAULT_ITEM` | `speechfy_key` | Vaultwarden item name |
-| `VAULT_RESOLVER` | `/opt/data/bin/vault-resolver` | Vault path |
+| `VAULT_RESOLVER` | `vault-resolver` | Vault path |
 
 **Key resolution:** `SPEECHIFY_API_KEY` env var → vault-resolver → empty (skip).
 

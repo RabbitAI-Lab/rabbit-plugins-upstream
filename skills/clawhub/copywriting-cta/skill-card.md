@@ -1,44 +1,55 @@
-## Description: <br>
-Designs end-of-article calls to action for blog posts, newsletters, essays, and long-form content, including copy, structure, persuasive mechanisms, A/B test guidance, and accessibility checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Design end-of-article CTAs for blog posts, newsletters, essays, and long-form content, including copy, structure, mechanism choice, A/B testing guidance, and accessibility review.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Writers, newsletter operators, and content marketing teams use this skill to turn article context, target audience, funnel stage, and conversion objective into a concrete CTA recommendation with copy, layout, mechanism, A/B test guidance, and accessibility checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The declared tool list is broader than a CTA writing aid usually needs, so accepted actions could include file reads or edits outside the intended writing workflow. <br>
-Mitigation: Review any proposed file operation before accepting it and restrict runtime tools to the minimum needed for copywriting and review when possible. <br>
+## Use Case:
 
+Writers, editors, marketers, and content teams use this skill to design or improve a focused call-to-action at the end of an article. It helps match the CTA objective, audience, funnel stage, copy, layout, testing plan, and accessibility requirements to the publishing context.
 
-## Reference(s): <br>
-- [A/B Testing CTAs - Priority, Method, Pitfalls](references/ab-testing.md) <br>
-- [Accessibility Checklist for CTA Blocks](references/accessibility.md) <br>
-- [Anti-Patterns - Failure Modes to Call Out by Name](references/anti-patterns.md) <br>
-- [CTA Mechanisms - When Each Helps, When Each Backfires](references/mechanisms.md) <br>
-- [CTA Archetypes (A through K)](references/taxonomy.md) <br>
-- [ClawHub release page](https://clawhub.ai/samber/copywriting-cta) <br>
-- [Project homepage](https://github.com/samber/cc-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown recommendation with structured CTA copy, layout guidance, mechanism rationale, A/B test plan, accessibility checklist, anti-patterns, and follow-up options] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Interactive interview inputs include article context, primary objective, audience relationship, funnel stage, mechanism preference, and optional brand or language constraints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill can ask structured questions and may request access to article content to tailor CTA recommendations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only allow it to read or edit article files when that workflow is intentional, and review generated CTA copy before publishing.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/samber/skills/copywriting-cta)
+- [OpenClaw Homepage](https://github.com/samber/cc-skills)
+- [A/B Testing CTAs](references/ab-testing.md)
+- [Accessibility Checklist for CTA Blocks](references/accessibility.md)
+- [CTA Anti-Patterns](references/anti-patterns.md)
+- [CTA Persuasion Mechanisms](references/mechanisms.md)
+- [CTA Archetypes](references/taxonomy.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown recommendation with CTA copy, structure, mechanism guidance, A/B test plan, accessibility check, and anti-pattern notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may ask structured user questions before producing the recommendation.]
+
+## Skill Version(s):
+
+1.1.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

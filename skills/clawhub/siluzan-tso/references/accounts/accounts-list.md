@@ -14,17 +14,17 @@
 siluzan-tso list-accounts [选项]
 ```
 
-| 选项                    | 说明                                                                             |
-| ----------------------- | -------------------------------------------------------------------------------- | ---------------------- |
-| `-m, --media <type>`    | 媒体类型（留空查全部）：`Google \| TikTok \| Yandex \| MetaAd \| BingV2 \| Kwai` |
-| `-k, --keyword <text>`  | 按账户名称或 ID 搜索                                                             |
-| `-s, --status <status>` | 账户状态：`normal \| invalid \| all`（默认 all）                                 |
-| `-p, --page <n>`        | 页码（默认 1）                                                                   |
-| `--page-size <n>`       | 每页数量（默认 20）                                                              |
-| `--json-out`            | 输出原始 JSON                                                                    |
-| `--unicode`             | 表格使用 Unicode 线框；**默认**为 ASCII `+-                                      | ` 线框（兼容各类终端） |
-| `--plain`               | 已默认 ASCII，无需再传；保留兼容旧脚本                                           |
-| `--refresh-dp`          | 强制重拉 Datapermission（排查「本页全部 OAuth 失效」类会话异常）                 |
+| 选项                    | 说明                                                                               |
+| ----------------------- | ---------------------------------------------------------------------------------- | ---------------------- |
+| `-m, --media <type>`    | 媒体类型（留空查全部）：`Google \| TikTok \| Yandex \| MetaAd \| BingV2 \| Kwai`   |
+| `-k, --keyword <text>`  | 统一模糊搜索：账户名称 **或** ID（含 Google CID 带横杠）；透传 Sammamish `keyword` |
+| `-s, --status <status>` | 账户状态：`normal \| invalid \| all`（默认 all）                                   |
+| `-p, --page <n>`        | 页码（默认 1）                                                                     |
+| `--page-size <n>`       | 每页数量（默认 20）                                                                |
+| `--json-out`            | 输出原始 JSON                                                                      |
+| `--unicode`             | 表格使用 Unicode 线框；**默认**为 ASCII `+-                                        | ` 线框（兼容各类终端） |
+| `--plain`               | 已默认 ASCII，无需再传；保留兼容旧脚本                                             |
+| `--refresh-dp`          | 强制重拉 Datapermission（排查「本页全部 OAuth 失效」类会话异常）                   |
 
 **命令定位**：`list-accounts` 主打**精准查询账号信息**（列表、计数、按名称/ID 找户、`entityId` / `mediaCustomerId` / 币种 / 状态等元数据），**不是余额/消耗汇总工具**。JSON **不含**余额/消耗字段，表格也不显示余额列；**禁止**臆造数值——单户余额用 `balance`、全量余额预警用 `balance-scan`（P2）、多户消耗画像用 `accounts-digest`（P3）、单户消耗用 `stats`（均见 `accounts-balance-stats.md`）。
 
@@ -35,7 +35,7 @@ siluzan-tso list-accounts [选项]
 | 用户意图                      | 推荐命令（一步）                                                        | 脚本读落盘 JSON                                                                                         |
 | ----------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | 列出全部某媒体账户            | `list-accounts -m <媒体> --page-size 999 --json-out <dir>`              | `items[]`（`ma.mediaCustomerId`、`ma.mediaCustomerName`、`ma.currencyCode`、`ma.invalidOAuthToken` 等） |
-| 哪些账户 OAuth / 授权失效     | 同上（或 `-s invalid`）；表格看「授权状态」列                            | **`ma.invalidOAuthToken === true`**（勿用审核状态 / `mediaAccountState`）                               |
+| 哪些账户 OAuth / 授权失效     | 同上（或 `-s invalid`）；表格看「授权状态」列                           | **`ma.invalidOAuthToken === true`**（勿用审核状态 / `mediaAccountState`）                               |
 | 有多少个账户                  | 同上                                                                    | **`total`**（无需翻页；`itemCount < total` 时说明 page-size 不够大）                                    |
 | 只查某一个户                  | `list-accounts -m <媒体> -k <id或名称> --json-out <dir>`                | 无需大 page-size                                                                                        |
 | **Meta 全部账户 + 余额/消耗** | **`accounts-digest -m MetaAd --json-out <dir>`**（一步；内部翻页+分批） | `accounts-digest-metaad.json` → `data.items[]`（含 `balance`、`spend`）                                 |
@@ -73,17 +73,20 @@ siluzan-tso list-accounts -m Google --page 2 --page-size 999 --json-out ./snap-p
 
 **输出字段说明：**
 
-| 字段 / JSON 路径              | 说明                                                                                                                                                          |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ma.entityId`                 | 丝路赞内部 ID，`delink`/`share`/`reauth`、**`account-active-bills`** 等操作使用此 ID（**不是** `mediaCustomerId`）                                           |
-| `ma.mediaCustomerId`          | 媒体侧账户 ID（`stats`/`balance`/`accounts-digest` 的 `-a` 只用此字段）：Google/TikTok/Bing 多为数字；**Yandex 形如 `porg-…`**；Meta 常带 `act_`。**不是** `entityId` |
-| `ma.currencyCode`             | 账户主币种：`CNY` / `USD` 等；**表格有「币种」列**；报告/Excel 须与此一致，见 `references/accounts/currency.md`                                              |
-| `ma.mediaCustomerName`        | 账户名称（表格「账户名称」）                                                                                                                                  |
-| `ma.mediaAccountState` 等     | 平台开户/审核态（如 Approved / Linked）；**不是** OAuth 是否可用                                                                                              |
-| **`ma.invalidOAuthToken`**    | **OAuth 是否失效**：`true`=失效，`false`=正常。**表格必有「授权状态」列**（✅ 正常 / ⚠️ 失效），与此字段一一对应；判失效、筛 `-s invalid`、走 `reauth` 均看它 |
-| `ma.TTADInfo.status` 等       | 媒体侧投放/审核细态（TikTok 表格「审核状态」等）；**勿**当成 OAuth 授权状态                                                                                    |
+| 字段 / JSON 路径                       | 说明                                                                                                                                                                                                                                                  |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ma.entityId`                          | 丝路赞内部 ID，`delink`/`share`/`reauth`、**`account-active-bills`** 等操作使用此 ID（**不是** `mediaCustomerId`）                                                                                                                                    |
+| `ma.mediaCustomerId`                   | 媒体侧账户 ID（`stats`/`balance`/`accounts-digest` 的 `-a` 只用此字段）：Google/TikTok/Bing 多为数字；**Yandex 形如 `porg-…`**；Meta 常带 `act_`。**不是** `entityId`                                                                                 |
+| `ma.currencyCode`                      | 账户主币种：`CNY` / `USD` 等；**表格有「币种」列**；报告/Excel 须与此一致，见 `references/accounts/currency.md`                                                                                                                                       |
+| `ma.mediaCustomerName`                 | 账户名称（表格「账户名称」）                                                                                                                                                                                                                          |
+| `ma.mediaAccountState` 等              | 平台开户/审核态（如 Approved / Linked）；**不是** OAuth 是否可用                                                                                                                                                                                      |
+| **`ma.invalidOAuthToken`**             | **OAuth 是否失效**：`true`=失效，`false`=正常。**表格必有「授权状态」列**（✅ 正常 / ⚠️ 失效），与此字段一一对应；判失效、筛 `-s invalid`、走 `reauth` 均看它                                                                                         |
+| **`ma.scopeActivatedSources`**（可选） | **仅当本次 `list-accounts` 输出中出现该字段时才可读**：非空且存在未过期条目（看 `expireAt`）= 已激活；空数组或全部过期 = 未激活。出现时 Google 表格才有「套餐激活」列。**若 JSON/表格中无此字段/列：禁止向用户谈套餐是否激活，禁止臆造未激活/已激活** |
+| `ma.TTADInfo.status` 等                | 媒体侧投放/审核细态（TikTok 表格「审核状态」等）；**勿**当成 OAuth 授权状态                                                                                                                                                                           |
 
 > **Agent**：用户问「哪些授权失效 / OAuth 状态」时，读盘看 `items[].ma.invalidOAuthToken`，表格看「授权状态」列；**不要**用 `mediaAccountState` 或审核状态列代替。
+> 用户问「哪些买了套餐 / 是否激活套餐」时：**仅当**输出含 `ma.scopeActivatedSources`（或 Google 表格有「套餐激活」列）才可据此回答；**缺失时直接说明当前环境无法查询套餐激活状态**，不要用 `mediaAccountState` / 授权状态代替，也不要去猜。
+> **Google 单户**：若输出中能确认套餐**已激活**，可用 `account check-access -a <mediaCustomerId>` 再确认网关侧授权是否可用；若输出无激活字段，仍可直接跑 `check-access`（以返回 `status` 为准），**不要**先编造「未激活」。见 `accounts-permissions.md` § check-access。
 
 ---
 

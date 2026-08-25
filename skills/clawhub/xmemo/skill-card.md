@@ -1,48 +1,57 @@
-## Description: <br>
-XMemo gives agents persistent, user-owned memory with standalone runtime support for recall, search, handoff state, TODOs, expenses, and authentication diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Persistent, user-owned memory for agents. Use the standalone runtime to remember, recall, search, preserve restart continuity, manage TODOs and expenses, or diagnose XMemo when MCP tools are unavailable.
 
-## Publisher: <br>
-[xmemo](https://clawhub.ai/user/xmemo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xmemo](https://clawhub.ai/user/xmemo)
 
-## Use Case: <br>
-Developers and agents use XMemo to preserve useful project memory across sessions, retrieve prior decisions, manage handoff state, track TODOs and expenses, and diagnose XMemo authentication or service access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends memory, TODO, expense, and diagnostic requests to the hosted XMemo service. <br>
-Mitigation: Install and use it only when hosted XMemo service use is acceptable for the data being stored or retrieved. <br>
-Risk: Local credential storage is plaintext when --allow-plaintext is used. <br>
-Mitigation: Prefer XMEMO_KEY or a managed secret store; use --allow-plaintext only on a trusted machine within the user's local account boundary. <br>
-Risk: Temporary registration creates a limited sandbox and exposes a bind URL that can connect the sandbox to a user account. <br>
-Mitigation: Use temporary registration only for unattended or explicitly declined formal login flows, show the bind URL only to the intended user, and complete claim confirmation after the user claims it. <br>
-Risk: Stored memory may contain inappropriate secrets or sensitive data if the agent saves too broadly. <br>
-Mitigation: Do not save secrets, tokens, private keys, cookies, session IDs, or sensitive personal/customer data unless the user explicitly asks and the service's privacy posture supports it. <br>
+## Use Case:
 
+Developers and agent users use this skill to give agents durable memory, task continuity, TODO tracking, expense capture, and service diagnostics through XMemo.
 
-## Reference(s): <br>
-- [XMemo Skill Page](https://clawhub.ai/xmemo/skills/xmemo) <br>
-- [XMemo Publisher Profile](https://clawhub.ai/user/xmemo) <br>
-- [XMemo Service](https://xmemo.dev) <br>
-- [Operations Reference](artifact/references/operations.md) <br>
-- [Troubleshooting Reference](artifact/references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Memory recall and search can be compacted for terminal display; commands can emit JSON with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and bundled script constant) <br>
+Risk: Agent memories, TODOs, restart state, and expense entries are sent to the XMemo service under the user credential.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that data flow is acceptable, and avoid storing secrets or sensitive personal data unless the user explicitly approves and the service policy fits the use case.
+
+Risk: Using --allow-plaintext stores the issued token where same-user local processes may read it.
+
+Mitigation: Prefer XMEMO_KEY or a managed secret store; use --allow-plaintext only after accepting that local trust boundary.
+
+## Reference(s):
+
+- [XMemo Skill Operations](references/operations.md)
+- [XMemo Troubleshooting](references/troubleshooting.md)
+- [XMemo service](https://xmemo.dev)
+- [ClawHub skill page](https://clawhub.ai/xmemo/skills/xmemo)
+- [ClawHub publisher profile](https://clawhub.ai/user/xmemo)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and optional JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Standalone commands may send memory, TODO, restart-state, and expense data to the XMemo service under the active credential.]
+
+## Skill Version(s):
+
+1.1.12 (source: server release metadata and CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

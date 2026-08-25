@@ -1,43 +1,55 @@
-## Description: <br>
-AI social media video and content creation powered by CellCog for Instagram Reels, TikTok videos, Stories, carousels, and social posts, including full video production from a single prompt. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI social media video and content creation powered by CellCog for Instagram Reels, TikTok videos, Stories, carousels, and social posts from a single prompt.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-External creators, marketers, and developers use this skill to ask an agent to create or plan Instagram Reels, TikTok videos, Stories, carousels, and static social posts through CellCog. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, uploaded assets, and brand details are sent to the third-party CellCog service. <br>
-Mitigation: Use only data approved for CellCog processing and avoid submitting confidential, regulated, or sensitive brand material unless the deployment owner has approved that use. <br>
-Risk: Video generation may consume paid CellCog credits without producing a satisfactory result. <br>
-Mitigation: Start with small, low-cost tests, monitor credit usage, and review generated content before broader campaign use. <br>
-Risk: Generated social media content may not match brand, factual, accessibility, or platform requirements. <br>
-Mitigation: Have a human reviewer check accuracy, brand fit, captions, calls to action, and platform specifications before publishing. <br>
+## Use Case:
 
+External creators, marketers, and agent users use this skill to request CellCog-generated short-form videos, Instagram carousels, Stories, and static social posts from prompts and provided materials.
 
-## Reference(s): <br>
-- [CellCog homepage](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/instagram-reels-tiktok-cellcog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May trigger CellCog API usage through CELLCOG_API_KEY and can return generated social content or status text from the third-party service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: release evidence) <br>
+Risk: Prompts and user-provided social media materials may be sent to CellCog for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid including secrets, private customer data, regulated data, or unpublished business-sensitive assets unless CellCog terms and data handling have been reviewed.
+
+Risk: Generated social media video quality can be unpredictable and may consume credits without producing a usable result.
+
+Mitigation: Review generated outputs before publication and start with low-risk drafts, smaller scopes, and clear budget expectations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/cellcog/skills/instagram-reels-tiktok-cellcog)
+- [CellCog publisher profile](https://clawhub.ai/user/cellcog)
+- [CellCog homepage](https://cellcog.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with Python examples and installation commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include prompts, generated social media content requests, and CellCog API usage guidance.]
+
+## Skill Version(s):
+
+1.0.18 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

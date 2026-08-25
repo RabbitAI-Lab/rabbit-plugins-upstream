@@ -1,49 +1,61 @@
-## Description: <br>
-Turn a music track, source video audio, or mood-generated track into a beat-synced lyric video, slideshow, or kinetic promo where music drives pacing and optional user media is cut to the same beat grid. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns a music track or generated mood brief into a beat-synced HyperFrames video such as a lyric video, slideshow, or kinetic promo.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and creative agents use this skill to plan and build music-grounded HyperFrames videos from a provided or generated track, optional images or videos, and beat analysis. It supports storyboard planning, frame composition, assembly, verification, and final MP4 rendering. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill directs agents to silently update global HyperFrames skills before use. <br>
-Mitigation: Require explicit user confirmation before running any global skill update or other package-changing npx command. <br>
-Risk: The workflow can install Python dependencies, use authenticated media providers, and run render steps. <br>
-Mitigation: Confirm dependency installation, authenticated provider use, and rendering actions before execution, and keep credentials out of project-local environment files. <br>
-Risk: Some bundled visual templates use strobe-like effects that may be unsuitable for photosensitive audiences. <br>
-Mitigation: Avoid strobe templates or substitute lower-flash motion treatments when the audience may include photosensitive viewers. <br>
+## Use Case:
 
+Developers and creative operators use this skill to create beat-synced videos from music, optional user media, and generated or supplied visual plans. It guides an agent through audio analysis, storyboard planning, per-frame composition, assembly, verification, and rendering.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/music-to-video) <br>
-- [Frame Skeleton](references/frame-skeleton.md) <br>
-- [Planning](references/planning.md) <br>
-- [Storyboard Format](references/storyboard-format.md) <br>
-- [Template Catalog](references/template-catalog.md) <br>
-- [Motion Primitive Catalog](references/motion-primitive-catalog.md) <br>
-- [Montage](references/montage.md) <br>
-- [Frame Worker](sub-agents/frame-worker.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown storyboards, JSON timing data, HTML/CSS/JavaScript frame files, shell commands, configuration files, and rendered video artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces project files under a video workspace and a final MP4 render after verification and approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata) <br>
+Risk: The workflow runs HyperFrames commands and local scripts, may install Python audio libraries, writes project files under videos/<project>/, copies user-selected media, and may update related HyperFrames skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the proposed commands, project path, media sources, and skill-update prompt before execution; run in a dedicated workspace when handling sensitive media.
+
+Risk: Some available visual templates and motion primitives can create flash or strobe effects that may be unsuitable for photosensitive viewers.
+
+Mitigation: Avoid flash and strobe templates for sensitive audiences, or add a safe-mode review before rendering and sharing the video.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/music-to-video)
+- [Publisher Profile](https://clawhub.ai/user/heygen-com)
+- [Frame Skeleton Reference](references/frame-skeleton.md)
+- [Storyboard Format Reference](references/storyboard-format.md)
+- [Planning Reference](references/planning.md)
+- [Template Catalog](references/template-catalog.md)
+- [Motion Primitive Catalog](references/motion-primitive-catalog.md)
+- [Asset Treatments Reference](references/montage.md)
+- [Frame Worker Reference](sub-agents/frame-worker.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands, storyboard specifications, JSON analysis files, HTML composition files, and rendered video project artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent workflow guidance and local project files under videos/<project>, including audiomap.json, STORYBOARD.md, per-frame HTML compositions, index.html, and renders/video.mp4.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

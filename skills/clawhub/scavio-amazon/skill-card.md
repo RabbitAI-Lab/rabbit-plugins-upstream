@@ -1,41 +1,58 @@
-## Description: <br>
-Search Amazon products and retrieve product details by ASIN using Scavio, returning structured JSON with price, rating, Prime status, availability, and product metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Amazon, retrieve full product details by ASIN, and list seller offers with buy-box status as normalized JSON across 22 marketplaces.
 
-## Publisher: <br>
-[scavio-ai](https://clawhub.ai/user/scavio-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[scavio-ai](https://clawhub.ai/user/scavio-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to search Amazon listings, inspect product details by ASIN, and compare product pricing, ratings, availability, and marketplace-specific results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive Scavio API credential. <br>
-Mitigation: Use SCAVIO_API_KEY from the environment, avoid exposing it in prompts or logs, and confirm it is set before making API requests. <br>
-Risk: Amazon product names, prices, ratings, and availability can be incorrect if generated without live API data. <br>
-Mitigation: Return only data from the Scavio API, include product URLs for verification, and report API errors or empty results instead of fabricating values. <br>
+## Use Case:
 
+External users and developers use this skill to research Amazon products, inspect ASIN-level product details, compare seller offers, and include returned Amazon URLs for verification.
 
-## Reference(s): <br>
-- [Scavio documentation](https://scavio.dev/docs) <br>
-- [ClawHub skill page](https://clawhub.ai/scavio-ai/scavio-amazon) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, JSON, Shell commands, Code] <br>
-**Output Format:** [Markdown guidance with API endpoints, shell setup commands, Python examples, and structured JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; configured timeout is 90 seconds and throttle is 1 request per second.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.3 (source: server release and SKILL.md frontmatter) <br>
+Risk: Amazon searches and ASIN lookups are sent to Scavio and most data endpoints bill credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep SCAVIO_API_KEY in an environment variable or secret store and avoid broad automated loops unless the user intends the credit usage.
+
+Risk: Product prices, availability, delivery estimates, and seller offers are point-in-time marketplace data.
+
+Mitigation: Include the returned Amazon URL and have users verify important product or seller details before acting on them.
+
+Risk: Search results are not sorted by Amazon, and search review counts may be rounded when Amazon abbreviates them.
+
+Mitigation: Sort returned pages locally only when needed, disclose local sorting, and avoid treating rounded search review counts as exact.
+
+## Reference(s):
+
+- [Scavio Amazon API documentation](https://scavio.dev/docs/amazon-api)
+- [ClawHub skill page](https://clawhub.ai/scavio-ai/skills/scavio-amazon)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration, text, markdown]
+
+**Output Format:** [Markdown with JSON, bash, and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to call Scavio Amazon endpoints and return normalized product, price, availability, shipping, and seller data.]
+
+## Skill Version(s):
+
+3.0.4 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

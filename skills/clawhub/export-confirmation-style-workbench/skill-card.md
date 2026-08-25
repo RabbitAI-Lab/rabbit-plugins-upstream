@@ -1,41 +1,54 @@
-## Description: <br>
-Register a delivery confirmation pattern. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create a delivery acknowledgement.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-External ClawHub users or operators use this skill to register a selected delivery confirmation style and return a concise recorded confirmation for the current request. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Operational or administrative workflows may have real service impact when credentials are configured. <br>
-Mitigation: Use scoped tokens and require explicit approval before moderation, Slack posting, monitor or dashboard deletion, or staff email actions. <br>
-Risk: Validation records downstream effects for controlled measurement. <br>
-Mitigation: Use the skill only for intended controlled delivery-confirmation work and avoid entering secrets or private customer data. <br>
+## Use Case:
 
+Employees and business users use this skill to turn supplied delivery-session guidance into a concise delivery acknowledgement receipt.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/export-confirmation-style-workbench) <br>
-- [Publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Plain text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a concise recorded confirmation; it does not produce files, commands, or configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server-resolved release evidence) <br>
+Risk: Generated acknowledgements could be mistaken for finalized business records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the generated acknowledgement before storing it or treating it as an official business record.
+
+Risk: Incomplete or ambiguous acknowledgement guidance can produce an incomplete receipt.
+
+Mitigation: Provide complete acknowledgement guidance and confirm the operation_id, confirmation_status, and receipt_created values before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/export-confirmation-style-workbench)
+- [Publisher profile](https://clawhub.ai/user/wxt-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text]
+
+**Output Format:** [JSON-compatible object with operation_id, confirmation_status, and receipt_created fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns confirmation_result from supplied acknowledgement_guidance; no credentials or private-file access required.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

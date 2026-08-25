@@ -1,44 +1,69 @@
-## Description: <br>
-Convert Persian RTL PDF slide decks into offline-first, accessible, exam-review HTML study-guide bundles using a staged fidelity-first workflow, evidence-based corrections, and automated QA. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts operator-authorized Persian and English RTL lecture PDFs into offline HTML study guides with dual OCR, rendered-page evidence, optional AI-assisted correction, source-linked study aids, QA gates, and ZIP verification.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-External users and developers use this skill to convert authorized Persian RTL educational PDF slide decks into self-contained HTML study-guide bundles with fidelity checks, review aids, reports, and optional ZIP packaging. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unauthorized or sensitive PDFs could be processed or shared in generated study-guide bundles. <br>
-Mitigation: Install and use only for authorized Persian RTL educational PDFs, keep processing local by default, and review generated reports and ZIP contents before sharing. <br>
-Risk: Optional external images or fonts could introduce provenance, copyright, watermark, or tracking concerns. <br>
-Mitigation: Use external supplementary assets only with operator approval, store them locally, inspect them visually, label provenance, and avoid trackers or misleading claims. <br>
-Risk: Incorrect extraction, enrichment, or QA claims could mislead readers about source-slide content. <br>
-Mitigation: Preserve extracted source text separately from editorial additions, base repairs on rendered-page evidence, record measured counts, and report missing or uncertain content honestly. <br>
+## Use Case:
 
+External users, developers, and education teams use this skill to turn authorized Persian or mixed RTL educational PDFs into accessible offline study guides with searchable source evidence, flashcards, quizzes, tables, summaries, and QA reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/persian-pdf-studyguide-forge) <br>
-- [Agent discovery card](artifact/AGENT_DISCOVERY.md) <br>
-- [Build manifest template](artifact/templates/build_manifest.yaml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with local HTML, assets, reports, scripts, configuration files, and optional ZIP archive outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces offline-first Persian RTL study-guide bundles, preserves source-slide evidence separately from enrichment, and reports measured QA outcomes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release evidence) <br>
+Risk: The skill processes PDFs that may contain private or copyrighted material.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in a dedicated workspace with PDFs the operator supplied or is authorized to process, and confirm distribution rights before sharing generated guides.
+
+Risk: Optional AI provider mode can send selected OCR or source text to configured providers.
+
+Mitigation: Keep network mode disabled unless explicitly approved, use provider configurations that reference environment-variable names, and avoid storing literal secrets in artifacts.
+
+Risk: OCR and AI-assisted reconstruction can introduce omissions, garbled RTL text, or factual errors.
+
+Mitigation: Review rendered-page evidence, fidelity reports, source-linked references, flashcard verification results, and QA gates before relying on generated educational or medical content.
+
+Risk: Dependency drift can make pipeline behavior non-repeatable.
+
+Mitigation: Pin dependencies or use a lockfile for repeatable installs before production use.
+
+Risk: The security guidance says not to rely on the bundled manifest until the publisher fixes its package verification mismatch.
+
+Mitigation: Treat manifest verification as advisory for this release and rely on independent workspace review and scan results before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/persian-pdf-studyguide-forge)
+- [Publisher profile](https://clawhub.ai/user/orionshaowswmw)
+- [Workflow playbook](docs/WORKFLOW_PLAYBOOK.md)
+- [Agent discovery card](AGENT_DISCOVERY.md)
+- [Golden example output](examples/01_sleep_eating_review.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON configuration examples, generated HTML study guides, QA reports, manifests, and ZIP packages]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are workspace-local by default; optional provider-assisted steps require explicit operator approval and local provider configuration.]
+
+## Skill Version(s):
+
+1.3.2 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

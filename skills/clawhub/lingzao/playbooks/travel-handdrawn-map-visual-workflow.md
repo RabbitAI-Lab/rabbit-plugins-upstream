@@ -56,12 +56,12 @@ If the user has a Xiaohongshu note/link or screenshot, first choose the safe
 intake path:
 
 - For screenshots or pasted route details, extract the visible details directly.
-- For Xiaohongshu links, do not open the link before credit confirmation. First
-  route through `search-credit-notice.md` and ask whether to spend one paid
+- For Xiaohongshu links, do not open the link before scope confirmation. First
+  route through `research-scope-guard.md` and ask whether to make one online
   lookup to read the public note, or ask the user to paste the route details
   instead.
 
-After the user confirms the paid lookup or provides visible details, extract:
+After the user confirms the online lookup or provides visible details, extract:
 
 - city / area
 - route order

@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/google-search",
+  "slug": "google-search",
+  "ownerHandle": "fetcher-sh",
+  "version": "0.1.0",
+  "updatedAt": 1787305095169,
+  "contentHash": "2b814acdf2c2fe65a552864a4d1e299da5382bbee9c98ccb512b49044d039431",
+  "fetchedAt": "2026-08-25T08:22:48.230Z"
+}

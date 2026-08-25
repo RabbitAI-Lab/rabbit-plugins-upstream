@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cargo-gtm",
   "slug": "cargo-gtm",
   "ownerHandle": null,
-  "version": "1.9.0",
-  "updatedAt": 1785007301061,
-  "contentHash": "0785862c36f9536b33ec0b60e74de9830eeda6f60d703afc6ab3db49b91e5cc8",
-  "fetchedAt": "2026-07-26T18:03:55.724Z"
+  "version": "1.16.0",
+  "updatedAt": 1787547201968,
+  "contentHash": "fae5ee72a4f7bd23b793449f47f9c067e26bb0a9fb36cd2fbfb65c54f49a552f",
+  "fetchedAt": "2026-08-25T08:11:40.904Z"
 }

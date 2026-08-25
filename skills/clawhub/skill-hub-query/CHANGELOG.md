@@ -2,6 +2,108 @@
 
 All notable changes to this skill are documented here.
 
+### v1.3.0 (2026-08-23)
+
+Adds a stale-cache warning to `query.sh`. Same theme as v1.2.0: a failure that
+reports success and only bites later.
+
+- **Added: `query.sh` warns when the local cache is old.** List queries read the
+  local cache by design — that is what makes them fast. The problem is that a
+  stale `latestVersion` is **indistinguishable from a fresh one**: same shape,
+  same field, no staleness marker anywhere in the output. Observed failure: a
+  cache untouched for 67 days reported an old release as "latest", which nearly
+  caused a publish against the wrong version baseline. A single `sync.sh` fixed
+  the data instantly — the data path was never broken, the *silence* was.
+  - Thresholds: **>7 days** prints a notice, **>30 days** prints a loud warning
+    that also points at `query.sh versions <slug>` (live API, never cached).
+  - **Warn only, never block.** Offline operation stays intentional, so a stale
+    cache is still usable — you just get told.
+  - All warning output goes to **stderr**, so `query.sh ... | jq` pipelines are
+    unaffected.
+  - Applies to the cache-backed providers only. `skillhub_cn` returns before the
+    cache is ever consulted (it queries live), so the warning is correctly absent
+    there.
+
+- **Note for anyone extending this: do not mix the two timestamps in
+  `skill-cache-meta.json`.** The first implementation computed cache age from
+  `max(lastFullSync, lastIncrementalSync)`, which is wrong and **silently
+  defeats the whole feature**:
+  - `lastFullSync` is a **local wall-clock** stamp — "a sync actually ran".
+  - `lastIncrementalSync` is the **server-side max `updatedAt`** — the
+    incremental cursor, i.e. "when the newest skill on the hub last changed".
+    It is deliberately *not* wall-clock (see `sync.sh`), because using local
+    time there would drop records on the next incremental sync under clock skew.
+
+  Taking `max()` of the two makes the computed age collapse to ~0 whenever the
+  hub has recent activity — so "local cache 67 days stale + hub updated
+  yesterday" produced **no warning at all**, exactly the case the warning exists
+  for. Age is now derived from `lastFullSync` only, falling back to the cache
+  file's `mtime` when it is absent or `0` (i.e. only incremental syncs have run);
+  `mtime` is also a local clock, so it is semantically safe.
+
+  Worth stating plainly: the first round of tests passed while this bug was live,
+  because every test case set both fields to the same value — the inputs could
+  not express the bug. Verified now with the two fields deliberately diverged.
+
+### v1.2.0 (2026-08-22)
+
+Install-reliability release. All three issues below were **silent failures** —
+the install reported success and the damage only surfaced later, usually pointing
+the blame at the wrong component.
+
+- **Fixed: non-ASCII filenames were mangled on extraction.** Info-ZIP `unzip`
+  6.00 ignores the ZIP spec's UTF-8 filename flag (general purpose bit 11) and
+  decodes names with the local codepage, so an entry such as
+  `references/<non-ascii>.json` landed on disk as mojibake. Any script in the
+  installed skill that opened the file by its real name then died with
+  `FileNotFoundError` — looking like a bug in the *installed* skill rather than
+  in the installer. `unzip -O UTF-8` only exists in the Windows build, so there
+  is no flag-level workaround: listing and extraction now go through the new
+  `scripts/_zip_safe.py` (Python `zipfile`), which keeps the same
+  absolute-path / traversal checks plus a per-entry `resolve()` check before
+  writing.
+  - Handles **both** archive flavours: names flagged UTF-8, and names written as
+    raw UTF-8 bytes *without* the flag (which a naive `zipfile` reader decodes as
+    CP437 and mangles in the opposite direction). Unflagged entries are
+    round-tripped and retried as UTF-8.
+  - Entries are written individually with the corrected name (not via
+    `extractall`, which would reuse the mangled one), preserving the executable
+    bit recorded in the archive.
+- **Fixed: version resolution trusted a stale cache (risk of data loss).** The
+  old order was "cache first, API as fallback". The cached
+  `.latestVersion.version` is a `sync.sh` snapshot that is not invalidated when
+  the Hub publishes afterwards, and was observed reading `1.3.0` while the real
+  latest was `2.2.2` — so omitting a version silently installed an **older**
+  release *and* replaced the whole directory of the newer copy the user already
+  had. Order is now "version-history API first, cache only as fallback", and a
+  fallback prints an explicit warning plus recovery instructions.
+- **Added: version-consistency check before the directory is replaced.** A Hub's
+  download endpoint was observed serving `v1.3.0` when `v2.2.2` was requested,
+  while the script still printed success and recorded the *requested* version.
+  The package's own declared version is now compared **before** anything is
+  replaced (i.e. while the existing install is still intact); a mismatch warns
+  and the ledger records the actual version. Recognises both the frontmatter
+  `version:` and the open-source body `- **Version**:` conventions.
+- **Fixed: temp-file leak window.** The `trap` was registered several lines after
+  `mktemp`, so a download or `stat` failure in between left the ZIP behind. The
+  trap is now registered first (with `${var:-}` guards for `set -u`).
+- **Improved: API failures are no longer swallowed.** The version-history call's
+  stderr used to be discarded, leaving users with "falling back to cache" and no
+  idea whether the cause was an expired token or a dead network. The real reason
+  is now captured and shown in both the fallback warning and the final error.
+- **Improved: `doctor.sh` now actually tests ZIP filename handling.** Checking
+  that `python3` exists proves nothing; doctor now builds an archive containing a
+  non-ASCII filename and verifies `_zip_safe.py list` returns it byte-for-byte,
+  and reports a blocking issue when it does not. `unzip` is no longer a listed
+  dependency; `python3` is. Temp dirs created by diagnostics are cleaned up on
+  every exit path.
+- **Docs**: new "Requirements" table (explaining why `python3` replaces `unzip`),
+  five new rows in the error reference, and two new known limitations covering the
+  stale-cache field and the download-endpoint version mismatch.
+
+### v1.1.5 (2026-07-28)
+- Maintenance release (version bump only). Reviewed against clawhub SkillSpector findings; the flagged `xargs -r rm` is confirmed a false positive — it only prunes this skill's own edit-backup snapshots under a controlled `EDIT_BACKUP_DIR` (retention rotation), so no code change was needed.
+
 ### v1.1.4 (2026-07-17)
 - Docs: move changelog out of SKILL.md into this standalone CHANGELOG.md (open-source convention)
 - **v1.0.1** (2026-06-22): UGLIC patch — all 3 ERR + 4 WARN + 2 INFO fixed.

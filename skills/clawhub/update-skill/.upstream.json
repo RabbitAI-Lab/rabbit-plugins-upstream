@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/update-skill",
   "slug": "update-skill",
   "ownerHandle": null,
-  "version": "0.8.1",
-  "updatedAt": 1784746410298,
-  "contentHash": "30ce6e29758a46c43532ca126e60914c256aefc369cad551277784fab91c641c",
-  "fetchedAt": "2026-07-26T18:07:45.405Z"
+  "version": "0.8.2",
+  "updatedAt": 1787315042259,
+  "contentHash": "a674194d4c39f802ac1d03796b49416c37c92e0d85a7b5212e4d2da9e81e00b9",
+  "fetchedAt": "2026-08-25T08:21:36.605Z"
 }

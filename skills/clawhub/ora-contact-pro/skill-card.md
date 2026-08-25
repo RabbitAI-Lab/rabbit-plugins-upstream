@@ -1,44 +1,59 @@
-## Description: <br>
-对企业或组织进行合规的外贸客户开发与决策人信息查询，仅在用户明确授权并符合当地隐私、反垃圾和商业通信法规的前提下使用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users perform authorized, compliant foreign-trade prospecting and decision-maker lookup by company name, company domain, or LinkedIn company identifier.
 
-## Publisher: <br>
-[oraagent](https://clawhub.ai/user/oraagent) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oraagent](https://clawhub.ai/user/oraagent)
 
-## Use Case: <br>
-External users and business development teams use this skill to look up company details and decision-maker contact signals by company name, domain, or LinkedIn company identifier after confirming authorization and compliance requirements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries and authorization derived from OraAgent.key are sent to the external Ora/Topeasy API. <br>
-Mitigation: Use the skill only for authorized business contact lookup and confirm the user accepts the external data processing before running a search. <br>
-Risk: Generated temporary JSON result files may contain company or personal contact details. <br>
-Mitigation: Treat result files as sensitive, share only necessary fields, and remove temporary files when they are no longer needed. <br>
-Risk: Returned decision-maker or contact information could be misused for unauthorized collection or harassing marketing. <br>
-Mitigation: Stop when authorization or compliance is unclear, and do not use the skill for privacy-invasive or unlawful outreach scenarios. <br>
+## Use Case:
 
+Sales, business development, and company-research users use this skill to retrieve company profiles, contact channels, social links, and limited employee or decision-maker leads when they have authorization and a compliant outreach purpose.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oraagent/skills/ora-contact-pro) <br>
-- [Publisher profile](https://clawhub.ai/user/oraagent) <br>
-- [Topeasy API service endpoint](https://api.topeasychina.com:6443/TPAiAgentSkill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, JSON files, Guidance] <br>
-**Output Format:** [Markdown summary with referenced JSON result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads OraAgent.key, queries an external Ora/Topeasy API, and stores raw JSON results under the system temporary directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata) <br>
+Risk: The skill sends company, domain, or LinkedIn-company queries to Topeasy's external API using a local OraAgent.key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user accepts that external data processing and has authorization for the lookup.
+
+Risk: Saved JSON result files may contain business contact data or sensitive outreach-relevant details.
+
+Mitigation: Limit display to necessary fields and remove temporary result files when they are no longer needed.
+
+Risk: Returned contact information could be misused for unauthorized collection, spam, harassment, or privacy-invasive outreach.
+
+Mitigation: Use only for compliant company research and stop when authorization or legal basis is unclear.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oraagent/skills/ora-contact-pro)
+- [OraAgent publisher profile](https://clawhub.ai/user/oraagent)
+- [Topeasy platform](https://www.oraskl.com/platform)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Files, Guidance]
+
+**Output Format:** [Markdown summary with references to saved JSON result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include company details, contact channels, social links, employee/contact summaries, empty-result notices, and API status errors.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

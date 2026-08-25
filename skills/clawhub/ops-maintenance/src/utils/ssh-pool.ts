@@ -5,6 +5,7 @@
  */
 
 import { Client } from 'ssh2'
+import { readFileSync } from 'fs'
 
 export interface SSHConfig {
   host: string
@@ -78,14 +79,14 @@ export class SSHConnectionPool {
 
       // 优先使用密钥认证
       if (config.keyFile) {
-        connConfig.privateKey = require('fs').readFileSync(config.keyFile)
+        connConfig.privateKey = readFileSync(config.keyFile)
       } else if (config.password) {
         connConfig.password = config.password
       } else {
         // 尝试使用默认密钥
         try {
-          const defaultKey = require('fs').readFileSync(
-            require('os').homedir() + '/.ssh/id_rsa'
+          const defaultKey = readFileSync(
+            os.homedir() + '/.ssh/id_rsa'
           )
           connConfig.privateKey = defaultKey
         } catch (e) {

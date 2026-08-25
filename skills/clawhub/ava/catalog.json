@@ -1,0 +1,31 @@
+{
+  "name": "ava",
+  "displayName": "Ava",
+  "description": "Accountability layer for agent-managed capital. Mandates agreed before the agent has authority, deterministic gates below the model, and receipts that state exactly how much they can prove. Testnet by default, fail closed.",
+  "provider": "Ava",
+  "homepage": "https://github.com/kamalbuilds",
+  "install": {
+    "kind": "openclaw-skill",
+    "path": "packages/openclaw-skill",
+    "skillFile": "SKILL.md",
+    "cli": "node scripts/ava.mjs"
+  },
+  "requires": {
+    "env": ["AVA_API_BASE"],
+    "optionalEnv": ["AVA_USER_ID", "AVA_TOKEN", "AVA_PORTAL", "AVA_ENABLE_LIVE"]
+  },
+  "tools": [
+    "ava_copilot_turn",
+    "ava_approve_execute",
+    "ava_portfolio",
+    "ava_get_price",
+    "ava_quote_swap",
+    "ava_plan_intent",
+    "ava_list_capabilities_for_portal",
+    "ava_create_automation",
+    "ava_list_automations",
+    "ava_eval_automation"
+  ],
+  "defaultMode": "testnet",
+  "chains": ["sui", "sol", "eth", "base", "arb", "multi"]
+}

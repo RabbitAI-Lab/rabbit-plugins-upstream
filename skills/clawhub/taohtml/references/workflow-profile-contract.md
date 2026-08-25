@@ -196,10 +196,10 @@ modes:
 
 - Profile selection itself never activates Report IR or changes Direct HTML from the
   default production path. It adds no IR questionnaire.
-- Only an explicit Report IR engineering request or current project pilot
+- Only an explicit Report IR engineering request or current project Report IR
   authorization may use the IR workflow after the Report Design Brief is confirmed
   and current-file Production Authorization independently permits the action.
-- Only an independently authorized Report IR engineering pilot may derive and write
+- Only an independently authorized Report IR engineering project may derive and write
   the confirmed Profile result into a new `1.1` IR. A separate explicit engineering
   request may inspect, validate, compile, or patch an already supplied `1.0`/`1.1`
   source, but it must not infer or manufacture a missing binding.

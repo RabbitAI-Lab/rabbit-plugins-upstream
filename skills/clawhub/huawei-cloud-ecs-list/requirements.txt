@@ -1,0 +1,13 @@
+# requirements.txt
+# Huawei Cloud ECS Query Skill - Python dependencies
+#
+# This skill uses the hcloud CLI (KooCLI) for API calls.
+# Python standard library only — no third-party packages required.
+#
+# Prerequisites (system-level, not pip):
+#   - Python 3.8+
+#   - hcloud CLI (KooCLI): https://support.huaweicloud.com/qs-hcli/hcli_02_003.html
+#
+# The entry script (scripts/huawei-cloud-ecs-list.py) uses only the
+# Python standard library: argparse, json, os, subprocess, sys.
+# No pip install needed.

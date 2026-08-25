@@ -1,18 +1,18 @@
-# SkillSpector Static Scan Summary
+# SkillSpector static scan
 
 Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.
 
 Scan target: `skills/tweetclaw`
 
-Scanner: NVIDIA SkillSpector v2.2.3 from https://github.com/NVIDIA/SkillSpector
+Scanner: NVIDIA SkillSpector v2.4.1 at commit `11567e8d1d5140722225fcaeb3c0f637c21ec40d` from https://github.com/NVIDIA/SkillSpector
 
-Command:
+Run the reviewed commit only in an isolated environment. Never execute mutable repository HEAD.
 
 ```bash
-uvx --from git+https://github.com/NVIDIA/SkillSpector.git skillspector scan skills/tweetclaw --no-llm
+uvx --from 'git+https://github.com/NVIDIA/SkillSpector.git@11567e8d1d5140722225fcaeb3c0f637c21ec40d' skillspector scan skills/tweetclaw --no-llm
 ```
 
-Latest recorded scan: 2026-06-22 06:17 UTC.
+Latest recorded scan: 2026-07-23 18:40 UTC.
 
 Latest recorded result: score `0/100`, severity `LOW`, recommendation `SAFE`.
 
@@ -28,8 +28,6 @@ Scanned components:
 - `skill-card.md`
 - `skillspector-report.md`
 
-Notes:
-
-- This summary records the static scan result for the reviewed skill directory after the NVIDIA Skills hardening pass on 2026-06-21.
-- Re-run the command before publishing a new signed skill artifact or claiming verified status.
-- If a future scan reports critical or high findings, block release until the finding is fixed or formally accepted in the release record.
+This report records the post-hardening scan from 2026-07-23. Rerun it before a
+signed release or verification claim. Block critical and high findings until
+they are fixed or formally accepted in the release record.

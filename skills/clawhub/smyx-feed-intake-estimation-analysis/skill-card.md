@@ -1,43 +1,59 @@
-## Description: <br>
-Estimates daily feed intake per livestock individual from continuous feeder videos by tracking the change of feed remaining in the trough, and outputs intake trend with anomaly alerts. | 通过食槽视频估算每日采食量变化，异常时预警。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Estimates daily feed intake per livestock individual from continuous feeder videos by tracking the change of feed remaining in the trough, and outputs intake trend with anomaly alerts. | 通过食槽视频估算每日采食量变化，异常时预警。
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to estimate livestock feed intake from fixed feeder images or videos, review intake trends, and identify abnormal feeding patterns. It also supports querying prior feed-intake reports associated with the current account identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Feeder images or videos, report queries, and account identity data are sent to lifeemergence.com services. <br>
-Mitigation: Install and use only after confirming that these remote-service data flows are acceptable for the workspace and livestock operation. <br>
-Risk: The security evidence reports automatic identity creation or reuse and local token storage. <br>
-Mitigation: Review identity lifecycle, token storage location, and shared-workspace access before use in sensitive environments. <br>
+## Use Case:
 
+External livestock operators and farm-management teams use this skill to estimate feed intake trends from feeder-area videos or URLs and review anomaly alerts and cloud report history. It supports visual trend analysis only and does not provide feed-ration or nutrition recommendations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-feed-intake-estimation-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Feed intake API documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text, with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs can include structured intake estimates, trend labels, anomaly alerts, historical report tables, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; skill frontmatter reports 1.0.3) <br>
+Risk: The skill sends feeder videos, video URLs, and identity-linked report requests to the lifeemergence cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when users are comfortable sharing feeder media with that service, and avoid submitting media that includes unnecessary people, identifiers, or unrelated sensitive farm information.
+
+Risk: The skill can create or reuse a persistent local identity and store returned service tokens in a workspace SQLite database.
+
+Mitigation: Review workspace data storage before deployment, restrict filesystem access to trusted users, and rotate or remove stored tokens when the workspace is shared or retired.
+
+Risk: The security verdict is suspicious because of persistent identity handling and external service token use.
+
+Mitigation: Review the skill before installation and scan future versions before deployment; treat cloud report history and token handling as security-sensitive behavior.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-feed-intake-estimation-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API 接口文档](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, files, guidance]
+
+**Output Format:** [Markdown or JSON-like structured analysis text, with optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include feed-intake estimates, trend or anomaly labels, report links, and cloud report-history listings.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact frontmatter says 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

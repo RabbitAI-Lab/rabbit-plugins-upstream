@@ -58,6 +58,7 @@ With API key:
 
 ### Search
 - `nrds` -- Newly registered domains, by keyword or browse a gTLD
+- `nrds_live` -- Live feed of domains registered in the last three days
 - `aged` -- Domains with 5-20+ years history
 - `expired` -- Domains entering deletion cycle, by keyword or browse a gTLD
 - `deleted` -- Just-dropped domains, available now
@@ -86,12 +87,12 @@ With API key:
 
 ### Bulk
 - `bulk_tld` -- Keyword popularity across TLDs
-- `bulk_available` -- Batch availability check (up to 10 domains)
+- `bulk_available` -- Batch availability check (up to 50 domains)
 
 ### Stateful (require memory)
 - `preferences` -- Manage memory and saved preferences (action: get/set/delete)
 - `monitor` -- Domain monitoring with WHOIS/DNS/page change checks (action: get/set/update/delete)
-- `strategy` -- Save and execute domain strategies (action: get/set/update/delete)
+- `strategy` -- Store user-authored strategy text, run timestamps and the most recent result (action: get/set/update/delete)
 - `usage` -- Current tier, per-group usage, and remaining quota
 
 ## Skills
@@ -113,19 +114,9 @@ Output rules:
 - Default to `no_hyphen=true` and `no_number=true`
 - Use `usage` to check remaining quota before heavy operations
 
-## Access Tiers
+## Access
 
-| | Guest | Member (free) | Premium | Platinum |
-|---|---|---|---|---|
-| **Search tools** | 5/min, 10/day | 20/min, 2000/day | 60/min, 2000/day | Unlimited |
-| **Lookup tools** | 5/min, 10/day | Varies | 20-50/min | Unlimited or high cap |
-| **Trend tools** | 5/min, 10/day | 10/min, 100/day | Unlimited | Unlimited |
-| **Bulk tools** | 5/min, 10/day | 5/min, 50/day | 8/min, 1000/day | Unlimited |
-| **Safety, Backlinks, Keywords** | Blocked | Limited | Limited | High cap or unlimited |
-| **Monitors** | -- | 5 | 50 | Unlimited |
-| **Strategies** | -- | 1 | 6 | Unlimited |
-
-Register free at [domainkits.com](https://domainkits.com/register). [View pricing](https://domainkits.com/pricing).
+Works without an API key on a guest quota. A free account raises it; paid tiers raise it further and unlock the full filter set, deeper paging, and the account-bound tools (`safety`, `keyword_data`, `backlink_summary`, monitors, strategies). Current per-tier limits are listed at [domainkits.com/pricing](https://domainkits.com/pricing); the `usage` tool reports the live quota for the current account. Register free at [domainkits.com](https://domainkits.com/register).
 
 ## Privacy
 

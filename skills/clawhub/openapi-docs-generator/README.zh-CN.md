@@ -14,18 +14,18 @@ Validated demand: Backend and platform teams need practical help generating, imp
 
 ## 来源证据
 
-- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search：[Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues：[Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues：[[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
-- segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search：[typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search：[ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search：[答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
-- segmentfault-search：[OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
-- segmentfault-search：[答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues：[Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- github-issues：[CI: add measurable quality regression gates beyond aggregate coverage](https://github.com/sgajbi/lotus-advise/issues/495)
+- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=1f5ec3d1d9094463ba662c06db6e54f9&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-159013081-null-null.142^v102^pc_search_result_base1&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues：[Publish governed benchmark, scenario, and valuation-date evidence for proposal review](https://github.com/sgajbi/lotus-advise/issues/491)
+- github-issues：[[tech-debt] Two writer lanes into the target tenancy tables — retire #1031's sync writers into the async tenant_resolution lane](https://github.com/chrisrogers37/storydump/issues/1036)
+- hacker-news-ask-hn：[Ask HN: What a fullstack dev should know about security?](https://news.ycombinator.com/item?id=49408476)
+- github-issues：[[docs] Swagger/OpenAPI Alignment Audit: Spec Matches Implementation](https://github.com/ExcelDsigN-tech/dukapay/issues/437)
+- github-issues：[infra: Initialize production backend](https://github.com/ZevsVT/Nutri-AI/issues/6)
+- hacker-news-search：[Anthropic's best AI model struggles to attract users as cheaper tools thrive](https://news.ycombinator.com/item?id=49408489)
+- hacker-news-search：[Felony Bench](https://news.ycombinator.com/item?id=49392171)
+- hacker-news-search：[Pacing model development in an era of cyber-critical capabilities](https://news.ycombinator.com/item?id=49379714)
+- hacker-news-search：[Gemini 3.7 Flash](https://news.ycombinator.com/item?id=49291703)
+- hacker-news-search：[Mea Culpa – Dark Hours](https://news.ycombinator.com/item?id=49268833)
 
 ## 这个技能如何满足需求
 

@@ -1,47 +1,64 @@
-## Description: <br>
-Send global bulk SMS with two-way replies and monitor delivery status through UpKuaJing task reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Send global bulk SMS with two-way replies, monitor delivery status through task reports, and support cross-border outreach campaigns for business users.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Marketing, sales, operations, and customer support teams use this skill to send paid cross-border SMS campaigns, enable two-way replies, and check delivery task status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid SMS sending can incur charges. <br>
-Mitigation: Confirm pricing and obtain explicit user approval before executing send operations. <br>
-Risk: Bulk messaging can create legal, consent, or abuse risk. <br>
-Mitigation: Confirm recipient consent, applicable messaging rules, and message content before sending. <br>
-Risk: The skill handles phone numbers, message content, delivery records, and an API key. <br>
-Mitigation: Limit exposure of recipient data and keep ~/.upkuajing/.env private with restrictive file permissions. <br>
+## Use Case:
 
+External business, marketing, sales, operations, and support teams use this skill to send paid SMS messages, inspect SMS task status, and review delivery records through the UpKuaJing Open Platform API. Agents should confirm paid sends with the user and handle recipient data, message bodies, and API keys as sensitive data.
 
-## Reference(s): <br>
-- [SMS Send API](references/sms-send-api.md) <br>
-- [SMS Task List API](references/sms-task-list-api.md) <br>
-- [SMS Task Record List API](references/sms-task-record-list-api.md) <br>
-- [UpKuaJing Homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python, httpx, and UPKUAJING_API_KEY for authenticated API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and skill frontmatter) <br>
+Risk: SMS sends can incur fees and contact external recipients.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the recipient list, message content, and cost-bearing action with the user before running any SMS send command.
+
+Risk: SMS recipient data, message bodies, and API keys are sensitive.
+
+Mitigation: Keep UPKUAJING_API_KEY private, store it only in the expected environment or ~/.upkuajing/.env file, and avoid including sensitive values in logs or error reports.
+
+Risk: Error reports can accidentally include sensitive request or response details.
+
+Mitigation: Ask for user confirmation before reporting an abnormal API call and redact phone numbers, message bodies, tokens, and other sensitive data from the report context.
+
+## Reference(s):
+
+- [SMS Send API](references/sms-send-api.md)
+- [SMS Task List API](references/sms-task-list-api.md)
+- [SMS Task Record List API](references/sms-task-record-list-api.md)
+- [Skill Error Report API](references/skill-error-report-api.md)
+- [UpKuaJing Homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [UpKuaJing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/upkuajing-sms-tool)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; SMS sends can incur fees and should require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,11 +1,11 @@
 # TPCB\_LayersOfFill type
 
-填充所属层
+Layers of the fill
 
 ## Signature
 
 ```typescript
-type TPCB_LayersOfFill = TPCB_LayersOfCopper | TPCB_LayersOfCustom | EPCB_LayerId.TOP_SILKSCREEN | EPCB_LayerId.TOP_SOLDER_MASK | EPCB_LayerId.TOP_PASTE_MASK | EPCB_LayerId.TOP_ASSEMBLY | EPCB_LayerId.BOTTOM_SILKSCREEN | EPCB_LayerId.BOTTOM_SOLDER_MASK | EPCB_LayerId.BOTTOM_PASTE_MASK | EPCB_LayerId.BOTTOM_ASSEMBLY | EPCB_LayerId.DOCUMENT | EPCB_LayerId.MECHANICAL | EPCB_LayerId.MULTI;
+export type TPCB_LayersOfFill = TPCB_LayersOfCopper | TPCB_LayersOfCustom | EPCB_LayerId.TOP_SILKSCREEN | EPCB_LayerId.TOP_SOLDER_MASK | EPCB_LayerId.TOP_PASTE_MASK | EPCB_LayerId.TOP_ASSEMBLY | EPCB_LayerId.BOTTOM_SILKSCREEN | EPCB_LayerId.BOTTOM_SOLDER_MASK | EPCB_LayerId.BOTTOM_PASTE_MASK | EPCB_LayerId.BOTTOM_ASSEMBLY | EPCB_LayerId.DOCUMENT | EPCB_LayerId.MECHANICAL | EPCB_LayerId.MULTI;
 ```
 ## References
 
@@ -14,4 +14,4 @@ type TPCB_LayersOfFill = TPCB_LayersOfCopper | TPCB_LayersOfCustom | EPCB_LayerI
 
 ## Remarks
 
-填充所属层为 [EPCB\_LayerId.MULTI](../enums/EPCB_LayerId.md) 时代表挖槽区域
+When the fill layer is [EPCB\_LayerId.MULTI](../enums/EPCB_LayerId.md)<!-- -->, it represents a slot region

@@ -26,7 +26,7 @@ The method name uses only lowercase ASCII letters (`r`, `o`, `d`, `i`, `t`), whi
 |------|-------------|
 | Length | Exactly **12** characters |
 | Charset | Lowercase ASCII letters **`a`–`z`** only |
-| Semantics | On-chain RODiT `token_id` (facial encoding); unique within a given NEAR contract deployment |
+| Semantics | On-chain RODiT `token_id` (facial encoding); **universally unique** (not a locally scoped handle); minting rejects duplicates on the trusted contract |
 | Examples | `bkbvehbdcrgm`, `saaddbbadbbf` |
 
 Passport IDs are case-normalized to lowercase for blockchain lookup. Other encodings (facial categories) are documented in [token-metadata.md](token-metadata.md#facial-token-id-encoding).
@@ -50,7 +50,7 @@ Passport IDs are case-normalized to lowercase for blockchain lookup. Other encod
 
 Documentation examples use the **production/main** contract. The DID string does not encode which contract is used; resolvers must know the API host (or trust that host’s `NEAR_CONTRACT_ID`).
 
-If the same `passport-id` existed on two contracts (unlikely in practice), `did:rodit:<passport-id>` would be ambiguous across resolvers pointing at different contracts.
+Minting is designed so each `passport-id` is **universally unique**. Resolvers still pin `NEAR_CONTRACT_ID`. If the same `passport-id` existed on two contracts (a minting/ops failure, not an expected namespace), `did:rodit:<passport-id>` would be ambiguous across resolvers pointing at different contracts.
 
 ---
 

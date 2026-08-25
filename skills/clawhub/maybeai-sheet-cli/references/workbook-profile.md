@@ -1,148 +1,107 @@
-# Workbook Profile Reference
+# Workbook Metadata Reference
 
-## Contents
+## When to use it
 
-1. When to use this
-2. What workbook metadata does
-3. Request
-4. Response
-5. Recommended workflows
-6. Limitations and recovery
-
-## 1. When to use this
-
-Read this document when the task involves understanding an unfamiliar workbook, deciding which worksheets to inspect, summarizing workbook contents, or preparing a plan before detailed analysis.
-
-Use workbook metadata when the user asks:
-
-- what a workbook contains
-- which sheets are relevant
-- where to start analyzing a multi-sheet workbook
-- for a high-level workbook summary
-- for a quick profile before writing SQL, formulas, or reports
-
-Do not use this as a substitute for exact data extraction. After the profile identifies relevant worksheets, use `mbs excel-worksheet range read`, `mbs excel-table sample`, or `mbs db-table sample` for precise values.
-
-## 2. What workbook metadata does
-
-`mbs workbook metadata` is read-only workbook understanding.
-
-It:
-
-- accepts a `document_id` or MaybeAI spreadsheet `uri`
-- lists workbook worksheets internally
-- reads non-empty sample rows from each worksheet
-- sends compact worksheet samples to an LLM to generate a Chinese natural-language workbook summary
-- caches the result in `excel_v2_workbook_profiles`
-- returns the cached profile when the worksheet signature has not changed
-
-The generated profile is useful for orientation, routing, and analysis planning. It should not be treated as a complete audit of every row.
-
-## 3. Request
-
-Use:
+Run `mbs workbook metadata` before acting on an unfamiliar workbook. It is the
+read-only routing step that identifies worksheet names, gids, engines, and Base
+table IDs. It does not read samples, generate an LLM summary, or replace an
+exact worksheet/table read.
 
 ```bash
-mbs workbook metadata --doc-id <DOC_ID>
-mbs workbook metadata --url <MAYBE_SHEET_URL>
+mbs workbook metadata --doc-id <DOC_ID> --output json
+mbs workbook metadata --url "https://www.maybe.ai/docs/spreadsheets/d/<DOC_ID>?gid=2" --output json
 ```
 
-Fields:
+The CLI accepts `--doc-id`, `--url`, or `--uri`. It resolves those to a
+MaybeAI workbook URI and calls:
 
-- `document_id`: workbook document id. Required unless `uri` is provided.
-- `uri`: MaybeAI spreadsheet URL or document id string. Required unless `document_id` is provided.
-- Use `--url` when you already have a Maybe Sheet URL.
-- Use `--doc-id` when you only have the workbook document id.
+```text
+POST /api/v1/excel_v2/worksheet/metadata
+{"uri": "https://www.maybe.ai/docs/spreadsheets/d/<DOC_ID>"}
+```
 
-## 4. Response
+## Response contract
 
-Typical shape:
+The CLI wraps the backend response in its normal command envelope:
 
 ```json
 {
   "success": true,
-  "document_id": "<document_id>",
-  "cache_status": "hit",
-  "profile": {
-    "summary": "这个工作簿...",
+  "endpoint": "/api/v1/excel_v2/worksheet/metadata",
+  "result": {
+    "document_id": "<DOC_ID>",
+    "engine": "composite",
+    "worksheet_count": 2,
     "worksheets": [
       {
-        "gid": 0,
-        "sheet_name": "订单",
-        "data_engine": "pg",
-        "sample_rows": [
-          ["日期", "订单号"],
-          ["2026-06-01", "SO-1"]
-        ]
-      }
-    ],
-    "worksheet_signature": [
+        "worksheet_name": "Orders",
+        "gid": 5,
+        "data_engine": "base",
+        "table_id": "tbl_orders"
+      },
       {
-        "gid": 0,
-        "sheet_name": "订单"
+        "worksheet_name": "Dashboard",
+        "gid": 6,
+        "data_engine": "sheet"
       }
-    ],
-    "generated_at": "2026-06-17T00:00:00+00:00"
+    ]
+  },
+  "target": {
+    "document_id": "<DOC_ID>",
+    "uri": "https://www.maybe.ai/docs/spreadsheets/d/<DOC_ID>"
   }
 }
 ```
 
-Important fields:
+Use these fields as routing identities:
 
-- `cache_status`: `hit`, `miss`, `stale`, or `refreshed`
-- `profile.summary`: LLM-generated Chinese summary of workbook purpose, likely business scenario, key data objects, and metrics
-- `profile.worksheets`: per-worksheet metadata and up to five sample non-empty rows returned to the caller
-- `profile.worksheet_signature`: sheet identity used for cache freshness checks
-- `profile.generated_at`: profile generation or refresh time
+| Metadata | Meaning | Next command family |
+|---|---|---|
+| `data_engine: sheet` | Excel-style worksheet | `worksheet`, `table`, A1/range operations |
+| `data_engine: base` plus `table_id` | Base-backed table | canonical `table`, `row`, `column`, `formula` operations (`table` is compatibility) |
+| `gid` | worksheet locator | Use with worksheet/table lookup when a command needs it |
 
-Cache behavior:
+Do not treat `worksheet_name` as a Base record identity, and do not infer row
+counts or exact headers from this route. Use a bounded Sheet read or
+`table inspect`/`schema` after resolving the target.
 
-- `hit`: existing profile reused
-- `miss`: no cached profile existed
-- `stale`: worksheet signature changed, so the profile was rebuilt
-- `refreshed`: caller forced a rebuild with `force_refresh: true`
+## Recommended workflows
 
-## 5. Recommended workflows
+### Inspect an unfamiliar workbook
 
-### Understand an unfamiliar workbook
+1. Run `mbs workbook metadata --doc-id <DOC_ID> --output json`.
+2. Choose the target by `worksheet_name` and `data_engine`.
+3. For Sheet, read a bounded range:
 
-1. Call `mbs workbook metadata`
-2. Read `profile.summary`
-3. Use `profile.worksheets[].sheet_name`, `gid`, and `sample_rows` to identify likely source sheets
-4. Call `mbs excel-worksheet range read`, `mbs excel-table schema`, or `mbs db-table schema` on the relevant targets
-5. Continue with SQL, formulas, or report-building only after exact schema checks
+   ```bash
+   mbs range read --doc-id <DOC_ID> --worksheet-name Orders --range A1:H20 --output table
+   ```
 
-### Plan a SQL result sheet
+4. For Base, retain `table_id`, then inspect native schema/sample:
 
-1. Call `mbs workbook metadata` to understand sheet roles
-2. Call `mbs excel-table schema` or `mbs db-table schema` on likely source tables
-3. Optionally call `mbs excel-worksheet range read`, `mbs excel-table sample`, or `mbs db-table sample` for representative rows
-4. Draft SQL
-5. Convert the SQL into a `=SQL("...")` formula
-6. Use `mbs excel-worksheet range set-formula` on the report worksheet
-7. Verify the spill result with `mbs excel-worksheet range read`
+   ```bash
+   mbs table schema --doc-id <DOC_ID> --table-id <TABLE_ID> --output json
+   mbs table sample --doc-id <DOC_ID> --table-id <TABLE_ID> --limit 20 --output table
+   ```
 
-## 6. Limitations and recovery
+### Verify a native worksheet import
 
-Limitations:
+Run `worksheet import --transfer-mode native --verify`. Its
+`result.operations[]` contains `final_target_name`, `final_engine`, `rows`, and
+`verify.status`. Follow with `workbook metadata` only to confirm the target
+name/gid/engine. For a large Base source, the import operation's `rows` is the
+copy-completeness evidence; do not substitute a default bounded read.
 
-- The summary is based on worksheet names and sample non-empty rows, not a full workbook scan
-- Returned `sample_rows` are limited and intended for orientation
-- Very wide rows are truncated internally before summarization
-- The summary is generated in Chinese by the service prompt
-- It requires viewer permission on the sheet
+## Compatibility and recovery
 
-Recovery:
-
-- `400 document_id or uri is required`: pass `document_id` or `uri`
-- `403`: confirm `MAYBEAI_API_TOKEN` and sheet access
-- profile seems stale: rerun `mbs workbook metadata`; if it remains stale, inspect exact sheets directly
-- worksheet sample read errors: inspect the affected worksheet with `mbs excel-worksheet range read`
-- need exact values: use `mbs excel-worksheet range read`, `mbs excel-table sample`, or `mbs db-table sample`; do not rely only on `profile.summary`
-
-Related CLI:
-
-```bash
-mbs workbook metadata --doc-id <DOC_ID>
-mbs workbook capabilities --doc-id <DOC_ID>
-```
+- `workbook manifest` and `workbook capabilities` are compatibility commands
+  that may still use `/api/v1/excel/workbook_profile`.
+- `workbook metadata` must use `/api/v1/excel_v2/worksheet/metadata`. If output
+  shows a 500 from `workbook_profile`, the installed CLI is stale; update or
+  reinstall the local package and rerun the unchanged `mbs workbook metadata`
+  command.
+- `403`: confirm `MAYBEAI_API_TOKEN` and document access.
+- Missing target worksheet: refresh metadata, then use the exact returned
+  worksheet name or gid.
+- Missing Base `table_id`: stop before a Base mutation and resolve the table by
+  `mbs table inspect --name <TABLE_NAME>`.

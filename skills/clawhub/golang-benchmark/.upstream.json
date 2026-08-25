@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/golang-benchmark",
   "slug": "golang-benchmark",
   "ownerHandle": null,
-  "version": "1.2.4",
-  "updatedAt": 1781013203157,
-  "contentHash": "88dbffd6831b616b884ceb2549615e5750187f63a43ce5b3b04b8f759087e7d7",
-  "fetchedAt": "2026-07-26T18:30:23.317Z"
+  "version": "1.3.0",
+  "updatedAt": 1787232396004,
+  "contentHash": "d3c3739c27c88efcf5dbf20aac3224daedd74a8bfe4929ab6ea60ed42711b8ac",
+  "fetchedAt": "2026-08-25T08:25:03.165Z"
 }

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/smartbi-cli",
   "slug": "smartbi-cli",
   "ownerHandle": null,
-  "version": "1.2.0",
-  "updatedAt": 1780559352543,
-  "contentHash": "d4e420d34fa1129a90d7d93aa0250121a2d40c69b17145f55430dba54a73042d",
-  "fetchedAt": "2026-07-26T18:35:38.920Z"
+  "version": "1.3.0",
+  "updatedAt": 1787212543442,
+  "contentHash": "95376dc29e0ce985dfea10249cee3cb467c87229599ade7e1c3fc35651248554",
+  "fetchedAt": "2026-08-25T08:26:00.406Z"
 }

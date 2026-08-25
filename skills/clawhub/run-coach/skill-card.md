@@ -1,41 +1,54 @@
-## Description: <br>
-Science-based running coach with HD visual training plans and Garmin sync for runners from 5K fitness to marathon. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Science-based running coach via Telegram that logs training, sends visual training plans as HD photo albums, coaches with evidence-driven discipline, and optionally syncs Garmin health metrics while storing credentials and session tokens locally.
 
-## Publisher: <br>
-[ENAwareness](https://clawhub.ai/user/ENAwareness) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[enawareness](https://clawhub.ai/user/enawareness)
 
-## Use Case: <br>
-External runners use this skill through Telegram to log runs, request training plans, review trends, and optionally sync Garmin data for coaching feedback. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The image feature may process untrusted or HTML-like text while generating Telegram images. <br>
-Mitigation: Review generated content before sending images and avoid routing untrusted or HTML-like text through the image feature until escaping is fixed. <br>
-Risk: The skill can store persistent fitness data and use Telegram bot access plus optional Garmin account access. <br>
-Mitigation: Keep tokens and passwords out of logs and repositories, limit use to trusted accounts, and periodically review or delete MEMORY.md, garmin/.garth, and local Garmin activity files. <br>
+## Use Case:
 
+External runners and coaching agents use this skill to maintain a runner profile, log training, generate Telegram-delivered training plans, and optionally incorporate locally synced Garmin activity and health metrics.
 
-## Reference(s): <br>
-- [Run Coach on ClawHub](https://clawhub.ai/ENAwareness/run-coach) <br>
-- [garminconnect releases](https://github.com/cyberjunky/python-garminconnect/releases) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command snippets and optional generated image delivery through Telegram.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Telegram bot credentials for image delivery; Garmin sync is optional and depends on user-provided Garmin credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: Telegram bot credentials and optional Garmin credentials, health metrics, and session tokens are stored locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if local storage of these files is acceptable; use chmod 600 for credential files and chmod 700 for the Garmin directory.
+
+Risk: Optional Garmin sync collects health and training data that persists locally until deleted.
+
+Mitigation: Do not enable Garmin sync unless needed; delete garmin/activities, garmin/summary.json, and garmin/.garth to remove stored Garmin data and tokens.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/enawareness/skills/run-coach)
+- [Publisher profile](https://clawhub.ai/user/enawareness)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and locally rendered Telegram image artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May send generated PNG training plans to the configured Telegram chat; optional Garmin sync writes local JSON summaries and activity snapshots.]
+
+## Skill Version(s):
+
+1.1.6 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

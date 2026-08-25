@@ -1,44 +1,60 @@
-## Description: <br>
-AI-powered pet grooming effect assessment: detects mat residue area, dandruff coverage, and coat smoothness from post-grooming images, then outputs a 0-100 grooming score with targeted re-grooming suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses post-grooming pet images or videos for remaining mats, dandruff coverage, and coat smoothness, then returns a grooming score and suggested follow-up care.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External pet owners, pet salons, and care teams use this skill to assess post-grooming pet images or videos for remaining mats, dandruff coverage, coat smoothness, and follow-up grooming needs. The output is a visual grooming-quality assessment and is not a medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images or videos may be processed by the vendor cloud service. <br>
-Mitigation: Use only with media that is appropriate for vendor cloud processing and disclose the cloud-processing behavior before deployment. <br>
-Risk: The skill may create or reuse a local account identity, store tokens in the workspace database, and query prior cloud reports automatically. <br>
-Mitigation: Prefer deployment controls that require explicit consent for account creation, token storage, media upload, and history lookup. <br>
-Risk: The security verdict is suspicious because user control over account creation, history lookup, and media upload is not clear. <br>
-Mitigation: Review the skill before execution, restrict it to trusted workspaces, and verify that identity, token, and upload behavior match local policy. <br>
+## Use Case:
 
+External users, pet owners, and grooming service operators use this skill to evaluate grooming quality from pet media, check for remaining mats or dandruff, and decide whether additional grooming or care is warranted. The results are visual assessments only and are not medical diagnosis or treatment advice.
 
-## Reference(s): <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with scores, observations, recommendations, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports image, video, local file, and URL inputs; historical report lookup returns Markdown tables from the cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence; artifact frontmatter reports 1.0.5) <br>
+Risk: Pet images, videos, and analysis requests are sent to lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media that is appropriate to send to that service, and avoid submitting sensitive or unnecessary background content.
+
+Risk: The skill can silently create or reuse a cloud-linked identity and associate report history with it.
+
+Mitigation: Review the identity behavior before installation and use an environment where this account linkage is acceptable.
+
+Risk: Reusable backend tokens or identity values may be stored locally in the workspace data directory.
+
+Mitigation: Review or remove existing data/smyx-api-key.txt and workspace data before use if that identity should not be reused.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-grooming-effect-assessment-analysis)
+- [API documentation](references/api_doc.md)
+- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, files]
+
+**Output Format:** [Markdown report text with structured JSON content, report links, and optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts local or URL media input; local files are limited to supported formats and a 10 MB maximum.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact frontmatter reports 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

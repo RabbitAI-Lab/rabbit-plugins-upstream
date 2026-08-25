@@ -1,41 +1,54 @@
-## Description: <br>
-AI video generation and production powered by CellCog for marketing videos, product demos, explainers, educational content, lipsync spokesperson videos, UGC, news reports, training materials, cinematic short films, social media reels, and YouTube content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI video generation and production powered by CellCog for marketing videos, product demos, explainers, educational content, lipsync spokesperson videos, UGC, news reports, training materials, cinematic short films, social media reels, and YouTube content.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers and content teams use this skill to ask an agent to create CellCog video-generation jobs for marketing, educational, explainer, UGC, news, spokesperson, and cinematic video content. It provides prompt guidance, Python SDK examples, and setup commands for CellCog-powered video production. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and source materials may be sent to CellCog for external AI video generation. <br>
-Mitigation: Use the skill only with approved CellCog usage and do not submit secrets, private customer data, regulated data, unreleased business materials, or proprietary media unless the organization permits it. <br>
-Risk: Long-form AI video output can be unpredictable and may consume credits without producing a usable result. <br>
-Mitigation: Start with short, scoped prompts, specify duration and aspect ratio, review generated output before production use, and manage spending expectations. <br>
+## Use Case:
 
+Developers and agent users use this skill to request CellCog-generated videos from prompts, scripts, visual style requirements, duration targets, aspect ratios, and audio preferences.
 
-## Reference(s): <br>
-- [CellCog homepage](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/video-generation-cellcog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python SDK examples and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog package, and CELLCOG_API_KEY; generated media is produced through the external CellCog service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: release evidence) <br>
+Risk: Prompts, scripts, face images, likenesses, or other sensitive content may be sent to CellCog as an external video-generation provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when external processing is acceptable, and do not submit confidential data, personal information, secrets, copyrighted material, or likeness-related content without rights and consent.
+
+Risk: Long-form AI video generation can be unpredictable and may consume time or credits without producing a usable result.
+
+Mitigation: Start with constrained prompts, specify duration and aspect ratio, test short drafts first, and review generated output before using it in production contexts.
+
+## Reference(s):
+
+- [CellCog homepage](https://cellcog.ai)
+- [ClawHub skill page](https://clawhub.ai/cellcog/skills/video-generation-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Configuration instructions]
+
+**Output Format:** [Markdown with Python code blocks and setup commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and CELLCOG_API_KEY; video generation runs through the external CellCog service.]
+
+## Skill Version(s):
+
+1.0.18 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="100%" role="img" aria-label="五步工作流：意图识别、建项、完成即写、恢复续跑、完成归档">
+  <title>五步工作流：意图识别、建项、完成即写、恢复续跑、完成归档</title>
+  <rect width="1200" height="300" fill="#0d1117"/>
+  <rect x="16" y="16" width="1168" height="268" rx="16" fill="#161b22" stroke="#30363d"/>
+  <text x="40" y="58" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#e6edf3">工作流：一次任务的完整生命周期</text>
+
+  <!-- 连接轨道 -->
+  <line x1="150" y1="160" x2="1130" y2="160" stroke="#30363d" stroke-width="4"/>
+
+  <!-- 节点 1：意图识别 -->
+  <circle cx="150" cy="160" r="34" fill="#58a6ff"/>
+  <text x="150" y="169" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="26" font-weight="700" fill="#0d1117">1</text>
+  <text x="150" y="228" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#e6edf3">意图识别</text>
+  <text x="150" y="252" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" fill="#8b949e">任务 / 项目 / 事务</text>
+  <text x="150" y="272" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#d29922">拿不准就建，宁多勿漏</text>
+
+  <!-- 节点 2：建项 -->
+  <circle cx="350" cy="160" r="34" fill="#58a6ff"/>
+  <text x="350" y="169" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="26" font-weight="700" fill="#0d1117">2</text>
+  <text x="350" y="228" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#e6edf3">建项</text>
+  <text x="350" y="252" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" fill="#8b949e">PROGRESS.md</text>
+  <text x="350" y="272" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#8b949e">3-6 个里程碑规划</text>
+
+  <!-- 节点 3：完成即写 -->
+  <circle cx="550" cy="160" r="34" fill="#3fb950"/>
+  <path d="M538 160 l8 8 l16 -18" stroke="#0d1117" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="550" y="228" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#e6edf3">完成即写</text>
+  <text x="550" y="252" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" fill="#8b949e">原子写入 + 幂等清单</text>
+  <text x="550" y="272" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#3fb950">跑死也不丢进度</text>
+
+  <!-- 节点 4：恢复续跑 -->
+  <circle cx="750" cy="160" r="34" fill="#d29922"/>
+  <path d="M750 148 l12 12 l-12 12" stroke="#0d1117" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M738 160 l12 12 l-12 12" stroke="#0d1117" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="750" y="228" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#e6edf3">恢复续跑</text>
+  <text x="750" y="252" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" fill="#8b949e">新会话启动检查</text>
+  <text x="750" y="272" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#d29922">汇报进度，用户确认后才续跑</text>
+
+  <!-- 节点 5：归档 -->
+  <circle cx="950" cy="160" r="34" fill="#8b949e"/>
+  <text x="950" y="169" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="26" font-weight="700" fill="#0d1117">5</text>
+  <text x="950" y="228" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#e6edf3">完成归档</text>
+  <text x="950" y="252" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" fill="#8b949e">标记完成</text>
+  <text x="950" y="272" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#8b949e">决策/教训沉淀进 memory/</text>
+</svg>

@@ -1,46 +1,62 @@
-## Description: <br>
-依托 LinkedIn 数据，按人员 ID 和学校 ID 查询校友列表，用于发掘共同求学背景和潜在商务关系。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+依托 LinkedIn 数据，结合人员与企业信息调取校友及离职前员工清单，挖掘彼此共同求学背景和过往任职关联，发掘潜在商务合作机会。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External recruiters, sales teams, and B2B lead builders use this skill to query LinkedIn alumni relationships from a known person ID and school ID, then expand prospect lists or trace education-based connections. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill performs paid LinkedIn alumni lookup API calls. <br>
-Mitigation: Confirm each paid query before execution and review price or account information when cost context is needed. <br>
-Risk: The skill handles a local UPKUAJING_API_KEY value and may store it in ~/.upkuajing/.env. <br>
-Mitigation: Store the key deliberately, avoid printing the local environment file, and rotate or remove the key if it is exposed. <br>
-Risk: The account recharge flow can return a payment URL. <br>
-Mitigation: Review any recharge payment URL before opening it or paying. <br>
+## Use Case:
 
+Recruiters, sales teams, B2B lead builders, and relationship researchers use this skill to look up LinkedIn alumni relationships for a specified person and school. It helps expand contact lists, trace education-based associations, and support talent sourcing or lead generation workflows.
 
-## Reference(s): <br>
-- [LinkedIn Alumni List API Reference](references/linkedin-person-alumni-list-api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/linkedin-person-alumni-zh) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer platform](https://developer.upkuajing.com/) <br>
-- [Upkuajing API pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, json] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; paid API calls return fee metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence and SKILL.md metadata) <br>
+Risk: Paid lookup or recharge-related actions can incur external Upkuajing API costs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm any charged lookup, pagination request, price check, or recharge-related action with the user before execution.
+
+Risk: The Upkuajing API key may be stored in a local plaintext .env file.
+
+Mitigation: Keep the key out of chat and logs, restrict local file access where possible, and rotate the key if exposure is suspected.
+
+Risk: Lookup and optional error-report data is sent to the external Upkuajing service.
+
+Mitigation: Send only the minimum necessary lookup or diagnostic context and avoid including secrets or unrelated personal data in error reports.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/linkedin-person-alumni-zh)
+- [Upkuajing homepage](https://www.upkuajing.com)
+- [Upkuajing developer platform](https://developer.upkuajing.com/)
+- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [领英校友列表 API 参考](references/linkedin-person-alumni-list-api.md)
+- [Agent调用Skill异常上报 API 参考](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Alumni lookup responses include paginated list data, fee information, and request identifiers when returned by the Upkuajing API.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

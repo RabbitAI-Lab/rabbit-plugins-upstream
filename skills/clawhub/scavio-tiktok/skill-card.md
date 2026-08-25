@@ -1,42 +1,59 @@
-## Description: <br>
-Look up TikTok profiles, search videos and users, explore hashtags, read comments, and traverse the social graph (followers/followings). Eleven endpoints, all at 1 credit per request. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Look up TikTok profiles, search videos and users, explore hashtags, read comments, and traverse the social graph (followers/followings). Eleven endpoints, all at 1 credit per request.
 
-## Publisher: <br>
-[scavio-ai](https://clawhub.ai/user/scavio-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[scavio-ai](https://clawhub.ai/user/scavio-ai)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to retrieve TikTok profile, video, hashtag, comment, and follower/following data through the Scavio API for creator research, trend analysis, RAG enrichment, or content performance review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Scavio API key and sends user-directed TikTok queries to a third-party service. <br>
-Mitigation: Use a dedicated key with appropriate access, avoid exposing it in prompts or logs, and rotate it if it may have been shared. <br>
-Risk: TikTok comments, profiles, and follower or following lists may contain personal or sensitive social graph data. <br>
-Mitigation: Limit collection to necessary queries and pagination, and review privacy, consent, platform-policy, and retention requirements before reuse. <br>
-Risk: Paginated calls consume credits and can expand collection scope quickly. <br>
-Mitigation: Inform users before broad pagination, keep result counts narrow, and stop when the requested analysis has enough data. <br>
+## Use Case:
 
+Developers, analysts, and agent builders use this skill to retrieve structured TikTok profile, video, hashtag, comment, and follower/following data through Scavio endpoints for research, trend analysis, influencer analysis, and RAG workflows.
 
-## Reference(s): <br>
-- [Scavio TikTok API documentation](https://scavio.dev/docs/tiktok-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, configuration, shell commands, code, text] <br>
-**Output Format:** [Markdown with API endpoint guidance, JSON-oriented examples, and inline bash or Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; Scavio metadata sets a 90 second timeout and 1 request per second throttle.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server evidence and frontmatter) <br>
+Risk: Queries go through Scavio and consume credits, especially when paginating through many result pages.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm large paginated lookups before running them and monitor credit usage.
+
+Risk: The skill requires a Scavio API key.
+
+Mitigation: Keep SCAVIO_API_KEY out of source control and store it through the user's normal secret-management flow.
+
+Risk: The skill can retrieve TikTok comments and social graph data.
+
+Mitigation: Use retrieved public data in line with applicable platform rules and privacy expectations.
+
+## Reference(s):
+
+- [Scavio TikTok API documentation](https://scavio.dev/docs/tiktok-api)
+- [ClawHub skill page](https://clawhub.ai/scavio-ai/skills/scavio-tiktok)
+- [ClawHub publisher profile](https://clawhub.ai/user/scavio-ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, JSON, API calls]
+
+**Output Format:** [Markdown guidance with shell commands, Python examples, endpoint descriptions, and structured JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SCAVIO_API_KEY. TikTok calls go through Scavio and each endpoint request costs 1 credit; pagination can consume additional credits.]
+
+## Skill Version(s):
+
+1.0.7 (source: evidence.json release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

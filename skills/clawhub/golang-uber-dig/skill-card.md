@@ -1,47 +1,58 @@
-## Description: <br>
-Implements dependency injection in Golang using uber-go/dig, including reflection-based containers, Provide/Invoke, dig.In/dig.Out parameter and result objects, named values, value groups, optional dependencies, scopes, and Decorate. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in implementing dependency injection in Go with uber-go/dig, including containers, Provide and Invoke, dig.In and dig.Out, named values, value groups, optional dependencies, scopes, Decorate, and graph validation.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineers use this skill to wire Go applications with uber-go/dig, including constructor registration, graph invocation, parameter and result objects, named values, value groups, scopes, decorators, and graph validation patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may propose Go source changes, dependency updates, or Git commands as part of wiring uber-go/dig. <br>
-Mitigation: Review generated code, go.mod/go.sum changes, and Git commands before committing or pushing. <br>
-Risk: Incorrect dependency injection wiring can hide missing providers, cycles, or unintended service-locator patterns until startup or test time. <br>
-Mitigation: Validate the graph with tests, keep the container at the composition root, and inspect constructor errors before deployment. <br>
+## Use Case:
 
+Developers and engineers use this skill to wire Go applications with uber-go/dig, refactor dependency graphs, validate constructors, and avoid service-locator patterns. It is most useful when a codebase imports go.uber.org/dig or is adopting reflection-based dependency injection at the composition root.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/samber/golang-uber-dig) <br>
-- [Publisher profile](https://clawhub.ai/user/samber) <br>
-- [Source homepage](https://github.com/samber/cc-skills-golang) <br>
-- [uber-go/dig documentation](https://pkg.go.dev/go.uber.org/dig) <br>
-- [uber-go/dig repository](https://github.com/uber-go/dig) <br>
-- [Advanced uber-go/dig reference](references/advanced.md) <br>
-- [uber-go/dig recipes](references/recipes.md) <br>
-- [Testing with uber-go/dig](references/testing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with Go code examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose Go source edits, go.mod/go.sum changes, go test commands, and git commands for review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Generated dependency-injection changes can alter application startup behavior or hide missing providers until invocation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed wiring changes, keep the container at the composition root, and validate the production graph in tests with dig.DryRun(true).
+
+Risk: Adopting go.uber.org/dig may add or update a third-party Go module in the target project.
+
+Mitigation: Review go.mod changes, confirm the selected module version and license, and run normal Go tests and vulnerability checks before release.
+
+## Reference(s):
+
+- [pkg.go.dev: go.uber.org/dig](https://pkg.go.dev/go.uber.org/dig)
+- [uber-go/dig GitHub repository](https://github.com/uber-go/dig)
+- [cc-skills-golang homepage](https://github.com/samber/cc-skills-golang)
+- [Advanced uber-go/dig reference](references/advanced.md)
+- [uber-go/dig recipes](references/recipes.md)
+- [Testing with uber-go/dig](references/testing.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown with Go code snippets and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces implementation guidance for agent-authored Go code changes; review generated dependency wiring before applying.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

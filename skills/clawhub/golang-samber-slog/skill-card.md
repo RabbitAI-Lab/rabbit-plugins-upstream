@@ -1,48 +1,61 @@
-## Description: <br>
-Structured logging extensions for Golang using samber/slog packages for multi-handler pipelines, log sampling, attribute formatting, HTTP middleware, and backend routing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Structured logging extensions for Golang using samber/slog-**** packages for multi-handler pipelines, log sampling, attribute formatting, HTTP middleware, and backend routing.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineers use this skill to design Go slog pipelines with samber handlers, including sampling, PII-aware formatting, request logging middleware, routing, and backend sinks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated logging guidance may enable request body, response body, or broad header logging that exposes sensitive data. <br>
-Mitigation: Require explicit scoping, redaction, size limits, sensitive-endpoint exclusions, retention controls, and user approval before enabling body or broad header logging. <br>
-Risk: Generated configurations may route logs to external sinks and transmit operational or user data outside the application boundary. <br>
-Mitigation: Require user approval for external log sinks and review destination, retention, and privacy settings before deployment. <br>
+## Use Case:
 
+Developers and engineers use this skill when designing or maintaining Go structured logging pipelines with samber/slog packages. It helps configure sampling, formatting, routing, HTTP middleware logging, backend sinks, and graceful shutdown patterns.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/samber/golang-samber-slog) <br>
-- [samber Go Skills Repository](https://github.com/samber/cc-skills-golang) <br>
-- [slog-multi](https://github.com/samber/slog-multi) <br>
-- [slog-sampling](https://github.com/samber/slog-sampling) <br>
-- [slog-formatter](https://github.com/samber/slog-formatter) <br>
-- [Pipeline Patterns](references/pipeline-patterns.md) <br>
-- [Sampling Strategies](references/sampling-strategies.md) <br>
-- [HTTP Middlewares](references/http-middlewares.md) <br>
-- [Backend Handlers](references/backend-handlers.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with Go and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dependency versions, logging pipeline recommendations, and handler configuration examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata and skill frontmatter) <br>
+Risk: HTTP request or response body logging can expose sensitive data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep body logging disabled by default; enable it only for narrow debugging with redaction, size limits, route allowlists, and exclusions for authentication, payment, and PII-bearing endpoints.
+
+Risk: Buffered backend handlers can lose log records during shutdown.
+
+Mitigation: Use the documented graceful shutdown or flush calls for batch-oriented handlers before the process exits.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/golang-samber-slog)
+- [cc-skills-golang repository](https://github.com/samber/cc-skills-golang)
+- [slog-multi](https://github.com/samber/slog-multi)
+- [slog-sampling](https://github.com/samber/slog-sampling)
+- [slog-formatter](https://github.com/samber/slog-formatter)
+- [Pipeline Patterns](references/pipeline-patterns.md)
+- [Sampling Strategies](references/sampling-strategies.md)
+- [HTTP Middlewares](references/http-middlewares.md)
+- [Backend Handlers](references/backend-handlers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with Go code examples and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference Go tooling and package documentation for version, symbol, import, and vulnerability checks.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

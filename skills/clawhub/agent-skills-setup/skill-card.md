@@ -1,48 +1,68 @@
-## Description: <br>
-Migrates AI assistant context between IDEs, including MCP servers, rules, skills, commands, agents, hooks, and memory, with dry-run previews, format conversion, backup-first merging, secret redaction, and verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when a user names two supported IDEs or agent products to plan, migrate, or inspect specific skills, instructions, and MCP; the skill inventories local paths and runs bundled Bash/Python, and an approved apply or rollback may write targets, create backups/manifests, verify results, and scan or redact secrets while network access is forbidden.
 
-## Publisher: <br>
-[luckycat133](https://clawhub.ai/user/luckycat133) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[luckycat133](https://clawhub.ai/user/luckycat133)
 
-## Use Case: <br>
-Developers and engineers use this skill when they explicitly need to migrate, copy, convert, or synchronize AI assistant context between supported IDEs and agent runtimes. It helps inventory source settings, preview conversion plans, redact credentials, apply approved changes, and verify destination configuration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT No Attribution
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify IDE and agent configuration files during migration. <br>
-Mitigation: Run dry-runs first, review target directories and planned changes, and only use --yes when the destination changes are understood. <br>
-Risk: Using overwrite or replacement sync modes can rewrite or delete destination skill and configuration files. <br>
-Mitigation: Prefer the default backup strategy, keep timestamped backups, and avoid overwrite modes unless the target contents are disposable. <br>
-Risk: MCP, config, and project migrations may contain credentials or connection strings. <br>
-Mitigation: Treat these migrations as opt-in, expect secrets to be blanked, and re-enter credentials through the target IDE or a secret manager after migration. <br>
-Risk: OpenClaw installation downloads and runs an external installer. <br>
-Mitigation: Set and verify OPENCLAW_INSTALL_SHA256 before allowing the installer to run, and do not proceed when the checksum is missing or mismatched. <br>
+## Use Case:
 
+Developers and engineers use this skill to review and migrate portable agent context between supported IDEs and agent products, including skills, instructions, and MCP configuration. It is intended for local, offline planning first, with writes limited to reviewed migration, restore, or rollback plans.
 
-## Reference(s): <br>
-- [Agent Skills Setup on ClawHub](https://clawhub.ai/luckycat133/skills/agent-skills-setup) <br>
-- [IDE Registry](artifact/references/ide-registry.md) <br>
-- [IDE Paths](artifact/references/ide-paths.json) <br>
-- [OpenClaw Reference](artifact/references/openclaw.md) <br>
-- [Publishing Reference](artifact/references/publishing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, configuration snippets, migration plans, and verification summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local file changes and installer commands; write operations require explicit confirmation and should be previewed first.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.7 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Plan replay and plugin-copy paths can perform high-impact local writes when applied.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use plan-only review by default, inspect exact target paths and diffs, and apply only a saved plan after explicit approval.
+
+Risk: Bundles or replayed plans from untrusted sources could write unexpected local agent context.
+
+Mitigation: Avoid untrusted bundles, run bundle verification, and require checksum-bound source and target state locks before restore or apply.
+
+Risk: Bulk operations such as all-installed discovery can broaden the set of affected products.
+
+Mitigation: Review the detection table and constrain source, target, scope, workspace, and object types before any write.
+
+Risk: Sensitive local settings may contain credentials or trust state.
+
+Mitigation: Rely on the skill's secret scanning and redaction behavior, and migrate only the reviewed portable subobjects rather than whole settings files.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/luckycat133/skills/agent-skills-setup)
+- [IDE registry](references/ide-registry.md)
+- [Registry v2](references/registry-v2.json)
+- [Migration safety and conflicts](references/migration-safety.md)
+- [MCP migration](references/mcp-migration.md)
+- [Object migration](references/object-migration.md)
+- [Verification and evidence](references/verification.md)
+- [Documentation freshness checks](references/doc-freshness-checks.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON plan or manifest paths, and concise migration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce reviewed plan, manifest, verification, rollback, or bundle guidance; network access is forbidden by the skill.]
+
+## Skill Version(s):
+
+0.8.33 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -39,7 +39,7 @@ CLI 会把 key 保存在你的用户配置目录（macOS/Linux 上为 `~/.dlazy/
 
 - **CLI 源代码**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
 - **维护者**: dlazyai
-- **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.2.3` 版本）
+- **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.0.9` 版本）
 - **官网**: [dlazy.com](https://dlazy.com)
 
 如果你不希望在系统上长期保留一个全局 CLI，可以按需运行：
@@ -65,7 +65,7 @@ name: 'text-storyboard-script'
 description: 'Storyboard script generator, taking user-provided themes, structured copy (such as a script containing hooks, suspense, story development, core viewpoints), or outlines, dismantling them into detailed short video storyboard scripts.'
 ---
 
-# Storyboard Script Generator (Text Storyboard Script)
+# 分镜脚本生成 Storyboard Script
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

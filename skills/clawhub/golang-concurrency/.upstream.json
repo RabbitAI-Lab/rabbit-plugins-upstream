@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/golang-concurrency",
   "slug": "golang-concurrency",
   "ownerHandle": null,
-  "version": "1.1.4",
-  "updatedAt": 1779312348766,
-  "contentHash": "a4002c90f40fd33e70dbe2e1ebcf6e47ce2f07bcec93653dc36e4b576ecc2cef",
-  "fetchedAt": "2026-07-26T18:42:08.899Z"
+  "version": "1.2.0",
+  "updatedAt": 1787243184711,
+  "contentHash": "02cdfc32c0563428646bb7dffa7e7b0091fec9fb8204c1df70326404b2767eb2",
+  "fetchedAt": "2026-08-25T08:24:48.329Z"
 }

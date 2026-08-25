@@ -16,7 +16,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.18.0**
+**Skill version: 1.21.1**
 
 here.now lets agents publish websites and files to live URLs in seconds.
 
@@ -54,6 +54,7 @@ Topics that require current docs (do not rely on local skill text alone):
 - SPA routing
 - owner Site search
 - Site analytics
+- Site version history, previews, and rollback
 - error handling and remediation
 - feature availability
 
@@ -97,6 +98,8 @@ You can also publish raw files without any HTML. Single files get a rich auto-vi
 The script auto-loads the `claimToken` from `.herenow/state.json` when updating anonymous sites. Pass `--claim-token {token}` to override.
 
 Authenticated updates require a saved API key.
+
+Every publish records an immutable version. If the user asks to see earlier versions of a Site, undo a publish, or roll back: list history with `GET /api/v1/publish/{slug}/versions` and restore instantly with `POST /api/v1/publish/{slug}/versions/{versionId}/restore` (restoring keeps the current access mode, password, and domains). Version access requires a paid plan and is included for workspace Sites; free accounts' history is recorded and unlocks on upgrade. A byte-identical republish returns `unchanged: true` from finalize instead of creating a new version. See https://here.now/docs#versions.
 
 Signed-in users also have public profiles. Agents can help users show or hide Sites on their profile and manage profile settings through the API documented at https://here.now/docs#profile.
 
@@ -146,14 +149,21 @@ Use scoped Drive tokens for agent-to-agent handoff. If you receive a `herenow_dr
 
 ## Client attribution
 
-Pass `--client` so here.now can track reliability by agent:
+Pass `--client` with the name of the **agent product or harness you are running in** — `cursor`, `claude-code`, `codex`, `grok-bot`, `openclaw`, `gemini`, etc:
 
 ```bash
-./scripts/publish.sh {file-or-dir} --client cursor
+./scripts/publish.sh {file-or-dir} --client claude-code
 ```
 
-This sends `X-HereNow-Client: cursor/publish-sh` on publish API calls.
-If omitted, the script sends a fallback value.
+This sends `X-HereNow-Client: claude-code/publish-sh` on publish API calls. If omitted, the script sends a fallback value.
+
+Use the platform's name, **not** the name you were given inside it. If you are a bot named "research-bot" running inside Grok Bot, the correct value is `grok-bot` — not `research-bot`. Bot names, personas, sub-agents, projects, and thread names don't identify the platform. To record your instance name too, append it after a slash:
+
+```bash
+./scripts/publish.sh {file-or-dir} --client grok-bot/research-bot
+```
+
+Only a standalone agent running in no harness should use its own product name.
 
 ## API key storage
 
@@ -210,8 +220,8 @@ After every site create/update, the script writes to `.herenow/state.json` in th
   "publishes": {
     "bright-canvas-a7k2": {
       "siteUrl": "https://bright-canvas-a7k2.here.now/",
-      "claimToken": "abc123",
-      "claimUrl": "https://here.now/claim?slug=bright-canvas-a7k2&token=abc123",
+      "claimToken": "4fQ9tK2mXb7cW1pZ",
+      "claimUrl": "https://here.now/c/4fQ9tK2mXb7cW1pZ",
       "expiresAt": "2026-02-18T01:00:00.000Z"
     }
   }
@@ -227,10 +237,11 @@ Never present this local file path as a URL, and never use it as source of truth
 For published sites:
 
 - Always share the `siteUrl` from the current script run.
+- Put the site URL on its own line with nothing else on that line — no punctuation, dashes, or status text after it (chat clients autolink everything up to whitespace, gluing your words into the URL). Status details like "permanent, saved to your account" go on the following line.
 - Read and follow `publish_result.*` lines from script stderr to determine auth mode.
 - When `publish_result.account_url` is non-empty (workspace publishes), share it as the primary team URL alongside `siteUrl`.
 - When `publish_result.auth_mode=authenticated`: tell the user the site is **permanent** and saved to their account. No claim URL is needed.
-- When `publish_result.auth_mode=anonymous`: tell the user the site **expires in 24 hours**. Share the claim URL (if `publish_result.claim_url` is non-empty and starts with `https://`) so they can keep it permanently. Warn that claim tokens are only returned once and cannot be recovered.
+- When `publish_result.auth_mode=anonymous`: tell the user the site **expires in 24 hours**. Share the claim URL (if `publish_result.claim_url` is non-empty and starts with `https://`) so they can keep it permanently. Copy it byte-for-byte as a clickable link — never shorten, redact, summarize, or replace any part of it with `...`; a modified claim link will not work. Warn that claim tokens are only returned once and cannot be recovered.
 - Never tell the user to inspect `.herenow/state.json` for claim URLs or auth status.
 
 For Drives:
@@ -249,7 +260,7 @@ For Drives:
 | `--title {text}`       | Viewer title (non-HTML sites)             |
 | `--description {text}` | Viewer description                            |
 | `--ttl {seconds}`      | Set expiry (authenticated only)               |
-| `--client {name}`      | Agent name for attribution (e.g. `cursor`)    |
+| `--client {name}`      | Agent harness for attribution — the platform you run in (e.g. `cursor`, `grok-bot`), not your bot/persona name; optionally append it: `grok-bot/research-bot` |
 | `--base-url {url}`     | API base URL (default: `https://here.now`)    |
 | `--allow-nonherenow-base-url` | Allow sending auth to non-default `--base-url` |
 | `--api-key {key}`      | API key override (prefer credentials file)    |

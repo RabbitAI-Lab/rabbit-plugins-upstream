@@ -1,48 +1,62 @@
-## Description: <br>
-Queries UpKuajing customs company product-list data so an agent can retrieve product names, trade counts, amounts, quantities, weights, trade share, pagination cursors, and related HS codes for product portfolio analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+查询公司海关贸易产品列表数据，获取产品名称的贸易次数、金额、数量和关联 HS 编码，支持外贸团队进行产品组合分析、市场分析和竞品追踪。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External trade teams and agents use this skill to inspect a company's traded product list, quantify product-level trade activity, and connect products to HS codes for market analysis and competitor tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid API calls can incur charges for each product-list query page. <br>
-Mitigation: Tell the user the query is paid and wait for explicit confirmation in a separate message before running the query. <br>
-Risk: The API key may be stored in a local plaintext dotfile. <br>
-Mitigation: Use the environment variable when possible, restrict access to the local credentials file, and avoid sharing command output that includes secrets. <br>
-Risk: Recharge order creation can produce a payment link. <br>
-Mitigation: Only create recharge orders when the user asks, present the returned payment URL for user action, and continue only after the user confirms payment. <br>
-Risk: The helper performs an automatic version check against the UpKuajing API service. <br>
-Mitigation: Install only if this outbound version check is acceptable for the deployment environment. <br>
+## Use Case:
 
+External trade teams and agents use this skill to retrieve paginated company-level customs product data from Upkuajing, including trade counts, amounts, quantities, weights, share percentages, and associated HS codes. It supports product portfolio review, market analysis, and competitor tracking.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-company-product-list-zh) <br>
-- [公司贸易产品列表 API 参考](references/customs-company-product-list-api.md) <br>
-- [UpKuajing homepage](https://www.upkuajing.com) <br>
-- [UpKuajing developer platform](https://developer.upkuajing.com/) <br>
-- [UpKuajing API pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [JSON responses with product-list data and fee information, plus concise user guidance before paid actions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; query parameters are passed as a JSON string to the script.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: The skill uses a paid customs-data API and may initiate billable product-list queries or recharge-order flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm each billable query or recharge-order action before execution and consult the published pricing information when cost details are needed.
+
+Risk: The API key may be stored in a local plaintext ~/.upkuajing/.env file.
+
+Mitigation: Install only when this storage model is acceptable, restrict local file access, and avoid sharing the UPKUAJING_API_KEY value.
+
+Risk: Optional error reports can include request context or payload details.
+
+Mitigation: Review error-report content before submission and avoid including customer secrets, tokens, or sensitive raw payloads.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-company-product-list-zh)
+- [Upkuajing homepage](https://www.upkuajing.com)
+- [Upkuajing developer platform](https://developer.upkuajing.com/)
+- [Upkuajing API pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [公司贸易产品列表 API 参考](references/customs-company-product-list-api.md)
+- [Agent调用Skill异常上报 API 参考](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; customs product-list calls are billable and return paginated JSON data with fee and request identifiers.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

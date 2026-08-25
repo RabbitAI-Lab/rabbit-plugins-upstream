@@ -1,42 +1,56 @@
-## Description: <br>
-Guides developers through basic AWS Bedrock AgentCore and LangGraph agent orchestration, including StateGraph routing and container runtime deployment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AWS图代理 provides workflow and configuration guidance for building AWS Bedrock AgentCore and LangGraph multi-agent systems, including StateGraph orchestration, runtime deployment, memory, gateway integration, and CLI lifecycle management.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[thcjp](https://clawhub.ai/user/thcjp)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and platform engineers use this skill to plan, configure, and deploy AWS Bedrock AgentCore/LangGraph multi-agent workflows with persistent memory, gateway tool integration, and lifecycle commands.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: AWS credentials or sensitive deployment details could be exposed during setup or troubleshooting.
+
+Mitigation: Use least-privilege AWS roles or named profiles, do not paste or print AWS secrets, and avoid storing secrets in source files or container build arguments.
+
+Risk: Generated code and shell commands can create, deploy, invoke, destroy, or otherwise affect AWS resources.
+
+Mitigation: Review generated code and commands before execution, require explicit approval for launch, destroy, and high-impact tool actions, and clean up test resources after use.
+
+Risk: Callback URLs or integrated tools could send data to untrusted destinations.
+
+Mitigation: Use only callback URLs and external tools that the operator controls and trusts.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and engineers use this skill to create a single-agent LangGraph workflow, expose it through AWS Bedrock AgentCore Runtime, and run local development, deployment, invocation, and cleanup commands. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
 
-## Known Risks and Mitigations: <br>
-Risk: AWS deployment commands can create billable cloud resources. <br>
-Mitigation: Review each command before execution, use a test account or least-privilege credentials, confirm the target region, and run cleanup commands when finished. <br>
-Risk: Credential or environment configuration mistakes can affect cloud access or deployment behavior. <br>
-Mitigation: Keep API keys out of version control, verify required model access and runtime settings, and confirm exposed service behavior before deployment. <br>
+**Output Format:** [Markdown with inline code and shell command examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/aws-graph-agent-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Clawdis homepage](https://skillhub.cn) <br>
+**Other Properties Related to Output:** [Requires review before deployment and assumes an AWS account, Bedrock access, and appropriate AWS credentials or roles.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with Python examples, shell commands, and JSON result shape] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include AWS deployment, local development, invocation, and cleanup commands.] <br>
+1.0.4 (source: server release evidence and frontmatter)
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter is 1.0.0) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,62 @@
-## Description: <br>
-Scores and diagnoses Ruankao senior qualification essay drafts across five exam tracks, producing dimension-level scores, pass-line assessment, and targeted revision guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scores and diagnoses Ruankao advanced qualification essays across five tracks, using rubric-based checks for topic fit, professional depth, practical evidence, writing quality, and structure.
 
-## Publisher: <br>
-[nieen](https://clawhub.ai/user/nieen) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nieen](https://clawhub.ai/user/nieen)
 
-## Use Case: <br>
-External Ruankao candidates and reviewers use this skill to evaluate senior qualification essay drafts against the selected exam-track rubric. It helps identify score-limiting gaps such as missing prompt coverage, weak practical evidence, structure issues, and unclear writing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nieen/skills/ruankao-essay-scoring) <br>
-- [Default scoring rubric for system architect essays](references/scoring-rubric.md) <br>
-- [Project manager scoring rubric](references/scoring-rubric-pm.md) <br>
-- [System analyst scoring rubric](references/scoring-rubric-sa.md) <br>
-- [Network planning designer scoring rubric](references/scoring-rubric-ne.md) <br>
-- [System planning and management scoring rubric](references/scoring-rubric-sp.md) <br>
+External users and developers use this skill to evaluate Ruankao advanced essay drafts, confirm the target qualification track, identify scoring weaknesses, and receive focused improvement guidance before revision.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown scoring report with tables, per-dimension diagnosis, and prioritized revision advice] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only output; users should avoid including sensitive personal information in essay drafts unless needed for review, and should confirm the request is a Ruankao essay-scoring task before using the skill.] <br>
+Global
 
-## Skill Version(s): <br>
-1.1.0 (source: evidence release and SKILL.md frontmatter) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill may inspect essay text supplied by the user.
+
+Mitigation: Use it only with essay content the user is comfortable sharing with the active agent environment.
+
+Risk: The declared Write/Edit capability is broader than basic scoring needs.
+
+Mitigation: Review proposed file writes or edits before accepting them, and run the skill in contexts where report-file creation or editing is expected.
+
+Risk: Scoring guidance can be inaccurate or misleading if the wrong qualification track or essay prompt is used.
+
+Mitigation: Confirm the target qualification and original essay prompt before relying on the scoring report.
+
+## Reference(s):
+
+- [Ruankao Essay Scoring skill page](https://clawhub.ai/nieen/skills/ruankao-essay-scoring)
+- [Default scoring rubric](artifact/references/scoring-rubric.md)
+- [Project management scoring rubric](artifact/references/scoring-rubric-pm.md)
+- [System analyst scoring rubric](artifact/references/scoring-rubric-sa.md)
+- [Network planning scoring rubric](artifact/references/scoring-rubric-ne.md)
+- [System planning and management scoring rubric](artifact/references/scoring-rubric-sp.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown scoring report with tables and targeted revision guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes per-dimension scores, word count, seven-question coverage checks, pass-line status, and prioritized improvement suggestions.]
+
+## Skill Version(s):
+
+1.2.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

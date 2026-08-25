@@ -33,6 +33,7 @@ const BRIDGE_CREDENTIAL = runtimeConfig.bridgeCredential;
 const OPERATOR_NAME = runtimeConfig.operatorName;
 const LOGS_DIR = runtimeConfig.logsDir;
 const OUTBOUND_CALLS_ENABLED = runtimeConfig.outboundCallsEnabled;
+const CRM_ENABLED = runtimeConfig.crmEnabled;
 
 // ─── Helpers ───
 
@@ -322,7 +323,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         required: ['action'],
       },
     },
-    {
+    ...(CRM_ENABLED ? [{
       name: 'crm',
       description:
         'Manage contacts and interaction history. Look up contacts by phone or name, ' +
@@ -363,7 +364,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         },
         required: ['action'],
       },
-    },
+    }] : []),
     {
       name: 'bridge_health',
       description:
@@ -600,6 +601,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case 'crm': {
+        if (!CRM_ENABLED) {
+          return {
+            content: [{
+              type: 'text',
+              text: 'CRM is disabled. Set AMBER_CRM_ENABLED=true, install amber-skills/crm dependencies, and restart Amber to use caller memory.',
+            }],
+            isError: true,
+          };
+        }
+
         // Format CRM results into readable text
         const formatCrmResult = (result: any): string => {
           if (!result.success) return result.message ?? result.error ?? JSON.stringify(result);
@@ -673,6 +684,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case 'contacts_lookup': {
         const contactName = (args as any)?.name;
         const contactPhone = (args as any)?.phone;
+        const includeExtendedFields = /^(1|true|yes)$/i.test(process.env.AMBER_CONTACTS_EXTENDED || '');
 
         if (!contactName && !contactPhone) {
           return {
@@ -732,20 +744,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           const formatted = matches.map((c: any) => {
             const fullName = [c.firstName, c.lastName].filter(Boolean).join(' ') || c.organization || 'Unknown';
             const lines = [`### ${fullName}`];
-            if (c.organization) lines.push(`🏢 ${c.organization}${c.jobTitle ? ` — ${c.jobTitle}` : ''}`);
             if (c.phones?.length) {
               lines.push(`📱 ${c.phones.map((p: any) => `${p.number}${p.label ? ` (${p.label})` : ''}`).join(', ')}`);
             }
-            if (c.emails?.length) {
-              lines.push(`📧 ${c.emails.map((e: any) => `${e.address}${e.label ? ` (${e.label})` : ''}`).join(', ')}`);
+            if (includeExtendedFields) {
+              if (c.organization) lines.push(`🏢 ${c.organization}${c.jobTitle ? ` — ${c.jobTitle}` : ''}`);
+              if (c.emails?.length) {
+                lines.push(`📧 ${c.emails.map((e: any) => `${e.address}${e.label ? ` (${e.label})` : ''}`).join(', ')}`);
+              }
+              if (c.relationships?.length) {
+                lines.push(`👥 ${c.relationships.map((r: any) => `${r.name} (${r.type})`).join(', ')}`);
+              }
+              if (c.addresses?.length) {
+                lines.push(`📍 ${c.addresses[0].full}`);
+              }
+              if (c.note) lines.push(`📝 ${c.note}`);
             }
-            if (c.relationships?.length) {
-              lines.push(`👥 ${c.relationships.map((r: any) => `${r.name} (${r.type})`).join(', ')}`);
-            }
-            if (c.addresses?.length) {
-              lines.push(`📍 ${c.addresses[0].full}`);
-            }
-            if (c.note) lines.push(`📝 ${c.note}`);
             return lines.join('\n');
           }).join('\n\n');
 

@@ -1,46 +1,61 @@
-## Description: <br>
-Consumes tender files and helps produce compliant bid documents by interpreting requirements, drafting technical and commercial bid content, exporting .docx files, and reviewing rejection and compliance risks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+喂进招标文件后，本 skill 经开放 API 解读招标文件、智能撰写技术标与商务标、导出 .docx，并做废标风险与合规审查。
 
-## Publisher: <br>
-[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666)
 
-## Use Case: <br>
-External users and bid-writing teams use this skill to analyze tender files, generate editable bid documents, and review bid submissions for compliance and rejection risk through the named bid-writing service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid files may contain confidential commercial, pricing, or personal information and are uploaded to the named service for processing. <br>
-Mitigation: Confirm the user understands and agrees to each upload before running interpretation, bid generation, or compliance review. <br>
-Risk: Bid document generation can use the App Key account and may consume paid credits. <br>
-Mitigation: Check account balance before submission and confirm paid generation steps with the user. <br>
-Risk: The App Key is an account credential. <br>
-Mitigation: Have the user store it only in the local config file and never paste it into chat or expose links containing the key. <br>
+## Use Case:
 
+External procurement and bid teams use this skill to interpret tender documents, generate editable bid documents, and review bid files for rejection and compliance risks. Agents also use it to produce reports, route users through credential setup, and surface required consent before uploading commercial documents to the 百炼标书 service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-craft) <br>
-- [Publisher profile](https://clawhub.ai/user/chichihaixiaojian666) <br>
-- [百炼标书 service](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [API contract reference](references/api.md) <br>
-- [Usage reference](references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance plus generated .docx, HTML, and Word report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated bid documents and reports are written to local output paths; some cloud results may expire after about 7 days.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+Risk: Tender, bid, and company data may contain commercial, pricing, or personal information and is uploaded to the 百炼标书 service for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use only when authorized to upload those files, and confirm user consent before the first upload.
+
+Risk: The App Key is a full account credential and could be exposed through chat history or shared-machine files.
+
+Mitigation: Have the user place the key in the local config file rather than pasting it in chat, and clear config or cache files on shared machines when finished.
+
+Risk: Generated task results and .docx outputs remain available on the service for about 7 days.
+
+Mitigation: Tell users about the retention window and have them manage or remove service-side history through the account when appropriate.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-craft)
+- [百炼标书 service](https://biaoshu.zhiliaobiaoxun.com/)
+- [API contract reference](references/api.md)
+- [Usage guide](references/usage.md)
+- [Knowledge-base field guide](references/knowledge-fields.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Conversational guidance plus generated HTML reports, Word reports, and .docx bid documents]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a user-provided App Key in local config and user-authorized local tender or bid files.]
+
+## Skill Version(s):
+
+1.0.15 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
