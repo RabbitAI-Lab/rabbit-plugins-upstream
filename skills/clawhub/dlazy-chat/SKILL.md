@@ -1,19 +1,13 @@
 ---
 name: dlazy-chat
 version: 1.2.8
-description: Chat with the dlazy sandbox agent — a project-scoped assistant that runs skills end-to-end over multiple turns. Discover skills and projects with dlazy skills list / dlazy projects list. 与 dlazy 沙箱 agent 对话 —— 一个以项目为单位、可端到端运行技能的多轮助手。用 dlazy skills list / dlazy projects list 发现可用技能与项目。
+description: "Chat with the dlazy sandbox agent — a project-scoped assistant that runs skills end-to-end over multiple turns. Discover skills and projects with dlazy skills list / dlazy projects list. 与 dlazy 沙箱 agent 对话 —— 一个以项目为单位、可端到端运行技能的多轮助手。用 dlazy skills list / dlazy projects list 发现可用技能与项目。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When this skill is called, use `dlazy chat`; discover ids via `dlazy skills list` and `dlazy projects list`."}}
 ---
 
-# dlazy-chat
+# 沙箱智能体对话 Chat
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
-
-
-
-
-
 
 
 Chat with the dlazy sandbox agent — a project-scoped assistant that runs skills end-to-end over multiple turns. Discover skills and projects with `dlazy skills list` / `dlazy projects list`.

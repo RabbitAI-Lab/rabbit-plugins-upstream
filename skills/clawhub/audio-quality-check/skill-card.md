@@ -1,42 +1,50 @@
-## Description: <br>
-Audio Quality Check helps agents analyze local audio recordings for echo, loudness, speech intelligibility, SNR, spectral characteristics, and related quality issues. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes audio recording quality, including echo detection, loudness, speech intelligibility, SNR, and spectral analysis.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers, engineers, and audio reviewers use this skill to run local recording diagnostics, interpret metrics, and identify likely causes of poor call audio such as echo, bleed, noise, or AEC degradation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Call recordings may contain private speech or sensitive meeting content. <br>
-Mitigation: Run the analyzer only on recordings the user is authorized to inspect, and avoid sharing generated reports outside the intended review context. <br>
-Risk: The skill depends on local audio-analysis tooling and Python packages that must be installed before use. <br>
-Mitigation: Install dependencies from trusted package sources and review the local environment before running analysis commands. <br>
+## Use Case:
 
+Developers, audio engineers, and support teams use this skill to inspect call recordings, compare original and processed tracks, and diagnose issues such as echo, low intelligibility, noise, or abnormal loudness.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/audio-quality-check) <br>
-- [Project homepage](https://github.com/tenequm/skills/tree/main/skills/audio-quality-check) <br>
-- [Apache License 2.0](https://www.apache.org/licenses/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, guidance] <br>
-**Output Format:** [Markdown guidance with bash and Python snippets plus terminal report text from the bundled analyzer] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user-selected local audio recordings and ffmpeg/ffprobe; analysis is performed locally according to the reviewed artifacts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: evidence.release.version and artifact metadata.version) <br>
+Risk: Private extracted audio can remain in temporary files when some analysis modes exit before cleanup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid shortcut modes for sensitive recordings, or manually delete /tmp/audio_analysis_* and related extracted WAV files after analysis.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tenequm/skills/audio-quality-check)
+- [Project homepage](https://github.com/tenequm/skills/tree/main/skills/audio-quality-check)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and terminal analysis output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports track metadata, loudness, echo correlation, speech quality, intelligibility, spectral metrics, SNR, and per-minute energy when supported by the recording inputs.]
+
+## Skill Version(s):
+
+0.1.4 (source: SKILL.md frontmatter, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

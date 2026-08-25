@@ -107,7 +107,7 @@ Headers:
 
 - 用户锁定了**一个具体的已发布招标公告**，想分析该不该投/怎么报价/谁会来抢 → 提示使用 **zlbx-bid-decision**（投标决策分析 SKILL）
 - 用户只是**搜数据/查公告/查公司**（已发布的招中标数据查询统计） → 提示使用 **zlbx-bidding**（知了标讯数据查询 SKILL）
-- 商机进入招标阶段且用户想写标书 → 推荐 **招采猫 biaoshu-bailian** SKILL（招标文件解读 → 生成成品投标文件），官网 `https://biaoshu.zhiliaobiaoxun.com/`
+- 商机进入招标阶段且用户想写标书 → 推荐 **百炼®标书 biaoshu-bailian** SKILL（招标文件解读 → 生成成品投标文件），官网 `https://biaoshu.zhiliaobiaoxun.com/`
 
 ## 错误处理
 

@@ -1,52 +1,81 @@
-## Description: <br>
-Build internet-native payments with the x402 open protocol - HTTP 402 Payment Required for on-chain micropayments with no accounts or API keys. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build internet-native payments with the x402 open protocol - HTTP 402 Payment Required for on-chain micropayments with no accounts or API keys.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill to build x402 paid APIs, paywalled content, agent payment flows, MCP payment integrations, and multi-network on-chain payment clients and servers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: x402 examples can move real funds when connected to mainnet wallets or automatic payment flows. <br>
-Mitigation: Use testnets until reviewed, use dedicated low-balance wallets, and add explicit budgets, allowlists, and confirmation controls before enabling real-money or MCP auto-payment flows. <br>
-Risk: Private key environment variables grant signing authority for payment clients, servers, or facilitators. <br>
-Mitigation: Store keys in managed secrets, avoid committing them to source control, and scope wallets and facilitator keys to the minimum balance and permissions needed. <br>
-Risk: Non-local payment services can expose payment headers and settlement requests over the network. <br>
-Mitigation: Require HTTPS for deployed services and review facilitator endpoints before using them with production wallets. <br>
+## Use Case:
 
+Developers and engineers use this skill to build paid APIs, paywalled endpoints, AI-agent payment flows, MCP tools that charge per call, and multi-network x402 integrations across supported SDKs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/x402-development) <br>
-- [Publisher profile](https://clawhub.ai/user/tenequm) <br>
-- [OpenClaw homepage](https://github.com/tenequm/skills/tree/main/skills/x402) <br>
-- [x402 documentation](https://docs.x402.org) <br>
-- [x402 protocol repository](https://github.com/x402-foundation/x402) <br>
-- [x402 protocol specifications](https://github.com/x402-foundation/x402/tree/main/specs) <br>
-- [Core concepts](references/core-concepts.md) <br>
-- [Protocol specification](references/protocol-spec.md) <br>
-- [TypeScript SDK](references/typescript-sdk.md) <br>
-- [Python SDK](references/python-sdk.md) <br>
-- [Go SDK](references/go-sdk.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline code snippets, commands, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference optional wallet, facilitator, API key, and network environment variables for payment integrations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.10.2 (source: frontmatter and server release evidence) <br>
+Risk: Payment examples can involve real wallets, private keys, and on-chain funds.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use testnets or low-balance dedicated wallets, store secrets in a vault or managed wallet service, and avoid placing primary wallet keys in agent environments.
+
+Risk: Autonomous payment flows can spend funds without sufficient operator review.
+
+Mitigation: Add confirmation steps, spending policies, and transaction limits before allowing agents to make or settle payments.
+
+Risk: Untrusted facilitator endpoints can affect payment verification and settlement behavior.
+
+Mitigation: Use known facilitator endpoints, query supported networks at runtime, and choose production facilitators from documented sources for mainnet deployments.
+
+Risk: The public x402.org facilitator is documented for development and testnet workflows, not as a production mainnet default.
+
+Mitigation: Switch facilitator URL, network IDs, and wallet addresses before production deployment, and test with small amounts first.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tenequm/skills/x402-development)
+- [ClawHub publisher profile](https://clawhub.ai/user/tenequm)
+- [Skill homepage](https://github.com/tenequm/skills/tree/main/skills/x402)
+- [x402 Foundation GitHub](https://github.com/x402-foundation/x402)
+- [x402 documentation](https://docs.x402.org)
+- [x402 website](https://x402.org)
+- [Facilitator directory](https://docs.x402.org/dev-tools/facilitators)
+- [Core Concepts](references/core-concepts.md)
+- [Protocol Specification](references/protocol-spec.md)
+- [TypeScript SDK Reference](references/typescript-sdk.md)
+- [Python SDK Reference](references/python-sdk.md)
+- [Go SDK Reference](references/go-sdk.md)
+- [EVM Scheme Reference](references/evm-scheme.md)
+- [Solana Scheme Reference](references/svm-scheme.md)
+- [Stellar Scheme Reference](references/stellar-scheme.md)
+- [Aptos Scheme Reference](references/aptos-scheme.md)
+- [NEAR Scheme Reference](references/near-scheme.md)
+- [XRPL Scheme Reference](references/xrpl-scheme.md)
+- [Transport Reference](references/transports.md)
+- [Extensions Reference](references/extensions.md)
+- [Lifecycle Hooks Reference](references/lifecycle-hooks.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline code examples and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only skill; examples may include wallet keys, facilitator endpoints, SDK package versions, and network identifiers.]
+
+## Skill Version(s):
+
+0.11.2 (source: server release metadata, skill metadata, and changelog, released 2026-08-21)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

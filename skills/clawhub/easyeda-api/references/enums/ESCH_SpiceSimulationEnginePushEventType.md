@@ -1,11 +1,11 @@
 # ESCH\_SpiceSimulationEnginePushEventType enum
 
-Spice 仿真引擎推送事件类型
+Spice simulation engine push event type
 
 ## Signature
 
 ```typescript
-declare enum ESCH_SpiceSimulationEnginePushEventType 
+export enum ESCH_SpiceSimulationEnginePushEventType 
 ```
 
 ## Enumeration Members
@@ -33,12 +33,10 @@ ERROR\_RESULT
 
 </td><td>
 
-`"ERROR_RESULT"`
+`'ERROR_RESULT'`
 
 
 </td><td>
-
-错误
 
 
 </td></tr>
@@ -49,12 +47,10 @@ LOG\_RESULT
 
 </td><td>
 
-`"LOG_RESULT"`
+`'LOG_RESULT'`
 
 
 </td><td>
-
-日志
 
 
 </td></tr>
@@ -65,12 +61,10 @@ SIMULATION\_RESULT
 
 </td><td>
 
-`"SIMULATION_RESULT"`
+`'SIMULATION_RESULT'`
 
 
 </td><td>
-
-仿真结果
 
 
 </td></tr>
@@ -81,12 +75,10 @@ VALIDATION\_RESULT
 
 </td><td>
 
-`"VALIDATION_RESULT"`
+`'VALIDATION_RESULT'`
 
 
 </td><td>
-
-验证结果
 
 
 </td></tr>

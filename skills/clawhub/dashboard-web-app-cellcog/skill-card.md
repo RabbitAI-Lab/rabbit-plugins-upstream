@@ -1,39 +1,54 @@
-## Description: <br>
-AI dashboard and web app generation powered by CellCog, including interactive dashboards, KPI trackers, data visualizations, analytics apps, data explorers, calculators, games, and responsive HTML apps with real-time filters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dashboard helps agents use CellCog to generate interactive dashboards, KPI trackers, data visualizations, analytics apps, data explorers, calculators, games, and responsive HTML apps with real-time filters.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers and business users use this skill to generate interactive dashboards, KPI trackers, data explorers, charts, and responsive web apps through CellCog. It supports prompts that include inline data, uploaded files, or generated sample data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and uploaded data may be sent to CellCog as an external AI service. <br>
-Mitigation: Use mock or redacted data for demos, and upload confidential, customer, HR, financial, log, or regulated data only when authorized and aligned with CellCog data handling terms. <br>
+## Use Case:
 
+Developers and agents use this skill to ask CellCog to create dashboards, KPI trackers, interactive data explorers, responsive web apps, and simple browser games from prompts, inline data, or uploaded CSV, JSON, and Excel files.
 
-## Reference(s): <br>
-- [CellCog homepage](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/dashboard-web-app-cellcog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Code, Files, Markdown, Guidance] <br>
-**Output Format:** [Markdown responses with generated dashboard or web app code and files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; may use uploaded CSV, JSON, or Excel data when provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release evidence) <br>
+Risk: Prompts and uploaded CSV, JSON, or Excel files may be sent to CellCog's external generation service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when CellCog is intended for the workflow, avoid sensitive business data unless approved, and review CellCog's package and service terms before use.
+
+Risk: The skill depends on a CellCog API key and Python package availability.
+
+Mitigation: Install the CellCog package from an approved source, set CELLCOG_API_KEY through the user's normal secret-management process, and avoid embedding credentials in prompts or generated files.
+
+## Reference(s):
+
+- [CellCog homepage](https://cellcog.ai)
+- [ClawHub skill page](https://clawhub.ai/cellcog/skills/dashboard-web-app-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with Python and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the CellCog package and CELLCOG_API_KEY; generated dashboard or app content is returned by the external CellCog service.]
+
+## Skill Version(s):
+
+1.0.17 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

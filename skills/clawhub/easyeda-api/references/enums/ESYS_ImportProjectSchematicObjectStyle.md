@@ -1,11 +1,11 @@
 # ESYS\_ImportProjectSchematicObjectStyle enum
 
-导入工程原理图图元样式
+Import project schematic primitive style
 
 ## Signature
 
 ```typescript
-declare enum ESYS_ImportProjectSchematicObjectStyle 
+export enum ESYS_ImportProjectSchematicObjectStyle 
 ```
 
 ## Enumeration Members
@@ -33,12 +33,10 @@ USE\_SOURCE\_FILE\_STYLE
 
 </td><td>
 
-`"custom"`
+`'custom'`
 
 
 </td><td>
-
-使用源文件样式
 
 
 </td></tr>
@@ -49,12 +47,10 @@ USE\_SYSTEM\_THEME
 
 </td><td>
 
-`"system"`
+`'system'`
 
 
 </td><td>
-
-使用系统主题
 
 
 </td></tr>

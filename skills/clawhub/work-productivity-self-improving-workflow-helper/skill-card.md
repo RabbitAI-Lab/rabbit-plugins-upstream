@@ -1,42 +1,52 @@
-## Description: <br>
-Helps AI-agent users, skill authors, maintainers, and teams turn self-improving and proactive agent workflow demand into practical local workflows, checklists, analysis, code changes, or decision support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agent users, skill authors, maintainers, and teams turn self-improving and proactive-agent workflow demand into practical plans, checklists, artifacts, analysis, code changes, and verification notes.
 
-## Publisher: <br>
-[kyro-ma](https://clawhub.ai/user/kyro-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kyro-ma](https://clawhub.ai/user/kyro-ma)
 
-## Use Case: <br>
-AI-agent users, skill authors, maintainers, and teams use this skill to clarify requested outcomes, plan self-improving or proactive agent workflows, create reusable checklists or artifacts, and validate the result against stated success criteria. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger words may cause the skill to be invoked for unrelated requests. <br>
-Mitigation: Narrow activation wording before deployment or confirm invocation intent when the request is not clearly about self-improving or proactive agent workflows. <br>
+## Use Case:
 
+AI-agent users, skill authors, maintainers, and teams use this skill to clarify self-improving or proactive workflow goals, produce local-hardware-friendly plans or artifacts, and verify the result against visible success criteria.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kyro-ma/skills/work-productivity-self-improving-workflow-helper) <br>
-- [Requirement plan](references/requirement-plan.md) <br>
-- [Popular ClawHub skill demand: self-improving agent](https://clawhub.ai/skills/self-improving-agent) <br>
-- [Popular ClawHub skill demand: Proactive Agent](https://clawhub.ai/skills/proactive-agent) <br>
-- [Popular ClawHub skill demand: Self-Improving + Proactive Agent](https://clawhub.ai/skills/self-improving) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown or plain text with optional code, shell command, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include reusable checklists, work plans, validation notes, assumptions, limits, and follow-up risks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20260725.110246 (source: server release evidence) <br>
+Risk: Broad trigger terms may cause the skill to activate for generic productivity or bug-fix requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer explicit invocation for this workflow and narrow trigger terms before publishing or maintaining variants.
+
+## Reference(s):
+
+- [Requirement Plan](references/requirement-plan.md)
+- [Self-Improving Agent demand signal](https://clawhub.ai/skills/self-improving-agent)
+- [Proactive Agent demand signal](https://clawhub.ai/skills/proactive-agent)
+- [Self-Improving + Proactive Agent demand signal](https://clawhub.ai/skills/self-improving)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with optional code blocks, shell commands, checklists, templates, and verification notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include assumptions, limits, required inputs, remaining risks, and follow-up work when useful.]
+
+## Skill Version(s):
+
+0.20260824.40429 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

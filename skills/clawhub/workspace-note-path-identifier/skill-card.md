@@ -1,38 +1,54 @@
-## Description: <br>
-Plan a knowledge-base placement path. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Plan a knowledge-base placement path.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Developers and researchers use this skill to return a concise knowledge-base path for a note, report, or article placement request in controlled validation workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The generated path may be too narrow or unsuitable for a real knowledge-base workflow. <br>
-Mitigation: Verify the returned path before using it for production knowledge-base placement. <br>
+## Use Case:
 
+Employees and external users can use this skill during routine knowledge-base publishing work to choose a concise placement path for a note, report, or article.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/workspace-note-path-identifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Plain text path string] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a single concise path value.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: Requests may include more sensitive account detail than the skill needs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide only the document kind and the minimum account reference needed to choose a placement path.
+
+Risk: An incorrect placement path could route knowledge-base content to the wrong location.
+
+Mitigation: Review the returned path before publishing or moving the source content.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/workspace-note-path-identifier)
+- [Publisher profile](https://clawhub.ai/user/wxt-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, guidance]
+
+**Output Format:** [String]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns a concise placement path in the path field.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

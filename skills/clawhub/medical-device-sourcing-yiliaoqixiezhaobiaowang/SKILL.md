@@ -16,10 +16,18 @@ Headers:
   Content-Type: application/json
 ```
 
-**API Key**: 
-- 从环境变量 `ZLBX_API_KEY`
-- 从Agent配置文件中读取。
-- 申请地址：https://ai.zhiliaobiaoxun.com/?ch=s37 → 手机号登录 → 复制 Key → 配置到环境变量 `ZLBX_API_KEY` 即可。（新用户限时赠200次额度）
+**API Key 获取**（按以下优先级，命中即停，不要做任何额外提示）：
+
+1. 环境变量 `$ZLBX_API_KEY`（用户主动配置）→ 直接用
+2. 本地配置文件 `~/.zlbx/config.json` 中 `api_key` 字段 → 直接用
+3. **以上都没有 → 先征得用户同意，再开通免费试用账号**（详见 `references/account-setup.md`）：
+   - 先用一句话征询，例如「未检测到 API Key，我帮你开通一个免费试用账号（送 100 次调用，仅读取 3 项非身份设备标识做去重）？」**用户同意前不得执行任何读取命令、不得发起任何请求**；用户拒绝 → 给出手动申请链接 `https://ai.zhiliaobiaoxun.com/?ch=s37`，流程终止
+   - 同意后读取 3 项设备标识（platform / arch / mac_hash，MAC 仅传 SHA256 哈希，不传原始值；不读取主机名、用户名、目录路径），读取失败用空串代替，**不要中断**
+   - POST `https://ai.zhiliaobiaoxun.com/web-api/internal/auto-register`
+   - 返回的 `api_key` 写入 `~/.zlbx/config.json`：`{"api_key": "zlbx_xxx", "source": "auto", "registered_at": "<ISO 时间>"}`
+   - 当前会话立即用该 key 继续工作；新设备账号赠送 100 次免费调用，绑定手机号再送 100
+
+> **重要**：若 `$ZLBX_API_KEY` 已配置或 config.json 中 `source` 不是 `"auto"`，本 SKILL 不输出任何关于「账号开通」「自动登录」「设备绑定」相关内容，按现有手动充值流程提示用户。
 
 
 ---
@@ -290,7 +298,7 @@ POST /api_v2/get_price_trends {"brand": "联想", "model": "ThinkSystem SR650", 
 | 错误码 | 处理方式 |
 |------|---------|
 | AUTHENTICATION_FAILED | 检查 ZLBX_API_KEY 是否正确 |
-| INSUFFICIENT_BALANCE / QUOTA_EXCEEDED | 账户额度不足，需充值 |
+| INSUFFICIENT_BALANCE / QUOTA_EXCEEDED | **判断 API Key 来源**：<br>① 来自 `~/.zlbx/config.json` 且 `source == "auto"` → 调用 `POST /web-api/auth/generate-device-sid`（带 `X-API-Key` Header）拿到 `sid`，输出充值链接 `https://ai.zhiliaobiaoxun.com/auto-login?sid=<sid>`，提示文案：「免费额度已用完，点击链接自动登录并充值；首次会引导绑定手机号，绑定即送 100 次」<br>② 来自 `$ZLBX_API_KEY` → 提示访问 `https://ai.zhiliaobiaoxun.com/?ch=s37` 手动登录充值（不输出自动登录链接） |
 | RATE_LIMITED | 降低请求频率，稍后重试 |
 | INVALID_REQUEST | 检查必填参数和类型 |
 

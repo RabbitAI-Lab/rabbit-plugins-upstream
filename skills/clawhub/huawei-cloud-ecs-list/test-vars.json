@@ -1,0 +1,28 @@
+{
+  "skill_name": "huawei-cloud-ecs-list",
+  "service": "ECS",
+  "mode": "CLI",
+  "test_cases": [
+    {
+      "name": "list - 基础列表查询（默认区域）",
+      "command": "python3 scripts/huawei-cloud-ecs-list.py list --region cn-north-4",
+      "method": "GET",
+      "category": "readonly",
+      "expected": "JSON {count, servers}，空列表时 count=0"
+    },
+    {
+      "name": "list - 组合过滤查询（状态+名称+规格）",
+      "command": "python3 scripts/huawei-cloud-ecs-list.py list --region cn-north-4 --status ACTIVE --name test --flavor s6.small.1",
+      "method": "GET",
+      "category": "readonly",
+      "expected": "JSON {count, servers}，无匹配时 count=0"
+    },
+    {
+      "name": "capability-list - 能力列表",
+      "command": "python3 scripts/huawei-cloud-ecs-list.py capability-list",
+      "method": "GET",
+      "category": "readonly",
+      "expected": "JSON {skill, service, mode, operations}"
+    }
+  ]
+}

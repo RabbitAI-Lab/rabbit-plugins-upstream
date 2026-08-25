@@ -1,42 +1,59 @@
-## Description: <br>
-Deep Research Cellcog helps agents use CellCog for deep research across market, competitive, investment, academic, due diligence, financial, crypto, and news topics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deep Research uses CellCog to produce multi-source research for market analysis, competitive analysis, investment research, academic research, due diligence, financial analysis, crypto research, and news intelligence.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-External users and developers use this skill to route research prompts to CellCog and request structured reports, analyses, and citation-backed syntheses for business, academic, and technical research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Research prompts and included context may be sent to CellCog. <br>
-Mitigation: Avoid secrets, regulated data, internal documents, or confidential business information unless CellCog is approved for that use. <br>
-Risk: Citations are not automatic, and generated research can still require source review before high-impact decisions. <br>
-Mitigation: Explicitly request citations and review cited sources before relying on results for investment, regulatory, due diligence, or academic decisions. <br>
+## Use Case:
 
+Developers and agent users use this skill to request CellCog deep research across competitive analysis, market research, investment analysis, academic research, and due diligence. It is suited for research reports, structured comparisons, summaries, and source-backed analysis when citations are explicitly requested.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/deep-research-cellcog) <br>
-- [CellCog](https://cellcog.ai) <br>
-- [DeepResearch Bench Leaderboard](https://huggingface.co/spaces/muset-ai/DeepResearch-Bench-Leaderboard) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python code blocks and setup commands; downstream CellCog responses may be plain text, Markdown, HTML, or PDF when requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; agent team max mode requires at least 2,000 credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.15 (source: server release evidence) <br>
+Risk: Confidential, regulated, financial, or proprietary prompts may be sent to the external CellCog service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with data your organization permits sending to CellCog; avoid sensitive data unless approved.
+
+Risk: Generated HTML or PDF reports may need review before sharing or rendering in trusted environments.
+
+Mitigation: Review generated reports before distribution and open them in an environment appropriate for generated external-service content.
+
+Risk: Source traceability may be incomplete if citations are not requested.
+
+Mitigation: Explicitly request citations and source URLs for factual claims when traceability is required.
+
+## Reference(s):
+
+- [CellCog homepage](https://cellcog.ai)
+- [DeepResearch Bench Leaderboard](https://huggingface.co/spaces/muset-ai/DeepResearch-Bench-Leaderboard)
+- [ClawHub Deep Research skill page](https://clawhub.ai/cellcog/skills/deep-research-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with Python examples; research outputs may be plain text, Markdown, PDF, or interactive HTML when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3, the cellcog dependency, CELLCOG_API_KEY, and use of the external CellCog service; citations must be explicitly requested.]
+
+## Skill Version(s):
+
+1.0.20 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,7 +1,7 @@
 ---
 name: drivethru-odoo
 description: Talk to an Odoo ERP through its `drivethru_mcp` MCP server — discover the available Odoo tools at runtime and call them to look up eBay products/inventory, push eBay orders and read tracking, run the Accounts Payable PO→vendor-bill flow, review documents in the Documents app against their purchase orders and fix incorrect PO line pricing (the "check the Purchasing folder against the POs" / vendor-invoice pricing-review workflow, filing each document into Matched or Questions), schedule MRP production batches, drive vendor replenishment purchasing (run the replenishment report → curate lines → add to a PO → hand style/color/size/qty to the vendor's purchasing skill → write pricing + confirmation back and confirm the PO), and retrieve internal SOPs / best practices / policies from the Knowledge base scoped to the asking person's permissions. Use whenever the user needs to read from or write to Odoo, especially when you are answering a person inside an Odoo Discuss conversation.
-version: 0.6.0
+version: 0.9.0
 emoji: 🏭
 homepage: https://www.odoo.com
 metadata:
@@ -114,16 +114,16 @@ live list over this table):
 | eBay        | `ebay_list_products`, `ebay_inventory`, `ebay_create_order`, `ebay_order_tracking` |
 | Accounts Pay| `ap_search_purchase_orders`, `ap_get_purchase_order`, `ap_update_po_lines`, `ap_create_vendor_bill`, `ap_get_vendor_bill`, `ap_search_vendors`; PO chatter: `po_post_message`, `po_get_messages` |
 | Documents app | `documents_list_folders`, `documents_search`, `documents_get`, `documents_create`, `documents_update`, `documents_post_message` — folders/files, chatter, and activities (the door to the Purchasing folder for the PO pricing review) |
-| Production  | `production_overview`, `production_schedule_queue`, `production_list_batches`, `production_get_batch`, `production_batch_supply`, `production_schedule_batch`, `production_plan_batch`, `production_bulk_schedule`, `production_list_workcenters`, `production_get_workcenter`, `production_list_production_centers`, `production_list_decoration_methods` |
+| Production  | `production_overview`, `production_schedule_queue`, `production_set_run_order`, `production_list_batches`, `production_get_batch`, `production_batch_supply`, `production_schedule_batch`, `production_plan_batch`, `production_bulk_schedule`, `production_list_workcenters`, `production_get_workcenter`, `production_list_production_centers`, `production_list_decoration_methods` |
 | Mfg data (read-only) | `mfg_list_models`, `mfg_fields`, `mfg_read` — read ALL fields on any whitelisted manufacturing model (batches, POs, receipts, decorations, tracking, …) |
 | Replenishment / Purchasing | `replenish_run_report`, `replenish_get_orderpoint`, `replenish_to_po`, `replenish_update_po`, `replenish_confirm_po`, `po_post_message`, `po_get_messages` |
 | Internal knowledge (SOPs, best practices) | `knowledge_search_articles`, `knowledge_get_article` — permission-scoped to the asking person |
 | Operator docs | `docs_list`, `docs_get` — fetch the operator reference for deeper context |
 
-For a full production-scheduling pass (rank the queue → check receipts → place
-batches on machines, never starting before goods are received), use the
-dedicated **`drivethru-production-scheduler`** skill, which drives these same
-tools.
+For a full production-scheduling pass (rank the queue → publish the run order
+→ check receipts → place batches on machines, never starting before goods are
+received), use the dedicated **`drivethru-production-scheduler`** skill, which
+drives these same tools.
 
 ## Operator setup: attaching the `drivethru_mcp` MCP (native tools)
 

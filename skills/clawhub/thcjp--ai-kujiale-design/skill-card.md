@@ -1,44 +1,59 @@
-## Description: <br>
-Ai Kujiale Design guides an agent through Kujiale-based interior design, including floorplan search or upload, style selection, automatic layout, and render or panorama output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through Kujiale-powered interior design workflows for floor-plan confirmation, style selection, automated layout generation, and rendered output.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users, interior designers, real-estate professionals, and renovation teams use this skill to turn a selected or uploaded floorplan into Kujiale layout proposals, render images, panorama links, and concise design highlights. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow relies on a persistent Kujiale account token stored in .kjlconfig.json. <br>
-Mitigation: Use a dedicated Kujiale token where possible, keep .kjlconfig.json out of version control, and restrict local file permissions. <br>
-Risk: Layout and rendering actions may consume paid or quota-limited Kujiale resources. <br>
-Mitigation: Require explicit user confirmation before actions that spend layout or rendering quota, and stop when quota is unavailable. <br>
-Risk: The skill can upload floorplan images and monitor a local inbound media folder. <br>
-Mitigation: Use a dedicated workspace, verify the intended image before upload, and avoid shared or synced folders for sensitive floorplans. <br>
+## Use Case:
 
+Homeowners, interior designers, and real-estate teams use this Chinese-language skill to search or upload a floor plan, choose a style, generate a layout, and obtain render images, panorama links, and design highlights through Kujiale.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-kujiale-design) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
-- [Kujiale skills portal](https://www.kujiale.com/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell command snippets, image links, panorama links, and design highlights] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Final output is expected to include ordered render images, panorama links, design highlights, and a Kujiale design detail link.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata) <br>
+Risk: Floorplan images and design data may be sent to Kujiale cloud services during the workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm user consent before uploading or processing floorplans, and avoid sending sensitive floorplan or design data when the user is not comfortable with Kujiale handling it.
+
+Risk: The workflow requires a Kujiale access token.
+
+Mitigation: Store the token outside version control, restrict permissions on local configuration files, and avoid printing or logging token values.
+
+Risk: Layout and render actions may consume account quota or credits.
+
+Mitigation: Ask for explicit user confirmation before running quota-consuming layout or rendering steps.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-kujiale-design)
+- [Kujiale skills token page](https://www.kujiale.com/skills)
+- [Kujiale design detail URL pattern](https://www.kujiale.com/pcenter/design/{designId}/setting?from=skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown result file plus direct image and link messages]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Final output is expected at ./outputs/result.md with design highlights, render images, panorama links, and a Kujiale design detail link; progress messages are sent separately.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata; artifact frontmatter says 1.0.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

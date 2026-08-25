@@ -1,46 +1,64 @@
-## Description: <br>
-AI video reviews for creators and teams that return timestamped feedback from prompts for pacing, clarity, hook, retention, structure, proof, CTA, and publish-readiness. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+VideoLens turns user-selected YouTube videos, local files, or supported video URLs into timestamped reports grounded in transcript, frame-level vision, OCR, and OpenAI BYOK analysis after explicit install and credit approval.
 
-## Publisher: <br>
-[shadoprizm](https://clawhub.ai/user/shadoprizm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shadoprizm](https://clawhub.ai/user/shadoprizm)
 
-## Use Case: <br>
-Creators, teams, and agent developers use VideoLens.io to review videos with custom prompts and produce timestamped feedback, summaries, bug reports, and QA artifacts before publishing or handoff. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OpenAI API key for local video analysis. <br>
-Mitigation: Provide credentials only in trusted environments and use the preflight action to confirm key availability before analysis. <br>
-Risk: Bootstrap and analysis clone and execute the external VideoLens CLI locally. <br>
-Mitigation: Review the upstream repository and use the default OCC data paths, especially when processing sensitive videos. <br>
-Risk: Analysis can spend model or API credits. <br>
-Mitigation: The wrapper refuses analysis unless allow_credit_spend is explicitly set to true. <br>
+## Use Case:
 
+External users, developers, QA teams, creators, and product teams use this skill to convert selected videos into grounded summaries, tutorials, meeting notes, bug reports, UX reviews, privacy reviews, and production recipes. It is intended for manual use where the user approves runtime installation separately from OpenAI API-credit spending.
 
-## Reference(s): <br>
-- [VideoLens.io](https://videolens.io) <br>
-- [VideoLens source repository](https://github.com/shadoprizm/videolens) <br>
-- [ClawHub release page](https://clawhub.ai/shadoprizm/videolens) <br>
-- [artifact/README.md](artifact/README.md) <br>
-- [artifact/SKILL.md](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports, structured JSON, status metadata, and local file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Analysis writes report.md and analysis.json under the OCC data directory for each run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Bootstrap downloads code and dependencies from GitHub and package registries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit runtime-install approval and rely on the pinned, hash-verified runtime and locked dependency set described by the release evidence.
+
+Risk: Analysis sends selected video audio, frames, transcripts, and prompts to OpenAI using the user's BYOK key.
+
+Mitigation: Require separate API-credit approval before analysis, use a dedicated OpenAI key or limited budget where practical, and avoid analyzing content the user is not authorized to process.
+
+Risk: Generated reports and caches may retain sensitive video-derived content locally.
+
+Mitigation: Store artifacts only in the managed VideoLens state directory and remove reports or caches when they are no longer needed.
+
+Risk: Privacy, UX, bug, or content findings may be incomplete or mistaken.
+
+Mitigation: Treat generated findings as review aids and verify consequential claims against the cited timestamps.
+
+## Reference(s):
+
+- [VideoLens ClawHub listing](https://clawhub.ai/shadoprizm/skills/videolens)
+- [VideoLens product site](https://videolens.io)
+- [VideoLens Chrome extension](https://videolens.io/chrome)
+- [VideoLens GitHub repository](https://github.com/shadoprizm/videolens)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown report, HTML report, JSON analysis, file paths, and shell command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are stored as local run artifacts; analysis can reuse cached extraction when source and settings match.]
+
+## Skill Version(s):
+
+1.1.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

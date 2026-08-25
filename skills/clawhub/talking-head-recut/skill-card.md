@@ -1,42 +1,55 @@
-## Description: <br>
-Packages an existing talking-head, interview, or podcast video with timed graphic overlay cards synced to the transcript while leaving the underlying clip intact. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Packages an existing talking-head, interview, or podcast video with timed designed graphic overlays such as kinetic titles, lower-thirds, data callouts, quotes, side panels, and picture-in-picture cards while the original clip plays underneath.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and content teams use this skill to turn an existing talking-head clip into a polished recut with titles, lower-thirds, quote cards, data callouts, side panels, or picture-in-picture overlays. It is suited for agent-assisted video packaging workflows that can run local media tools and review generated files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review says the skill instructs agents to run a silent skill-package update before use, which can change trusted code without clear user approval. <br>
-Mitigation: Run updates only explicitly, review the installed skill content before execution, and avoid automatic update steps in controlled workflows. <br>
-Risk: The workflow runs local media tooling and npx hyperframes, then writes generated files under videos/<project>/. <br>
-Mitigation: Run it in a workspace where generated media files are acceptable, review commands before execution, and inspect generated HTML and MP4 outputs before relying on them. <br>
+## Use Case:
 
+Video creators, marketing teams, and agents use this skill to turn an existing spoken-video clip into a packaged MP4 with transcript-timed graphic cards. It is suited to adding designed on-screen graphics rather than plain subtitles or from-scratch video generation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/talking-head-recut) <br>
-- [Design reference index](artifact/references/DESIGN_INDEX.md) <br>
-- [Attribution notice](artifact/NOTICE.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON planning artifacts, and HTML/CSS card fragments] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces media workflow instructions and generated project files under videos/<project>/, including metadata, transcript, storyboard, card HTML, composition HTML, and output MP4.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The workflow runs local media-processing commands and may use npx to obtain or update HyperFrames tooling if approved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use videos that are appropriate for local processing, approve tool updates deliberately, and review the generated project directory before sharing the final MP4.
+
+Risk: Transcript-derived cards or visual summaries may misstate what the speaker said if transcription or card selection is wrong.
+
+Mitigation: Review and correct transcript text, card timing, and generated overlays before rendering or publishing the video.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/talking-head-recut)
+- [Attribution notice](artifact/NOTICE.md)
+- [Visual design reference index](artifact/references/DESIGN_INDEX.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON storyboards, HTML/CSS card code, and render instructions.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [When executed by an agent, the workflow can produce local project files such as metadata.json, transcript.json, storyboard.json, card HTML, public/index.html, and output.mp4.]
+
+## Skill Version(s):
+
+1.0.9 (source: evidence.json release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

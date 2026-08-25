@@ -1,50 +1,73 @@
-## Description: <br>
-Solo Mission helps agents create and operate SOLO Mission Platform workflows, including mission creation, human hiring, conversations, media review, Base Sepolia escrow funding, settlement, and refund recovery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Solo Mission helps an agent create and monitor SOLO Mission Platform work, hire humans, manage conversations, fund or recover Base Sepolia escrow, and settle participant rewards.
 
-## Publisher: <br>
-[wj-solo](https://clawhub.ai/user/wj-solo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wj-solo](https://clawhub.ai/user/wj-solo)
 
-## Use Case: <br>
-Developers and agent operators use this skill to run SOLO Mission Platform missions end to end, from setup and participant hiring through escrow funding, qualification, settlement, refunds, and media-review workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill grants broad authority for mission creation, hiring, messaging, uploads, settlement, refunds, and signing workflows. <br>
-Mitigation: Install only for agents intended to actively operate SOLO missions and require human review before mission creation, media uploads, hiring criteria, settlement, and refund recipient details. <br>
-Risk: SOLO agent keys and local settings can expose platform access if copied into repositories or backups. <br>
-Mitigation: Use a scoped SOLO agent key and keep .claude/settings.local.json out of repositories and backups. <br>
-Risk: Raw private-key command-line signing can expose wallet secrets or authorize unintended escrow operations. <br>
-Mitigation: Prefer a managed signer or hardware/KMS-backed wallet, and do not paste PRIVATE_KEY or wallet secrets into chat. <br>
+## Use Case:
 
+External operators and developers use this skill to run SOLO Mission Platform workflows end to end, including mission creation, participant hiring, conversation management, media review, and reward settlement through manual transfer or Base Sepolia escrow.
 
-## Reference(s): <br>
-- [Solo Mission ClawHub page](https://clawhub.ai/wj-solo/skills/solo-mission) <br>
-- [SOLO Mission REST API Reference](references/rest-api.md) <br>
-- [SOLO Mission On-Chain Reference](references/onchain.md) <br>
-- [SOLO Mission Stuck Mission Recovery](references/stuck-recovery.md) <br>
-- [SOLO Mission Wallet Setup](references/wallet-setup.md) <br>
-- [SOLO Mission API](https://api.mission.projectsolo.xyz) <br>
-- [Base Sepolia RPC](https://sepolia.base.org) <br>
-- [Foundry](https://foundry.paradigm.xyz) <br>
-- [Circle USDC Faucet](https://faucet.circle.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, files, guidance] <br>
-**Output Format:** [Markdown guidance with bash and curl examples, JSON state shapes, API request details, and configuration instructions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local mission state and local agent-key configuration when used by an agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.8 (source: server release metadata) <br>
+Risk: The skill can direct an agent to operate SOLO missions end to end, including external API calls, participant actions, mission settlement, and mission-wide changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require operator review and explicit confirmation before creating, settling, cancelling, refunding, or otherwise applying mission-wide actions.
+
+Risk: On-chain flows require Sponsor wallet signing authority and may expose funds to incorrect or premature transactions.
+
+Mitigation: Use a dedicated Base Sepolia testnet wallet, avoid reusing wallet secrets, prefer a managed signer or hardware/KMS boundary, and confirm every on-chain transaction before signing.
+
+Risk: Private keys or wallet secrets could be mishandled if provided through chat or stored insecurely.
+
+Mitigation: Do not paste private keys into chat; provide wallet credentials only through environment or signer configuration, and stop execution when required signing variables are missing.
+
+Risk: Media review workflows can upload local media paths selected by the agent or operator.
+
+Mitigation: Review each media file path before upload and confirm that the files are intended for the mission.
+
+Risk: Interrupted sessions can leave on-chain missions requiring refund or recovery actions.
+
+Mitigation: Run the documented session-start scan for stuck missions and resolve required sponsor actions before starting new work.
+
+## Reference(s):
+
+- [SOLO Mission Platform skill page](https://clawhub.ai/wj-solo/skills/solo-mission)
+- [SOLO Mission Platform API](https://api.mission.projectsolo.ai)
+- [SOLO Mission Platform site](https://solomission.ai)
+- [REST API Reference](references/rest-api.md)
+- [On-Chain Reference](references/onchain.md)
+- [Stuck Mission Recovery](references/stuck-recovery.md)
+- [Wallet Setup](references/wallet-setup.md)
+- [Base Sepolia RPC](https://sepolia.base.org)
+- [Circle Faucet](https://faucet.circle.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples and inline bash, curl, jq, and Foundry cast commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce mission state guidance, API request bodies, wallet setup steps, and transaction command sequences for operator review.]
+
+## Skill Version(s):
+
+1.1.11 (source: ClawHub release metadata; artifact frontmatter version: 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

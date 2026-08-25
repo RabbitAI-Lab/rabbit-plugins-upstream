@@ -1,11 +1,11 @@
 # ILIB\_DeviceAssociationItem interface
 
-器件关联符号、封装属性
+Device associated symbol, footprint property
 
 ## Signature
 
 ```typescript
-interface ILIB_DeviceAssociationItem 
+export interface ILIB_DeviceAssociationItem 
 ```
 
 ## Properties
@@ -41,12 +41,12 @@ Description
 
 </td><td>
 
-\{ uuid: string; libraryUuid: string; \}
+\{ uuid: string; libraryUuid: string \}
 
 
 </td><td>
 
-_(Optional)_ 封装
+_(Optional)_ Footprint
 
 
 </td></tr>
@@ -98,12 +98,12 @@ _(Optional)_
 
 </td><td>
 
-{ type: [ELIB\_SymbolType](../enums/ELIB_SymbolType.md)<!-- -->; uuid: string; libraryUuid: string; }
+{ type: [ELIB\_SymbolType](../enums/ELIB_SymbolType.md)<!-- -->; uuid: string; libraryUuid: string }
 
 
 </td><td>
 
-符号
+Symbol
 
 
 </td></tr>
@@ -155,15 +155,12 @@ string
 
 # ILIB\_DeviceAssociationItem.footprint property
 
-封装
+Footprint
 
 ## Signature
 
 ```typescript
-footprint?: {
-        uuid: string;
-        libraryUuid: string;
-    };
+footprint?: { uuid: string; libraryUuid: string };
 ```
 
 ### footprintuuid
@@ -196,16 +193,12 @@ images?: Array<string>;
 
 # ILIB\_DeviceAssociationItem.symbol property
 
-符号
+Symbol
 
 ## Signature
 
 ```typescript
-symbol: {
-        type: ELIB_SymbolType;
-        uuid: string;
-        libraryUuid: string;
-    };
+symbol: { type: ELIB_SymbolType; uuid: string; libraryUuid: string };
 ```
 
 ### symboltype

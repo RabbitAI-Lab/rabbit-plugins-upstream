@@ -1,43 +1,62 @@
-## Description: <br>
-Mubu Integration helps agents authenticate with Mubu, manage documents and folders, and import or export outlines. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+mubu-integration lets agents read, write, search, import, and export Mubu outlines as Markdown, JSON, OPML, or FreeMind content through the user's configured Mubu account.
 
-## Publisher: <br>
-[liuboacean](https://clawhub.ai/user/liuboacean) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liuboacean](https://clawhub.ai/user/liuboacean)
 
-## Use Case: <br>
-Developers, engineers, and agents use this skill to perform explicit Mubu note operations such as listing, creating, saving, moving, searching, and converting outline documents between Mubu structures and Markdown, OPML, or FreeMind XML. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Mubu account credentials and a local token to access real Mubu documents. <br>
-Mitigation: Install only if account-level Mubu access is acceptable, keep MUBU_PHONE, MUBU_PASSWORD, and ~/.mubu_token private, and use the skill only for explicit Mubu actions. <br>
-Risk: Save, move, delete, and purge operations can affect real remote content, and purge is irreversible. <br>
-Mitigation: Review document and folder IDs before action, rely on the guarded soft-delete workflow for delete, and treat purge --yes as a deliberate irreversible operation. <br>
+## Use Case:
 
+Developers and AI-agent users use this skill to connect Mubu outlines with Markdown workflows such as Obsidian notes, archival exports, and scripted account operations. It is most useful when a user explicitly asks an agent to query, export, create, update, move, rename, or purge Mubu content.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liuboacean/skills/mubu-integration) <br>
-- [README](README.md) <br>
-- [Weekly outline example](examples/weekly.md) <br>
-- [Mubu API base endpoint](https://api2.mubu.com/v3/api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, JSON, CLI text, shell commands, OPML, and FreeMind XML] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Single-stream agent responses and CLI output; document exports may include Markdown, JSON, OPML, or FreeMind XML.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: server release metadata and scripts/mubu/__init__.py) <br>
+Risk: The skill can change live Mubu account data, including create, save, move, rename, and purge operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for explicit Mubu action requests and confirm the target document or folder before any write operation.
+
+Risk: Purge operations can permanently delete Mubu content.
+
+Mitigation: Require clear user confirmation before purge and verify the item id, item type, and intended target before execution.
+
+Risk: Local token or credential files can expose Mubu account access on shared machines.
+
+Mitigation: Protect or remove ~/.mubu_token and ~/.workbuddy/.env.mubu on shared machines.
+
+Risk: Trigger and confirmation boundaries are looser than advertised.
+
+Mitigation: Invoke the skill only after an explicit Mubu-related request and present the planned action before create, save, move, rename, or purge commands.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/liuboacean/skills/mubu-integration)
+- [ClawHub publisher profile](https://clawhub.ai/user/liuboacean)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, code, shell commands, configuration, guidance]
+
+**Output Format:** [Human-readable guidance, shell commands, Markdown, JSON, and OPML or FreeMind XML.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may lead an agent to execute authenticated Mubu account operations when credentials are configured.]
+
+## Skill Version(s):
+
+1.3.14 (source: server release metadata and artifact changelog dated 2026-08-25)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

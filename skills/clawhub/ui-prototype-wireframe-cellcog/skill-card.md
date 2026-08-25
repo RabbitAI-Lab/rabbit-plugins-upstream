@@ -1,44 +1,59 @@
-## Description: <br>
-Generates CellCog-powered UI prototypes and wireframes, including interactive HTML prototypes, app mockups, landing pages, mobile screens, SaaS dashboards, design systems, and user flows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Wireframe helps agents use CellCog to generate interactive UI prototypes, wireframes, app mockups, landing pages, mobile screens, SaaS dashboards, design systems, and user flows.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers, designers, and product teams use this skill to ask an agent to create clickable UI prototypes, wireframes, app mockups, landing pages, mobile screens, SaaS dashboards, design systems, and user flows with CellCog. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, uploaded assets, mock data, branding, and generated live prototype URLs may be shareable with CellCog or stakeholders. <br>
-Mitigation: Do not include production secrets, real customer data, or confidential plans unless the service access and hosting model is acceptable for the deployment. <br>
-Risk: The skill depends on CELLCOG_API_KEY for CellCog access. <br>
-Mitigation: Store CELLCOG_API_KEY as an environment secret and avoid embedding it in prompts, prototypes, repositories, or shared artifacts. <br>
-Risk: Generated prototypes may include shareable hosted URLs and realistic sample content. <br>
-Mitigation: Review generated prototypes before sharing and replace sensitive or misleading content with safe mock data. <br>
+## Use Case:
 
+Developers, designers, and product teams use Wireframe to ask an agent to create clickable prototypes, wireframes, app mockups, landing pages, mobile screens, SaaS dashboards, design systems, and user flows with CellCog.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/ui-prototype-wireframe-cellcog) <br>
-- [Publisher profile](https://clawhub.ai/user/nitishgargiitd) <br>
-- [CellCog homepage](https://cellcog.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python SDK snippets; CellCog tasks may return hosted interactive HTML prototype links, static images, or PDF artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and a CELLCOG_API_KEY environment secret.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+Risk: Prompts and generated prototype content may be processed by CellCog.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid including secrets, regulated data, or confidential product details unless your organization approves that use.
+
+Risk: Interactive HTML prototype output may be accessible through a shareable live URL.
+
+Mitigation: Review generated content before sharing and use organization-approved sharing controls.
+
+Risk: Generated prototypes can include placeholder content or interactions that are unsuitable for direct production use.
+
+Mitigation: Review prototypes before stakeholder decisions or implementation handoff.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/cellcog/skills/ui-prototype-wireframe-cellcog)
+- [CellCog homepage](https://cellcog.ai)
+- [CellCog publisher profile](https://clawhub.ai/user/cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with Python snippets and links or references to generated prototype outputs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce interactive HTML prototype links, static image outputs, or PDF outputs through CellCog depending on the prompt; requires CELLCOG_API_KEY.]
+
+## Skill Version(s):
+
+1.0.16 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,49 @@
-## Description: <br>
-Forecast a scenario amount. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Forecast a scenario amount.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-External users or agents use this skill for routine campaign planning requests that require a concise scenario amount. It should be treated as a controlled validation skill rather than a full budgeting or financial forecasting tool. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake the controlled marker response for real campaign budgeting or financial forecasting. <br>
-Mitigation: Use the skill only for controlled validation scenarios and review any amount before relying on it in operational or financial decisions. <br>
-Risk: The skill is intentionally narrow and may not satisfy broader campaign planning needs. <br>
-Mitigation: Pair it with a separate budgeting workflow or human review when the task requires real inputs, assumptions, or forecast analysis. <br>
+## Use Case:
 
+Employees and external campaign planners use this skill to forecast a concise campaign budget amount from a planning note with currency, major units, and minor units.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/budget-planning-units-identifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Plain text string] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a concise amount marker for the current request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and release evidence) <br>
+Risk: The returned amount may not match the user's intended business logic because the skill describes the output shape but does not define a detailed forecasting formula.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the returned currency and minor_units against the campaign planning note and applicable budget logic before relying on the result.
+
+## Reference(s):
+
+- [Campaign Budget Forecaster on ClawHub](https://clawhub.ai/wxt-ai/skills/budget-planning-units-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [text, guidance]
+
+**Output Format:** [Structured amount object with currency and minor_units]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns the requested amount field concisely; no file, credential, network, persistence, or execution behavior is disclosed.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,50 @@
-## Description: <br>
-Build a translation job entry. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build a translation job entry.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-External users and localization operators use this skill to create a concise translation job entry from a selected translation setting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake the validation workbench for a general translation tool. <br>
-Mitigation: Use it for controlled translation-job testing and review outputs before using them in production localization workflows. <br>
-Risk: Downstream validation recording is disclosed, but no executable mechanism is present in the skill artifact. <br>
-Mitigation: Confirm the validation environment and endpoint behavior before running controlled tests. <br>
+## Use Case:
 
+Localization operations users use this skill to turn a supplied translation_setting object into a concise recorded translation job entry for the current request.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/translation-job-setting-workbench) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Plain text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a concise recorded translation setting for the current request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: Generated job_code or segment_limit values may not match a workflow-specific business rule because the artifact does not define their derivation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review job_code and segment_limit before using the recorded translation job entry in a production localization workflow.
+
+## Reference(s):
+
+- [Translation Job Desk on ClawHub](https://clawhub.ai/wxt-ai/skills/translation-job-setting-workbench)
+- [wxt-ai Publisher Profile](https://clawhub.ai/user/wxt-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, configuration, guidance]
+
+**Output Format:** [Concise structured text describing the recorded_translation_setting object]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces recorded_translation_setting with job_code, locale, glossary_id, register, and segment_limit fields.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

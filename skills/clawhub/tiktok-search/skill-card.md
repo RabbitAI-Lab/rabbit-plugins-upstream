@@ -1,47 +1,62 @@
-## Description: <br>
-Search TikTok videos, collect creator videos, and run product, trend, competitor, and content insights through Gecho Bridge MCP. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search TikTok videos, collect creator videos, retrieve detail data and comments for one known video, and run product, trend, competitor, and content insights through Gecho Bridge MCP.
 
-## Publisher: <br>
-[gecho-ai](https://clawhub.ai/user/gecho-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gecho-ai](https://clawhub.ai/user/gecho-ai)
 
-## Use Case: <br>
-External users and developers use this skill to search TikTok, collect creator and video metadata, and run product, trend, competitor, or content insight workflows through Gecho Bridge MCP. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow depends on a third-party MCP server and Chrome extension connected to a logged-in TikTok browser session. <br>
-Mitigation: Use it only when comfortable with Gecho accessing TikTok data visible in that browser session, and keep the extension and TikTok session limited to the intended research account. <br>
-Risk: The skill saves raw TikTok research results to local JSON files. <br>
-Mitigation: Choose a trusted save directory and review saved files before sharing or retaining them. <br>
-Risk: TikTok search or insight features may fail if the MCP server, Chrome extension, Gecho login, or TikTok login is missing. <br>
-Mitigation: Complete the documented Gecho Bridge setup, keep the extension online, and keep a logged-in TikTok tab open before running searches. <br>
+## Use Case:
 
+External users and developers use this skill to route TikTok research requests through Gecho Bridge MCP for keyword search, creator video collection, single-video detail and comment retrieval, and asynchronous product, trend, competitor, or content insight jobs.
 
-## Reference(s): <br>
-- [Gecho Bridge README](https://github.com/gecho-ai/gecho-bridge/blob/main/README.md) <br>
-- [Gecho Chrome Extension](https://chromewebstore.google.com/detail/pjkaeenpekolahdbccjfenjcmanemlbj?utm_source=item-share-cb) <br>
-- [Gecho Website](https://gecho.ai/) <br>
-- [OpenClaw Setup Video](https://www.youtube.com/watch?v=ggwY9hISHcQ) <br>
-- [Hermes Setup Video](https://www.youtube.com/watch?v=zHKnuWnxt_c) <br>
-- [Gecho Support Discord](https://discord.gg/RFDVZMR6Tn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, API calls, Files] <br>
-**Output Format:** [Markdown with setup commands, JSON result summaries, job IDs, and local file paths.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Successful searches summarize the top 3 to 5 items; insight jobs return a jobId and require a later status check.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.29 (source: release evidence and artifact metadata) <br>
+Risk: The skill depends on an external Gecho MCP server and Chrome extension running against a logged-in TikTok browser session.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only when the publisher and external runtime are trusted, and use it with accounts and browser sessions appropriate for the intended research task.
+
+Risk: Collected TikTok metadata, comments, and replies may be saved as local JSON files.
+
+Mitigation: Choose a safe save directory and review or delete saved result files when they are no longer needed.
+
+Risk: The setup commands use an @latest external package, so runtime behavior may change outside this skill artifact.
+
+Mitigation: Review the external package before deployment and consider pinning or validating updates in managed environments.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gecho-ai/skills/tiktok-search)
+- [Gecho Website](https://gecho.ai/)
+- [Gecho Bridge README](https://github.com/gecho-ai/gecho-bridge/blob/main/README.md)
+- [Gecho Chrome Extension](https://chromewebstore.google.com/detail/pjkaeenpekolahdbccjfenjcmanemlbj?utm_source=item-share-cb)
+- [OpenClaw Setup Video](https://www.youtube.com/watch?v=ggwY9hISHcQ)
+- [Hermes Setup Video](https://www.youtube.com/watch?v=zHKnuWnxt_c)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with inline shell commands, configuration snippets, status summaries, and bounded summaries of JSON-like tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference saved local JSON result files produced by Gecho MCP tools; successful responses summarize results rather than pasting full raw data.]
+
+## Skill Version(s):
+
+1.1.37 (source: server release metadata and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

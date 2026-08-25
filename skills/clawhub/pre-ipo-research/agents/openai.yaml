@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pre-IPO Opportunity Research"
+  short_description: "查询 Jarsy Pre-IPO 机会榜单、估值与数据时效"
+  default_prompt: "Use $pre-ipo-research to find current Pre-IPO opportunity rankings, valuations, and freshness."

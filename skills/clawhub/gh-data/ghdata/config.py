@@ -124,7 +124,7 @@ def init(webapi_url: str = None, timeout: int = None, api_key: str = None):
     示例:
         >>> config.init()                                          # 从 ~/.ghdata/ghdataapikey 读取
         >>> config.init("http://192.168.1.100:5099/api")          # 代码覆盖URL
-        >>> config.init(api_key="00000000-0000-0000-0000-000000000000")  # 指定APIKey
+        >>> config.init(api_key="<在此填入你的APIKey>")  # 指定APIKey（示例，用真实Key替换）
     """
     global WEBAPI_BASE_URL, TIMEOUT, DOC_DIR, DATA_DIR, API_KEY, _initialized
 
@@ -172,10 +172,8 @@ def init(webapi_url: str = None, timeout: int = None, api_key: str = None):
     elif not os.path.exists(_APIKEY_FILE):
         key_source = "自动生成（文件不存在）"
     print(f"[config] WebAPI: {WEBAPI_BASE_URL}  timeout={TIMEOUT}s  APIKey: {masked_key} ({key_source})")
-    # ⚠️ LLM 注意：构造购买链接时必须用完整 API_KEY，不要用上面掩码后的 masked_key！
-    #   正确方式：analyze() 返回的 result["_payment_url"] 已包含完整 Key
-    #   或手动拼接：f"https://www.oraskl.com/ghdata-admin?apikey={config.API_KEY}"
-    print(f"[config] 购买链接: https://www.oraskl.com/ghdata-admin?apikey={API_KEY}")
+    # 购买链接由 db.get_payment_url() 生成（v2.2.50 token化，URL不含完整Key）
+    print(f"[config] 购买链接: 由 analyze() 返回的 _payment_url 提供（token化，不再打印完整Key）")
     print(f"[config] DOC: {DOC_DIR}")
 
 

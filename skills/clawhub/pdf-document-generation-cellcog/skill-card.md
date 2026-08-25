@@ -1,41 +1,54 @@
-## Description: <br>
-AI PDF document generation powered by CellCog for PDF and DOCX output, including resumes, contracts, reports, proposals, invoices, certificates, NDAs, letters, brochures, legal documents, cover letters, and other professional documents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI PDF document generation powered by CellCog for PDF and DOCX output, including resumes, contracts, reports, proposals, invoices, certificates, NDAs, letters, brochures, legal documents, cover letters, and other professional documents.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-External users, employees, and agents use this skill to generate polished PDF or DOCX business, career, legal, finance, marketing, education, event, and certificate documents from structured prompts and supporting content. It is most useful when a user needs a professionally formatted document and can provide the facts, audience, structure, and design preferences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Document prompts and contents may be sent to an external CellCog service. <br>
-Mitigation: Do not submit secrets, regulated data, confidential client material, or sensitive legal or financial details unless the user is comfortable sending that information to CellCog. <br>
-Risk: Legal, finance, privacy-policy, and contract documents may contain errors or unsuitable advice. <br>
-Mitigation: Have qualified professionals review those outputs before relying on or distributing them. <br>
+## Use Case:
 
+Developers and agents use this skill to request professionally designed PDF or DOCX documents from CellCog, including business, career, legal, finance, marketing, education, event, form, and certificate documents.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/nitishgargiitd/skills/pdf-document-generation-cellcog) <br>
-- [CellCog homepage](https://cellcog.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with Python code blocks and generated PDF or DOCX files through CellCog] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog package, and CELLCOG_API_KEY; document prompts and contents may be sent to CellCog.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server release evidence) <br>
+Risk: Document prompts and supplied materials may be processed by CellCog, including sensitive resumes, contracts, legal, finance, and business content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when CellCog processing is approved, and do not submit secrets, regulated data, confidential contracts, personal records, or client financial information without organizational approval.
+
+Risk: Generated legal, finance, business, or professional documents may contain incorrect, incomplete, or unsuitable content.
+
+Mitigation: Have qualified reviewers check generated documents before signing, publishing, sending to clients, or relying on them for legal, financial, or business decisions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/cellcog/skills/pdf-document-generation-cellcog)
+- [CellCog Homepage](https://cellcog.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, files]
+
+**Output Format:** [Markdown guidance with Python and shell command snippets; generated documents are PDF by default or DOCX when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3, CELLCOG_API_KEY, and access to the CellCog service.]
+
+## Skill Version(s):
+
+1.0.18 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

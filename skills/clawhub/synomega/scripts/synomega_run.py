@@ -2,8 +2,9 @@
 """Run synomega locally and print JSON, loading the model + stock from env vars.
 
 A thin convenience wrapper over the installed `synomega` package so an agent can
-call any of the three operations uniformly (the package CLI has no single-step
-subcommand). Requires: `pip install "synomega[gnn]"`.
+call every operation uniformly (the package CLI has no single-step subcommand):
+single-step retro, forward, plan, score, evolve. Requires:
+`pip install "synomega[gnn]"`.
 
 Environment:
     SYNOMEGA_MODEL       trained run directory (contains best.pt + config.yaml)  [required]
@@ -12,11 +13,14 @@ Environment:
     SYNOMEGA_DEVICE      torch device, e.g. "cpu" or "cuda:0"                    [default cpu]
     SYNOMEGA_PLAUSIBILITY           "1" to enable dual-tower plausibility screening  [default off]
     SYNOMEGA_PLAUSIBILITY_THRESHOLD drop candidates below this plausibility         [default 0.4]
+    SYNOMEGA_FORWARD_MODEL          forward run dir for `forward`/`evolve`           [default: download]
 
 Usage:
     python synomega_run.py single-step "CC(=O)Nc1ccccc1O" --top-k 10
-    python synomega_run.py plan        "CC(=O)Nc1ccccc1O" --max-depth 5 --algorithm retrostar
-    python synomega_run.py score        "CC(=O)Nc1ccccc1O" --max-steps 5
+    python synomega_run.py plan        "CC(=O)Nc1ccccc1O" --max-depth 5 [--simplify]
+    python synomega_run.py score       "CC(=O)Nc1ccccc1O" --max-steps 5  # simplify model by default
+    python synomega_run.py forward     "CC(=O)O.NCc1ccccc1" --top-k 5
+    python synomega_run.py evolve      "CC(=O)c1ccccc1.C=O.CNC" --max-depth 3 --score-threshold 0.01
 """
 from __future__ import annotations
 
@@ -30,9 +34,15 @@ def _truthy(name: str) -> bool:
     return os.environ.get(name, "").lower() in {"1", "true", "yes", "on"}
 
 
-def _load(algorithm: str):
+def _load(algorithm: str, *, simplify: bool = False, expansion_width: int = 50):
     """Build (model, planner). Uses SYNOMEGA_MODEL/SYNOMEGA_STOCK if set,
-    otherwise downloads the default pretrained model + stock on first use."""
+    otherwise downloads a pretrained model + stock on first use.
+
+    `simplify=True` uses the simplification-constrained single-step model (only
+    fragmentation disconnections) -- the model synomega recommends for scoring;
+    ignored when SYNOMEGA_MODEL points at an explicit checkpoint.
+    `expansion_width` is the planner's search width -- single-step candidates
+    expanded per node in multi-step search (scoring uses 10)."""
     try:
         from synomega import Planner
         from synomega.singlestep import TemplateGNN
@@ -44,9 +54,11 @@ def _load(algorithm: str):
     model_path = os.environ.get("SYNOMEGA_MODEL", "").strip()
     stock_path = os.environ.get("SYNOMEGA_STOCK", "").strip()
 
-    # Model: explicit path, or the auto-downloaded default.
+    # Model: explicit path, else the simplify or the default downloaded model.
     if model_path:
         model = TemplateGNN.from_pretrained(model_path, device=device)
+    elif simplify:
+        model = TemplateGNN.simplify(device=device)
     else:
         model = TemplateGNN.default(device=device)
 
@@ -73,8 +85,27 @@ def _load(algorithm: str):
     threshold = float(os.environ.get("SYNOMEGA_PLAUSIBILITY_THRESHOLD", "0.4"))
 
     planner = Planner(model, stock, algorithm=algorithm,
+                      expansion_width=expansion_width,
                       plausibility=plausibility, plausibility_threshold=threshold)
     return model, planner
+
+
+def _load_forward():
+    """Build the forward-prediction model (reactants -> products).
+
+    Uses SYNOMEGA_FORWARD_MODEL if set, otherwise downloads the default forward
+    model on first use. Independent of the retro model above.
+    """
+    try:
+        from synomega.forward import ForwardTemplateGNN
+    except ImportError:
+        sys.exit('synomega is not installed. Run:  pip install "synomega[gnn]"')
+
+    device = os.environ.get("SYNOMEGA_DEVICE", "cpu")
+    fwd_path = os.environ.get("SYNOMEGA_FORWARD_MODEL", "").strip()
+    if fwd_path:
+        return ForwardTemplateGNN.from_pretrained(fwd_path, device=device)
+    return ForwardTemplateGNN.default(device=device)
 
 
 def main() -> int:
@@ -91,6 +122,9 @@ def main() -> int:
                     choices=["retrostar", "mcts", "bfs"])
     pl.add_argument("--max-depth", type=int, default=5)
     pl.add_argument("--max-routes", type=int, default=5)
+    pl.add_argument("--simplify", action="store_true",
+                    help="use the simplification-constrained single-step model "
+                         "(fragmentation-only disconnections; cheaper search)")
     pl.add_argument("--exclude-target", action="store_true",
                     help="treat the target as not purchasable even if it is in "
                          "the stock (avoids a trivial zero-step solution)")
@@ -100,9 +134,32 @@ def main() -> int:
     sc.add_argument("--max-steps", type=int, default=5)
     sc.add_argument("--algorithm", default="retrostar",
                     choices=["retrostar", "mcts", "bfs"])
+    # Scoring defaults to the simplification-constrained model @ expansion
+    # width 10, the operating point synomega recommends; --original reverts.
+    sc.add_argument("--original", dest="simplify", action="store_false",
+                    help="score with the unconstrained (original) model instead")
+    sc.set_defaults(simplify=True)
     sc.add_argument("--exclude-target", action="store_true",
                     help="treat the target as not purchasable even if it is in "
                          "the stock (avoids a trivial zero-step solution)")
+
+    fw = sub.add_parser("forward")
+    fw.add_argument("reactants", help="reactant SMILES, '.'-separated")
+    fw.add_argument("--top-k", type=int, default=10)
+
+    ev = sub.add_parser("evolve")
+    ev.add_argument("reactants",
+                    help="starting reactant SMILES, '.'-separated (each seeds the pool)")
+    ev.add_argument("--max-depth", type=int, default=3,
+                    help="max synthesis-tree depth (not step count)")
+    ev.add_argument("--score-threshold", type=float, default=0.01,
+                    help="min total score for a molecule to be reactable")
+    ev.add_argument("--forward-top-k", type=int, default=5,
+                    help="products taken per reaction pair")
+    ev.add_argument("--frontier-width", type=int, default=None,
+                    help="cap selectable molecules paired per round (for scale)")
+    ev.add_argument("--top", type=int, default=20,
+                    help="how many top-scoring product molecules to report")
 
     args = p.parse_args()
 
@@ -127,7 +184,7 @@ def main() -> int:
             ],
         }
     elif args.cmd == "plan":
-        _, planner = _load(args.algorithm)
+        _, planner = _load(args.algorithm, simplify=args.simplify)
         result = planner.plan(
             args.smiles, max_depth=args.max_depth,
             exclude_target=args.exclude_target,
@@ -141,12 +198,45 @@ def main() -> int:
     elif args.cmd == "score":
         from synomega.synthesizability import SynthesizabilityScorer
 
-        _, planner = _load(args.algorithm)
+        _, planner = _load(args.algorithm, simplify=args.simplify,
+                           expansion_width=10)
         report = SynthesizabilityScorer(planner).score(
             args.smiles, max_steps=args.max_steps,
             exclude_target=args.exclude_target,
         )
         out = report.as_dict()
+    elif args.cmd == "forward":
+        model = _load_forward()
+        preds = model.predict(args.reactants, top_k=args.top_k)
+        out = {
+            "reactants": args.reactants,
+            "products": [
+                {
+                    "rank": i,
+                    "product": pred.product,
+                    "score": round(float(pred.score), 6),
+                    "template_id": pred.template_id,
+                }
+                for i, pred in enumerate(preds, 1)
+            ],
+        }
+    elif args.cmd == "evolve":
+        from synomega.forward import MultiComponentEvolution
+
+        model = _load_forward()
+        reactants = [r for r in args.reactants.split(".") if r]
+        evolver = MultiComponentEvolution(
+            model, max_depth=args.max_depth,
+            score_threshold=args.score_threshold,
+            forward_top_k=args.forward_top_k,
+            frontier_width=args.frontier_width,
+        )
+        result = evolver.evolve(reactants)
+        try:
+            out = result.to_dict(max_molecules=args.top)
+            out["reactants"] = reactants
+        finally:
+            result.close()
     else:  # pragma: no cover
         p.error("unknown command")
 

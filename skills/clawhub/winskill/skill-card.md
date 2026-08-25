@@ -1,44 +1,69 @@
-## Description: <br>
-Winskill is a Windows Server operations toolbox that helps agents diagnose disk usage, IIS, services, Windows Update, performance, security logs, registry startup items, storage, networking, certificates, firewall rules, Docker, Kubernetes, and guided repair workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Windows server operations toolbox for disk analysis, cleanup, IIS and service checks, Windows Update diagnostics, performance monitoring, security auditing, compliance checks, repair workflows, and remote multi-server management.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Windows administrators, operations engineers, and support agents use this skill to generate PowerShell-based diagnostic and maintenance guidance for Windows Server environments. It is intended for local server triage, audit, cleanup, and confirmed repair workflows rather than unattended changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Repair and cleanup flows can stop services, reset networking, clear caches, or delete temporary files. <br>
-Mitigation: Run diagnosis-only steps first, review the proposed command list and impact, require explicit user confirmation, and schedule changes during a maintenance window. <br>
-Risk: Some procedures require administrator privileges on Windows servers and may affect availability. <br>
-Mitigation: Limit execution to authorized administrators, confirm backups or restore points where applicable, and avoid production execution without change approval. <br>
-Risk: The release makes read-only and offline safety claims that do not cover every repair behavior. <br>
-Mitigation: Treat the skill as a repair-capable administrative toolbox and review each generated command before running it. <br>
+## Use Case:
 
+Windows administrators and operations engineers use Winskill to ask an agent for PowerShell-based diagnostics, reports, maintenance guidance, and confirm-before-action repair workflows across Windows Server environments.
 
-## Reference(s): <br>
-- [Winskill ClawHub skill page](https://clawhub.ai/fyniujin/skills/winskill) <br>
-- [Docker Engine on Windows Server documentation](https://docs.docker.com/engine/install/windows-server/) <br>
-- [Install kubectl on Windows documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with PowerShell command blocks, tables, and Chinese-language operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes read-only diagnostic flows plus confirmed administrator repair and cleanup procedures.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Repair, cleanup, service, and network commands can interrupt services, remove files, or change host state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require an explicit user confirmation step, show the planned commands and affected resources first, and keep an audit trail for any executed action.
+
+Risk: Remote multi-server management may store credentials and run commands across multiple hosts.
+
+Mitigation: Use only approved Windows administrative contexts, avoid stored remote credentials unless accepted by the operator, and scope remote execution to named servers and reviewed commands.
+
+Risk: Security and compliance checks can produce incomplete or environment-specific findings.
+
+Mitigation: Treat generated reports as operational guidance for administrator review rather than authoritative compliance certification.
+
+Risk: Performance baselines and monitoring workflows may create local output or scheduled data collection artifacts.
+
+Mitigation: Confirm collection scope, retention, and output paths before enabling persistent or repeated monitoring.
+
+## Reference(s):
+
+- [ClawHub winskill release page](https://clawhub.ai/fyniujin/skills/winskill)
+- [CIS Benchmark compliance checklist](references/compliance/cis-benchmark.yaml)
+- [Dengbao 2.0 compliance checklist](references/compliance/dp-2.0.yaml)
+- [Automated repair guide module](references/modules/module-27-自动化修复向导.md)
+- [Remote multi-server management module](references/modules/module-30-远程多服务器管理.md)
+- [System file integrity repair module](references/modules/module-23-系统文件完整性检查与修复（SFC---DISM）.md)
+- [Docker and Kubernetes container management module](references/modules/module-26-Docker---K8s-容器管理.md)
+- [Docker Engine on Windows Server documentation](https://docs.docker.com/engine/install/windows-server/)
+- [kubectl on Windows documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown with PowerShell command blocks, checklists, status reports, and operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Some workflows produce local reports or configuration snippets and require explicit confirmation before high-impact actions.]
+
+## Skill Version(s):
+
+3.2.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

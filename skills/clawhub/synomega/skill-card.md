@@ -1,41 +1,56 @@
-## Description: <br>
-Retrosynthesis helper for legitimate cheminformatics tasks using the synomega Python package, including single-step reactant prediction, multi-step route planning, and synthesizability scoring for target molecules provided as SMILES. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrosynthesis, reaction prediction, and synthesizability for organic molecules using the local SynOmega Python package.
 
-## Publisher: <br>
-[zbc0315](https://clawhub.ai/user/zbc0315) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zbc0315](https://clawhub.ai/user/zbc0315)
 
-## Use Case: <br>
-Developers, chemistry researchers, and cheminformatics users can use this skill to ask an agent for candidate disconnections, synthesis route plans, or makeability scores for specific target molecules. The host safety policy remains responsible for deciding whether requests involving hazardous, controlled, or dual-use compounds are allowed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: First use may download a few hundred MB of model and stock data into a local cache. <br>
-Mitigation: Prefetch the data, set a controlled cache location, or use local model and stock files in bandwidth-limited, air-gapped, privacy-sensitive, or reproducibility-critical environments. <br>
-Risk: Retrosynthesis can provide operational route assistance for hazardous, controlled, or otherwise dual-use compounds. <br>
-Mitigation: Apply the host safety policy before planning routes or providing actionable assistance for high-risk targets, and decline or escalate requests that appear unsafe. <br>
+## Use Case:
 
+Developers, researchers, and chemistry-focused agents use this skill to evaluate organic molecules, predict reaction outcomes, plan retrosynthetic routes, score synthesizability, and explore multi-component reaction networks from SMILES inputs.
 
-## Reference(s): <br>
-- [Synomega package on PyPI](https://pypi.org/project/synomega/) <br>
-- [SynOmega Skill on ClawHub](https://clawhub.ai/zbc0315/skills/synomega) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON-producing helper commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Helper commands can output JSON for single-step predictions, route plans, and synthesizability scores.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: server release metadata) <br>
+Risk: The first use downloads large model and stock assets and stores them in a local cache.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefetch assets explicitly, set SYNOMEGA_CACHE to an approved location, or point SYNOMEGA_MODEL and SYNOMEGA_STOCK at approved local assets in private, air-gapped, or reproducibility-sensitive environments.
+
+Risk: Retrosynthesis and reaction prediction can be dual-use for hazardous, controlled, or operational synthesis requests.
+
+Mitigation: Apply the host safety policy before producing route plans, procurement-relevant details, or other operational assistance for high-risk compounds.
+
+## Reference(s):
+
+- [SynOmega package](https://pypi.org/project/synomega/)
+- [SynOmega documentation](https://zbc0315.github.io/synomega/)
+- [SynOmega toolkit source](https://github.com/zbc0315/synomega)
+- [ClawHub skill page](https://clawhub.ai/zbc0315/skills/synomega)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON outputs from the helper script]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are candidate chemistry predictions and route-planning results; they require host safety-policy review for hazardous, controlled, or operational synthesis requests.]
+
+## Skill Version(s):
+
+1.6.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

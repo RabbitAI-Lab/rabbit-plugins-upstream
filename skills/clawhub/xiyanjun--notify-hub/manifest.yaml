@@ -1,0 +1,35 @@
+name: notify-hub
+slug: notify-hub
+version: 1.0.0
+description: "统一通知层：一个 skill 抽象掉所有消息通道。调用方定义一次内容（text/card/file），广播到飞书、企业微信、钉钉、Slack、Telegram、邮件六个通道。统一卡片 DSL + 各通道降级渲染（表格/按钮自动适配），通道可插拔（新增通道=加一个 adapter 文件），内置签名与限流，纯 Python 标准库零依赖。"
+category: ai-agent
+author: hectorlee
+license: MIT-0
+tags:
+  - 通知
+  - 推送
+  - 多通道
+  - 飞书
+  - 企业微信
+  - 钉钉
+  - Slack
+  - Telegram
+  - 邮件
+  - 广播
+  - 自动化
+triggers:
+  - 通知
+  - 推送
+  - 广播
+  - 发到群
+  - 多通道
+  - 飞书
+  - 企业微信
+  - 钉钉
+  - 群消息
+  - 统一通知
+  - 定时提醒
+  - notify
+dependencies:
+  python: []
+min_python: "3.7"

@@ -1,43 +1,68 @@
-## Description: <br>
-Write, rewrite, or audit natural, genre-aware prose with long-form continuity, explicit reference-style matching, physical and relationship consistency, deterministic AI-pattern linting, and protected fact verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Advanced Human Writing & AI Humanizer helps agents humanize and edit multilingual prose, build genre-aware prompt packs, and audit long-form writing for continuity, style, source fidelity, protected content, and revision quality.
 
-## Publisher: <br>
-[whh110112](https://clawhub.ai/user/whh110112) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[whh110112](https://clawhub.ai/user/whh110112)
 
-## Use Case: <br>
-External users and developers use this skill to draft, continue, revise, lint, audit, and verify prose across fiction, webnovels, essays, news, self-media, and academic writing while preserving supplied facts and continuity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Referenced supporting files and commands are not included in the submitted artifact, so parts of the workflow may not work unless those resources are supplied elsewhere. <br>
-Mitigation: Confirm required README, docs, module files, and command implementations are available before relying on the full workflow. <br>
-Risk: Drafts, sources, and continuity ledgers may contain sensitive or unpublished writing material processed by the agent. <br>
-Mitigation: Provide only material appropriate for the agent environment and review outputs before sharing or publication. <br>
-Risk: Writing, audit, or verification guidance can still introduce incorrect edits or misleading conclusions. <br>
-Mitigation: Use deterministic linting and source verification where applicable, then perform human review for factual and editorial decisions. <br>
+## Use Case:
 
+Developers, writers, editors, and writing agents use this skill to rewrite drafts naturally, compile task-specific writing instructions, and run focused audits for fiction, serious documents, style consistency, source grounding, protected content, and long-form continuity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/whh110112/skills/human-writing-skills) <br>
-- [Server-resolved GitHub provenance](https://github.com/whh110112/human-writing-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and plain text with optional command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce drafts, revisions, audits, lint findings, verification notes, and workflow guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: The CLI can read drafts, context, originals, references, and source files selected by the user.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not pass secrets or unrelated private documents as style references or sources; provide only the files needed for the writing task.
+
+Risk: Fix or pipeline workflows can write staged audit files or apply edits to user text when requested.
+
+Mitigation: Use preview and output-directory modes before applying changes to an original file, and review generated edits before reuse.
+
+Risk: Humanization and AI-trace guidance can be misread as detector evasion or authorship proof.
+
+Mitigation: Use the skill for editing quality, continuity, and craft review; do not claim that style diagnostics prove authorship or guarantee detector outcomes.
+
+Risk: Reference-style and source-grounding workflows can mix style evidence, factual evidence, and rewrite originals if inputs are chosen carelessly.
+
+Mitigation: Keep original text, style references, factual sources, and project context separate, and treat supplied facts and source files as authoritative only for the relevant workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/whh110112/skills/human-writing-skills)
+- [README](artifact/README.md)
+- [Skill instructions](artifact/SKILL.md)
+- [Long-form consistency guide](artifact/docs/long-form-consistency.md)
+- [Audit pipeline guide](artifact/docs/audit-pipeline.md)
+- [Protected content verification](artifact/docs/protected-content.md)
+- [Editing tools guide](artifact/docs/editing-tools.md)
+- [Reference style guide](artifact/docs/reference-style.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown prompt packs and audit reports, JSON diagnostics, Python CLI output, and command-line guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May read user-supplied draft, context, original, reference, or source files and may write staged audit files or previewed fixes when requested.]
+
+## Skill Version(s):
+
+0.12.1 (source: server release metadata and pyproject.toml)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,57 @@
-## Description: <br>
-Memory Compress condenses AI agent memory logs into structured summaries that preserve key events, lessons, and todos while reducing long Markdown logs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Compresses long AI-agent logs into structured Markdown summaries for memory maintenance, preserving key events, lessons, and follow-up items.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent operators use this skill to compress daily AI agent logs, long-session memory, project retrospectives, and maintenance summaries into smaller Markdown memory records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads local memory logs that may contain sensitive information. <br>
-Mitigation: Review the logs before processing and clarify whether any LLM or remote provider will handle sensitive content. <br>
-Risk: The skill can append summaries to MEMORY.md, update .last-memory-maintenance, and optionally move source logs into an archive. <br>
-Mitigation: Ask the agent to preview planned file changes before batch runs and review compressed summaries before appending or archiving. <br>
-Risk: The optional callback_url may notify an external endpoint after processing. <br>
-Mitigation: Leave callback_url unset unless outbound notification is intended and the destination is trusted. <br>
+## Use Case:
 
+Developers and AI-agent operators use this skill to compress daily or weekly Markdown memory logs into shorter summaries before appending them to MEMORY.md. It is intended for explicit log-compression and memory-maintenance requests where the user can review the generated summary before persistent writes.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/memory-compress) <br>
-- [SkillHub Homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, files, guidance] <br>
-**Output Format:** [Markdown summaries with optional shell commands and file updates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May append summaries to MEMORY.md, update .last-memory-maintenance, and optionally archive source logs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill requests command and write authority over persistent agent memory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only after an explicit log-compression request, confirm the input and output paths, and review generated summaries before writing to MEMORY.md.
+
+Risk: The referenced Node.js compression script is not included in the artifact.
+
+Mitigation: Inspect and verify the publisher-provided script before granting exec access or running compression commands.
+
+Risk: Automatic archive or move operations can make original logs harder to recover.
+
+Mitigation: Keep backups and avoid moving or archiving original logs automatically unless recovery has been tested.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/thcjp/skills/memory-compress)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, files, guidance]
+
+**Output Format:** [Markdown summaries with shell command snippets and file-write guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summaries should be reviewed before appending to persistent memory files.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

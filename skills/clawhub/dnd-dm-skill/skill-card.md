@@ -1,49 +1,60 @@
-## Description: <br>
-Provides an AI Dungeon Master workflow for D&D 5e play, including modular adventure running, combat adjudication, character creation, save management, and SRD-backed rule lookup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+dnd-dm is an AI Dungeon Master skill for D&D 5e that supports modular play, combat adjudication, character creation, saves, SRD lookup, and D&D Lens subskills for lore retrieval, module generation, and anonymized real-experience mapping.
 
-## Publisher: <br>
-[ackiles](https://clawhub.ai/user/ackiles) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ackiles](https://clawhub.ai/user/ackiles)
 
-## Use Case: <br>
-Players, game masters, and agent developers use this skill to run D&D 5e sessions through conversation while delegating dice, combat, party state, saves, and SRD lookup to bundled helper code. It is intended for isolated game workspaces where the agent may create and update local campaign files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may create, read, update, or delete local game files. <br>
-Mitigation: Install and run it only in an isolated game workspace with access limited to campaign files. <br>
-Risk: The security summary reports broad personal-assistant, background-monitoring, and publishing powers that are not tightly scoped to gameplay. <br>
-Mitigation: Do not grant access to email, calendar, social accounts, broad memory files, repository push permissions, or other non-game resources unless that access is explicitly intended. <br>
-Risk: Untrusted save files may be unsafe until scene-cache path handling is fixed. <br>
-Mitigation: Avoid loading untrusted saves and review save/cache files before use. <br>
+## Use Case:
 
+External users and developers use this skill to run D&D 5e sessions with an AI Dungeon Master, structured rules support, local save management, and helper workflows for lore, module creation, and anonymized story mapping.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ackiles/dnd-dm-skill) <br>
-- [D&D DM skill instructions](SKILL.md) <br>
-- [Dungeon Master operating rules](references/DM_RULES.md) <br>
-- [Dungeon Master development guide](references/DM_DEV_GUIDE.md) <br>
-- [Dungeon Master templates](references/DM_TEMPLATES.md) <br>
-- [SRD lookup skill](srd/SKILL.md) <br>
-- [D&D Beyond SRD 5.2.1](https://www.dndbeyond.com/srd) <br>
-- [Creative Commons Attribution 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Conversational Markdown with structured tables, code snippets, shell commands, JSON-like state/configuration guidance, and local file updates when permitted.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and pip; supports darwin, linux, and win32 according to server-parsed metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.8 (source: server release metadata, SKILL.md frontmatter, CHANGELOG.md) <br>
+Risk: The artifact includes unrelated personal-assistant instructions alongside the D&D skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the skill only in a dedicated D&D workspace and remove or ignore the bundled AGENTS.md heartbeat and personal-assistant instructions before enabling it.
+
+Risk: The skill persists local game and derived story data, including echo-map outputs from user-provided real-life stories.
+
+Mitigation: Back up existing saves and module files, and avoid using echo-map with sensitive real-life stories unless local derived storage is acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ackiles/skills/dnd-dm-skill)
+- [SKILL.md](artifact/SKILL.md)
+- [CHANGELOG.md](artifact/CHANGELOG.md)
+- [DM_RULES.md](artifact/references/DM_RULES.md)
+- [DM_TEMPLATES.md](artifact/references/DM_TEMPLATES.md)
+- [DND Lens world-lore workflow](artifact/world-lore/references/world-lore-workflow.md)
+- [DND Lens module-forge workflow](artifact/module-forge/references/module-forge-workflow.md)
+- [DND Lens echo-map workflow](artifact/echo-map/references/echo-map-workflow.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown responses with JSON files, shell commands, and generated D&D campaign text.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update local D&D workspace files such as saves, module indexes, scene caches, party state, and anonymized module drafts.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata and CHANGELOG, released 2026-08-19; SKILL.md frontmatter reports 1.1.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

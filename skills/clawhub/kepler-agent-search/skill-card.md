@@ -1,42 +1,60 @@
-## Description: <br>
-Searches Bing, Zhihu, and Xiaohongshu through Kepler MCP tools so agents can find web results and extract content for research, comparison, and summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes agent search and page-reading tasks across Bing, Baidu, Zhihu, Xiaohongshu, GitHub, arXiv, 199it, Eastmoney, Zhaopin, and 51job through Kepler MCP tools.
 
-## Publisher: <br>
-[mylike2018](https://clawhub.ai/user/mylike2018) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mylike2018](https://clawhub.ai/user/mylike2018)
 
-## Use Case: <br>
-Developers and external agent users use this skill to route web search and page-reading tasks across Bing, Zhihu, and Xiaohongshu, then return structured search results, article reads, or multi-source research reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries, URLs, API keys, and research targets are sent to the third-party Kepler MCP provider and downstream search services. <br>
-Mitigation: Use only when the user trusts the apisec.cn provider; avoid confidential prompts, internal URLs, proprietary research targets, and sensitive credentials. <br>
-Risk: External search and content extraction can return incomplete, stale, or misleading web content. <br>
-Mitigation: Have the agent cite sources, compare multiple engines for important tasks, and review generated summaries before using them for decisions. <br>
+## Use Case:
 
+Developers and agent users use this skill to retrieve current web information, read selected pages, and compare results across general search, Chinese social platforms, code, academic, data, finance, and hiring sources.
 
-## Reference(s): <br>
-- [Kepler MCP setup guide](references/mcp-setup.md) <br>
-- [Kepler provider site](https://apisec.cn) <br>
-- [ClawHub skill page](https://clawhub.ai/mylike2018/skills/kepler-agent-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown search results, article summaries, research reports, and MCP setup snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include links, source labels, dates when available, and selected engine/source metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Search queries and selected URLs are routed through an external Kepler MCP service at apisec.cn.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and accept the provider's privacy and security terms before use, especially for organizational deployments.
+
+Risk: Sensitive prompts, secrets, credentials, confidential documents, customer data, or sensitive personal topics could be exposed through search or page-reading requests.
+
+Mitigation: Do not use the skill with secrets, credentials, private customer data, confidential internal documents, or sensitive personal topics unless that data sharing has been approved.
+
+## Reference(s):
+
+- [Kepler MCP Service Setup Guide](references/mcp-setup.md)
+- [Web Search and Code Search](references/search.md)
+- [Social Media Search](references/social.md)
+- [Open Source Code Search](references/github.md)
+- [Academic Research Search](references/arxiv.md)
+- [Industry Data and Report Search](references/data.md)
+- [Finance and Stock Search](references/finance.md)
+- [Recruiting and Job Search](references/career.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API Calls, Configuration, Guidance]
+
+**Output Format:** [Markdown with links, summaries, source labels, and optional JSON MCP configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search behavior depends on the configured Kepler MCP service and selected source engine.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

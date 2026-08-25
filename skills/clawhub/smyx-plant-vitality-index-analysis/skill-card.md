@@ -1,44 +1,64 @@
-## Description: <br>
-Using plant images, optional environmental data, and growth metrics, this skill calls a plant-analysis service to produce a 0-100 vitality score, vitality grade, trend, change percentage, alert hints, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes plant images, videos, optional environmental data, and growth metrics to produce a 0-100 plant vitality score, vitality grade, trend, change percentage, and alert hint.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and plant-monitoring operators use this skill to evaluate plant vitality from plant images or videos and to retrieve cloud-hosted historical vitality reports. It is intended for smart planters, plant factories, home gardening, and plant-monitoring platforms where concise scoring and trend reporting support care decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Plant images, videos, URLs, and report history may be processed by lifeemergence.com services. <br>
-Mitigation: Use only media and URLs approved to leave the user's environment, and avoid private files or internal URLs unless external processing is permitted. <br>
-Risk: The skill may create or reuse a local or remote identity and store session tokens in workspace data. <br>
-Mitigation: Review workspace data handling before deployment, limit access to generated tokens, and remove or rotate stored identity data when the skill is no longer needed. <br>
-Risk: Single-image vitality scores can be affected by lighting, angle, and image quality. <br>
-Mitigation: Prefer consistent daily image sequences and treat scores as care guidance rather than definitive plant-health diagnosis. <br>
+## Use Case:
 
+External users and developers use this skill to evaluate plant vitality from plant media, optional environmental readings, and growth indicators. It supports smart planters, home gardening, plant factories, and plant-monitoring platforms that need structured vitality reports and history lookups.
 
-## Reference(s): <br>
-- [API Documentation](references/api_doc.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-vitality-index-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and JSON reports with score, grade, trend, alert hints, report links, and optional history tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call cloud APIs for analysis and historical report retrieval; supports local file paths or public media URLs as inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter lists 1.0.6) <br>
+Risk: Plant media and account-linked metadata may be sent to configured remote services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the configured service endpoints and obtain user consent before installing or running the skill with plant images, videos, URLs, or environment data.
+
+Risk: History requests automatically fetch cloud report records associated with the resolved identity.
+
+Mitigation: Use history lookup only when the user requests it, and disclose that results come from the remote service account context.
+
+Risk: The skill creates or reuses a local identity and can persist authentication tokens locally.
+
+Mitigation: Make authentication and persistence opt-in or clearly consented, and clear local credentials when the skill is no longer needed.
+
+Risk: Default configuration includes remote service endpoints and automatic network calls.
+
+Mitigation: Review endpoint configuration before deployment and remove development or private endpoints from release defaults.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-vitality-index-analysis)
+- [Plant Vitality API Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, guidance]
+
+**Output Format:** [Markdown and JSON analysis reports, with optional report links and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write an analysis result to a user-specified output file.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact frontmatter says 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

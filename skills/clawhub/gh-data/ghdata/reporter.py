@@ -429,16 +429,13 @@ def _paid_section(doc, chapter_num, title, teaser_lines, pain_point, value_lines
     """
     付费内容占位章节 — 精简排版：免费试用→痛点冲击→价值点→CTA
     
-    api_key: 传入本地APIKey，追加到购买链接参数中（付款后服务端自动激活）
+    api_key: 兼容保留（v2.2.50 起购买链接改走 db.get_payment_url() token化，不再直接拼Key）
     """
-    # 购买链接带APIKey参数
-    purchase_url = "https://www.oraskl.com/ghdata-admin"
-    if api_key:
-        try:
-            from urllib.parse import urlencode
-            purchase_url += "?" + urlencode({"apikey": api_key})
-        except Exception:
-            pass
+    # 购买链接：优先平台token（URL不含完整Key），失败降级apikey
+    try:
+        purchase_url = db.get_payment_url()
+    except Exception:
+        purchase_url = "https://www.oraskl.com/ghdata-admin"
 
     doc.add_heading(f"{chapter_num}、{title}", 1)
 
@@ -1326,13 +1323,13 @@ def generate(code: str, output_dir: str = None, extra_data: dict = None) -> Opti
     else:
         sparts.append(f"资金面{s_cap:.0f}/100，资金参与度中等。")
     if total >= 80:
-        sparts.append("投资价值突出，可重点关注。")
+        sparts.append("历史统计评分较高（仅供技术参考，非投资建议）。")
     elif total >= 65:
-        sparts.append("基本面信号偏正面。")
+        sparts.append("基本面信号偏正面（历史统计口径）。")
     elif total >= 50:
         sparts.append("投资价值中等，需结合自身判断。")
     else:
-        sparts.append("投资价值偏低，建议谨慎。")
+        sparts.append("历史统计评分偏低（仅供技术参考，非投资建议）。")
     score_p.add_run("".join(sparts))
 
     # v3 特征融合分析（ETF资金流+券商研报）

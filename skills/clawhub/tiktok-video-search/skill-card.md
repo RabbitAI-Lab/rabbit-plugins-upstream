@@ -1,47 +1,62 @@
-## Description: <br>
-Searches TikTok videos by keyword through Gecho Bridge MCP and returns structured video metadata, creators, engagement metrics, video links, and concise summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search TikTok videos by keyword with Gecho Bridge MCP, returning video metadata, creators, engagement metrics, and links for users with the Gecho Chrome extension, an active TikTok session, and the Gecho Bridge MCP server.
 
-## Publisher: <br>
-[gecho-ai](https://clawhub.ai/user/gecho-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gecho-ai](https://clawhub.ai/user/gecho-ai)
 
-## Use Case: <br>
-External users, marketers, researchers, and developers use this skill to search TikTok for exact keywords, discover videos and creators, collect engagement metadata, and save keyword-level result sets through the official Gecho browser workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: TikTok search depends on Gecho Bridge MCP, the Gecho Chrome extension, Chrome, and an active logged-in TikTok web session; missing or blocked prerequisites can cause failures or timeouts. <br>
-Mitigation: Confirm the MCP server is configured, the extension is installed and logged in, TikTok web is logged in, and CAPTCHA or login walls are resolved before running a search. <br>
-Risk: Search metadata and video links may be saved locally as JSON and could contain sensitive research context. <br>
-Mitigation: Use a safe workspace or explicit save directory with appropriate access controls when results could be sensitive. <br>
-Risk: Unofficial scraping, parallel scraping jobs, or automatic query rewrites could produce unreliable behavior or unexpected browser-session effects. <br>
-Mitigation: Use only the official Gecho `tiktok_search` MCP tool, run one search job per conversational turn, and keep the user's exact keyword unless they provide a new one. <br>
+## Use Case:
 
+External users, developers, and social media researchers use this skill to run keyword-level TikTok video searches through Gecho Bridge and summarize creators, engagement metrics, links, and saved result files.
 
-## Reference(s): <br>
-- [Tiktok Video Search on ClawHub](https://clawhub.ai/gecho-ai/skills/tiktok-video-search) <br>
-- [Gecho Bridge README](https://github.com/gecho-ai/gecho-bridge/blob/main/README.md) <br>
-- [Gecho Chrome Extension](https://chromewebstore.google.com/detail/pjkaeenpekolahdbccjfenjcmanemlbj?utm_source=item-share-cb) <br>
-- [Gecho Website](https://gecho.ai/) <br>
-- [OpenClaw TikTok Setup Video](https://www.youtube.com/watch?v=ggwY9hISHcQ) <br>
-- [Hermes TikTok Setup Video](https://www.youtube.com/watch?v=zHKnuWnxt_c) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with setup commands, concise search summaries, TikTok video metadata, links, and optional saved JSON result paths.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the `tiktok_search` MCP tool with a required keyword query and an optional absolute save directory; successful responses should summarize only the top 3 to 5 items.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.29 (source: server release evidence) <br>
+Risk: The workflow connects Gecho Bridge and the Chrome extension to a logged-in TikTok browser session.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing or running searches, confirm the user is comfortable using a logged-in TikTok session through the official Gecho Bridge workflow.
+
+Risk: Saved raw search results may reveal sensitive research interests or account-derived content.
+
+Mitigation: Use a user-selected save_dir with appropriate access controls, or delete saved result files after use.
+
+Risk: Searches depend on the Gecho Bridge MCP server, Gecho Chrome extension, and active TikTok browser session being available.
+
+Mitigation: Provide setup guidance when prerequisites are missing and avoid inventing or retrying results when the official tool is unavailable or returns no data.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gecho-ai/skills/tiktok-video-search)
+- [Gecho Website](https://gecho.ai/)
+- [Gecho Bridge README](https://github.com/gecho-ai/gecho-bridge/blob/main/README.md)
+- [Gecho Chrome Extension](https://chromewebstore.google.com/detail/pjkaeenpekolahdbccjfenjcmanemlbj?utm_source=item-share-cb)
+- [OpenClaw Setup Video](https://www.youtube.com/watch?v=ggwY9hISHcQ)
+- [Hermes Setup Video](https://www.youtube.com/watch?v=zHKnuWnxt_c)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Configuration instructions, Shell commands, Markdown, JSON, Files, Guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and structured TikTok search results returned as JSON plus saved local result files when available.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Successful searches summarize the top 3 to 5 results and include a saved file path when available.]
+
+## Skill Version(s):
+
+1.1.37 (source: server release evidence and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

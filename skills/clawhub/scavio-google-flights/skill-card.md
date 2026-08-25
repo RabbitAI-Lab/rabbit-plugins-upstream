@@ -1,45 +1,63 @@
-## Description: <br>
-Searches Google Flights through Scavio's v2 API and returns structured flight itinerary JSON including price, airline, duration, stops, and legs for round-trip, one-way, and multi-city requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Flights for a route and date as structured JSON with price, airline, duration, stops, and legs; supports round-trip, one-way, and multi-city searches with cabin, stops, and airline filters.
 
-## Publisher: <br>
-[scavio-ai](https://clawhub.ai/user/scavio-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[scavio-ai](https://clawhub.ai/user/scavio-ai)
 
-## Use Case: <br>
-External users, developers, and travel-planning agents use this skill to search and compare flights by route, dates, cabin, stops, airline filters, duration, and price. It is suited for producing structured flight-search results from Scavio rather than estimating or fabricating fares. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Flight searches send trip details such as airports, dates, passenger counts, cabin preferences, and airline filters to Scavio's API. <br>
-Mitigation: Use the skill only when that data sharing is acceptable, and avoid including unnecessary personal or sensitive information in search requests. <br>
-Risk: The skill requires a Scavio API key. <br>
-Mitigation: Use your own SCAVIO_API_KEY from the environment and avoid pasting, logging, or sharing the key. <br>
-Risk: Flight prices, times, airlines, and durations can be incorrect if an agent invents values outside the API response. <br>
-Mitigation: Return only values from Scavio API data, state the requested currency when quoting fares, and retry or adjust filters when the API returns no flights or an error. <br>
+## Use Case:
 
+External users, developers, and travel-support agents use this skill to look up Google Flights results through Scavio for specific routes and dates, compare fares and itinerary details, and return only API-backed flight data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/scavio-ai/skills/scavio-google-flights) <br>
-- [Scavio Google Flights documentation](https://scavio.dev/docs/google-flights) <br>
-- [Scavio rate limits](https://scavio.dev/docs/rate-limits) <br>
-- [scavio-ai publisher profile](https://clawhub.ai/user/scavio-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with shell setup, API request examples, and structured JSON flight-search results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY. Scavio reports each Google Flights request as costing 1 credit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Flight search details are sent to Scavio when the API is called.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Tell users when their route, dates, passenger counts, and filters will be sent to Scavio, and avoid sending sensitive travel details unless needed.
+
+Risk: Each API request consumes one Scavio credit.
+
+Mitigation: Confirm required route and date parameters before calling the API, and avoid repeated calls when filters or dates are unclear.
+
+Risk: The Scavio API key can be exposed if pasted into source code or shared transcripts.
+
+Mitigation: Keep SCAVIO_API_KEY in an environment variable or secret store and never include real keys in generated code.
+
+Risk: Flight prices, schedules, and availability can be wrong if invented or quoted without context.
+
+Mitigation: Report only API-returned data and include relevant context such as currency, dates, stops, and the time-sensitive nature of fares.
+
+## Reference(s):
+
+- [Scavio Google Flights documentation](https://scavio.dev/docs/google-flights)
+- [Scavio rate limits](https://scavio.dev/docs/rate-limits)
+- [ClawHub skill listing](https://clawhub.ai/scavio-ai/skills/scavio-google-flights)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Code, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell and Python examples plus structured JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; each Scavio API request costs one credit.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

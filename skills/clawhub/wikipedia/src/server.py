@@ -11,13 +11,14 @@ import json
 import random
 import re
 import sys
+from datetime import datetime, timezone
 from typing import Optional
 
 import requests
 
 API_VERSION = "2025-06-18"
 SERVER_NAME = "wikipedia-mcp"
-SERVER_VERSION = "1.1.0"
+SERVER_VERSION = "1.1.4"
 
 # Wikipedia requires a descriptive User-Agent with contact info.
 USER_AGENT = (
@@ -99,7 +100,10 @@ def _summary_block(data: dict, fallback_title: str) -> str:
 # ---------------------------------------------------------------------------
 def search_wikipedia(query: str, limit: int = 5, lang: str = "en") -> str:
     """Search Wikipedia for articles matching a query."""
-    limit = max(1, min(int(limit), 20))
+    try:
+        limit = max(1, min(int(limit), 20))
+    except (TypeError, ValueError):
+        limit = 5  # fall back to default on garbage input
     params = {
         "action": "query",
         "list": "search",
@@ -196,6 +200,44 @@ def dino_fact(species: str = "", lang: str = "en") -> str:
     )
 
 
+def article_extract(title: str, lang: str = "en") -> str:
+    """Get a Wikipedia article's full plain-text extract by title (vs `summary`).
+
+    Uses the MediaWiki Action API `prop=extracts` with `explaintext=1` to return
+    the full article body as plain text — typically several paragraphs, much
+    longer than `summary`'s short extract. Complements `summary`: use `summary`
+    for the lead + thumbnail, `article_extract` when you want to read more
+    without parsing HTML.
+    """
+    params = {
+        "action": "query",
+        "prop": "extracts",
+        "explaintext": 1,
+        "exsectionformat": "plain",
+        "titles": title,
+        "format": "json",
+        "origin": "*",
+    }
+    resp = _get(_wiki(lang), params=params)
+    if resp.status_code == 404:
+        return f"Article '{title}' not found on Wikipedia."
+    resp.raise_for_status()
+    data = resp.json()
+    pages = data.get("query", {}).get("pages", {})
+    page = next(iter(pages.values()), {}) if pages else {}
+    # MediaWiki Action API returns 200 OK with a "missing" marker for
+    # non-existent pages rather than a 404 HTTP status. Detect that
+    # explicitly so users see the same "not found" message as `summary`.
+    if not page or "missing" in page:
+        return f"Article '{title}' not found on Wikipedia."
+    extract = (page.get("extract") or "").strip()
+    title_out = (page.get("title") or title) if page else title
+    if not extract:
+        return f"No extract available for '{title_out}'."
+    desktop_url = f"https://{lang}.wikipedia.org/wiki/{_slug(title_out)}"
+    return f"## {title_out}\n\n{extract}\n\n[Read more →]({desktop_url})"
+
+
 def featured_article(lang: str = "en") -> str:
     """Get today's Wikipedia Featured Article (great content hook)."""
     resp = _get(f"{_base(lang)}/feed/featured/{_today()}")
@@ -208,9 +250,99 @@ def featured_article(lang: str = "en") -> str:
     return _summary_block(data, fallback_title=data.get("title", "Featured Article"))
 
 
+def on_this_day(lang: str = "en", count: int = 5) -> str:
+    """Get historical events that happened on today's date from Wikipedia.
+
+    Returns a random sample of events from Wikipedia's "On This Day" feed
+    for the current UTC date. Pairs well with featured_article for daily
+    content hooks — e.g. "today in history" newsletter intros.
+    """
+    try:
+        count = max(1, min(int(count), 10))
+    except (TypeError, ValueError):
+        count = 5
+    today_mm_dd = datetime.now(timezone.utc).strftime("%m/%d")
+    resp = _get(f"{_base(lang)}/feed/onthisday/events/{today_mm_dd}")
+    if resp.status_code == 404:
+        return f"No 'on this day' events available for {lang}.wikipedia.org today."
+    resp.raise_for_status()
+    events = resp.json().get("events", [])
+    if not events:
+        return f"No historical events found for today on {lang}.wikipedia.org."
+
+    sample = random.sample(events, min(count, len(events)))
+    out = "**On this day:**\n\n"
+    for ev in sample:
+        year = ev.get("year", "?")
+        text = _strip_html(ev.get("text", ""))
+        out += f"- **{year}** — {text}\n"
+        pages = ev.get("pages", [])
+        if pages:
+            page_title = pages[0].get("title", "")
+            if page_title:
+                out += (
+                    f"  [Read on Wikipedia]"
+                    f"(https://{lang}.wikipedia.org/wiki/{page_title})\n"
+                )
+    return out
+
+
 def _today() -> str:
-    from datetime import datetime, timezone
     return datetime.now(timezone.utc).strftime("%Y/%m/%d")
+
+
+def categories(title: str, limit: int = 20, lang: str = "en") -> str:
+    """List Wikipedia categories for an article.
+
+    Returns the Wikipedia categories an article belongs to (e.g.
+    "Late Cretaceous dinosaurs", "Articles containing Latin-language text").
+    Useful for taxonomy-based discovery — finding related topics that
+    don't show up in text search. Hidden/maintenance categories are
+    filtered out so the result is high-signal.
+    """
+    try:
+        limit = max(1, min(int(limit), 50))
+    except (TypeError, ValueError):
+        limit = 20
+    params = {
+        "action": "query",
+        "prop": "categories",
+        "titles": title,
+        "cllimit": limit,
+        "clshow": "!hidden",
+        "clsort": "sortkey",
+        "format": "json",
+        "origin": "*",
+    }
+    resp = _get(_wiki(lang), params=params)
+    if resp.status_code == 404:
+        return f"Article '{title}' not found on Wikipedia."
+    resp.raise_for_status()
+    data = resp.json()
+    pages = data.get("query", {}).get("pages", {})
+    if not pages:
+        return f"No categories found for '{title}'."
+
+    # API returns pages as {pageid: {...}}; missing pages have id=-1
+    page = next(iter(pages.values()))
+    if page.get("missing") is not None or page.get("title", "") == "" and "categories" not in page:
+        return f"Article '{title}' not found on Wikipedia."
+    cats = page.get("categories", [])
+    if not cats:
+        return f"No categories found for '{page.get('title', title)}'."
+
+    page_title = page.get("title", title)
+    out = f"**Categories for \"{page_title}\":**\n\n"
+    for cat in cats:
+        # Strip "Category:" prefix for cleaner display
+        name = cat.get("title", "").replace("Category:", "", 1)
+        if name:
+            out += f"- {name}\n"
+    out += (
+        f"\n[View article]"
+        f"(https://{lang}.wikipedia.org/wiki/{_slug(page_title)})"
+    )
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -315,6 +447,31 @@ TOOLS = [
         },
     },
     {
+        "name": "article_extract",
+        "description": (
+            "Get a Wikipedia article's full plain-text extract by title — "
+            "much longer than `summary` (typically several paragraphs). "
+            "Returns plain text (no HTML). Complements `summary`: use it "
+            "when the summary is too brief and you want a fuller reading."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Article title (e.g. 'Tyrannosaurus' or 'Albert_Einstein')",
+                },
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+            },
+            "required": ["title"],
+        },
+    },
+    {
         "name": "featured_article",
         "description": "Get today's Wikipedia Featured Article — a curated long-form pick, perfect for content hooks",
         "inputSchema": {
@@ -327,6 +484,60 @@ TOOLS = [
                     "enum": list(SUPPORTED_LANGS),
                 },
             },
+        },
+    },
+    {
+        "name": "on_this_day",
+        "description": (
+            "Get historical events that happened on today's date (UTC) "
+            "from Wikipedia's 'On This Day' feed. Returns a random sample "
+            "of events with year + description + Wikipedia link — great "
+            "daily content hook alongside featured_article."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+                "count": {
+                    "type": "integer",
+                    "description": "Number of events to return (default 5, max 10)",
+                    "default": 5,
+                },
+            },
+        },
+    },
+    {
+        "name": "categories",
+        "description": (
+            "List Wikipedia categories an article belongs to. Useful for "
+            "taxonomy-based discovery — finding related topics that don't "
+            "appear in text search. Hidden/maintenance categories are filtered out."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Article title (e.g. 'Tyrannosaurus' or 'Albert_Einstein')",
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Max categories to return (default 20, max 50)",
+                    "default": 20,
+                },
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+            },
+            "required": ["title"],
         },
     },
 ]
@@ -345,6 +556,12 @@ def _call_tool(name: str, args: dict) -> str:
         return dino_fact(**args)
     if name == "featured_article":
         return featured_article(**args)
+    if name == "article_extract":
+        return article_extract(**args)
+    if name == "on_this_day":
+        return on_this_day(**args)
+    if name == "categories":
+        return categories(**args)
     return f"Unknown tool: {name}"
 
 

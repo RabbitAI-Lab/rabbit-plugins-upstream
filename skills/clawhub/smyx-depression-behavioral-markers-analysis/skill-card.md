@@ -1,44 +1,64 @@
-## Description: <br>
-Analyzes long-duration bedroom and dining-area camera video to produce behavior-change reports about prolonged immobility, reduced eating activity, baseline comparison, alert level, and recommended follow-up, without presenting a medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed home-camera video from bedroom and dining areas to report long immobility, appetite-related behavior changes, and caregiver-facing alerts without making medical diagnoses.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Developers and care-platform operators use this skill to route consenting home-camera video or URLs to cloud analysis and return structured behavioral observation reports for family members or community doctors. It is intended as monitoring support for older adults or people living alone, not as a clinical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive home-camera footage and identity-linked monitoring data may be sent to external services and associated with locally stored tokens. <br>
-Mitigation: Use only with knowing consent from users and monitored individuals; require clear upload and history-query confirmation, documented retention and deletion controls, and transparent account setup. <br>
-Risk: Behavioral observations about immobility or appetite change may be mistaken for a depression diagnosis or treatment recommendation. <br>
-Mitigation: Present outputs as visual behavior statistics and follow-up prompts only; require family, community doctor, or clinician review for medical interpretation. <br>
-Risk: Cloud report-history lookup can expose prior sensitive health-monitoring records. <br>
-Mitigation: Restrict history access to the intended account, protect local credentials, and make report-history retrieval an explicit user-visible action. <br>
+## Use Case:
 
+External caregivers, family members, community care teams, and developers use this skill to analyze 24-hour-or-longer fixed-camera home video for sustained bed rest and reduced eating behavior signals. The skill produces observation reports and alerts for follow-up, not depression diagnosis, scoring, medication advice, or treatment planning.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-depression-behavioral-markers-analysis) <br>
-- [API interface reference](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown text with structured JSON report content and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write results to a user-specified output file; history queries return cloud report records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: Highly sensitive in-home health video may be uploaded or remotely processed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only with the monitored person's informed consent, use a trusted provider, and confirm retention, access, and deletion terms before use.
+
+Risk: The skill may silently create or reuse an internal identity and store service tokens locally.
+
+Mitigation: Run it in a dedicated environment, inspect local identity and token storage, and clear or revoke credentials when the skill is no longer needed.
+
+Risk: Behavioral markers can be mistaken for a medical diagnosis.
+
+Mitigation: Use outputs only as observation aids and route concerning signals to family, community care staff, or licensed clinicians for interpretation.
+
+Risk: Continuous bedroom and dining-area monitoring can expose intimate personal routines.
+
+Mitigation: Prefer privacy-preserving modes such as human silhouettes, face masking, metric-only retention, and minimized access to raw recordings.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-depression-behavioral-markers-analysis)
+- [Depression behavioral markers API documentation](artifact/references/api_doc.md)
+- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown reports and JSON-formatted analysis results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include report export links and API-backed history listings; reliable alerts require 24h+ bedroom and dining-area video plus a 7-14 day personal baseline.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata; artifact frontmatter says 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

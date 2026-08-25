@@ -1,14 +1,13 @@
 ---
 name: dlazy-jimeng-i2v-first
 version: 1.3.5
-description: Generate dynamic videos based on a single first frame image and prompts using Jimeng. 使用即梦 (Jimeng) 首帧生视频模型，基于单张首帧图片和提示词生成动态视频。
+description: "Generate dynamic videos based on a single first frame image and prompts using Jimeng. 使用即梦 (Jimeng) 首帧生视频模型，基于单张首帧图片和提示词生成动态视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy jimeng-i2v-first -h for help."}}
 ---
 
-# dlazy-jimeng-i2v-first
+# 图生视频 即梦首帧 Jimeng I2V
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Generate dynamic videos based on a single first frame image and prompts using Jimeng.
@@ -87,6 +86,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -99,7 +99,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "jimeng-i2v-first",
-    "modelId": "jimeng-i2v-first",
+    "modelId": "jimeng-i2v-first-v30",
     "outputs": [
       {
         "type": "image",

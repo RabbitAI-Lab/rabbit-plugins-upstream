@@ -1,47 +1,62 @@
-## Description: <br>
-Book To Learn Check turns books in PDF, DOCX, HTML, EPUB, TXT, or RTF formats into daily learning cards with optional bilingual terminology review, translation, and delivery through IMA or Feishu. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+把任意一本书分解成日常学习任务，每日推送一张知识点卡片。
 
-## Publisher: <br>
-[sedey999](https://clawhub.ai/user/sedey999) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[sedey999](https://clawhub.ai/user/sedey999)
 
-## Use Case: <br>
-Developers, educators, and self-directed learners use this skill to decompose books into structured knowledge points, generate study-card artifacts, and run daily push workflows. It is suited to recurring book study, bilingual review, and prompt-driven learning variants built from the same extracted book data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Installation guidance includes optional sudo pip commands and an optional download/copy flow for the IMA skill. <br>
-Mitigation: Review commands before execution, install dependencies in a controlled environment, and only install the IMA skill from a trusted source. <br>
-Risk: Generated book content, cards, images, and failure messages can be sent to configured IMA, Feishu, webhook, or push-service destinations. <br>
-Mitigation: Use only trusted destinations and avoid processing confidential books unless the selected push channel is approved for that content. <br>
-Risk: Optional push workflows depend on local IMA, Feishu, or webhook credentials. <br>
-Mitigation: Configure credentials only for trusted accounts, store them locally as documented, and rotate or remove them if exposure is suspected. <br>
+## Use Case:
 
+Developers and external users use this skill to turn books into structured daily learning workflows, including knowledge-point extraction, card generation, progress tracking, and scheduled delivery through configured channels.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sedey999/skills/book-to-learn) <br>
-- [IMA agent interface](https://ima.qq.com/agent-interface) <br>
-- [Feishu Open Platform](https://open.feishu.cn/app) <br>
-- [Open Music Theory example source](https://viva.pressbooks.pub/openmusictheory) <br>
-- [book-to-skill reference project](https://github.com/virgiliojr94/book-to-skill) <br>
-- [react-paper-memo design reference](https://github.com/JustinChia/react-paper-memo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration, shell commands, and generated PDF, HTML, PNG, or Feishu card artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Progress is recorded only after successful delivery; optional push workflows can send generated book content to configured IMA, Feishu, or webhook destinations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: SKILL.md frontmatter and ClawHub release metadata) <br>
+Risk: Book text, generated cards, images, and selected attachments can leave the local machine through IMA, Feishu, configured webhooks, and Catbox in Feishu webhook image mode.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use non-sensitive books first, avoid Feishu webhook image mode for private content, and install only when those external transfers are acceptable.
+
+Risk: The skill can download links from book data and send generated or downloaded files to external services with limited safeguards.
+
+Mitigation: Review items.json relatedLinks and image fields before scheduling automated pushes.
+
+Risk: Push modes depend on configured credentials and service accounts.
+
+Mitigation: Prefer explicitly configured paths and credentials with least-privilege IMA, Feishu, and webhook accounts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sedey999/skills/book-to-learn)
+- [Project homepage listed by the skill](https://github.com/sedey999/book-to-learn)
+- [IMA API key page](https://ima.qq.com/agent-interface)
+- [Feishu Open Platform app setup](https://open.feishu.cn/app)
+- [book-to-skill reference project](https://github.com/virgiliojr94/book-to-skill)
+- [react-paper-memo design reference](https://github.com/JustinChia/react-paper-memo)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON data files, and generated learning-card artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May generate PDF, PNG, HTML, and JSON files and may send generated cards, images, or attachments to configured IMA, Feishu, webhook, or Catbox endpoints.]
+
+## Skill Version(s):
+
+1.4.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

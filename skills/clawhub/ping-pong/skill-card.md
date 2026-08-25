@@ -1,44 +1,59 @@
-## Description: <br>
-Agent Ping-Pong guides a human-relayed workflow where OpenClaw specifies and reviews work while Codex or Claude Code implements changes through GitHub pull requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Your OpenClaw is the brain. Codex or Claude Code are the hands. The clipboard is the protocol.
 
-## Publisher: <br>
-[highnoonoffice](https://clawhub.ai/user/highnoonoffice) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[highnoonoffice](https://clawhub.ai/user/highnoonoffice)
 
-## Use Case: <br>
-Developers and technical operators use this skill to coordinate two-agent coding work, with a human relaying structured handoff blocks between OpenClaw and a coding agent. It is intended for GitHub PR workflows that keep implementation in a sandbox, preserve review, and require explicit approval before merge or production porting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow describes sending handoff blocks to a fixed Telegram destination, which could expose work context or route messages to an unintended recipient. <br>
-Mitigation: Use the skill only when you control the destination, remove or replace the hardcoded chat destination, and require explicit approval for each external send. <br>
-Risk: The workflow requires GitHub personal access tokens for the participating agents. <br>
-Mitigation: Use fine-grained, repo-limited tokens only, avoid broad or classic tokens, and scope each token to the minimum repositories and permissions needed. <br>
-Risk: Clipboard handoff blocks can expose secrets or private business details to local processes or external messaging if copied into the workflow. <br>
-Mitigation: Keep raw credentials and sensitive details out of handoff blocks; store credentials only in agent configuration and review blocks before relaying them. <br>
+## Use Case:
 
+Developers and builders use this skill to coordinate OpenClaw with Codex or Claude Code for GitHub-based coding work, routing specs, PR reports, reviews, and merge approvals through structured handoff blocks.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/highnoonoffice/ping-pong) <br>
-- [Project homepage](https://github.com/highnoonoffice/agent-ping-pong) <br>
-- [OpenClaw](https://openclaw.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with structured handoff blocks and inline command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Single-stream agent guidance for repository setup, PR handoffs, review loops, and approval gates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.1 (source: server release metadata; artifact frontmatter lists 2.8.0) <br>
+Risk: Handoff content may be sent to a hard-coded Telegram chat outside the local clipboard workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove or disable the Telegram instructions unless that external relay is explicitly intended and approved.
+
+Risk: The workflow requires scoped GitHub write tokens for the participating agents.
+
+Mitigation: Use fine-grained tokens limited to the intended sandbox and production repositories, and review permissions before installation.
+
+Risk: Structured handoff blocks can carry sensitive information through the clipboard or external relay.
+
+Mitigation: Keep raw secrets out of handoff blocks and store credentials only in agent configuration.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/highnoonoffice/skills/ping-pong)
+- [Project homepage](https://github.com/highnoonoffice/agent-ping-pong)
+- [OpenClaw](https://openclaw.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with structured handoff blocks and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires human relay and approval gates; credentials remain in agent configuration.]
+
+## Skill Version(s):
+
+2.8.2 (source: server release evidence; artifact frontmatter: 2.8.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

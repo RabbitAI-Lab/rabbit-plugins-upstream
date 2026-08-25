@@ -10,8 +10,8 @@
 |------|---------|------|---------|
 | Agnes AI | agnes-2.0-flash | 文本/图像/视频生成 | https://apihub.agnes-ai.com/v1 |
 | 智谱 BigModel | glm-4.7-flash | 文本生成 | https://open.bigmodel.cn/api/paas/v4/ |
-| 商汤 SenseNova | sensenova-6.7-flash-lite | 文本生成 | https://token.sensenova.cn/v1 |
-| 小米 MIMO | mimo-v2.5-pro | 文本生成 | https://token-plan-cn.xiaomimimo.com/v1 |
+| 商汤 SenseNova | sensenova-6.8-flash-lite / sensenova-u1-fast / deepseek-v4-flash / glm-5.2 | 文本生成 / 信息图生成 / 对话推理 | https://token.sensenova.cn/v1 |
+| 小米 MIMO | mimo-v2.5-pro / mimo-v2.5 / mimo-v2.5-asr / mimo-v2.5-tts 系列 | 文本生成 / 全模态 / 语音识别 / 语音合成 | https://token-plan-cn.xiaomimimo.com/v1 |
 | 美团 LongCat | LongCat-2.0 | 文本生成 | https://api.longcat.chat/openai |
 
 2. **平台能力对比**：
@@ -19,7 +19,7 @@
 | 能力维度 | Agnes AI | 智谱 BigModel | 商汤 SenseNova | 小米 MIMO | 美团 LongCat |
 |---------|----------|---------------|----------------|-----------|--------------|
 | 文本生成 | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 图像生成 | ✅ | ❌ | ❌ | ❌ | ❌ |
+| 图像生成 | ✅ | ❌ | ✅ | ❌ | ❌ |
 | 视频生成 | ✅ | ❌ | ❌ | ❌ | ❌ |
 | 中文支持 | ✅ | ✅ | ✅ | ✅ | ✅ |
 | 免费额度 | 有限 | 有限 | 有限 | 有限 | 有限 |
@@ -39,8 +39,8 @@
 |------|------|------|
 | Agnes AI | 多模态能力强 | 需要配置 |
 | 智谱 BigModel | 中文能力强 | 仅文本 |
-| 商汤 SenseNova | 稳定性好 | 仅文本 |
-| 小米 MIMO | 响应速度快 | 仅文本 |
+| 商汤 SenseNova | 稳定性好，支持信息图生成 | 生图链接 1 小时有效 |
+| 小米 MIMO | 响应速度快，全模态 + 语音 | ASR 按音频时长计费 |
 | 美团 LongCat | 免费额度高 | 仅文本 |
 
 **平台推荐**：
@@ -119,8 +119,8 @@
 |------|---------|---------|---------|---------|---------|
 | Agnes AI | agnes-2.0-flash | ✅ | ✅ | ✅ | ✅ |
 | 智谱 BigModel | glm-4.7-flash | ✅ | ❌ | ❌ | ✅ |
-| 商汤 SenseNova | sensenova-6.7-flash-lite | ✅ | ❌ | ❌ | ✅ |
-| 小米 MIMO | mimo-v2.5-pro | ✅ | ❌ | ❌ | ✅ |
+| 商汤 SenseNova | sensenova-6.8-flash-lite / sensenova-u1-fast / deepseek-v4-flash / glm-5.2 | ✅ | ✅ | ❌ | ✅ |
+| 小米 MIMO | mimo-v2.5-pro / mimo-v2.5 / mimo-v2.5-asr / mimo-v2.5-tts 系列 | ✅ | ❌ | ❌ | ✅ |
 | 美团 LongCat | LongCat-2.0 | ✅ | ❌ | ❌ | ✅ |
 
 2. **需求匹配度分析**：

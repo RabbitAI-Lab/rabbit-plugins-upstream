@@ -1,11 +1,11 @@
 # TPCB\_LayersOfPad type
 
-焊盘所属层
+Layers of the pad
 
 ## Signature
 
 ```typescript
-type TPCB_LayersOfPad = EPCB_LayerId.TOP | EPCB_LayerId.BOTTOM | EPCB_LayerId.MULTI;
+export type TPCB_LayersOfPad = EPCB_LayerId.TOP | EPCB_LayerId.BOTTOM | EPCB_LayerId.MULTI;
 ```
 ## References
 

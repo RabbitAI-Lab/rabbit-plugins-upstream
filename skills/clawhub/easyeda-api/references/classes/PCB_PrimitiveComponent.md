@@ -1,11 +1,11 @@
 # PCB\_PrimitiveComponent class
 
-PCB &amp; 封装 / 器件图元类
+PCB &amp; footprint / device primitive class
 
 ## Signature
 
 ```typescript
-declare class PCB_PrimitiveComponent implements IPCB_PrimitiveAPI 
+export class PCB_PrimitiveComponent implements IPCB_PrimitiveAPI 
 ```
 **Implements:** [IPCB\_PrimitiveAPI](../interfaces/IPCB_PrimitiveAPI.md)
 
@@ -37,7 +37,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 创建器件
+**_(BETA)_** Create Device
 
 
 </td></tr>
@@ -51,7 +51,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 删除器件
+**_(BETA)_** Delete Device
 
 
 </td></tr>
@@ -65,7 +65,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取器件
+**_(BETA)_** Get Device
 
 
 </td></tr>
@@ -79,7 +79,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取器件
+**_(BETA)_** Get Device
 
 
 </td></tr>
@@ -93,7 +93,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有器件
+**_(BETA)_** Get all Device
 
 
 </td></tr>
@@ -107,7 +107,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取器件关联的所有焊盘
+**_(BETA)_** Get all pads associated with the device
 
 
 </td></tr>
@@ -121,7 +121,21 @@ Description
 
 </td><td>
 
-**_(BETA)_** 获取所有器件的图元 ID
+**_(BETA)_** Get all Device primitive IDs
+
+
+</td></tr>
+<tr><td>
+
+[getAllPropertyNames()](./PCB_PrimitiveComponent.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Get The set of all property names of all devices
 
 
 </td></tr>
@@ -135,7 +149,7 @@ Description
 
 </td><td>
 
-**_(BETA)_** 修改器件
+**_(BETA)_** Modify Device
 
 
 </td></tr>
@@ -149,7 +163,21 @@ Description
 
 </td><td>
 
-**_(BETA)_** 使用鼠标放置器件
+**_(BETA)_** Place with the mouse device
+
+
+</td></tr>
+<tr><td>
+
+[placeFootprintWithMouse(footprint, properties)](./PCB_PrimitiveComponent.md)
+
+
+</td><td>
+
+
+</td><td>
+
+**_(BETA)_** Place with the mouse footprint
 
 
 </td></tr>
@@ -165,19 +193,12 @@ Description
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-创建器件
+Create Device
 
 ## Signature
 
 ```typescript
-create(component: {
-        libraryUuid: string;
-        uuid: string;
-    } | ILIB_DeviceItem | ILIB_DeviceSearchItem | {
-        libraryType: ELIB_LibraryType.FOOTPRINT;
-        libraryUuid: string;
-        uuid: string;
-    } | ILIB_FootprintItem | ILIB_FootprintSearchItem, layer: TPCB_LayersOfComponent, x: number, y: number, rotation?: number, primitiveLock?: boolean): Promise<IPCB_PrimitiveComponent | undefined>;
+public create(component: { libraryUuid: string; uuid: string } | ILIB_DeviceItem | ILIB_DeviceSearchItem | { libraryType: ELIB_LibraryType.FOOTPRINT; libraryUuid: string; uuid: string } | ILIB_FootprintItem | ILIB_FootprintSearchItem, layer: TPCB_LayersOfComponent, x: number, y: number, rotation?: number, primitiveLock?: boolean): Promise<IPCB_PrimitiveComponent | undefined>;
 ```
 
 ## Parameters
@@ -205,12 +226,12 @@ component
 
 </td><td>
 
-{ libraryUuid: string; uuid: string; } \| [ILIB\_DeviceItem](../interfaces/ILIB_DeviceItem.md) \| [ILIB\_DeviceSearchItem](../interfaces/ILIB_DeviceSearchItem.md) \| { libraryType: [ELIB\_LibraryType.FOOTPRINT](../enums/ELIB_LibraryType.md)<!-- -->; libraryUuid: string; uuid: string; } \| [ILIB\_FootprintItem](../interfaces/ILIB_FootprintItem.md) \| [ILIB\_FootprintSearchItem](../interfaces/ILIB_FootprintSearchItem.md)
+{ libraryUuid: string; uuid: string } \| [ILIB\_DeviceItem](../interfaces/ILIB_DeviceItem.md) \| [ILIB\_DeviceSearchItem](../interfaces/ILIB_DeviceSearchItem.md) \| { libraryType: [ELIB\_LibraryType.FOOTPRINT](../enums/ELIB_LibraryType.md)<!-- -->; libraryUuid: string; uuid: string } \| [ILIB\_FootprintItem](../interfaces/ILIB_FootprintItem.md) \| [ILIB\_FootprintSearchItem](../interfaces/ILIB_FootprintSearchItem.md)
 
 
 </td><td>
 
-关联库器件
+Associate library device
 
 
 </td></tr>
@@ -226,7 +247,7 @@ layer
 
 </td><td>
 
-层
+Layer
 
 
 </td></tr>
@@ -242,7 +263,7 @@ number
 
 </td><td>
 
-坐标 X
+X coordinate
 
 
 </td></tr>
@@ -258,7 +279,7 @@ number
 
 </td><td>
 
-坐标 Y
+Y coordinate
 
 
 </td></tr>
@@ -274,7 +295,7 @@ number
 
 </td><td>
 
-_(Optional)_ 旋转角度
+_(Optional)_ Rotation angle
 
 
 </td></tr>
@@ -290,7 +311,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -302,7 +323,31 @@ _(Optional)_ 是否锁定
 
 Promise&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md) \| undefined&gt;
 
-器件图元对象
+Device primitive object
+
+## Example
+
+
+```javascript
+// 1. 按立创编号从系统库精确反查器件，返回项不含 libraryUuid，需补上才能用于 create
+//    坐标取随机值，避免与画布上已有的器件重合
+const x = 20000 + Math.floor(Math.random() * 80000);
+const y = 20000 + Math.floor(Math.random() * 80000);
+const devices = await eda.lib_Device.searchByProperties({ supplierId: 'C1523' }, undefined, undefined, undefined, 5, 1);
+const sysLibUuid = await eda.lib_LibrariesList.getSystemLibraryUuid();
+
+// 2. 放置到顶层（1），旋转 90°，不锁定
+const comp = await eda.pcb_PrimitiveComponent.create({ libraryUuid: sysLibUuid, uuid: devices[0].uuid }, 1, x, y, 90, false);
+
+// 3. 创建类保留现场，不删除器件
+console.log('primitiveId:', comp.getState_PrimitiveId());
+console.log('designator:', comp.getState_Designator());
+console.log('name:', comp.getState_Name());
+console.log('footprint:', comp.getState_Footprint());
+console.log('layer:', comp.getState_Layer());
+console.log('x:', comp.getState_X(), 'y:', comp.getState_Y());
+console.log('rotation:', comp.getState_Rotation());
+```
 
 ### delete
 
@@ -310,12 +355,12 @@ Promise&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md) \| undefined
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-删除器件
+Delete Device
 
 ## Signature
 
 ```typescript
-delete(primitiveIds: string | IPCB_PrimitiveComponent | Array<string> | Array<IPCB_PrimitiveComponent>): Promise<boolean>;
+public delete(primitiveIds: string | IPCB_PrimitiveComponent | Array<string> | Array<IPCB_PrimitiveComponent>): Promise<boolean>;
 ```
 
 ## Parameters
@@ -348,7 +393,7 @@ string \| [IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md) \| Array&lt;s
 
 </td><td>
 
-器件的图元 ID 或器件图元对象
+Device primitive ID or Device primitive object
 
 
 </td></tr>
@@ -360,7 +405,36 @@ string \| [IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md) \| Array&lt;s
 
 Promise&lt;boolean&gt;
 
-删除操作是否成功
+Delete Whether the operation is successful
+
+## Example
+
+
+```javascript
+// 1. 放置一个待删除的测试器件（随机坐标避免与画布已有器件重合）：
+//    按立创编号从系统库精确反查器件，返回项不含 libraryUuid，需补上才能用于 create
+const x = 20000 + Math.floor(Math.random() * 80000);
+const y = 20000 + Math.floor(Math.random() * 80000);
+const devices = await eda.lib_Device.searchByProperties({ supplierId: 'C1523' }, undefined, undefined, undefined, 5, 1);
+const sysLibUuid = await eda.lib_LibrariesList.getSystemLibraryUuid();
+const comp = await eda.pcb_PrimitiveComponent.create({ libraryUuid: sysLibUuid, uuid: devices[0].uuid }, 1, x, y);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 记录删除前的器件图元 ID 列表
+const beforeIds = await eda.pcb_PrimitiveComponent.getAllPrimitiveId();
+const beforeContains = beforeIds.includes(compId);
+
+// 3. 以 ID 数组形式删除该器件
+const deleted = await eda.pcb_PrimitiveComponent.delete([compId]);
+
+// 4. 验证删除后 ID 列表不再包含该器件
+const afterIds = await eda.pcb_PrimitiveComponent.getAllPrimitiveId();
+
+console.log('deleted:', deleted);
+console.log('beforeContains:', beforeContains);
+console.log('afterContains:', afterIds.includes(compId));
+console.log('component count:', beforeIds.length, '→', afterIds.length);
+```
 
 ### get
 
@@ -368,12 +442,12 @@ Promise&lt;boolean&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取器件
+Get Device
 
 ## Signature
 
 ```typescript
-get(primitiveIds: string): Promise<IPCB_PrimitiveComponent | undefined>;
+public get(primitiveIds: string): Promise<IPCB_PrimitiveComponent | undefined>;
 ```
 
 ## Parameters
@@ -406,7 +480,7 @@ string
 
 </td><td>
 
-器件的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Device primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -418,7 +492,34 @@ string
 
 Promise&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md) \| undefined&gt;
 
-器件图元对象，`undefined` 表示获取失败
+Device primitive object, `undefined` indicates that the retrieval failed
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件：
+//    按立创编号从系统库精确反查器件，返回项不含 libraryUuid，需补上才能用于 create
+const devices = await eda.lib_Device.searchByProperties({ supplierId: 'C1523' }, undefined, undefined, undefined, 5, 1);
+const sysLibUuid = await eda.lib_LibrariesList.getSystemLibraryUuid();
+const comp = await eda.pcb_PrimitiveComponent.create({ libraryUuid: sysLibUuid, uuid: devices[0].uuid }, 1, 5000, 5000);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 传单个 ID 字符串，返回单个器件对象
+const single = await eda.pcb_PrimitiveComponent.get(compId);
+
+// 3. 传 ID 数组，返回器件对象数组
+const arr = await eda.pcb_PrimitiveComponent.get([compId]);
+
+// 4. 清理测试器件
+await eda.pcb_PrimitiveComponent.delete([compId]);
+
+console.log('designator:', single.getState_Designator());
+console.log('footprint:', single.getState_Footprint());
+console.log('x:', single.getState_X(), 'y:', single.getState_Y());
+console.log('array length:', arr.length);
+console.log('sameId:', arr[0].getState_PrimitiveId() === compId);
+```
 
 ### get_1
 
@@ -426,12 +527,12 @@ Promise&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md) \| undefined
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取器件
+Get Device
 
 ## Signature
 
 ```typescript
-get(primitiveIds: Array<string>): Promise<Array<IPCB_PrimitiveComponent>>;
+public get(primitiveIds: Array<string>): Promise<Array<IPCB_PrimitiveComponent>>;
 ```
 
 ## Parameters
@@ -464,7 +565,7 @@ Array&lt;string&gt;
 
 </td><td>
 
-器件的图元 ID，可以为字符串或字符串数组，如若为数组，则返回的也是数组
+Device primitive ID, which can be a string or an array of strings. If it is an array, an array is also returned
 
 
 </td></tr>
@@ -476,11 +577,11 @@ Array&lt;string&gt;
 
 Promise&lt;Array&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md)<!-- -->&gt;&gt;
 
-器件图元对象，空数组表示获取失败
+Device primitive object; an empty array indicates that the retrieval failed
 
 ## Remarks
 
-如若传入多个图元 ID，任意图元 ID 未匹配到不影响其它图元的返回，即可能返回少于传入的图元 ID 数量的图元对象
+If multiple primitive IDs are passed in, a primitive ID that is not matched will not affect the return of other primitives; that is, fewer primitive objects than the number of primitive IDs passed in may be returned.
 
 ### getall
 
@@ -488,12 +589,12 @@ Promise&lt;Array&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md)<!--
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有器件
+Get all Device
 
 ## Signature
 
 ```typescript
-getAll(layer?: TPCB_LayersOfComponent, primitiveLock?: boolean): Promise<Array<IPCB_PrimitiveComponent>>;
+public getAll(layer?: TPCB_LayersOfComponent, primitiveLock?: boolean): Promise<Array<IPCB_PrimitiveComponent>>;
 ```
 
 ## Parameters
@@ -526,7 +627,7 @@ layer
 
 </td><td>
 
-_(Optional)_ 层
+_(Optional)_ Layer
 
 
 </td></tr>
@@ -542,7 +643,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -554,7 +655,33 @@ _(Optional)_ 是否锁定
 
 Promise&lt;Array&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md)<!-- -->&gt;&gt;
 
-器件图元对象数组
+Array of Device primitive objects
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件作为过滤参照：
+//    按立创编号从系统库精确反查器件，返回项不含 libraryUuid，需补上才能用于 create
+const devices = await eda.lib_Device.searchByProperties({ supplierId: 'C1523' }, undefined, undefined, undefined, 5, 1);
+const sysLibUuid = await eda.lib_LibrariesList.getSystemLibraryUuid();
+const comp = await eda.pcb_PrimitiveComponent.create({ libraryUuid: sysLibUuid, uuid: devices[0].uuid }, 1, 5000, 5000);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 不带参数：获取 PCB 上全部器件
+const all = await eda.pcb_PrimitiveComponent.getAll();
+
+// 3. 按层过滤：只取顶层（1）器件
+const topComps = await eda.pcb_PrimitiveComponent.getAll(1);
+
+// 4. 清理测试器件
+await eda.pcb_PrimitiveComponent.delete([compId]);
+
+console.log('total components:', all.length);
+console.log('top layer components:', topComps.length);
+console.log('fixture included:', all.some(c => c.getState_PrimitiveId() === compId));
+console.log('designators:', all.map(c => c.getState_Designator()).join(', '));
+```
 
 ### getallpinsbyprimitiveid
 
@@ -562,12 +689,12 @@ Promise&lt;Array&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md)<!--
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取器件关联的所有焊盘
+Get all pads associated with the device
 
 ## Signature
 
 ```typescript
-getAllPinsByPrimitiveId(primitiveId: string): Promise<Array<IPCB_PrimitiveComponentPad> | undefined>;
+public getAllPinsByPrimitiveId(primitiveId: string): Promise<Array<IPCB_PrimitiveComponentPad> | undefined>;
 ```
 
 ## Parameters
@@ -600,7 +727,7 @@ string
 
 </td><td>
 
-器件图元 ID
+Device primitive ID
 
 
 </td></tr>
@@ -612,7 +739,33 @@ string
 
 Promise&lt;Array&lt;[IPCB\_PrimitiveComponentPad](./IPCB_PrimitiveComponentPad.md)<!-- -->&gt; \| undefined&gt;
 
-器件焊盘图元数组
+Device pad primitive array
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件：
+//    按立创编号从系统库精确反查器件，返回项不含 libraryUuid，需补上才能用于 create
+const devices = await eda.lib_Device.searchByProperties({ supplierId: 'C1523' }, undefined, undefined, undefined, 5, 1);
+const sysLibUuid = await eda.lib_LibrariesList.getSystemLibraryUuid();
+const comp = await eda.pcb_PrimitiveComponent.create({ libraryUuid: sysLibUuid, uuid: devices[0].uuid }, 1, 5000, 5000);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 取出该器件的全部焊盘图元对象
+const pins = await eda.pcb_PrimitiveComponent.getAllPinsByPrimitiveId(compId);
+
+// 3. 读取每个焊盘的归属与坐标，确认都属于该器件
+const parentIds = pins.map(pin => pin.getState_ParentComponentPrimitiveId());
+
+// 4. 清理测试器件（焊盘随器件一起删除）
+await eda.pcb_PrimitiveComponent.delete([compId]);
+
+console.log('pinCount:', pins.length);
+console.log('allBelongToComponent:', parentIds.every(id => id === compId));
+console.log('firstPin:', 'x:', pins[0].getState_X(), 'y:', pins[0].getState_Y());
+console.log('firstPinParentId:', parentIds[0]);
+```
 
 ### getallprimitiveid
 
@@ -620,12 +773,12 @@ Promise&lt;Array&lt;[IPCB\_PrimitiveComponentPad](./IPCB_PrimitiveComponentPad.m
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-获取所有器件的图元 ID
+Get all Device primitive IDs
 
 ## Signature
 
 ```typescript
-getAllPrimitiveId(layer?: TPCB_LayersOfComponent, primitiveLock?: boolean): Promise<Array<string>>;
+public getAllPrimitiveId(layer?: TPCB_LayersOfComponent, primitiveLock?: boolean): Promise<Array<string>>;
 ```
 
 ## Parameters
@@ -658,7 +811,7 @@ layer
 
 </td><td>
 
-_(Optional)_ 层
+_(Optional)_ Layer
 
 
 </td></tr>
@@ -674,7 +827,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ 是否锁定
+_(Optional)_ Whether it is locked
 
 
 </td></tr>
@@ -686,7 +839,75 @@ _(Optional)_ 是否锁定
 
 Promise&lt;Array&lt;string&gt;&gt;
 
-器件的图元 ID 数组
+Array of Device primitive IDs
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件作为过滤参照：
+//    按立创编号从系统库精确反查器件，返回项不含 libraryUuid，需补上才能用于 create
+const devices = await eda.lib_Device.searchByProperties({ supplierId: 'C1523' }, undefined, undefined, undefined, 5, 1);
+const sysLibUuid = await eda.lib_LibrariesList.getSystemLibraryUuid();
+const comp = await eda.pcb_PrimitiveComponent.create({ libraryUuid: sysLibUuid, uuid: devices[0].uuid }, 1, 5000, 5000);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 不带参数：获取全部器件的图元 ID
+const allIds = await eda.pcb_PrimitiveComponent.getAllPrimitiveId();
+
+// 3. 按层过滤：只取顶层（1）器件的图元 ID
+const topIds = await eda.pcb_PrimitiveComponent.getAllPrimitiveId(1);
+
+// 4. 清理测试器件
+await eda.pcb_PrimitiveComponent.delete([compId]);
+
+console.log('total ids:', allIds.length);
+console.log('top layer ids:', topIds.length);
+console.log('fixture included:', allIds.includes(compId));
+console.log('firstId:', allIds[0]);
+```
+
+### getallpropertynames
+
+# PCB\_PrimitiveComponent.getAllPropertyNames() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Get The set of all property names of all devices
+
+## Signature
+
+```typescript
+public getAllPropertyNames(): Promise<Array<string>>;
+```
+
+
+## Returns
+
+Promise&lt;Array&lt;string&gt;&gt;
+
+The set of all property names of all devices
+
+## Example
+
+
+```javascript
+// 1. 放置一个测试器件：
+//    按立创编号从系统库精确反查器件，返回项不含 libraryUuid，需补上才能用于 create
+const devices = await eda.lib_Device.searchByProperties({ supplierId: 'C1523' }, undefined, undefined, undefined, 5, 1);
+const sysLibUuid = await eda.lib_LibrariesList.getSystemLibraryUuid();
+const comp = await eda.pcb_PrimitiveComponent.create({ libraryUuid: sysLibUuid, uuid: devices[0].uuid }, 1, 5000, 5000);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 获取 PCB 上所有器件的属性名称集合（无参数）
+const names = await eda.pcb_PrimitiveComponent.getAllPropertyNames();
+
+// 3. 清理测试器件
+await eda.pcb_PrimitiveComponent.delete([compId]);
+
+console.log('property name count:', names.length);
+console.log('names:', names.join(', '));
+```
 
 ### modify
 
@@ -694,29 +915,12 @@ Promise&lt;Array&lt;string&gt;&gt;
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-修改器件
+Modify Device
 
 ## Signature
 
 ```typescript
-modify(primitiveId: string | IPCB_PrimitiveComponent, property: {
-        layer?: TPCB_LayersOfComponent;
-        x?: number;
-        y?: number;
-        rotation?: number;
-        primitiveLock?: boolean;
-        addIntoBom?: boolean;
-        designator?: string | null;
-        name?: string | null;
-        uniqueId?: string | null;
-        manufacturer?: string | null;
-        manufacturerId?: string | null;
-        supplier?: string | null;
-        supplierId?: string | null;
-        otherProperty?: {
-            [key: string]: any;
-        };
-    }): Promise<IPCB_PrimitiveComponent | undefined>;
+public modify(primitiveId: string | IPCB_PrimitiveComponent, property: { layer?: undefined | EPCB_LayerId.TOP | EPCB_LayerId.BOTTOM; x?: undefined | number; y?: undefined | number; rotation?: undefined | number; primitiveLock?: undefined | false | true; addIntoBom?: undefined | false | true; designator?: undefined | null | string; name?: undefined | null | string; uniqueId?: undefined | null | string; manufacturer?: undefined | null | string; manufacturerId?: undefined | null | string; supplier?: undefined | null | string; supplierId?: undefined | null | string; otherProperty?: undefined | Record<string, any> }): Promise<IPCB_PrimitiveComponent | undefined>;
 ```
 
 ## Parameters
@@ -749,7 +953,7 @@ string \| [IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md)
 
 </td><td>
 
-图元 ID
+Primitive ID
 
 
 </td></tr>
@@ -760,7 +964,7 @@ property
 
 </td><td>
 
-{ layer?: [TPCB\_LayersOfComponent](../types/TPCB_LayersOfComponent.md)<!-- -->; x?: number; y?: number; rotation?: number; primitiveLock?: boolean; addIntoBom?: boolean; designator?: string \| null; name?: string \| null; uniqueId?: string \| null; manufacturer?: string \| null; manufacturerId?: string \| null; supplier?: string \| null; supplierId?: string \| null; otherProperty?: { \[key: string\]: any; }; }
+{ layer?: undefined \| [EPCB\_LayerId.TOP](../enums/EPCB_LayerId.md) \| [EPCB\_LayerId.BOTTOM](../enums/EPCB_LayerId.md)<!-- -->; x?: undefined \| number; y?: undefined \| number; rotation?: undefined \| number; primitiveLock?: undefined \| false \| true; addIntoBom?: undefined \| false \| true; designator?: undefined \| null \| string; name?: undefined \| null \| string; uniqueId?: undefined \| null \| string; manufacturer?: undefined \| null \| string; manufacturerId?: undefined \| null \| string; supplier?: undefined \| null \| string; supplierId?: undefined \| null \| string; otherProperty?: undefined \| Record&lt;string, any&gt; }
 
 
 </td><td>
@@ -775,7 +979,38 @@ property
 
 Promise&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md) \| undefined&gt;
 
-器件图元对象
+Device primitive object
+
+## Example
+
+
+```javascript
+// 1. 放置待修改的测试器件（随机坐标避免与画布已有器件重合）：
+//    按立创编号从系统库精确反查器件，返回项不含 libraryUuid，需补上才能用于 create
+const x = 20000 + Math.floor(Math.random() * 80000);
+const y = 20000 + Math.floor(Math.random() * 80000);
+const devices = await eda.lib_Device.searchByProperties({ supplierId: 'C1523' }, undefined, undefined, undefined, 5, 1);
+const sysLibUuid = await eda.lib_LibrariesList.getSystemLibraryUuid();
+const comp = await eda.pcb_PrimitiveComponent.create({ libraryUuid: sysLibUuid, uuid: devices[0].uuid }, 1, x, y);
+const compId = comp.getState_PrimitiveId();
+
+// 2. 读取修改前的位置与旋转角度
+const beforeX = comp.getState_X();
+const beforeY = comp.getState_Y();
+const beforeRotation = comp.getState_Rotation();
+
+// 3. 批量修改：平移 500mil，旋转 0° → 90°
+await eda.pcb_PrimitiveComponent.modify(compId, { x: beforeX + 500, y: beforeY + 500, rotation: 90 });
+
+// 4. modify 返回后需要重新 get() 才能读到画布上的最新值
+const refreshed = await eda.pcb_PrimitiveComponent.get(compId);
+
+// 5. 修改类保留现场，供观察修改结果
+console.log('primitiveId:', compId);
+console.log('x:', beforeX, '→', refreshed.getState_X());
+console.log('y:', beforeY, '→', refreshed.getState_Y());
+console.log('rotation:', beforeRotation, '→', refreshed.getState_Rotation());
+```
 
 ### placecomponentwithmouse
 
@@ -783,15 +1018,12 @@ Promise&lt;[IPCB\_PrimitiveComponent](./IPCB_PrimitiveComponent.md) \| undefined
 
 > This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
 
-使用鼠标放置器件
+Place with the mouse device
 
 ## Signature
 
 ```typescript
-placeComponentWithMouse(component: {
-        libraryUuid: string;
-        uuid: string;
-    } | ILIB_DeviceItem | ILIB_DeviceSearchItem): Promise<boolean>;
+public placeComponentWithMouse(component: { libraryUuid: string; uuid: string } | ILIB_DeviceItem | ILIB_DeviceSearchItem): Promise<boolean>;
 ```
 
 ## Parameters
@@ -819,12 +1051,12 @@ component
 
 </td><td>
 
-{ libraryUuid: string; uuid: string; } \| [ILIB\_DeviceItem](../interfaces/ILIB_DeviceItem.md) \| [ILIB\_DeviceSearchItem](../interfaces/ILIB_DeviceSearchItem.md)
+{ libraryUuid: string; uuid: string } \| [ILIB\_DeviceItem](../interfaces/ILIB_DeviceItem.md) \| [ILIB\_DeviceSearchItem](../interfaces/ILIB_DeviceSearchItem.md)
 
 
 </td><td>
 
-关联库器件
+Associate library device
 
 
 </td></tr>
@@ -836,10 +1068,90 @@ component
 
 Promise&lt;boolean&gt;
 
-是否找到器件
+Whether the device was found
 
 ## Remarks
 
-本接口模拟前端点击放置按钮，指定的器件将绑定到当前鼠标，并在用户后续点击时放置于画布
+This API simulates clicking the placement button on the front end. The specified device will be bound to the current mouse and placed on the canvas when the user clicks subsequently
 
-本接口的返回时机并不会等待用户的放置操作，一旦器件被绑定到鼠标，本接口将立即返回 `true` 的结果
+The return timing of this API does not wait for the user's placement operation. Once the device is bound to the mouse, this API will immediately return `true`
+
+### placefootprintwithmouse
+
+# PCB\_PrimitiveComponent.placeFootprintWithMouse() method
+
+> This API is provided as a beta preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
+
+Place with the mouse footprint
+
+## Signature
+
+```typescript
+public placeFootprintWithMouse(footprint: { libraryUuid: string; uuid: string } | ILIB_FootprintItem | ILIB_FootprintSearchItem, properties?: Record<string, boolean | number | string | undefined>): Promise<boolean>;
+```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+footprint
+
+
+</td><td>
+
+{ libraryUuid: string; uuid: string } \| [ILIB\_FootprintItem](../interfaces/ILIB_FootprintItem.md) \| [ILIB\_FootprintSearchItem](../interfaces/ILIB_FootprintSearchItem.md)
+
+
+</td><td>
+
+Associate library footprint
+
+
+</td></tr>
+<tr><td>
+
+properties
+
+
+</td><td>
+
+Record&lt;string, boolean \| number \| string \| undefined&gt;
+
+
+</td><td>
+
+_(Optional)_ Device property
+
+
+</td></tr>
+</tbody></table>
+
+
+
+## Returns
+
+Promise&lt;boolean&gt;
+
+Whether the footprint was found
+
+## Remarks
+
+This API simulates clicking the placement button on the front end. The specified footprint will be bound to the current mouse and placed on the canvas when the user clicks subsequently
+
+The return timing of this API does not wait for the user's placement operation. Once the footprint is bound to the mouse, this API will immediately return `true` ADD since API v0.2.26

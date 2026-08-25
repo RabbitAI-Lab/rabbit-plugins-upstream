@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/golang-stretchr-testify",
   "slug": "golang-stretchr-testify",
   "ownerHandle": null,
-  "version": "1.2.0",
-  "updatedAt": 1779578378942,
-  "contentHash": "38246be0f2db0cf08f316a0ca6edd50c8a8395d04765b707114d6b8c2336e659",
-  "fetchedAt": "2026-07-26T18:40:50.579Z"
+  "version": "1.3.0",
+  "updatedAt": 1787460389077,
+  "contentHash": "71ed4babd053b9cea1ebf76159cb85e38f7fa3a14f425124a77f0b9c6468a635",
+  "fetchedAt": "2026-08-25T08:14:47.960Z"
 }

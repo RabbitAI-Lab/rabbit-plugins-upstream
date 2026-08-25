@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="100%" role="img" aria-label="任务进度跟踪器：对话是一次性的操作窗口，任务状态是持久资产">
+  <title>任务进度跟踪器：对话是一次性的操作窗口，任务状态是持久资产</title>
+  <rect width="1200" height="320" fill="#0d1117"/>
+  <rect x="16" y="16" width="1168" height="288" rx="16" fill="#161b22" stroke="#30363d"/>
+
+  <!-- 左侧：标题区 -->
+  <text x="56" y="84" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#8b949e">xiaoyaoclaw-task-progress-tracker</text>
+  <text x="56" y="142" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="46" font-weight="700" fill="#e6edf3">任务进度跟踪器</text>
+  <text x="56" y="188" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" fill="#58a6ff">对话是一次性的操作窗口，任务状态是持久资产</text>
+  <text x="56" y="228" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" fill="#8b949e">用 PROGRESS.md 里程碑检查点实现长任务自动保存与断点恢复</text>
+  <text x="56" y="266" font-family="SFMono-Regular, Consolas, 'Courier New', monospace" font-size="16" fill="#3fb950">里程碑完成即写 · 幂等清单 · 恢复需确认</text>
+
+  <!-- 右侧：检查点轨道 -->
+  <line x1="716" y1="168" x2="1132" y2="168" stroke="#30363d" stroke-width="4" stroke-dasharray="10 8"/>
+  <circle cx="776" cy="168" r="26" fill="#3fb950"/>
+  <path d="M766 168 l8 8 l16 -18" stroke="#0d1117" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="776" y="230" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" fill="#e6edf3">已完成</text>
+  <text x="776" y="252" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="15" fill="#8b949e">M1-M2</text>
+
+  <circle cx="932" cy="168" r="26" fill="#d29922"/>
+  <rect x="920" y="158" width="24" height="20" rx="4" fill="#0d1117"/>
+  <text x="932" y="230" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" fill="#e6edf3">进行中</text>
+  <text x="932" y="252" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="15" fill="#8b949e">M3</text>
+
+  <circle cx="1088" cy="168" r="26" fill="none" stroke="#8b949e" stroke-width="4"/>
+  <text x="1088" y="230" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" fill="#e6edf3">待办</text>
+  <text x="1088" y="252" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="15" fill="#8b949e">M4-M6</text>
+
+  <!-- 底部弧线示意中断恢复 -->
+  <path d="M776 210 C 776 292, 1088 292, 1088 210" fill="none" stroke="#58a6ff" stroke-width="3" stroke-dasharray="6 6"/>
+  <text x="932" y="292" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" fill="#58a6ff">中断 → 新会话续跑</text>
+</svg>
