@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/notion-spec-to-implementation",
+  "repo": "openai/skills",
+  "skillId": "notion-spec-to-implementation",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "bebeac94966be6ee4f8444927948f0cdee2fd2459724eee06dc1d692848d419d",
+  "fetchedAt": "2026-08-25T08:04:09.557Z"
+}
