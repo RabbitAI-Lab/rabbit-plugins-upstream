@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/image-create",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "image-create",
+  "branch": "main",
+  "pushedAt": "2026-08-21T09:24:30Z",
+  "contentHash": "0afddcb56d5ff748f283343d90682540017d44b8f745b65ed6469717dacf352d",
+  "fetchedAt": "2026-08-25T08:04:17.540Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/prime-skills/runcomfy-agent-skills/image-outpainting",
+  "repo": "prime-skills/runcomfy-agent-skills",
+  "skillId": "image-outpainting",
+  "branch": "main",
+  "pushedAt": "2026-05-15T10:59:51Z",
+  "contentHash": "c2b134f01b3c4c0f4ce229975fe77a97293ff9467a71a180a29daa05c4f30818",
+  "fetchedAt": "2026-08-25T08:02:18.978Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/netlify-deploy",
+  "repo": "openai/skills",
+  "skillId": "netlify-deploy",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "93ae5c66070276650fe18bab65423c044a06d2bb3b8adbcf755a78bb3b8eed68",
+  "fetchedAt": "2026-08-25T08:04:09.533Z"
+}
