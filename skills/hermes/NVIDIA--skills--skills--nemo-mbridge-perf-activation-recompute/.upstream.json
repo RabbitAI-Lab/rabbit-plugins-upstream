@@ -5,7 +5,7 @@
   "repo": "NVIDIA/skills",
   "path": "skills/nemo-mbridge-perf-activation-recompute",
   "branch": "main",
-  "pushedAt": "2026-07-24T21:26:54Z",
-  "contentHash": "50c9c976597f589ad1f3aaf730fb0f0f54493513539d3fe2a0ac83246c6c8a75",
-  "fetchedAt": "2026-07-26T17:03:52.332Z"
+  "pushedAt": "2026-08-25T21:11:32Z",
+  "contentHash": "71a1cb64dd6709b76cdabe9801bb5d2b9a229c4a34dc1eefe51e570700068b31",
+  "fetchedAt": "2026-08-26T08:03:41.196Z"
 }

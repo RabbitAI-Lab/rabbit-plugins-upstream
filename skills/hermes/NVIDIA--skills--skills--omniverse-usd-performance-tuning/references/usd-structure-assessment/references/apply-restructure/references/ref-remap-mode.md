@@ -1,6 +1,3 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
-<!-- SPDX-License-Identifier: Apache-2.0 -->
-
 # Ref Remap Mode
 
 Use this reference for `apply-restructure` mode=`ref_remap` after Phase 4 mesh
@@ -44,10 +41,14 @@ root and apply the same path-remap policy.
 ## Stage-Level Cleanup
 
 After references are stable, run lossless cleanup on the new assembly root via
-`so-run-operations`:
+`usd-optimize-run-operations`:
 
 - `computeExtents`
-- `pruneLeaves`
+- `pruneLeaves` — unloaded payloads are preserved by default. A prim whose payload
+  is authored but not loaded composes no children and looks like an empty leaf,
+  but `preserveUnloadedPayloads` (default `true`) keeps it. Do not set it `false`
+  unless you intend to drop such prims; there is no need to load payloads across
+  the subtree first. See `operation-safety.md`.
 - `removePrims`
 
 Do not include bounded-loss operations such as `decimateMeshes` or
@@ -63,7 +64,7 @@ target. Per-prototype invocations cannot delete materials introduced through
 references.
 
 For the Python/API fallback path, use
-`skills/omniverse-usd-performance-tuning/references/so-run-operations/references/invocation.md`.
+`skills/omniverse-usd-performance-tuning/references/usd-optimize-run-operations/references/invocation.md`.
 
 ## Instanceability
 
@@ -72,5 +73,7 @@ candidate path approved by `instancing-readiness`.
 
 ## Output Validation
 
-Run the runner's minimum-openability check on every written USD. Record
-`pass | fail | skipped` in the manifest and never delete failed outputs.
+> See [Output Validation](restructure-mode.md#output-validation) in
+> `restructure-mode.md` for the shared rule (run the runner's minimum-openability
+> check on every written USD; record `pass | fail | skipped` in the manifest;
+> never delete failed outputs).
