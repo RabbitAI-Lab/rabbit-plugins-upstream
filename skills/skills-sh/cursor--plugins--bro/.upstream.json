@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/bro",
+  "repo": "cursor/plugins",
+  "skillId": "bro",
+  "branch": "main",
+  "pushedAt": "2026-08-25T06:47:17Z",
+  "contentHash": "a333dd2281770dcc9fb2317b066bd0dbefd780aa9abfd6b19f7d31db3ad3f007",
+  "fetchedAt": "2026-08-26T08:05:37.291Z"
+}

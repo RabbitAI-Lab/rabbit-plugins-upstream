@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/api-gateway-configuration",
+  "repo": "secondsky/claude-skills",
+  "skillId": "api-gateway-configuration",
+  "branch": "main",
+  "pushedAt": "2026-08-24T09:50:04Z",
+  "contentHash": "7fb8ff09a9f2398d2cd5caebb4fcc5753f26726e8e935fbe0731c9532c2bd0c8",
+  "fetchedAt": "2026-08-26T08:06:26.325Z"
+}

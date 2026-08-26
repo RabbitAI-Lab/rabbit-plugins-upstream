@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/fix-ci",
+  "repo": "cursor/plugins",
+  "skillId": "fix-ci",
+  "branch": "main",
+  "pushedAt": "2026-08-25T06:47:17Z",
+  "contentHash": "c6fbf5f36e1664e6066e83b0465905cfea4a3f97985415372334334fc6d38572",
+  "fetchedAt": "2026-08-26T08:05:37.105Z"
+}

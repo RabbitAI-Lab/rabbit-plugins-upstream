@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/agent-platform-prompt-management",
+  "repo": "google/skills",
+  "skillId": "agent-platform-prompt-management",
+  "branch": "main",
+  "pushedAt": "2026-08-26T07:12:10Z",
+  "contentHash": "874cae1a3a74fcdfd1b6f344bdfcba9fa5f94b4581f15be8c48d6da585200186",
+  "fetchedAt": "2026-08-26T08:05:35.414Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/knowledge-work-plugins/slack-search",
+  "repo": "anthropics/knowledge-work-plugins",
+  "skillId": "slack-search",
+  "branch": "main",
+  "pushedAt": "2026-08-26T07:37:15Z",
+  "contentHash": "b2417ebda4ac6d843e0aed6dd6af19fd5ea4fd44e8d16265d94473632d71f476",
+  "fetchedAt": "2026-08-26T08:05:47.368Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/clickhouse/agent-skills/clickhouse-js-node-coding",
+  "repo": "clickhouse/agent-skills",
+  "skillId": "clickhouse-js-node-coding",
+  "branch": "main",
+  "pushedAt": "2026-08-06T14:07:59Z",
+  "contentHash": "f3e061e988e5e8aa6c4418779d46c97c15305c8a8e51e0bef6263ac645ac7f5b",
+  "fetchedAt": "2026-08-26T08:05:53.995Z"
+}
