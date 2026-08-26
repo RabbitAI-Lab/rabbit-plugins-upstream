@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/llm-models",
+  "repo": "inference-sh/skills",
+  "skillId": "llm-models",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "9196bc0e7d8bf504e9f9cf3072fc6d13818863da7dbe6b9233e9f76ba247c234",
+  "fetchedAt": "2026-08-26T08:03:55.388Z"
+}

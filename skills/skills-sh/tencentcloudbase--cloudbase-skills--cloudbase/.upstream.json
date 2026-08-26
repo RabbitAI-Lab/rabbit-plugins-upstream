@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/tencentcloudbase/cloudbase-skills/cloudbase",
+  "repo": "tencentcloudbase/cloudbase-skills",
+  "skillId": "cloudbase",
+  "branch": "main",
+  "pushedAt": "2026-08-25T10:24:24Z",
+  "contentHash": "9d56e2a0a418db1de79c6c65e48395ffaccc2fadf62164056c6e89da922bb2d9",
+  "fetchedAt": "2026-08-26T08:05:50.131Z"
+}

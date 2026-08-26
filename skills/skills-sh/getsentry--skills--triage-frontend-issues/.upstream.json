@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/triage-frontend-issues",
+  "repo": "getsentry/skills",
+  "skillId": "triage-frontend-issues",
+  "branch": "main",
+  "pushedAt": "2026-08-25T14:33:51Z",
+  "contentHash": "3cf8b910593e0224f23f4b1805213469280e7ed1019d0125e1c50ae697852ad0",
+  "fetchedAt": "2026-08-26T08:04:09.461Z"
+}

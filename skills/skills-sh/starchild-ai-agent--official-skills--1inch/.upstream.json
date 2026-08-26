@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/1inch",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "1inch",
+  "branch": "main",
+  "pushedAt": "2026-08-26T02:35:27Z",
+  "contentHash": "10d8b87c9de80571c8feec16bfb2d23f679f0130a0fffdfafe126cf3699de30a",
+  "fetchedAt": "2026-08-26T08:05:55.392Z"
+}

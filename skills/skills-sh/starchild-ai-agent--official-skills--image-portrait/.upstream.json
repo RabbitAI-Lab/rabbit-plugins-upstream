@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/image-portrait",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "image-portrait",
+  "branch": "main",
+  "pushedAt": "2026-08-26T02:35:27Z",
+  "contentHash": "1dcf5cab388c3b26072c67ec34f2fe5212ef999300096ecd62663fce1bad3660",
+  "fetchedAt": "2026-08-26T08:05:55.297Z"
+}

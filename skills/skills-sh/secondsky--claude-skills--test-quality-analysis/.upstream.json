@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/test-quality-analysis",
+  "repo": "secondsky/claude-skills",
+  "skillId": "test-quality-analysis",
+  "branch": "main",
+  "pushedAt": "2026-08-24T09:50:04Z",
+  "contentHash": "9f88a4d92e1dc420633a2dcc021a910a2a4f0be3b50568a0568c891e4e6b1a62",
+  "fetchedAt": "2026-08-26T08:06:25.566Z"
+}

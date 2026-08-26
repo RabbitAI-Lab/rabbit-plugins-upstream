@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/bun-docker",
+  "repo": "secondsky/claude-skills",
+  "skillId": "bun-docker",
+  "branch": "main",
+  "pushedAt": "2026-08-24T09:50:04Z",
+  "contentHash": "c4f823d37b26d11d535d7e7433b9c38920fe38ad10e505acec4ada90dc5c11ea",
+  "fetchedAt": "2026-08-26T08:06:26.171Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/api-reference-documentation",
+  "repo": "secondsky/claude-skills",
+  "skillId": "api-reference-documentation",
+  "branch": "main",
+  "pushedAt": "2026-08-24T09:50:04Z",
+  "contentHash": "74d70f570f9230816da7d2766e6bff82da9339ef51b44728b70bc1f2cfadd692",
+  "fetchedAt": "2026-08-26T08:06:25.495Z"
+}

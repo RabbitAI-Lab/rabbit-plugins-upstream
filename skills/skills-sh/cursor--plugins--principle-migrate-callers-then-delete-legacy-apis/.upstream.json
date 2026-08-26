@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/principle-migrate-callers-then-delete-legacy-apis",
+  "repo": "cursor/plugins",
+  "skillId": "principle-migrate-callers-then-delete-legacy-apis",
+  "branch": "main",
+  "pushedAt": "2026-08-25T06:47:17Z",
+  "contentHash": "d0b621895f8fe11a04c98d03e6eb6cc6bee0d20ff8ea07d9371f2bec9c6fc75f",
+  "fetchedAt": "2026-08-26T08:05:37.228Z"
+}
