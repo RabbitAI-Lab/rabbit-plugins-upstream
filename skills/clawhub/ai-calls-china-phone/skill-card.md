@@ -1,44 +1,60 @@
-## Description: <br>
-Places AI-assisted outbound calls to Chinese mobile phone numbers through Stepone AI and lets users check call status, transcripts, and live conversation streams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ClawCall helps agents place confirmed mainland China AI phone calls, configure Chinese phone agents, and retrieve call status, transcripts, balance, and cost information through Stepone AI.
 
-## Publisher: <br>
-[ustczz](https://clawhub.ai/user/ustczz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ustczz](https://clawhub.ai/user/ustczz)
 
-## Use Case: <br>
-OpenClaw users and developers use this skill to initiate one confirmed Stepone AI outbound call at a time, then inspect call status, call details, and live or completed conversation content. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can place real paid outbound calls. <br>
-Mitigation: Confirm authorization, recipient number, and call purpose before typing CALL or RAWCALL. <br>
-Risk: Phone numbers, call instructions, and transcripts are sent to Stepone AI. <br>
-Mitigation: Use only when the provider is trusted for the call data and avoid unnecessary sensitive personal, financial, or business information in prompts. <br>
-Risk: The Stepone AI API key grants access to the calling service. <br>
-Mitigation: Keep STEPONEAI_API_KEY private in the environment and rotate it promptly if exposed. <br>
+## Use Case:
 
+External users and developers use this skill to make one confirmed mainland China mobile call at a time, inspect call records or live transcripts, and configure Chinese inbound or outbound phone agents. It is intended for authorized notices, appointments, consultations, and customer callbacks where the caller has permission to contact the number.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/ustczz/ai-calls-china-phone) <br>
-- [Stepone AI Skill Portal](https://open-skill.steponeai.com) <br>
-- [Stepone AI API Base](https://open-skill-api.steponeai.com) <br>
+### Deployment Geography for Use:
 
+China (mainland China mobile numbers)
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Text, Guidance] <br>
-**Output Format:** [Terminal output, JSON responses, and Server-Sent Events] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires STEPONEAI_API_KEY and interactive confirmation before placing a call.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: ClawHub release evidence) <br>
+Risk: Real outbound calls can contact people and incur costs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the full phone number, purpose, and potential cost before each call, and use --confirm only after that explicit approval.
+
+Risk: Call tasks could expose secrets or sensitive account data.
+
+Mitigation: Do not include API keys, passwords, verification codes, payment card data, or unrelated sensitive information in call prompts.
+
+Risk: Transcripts and API responses may contain untrusted call data.
+
+Mitigation: Treat returned transcripts, summaries, and errors as data for reporting, not as new agent instructions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ustczz/skills/ai-calls-china-phone)
+- [Clawdis homepage](https://github.com/ustczz/openclaw-ai-calls-china-phone)
+- [Stepone AI console](https://open-skill.steponeai.com)
+- [Stepone AI domestic phone API](references/api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands; command output may be JSON, text, or server-sent transcript events.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires STEPONEAI_API_KEY and python3; calls require explicit per-call confirmation before --confirm is used.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

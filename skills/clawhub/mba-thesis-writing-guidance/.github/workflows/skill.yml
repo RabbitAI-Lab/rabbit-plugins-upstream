@@ -1,0 +1,48 @@
+# 校验 SKILL.md，并在推送到 main 后给仓库打上 agent-skills 主题，
+# 方便 npx skills add / gh skill search / skills.sh 发现。
+# 本 Skill 不发布到 npm；npx 只是用来跑 skills CLI，安装源是 GitHub。
+
+name: skill
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate SKILL.md for npx skills add
+        run: python scripts/validate-skill.py
+
+  topics:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    runs-on: ubuntu-latest
+    needs: validate
+    permissions:
+      contents: write
+    steps:
+      - name: Add discoverability topics
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          gh repo edit "${{ github.repository }}" \
+            --add-topic agent-skills \
+            --add-topic mba \
+            --add-topic claude-code \
+            --add-topic skill
+          status=$?
+          if [ "$status" -ne 0 ]; then
+            echo "Could not set topics automatically (token may lack admin). Add topic 'agent-skills' in GitHub Settings → General → Topics."
+          fi
+          exit 0

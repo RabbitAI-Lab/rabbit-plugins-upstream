@@ -1,39 +1,55 @@
-## Description: <br>
-Weekly Report Pro collects local Git commits and user-provided work context to generate structured, results-oriented weekly, daily, or monthly reports without uploading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Weekly Report Pro helps an agent collect local Git history, optional code statistics, Markdown checklist progress, and user-provided work notes to draft structured weekly or monthly reports in Chinese or English.
 
-## Publisher: <br>
-[tangbinbinm](https://clawhub.ai/user/tangbinbinm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tangbinbinm](https://clawhub.ai/user/tangbinbinm)
 
-## Use Case: <br>
-Employees, developers, technical leads, and business operators use this skill to turn Git commit history, task notes, chat exports, and dictated context into concise work reports for weekly, daily, or monthly reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may read local Git history and user-provided task files, chat exports, or dictated notes that contain sensitive work information. <br>
-Mitigation: Point it only at intended code directories and avoid providing sensitive files or conversations unless that material should be included in the generated report. <br>
+## Use Case:
 
+Employees, developers, and team leads use this skill to turn local commit activity, checklist status, and concise user notes into results-oriented weekly or monthly work reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tangbinbinm/skills/weekly-report-pro) <br>
-- [README](README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown report with optional local shell command output summarized into prose] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use local Git commit summaries and user-provided notes; no upload behavior was reported by the security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can expose sensitive project names, file paths, commit messages, or checklist content in generated reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Point it only at specific project folders and review generated reports before sharing them outside the intended audience.
+
+Risk: Broad directory scans may collect more local Git history than the user intended.
+
+Mitigation: Use narrow --dirs values and avoid pointing the helper at home directories or unrelated workspace roots.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tangbinbinm/skills/weekly-report-pro)
+- [Artifact README](artifact/README.md)
+- [Artifact skill instructions](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown reports with optional JSON evidence collected by a local helper script]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can produce weekly or monthly report drafts, metrics summaries, plan completion summaries, and next-period plans.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

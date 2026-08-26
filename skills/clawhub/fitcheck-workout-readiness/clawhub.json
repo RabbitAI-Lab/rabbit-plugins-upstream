@@ -1,0 +1,37 @@
+{
+  "slug": "fitcheck-workout-readiness",
+  "displayName": "FitCheck: Live Emotional Mirror & Readiness",
+  "version": "1.1.3",
+  "description": "Camera scan in your browser: emotions, stress, composure, eye contact, micro-expressions and a heart-rate estimate. Play the deception challenge with a friend, read any video, or run a before-and-after check around a workout. The scan itself runs on-device and no video or audio leaves the device. Entertainment and self-insight, not a medical or lie-detection tool. Powered by EmoPulse.",
+  "author": "emopulse",
+  "homepage": "https://emo.city?utm_source=clawhub&utm_medium=skill",
+  "repository": "https://github.com/gv66co/Emo-City",
+  "license": "PROPRIETARY",
+  "tags": [
+    "fitness",
+    "workout",
+    "recovery",
+    "readiness",
+    "heart-rate",
+    "stress",
+    "wellness",
+    "mood",
+    "training",
+    "mediapipe",
+    "emotion",
+    "face-scan",
+    "camera",
+    "deception-game",
+    "party-game"
+  ],
+  "categories": [
+    "health",
+    "lifestyle"
+  ],
+  "source": {
+    "kind": "github",
+    "url": "https://github.com/gv66co/Emo-City",
+    "repo": "gv66co/Emo-City",
+    "path": "skills/emocity-biometric-scan"
+  }
+}

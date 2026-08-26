@@ -1,5 +1,61 @@
 # Changelog
 
+## [0.6.0](https://github.com/es6kr/skills/compare/consolidate-v0.5.4...consolidate-v0.6.0) (2026-08-20)
+
+
+### Features
+
+* promote next-feat batch (hook registry schema, self-reference path anchoring) ([0c33ffa](https://github.com/es6kr/skills/commit/0c33ffac99a9237f4530566470dabeaea128c209))
+* promote next-feat staging (lifecycle guards, triage automation, and workflow safety procedures) ([77d58ac](https://github.com/es6kr/skills/commit/77d58ac3a771a4897043c9eea8b149ea1e8ba2ff))
+
+
+### Bug Fixes
+
+* **consolidate:** refresh the AI Review Summary before the merge ask when findings were fixed ([#348](https://github.com/es6kr/skills/issues/348)) ([9512c9c](https://github.com/es6kr/skills/commit/9512c9cdff7d1a0d2e36a8c70a468e2abca6e977))
+* **hook-kit,fix-plan,consolidate:** resolve review findings on registry fail-fast, add-item safety, and mechanical verification ([72fb280](https://github.com/es6kr/skills/commit/72fb28054ccd858aa56617e8a6a5d1fb5b9d2384))
+* promote next-fix batch (hook path repair, topic-dispatch scoping, conflict diagnosis) ([eb7ecb6](https://github.com/es6kr/skills/commit/eb7ecb61dda9701d78f12dc810781dc7cb687caa))
+
+## [0.5.4](https://github.com/es6kr/skills/compare/consolidate-v0.5.3...consolidate-v0.5.4) (2026-08-17)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.5.3](https://github.com/es6kr/skills/compare/consolidate-v0.5.2...consolidate-v0.5.3) (2026-08-12)
+
+
+### Bug Fixes
+
+* **consolidate:** clarify tracking medium is the session workspace, not the reviewed PR's repo ([435b997](https://github.com/es6kr/skills/commit/435b997fa83072538393576b771efe3846e2da69))
+* **consolidate:** clarify tracking medium is the session workspace, not the reviewed PR's repo ([544bbca](https://github.com/es6kr/skills/commit/544bbca50b15ed22a18441b7848e8b96fa8e4bb1))
+* promote accumulated next-fix fixes to main ([803bbd3](https://github.com/es6kr/skills/commit/803bbd3b9e4f8367ee1b955cfa2b6a536f85cee0))
+
+## [0.5.2](https://github.com/es6kr/skills/compare/consolidate-v0.5.1...consolidate-v0.5.2) (2026-08-09)
+
+
+### Bug Fixes
+
+* **consolidate:** address CodeRabbit/Copilot review findings on PR [#270](https://github.com/es6kr/skills/issues/270) ([3b11a73](https://github.com/es6kr/skills/commit/3b11a730b5ad68803d35a8264eda540e48265d75))
+* **consolidate:** require merge-method precheck before squash-merge option label ([#269](https://github.com/es6kr/skills/issues/269)) ([1830341](https://github.com/es6kr/skills/commit/183034138eab3d72a8ecb1005db91b86797db0ba))
+* declare undeclared skill-to-skill dependencies (7 skills) ([#271](https://github.com/es6kr/skills/issues/271)) ([36a9f9d](https://github.com/es6kr/skills/commit/36a9f9d7c1fac9bb1c4c96b325a067ab92ad0da7))
+* promote accumulated next-fix fixes to main ([95656e9](https://github.com/es6kr/skills/commit/95656e9b551ee0bb77904a0a571d49c53bc01cc9))
+
+## [0.5.1](https://github.com/es6kr/skills/compare/consolidate-v0.5.0...consolidate-v0.5.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+
+## [0.5.0](https://github.com/es6kr/skills/compare/consolidate-v0.4.0...consolidate-v0.5.0) (2026-08-03)
+
+
+### Features
+
+* **consolidate:** cross-platform noncompliant-review-comment guard ([#166](https://github.com/es6kr/skills/issues/166)) ([168fb9c](https://github.com/es6kr/skills/commit/168fb9cfecc3249c181572910a9925257fbe52a2))
+* promote next-feat to main ([4fbe313](https://github.com/es6kr/skills/commit/4fbe31332c58bf24327d819cc9204ebda2d4afa8))
+
 ## [0.4.0](https://github.com/es6kr/skills/compare/consolidate-v0.3.6...consolidate-v0.4.0) (2026-07-23)
 
 

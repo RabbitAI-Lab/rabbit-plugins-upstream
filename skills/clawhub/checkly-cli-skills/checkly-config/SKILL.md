@@ -17,6 +17,11 @@ export default defineConfig({
   projectName: 'My App',
   logicalId: 'my-app-monitoring',
   repoUrl: 'https://github.com/acme/my-app',
+  caching: {
+    dependencyCache: {
+      version: '2026-08-11',
+    },
+  },
   checks: {
     frequency: 5,
     locations: ['us-east-1', 'eu-west-1'],
@@ -27,8 +32,33 @@ export default defineConfig({
       testMatch: '**/__checks__/**/*.spec.{js,ts}',
     },
   },
+  bundle: {
+    packages: {
+      embed: ['@acme/*', 'legacy-private-pkg@2.1.0'],
+    },
+  },
 })
 ```
+
+Use top-level `bundle.packages.embed` only for Playwright Check Suites whose private-registry dependencies cannot be fetched by Checkly runners. Entries resolve against the workspace-root `pnpm-lock.yaml` or `package-lock.json` and can be package names, exact `name@version` pins, or name wildcards such as `@acme/*`, `acme-*`, and `@acme/*-utils`; `*` does not cross `/`. The resolved embedded tarball set is part of the runner dependency-cache key. See `checkly-playwright` for package eligibility, cache, and secret-handling details.
+
+### Dependency-cache invalidation
+
+Checkly caches installed dependencies for Playwright Check Suites using the lockfile, `package.json`, `.npmrc` content, and the resolved embedded package set. To invalidate that cache persistently for deployed and scheduled suites, set a top-level string or safe integer and change it when dependencies must be reinstalled:
+
+```typescript
+export default defineConfig({
+  projectName: 'My App',
+  logicalId: 'my-app-monitoring',
+  caching: {
+    dependencyCache: {
+      version: process.env.DEPENDENCY_CACHE_VERSION,
+    },
+  },
+})
+```
+
+This setting is top-level because one code bundle serves all Playwright Check Suites. An unset or empty-string value leaves the cache key unchanged, so an optional environment variable is safe. For one ad-hoc reinstall, use `--refresh-cache` with `checkly test`, `checkly pw-test`, `checkly trigger`, or `checkly checks run` instead of changing committed configuration.
 
 ## Configuration file structure
 

@@ -5,10 +5,9 @@ description: "Video replicate tool: extracts the first frame and audio from the 
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy video-replicate -h 查看帮助信息。"}}
 ---
 
-# dlazy-video-replicate
+# 视频仿制 Video Replicate
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 视频拆分工具：从源视频中提取第一帧和音频，运行视频理解以生成提示，并返回 Seedance 2.0内容 （第一帧 + 音频 + 视频）。
@@ -84,6 +83,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

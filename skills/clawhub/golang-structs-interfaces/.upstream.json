@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/golang-structs-interfaces",
   "slug": "golang-structs-interfaces",
   "ownerHandle": null,
-  "version": "1.1.3",
-  "updatedAt": 1778492154873,
-  "contentHash": "52870690a43a0f6353ad10569e97a5d4dc43b23688d514378a2faffb73506cb0",
-  "fetchedAt": "2026-07-26T19:50:44.247Z"
+  "version": "1.2.0",
+  "updatedAt": 1787463318185,
+  "contentHash": "382e53dcd6f469246eacc079dab6d816a93f6b031212f15e04daf422b8a8b64a",
+  "fetchedAt": "2026-08-26T08:26:06.162Z"
 }

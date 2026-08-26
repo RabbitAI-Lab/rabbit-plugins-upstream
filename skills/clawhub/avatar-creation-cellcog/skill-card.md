@@ -1,41 +1,55 @@
-## Description: <br>
-Guides agents to create and manage persistent CellCog avatars with personalities, reference images, cloned voices, and reusable content workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI avatar creation and digital persona design powered by CellCog for creating characters, cloned voices, generated images, and reusable personalities.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers and agent users use this skill to create brand mascots, digital twins, character personas, spokespersons, podcast hosts, and other reusable CellCog avatars for generated media workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded avatar details, images, and voice samples may become persistent account-level assets. <br>
-Mitigation: Use only avatar materials you are comfortable storing in CellCog, and delete or update avatars when they should no longer be available across chats. <br>
-Risk: Voice cloning can misuse voices without consent. <br>
-Mitigation: Clone only voices you own or have explicit permission to use. <br>
+## Use Case:
 
+External users and developers use this skill to create and manage persistent CellCog avatars for brand mascots, digital twins, marketing content, podcasts, and multi-avatar stories.
 
-## Reference(s): <br>
-- [CellCog homepage](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/avatar-creation-cellcog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with Python examples and setup commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to use CellCog with CELLCOG_API_KEY and persistent avatar assets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Avatar prompts, images, and voice samples may include sensitive voice or likeness data for persistent account-level reuse.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Upload only media you own or have clear permission to use, avoid sensitive media, and confirm CellCog retention and deletion controls before use.
+
+Risk: The server security summary notes insufficient consent, privacy, and retention guidance for voice and likeness data.
+
+Mitigation: Review consent, privacy, retention, and deletion requirements before using this skill with a person's voice or likeness.
+
+## Reference(s):
+
+- [Avatar Creation on ClawHub](https://clawhub.ai/cellcog/skills/avatar-creation-cellcog)
+- [CellCog publisher profile](https://clawhub.ai/user/cellcog)
+- [CellCog homepage](https://cellcog.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with natural-language prompts, Python snippets, and setup commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference local image or audio files and requires CELLCOG_API_KEY for CellCog API access.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

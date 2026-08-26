@@ -1,49 +1,64 @@
-## Description: <br>
-AI-powered active-ingredient accumulation trend assessment for medicinal herbs using high-resolution leaf images to estimate visual indicators, compare them with cultivar reference features, and report an accumulation trend level for harvest-window decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses medicinal-herb leaf images or videos for visual indicators of active-ingredient accumulation and returns a Low, Medium, High, or Peak trend level with harvest-timing guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users in medicinal herb cultivation bases, GAP planting bases, herb cooperatives, and pharmaceutical raw-material operations use this skill to analyze leaf images or video and receive active-ingredient accumulation trend levels and harvest timing guidance. Agents can also query prior cloud-hosted analysis reports for the same skill workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends media and report-history requests to external services. <br>
-Mitigation: Review destination services, network policy, and data handling requirements before installation or use. <br>
-Risk: The skill can silently create or reuse a service identity and associate reports with that identity. <br>
-Mitigation: Run only in environments where this account linkage is approved, and avoid using sensitive media unless the linked cloud account is acceptable. <br>
-Risk: The skill stores authentication tokens in a local workspace database. <br>
-Mitigation: Limit workspace access, rotate or remove tokens when decommissioning the skill, and avoid shared workspaces unless token persistence is acceptable. <br>
-Risk: The skill includes unrelated pet-health or generic analysis components alongside the herb-analysis workflow. <br>
-Mitigation: Review the packaged components and exposed commands before deployment to confirm only the intended workflow is enabled. <br>
-Risk: The analysis estimates herb quality trends from visual features and does not provide chemical testing data. <br>
-Mitigation: Use results as harvest-decision support and confirm formal quality claims with appropriate chemical or regulatory testing. <br>
+## Use Case:
 
+External herb growers, GAP planting bases, cooperatives, and pharmaceutical raw-material teams use this skill to assess visual trends in medicinal-herb active-ingredient accumulation from uploaded images, videos, or URLs. It can also query account-linked historical analysis reports from the backend service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-chinese-herbal-ingredient-trend-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis text with report links and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call external analysis and report-history services; local inputs are limited to supported image/video formats and documented file-size constraints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter reports 1.0.6) <br>
+Risk: Uploaded plant images, videos, URLs, and report history are sent to a backend service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only when the publisher and backend data handling are acceptable; avoid sensitive cultivation or operational media unless retention and access expectations are clear.
+
+Risk: The skill silently resolves or creates an account-linked identity and can store authentication tokens locally.
+
+Mitigation: Run in an isolated workspace, inspect local data storage before and after use, and avoid sharing workspace data directories across trust boundaries.
+
+Risk: Security evidence reports mismatched pet-analysis backend artifacts in the release.
+
+Mitigation: Review backend endpoints and returned report content before relying on results for harvesting or quality decisions.
+
+Risk: The analysis is based on visual indicators and is not a formal chemical assay.
+
+Mitigation: Treat outputs as decision support and confirm quality-critical decisions with HPLC, pharmacopeial, or other professional testing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-chinese-herbal-ingredient-trend-analysis)
+- [Publisher profile](https://clawhub.ai/user/18072937735)
+- [API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown text with structured JSON-like analysis content and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write the returned report text to a user-specified output file.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact frontmatter reports 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

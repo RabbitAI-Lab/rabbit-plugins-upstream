@@ -1,7 +1,7 @@
 ---
 name: global-company-person-experience
 description: "Check overseas staff’s education history via personnel ID. Access their university, degree, major and GPA data to support candidate screening and background checks.\n\nTrigger: employee education verification, personnel academic background check, candidate qualification assessment, pre‑hire screening, overseas staff background validation"
-metadata: {"version":"1.0.3","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"💼","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.4","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"💼","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # Global Company Person Work Experience Query
@@ -63,6 +63,15 @@ Use this script to get account information for UPKUAJING_API_KEY: `auth.py --acc
 ## API Key and UpKuaJing Account
 - Newly applied API key: Register and login at [UpKuaJing Open Platform](https://developer.upkuajing.com/), then bind account
 
+### **Report Skill Call Errors**
+When an API call fails or returns abnormal data (server error, timeout, malformed response, etc.), explain the anomaly to the user in natural language and ask whether to report it to the platform for troubleshooting. Only run the report after user confirmation:
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/search/depth_company/person/experience/list","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"Work experience query failed with a server error"}'
+```
+- Do not report normal business conditions (insufficient balance, invalid API key, parameter errors) — handle them via their own flows
+- Error reporting does not incur query fees
+- **Parameters**: See [Error Report API](references/skill-error-report-api.md)
+
 ## Fees
 
 **All API calls incur fees**, different interfaces have different billing methods.
@@ -116,10 +125,12 @@ python scripts/person_experience_list.py --hid H_67890 --cursor 'cursor_string_f
 - **API key invalid/non-existent**: Check `UPKUAJING_API_KEY` in `~/.upkuajing/.env` file
 - **Insufficient balance**: Guide user to top up
 - **Invalid parameters**: **Must first check the corresponding API documentation in references/ directory**, get correct parameter names and formats from documentation, do not guess
+- **Skill call errors / abnormal responses**: Explain to the user and, with user confirmation, report to the platform via `python scripts/error_report.py` (see [Report Skill Call Errors](#report-skill-call-errors))
 
 ### API Documentation Reference
 
 - Work Experience List: Check [references/person-experience-list-api.md](references/person-experience-list-api.md)
+- Error Report: Check [references/skill-error-report-api.md](references/skill-error-report-api.md)
 
 ## Best Practices
 

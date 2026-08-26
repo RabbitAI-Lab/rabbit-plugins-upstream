@@ -28,6 +28,10 @@ BUILT_IN_THEME_IDS = (
     "rigorous-consulting-report",
     "corporate-annual-report",
     "editorial-collage",
+    "deep-data-dashboard",
+    "warm-brand-narrative",
+    "minimal-product-whitespace",
+    "formal-government-bluewhite",
 )
 PROJECT_THEME_FILES = {"theme.json", "theme.css", "templates.html", "provenance.json"}
 PROJECT_ID = re.compile(r"^project-[a-z0-9]+(?:-[a-z0-9]+)*$")

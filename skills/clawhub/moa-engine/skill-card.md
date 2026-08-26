@@ -1,44 +1,65 @@
-## Description: <br>
-Moa Engine helps an agent decompose complex requests into a staged virtual expert-team workflow with specialist proposals, structured critique, revision, and a synthesized final answer. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Orchestrates a multi-role expert team through structured critique, logical synthesis, XML-tagged information flow, intelligent routing, and recursive self-improvement for complex analysis and design tasks.
 
-## Publisher: <br>
-[kiwifruit13](https://clawhub.ai/user/kiwifruit13) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kiwifruit13](https://clawhub.ai/user/kiwifruit13)
 
-## Use Case: <br>
-External users and developers use this skill when they need deeper analysis, technical design, product planning, creative ideation, or other complex work broken into expert subproblems and reconciled into one final answer. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The staged expert-and-critic workflow can be unnecessarily verbose or heavy for simple, single-domain requests. <br>
-Mitigation: Use the MoA protocol only for complex tasks; answer directly when the user's request is simple or narrow. <br>
-Risk: The skill is optimized for Chinese-language structured analysis, which may not match every user's preferred language or level of detail. <br>
-Mitigation: Adapt the response language and depth to the user's request, and summarize staged reasoning when a shorter answer is more useful. <br>
-Risk: Synthesized expert-role output can sound authoritative even when it is based on assumptions or incomplete evidence. <br>
-Mitigation: Mark assumptions, preserve uncertainty, and review high-impact recommendations before relying on them. <br>
+## Use Case:
 
+Developers, architects, product teams, and reviewers use this skill to structure multi-perspective analysis, architecture review, high-risk decision scrutiny, and cross-domain solution design. It is best suited to complex tasks where planning, expert-role reasoning, critique, and synthesized recommendations are useful.
 
-## Reference(s): <br>
-- [MoA System Guide](references/moa-system-guide.md) <br>
-- [MoA Meta Prompt](references/moa-meta-prompt.md) <br>
-- [MoA Case Study](references/moa-case-study.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured Markdown response with staged expert, critic, revision, decision, and final-answer sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompt-only skill; optimized for verbose Chinese-language structured analysis unless adapted by the agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata) <br>
+Risk: The skill may keep and reuse performance signals across runs, which can influence future agent behavior without clear user controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm where signal and audit outputs are stored, set retention and access controls, and disable or gate profile updates when persistent learning is not desired.
+
+Risk: Sensitive privacy, financial, medical, legal, compliance, or security work may expose sensitive context through audit outputs or signal files.
+
+Mitigation: Use the skill on sensitive work only after confirming storage behavior, limiting sensitive inputs, and requiring human review for high-risk conclusions.
+
+Risk: Prompt or harness evolution can change how future runs behave.
+
+Mitigation: Require approval before generated enhancement instructions or patches alter production workflows, and keep rollback criteria for behavior changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kiwifruit13/skills/moa-engine)
+- [MoA system guide](references/moa-system-guide.md)
+- [MoA tag system](references/moa-tag-system.md)
+- [MoA routing design](references/moa-routing-design.md)
+- [MoA meta prompt](references/moa-meta-prompt.md)
+- [Architecture overview](references/architecture-overview.md)
+- [RHI guide](references/moa-rhi-guide.md)
+- [Fitness function](references/fitness-function.md)
+- [Patch specification](references/patch-spec.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, JSON, XML-tagged analysis, shell commands, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce structured intermediate outputs for task classification, expert matching, red-team prompts, fitness scoring, and harness improvement; review outputs before applying changes.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata; artifact frontmatter describes MoA engine protocol version 2.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

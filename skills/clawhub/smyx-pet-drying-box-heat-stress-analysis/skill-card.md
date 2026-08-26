@@ -1,46 +1,59 @@
-## Description: <br>
-Analyzes pet drying box videos through a cloud API to detect heat-stress signals such as panting intensity, tongue color, and movement frequency, then returns risk levels and intervention guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet drying box video files or URLs through a backend API to detect early heat-stress signals such as panting intensity, tongue color, and movement frequency, then returns risk levels and intervention guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze pet drying box video files or URLs for early heat-stress warning signals and to receive structured safety-oriented recommendations. It is intended for pet drying boxes, grooming stores, and pet hospitals, and does not provide veterinary diagnosis or treatment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends pet videos, video URLs, and related analysis requests to the LifeEmergence cloud service. <br>
-Mitigation: Use only when the user accepts cloud processing of the submitted media and avoid submitting sensitive video unless the service is trusted for that data. <br>
-Risk: The skill may create or reuse a local identity and store authentication tokens in the workspace data directory. <br>
-Mitigation: Avoid shared workspaces for sensitive use, review local data storage expectations before installation, and clear workspace credentials when rotating users or environments. <br>
-Risk: The skill can retrieve historical cloud reports associated with the local identity. <br>
-Mitigation: Confirm that historical report access through the local identity is appropriate for the workspace and user before enabling report-list workflows. <br>
+## Use Case:
 
+External users, pet-care operators, grooming stores, pet hospitals, and developers use this skill to review drying-box media for heat-stress warning signs and produce structured safety guidance. Results are for drying safety support and should not be treated as medical diagnosis or treatment advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-drying-box-heat-stress-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON analysis reports with risk levels, observed signals, recommendations, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write a report to a user-specified output file and may return historical report lists from the cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Pet videos or video URLs are sent to a configured backend service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media the user is authorized to upload, disclose backend processing, and require explicit confirmation before upload.
+
+Risk: The skill can silently create or reuse account identities and store service tokens in a local SQLite database.
+
+Mitigation: Run in an isolated workspace, review local storage before reuse, and avoid sharing the workspace across unrelated users.
+
+Risk: Cloud history report lookup may retrieve prior reports with limited user control.
+
+Mitigation: Require explicit confirmation before history queries and show only report information appropriate for the current user context.
+
+## Reference(s):
+
+- [Pet Drying Box Heat Stress API Documentation](references/api_doc.md)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-drying-box-heat-stress-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown and JSON-style structured analysis reports, with optional Markdown tables for history reports and links to generated reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local video files or video URLs, optional pet type, detail level, output file path, and cloud history report listing.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata; artifact frontmatter says 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "description": "Schema for Neural-Compressed Markdown (NCM) tags used by context-compressor.",
+  "tags": {
+    "O": { "label": "Objective", "description": "The current primary goal of the session or project." },
+    "S": { "label": "Status", "description": "Current progress or state of the task." },
+    "D": { "label": "Decision", "description": "A key decision made that must be preserved." },
+    "K": { "label": "Knowledge", "description": "Critical facts, context, or data points." },
+    "N": { "label": "NextStep", "description": "The immediate next action to be taken." }
+  },
+  "format": "[TAG]:key:value OR [TAG]:value",
+  "constraints": {
+    "max_tag_length": 1,
+    "no_filler_words": true,
+    "punctuation_minimal": true
+  }
+}

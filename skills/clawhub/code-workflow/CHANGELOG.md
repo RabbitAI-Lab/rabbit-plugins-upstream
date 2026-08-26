@@ -1,5 +1,60 @@
 # Changelog
 
+## [0.7.0](https://github.com/es6kr/skills/compare/code-workflow-v0.6.3...code-workflow-v0.7.0) (2026-08-20)
+
+
+### Features
+
+* promote next-feat staging (lifecycle guards, triage automation, and workflow safety procedures) ([77d58ac](https://github.com/es6kr/skills/commit/77d58ac3a771a4897043c9eea8b149ea1e8ba2ff))
+
+
+### Bug Fixes
+
+* **code-workflow:** record that the plan-edit trigger duplicates plan-guard ([aba3eeb](https://github.com/es6kr/skills/commit/aba3eeb30a1a9b4cde9235020bcbf01643ae0696))
+* **hook-kit:** stop topic dispatch from resolving into nested worktrees ([e81bb4c](https://github.com/es6kr/skills/commit/e81bb4c2aa6e817318950de8ae53b475dc2999aa))
+* promote next-fix batch (hook path repair, topic-dispatch scoping, conflict diagnosis) ([eb7ecb6](https://github.com/es6kr/skills/commit/eb7ecb61dda9701d78f12dc810781dc7cb687caa))
+
+## [0.6.3](https://github.com/es6kr/skills/compare/code-workflow-v0.6.2...code-workflow-v0.6.3) (2026-08-17)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.6.2](https://github.com/es6kr/skills/compare/code-workflow-v0.6.1...code-workflow-v0.6.2) (2026-08-11)
+
+
+### Bug Fixes
+
+* **code-workflow:** drop leading-slash requirement in plan-undecided-guard path matcher ([d2ce69e](https://github.com/es6kr/skills/commit/d2ce69e55a1a2ea36bdc6069b2e2acbe11aef125))
+* **code-workflow:** drop unreachable .ralph arm in plan-undecided-guard path matcher ([c94ea53](https://github.com/es6kr/skills/commit/c94ea531bf2eeed79e6e918637fd7b2551e2ae8d))
+* **code-workflow:** scope plan-undecided-guard past fix_plan.md/checklist.md ([22222f4](https://github.com/es6kr/skills/commit/22222f4646e980b811b1253573c5cfe7ecadc590))
+* **code-workflow:** scope plan-undecided-guard past fix_plan.md/checklist.md ([ddcdb03](https://github.com/es6kr/skills/commit/ddcdb03a79852bc1a00e1178a70cec5d4c4359e4))
+
+## [0.6.1](https://github.com/es6kr/skills/compare/code-workflow-v0.6.0...code-workflow-v0.6.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+
+## [0.6.0](https://github.com/es6kr/skills/compare/code-workflow-v0.5.1...code-workflow-v0.6.0) (2026-08-03)
+
+
+### Features
+
+* promote next-feat to main ([4fbe313](https://github.com/es6kr/skills/commit/4fbe31332c58bf24327d819cc9204ebda2d4afa8))
+
+## [0.5.1](https://github.com/es6kr/skills/compare/code-workflow-v0.5.0...code-workflow-v0.5.1) (2026-07-28)
+
+
+### Bug Fixes
+
+* **code-workflow:** default output-dir to llm-wiki/outputs/ + mandate RAG pre-lookup ([ad56a86](https://github.com/es6kr/skills/commit/ad56a863157776c4fb840f58eec80990543a3040))
+* **code-workflow:** default output-dir to workspace-local llm-wiki/outputs/ + mandate RAG pre-lookup before research ([b471487](https://github.com/es6kr/skills/commit/b471487c8330165f8df334d21a9203546efa19c4))
+* **code-workflow:** make pre-lookup vendor-agnostic + fix stale/dangling refs ([c8c61f1](https://github.com/es6kr/skills/commit/c8c61f1c9074e7c2dbf39f63a4e4fc8b8b928ca5))
+* **next-fix:** promote staged fixes across hook-kit, next, cleanup, fix-plan ([34f1c67](https://github.com/es6kr/skills/commit/34f1c67beee3a8279e0e80de4ab3a87ba2223d5c))
+
 ## [0.5.0](https://github.com/es6kr/skills/compare/code-workflow-v0.4.1...code-workflow-v0.5.0) (2026-07-23)
 
 

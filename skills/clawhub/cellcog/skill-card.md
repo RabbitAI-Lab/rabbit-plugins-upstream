@@ -1,47 +1,61 @@
-## Description: <br>
-Cellcog helps agents offload multimodal work to the CellCog service, including research, analysis, file-aware tasks, media generation, documents, dashboards, code, and other generated deliverables. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CellCog guides agents to use a third-party multimodal sub-agent for research, media generation, documents, dashboards, code, and other deliverables.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers and agent users use this skill to invoke CellCog as a third-party AI sub-agent for multimodal research, analysis, generation, and file-producing workflows. It is especially relevant when an agent needs to submit prompts and selected local files to CellCog and receive text plus generated artifacts back. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tagged local files are uploaded to CellCog as attachments. <br>
-Mitigation: Use SHOW_FILE only for files intended for the third-party service, and do not tag secrets, credentials, private keys, .env files, or other sensitive material. <br>
-Risk: Generated files may be downloaded to paths requested by the user or selected by the SDK. <br>
-Mitigation: Review requested output paths before generation and inspect downloaded artifacts before opening, executing, or sharing them. <br>
-Risk: The integration depends on a CellCog API key and account credits. <br>
-Mitigation: Configure CELLCOG_API_KEY only in the intended environment and monitor task cost or credit usage reported in completion messages. <br>
+## Use Case:
 
+Developers and agent users use this skill to offload complex multimodal work to CellCog, including analysis, generated files, creative assets, code, and iterative follow-up tasks.
 
-## Reference(s): <br>
-- [CellCog homepage](https://cellcog.ai) <br>
-- [CellCog Python SDK](https://github.com/CellCog/cellcog_python) <br>
-- [CellCog Python package](https://pypi.org/project/cellcog/) <br>
-- [DeepResearch Bench Leaderboard](https://huggingface.co/spaces/muset-ai/DeepResearch-Bench-Leaderboard) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/cellcog) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/nitishgargiitd) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell examples, plus references to generated output files when CellCog produces artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include CellCog chat status, messages, downloaded file paths, and follow-up instructions from the third-party service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.17 (source: server release evidence) <br>
+Risk: Tagged local files may be uploaded to the third-party CellCog service, including sensitive content if the wrong path is selected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only tag files intended for upload and exclude credentials, private keys, .env files, SSH keys, and other secrets.
+
+Risk: Browser, co-work, and connected SaaS tool modes can grant broad access to local or account resources.
+
+Mitigation: Enable browser or co-work modes only when needed and select narrow connected toolkits instead of enabling all tools.
+
+Risk: Generated artifacts or task responses may be incomplete, costly, or require follow-up review.
+
+Mitigation: Review the full CellCog response, generated file paths, credit usage, and follow-up instructions before relying on outputs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/cellcog/skills/cellcog)
+- [CellCog Homepage](https://cellcog.ai)
+- [CellCog Python SDK](https://github.com/CellCog/cellcog_python)
+- [CellCog PyPI Package](https://pypi.org/project/cellcog/)
+- [DeepResearch Bench Leaderboard](https://huggingface.co/spaces/muset-ai/DeepResearch-Bench-Leaderboard)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with Python and shell snippets; CellCog task results may include generated files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; tagged local files may be uploaded to CellCog for processing.]
+
+## Skill Version(s):
+
+2.0.21 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

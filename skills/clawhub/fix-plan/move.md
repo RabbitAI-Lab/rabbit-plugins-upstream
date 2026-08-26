@@ -14,13 +14,18 @@ Keep the Completed file minimal — detailed steps, commit hashes, session IDs, 
 **Completed Lifecycle Rule (HARD STOP)**: The `## Completed` section in the active tracker file is a **temporary holding area** only. It does not accumulate indefinitely.
 - **Cycle**: Completed item added → Archived to `.bak/` partition file (and index to RAG) at the end of the current period (weekly/monthly) → **Deleted permanently from the active tracker file**.
 - **Result**: The active `fix_plan.md` always stays compact. Leaving months of completed history in the active file is forbidden.
+- **Atomic Move Obligation (HARD STOP)**: When moving an entry to `## Completed` (or marking `[x]`), the original line in the active section (`## Priority Work`, `## Progress`, etc.) **MUST be deleted atomically in the same edit turn**. Marking `[x]` while leaving the original line in place is strictly forbidden — it creates visual confusion and stale state.
 - **Forbidden**: Do **not** manually insert one-line summaries at random locations (such as above `## REPEAT` or in active lists) to keep track of them. Once mapped to RAG or archived, they must be **deleted** from the active file.
+- **Automated Bloated Task Detection (HARD STOP)**: Before executing the move pipeline or wrap-up, run `detect_bloated_tasks.py` script to audit for remaining `[x]` items or unmarked sub-residuals in active sections:
+   ```bash
+   python <skill-dir>/scripts/detect_bloated_tasks.py --file <path/to/fix_plan.md>
+   ```
 
 
 
 ```markdown
 # Before (Progress)
-- [x] proxy.ts basePath redirect fix → image build / deploy (2026-03-15 17:30 completed: Session xxxxxxxx, model claude-sonnet-4-6, commit a1b2c3d4)
+- [x] proxy.ts basePath redirect fix → image build / deploy (YYYY-MM-DD HH:mm completed: Session xxxxxxxx, model claude-sonnet-5, commit a1b2c3d4)
   - proxy.ts `new URL` × 5 fixed **complete**
   - callback/route.ts, logout/route.ts edited **complete**
   - Dockerfile ARG BASE_PATH added **complete**
@@ -44,6 +49,18 @@ Keep the Completed file minimal — detailed steps, commit hashes, session IDs, 
 | Timestamp | `YYYY-MM-DD HH:mm —` prefix required. **`HH:mm` mandatory** |
 | Reference | Do NOT include commit hashes, session IDs, or model name. These are cataloged in RAG. If applicable, keep only the PR or Issue number (e.g. `(PR #N)`). |
 | No `[x]` marker | Completed uses `-` followed by a space (no checkbox) |
+
+### Session identifier format (HARD STOP — when a `(session <id>)` reference is kept)
+
+A session reference is normally dropped (Reference rule above). When one **is** kept — Progress-item completion notes and some environments' Completed lines carry `(session <id>)` inline — it must be a **prefix of the runtime's canonical session id**, never a session *name* / alias. In Claude Code that id is the 36-char transcript UUID; the inline convention is its **first 8 hex chars** (e.g. `(session c1b6e7e2)`) — enough to grep a transcript, without bloating the line with the full 36 chars. A human-readable session name (a `/rename` label like `fable-fix-plan`) is NOT an id: it cannot be matched back to a transcript, and it is the exact failure this rule prevents.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Write the session's display name / alias: `(session fable-fix-plan)` | Write the 8-char id prefix: `(session c1b6e7e2)` |
+| 2 | Bloat the inline note with the full 36-char UUID: `(session c1b6e7e2-445e-4884-97e4-6a02042149b2)` | 8-char prefix is the fix_plan convention: `(session c1b6e7e2)`. Reserve the full UUID for RAG metadata / import reports, not the fix_plan line |
+| 3 | Invent a placeholder because the id is not at hand | Obtain the real id first (see below), then write its prefix — a placeholder that later gets treated as real is worse than omitting the reference |
+
+**When the id is not known**: in a runtime where the session id is only obtainable through the harness (Claude Code exposes it via the SessionStart-injected `Current session ID` context or the `/session id` command, not by the model guessing), do NOT fabricate a name/placeholder. Either omit the `(session …)` reference entirely (the Reference rule already permits this) or retrieve the real id first, then keep its 8-char prefix. Emitting a name in the identifier slot is the failure this rule prevents.
 
 ## PR-level item
 
@@ -164,7 +181,7 @@ archive-receiver.
 To automate the checklist parsing, subtree-move, and size archiving procedure, run the Python utility script included in the skill:
 
 ```bash
-python3 ~/.claude/skills/fix-plan/scripts/cleanup.py [--file <path>] [--cutoff <YYYY-MM-DD>] [--period monthly|weekly] [--dry-run]
+python3 <skill-dir>/scripts/cleanup.py [--file <path>] [--cutoff <YYYY-MM-DD>] [--period monthly|weekly] [--dry-run]
 ```
 
 This script:
@@ -172,6 +189,25 @@ This script:
 2. Extracts completed `[x]` items (including subtrees under active parents) and removes them from progress sections.
 3. Sorts completed entries chronologically descending under `## Completed`.
 4. Archives entries older than the cutoff date (defaults to the start of the current month) into `.bak/` partition files (`<tracker>-completed-YYYY-MM.md`).
+
+**Wholesale move, not semantic summary (HARD STOP)**: the script moves a completed subtree **verbatim** (parent + every child line, checkbox markers stripped) — it does NOT synthesize the "one merged headline" shown in the Summary format / Merge example sections above. Merging N child bullets into one coherent sentence requires semantic judgment a parser/tree-walker cannot safely perform; an earlier version tried to fake this by keeping only the parent's original text and silently dropping every child line (real completion detail lost). If a condensed one-liner is wanted, hand-author it (Summary rules above) either instead of running the script on that entry, or as a follow-up edit after the script's wholesale move has landed the full detail safely.
+
+**Checkbox-blind archiving under a corrupted `## Completed` heading (HARD STOP)**: `cleanup.py`'s `## Completed` branch collects **every** top-level list item under that heading into `completed_entries` — regardless of the item's own checkbox marker (`[x]`, `[ ]`, or `[BLOCKED...]`). This is safe when a `## Completed` heading genuinely contains only completed work. It is **not** safe when a tracker has drifted — e.g. a sync-conflict merge can leave active `[ ]`/`[BLOCKED]` work items structurally nested under a `## Completed` heading, and running the script in write mode on such a file would silently sweep those active items into a `.bak/` archive partition alongside the real completed history. Before running the script (not just `--dry-run` — visually too), confirm every `## Completed` heading in the file is unique (`grep -c "^## Completed$"` should be 1) and spot-check that the items under it are actually done.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Assume the script produces move.md's "one merged headline" format | The script preserves the full subtree verbatim (checkbox-stripped); manual condensing is a separate, optional step |
+| 2 | Trust a single-node-text summary function to represent a subtree with children | Verify the entries mover recurses into children (see `node_to_completed_block` in `cleanup.py`) before relying on it for a multi-line subtree |
+| 3 | Run the script in write mode on a tracker without first confirming its `## Completed` heading is unique and its contents are actually complete | `grep -c "^## Completed$" <file>` before every write-mode run; a count > 1 means the file likely has active work items mis-nested under a stale duplicate heading — resolve that corruption manually first (see fix-plan skill's Cat IV classification) |
+
+### Line-ending preservation for custom bulk-move scripts (HARD STOP)
+
+Trackers edited across Windows/WSL and macOS/Linux sessions commonly use CRLF line endings throughout. When hand-rolling a Move-step transformation instead of using `cleanup.py` (e.g. a one-off script for a large batch of `[x]` items), a naive read/transform/write in a scripting language's default text mode silently normalizes CRLF → LF on read, or mixes conventions if only some content passes through that normalization and other content (freshly-authored strings) is written with literal `\n`. The result is either a diff where every unchanged line shows as modified (a false full-file rewrite obscuring the real change), or a file with inconsistent line endings.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Read a CRLF tracker in a language's default text mode, transform, and write back in default text mode without checking terminators | Detect the file's dominant line ending first (byte-count `\r\n` vs `\n`); do the transform logic against `\n`-normalized content, then convert the whole result back to the original convention immediately before writing |
+| 2 | Assume mixed CRLF/LF within one file is harmless | Verify post-write: `\r\n` count equals the total line count (pure CRLF) or is 0 (pure LF) — a partial count means the write mixed conventions |
 
 ### Trigger
 

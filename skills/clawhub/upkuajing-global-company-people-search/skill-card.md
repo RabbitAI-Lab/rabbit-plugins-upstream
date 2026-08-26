@@ -1,52 +1,70 @@
-## Description: <br>
-Search global companies and professional contacts for cross-border B2B lead generation, including company intelligence, business registration records, and verified contact details. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search global companies and professional contacts for cross-border B2B lead generation.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External B2B sales, export, sourcing, and trade teams use this skill to search international companies and professional contacts, identify potential buyers or suppliers, and enrich selected entities with business details and contact information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill retrieves paid business and personal contact data, which can create privacy, compliance, and misuse risk. <br>
-Mitigation: Use it only for a lawful business purpose, scope searches narrowly, and avoid broad contact harvesting. <br>
-Risk: The UpKuaJing API key may be stored locally in ~/.upkuajing/.env. <br>
-Mitigation: Use a dedicated API key, restrict local file permissions, and rotate or revoke the key if it may have been exposed. <br>
-Risk: Search and enrichment results may be stored locally under task_data. <br>
-Mitigation: Delete result files when they are no longer needed and avoid storing regulated or unnecessary personal data. <br>
-Risk: List searches and enrichment interfaces can incur paid API charges. <br>
-Mitigation: Confirm expected API call counts and fee impact before running large searches or batch enrichment. <br>
+## Use Case:
 
+External B2B exporters, sourcing agents, and sales teams use this skill to find companies, professional contacts, business credentials, and contact channels for export lead generation, supplier discovery, and company background verification.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/upkuajing-global-company-people-search) <br>
-- [UpKuaJing homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [Company list API reference](references/company-list-api.md) <br>
-- [People list API reference](references/human-list-api.md) <br>
-- [Company detail API reference](references/company-detail-api.md) <br>
-- [Human detail API reference](references/human-detail-api.md) <br>
-- [Contact API reference](references/contact-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with Python command examples, JSON API responses, and local result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires UPKUAJING_API_KEY; list searches and enrichment calls can incur fees and may write task_data results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: skill metadata and ClawHub release metadata) <br>
+Risk: The skill can retrieve personal contact channels and business lead data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only where there is a lawful basis for contact-data processing, limit searches to necessary records, and protect or delete generated result files when no longer needed.
+
+Risk: The skill can make paid API calls.
+
+Mitigation: Confirm expected fee counts before paid searches or enrichment calls, and use the vendor pricing or account information flow when cost is unclear.
+
+Risk: The skill can store an API key in a plaintext home-directory file.
+
+Mitigation: Prefer protected environment-variable storage where possible, restrict access to the credential file, and remove unused keys.
+
+Risk: The skill can send diagnostic reports to the vendor after confirmation.
+
+Mitigation: Do not include raw request data, response data, or sensitive personal information in diagnostic context.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/upkuajing-global-company-people-search)
+- [UpKuaJing Homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [UpKuaJing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [Company List API Reference](references/company-list-api.md)
+- [Company Detail API Reference](references/company-detail-api.md)
+- [People List API Reference](references/human-list-api.md)
+- [People Detail API Reference](references/human-detail-api.md)
+- [Contact API Reference](references/contact-api.md)
+- [Skill Error Report API Reference](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result summaries; list searches may also produce JSONL result files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; paid API calls can retrieve and persist company and personal contact data.]
+
+## Skill Version(s):
+
+1.0.10 (source: skill metadata and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

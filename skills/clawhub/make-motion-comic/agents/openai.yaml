@@ -1,0 +1,4 @@
+interface:
+  display_name: "动态漫画制作"
+  short_description: "从剧本、统一角色图到 Edge TTS 与防抖竖屏成片"
+  default_prompt: "使用 $make-motion-comic 把这个故事制作成一集竖屏动态漫画。"

@@ -36,12 +36,16 @@ Retrieve and consume it inside a single script so the value never crosses a proc
 
 ```bash
 python <<'EOF'
-import urllib.request, os, json
-KEY = os.environ["MATON_API_KEY"]
+import json, os, subprocess, urllib.request
+
+# Short-lived token from the CLI; no long-lived key in the environment.
+TOKEN = subprocess.run(
+    ["maton", "token"], capture_output=True, text=True, check=True
+).stdout.strip()
 
 def call(path):
     req = urllib.request.Request(f'https://api.maton.ai/facebook-page/v25.0/{path}')
-    req.add_header('Authorization', f'Bearer {KEY}')
+    req.add_header('Authorization', f'Bearer {TOKEN}')
     return json.load(urllib.request.urlopen(req))
 
 pages = call('me/accounts?fields=id,name,access_token')     # token is never printed

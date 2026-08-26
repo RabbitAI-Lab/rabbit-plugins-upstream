@@ -438,10 +438,10 @@ NOTE: `edit_history.md` is a GENERATED VIEW (newest entries on top) built from c
 ## 5. Technical Standards
 
 ### 5.1 Executable Paths
-- Node: `/Users/deepak/.nvm/versions/node/v23.11.0/bin/node`
-- NPM: `/Users/deepak/.nvm/versions/node/v23.11.0/bin/npm`
-- PNPM: `/Users/deepak/.nvm/versions/node/v23.11.0/bin/pnpm`
-- Python: `/Users/deepak/miniconda3/bin/python`
+- Node: `~/.nvm/versions/node/v23.11.0/bin/node`
+- NPM: `~/.nvm/versions/node/v23.11.0/bin/npm`
+- PNPM: `~/.nvm/versions/node/v23.11.0/bin/pnpm`
+- Python: `~/miniconda3/bin/python`
 
 ### 5.2 XML Tool Format Standards
 1. **Structure**:

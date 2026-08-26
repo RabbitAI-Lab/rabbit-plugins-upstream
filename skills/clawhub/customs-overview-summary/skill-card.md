@@ -1,48 +1,67 @@
-## Description: <br>
-Retrieves aggregated annual trade totals, quarterly trade volume, and supplier and buyer counts by country pair from the UpKuaJing Open Platform API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries UpKuaJing customs overview summary data for annual trade totals, quarterly trade volume, and supplier and buyer counts by country pair.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External trade analysts, export teams, and market researchers use this skill to request high-level country-pair customs summaries for a selected year before deeper market analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Fee-bearing API calls, pricing checks, or top-up order creation could incur account charges or start a payment workflow. <br>
-Mitigation: Tell the user a fee may apply, check current pricing when needed, and wait for explicit confirmation in a separate message before executing paid calls or top-up order creation. <br>
-Risk: The skill stores or reads the UpKuaJing API key from a local plaintext file. <br>
-Mitigation: Protect ~/.upkuajing/.env with appropriate local file permissions, avoid exposing terminal output that includes keys, and rotate the key if it is shared accidentally. <br>
-Risk: Trade queries, account information, and payment-related requests are sent to UpKuaJing services. <br>
-Mitigation: Install and run the skill only when the user trusts UpKuaJing with the trade queries and account workflow. <br>
-Risk: If API logging is enabled, request and response data can be retained in local log files. <br>
-Mitigation: Keep API logging disabled unless local retention is intended, and review or remove ~/.upkuajing/logs when retention is no longer needed. <br>
+## Use Case:
 
+External export teams, trade analysts, market researchers, and agents use this skill to retrieve high-level country-pair trade summaries for market analysis and partner ecosystem evaluation.
 
-## Reference(s): <br>
-- [Overview Summary API Reference](references/customs-overview-summary-api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/customs-overview-summary) <br>
-- [UpKuaJing Homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing API Pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with Python shell commands and formatted JSON API results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python, httpx, and UPKUAJING_API_KEY; fee-bearing API calls require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md metadata and server release metadata) <br>
+Risk: Paid trade-summary API calls and account or top-up flows can affect the user's UpKuaJing account balance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Tell the user when an operation may incur fees and wait for explicit confirmation before running fee-incurring commands.
+
+Risk: The skill can store an API key in a plaintext dotfile.
+
+Mitigation: Use a dedicated API key, keep the dotfile private, and rotate the key if it may have been exposed.
+
+Risk: Error reporting can send diagnostic request or response details to the provider.
+
+Mitigation: Run error reports only after user confirmation and avoid sending sensitive request or response details.
+
+Risk: The skill performs an undisclosed daily version check to the provider.
+
+Mitigation: Review the version-check behavior before installation in environments with network disclosure or change-control requirements.
+
+## Reference(s):
+
+- [Customs Overview Summary API Reference](references/customs-overview-summary-api.md)
+- [Skill Error Report API Reference](references/skill-error-report-api.md)
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/customs-overview-summary)
+- [UpKuaJing Publisher Profile](https://clawhub.ai/user/upkuajing)
+- [UpKuaJing Homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [UpKuaJing API Pricing](https://www.upkuajing.com/web/openapi/price.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls]
+
+**Output Format:** [JSON API responses plus human-facing text or Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY. Paid API calls require explicit user confirmation before execution and may include fee details and request IDs.]
+
+## Skill Version(s):
+
+1.0.1 (source: evidence.release.version, evidence.parsed.metadata.version, SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

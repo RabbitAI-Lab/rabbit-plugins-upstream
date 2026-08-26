@@ -1,48 +1,64 @@
-## Description: <br>
-Stripe API integration with managed OAuth for administering customers, subscriptions, invoices, products, prices, and payments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Stripe API integration with managed OAuth for administering customers, subscriptions, invoices, products, prices, payments, and related Stripe resources through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to administer Stripe resources through Maton-managed OAuth, including customers, subscriptions, invoices, products, prices, payments, and refunds. It is intended for users who need Stripe administration and can verify account context before write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact Stripe financial actions such as charges, refunds, invoice finalization or payment, payment method changes, deletions, and subscription changes. <br>
-Mitigation: Require explicit user confirmation that shows the exact endpoint, target resource, object IDs, amounts, test/live mode, and expected financial effect before any write action. <br>
-Risk: Requests may be sent to the wrong Stripe account when multiple Maton connections exist or a default connection is used. <br>
-Mitigation: Verify the intended Maton-Connection account before each request and include the Maton-Connection header for Stripe API calls. <br>
-Risk: Broad OAuth access or stale connections can expose sensitive financial data and administrative capabilities. <br>
-Mitigation: Use the least-privileged Stripe or Maton connection available, prefer test mode where possible, and revoke unused connections promptly. <br>
+## Use Case:
 
+Developers, operators, and finance administrators use this skill for agent-assisted Stripe administration, including reading account data and preparing customer, subscription, invoice, product, price, and payment changes. The skill should be installed only where Stripe administration is needed and write actions can be reviewed before execution.
 
-## Reference(s): <br>
-- [Stripe skill on ClawHub](https://clawhub.ai/byungkyu/skills/stripe-api) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton](https://maton.ai) <br>
-- [API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Stripe API Reference](https://docs.stripe.com/api) <br>
-- [Stripe Dashboard](https://dashboard.stripe.com/) <br>
-- [Stripe Testing](https://docs.stripe.com/testing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell, Python, JavaScript, HTTP endpoint examples, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Maton-managed Stripe OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata; artifact frontmatter version 1.0) <br>
+Risk: The generic Stripe API passthrough can reach high-impact financial endpoints beyond the short scope statement.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the exact `maton api` endpoint, target Stripe account, resource IDs, amounts, and test or live mode before any request, and require explicit user confirmation for every write.
+
+Risk: Stripe administration actions can modify billing, payments, subscriptions, invoices, customers, products, or prices.
+
+Mitigation: Prefer test mode and read-only checks first, use the least-privileged Stripe connection available, and summarize financial consequences before executing a write.
+
+Risk: Long-lived API keys or provider-issued tokens may be exposed if printed, stored, passed on command lines, or sent to the wrong host.
+
+Mitigation: Prefer OAuth through the Maton CLI, avoid printing or persisting credentials, and send raw HTTP fallback credentials only to `api.maton.ai` when the CLI cannot be used.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/stripe-api)
+- [Maton homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Stripe API Reference](https://docs.stripe.com/api)
+- [Stripe Testing](https://docs.stripe.com/testing)
+- [Stripe Dashboard](https://dashboard.stripe.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance, Markdown]
+
+**Output Format:** [Markdown with inline bash commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May issue read or write Stripe API calls through Maton when the user has authenticated and approved high-impact operations.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,65 @@
-## Description: <br>
-Quo API integration with managed OAuth for managing calls, messages, contacts, and conversations in a business phone system. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Quo API integration with managed OAuth for managing calls, messages, contacts, conversations, call recordings, and transcripts for a business phone system.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Employees, support teams, sales teams, and developers use this skill to access a connected Quo/OpenPhone account through Maton-managed OAuth. It helps agents send SMS, list calls and conversations, manage contacts, and retrieve call recordings, transcripts, summaries, and voicemails when authorized. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive communications data, including calls, messages, recordings, transcripts, voicemails, contacts, and conversations. <br>
-Mitigation: Retrieve only data the user is authorized to access, treat communications records as sensitive, and avoid exposing them in prompts, logs, screenshots, or shared terminals. <br>
-Risk: Write operations can send SMS messages, create or update contacts, delete contacts, or delete OAuth connections. <br>
-Mitigation: Before any write or delete request, confirm the exact account, recipient or contact ID, and intended effect with the user. <br>
-Risk: MATON_API_KEY grants access to the connected Quo/OpenPhone account through Maton. <br>
-Mitigation: Keep MATON_API_KEY out of prompts, logs, and screenshots, and install the skill only when Maton is trusted with the connected account. <br>
+## Use Case:
 
+Developers and operators use this skill to access Quo phone-system data through Maton, including listing calls and messages, managing contacts, sending SMS, and retrieving call recordings or transcripts. It is intended for connected Quo accounts where the user can approve account connections and data-changing actions.
 
-## Reference(s): <br>
-- [Quo API Introduction](https://www.quo.com/docs/mdx/api-reference/introduction) <br>
-- [Quo API Authentication](https://www.quo.com/docs/mdx/api-reference/authentication) <br>
-- [Quo Support Center API Integration](https://support.quo.com/core-concepts/integrations/api) <br>
-- [Maton](https://maton.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/quo) <br>
-- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API request examples, shell commands, and code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Quo OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The agent may send messages or modify Quo contacts, conversations, or related phone-system data without sufficient confirmation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm recipients, payloads, target resources, and target connections before any POST, PUT, PATCH, or DELETE request; default to read and list calls first.
+
+Risk: The agent may connect or act against the wrong Quo account when multiple Maton profiles or Quo connections exist.
+
+Mitigation: Confirm the intended account and use explicit connection or profile selection when more than one option is available.
+
+Risk: Credentials or scoped provider tokens may be exposed if copied into logs, files, command arguments, or prompts.
+
+Mitigation: Prefer OAuth, keep credentials in the managed credential store, avoid printing or persisting tokens, and use the narrowest Quo scopes available.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/quo)
+- [Publisher profile](https://clawhub.ai/user/byungkyu)
+- [Maton homepage](https://maton.ai)
+- [Quo API Introduction](https://www.quo.com/docs/mdx/api-reference/introduction)
+- [Quo API Authentication](https://www.quo.com/docs/mdx/api-reference/authentication)
+- [Quo Support Center API Integration](https://support.quo.com/core-concepts/integrations/api)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API calls, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON request or response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands require network access, a Maton account, and an authorized Quo connection.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

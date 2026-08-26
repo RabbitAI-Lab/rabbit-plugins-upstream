@@ -1,46 +1,62 @@
-## Description: <br>
-依托全球企业资料库查找目标人员或企业对应的同事及内部团队成员，梳理企业内部人脉网络，助力外贸销售和猎头人员拓展业务人脉，实现精准客户触达。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+依托全球企业资料库查找目标人员或企业对应的同事及内部团队成员，梳理企业内部人脉网络，助力外贸销售和猎头人员拓展业务人脉，实现精准客户触达。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Recruiters, sales teams, B2B lead builders, and agents using ClawHub use this skill to find colleagues for a known company and person ID. It supports relationship mapping, talent research, and discovery of additional contacts or decision-makers after an initial key person is found. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads and can write UPKUAJING_API_KEY in ~/.upkuajing/.env. <br>
-Mitigation: Use this skill only when you intend to use Upkuajing's API, keep the key private, and do not let the agent print or share the .env contents. <br>
-Risk: Lookup, pagination, account, and recharge helper actions may consume paid account balance or create a payment flow. <br>
-Mitigation: Review price or account commands before running them and require explicit confirmation before paid lookup or recharge actions. <br>
-Risk: The skill sends company and person identifiers to a third-party API provider. <br>
-Mitigation: Submit only identifiers you are authorized to process and check organizational privacy or compliance requirements before use. <br>
+## Use Case:
 
+Recruiters, sales teams, B2B lead builders, and business researchers use this skill to find colleagues and internal team members for a known company and person ID. It helps expand relationship maps after a key contact has been identified.
 
-## Reference(s): <br>
-- [全球企业库同事列表 API 参考](references/person-colleague-list-api.md) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer portal](https://developer.upkuajing.com/) <br>
-- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/global-company-person-colleague-zh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with Python command snippets and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires UPKUAJING_API_KEY; paid lookup calls can return fee and account-balance information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: SKILL.md metadata and server release evidence) <br>
+Risk: The skill uses a paid Upkuajing API and paginated lookups can incur a charge per page.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Tell the user a query may incur fees and wait for explicit confirmation before running paid lookups; use the price information command or pricing page for current costs.
+
+Risk: The API key may be stored in plaintext under ~/.upkuajing.
+
+Mitigation: Protect local access to the API key file, avoid sharing it, and rotate the key if exposure is suspected.
+
+Risk: The skill performs automatic network version-check requests and can send error reports that may include request or response context.
+
+Mitigation: Review network behavior before installation and avoid including sensitive request or response details when reporting errors.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/global-company-person-colleague-zh)
+- [Upkuajing Homepage](https://www.upkuajing.com)
+- [Upkuajing Developer Platform](https://developer.upkuajing.com/)
+- [Upkuajing API Pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [Person Colleague List API](references/person-colleague-list-api.md)
+- [Skill Error Report API](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and an UPKUAJING_API_KEY; colleague lookup calls are paid and paginated.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

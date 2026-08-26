@@ -1,43 +1,60 @@
-## Description: <br>
-Fast response and generation of short videos with Google Veo 3.1 Fast. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fast response and generation of short videos with Google Veo 3.1 Fast.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to call the dLazy CLI for text-to-video, image-to-video, and video extension workflows with Google Veo 3.1 Fast. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, generation parameters, and local media paths passed to the CLI may be sent or uploaded to dLazy services. <br>
-Mitigation: Invoke the skill explicitly for intended dLazy video generation tasks and confirm local file paths before running it. <br>
-Risk: The CLI can store a persistent API key in the user's local configuration. <br>
-Mitigation: Use DLAZY_API_KEY per invocation when persistent credential storage is not appropriate, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+External users and developers use this skill to generate or extend short videos through dLazy's hosted Veo 3.1 Fast integration from text prompts and optional image or video inputs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-veo-3-1-fast) <br>
-- [dLazy CLI](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is returned as hosted file URLs; asynchronous runs may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release metadata) <br>
+Risk: The skill uses dLazy's hosted service, so prompts, parameters, and referenced local media may be sent to dLazy endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when cloud processing by dLazy is intended, and avoid sending sensitive prompts or media unless approved for that service.
+
+Risk: The dLazy API key may be saved in the local CLI config.
+
+Mitigation: Prefer a per-run DLAZY_API_KEY for sensitive environments, or restrict permissions on ~/.dlazy/config.json and rotate or revoke keys when needed.
+
+Risk: Video generation can be cost-bearing.
+
+Mitigation: Use dry-run or otherwise confirm expected cost before running generation commands.
+
+## Reference(s):
+
+- [dLazy CLI source](https://github.com/dlazyai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-veo-3-1-fast)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Files, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media is returned as hosted file URLs, and the CLI can save result assets to a local path when requested.]
+
+## Skill Version(s):
+
+1.3.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

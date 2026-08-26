@@ -5,10 +5,9 @@ description: 'GPT Image 2 图像生成与编辑模型。支持文生图，以及
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy gpt-image-2 -h 查看帮助信息。"}}
 ---
 
-# dlazy-gpt-image-2
+# 图像生成 GPT Image 2
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 GPT Image 2 图像生成与编辑模型。支持文生图，以及通过提供参考图进行图像编辑和合成。
@@ -82,11 +81,12 @@ Options:
   --prompt [prompt]                    提示词
   --images [images...]                 参考图 [image: url or local path] (max 5)
   --size [size]                        尺寸 [default: auto] (choices: "1024x1024", "1536x1024", "1024x1536", "2048x2048", "2048x1152", "3840x2160", "2160x3840", "auto")
-  --format [format]                    格式 [default: jpeg] (choices: "jpeg", "png", "webp")
+  --imageFormat [imageFormat]          图片格式 [default: jpeg] (choices: "jpeg", "png", "webp")
   --quality [quality]                  画质 [default: medium] (choices: "low", "medium", "high")
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

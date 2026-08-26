@@ -1,41 +1,50 @@
-## Description: <br>
-AI image generation and photo editing powered by CellCog for text-to-image, image-to-image, consistent characters, product photography, reference-based generation, style transfer, social media visuals, brand assets, stickers, comics, and GIFs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI image generation and photo editing powered by CellCog, including text-to-image, image-to-image, consistent characters, product photography, reference-based generation, style transfer, image sets, social media visuals, brand assets, stickers, comics, and GIFs.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers and creative teams use this skill to ask an agent to generate or edit images through CellCog, including product visuals, social media assets, reference-based images, and consistent character sets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and uploaded or reference images are sent to an external AI service and may be routed to model providers. <br>
-Mitigation: Avoid submitting confidential, regulated, or sensitive personal material unless that use is approved for the deployment environment. <br>
-Risk: Generated or edited images may be incorrect, misleading, or unsuitable for a brand or regulated use case. <br>
-Mitigation: Review generated image outputs before publication or downstream use. <br>
+## Use Case:
 
+Developers, designers, marketers, and other agent users use this skill to request AI-generated or edited images through CellCog, including product photography, campaign image sets, character-consistent visuals, style transfer, and reference-based generation.
 
-## Reference(s): <br>
-- [CellCog](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/image-generation-cellcog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands] <br>
-**Output Format:** [Markdown with Python and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce instructions for image generation prompts, reference-image workflows, SDK calls, and CellCog setup.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release evidence) <br>
+Risk: Prompts, reference images, and uploaded assets may be sent to CellCog as an external AI image service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting secrets, private personal images, proprietary assets, or regulated data unless the organization explicitly permits that use and has reviewed CellCog's data handling terms.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/cellcog/skills/image-generation-cellcog)
+- [CellCog homepage](https://cellcog.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with Python examples and shell setup commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or modify image assets through the external CellCog service.]
+
+## Skill Version(s):
+
+1.0.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

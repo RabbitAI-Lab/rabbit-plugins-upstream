@@ -1,45 +1,60 @@
-## Description: <br>
-Combines facial blood flow and emotional characteristics to analyze stress index, anxiety tendency, and depression tendency for mental health monitoring scenarios. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Combines facial blood flow and emotional characteristics to analyze stress index, anxiety tendency, and depression tendency for mental health monitoring scenarios.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Developers and agent users can use this skill to submit face image or video media for a psychological stress assessment report covering stress index, anxiety tendency, and depression tendency. The skill is intended for mental health monitoring and screening support, not clinical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Face media and inferred mental-health results are sent to the publisher's remote service and may be linked to local or cloud identity state. <br>
-Mitigation: Use only with clear subject consent, review the publisher's data handling terms, and confirm retention, deletion, token, and identity-linking controls before production use. <br>
-Risk: Stress, anxiety, and depression tendency outputs may be mistaken for clinical conclusions. <br>
-Mitigation: Present results as screening or monitoring support only and route persistent or concerning results to qualified mental-health professionals. <br>
-Risk: History-report queries can expose prior psychological assessment records associated with the resolved user identity. <br>
-Mitigation: Limit access to authorized users and review who can retrieve report history before enabling the skill in shared, workplace, school, or clinical settings. <br>
+## Use Case:
 
+Employees, external users, and developers can use this skill to submit face images or videos for cloud-backed psychological stress assessment, including stress index, anxiety tendency, depression tendency, suggestions, report links, and historical report lookup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-psychological-stress-assessment-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON psychological stress assessment report] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return structured stress, anxiety, and depression tendency results, report links, and history-report tables; documented media inputs include image or video files and remote media URLs with a 10 MB file-size limit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact SKILL.md declares 1.0.9) <br>
+Risk: The skill uploads face images or videos for cloud-backed mental-health and biometric-style analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit user consent and clear disclosure of the remote service, data upload, retention, and report access behavior.
+
+Risk: The skill silently creates or reuses a persistent identity and may store tokens in the workspace data directory.
+
+Mitigation: Review identity and token handling before installation, restrict workspace access, and rotate or remove stored credentials when no longer needed.
+
+Risk: Assessment output could be mistaken for clinical diagnosis.
+
+Mitigation: Present results as reference-only mental health screening information and direct users with persistent concerns to qualified professionals.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-psychological-stress-assessment-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Interface Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON assessment output with report links and optional saved result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports basic, standard, and JSON detail levels; historical reports are returned as Markdown tables.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata; artifact frontmatter lists 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

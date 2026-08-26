@@ -1,41 +1,56 @@
-## Description: <br>
-Diagnoses plant nutrient deficiency or excess from plant leaf images or videos and returns structured fertilization guidance for precision nutrient management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Diagnoses plant nutrient deficiency or excess based on computer vision and plant physiology, outputs targeted fertilization suggestions for precision nutrient management. | 植物营养诊断技能，基于计算机视觉与植物生理学，通过叶片特征诊断氮磷钾及微量元素缺乏或过剩，输出精准施肥建议
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and agents use this skill to analyze plant leaf media, identify likely nutrient deficiency or excess, and receive structured diagnostic findings with fertilization suggestions. It can also query cloud-hosted historical diagnosis reports associated with the skill's internal account identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends plant media to a cloud service and should not be treated as an offline-only image-analysis helper. <br>
-Mitigation: Use it only with media approved for that cloud workflow, and confirm the service's data handling meets the installing organization's requirements. <br>
-Risk: The skill may silently create or reuse a cloud-linked identity and store authentication tokens locally. <br>
-Mitigation: Run it in an appropriate workspace, protect or remove local identity and token storage according to policy, and review account linkage before deployment. <br>
+## Use Case:
 
+External growers, agronomists, and developers use this skill to diagnose plant nutrient deficiency or excess from leaf images or videos, generate structured analysis, and retrieve cloud-hosted diagnosis history. The results support precision fertilization decisions but should be checked against soil tests and local agricultural guidance.
 
-## Reference(s): <br>
-- [API Interface Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill usage demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Structured Markdown report text or JSON, with optional saved output file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include diagnostic findings, physiological cause analysis, fertilization suggestions, report links, or a Markdown table of historical reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata; artifact frontmatter states 1.0.9) <br>
+Risk: The skill automatically links a local or cloud identity and persists account tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the publisher and backend service are trusted, and review account linkage and token storage behavior before use.
+
+Risk: Plant media and report history requests are sent to backend services with incomplete and inconsistent disclosure.
+
+Mitigation: Review configured backend URLs, retention, and account behavior before deployment, and avoid submitting sensitive media unless that storage model is acceptable.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-nutrition-diagnosis-analysis)
+- [Publisher Profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Markdown text with structured JSON report content and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May upload plant media to backend services and query cloud report history associated with an automatically resolved identity.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter says 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,796 @@
+{
+  "telegram": {
+    "merckmillipore": {
+      "posts_parsed": 151,
+      "listings": 2,
+      "rejected": 149,
+      "listing_rate_pct": 1.3,
+      "with_price": 0,
+      "with_contact": 0,
+      "grade_split": {
+        "research": 2
+      },
+      "rejection_detail": {
+        "listing_discriminator:no_sales_signal": 109,
+        "identity_resolution:no_alias_or_cas_match": 39,
+        "identity_resolution:generic_announcement_no_molecule_named": 1
+      },
+      "persian_profile": {
+        "channel": "merckmillipore",
+        "posts_total": 151,
+        "posts_with_text": 81,
+        "posts_persian": 45,
+        "posts_arabic": 1,
+        "posts_latin": 32,
+        "persian_ratio": 0.556,
+        "persian_chars": 7489,
+        "trade_words_seen": [
+          "ارسال",
+          "انبار",
+          "برند",
+          "تامین",
+          "تحویل",
+          "خرید",
+          "درصد",
+          "سفارش",
+          "شیمیایی",
+          "عرضه",
+          "فروش",
+          "قیمت",
+          "لیتر",
+          "مواد",
+          "موجود"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 45/81 posts (56%), 15 trade terms"
+      },
+      "excluded": false
+    },
+    "labshop": {
+      "posts_parsed": 192,
+      "listings": 2,
+      "rejected": 190,
+      "listing_rate_pct": 1.0,
+      "with_price": 0,
+      "with_contact": 0,
+      "grade_split": {
+        "research": 2
+      },
+      "rejection_detail": {
+        "listing_discriminator:no_sales_signal": 158,
+        "identity_resolution:no_alias_or_cas_match": 32
+      },
+      "persian_profile": {
+        "channel": "labshop",
+        "posts_total": 192,
+        "posts_with_text": 141,
+        "posts_persian": 85,
+        "posts_arabic": 0,
+        "posts_latin": 56,
+        "persian_ratio": 0.603,
+        "persian_chars": 3542,
+        "trade_words_seen": [
+          "ارسال",
+          "برند",
+          "تومان",
+          "خرید",
+          "سفارش",
+          "فروش",
+          "قیمت",
+          "لیتر",
+          "وارد",
+          "پخش",
+          "گرم"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 85/141 posts (60%), 11 trade terms"
+      },
+      "excluded": false
+    },
+    "minatajhiz": {
+      "posts_parsed": 951,
+      "listings": 122,
+      "rejected": 829,
+      "listing_rate_pct": 12.8,
+      "with_price": 1,
+      "with_contact": 1,
+      "grade_split": {
+        "industrial": 1,
+        "research": 121
+      },
+      "rejection_detail": {
+        "listing_discriminator:no_sales_signal": 669,
+        "identity_resolution:generic_announcement_no_molecule_named": 77,
+        "identity_resolution:no_alias_or_cas_match": 83
+      },
+      "persian_profile": {
+        "channel": "minatajhiz",
+        "posts_total": 951,
+        "posts_with_text": 775,
+        "posts_persian": 499,
+        "posts_arabic": 3,
+        "posts_latin": 266,
+        "persian_ratio": 0.644,
+        "persian_chars": 41410,
+        "trade_words_seen": [
+          "ارسال",
+          "انبار",
+          "برند",
+          "بسته",
+          "تامین",
+          "تحویل",
+          "تومان",
+          "خرید",
+          "خلوص",
+          "درصد",
+          "سفارش",
+          "شیمیایی",
+          "صنعتی",
+          "عرضه",
+          "فروش"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 499/775 posts (64%), 15 trade terms"
+      },
+      "excluded": false
+    },
+    "ChemIranSanat": {
+      "posts_parsed": 1930,
+      "listings": 165,
+      "rejected": 1765,
+      "listing_rate_pct": 8.5,
+      "with_price": 0,
+      "with_contact": 11,
+      "grade_split": {
+        "industrial": 5,
+        "research": 160
+      },
+      "rejection_detail": {
+        "listing_discriminator:no_sales_signal": 1566,
+        "identity_resolution:generic_announcement_no_molecule_named": 12,
+        "identity_resolution:no_alias_or_cas_match": 186,
+        "listing_discriminator:job_advert_not_a_product_listing": 1
+      },
+      "persian_profile": {
+        "channel": "ChemIranSanat",
+        "posts_total": 1930,
+        "posts_with_text": 1463,
+        "posts_persian": 1399,
+        "posts_arabic": 2,
+        "posts_latin": 62,
+        "persian_ratio": 0.956,
+        "persian_chars": 159781,
+        "trade_words_seen": [
+          "ارسال",
+          "انبار",
+          "برند",
+          "بسته",
+          "تامین",
+          "تحویل",
+          "تومان",
+          "خرید",
+          "خلوص",
+          "درصد",
+          "ریال",
+          "سفارش",
+          "شیمیایی",
+          "صنعتی",
+          "عرضه"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 1399/1463 posts (96%), 15 trade terms"
+      },
+      "excluded": false
+    },
+    "Maran_Tejarat_Eshen": {
+      "posts_parsed": 474,
+      "listings": 187,
+      "rejected": 287,
+      "listing_rate_pct": 39.5,
+      "with_price": 0,
+      "with_contact": 159,
+      "grade_split": {
+        "industrial": 182,
+        "research": 5
+      },
+      "rejection_detail": {
+        "listing_discriminator:no_sales_signal": 53,
+        "identity_resolution:no_alias_or_cas_match": 230,
+        "identity_resolution:generic_announcement_no_molecule_named": 4
+      },
+      "persian_profile": {
+        "channel": "Maran_Tejarat_Eshen",
+        "posts_total": 474,
+        "posts_with_text": 465,
+        "posts_persian": 451,
+        "posts_arabic": 0,
+        "posts_latin": 14,
+        "persian_ratio": 0.97,
+        "persian_chars": 62622,
+        "trade_words_seen": [
+          "ارسال",
+          "انبار",
+          "برند",
+          "بسته",
+          "تامین",
+          "تحویل",
+          "خرید",
+          "خلوص",
+          "درصد",
+          "ریال",
+          "سفارش",
+          "شیمیایی",
+          "صنعتی",
+          "عرضه",
+          "فروش"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 451/465 posts (97%), 15 trade terms"
+      },
+      "excluded": false
+    },
+    "jahaneshimicom": {
+      "posts_parsed": 156,
+      "listings": 16,
+      "rejected": 140,
+      "listing_rate_pct": 10.3,
+      "with_price": 0,
+      "with_contact": 16,
+      "grade_split": {
+        "industrial": 14,
+        "research": 2
+      },
+      "rejection_detail": {
+        "listing_discriminator:no_sales_signal": 19,
+        "identity_resolution:generic_announcement_no_molecule_named": 4,
+        "identity_resolution:no_alias_or_cas_match": 117
+      },
+      "persian_profile": {
+        "channel": "jahaneshimicom",
+        "posts_total": 156,
+        "posts_with_text": 145,
+        "posts_persian": 144,
+        "posts_arabic": 0,
+        "posts_latin": 1,
+        "persian_ratio": 0.993,
+        "persian_chars": 10068,
+        "trade_words_seen": [
+          "ارسال",
+          "انبار",
+          "برند",
+          "بسته",
+          "تامین",
+          "تحویل",
+          "تومان",
+          "خرید",
+          "خلوص",
+          "درصد",
+          "سفارش",
+          "شیمیایی",
+          "صنعتی",
+          "فروش",
+          "قیمت"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 144/145 posts (99%), 15 trade terms"
+      },
+      "excluded": false
+    },
+    "Ch_Chemical_leaders": {
+      "posts_parsed": 329,
+      "listings": 67,
+      "rejected": 262,
+      "listing_rate_pct": 20.4,
+      "with_price": 1,
+      "with_contact": 5,
+      "grade_split": {
+        "industrial": 45,
+        "research": 22
+      },
+      "rejection_detail": {
+        "listing_discriminator:no_sales_signal": 130,
+        "identity_resolution:generic_announcement_no_molecule_named": 57,
+        "identity_resolution:no_alias_or_cas_match": 75
+      },
+      "persian_profile": {
+        "channel": "Ch_Chemical_leaders",
+        "posts_total": 329,
+        "posts_with_text": 322,
+        "posts_persian": 321,
+        "posts_arabic": 0,
+        "posts_latin": 1,
+        "persian_ratio": 0.997,
+        "persian_chars": 104576,
+        "trade_words_seen": [
+          "ارسال",
+          "انبار",
+          "برند",
+          "بسته",
+          "تامین",
+          "تحویل",
+          "تومان",
+          "خرید",
+          "خلوص",
+          "درصد",
+          "ریال",
+          "سفارش",
+          "شیمیایی",
+          "صنعتی",
+          "عرضه"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 321/322 posts (100%), 15 trade terms"
+      },
+      "excluded": false
+    },
+    "Boof_company": {
+      "posts_parsed": 49,
+      "listings": 40,
+      "rejected": 9,
+      "listing_rate_pct": 81.6,
+      "with_price": 0,
+      "with_contact": 36,
+      "grade_split": {
+        "industrial": 37,
+        "research": 3
+      },
+      "rejection_detail": {
+        "listing_discriminator:no_sales_signal": 6,
+        "identity_resolution:generic_announcement_no_molecule_named": 2,
+        "identity_resolution:no_alias_or_cas_match": 1
+      },
+      "persian_profile": {
+        "channel": "Boof_company",
+        "posts_total": 49,
+        "posts_with_text": 48,
+        "posts_persian": 42,
+        "posts_arabic": 0,
+        "posts_latin": 6,
+        "persian_ratio": 0.875,
+        "persian_chars": 13912,
+        "trade_words_seen": [
+          "انبار",
+          "برند",
+          "بسته",
+          "تامین",
+          "خرید",
+          "خلوص",
+          "سفارش",
+          "شیمیایی",
+          "صنعتی",
+          "فروش",
+          "قیمت",
+          "مواد",
+          "موجود",
+          "وارد",
+          "کیلو"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 42/48 posts (88%), 15 trade terms"
+      },
+      "excluded": false
+    },
+    "fanchem": {
+      "posts_parsed": 294,
+      "listings": 54,
+      "rejected": 240,
+      "listing_rate_pct": 18.4,
+      "with_price": 0,
+      "with_contact": 0,
+      "grade_split": {
+        "industrial": 46,
+        "research": 8
+      },
+      "rejection_detail": {
+        "listing_discriminator:no_sales_signal": 168,
+        "identity_resolution:no_alias_or_cas_match": 67,
+        "identity_resolution:generic_announcement_no_molecule_named": 5
+      },
+      "persian_profile": {
+        "channel": "fanchem",
+        "posts_total": 294,
+        "posts_with_text": 288,
+        "posts_persian": 285,
+        "posts_arabic": 0,
+        "posts_latin": 3,
+        "persian_ratio": 0.99,
+        "persian_chars": 73491,
+        "trade_words_seen": [
+          "ارسال",
+          "انبار",
+          "برند",
+          "بسته",
+          "تامین",
+          "تحویل",
+          "تومان",
+          "خرید",
+          "خلوص",
+          "درصد",
+          "سفارش",
+          "شیمیایی",
+          "صنعتی",
+          "عرضه",
+          "فروش"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 285/288 posts (99%), 15 trade terms"
+      },
+      "excluded": false
+    },
+    "IranChemicals": {
+      "posts_parsed": 2673,
+      "listings": 52,
+      "rejected": 2621,
+      "listing_rate_pct": 1.9,
+      "with_price": 0,
+      "with_contact": 21,
+      "grade_split": {
+        "industrial": 19,
+        "research": 15,
+        "unknown": 18
+      },
+      "rejection_detail": {
+        "listing_discriminator:news_channel_requires_strong_marker": 1497,
+        "identity_resolution:no_alias_or_cas_match": 1010,
+        "identity_resolution:generic_announcement_no_molecule_named": 101,
+        "listing_discriminator:job_advert_not_a_product_listing": 13
+      },
+      "persian_profile": {
+        "channel": "IranChemicals",
+        "posts_total": 2673,
+        "posts_with_text": 2512,
+        "posts_persian": 1986,
+        "posts_arabic": 0,
+        "posts_latin": 43,
+        "persian_ratio": 0.791,
+        "persian_chars": 523078,
+        "trade_words_seen": [
+          "ارسال",
+          "انبار",
+          "برند",
+          "بسته",
+          "تامین",
+          "تحویل",
+          "تومان",
+          "خرید",
+          "درصد",
+          "ریال",
+          "سفارش",
+          "شیمیایی",
+          "صنعتی",
+          "عرضه",
+          "فروش"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 1986/2512 posts (79%), 15 trade terms"
+      },
+      "excluded": false
+    },
+    "chemgroup": {
+      "posts_parsed": 2501,
+      "listings": 28,
+      "rejected": 2473,
+      "listing_rate_pct": 1.1,
+      "with_price": 0,
+      "with_contact": 2,
+      "grade_split": {
+        "industrial": 7,
+        "research": 2,
+        "unknown": 19
+      },
+      "rejection_detail": {
+        "listing_discriminator:news_channel_requires_strong_marker": 2088,
+        "identity_resolution:no_alias_or_cas_match": 268,
+        "identity_resolution:generic_announcement_no_molecule_named": 10,
+        "listing_discriminator:job_advert_not_a_product_listing": 107
+      },
+      "persian_profile": {
+        "channel": "chemgroup",
+        "posts_total": 2501,
+        "posts_with_text": 2480,
+        "posts_persian": 2437,
+        "posts_arabic": 9,
+        "posts_latin": 34,
+        "persian_ratio": 0.983,
+        "persian_chars": 420684,
+        "trade_words_seen": [
+          "ارسال",
+          "انبار",
+          "برند",
+          "بسته",
+          "تامین",
+          "تحویل",
+          "تومان",
+          "خرید",
+          "خلوص",
+          "درصد",
+          "ریال",
+          "سفارش",
+          "شیمیایی",
+          "صنعتی",
+          "عرضه"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 2437/2480 posts (98%), 15 trade terms"
+      },
+      "excluded": false
+    },
+    "LabTel": {
+      "posts_parsed": 2667,
+      "listings": 65,
+      "rejected": 2602,
+      "listing_rate_pct": 2.4,
+      "with_price": 0,
+      "with_contact": 62,
+      "grade_split": {
+        "industrial": 2,
+        "research": 45,
+        "unknown": 18
+      },
+      "rejection_detail": {
+        "listing_discriminator:job_advert_not_a_product_listing": 1677,
+        "identity_resolution:no_alias_or_cas_match": 570,
+        "listing_discriminator:news_channel_requires_strong_marker": 317,
+        "identity_resolution:generic_announcement_no_molecule_named": 38
+      },
+      "persian_profile": {
+        "channel": "LabTel",
+        "posts_total": 2667,
+        "posts_with_text": 2408,
+        "posts_persian": 2404,
+        "posts_arabic": 0,
+        "posts_latin": 1,
+        "persian_ratio": 0.998,
+        "persian_chars": 724219,
+        "trade_words_seen": [
+          "ارسال",
+          "انبار",
+          "برند",
+          "بسته",
+          "تامین",
+          "تحویل",
+          "تومان",
+          "خرید",
+          "درصد",
+          "ریال",
+          "سفارش",
+          "شیمیایی",
+          "صنعتی",
+          "عرضه",
+          "فروش"
+        ],
+        "is_persian": true,
+        "reason": "Persian verified: 2404/2408 posts (100%), 15 trade terms"
+      },
+      "excluded": false
+    }
+  },
+  "suppliers": {
+    "Chemical Iran": {
+      "type": "woo_rest",
+      "products": 17,
+      "resolved": 13
+    },
+    "Iran Petrochemical": {
+      "type": "woo_rest",
+      "products": 0,
+      "resolved": 0
+    },
+    "ArChem": {
+      "type": "woo_rest",
+      "products": 0,
+      "resolved": 0
+    },
+    "Karina Polymer": {
+      "type": "woo_rest",
+      "products": 18,
+      "resolved": 9
+    },
+    "Akbarieh Company": {
+      "type": "woo_rest",
+      "products": 0,
+      "resolved": 0
+    },
+    "Pishtaz Teb Zaman Diagnostics": {
+      "type": "woo_rest",
+      "products": 0,
+      "resolved": 0
+    },
+    "Mojallali Group": {
+      "type": "woo_rest",
+      "products": 0,
+      "resolved": 0
+    },
+    "Exir Pharmaceutical Co.": {
+      "type": "woo_rest",
+      "products": 0,
+      "resolved": 0
+    },
+    "Temad": {
+      "type": "woo_rest",
+      "products": 0,
+      "resolved": 0
+    },
+    "Abnoos Chemical Complex": {
+      "type": "static",
+      "blocks": 49,
+      "resolved": 0
+    },
+    "Artin Kimya": {
+      "type": "static",
+      "blocks": 8,
+      "resolved": 0
+    },
+    "BASPARSAZAN IRANIAN Company": {
+      "type": "static",
+      "blocks": 41,
+      "resolved": 0
+    },
+    "Gulf Petrochemical": {
+      "type": "static",
+      "blocks": 2,
+      "resolved": 0
+    },
+    "Iran Daru Pharmaceutical": {
+      "type": "static",
+      "blocks": 2,
+      "resolved": 0
+    },
+    "Mahdis Tejarat Trading Company": {
+      "type": "static",
+      "blocks": 1,
+      "resolved": 0
+    },
+    "Novichem Co.": {
+      "type": "static",
+      "blocks": 0,
+      "resolved": 0
+    },
+    "Paksho Industrial Group": {
+      "type": "static",
+      "blocks": 235,
+      "resolved": 0
+    },
+    "Pars Gilsonite Reshad Co.": {
+      "type": "static",
+      "blocks": 1,
+      "resolved": 0
+    },
+    "Persian Gulf Star Oil Company": {
+      "type": "static",
+      "blocks": 0,
+      "resolved": 0
+    },
+    "Rock Chemie Co.": {
+      "type": "static",
+      "blocks": 6,
+      "resolved": 0
+    },
+    "Sobhan Oncology": {
+      "type": "static",
+      "blocks": 3,
+      "resolved": 0
+    },
+    "Teb Gostar Noor Pars": {
+      "type": "static",
+      "blocks": 2,
+      "resolved": 0
+    }
+  },
+  "ai_assist": {
+    "queued": 2777,
+    "resolved": 194,
+    "calls": 0,
+    "failed_calls": 0
+  },
+  "rejections": {},
+  "final": {
+    "total_rows": 1006,
+    "unique_molecules_all": 408,
+    "organic_unique": 334,
+    "unknown_unique": 124,
+    "inorganic_unique": 74,
+    "identity_method_split": {
+      "structured_pubchem": 122,
+      "alias": 76,
+      "cas_anchor": 1,
+      "cas_only": 9,
+      "structured_pubchem(over_alias)": 6,
+      "ai_resolved": 194
+    },
+    "grade_split": {
+      "research": 220,
+      "industrial": 184,
+      "unknown": 4
+    },
+    "supplier_split": {
+      "telegram:merckmillipore": 4,
+      "telegram:labshop": 4,
+      "telegram:Maran_Tejarat_Eshen": 48,
+      "telegram:minatajhiz": 116,
+      "telegram:Ch_Chemical_leaders": 18,
+      "telegram:chemgroup": 30,
+      "telegram:ChemIranSanat": 140,
+      "telegram:IranChemicals": 43,
+      "telegram:Boof_company": 13,
+      "Karina Polymer": 2,
+      "telegram:jahaneshimicom": 48,
+      "Chemical Iran": 11,
+      "telegram:fanchem": 8,
+      "telegram:LabTel": 2,
+      "telegram:ChemIranSanat; telegram:jahaneshimicom": 1,
+      "telegram:ChemIranSanat; telegram:Maran_Tejarat_Eshen": 2,
+      "telegram:Maran_Tejarat_Eshen; telegram:jahaneshimicom": 1,
+      "Artin Kimya": 1,
+      "telegram:fanchem; telegram:chemgroup": 1,
+      "telegram:Ch_Chemical_leaders; telegram:fanchem": 1,
+      "telegram:minatajhiz; telegram:chemgroup": 1,
+      "telegram:jahaneshimicom; telegram:chemgroup": 1,
+      "telegram:chemgroup; telegram:IranChemicals": 1,
+      "telegram:IranChemicals; telegram:chemgroup": 2
+    }
+  },
+  "v2_17_market_verified": {
+    "crawl_date": "2026-08-24",
+    "seed_file": "iran_organic_molecules_market_verified.csv",
+    "rows": 873,
+    "previous_rows": 651,
+    "added_rows": 224,
+    "confirmed_organic": 844,
+    "inorganic_relabelled": 29,
+    "unique_inchikeys": 873,
+    "unique_cids": 873,
+    "rows_with_canonical_smiles": 840,
+    "rows_with_cas": 424,
+    "rows_with_evidence_url": 791,
+    "category_split": {
+      "organic_reagent": 598,
+      "pharmaceutical_or_api": 152,
+      "colorant_or_indicator": 46,
+      "secondary_metabolite_or_natural_product": 25,
+      "cosmetic_raw_material": 23,
+      "fragrance_or_aroma": 21,
+      "supplement_active": 5,
+      "vitamin": 3
+    },
+    "source_type_split": {
+      "verified_catalogue": 482,
+      "verified_telegram_listing": 287,
+      "verified_web_catalogue": 104
+    },
+    "telegram_mirror": {
+      "channels": 12,
+      "posts_mirrored": 29841,
+      "unique_posts_screened": 22375,
+      "note": "deep historical sweep: max_pages_per_channel 200->700, incremental state bypassed (14,907 -> 29,841 posts)"
+    },
+    "data_corrections": {
+      "carbonless_formula_gate": "export_verified.gate_row now matches element C via regex C(?![a-z]); the previous \"C\" in formula test admitted CuO4S/CaCl2/ClH/Cu etc. as organic",
+      "organic_status_relabelled": 29,
+      "cid_identity_repaired": 3,
+      "duplicate_structures_merged": 2,
+      "canonical_smiles_backfilled": 615
+    }
+  },
+  "v2_19_catalogue_verified": {
+    "crawl_date": "2026-08-25",
+    "seed_file": "iran_organic_molecules_catalogue_verified_2026-08-25.csv",
+    "rows": 1041,
+    "previous_workspace_export_rows": 957,
+    "added_unique_cids": 84,
+    "confirmed_organic": 1041,
+    "unique_cids": 1041,
+    "unique_inchikeys": 1035,
+    "rows_with_canonical_smiles": 1035,
+    "rows_with_cas": 569,
+    "rows_with_evidence_url": 977,
+    "source_type_split": {
+      "verified_telegram_listing": 358,
+      "verified_catalogue": 480,
+      "verified_catalogue | verified_telegram_listing": 2,
+      "verified_web_catalogue": 200,
+      "(none)": 1
+    },
+    "note": "PRIMARY seed as of v2.19.0. Previous seed CSVs retained. Not a national census."
+  }
+}

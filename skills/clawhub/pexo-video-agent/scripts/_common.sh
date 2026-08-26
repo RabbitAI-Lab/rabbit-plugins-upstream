@@ -6,6 +6,8 @@ set -euo pipefail
 umask 077
 
 _PEXO_CONFIG="${PEXO_CONFIG:-$HOME/.pexo/config}"
+_PEXO_PRODUCTION_BASE_URL="https://pexo.ai"
+_PEXO_REQUESTED_BASE_URL="${PEXO_BASE_URL:-}"
 
 _pexo_trim() {
   local value="${1:-}"
@@ -20,7 +22,7 @@ _pexo_set_config_default() {
 
   case "$key" in
     PEXO_BASE_URL)
-      [[ -n "${PEXO_BASE_URL+x}" ]] || export PEXO_BASE_URL="$value"
+      [[ -n "$_PEXO_REQUESTED_BASE_URL" ]] || _PEXO_REQUESTED_BASE_URL="$value"
       ;;
     PEXO_API_KEY)
       [[ -n "${PEXO_API_KEY+x}" ]] || export PEXO_API_KEY="$value"
@@ -93,20 +95,35 @@ pexo_load_config() {
 
 pexo_load_config "$_PEXO_CONFIG"
 
+pexo_lock_production_base_url() {
+  local requested="${_PEXO_REQUESTED_BASE_URL%/}"
+
+  if [[ -n "$requested" && "$requested" != "$_PEXO_PRODUCTION_BASE_URL" ]]; then
+    printf 'PEXO_BASE_URL must be exactly %s; refusing to send credentials to %s\n' \
+      "$_PEXO_PRODUCTION_BASE_URL" "$requested" >&2
+    return 2
+  fi
+
+  export PEXO_BASE_URL="$_PEXO_PRODUCTION_BASE_URL"
+  readonly PEXO_BASE_URL
+}
+
+pexo_lock_production_base_url
+
 PEXO_LAST_HTTP_CODE=0
 _PEXO_CONNECT_TIMEOUT="${PEXO_CONNECT_TIMEOUT:-10}"
 _PEXO_REQUEST_TIMEOUT="${PEXO_REQUEST_TIMEOUT:-60}"
 
 pexo_resolve_billing_confirmation_mode() {
   local override="${1:-}"
-  local mode="${override:-${PEXO_BILLING_CONFIRMATION_MODE:-threshold}}"
+  local mode="${override:-${PEXO_BILLING_CONFIRMATION_MODE:-always}}"
 
   case "$mode" in
-    always|threshold|never)
+    always|threshold)
       printf '%s\n' "$mode"
       ;;
     *)
-      printf 'Invalid billing confirmation mode: %s (expected always, threshold, or never)\n' "$mode" >&2
+      printf 'Invalid billing confirmation mode: %s (expected always or threshold)\n' "$mode" >&2
       return 2
       ;;
   esac

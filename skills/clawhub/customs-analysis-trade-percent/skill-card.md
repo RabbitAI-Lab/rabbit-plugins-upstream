@@ -1,46 +1,62 @@
-## Description: <br>
-Query trade percentage analysis retrieves company-level trade share data for a specified HS code and ranks companies by trade volume. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query company-level trade share data for a specified HS code and return ranked customs trade results.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Trade analysts, sourcing agents, and market researchers use this skill to identify major companies trading a product, analyze market concentration, compare supplier competition, and discover potential trade partners from customs data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an UpKuaJing API key and stores or reads it from ~/.upkuajing/.env. <br>
-Mitigation: Treat the API key like a password, restrict file access, and review or rotate the key if the local environment may be shared. <br>
-Risk: Successful data queries incur paid API charges. <br>
-Mitigation: Require explicit user confirmation before each fee-incurring query and check current pricing before execution. <br>
-Risk: When balance is insufficient, the auth helper can create a recharge order and return a payment URL. <br>
-Mitigation: Review any top-up prompt and payment URL before opening it or completing payment. <br>
+## Use Case:
 
+Trade analysts, sourcing agents, and market researchers use this skill to identify major companies trading a specific HS code, compare trade share, and discover potential partners across customs data. It supports exporter or importer views, country filtering, recent-month windows, and paginated ranked company results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-analysis-trade-percent) <br>
-- [UpKuaJing homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [Trade Percent API reference](references/customs-analysis-trade-percent-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns ranked company trade-share records with fee information when API calls succeed; requires Python and UPKUAJING_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md metadata) <br>
+Risk: Paid customs-data API calls and payment-related actions can incur charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inform the user that a query or payment action may incur fees and wait for explicit confirmation before running it.
+
+Risk: The skill persists API credentials locally and terminal output may reveal key prefixes or request details.
+
+Mitigation: Use a dedicated low-privilege UpKuaJing API key, restrict access to ~/.upkuajing, and avoid sharing terminal output that contains credential or request metadata.
+
+Risk: Normal API calls also perform automatic version-check network calls and create local files under ~/.upkuajing.
+
+Mitigation: Review this network behavior and local file creation before installing the skill in environments with sensitive business data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-analysis-trade-percent)
+- [UpKuaJing homepage](https://www.upkuajing.com)
+- [UpKuaJing developer platform](https://developer.upkuajing.com/)
+- [UpKuaJing API pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [Trade Percent API reference](artifact/references/customs-analysis-trade-percent-api.md)
+- [Skill Error Report API reference](artifact/references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Analysis, JSON, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python and UPKUAJING_API_KEY; paid queries require explicit user confirmation and may return fee and request ID metadata.]
+
+## Skill Version(s):
+
+1.0.1 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

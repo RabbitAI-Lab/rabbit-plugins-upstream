@@ -8,6 +8,7 @@
 import { exec } from 'child_process'
 import { promisify } from 'util'
 import { getAuditLogger } from './audit-logger.js'
+import osModule from 'os'
 
 const execAsync = promisify(exec)
 
@@ -80,7 +81,7 @@ export class HealthChecker {
     const overall = this.computeOverallStatus(checks)
 
     return {
-      hostname: require('os').hostname(),
+      hostname: osModule.hostname(),
       timestamp: new Date().toISOString(),
       overall,
       checks,
@@ -125,9 +126,9 @@ export class HealthChecker {
 
   private async checkLoad(): Promise<HealthCheckResult> {
     try {
-      const os = require('os')
-      const loadAvg = os.loadavg()
-      const cpuCount = os.cpus().length
+      const os = osModule
+      const loadAvg = osModule.loadavg()
+      const cpuCount = osModule.cpus().length
       const load1 = loadAvg[0]
       const ratio = load1 / cpuCount
 
@@ -149,9 +150,9 @@ export class HealthChecker {
 
   private async checkMemory(): Promise<HealthCheckResult> {
     try {
-      const os = require('os')
-      const totalMem = os.totalmem()
-      const freeMem = os.freemem()
+      const os = osModule
+      const totalMem = osModule.totalmem()
+      const freeMem = osModule.freemem()
       const usedMem = totalMem - freeMem
       const usagePercent = (usedMem / totalMem) * 100
 
@@ -195,7 +196,7 @@ export class HealthChecker {
   private async checkCPU(): Promise<HealthCheckResult> {
     try {
       // 采样1秒的CPU使用率
-      const os = require('os')
+      const os = osModule
 
       const startUsage = process.cpuUsage()
       const startTime = process.hrtime()
@@ -256,8 +257,8 @@ export class HealthChecker {
 
   private async checkUptime(): Promise<HealthCheckResult> {
     try {
-      const os = require('os')
-      const uptimeSec = os.uptime()
+      const os = osModule
+      const uptimeSec = osModule.uptime()
       const days = Math.floor(uptimeSec / 86400)
       const hours = Math.floor((uptimeSec % 86400) / 3600)
 

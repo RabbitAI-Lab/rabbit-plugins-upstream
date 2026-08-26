@@ -29,8 +29,9 @@ theme is recompiled from the same confirmed VI/reference bytes with a profile-on
 name, and empty project corrections, then compared structurally with the already
 validated source theme.
 
-Profiles are not a fifth built-in visual system. Keep the built-in visual-system
-directory and selector at exactly four systems.
+Profiles are not a ninth built-in visual system. Keep the built-in visual-system
+directory and selector at the complete eight-system catalog; a corporate profile
+remains a separate project-specific binding.
 
 ## Home And Schema
 

@@ -1,49 +1,66 @@
-## Description: <br>
-Search global corporate personnel by name, company, industry, and profile URL, and enrich contact data for recruiting, sales, and B2B lead generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches global corporate personnel by name, company, industry, and profile URL through the UpKuaJing Open Platform API.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Recruiters, sales teams, and B2B lead-generation specialists use this skill to find global corporate personnel and enrich contact data for talent search, headhunting, lead development, and cross-border customer acquisition. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries and returned contact data are sent to and received from the UpKuaJing API, and results may include personal or business contact information. <br>
-Mitigation: Review privacy, consent, retention, and lawful-use requirements before running searches or storing returned records. <br>
-Risk: The skill uses paid API calls and may incur fees, especially for query_count values above one page of results. <br>
-Mitigation: Check current pricing with the provided pricing helper or pricing page, inform the user of expected call volume, and get explicit confirmation before paid operations. <br>
-Risk: The API key is stored in ~/.upkuajing/.env when generated or configured locally. <br>
-Mitigation: Protect the local env file, avoid sharing the key, and rotate or replace the key if it is exposed. <br>
-Risk: Search results are stored locally as task JSONL files and can contain contact-enrichment data. <br>
-Mitigation: Apply local access controls and delete task result files when they are no longer needed. <br>
+## Use Case:
 
+Recruiters, sales teams, and B2B lead-generation specialists use this skill to find global corporate contacts, source candidates, and enrich lead data from company-person records.
 
-## Reference(s): <br>
-- [Global Company Person List API](references/global-company-person-list-api.md) <br>
-- [UpKuaJing Homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/global-company-person-search) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/upkuajing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses, local JSONL result files, and concise Markdown guidance with shell commands when needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results are stored as per-task JSONL files; task metadata supports continuation by task_id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+Risk: The skill handles sensitive recruiting, sales, and customer contact data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before use in sensitive environments and limit submitted search inputs to data appropriate for the intended business purpose.
+
+Risk: The API key is persisted in ~/.upkuajing/.env.
+
+Mitigation: Use a dedicated low-privilege API key and check local file permissions before running the skill.
+
+Risk: Search outputs can persist in task_data result files.
+
+Mitigation: Periodically delete result files that are no longer needed and handle exported JSONL data according to the user's data-retention requirements.
+
+Risk: Error reports may include operational context from failed API calls.
+
+Mitigation: Avoid sending personal data in error reports and report only after explicit user confirmation.
+
+## Reference(s):
+
+- [Global Company Person List API](references/global-company-person-list-api.md)
+- [Skill Error Report API](references/skill-error-report-api.md)
+- [UpKuaJing Homepage](https://www.upkuajing.com)
+- [UpKuaJing Developer Platform](https://developer.upkuajing.com/)
+- [UpKuaJing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/global-company-person-search)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown guidance, shell command examples, and JSON or JSONL API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search results are written to task_data result files; API responses include task identifiers, fee information, and result file paths.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

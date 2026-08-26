@@ -1,41 +1,56 @@
-## Description: <br>
-Api Doc Writer helps developers draft REST API documentation with endpoint descriptions, request and response formats, authentication notes, status code guidance, security recommendations, and change records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+API文档一键生成规范器 helps developers produce REST API documentation, interface specifications, RESTful design guidance, status-code guidance, and API security recommendations.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[thcjp](https://clawhub.ai/user/thcjp)
+
+### License/Terms of Use:
+
+MIT
+
+## Use Case:
+
+Developers and API teams use this skill to create or standardize Markdown REST API documentation for new interfaces, review workflows, and multi-module project documentation.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The security review flags the skill as suspicious because it requests command execution authority that is not clearly needed or bounded for API documentation work.
+
+Mitigation: Review the skill before installation in command-sensitive environments and restrict command execution to explicit, approved, documented use.
+
+Risk: Generated API documentation can include incorrect endpoint details, authentication assumptions, status codes, or security guidance if the input API information is incomplete.
+
+Mitigation: Have the responsible API owner review generated documentation against the implemented service before publishing or using it for integrations.
+
+Risk: Callback URLs and API key setup guidance can expose integration metadata or credentials if handled carelessly.
+
+Mitigation: Use trusted callback endpoints, avoid hardcoded secrets, keep credentials in environment variables or secret stores, and redact sensitive values from generated examples.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and API teams use this skill to create consistent REST API documentation, including interface overviews, authentication conventions, request and response examples, error handling, security recommendations, and multi-module document structure. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Generated API examples or documentation may include sensitive internal endpoints, tokens, or customer data. <br>
-Mitigation: Use sanitized examples by default, omit real secrets, and review generated documentation before sharing or committing it. <br>
-Risk: The optional callback_url parameter may send result data to an unintended endpoint. <br>
-Mitigation: Use callback_url only with trusted HTTPS endpoints after confirming what data will be transmitted. <br>
+**Output Format:** [Markdown with tables, JSON examples, shell snippets, and structured API documentation sections]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/api-doc-writer) <br>
-- [SkillHub Homepage](https://skillhub.cn) <br>
+**Other Properties Related to Output:** [Outputs may include REST API templates, compliance notes, changelog tables, error-handling guidance, and security recommendations.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown API documentation with JSON, HTTP, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include template sections, endpoint tables, example payloads, error-handling notes, and security recommendations.] <br>
+1.0.4 (source: ClawHub release metadata)
 
-## Skill Version(s): <br>
-1.0.2 (source: ClawHub release metadata and SKILL.md frontmatter) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

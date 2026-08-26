@@ -1,47 +1,63 @@
-## Description: <br>
-Connects an agent to an Odoo ERP through the drivethru_mcp MCP server to discover and call tools for eBay operations, accounts payable, document pricing review, production scheduling, replenishment purchasing, and permission-scoped internal knowledge. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Drivethru Odoo lets an agent work with an Odoo ERP through the drivethru_mcp MCP server for inventory, eBay orders, accounts payable, purchasing document review, replenishment, production scheduling, and permission-scoped internal knowledge lookup.
 
-## Publisher: <br>
-[zmtucker](https://clawhub.ai/user/zmtucker) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zmtucker](https://clawhub.ai/user/zmtucker)
 
-## Use Case: <br>
-Employees and operations agents use this skill to read from and write to Odoo for order, inventory, accounts payable, purchasing, document review, production scheduling, and internal knowledge workflows. It is especially suited to agents answering users from inside Odoo Discuss while operating against live Odoo data with the user's confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate on live Odoo business data, including purchase order prices, vendor bills, document filing, production schedules, replenishment purchase orders, and eBay order creation. <br>
-Mitigation: Install only for agents that should operate on live Odoo data, scope the Odoo MCP token to intended companies, users, and tools, and require explicit user confirmation before write actions. <br>
-Risk: The ODOO_MCP_TOKEN authorizes access to the Odoo MCP server. <br>
-Mitigation: Keep the token in the agent environment, treat it as a secret, and do not paste it into chat or skill output. <br>
-Risk: Operators may not expect document review, purchasing, or scheduling requests to move records or change Odoo state. <br>
-Mitigation: Make operators aware that matching Purchasing documents can update PO prices, post chatter messages, file documents into Matched or Questions, and move purchase documents through confirmation workflows. <br>
+## Use Case:
 
+Operations agents inside an Odoo-backed business use this skill to read ERP records, answer workflow questions, and carry out order, accounts payable, purchasing, replenishment, production, and knowledge-base tasks. The skill is intended for configured agents with Odoo MCP access and clear approval before live write actions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zmtucker/skills/drivethru-odoo) <br>
-- [Odoo](https://www.odoo.com) <br>
-- [Odoo agent_api endpoint surface](references/agent_api_endpoints.md) <br>
-- [Document-driven PO pricing review](references/po_pricing_review.md) <br>
-- [Production scheduling data model](references/production_scheduling.md) <br>
-- [Replenishment to vendor purchasing](references/replenishment_purchasing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Markdown] <br>
-**Output Format:** [Markdown instructions with JSON tool-call examples and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Helper scripts and Odoo MCP calls may return JSON objects from live Odoo workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can operate on live Odoo business data and perform write actions such as creating orders or bills, updating prices, moving documents, posting messages, assigning activities, confirming purchase orders, and scheduling production.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for agents intended to operate in the Odoo environment and require clear user approval before live write actions.
+
+Risk: The Odoo MCP token is a live business credential.
+
+Mitigation: Keep ODOO_MCP_TOKEN in the agent environment, do not paste it into chat, and verify the MCP server exposes only approved tools.
+
+Risk: The skill depends on the configured Odoo MCP server, required environment variables, and the approved live tool surface.
+
+Mitigation: Before operational use, verify ODOO_MCP_URL, ODOO_MCP_TOKEN, python3, and the attached MCP tools with a low-impact smoke test.
+
+## Reference(s):
+
+- [Odoo Drive Thru MCP integration](SKILL.md)
+- [Odoo agent_api endpoint surface](references/agent_api_endpoints.md)
+- [Document-driven PO pricing review](references/po_pricing_review.md)
+- [Production scheduling data model](references/production_scheduling.md)
+- [Replenishment to vendor purchasing](references/replenishment_purchasing.md)
+- [Odoo](https://www.odoo.com)
+- [ClawHub skill page](https://clawhub.ai/zmtucker/skills/drivethru-odoo)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Plain text or Markdown responses with JSON MCP/tool payloads and shell commands when native tools are unavailable.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ODOO_MCP_URL, ODOO_MCP_TOKEN, python3, and MCP access to the configured Odoo server.]
+
+## Skill Version(s):
+
+0.9.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

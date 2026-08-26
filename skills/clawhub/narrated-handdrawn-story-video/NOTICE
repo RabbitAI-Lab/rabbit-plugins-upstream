@@ -1,0 +1,9 @@
+This project includes a modified copy of the renderer from
+https://github.com/gnipbao/story-to-handdrawn-video
+
+Upstream copyright: Copyright (c) 2026 gnipbao
+Upstream license: MIT (see renderer/LICENSE)
+
+Changes in this repository add a generic first-frame opening-poster contract,
+aspect-ratio validation, a local Qwen3-TTS voice-plan tool, and the narrated
+story production workflow.

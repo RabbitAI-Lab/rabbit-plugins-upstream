@@ -1,351 +1,327 @@
 ---
 name: lux3d
-description: "Use Lux3D to generate 3D models from images or text, or perform material repaint. Trigger when the user asks for image to 3D, text to 3D, prompt to 3D, create a 3D model from a description, create a 3D model from a description plus a reference image, or regenerate materials for an existing 3D model. Supports v1.0-pro, v2.0-preview, and v3.0-standard (default, with colored transparent material support, custom face count, and five-format output). For international users."
+description: "Use the Lux3D Global environment to generate 3D from image URLs or text, transfer materials onto an existing model, complete additional viewpoints from one object image, export model formats, and query task status or generation history. Use for image-to-3D, text-to-3D, text plus reference image, material transfer, four-view completion, USDZ/OBJ/FBX export, task queries, or task lists."
 ---
 
-## What This Skill Does
+# Lux3D Global
 
-Lux3D generates 3D assets through three documented asynchronous workflows:
+Use **lux3d_client.py** in this directory to call the public Lux3D API. Before running a command, change to this Skill directory or replace the script name in the examples with its absolute path. This package defaults to the Global environment:
 
-- **Image to 3D**: submit an input image, poll the task, then download the ZIP result.
-- **Text to 3D**: submit a prompt plus style, optionally with a reference image, poll the task, then download the ZIP result.
-- **Material Repaint**: submit a reference image and a model URL, poll the task, then download the regenerated model result.
+~~~text
+https://api.aholo3d.com/global
+~~~
 
-All workflows require `LUX3D_API_KEY`, which is the API key obtained from https://labs.aholo3d.com/api-keys.
+Use only the public endpoints and fields listed here. Do not add business-type fields or internal versions.
 
-## API Endpoint
+## Before Calling
 
-- **International Endpoint**: `https://api.aholo3d.com/global`
+1. Apply for a key on the [Global API Key page](https://labs.aholo3d.com/api-keys).
+2. Set the environment:
 
-## Concurrency Limits
+   ~~~bash
+   export LUX3D_API_KEY="your_api_key"
+   export LUX3D_REGION="international"
+   ~~~
 
-Lux3D limits the number of generation tasks that can be in progress at the same time based on the account plan. Image-to-3D, text-to-3D, and material repaint tasks share the same account-level concurrency quota.
+3. **img**, **imgs**, **meshUrl**, and **modelUrl** must be HTTP(S) URLs accessible to Lux3D. For a local file, upload it first with the [Asset upload APIs](https://labs.aholo3d.com/api-docs/en/api-reference#tag/asset), then use the returned URL.
+4. Global and China API Keys are not interchangeable. This Skill defaults to Global; do not mix it with the China endpoint.
+5. Pass the API Key directly in the authentication header, without a Bearer prefix:
 
-| Account Type | Maximum Concurrent In-progress Tasks |
-| --- | :--: |
-| Free account | 1 |
-| Pro account | 2 |
+   ~~~text
+   Authorization: <API Key>
+   ~~~
 
-If a task creation endpoint returns `GENERATION_CONCURRENCY_LIMIT_EXCEEDED`, the account has reached its concurrency limit. No new task is created and no credits are consumed. Wait for an existing task to finish before retrying, or upgrade the account for higher concurrency.
+Install the dependency:
 
-## Setup
+~~~bash
+pip install requests
+~~~
 
-### Apply for an API Key
+## Choose a Capability
 
-- Register at: https://labs.aholo3d.com/api-keys
+Select one creation endpoint for the request:
 
-### Set Environment Variables
+| Need | Capability |
+| --- | --- |
+| One or more object images and a 3D model | Image-to-3D |
+| A text description, optionally with one reference image | Text-to-3D |
+| An existing GLB that needs material transfer from an image | Material transfer |
+| Optional multi-view completion before a G1-Turbo generation request | Image-to-four-view -> G1-Turbo image-to-3D |
+| Additional formats from a Lux3D ZIP or GLB | Multi-format export |
 
-**Required:**
+For image-to-3D and text-to-3D, pass the input directly to **G1** without assembling other capabilities around it. **G1-Turbo** can run as a lightweight atomic capability on its own; when the user wants more control through multi-view input, they may optionally complete viewpoints first and pass the results as **imgs**. If the user did not specify a version and the request does not distinguish them, ask before creating the task.
 
-```bash
-export LUX3D_API_KEY="your_api_key"
-```
+A create endpoint returns a **taskid**. Query that task afterward; poll every 10-15 seconds.
 
-**Optional - Override Base URL:**
+## 1. Image-to-3D
 
-```bash
-export LUX3D_BASE_URL="https://api.aholo3d.com/global"
-```
+**version** is required. Pass **img** for a single image or **imgs** for multiple images, never both. **imgs** accepts 1-32 URLs of the same subject; put the clearest and most complete view first.
 
-**Optional - Specify Region:**
+### G1
 
-```bash
-export LUX3D_REGION="international"
-```
+Pass only these fields:
 
-## Python Usage
+| Field | Required | How to pass it |
+| --- | :---: | --- |
+| **img** | Conditional | One image URL; omit when using **imgs** |
+| **imgs** | Conditional | 1-32 image URLs; omit when using **img** |
+| **version** | Yes | Pass **G1** |
+| **faceCount** | No | Mesh face count in [10000, 300000]; default 200000; does not affect PLY |
+| **outputFormat** | No | A non-duplicated list of **zip**, **glb**, and **ply**. Omission, an empty list, or a list without **ply** returns ZIP + GLB; including **ply** returns ZIP + GLB + PLY |
+| **aiPredictSize** | No | Omit or pass **true** to predict and scale size; pass **false** to disable |
 
-### Image to 3D
+Do not pass **enablePbr** for G1. Output order is always ZIP, GLB, optional PLY. Even ["ply"] returns all three outputs.
 
-```python
-from skill.lux3d_client import generate_3d_model
+~~~bash
+python lux3d_client.py image \
+  "https://example.com/object.jpg" \
+  --version G1
+~~~
 
-result = generate_3d_model("path/to/input.jpg", version="v2.0-preview")
-print(result)
-```
+Multiple images:
 
-Specify target face count (effective for v2.0-preview / v3.0-standard, range [10000, 500000], default 60000):
+~~~bash
+python lux3d_client.py image \
+  "https://example.com/front.jpg" \
+  --image-view "https://example.com/side.jpg" \
+  --version G1 --format ply
+~~~
 
-```python
-result = generate_3d_model("path/to/input.jpg", version="v3.0-standard", face_count=100000)
-print(result)
-```
+### G1-Turbo
 
-Or explicitly specify international region:
+Pass only these fields:
 
-```python
-result = generate_3d_model("path/to/input.jpg", region="international", version="v2.0-preview")
-print(result)
-```
+| Field | Required | How to pass it |
+| --- | :---: | --- |
+| **img** | Conditional | One image URL; omit when using **imgs** |
+| **imgs** | Conditional | 1-32 image URLs; omit when using **img** |
+| **version** | Yes | Pass **G1-Turbo** |
+| **faceCount** | No | Mesh face count in [10000, 300000]; default 200000; does not affect PLY |
+| **outputFormat** | No | Any non-duplicated individual or combined **zip**, **glb**, and **ply** values; omission or an empty list is treated as ["zip"] |
+| **enablePbr** | No | For ZIP/GLB, omit or pass **true** for a textured Mesh and **false** for a white Mesh; omit for PLY-only |
+| **aiPredictSize** | No | Omit or pass **true** to predict and scale size; pass **false** to disable |
 
-### Text to 3D
+~~~bash
+python lux3d_client.py image \
+  "https://example.com/object.jpg" \
+  --version G1-Turbo --format glb --no-pbr
+~~~
 
-```python
-from skill.lux3d_client import generate_text_to_3d
+PLY-only:
 
-result = generate_text_to_3d(
-    "Generate a high-quality 3D wooden chair",
-    style="photorealistic",
-    version="v2.0-preview",
+~~~bash
+python lux3d_client.py image \
+  "https://example.com/object.jpg" \
+  --version G1-Turbo --format ply
+~~~
+
+## 2. Text-to-3D
+
+**prompt** and **version** are required. **style** is optional. For visual guidance, pass one **img** URL; do not pass **imgs**.
+
+Supported **style** values:
+
+~~~text
+photorealistic, cartoon, anime, hand_painted, cyberpunk, fantasy, glass
+~~~
+
+The default style is **photorealistic**.
+
+### G1
+
+| Field | Required | How to pass it |
+| --- | :---: | --- |
+| **prompt** | Yes | Non-empty text describing the subject, material, style, and key details |
+| **style** | No | Use one value from the list above |
+| **img** | No | One accessible reference-image URL |
+| **version** | Yes | Pass **G1** |
+| **faceCount** | No | Mesh face count in [10000, 300000]; default 200000; does not affect PLY |
+| **outputFormat** | No | A non-duplicated list of **zip**, **glb**, and **ply**. A list without **ply** returns ZIP + GLB; including **ply** appends PLY |
+| **aiPredictSize** | No | Omit or pass **true** to predict and scale size; pass **false** to disable |
+
+Do not pass **enablePbr**.
+
+~~~bash
+python lux3d_client.py text \
+  "A modern dining chair with visible wood grain" \
+  --style photorealistic --version G1
+~~~
+
+### G1-Turbo
+
+| Field | Required | How to pass it |
+| --- | :---: | --- |
+| **prompt** | Yes | Non-empty text describing the subject, material, style, and key details |
+| **style** | No | Use one value from the list above |
+| **img** | No | One accessible reference-image URL |
+| **version** | Yes | Pass **G1-Turbo** |
+| **faceCount** | No | Mesh face count in [10000, 300000]; default 200000; does not affect PLY |
+| **outputFormat** | No | Any non-duplicated individual or combined **zip**, **glb**, and **ply** values; omission or an empty list is treated as ["zip"] |
+| **enablePbr** | No | For ZIP/GLB, omit or pass **true** for a textured Mesh and **false** for a white Mesh; omit for PLY-only |
+| **aiPredictSize** | No | Omit or pass **true** to predict and scale size; pass **false** to disable |
+
+~~~bash
+python lux3d_client.py text \
+  "A futuristic desk lamp" \
+  --image "https://example.com/reference.png" \
+  --version G1-Turbo --format glb
+~~~
+
+## 3. Material Transfer
+
+This endpoint uses only **v3.0-standard**:
+
+| Field | Required | How to pass it |
+| --- | :---: | --- |
+| **img** | Yes | Material reference-image URL |
+| **meshUrl** | Yes | URL of the GLB to retexture |
+| **version** | Yes | Pass **v3.0-standard** |
+| **outputFormat** | No | A non-duplicated list of **zip**, **glb**, **usdz**, **obj_zip**, and **fbx_zip**. Omission or an empty list returns ZIP + GLB; include other values when needed |
+| **aiPredictSize** | No | Pass **true** for automatic size prediction and omit **customSize**; pass **false** or omit to preserve size or set a height |
+| **customSize** | No | Model height in millimetres, greater than 0; set **aiPredictSize** to **false** or omit it |
+
+~~~bash
+python lux3d_client.py material \
+  "https://example.com/material.png" \
+  --mesh-url "https://example.com/model.glb" \
+  --version v3.0-standard --format usdz
+~~~
+
+## 4. Image-to-Four-View
+
+Pass one object image URL to complete additional viewpoints. This endpoint does not generate a 3D model and accepts only **img**.
+
+~~~bash
+python lux3d_client.py four-view "https://example.com/object.jpg"
+~~~
+
+On success, it returns four image URLs. The API stores them as a JSON-array string in one output item; the client parses that value into a list.
+
+G1-Turbo accepts either one image or multiple images directly. Check the input first: when it has a plain background, or its background has been removed and it contains only the target object to generate, pass the single image directly as **img**. Viewpoints and structural details that are not visible in the image are inferred from the available information. Offer the following composition when the user wants to reduce that inference, gain more control over unseen viewpoints, or provide missing viewpoint information:
+
+~~~text
+Single image -> Image-to-four-view -> Review and approve -> imgs -> G1-Turbo image-to-3D
+~~~
+
+~~~python
+from lux3d_client import generate_four_views
+
+four_view_urls = generate_four_views("https://example.com/object.jpg")
+print(four_view_urls)
+~~~
+
+Show the four images or their URLs to the user and confirm that the subject structure, orientation, and viewpoints match expectations. Do not create the G1-Turbo task until the user explicitly approves the results. After approval, continue with:
+
+~~~python
+from lux3d_client import create_image_to_3d_task
+
+task_id = create_image_to_3d_task(
+    imgs=four_view_urls,
+    version="G1-Turbo",
 )
-print(result)
-```
+~~~
 
-Specify target face count (effective for v2.0-preview / v3.0-standard):
+If the order needs adjustment, put the clearest and most complete view first in **imgs**.
 
-```python
-result = generate_text_to_3d(
-    "Generate a high-quality 3D wooden chair",
-    style="photorealistic",
-    version="v3.0-standard",
-    face_count=100000,
-)
-print(result)
-```
+This is only a recommended optional enhancement, not a prerequisite for G1-Turbo. If the user asks to call G1-Turbo directly, pass the single image as **img**; do not force multi-view completion or block the call because four-view results are absent. For G1, pass the original input directly and do not add a four-view task to the workflow.
 
-### Text plus Reference Image
+## 5. Multi-Format Export
 
-```python
-from skill.lux3d_client import generate_text_to_3d
+**modelUrl** must be an accessible .zip or .glb URL. A ZIP input must come from a Lux3D generation task.
 
-result = generate_text_to_3d(
-    "Generate a premium ceramic vase with a glossy glaze",
-    style="glass",
-    image_path="path/to/reference.png",
-    version="v2.0-preview",
-)
-print(result)
-```
+| Input | **outputFormat** rule |
+| --- | --- |
+| GLB | Pass at least one of **usdz**, **obj_zip**, or **fbx_zip** |
+| ZIP | Omit or pass an empty list to return GLB, or request one or more export formats above |
 
-### Low-level Task APIs
+~~~bash
+python lux3d_client.py export \
+  "https://example.com/model.glb" \
+  --format usdz --format obj_zip
+~~~
 
-```python
-from skill.lux3d_client import (
-    create_task,
+## 6. Query One Task
+
+Query once:
+
+~~~bash
+python lux3d_client.py query 1256173
+~~~
+
+Poll from Python:
+
+~~~python
+from lux3d_client import query_task_status
+
+outputs = query_task_status("1256173")
+~~~
+
+Public statuses:
+
+| Status | Meaning |
+| --- | --- |
+| 0 | Initialized |
+| 1 | Running |
+| 3 | Succeeded |
+| 4 | Failed |
+| 6 | Cancelled |
+
+After success, read results from **d.outputs[].content**. Result URLs expire after 2 hours, so save them promptly.
+
+## 7. List Generation Tasks
+
+~~~bash
+python lux3d_client.py list \
+  --page 1 --pagesize 20 --status 3 \
+  --starttime 1786590000000 --endtime 1786600000000
+~~~
+
+- **page** is one-based and defaults to 1
+- **pagesize** is 1-100 and defaults to 20
+- **status** may be 0, 1, 3, 4, or 6
+- Times are Unix milliseconds and use the interval [starttime, endtime)
+- Omit unused filters
+
+## Python Creation Functions
+
+Use the functions in endpoint order:
+
+~~~python
+from lux3d_client import (
+    create_image_to_3d_task,
     create_text_to_3d_task,
     create_material_transfer_task,
-    query_task_status,
-    download_model,
+    create_image_to_four_view_task,
+    create_multi_format_export_task,
+    get_task,
+    list_tasks,
 )
+~~~
 
-image_task_id = create_task("path/to/input.jpg")
-text_task_id = create_text_to_3d_task(
-    "Generate a stylized toy robot",
-    style="cartoon",
-    image_path="path/to/reference.png",
+Pass only the fields listed for the selected version. For example:
+
+~~~python
+task_id = create_image_to_3d_task(
+    img="https://example.com/object.jpg",
+    version="G1",
+    outputFormat=["ply"],
 )
-material_task_id = create_material_transfer_task(
-    "path/to/reference.png",
-    mesh_url="https://example.com/model.glb",
-)
+~~~
 
-image_model_url = query_task_status(image_task_id)
-text_model_url = query_task_status(text_task_id)
-material_model_url = query_task_status(material_task_id)
+## Tasks and Credits
 
-download_model(image_model_url, "image_to_3d.zip")
-download_model(text_model_url, "text_to_3d.zip")
-download_model(material_model_url, "material_transfer.zip")
-```
+Image-to-3D, text-to-3D, and material transfer share the account concurrency limit:
 
-### Material Repaint
+| Account | Concurrent in-progress tasks |
+| --- | :---: |
+| Free | 1 |
+| Pro | 2 |
 
-```python
-from skill.lux3d_client import generate_material_transfer
-
-result = generate_material_transfer(
-    "path/to/reference.png",
-    mesh_url="https://example.com/model.glb",
-    version="v2.0-preview",
-)
-print(result)
-```
-
-## Command Line Usage
-
-### Region Selection
-
-Use `--region` or `-r` to select the international endpoint (default):
-
-```bash
-python lux3d_client.py --region international image input.jpg output.zip
-```
-
-Or simply omit the region flag (international is default):
-
-```bash
-python lux3d_client.py image input.jpg output.zip
-```
-
-### Image to 3D
-
-```bash
-# Historical form (default region)
-python lux3d_client.py input.jpg output.zip --version v3.0-standard
-
-# Explicit command
-python lux3d_client.py image input.jpg output.zip --version v3.0-standard
-```
-
-### Text to 3D
-
-```bash
-python lux3d_client.py text "Generate a high-quality 3D wooden chair" output.zip --style photorealistic --version v3.0-standard
-```
-
-### Text to 3D with Reference Image
-
-```bash
-python lux3d_client.py text "Generate a futuristic desk lamp" output.zip --style cyberpunk --image ref.png --version v3.0-standard
-```
-
-### Material Repaint
-
-```bash
-python lux3d_client.py material reference.png output.zip --mesh-url https://example.com/model.glb --version v3.0-standard
-```
-
-## Text-to-3D Styles
-
-Supported styles:
-
-| Style | Description |
-|-------|-------------|
-| `photorealistic` | Photorealistic quality |
-| `cartoon` | Cartoon style |
-| `anime` | Anime style |
-| `hand_painted` | Hand-painted style |
-| `cyberpunk` | Cyberpunk theme |
-| `fantasy` | Fantasy style |
-| `glass` | Glass material |
-
-## Lux3D Version
-
-You can specify the Lux3D version via the `version` parameter:
-
-| Version | Description | Output Format |
-|---------|-------------|---------------|
-| `v3.0-standard` | **Default version**, adds colored transparent material support, reduces color deviation in generated models, improves material quality, preserves text and texture details, and adds custom face count support; supports five-format output | .zip + .glb + .usdz + _obj.zip + _fbx.zip |
-| `v2.0-preview` | 2.0 model architecture with enhanced text and texture detail preservation, no transparent material support | .zip + .glb + .usdz |
-| `v1.0-pro` | First-generation model with complete PBR material properties, supports transparent material generation | ZIP result |
-
-**Important**: If the `version` parameter is not provided in the request, the system will default to `v3.0-standard`.
-**Custom face count**: The `faceCount` parameter for image-to-3D / text-to-3D is supported by `v2.0-preview` / `v3.0-standard`; `v1.0-pro` ignores this parameter.
-
-All generation APIs (image-to-3D, text-to-3D, material repaint) support the `version` parameter.
-
-### Specify Version in Python
-
-```python
-# Image to 3D with version
-result = generate_3d_model("path/to/input.jpg", version="v3.0-standard")
-
-# Text to 3D with version
-result = generate_text_to_3d(
-    "Generate a high-quality 3D wooden chair",
-    style="photorealistic",
-    version="v3.0-standard",
-)
-
-# Material repaint with version
-result = generate_material_transfer(
-    "path/to/reference.png",
-    mesh_url="https://example.com/model.glb",
-    version="v3.0-standard",
-)
-```
-
-### Specify Version in Command Line
-
-```bash
-# Image to 3D with version
-python lux3d_client.py image input.jpg output.zip --version v3.0-standard
-
-# Text to 3D with version
-python lux3d_client.py text "Generate a high-quality 3D wooden chair" output.zip --style photorealistic --version v3.0-standard
-
-# Material repaint with version
-python lux3d_client.py material reference.png output.zip --mesh-url https://example.com/model.glb --version v3.0-standard
-```
-
-## Output
-
-### v3.0-standard Multi-format Output
-
-The `v3.0-standard` version supports five model format outputs. You can choose the appropriate format based on your use case:
-
-| Format | Description | Use Case |
-|--------|-------------|----------|
-| **.zip** | Packaged result containing GLB model and separate PBR texture assets | Material editing or custom rendering pipelines |
-| **.glb** | GLB model with embedded materials | Web rendering, Unity/Unreal engine import, most 3D software |
-| **.usdz** | Apple AR native format | iOS/macOS AR Quick Look, ARKit applications |
-| **_obj.zip** | OBJ + MTL + BaseColor textures packed in a ZIP | Common 3D software and DCC tools |
-| **_fbx.zip** | FBX model and .fbm textures directory packed in a ZIP | Maya, 3ds Max, Blender, and other mainstream DCC software |
-
-### Download Different Formats
-
-After task completion, you can append parameters to the result URL to get different formats:
-
-```python
-# Get ZIP format (default)
-zip_url = result['data']['url'] + '?format=zip'
-
-# Get GLB format
-glb_url = result['data']['url'] + '?format=glb'
-
-# Get USDZ format
-usdz_url = result['data']['url'] + '?format=usdz'
-
-# Get OBJ zip format
-obj_url = result['data']['url'] + '?format=obj_zip'
-
-# Get FBX zip format
-fbx_url = result['data']['url'] + '?format=fbx_zip'
-
-# Download the corresponding format
-download_model(glb_url, "model.glb")
-```
-
-**Note**: v3.0-standard returns 5 output slots in `outputs[]` in order, corresponding to .zip / .glb / .usdz / _obj.zip / _fbx.zip. zip and glb always return URLs; usdz / obj_zip / fbx_zip return URLs only when the corresponding optional export is requested, otherwise the slot returns `NOT_REQUESTED`. The default download is `outputs[0]` (the .zip packaged result). To switch to a different format, append the corresponding `?format=` parameter as shown. URL construction is consistent with v2.0-preview.
-
-### v2.0-preview Multi-format Output
-
-The `v2.0-preview` version supports three model format outputs:
-
-| Format | Description | Use Case |
-|--------|-------------|----------|
-| **.zip** | Packaged result containing GLB model and separate PBR texture assets | Material editing or custom rendering pipelines |
-| **.glb** | GLB model with embedded materials | Web rendering, Unity/Unreal engine import, most 3D software |
-| **.usdz** | Apple AR native format | iOS/macOS AR Quick Look, ARKit applications |
-
-### v1.0-pro Output
-
-The `v1.0-pro` version returns a single ZIP result containing:
-- A GLB model file
-- Complete PBR texture assets (with transparent material support)
-
-### Result Validity
-
-All format download links are valid for **2 hours**, please download promptly.
-
-## Notes
-
-- Authentication uses `Authorization` header: `Authorization: <apiKey>`
-- Image-to-3D, text-to-3D, and material repaint use different create endpoints
-- All three workflows share the same task query endpoint
-- `prompt` and `style` are required for text-to-3D
-- `img` is optional for text-to-3D and should be a full data URL after encoding
-- Material repaint requires `img` (reference image) and `meshUrl` (model GLB file URL) parameters
-
-## Requirements
-
-```bash
-pip install Pillow requests
-```
+If the API returns **GENERATION_CONCURRENCY_LIMIT_EXCEEDED**, wait for an existing task to finish before retrying. The rejected request does not create a task or consume credits. See [Lux3D Pricing](https://www.aholo3d.com/pricing) for plans and credits.
 
 ## References
 
-- Lux3D Website: https://lux3d.aholo3d.com/
-- API Key Application: https://labs.aholo3d.com/api-keys
-- API contact: lux3d@qunhemail.com
+- [API Key](https://labs.aholo3d.com/api-keys)
+- [Asset upload APIs](https://labs.aholo3d.com/api-docs/en/api-reference#tag/asset)
+- [Lux3D Pricing](https://www.aholo3d.com/pricing)
+- Contact: lux3d@qunhemail.com

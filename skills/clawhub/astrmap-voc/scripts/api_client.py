@@ -346,10 +346,10 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument("--filter-product", default="all", help="商品筛选: all/ASIN (get_trend)")
     parser.add_argument("--filter-star", default="all", help="评分筛选: 1-5/all (get_comments)")
     parser.add_argument("--filter-verified", default="all", help="筛选已认证评论: all/true/false (get_comments)")
-    parser.add_argument("--association-type", default="tag", help="关联类型: tag/issue (get_related_comments)")
+    parser.add_argument("--association-type", default="tag", help="关联类型: tag/category (get_related_comments)")
     parser.add_argument("--normalized-tag", default=None, help="标准化标签名 (get_related_comments, tag模式)")
     parser.add_argument("--category", default=None, help="标签分类 (get_related_comments, tag模式)")
-    parser.add_argument("--dimension", default=None, help="问题维度 (get_related_comments, issue模式)")
+    parser.add_argument("--dimension", default=None, help="关联维度 (get_related_comments, category模式)")
     parser.add_argument("--polarity", default=None, help="情感极性 (get_representative_reviews, get_related_comments)")
     parser.add_argument("--limit", type=int, default=5, help="返回数量 (get_representative_reviews)")
 

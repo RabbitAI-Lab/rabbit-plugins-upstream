@@ -1,45 +1,67 @@
-## Description: <br>
-Find internal company teammates by company ID and person ID, returning colleague identifiers and job titles from UpKuaJing's global company database. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finds colleagues for a target person at a company using required company and person IDs, returning colleague identifiers and job titles from UpKuaJing's global company database.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Recruiters, sales teams, business development teams, and B2B researchers use this skill to retrieve a target person's colleague roster when they already have the required company and person identifiers. It supports paid UpKuaJing API lookups and should be used with fee confirmation and appropriate data-handling controls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a paid people-data API, and each colleague lookup or pagination request can incur fees. <br>
-Mitigation: Confirm fees with the user before execution, use the pricing reference or price-info command for current pricing, and create payment orders only when the user intentionally requests a top-up. <br>
-Risk: The skill requires an UpKuaJing API key stored locally and used for authenticated API requests. <br>
-Mitigation: Protect UPKUAJING_API_KEY, avoid exposing the local credential file or command output that contains secrets, and limit access to the account environment. <br>
-Risk: Colleague search results can contain sensitive personal or business relationship data. <br>
-Mitigation: Share only necessary results, follow applicable privacy and compliance requirements, and avoid redistributing outputs beyond the intended business purpose. <br>
+## Use Case:
 
+External recruiters, sales teams, and B2B lead generation users can look up colleagues of a known person at a known company after they have the required company and person IDs. The skill supports professional contact discovery and stakeholder mapping while requiring authorization, API-key access, and fee confirmation before paid queries.
 
-## Reference(s): <br>
-- [Colleague List API Reference](references/person-colleague-list-api.md) <br>
-- [UpKuaJing](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing API Pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON output from the API scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; API calls are paid and can return paginated colleague records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: evidence release version and skill metadata) <br>
+Risk: The skill uses a persistent UpKuaJing API key and can read it from the environment or ~/.upkuajing/.env.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user accepts this credential access, protect the key file, and rotate the key if it may have been exposed.
+
+Risk: Colleague lookup and account operations may incur paid API charges or create top-up payment URLs.
+
+Mitigation: Require explicit user confirmation before any paid query or top-up flow, and use the platform pricing endpoint or pricing page for current costs.
+
+Risk: The skill supports personnel-data lookups and stakeholder mapping that may be sensitive or inappropriate without authorization.
+
+Mitigation: Use it only for authorized professional research and avoid querying or retaining data outside the user's approved purpose.
+
+Risk: Optional error reports may include request context, request parameters, or response details.
+
+Mitigation: Ask for confirmation before reporting errors and avoid sending raw prompts, customer data, secrets, or full response payloads.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/global-company-person-colleague)
+- [Publisher profile](https://clawhub.ai/user/upkuajing)
+- [UpKuaJing homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [Detailed Price Description](https://www.upkuajing.com/web/openapi/price.html)
+- [Colleague List API](references/person-colleague-list-api.md)
+- [Skill Error Report API](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, API calls]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; colleague lookups are paginated and paid per API call after explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

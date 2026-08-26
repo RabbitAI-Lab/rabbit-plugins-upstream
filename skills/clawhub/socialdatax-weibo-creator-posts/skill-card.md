@@ -1,43 +1,58 @@
-## Description: <br>
-用于微博创作者数据、微博创作者内容列表、近期发布、内容调研和创作者内容分析。覆盖 Weibo creator posts，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于微博创作者数据、微博创作者内容列表、近期发布、内容调研和创作者内容分析。覆盖 Weibo creator posts，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and developers use this skill to fetch and summarize Weibo creator post lists for recent publishing review, creator benchmarking, content research, and account tracking through SocialDataX. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses SOCIALDATAX_API_KEY for data access. <br>
-Mitigation: Keep the API key private and provide it only through the expected environment variable. <br>
-Risk: Unbounded pagination can increase API credit use. <br>
-Mitigation: Prefer bounded options such as --pages or --max-items before using --all. <br>
-Risk: Returned Weibo creator-post data may be incomplete or depend on API availability and input identifiers. <br>
-Mitigation: Check returned errors, verify user IDs or profile URLs, and retry once for non-balance network or API failures when appropriate. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve and summarize Weibo creator post lists through SocialDataX for recent publishing review, content research, creator benchmarking, and account tracking.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-creator-posts) <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration guidance, JSON, Markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON data from SocialDataX responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY, supports bounded pagination with pages or max-items, and can summarize returned Weibo post fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: The skill uses SOCIALDATAX_API_KEY at runtime to access SocialDataX data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an API key limited to this service and avoid embedding credentials in generated skill files or shared outputs.
+
+Risk: The direct CLI path runs an npm package through npx.
+
+Mitigation: Verify the npm package source and version you are comfortable running before deployment.
+
+Risk: Fetching many pages for large Weibo accounts can increase API usage and cost.
+
+Mitigation: Use --pages or --max-items to bound collection unless full pagination is intentional.
+
+## Reference(s):
+
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-creator-posts)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API output summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY at runtime and returns read-only Weibo creator post data, including pagination metadata when available.]
+
+## Skill Version(s):
+
+0.1.18 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

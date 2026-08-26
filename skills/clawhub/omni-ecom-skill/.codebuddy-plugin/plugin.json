@@ -1,0 +1,115 @@
+{
+  "name": "omni-ecom",
+  "version": "1.5.11",
+  "description": "Evidence-led omni-channel e-commerce expert team with visible child-agent returns, numeric claim provenance, formula and attribution locks, resumable run states, privacy receipts, and a fail-closed formal completion gate.",
+  "author": {
+    "name": "品沐咨询 PINMOO",
+    "email": "team@pinmoo.com"
+  },
+  "agents": [
+    "./agents/omni-ecom-team-lead.md",
+    "./agents/data-analyst.md",
+    "./agents/platform-ops.md",
+    "./agents/content-live-growth.md",
+    "./agents/ad-profit-optimizer.md",
+    "./agents/delivery-review.md"
+  ],
+  "skills": [
+    "./skills/ecom-diagnosis-core",
+    "./skills/ecom-report-pdf-layout"
+  ],
+  "expertType": "team",
+  "agentName": "omni-ecom-team-lead",
+  "teamInfo": {
+    "leadAgent": "omni-ecom-team-lead",
+    "memberAgents": [
+      "data-analyst",
+      "platform-ops",
+      "content-live-growth",
+      "ad-profit-optimizer",
+      "delivery-review"
+    ]
+  },
+  "displayName": {
+    "en": "Omni-channel E-commerce Operations Expert Team",
+    "zh": "全域电商经营专家团"
+  },
+  "profession": {
+    "en": "Omni-channel E-commerce Operations Expert Team",
+    "zh": "全域电商经营专家团"
+  },
+  "displayDescription": {
+    "en": "A director and five specialists collaborate through traceable handoffs, task profiles, immutable review attempts, and verified completion receipts.",
+    "zh": "经营总监协同数据、平台、内容、投流与交付专家，以来源公式闸门、可追溯交接和完成闸门交付经营报告。"
+  },
+  "avatar": "avatars/team.png",
+  "categoryId": "07-SalesCommerce",
+  "defaultInitPrompt": {
+      "zh": "请上传原始报表，并说明客户范围、平台、期间、任务类型和决策目标；我会先做隔离、来源公式闸门，再调度专家并交付图表化报告。",
+    "en": "Upload the raw reports and state the client scope, platform, period, task type, and decision goal. I will gate the data before expert collaboration and chart-led delivery."
+  },
+  "plugin": "omni-ecom",
+  "tags": [
+    { "en": "Business Diagnosis", "zh": "经营诊断" },
+    { "en": "Data Quality", "zh": "数据质量" },
+    { "en": "Profit Optimization", "zh": "利润优化" }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Upload the raw reports and state the client scope, platform, period, task type, and decision goal. I will gate the data before expert collaboration and chart-led delivery.",
+      "zh": "请上传原始报表，并说明客户范围、平台、期间、任务类型和决策目标；我会先做隔离、来源公式闸门，再调度专家并交付图表化报告。"
+    },
+    {
+      "en": "Using search-channel data and complete costs, calculate net ROAS and allowable CPC with conservative and growth scenarios.",
+      "zh": "基于隔离运行记录、搜索渠道数据和完整成本，测算净ROAS与可承受CPC。"
+    },
+    {
+      "en": "Turn this week's gate-approved data into an operations report, top issues, and an action list with acceptance criteria.",
+      "zh": "基于通过数据闸门的本周数据，生成可追溯周报和带验收、停止条件的行动清单。"
+    }
+  ],
+  "members": [
+    {
+      "id": "omni-ecom-team-lead",
+      "displayName": { "en": "Mu Feng", "zh": "沐风" },
+      "profession": { "en": "Chief Omni-channel Operations Director", "zh": "全域经营操盘总监" },
+      "avatar": "avatars/omni-ecom-team-lead.png",
+      "role": "lead"
+    },
+    {
+      "id": "data-analyst",
+      "displayName": { "en": "Shen Shuqing", "zh": "沈数清" },
+      "profession": { "en": "E-commerce Data Analyst", "zh": "电商数据分析专家" },
+      "avatar": "avatars/data-analyst.png",
+      "role": "member"
+    },
+    {
+      "id": "platform-ops",
+      "displayName": { "en": "Liang Yuntong", "zh": "梁运通" },
+      "profession": { "en": "Platform Operations Expert", "zh": "平台运营专家" },
+      "avatar": "avatars/platform-ops.png",
+      "role": "member"
+    },
+    {
+      "id": "content-live-growth",
+      "displayName": { "en": "Hong Zhangsheng", "zh": "洪涨声" },
+      "profession": { "en": "Content & Livestream Growth Expert", "zh": "内容与直播增长专家" },
+      "avatar": "avatars/content-live-growth.png",
+      "role": "member"
+    },
+    {
+      "id": "ad-profit-optimizer",
+      "displayName": { "en": "Luo Xiaoying", "zh": "罗效盈" },
+      "profession": { "en": "Ad-traffic & Profit Optimizer", "zh": "投流与利润优化专家" },
+      "avatar": "avatars/ad-profit-optimizer.png",
+      "role": "member"
+    },
+    {
+      "id": "delivery-review",
+      "displayName": { "en": "Wei Jiaoda", "zh": "韦交达" },
+      "profession": { "en": "Project Delivery & Review Expert", "zh": "项目交付与复盘专家" },
+      "avatar": "avatars/delivery-review.png",
+      "role": "member"
+    }
+  ]
+}

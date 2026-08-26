@@ -1,45 +1,66 @@
-## Description: <br>
-调取 LinkedIn 企业主页数据获取员工清单与整体人员规模，剖析企业内部组织架构，挖掘潜在商务联系人以及核心岗位决策人员。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+调取 LinkedIn 企业主页数据获取员工清单与整体人员规模，剖析企业内部组织架构，挖掘潜在商务联系人以及核心岗位决策人员。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Recruiters, sales teams, and B2B lead builders use this skill to retrieve LinkedIn-sourced employee records for a known company ID, including person IDs and job titles. It supports talent research, organization analysis, contact enrichment, and lead qualification workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a paid Upkuajing API workflow for employee-list queries. <br>
-Mitigation: Confirm expected fees and pricing before running queries, especially when paginating through additional result pages. <br>
-Risk: The skill uses or creates an UPKUAJING_API_KEY and may store it in ~/.upkuajing/.env. <br>
-Mitigation: Keep the API key out of conversation logs and shared outputs, and review local credential storage before deployment. <br>
-Risk: The skill can generate a recharge payment URL when directed. <br>
-Mitigation: Treat recharge flows as user-approved billing actions and verify account context before opening or sharing payment links. <br>
+## Use Case:
 
+Recruiters, sales teams, and B2B lead builders use this skill to retrieve LinkedIn-sourced employee lists and job titles by company ID. It supports talent research, organization analysis, contact enrichment, and lead qualification.
 
-## Reference(s): <br>
-- [LinkedIn company employee list API reference](references/linkedin-company-employee-list-api.md) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer platform](https://developer.upkuajing.com/) <br>
-- [Upkuajing API pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns paginated employee-list data with fee information when the API call succeeds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Lookup calls use Upkuajing's paid API and can deduct account balance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Tell the user a lookup may incur charges, obtain separate explicit confirmation before paid calls, and use the pricing command or pricing page instead of estimating costs.
+
+Risk: The skill reads or creates an API key in ~/.upkuajing/.env.
+
+Mitigation: Keep the key local, avoid exposing it in prompts or reports, and rotate it if it is disclosed.
+
+Risk: Error reports can include request context and response details.
+
+Mitigation: Send reports only after user approval and remove secrets or sensitive business data from report context.
+
+Risk: The skill makes network calls to Upkuajing services, including lookup, account, pricing, error-reporting, and version-check requests.
+
+Mitigation: Install and run the skill only when Upkuajing network access and service terms are acceptable for the user's workflow.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/upkuajing/skills/linkedin-company-employee-zh)
+- [Upkuajing homepage](https://www.upkuajing.com)
+- [Upkuajing developer platform](https://developer.upkuajing.com/)
+- [Upkuajing API pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [领英员工列表 API 参考](references/linkedin-company-employee-list-api.md)
+- [Agent调用Skill异常上报 API 参考](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a company ID and supports cursor-based pagination; lookup calls may include fee and request ID details.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

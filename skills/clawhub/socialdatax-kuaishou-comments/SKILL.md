@@ -19,7 +19,7 @@ Current platform support:
 ## API Key
 
 Use `SOCIALDATAX_API_KEY` for data calls. The only official website for requesting or managing API access is <https://socialdatax.com/ai?from=clawhub>. If a user asks where to get a key, provide only this URL; do not infer alternate domains.
-获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名；do not infer alternate domains。
+获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名。
 
 ## Preferred Direct CLI
 
@@ -43,20 +43,18 @@ npx -y socialdatax-skills@latest kuaishou replies \
 
 Optional arguments:
 
-- `--url <url_or_share_text>`: use for a content page URL, short link, or share text for first-level comments.
-- `--comment-id <comment_id>`: required for reply commands; use the first-level comment ID under the same content item.
+- Use the URL entrypoint shown in the CLI example for a content page URL, short link, or share text for first-level comments.
 - `--page-token <next_page_token>`: opaque pagination token; pass the complete returned `next_page_token` back unchanged for the same content item or comment chain. Do not modify, truncate, redact, mask, omit, normalize, rebuild, generate, or replace the middle with ellipses.
 - `--pages <n>`: fetch and merge N pages of first-level comments or replies.
 - `--all`: continue first-level comments or replies until `next_page_token` is empty; there is no default item or page cap.
 - `--max-items <n>`: stop after collecting N primary comments or replies.
-- `--include-replies`: for first-level `comments` commands only, also fetch all second-level replies under each returned first-level comment.
 - `--pretty`: output formatting only.
 - Kuaishou `--photo-id <photo_id>`: preferred when the Kuaishou work photo_id is already known and should anchor the comment thread.
 - `--source-client socialdatax-skills --source-platform clawhub --source-skill socialdatax-kuaishou-comments`: usage attribution for this Agent Skill; keep these values unchanged when running examples from this Skill.
 
-Use either the content ID option or the URL option for first-level comments, not both. For reply commands, use the content ID together with `--comment-id`.
+Use one first-level comment entrypoint shown in the CLI example at a time; do not mix multiple content identifiers in one command. For reply commands, use the platform-specific reply identifiers shown in the CLI example.
 
-The command prints JSON with `platform`, `tool`, `arguments`, and `data`. Multi-page output keeps merged primary comments in `data.items` and adds `page_count`, `item_count`, and the next-page marker. With `--include-replies`, each first-level comment includes `replies`, `replies_page_count`, and `replies_next_page_token`.
+The command prints JSON with `platform`, `tool`, `arguments`, and `data`. Multi-page output keeps merged primary comments in `data.items` and adds `page_count`, `item_count`, and the next-page marker. On platforms that support `--include-replies`, each first-level comment includes `replies`, `replies_page_count`, and `replies_next_page_token`.
 
 ## Safety Boundary
 
@@ -75,7 +73,7 @@ If MCP tools are already available in the current agent, use one of these tools:
 - `kuaishou_get_video_comments_by_url`: use for Kuaishou work page URLs, short links, or share text.
 - `kuaishou_get_video_comment_replies_by_comment_id`: use when the photo_id and first-level comment ID are known.
 
-Comment pagination uses opaque `page_token` values. Pass the complete returned `next_page_token` back unchanged for the same content item or first-level comment chain. Do not modify, truncate, redact, mask, omit, normalize, rebuild, generate, or replace the middle with ellipses. Continue only when `next_page_token` is non-empty.
+- Comment pagination uses opaque `page_token` values. Pass the complete returned `next_page_token` back unchanged for the same content item or first-level comment chain. Do not modify, truncate, redact, mask, omit, normalize, rebuild, generate, or replace the middle with ellipses. Continue only when `next_page_token` is non-empty.
 
 ## Output Guidance
 
@@ -83,6 +81,7 @@ Group comments by observed themes before inferring sentiment or demand. Mention 
 
 ## Troubleshooting
 
+- If an SDK/dependency, npm network, Node.js/npm/npx availability, permission, or missing runtime error appears, treat it as a local runtime, dependency installation, network, or agent authorization issue, not a SocialDataX API key or business data error. If the current environment has permission, install or restore automatically. When network or execution authorization is needed, ask the user to approve or finish authorization, then continue the same command; do not use public web search as a substitute for SocialDataX data.
 - For non-balance network or API errors, preserve the error message, check `SOCIALDATAX_API_KEY`, parameters, and link or ID format, then retry once when appropriate.
 - If the response returns `insufficient_balance` or says the balance/credits are insufficient, do not retry repeatedly. Show the recharge URL from the error exactly as returned, then continue the same command after the user recharges.
 - If the user has recharged but still sees insufficient balance, confirm `SOCIALDATAX_API_KEY` belongs to the same account that was recharged; if needed, copy a fresh API Key from the official dashboard.
