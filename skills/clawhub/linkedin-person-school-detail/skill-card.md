@@ -1,44 +1,64 @@
-## Description: <br>
-Retrieves detailed LinkedIn school information, including names, types, locations, websites, and social links, to help recruiters, researchers, and analysts verify institutions and enrich academic network data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pull detailed school information from LinkedIn data to help verify education institutions and analyze academic networks.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External users, recruiters, researchers, and analysts use this skill to look up a known LinkedIn school ID and retrieve institution details for degree verification, institutional research, and academic network enrichment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses UpKuaJing as the data provider and API calls may incur fees. <br>
-Mitigation: Confirm the paid-call workflow and review current pricing before approving lookups or top-up flows. <br>
-Risk: The API key may be stored in a local plaintext ~/.upkuajing/.env file. <br>
-Mitigation: Protect the local credential file, avoid sharing it, and rotate the key if exposure is suspected. <br>
-Risk: Payment URLs and top-up flows can affect account balance. <br>
-Mitigation: Review payment URLs carefully and require explicit user confirmation before creating or acting on top-up orders. <br>
+## Use Case:
 
+Recruiters, researchers, analysts, and agents use this skill to retrieve school names, institution types, locations, websites, and social links from LinkedIn school data for education verification, institutional research, and academic network analysis.
 
-## Reference(s): <br>
-- [LinkedIn School Detail API Reference](references/linkedin-school-detail-api.md) <br>
-- [UpKuaJing Homepage](https://www.upkuajing.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/linkedin-person-school-detail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, configuration, guidance] <br>
-**Output Format:** [JSON responses with concise Markdown guidance and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a school ID and a configured UPKUAJING_API_KEY; each lookup may incur a fee.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: evidence release and frontmatter) <br>
+Risk: The skill performs real paid LinkedIn school-detail lookups through UpKuaJing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inform the user that lookup calls incur fees and wait for explicit confirmation before running a paid query.
+
+Risk: The skill stores and uses an UpKuaJing API key from the user's environment or ~/.upkuajing/.env.
+
+Mitigation: Install only when the user is comfortable using UpKuaJing as the provider, and keep the API key out of prompts, logs, and shared outputs.
+
+Risk: Diagnostics and error reports may include request context that could contain sensitive user or prompt data.
+
+Mitigation: Ask for explicit confirmation before sending diagnostics and avoid including sensitive prompt or user data in diagnostic context.
+
+Risk: The security verdict is suspicious because the skill contacts the provider for lookup, account, pricing, diagnostics, and version-check requests.
+
+Mitigation: Review the provider relationship, network behavior, account actions, and billing expectations before deployment.
+
+## Reference(s):
+
+- [LinkedIn School Detail API Reference](references/linkedin-school-detail-api.md)
+- [Skill Error Report API Reference](references/skill-error-report-api.md)
+- [UpKuaJing Homepage](https://www.upkuajing.com)
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/linkedin-person-school-detail)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [JSON API responses and concise Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a school ID and an UpKuaJing API key; paid lookup calls require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

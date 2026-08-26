@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/linkedin-api",
   "slug": "linkedin-api",
   "ownerHandle": null,
-  "version": "1.0.10",
-  "updatedAt": 1784922288054,
-  "contentHash": "60d24f38d78b6a58857e51989a9ac8bb9f69304a6dfa2609b3d1c4d5b0c57938",
-  "fetchedAt": "2026-07-26T18:04:25.570Z"
+  "version": "1.1.0",
+  "updatedAt": 1787729434273,
+  "contentHash": "600ca9a837046fde1e0245b8a665c6dd81722b93a372a2051db1cdd506c8cc7e",
+  "fetchedAt": "2026-08-26T08:11:31.892Z"
 }

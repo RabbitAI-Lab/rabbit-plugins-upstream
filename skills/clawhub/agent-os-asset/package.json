@@ -1,0 +1,7 @@
+{
+  "name": "agent-os-asset",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Privacy-safe historical-file modernization and retrieval suite for AI agents / 面向 AI Agent 的隐私安全历史文件现代化与检索套件",
+  "license": "Apache-2.0"
+}

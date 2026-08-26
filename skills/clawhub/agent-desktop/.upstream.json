@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-desktop",
   "slug": "agent-desktop",
   "ownerHandle": null,
-  "version": "0.1.21",
-  "updatedAt": 1784533556291,
-  "contentHash": "cd4a2b206ec834933f5158bdc5d45092fc86db34eb0126d64cdb2bdbfd55351f",
-  "fetchedAt": "2026-07-26T18:10:16.021Z"
+  "version": "0.1.26",
+  "updatedAt": 1787438189709,
+  "contentHash": "6e485c23ee05cd89e0759ae7e9922012d675cca6376955e725edf98f5d9761da",
+  "fetchedAt": "2026-08-26T08:26:27.271Z"
 }

@@ -1,45 +1,66 @@
-## Description: <br>
-Fetches Chinese financial-market data and investment research information across A-shares, Hong Kong stocks, funds, indices, financial statements, announcements, research reports, macroeconomic data, and more than 200 related interfaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetches China-market financial data and investment-research information across A-shares, Hong Kong stocks, funds, indices, financials, announcements, research reports, macroeconomics, and related datasets.
 
-## Publisher: <br>
-[kenneth-bro](https://clawhub.ai/user/kenneth-bro) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kenneth-bro](https://clawhub.ai/user/kenneth-bro)
 
-## Use Case: <br>
-Developers, analysts, and research agents use this skill to find InvestToday finance-data endpoints, fetch structured Chinese market datasets, and summarize available quotes, fundamentals, fund, index, announcement, research, sector, industry-chain, and macroeconomic data. It should support research and data retrieval, not direct buy/sell advice, order execution, or conclusions that require inventing missing data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API keys may be exposed when passed directly in shell commands or retained in shell history. <br>
-Mitigation: Prefer interactive initialization or environment variables for credentials, and avoid command examples that place API keys directly on the command line. <br>
-Risk: The auto-update setup path can later change the CLI or installed skills. <br>
-Mitigation: Enable auto-update only when the operator accepts that update behavior, and review updated tools or skills before relying on them. <br>
-Risk: Returned finance, personnel, contact, watchlist, and trading-signal data may be sensitive or easy to overinterpret. <br>
-Mitigation: Treat returned data as informational, protect sensitive outputs, and avoid presenting results as direct investment advice or trading instructions. <br>
+## Use Case:
 
+External users and developers use this skill to locate InvestToday API endpoints and fetch structured China-market financial data for research, comparison, export, and downstream analysis. It should not be used for trading execution, direct buy/sell advice, or conclusions that require inventing missing data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kenneth-bro/skills/investoday-finance-data) <br>
-- [English skill guide](artifact/SKILL_EN.md) <br>
-- [API reference index](artifact/docs/references-index.en.md) <br>
-- [Source skill definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with CLI commands, parameter guidance, and concise data summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on Node.js 18+, the @investoday/investoday-api package, network access, API credentials, and endpoint-specific permissions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.51 (source: server release evidence and skill frontmatter) <br>
+Risk: The setup path can store an API key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat API keys as secrets, avoid sharing them in prompts or logs, and prefer initialization flows that do not expose credentials in reusable shell history.
+
+Risk: The documented auto-update and skip-verify setup example can allow local CLI or installed skill changes outside the immediate query task.
+
+Mitigation: Prefer `investoday-api init` or `investoday-api init --api-key <key> --no-auto-update`; use auto-update only when the deployment owner intentionally accepts that behavior.
+
+Risk: Financial data and investment-signal outputs can be incomplete, delayed, permission-limited, or misleading if treated as advice.
+
+Mitigation: Use outputs for informational research, verify important results against primary sources, and avoid direct trading or portfolio decisions based solely on this skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kenneth-bro/skills/investoday-finance-data)
+- [Reference Index](docs/references-index.en.md)
+- [Chinese Reference Index](docs/references-index.md)
+- [Basic Data](references/基础数据.md)
+- [Market Data](references/市场数据.md)
+- [A-share, Shanghai, Shenzhen, and Beijing Data](references/沪深京数据/基础信息/证券资料.md)
+- [Fund Overview](references/基金/基金资料/基金概况.md)
+- [Bond Data](references/债券.md)
+- [Domestic Macroeconomic Data](references/宏观经济/国内宏观.md)
+- [Research Reports](references/研报/基础数据.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured CLI results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 18+, @investoday/investoday-api, network access, and configured API credentials for data queries.]
+
+## Skill Version(s):
+
+1.8.76 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

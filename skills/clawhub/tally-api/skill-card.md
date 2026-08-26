@@ -1,48 +1,67 @@
-## Description: <br>
-Tally API integration with managed OAuth for managing forms, submissions, workspaces, webhooks, organization users, and organization invites. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tally API integration with managed OAuth for managing forms, submissions, workspaces, webhooks, organization users, and organization invites.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Tally account resources through Maton-managed OAuth, including forms, submissions, workspaces, webhooks, organization users, and invites. It is useful when an agent needs to generate API calls, examples, or operational guidance for Tally workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and OAuth-backed access to a connected Tally account. <br>
-Mitigation: Keep MATON_API_KEY in the environment or a secrets manager, avoid exposing it in logs, and verify the intended Tally connection before use. <br>
-Risk: Write operations can create, update, or delete forms, workspaces, submissions, webhooks, organization users, and invites. <br>
-Mitigation: Confirm the target resource and intended effect with the user before every create, update, delete, invite, removal, or retry operation. <br>
-Risk: Webhooks can transmit form submission data, including personal or sensitive respondent information, to external URLs. <br>
-Mitigation: Confirm the destination URL, form, and event types before creating or updating webhooks. <br>
-Risk: Scanner telemetry is clean, but the security evidence notes that the target skill files were not available for full artifact review. <br>
-Mitigation: Inspect the visible skill instructions and requested permissions before installation or deployment. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent work with a connected Tally account through Maton OAuth, including reading forms and submissions and carrying out approved changes to workspaces, organization membership, invites, and webhooks.
 
-## Reference(s): <br>
-- [ClawHub Tally Skill Page](https://clawhub.ai/byungkyu/tally-api) <br>
-- [Tally API Introduction](https://developers.tally.so/api-reference/introduction) <br>
-- [Tally API Reference](https://developers.tally.so/llms.txt) <br>
-- [Tally Help Center](https://help.tally.so/) <br>
-- [Maton Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration, API calls] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP examples, and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Tally OAuth connection; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Write operations can change Tally account data, including forms, workspaces, organization membership, invites, submissions, and webhooks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, then require explicit user approval with target resource, payload, and intended effect before any POST, PUT, PATCH, or DELETE request.
+
+Risk: Organization user removal and invite management affect account membership.
+
+Mitigation: Confirm the organization, target user or email, and intended access change before execution.
+
+Risk: Webhooks can send form submission data, which may contain personal information, to external URLs.
+
+Mitigation: Confirm the form, event types, and destination URL before creating or updating a webhook.
+
+Risk: Maton credentials or provider-issued tokens could be exposed if printed, logged, persisted, or passed on the command line.
+
+Mitigation: Use Maton OAuth and the CLI credential store where possible; never inspect stored credentials, never print tokens, and use the documented stdin-based raw HTTP fallback only when the CLI is unavailable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/tally-api)
+- [Maton homepage](https://maton.ai)
+- [Tally API introduction](https://developers.tally.so/api-reference/introduction)
+- [Tally API reference](https://developers.tally.so/llms.txt)
+- [Maton docs](https://docs.maton.ai)
+- [Maton API reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce API request paths, command examples, confirmation prompts, and structured JSON payload examples.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/youtube-api-skill",
   "slug": "youtube-api-skill",
   "ownerHandle": null,
-  "version": "1.0.6",
-  "updatedAt": 1782600559208,
-  "contentHash": "7b81ec878f22e353c704fa390ad40ff99e73abf18d9d7389309e1d1dc8f33f8c",
-  "fetchedAt": "2026-07-26T18:22:53.789Z"
+  "version": "1.1.0",
+  "updatedAt": 1787730447579,
+  "contentHash": "d5cc85b2dd29a9f4d9dc86ee31786ebce78c244d8b464d7c98b702fb99606441",
+  "fetchedAt": "2026-08-26T08:11:08.166Z"
 }

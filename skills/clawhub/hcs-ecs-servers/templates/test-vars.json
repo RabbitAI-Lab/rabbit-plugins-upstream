@@ -1,0 +1,65 @@
+{
+  "skill_name": "hcs-ecs-servers",
+  "entry_file": "scripts/hcs-ecs-servers.py",
+  "test_cases": [
+    {
+      "id": "TC-01",
+      "name": "capability-list",
+      "command": "python3 scripts/hcs-ecs-servers.py capability-list",
+      "expected": "{\"capability\":\"capability-list\",\"skill\":\"hcs-ecs-servers\",\"capabilities\":[...]}",
+      "method": "GET",
+      "category": "readonly",
+      "description": "列出本 skill 所有能力项"
+    },
+    {
+      "id": "TC-02",
+      "name": "list-servers",
+      "command": "python3 scripts/hcs-ecs-servers.py list-servers",
+      "expected": "表格格式输出 ECS 实例列表（或显示该区域无实例）",
+      "method": "GET",
+      "category": "readonly",
+      "description": "查询 ECS 实例列表（默认区域 cn-north-4）"
+    },
+    {
+      "id": "TC-03",
+      "name": "list-servers-json",
+      "command": "python3 scripts/hcs-ecs-servers.py list-servers --json",
+      "expected": "{\"count\":N,\"region\":\"cn-north-4\",\"servers\":[...]}",
+      "method": "GET",
+      "category": "readonly",
+      "description": "JSON 格式输出 ECS 实例列表"
+    },
+    {
+      "id": "TC-04",
+      "name": "list-servers-region",
+      "command": "python3 scripts/hcs-ecs-servers.py list-servers --region cn-north-4",
+      "expected": "查询指定区域的 ECS 实例列表",
+      "method": "GET",
+      "category": "readonly",
+      "description": "按区域筛选 ECS 实例"
+    },
+    {
+      "id": "TC-05",
+      "name": "list-servers-status",
+      "command": "python3 scripts/hcs-ecs-servers.py list-servers --status ACTIVE",
+      "expected": "只返回状态为 ACTIVE 的实例",
+      "method": "GET",
+      "category": "readonly",
+      "description": "按状态筛选 ECS 实例"
+    },
+    {
+      "id": "TC-06",
+      "name": "exit-code-no-creds",
+      "command": "env -u HUAWEI_AK -u HUAWEI_SK -u HUAWEICLOUD_SDK_AK -u HUAWEICLOUD_SDK_SK -u OBS_ACCESS_KEY -u OBS_SECRET_KEY python3 scripts/hcs-ecs-servers.py list-servers",
+      "expected": "退出码 3（缺少配置）",
+      "method": "NONE",
+      "category": "readonly",
+      "description": "验证缺少 AK/SK 时退出码为 3"
+    }
+  ],
+  "env_vars_required": [
+    "HUAWEI_AK / HUAWEI_SK（或任意 HUAWEI/HW/HWC 前缀 + AK/SK 后缀的环境变量）",
+    "也可通过 .project-info/ 下 JSON 配置文件 secrets.HUAWEI_AK / secrets.HUAWEI_SK 提供"
+  ],
+  "notes": "本 skill 为只读查询类，所有测试用例均为只读操作。AK/SK 通过环境变量或 .project-info/ JSON 配置解析。默认区域 cn-north-4。不写入凭据到此文件。"
+}

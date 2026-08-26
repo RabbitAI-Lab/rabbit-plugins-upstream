@@ -1,47 +1,61 @@
-## Description: <br>
-Dependency management strategies for Golang projects, including go.mod management, package installation and upgrades, Minimal Version Selection, vulnerability scanning, outdated dependency tracking, binary size analysis, automated dependency updates, conflict resolution, and go.work workspaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dependency management strategies for Golang projects — go.mod management, installing/upgrading packages, Minimal Version Selection, vulnerability scanning, outdated dependency tracking, binary size analysis, Dependabot/Renovate setup, conflict resolution, and go.work workspaces. Use when adding, removing, or upgrading Go dependencies, auditing vulnerabilities, resolving version conflicts, or setting up automated dependency updates.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to manage Go module dependencies, evaluate new packages, upgrade or remove modules, audit vulnerabilities, analyze dependency size, configure update automation, and resolve module or workspace conflicts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may modify dependency, workspace, or CI configuration files and may run Go or git commands. <br>
-Mitigation: Review proposed go.mod, go.sum, go.work, and CI changes before committing them. <br>
-Risk: Adding unnecessary or low-quality dependencies can increase maintenance burden and supply-chain exposure. <br>
-Mitigation: Require confirmation before adding new dependencies, check standard-library alternatives, review package quality and license compatibility, and run govulncheck for release workflows. <br>
+## Use Case:
 
+Developers and engineers use this skill to manage Go module dependencies, evaluate additions and upgrades, audit vulnerabilities, resolve version conflicts, and configure automated dependency update workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/samber/golang-dependency-management) <br>
-- [Project homepage](https://github.com/samber/cc-skills-golang) <br>
-- [Versioning and Minimal Version Selection](references/versioning.md) <br>
-- [Auditing Dependencies](references/auditing.md) <br>
-- [Dependency Conflicts and Resolution](references/conflicts.md) <br>
-- [Go Workspaces](references/workspaces.md) <br>
-- [Automated Dependency Updates](references/automated-updates.md) <br>
-- [Visualizing the Dependency Graph](references/visualization.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code and shell command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose edits to Go module, workspace, and dependency-update configuration files; user review is expected before committing changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can guide an agent to modify Go project files and run Go tooling that may download modules.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed changes to go.mod, go.sum, go.work, and update configuration before committing, and run project tests plus vulnerability scanning after dependency changes.
+
+Risk: A newly added dependency may be unnecessary, poorly maintained, or incompatible with project licensing or security expectations.
+
+Mitigation: Require user confirmation before adding dependencies and evaluate standard-library alternatives, maintenance status, license compatibility, and known alternatives before running go get.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/golang-dependency-management)
+- [ClawHub publisher profile](https://clawhub.ai/user/samber)
+- [Project homepage](https://github.com/samber/cc-skills-golang)
+- [Versioning & Minimal Version Selection](references/versioning.md)
+- [Auditing Dependencies](references/auditing.md)
+- [Dependency Conflicts & Resolution](references/conflicts.md)
+- [Go Workspaces](references/workspaces.md)
+- [Automated Dependency Updates](references/automated-updates.md)
+- [Visualizing the Dependency Graph](references/visualization.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, markdown]
+
+**Output Format:** [Markdown with inline shell commands and Go module configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose edits to go.mod, go.sum, go.work, and dependency update configuration, with user confirmation required before adding a new dependency.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

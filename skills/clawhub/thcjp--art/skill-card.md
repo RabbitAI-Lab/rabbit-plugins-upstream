@@ -1,42 +1,53 @@
-## Description: <br>
-Provides practical, medium-specific guidance for art creation, technique development, and art appreciation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides art creation, technique development, and appreciation with practical, medium-specific advice.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Artists, creators, and agent users can use this skill to request practical art guidance, technique improvement suggestions, and medium-specific critique or planning advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests command execution even though its stated purpose is art guidance. <br>
-Mitigation: Review requested commands before execution and prefer a release that removes exec access or documents exact command limits and user-confirmation rules. <br>
-Risk: Broad automation language in the artifact does not clearly match the art-advice use case. <br>
-Mitigation: Constrain use to art guidance, critique, and planning tasks unless the publisher provides clear documentation for any automation behavior. <br>
+## Use Case:
 
+External users and creators use this skill for art creation guidance, technique development, and art appreciation across media such as drawing, sculpture, and photography.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/art) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, JSON] <br>
-**Output Format:** [Markdown or plain text guidance, with optional structured JSON-style results shown by the artifact.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include critique summaries, improvement suggestions, and medium-specific recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The skill requests broad local read, write, and command execution authority that is not clearly required for art-advice functionality.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in a constrained environment or narrow and remove unnecessary permissions before installation.
+
+Risk: The artifact includes API-key setup guidance even though the art-advice workflow does not clearly require external API access.
+
+Mitigation: Rely on the host agent's secret handling, avoid hard-coded credentials, and omit API access unless a reviewed deployment explicitly needs it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/art)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown text with optional JSON-shaped examples and shell configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include structured scoring, recommendations, improvements, or troubleshooting guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence; artifact frontmatter reports 1.0.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

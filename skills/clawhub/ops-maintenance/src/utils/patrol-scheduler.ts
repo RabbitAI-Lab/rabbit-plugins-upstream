@@ -10,6 +10,7 @@ import { join } from 'path'
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs'
 import { getAuditLogger } from './audit-logger.js'
 import { getAlertManager, type AlertLevel } from './alert-manager.js'
+import { readdirSync } from 'fs'
 
 // ============================================================
 // 类型定义
@@ -442,7 +443,7 @@ export class PatrolScheduler {
   listReports(limit: number = 10): { file: string; timestamp: string }[] {
     if (!existsSync(this.reportDir)) return []
 
-    const files = require('fs').readdirSync(this.reportDir)
+    const files = readdirSync(this.reportDir)
       .filter((f: string) => f.startsWith('patrol-') && f.endsWith('.json'))
       .sort()
       .reverse()

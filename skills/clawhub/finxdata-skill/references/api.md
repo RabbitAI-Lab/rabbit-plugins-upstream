@@ -23,7 +23,7 @@
 export FINXDATA_API_KEY="sk-..."
 ```
 
-这些接口会走账户认证和额度逻辑。多数数据接口返回 `{"code": 200, "data": "<Markdown>"}`。
+这些接口需要账户认证；除 `stock search` 外会走账户额度逻辑。数据接口通常返回 `{"code": 200, "confidence": "高|中高|中", "data": "<字符串、对象或数组>"}`。
 
 ### 额度
 
@@ -37,6 +37,7 @@ export FINXDATA_API_KEY="sk-..."
 
 | 命令 | 接口 | 参数 | 内容 |
 |---|---|---|---|
+| `stock search` | `/api/v1/http/stock/search` | `query` | 按代码或名称模糊查询 A/H 股票，最多返回 5 条；需要 API Key，但不扣账户额度。 |
 | `stock summary` | `/api/v1/http/stock/summary` | `code` | 股票概要和公司信息。 |
 | `stock quote` | `/api/v1/http/stock/quote` | `code`，支持多个 | 股票最新行情。 |
 | `stock financial` | `/api/v1/http/stock/financial` | `code`，`sections=reports` | 财务报表和指定财务板块。 |
@@ -48,7 +49,7 @@ export FINXDATA_API_KEY="sk-..."
 | `stock dragon-tiger-seats` | `/api/v1/http/stock/dragon_tiger/seats` | `code`，`trade_date`，`look_back=30`，`refresh` | 个股龙虎榜上榜记录、买卖席位和机构席位统计。 |
 | `stock ontology` | `/api/v1/http/stock/ontology` | `code` | 股票图谱摘要。 |
 | `stock listing` | `/api/v1/http/stock/listing` | `limit=20` | 近期新股列表。 |
-| `stock forecast` | `/api/v1/http/stock/forecast` | `page=1`，`page_size=50`，`refresh` | 业绩预告公告。 |
+| `stock forecast` | `/api/v1/http/stock/forecast` | `code`，`page=1`，`page_size=50`，`refresh` | 业绩预告公告；`code` 可选。 |
 | `stock trade-calendar` | `/api/v1/http/stock/trade_calendar` | `year`，`month`，`months=3` | A 股交易日历。 |
 | `stock notice-summary` | `/api/v1/http/stock/notice/summary` | `code`，`refresh` | 股票公告摘要。 |
 | `stock lockup` | `/api/v1/http/stock/lockup` | `code`，`trade_date`，`forward_days=90`，`refresh` | 个股限售解禁日历，包含未来待解禁和历史解禁。 |
@@ -81,7 +82,7 @@ export FINXDATA_API_KEY="sk-..."
 | 命令 | 接口 | 参数 | 内容 |
 |---|---|---|---|
 | `fred series-list` | `/api/v1/http/fred/series` | 无 | 可用 FRED 序列清单。 |
-| `fred series` | `/api/v1/http/fred/series/{series_id}` | `series_id`，`observation_start`，`observation_end`，`limit` | 单个 FRED 序列观测值。 |
+| `fred series` | `/api/v1/http/fred/series/{series_id}` | `series_id`，`observation_start`，`observation_end`，`limit=12` | 单个 FRED 序列观测值。 |
 | `fred key-indicators` | `/api/v1/http/fred/key-indicators` | `observation_start`，`observation_end` | 重点宏观指标矩阵。 |
 
 ### 跟踪

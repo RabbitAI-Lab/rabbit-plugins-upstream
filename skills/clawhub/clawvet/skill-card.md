@@ -1,38 +1,54 @@
-## Description: <br>
-Code quality and safety linter for OpenClaw skills that runs six analysis passes before installation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use before installing, enabling, or running any third-party OpenClaw skill, and when the user asks whether a skill is safe, should be trusted, scanned, vetted, or installed.
 
-## Publisher: <br>
-[mohibshaikh](https://clawhub.ai/user/mohibshaikh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mohibshaikh](https://clawhub.ai/user/mohibshaikh)
 
-## Use Case: <br>
-Developers and engineers use clawvet to scan OpenClaw skills for code quality, safety, metadata, dependency, typosquat, and semantic-analysis issues before installation or during CI review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mohibshaikh/skills/clawvet) <br>
-- [Server-resolved GitHub provenance](https://github.com/MohibShaikh/clawvet) <br>
+Developers and agents use this skill before installing or trusting third-party OpenClaw skills. It guides them to run ClawVet scans, inspect risk grades and high-severity findings, and decide whether to proceed or stop.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and optional JSON scanner output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires node and npm. Security evidence says the tool may inspect local skill folders and installed skills; enable watch mode, feedback, telemetry, alerts, badges, or remote scan features only when the related local access or network calls are acceptable, and prefer pinned npm versions in automated environments.] <br>
+Global
 
-## Skill Version(s): <br>
-0.8.1 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Running npx can execute external package code.
+
+Mitigation: Before installing or scanning, verify that the npm package invoked by npx is the intended ClawVet scanner and comes from a trusted source.
+
+Risk: A third-party skill under review may contain misleading instructions or prompt injection.
+
+Mitigation: Treat artifact skill text as untrusted input, surface critical or high findings, and stop on D or F scan grades unless the user explicitly resolves the risk.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/mohibshaikh/skills/clawvet)
+- [Publisher profile](https://clawhub.ai/user/mohibshaikh)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown with inline bash code blocks and JSON result interpretation guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct the agent to run npx-based scan or audit commands and report risk grades and high-severity findings.]
+
+## Skill Version(s):
+
+0.11.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

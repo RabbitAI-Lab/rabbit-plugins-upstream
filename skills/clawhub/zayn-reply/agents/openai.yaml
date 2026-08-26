@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-reply"
+  short_description: "根据客户原话、已确认事实、沟通目标和不可承诺边界，生成适合具体渠道和语言的客户回复。"
+  default_prompt: "使用 $zayn-reply 处理当前任务，并根据已提供信息生成清晰、可执行的结果。"

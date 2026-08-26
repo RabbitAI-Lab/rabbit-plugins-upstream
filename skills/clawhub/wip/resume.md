@@ -22,6 +22,7 @@ Environment detection:
 1. `TaskList` tool callable → Claude Code
 2. `task.md` artifact exists or `appDataDir` context present → Antigravity
 3. If both, prefer Claude Code (TaskList is more reliable)
+4. **`TaskList` shows as unavailable (`ToolSearch` no-match / disconnect reminder) in a session that is otherwise clearly Claude Code** (Claude-Code-specific context present, no `task.md`/`appDataDir`) — do not conclude "not Claude Code" or "skip task tracking" from this signal alone. `ToolSearch` returning no match does not distinguish "temporarily disconnected" from "disabled in this session's context" from "genuinely absent". Attempt one direct call (e.g. `TaskCreate`) to read the actual error, then report that finding to the user before deciding the fallback — see [claude.md](./claude.md) → "Tool unavailability — verify before falling back" for the full branch table (recoverable vs context-disabled) and the `claude-task` CLI fallback mechanics (persistent `~/.agents/tasks/default/` directory — never the session scratchpad, which does not survive a session/compact boundary). Do not silently drop to `fix_plan.md`/`checklist.md`-only tracking without surfacing this first — a broken task tool is an anomaly worth flagging, not a routine environment branch
 
 ## Precondition — Resume mode selected by SKILL.md Step 0
 
@@ -125,6 +126,18 @@ After cleanup, scan the remaining items (`pending` + `in_progress`). For any tas
 
 After Step 1, ask the direction for each remaining incomplete item (`pending` + `in_progress`).
 
+### Single unambiguous item — skip the ask (HARD STOP scope: exactly 1 item)
+
+If **exactly one** item remains after Step 1 (cleanup) and Step 1.5 (checklist state recovery), and **all** of the following hold, skip the `AskUserQuestion`/`ask.md` call entirely and go straight to Step 3:
+
+1. The item is **not** context-opaque (Step 1.5 resolved its state, or it never needed resolving — e.g. it was registered this session or its scope/direction is otherwise plainly evident from context)
+2. The item does **not** carry a BLOCKED / review-pending / host-delegated / external-wait label
+3. Nothing about the item signals it needs splitting or merging (single coherent deliverable)
+
+When these hold, state the inferred direction in one line ("Only one item remains: `<subject>` — proceeding.") and mark it `in_progress` immediately. This is not silent execution — naming the item and direction gives the user a visible point to redirect before work starts, without forcing a decision that has only one real answer.
+
+This fast path is scoped narrowly to the **count == 1** case. With 2+ remaining items, per-item ambiguity across items is common even when each one looks obvious in isolation (priority, dependency, or scope overlap between them) — Step 2's full ask still applies.
+
 ### Direction options
 
 | Label | Meaning |
@@ -145,6 +158,8 @@ After Step 1, ask the direction for each remaining incomplete item (`pending` + 
 | 3 | Bundle tasks under one ask via `multiSelect` | Each question independently decides the direction of its task |
 | 4 | Mark the first item `in_progress` without the direction ask | Step 3 may only be entered after Step 2 is complete |
 | 5 | Offer only "Hold (keep as task)" for external-wait items (user manual action / merge instruction / reply pending) | Include **Defer to checklist** in the option set — external-wait items belong in the checklist medium per "Medium separation principle" below. Hold keeps them polluting the task list across sessions |
+| 6 | Reference a PR/issue by bare `#N` in the question text or an option's description | Every distinct PR/issue number needs its own clickable full URL (`https://github.com/<owner>/<repo>/pull/<N>`) somewhere in that same ask — this rule is not scoped to any one skill's option-composition path, it applies wherever a PR/issue surfaces in a decision UI. Enforced by `block-pr-url-gate.sh` (PreToolUse:AskUserQuestion) |
+| 7 | Ask direction for a single remaining item whose state is already known and whose direction is not actually in question | Apply the "Single unambiguous item — skip the ask" fast path above: state the inferred direction in one line and proceed to Step 3 directly |
 
 ### Per-environment ask method
 
@@ -176,7 +191,7 @@ Among the items decided as "Proceed" in Step 2, decide the start priority → ma
 
 ### Loop continuation (HARD STOP — do not stop with a report mid-batch)
 
-Step 3 is a **loop**, not a single action. After each "Proceed" item completes — **including when it finished via a sub-skill call** (`github-flow`, `fix`, `consolidate`, etc.) — control returns to the /wip loop. Drive the **next** Proceed item **in the same turn**. Do not end the turn with a status report while Proceed items remain. When the batch is exhausted, invoke `Skill("next")` to surface the remaining/follow-up work — do not end with a bare report. Delegating an item to a **background agent** (`run_in_background`) also returns control immediately — the dispatch itself is not a reason to stop.
+Step 3 is a **loop**, not a single action. After each "Proceed" item completes — **including when it finished via a sub-skill call** (`github-flow`, `fix`, `consolidate`, etc.) — control returns to the /wip loop. Drive the **next** Proceed item **in the same turn**. Do not end the turn with a status report while Proceed items remain. When the batch is exhausted, invoke `Skill("next")` to surface the remaining/follow-up work — do not end with a bare report. This applies even when `next` itself routed the flow into /wip earlier in the same chain — re-invocation is loop-safe: `next`'s gates re-evaluate the new completion state and terminate when no new candidates surface (skip/report or a single wrap-up ask), so the next↔wip cycle cannot spin, and "the duty was already discharged this chain" is not a valid skip reason. Delegating an item to a **background agent** (`run_in_background`) also returns control immediately — the dispatch itself is not a reason to stop.
 
 | # | Don't | Do |
 |---|-------|-----|
@@ -216,6 +231,24 @@ The ask-medium ceiling (Claude `questions` max 4, Antigravity `ask.md` visibilit
 | 2 | Double-register BLOCKED items under the rationale "having it in the task list helps me not forget" | The checklist is reloaded every session, so it won't be forgotten. Duplicating the medium increases sync overhead |
 | 3 | Use `[BLOCKED]` as a task subject prefix | Use the checklist's `## Hold` section: `- [ ] [BLOCKED] <subject> (trigger: ...)` |
 | 4 | Report "BLOCKED still BLOCKED" on every `/wip` for external-wait tasks | If it is not in the task list, it is not a reporting target. When the response arrives, promote it from the checklist to a task |
+| 5 | Write a task subject like "Consolidate PR #184..." with the repo/URL only in the description | `TaskList` displays subject only, never description. A PR/issue reference in the subject needs its own repo qualifier (e.g. "owner/repo PR #N: ...") in the subject itself. Enforced by `block-pr-url-gate.sh` (PreToolUse:TaskCreate) |
+
+### Exception — Ralph-autonomous-loop-owned checklist files (large backlog)
+
+The "`[ ]` open → register as an execution task" rule above assumes a checklist file scoped to the current session's own work. Some checklist files are instead owned by a separate autonomous loop (Ralph) that runs across many sessions independently of the current interactive one — recognizable by a `## REPEAT` section (or equivalent recurring-task marker). Pulling every `[ ]` item from such a file into the current session's TaskList is disproportionate once the file's open-item count crosses a size threshold — the backlog is designed to be worked off across many future autonomous-loop passes, not exhausted in one sitting.
+
+**Trigger (both must hold)**:
+1. The checklist file has a `## REPEAT` section (or equivalent recurring-task marker), AND
+2. The count of top-level `[ ]` (non-`[BLOCKED]`) open items exceeds ~20
+
+**When triggered**: skip the full mechanical decomposition sync. Instead:
+- Present a scoped `AskUserQuestion` offering only session-relevant candidates (items touching files/topics from this session), plus an option to leave the rest for the autonomous loop's own future passes
+- Do NOT silently drop the sync obligation — state explicitly in the wip report that the full backlog was intentionally not decomposed, and why (trigger condition met)
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Register all of a large Ralph-owned backlog's `[ ]` items as TaskList entries because decomposition is "MANDATORY" | Check the exception trigger first — Ralph-owned (`## REPEAT` present) + oversized backlog → scoped ask instead |
+| 2 | Silently skip decomposition without saying so | State the skip and the reason explicitly in the wip report |
 
 ### Reverse direction — task → checklist demotion (Defer to checklist execution)
 
@@ -254,6 +287,7 @@ Step 1.5: Checklist state recovery (context-opaque tasks only)
   └─ Grep/Read fix_plan.md / checklist.md → feed recovered state into Step 2
   ↓
 Step 2: Per-item direction ask
+  ├─ exactly 1 item + unambiguous → skip ask, state direction, go to Step 3
   ├─ Claude: AskUserQuestion (questions array, 1 question per task, max 4)
   └─ Antigravity: ask.md (RequestFeedback: true)
   ↓

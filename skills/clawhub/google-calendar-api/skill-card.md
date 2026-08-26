@@ -1,44 +1,64 @@
-## Description: <br>
-Google Calendar API integration with managed OAuth for creating events, listing calendars, checking availability, and managing schedules. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Calendar API integration with managed OAuth for creating events, listing calendars, checking availability, and managing schedules.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to read and manage Google Calendar calendars, events, connections, and availability through Maton-managed OAuth and API or CLI examples. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change Google Calendar data through Maton-mediated access. <br>
-Mitigation: Install only if Maton-mediated calendar access is acceptable, and confirm the target calendar, event, connection, and intended effect before create, update, delete, or connection-management commands. <br>
-Risk: Multiple Google Calendar connections can cause requests to affect the wrong account or calendar. <br>
-Mitigation: Specify the intended connection when multiple Google Calendar connections exist and verify the target resource before write operations. <br>
+## Use Case:
 
+External users and agents use this skill to inspect and manage Google Calendar calendars, events, availability, and scheduling through Maton OAuth. It supports read-first calendar workflows and requires user approval before creating connections or changing calendar data.
 
-## Reference(s): <br>
-- [ClawHub Google Calendar Skill](https://clawhub.ai/byungkyu/skills/google-calendar-api) <br>
-- [Google Calendar API Overview](https://developers.google.com/calendar/api/v3/reference) <br>
-- [Google Calendar Events Reference](https://developers.google.com/workspace/calendar/api/v3/reference/events/list) <br>
-- [Google Calendar Free/Busy Reference](https://developers.google.com/workspace/calendar/api/v3/reference/freebusy/query) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API endpoint examples and inline bash, Python, and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Google Calendar OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: ClawHub release metadata) <br>
+Risk: Calendar writes or meeting changes can notify participants or alter a user's schedule.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read/list calls, verify the target calendar or event, and require explicit user approval before create, update, delete, quick-add, or reschedule operations.
+
+Risk: Using a long-lived API key or exposing credentials in logs, files, or command lines can leak access to Maton or Google Calendar.
+
+Mitigation: Prefer OAuth through the Maton CLI and operating system credential store; never print, persist, or pass credentials on command lines.
+
+Risk: Multiple Maton accounts or Google Calendar connections can send requests to the wrong account.
+
+Mitigation: Confirm the active profile and specify the intended connection before writes or sensitive reads.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-calendar-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Google Calendar API Overview](https://developers.google.com/calendar/api/v3/reference)
+- [Google Calendar List Calendars](https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/list)
+- [Google Calendar List Events](https://developers.google.com/workspace/calendar/api/v3/reference/events/list)
+- [Google Calendar FreeBusy Query](https://developers.google.com/workspace/calendar/api/v3/reference/freebusy/query)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read/list operations first; write, delete, reschedule, quick-add, and connection operations require user confirmation.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

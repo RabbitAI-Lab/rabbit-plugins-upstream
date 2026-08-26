@@ -1,50 +1,63 @@
-## Description: <br>
-Guides agents working on Go CLI projects that use spf13/cobra, including command trees, RunE hooks, argument validators, flags, completions, documentation generation, and command testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Go CLI engineering guide for building, extending, and reviewing spf13/cobra command trees, flags, completions, documentation generation, and tests.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to build, extend, or review Go command-line applications that rely on spf13/cobra. It helps produce idiomatic command definitions, flag handling, completions, documentation generation, and test patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated changes to command wiring, flags, completions, or tests may alter CLI behavior in ways the user did not intend. <br>
-Mitigation: Review proposed diffs before relying on them and run the project's Go test suite for affected commands. <br>
-Risk: The skill may guide an agent to run Go or git commands during implementation work. <br>
-Mitigation: Keep command execution scoped to the project, inspect command intent before running it, and avoid commands that publish, push, or modify remote state unless explicitly requested. <br>
+## Use Case:
 
+Developers and engineers use this skill when adopting or maintaining spf13/cobra in Go CLIs, including command-tree design, flags, argument validation, completions, documentation generation, and test patterns.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/samber/golang-spf13-cobra) <br>
-- [Publisher Profile](https://clawhub.ai/user/samber) <br>
-- [Metadata Homepage](https://github.com/samber/cc-skills-golang) <br>
-- [spf13/cobra Package Documentation](https://pkg.go.dev/github.com/spf13/cobra) <br>
-- [spf13/cobra Repository](https://github.com/spf13/cobra) <br>
-- [Cobra Documentation](https://cobra.dev) <br>
-- [Commands and Arguments Reference](references/commands-and-args.md) <br>
-- [Flags Reference](references/flags.md) <br>
-- [Completions Reference](references/completions.md) <br>
-- [Generators Reference](references/generators.md) <br>
-- [Testing Reference](references/testing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with Go code examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide the agent to edit project files, run Go or git commands, and fetch official or library documentation when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter metadata) <br>
+Risk: Suggested dependency or scaffolding commands may change a Go module or create project files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the proposed command and resulting diff before committing generated dependency or scaffold changes.
+
+Risk: Generated Cobra handlers, hooks, or validators may encode incorrect CLI behavior for the application.
+
+Mitigation: Review generated code against the intended command contract and run focused command tests before release.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/samber/skills/golang-spf13-cobra)
+- [Publisher profile](https://clawhub.ai/user/samber)
+- [ClawHub metadata homepage](https://github.com/samber/cc-skills-golang)
+- [spf13/cobra package docs](https://pkg.go.dev/github.com/spf13/cobra)
+- [spf13/cobra GitHub repository](https://github.com/spf13/cobra)
+- [Cobra documentation](https://cobra.dev)
+- [Cobra commands, hooks, and args validators](references/commands-and-args.md)
+- [Cobra flags reference](references/flags.md)
+- [Cobra shell completions reference](references/completions.md)
+- [Cobra documentation generators](references/generators.md)
+- [Testing Cobra commands](references/testing.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Markdown]
+
+**Output Format:** [Markdown with Go and bash code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose Go code changes, dependency commands, cobra-cli scaffolding commands, and test patterns for caller review.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

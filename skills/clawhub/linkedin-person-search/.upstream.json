@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/linkedin-person-search",
   "slug": "linkedin-person-search",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1784183603558,
-  "contentHash": "140d22dc9f58f80afa95d20a61c1739f35bd1f1cce99111c46a962db6f0f4de2",
-  "fetchedAt": "2026-07-26T18:13:37.126Z"
+  "version": "1.0.3",
+  "updatedAt": 1787563593315,
+  "contentHash": "96c47fe75a30d93e66ff3f1ee346b6ed92d4b526892585cb04fcf28d36aff265",
+  "fetchedAt": "2026-08-26T08:21:25.326Z"
 }

@@ -1,43 +1,60 @@
-## Description: <br>
-Update Skill guides an agent through a gated refresh of one skill repository entry, including research, version and changelog updates, validation, and commit or PR follow-through. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Update Skill helps developers refresh one skill in a skills repository by researching usage, upstream changes, and documentation, proposing gated edits, updating versioning and changelogs, validating changes, and preparing commit and publish steps.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and maintainers use this skill to refresh a single skill in a skills repository, review proposed edits at approval gates, update release metadata, run validation, and prepare repository changes for publication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Agent-assisted refreshes can introduce incorrect or misleading changes to skill files or release metadata. <br>
-Mitigation: Review the Gate 1 proposed edits, validation output, and Gate 2 diff before approving changes. <br>
-Risk: After approval, the workflow can commit and push repository changes that may publish through the repository pipeline. <br>
-Mitigation: Approve Gate 2 only after confirming the target branch, privacy scan result, diff, and CI or publication expectations. <br>
+## Use Case:
 
+Developers and skill maintainers use this skill to perform an agent-assisted refresh of a specific repository skill, including research, gated edits, changelog and version updates, validation, privacy scanning, and commit or publish review.
 
-## Reference(s): <br>
-- [Skill homepage](https://github.com/tenequm/skills/tree/main/skills/update-skill) <br>
-- [Keep a Changelog 2.0.0](https://keepachangelog.com/en/2.0.0/) <br>
-- [Semantic Versioning](https://semver.org/spec/v2.0.0.html) <br>
-- [Pond MCP](https://pond.cascade.fyi/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with inline shell commands, proposed file edits, changelog entries, and git workflow guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses two human approval gates before applying edits and before committing or pushing repository changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.1 (source: metadata.version, release.version, and CHANGELOG.md, released 2026-07-22) <br>
+Risk: The workflow can modify repository skills and prepare commits or pushes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the Phase 3 proposal before approving edits and review the Phase 6 diff before approving commit or push steps.
+
+Risk: Research or usage findings could introduce private details into a public skill update.
+
+Mitigation: Use the required privacy scan and drop private-scope findings before commit review.
+
+Risk: Agent-proposed changes could introduce incorrect or misleading skill guidance.
+
+Mitigation: Ground findings against primary sources, run the repository validation gate, and review generated changes before deployment.
+
+## Reference(s):
+
+- [Update Skill homepage](https://github.com/tenequm/skills/tree/main/skills/update-skill)
+- [Pond MCP](https://pond.cascade.fyi/)
+- [Keep a Changelog 2.0.0](https://keepachangelog.com/en/2.0.0/)
+- [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown reports with command snippets, proposed file edits, validation results, diffs, and git or CI status summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires explicit user approval before edits and before commit or push steps.]
+
+## Skill Version(s):
+
+0.8.2 (source: frontmatter, changelog, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

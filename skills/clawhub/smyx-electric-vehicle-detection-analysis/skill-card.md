@@ -1,47 +1,59 @@
-## Description: <br>
-Automatically detects electric motorcycles and e-bikes in restricted areas from video streams, images, local files, or media URLs, then reports counts, violation levels, alerts, and management suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automatically detects electric motorcycles and e-bikes in restricted areas from videos, images, or media URLs, then returns violation counts, alert levels, and management suggestions for safety teams.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Security operators, facilities teams, and their agents use this skill to analyze surveillance images, videos, or media URLs for electric motorcycle and e-bike activity in restricted areas, then review violation counts and handling suggestions. The skill can also retrieve identity-linked historical analysis reports from the configured cloud service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Surveillance images, videos, media URLs, and report queries are sent to the configured LifeEmergence cloud service. <br>
-Mitigation: Use the skill only with media that is approved for external cloud processing, and confirm privacy, retention, and data-processing terms before deployment. <br>
-Risk: The skill silently creates or reuses an account identity for analysis and historical report access. <br>
-Mitigation: Review whether silent account creation and identity-linked report retrieval are acceptable for the target environment, and restrict execution to approved workspaces. <br>
-Risk: Authentication tokens may be persisted locally in the workspace data database. <br>
-Mitigation: Protect the workspace data directory, rotate tokens if access is suspected, and clear stored credentials before sharing or archiving the workspace. <br>
-Risk: Detection results may be used to assess real-world violations from surveillance media. <br>
-Mitigation: Treat outputs as operational decision support and require human review before enforcement or disciplinary action. <br>
+## Use Case:
 
+External safety, facilities, and operations teams use this skill to analyze surveillance media for electric motorcycles or e-bikes in restricted areas. It supports park, community, campus, parking-lot, roadway, and similar safety-management workflows where reports should be reviewed by a human before action.
 
-## Reference(s): <br>
-- [Electric Vehicle Detection API Documentation](references/api_doc.md) <br>
-- [Generic Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-electric-vehicle-detection-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Files] <br>
-**Output Format:** [Markdown report text or structured JSON, with optional saved output files and cloud report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports basic, standard, and JSON detail levels; local media input is limited to configured supported formats and file size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-9.9.10 (source: ClawHub release evidence; artifact frontmatter reports 1.0.11) <br>
+Risk: Surveillance images, videos, or media URLs are sent to the Life Emergence/Open Life Emergence backend for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media approved for that backend, and review the service's handling of uploaded media and report retention before processing sensitive footage.
+
+Risk: Reports are tied to an automatically managed local identity, and authentication tokens may be stored locally.
+
+Mitigation: Review account creation, local token storage, and report-history behavior before installation; restrict local file access and rotate or remove stored tokens when no longer needed.
+
+Risk: Computer-vision reports may incorrectly classify vehicles or violation severity.
+
+Mitigation: Treat reports as safety-management aids and require human review before enforcement, cleanup, or other operational action.
+
+## Reference(s):
+
+- [Electric Vehicle Detection Analysis API Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON analysis reports with optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports can include violation counts, risk scores, alert levels, management warnings, suggestions, report links, and history-list results.]
+
+## Skill Version(s):
+
+9.9.15 (source: server release metadata; artifact frontmatter reports 1.0.15)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/report2article",
   "slug": "report2article",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781763304348,
-  "contentHash": "7489e307348c0131b700ef76a6cee150e7f6ffc552eb090fdce9dc6058d0ad8e",
-  "fetchedAt": "2026-07-26T18:27:13.241Z"
+  "version": "1.0.2",
+  "updatedAt": 1787662649229,
+  "contentHash": "17748c5646d46bae34659dbc827c21425ccf822dfd31c91c1ce7178107b366c5",
+  "fetchedAt": "2026-08-26T08:15:10.744Z"
 }

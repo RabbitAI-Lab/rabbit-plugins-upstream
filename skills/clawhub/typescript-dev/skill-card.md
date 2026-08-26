@@ -1,56 +1,62 @@
-## Description: <br>
-Build full-stack TypeScript apps with Vite 8, React 19, Tailwind CSS v4, shadcn/ui, Biome, Vitest, and Hono, including frontend build, testing, styling, and Hono backend/API guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds full-stack TypeScript apps with Vite 8, React 19, Tailwind CSS v4, shadcn/ui, Biome, Vitest, and Hono.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill when setting up or maintaining TypeScript projects across Vite, React, Tailwind, shadcn/ui, Biome, Vitest, and Hono. It provides stack guidance, configuration examples, code patterns, command examples, and cross-tool compatibility notes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can activate for many React or TypeScript tasks and may provide broad project guidance. <br>
-Mitigation: Confirm the current project stack and intended task before applying configuration, code, or command suggestions. <br>
-Risk: Suggested commands may write to a project, apply unsafe fixes, overwrite files, install registry components, configure MCP, or deploy code. <br>
-Mitigation: Review each command and its flags before execution, inspect generated diffs, and run deployment commands only in the intended environment. <br>
+## Use Case:
 
+Developers and engineers use this skill when setting up or maintaining TypeScript projects that combine Vite, React, Tailwind CSS, shadcn/ui, Biome, Vitest, and Hono. It provides stack guidance, code and configuration examples, shell commands, testing guidance, and integration rules for type-safe frontend and backend development.
 
-## Reference(s): <br>
-- [OpenClaw homepage](https://github.com/tenequm/skills/tree/main/skills/typescript-dev) <br>
-- [Vite reference](references/vite.md) <br>
-- [React reference](references/react.md) <br>
-- [TypeScript reference](references/typescript.md) <br>
-- [Tailwind CSS reference](references/tailwind.md) <br>
-- [shadcn/ui reference](references/shadcn.md) <br>
-- [Biome reference](references/biome.md) <br>
-- [Vitest reference](references/vitest.md) <br>
-- [Hono reference](references/hono.md) <br>
-- [Vite documentation](https://vite.dev/guide/) <br>
-- [React Compiler documentation](https://react.dev/learn/react-compiler) <br>
-- [TypeScript 6.0 announcement](https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/) <br>
-- [Tailwind CSS documentation](https://tailwindcss.com/docs) <br>
-- [shadcn/ui documentation](https://ui.shadcn.com/docs) <br>
-- [Biome documentation](https://biomejs.dev/) <br>
-- [Vitest documentation](https://vitest.dev/guide/) <br>
-- [Hono documentation](https://hono.dev/docs/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code blocks and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include project configuration snippets, TypeScript/React/Hono code, and commands that should be reviewed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.2 (source: frontmatter, changelog, release evidence) <br>
+Risk: Agent-proposed commands or file edits could overwrite project files or change deployed services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before execution, especially shadcn component overwrites, Biome --unsafe fixes, registry additions, MCP setup, and Wrangler deployment.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/tenequm/skills/tree/main/skills/typescript-dev)
+- [Vite 8 reference](references/vite.md)
+- [React 19 reference](references/react.md)
+- [TypeScript 6.0 reference](references/typescript.md)
+- [Tailwind CSS v4 reference](references/tailwind.md)
+- [shadcn/ui reference](references/shadcn.md)
+- [Biome reference](references/biome.md)
+- [Vitest reference](references/vitest.md)
+- [Hono reference](references/hono.md)
+- [Vite documentation](https://vite.dev/guide/)
+- [React Compiler documentation](https://react.dev/learn/react-compiler)
+- [Tailwind CSS documentation](https://tailwindcss.com/docs)
+- [shadcn/ui documentation](https://ui.shadcn.com/docs)
+- [Hono documentation](https://hono.dev/docs/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline TypeScript, JSON, CSS, and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only guidance; the agent may propose file edits, local tool commands, and deployment commands for review before execution.]
+
+## Skill Version(s):
+
+0.3.4 (source: frontmatter, changelog released 2026-08-21, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

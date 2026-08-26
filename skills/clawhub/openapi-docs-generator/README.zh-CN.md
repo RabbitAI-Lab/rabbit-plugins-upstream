@@ -14,10 +14,11 @@ Validated demand: Backend and platform teams need practical help generating, imp
 
 ## 来源证据
 
-- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search：[Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues：[Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues：[[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
+- github-issues：[CI: add measurable quality regression gates beyond aggregate coverage](https://github.com/sgajbi/lotus-advise/issues/495)
+- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=269250cb9297425c9c14c7cce93e9e1d&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-159013081-null-null.142^v102^pc_search_result_base5&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues：[dnse: architecture parity with reference plugins — journal/recovery/disappearance/module-split/broker_lab (plan: dnse_v2_fix_plan.md)](https://github.com/rubycell/pynecore/issues/53)
+- github-issues：[dnse: per-tick execution (calc_on_every_tick) via /trades/latest pseudo-tick feed](https://github.com/rubycell/pynecore/issues/37)
+- github-issues：[feat(api): Add developer documentation portal](https://github.com/Deen-Bridge/dnb-backend/issues/224)
 - segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
 - segmentfault-search：[typescript](https://segmentfault.com/t/typescript)
@@ -25,7 +26,6 @@ Validated demand: Backend and platform teams need practical help generating, imp
 - segmentfault-search：[答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
 - segmentfault-search：[OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
 - segmentfault-search：[答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues：[Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
 
 ## 这个技能如何满足需求
 

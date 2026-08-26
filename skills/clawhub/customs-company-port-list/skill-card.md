@@ -1,45 +1,62 @@
-## Description: <br>
-Query paginated port trade data for a company and retrieve port-level trade statistics with counts, amounts, quantities, weights, and percentages for logistics analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query paginated port trade data for a company to retrieve port-level trade statistics with counts, amounts, and percentages for logistics analysis.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External users, logistics analysts, and developers use this skill to inspect a company's import-export port distribution and drill into paginated port-level customs trade statistics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid API queries and top-up actions can incur charges. <br>
-Mitigation: Require a separate explicit confirmation before fee-incurring queries or top-up flows, and use the provider pricing reference or price-info command for current fees. <br>
-Risk: The API key may be stored locally in ~/.upkuajing/.env. <br>
-Mitigation: Prefer managed secret storage for UPKUAJING_API_KEY and keep any local credential file private. <br>
-Risk: Queries and daily version checks contact UpKuaJing services. <br>
-Mitigation: Use the skill only when sharing query parameters with the UpKuaJing API and checking for provider-hosted updates is acceptable. <br>
+## Use Case:
 
+Developers, analysts, and logistics teams use this skill to query UpKuaJing customs data for a company's trade ports, including port-level transaction counts, amounts, quantities, weights, and trade percentages.
 
-## Reference(s): <br>
-- [Company Port List API](references/customs-company-port-list-api.md) <br>
-- [UpKuaJing Homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [JSON responses from Python scripts plus Markdown guidance with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns paginated port-list data and fee information; requires UPKUAJING_API_KEY and explicit user confirmation before paid queries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: metadata.version and release.version) <br>
+Risk: Paid UpKuaJing API calls and top-up flows can incur costs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inform the user that a fee may be charged and wait for explicit confirmation before running a paid query or creating a top-up order.
+
+Risk: The UPKUAJING_API_KEY grants access to the user's UpKuaJing account.
+
+Mitigation: Keep the key private, store it only in the expected environment variable or ~/.upkuajing/.env file, and do not expose it in prompts, logs, or shared output.
+
+Risk: Error reports may include request or response details that contain sensitive business data.
+
+Mitigation: Ask for user confirmation before reporting an abnormal API call and avoid sending raw request or response bodies unless the user has reviewed them for sensitive content.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-company-port-list)
+- [UpKuaJing homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [Detailed price description](https://www.upkuajing.com/web/openapi/price.html)
+- [Company Port List API](references/customs-company-port-list-api.md)
+- [Skill Error Report API](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API results and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python, httpx, and UPKUAJING_API_KEY; paid API calls require explicit user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.1 (source: evidence.release.version and SKILL.md metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

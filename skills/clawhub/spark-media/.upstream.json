@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/spark-media",
   "slug": "spark-media",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1784116591739,
-  "contentHash": "a87a1070515886063d93de8f21ef91a3d6ef642732cb5bd6ace28f7cde1d86c4",
-  "fetchedAt": "2026-07-26T18:13:58.618Z"
+  "version": "2.2.0",
+  "updatedAt": 1787707586769,
+  "contentHash": "06ddf156d4629e1cda58d759f05ad36a54495daeb307b9fedfe4249169146c3e",
+  "fetchedAt": "2026-08-26T08:12:55.841Z"
 }

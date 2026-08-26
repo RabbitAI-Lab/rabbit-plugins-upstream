@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pinmoo.com/omni-ecom/schemas/claim-ledger.schema.json",
+  "title": "Omni E-commerce Numeric Claim Ledger",
+  "type": "object",
+  "required": ["schema_version", "run_id", "period", "claims"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "client_scope": { "type": "string", "minLength": 1 },
+    "period": { "type": "string", "minLength": 1 },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/claim" }
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "required": ["source_id", "source_file", "field", "source_sha256"],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1 },
+        "source_file": { "type": "string", "minLength": 1 },
+        "sheet": { "type": "string" },
+        "range": { "type": "string" },
+        "field": { "type": "string", "minLength": 1 },
+        "source_sha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+      },
+      "additionalProperties": true
+    },
+    "formula": {
+      "type": "object",
+      "required": ["name", "numerator", "denominator", "expression"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "numerator": { "type": "string", "minLength": 1 },
+        "denominator": { "type": "string", "minLength": 1 },
+        "expression": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "attribution": {
+      "type": "object",
+      "required": ["source_id", "window", "level"],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1 },
+        "window": { "type": "string", "minLength": 1 },
+        "level": { "type": "string", "minLength": 1 },
+        "cost_complete": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "claim": {
+      "type": "object",
+      "required": ["claim_id", "metric", "value", "unit", "period", "status", "source_ref"],
+      "properties": {
+        "claim_id": { "type": "string", "pattern": "^C-[A-Za-z0-9_-]+$" },
+        "metric": { "type": "string", "minLength": 1 },
+        "value": { "type": ["number", "null"] },
+        "unit": { "type": "string", "minLength": 1 },
+        "period": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["verified", "derived", "unknown"] },
+        "source_ref": { "$ref": "#/$defs/sourceRef" },
+        "formula": { "$ref": "#/$defs/formula" },
+        "inputs": { "type": "array", "items": { "type": "string" } },
+        "attribution": { "$ref": "#/$defs/attribution" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

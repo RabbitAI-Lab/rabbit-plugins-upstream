@@ -1,46 +1,65 @@
-## Description: <br>
-Helps agents use Mallary CLI workflows for social-media publishing, scheduling, uploads, comments, analytics, webhooks, settings, and platform connections while preferring read-only discovery before side-effecting actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill only when the user explicitly asks to inspect, set up, or act through Mallary, the Mallary CLI, the Mallary API, Mallary MCP, or an existing Mallary workflow.
 
-## Publisher: <br>
-[sammydigits](https://clawhub.ai/user/sammydigits) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sammydigits](https://clawhub.ai/user/sammydigits)
 
-## Use Case: <br>
-Developers, operators, CI jobs, and AI agents use this skill to operate Mallary CLI workflows for social-media account discovery, media upload, posting, scheduling, analytics, webhooks, profile settings, and platform connection management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Mallary API keys are bearer secrets that can authorize posting and account-management actions. <br>
-Mitigation: Store MALLARY_API_KEY in a secret manager or masked CI secret, never print or paste it, and rotate it if exposed. <br>
-Risk: Publishing, upload, reply, delete, webhook, settings, and disconnect commands can transmit data, create public content, or change account state. <br>
-Mitigation: Start with read-only commands and confirm the exact profile, platform, file, message, webhook URL, setting, or identifier before allowing side-effecting actions. <br>
-Risk: Read-only discovery can expose profile IDs, connected-platform state, settings, analytics, and other operational metadata. <br>
-Mitigation: Request the minimum needed output and redact sensitive profile, platform, account, post, and settings details before sharing logs or summaries. <br>
+## Use Case:
 
+Developers, operators, CI maintainers, and AI agents use this skill to inspect Mallary state, set up authentication, and carry out explicit user-requested Mallary workflows such as publishing, scheduling, media upload for a post, replies, and account operations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sammydigits/skills/mallary) <br>
-- [Mallary Website](https://mallary.ai) <br>
-- [Mallary CLI npm Package](https://www.npmjs.com/package/@mallary/cli) <br>
-- [Mallary API Platform Options](https://docs.mallary.ai/api-reference/endpoint/create#body-platform-options) <br>
-- [Mallary API Platform Media Rules](https://docs.mallary.ai/api-reference/endpoint/create#platform-specific-media-rules) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON, Markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference MALLARY_API_KEY and Mallary profile, platform, post, file, webhook, or settings identifiers; side-effecting commands require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; SKILL.md frontmatter says 1.0.2) <br>
+Risk: OAuth or an API key grants broad Mallary access and can authorize publishing, engagement, and account-management actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use browser OAuth only for explicit setup requests, keep API keys in a secret manager or masked environment, and never request or print credentials in chat or logs.
+
+Risk: A clear request to publish, schedule, upload media for a post, or send a reply can create public or scheduled social content without a second confirmation.
+
+Mitigation: Resolve the exact profile, destination, content, files, and timing before acting, keep the action within the request, run it once, and verify with a read-only command.
+
+Risk: Read-only Mallary discovery can expose sensitive profile IDs, account labels, post content, analytics, settings, webhook destinations, and provider metadata.
+
+Mitigation: Request only the data needed for the user's Mallary task and redact sensitive operational identifiers and metadata before sharing output.
+
+Risk: Deletion, platform disconnection, webhook changes, and settings updates can affect remote data, public behavior, or account access.
+
+Mitigation: Use read-only discovery to identify the target and confirm target and effect when the current request does not already clearly identify both and ask to execute now.
+
+## Reference(s):
+
+- [ClawHub Mallary Skill Page](https://clawhub.ai/sammydigits/skills/mallary)
+- [Mallary Website](https://mallary.ai/)
+- [Mallary Docs](https://docs.mallary.ai)
+- [Mallary CLI npm Package](https://www.npmjs.com/package/@mallary/cli)
+- [Mallary Agent Repository](https://github.com/mallarylabs/mallary-agent)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may guide read-only discovery and user-authorized Mallary CLI actions; executable write syntax is intentionally limited in the artifact.]
+
+## Skill Version(s):
+
+1.1.2 (source: server release metadata; artifact frontmatter lists 1.0.17)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

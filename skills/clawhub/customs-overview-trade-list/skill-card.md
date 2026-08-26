@@ -1,46 +1,61 @@
-## Description: <br>
-Queries paginated national trade list data from the UpKuaJing Open Platform API, returning country-level annual, quarterly, and monthly trade volumes plus supplier and buyer counts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query paginated national trade list data to retrieve country-level annual, quarterly, and monthly trade volumes for market analysis.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External export teams, market researchers, and trade analysts use this skill to compare import-export volumes across countries, analyze market penetration, and identify growth opportunities from structured country-level customs trade data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles an UpKuaJing API key and may read or write it in a plaintext local file. <br>
-Mitigation: Prefer a managed secret store or a tightly permissioned local file, and avoid exposing the API key in prompts, logs, or shared outputs. <br>
-Risk: API queries and account top-up actions can incur charges. <br>
-Mitigation: Require separate explicit user confirmation before any billed query or top-up action, and check current pricing before execution. <br>
-Risk: Queries send trade parameters and the API key to the UpKuaJing API. <br>
-Mitigation: Install and use the skill only when the user trusts UpKuaJing and is comfortable sending the required query data to that service. <br>
+## Use Case:
 
+External export teams, market researchers, and trade analysts use this skill to compare country-level import-export volumes, analyze market penetration, and identify growth opportunities from structured trade data.
 
-## Reference(s): <br>
-- [Customs Overview Trade List API Reference](references/customs-overview-trade-list-api.md) <br>
-- [UpKuaJing Homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Developer Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/customs-overview-trade-list) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and formatted JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires UPKUAJING_API_KEY; paginated API calls return fee information and may include a cursor for additional pages.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and SKILL.md metadata) <br>
+Risk: Paid API calls may incur charges for each paginated trade-list request.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before paid queries and use the platform pricing reference or price-info script for current pricing.
+
+Risk: The API key is stored in plaintext under ~/.upkuajing/.env when configured locally.
+
+Mitigation: Protect the file like any other credential, avoid sharing it, and rotate the API key if exposure is suspected.
+
+Risk: Error reports can include troubleshooting context and request details.
+
+Mitigation: Submit error reports only after user confirmation and avoid including extra sensitive details in the report context.
+
+## Reference(s):
+
+- [Trade List API Reference](references/customs-overview-trade-list-api.md)
+- [Skill Error Report API Reference](references/skill-error-report-api.md)
+- [UpKuaJing](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [UpKuaJing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; paid API queries return paginated country trade records with fee and request identifiers.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,63 @@
-## Description: <br>
-Gladia Documentation Auto gives agents a comprehensive Gladia speech-to-text reference for transcription, audio intelligence, endpoint selection, and SDK-first workflow guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Comprehensive Gladia speech-to-text reference for agents that need broad guidance on Gladia capabilities, endpoints, model selection, SDK-first workflows, and fallback REST or WebSocket usage.
 
-## Publisher: <br>
-[gladiaio](https://clawhub.ai/user/gladiaio) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gladiaio](https://clawhub.ai/user/gladiaio)
 
-## Use Case: <br>
-Developers and agents use this skill to build Gladia transcription and audio-analysis workflows, choose pre-recorded versus live APIs, configure SDK/API requests, and avoid common implementation errors. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may guide agents toward Gladia transcription or audio-analysis behavior outside an explicit user request because the security summary notes a routing-scope concern. <br>
-Mitigation: Use the skill only for explicit Gladia, transcription, speech-to-text, or audio-analysis tasks until the broad fallback wording is narrowed. <br>
-Risk: Transcription workflows may require Gladia credentials or may send audio to Gladia. <br>
-Mitigation: Review whether a task requires a Gladia API key or audio upload, keep credentials out of generated code and logs, and get user confirmation before sending audio to the service. <br>
+## Use Case:
 
+Developers and agents use this skill to build Gladia speech-to-text integrations for pre-recorded transcription, live transcription, diarization, translation, audio intelligence features, CLI usage, and SDK-first implementation decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gladiaio/skills/gladia-documentation-auto) <br>
-- [Gladia publisher profile](https://clawhub.ai/user/gladiaio) <br>
-- [Server-resolved provenance unavailable](evidence.json#provenance) <br>
-- [Source skill metadata](https://docs.gladia.io/.well-known/agent-skills/gladia/skill.md) <br>
-- [Gladia documentation](https://docs.gladia.io) <br>
-- [Gladia documentation index](https://docs.gladia.io/llms.txt) <br>
-- [Pre-recorded quickstart](https://docs.gladia.io/chapters/pre-recorded-stt/quickstart) <br>
-- [Live quickstart](https://docs.gladia.io/chapters/live-stt/quickstart) <br>
-- [Audio intelligence features](https://docs.gladia.io/chapters/audio-intelligence/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with code snippets, API examples, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [SDK-first recommendations with raw REST/WebSocket fallback guidance when the SDK cannot satisfy the requirement.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: CLI installation examples execute remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer scripts before running them and prefer trusted package or release channels when available.
+
+Risk: Gladia API keys could be exposed if copied into client-side code or shared transcripts.
+
+Mitigation: Keep API keys server-side or in protected environment variables and avoid exposing the x-gladia-key header in frontend code.
+
+Risk: Generated transcription guidance can be incorrect if model, duration, language, or webhook constraints are ignored.
+
+Mitigation: Validate model choice, audio limits, callback reachability, and error handling against Gladia documentation before deployment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gladiaio/skills/gladia-documentation-auto)
+- [Gladia Agent Skill Source](https://docs.gladia.io/.well-known/agent-skills/gladia/skill.md)
+- [Gladia Documentation](https://docs.gladia.io)
+- [Gladia Documentation Index](https://docs.gladia.io/llms.txt)
+- [Pre-recorded STT Quickstart](https://docs.gladia.io/chapters/pre-recorded-stt/quickstart)
+- [Live STT Quickstart](https://docs.gladia.io/chapters/live-stt/quickstart)
+- [Gladia API Reference](https://docs.gladia.io/api-reference)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline code, API endpoint references, shell commands, and configuration notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [SDK-first recommendations with REST, WebSocket, and CLI fallback guidance]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

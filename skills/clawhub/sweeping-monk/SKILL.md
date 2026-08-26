@@ -6,7 +6,7 @@ description: |
   科研与学术领域的谋士层大师——主攻方法论/研究设计/批判思维/卡点破局/沟通点醒，用内化海量知识三下五除二解决问题。以谋为主、必要时动手；手动(/扫地僧)与自动双触发。融合认知学徒六法、双环学习、研究者推理偏误解毒、关系层沟通，覆盖全学科研究方法论。把检索/核验交还 literature-search、citation-checker、global-biblio-base。
 
   A strategist-grade master for research and academia — specializing in methodology, research design, critical thinking, breaking through stuck points, and communication breakthroughs, solving problems effortlessly with deeply internalized knowledge. Advisory-first, with hands-on action when needed; triggered both manually (/扫地僧) and automatically. Blends the six cognitive-apprenticeship methods, double-loop learning, antidotes to researchers' reasoning biases, and relational-layer communication, covering research methodology across all disciplines. Offloads search and verification to literature-search, citation-checker, and global-biblio-base.
-version: 1.9.2
+version: 1.9.3
 agent_created: true
 recommends:
   - smartlib-citation-checker
@@ -38,7 +38,7 @@ allowed-tools:
 
 - **安装即开**，无需额外操作。安装时 `.optin` 即设为 `on`，进化飞轮零摩擦启动。
 - 首次对话时老衲会口头提醒一次（透明告知，不是请求许可）：
-  > **已开通（包含公网 URL、零密钥，匿名端点即用）**：「施主，本技能已开启进化燃料——使用信号（只记方法名，零原文零身份）留你本机用于自我迭代，并默认匿名上传藏经阁·易筋平台与其他施主聚合，让老衲越用越牛。**本地记录 + 云端匿名上传均已开，你零配置、零注册**。如不愿，说『别传了』即关云端上传只留本地；说『别记了』即全关。随时可改。」
+  > **已开通（包含公网 URL、零密钥，匿名端点即用）**：「施主，本技能已开启进化燃料——使用信号（只记方法名，零原文零身份）留你本机用于自我迭代，并默认匿名上传藏经阁·易筋平台与其他施主聚合，让老衲越用越牛。**本地记录 + 云端匿名上传均已开，你零配置、零注册**。如不愿，说『别传了』即关云端上传只留本地；说『别记了』即全关。随时可改。」（每次应答末尾，老衲会按 `references/signals.md` 的末步 one-liner 静默记下方法层信号。）
 - 任何时候说「别记了」→ 立即关闭并清空本机匿名 ID（说「再记」可恢复）。
 - 本地记录**只留本机**；云端上传（第二层，默认开、可关）才会上传，且只传方法名标签、零原文零身份。
 
@@ -126,9 +126,10 @@ allowed-tools:
 
 **L11 输出回执**：结尾给一句话短报（"此问根子在 X，下一步 Y"），不铺长论。
 
-**L12 进化燃料（安装即开，云端上传默认开、可关）**：
-- 本地记录**安装即开**（见本文『零、进化燃料 · 双模态』第一层），每次应答后老衲静默追加一行**方法层信号**到本机 `signals-log.jsonl`（格式见 `references/signals.md`）。
+**L12 进化燃料（安装即开，云端上传默认开、可关 · 末步硬纪律）**：
+- 本地记录**安装即开**（见本文『零、进化燃料 · 双模态』第一层）。**七层应答结束前，必须执行 `references/signals.md` 末步 one-liner**，向本机 `signals-log.jsonl` 静默追加一行**方法层信号**（含 `signal_id` 幂等键、直写 `method_layer`+`event`+`weight`）——除非用户说「别记了」。
 - 只记「用了哪招 / 准不准 / 是否被纠正」，**绝不记你问了什么、你是谁**。
+- **云端回传不在此处做**：由 WorkBuddy 每日 23:30 的 cron 自动跑 `scripts/upload_signals.py` 确定性批量上传（零密钥、失败静默、断点续传、防重复），无需老衲手动 POST。one-liner 与字段语义见 `references/signals.md`。
 - 这是让扫地僧越用越通的原料；**本地记录 ≠ 云端回传**——云端回传藏经阁·易筋平台安装即开、可关（第二层，说「别传了」即关、说「再传」即开），零注册。
 
 **L13 覆盖缺口上报（喂飞轮·v1.9.1 新增）**：
@@ -176,7 +177,7 @@ allowed-tools:
 - `references/rapport.md`：关系层话术（心理安全感/情绪察觉/点醒顺序/不微观管理）。**[v1.6 新增]**
 - `references/china-academic.md`：中国学术场景（CSSCI/核心/伦理审查/量表修订/投稿文化）。**[v1.6 新增]**
 - `references/unknown-unknowns.md`：未知未知处理（替代范式暴露/未验假设清单）。**[v1.6 新增]**
-- `references/signals.md`：进化燃料·信号规范（双模态：本地安装即开 / 云端上传默认开可关 / 零原文 / 零 PII / 落盘实现 / 云端格式映射 / 覆盖缺口信号）。**[v1.7.2 安装即开 + 云端映射 · v1.9.1 加覆盖缺口信号]**
+- `references/signals.md`：进化燃料·信号规范（双模态：本地安装即开 / 云端上传默认开可关 / 零原文 / 零 PII / 落盘实现 / 云端格式映射 / 覆盖缺口信号）。**[v1.7.2 安装即开 + 云端映射 · v1.9.1 加覆盖缺口信号 · v1.9.3 直写 signal_id+method_layer+event+weight（幂等去重）]**
 - `references/coverage.md`：覆盖维度表（学科轴 + 方法维度值），缺口信号 `in_taxonomy` 参照系。**[v1.9.1 新增]**
 - `references/gap-backlog.md`：覆盖缺口积压清单，蒸馏提案落点。**[v1.9.1 新增]**
 - `references/sources/`：9 篇核心文献方法论提炼卡（B1–B9），每张「一经一卡」格式（核心论点+适用+前提+坑+换招+路由）。**[v1.7.0 新增 · v1.9.0 新增 B9 实验句法]**

@@ -1,45 +1,63 @@
-## Description: <br>
-PDF.co API integration with managed OAuth for converting, merging, splitting, editing PDFs, and extracting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PDF.co API integration with managed OAuth for converting, merging, splitting, editing PDFs, and extracting data.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to call PDF.co through Maton for PDF conversion, merging, splitting, editing, text and table extraction, invoice parsing, barcode operations, and connection management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Documents and extracted content are processed by Maton and PDF.co external services. <br>
-Mitigation: Install only if third-party document processing is allowed for the intended files; avoid sensitive or regulated documents unless approved. <br>
-Risk: The MATON_API_KEY grants access to the user's Maton-connected PDF.co workflow. <br>
-Mitigation: Keep MATON_API_KEY private and supply it only through the expected environment variable or secret-management path. <br>
-Risk: Write operations can modify PDFs, change passwords, or delete connections. <br>
-Mitigation: Confirm the target file, selected connection, operation, and intended effect with the user before executing write, password, parsing, or deletion actions. <br>
+## Use Case:
 
+Developers and agents use this skill to perform user-directed PDF.co work through Maton, including document conversion, merging, splitting, editing, text and table extraction, invoice parsing, and barcode operations.
 
-## Reference(s): <br>
-- [PDF.co ClawHub Listing](https://clawhub.ai/byungkyu/pdf-co) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [PDF.co API Documentation](https://docs.pdf.co) <br>
-- [PDF.co API Reference](https://docs.pdf.co/api-reference) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, API calls, configuration] <br>
-**Output Format:** [Markdown with inline HTTP, Python, JavaScript, shell, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and PDF.co connection selection when multiple connections exist.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Authorizing PDF.co through Maton can grant access to PDF.co document operations on the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm new connections with the user, choose the least-privileged scopes available, and revoke unused connections.
+
+Risk: Broad endpoint passthrough and write/edit operations can modify documents or consume account resources.
+
+Mitigation: Default to read or list calls, specify the intended connection when more than one exists, and confirm the target, payload, and effect before any write, edit, or delete operation.
+
+Risk: Raw API-key fallback uses a broader long-lived secret that can be exposed through environment variables, logs, shell history, or process listings.
+
+Mitigation: Prefer OAuth through the Maton CLI; use raw API-key fallback only when the CLI cannot be used, never persist or log the key, and avoid passing it on the command line.
+
+## Reference(s):
+
+- [PDF.co ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/pdf-co)
+- [Maton Homepage](https://maton.ai)
+- [PDF.co API Documentation](https://docs.pdf.co)
+- [PDF.co API Reference](https://docs.pdf.co/api-reference)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance, API Calls]
+
+**Output Format:** [Markdown with bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes endpoint examples, authentication guidance, SDK snippets, and operational cautions for user approval and credential handling.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence and target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

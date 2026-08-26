@@ -1,43 +1,60 @@
-## Description: <br>
-Identifies individual livestock, including pigs, cattle, and sheep, from facial or body-pattern images or videos and returns a stable individual ID with confidence for precision farm management and tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies individual livestock (pigs, cattle, sheep) by facial or body-pattern features and outputs a stable individual ID with confidence for precision farm management and tracking.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Farm operators, livestock-management teams, and external users use this skill to identify pigs, cattle, or sheep from images, videos, local files, or URLs. It links visual observations to an individual ID, confidence score, matched feature regions, and report link for tracking workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends livestock media, remote media URLs, and identity or session metadata to cloud services. <br>
-Mitigation: Use it only where that transfer is approved, avoid unnecessary sensitive media, and disclose cloud processing to affected operators before deployment. <br>
-Risk: The skill may silently create or reuse a local account record and store tokens in a workspace SQLite database. <br>
-Mitigation: Review local identity and token storage before installation, isolate workspaces that run the skill, and prefer a version that requires explicit consent for account creation and history lookup. <br>
+## Use Case:
 
+Farm operators, livestock management teams, and developers use this skill to identify pigs, cattle, and sheep from images, videos, or URLs and receive a structured report with individual IDs, confidence, matched visual features, and report links.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-livestock-individual-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text containing livestock identification results, confidence values, matched feature regions, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can list historical reports as a Markdown table through the cloud API; analysis may also be saved to a local output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release metadata; SKILL.md frontmatter lists 1.0.3) <br>
+Risk: Farm images, videos, URLs, and identity data may be sent to external analysis services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after verifying the configured API endpoints and confirming that uploaded media is appropriate for the service and publisher.
+
+Risk: The skill can create or reuse a local identity and store tokens in a workspace SQLite database.
+
+Mitigation: Use a dedicated workspace, review local identity and token storage expectations before use, and avoid sharing the workspace with untrusted users.
+
+Risk: Historical cloud report queries can expose prior report metadata for the resolved identity.
+
+Mitigation: Run history queries only when report tracking for the current identity is intended and acceptable.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-livestock-individual-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [Livestock Individual Identification API Documentation](references/api_doc.md)
+- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Files]
+
+**Output Format:** [Markdown or JSON structured livestock identification report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include individual IDs, confidence scores, matched feature areas, historical report entries, export links, and optional saved output files.]
+
+## Skill Version(s):
+
+1.0.10 (source: ClawHub release metadata; artifact frontmatter says 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

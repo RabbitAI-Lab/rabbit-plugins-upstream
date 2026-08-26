@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "omni-ecom://schemas/run-scope-1.0.json",
+  "title": "Omni E-commerce Run Scope",
+  "type": "object",
+  "required": ["schema_version", "client_scope", "run_id", "allowed_roots", "input_paths", "output_root"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "client_scope": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,80}$" },
+    "allowed_roots": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+    "input_paths": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+    "output_root": { "type": "string", "minLength": 1 },
+    "forbidden_terms": { "type": "array", "items": { "type": "string" } }
+  }
+}

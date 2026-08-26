@@ -1,7 +1,83 @@
-1.0.8
+1.0.19
 
 Release/version change metadata for this skill set lives here, not in individual skill files.
 
+- PlanetScale CLI v0.325.0
+  - Reviewed the upstream release and compare `v0.324.0...v0.325.0` on 2026-08-25.
+  - Added guarded PostgreSQL point-in-time recovery guidance for `pscale branch create --restore-point`, including source-branch inspection, RFC 3339 timestamps, explicit approval, readiness waiting, and post-create verification.
+  - Added the complete `pscale branch create` help surface and re-verified the unchanged parent help from the checksum-verified v0.325.0 macOS arm64 release binary.
+- PlanetScale CLI v0.324.0
+  - Reviewed the upstream release and compare `v0.323.0...v0.324.0` on 2026-08-22.
+  - Added binary-native agent bootstrap guidance for `pscale --skill` and `pscale agent-guide --skill`, including JSON-mode output behavior.
+  - Added Postgres role connection-target guidance for branch replicas, regional read-only replicas, and PgBouncers, including mutually exclusive flags and PgBouncer port 6432.
+  - Documented role `status` and `expires_at` output and the target-specific credential handling and not-found behavior.
+  - Verified that the release artifact still prints root help and exits zero for a bare unknown root token, so automation guidance now requires expected-output validation instead of trusting the exit code alone.
+  - Re-captured 145 complete command help surfaces from the checksum-verified v0.324.0 macOS arm64 release binary, including the new `role get` surface and previously combined PgBouncer references.
+- PlanetScale CLI v0.323.0
+  - Reviewed the upstream release and compare `v0.322.0...v0.323.0` on 2026-08-21.
+  - Added Postgres branch maintenance run and extension-catalog guidance.
+  - Added query-pattern report list/show/delete workflows alongside download.
+  - Added organization member list/show/update/remove workflows and Vitess password show/update metadata management.
+  - Updated deploy-request update/edit alias guidance, Postgres role default lookup, SQL destructive guards, and D1 import hardening notes.
+  - Re-captured every affected parent/subcommand help surface from the checksum-verified v0.323.0 macOS arm64 release binary.
+- PlanetScale CLI v0.322.0
+  - Reviewed the upstream release and compare `v0.321.0...v0.322.0` on 2026-08-20.
+  - Added branch rename/deletion-protection updates and guarded Postgres primary switchovers.
+  - Added Vitess database aggressive-cutover status/enable/disable and deploy-queue unblocking after failed deploys or reverts.
+  - Added Insights error-fingerprint and anomaly detail workflows, including full-fingerprint lookup and correlated-query interpretation.
+  - Added standalone PostgreSQL Traffic Control inventory and guarded budget/rule management, including the new budget list and fingerprint filter.
+  - Re-captured every affected parent/subcommand help surface from the checksum-verified v0.322.0 macOS arm64 release binary.
+- PlanetScale CLI v0.321.0
+  - Reviewed the upstream release and compare `v0.320.0...v0.321.0` on 2026-08-19.
+  - Added standalone `pscale-metrics` guidance for historical series, current values, and engine-aware grouped performance reports across JSON, CSV, and human output.
+  - Documented time-range exclusivity, positive-step validation, metric/dimension filtering, output interpretation, and correlation with Insights and live inspection.
+  - Re-captured the complete metrics parent/subcommand help surface from the checksum-verified v0.321.0 macOS arm64 release binary.
+- PlanetScale CLI v0.320.0
+  - Reviewed upstream releases v0.319.0 and v0.320.0 plus compare `v0.317.0...v0.320.0` on 2026-08-18; no v0.318.0 release exists.
+  - Added standalone read-only maintenance schedule/list/show/window guidance for Vitess Enterprise databases, including IDs, pending-version/deadline interpretation, week-of-month output, and JSON-first review.
+  - Added database-level Vitess migration throttler show/update guidance, distinguishing future deploy defaults from per-deploy and vtctld throttlers and requiring explicit approval plus post-write verification.
+  - Documented non-zero propagation for dump cursor/worker failures and re-captured all affected maintenance/database-throttler help from the checksum-verified v0.320.0 macOS arm64 release binary.
+- PlanetScale CLI v0.317.0
+  - Reviewed upstream releases v0.316.0 and v0.317.0 plus compares `v0.315.0...v0.316.0` and `v0.316.0...v0.317.0` on 2026-08-14.
+  - Added deploy-request queue, deployment, operation, review, storage-readiness, force-cutover, and per-deploy throttler workflows.
+  - Added keyspace deletion and live keyspace-routing-rule inspection/replacement guidance with destructive-write approval and post-write verification requirements.
+  - Re-captured the complete affected keyspace, vtctld, and deploy-request help surfaces from the checksum-verified v0.317.0 macOS arm64 release binary.
+- PlanetScale CLI v0.315.0
+  - Reviewed the upstream release and compare `v0.314.0...v0.315.0` on 2026-08-13.
+  - Added query execution-sample and query-tag list/show/summary workflows, including required fingerprint/keyspace drill-down, friendly tag-name disambiguation, privacy cautions, and attribution guidance.
+  - Added guarded schema-recommendation dismissal guidance with explicit approval, reason, force, and post-write verification requirements.
+  - Updated Cloudflare D1 migration guidance for deferred/replay-safe foreign-key application, cyclic/case-mismatched/schema-qualified references, parent-primary-key defaults, and positional composite-key typing.
+  - Re-captured the complete affected Insights help surface from the checksum-verified v0.315.0 macOS arm64 release binary.
+- PlanetScale CLI v0.314.0
+  - Reviewed the upstream release and compare `v0.313.0...v0.314.0` on 2026-08-12.
+  - Added standalone dedicated PostgreSQL PgBouncer list/show/create/resize/status/cancel/delete guidance, including target, size, replicas-per-cell, parameter, asynchronous-state, no-op, and destructive-delete safety.
+  - Documented the now-visible `pscale deploy-request deploy --strategy serial|parallel` flag and the need to confirm database eligibility before selecting parallel deployment.
+  - Re-captured affected help from the checksum-verified v0.314.0 macOS arm64 release binary.
+- PlanetScale CLI v0.313.0
+  - Reviewed the upstream release and compare `v0.312.0...v0.313.0` on 2026-08-11.
+  - Added database settings show/update and PostgreSQL IP-restriction CRUD guidance, with engine-specific flags, explicit boolean values, pre-write inspection, and destructive-delete checks.
+  - Added scheduled backup policy CRUD, Vitess read-only-region add/update/remove, and authentication-attempt audit export workflows.
+  - Re-captured affected help from the checksum-verified v0.313.0 macOS arm64 release binary; dependency/security updates and the hidden Cloudflare billing transport change required no public skill command additions.
+- PlanetScale CLI v0.312.0
+  - Reviewed releases v0.310.0, v0.311.0, and v0.312.0 plus upstream compare `v0.309.0...v0.312.0` on 2026-08-06.
+  - Added Vitess production-branch VTGate show, resize, status, cancel, fixed-count, and autoscaling guidance.
+  - Added Vitess read-only-region discovery, region-scoped dump, and region-scoped password workflows, including reader defaults and mutually exclusive routing flags.
+  - Re-captured the affected help from the checksum-verified v0.312.0 macOS arm64 release binary; v0.311.0 only disabled AUR packaging and required no skill workflow change.
+- PlanetScale CLI v0.308.0
+  - Reviewed the upstream release and compare `v0.307.0...v0.308.0` on 2026-08-04.
+  - Documented tablet throttler app throttle/unthrottle rules, expiry/ratio controls, checked-metric assignment, and the new omit-to-preserve behavior for `--enabled`.
+  - Documented preservation of raw API error codes in JSON output, including the `schema_mutation_blocked` retry guidance.
+  - Re-captured the affected throttler help from the checksum-verified release binary; reviewed the hidden Cloudflare billing flags and clearer connection not-found errors as changes requiring no public skill workflow additions.
+- PlanetScale CLI v0.307.0
+  - Reviewed the upstream release and compare `v0.306.0...v0.307.0` on 2026-07-25.
+  - Added standalone `pscale-insights` guidance for production query statistics, errors, anomalies, and schema recommendations.
+  - Added standalone `pscale-inspect` guidance for bounded, read-only MySQL/Vitess and PostgreSQL diagnostics, exact shard/database targeting, and combined JSON reports.
+  - Documented output-format limits, engine-specific skipped checks, `pg_stat_statements` requirements, and safe handling of recommendation DDL.
+- PlanetScale CLI v0.306.0
+  - Reviewed the upstream release and compare `v0.305.0...v0.306.0` on 2026-07-24.
+  - Added guidance for the hardened destructive-SQL gate, including MySQL executable comments.
+  - Documented project `.pscale.yml` key allowlisting and safer OAuth help/override handling.
+  - Updated D1 conversion guidance for validated defaults, foreign-key action tails, and malformed trailing SQL.
 - PlanetScale CLI v0.305.0
   - Reviewed upstream release and compare `v0.304.0...v0.305.0` on 2026-07-23.
   - Updated D1 migration guidance for inferred boolean `CHECK` literal conversion and supported `strftime()` current-time/default mappings.

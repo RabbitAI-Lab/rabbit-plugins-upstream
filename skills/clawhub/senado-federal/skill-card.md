@@ -1,44 +1,65 @@
-## Description: <br>
-Monitor and research Brazilian Senate legislative activity, including bills, agendas, senators, votes, committees, speeches, mandates, and public accountability data via open Senate APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Research Brazil's Federal Senate using its official legislative and administrative open-data APIs.
 
-## Publisher: <br>
-[olegantonov](https://clawhub.ai/user/olegantonov) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[olegantonov](https://clawhub.ai/user/olegantonov)
 
-## Use Case: <br>
-External users, researchers, journalists, policy analysts, and developers use this skill to query Brazilian Senate open data for legislative tracking, senator research, voting history, committee activity, and transparency review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can query public administrative transparency data that may include names, compensation, pension, office, supplier, tax identifier, telephone, or email details. <br>
-Mitigation: Use results for legitimate transparency and legislative research; avoid bulk profiling, doxxing, harassment, or unsolicited outreach. <br>
-Risk: Dependency hygiene is not fully pinned by a lockfile in the release evidence. <br>
-Mitigation: Install in an isolated environment and review dependency versions before deployment. <br>
+## Use Case:
 
+External users, researchers, journalists, civic-tech developers, and agents use this skill to retrieve and summarize official Brazilian Senate legislative records and administrative transparency data with auditable API URLs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/olegantonov/senado-federal) <br>
-- [Senado Federal Open Data API](https://legis.senado.leg.br/dadosabertos) <br>
-- [Senado Federal Open Data Swagger UI](https://legis.senado.leg.br/dadosabertos/api-docs/swagger-ui/index.html) <br>
-- [Senado Federal Administrative Open Data Swagger UI](https://adm.senado.gov.br/adm-dadosabertos/swagger-ui/index.html) <br>
-- [Complete endpoint reference](references/api-endpoints.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown with API examples, Python snippets, shell commands, and summarized public-data results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce live API queries against public Senado Federal endpoints; no authentication is required by the documented APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter declares 1.1.0) <br>
+Risk: Administrative transparency records can include personal or financial fields from official Senate datasets.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Summarize only the fields needed for the task, avoid republishing unnecessary personal details, and state the year, filters, currency treatment, and source URL used.
+
+Risk: Official APIs can time out, fail, or return response-shape variations that could be mistaken for no records.
+
+Mitigation: Use bounded retries, validate expected response shapes, treat upstream failures differently from empty results, and preserve the exact API URL and retrieval date.
+
+Risk: Dependency ranges may change future installs.
+
+Mitigation: Pin and review dependencies when reproducible or controlled deployments are required.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/olegantonov/skills/senado-federal)
+- [Senate legislative open-data API](https://legis.senado.leg.br/dadosabertos)
+- [Senate legislative API Swagger](https://legis.senado.leg.br/dadosabertos/api-docs/swagger-ui/index.html)
+- [Senate administrative open-data API](https://adm.senado.gov.br/adm-dadosabertos)
+- [Senate administrative API Swagger](https://adm.senado.gov.br/adm-dadosabertos/swagger-ui/index.html)
+- [Senate legislative API endpoint reference](references/api-endpoints.md)
+- [Senate response shapes, identifiers, and dates](references/response-shapes.md)
+- [Senate administrative and transparency API](references/administrative-api.md)
+- [Tracking a process across the Senate and Chamber](references/cross-house.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, API calls]
+
+**Output Format:** [Markdown prose with official API URLs, JSON snippets, Python code, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should distinguish official Senate data from interpretation and include retrieval dates, identifiers, filters, and source API URLs when freshness or auditability matters.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter, pyproject.toml, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

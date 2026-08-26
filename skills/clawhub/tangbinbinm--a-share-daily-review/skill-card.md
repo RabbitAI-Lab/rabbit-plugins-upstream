@@ -1,44 +1,59 @@
-## Description: <br>
-Generates a structured A-share daily market review from public akshare data, covering major indices, market sentiment, sector leaders and laggards, limit-up tiers, and Dragon-Tiger Board activity without requiring an API key. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates a fact-only daily global market review for A-shares, Hong Kong, U.S., Asia-Pacific, Europe, and north-bound capital flow using public akshare data without API keys.
 
-## Publisher: <br>
-[tangbinbinm](https://clawhub.ai/user/tangbinbinm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tangbinbinm](https://clawhub.ai/user/tangbinbinm)
 
-## Use Case: <br>
-External users and developers use this skill to produce a concise Markdown recap of the latest or requested A-share trading day from public market data. It is intended for factual market reporting, not investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake factual market summaries for investment advice. <br>
-Mitigation: Keep reports limited to observed market data, avoid buy or sell recommendations, and include the required investment-risk disclaimer. <br>
-Risk: Public akshare data sources may be unavailable, delayed, or incomplete. <br>
-Mitigation: Report unavailable sections explicitly from the script errors and do not fabricate missing figures. <br>
-Risk: Broad stock-market prompts may invoke the skill and fetch public A-share data. <br>
-Mitigation: Make clear that the report uses public data and that users should independently verify important financial information. <br>
+## Use Case:
 
+External users and analysts use this skill to generate a structured, fact-only daily market report from public market data. It is intended for market-data reporting and copy-friendly summaries, not investment advice.
 
-## Reference(s): <br>
-- [README](README.md) <br>
-- [Skill instructions](SKILL.md) <br>
-- [ClawHub skill page](https://clawhub.ai/tangbinbinm/skills/a-share-daily-review) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown report generated from a local JSON data collection script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetches public A-share market data through akshare; sections tolerate source failures and report missing data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill may run for broad market-review requests and make outbound requests to public market-data providers through akshare.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review when the skill activates, and use it only where outbound access to public market-data providers is acceptable.
+
+Risk: Market summaries could be mistaken for investment advice.
+
+Mitigation: Keep outputs fact-only, include the required disclaimer, and avoid buy, sell, recommendation, or prediction language.
+
+Risk: Public market-data sources may be unavailable, delayed, or partially missing.
+
+Mitigation: Report unavailable sections and data-quality errors instead of filling gaps with inferred values.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tangbinbinm/skills/a-share-daily-review)
+- [artifact/README.md](artifact/README.md)
+- [artifact/SKILL.md](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Structured Markdown report or plain text summary, backed by JSON data from the local script]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs fact-only market summaries, deterministic insights, data-quality notes, and a required investment-advice disclaimer.]
+
+## Skill Version(s):
+
+1.2.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

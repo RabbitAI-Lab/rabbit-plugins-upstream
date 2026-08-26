@@ -7,6 +7,46 @@ and this skill adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [2.6.0] - 2026-08-24
+
+### Removed
+
+- `disable-model-invocation: true` frontmatter flag. It blocked the model from honoring an earlier "run /polish before committing" instruction (the most common way the skill is requested), and the fallback was a hand-replicated or degraded review. The skill already hard-stops for approval before any fix, so model invocation is not risky.
+
+### Changed
+
+- Description trigger now targets an explicit or earlier user request rather than every commit, so the skill does not auto-fire unasked.
+
+## [2.5.1] - 2026-08-21
+
+### Fixed
+
+- Eval 5 still required the report to stay off pre-existing code, the rule 2.5.0 replaced, and its "clean" fixture had an unchecked `fetch` boundary in the baseline that the changed file calls into - so correctly surfacing it would have failed the eval. Baseline now checks `res.ok`, and the expectation asks for no manufactured findings instead.
+
+## [2.5.0] - 2026-08-21
+
+### Changed
+
+- Removed the non-blocking "Observations" report section. Everything actionable the review surfaces - including pre-existing flaws the diff touches and adjacent out-of-diff issues - is now a regular finding in its category, tagged `(pre-existing)` or `(out of diff)`, with the Recommendation line judging fix vs. skip on long-term codebase benefit (out-of-diff findings default to fix).
+- Rewrote the scope rule: the diff remains the hunting scope, but real issues found along the way are findings, never parked in a side note.
+- Recommendation guidance now carries a fix-vs-defer test: defer only what forces a decision or carries more risk than value; a low-risk maintenance fix is a fix, not a deferral.
+
+## [2.4.3] - 2026-08-21
+
+### Changed
+
+- Declared ClawHub browse categories (`development`) and topics in `metadata`, so the release pipeline publishes them instead of leaving the skill in the `other` category.
+
+### Removed
+
+- `skill-card.md`. The ClawHub CLI strips a root `skill-card.md` from every publish and the registry generates its own card, so the authored file never reached ClawHub.
+
+## [2.4.2] - 2026-08-07
+
+### Fixed
+
+- Agent 4 routed out-of-scope findings to `/review`; the bundled review skill is `/code-review`.
+
 ## [2.4.1] - 2026-07-22
 
 ### Added

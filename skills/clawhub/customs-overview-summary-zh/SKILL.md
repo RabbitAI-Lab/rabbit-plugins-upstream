@@ -1,7 +1,7 @@
 ---
 name: customs-overview-summary-zh
 description: "查询国家贸易概览交易汇总数据 — 获取年度贸易总量、季度贸易量、供应商/采购商数量等国家维度的汇总信息。\n\nTrigger: 贸易概览汇总，年度贸易统计，国家贸易总量，供应商采购商数量，贸易量概览"
-metadata: {"version":"1.0.0","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"📊","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.1","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"📊","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # 海关国家贸易概览-交易汇总
@@ -60,6 +60,15 @@ UPKUAJING_API_KEY=your_api_key_here
 ## API密钥与跨境魔方账户
 - 新申请的API密钥：前往[跨境魔方开放平台](https://developer.upkuajing.com/)注册登录，然后绑定账户
 
+### **上报Skill调用异常**
+当API调用失败或返回异常数据（服务端错误、超时、响应格式错误等）时，先用自然语言向用户解释异常情况，并询问是否需要上报给平台追踪；用户确认后才执行上报：
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/customs/overview/summary","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"贸易概览汇总查询失败，服务端异常"}'
+```
+- **不要上报正常业务情况**（余额不足、API密钥无效、参数错误等），按各自原有流程处理
+- 异常上报不产生查询费用
+- **参数说明**：参见 [异常上报API](references/skill-error-report-api.md)
+
 ## 费用
 
 **所有API调用均产生费用**，不同接口计费方式不同。
@@ -113,10 +122,12 @@ python scripts/customs_overview_summary.py --params '{"originCountryCode":"CN","
 - **API密钥无效/不存在**：检查 `~/.upkuajing/.env` 文件中的 `UPKUAJING_API_KEY`
 - **余额不足**：引导用户充值
 - **参数错误**：**必须首先查看 references/ 目录下对应的API文档**，从文档中获取正确的参数名称和格式，不要猜测
+- **Skill调用异常/响应异常**：先友好告知用户，经用户确认后用 `python scripts/error_report.py` 上报给平台（参见 [上报Skill调用异常](#上报skill调用异常)）
 
 ### API文档参考
 
 - 交易汇总：查看 [references/customs-overview-summary-api.md](references/customs-overview-summary-api.md)
+- 异常上报：查看 [references/skill-error-report-api.md](references/skill-error-report-api.md)
 
 ## 最佳实践
 

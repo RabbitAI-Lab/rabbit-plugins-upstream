@@ -1,14 +1,13 @@
 ---
 name: dlazy-jimeng-i2v-first-tail
 version: 1.3.5
-description: 使用即梦 (Jimeng) 首尾帧生视频模型，通过提供的第一帧和最后一帧图片生成连贯的过渡视频。
+description: "使用即梦 (Jimeng) 首尾帧生视频模型，通过提供的第一帧和最后一帧图片生成连贯的过渡视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy jimeng-i2v-first-tail -h 查看帮助信息。"}}
 ---
 
-# dlazy-jimeng-i2v-first-tail
+# 首尾帧视频 即梦 Jimeng First-Tail
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 使用即梦 (Jimeng) 首尾帧生视频模型，通过提供的第一帧和最后一帧图片生成连贯的过渡视频。
@@ -89,6 +88,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -101,7 +101,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "jimeng-i2v-first-tail",
-    "modelId": "jimeng-i2v-first-tail",
+    "modelId": "jimeng-i2v-first-tail-v30",
     "outputs": [
       {
         "type": "image",

@@ -45,7 +45,7 @@ OPC-UA server**(opc.tcp 4840)与 **Modbus-TCP 过程数据 server** 读取 —�
 - 基线：`baseline_learn` `baseline_check` `baseline_record_change` `baseline_status`
 - 合规/信创：`compliance_mapping` `compliance_frameworks` `compliance_dengbao_levels`
   `compliance_report` `compliance_evidence_bundle`
-  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish`
+  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish` `uns_publish`
   `stream_publish_event` `rca_narrate` `fleet_status` `fleet_incidents`
 - 程序解读：`plc_program_outline` `plc_program_xref` `plc_program_section` `plc_program_visibility`
   （解读导出的 ST/AWL/L5X;PLCnext 工程可导出 IEC 61131 ST 文本后离线解读）
@@ -64,5 +64,5 @@ OPC-UA server**(opc.tcp 4840)与 **Modbus-TCP 过程数据 server** 读取 —�
 
 | 协议 | 库(pin) | 规范/版本 | 覆盖 | 传输 | 自测 |
 |---|---|---|---|---|---|
-| OPC-UA | `asyncua>=1.0,<2` | OPC UA 1.0x（DA+HA+AC 子集） | PLCnext 内置 OPC-UA server | opc.tcp/4840 | ✅ mock+HDA;真 PLCnext 待核实 |
+| OPC-UA | `asyncua>=2.0,<3` | OPC UA 1.0x（DA+HA+AC 子集） | PLCnext 内置 OPC-UA server | opc.tcp/4840 | ✅ mock+HDA;真 PLCnext 待核实 |
 | Modbus-TCP | `pymodbus>=3.5,<4` | App 1.1b3;FC 1/2/3/4/5/6/15/16 | PLCnext 过程数据 server | TCP/502 | ✅;真 PLCnext 待核实 |

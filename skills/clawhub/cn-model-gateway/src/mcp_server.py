@@ -1,4 +1,8 @@
-"""MCP (Model Context Protocol) server - JSON-RPC 2.0 implementation."""
+"""MCP (Model Context Protocol) server - JSON-RPC 2.0 implementation.
+
+v1.6.0: Added 4 new tools (embed_text, rerank, audio_transcribe, video_understand)
+        via shared llm_core kernel.
+"""
 from __future__ import annotations
 
 import json
@@ -31,36 +35,109 @@ class MCPServer:
 
     def _register_defaults(self) -> None:
         """Register built-in tools, resources, and prompts."""
+        # v1.6.0: 4 new MCP tools added
         self._tools = {
             "ask_model": {
                 "name": "ask_model",
-                "description": "向指定的国产模型提问。provider 可选: deepseek/tongyi/zhipu/kimi/hunyua"
-                            "n/doubao，留空则自动选择可用模型。",
+                "description": "向国产模型提问。providers 为空时自动选一家（带故障转移）；"
+                                "指定 2 家及以上时返回对比结果。支持 Function Calling（tools 参数）。",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
-                        "provider": {"type": "string", "description": "模型提供商名称"},
                         "question": {"type": "string", "description": "要提问的内容"},
+                        "provider": {"type": "string", "description": "模型提供商名称（可选，留空自动选择）"},
+                        "providers": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": "多提供商对比列表（可选，指定 2 家及以上时返回对比）",
+                        },
                         "model": {"type": "string", "description": "具体模型 ID（可选）"},
                         "temperature": {"type": "number", "description": "温度参数 0-2（可选）"},
+                        "tools": {
+                            "type": "array",
+                            "items": {"type": "object"},
+                            "description": "Function Calling 工具定义列表（可选，指定后模型可返回 tool_calls）",
+                        },
                     },
                     "required": ["question"],
                 },
             },
-            "compare_models": {
-                "name": "compare_models",
-                "description": "向多个模型发送同一问题，返回对比结果。用于评估不同模型的回答质量。",
+            "describe_image": {
+                "name": "describe_image",
+                "description": "向视觉模型发送图片，返回图片描述或回答图片相关问题。"
+                                "支持 Qwen-VL、GLM-4V、豆包视觉等多模态模型。",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
-                        "question": {"type": "string", "description": "要提问的内容"},
-                        "providers": {
+                        "image": {"type": "string", "description": "图片 URL / base64 / 文件路径"},
+                        "prompt": {"type": "string", "description": "关于图片的问题（可选，默认\"请描述这张图片\"）"},
+                        "provider": {"type": "string", "description": "模型提供商名称（可选，留空自动选择）"},
+                        "model": {"type": "string", "description": "具体模型 ID（可选）"},
+                    },
+                    "required": ["image"],
+                },
+            },
+            "embed_text": {
+                "name": "embed_text",
+                "description": "将文本转换为向量嵌入（embedding）。支持 deepseek、zhipu、doubao、tongyi 等提供商。",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "texts": {
                             "type": "array",
                             "items": {"type": "string"},
-                            "description": "要对比的提供商列表（可选，默认全部可用）",
+                            "description": "要嵌入的文本列表（至少 1 条，最多 100 条）",
                         },
+                        "provider": {"type": "string", "description": "模型提供商名称（可选，留空自动选择）"},
+                        "model": {"type": "string", "description": "嵌入模型 ID（可选，默认使用提供商推荐模型）"},
                     },
-                    "required": ["question"],
+                    "required": ["texts"],
+                },
+            },
+            "rerank": {
+                "name": "rerank",
+                "description": "对文档列表按查询相关性进行重排序。支持 zhipu 等提供商。",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "query": {"type": "string", "description": "查询文本"},
+                        "documents": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": "待排序的文档列表",
+                        },
+                        "provider": {"type": "string", "description": "模型提供商名称（可选，留空自动选择）"},
+                        "model": {"type": "string", "description": "重排序模型 ID（可选）"},
+                    },
+                    "required": ["query", "documents"],
+                },
+            },
+            "audio_transcribe": {
+                "name": "audio_transcribe",
+                "description": "将音频文件转换为文字（语音识别）。支持 zhipu、doubao 等提供商。",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "audio": {"type": "string", "description": "音频文件 URL / base64 / 文件路径（支持 mp3/wav/flac 等格式）"},
+                        "provider": {"type": "string", "description": "模型提供商名称（可选，留空自动选择）"},
+                        "model": {"type": "string", "description": "语音识别模型 ID（可选）"},
+                        "language": {"type": "string", "description": "音频语言（可选，默认自动检测）"},
+                    },
+                    "required": ["audio"],
+                },
+            },
+            "video_understand": {
+                "name": "video_understand",
+                "description": "理解视频内容：抽取关键帧 → 视觉模型描述 → 拼接为完整视频摘要。",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "video": {"type": "string", "description": "视频文件 URL / 文件路径"},
+                        "prompt": {"type": "string", "description": "描述提示（可选，默认\"请描述这个视频的内容\"）"},
+                        "provider": {"type": "string", "description": "模型提供商名称（可选，留空自动选择）"},
+                        "model": {"type": "string", "description": "视觉模型 ID（可选）"},
+                    },
+                    "required": ["video"],
                 },
             },
             "list_providers": {
@@ -126,7 +203,7 @@ class MCPServer:
                 },
                 "serverInfo": {
                     "name": "cn-model-gateway",
-                    "version": "1.0.0",
+                    "version": "1.6.0",
                     "description": "国产模型 MCP 服务器 - DeepSeek/通义/智谱/Kimi/混元/豆包一站式接入",
                 },
             })
@@ -169,31 +246,33 @@ class MCPServer:
             return self._error(req_id, ERROR_INTERNAL, f"工具调用失败: {traceback.format_exc()}")
 
     def _tool_ask_model(self, args: Dict[str, Any]) -> str:
-        provider = args.get("provider")
+        """Unified ask tool: single provider or multi-provider compare."""
         question = args.get("question", "")
         if not question:
             raise ValueError("question 不能为空")
-        msgs = [ChatMessage(role="user", content=question)]
-        kwargs = {}
+
+        tools = args.get("tools")
+        kwargs: Dict[str, Any] = {}
         if args.get("model"):
             kwargs["model"] = args["model"]
         if args.get("temperature") is not None:
             kwargs["temperature"] = args["temperature"]
-        resp = self.router.chat(msgs, provider=provider, **kwargs)
-        return (
-            f"[via {resp.provider}/{resp.model}]\n{resp.content}\n"
-            f"---\n耗时: {resp.duration_ms}ms | "
-            f"Token: prompt={resp.usage.get('prompt_tokens', '?')}, "
-            f"completion={resp.usage.get('completion_tokens', '?')}"
-        )
+        if tools:
+            kwargs["tools"] = tools
 
-    def _tool_compare_models(self, args: Dict[str, Any]) -> str:
-        question = args.get("question", "")
-        if not question:
-            raise ValueError("question 不能为空")
         providers = args.get("providers")
+        if providers and len(providers) >= 2:
+            return self._compare_models_internal(question, providers, **kwargs)
+
+        provider = args.get("provider")
         msgs = [ChatMessage(role="user", content=question)]
-        results = self.router.compare_models(msgs, providers=providers)
+        resp = self.router.chat(msgs, provider=provider, **kwargs)
+        return self._format_response(resp)
+
+    def _compare_models_internal(self, question: str, providers: List[str], **kwargs: Any) -> str:
+        """Internal: compare multiple providers."""
+        msgs = [ChatMessage(role="user", content=question)]
+        results = self.router.compare_models(msgs, providers=providers, **kwargs)
         lines = [f"## 模型对比结果\n问题: {question}\n"]
         for provider, info in results.items():
             lines.append(f"### {provider}")
@@ -206,6 +285,221 @@ class MCPServer:
                 lines.append(f"  回答: {info['content'][:200]}...")
             lines.append("")
         return "\n".join(lines)
+
+    def _format_response(self, resp: Any) -> str:
+        """Format a ChatResponse into display string."""
+        lines = [
+            f"[via {resp.provider}/{resp.model}]\n{resp.content}\n",
+            f"---\n耗时: {resp.duration_ms}ms | ",
+            f"Token: prompt={resp.usage.get('prompt_tokens', '?')}, ",
+            f"completion={resp.usage.get('completion_tokens', '?')}",
+        ]
+        if resp.tool_calls:
+            tc_lines = ["", "### Tool Calls:"]
+            for tc in resp.tool_calls:
+                tc_lines.append(f"  - {tc.name}({tc.arguments})")
+            lines.append("\n".join(tc_lines))
+        return "".join(lines)
+
+    def _tool_describe_image(self, args: Dict[str, Any]) -> str:
+        """Describe an image using vision models."""
+        image = args.get("image", "")
+        if not image:
+            raise ValueError("image 不能为空")
+        prompt = args.get("prompt", "请描述这张图片")
+        provider = args.get("provider")
+        model = args.get("model")
+
+        adapter = None
+        if provider:
+            adapter = self.router.get_adapter(provider)
+        else:
+            available = self.router.list_available()
+            if available:
+                adapter = self.router.get_adapter(available[0])
+
+        if not adapter:
+            return "没有可用的模型提供商。请在 config.json 中填写 api_key。"
+
+        try:
+            resp = adapter.describe_image(image, prompt, model=model)
+            return self._format_response(resp)
+        except Exception as e:
+            return f"图片描述失败: {e}"
+
+    # --- v1.6.0: 4 new MCP tool handlers ---
+
+    def _tool_embed_text(self, args: Dict[str, Any]) -> str:
+        """Generate text embeddings."""
+        texts = args.get("texts", [])
+        if not texts:
+            raise ValueError("texts 不能为空")
+        provider = args.get("provider")
+        model = args.get("model")
+
+        adapter = None
+        if provider:
+            adapter = self.router.get_adapter(provider)
+        else:
+            # Auto-select: find adapter that supports embed_text
+            for p in self.router.list_available():
+                a = self.router.get_adapter(p)
+                if a and hasattr(a, 'embed_text'):
+                    try:
+                        # Test if it actually works (not just inherited NotImplementedError)
+                        from llm_core.adapters.base import BaseAdapter
+                        if a.embed_text.__func__ is not BaseAdapter.embed_text:
+                            adapter = a
+                            break
+                    except Exception:
+                        pass
+            if not adapter:
+                available = self.router.list_available()
+                if available:
+                    adapter = self.router.get_adapter(available[0])
+
+        if not adapter:
+            return "没有可用的模型提供商。请在 config.json 中填写 api_key。"
+
+        try:
+            result = adapter.embed_text(texts, model=model)
+            lines = [
+                f"## 向量嵌入结果\n提供商: {result.provider}\n模型: {result.model}\n"
+                f"耗时: {result.duration_ms}ms\nToken: {result.usage}\n",
+                f"嵌入维度: {len(result.embeddings[0]) if result.embeddings else 0}",
+                f"嵌入数量: {len(result.embeddings)}",
+            ]
+            return "\n".join(lines)
+        except NotImplementedError as e:
+            return f"该提供商不支持向量嵌入: {e}"
+        except Exception as e:
+            return f"向量嵌入失败: {e}"
+
+    def _tool_rerank(self, args: Dict[str, Any]) -> str:
+        """Rerank documents by relevance to query."""
+        query = args.get("query", "")
+        documents = args.get("documents", [])
+        if not query or not documents:
+            raise ValueError("query 和 documents 不能为空")
+        provider = args.get("provider")
+        model = args.get("model")
+
+        adapter = None
+        if provider:
+            adapter = self.router.get_adapter(provider)
+        else:
+            for p in self.router.list_available():
+                a = self.router.get_adapter(p)
+                if a and hasattr(a, 'rerank'):
+                    from llm_core.adapters.base import BaseAdapter
+                    if a.rerank.__func__ is not BaseAdapter.rerank:
+                        adapter = a
+                        break
+            if not adapter:
+                available = self.router.list_available()
+                if available:
+                    adapter = self.router.get_adapter(available[0])
+
+        if not adapter:
+            return "没有可用的模型提供商。请在 config.json 中填写 api_key。"
+
+        try:
+            result = adapter.rerank(query, documents, model=model)
+            lines = [
+                f"## 重排序结果\n提供商: {result.provider}\n模型: {result.model}\n"
+                f"耗时: {result.duration_ms}ms\n",
+            ]
+            for i, score in enumerate(result.scores):
+                doc_preview = documents[i][:50] + "..." if len(documents[i]) > 50 else documents[i]
+                lines.append(f"  [{i+1}] 相关度: {score:.4f} | {doc_preview}")
+            return "\n".join(lines)
+        except NotImplementedError as e:
+            return f"该提供商不支持重排序: {e}"
+        except Exception as e:
+            return f"重排序失败: {e}"
+
+    def _tool_audio_transcribe(self, args: Dict[str, Any]) -> str:
+        """Transcribe audio to text."""
+        audio = args.get("audio", "")
+        if not audio:
+            raise ValueError("audio 不能为空")
+        provider = args.get("provider")
+        model = args.get("model")
+        language = args.get("language", "")
+
+        adapter = None
+        if provider:
+            adapter = self.router.get_adapter(provider)
+        else:
+            for p in self.router.list_available():
+                a = self.router.get_adapter(p)
+                if a and hasattr(a, 'audio_transcribe'):
+                    from llm_core.adapters.base import BaseAdapter
+                    if a.audio_transcribe.__func__ is not BaseAdapter.audio_transcribe:
+                        adapter = a
+                        break
+            if not adapter:
+                available = self.router.list_available()
+                if available:
+                    adapter = self.router.get_adapter(available[0])
+
+        if not adapter:
+            return "没有可用的模型提供商。请在 config.json 中填写 api_key。"
+
+        try:
+            kwargs = {}
+            if language:
+                kwargs["language"] = language
+            result = adapter.audio_transcribe(audio, model=model, **kwargs)
+            return (
+                f"## 语音转文字结果\n提供商: {result.provider}\n模型: {result.model}\n"
+                f"语言: {result.language}\n耗时: {result.duration_ms}ms\n\n"
+                f"识别文本:\n{result.text}"
+            )
+        except NotImplementedError as e:
+            return f"该提供商不支持语音转文字: {e}"
+        except Exception as e:
+            return f"语音转文字失败: {e}"
+
+    def _tool_video_understand(self, args: Dict[str, Any]) -> str:
+        """Understand video content via keyframe extraction + vision model."""
+        video = args.get("video", "")
+        if not video:
+            raise ValueError("video 不能为空")
+        prompt = args.get("prompt", "请描述这个视频的内容")
+        provider = args.get("provider")
+        model = args.get("model")
+
+        adapter = None
+        if provider:
+            adapter = self.router.get_adapter(provider)
+        else:
+            for p in self.router.list_available():
+                a = self.router.get_adapter(p)
+                if a and hasattr(a, 'video_understand'):
+                    from llm_core.adapters.base import BaseAdapter
+                    if a.video_understand.__func__ is not BaseAdapter.video_understand:
+                        adapter = a
+                        break
+            if not adapter:
+                available = self.router.list_available()
+                if available:
+                    adapter = self.router.get_adapter(available[0])
+
+        if not adapter:
+            return "没有可用的模型提供商。请在 config.json 中填写 api_key。"
+
+        try:
+            result = adapter.video_understand(video, prompt, model=model)
+            return (
+                f"## 视频理解结果\n提供商: {result.provider}\n模型: {result.model}\n"
+                f"关键帧数: {result.keyframe_count}\n耗时: {result.duration_ms}ms\n\n"
+                f"视频描述:\n{result.description}"
+            )
+        except NotImplementedError as e:
+            return f"该提供商不支持视频理解: {e}"
+        except Exception as e:
+            return f"视频理解失败: {e}"
 
     def _tool_list_providers(self, args: Dict[str, Any]) -> str:
         available = self.router.list_available()

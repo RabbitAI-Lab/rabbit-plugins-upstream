@@ -136,7 +136,12 @@ something.
   **source-first**: the contract card's claim-ledger row is corroboration for a number, never a
   substitute for its source location.
 - The **rubric**: read `references/review-rubrics.md` (universal rubric + the overlay
-  for this purpose) and `references/design-principles.md`.
+  for this purpose) and `references/design-principles.md`. **Scope that file before you read it**
+  — its `## How much of this file to read` says the universal rubric in full plus **exactly one**
+  of the nine per-purpose overlays, and `## Finding-level cross-validation` only at tier
+  `thorough`. The other eight overlays describe decks you are not reviewing. You then declare the
+  one you used as `rubric_overlay` in your output, which `validate_review.py` checks against the
+  nine — so this is a contract you sign, not a suggestion you can skim past.
 - **Your assigned LENS** (when dispatched as a panel): **Content** (Lens A) or **Design** (Lens B) —
   apply only that lens's checks (§2) so you go deep instead of skimming all ~30; if no lens is named
   you are the sole critic — run **both** lenses as two passes. The three high-recurrence classes
@@ -226,7 +231,12 @@ Do not just skim for the first few obvious issues. Run these passes:
        wrong number); real brand/product-asset credibility; build/meta-annotation leaks; formula
        transcription/derivation fidelity; claim currency (as-of date); kicker-echoes-title;
        language consistency; text-density vs delivery mode; **sourced-photo subject verification**
-       (the photo matches its claimed subject per origin caption/geotag/category) + license/credit
+       (the photo matches its claimed subject per origin caption/geotag/category — and this is now
+       CHECKABLE rather than eyeballed: `python3 scripts/fetch_images.py ledger <assets> --tokens`
+       prints what was claimed, `--credits` prints the lines the licence obliges, and
+       `python3 scripts/check_image_provenance.py <deck-dir> --pptx <deck>` holds both against the
+       ledger and the built deck; a `searched, none found` rung with no recorded search behind it
+       is a finding, and so is a network failure spent as one) + license/credit
        presence + **watermark-free** (a visible watermark/stock-preview overlay is a finding — and
        so are crop/blur/inpaint traces where one was hidden); **REFERENT-RULE off-contract** — a generated image claiming photographic reality of a
        real-and-specific subject (named place / real product / real person) is a fidelity finding; a
@@ -774,7 +784,12 @@ Do not just skim for the first few obvious issues. Run these passes:
      corner/size** across slides. *(Not for a multi-organisation deck — survey / landscape / review — or a
      neutral-academic talk, where house branding is noise; and don't double a logo a template already
      carries. Satisfying marks are exactly two: the **real official asset (untouched)**, or a **designed
-     wordmark whose plan `logo plan:` line carries `searched, none found → designed wordmark (flagged)`**.
+     wordmark whose plan `logo plan:` line carries `searched, none found → designed wordmark (flagged)`**,
+     or — on a **THIRD-PARTY ASSESSMENT** (about an entity, not from it, carrying what that entity would
+     not publish about itself: open recalls, a "first but not unique" correction, a limitations page) —
+     **no livery at all with `n/a — third-party assessment`**, which is the row's correct answer and not
+     an omission. On that row raise the INVERSE: a deck wearing its subject's mark while asserting what
+     the subject would not is a misattribution of authorship, and rates with an unsourced claim.
      A bare wordmark / "text only" with NO recorded-search token is a finding — name which LOGO-PRINCIPLE
      situation-table row the deck matches. A literal placeholder shipping in a final deck is not a
      satisfier — it's a meta-annotation blocker. Never a fabricated fake.)* Authoritative checks:
@@ -931,15 +946,17 @@ line it audits).
 ```json
 {
   "purpose": "<echo the purpose you reviewed against>",
+  "rubric_overlay": "<which ONE per-purpose section of review-rubrics.md you applied, verbatim from its heading — progress / lab meeting · work status update · academic conference talk · academic job talk / faculty interview · company / stakeholder presentation · product description / pitch · thesis / committee defense · teaching / instructional · conference / research poster. If none of the nine fits this deck, 'none — <reason>'. validate_review.py rejects anything else, including a bare 'none': reviewing a job talk against the pitch bar produces a confident verdict that is measuring the wrong thing, and that error is invisible in the output>",
   "coverage": {
     "slides_opened": [1, 2, "...every slide number whose PNG you actually Read — a missing number means the review is INVALID, not that the slide was fine. SCOPE: every slide in your ASSIGNED scope — the whole deck for a sole/whole-deck critic; your section's page range for a per-section critic (echo the range you were given); the coordinator rejects gaps against the scope, not the whole deck"],
+    "scope": "<OMIT on a whole-deck review. A per-section critic MUST set it to its assigned range, [first, last] — e.g. [4, 9]. This is not bookkeeping: render_deck.py --gate-check counts the deck's real slides and refuses a consent whose slides_opened does not reach them, so a section review that does not state its range is read as a whole-deck review full of holes and bounces>",
     "passes": ["<name each lens pass you ran, e.g. 'content lens (full deck)', 'design lens (full deck)' — a sole critic lists TWO; round 2+ adds 'fresh whole-deck re-pass'>"],
     "stats_block_seen": true,
     "contract_card_seen": "true | false | 'none-declared' — true = the card was in your input; 'none-declared' = the dispatch explicitly stated no plans exist (external deck / redesign diagnosis / direction preview — legitimate); false = card absent with no statement, which obliges the main loop to re-dispatch with it before the review counts"
   },
   "plan_audit": {
     "_comment": "the contract-card audit — each declared contract judged from PIXELS as kept | broken | degraded, lens-owned; null (with the reason) for direction previews / external decks with no plans",
-    "lens_b": {"skeleton_rhythm": "kept|broken|degraded — <one clause>", "wow": [{"slide": 0, "landed": true, "why": "<one clause vs its actual neighbours — a WOW that is merely big did not land>"}], "signature_move": {"verdict": "landed|sanded|timid|clashing — judged vs the boldness dial (at bold/experimental a surviving timid/sanded verdict triggers Step 5's blocking-until-waived escalation)", "why": "<one clause>", "carried": [{"slide": 0, "structural": true, "note": "<does the idea do structural work here (the motif is this slide's own geometry) or was it stamped (a badge/rule/corner mark)? one entry per carried_by slide from the contract card>"}], "proof": "matches | diverged: <clause> | skipped: <carve — legitimate|no-carve, and no-carve is itself a distinctiveness finding>"}, "memorable_one_thing": "<the ONE thing a viewer remembers tomorrow; if 'a clean competent deck' at boldness>=balanced+, that is a finding>", "composition": {"cover_archetype": "kept|broken — is the BUILT cover the picked cover token (centred/low-left/split-vertical/full-bleed-type)?", "home_skeleton_plurality": "kept|broken — is the picked home skeleton the rhythm map's most-used skeleton?"}, "register_interiors": "kept | bookends-only — does the quiet register signature (the contract card's `interior register:` cue) reach ordinary interior slides, or does the style stop at the cover/dividers? bookends-only with no declared `none — <reason>` carve is a finding (的风格要走所有页)", "money_slide": "<did the visual peak land on the declared slide?>", "semantic_colour": "<ledger kept / a hue double-booked where>", "type_tokens": "<sizes drawn from the declared tokens?>", "eye_path_misses": ["<slides whose squint-level first-read missed the declared hero>"]},
+    "lens_b": {"concept_landed": "<the contract card names what this deck's idea is a PICTURE of. In one clause: does the BUILT deck look like that picture? `carried: <how>` when the concept is visible in the motif AND the colour logic AND the cover AND at least one diagram — a concept that reached only the cover did not govern, it decorated. `nominal: <what you see instead>` when the deck is competent and the concept left no trace: a page you could re-title for a DIFFERENT concept without noticing is nominal, and that is the finding. `n/a — none declared` on an external/redesign deck. NOT the same question as signature_move: the move is one scoped RISK, the concept is what the whole deck is a picture of, and a deck can land the move while the concept never arrives>", "skeleton_rhythm": "kept|broken|degraded — <one clause>", "wow": [{"slide": 0, "landed": true, "why": "<one clause vs its actual neighbours — a WOW that is merely big did not land>"}], "signature_move": {"verdict": "landed|sanded|timid|clashing — judged vs the boldness dial (at bold/experimental a surviving timid/sanded verdict triggers Step 5's blocking-until-waived escalation)", "why": "<one clause>", "carried": [{"slide": 0, "structural": true, "note": "<does the idea do structural work here (the motif is this slide's own geometry) or was it stamped (a badge/rule/corner mark)? one entry per carried_by slide from the contract card>"}], "proof": "matches | diverged: <clause> | skipped: <carve — legitimate|no-carve, and no-carve is itself a distinctiveness finding>"}, "memorable_one_thing": "<the ONE thing a viewer remembers tomorrow; if 'a clean competent deck' at boldness>=balanced+, that is a finding>", "composition": {"cover_archetype": "kept|broken — is the BUILT cover the picked cover token (centred/low-left/split-vertical/full-bleed-type)?", "home_skeleton_plurality": "kept|broken — is the picked home skeleton the rhythm map's most-used skeleton?"}, "register_interiors": "kept | bookends-only — does the quiet register signature (the contract card's `interior register:` cue) reach ordinary interior slides, or does the style stop at the cover/dividers? bookends-only with no declared `none — <reason>` carve is a finding (的风格要走所有页)", "money_slide": "<did the visual peak land on the declared slide?>", "semantic_colour": "<ledger kept / a hue double-booked where>", "type_tokens": "<sizes drawn from the declared tokens?>", "eye_path_misses": ["<slides whose squint-level first-read missed the declared hero>"]},
     "lens_a": {"memory_sentence": "<your remembered ONE sentence, written BEFORE reading the card's deck message>", "matches_deck_message": true, "curve_visible": "<is the declared emotional curve visible in pacing?>", "takeaway_titles": "<content-slide titles vs the takeaway table — list divergent slides>", "motion_manifest": "kept|broken|degraded"}
   },
   "probes": {
@@ -972,10 +989,20 @@ must list every slide in the deck (the main loop rejects a review with gaps), `p
 two lens passes actually ran (and, on rounds 2+, that the re-pass was whole-deck fresh, not a
 fix-list check), `stats_block_seen: false` obliges the main loop to hand you the lint deck-stats
 block before the review counts, and `contract_card_seen: false` obliges it to re-dispatch with the
-card. **The `probes` and lens-owned `plan_audit` blocks are gated the same way:** on a full-deck
-review of a pipeline-built deck, the main loop rejects a review whose lens-required probe fields
-or plan_audit subfields are missing, exactly as it rejects `slides_opened` gaps (direction
-previews and external no-plan decks set `plan_audit: null` with the reason and skip `probes`).
+card. **The `probes` and lens-owned `plan_audit` blocks are gated the same way, and now really
+are:** `scripts/validate_review.py` rejects a review that omits the audit or the probe its own
+`coverage.passes` says it owes — the content lens owes `lens_a` + `probes.memory_sentence`, the
+design lens owes `lens_b` + `probes.per_slide`, a sole critic owes both — and rejects
+`contract_card_seen: true` sitting over an empty or null `plan_audit`, which is a review claiming
+it received the card while auditing none of it. Direction previews and external no-plan decks set
+`plan_audit: null` with the reason, declare the card `'none-declared'`, and skip `probes`. **A
+back-of-room / audience critic owes neither** — it judges the room, not the contract card, and the
+gate reads that off `passes` too; name the pass so it can (`"passes": ["back-of-room pass (full
+deck)"]`). A `passes` line naming no pass the gate recognises is read as a SOLE critic and held to
+both lenses, per the assigned-LENS rule above — an unparseable line is not an exemption.
+*(This sentence used to describe a rejection nothing implemented: the validator checked only that
+`plan_audit` was a dict, so `"plan_audit": {}` with no probes at all validated clean and
+consented — every contract the panel exists to test could be skipped in silence.)*
 
 Severity: **blocker** = undermines the purpose / a claim the audience can't verify or
 that is wrong → must fix. **major** = clearly hurts comprehension or impact. **minor**

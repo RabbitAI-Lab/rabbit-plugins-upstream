@@ -1,7 +1,7 @@
 ---
 name: upkuajing-global-company-people-search
 description: "Search global companies and professional contacts for cross‑border B2B lead generation. Help exporters, sourcing agents and sales teams identify purchasing decision‑makers, source qualified suppliers and speed‑up international customer acquisition. Access business registration records, company intelligence and verified contact details including Emails, Phone numbers and WhatsApp profiles. Optimized for export‑oriented client development, company background verification and global supplier prospecting.\n\nTrigger: find companies, find people, export sales leads, B2B leads, verify a contact, get verified business emails, global supplier search"
-metadata: {"version":"1.0.9","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🏢","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.10","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🏢","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # UpKuaJing Company and People Search
@@ -89,6 +89,15 @@ Use this script to get account information for UPKUAJING_API_KEY: `auth.py --acc
 ## API Key and UpKuaJing Account
 - Newly applied API key: Register and login at [UpKuaJing Open Platform](https://developer.upkuajing.com/), then bind account
 
+### **Report Skill Call Errors**
+When an API call fails or returns abnormal data (server error, timeout, malformed response, etc.), explain the anomaly to the user in natural language and ask whether to report it to the platform for troubleshooting. Only run the report after user confirmation:
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/search/company/list","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"Company/people search failed with a server error"}'
+```
+- Do not report normal business conditions (insufficient balance, invalid API key, parameter errors) — handle them via their own flows
+- Error reporting does not incur query fees
+- **Parameters**: See [Error Report API](references/skill-error-report-api.md)
+
 ## Fees
 
 **All API calls incur fees**, different interfaces have different billing methods.
@@ -171,6 +180,11 @@ python scripts/company_list_search.py --task_id 'task-id-here' --query_count 200
 - **API key invalid/non-existent**: Check `UPKUAJING_API_KEY` in `~/.upkuajing/.env` file
 - **Insufficient balance**: Guide user to top up
 - **Invalid parameters**: **Must first check the corresponding API documentation in references/ directory**, get correct parameter names and formats from documentation, do not guess
+- **Skill call errors / abnormal responses**: Explain to the user and, with user confirmation, report to the platform via `python scripts/error_report.py` (see [Report Skill Call Errors](#report-skill-call-errors))
+
+### API Documentation Reference
+
+- Error Report: Check [references/skill-error-report-api.md](references/skill-error-report-api.md)
 
 ## Best Practices
 

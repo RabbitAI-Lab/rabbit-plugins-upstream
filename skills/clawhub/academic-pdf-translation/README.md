@@ -164,8 +164,11 @@ Workspace/
 
 ## 更多说明
 
+- 变更记录：[CHANGELOG.md](CHANGELOG.md)
 - Agent 执行流程：[SKILL.md](SKILL.md)
 - 质量门槛：[references/quality-contract.md](references/quality-contract.md)
 - 工作区和输出：[references/workspace.md](references/workspace.md)
 - 已验证范围：[references/validation.md](references/validation.md)
 - 开源协议：[MIT License](LICENSE)
+- 隐私说明：[PRIVACY.md](PRIVACY.md)
+- 使用条款：[TERMS.md](TERMS.md)

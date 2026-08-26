@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent OS Asset / Agent OS 资产"
+  short_description: "Modernize historical files into reviewed AI assets / 将历史文件现代化为已 review 的 AI 资产"
+  default_prompt: "Use $agent-os-asset to plan a privacy-safe modernization of this folder. / 使用 $agent-os-asset 为此目录规划隐私安全的现代化流程。"

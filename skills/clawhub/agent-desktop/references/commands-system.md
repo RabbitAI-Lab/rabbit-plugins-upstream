@@ -11,18 +11,105 @@ agent-desktop launch "com.apple.Safari" --timeout 10000
 agent-desktop launch "TextEdit" --arg /tmp/notes.txt
 agent-desktop launch "MyTool" --arg --flag --arg value --env KEY=VALUE --cwd /tmp
 agent-desktop launch "MyTool" --no-attach
+agent-desktop launch "TextEdit" --activate
+agent-desktop launch "Obsidian" --cdp
+agent-desktop launch "Obsidian" --cdp 9229
 ```
-Launches an application by name or bundle ID and waits until its window is visible.
+Launches an application by name or bundle ID and returns once the process is running.
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `--timeout` | 30000 | Max wait time in ms for window to appear |
-| `--arg` | | Command-line argument passed to the launched app; repeatable, order preserved |
+| `--timeout` | 30000 | Upper bound in ms for the whole launch |
+| `--arg` | | Command-line argument passed to the launched app; repeatable, order preserved. For a value that starts with `-`, use the equals form (`--arg=<value>`) — the space form swallows the next flag |
 | `--env` | | `KEY=VALUE` environment variable for the launched process; repeatable |
 | `--cwd` | | Working directory for the launched process |
 | `--no-attach` | false | Require a fresh launch instead of the default attach-if-running behavior |
+| `--activate` | false | Bring the app forward so it presents a window, and wait for that window |
+| `--cdp` | | Launch fresh with a Chrome DevTools Protocol port, verified before return; optional `[PORT]`, `0` or omitted picks a free port |
 
-By default, `launch` attaches to an already-running instance and returns its visible window. `--no-attach` rejects an already-running app with `ACTION_FAILED`; otherwise it starts a fresh instance and still waits for a real visible window. Windowless, menu-bar-only, or background apps return `WINDOW_NOT_FOUND` rather than a fabricated empty window response; use `list-apps` to observe those processes.
+The process starting and the app presenting a window are separate outcomes, so the response reports them separately:
+
+```json
+{ "app": "TextEdit", "pid": 611, "process_instance": "macos-proc-v1:...",
+  "window": { "id": "w-110407", "title": "Open", "visible": true } }
+```
+
+`window` is present when the app already has one and **omitted when it does not**. Its absence is a fact, not a failure — `launch` still returns `ok: true`.
+
+When the launched app's bundle is built on Chromium — detected from the bundle's frameworks, not the app's name — the response also carries `renderer: "chromium"` and a `suggestion` string:
+
+```json
+{ "app": "Slack", "pid": 2201, "process_instance": "macos-proc-v1:...",
+  "window": { "id": "w-8891", "title": "Slack | general", "visible": true },
+  "renderer": "chromium",
+  "suggestion": "Chromium app: for web-content work, run close-app and then launch --cdp, then drive the web contents with agent-browser or any CDP client. Accessibility commands still cover everything, including native menus and dialogs." }
+```
+
+`renderer` and `suggestion` are both optional and omitted on a non-Chromium app. Read `suggestion` as a hint the response carries, not an instruction the command enforces — a plain `launch` still succeeds and the accessibility path still works on a Chromium app; the field only names the faster option for the web-content case. See "Driving the web contents of a Chromium app" below for the `--cdp` flow the suggestion points at.
+
+A launch waits only for the windows the launch itself causes. It polls until the app reports that it finished starting up, plus a short grace for the first window to reach the window server. Most apps therefore return their window in one step. An app that opens its first window only when brought forward — any document-based app — returns without one instead of waiting out `--timeout`.
+
+A launch that finds its process gone before any window appears fails with `APP_UNRESPONSIVE` rather than reporting a windowless success.
+
+When you need the window:
+
+- `--activate` asks the app to present one and waits for it up to `--timeout`, because activation is what causes the window. This brings the app forward, so it is not headless. Pair it with a small `--timeout` for an app that may have no window at all.
+- `wait --event window-opened` waits on your terms after you trigger the window some other way.
+
+Windowless, menu-bar-only, and background apps simply report no `window`; use `list-apps` to observe those processes and read their `presentation`. `--no-attach` rejects an already-running app with `ACTION_FAILED` and starts a fresh instance.
+
+### Driving the web contents of a Chromium app
+```bash
+agent-desktop launch "Obsidian" --cdp
+agent-desktop launch "Obsidian" --cdp 9229
+```
+Use `--cdp` on Electron and other Chromium-based apps — Slack, VS Code, Discord, Obsidian, Notion, and similar — whose web contents are dense or slow to walk through the accessibility tree. It launches the app fresh with `--remote-debugging-port=<port>` and `--remote-debugging-address=127.0.0.1` (loopback pinned), then polls `http://127.0.0.1:<port>/json/version` until the endpoint answers with a parseable `webSocketDebuggerUrl`, before the command returns. Pass a port number for an explicit choice; omit it or pass `0` to let the OS pick a free one.
+
+The port exists only for a fresh process, so `--cdp` requires a fresh launch. `launch` never quits a running app for you — a silent quit loses the user's state — so an already-running target returns `ACTION_FAILED` with `details.kind: "cdp_requires_fresh_launch"` instead. Run `close-app` first, confirm the process exited, then launch again with `--cdp`.
+
+`--cdp` owns the remote-debugging switches. A user `--arg` naming `--remote-debugging-port`, `--remote-debugging-pipe`, `--remote-debugging-address`, or `--remote-allow-origins` is rejected before launch — see `cdp_switch_conflict` below.
+
+On success, the response adds a `cdp` object and a `suggestion` string naming the next step. "Verified" means the endpoint answered `/json/version` with a parseable `webSocketDebuggerUrl`, so `cdp.websocket_url` is always present on success:
+
+```json
+{ "app": "Obsidian", "pid": 4821, "cdp": {
+  "port": 9229,
+  "http_endpoint": "http://127.0.0.1:9229",
+  "websocket_url": "ws://127.0.0.1:9229/devtools/browser/<id>",
+  "product": "Chrome/142.0.7444.265"
+},
+  "suggestion": "Next: run `agent-browser connect <port>` (preferred; `agent-browser skills get electron` has the guide) or connect any CDP client such as Playwright or Puppeteer. If neither is available, ask the user to install agent-browser or continue with accessibility commands. Do not hand-roll raw CDP or call app-internal APIs — that path is unverified and app-specific. Native menus, dialogs, windows, and screenshots stay with agent-desktop." }
+```
+
+`suggestion` is informational, the same way `data.cdp` itself is — read it, do not treat it as a command the process enforces.
+
+The probe that verifies the endpoint has a reserved time budget so a slow launch cannot consume it: `reserve = min(5s, one quarter of the remaining launch budget)`, carved out of `--timeout` before the probe starts.
+
+Errors:
+
+| Code | `details.kind` | Meaning | Recovery |
+|------|-----------------|---------|----------|
+| `ACTION_FAILED` | `cdp_requires_fresh_launch` | The app was already running | `close-app`, confirm it exited, then `launch --cdp` again |
+| `INVALID_ARGS` | `cdp_port_in_use` | The explicit port you named is already bound | Name a different port, or omit the number and let agent-desktop pick a free one |
+| `INVALID_ARGS` | `cdp_switch_conflict` | `--arg` also carried `--remote-debugging-port`, `--remote-debugging-pipe`, `--remote-debugging-address`, or `--remote-allow-origins` | Drop that `--arg`; `--cdp` owns the remote-debugging switches |
+| `ACTION_FAILED` | `cdp_endpoint_unavailable` | No DevTools endpoint answered on the port before the deadline — a non-Chromium app, one that strips debugging switches from its main process, or one still starting up | `details` carries `pid`, `port`, `elapsed_ms`, `probe_budget_ms`, `process_instance`, and `responder_without_devtools_body: true` when something answered over HTTP without a DevTools body. The app is left running; fall back to the accessibility path |
+
+Security: `--remote-debugging-address=127.0.0.1` pins the endpoint to loopback and `--cdp` rejects `--arg` values that would widen it, but while the port is open, any local process running as your user can still reach it and gain full control of the app's web contents — that boundary belongs to the OS, not to agent-desktop. Request `--cdp` only for the step that needs it; `close-app` ends the exposure along with the app itself.
+
+**Handoff:** once `data.cdp` is present, drive the app's web contents with a CDP client — agent-desktop never talks to that port itself. Any framework that speaks CDP can connect: `agent-browser` is preferred (it has the ref-based agent workflow and a bundled `electron` skill), but Playwright, Puppeteer, `chrome-remote-interface`, and other CDP clients work too. Check for `agent-browser` first (`command -v agent-browser`):
+
+- If it is installed, connect with `agent-browser connect <port>`, then use its normal snapshot/click/type workflow. It ships an `electron` skill: `agent-browser skills get electron`.
+- If it is not installed but another CDP client is available, connect with that instead.
+- If neither is available, ask the user to run `npm install -g agent-browser`, or keep using agent-desktop's accessibility commands — those always work, on this app or any other.
+
+agent-desktop never invokes `agent-browser` itself; the calling agent does. Even with CDP connected, these stay on the accessibility path, because CDP cannot reach them:
+
+- The native menu bar (`snapshot --surface menubar`)
+- File dialogs and sheets
+- Window management (`list-windows`, `focus-window`, `resize-window`, and related commands)
+- Notifications
+- Screenshots
+- Any app you did not launch yourself — CDP cannot attach to an already-running process, so the accessibility path is the only attach story there
 
 ### close-app
 ```bash
@@ -39,7 +126,17 @@ Requests an application quit. A graceful quit is asynchronous — the app may sh
 agent-desktop list-apps
 agent-desktop list-apps --app "Text"
 ```
-Lists running GUI applications, optionally filtered by a case-insensitive name substring. Returns array of `{ name, pid, bundle_id }`.
+Lists running GUI applications, optionally filtered by a case-insensitive name substring. Returns array of `{ name, pid, bundle_id, presentation }`.
+
+`presentation` tells a foreground app from one that only appears on a hotkey or lives in the menu bar:
+
+| Value | Meaning |
+|-------|---------|
+| `foreground` | Owns ordinary windows and appears in the Dock |
+| `background` | No Dock entry — menu-bar and tray items, and overlays summoned by a hotkey. Their windows may exist only while shown |
+| omitted | Not registered as an application (helper processes and daemons found through the process table) |
+
+Applications with no user interface at all are excluded.
 
 ## Window Management
 
@@ -49,6 +146,12 @@ agent-desktop list-windows
 agent-desktop list-windows --app "Finder"
 ```
 Lists all visible windows, optionally filtered by app. Returns array of `{ id, title, app_name, pid, bounds, is_focused }`. Focus is detected through the platform's frontmost/focused-window APIs, not window stacking order.
+
+The inventory comes from the window server, which knows more windows than the
+accessibility layer exposes. Targeting one an application never published
+returns `ACTION_NOT_SUPPORTED` with `kind: "window_without_accessibility_element"`
+— the window exists and still accepts screenshots and coordinate input, but no
+semantic command can reach it. Choose another window from this list.
 
 ### focus-window
 ```bash
@@ -299,6 +402,7 @@ Transient errors (timeouts, element-not-found) are retried within the `--timeout
 agent-desktop batch '[{"command":"click","args":{"ref_id":"@e1","snapshot":"<snapshot_id>"}},{"command":"wait","args":{"ms":500}},{"command":"click","args":{"ref_id":"@e2","snapshot":"<snapshot_id>"}}]'
 agent-desktop batch '[...]' --stop-on-error
 agent-desktop --session run-a batch '[{"command":"status","session":"run-b","args":{}}]'
+agent-desktop batch '[{"command":"launch","args":{"app":"Obsidian","cdp":0}}]'
 ```
 Execute multiple commands in sequence from a JSON array. Each entry has `command` (string) and `args` (object). Use `args`, not `params`. For ref-consuming commands, pass the output `snapshot_id` as the `snapshot` field.
 
@@ -326,7 +430,7 @@ Each entry may include `"session": "id"` beside `command` and `args`. If omitted
 **Per-entry failure shape:**
 ```json
 {
-  "version": "2.1",
+  "version": "2.3",
   "ok": false,
   "command": "click",
   "error": {
@@ -349,7 +453,16 @@ Each entry may include `"session": "id"` beside `command` and `args`. If omitted
 
 ## Session lifecycle
 
-Sessions are on-disk containers under `~/.agent-desktop/sessions/<id>/` with a `session.json` manifest, snapshot refmaps, and (when tracing is on) a `trace/` directory. Session selection is explicit; `session start` returns an ID but does not activate it for later processes.
+Sessions are on-disk containers under `<state root>/sessions/<id>/` with a `session.json` manifest, snapshot refmaps, and (when tracing is on) a `trace/` directory. The state root defaults to `~/.agent-desktop`; setting `AGENT_DESKTOP_HOME` relocates it — the env value is the root itself, applied to every subcommand. A relative or empty value fails with `INVALID_ARGS` before dispatch, and `status` reports the resolved root as `state_root`. Session selection is explicit; `session start` returns an ID but does not activate it for later processes.
+
+### cursor-overlay enable / disable
+
+```bash
+agent-desktop --session <id> cursor-overlay enable --label "Opening menu" --max-words 6
+agent-desktop --session <id> cursor-overlay disable
+```
+
+The setting is stored in the selected session manifest and inherited by all eligible headless commands, including batch entries scoped to that session. Enabling immediately presents the persistent cursor with “Hey, let's play with this computer!” The current description remains visible; when its value changes, the old card eases out and the new text eases in. Only `cursor-overlay disable` or session end removes the cursor and card. Action and batch-entry schemas do not accept cursor-enable flags. Headed actions temporarily hide the overlay while the real pointer is used. macOS renders the overlay natively; other platforms use the adapter's presentation no-op.
 
 ### session start
 ```bash

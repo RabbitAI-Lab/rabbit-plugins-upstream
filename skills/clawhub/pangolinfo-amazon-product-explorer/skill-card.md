@@ -1,43 +1,58 @@
-## Description: <br>
-Helps agents research Amazon product opportunities by scouting demand, filtering niches, benchmarking products, mining review pain points, checking IP signals, and producing a go/no-go report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through Amazon product opportunity research, from demand and niche filtering to benchmark products, review pain mining, IP checks, and a final go/no-go report.
 
-## Publisher: <br>
-[pangolinfo](https://clawhub.ai/user/pangolinfo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pangolinfo](https://clawhub.ai/user/pangolinfo)
 
-## Use Case: <br>
-External sellers, product teams, and e-commerce researchers use this skill to evaluate Amazon product categories and niches before launching a new product. It guides an agent through fast and full research modes that combine demand signals, benchmark products, review themes, IP checks, and investment recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Pangolinfo API key in the runtime environment. <br>
-Mitigation: Treat the API key as a secret, provide it through the supported environment or MCP configuration path, avoid pasting it into prompts or logs, and rotate it if exposure is suspected. <br>
-Risk: Full-mode and review-scraping workflows can consume additional Pangolinfo credits. <br>
-Mitigation: Use the fast mode by default, confirm budget before review scraping or full reports, and monitor quota usage. <br>
-Risk: Amazon market and IP signals may be incomplete or time-sensitive. <br>
-Mitigation: Use the report as decision support, review source-labeled findings before acting, and obtain professional IP review before product launch or large inventory commitments. <br>
+## Use Case:
 
+External sellers, product managers, and e-commerce researchers use this skill to evaluate whether an Amazon category or product idea is worth entering. It helps them move from a seed idea to a concise market profile, benchmark comparison, risk check, and go/no-go recommendation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pangolinfo/pangolinfo-amazon-product-explorer) <br>
-- [Pangolinfo](https://www.pangolinfo.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown reports with tables, concise recommendations, and red/yellow/green go/no-go decisions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include source-labeled market metrics, benchmark product comparisons, review themes, IP-risk notes, budget prompts, and next-step recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: server release metadata; artifact frontmatter says 3.1.0) <br>
+Risk: The skill uses a Pangolinfo API key and sends product-research queries through Pangolinfo tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if you trust Pangolinfo with the API key and research queries, keep the key scoped to this service where possible, and avoid sending sensitive product plans unless permitted.
+
+Risk: Full-mode review and search steps can consume external lookup credits.
+
+Mitigation: Review the skill's budget prompts before approving higher-cost steps and stop when Fast-mode evidence is sufficient.
+
+Risk: IP clearance output is a preliminary risk radar rather than formal legal advice.
+
+Mitigation: Use the IP section to identify areas for review and consult a qualified IP professional before opening molds or committing to large inventory.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/pangolinfo/skills/pangolinfo-amazon-product-explorer)
+- [Pangolinfo website](https://www.pangolinfo.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown reports with tables, sourced metrics, and concise recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fast and Full modes; higher-cost review collection requires a budget prompt before proceeding.]
+
+## Skill Version(s):
+
+4.0.0 (source: server release evidence; artifact frontmatter says 3.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,165 +1,328 @@
 # meta-analysis
 
-[🇨🇳 中文 (Chinese)](./README_ZH.md)
+- **English guide** → [README.md](https://github.com/medstatstar/meta-analysis/blob/main/README.md) · **中文指南** → [README_zh-CN.md](https://github.com/medstatstar/meta-analysis/blob/main/README_zh-CN.md)
 
-> An R-based, conversation-driven Meta-Analysis skill for WorkBuddy. Covers 100% of RevMan 5.x functionality, Stata `metareg`/`mvmeta` equivalents, effect-size conversions (`esc`), and cluster-robust variance estimation (`clubSandwich`/`robumeta`) — all with publication-ready, editable SVG graphics.
+<div align="center">
+  <img src="assets/icon.svg" width="240" height="240" alt="meta-analysis logo"/>
+</div>
 
-## Overview
+> **Easy-to-use R-based Meta-Analysis for Clinical Researchers**
+>
+> You don't need to code or memorize commands — just describe your meta-analysis needs in **plain language inside a chat**, and the skill **automatically runs** the full analysis (pooling, figures, report) for you. Powered by R and 14 core + 2 optional professional R packages (metafor, meta, netmeta, bayesmeta, dosresmeta, mada, etc.), it returns results in Chinese or English depending on your OS language setting (you can force-switch via a prompt at any time). Once you describe a request, the skill **auto-executes** and returns results + figures; ask for the full reproducible R code at any time.
 
-`meta-analysis` turns natural-language requests into fully reproducible R workflows. Tell it what you want ("pool the OR", "draw a forest plot subgrouped by region", "network meta-analysis with 3 interventions") and it will: check the R environment, guide you through data input, run the right model, and emit editable vector figures plus a structured results summary.
+---
 
-Everything runs **locally** — no user data is uploaded to any server.
+## Who This Is For
 
-## Key Features
+meta-analysis is part of the CT-series skill family, built for three groups:
 
-| Capability | Implementation (R packages) | Coverage |
-|------------|------------------------------|----------|
-| **Effect-size computation** | `metafor`, `meta` | 8 types auto-detected: OR/RR/RD (dichotomous), SMD/MD (continuous), HR (survival), r→Fisher's z (correlation), single-group rate/mean |
-| **Fixed / Random / Mixed models** | `rma()`, `metabin()`, `metacont()` | DL, REML, ML, PM, Hartung–Knapp, FE |
-| **Forest / Funnel / GOSH plots** | `metafor`, `ggplot2` | Publication-ready SVG (minimal/lancet/jama/revman/custom themes) |
-| **Heterogeneity** | `metafor` | I², Cochran's Q, τ², H², Prediction Interval |
-| **Publication bias** | `metafor`, `meta` | Egger regression, Begg rank, Trim-and-fill, selection models, fail-safe N |
-| **Subgroup analysis** | `metafor`, `meta` | `mods = ~ factor(group) - 1`, between-group Q |
-| **Meta-regression** | `metafor` | Uni/multivariate, continuous/categorical/interaction + bubble plot |
-| **Network Meta-Analysis** | `netmeta`, `gemtc`, `multinma` | Consistency (node-split), SUCRA, league table, Bayesian (JAGS/Stan) |
-| **Bayesian Meta-Analysis** | `bayesmeta`, `multinma`, `gemtc` | MCMC posterior, prior diagnostics |
-| **Sensitivity analysis** | `metafor`, `dmetar` | Leave-one-out, cumulative, GOSH (all-subsets) |
-| **Survival Meta** | `survmeta`, `ipdmeta` | Aggregate HR + KM pseudo-IPD reconstruction |
-| **Single-group / Diagnostic** | `meta` (`metaprop`/`metamean`/`metainc`/`metacor`), `mada` | Proportion, mean, incidence, correlation, bivariate SROC |
-| **Trial Sequential Analysis** | `metafor::tes()` | Type-I-error control, required-info size |
-| **Power analysis** | `dmetar`, `meta` | Prospective sample-size planning |
-| **Risk-of-Bias (RoB 1.0/2.0, ROBINS-I)** | `robvis`, `dmetar` | Traffic-light + weighted bar plots |
-| **Effect-size conversion** | `esc` | d ↔ g ↔ logOR ↔ r ↔ Fisher's z, batch + Hedges' g correction |
-| **Cluster-robust variance estimation** | `robumeta`, `clubSandwich` | RVE + CR2 small-sample SE (dependent/multi-arm data) |
-| **Multivariate / Multilevel** | `rma.mv()`, `robumeta` | UN/CS/AR1 + compound-symmetry V-matrix |
-| **Stata equivalents** | `metafor`, `robumeta` | `metareg` → `rma`+permutation; `mvmeta` → `rma.mv`+6 covariance structs |
-| **Systematic-review workflow** | `metagear` | PRISMA flow, screening GUI, PDF batch, digitize, impute |
+- **Clinical-trial practitioners at pharmaceutical companies** — sponsors, CROs, and medical / statistical / regulatory roles who need to pool and compare study evidence;
+- **Clinicians and nurses who design, conduct, or participate in clinical research** and need meta-analysis / systematic-review support;
+- **Medical students who want to learn evidence-based medicine and meta-analysis methodology in a structured way**.
 
-## RevMan Compatibility
+---
 
-The skill implements 1:1 code mappings for all RevMan 5.x analysis types (binary, continuous, generic inverse-variance, single-arm, OD ratios, etc.). Users familiar with RevMan can migrate to fully reproducible, editable R output without re-learning statistics.
+## 1. How to Use It in a Chat (the Core)
 
-## Stata Equivalents
+meta-analysis is a **conversational skill**: you simply tell the assistant what you want in natural language — no commands, no parameter names to remember. As a WorkBuddy skill it **auto-loads with no extra installation**.
 
-| Stata command | R equivalent | Notes |
-|---------------|--------------|-------|
-| `metan` | `metabin()` / `metacont()` | Same models, richer output |
-| `metareg` | `rma(..., mods = ~ x)` + permutation test | Adds Knapp–Hartung SEs |
-| `mvmeta` | `rma.mv()` with `V` matrix | 6 covariance structures (UN/CS/AR1/…) |
-| `metabias` | `regtest()` / `ranktest()` | Egger / Begg |
-| `metaninf` | `leave1out()` | Influence diagnostics |
+Below are 7 real conversational examples. **Example 1 is the upstream topic-selection gate** (choose among candidate directions before running any analysis), followed by Examples 2–7 ordered from simple to advanced. Each shows **"You say"** and a sketch of **"The assistant replies"**, plus how to get the actual number.
 
-## Interactive Workflow
+### Example 1 · Topic selection: choose among candidate meta-analysis directions
+**You say:**
+> I'm interested in SGLT2 inhibitors for renoprotection and cardiovascular benefit in chronic kidney disease (CKD), but I haven't decided which specific meta-analysis direction to pursue. Can you help me shortlist candidate directions?
 
-On first activation the skill presents a 7-category menu; if your initial message already contains enough detail it skips straight to analysis:
+**Assistant replies (sketch):**
+> Sure — I'll use a **topic-selection approach** to lock down the direction. First I run the **in-skill dedup probe (Cochrane + PubMed real hit counts)**, then shortlist — otherwise a saturated direction can be wrongly pushed as top pick.
+>
+> **First, rule out the saturated directions**: the generic "SGLT2i on cardiorenal outcomes in CKD" is Cochrane 23 / PubMed 2785 — highly saturated. **Counter-intuitively**, the seemingly niche **non-diabetic CKD (Cochrane 20 / PubMed 2402)** and **dialysis / advanced CKD (Cochrane 22 / PubMed 1067)** are also heavily covered (DAPA-CKD / EMPA-KIDNEY spawned many reviews) — also not recommended.
+>
+> Re-shortlisting 3 candidates by **evidence gap + novelty** (I'll produce 1–3 directions; I won't decide for you):
+>
+> **Candidate ① Renoprotection in IgA nephropathy (top pick)**
+> - Cochrane 4 / PubMed 224 (≈1/10 of the broad direction) → **real gap**
+> - Most common primary GN; SGLT2i already a guideline adjunct; many RCTs, data available
+>
+> **Candidate ② Net benefit / benefit–risk framework**
+> - Cochrane 5 / PubMed 442 → gap
+> - Pools renal + cardiac benefit with safety events (DKA / infection / volume depletion) in one framework — strong methodological differentiation
+>
+> **Candidate ③ Specific glomerular diseases (FSGS / membranous / ADPKD / lupus)**
+> - FSGS Cochrane 0, ADPKD 2, membranous 1, lupus 3 → **very deep gap**
+> - ⚠️ but sparse RCTs → power risk; better as a **scoping review** than a hard efficacy MA
+>
+> **Suggestion**: Start with ① (real gap, high clinical need); ② as the methodological-differentiation alternative; ③ conditional. Next step: a **full topic assessment** (PICO + dedup search + PRISMA/AMSTAR-2 pre-check), and **run ct-literature first for a full dedup confirmation** (the probe is a quick signal; FSGS=0 may include index-phrasing variance, don't rely on it alone).
 
-1. **Pairwise Meta** — binary / continuous / pre-computed / survival / correlation / single-group
-2. **Heterogeneity & Bias** — I²/Q/τ², subgroup, meta-regression, Egger/Begg/Trim-fill, sensitivity, GOSH, Baujat, Drapery
-3. **Advanced Models** — NMA, Bayesian NMA (Stan/JAGS), multilevel, multivariate, IPD, dose-response, survival, TSA, bootstrap
-4. **Effect Size & Conversion** — mean/SD→d, t/F/r→d, d↔g, d↔logOR, r↔Fisher's z, OR↔logOR, batch, NNT
-5. **Visualization** — forest (5 themes), funnel, bubble, GOSH, network, league table, RoB traffic-light, power curve, Drapery, inconsistency heatmap
-6. **Study Quality** — RoB 1.0/2.0, ROBINS-I, GRADE, PRISMA checklist, AMSTAR-2
-7. **Systematic Review Workflow** — PRISMA flow, screening GUI, PDF batch, digitize, impute, reference management
+**📌 Note:** When you have a direction but are unsure which specific meta to run, the assistant uses the topic-selection framework to produce **1–3 candidate directions + a 4-dim score + meta type**, instead of deciding for you or giving a single answer. This is the **topic-selection gate** before analysis — no R computation is invoked. Candidates are stratified by **evidence gap / novelty**, each backed by the **in-skill dedup probe (Cochrane + PubMed real hit counts)** — so a saturated generic direction (including the "intuitively niche" non-diabetic CKD or dialysis) is no longer mis-pushed as the top pick.
 
-## Installation
+### Example 2 · Two-group binary meta (most common)
+**You say:**
+> Combine the OR across these 5 binary studies:
+> Study A: experimental 30/100, control 20/100
+> Study B: experimental 45/120, control 30/100
+> ...
 
-1. Install **R 4.0+** (https://cran.r-project.org/).
-2. Place the skill folder at `~/.workbuddy/skills/meta-analysis/`.
-3. On first run the skill auto-detects and installs missing R packages (you choose *install all now* or *on demand*).
+**Assistant replies (sketch):**
+> ✅ 5 studies, random-effects (DL), OR = 1.52 (95%CI: 1.18–1.96), I² = 34%
+> (Ask for the full reproducible R code at any time.)
 
-If your raw data is in a non-standard format (SPSS/Stata/SAS/Excel/Parquet/…), the skill recommends installing **`statdata-transfer`** to convert it into the required CSV columns before analysis.
+**📌 Auto-execution:** Once you describe the request, the assistant **auto-executes** and returns the real result; ask for the reproducible code by saying **"give me the full R code"**.
 
-## Usage
+### Example 3 · Effect size conversion
+**You say:**
+> Convert Cohen's d = 0.8 to logOR
 
-```
-# In WorkBuddy chat:
-"run a meta-analysis with the following data..."
-"pool the OR using a random-effects model"
-"draw a forest plot, subgroup by region"
-"network meta-analysis with 3 interventions (A vs B, A vs placebo)"
-"meta-regression: effect size ~ publication year + sample size"
-"check publication bias: Egger test + trim-and-fill"
-"node-split test for NMA inconsistency"
-"convert Cohen's d to logOR"
-```
+**Assistant replies (sketch):**
+> ✅ d = 0.8 → logOR ≈ 1.45 (SE ≈ 0.38), based on logOR = d × π/√3
 
-## Output
+### Example 4 · Heterogeneity + subgroup
+**You say:**
+> I did a continuous meta with 8 studies, SMD pooled, but I² is high — I want to subgroup by region
 
-- `analysis_complete.R` — fully reproducible R script
-- Forest plot (`.svg` + `.png`)
-- Funnel plot, standard & contour-enhanced (`.svg` + `.png`)
-- `results_summary.md` — structured results (effect, CI, I², τ², p-values)
-- CSV data backup
-- R Markdown / HTML report (optional)
+**Assistant replies (sketch):**
+> ✅ 8 studies, SMD = 0.42 (95%CI: 0.15–0.69), I² = 78%
+> Subgroup by region:
+> - Asia (k=4): SMD = 0.55, I² = 45%
+> - Euro-US (k=4): SMD = 0.28, I² = 62%
+> - Between-group Q = 4.12, p = 0.04
 
-## Editing the SVG Graphics
+### Example 5 · Complex: Network meta with multiple decisions (popup menu)
+**You say:**
+> I want to do a network meta with 4 interventions, but I haven't decided whether to use frequentist or Bayesian, and I'm not sure if I should include dose-response
 
-The figures are emitted as editable SVG. Recommended tools:
+**Assistant replies (sketch):**
+> 4 interventions clear. Two key choices to clarify:
+>
+> **① Which analysis framework?**
+> - (a) Frequentist — `netmeta`, inverse-variance based, good for consistent networks
+> - (b) Bayesian — `gemtc` (JAGS) or `multinma` (Stan) **local only** (a known coze limitation: the container has no root to install JAGS; on the cloud use (a) netmeta); `bayesmeta` supports Bayesian pairwise comparisons locally
+>
+> **② Include dose-response?**
+> - (a) No — pure pairwise comparison network
+> - (b) Yes — needs dose-effect parameters, Bayesian framework preferred
+>
+> **③ Can't decide?** → say "explain the differences between these choices in detail", and I'll clarify the clinical/statistical meaning before you choose
 
-| Tool | Type | Notes |
-|------|------|-------|
-| **Microsoft PowerPoint** (2016+) | Office | Drag the `.svg` in, right-click → *Convert to Shape* / *Ungroup* to edit text/colors directly |
-| **Inkscape** | Free / Open-source | Full vector editing; CLI export: `inkscape in.svg --export-type=pdf --export-filename=out.pdf` |
-| **Adobe Illustrator** | Paid | Journal-grade fine-tuning; native SVG/EPS |
-| **Affinity Designer** | Paid (one-time) | Lightweight AI alternative |
-| **Boxy SVG** | Free/Paid web app | Quick color/text/dimension tweaks |
+**📌 Note:** When you've **named the test type but are stuck on "which option / design family"**, the assistant **pops a routing menu** to confirm step by step — instead of deciding for you or dumping the full menu. The menu also offers an "explain the differences" option — when you're unsure, it explains before you decide.
 
-For journal submission (TIFF/EPS/PDF), convert with Inkscape:
+### Example 6 · Vague: Not sure which model (grill-me)
+**You say:**
+> I want to do a meta-analysis but I'm not sure which model to use — help me figure it out
 
-```bash
-inkscape forest_plot.svg --export-type=eps --export-filename=forest_plot.eps
-inkscape forest_plot.svg --export-type=pdf --export-filename=forest_plot.pdf
-inkscape forest_plot.svg --export-type=png --export-dpi=600 --export-filename=forest_plot.tiff
-```
+**Assistant replies (sketch):**
+> Sure — let's pin down your needs first; a few key questions will locate the right model:
+> 1. What type is your **primary endpoint**? — continuous (e.g. SMD) / binary (e.g. OR) / survival (HR) / single-group rate / other?
+> 2. Is it a **two-group comparison or multi-group network**?
+> 3. Any **special dependency structure**? — multi-arm / multi-outcome / IPD / none
+>
+> (After you answer, the assistant keeps probing until the model is locked, then computes — no full menu dumped on you.)
 
-## Directory Structure
+**📌 Note:** When you say "not sure which model", the assistant uses **branch-by-branch probing** to clarify your needs, instead of dumping the full menu.
 
-```
-meta-analysis/
-├── SKILL.md                       # Main skill definition (bilingual, EN-first)
-├── README.md / README_ZH.md      # This file
-├── LICENSE                        # MIT
-├── requirements.txt              # R package list
-├── assets/
-│   └── icon.svg                   # Skill logo
-├── scripts/
-│   ├── setup_packages.R          # Env check + package installer
-│   ├── meta_analysis_core.R      # Core engine (escalc/rma/forest/funnel)
-│   ├── effect_size_conversions.R # esc wrappers, d↔g, RVE
-│   ├── stata_equivalents.R       # metareg / mvmeta equivalents
-│   └── network_meta_analysis.R   # netmeta / gemtc / multinma
-└── references/
-    ├── interactive_menu.md        # Full menu tree + data-format guide
-    ├── data_templates.md          # Per-type CSV templates + validation
-    ├── revman_complete.md         # 1:1 RevMan → R code mappings
-    ├── stata_to_r_mapping.md      # Stata metareg/mvmeta → R equivalents
-    ├── advanced_analysis.md       # Multivariate / multilevel / IPD / dose-response
-    ├── single_group_meta.md       # metaprop/metamean/metainc/metacor
-    ├── survival_meta.md           # survmeta / KM pseudo-IPD
-    ├── tsa_diagnostics.md         # tes / Baujat / Drapery / selection
-    ├── diagnosis_meta.md          # mada bivariate / SROC
-    ├── bayesian_nma.md            # multinma / gemtc workflows
-    ├── esc_robust_meta.md         # esc conversions + RVE (robumeta/clubSandwich)
-    ├── review_workflow.md         # metagear PRISMA / screening / digitize
-    ├── r_packages.md              # Package inventory
-    ├── citations.md               # Methodological references
-    └── purpose_zh.md              # Chinese Purpose text mirror
-```
+### Example 7 · Systematic review workflow
+**You say:**
+> Help me generate a PRISMA flow diagram
 
-## Important Notes
+**Assistant replies (sketch):**
+> Sure, please provide:
+> - Records identified: ___
+> - Records screened: ___
+> - Records excluded: ___
+> - Full-text assessed: ___
+> - Full-text excluded (+ reasons): ___
+> - Studies included: ___
+>
+> User: 520, 380, 140, 80, 52(20 no data, 18 wrong pop, 14 wrong design), 28
+>
+> ✅ PRISMA flow diagram generated! [SVG output]
 
-- R **4.0+** is required; the skill verifies this on startup.
-- All analysis runs in your local R environment — **no user data is uploaded**.
-- Statistical output requires interpretation in context; the skill does not replace statistical or clinical judgment.
+> 💡 **Tip:** Most analyses need only three things — effect size (or rate / HR) + α + power. Anything you omit is filled with sensible defaults. It's fine to be incomplete — the assistant will tell you what's missing.
 
-## References
+---
 
-- Harrer, M., Cuijpers, P., Furukawa, T. A., & Ebert, D. D. (2021). *Doing Meta-Analysis with R: A Hands-On Guide*. Chapman and Hall/CRC.
-- Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. *J Stat Softw*, 36(3), 1–48.
-- Balduzzi, S., Rücker, G., & Schwarzer, G. (2019). How to perform a meta-analysis with R: a practical tutorial. *Evid Based Ment Health*, 22(4), 153–160.
-- Rücker, G., et al. (2016). netmeta: Network Meta-Analysis using Frequentist Methods. *BMC Med Res Methodol*, 16, 1–8.
-- Salanti, G. (2012). Network meta-analysis in mental health. *Evid Based Ment Health*, 15(1), 16–20.
+## 2. What You Can Do — Scenario Index
 
-## License
+Tests are grouped by **analysis purpose** (7 categories below). Each row gives the typical **clinical scenario** and a line you can **copy verbatim** under "Try saying". The same test may be reached from multiple entry points.
 
-MIT License. See `LICENSE` file for details.
+> The underlying R packages (metafor / meta / netmeta …) are listed in Section 6 "Advanced Reference"; ordinary users don't need to care.
+
+### ① Pairwise Meta-Analysis
+| Scenario | Try saying in chat |
+|:---|:---|
+| Binary (OR/RR/RD) | "Combine the OR across these 5 binary studies" |
+| Continuous (SMD/MD) | "Pool the SMD of these 6 continuous studies" |
+| Pre-calculated (yi+CI) | "I have effect sizes and CIs for 5 studies — draw the forest plot directly" |
+| Survival (HR) | "Pool the HR across these 8 studies" |
+| Correlation (r→Zr) | "Convert these 4 correlations via Fisher z then pool" |
+| Single-group rate/mean | "Pool the incidence rates across these studies" |
+| Generic inverse-variance | "I have yi and vi — run the meta directly" |
+
+### ② Heterogeneity & Bias
+| Scenario | Try saying in chat |
+|:---|:---|
+| Heterogeneity assessment | "I ran a meta, I² is very high — help me assess heterogeneity" |
+| Subgroup analysis | "Run subgroup analysis by region" |
+| Meta-regression | "Run meta-regression on publication year and sample size" |
+| Egger test | "Check publication bias, run Egger's test" |
+| Begg test | "Begg rank-correlation test" |
+| Trim-and-fill | "Correct publication bias with trim-and-fill" |
+| Selection model | "Assess publication bias with a selection model" |
+| Sensitivity analysis | "Run leave-one-out sensitivity analysis" |
+| Cumulative meta | "Run cumulative meta by publication year" |
+| GOSH plot | "Plot a GOSH graph to see heterogeneity patterns" |
+| Baujat diagnosis | "Make a Baujat plot to see which study contributes most heterogeneity" |
+| Drapery plot | "Plot a Drapery graph to assess α robustness" |
+
+### ③ Advanced Models
+| Scenario | Try saying in chat |
+|:---|:---|
+| Frequentist NMA | "Run network meta with 4 interventions, use netmeta" |
+| Bayesian NMA (Stan) | "Run Bayesian network meta, Stan backend" |
+| Bayesian NMA (JAGS) | "Run Bayesian network meta, JAGS backend" |
+| Multilevel meta | "Run 3-level meta with multiple effects within studies" |
+| Multivariate meta | "Pool a meta with multiple correlated outcomes" |
+| IPD meta | "I have individual patient data — run IPD meta" |
+| Dose-response | "Run dose-response meta, dosresmeta" |
+| Survival meta | "Pool survival HR via metafor (survmeta removed)" |
+| Trial sequential analysis | "Run TSA — see how many more studies are needed" |
+| Bootstrap meta | "Use Bootstrap for nonparametric DL estimation" |
+
+### ④ Effect Size & Conversion
+| Scenario | Try saying in chat |
+|:---|:---|
+| Mean/SD→d | "Convert mean and SD to Cohen's d" |
+| t/F→d | "Convert a t value to d" |
+| r→Fisher z | "Convert a correlation to Fisher z" |
+| d↔logOR | "Convert d to logOR" |
+| OR↔logOR | "Convert OR to logOR" |
+| Batch convert | "Batch convert SMD to logOR" |
+| NNT | "Calculate NNT" |
+
+### ⑤ Visualization
+| Scenario | Try saying in chat |
+|:---|:---|
+| Forest plot | "Draw a forest plot, lancet theme" |
+| Funnel plot | "Draw a funnel plot with contour enhancement" |
+| Bubble plot | "Draw a meta-regression bubble plot" |
+| GOSH plot | "Plot a GOSH graph" |
+| Network plot | "Draw the network meta graph" |
+| League table | "Draw the NMA league table" |
+| RoB traffic-light | "Draw a risk-of-bias traffic-light plot" |
+| Power curve | "Draw a power curve" |
+| Drapery plot | "Plot a Drapery graph" |
+| Inconsistency heatmap | "Plot an NMA inconsistency heatmap" |
+
+### ⑥ Study Quality
+| Scenario | Try saying in chat |
+|:---|:---|
+| RoB 2.0 | "Assess risk of bias with RoB 2.0" |
+| RoB 1.0 | "Assess with Cochrane RoB 1.0" |
+| ROBINS-I | "Non-randomized study — use ROBINS-I" |
+| GRADE | "Do a GRADE evidence-quality assessment" |
+| PRISMA checklist | "PRISMA checklist" |
+
+### ⑦ Systematic Review Workflow
+| Scenario | Try saying in chat |
+|:---|:---|
+| PRISMA flow | "Help me generate a PRISMA flow diagram" |
+| Literature screening | "Title/abstract screening, AI-assisted" |
+| PDF batch download | "Batch download full texts from a DOI list (needs confirmation)" |
+| Graph digitize | "Extract data from a scatter plot" |
+| Missing value imputation | "Impute missing standard deviations" |
+
+> ⚠️ **PDF batch download** connects to external networks and writes files to your local disk. Run it only on explicit user instruction, and respect copyright and access controls.
+
+---
+
+## 3. First-Time FAQ
+
+**Q: I only gave effect size and study count, no other parameters — will it still compute?**
+A: Yes. Most analyses need only 3 items — effect size (or rate / HR) + α + power. Omitted parts (two-sided α=0.05, 1:1 randomization, follow-up) are filled with sensible defaults; if something truly required is missing, the assistant will ask.
+
+**Q: Is the n in the result per group or total?**
+A: By default it's **per group**; paired / crossover designs report per-sequence, and survival often reports total events needed. The output always labels this clearly.
+
+**Q: Does the analysis run as soon as I describe a request?**
+A: Yes. Once you describe the request, the assistant **auto-executes** and returns the real numbers + figures — no extra trigger word needed. Computation runs on the cloud coze R engine (data disclosure in Section 5).
+
+**Q: I want the reproducible R code for submission or audit — how do I ask?**
+A: Say **"give me the full R code"**. Every analysis returns reproducible R code (with R and package versions), which you can copy, modify, and re-run yourself.
+
+**Q: On a Chinese system, is the output in Chinese?**
+A: Yes. By default the output language follows your OS language setting — Chinese on a Chinese-OS, English otherwise. This default requires no extra permission and only affects display language; you can force-switch anytime via a prompt (e.g. "用中文回复" / "switch to English").
+
+**Q: My data is in SPSS/Excel/Stata format — what do I do?**
+A: Say **"help me convert my SPSS/Excel data to CSV"** — the assistant will recommend installing `@skill:statdata-transfer` for 50+ format conversions.
+
+**Q: What if my data must stay confidential?**
+A: Run the whole analysis with **simulated / placeholder data**, then ask the skill for the **full reproducible R code** and run it yourself locally with your real data. The skill itself only sends your **analysis parameters / summary statistics** (event counts, sample sizes, effect sizes) to the cloud coze R engine — it **never touches your raw datasets or individual-patient records** (unless you explicitly choose to run an IPD analysis through the cloud, in which case sending IPD to the cloud is your decision).
+
+**Q: What if I found an error in the result — how do I report it?**
+A: This skill follows the standard bug-report workflow. If you suspect the result is wrong (or the engine errored), just say **"report a bug" / "上报问题" / "提交错误报告"**. The skill also **proactively asks** whether to report when it detects a likely defect (e.g. the engine errors or retries still fail) — at most **once per session**, and you can always decline. Either way, the assistant will:
+1. **Propose a sanitized report** (11-field whitelist: skill / skill_version / test / error_type / error_code / engine_status / description / locale / query_origin / session_hash / attempts — **no raw input values or personal data**, except the `description` field where you decide what to disclose, e.g. the algorithm/function used and the error message);
+2. **Show the full report text for your review** — you can add a problem description or correct anything before confirming;
+3. **Send after your explicit confirmation** — to the unified endpoint `https://ct-bugreport.coze.site/run` (if this session called coze) or, if purely local, **save the sanitized report locally and show you the author contact** so you can email it yourself if you choose (the skill itself does not send it; data never leaves your machine unless you email it);
+4. **Receive an acknowledgment** — including whether a previously submitted report from your source has already been fixed (with the fix note) or is still pending.
+
+You stay in full control: the report is shown to you **before** anything is sent, and nothing is transmitted without your explicit "send" confirmation.
+
+---
+
+## 4. Execution Model
+
+- **Auto-execution:** Once you describe a request, the skill **auto-executes** the analysis and returns real numbers + figures — no extra trigger word or confirmation needed. Computation runs on the cloud coze R engine by default.
+- **Default compute path:** The skill sends the analysis request to the cloud coze R engine (`https://ct-meta.coze.site/run`) (data disclosure in Section 5).
+- **Reproducible code:** Every analysis returns reproducible R code (with R + package versions); say **"give me the full R code"** to obtain it for submission or audit.
+- **Outbound authorization:** The default endpoint is pre-approved and runs automatically; a custom endpoint (`COZE_META_ENDPOINT`) asks for confirmation on first use (see Section 5).
+- **Output is for reference only** — validate before journal submission or regulatory use.
+
+---
+
+## 5. Data & Privacy
+
+The skill sends data externally in **two** situations: ① when you describe an analysis request, the skill **auto-sends** the analysis request to execute; ② when you confirm sending an error report. **Neither sends personal identifiers.**
+
+**5.1 Analysis request (cloud computation)**
+- **What is sent:** your **analysis data** — **summary statistics** such as study event counts / sample sizes / effect sizes. No personal identifiers; payloads are sanitized before sending.
+- **When:** the skill **auto-sends** after you describe a request; **before the first outbound call each session**, the skill gives you a one-time spoken disclosure of what is sent and to which endpoint (then executes automatically, without per-call confirmation).
+- **Endpoint:** default `https://ct-meta.coze.site/run` (pre-approved in `adapters/config.json` `auto_approve_endpoints`). A custom endpoint (`COZE_META_ENDPOINT`) asks for confirmation on first use (AUTH-BLOCK), and is persisted to the whitelist after you approve.
+- **If declined:** the skill returns a clear "cloud analysis not used" message.
+
+**5.2 Metadata sent with the request**
+Each request also carries two metadata fields (**in both the analysis request and the error report**):
+- `query_origin`: a SHA-256 hash of your machine hostname, used only for server-side attribution / rate-limiting — **not** your plaintext hostname;
+- `locale`: your OS language, for bilingual output.
+
+Neither is used to identify you personally.
+
+**5.3 Error report**
+- **What is sent:** **only** the 11-key whitelist envelope (skill / skill_version / test / error_type / error_code / engine_status / description / locale / query_origin / session_hash / attempts) — **no analysis data and no personal identifiers**. `description` is the only free-text field, and you review it before consent (hard boundary: no identifiable person/institution/subject info).
+- **Endpoint:** unified bug-report endpoint `https://ct-bugreport.coze.site/run`.
+- **If declined:** nothing is sent; if there is no cloud call this session, the report is saved locally instead (`save_local_report`, data never leaves the machine).
+
+> **In one sentence:** your **analysis summary data** is **auto-sent** to the cloud after you describe a request (with a one-time disclosure before the first outbound call each session); **error reports** go to the unified endpoint only after your confirmation; the two metadata fields (`query_origin` hash + `locale`) are for anonymous attribution. Raw data and individual records never leave your machine.
+
+---
+
+## 6. Advanced Reference (moved to a separate file)
+
+CLI examples, bidirectional solving, curve mode, core formulas, system requirements, common errors, full file structure, and references for developers have been moved to **[references/ADVANCED.md](references/ADVANCED.md)**. Ordinary users don't need it; see Sections 1-5 for daily use.
+
+---
+
+**Version**: v2.1.5 | **License**: MIT | **Authors**: medstatstar, phoe-zip
+
+For feature requests, bug reports, or other feedback, please contact the author directly at medstatstar@gmail.com (Wintone Zhang / 张文彤).
+
+---
+
+## Confidentiality Notice
+
+> The CT series consists of 20+ specialized domain skills, organized into **two tiers — A, B** — by "confidential-data-exfiltration risk + whether external retrieval is needed", providing full coverage of the entire new-drug clinical trial (Clinical Trial) lifecycle.
+>
+> - **Tier A (non-confidential, public)**: inputs are ordinary data, run fully locally (`network=off`) or with external public retrieval (`network=public-retrieval`, e.g. ct-registry / ct-advisor); no confidential information involved. Tier A skills are published openly on GitHub.
+> - **Tier B (confidential, internal)**: involve strictly confidential clinical-trial data and internal information from pharma sponsors (e.g., ct-analysis, ct-sdtm, ct-eligibility); Tier B is processed locally (`egress=none`, data never leaves the boundary) or requires approval for outbound (`egress=approval-req`, e.g. ct-eligibility). Tier B skills are designated for internal enterprise use only and are not publicly released at present.
+>
+> If you do have a genuine need for these confidential skills, please contact the author to request custom installation.
+>
+> 📧 Contact: medstatstar@gmail.com (Wintone Zhang / 张文彤)

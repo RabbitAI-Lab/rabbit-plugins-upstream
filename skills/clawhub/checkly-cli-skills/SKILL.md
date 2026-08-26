@@ -41,6 +41,22 @@ metadata:
 
 Comprehensive Checkly CLI command reference and Monitoring as Code (MaC) workflows.
 
+## Choose CLI or MCP first
+
+This skill pack drives `npx checkly` in a shell. Use the CLI for authoring, testing, importing, and deploying Monitoring as Code. Checkly MCP covers only a subset of live-account work: check status/results, test sessions, root-cause analysis, triggering deployed checks, and incidents.
+
+Before the first command that talks to the Checkly API:
+
+1. With shell access, run `npx checkly whoami` once.
+   - If it succeeds, continue with the CLI, even when Checkly MCP tools are also connected.
+   - If authentication fails, do not work around it for authoring, testing, imports, or deploys; authenticate with `npx checkly login` or `CHECKLY_API_KEY` plus `CHECKLY_ACCOUNT_ID`.
+   - For supported live-account work only, an authenticated Checkly MCP connection may be used as a fallback. Call its `whoami` tool first and name the account being used.
+2. Without shell access, use connected Checkly MCP tools only for their supported live-account operations. The MCP server cannot replace the CLI for Monitoring as Code.
+
+Never mix CLI and MCP evidence without confirming that both sessions use the same account ID. A fallback write still requires the same explicit review/confirmation as the corresponding CLI action.
+
+Run `npx checkly skills` before choosing a live CLI action. It loads the current action list locally and does not require Checkly authentication.
+
 ## Quick start
 
 ```bash
@@ -95,7 +111,7 @@ This skill routes to specialized sub-skills by Checkly domain:
 **Operations:**
 - `checkly-members` - Audit and manage Checkly account access with `npx checkly members`
 - `checkly-test` - Also covers `npx checkly test-sessions` for recorded test-session drilldown and RCA context
-- `checkly-checks` - Inspect and delete deployed checks with `npx checkly checks`; use `checks delete --dry-run` before destructive deletes
+- `checkly-checks` - Inspect, run, and delete deployed checks with `npx checkly checks`; confirm live-run targets before `checks run`, and use `checks delete --dry-run` before destructive deletes
 - `checkly-assets` - List/download result assets such as logs, traces, videos, screenshots, pcap, reports, and files for failure investigation
 
 ## When to use Checkly CLI vs Web UI
@@ -228,6 +244,8 @@ npx checkly checks get <check-id> --result <result-id>
 ```
 
 When investigating a deployed failure, look for `errorGroups`, `rootCause`, or `RCA` fields in the output. If Checkly already surfaced Rocky AI root-cause analysis, reuse that context before suggesting additional debugging steps.
+
+To trigger deployed checks rather than test local project definitions, route to `checkly-checks` for `npx checkly checks run`. This creates live check sessions using deployed locations and alerting rules, so confirm the intended check IDs or tags before running it; omitting selectors targets all deployed checks.
 
 For alerting questions, use read-only JSON/API evidence before table output:
 

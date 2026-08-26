@@ -1,0 +1,35 @@
+# 论文意图配置。由 Agent 在 00-intake 写入论文项目根目录的同名文件。
+# 用户不必手填本模板。缺项用提问补，不要用假值填满。学校硬约束见 school-format.yaml。
+
+metadata:
+  title: ""
+  title_en: ""
+  author: ""
+  school: ""
+  program: "MBA"          # MBA / EMBA / 其他应用型硕士
+  supervisor: ""
+
+research:
+  object: ""              # 企业或业务单元（可匿名）
+  industry: ""
+  primary_question: ""
+  secondary_questions: []
+  main_discipline: ""     # 营销 / 人力 / 运营 / 质量 / 财务 / 战略 / 数字化 / 经营管理（只能一个）
+  theory_primary: ""
+  theory_secondary: ""
+
+methodology:
+  type: ""                # case_study / survey / interview / mixed
+  methods: []
+  sample_size: null
+  interview_count: null
+  data_window: ""
+  evidence_path: ""       # 已有内部材料 / 能脱敏 / 仅公开数据 / 尚无路径
+
+structure:
+  chapters: 5             # 5 或学校要求的 6
+  chapter4_is_core: true
+
+status:
+  stage: "00-intake"      # 与 workflows/ 文件名对应
+  notes: ""
