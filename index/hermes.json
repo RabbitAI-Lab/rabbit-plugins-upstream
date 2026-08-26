@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-27T10:53:35.712Z",
+  "generatedAt": "2026-08-26T08:03:51.945Z",
   "source": "hermes",
   "skillCount": 90605,
   "upstreamGeneratedAt": "2026-07-20T18:55:15.264264+00:00",
@@ -43,8 +43,8 @@
       "source": "hermes",
       "url": "https://github.com/anthropics/skills/tree/main/skills/claude-api",
       "version": null,
-      "contentHash": "d789c96aefba862371c7510a61829c980726d111d92493fc3660718061da4f2a",
-      "fetchedAt": "2026-07-26T17:03:51.042Z"
+      "contentHash": "94c49cbd2b0b685cf1729fd4ba0973d09c933912dbca9f35eefb5d4e28b94df1",
+      "fetchedAt": "2026-08-26T08:03:39.925Z"
     },
     {
       "id": "hermes/anthropics--skills--skills--doc-coauthoring",
@@ -155,416 +155,416 @@
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/autoplan",
       "version": null,
-      "contentHash": "27b9321eb8b1ac3df46dbad00c303380d4bc5e4193e1b14123f52338483822b0",
-      "fetchedAt": "2026-07-26T17:03:53.008Z"
+      "contentHash": "6eae64134463cf6d96a475c45289525bde5d1ae68fba4c62bd77965de832575f",
+      "fetchedAt": "2026-08-26T08:03:40.490Z"
     },
     {
       "id": "hermes/garrytan--gstack--benchmark",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/benchmark",
       "version": null,
-      "contentHash": "60c1602410dcba9507c853e8f87ac2a0d9dcfd12a535a4e8619591bda8292635",
-      "fetchedAt": "2026-07-26T17:03:53.008Z"
+      "contentHash": "5cb240a300a7eebc7e9ef09c010049a36ffb70fa8d76b49aff47009f67438afe",
+      "fetchedAt": "2026-08-26T08:03:40.491Z"
     },
     {
       "id": "hermes/garrytan--gstack--benchmark-models",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/benchmark-models",
       "version": null,
-      "contentHash": "145c0668479433b8f3593671ad8ed65cd4b065a92734ac41e1327a382a57ef8e",
-      "fetchedAt": "2026-07-26T17:03:53.009Z"
+      "contentHash": "95aadc5d46a3fac448139633807e192cb88692c0b0ec3de9fe32028a02bd095a",
+      "fetchedAt": "2026-08-26T08:03:40.491Z"
     },
     {
       "id": "hermes/garrytan--gstack--browse",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/browse",
       "version": null,
-      "contentHash": "c55f29ffe24bf0fe00cb14b97aa4e2cacc5e876c657c3ebc8e5c13bdd7bbdb90",
-      "fetchedAt": "2026-07-26T17:03:53.066Z"
+      "contentHash": "6b1643d5e31260ba589a052015e71b018817ee34ea267dcc95a78d09004435c0",
+      "fetchedAt": "2026-08-26T08:03:40.513Z"
     },
     {
       "id": "hermes/garrytan--gstack--canary",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/canary",
       "version": null,
-      "contentHash": "b4bc4d24ef328753e2ff721f21a2f5f0c10c058f8b2b190d09709047798d65ba",
-      "fetchedAt": "2026-07-26T17:03:53.091Z"
+      "contentHash": "21492cd7e40f4a404928bb2d6e8e816aa6dc674a5374846962eb882510e6217c",
+      "fetchedAt": "2026-08-26T08:03:40.516Z"
     },
     {
       "id": "hermes/garrytan--gstack--careful",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/careful",
       "version": null,
-      "contentHash": "fa2488a709c50deeebd2b9ba15781a39ee646404b4f9fa0b61d043afbf1d156f",
-      "fetchedAt": "2026-07-26T17:03:53.091Z"
+      "contentHash": "619cfb99c1f45cf1566c62424b4847c176f9411cdf4044b1923200d850f11c12",
+      "fetchedAt": "2026-08-26T08:03:40.517Z"
     },
     {
       "id": "hermes/garrytan--gstack--codex",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/codex",
       "version": null,
-      "contentHash": "f70cf3d0f83f833087a2b149586152702ab8723ef78e1c92a0bc6882c16062ca",
-      "fetchedAt": "2026-07-26T17:03:53.091Z"
+      "contentHash": "2d882b26050827bade7b5b98a282fc0a4f830820eced65f628598599ef5bd9b1",
+      "fetchedAt": "2026-08-26T08:03:40.518Z"
     },
     {
       "id": "hermes/garrytan--gstack--context-restore",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/context-restore",
       "version": null,
-      "contentHash": "82050355de5f1bfea23268c5e4f06ed9375031ef308c07202b5d16dca2522e12",
-      "fetchedAt": "2026-07-26T17:03:53.092Z"
+      "contentHash": "695d6d5bf15eb9a5abfb0ad4870ed96e92737f6e29c04a44c7538aa74fee8745",
+      "fetchedAt": "2026-08-26T08:03:40.519Z"
     },
     {
       "id": "hermes/garrytan--gstack--context-save",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/context-save",
       "version": null,
-      "contentHash": "ef8cf605836b509932e5f0fc7d678b5dd19ddb67a8c299b46a96395a7fe58a0e",
-      "fetchedAt": "2026-07-26T17:03:53.092Z"
+      "contentHash": "79323399fe3b51de73196e36d4a1631c6d8d35e213554e3b7d84eb0464d9e758",
+      "fetchedAt": "2026-08-26T08:03:40.519Z"
     },
     {
       "id": "hermes/garrytan--gstack--cso",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/cso",
       "version": null,
-      "contentHash": "15ee201d362d74f3f9e98f7b03310b6c4fee94f04a6e5cc36deb519d7e5b1637",
-      "fetchedAt": "2026-07-26T17:03:53.093Z"
+      "contentHash": "da175175b8518bbfe0177c324a1159afc49d2a14a1a934ad669e731f306a2f2e",
+      "fetchedAt": "2026-08-26T08:03:40.520Z"
     },
     {
       "id": "hermes/garrytan--gstack--design-consultation",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/design-consultation",
       "version": null,
-      "contentHash": "8944304d19b0f24a8b65daa429280c8a49b765543dace74200f7c5fc30b5c2e5",
-      "fetchedAt": "2026-07-26T17:03:53.093Z"
+      "contentHash": "6de7efc0dac44aa05fbcc3d7dabc851e278bf2fbd45a2f01f2d3fb07da5e1a3e",
+      "fetchedAt": "2026-08-26T08:03:40.522Z"
     },
     {
       "id": "hermes/garrytan--gstack--design-html",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/design-html",
       "version": null,
-      "contentHash": "e58cc65a7f73263ec5e44d62dc5472fb6898ab76911464e192acbe5a58f77cad",
-      "fetchedAt": "2026-07-26T17:03:53.094Z"
+      "contentHash": "5451f6946c3fa78cb9c072214f05af3334ffd9cb02b5cc59d462e412e9906718",
+      "fetchedAt": "2026-08-26T08:03:40.523Z"
     },
     {
       "id": "hermes/garrytan--gstack--design-review",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/design-review",
       "version": null,
-      "contentHash": "533e7fe33af4b87719529328f8bf208a87a272542bc5f479119a2bd997b8a28a",
-      "fetchedAt": "2026-07-26T17:03:53.094Z"
+      "contentHash": "2106b9ec46ee935278664dfbcd16a88815d7dfae434fbe19901c49f40c1fad93",
+      "fetchedAt": "2026-08-26T08:03:40.523Z"
     },
     {
       "id": "hermes/garrytan--gstack--design-shotgun",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/design-shotgun",
       "version": null,
-      "contentHash": "e5bf2e9b67534e2adb711bb1c834133939c7b2860d99bc570addb05339728c09",
-      "fetchedAt": "2026-07-26T17:03:53.094Z"
+      "contentHash": "f676a4e41bbf51457fb43095f46fa07d3850ae1d78988f19645679db93808555",
+      "fetchedAt": "2026-08-26T08:03:40.524Z"
     },
     {
       "id": "hermes/garrytan--gstack--devex-review",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/devex-review",
       "version": null,
-      "contentHash": "5634f74c68b28606d7f3b3f7783792e4b94113539abca04d51ccb2082a0b5f50",
-      "fetchedAt": "2026-07-26T17:03:53.095Z"
+      "contentHash": "38dcb93fcb452614048a5fa5cc845b717640ec8e906a8cb4250cebfad9ce251c",
+      "fetchedAt": "2026-08-26T08:03:40.524Z"
     },
     {
       "id": "hermes/garrytan--gstack--diagram",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/diagram",
       "version": null,
-      "contentHash": "b64b314ac419bf9438108b64cc3cf3880dd15882d462a871cd72b5c253f69ed3",
-      "fetchedAt": "2026-07-26T17:03:53.095Z"
+      "contentHash": "5e1cf66689c0ac880b36cd82300f206989e2b1e73e6b7e176d3b9cea7862710d",
+      "fetchedAt": "2026-08-26T08:03:40.525Z"
     },
     {
       "id": "hermes/garrytan--gstack--document-generate",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/document-generate",
       "version": null,
-      "contentHash": "9c510d71a17cfa0301a106f7b7bf44cab3257123f69be6bdc81ac9d1207b0e1f",
-      "fetchedAt": "2026-07-26T17:03:53.095Z"
+      "contentHash": "44897849843ba1471af1330a02a20bbddc936cfb9c0e2d4b6b1e3687ca974abe",
+      "fetchedAt": "2026-08-26T08:03:40.525Z"
     },
     {
       "id": "hermes/garrytan--gstack--document-release",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/document-release",
       "version": null,
-      "contentHash": "a650c1d74f91c8d9b7a69eb8be61dc5c7111e36c5f49998781eb5e539b54d388",
-      "fetchedAt": "2026-07-26T17:03:53.096Z"
+      "contentHash": "123b247870040e7392c469a2bf4f61816c097d2a5d241614ac81f4daa41ea7b7",
+      "fetchedAt": "2026-08-26T08:03:40.526Z"
     },
     {
       "id": "hermes/garrytan--gstack--freeze",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/freeze",
       "version": null,
-      "contentHash": "0c807bcffa20c150a0b40072ce48fdfa5c80c59af544c8945a0ae55facdf1400",
-      "fetchedAt": "2026-07-26T17:03:53.096Z"
+      "contentHash": "b7d3c2f171e542b0577450cf71d25abb23295e8c69efdc7ef7c740c06a73e890",
+      "fetchedAt": "2026-08-26T08:03:40.527Z"
     },
     {
       "id": "hermes/garrytan--gstack--gstack-upgrade",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/gstack-upgrade",
       "version": null,
-      "contentHash": "4e1f2691a56dd32bf0c0394227e0cbe5250d6652db96e6192c9b87fcad43d9af",
-      "fetchedAt": "2026-07-26T17:03:53.097Z"
+      "contentHash": "c26f37a749993efdcafe663179438d1ae5508bdf6fcbf41ca1474cf78441917b",
+      "fetchedAt": "2026-08-26T08:03:40.528Z"
     },
     {
       "id": "hermes/garrytan--gstack--guard",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/guard",
       "version": null,
-      "contentHash": "8f185750d0902fc9dc6d25c9fd99da639fa398341c8a0718c38ae036b086c72e",
-      "fetchedAt": "2026-07-26T17:03:53.097Z"
+      "contentHash": "978b6e139cad6ee145d6fcb8afe1f014bd358342d0b2972e412171910ece9b63",
+      "fetchedAt": "2026-08-26T08:03:40.529Z"
     },
     {
       "id": "hermes/garrytan--gstack--health",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/health",
       "version": null,
-      "contentHash": "86242147de78bdd343dffb2821880a63afa824d0c4cfa08c99fc3749bae8bcd4",
-      "fetchedAt": "2026-07-26T17:03:53.097Z"
+      "contentHash": "dccca2cedfc6da338a44a7c17e537ad879538b0fa642ff4c2e1a86425cbcafdc",
+      "fetchedAt": "2026-08-26T08:03:40.530Z"
     },
     {
       "id": "hermes/garrytan--gstack--investigate",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/investigate",
       "version": null,
-      "contentHash": "af75bd4efa3c59734e9bdb967f7b6d570963da7f2b284e181c6031e809691b3b",
-      "fetchedAt": "2026-07-26T17:03:53.098Z"
+      "contentHash": "96be9e34fa2213e4fb45aba378276377de7a9bb8588bfe5000407bc4271f768d",
+      "fetchedAt": "2026-08-26T08:03:40.530Z"
     },
     {
       "id": "hermes/garrytan--gstack--ios-clean",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/ios-clean",
       "version": null,
-      "contentHash": "04376c58cd42b9fc551a77b534f6bc932867042e358aac469ad951a7a438219d",
-      "fetchedAt": "2026-07-26T17:03:53.098Z"
+      "contentHash": "1c48b326aecbb13e1107459d6e38368aaf32987d0ba406691b06dfe68abaabcd",
+      "fetchedAt": "2026-08-26T08:03:40.531Z"
     },
     {
       "id": "hermes/garrytan--gstack--ios-design-review",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/ios-design-review",
       "version": null,
-      "contentHash": "319ed095500beadd228d82524fc21579d7d1a5799cc029fb2ef15e743b641969",
-      "fetchedAt": "2026-07-26T17:03:53.098Z"
+      "contentHash": "5a6bc3c573e90dff1420a3f3b805ce760fcaaa5c196849c88966a6b0ea4263d4",
+      "fetchedAt": "2026-08-26T08:03:40.531Z"
     },
     {
       "id": "hermes/garrytan--gstack--ios-fix",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/ios-fix",
       "version": null,
-      "contentHash": "834a6e96aef20ce61dffca9d350b2817b2abee4aabe448109fc592621061483a",
-      "fetchedAt": "2026-07-26T17:03:53.099Z"
+      "contentHash": "ff13a646e4aee87c261350584f696f0b041f996179b8660bcdb1c8fa78fdcdbe",
+      "fetchedAt": "2026-08-26T08:03:40.532Z"
     },
     {
       "id": "hermes/garrytan--gstack--ios-qa",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/ios-qa",
       "version": null,
-      "contentHash": "e5f207a29c3223e33e2d4785a5b04dfa2f2fe325faad8f7a65e5454abec8f4f3",
-      "fetchedAt": "2026-07-26T17:03:53.100Z"
+      "contentHash": "daba207aa80a71eff75e4a67e493f70d6c0ca25ebea95996ad2e8f0350293d1e",
+      "fetchedAt": "2026-08-26T08:03:40.536Z"
     },
     {
       "id": "hermes/garrytan--gstack--ios-sync",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/ios-sync",
       "version": null,
-      "contentHash": "f3bf7fe118de1e1099ce62c7ae867cf1feb0c1067215bc88d641064dc3f31640",
-      "fetchedAt": "2026-07-26T17:03:53.101Z"
+      "contentHash": "ef2811918483d27a3a1272879b8a194cbb4a72f456d7858f13eb14a2724ebb25",
+      "fetchedAt": "2026-08-26T08:03:40.538Z"
     },
     {
       "id": "hermes/garrytan--gstack--land-and-deploy",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/land-and-deploy",
       "version": null,
-      "contentHash": "7be7e1ceba84c1bcaf20cc9d0995bc80b0f211d2fbcf66d3fd656a15cb24cbcd",
-      "fetchedAt": "2026-07-26T17:03:53.101Z"
+      "contentHash": "6df6dec667dc1b2b9dc40e9c91746689c5b6670dfc1521cce1cd1d26dfbdb2b7",
+      "fetchedAt": "2026-08-26T08:03:40.538Z"
     },
     {
       "id": "hermes/garrytan--gstack--landing-report",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/landing-report",
       "version": null,
-      "contentHash": "c9e4d36bcc125dfdf9b7a70322b5eaa7d1bbb68fc3acaf075bce09a4fe9f946e",
-      "fetchedAt": "2026-07-26T17:03:53.102Z"
+      "contentHash": "21ef74de46bb4a72885fbd27f2126b925b3ee4a46ecdedd8e2203e5a7d55d4d4",
+      "fetchedAt": "2026-08-26T08:03:40.539Z"
     },
     {
       "id": "hermes/garrytan--gstack--learn",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/learn",
       "version": null,
-      "contentHash": "da66045b035386e1a6656e04690477c36dee42662b5e09c545d91458b3d477ef",
-      "fetchedAt": "2026-07-26T17:03:53.102Z"
+      "contentHash": "18273b36f18c2ce14d9d934406dd258b0e9e870a53108092a6489b0a4d0c3f38",
+      "fetchedAt": "2026-08-26T08:03:40.539Z"
     },
     {
       "id": "hermes/garrytan--gstack--make-pdf",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/make-pdf",
       "version": null,
-      "contentHash": "e8d2749339e2c4eefc4b08a913f4f80e3716051e57f14b1ea5eed9ba5e6158b7",
-      "fetchedAt": "2026-07-26T17:03:53.105Z"
+      "contentHash": "fbcf9e155b0bcd44e61b6557124dbbfefc7c2d3b3c8c08ab7d2ad66fbc18a21a",
+      "fetchedAt": "2026-08-26T08:03:40.543Z"
     },
     {
       "id": "hermes/garrytan--gstack--office-hours",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/office-hours",
       "version": null,
-      "contentHash": "3d54709854dd6226fff81f3c368576b6c482bf10c533690bd2ec5f3abd1f965c",
-      "fetchedAt": "2026-07-26T17:03:53.106Z"
+      "contentHash": "6958ed9e45cd4377e6c8e77b089affbc0e59d5e7fc7a4c7f2128c1ccfbdd74bb",
+      "fetchedAt": "2026-08-26T08:03:40.545Z"
     },
     {
       "id": "hermes/garrytan--gstack--open-gstack-browser",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/open-gstack-browser",
       "version": null,
-      "contentHash": "a8e7928a00041c936dbccc4386ba27e65fbd15088efbc4688da616db0f3ae69d",
-      "fetchedAt": "2026-07-26T17:03:53.107Z"
+      "contentHash": "219dec17ae25747cee974768828188b1fd1166d08f83556ab30b2157add1e2e6",
+      "fetchedAt": "2026-08-26T08:03:40.546Z"
     },
     {
       "id": "hermes/garrytan--gstack--pair-agent",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/pair-agent",
       "version": null,
-      "contentHash": "fb400c2dd90d2f267d24dd7f533f30149da8c32f1caf29fa24666482eee4e5ec",
-      "fetchedAt": "2026-07-26T17:03:53.107Z"
+      "contentHash": "84ab57218358e2c647b8b0dd3d921dd48eda1fba2685fe32a17b97bd80212558",
+      "fetchedAt": "2026-08-26T08:03:40.546Z"
     },
     {
       "id": "hermes/garrytan--gstack--plan-ceo-review",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/plan-ceo-review",
       "version": null,
-      "contentHash": "effa1a998da9d91127bc145417870b12896741d61c01c34e585f073f1f72e6b7",
-      "fetchedAt": "2026-07-26T17:03:53.107Z"
+      "contentHash": "b18660fcd44b925acff852b397d7cad207515ca49824c63cdce970a3e3dad121",
+      "fetchedAt": "2026-08-26T08:03:40.547Z"
     },
     {
       "id": "hermes/garrytan--gstack--plan-design-review",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/plan-design-review",
       "version": null,
-      "contentHash": "bf8bc877d1852cb26e31f2302634fd8351ea032598ac2cacbe6c57d45c3ab554",
-      "fetchedAt": "2026-07-26T17:03:53.108Z"
+      "contentHash": "b73cf26e2afef85b716be36767421150913034120fe472a8facde197b6aabb79",
+      "fetchedAt": "2026-08-26T08:03:40.549Z"
     },
     {
       "id": "hermes/garrytan--gstack--plan-devex-review",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/plan-devex-review",
       "version": null,
-      "contentHash": "73bfef6d7444e28ffb8bde377b0f5b1899fdca19af0c5dd9bd8277a13c8f7b92",
-      "fetchedAt": "2026-07-26T17:03:53.109Z"
+      "contentHash": "5eb2147bba8053002cb85f0788c3eb050acd04deb6bbac53f9de736d85d7377d",
+      "fetchedAt": "2026-08-26T08:03:40.550Z"
     },
     {
       "id": "hermes/garrytan--gstack--plan-eng-review",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/plan-eng-review",
       "version": null,
-      "contentHash": "1ea57c082ef9e5f4910acfd91af55ccd9c970f1c4cc46e25995fba589f7d3b61",
-      "fetchedAt": "2026-07-26T17:03:53.109Z"
+      "contentHash": "cefd74d6e44b813d5e86d1f86c7d7efcf8d5c978ae42e0047861bed6b0529020",
+      "fetchedAt": "2026-08-26T08:03:40.551Z"
     },
     {
       "id": "hermes/garrytan--gstack--plan-tune",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/plan-tune",
       "version": null,
-      "contentHash": "6f7d1d40b83c99e539961a2d0575d4f1c4c71fd351d09f380f0b7e69bae437ad",
-      "fetchedAt": "2026-07-26T17:03:53.110Z"
+      "contentHash": "e1421b0c8188b2301940a850c96e71460c69ec7a09762fe7c0986f1be056c691",
+      "fetchedAt": "2026-08-26T08:03:40.552Z"
     },
     {
       "id": "hermes/garrytan--gstack--qa",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/qa",
       "version": null,
-      "contentHash": "a504a633975e4a6531aac3d8dd1970f9089591e9108cd3190ac290ab44391813",
-      "fetchedAt": "2026-07-26T17:03:53.110Z"
+      "contentHash": "9433f21d64ebf22433a6439a47e18c61cff9c0aa42f4b99ae453cdbd434c1884",
+      "fetchedAt": "2026-08-26T08:03:40.553Z"
     },
     {
       "id": "hermes/garrytan--gstack--qa-only",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/qa-only",
       "version": null,
-      "contentHash": "e3fe55254144e445a7ba9b137b48fbf32cd6111c6658608807ab721ecf669d75",
-      "fetchedAt": "2026-07-26T17:03:53.111Z"
+      "contentHash": "f57bde18e443d6ec38fd1d6c5212fb8f21b8877f45dc6bb6c09a20ed9d11919a",
+      "fetchedAt": "2026-08-26T08:03:40.554Z"
     },
     {
       "id": "hermes/garrytan--gstack--retro",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/retro",
       "version": null,
-      "contentHash": "59e0d473f2634bb22ff27abcac05f6144c230b4c37dc62fb442ed29d098a96cf",
-      "fetchedAt": "2026-07-26T17:03:53.111Z"
+      "contentHash": "900e13fd91310d7375e65159d35b2788b60c201f1f71d376d94eb1979cdb6e6c",
+      "fetchedAt": "2026-08-26T08:03:40.554Z"
     },
     {
       "id": "hermes/garrytan--gstack--review",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/review",
       "version": null,
-      "contentHash": "ea0f701ef985207fb2399614fbb00a4bd6836da96ab263a62e0f0a1126be095c",
-      "fetchedAt": "2026-07-26T17:03:53.112Z"
+      "contentHash": "d0a1d81208279d71b5f5d70b9a3de2d45ce3817b7ee2a05b004b0715c638666a",
+      "fetchedAt": "2026-08-26T08:03:40.556Z"
     },
     {
       "id": "hermes/garrytan--gstack--scrape",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/scrape",
       "version": null,
-      "contentHash": "345dbe3fac5e2e9c7b7be85036e8c416c9d8928c51879105cfd2b108d7963786",
-      "fetchedAt": "2026-07-26T17:03:53.112Z"
+      "contentHash": "46ea27fed914f4705cb8989248f9646a313ffcc40f074024886e973fde24dd9c",
+      "fetchedAt": "2026-08-26T08:03:40.557Z"
     },
     {
       "id": "hermes/garrytan--gstack--setup-browser-cookies",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/setup-browser-cookies",
       "version": null,
-      "contentHash": "3d575765a65c58029e055974fe97424993325950638b302228a0dd671a2dead4",
-      "fetchedAt": "2026-07-26T17:03:53.112Z"
+      "contentHash": "c9e764372fa97a3e2eb2ccbdba971b315255f2c633829f0b8019ff670dedf7be",
+      "fetchedAt": "2026-08-26T08:03:40.557Z"
     },
     {
       "id": "hermes/garrytan--gstack--setup-deploy",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/setup-deploy",
       "version": null,
-      "contentHash": "c401820704acaa052041f7da65e1d29154c881f221282c1fb1d2ebbc6b399de2",
-      "fetchedAt": "2026-07-26T17:03:53.113Z"
+      "contentHash": "6b3b9fad1b58e4bf1866f5f802ee476d1fcf77210ae4a618850ae6ace1e41562",
+      "fetchedAt": "2026-08-26T08:03:40.557Z"
     },
     {
       "id": "hermes/garrytan--gstack--setup-gbrain",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/setup-gbrain",
       "version": null,
-      "contentHash": "43a84535638a109d83fc9e2795ad7231deeecb0e4d69f3d3c43d79d9849e06ee",
-      "fetchedAt": "2026-07-26T17:03:53.113Z"
+      "contentHash": "0bc95194daac14c7a73c708b1f6c81dbac1df7cfa1d65924418f865121fd50ab",
+      "fetchedAt": "2026-08-26T08:03:40.558Z"
     },
     {
       "id": "hermes/garrytan--gstack--ship",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/ship",
       "version": null,
-      "contentHash": "c541e7ce76165dd0ce433ba6a9eb08d2daebba41eba84e4210ef66b665e7f3c0",
-      "fetchedAt": "2026-07-26T17:03:53.115Z"
+      "contentHash": "51266bc06115fa88f20799f5e2e35a8a6e12a0de69f1dd3bb858992ca203c353",
+      "fetchedAt": "2026-08-26T08:03:40.561Z"
     },
     {
       "id": "hermes/garrytan--gstack--skillify",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/skillify",
       "version": null,
-      "contentHash": "679fed7db80a0cc376f409801b6fde43de6e5a6d5e9ca4839836db9854d8b767",
-      "fetchedAt": "2026-07-26T17:03:53.115Z"
+      "contentHash": "01b8a33c92bba8ffddf484327119bb8a103bdb0347cb852088e890551b226f6d",
+      "fetchedAt": "2026-08-26T08:03:40.562Z"
     },
     {
       "id": "hermes/garrytan--gstack--spec",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/spec",
       "version": null,
-      "contentHash": "0b737e28f49e92f83b4d13c611534331c33512038febdc64e6a8d51ca4134b95",
-      "fetchedAt": "2026-07-26T17:03:53.116Z"
+      "contentHash": "99f436183172745eeda85fd1a84cb98fef0742333166267a63d3b4e8b315c52e",
+      "fetchedAt": "2026-08-26T08:03:40.564Z"
     },
     {
       "id": "hermes/garrytan--gstack--sync-gbrain",
       "source": "hermes",
       "url": "https://github.com/garrytan/gstack/tree/main/sync-gbrain",
       "version": null,
-      "contentHash": "4aabeae9d3a9f359c4e12afdc719292b2fb1eec025cd4ffb2a924a1604aab05a",
-      "fetchedAt": "2026-07-26T17:03:53.116Z"
+      "contentHash": "227740a9a8de9f28dbd3337efd70c3e2b7ce8aeae9528e3a6eb650f9e49aad0a",
+      "fetchedAt": "2026-08-26T08:03:40.565Z"
     },
     {
       "id": "hermes/garrytan--gstack--unfreeze",
@@ -579,8 +579,8 @@
       "source": "hermes",
       "url": "https://github.com/huggingface/skills/tree/main/skills/hf-cli",
       "version": null,
-      "contentHash": "7e90003be46c689b985425e0b8a2a9129c6e7c59a86e1808697876df193641a1",
-      "fetchedAt": "2026-07-26T17:03:50.906Z"
+      "contentHash": "fca71143ff5647bb2b0d300973d6589276893a6fa5cdc4d127aef9708852fab1",
+      "fetchedAt": "2026-08-26T08:03:39.415Z"
     },
     {
       "id": "hermes/huggingface--skills--skills--hf-cloud-aws-context-discovery",
@@ -603,8 +603,8 @@
       "source": "hermes",
       "url": "https://github.com/huggingface/skills/tree/main/skills/hf-cloud-sagemaker-deployment-planner",
       "version": null,
-      "contentHash": "a74e44ef1c6ed89b2f543441750e73d302c6bac5f86e291529cc7d79d6a35320",
-      "fetchedAt": "2026-07-26T17:03:50.908Z"
+      "contentHash": "bac0f6366f18cd0476ba4eb3c21bf1f4134149a95fbe5932142a13c4ec58379b",
+      "fetchedAt": "2026-08-26T08:03:39.417Z"
     },
     {
       "id": "hermes/huggingface--skills--skills--hf-cloud-sagemaker-iam-preflight",
@@ -619,8 +619,8 @@
       "source": "hermes",
       "url": "https://github.com/huggingface/skills/tree/main/skills/hf-cloud-sagemaker-production-defaults",
       "version": null,
-      "contentHash": "8360e265f19804dffb853ea959db33cd9772dd43ee350d85df9721d32c794cac",
-      "fetchedAt": "2026-07-26T17:03:50.909Z"
+      "contentHash": "56a2948743714a567401148cb91ba5dcd8942f2b24b18c7f4c907ca1b48cd308",
+      "fetchedAt": "2026-08-26T08:03:39.419Z"
     },
     {
       "id": "hermes/huggingface--skills--skills--hf-cloud-serving-image-selection",
@@ -643,8 +643,8 @@
       "source": "hermes",
       "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-best",
       "version": null,
-      "contentHash": "cbbd7eb795e970a1bc98ef8975ec3d7610b1ee105322049ebf5b38668b0ddb63",
-      "fetchedAt": "2026-07-26T17:03:50.910Z"
+      "contentHash": "e3298a2659600c9759eedc0b25427d9c3496d03473a12c2ebf908d989d88ec79",
+      "fetchedAt": "2026-08-26T08:03:39.420Z"
     },
     {
       "id": "hermes/huggingface--skills--skills--huggingface-community-evals",
@@ -715,8 +715,8 @@
       "source": "hermes",
       "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-spaces",
       "version": null,
-      "contentHash": "6a22f572157818351164f72a7a1261e8c89c20a860fec448707d5e4d1928a8be",
-      "fetchedAt": "2026-07-26T17:03:50.915Z"
+      "contentHash": "71483e710c9e39c5c2686ef126e8e7d301d670d1401c7a8165658b20f3f6fbe5",
+      "fetchedAt": "2026-08-26T08:03:39.423Z"
     },
     {
       "id": "hermes/huggingface--skills--skills--huggingface-tool-builder",
@@ -755,8 +755,8 @@
       "source": "hermes",
       "url": "https://github.com/huggingface/skills/tree/main/skills/train-sentence-transformers",
       "version": null,
-      "contentHash": "2d0a425da328bf9ba1694f4036de5fd07bf46ccac4d9cf909e89d0dea5439baa",
-      "fetchedAt": "2026-07-26T17:03:50.919Z"
+      "contentHash": "1f6733162377fcae58401dbfaf64cd0f10721712ed14fa8ab11841ab660933d5",
+      "fetchedAt": "2026-08-26T08:03:39.427Z"
     },
     {
       "id": "hermes/huggingface--skills--skills--transformers-js",
@@ -771,8 +771,8 @@
       "source": "hermes",
       "url": "https://github.com/huggingface/skills/tree/main/skills/trl-training",
       "version": null,
-      "contentHash": "94080518b6f38211d4d708f786252ad5e9261b34975f7ef0e83ea877773c60e5",
-      "fetchedAt": "2026-07-26T17:03:50.920Z"
+      "contentHash": "375345448d51a51ed9aa4869fde7b38855dfe9ae275a4795ac283fefec45202f",
+      "fetchedAt": "2026-08-26T08:03:39.428Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--accelerated-computing-cudf",
@@ -851,40 +851,40 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/cuopt-install",
       "version": null,
-      "contentHash": "0e14baa627759a912ea1f9329b2c828bf81dee08be94a6652604e18befb8e21d",
-      "fetchedAt": "2026-07-26T17:03:52.238Z"
+      "contentHash": "82aec7cef2c9c89c9bc20043245830900a699752303132fc11398addf07bfc8b",
+      "fetchedAt": "2026-08-26T08:03:41.092Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--cuopt-multi-objective-exploration",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/cuopt-multi-objective-exploration",
       "version": null,
-      "contentHash": "9868debd4580cd23969d5bec4b20ccdb3964b7a72703cad152e73fe4e86ba248",
-      "fetchedAt": "2026-07-26T17:03:52.239Z"
+      "contentHash": "443a5ca564c9a772dfce20e40c4c29d2d0ae8127ba976c535360e9a6ab3ee482",
+      "fetchedAt": "2026-08-26T08:03:41.093Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--cuopt-numerical-optimization-api",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/cuopt-numerical-optimization-api",
       "version": null,
-      "contentHash": "800b1eacc801f96b41aa523df9b71b766c3a60c384f88f2d8a890eaf33c50551",
-      "fetchedAt": "2026-07-26T17:03:52.242Z"
+      "contentHash": "2328c156aa92e44552f69c56c25fb1e13aaa8c03afd12470d8aebb662b9430de",
+      "fetchedAt": "2026-08-26T08:03:41.102Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--cuopt-numerical-optimization-formulation",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/cuopt-numerical-optimization-formulation",
       "version": null,
-      "contentHash": "bb58713ed091759f9356b96cc06096ecb819679723a9da38822b3b42011b4bb9",
-      "fetchedAt": "2026-07-26T17:03:52.243Z"
+      "contentHash": "720e61bed1e56ea3dc9c55aebc51c5f39610e8e7c86075f1eb74f2cb6019f7b6",
+      "fetchedAt": "2026-08-26T08:03:41.104Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--cuopt-routing-api-python",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/cuopt-routing-api-python",
       "version": null,
-      "contentHash": "3dee4f00a1f5a8736c12622a9b8bf32d714185ad217d6bd4c02f8a2b71b0fc95",
-      "fetchedAt": "2026-07-26T17:03:52.244Z"
+      "contentHash": "f3bc0a9ea24aefbedb0e5769ca296dc1b96c38a5b9b5586c76e7b846a70c2508",
+      "fetchedAt": "2026-08-26T08:03:41.106Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--cuopt-server-api-python",
@@ -907,32 +907,32 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/cupynumeric-install",
       "version": null,
-      "contentHash": "1642a8ddfab09838349f14f956fc3e749f165e21e46e88aecff9d04784966e18",
-      "fetchedAt": "2026-07-26T17:03:52.246Z"
+      "contentHash": "e1dacb295c87942fe11f6ac158c7ab552d64b64835160fa98da971ce683d4b21",
+      "fetchedAt": "2026-08-26T08:03:41.109Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--cupynumeric-migration-readiness",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/cupynumeric-migration-readiness",
       "version": null,
-      "contentHash": "ef2d0f2c86e7f4e8a0c99c90f369441c053071ac32ad103f03b328f564393cd1",
-      "fetchedAt": "2026-07-26T17:03:52.248Z"
+      "contentHash": "ffef2c56fd3dd2d19a7f9b6e8e09da0b2fdacab67f80ba0fc2c58dc2ca071386",
+      "fetchedAt": "2026-08-26T08:03:41.116Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--cupynumeric-parallel-data-load",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/cupynumeric-parallel-data-load",
       "version": null,
-      "contentHash": "5fcdeb0a4dcafadc9b27fe93390918e9ef83a060c6b4f135d733c07363e41a7a",
-      "fetchedAt": "2026-07-26T17:03:52.249Z"
+      "contentHash": "41fc57db57e34a0f415e65589b4f78428c2d0c4111d1e304ab1bfb4b7e4d6d97",
+      "fetchedAt": "2026-08-26T08:03:41.117Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--dali-dynamic-mode",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/dali-dynamic-mode",
       "version": null,
-      "contentHash": "08f5dc39b2babca4660e7a582d86654795793a9fb4f94f5a073fa093240bc645",
-      "fetchedAt": "2026-07-26T17:03:52.250Z"
+      "contentHash": "4bc406c2d00c671cc98ca4c66ffed563f78ec0a6294fbdb9bd12e0b323ce6dac",
+      "fetchedAt": "2026-08-26T08:03:41.119Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--data-designer",
@@ -1043,64 +1043,64 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-aes-gcm",
       "version": null,
-      "contentHash": "8d105bbc2db5df7eb412a574247d5d47c72f4ae16655cae25c21f670ab086b8e",
-      "fetchedAt": "2026-07-26T17:03:52.264Z"
+      "contentHash": "f1d691d48c87d07887a9ad2ca9a1ee21eb3cba048cc8d5a582502add887a28fe",
+      "fetchedAt": "2026-08-26T08:03:41.130Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-argp",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-argp",
       "version": null,
-      "contentHash": "439b0b8ba25861899d69bc87549357234b73ff8090fc5c49981011eb643d64d5",
-      "fetchedAt": "2026-07-26T17:03:52.264Z"
+      "contentHash": "7eb9b4e605aea212f6785f852ae4ecf833c4859ae53853eb5c03f66d8364df66",
+      "fetchedAt": "2026-08-26T08:03:41.131Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-argus",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-argus",
       "version": null,
-      "contentHash": "da515a44bcc1429bb1a8b1f99aab05b60221369736c7a71953dd9a61542874a1",
-      "fetchedAt": "2026-07-26T17:03:52.265Z"
+      "contentHash": "25348d77665e0e34ee6e839d3219782955341d60e58d40b8e0d2c034bca8c1b6",
+      "fetchedAt": "2026-08-26T08:03:41.132Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-bare-metal-deployment",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-bare-metal-deployment",
       "version": null,
-      "contentHash": "be32321c27df251324f8a3f36939de482318c6bb848114d8da31967e6e852017",
-      "fetchedAt": "2026-07-26T17:03:52.265Z"
+      "contentHash": "7af6dbe763f9b84e5aa44fe5a94af2d86d26c2189a343475f3f8741131c54896",
+      "fetchedAt": "2026-08-26T08:03:41.133Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-bench",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-bench",
       "version": null,
-      "contentHash": "a19c8986b98b91ad7853524268f38d8bcea9583a218b62df752c52fd08c4506a",
-      "fetchedAt": "2026-07-26T17:03:52.266Z"
+      "contentHash": "84461656073832bb5de4e13911a6a95865fdff3f44a3e7415d8d65e257785fa8",
+      "fetchedAt": "2026-08-26T08:03:41.134Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-bench-extension",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-bench-extension",
       "version": null,
-      "contentHash": "40e838fd0dc44007e3c1a915fe187cb4c3bc1b8cdd1b29cdebbdd52e0c362990",
-      "fetchedAt": "2026-07-26T17:03:52.267Z"
+      "contentHash": "798e7bdd2ab3042d589c2badfd20fb26d9b7346fa45de705b19c96c1e835142d",
+      "fetchedAt": "2026-08-26T08:03:41.135Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-bf3-deployment",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-bf3-deployment",
       "version": null,
-      "contentHash": "741236415688513b8fc325ff0738e6c07eff617e6c2745e6630951fa872274a3",
-      "fetchedAt": "2026-07-26T17:03:52.267Z"
+      "contentHash": "3645443ac2ed84d85972684a7975fc14a23c569ad9b7033d5f31f366478d6e95",
+      "fetchedAt": "2026-08-26T08:03:41.137Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-bf4-deployment",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-bf4-deployment",
       "version": null,
-      "contentHash": "fe9b122e2e9e547f7be776b4ef9ea11aa5eb0ceb48b56cad175e0c135b90c84d",
-      "fetchedAt": "2026-07-26T17:03:52.268Z"
+      "contentHash": "45dee33aaa9176b7f249f8b8eb069bb545b4ac18788033c09225f4bc09350014",
+      "fetchedAt": "2026-08-26T08:03:41.138Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-caps",
@@ -1115,80 +1115,80 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-collectx-deployment",
       "version": null,
-      "contentHash": "aa0a0b366dcde1d4f4054a5741e713e7606eb9991df426837dfe6f5e4926b9bf",
-      "fetchedAt": "2026-07-26T17:03:52.269Z"
+      "contentHash": "180fd00088b1b67217f331c381b27e856338ce2d93723f035f9a059af8355ddf",
+      "fetchedAt": "2026-08-26T08:03:41.139Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-comch",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-comch",
       "version": null,
-      "contentHash": "3f90a80ef20febfba66f1a77b4fe046749ab5bd1b125b5dcf12d7ce246e10fdb",
-      "fetchedAt": "2026-07-26T17:03:52.269Z"
+      "contentHash": "425c84500300873debfe5268945969f735021a6432ae220c516829e7b18d20dc",
+      "fetchedAt": "2026-08-26T08:03:41.140Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-comm-channel-admin",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-comm-channel-admin",
       "version": null,
-      "contentHash": "304a8311974514636be9752281cc3875d79cdf29ee813217670d5d35ed2b16cd",
-      "fetchedAt": "2026-07-26T17:03:52.270Z"
+      "contentHash": "aa8a6ea8351d252f92468fd84b621e08074cf42b222a8d224b729afb9645ca32",
+      "fetchedAt": "2026-08-26T08:03:41.141Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-common",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-common",
       "version": null,
-      "contentHash": "f11e8c58c1af0a0752747f936921488e2a79881777ca5517f2a3118897c0be64",
-      "fetchedAt": "2026-07-26T17:03:52.270Z"
+      "contentHash": "f5e4cb94863649a9b4f4bdda7a6f2427f8db47308a5a1a830288f271a7e06cc7",
+      "fetchedAt": "2026-08-26T08:03:41.142Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-compress",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-compress",
       "version": null,
-      "contentHash": "4215e412debdb3d4b535fb8b25698e0057317c001334da84879ba327e3714e31",
-      "fetchedAt": "2026-07-26T17:03:52.271Z"
+      "contentHash": "a94b69f1201dd4865631ab6fd633da8b1a9bcbda4d1c7815978f3bc00535e3ad",
+      "fetchedAt": "2026-08-26T08:03:41.143Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-container-deployment",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-container-deployment",
       "version": null,
-      "contentHash": "3257975bc10ae742a73b8fdd7f760b5966fce84145e3e950a39484a7dc2390be",
-      "fetchedAt": "2026-07-26T17:03:52.272Z"
+      "contentHash": "150c120c662f9b7e7007f65a3ab9c86fff5467d431e6529e8de86e29e0e43f5f",
+      "fetchedAt": "2026-08-26T08:03:41.145Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-debug",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-debug",
       "version": null,
-      "contentHash": "0191f8a6427ee884bc22c83162af598231a05da706dfda6b0f01028f7df89c9f",
-      "fetchedAt": "2026-07-26T17:03:52.272Z"
+      "contentHash": "e6417cb116e5f3adf578f0a32dca7d2a075a96b1020144df49ed21f36d85b06c",
+      "fetchedAt": "2026-08-26T08:03:41.146Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-devemu",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-devemu",
       "version": null,
-      "contentHash": "3c3fd281b3d2e3b055193ec22d4e03c7308ec1a7142e242066e91a1695f378f3",
-      "fetchedAt": "2026-07-26T17:03:52.273Z"
+      "contentHash": "091070479dc2b2f6480b9c9d71682bd5afc0d0c2ae004e0693866ba0c5ec9e97",
+      "fetchedAt": "2026-08-26T08:03:41.147Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-dma",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-dma",
       "version": null,
-      "contentHash": "95e5524678ad86c83638947b02bd6a816b90501c1e8743a42678cf5e491d7732",
-      "fetchedAt": "2026-07-26T17:03:52.273Z"
+      "contentHash": "5183e754c3cb25160a3ff983d08edee194c4a0d92ff16713677de1b1975a1372",
+      "fetchedAt": "2026-08-26T08:03:41.148Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-dms",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-dms",
       "version": null,
-      "contentHash": "6e20c3da926766bf8db037c1d5d60e6ffbd37697175a5bfa1b9270bb1fddc7a9",
-      "fetchedAt": "2026-07-26T17:03:52.274Z"
+      "contentHash": "ed9cc08101b670b297da4b6006d54ec789679b8ee33f1a712224fbe0f08b2eab",
+      "fetchedAt": "2026-08-26T08:03:41.149Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-dpa",
@@ -1203,8 +1203,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-dpa-hl-tracer",
       "version": null,
-      "contentHash": "def8a72eb92211e9a3f59a1ce454c2b95db70ae71dc5456069f627869d1b28fc",
-      "fetchedAt": "2026-07-26T17:03:52.275Z"
+      "contentHash": "ce3cdc6f9ec7f2b19d56c9699b96a5fee98a2f105e52911a1e4b51f695eeec0d",
+      "fetchedAt": "2026-08-26T08:03:41.151Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-dpdk-bridge",
@@ -1235,24 +1235,24 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-firefly",
       "version": null,
-      "contentHash": "f2c140e25c2ed0628908a7ce4a9639b54f9f75e200ad6ab90cca3c2a04b00656",
-      "fetchedAt": "2026-07-26T17:03:52.277Z"
+      "contentHash": "d2cb3933ed607d99659b0dce11842f5350ed7d26f355439bafd63b5eab2436e8",
+      "fetchedAt": "2026-08-26T08:03:41.153Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-flow",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-flow",
       "version": null,
-      "contentHash": "90eca2a2debf6175f6a82596178943ba55b9439fa668018398ab92f8c6b8bf02",
-      "fetchedAt": "2026-07-26T17:03:52.278Z"
+      "contentHash": "1061386a1af2a5fd504274dc31ce7ee3ecc4e80676f21bcf0a46782fcd14608b",
+      "fetchedAt": "2026-08-26T08:03:41.153Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-flow-dpa-perf",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-flow-dpa-perf",
       "version": null,
-      "contentHash": "fe3e34001ff72507a910832c19f02eef08e8e9424fd1cfd9f90b64760007bf9c",
-      "fetchedAt": "2026-07-26T17:03:52.278Z"
+      "contentHash": "ef74eb5dd73b57cd0261f3eeb89d5959f50db862af50518304dcb38f73dabfdb",
+      "fetchedAt": "2026-08-26T08:03:41.154Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-flow-dpa-provider",
@@ -1267,256 +1267,256 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-flow-grpc-server",
       "version": null,
-      "contentHash": "0b32cfbeadf3112c898668ae8accb6ec2e46fe3d8fdb2de7fb5fdb6a80ead65a",
-      "fetchedAt": "2026-07-26T17:03:52.280Z"
+      "contentHash": "5edceb98d8ecfbb865de289777c33549ce5c7bf03d21ca8ea4ca1c839750578f",
+      "fetchedAt": "2026-08-26T08:03:41.155Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-flow-perf",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-flow-perf",
       "version": null,
-      "contentHash": "d356839c278fb3cc7e8b3d5fc00441dde5f93642dc218944ecee2c8fe7233343",
-      "fetchedAt": "2026-07-26T17:03:52.280Z"
+      "contentHash": "7b597551d933e086afacfda4c5fb51068d39d121003223a9d5ee9e4033978beb",
+      "fetchedAt": "2026-08-26T08:03:41.156Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-flow-tune",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-flow-tune",
       "version": null,
-      "contentHash": "c03c74b048768d4825f4b695473c1aab0936a43d30abf207906a7d4577ec88a5",
-      "fetchedAt": "2026-07-26T17:03:52.281Z"
+      "contentHash": "c80a9239695452fdc5e87aa490c4d919dbecf19827dd021bf498615b8dfed457",
+      "fetchedAt": "2026-08-26T08:03:41.157Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-gpi",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-gpi",
       "version": null,
-      "contentHash": "519d68e8ebfe2c6ab7308642c7f85f835df044467265b51bb24b7fb520cc19d9",
-      "fetchedAt": "2026-07-26T17:03:52.281Z"
+      "contentHash": "9be085600d6aef6ba65716115a201d6def0ca8eb0eb8021dd247b991d3739c03",
+      "fetchedAt": "2026-08-26T08:03:41.158Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-gpunetio",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-gpunetio",
       "version": null,
-      "contentHash": "87bf2db16fc76b615ff1ff78616f1bce20c72191c140954cb5a5cefa8131593c",
-      "fetchedAt": "2026-07-26T17:03:52.282Z"
+      "contentHash": "d39ae35fa0e73932d4399ec004e7d6aa2cb91fe475f80a370b239ce2be6b43cb",
+      "fetchedAt": "2026-08-26T08:03:41.159Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-gpunetio-ib-write-bw",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-gpunetio-ib-write-bw",
       "version": null,
-      "contentHash": "81af12f3a106104e4adf6cb64e4d468ce062c6c2c4bbe6ec271d5fccaee201e9",
-      "fetchedAt": "2026-07-26T17:03:52.282Z"
+      "contentHash": "a2ceb40af41653ce21257a4956ec9c53543005e34e3b09af19e9c20ef14cc756",
+      "fetchedAt": "2026-08-26T08:03:41.160Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-gpunetio-ib-write-lat",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-gpunetio-ib-write-lat",
       "version": null,
-      "contentHash": "1562f6eafbddfcc5af4fa6476d929d6cc7911e562c8dedf060b4ce294fff487e",
-      "fetchedAt": "2026-07-26T17:03:52.283Z"
+      "contentHash": "b700a8b026707d24a3e3323a28f0586075938ceb162a46d85f9e1c740444296b",
+      "fetchedAt": "2026-08-26T08:03:41.160Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-hardware-safety",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-hardware-safety",
       "version": null,
-      "contentHash": "c62ba4a3043a54f395575f2f62af2d7bdd18afc8c17c905922e53cafde28d119",
-      "fetchedAt": "2026-07-26T17:03:52.283Z"
+      "contentHash": "26913af72d863b6aba4b66f8bf4a5bdb0a9b0bb8cbacc4f8ac33283946a7c0e1",
+      "fetchedAt": "2026-08-26T08:03:41.161Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-mgmt",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-mgmt",
       "version": null,
-      "contentHash": "28e44219b6eea443927a016f199e790b70f39e27713f8d3c48b9a4e9e39ca533",
-      "fetchedAt": "2026-07-26T17:03:52.284Z"
+      "contentHash": "424c819104caf4f1f8cb96f301e7c83781734ea44bbe5bf0e72f8872c593fd7c",
+      "fetchedAt": "2026-08-26T08:03:41.162Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-pcc",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-pcc",
       "version": null,
-      "contentHash": "434459c8f42b0ba357751cb5943ec3f1a6fff5b143b20d7b11f592dfff2f7768",
-      "fetchedAt": "2026-07-26T17:03:52.285Z"
+      "contentHash": "72f4a9f017963a43ecb2c88c2d793a048aa9ee30781dd02f4cd0389ccd136761",
+      "fetchedAt": "2026-08-26T08:03:41.163Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-pcc-counters",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-pcc-counters",
       "version": null,
-      "contentHash": "0a8797462a846d7a9d54ab034702b3e3208b078d3a623fe7490822fba784b994",
-      "fetchedAt": "2026-07-26T17:03:52.285Z"
+      "contentHash": "7f1c5ae6106268109ecb338de29a1655001ea6971403d9f0b1af193b80609adb",
+      "fetchedAt": "2026-08-26T08:03:41.163Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-pcc-ztr-rttcc-algo",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-pcc-ztr-rttcc-algo",
       "version": null,
-      "contentHash": "42c95853954f7ba0dcd0c1cb9519fb49b170b81d55c25dcc37218d299bf1df0e",
-      "fetchedAt": "2026-07-26T17:03:52.286Z"
+      "contentHash": "d6ab84a0dff0537b83e7788975e022bcfe84df2fdd55a0236aa8757516e220c6",
+      "fetchedAt": "2026-08-26T08:03:41.164Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-programming-guide",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-programming-guide",
       "version": null,
-      "contentHash": "cc1b9b93c6b9386dc853b53b4d54730e3c79b2f9b8a0b2f36cff1c6155b75cca",
-      "fetchedAt": "2026-07-26T17:03:52.286Z"
+      "contentHash": "0380aacc1d3a9b3a888eb1685ab1e70dc71c56316ffd6f6af4b28e7de6f3680f",
+      "fetchedAt": "2026-08-26T08:03:41.165Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-public-knowledge-map",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-public-knowledge-map",
       "version": null,
-      "contentHash": "46828e0e551d3654753e33ce96a1745223b3d16f32ccdefcbdf89c009beeb204",
-      "fetchedAt": "2026-07-26T17:03:52.287Z"
+      "contentHash": "10b6f646e32ef5432854f602dd4a83d70d415247b2579820b919b09f1a6ace0f",
+      "fetchedAt": "2026-08-26T08:03:41.166Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-rdma",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-rdma",
       "version": null,
-      "contentHash": "8776b5cfef10d65f109b302717050ec94bc76f831fe8e9bdc1b634bcdc1859cb",
-      "fetchedAt": "2026-07-26T17:03:52.287Z"
+      "contentHash": "63963b3e5146f301468f20b31d2e54ee3eacf816487e18f6d364f5c9eedb8400",
+      "fetchedAt": "2026-08-26T08:03:41.167Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-rdmi",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-rdmi",
       "version": null,
-      "contentHash": "114213b1a95994d5bdae100852ec0d9a1956887eac07fdeee24638c8e776a518",
-      "fetchedAt": "2026-07-26T17:03:52.288Z"
+      "contentHash": "9916009e296e24f0ce5edcad6b4ffa6fc677538a1e8c69d27afa9d0c1fab2be9",
+      "fetchedAt": "2026-08-26T08:03:41.167Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-rmax",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-rmax",
       "version": null,
-      "contentHash": "b6fe77c18b742ee32623970449cf87150a96dbcfa812602ffadc04b2120015fa",
-      "fetchedAt": "2026-07-26T17:03:52.288Z"
+      "contentHash": "64058c444cf8ae01af43e56a2dfd945b595e4408fdd3fa448980ce0cd78965d9",
+      "fetchedAt": "2026-08-26T08:03:41.168Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-setup",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-setup",
       "version": null,
-      "contentHash": "747d510b652ff7af300586d8d15f0b56c741fe960040472622315fbb6485476b",
-      "fetchedAt": "2026-07-26T17:03:52.289Z"
+      "contentHash": "377c9902c4a09e9c289fd43234ee1b2b384d4b7d4bde23ea832effe14d508817",
+      "fetchedAt": "2026-08-26T08:03:41.169Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-sha",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-sha",
       "version": null,
-      "contentHash": "9076fcf925c0e941c338d5cb62951229a7ae27e90ff4bfc4fba14deb8c673c4c",
-      "fetchedAt": "2026-07-26T17:03:52.290Z"
+      "contentHash": "ab78b1d648f373b9447593e0769f7487f218d2eca48ba83365dd24275290b0f1",
+      "fetchedAt": "2026-08-26T08:03:41.170Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-sha-offload-engine",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-sha-offload-engine",
       "version": null,
-      "contentHash": "a73b9574a32636bddfeaa7f00bde127c6c304d20133eaf10217319819e8096ef",
-      "fetchedAt": "2026-07-26T17:03:52.290Z"
+      "contentHash": "a10c5793bc568b2d13d918271ba3fc86ac505c7f88ae0f6b5b4e06c3f2128564",
+      "fetchedAt": "2026-08-26T08:03:41.170Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-socket-relay",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-socket-relay",
       "version": null,
-      "contentHash": "71fe3f511c91920e6314b6d9f4229551de467d78b2a8546c3a1d11da5bba5e34",
-      "fetchedAt": "2026-07-26T17:03:52.291Z"
+      "contentHash": "572a091ae312cc937748f527d893e7b7eb33825d331c44bbb1a662e4ba423fd1",
+      "fetchedAt": "2026-08-26T08:03:41.172Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-spcx-cc",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-spcx-cc",
       "version": null,
-      "contentHash": "d8ca20f75e0f9bf923405fa4ae61119e714635655799db1c1a5dacfa363143a6",
-      "fetchedAt": "2026-07-26T17:03:52.291Z"
+      "contentHash": "75d4316cbdb8a0be606aa6886b60efeb06a131be539330f6ef3c00320b0c57d5",
+      "fetchedAt": "2026-08-26T08:03:41.173Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-sta",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-sta",
       "version": null,
-      "contentHash": "ad92209650e4f46d68fc0f67e03eafa22eb8ee756def6d085d4a399a6c79d866",
-      "fetchedAt": "2026-07-26T17:03:52.292Z"
+      "contentHash": "dfb2ed2b03e9e85b47fb962b659728372e5e4165e8e278a549f5454f89ed49cb",
+      "fetchedAt": "2026-08-26T08:03:41.174Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-structured-tools-contract",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-structured-tools-contract",
       "version": null,
-      "contentHash": "1e60c12436b41a6eb6d222fc3fd9d27d60ed81f871bec724247354071562ba32",
-      "fetchedAt": "2026-07-26T17:03:52.292Z"
+      "contentHash": "cbbd25a05cc1768aaaf7e86e4be98c2c309e30b5144b1c551d102998e5d4f1cc",
+      "fetchedAt": "2026-08-26T08:03:41.175Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-telemetry",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-telemetry",
       "version": null,
-      "contentHash": "0d4b7454136cadee12678e70fdd54abf4bdd22d7d65ed4dfc174862c9769be53",
-      "fetchedAt": "2026-07-26T17:03:52.293Z"
+      "contentHash": "f6cc5c40ddd946ad093b5b8ff19be19bfb56ca46a526dd33239db8826de9a1d5",
+      "fetchedAt": "2026-08-26T08:03:41.176Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-telemetry-exporter",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-telemetry-exporter",
       "version": null,
-      "contentHash": "970002ee123dee9606bb09f7d51ebfc9f2aac2b52bdd1dab916618975b1f92bd",
-      "fetchedAt": "2026-07-26T17:03:52.294Z"
+      "contentHash": "b85fbeaaffb16d0111a968682b2bd054ae9882ecfd3c1923ee281bfcc5c50759",
+      "fetchedAt": "2026-08-26T08:03:41.177Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-telemetry-utils",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-telemetry-utils",
       "version": null,
-      "contentHash": "c767dffd84457b55afe1da3aeb4473d86f7403980dc2e205ca47e191c2232e4c",
-      "fetchedAt": "2026-07-26T17:03:52.294Z"
+      "contentHash": "23c23ed3852a638341e2e099709e8ed3dfa43ed6b4273b1b7d0f0b6f736e5547",
+      "fetchedAt": "2026-08-26T08:03:41.178Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-upgrade",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-upgrade",
       "version": null,
-      "contentHash": "5d6d606013b51abd204de00a6cda5ea6d11bf469651e2590cbdefccd87eebf34",
-      "fetchedAt": "2026-07-26T17:03:52.295Z"
+      "contentHash": "d918b1ab4bb7c6773794245901aa60e2c645a0e37dfe3a6f9e3a9b7b8e77b2c2",
+      "fetchedAt": "2026-08-26T08:03:41.179Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-urom",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-urom",
       "version": null,
-      "contentHash": "5450e4aeae209cbcc8b5be5b640e87e05ea5c53d4351ad9bf999edc39fb31741",
-      "fetchedAt": "2026-07-26T17:03:52.295Z"
+      "contentHash": "6241bc6c998e0f8d48810560e005a605c487a58b536e2624ada4dba4fd5ad031",
+      "fetchedAt": "2026-08-26T08:03:41.179Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-urom-svc",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-urom-svc",
       "version": null,
-      "contentHash": "9b9668146ef0464fff9abce0571935ee14144cb60af638f8e0259e2b8422a6dd",
-      "fetchedAt": "2026-07-26T17:03:52.296Z"
+      "contentHash": "fbf898a1e4a13f33947dd274b0bf4b178989d26595225747428fcf254eb83b48",
+      "fetchedAt": "2026-08-26T08:03:41.180Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-verbs",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-verbs",
       "version": null,
-      "contentHash": "4f75732f4d17413c16c063ebbc30ed75a6d62b635ba3a191abbf964da296c416",
-      "fetchedAt": "2026-07-26T17:03:52.296Z"
+      "contentHash": "68a14d5ed9c4992134c8b1ae245f835f8b227fb369d26b5f15a68fad6f3ef5eb",
+      "fetchedAt": "2026-08-26T08:03:41.181Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-version",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-version",
       "version": null,
-      "contentHash": "fa9b93701e5b4132038bd2713a6b56c5ccd9bb57ecb755f7d5f3fe66bc10361a",
-      "fetchedAt": "2026-07-26T17:03:52.297Z"
+      "contentHash": "0be2f621e47a40c16b024ac790625375d6bb6007daa37e1ee8eb07ed3eb44d46",
+      "fetchedAt": "2026-08-26T08:03:41.182Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--dynamo-interconnect-check",
@@ -2003,8 +2003,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-automodel-distributed-training",
       "version": null,
-      "contentHash": "0dff14df2a60134f4cb7dc889ae4634e61e89ce64883b2058ac554eb0a44bb19",
-      "fetchedAt": "2026-07-26T17:03:52.328Z"
+      "contentHash": "6b168e606848e6d28daca9a9ec6a13d86127b98face5ac2ef825edc1f60fc491",
+      "fetchedAt": "2026-08-26T08:03:41.194Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-automodel-launcher-config",
@@ -2019,8 +2019,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-automodel-model-onboarding",
       "version": null,
-      "contentHash": "782922d06f7a6d973bc1e3356aafcf12c2cd0ba7932eea21d86774dc201e33de",
-      "fetchedAt": "2026-07-26T17:03:52.329Z"
+      "contentHash": "1366afb949944d728b64633af2e41af2b111a0bbd04e615a8370a3f06ae5a851",
+      "fetchedAt": "2026-08-26T08:03:41.195Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-automodel-recipe-development",
@@ -2067,8 +2067,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-activation-recompute",
       "version": null,
-      "contentHash": "50c9c976597f589ad1f3aaf730fb0f0f54493513539d3fe2a0ac83246c6c8a75",
-      "fetchedAt": "2026-07-26T17:03:52.332Z"
+      "contentHash": "71a1cb64dd6709b76cdabe9801bb5d2b9a229c4a34dc1eefe51e570700068b31",
+      "fetchedAt": "2026-08-26T08:03:41.196Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-mbridge-perf-cpu-offloading",
@@ -2091,8 +2091,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-expert-parallel-overlap",
       "version": null,
-      "contentHash": "44cc9558fd9ca1f98759846244aba48385a6ad445cbe402d3c30bc1978b9d2b3",
-      "fetchedAt": "2026-07-26T17:03:52.334Z"
+      "contentHash": "919b39f6d3e7a983ccebc8eaf1cf8a5b32014d94f3838577a951f7ba6a2a6dfc",
+      "fetchedAt": "2026-08-26T08:03:41.197Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-mbridge-perf-hierarchical-context-parallel",
@@ -2123,8 +2123,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-moe-comm-overlap",
       "version": null,
-      "contentHash": "7cb1e41661b20ecca671c45fec8ce9ad130ffd680d59f49f33904c892b76c690",
-      "fetchedAt": "2026-07-26T17:03:52.335Z"
+      "contentHash": "bc8ef46898b964fdded3e8eb67c20eb3cfc42899466f425844e360fa500bc38a",
+      "fetchedAt": "2026-08-26T08:03:41.199Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-mbridge-perf-moe-dispatcher-selection",
@@ -2139,8 +2139,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-moe-hardware-configs",
       "version": null,
-      "contentHash": "6c00407fbfa5d7d4e6cccddf349fe4969e27c9ef751adfbf742029d7fdb9edf8",
-      "fetchedAt": "2026-07-26T17:03:52.336Z"
+      "contentHash": "81882271378afcac093842d8c6a7c74589a7ec0169405235bd6c6608d61088de",
+      "fetchedAt": "2026-08-26T08:03:41.200Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-mbridge-perf-moe-long-context",
@@ -2155,8 +2155,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-moe-optimization-workflow",
       "version": null,
-      "contentHash": "9736873ba37e3697e13dfce296771adae457d57297bf1ea46eefba2023c7c20e",
-      "fetchedAt": "2026-07-26T17:03:52.336Z"
+      "contentHash": "54e6b8927bcbcb7501983154e19562eccf01bde8c63a706d053d37488e3b362b",
+      "fetchedAt": "2026-08-26T08:03:41.201Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-mbridge-perf-moe-vlm-training",
@@ -2179,8 +2179,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-sequence-packing",
       "version": null,
-      "contentHash": "31579c19add19ae504888e02bf94968df7e76065b5fc16a142ada1dbbb42aed2",
-      "fetchedAt": "2026-07-26T17:03:52.338Z"
+      "contentHash": "7079b8308b89a035ff4c651fa9767737af469035a1ee87dcc8d2c6c855bd7055",
+      "fetchedAt": "2026-08-26T08:03:41.202Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-mbridge-perf-tp-dp-comm-overlap",
@@ -2195,8 +2195,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-recipe-recommender",
       "version": null,
-      "contentHash": "1475f0292a2158bea21ea0a9a3ac9a0df8f5b167d1ec4d29c4806de1ecf5eaad",
-      "fetchedAt": "2026-07-26T17:03:52.339Z"
+      "contentHash": "5aff5cf69a9554f819ffe28f89e856b24219a08e0815b6f2155bdc585f4954d1",
+      "fetchedAt": "2026-08-26T08:03:41.203Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-mbridge-resiliency",
@@ -2211,8 +2211,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-relay-debug-runtime-integration",
       "version": null,
-      "contentHash": "98041c4f65489a265f8f20401f9dbb12e0280a5d308bca79524f0acfeaf3e119",
-      "fetchedAt": "2026-07-26T17:03:52.340Z"
+      "contentHash": "9f30ead00c9ad9203bb70527607d87d3d7dfd60c90b565d85b5dbac01cd80a0a",
+      "fetchedAt": "2026-08-26T08:03:41.204Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-relay-install",
@@ -2251,8 +2251,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-relay-migrate-from-flow",
       "version": null,
-      "contentHash": "9c4406efb884cf07cf5bf44efc4686f7bae90f98edf045b8d2e586c06658a7ad",
-      "fetchedAt": "2026-07-26T17:03:52.342Z"
+      "contentHash": "ba561e7ea2b1e82ed4557ddb18885357ffad3c29f3d66c77e70605c03e0ee971",
+      "fetchedAt": "2026-08-26T08:03:41.206Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-relay-plugin-adaptive-tuning",
@@ -2267,8 +2267,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-relay-plugin-build",
       "version": null,
-      "contentHash": "fe98f586c435d807b511d61e920174e62f10f32061946d98a1efa4dd4819c93a",
-      "fetchedAt": "2026-07-26T17:03:52.342Z"
+      "contentHash": "3b782f52293255793a90af4bcede8c6f9360e6d8dcbd5676b37726eb0332e69b",
+      "fetchedAt": "2026-08-26T08:03:41.207Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-retriever",
@@ -2355,8 +2355,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemotron-speech",
       "version": null,
-      "contentHash": "2f97f7a4a6bf351677a432f553dbc60dd6ce7806a3c593d676c6e8bef056a650",
-      "fetchedAt": "2026-07-26T17:03:52.351Z"
+      "contentHash": "eb7f66ef06ae3067e13a8c436adcc171747a471e45962f8c8d1bf36a8a9c8f9e",
+      "fetchedAt": "2026-08-26T08:03:41.211Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nv-generate-ct-rflow",
@@ -2443,24 +2443,24 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/omniverse-cad-to-simready",
       "version": null,
-      "contentHash": "bd3708a251503558f5ecc04d56ca2a819b875bcb140ee16b6fab2156c766caed",
-      "fetchedAt": "2026-07-26T17:03:52.365Z"
+      "contentHash": "8faa7d6fea855413fa3ff63087c82d352601c083a9ec0060b760dfb3df1247cb",
+      "fetchedAt": "2026-08-26T08:03:41.232Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--omniverse-realtime-viewer",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/omniverse-realtime-viewer",
       "version": null,
-      "contentHash": "d5f2691db873510eabdfe1466f9578554df98f74c9e276b23bcb508b56272847",
-      "fetchedAt": "2026-07-26T17:03:52.371Z"
+      "contentHash": "1aee646fbdb6e1e2d17f13070e36ae2f6ecf725f99c498da3becb6e61bead2cd",
+      "fetchedAt": "2026-08-26T08:03:41.244Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--omniverse-usd-performance-tuning",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/omniverse-usd-performance-tuning",
       "version": null,
-      "contentHash": "e980eab39efbc0707a91c2f4b5e9839db0c8d03139e630d0f6660952bfbb70c3",
-      "fetchedAt": "2026-07-26T17:03:52.377Z"
+      "contentHash": "3a6079b067a047ad183f6e70da8dacfbb795f961cc85bd79474a25030e1d83aa",
+      "fetchedAt": "2026-08-26T08:03:41.255Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--physical-ai-defect-image-generation",
@@ -2563,24 +2563,24 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-analyze-gaps-vlm-bcq",
       "version": null,
-      "contentHash": "5271986b19168ddc62fe75461a67bc3d2064e5c8aca60b3025c157d4ba4abbce",
-      "fetchedAt": "2026-07-26T17:03:52.396Z"
+      "contentHash": "65c26e41e44c378d60f4e4bb4988285fb656ffbb6e0f70a0f9123ed10b3e4f00",
+      "fetchedAt": "2026-08-26T08:03:41.264Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-convert-dataset-format",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-convert-dataset-format",
       "version": null,
-      "contentHash": "22387d4ef96dc6854b838ab465dd88ef11168cacbaa4ee6a96179e7ec9f83e3d",
-      "fetchedAt": "2026-07-26T17:03:52.396Z"
+      "contentHash": "aa323ef43912c30773dc4204e18c2bf4441ac005af0d072aae83e7180a7d3360",
+      "fetchedAt": "2026-08-26T08:03:41.264Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-finetune-clip",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-finetune-clip",
       "version": null,
-      "contentHash": "b0158c1786acfe3ebb50c96e22fa1abb84a62fd7e1317860cb1cb40234d31b4a",
-      "fetchedAt": "2026-07-26T17:03:52.397Z"
+      "contentHash": "2f6c69cf82ffdb07a13af5081a4895e86dab84f8c73d12921bb659138aff3202",
+      "fetchedAt": "2026-08-26T08:03:41.266Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-finetune-cosmos-embed",
@@ -2611,24 +2611,24 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-generate-image-grounding",
       "version": null,
-      "contentHash": "93942743217021ed1cf9b6712c74dd806c6bb0151bf6614ccb066ea57da3a57b",
-      "fetchedAt": "2026-07-26T17:03:52.402Z"
+      "contentHash": "ca6bd1a972e9f8d71da31c55667784fc55dce7199b35918f94b2029661ae0cb1",
+      "fetchedAt": "2026-08-26T08:03:41.269Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-generate-referring-expressions",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-generate-referring-expressions",
       "version": null,
-      "contentHash": "d4ade0e82a98fa4f53842c2ddc458658c115986f43b711e83974d69cf6d4f72f",
-      "fetchedAt": "2026-07-26T17:03:52.402Z"
+      "contentHash": "9e7fffba57f748fb4613c0989abf1c3e6b658765d021ef4669e54ba8db2f089e",
+      "fetchedAt": "2026-08-26T08:03:41.269Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-generate-video-reasoning-annotations",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-generate-video-reasoning-annotations",
       "version": null,
-      "contentHash": "33044b83769dc6a5199bc2a724b82351df6f0a8fd8ea9b93363c742b61e11cfb",
-      "fetchedAt": "2026-07-26T17:03:52.403Z"
+      "contentHash": "cb81ff66613ceff86515af561e423cb3750ca039be48fe39374c8fa2e214c165",
+      "fetchedAt": "2026-08-26T08:03:41.270Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-launch-workflow",
@@ -2643,8 +2643,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-list-capabilities",
       "version": null,
-      "contentHash": "ae4768647d3a8cf44921b9e39b9c4795372695b2e70f9106dac41422ced55f99",
-      "fetchedAt": "2026-07-26T17:03:52.404Z"
+      "contentHash": "6d4b2fe2a9db1f1da332b048c631ff9136da5604faff20a5b0adf4d962e66c91",
+      "fetchedAt": "2026-08-26T08:03:41.271Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-mine-aoi-images",
@@ -2675,16 +2675,16 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-automl",
       "version": null,
-      "contentHash": "90b787dc152456cbb61ae12f44203aaa455b6dea1d3eb10c7bbf394fbb255510",
-      "fetchedAt": "2026-07-26T17:03:52.407Z"
+      "contentHash": "6d33f5e549ab0b0f97880f74c5fa363a04ba5bfb1efc28fc752b6b85408f3360",
+      "fetchedAt": "2026-08-26T08:03:41.273Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-run-automl-deft-pipeline",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-automl-deft-pipeline",
       "version": null,
-      "contentHash": "54a24b01935e08178d0894611236f1979c4440bf42007dd18f8cf0022aed8e01",
-      "fetchedAt": "2026-07-26T17:03:52.407Z"
+      "contentHash": "ba89efc96cd1e61f0d668112695a88cd6041220e9ce68e5d6390d1ff626503c8",
+      "fetchedAt": "2026-08-26T08:03:41.274Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-run-deft-aoi",
@@ -2699,16 +2699,16 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-inference-service",
       "version": null,
-      "contentHash": "de9b5b3bb2cf407331ee361ecd85c7b3240fe4e71b17c4725a134c53520eee16",
-      "fetchedAt": "2026-07-26T17:03:52.410Z"
+      "contentHash": "616b880e308104b66073ab02ff38bbb99fb67740f036b45181f9834cb1c0bd28",
+      "fetchedAt": "2026-08-26T08:03:41.276Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-run-on-brev",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-on-brev",
       "version": null,
-      "contentHash": "76959bd9114fae46f8b76e159e8c76038348c5c13573edc1ddc7768c0df9a713",
-      "fetchedAt": "2026-07-26T17:03:52.410Z"
+      "contentHash": "2a07b65dd30eec7ee13442e4bc0bef95de676133e5cc70ff8dcc6c2c98e57671",
+      "fetchedAt": "2026-08-26T08:03:41.277Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-run-on-kubernetes",
@@ -2755,32 +2755,32 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-action-recognition",
       "version": null,
-      "contentHash": "0f299798187ffc65c3e17e9bed21295a2a5770c070ba76efcaba3646690d05e9",
-      "fetchedAt": "2026-07-26T17:03:52.413Z"
+      "contentHash": "43415330849aa7031b921e6d93b023de8c27f0c41af9f42115ae3b59a77d4584",
+      "fetchedAt": "2026-08-26T08:03:41.279Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-bevfusion",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-bevfusion",
       "version": null,
-      "contentHash": "678f273e9d9300b7dac83d1724d67d10e9f31ab9bb7f750a3df5d65e9ae63b29",
-      "fetchedAt": "2026-07-26T17:03:52.415Z"
+      "contentHash": "54848f85e810218bd41bea21b15aa8f4ea1502e225630380b11154098d6a55a3",
+      "fetchedAt": "2026-08-26T08:03:41.280Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-centerpose",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-centerpose",
       "version": null,
-      "contentHash": "efeb4c9ae72846c145d9a8023ef6bc94a3619de1d2779e6dda4feb8e194a6dd4",
-      "fetchedAt": "2026-07-26T17:03:52.416Z"
+      "contentHash": "b3ab9c7e8ffef04c76875feb59a74869a4eda0c8bdbbf4b51fb26636e666a684",
+      "fetchedAt": "2026-08-26T08:03:41.282Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-deformable-detr",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-deformable-detr",
       "version": null,
-      "contentHash": "e684f93cbf4241e6bb5bc0f7e2f0b77c49fcff521aa9d772e792aa115384342a",
-      "fetchedAt": "2026-07-26T17:03:52.417Z"
+      "contentHash": "c3439bda7e4a2913c23f046fb9983e7dadc210896ef432440c806ee5870d397b",
+      "fetchedAt": "2026-08-26T08:03:41.284Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-depth-anything-v2",
@@ -2795,8 +2795,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-dino",
       "version": null,
-      "contentHash": "90d99d7a9313938ee46462edf913efde8fb372af8c8528ac2c7ebcc4b4ea0490",
-      "fetchedAt": "2026-07-26T17:03:52.422Z"
+      "contentHash": "bc3b6507547aa407bc26e6a02ae0d4eb1fb8002f11837f167f01b306ac30029a",
+      "fetchedAt": "2026-08-26T08:03:41.288Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-fast-foundation-stereo",
@@ -2819,160 +2819,160 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-grounding-dino",
       "version": null,
-      "contentHash": "d477c10a6bc88a4dbc844598c1e70b644519619f7832c10f380b1fcfd428272c",
-      "fetchedAt": "2026-07-26T17:03:52.429Z"
+      "contentHash": "38843b37d464a17b067291599acc320c4e143fdc72ab8bd25dc427a617888718",
+      "fetchedAt": "2026-08-26T08:03:41.292Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-image-classification",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-image-classification",
       "version": null,
-      "contentHash": "bd7716ef34c95d22c487199f41509608f5c5fdc8dfcfec7b503168640720e8ad",
-      "fetchedAt": "2026-07-26T17:03:52.431Z"
+      "contentHash": "4e5e65938a7c698b9e04ae6361c1c8f20744e15334236acabb1c0c754e38a6ed",
+      "fetchedAt": "2026-08-26T08:03:41.295Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-mask-auto-encoder",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-mask-auto-encoder",
       "version": null,
-      "contentHash": "951cf147b8b8a71c68122589ec2b14d23e15e9c84c68bd7c1a65b62b3b0ab673",
-      "fetchedAt": "2026-07-26T17:03:52.433Z"
+      "contentHash": "61a41e7768ed3a4fb1895b814ab386f30ac4f9a147f2a572c88f5ea3910a2fd0",
+      "fetchedAt": "2026-08-26T08:03:41.297Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-mask-auto-label",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-mask-auto-label",
       "version": null,
-      "contentHash": "3d05900d5c99eab2f8820850442c5a7f823d3ae217aeed58dbb461323989786c",
-      "fetchedAt": "2026-07-26T17:03:52.434Z"
+      "contentHash": "babfabcb390fe161d0f9992b76c7f1688fc2fe1b06ad74751598682891475b08",
+      "fetchedAt": "2026-08-26T08:03:41.298Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-mask-grounding-dino",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-mask-grounding-dino",
       "version": null,
-      "contentHash": "12aa253bf73239d051b852c4f55246117c2fdd554c6b43ce7d9bb29be5f976bd",
-      "fetchedAt": "2026-07-26T17:03:52.435Z"
+      "contentHash": "1030fad2d47ca8ebb7368a4aeb2e481a83db71551561dfafa4dc5676de725a1a",
+      "fetchedAt": "2026-08-26T08:03:41.300Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-mask2former",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-mask2former",
       "version": null,
-      "contentHash": "080949ca4d30ada13662324e92b98a380e775e111d584279e42a96bc0f9d708a",
-      "fetchedAt": "2026-07-26T17:03:52.437Z"
+      "contentHash": "ec72de08a508fb2171ddf0010ac9c373d2c2300f050ee22d49ddc33c4bbbd742",
+      "fetchedAt": "2026-08-26T08:03:41.302Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-metric-learning-recognition",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-metric-learning-recognition",
       "version": null,
-      "contentHash": "4276c6ceda1ad83f0aea8991003a4d6f529e262d8206e639fc29f5c323f897a1",
-      "fetchedAt": "2026-07-26T17:03:52.438Z"
+      "contentHash": "df0a272d0dfe3d9420606f7638a94cb95096a8276917daf1c1b771ed3cf9792c",
+      "fetchedAt": "2026-08-26T08:03:41.304Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-nvdinov2",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-nvdinov2",
       "version": null,
-      "contentHash": "5e70bc8b9f0f2d7b9e4cd4efebeab3c368d9a6e8347b66ee9982bd3588ff0fd2",
-      "fetchedAt": "2026-07-26T17:03:52.439Z"
+      "contentHash": "dc81203fd9b1079751ee0c4189398f58124d60f2ba6556e512f6de5014009bb7",
+      "fetchedAt": "2026-08-26T08:03:41.306Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-nvpanoptix3d",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-nvpanoptix3d",
       "version": null,
-      "contentHash": "aa70373fadef0ad7d80dac1aa9c9fe65a34f26446c25ddd8ff74bd76d1a7476a",
-      "fetchedAt": "2026-07-26T17:03:52.441Z"
+      "contentHash": "816b566d77469749cb90db047a0adf5c7d3f13a5d73fb4c0bdf1d99f8d8f6308",
+      "fetchedAt": "2026-08-26T08:03:41.307Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-ocdnet",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-ocdnet",
       "version": null,
-      "contentHash": "fd1993c7f018634622bbc2ee96acac71d05d7f225a286e5b4a9e465682a9ee04",
-      "fetchedAt": "2026-07-26T17:03:52.442Z"
+      "contentHash": "cbbdae30791f82e2d2599306748b73b3936dab1cf5173066300eda5818a452a8",
+      "fetchedAt": "2026-08-26T08:03:41.310Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-ocrnet",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-ocrnet",
       "version": null,
-      "contentHash": "8d27c0941769aef817b5856bd2e096f0f304484ecc0eae21f146551ad990223d",
-      "fetchedAt": "2026-07-26T17:03:52.444Z"
+      "contentHash": "d223fac896975ec73d3dc81ff344fde2ca26d879d9782aff475316dfe77187b3",
+      "fetchedAt": "2026-08-26T08:03:41.313Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-oneformer",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-oneformer",
       "version": null,
-      "contentHash": "719d85cd828e10b8b69a7fdb7adcd433d5a525dd4f08168b1143019c08ed9451",
-      "fetchedAt": "2026-07-26T17:03:52.446Z"
+      "contentHash": "b9107bd92f5cd6588b08eed568a5db4eb440b6a79e5d82c81695adc85fc4982b",
+      "fetchedAt": "2026-08-26T08:03:41.315Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-optical-inspection",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-optical-inspection",
       "version": null,
-      "contentHash": "d0dc1f5f8242276cfea22c1ab84a489a0357aeaaf3fc5055c1b4749ecf0b3f35",
-      "fetchedAt": "2026-07-26T17:03:52.447Z"
+      "contentHash": "592580fa570e8ce40fe410be2c87846a8a70bd95fff48f6595785c2f41e4f96f",
+      "fetchedAt": "2026-08-26T08:03:41.317Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-pointpillars",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-pointpillars",
       "version": null,
-      "contentHash": "05c540909a848e42eb4644702e49c7a8117a68e9279029165c2672e67b332144",
-      "fetchedAt": "2026-07-26T17:03:52.449Z"
+      "contentHash": "84a157cc1c9b25068af4d3ae208911106abf69ecdf6602128a7bc8db4f75e35d",
+      "fetchedAt": "2026-08-26T08:03:41.322Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-pose-classification",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-pose-classification",
       "version": null,
-      "contentHash": "d7fbd274aeba1b19385f002375391218289e34aba135a1f077faff3305853957",
-      "fetchedAt": "2026-07-26T17:03:52.451Z"
+      "contentHash": "7f1d2b61640bdd534bc3e8c0f8e655a95afd2d066f531d6ad22787515536a444",
+      "fetchedAt": "2026-08-26T08:03:41.323Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-reid",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-reid",
       "version": null,
-      "contentHash": "45fe747fba1290ba38a35ad860fb32c64ad066f2d0b6aab2adf3343880fc0b0f",
-      "fetchedAt": "2026-07-26T17:03:52.452Z"
+      "contentHash": "35e90f2f10b56bd02556ac7fad16c8dee0989b45882a2d1239416b4a72a15659",
+      "fetchedAt": "2026-08-26T08:03:41.325Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-rtdetr",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-rtdetr",
       "version": null,
-      "contentHash": "65209764d7d33be8e411e6e839ad283ffed19bae6cde0690aa8e3f577996589b",
-      "fetchedAt": "2026-07-26T17:03:52.453Z"
+      "contentHash": "66094e206f880d8b8afab786dc83f35490b9fb968f628df5a95778f55eebed75",
+      "fetchedAt": "2026-08-26T08:03:41.327Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-segformer",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-segformer",
       "version": null,
-      "contentHash": "426a2b57d2bf95c91e4ceefcabcf7f9ce59f1fa4fcdc1c499b472b11846e033f",
-      "fetchedAt": "2026-07-26T17:03:52.455Z"
+      "contentHash": "33287b06e54b9570a66f3525cbf8b97eec3882d2e930bff3d4e98e5cd0eedfdd",
+      "fetchedAt": "2026-08-26T08:03:41.328Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-single-step",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-single-step",
       "version": null,
-      "contentHash": "23e4e11a70be6c0e77d9d7fbec93479a2566e16de75cddbc4edfaf2f2b72d0f8",
-      "fetchedAt": "2026-07-26T17:03:52.455Z"
+      "contentHash": "79171973a79e7411feb173a36b7c0c1eb50fb9737c0c877120030010fd59d627",
+      "fetchedAt": "2026-08-26T08:03:41.329Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-sparse4d",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-sparse4d",
       "version": null,
-      "contentHash": "6ac3c553b55fb1cb7d799ebe37f38e21f4c634b0d09e8e32efcb725383599668",
-      "fetchedAt": "2026-07-26T17:03:52.457Z"
+      "contentHash": "dd828cd27247f806dbbf985f18e143fd7f30aa6b7a1844687033e42e3e5c7d1a",
+      "fetchedAt": "2026-08-26T08:03:41.331Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tao-train-visual-changenet",
@@ -2987,8 +2987,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-validate-dataset-format",
       "version": null,
-      "contentHash": "e95f52b12dcd99a45146ca5d54a92f9f320b88e84b61d9b41f059ac1148a2581",
-      "fetchedAt": "2026-07-26T17:03:52.460Z"
+      "contentHash": "e0df756bdeaf96694a4760757f7b67f064893c8a2e2bd8cd06197e326e73d179",
+      "fetchedAt": "2026-08-26T08:03:41.334Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tilegym-adding-cutile-kernel",
@@ -3035,8 +3035,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tilegym-improve-cutile-kernel-perf",
       "version": null,
-      "contentHash": "5f33cf6b48bde28468b9187ec28e0013c58a535aa63848cfa2a3a17ce3fb4ffe",
-      "fetchedAt": "2026-07-26T17:03:52.467Z"
+      "contentHash": "c9d40f15a66b05473491c636c9484b672d0c91b236eefb3fb3ee08929ddb26d8",
+      "fetchedAt": "2026-08-26T08:03:41.338Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tilegym-monkey-patch-kernels-to-transformers",
@@ -3211,32 +3211,32 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/blockchain/evm",
       "version": null,
-      "contentHash": "83cdb19b378112a7755dba3787a1706b550c931156f1f61075b5268225e3c0d8",
-      "fetchedAt": "2026-07-26T17:03:56.977Z"
+      "contentHash": "399d3c70f24bbb5da5d7a9c146e6bb78e2b6d6bcff7cf15d39fc9127d04b4122",
+      "fetchedAt": "2026-08-26T08:03:51.661Z"
     },
     {
       "id": "hermes/official--blockchain--hyperliquid",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/blockchain/hyperliquid",
       "version": null,
-      "contentHash": "9145ae6e9dba3b0553ba0e1330730d165c4264e21eaa7b1a4604097f56c2e92a",
-      "fetchedAt": "2026-07-26T17:03:56.988Z"
+      "contentHash": "d1c21a97eac62bd24260968a67427bc6ee30794f21a0e439103ee685e24f49f6",
+      "fetchedAt": "2026-08-26T08:03:51.671Z"
     },
     {
       "id": "hermes/official--blockchain--solana",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/blockchain/solana",
       "version": null,
-      "contentHash": "65dcca327c49682464e8ee79d17e83d6574aecf2e3318afe1ff20176a3c3789e",
-      "fetchedAt": "2026-07-26T17:03:57.020Z"
+      "contentHash": "ffd5d4574dee340d604d25ff345c16940642abe31cfb5c7a071477c89f0e4d34",
+      "fetchedAt": "2026-08-26T08:03:51.701Z"
     },
     {
       "id": "hermes/official--communication--one-three-one-rule",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/communication/one-three-one-rule",
       "version": null,
-      "contentHash": "194ca759562a73ac1cd1b7b9e789598159cf787ca48f5a03c7476eb892d29477",
-      "fetchedAt": "2026-07-26T17:03:57.001Z"
+      "contentHash": "517fbc7025faaccf43d8c8872a3978daa220ab25a6aebebeb2b1bed995f20794",
+      "fetchedAt": "2026-08-26T08:03:51.678Z"
     },
     {
       "id": "hermes/official--creative--baoyu-article-illustrator",
@@ -3267,8 +3267,8 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/concept-diagrams",
       "version": null,
-      "contentHash": "24d4ce99e632746eca65aa5010e04e762b8a2554be41d1ce8f461559abed3eda",
-      "fetchedAt": "2026-07-26T17:03:56.970Z"
+      "contentHash": "7cdca8d1ef3ed5ef12cc1cd14e9aeee6329507a6d0977f237a6d6551c0d90a7e",
+      "fetchedAt": "2026-08-26T08:03:51.656Z"
     },
     {
       "id": "hermes/official--creative--creative-ideation",
@@ -3283,16 +3283,16 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/hyperframes",
       "version": null,
-      "contentHash": "0a11dfb0c4a311e9a92ad49762610a23d8b241df298524489557fe4a3449b9ae",
-      "fetchedAt": "2026-07-26T17:03:56.988Z"
+      "contentHash": "aadc66d6604d32b7c56485078225867f10923d249748dc94d3214c7ac1055c34",
+      "fetchedAt": "2026-08-26T08:03:51.670Z"
     },
     {
       "id": "hermes/official--creative--kanban-video-orchestrator",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/kanban-video-orchestrator",
       "version": null,
-      "contentHash": "4910a5ff2611b3e1390d90a0f7b4c3c92c4178d07e72c5348ca438a173e9b752",
-      "fetchedAt": "2026-07-26T17:03:56.991Z"
+      "contentHash": "ebc86ba4fe0929ed595049ec49a5ecb9dfa58c2e7f05bd23ebf10211b72c09db",
+      "fetchedAt": "2026-08-26T08:03:51.672Z"
     },
     {
       "id": "hermes/official--creative--meme-generation",
@@ -3307,16 +3307,16 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/pixel-art",
       "version": null,
-      "contentHash": "06ef8938adeb9ce005edaf026397a6851f5f15d9765a6af29316538ce10ae086",
-      "fetchedAt": "2026-07-26T17:03:57.010Z"
+      "contentHash": "8093a02c0a3f7fd61d1a7dfa6eb12f42eb12f8dff4445b18a3765dd2c0aaeeb7",
+      "fetchedAt": "2026-08-26T08:03:51.691Z"
     },
     {
       "id": "hermes/official--creative--unreal-mcp",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/unreal-mcp",
       "version": null,
-      "contentHash": "6c89e28bb61d9ca7a67b420f4bcfa40e5cd9dd38d6861f31bf7505fd80a6b7bb",
-      "fetchedAt": "2026-07-26T17:03:57.026Z"
+      "contentHash": "8c683581694c16fe7c3b4ae8c8e25e4feaf6a1ded35b9e26b30cd4c31501887a",
+      "fetchedAt": "2026-08-26T08:03:51.709Z"
     },
     {
       "id": "hermes/official--devops--cli",
@@ -3331,24 +3331,24 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/devops/docker-management",
       "version": null,
-      "contentHash": "eb95e33dd5dc50157bc475844d836e6b94c3a3a9649c6f57b854387b0ec9c7e1",
-      "fetchedAt": "2026-07-26T17:03:56.975Z"
+      "contentHash": "28aab3b84c65f58981ccf5e3fb4f8721756afe19d7442c1f573e64bbfc802fb2",
+      "fetchedAt": "2026-08-26T08:03:51.659Z"
     },
     {
       "id": "hermes/official--devops--hermes-s6-container-supervision",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/devops/hermes-s6-container-supervision",
       "version": null,
-      "contentHash": "d95bd275847d734a9d330661a3685cd7d0eaf13afe360c99a09dedd9783ce737",
-      "fetchedAt": "2026-07-26T17:03:56.985Z"
+      "contentHash": "233aa8bcdad84605e00f0ba28cfafbc9097c4ffc97ddb050e3bd9931eb84eb94",
+      "fetchedAt": "2026-08-26T08:03:51.667Z"
     },
     {
       "id": "hermes/official--devops--pinggy-tunnel",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/devops/pinggy-tunnel",
       "version": null,
-      "contentHash": "b81adf019729dc40ea7ad21f6b51aa5d967cf7987166850022d0d04dab7bea3a",
-      "fetchedAt": "2026-07-26T17:03:57.010Z"
+      "contentHash": "e134169621c07087e364a61ed1891e504ce02c6f57a6dc3ff541c082a276a6af",
+      "fetchedAt": "2026-08-26T08:03:51.689Z"
     },
     {
       "id": "hermes/official--devops--watchers",
@@ -3371,8 +3371,8 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/email/agentmail",
       "version": null,
-      "contentHash": "dff0ea4c2c1a7973a81b989686fdf4515af6c2876c2ee0cf35ee4591f8fd909f",
-      "fetchedAt": "2026-07-26T17:03:56.958Z"
+      "contentHash": "d310594512de5e72609bd545807af9b9fede357b5e5caac61506de84cd29bbe8",
+      "fetchedAt": "2026-08-26T08:03:51.646Z"
     },
     {
       "id": "hermes/official--finance--3-statement-model",
@@ -3435,48 +3435,48 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/finance/stocks",
       "version": null,
-      "contentHash": "a01ab04b4141c65be0f8e083c2dbe32145a3da6dc00df95a0d0a606ac917fd92",
-      "fetchedAt": "2026-07-26T17:03:57.022Z"
+      "contentHash": "a09b175b5fed9a931ed010a985e54ee865bdfe3b92824fb83265bedb16a6f11a",
+      "fetchedAt": "2026-08-26T08:03:51.702Z"
     },
     {
       "id": "hermes/official--gaming--minecraft-modpack-server",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/gaming/minecraft-modpack-server",
       "version": null,
-      "contentHash": "7b280be63bf365e98ee8c32b574d323101d63ead46e7934e8a17d9daf89742e2",
-      "fetchedAt": "2026-07-26T17:03:56.996Z"
+      "contentHash": "b40bf9fa097207a074f539268725607ff94fd2beba11168b45fbdfa40c79b269",
+      "fetchedAt": "2026-08-26T08:03:51.676Z"
     },
     {
       "id": "hermes/official--gaming--pokemon-player",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/gaming/pokemon-player",
       "version": null,
-      "contentHash": "8e611a65654769924da5a3bd8d7a1b4c1e58e857bf0d6ffaa1218386681033a1",
-      "fetchedAt": "2026-07-26T17:03:57.011Z"
+      "contentHash": "96cd08cdcf741a8a028e984cd7df25d0d8d146fa9faba9ebea892c1bc6e6f4fd",
+      "fetchedAt": "2026-08-26T08:03:51.693Z"
     },
     {
       "id": "hermes/official--health--fitness-nutrition",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/health/fitness-nutrition",
       "version": null,
-      "contentHash": "c892293c8319044eddc530f69e019649f16040ef68daad77fc288cb7c3888c36",
-      "fetchedAt": "2026-07-26T17:03:56.980Z"
+      "contentHash": "2370454dc1186057e3f1371df71b4f566f56abff796d3f29317c6899413ff1eb",
+      "fetchedAt": "2026-08-26T08:03:51.664Z"
     },
     {
       "id": "hermes/official--health--neuroskill-bci",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/health/neuroskill-bci",
       "version": null,
-      "contentHash": "52701f2fff1969a683786cf73b507c1a56a0979d2361e8e21bf33ed5bb623981",
-      "fetchedAt": "2026-07-26T17:03:56.999Z"
+      "contentHash": "2383ccfde43bba14a3a0f176d29d90d942698f4374dcd784b4b4cbbd00aa8b6c",
+      "fetchedAt": "2026-08-26T08:03:51.677Z"
     },
     {
       "id": "hermes/official--mcp--fastmcp",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mcp/fastmcp",
       "version": null,
-      "contentHash": "fd8ebf2424f57ae58909fbfd3ed05a344b84c86d1db52dfa2851db21dd079e33",
-      "fetchedAt": "2026-07-26T17:03:56.979Z"
+      "contentHash": "b223fe50a1756f99b568c66e99a198467316e9af196504a826d14d038e615fc7",
+      "fetchedAt": "2026-08-26T08:03:51.662Z"
     },
     {
       "id": "hermes/official--mcp--mcp-oauth-remote-gateway",
@@ -3499,16 +3499,16 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/migration/openclaw-migration",
       "version": null,
-      "contentHash": "31826c5ae27d22fc6d23e86dc67f59e4d13fca3dc37995273e720d0119531779",
-      "fetchedAt": "2026-07-26T17:03:57.001Z"
+      "contentHash": "943e8847403d3f42d9359d4e0fabe3b6ef7cf168d6a13e739c2b6eeef8d34f56",
+      "fetchedAt": "2026-08-26T08:03:51.679Z"
     },
     {
       "id": "hermes/official--mlops--accelerate",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/accelerate",
       "version": null,
-      "contentHash": "5e7e94ed6d9a30a8162f9d954062c638049dd54eaa1caf1c1d70bd0863a77726",
-      "fetchedAt": "2026-07-26T17:03:56.986Z"
+      "contentHash": "3465b139233da52142bae2ffb4c3944faa9e0a87b58cdbb055cb9cdd67e3176d",
+      "fetchedAt": "2026-08-26T08:03:51.668Z"
     },
     {
       "id": "hermes/official--mlops--chroma",
@@ -3539,8 +3539,8 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/flash-attention",
       "version": null,
-      "contentHash": "8966964f91de4d348e243fdebae2d8a91ff140f64b213c38b9e9dcab6b443bbf",
-      "fetchedAt": "2026-07-26T17:03:57.002Z"
+      "contentHash": "a2e8d061481eb1e2c9263c8b327dc7f0f682589248c5bae04a53cc274f1b8d9a",
+      "fetchedAt": "2026-08-26T08:03:51.681Z"
     },
     {
       "id": "hermes/official--mlops--guidance",
@@ -3579,8 +3579,8 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/lambda-labs",
       "version": null,
-      "contentHash": "c341886c2b45a064a74c8a85903a2b2f46d6f49dbe150b279c6858203f4c5df5",
-      "fetchedAt": "2026-07-26T17:03:56.992Z"
+      "contentHash": "9091419e18127faf383d63bfa652f3dcee49ae47cbf305060905d8edf1cdc4d7",
+      "fetchedAt": "2026-08-26T08:03:51.673Z"
     },
     {
       "id": "hermes/official--mlops--llava",
@@ -3595,8 +3595,8 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/modal",
       "version": null,
-      "contentHash": "6bfbe30c610f68c0bc902aabc99fe9cab5c84bcf204b96505de895c5c6f19d6b",
-      "fetchedAt": "2026-07-26T17:03:56.997Z"
+      "contentHash": "69c4c29f6bc6c1361f3b3080d57d531a0ee33730ea266bbbcde386725f9bf7a3",
+      "fetchedAt": "2026-08-26T08:03:51.676Z"
     },
     {
       "id": "hermes/official--mlops--nemo-curator",
@@ -3619,8 +3619,8 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/peft",
       "version": null,
-      "contentHash": "9130f26642b43b27eff842ed7f224ae3f46893f2c1afd0f6187cf363c888ea58",
-      "fetchedAt": "2026-07-26T17:03:57.008Z"
+      "contentHash": "3389ae2b5ccc5c7b582ee4998c0206ebb3c86357c608ae511e01485490d02047",
+      "fetchedAt": "2026-08-26T08:03:51.688Z"
     },
     {
       "id": "hermes/official--mlops--pinecone",
@@ -3635,24 +3635,24 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/pytorch-fsdp",
       "version": null,
-      "contentHash": "9c84c2e21d80396fac93ab2696bb45d77090fcbf3662f2b82df48393a3f0dce6",
-      "fetchedAt": "2026-07-26T17:03:57.012Z"
+      "contentHash": "abe2fae9ad595fa26c5b6f84979469f35189c46f8e3b7e61c993322adb0a48f1",
+      "fetchedAt": "2026-08-26T08:03:51.695Z"
     },
     {
       "id": "hermes/official--mlops--pytorch-lightning",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/pytorch-lightning",
       "version": null,
-      "contentHash": "18d05d02a12525c3262dc186d5a1a95557faa84fba44399c700bb0d65b103427",
-      "fetchedAt": "2026-07-26T17:03:57.014Z"
+      "contentHash": "bb8f27c8dca7c1ef3034082adde53ef71d13fc760c98a7de5aa2b98d6469f0d7",
+      "fetchedAt": "2026-08-26T08:03:51.697Z"
     },
     {
       "id": "hermes/official--mlops--qdrant",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/qdrant",
       "version": null,
-      "contentHash": "a0b08f5972a517d244bd42d59905d0eeefc82deda0c6ef6364e29307f5d6de31",
-      "fetchedAt": "2026-07-26T17:03:57.015Z"
+      "contentHash": "b3494abbee00edc83e905cb6b80d75c59457cce7e081a189eb98c1ee861347b8",
+      "fetchedAt": "2026-08-26T08:03:51.699Z"
     },
     {
       "id": "hermes/official--mlops--research--dspy",
@@ -3667,72 +3667,72 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/saelens",
       "version": null,
-      "contentHash": "954eef215675e0f666a192293ab140f5135bff5e9087e4448873b3fc44e25eb9",
-      "fetchedAt": "2026-07-26T17:03:57.021Z"
+      "contentHash": "9404b1a0273a92181a2147773c569ae2ba73e4c4a218ea15419066228dcad8f1",
+      "fetchedAt": "2026-08-26T08:03:51.701Z"
     },
     {
       "id": "hermes/official--mlops--simpo",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/simpo",
       "version": null,
-      "contentHash": "d852ba8ce5f4d6eb50f94d689a90bcc6b04a6d3cfe29e462549ef9e3c9b146f9",
-      "fetchedAt": "2026-07-26T17:03:57.019Z"
+      "contentHash": "9dcd5ed77d157b8525d606ca3b406051e67b688815823332bb56145a5a8461a7",
+      "fetchedAt": "2026-08-26T08:03:51.700Z"
     },
     {
       "id": "hermes/official--mlops--slime",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/slime",
       "version": null,
-      "contentHash": "a94d74dce7769a26d8ca94d9556de762161c584d170462d9d902523cedca2df0",
-      "fetchedAt": "2026-07-26T17:03:57.020Z"
+      "contentHash": "2322ebb770c6109b4ddc32ac42c9967ab9faa8ecaf0658ae691a88e731fed774",
+      "fetchedAt": "2026-08-26T08:03:51.701Z"
     },
     {
       "id": "hermes/official--mlops--stable-diffusion",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/stable-diffusion",
       "version": null,
-      "contentHash": "be38800dcdf0ada42a2c54a16ee0d9b37cccf0e8a980103258edc2ad1f9e7746",
-      "fetchedAt": "2026-07-26T17:03:57.021Z"
+      "contentHash": "1e7bd27d2dabf0c5111ed78cb8ba44ba2275157d38e704dfd131c61878b26d51",
+      "fetchedAt": "2026-08-26T08:03:51.702Z"
     },
     {
       "id": "hermes/official--mlops--tensorrt-llm",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/tensorrt-llm",
       "version": null,
-      "contentHash": "ea04a59b49ed7418612285a12c126d552c860e59996a5a34fe20d4398d0900f2",
-      "fetchedAt": "2026-07-26T17:03:57.023Z"
+      "contentHash": "7d6ae631b6fec25e4f686bfaa4222aed5c1aea825ad283119bdf1c36cfb2902a",
+      "fetchedAt": "2026-08-26T08:03:51.703Z"
     },
     {
       "id": "hermes/official--mlops--torchtitan",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/torchtitan",
       "version": null,
-      "contentHash": "7b5d8ca9443260387ee9cd658aadddc03c7e2e7becb5a95cdc7e9f72711cfec3",
-      "fetchedAt": "2026-07-26T17:03:56.975Z"
+      "contentHash": "71739f28c6dbebfa7394d0afd1f9b042e410afe9a3996522ba30a5b7ab1bf53c",
+      "fetchedAt": "2026-08-26T08:03:51.658Z"
     },
     {
       "id": "hermes/official--mlops--training--axolotl",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/training/axolotl",
       "version": null,
-      "contentHash": "536b20695a1499177e974faafd743a45eb6f3f008307ce4b2b00d48413c104fa",
-      "fetchedAt": "2026-07-26T17:03:56.959Z"
+      "contentHash": "4ff815fd7d670477617dcc6baf9f962f3a9cb8f75abbc7f9560a86d48745a102",
+      "fetchedAt": "2026-08-26T08:03:51.648Z"
     },
     {
       "id": "hermes/official--mlops--training--trl-fine-tuning",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/training/trl-fine-tuning",
       "version": null,
-      "contentHash": "39a0cb9885435f5eb0fd57e3ad8df0de603ca9d5a0697b78747b14def640eb9c",
-      "fetchedAt": "2026-07-26T17:03:56.980Z"
+      "contentHash": "d595b2e814409dd6d073009aeebbdba39ed59f0c778e6c7d07ff2b43e5335e43",
+      "fetchedAt": "2026-08-26T08:03:51.664Z"
     },
     {
       "id": "hermes/official--mlops--training--unsloth",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/training/unsloth",
       "version": null,
-      "contentHash": "e8288a28874cb382883235fdf0b2315c5a1a84a7e1ab747b253062b2d5046426",
-      "fetchedAt": "2026-07-26T17:03:57.029Z"
+      "contentHash": "eb9e6df75079cf2f0ece24aa781f26222342c98c756dd16cc65390afe000ee1b",
+      "fetchedAt": "2026-08-26T08:03:51.714Z"
     },
     {
       "id": "hermes/official--mlops--whisper",
@@ -3779,16 +3779,16 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/here-now",
       "version": null,
-      "contentHash": "0f71509954e34ec71a1f04533a1bfd26c0f7b40963eea751aa4cec512bc82d56",
-      "fetchedAt": "2026-07-26T17:03:56.985Z"
+      "contentHash": "87f09e4a1357092e7cb54f904465d7b0a97c5377e15c17d3724fcb86bf8041e7",
+      "fetchedAt": "2026-08-26T08:03:51.667Z"
     },
     {
       "id": "hermes/official--productivity--memento-flashcards",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/memento-flashcards",
       "version": null,
-      "contentHash": "5d40e85642685ac2fd4749dec28b1048253da42e4cfa68d274c6ae04adb9c04b",
-      "fetchedAt": "2026-07-26T17:03:56.995Z"
+      "contentHash": "8d0076c4ae6f325d62638b2a024ead87232dd9e9f5e5619db4cc42734e0943b2",
+      "fetchedAt": "2026-08-26T08:03:51.675Z"
     },
     {
       "id": "hermes/official--productivity--shop",
@@ -3819,16 +3819,16 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/telephony",
       "version": null,
-      "contentHash": "aceaa377811df0bba46456a5b06d2c888c7bd52b33cd58ab9b4980b3d750f563",
-      "fetchedAt": "2026-07-26T17:03:57.023Z"
+      "contentHash": "18b5b479125b5513d8709907f1fde8c41abf571f629aa79db1803e9ea9a4ba19",
+      "fetchedAt": "2026-08-26T08:03:51.703Z"
     },
     {
       "id": "hermes/official--research--bioinformatics",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/bioinformatics",
       "version": null,
-      "contentHash": "182cc106ea42ef06636c01e674846b39176c403f37eda61a68949c15f7878229",
-      "fetchedAt": "2026-07-26T17:03:56.965Z"
+      "contentHash": "ecb354d75f39150bb53188bb999e1526f47f47cea376266dff4e18fbb49074bd",
+      "fetchedAt": "2026-08-26T08:03:51.652Z"
     },
     {
       "id": "hermes/official--research--darwinian-evolver",
@@ -3843,16 +3843,16 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/domain-intel",
       "version": null,
-      "contentHash": "e19834333c049ecb1990730ccd5d251ea3d2ecc70cb36311f6c86bf4dc5d4fd1",
-      "fetchedAt": "2026-07-26T17:03:56.975Z"
+      "contentHash": "4cf39469c68133d8f4d6c035ff5149550fbb7b89e41f41dd5c03d0124755b310",
+      "fetchedAt": "2026-08-26T08:03:51.659Z"
     },
     {
       "id": "hermes/official--research--drug-discovery",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/drug-discovery",
       "version": null,
-      "contentHash": "38d5b41fd9fdbdab63d0fb399427fd4d58a7fd019bd7e532a05c32fc5952ba01",
-      "fetchedAt": "2026-07-26T17:03:56.976Z"
+      "contentHash": "45d53a951ef38e19810f202442b0b3843203cdcf77b5c67fe2c7f22a5f284d19",
+      "fetchedAt": "2026-08-26T08:03:51.660Z"
     },
     {
       "id": "hermes/official--research--duckduckgo-search",
@@ -3875,8 +3875,8 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/osint-investigation",
       "version": null,
-      "contentHash": "e609f9dae3389d1cd021a4e3ccaf2518d722eb23c301b1d34a854507ef922e80",
-      "fetchedAt": "2026-07-26T17:03:57.004Z"
+      "contentHash": "d902171924a8759285cea93fdb1e5380e3f805b82907dc91d32da145f3b90463",
+      "fetchedAt": "2026-08-26T08:03:51.684Z"
     },
     {
       "id": "hermes/official--research--parallel-cli",
@@ -3915,24 +3915,24 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/security/1password",
       "version": null,
-      "contentHash": "029c44800a5f283375d73ab651c4c9a5ad116c3b286858332c0ab25eb5eacd28",
-      "fetchedAt": "2026-07-26T17:03:56.957Z"
+      "contentHash": "4b45a9a6711ae1e3ec69775e50f045fac3207f7d12d911b958c157270ab92ac7",
+      "fetchedAt": "2026-08-26T08:03:51.645Z"
     },
     {
       "id": "hermes/official--security--godmode",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/security/godmode",
       "version": null,
-      "contentHash": "f57d20054b11e679353c9d032d6b958ba16c07458b290ecca31167fc48c80d6f",
-      "fetchedAt": "2026-07-26T17:03:56.982Z"
+      "contentHash": "c1b7306357c5f4de1ba7c43e163ec84edb1f6ba218d9a3c4703fd86e6bc2156a",
+      "fetchedAt": "2026-08-26T08:03:51.666Z"
     },
     {
       "id": "hermes/official--security--oss-forensics",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/security/oss-forensics",
       "version": null,
-      "contentHash": "fecceec0df7bc9881b8b16bb47bb60f3d5611c67cae77c49c3252fabb77abfd1",
-      "fetchedAt": "2026-07-26T17:03:57.005Z"
+      "contentHash": "e5ca5ff80e8baf6b131c0675644186897d18e32ed6d6a47c191eea2888af7147",
+      "fetchedAt": "2026-08-26T08:03:51.686Z"
     },
     {
       "id": "hermes/official--security--sherlock",
@@ -3947,32 +3947,32 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/security/unbroker",
       "version": null,
-      "contentHash": "bbc5f9df52e0893c63557be1fcd14b9d3a28b1075aa517dd83f1816076461653",
-      "fetchedAt": "2026-07-26T17:03:57.025Z"
+      "contentHash": "3e13848ba93ddbd6d08935e5ae32622842215b534dde1f3057486340ca07d66c",
+      "fetchedAt": "2026-08-26T08:03:51.707Z"
     },
     {
       "id": "hermes/official--security--web-pentest",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/security/web-pentest",
       "version": null,
-      "contentHash": "0c2e8aad41719f1ae56a728eecbb8a4378b5ff2ebe2fd500e0aa07d4c1ff98ae",
-      "fetchedAt": "2026-07-26T17:03:57.031Z"
+      "contentHash": "aca3fd7a7b650d922cc9d8816e688a820b23fe20b153039d88e37f7ca4c0e807",
+      "fetchedAt": "2026-08-26T08:03:51.716Z"
     },
     {
       "id": "hermes/official--software-development--code-wiki",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/software-development/code-wiki",
       "version": null,
-      "contentHash": "e5fd14dc30100ebdba456fc1e5ad41d98858592aedba5b403b524a41d578222e",
-      "fetchedAt": "2026-07-26T17:03:56.968Z"
+      "contentHash": "efa9978121790b421bd0c6bd161131abaeeafc755719cc0a6bff7f8c5478b4dc",
+      "fetchedAt": "2026-08-26T08:03:51.654Z"
     },
     {
       "id": "hermes/official--software-development--rest-graphql-debug",
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/software-development/rest-graphql-debug",
       "version": null,
-      "contentHash": "e2b87278021373360468cb129649c3320d406fbcdef7bfe1a495699778a829a7",
-      "fetchedAt": "2026-07-26T17:03:57.016Z"
+      "contentHash": "b9dd5e726e30bc10ebfd4ece59b20b444a621a5996a5914eec3f10f17c501511",
+      "fetchedAt": "2026-08-26T08:03:51.699Z"
     },
     {
       "id": "hermes/official--software-development--subagent-driven-development",
@@ -3987,8 +3987,8 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/web-development/cloudflare-temporary-deploy",
       "version": null,
-      "contentHash": "2435a81358450cba112ce5b29cc55cb407960ab626533174127121234cbb6ba6",
-      "fetchedAt": "2026-07-26T17:03:56.967Z"
+      "contentHash": "b6e7b0760dcf2cf28a60a702b12c0b0868e4cb2c55191bb3380b0a5320824171",
+      "fetchedAt": "2026-08-26T08:03:51.653Z"
     },
     {
       "id": "hermes/official--web-development--page-agent",
