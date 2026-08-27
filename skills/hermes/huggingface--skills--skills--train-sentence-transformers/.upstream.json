@@ -5,7 +5,7 @@
   "repo": "huggingface/skills",
   "path": "skills/train-sentence-transformers",
   "branch": "main",
-  "pushedAt": "2026-07-25T04:31:32Z",
-  "contentHash": "2d0a425da328bf9ba1694f4036de5fd07bf46ccac4d9cf909e89d0dea5439baa",
-  "fetchedAt": "2026-07-26T17:03:50.919Z"
+  "pushedAt": "2026-08-27T14:52:20Z",
+  "contentHash": "1f6733162377fcae58401dbfaf64cd0f10721712ed14fa8ab11841ab660933d5",
+  "fetchedAt": "2026-08-27T18:38:04.146Z"
 }
