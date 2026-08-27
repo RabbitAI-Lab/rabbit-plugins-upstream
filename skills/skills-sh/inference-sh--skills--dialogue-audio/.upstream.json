@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/dialogue-audio",
+  "repo": "inference-sh/skills",
+  "skillId": "dialogue-audio",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "325e2377f99ed5ded79c2bf48a0a2f938c7530619a5ba7a8f1be67a67dfb3b8c",
+  "fetchedAt": "2026-08-27T18:52:23.784Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/clickhouse/agent-skills/clickhouse-architecture-advisor",
+  "repo": "clickhouse/agent-skills",
+  "skillId": "clickhouse-architecture-advisor",
+  "branch": "main",
+  "pushedAt": "2026-08-06T14:07:59Z",
+  "contentHash": "3fd41cec51309c1a302f2366c968787be31d41d5f7e23d9af2a05a0fd6cbb21b",
+  "fetchedAt": "2026-08-27T18:54:22.532Z"
+}

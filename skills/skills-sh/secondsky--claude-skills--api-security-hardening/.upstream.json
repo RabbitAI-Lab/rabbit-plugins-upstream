@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/api-security-hardening",
+  "repo": "secondsky/claude-skills",
+  "skillId": "api-security-hardening",
+  "branch": "main",
+  "pushedAt": "2026-08-24T09:50:04Z",
+  "contentHash": "ba3d06620136591fc9ad548079fd55975277456ad04558261d345b4cd3b1f836",
+  "fetchedAt": "2026-08-27T18:54:53.648Z"
+}

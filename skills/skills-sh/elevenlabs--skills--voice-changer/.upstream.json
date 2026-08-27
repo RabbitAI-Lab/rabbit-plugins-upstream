@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/elevenlabs/skills/voice-changer",
+  "repo": "elevenlabs/skills",
+  "skillId": "voice-changer",
+  "branch": "main",
+  "pushedAt": "2026-08-26T17:58:02Z",
+  "contentHash": "f2464cd78c4dccd36b2b1e3ed4bde25403831532e2ebd1adcfece1ba546aee1f",
+  "fetchedAt": "2026-08-27T18:54:23.065Z"
+}
