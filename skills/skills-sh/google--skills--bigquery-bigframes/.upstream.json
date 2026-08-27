@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/bigquery-bigframes",
+  "repo": "google/skills",
+  "skillId": "bigquery-bigframes",
+  "branch": "main",
+  "pushedAt": "2026-08-27T14:45:25Z",
+  "contentHash": "76b503fa05052f829e482a062140992001a703ef0f21dd849b6efd8a279012b4",
+  "fetchedAt": "2026-08-27T18:54:05.228Z"
+}

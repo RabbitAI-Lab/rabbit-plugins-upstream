@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/flutter/agent-plugins/flutter-fix-layout-issues",
+  "repo": "flutter/agent-plugins",
+  "skillId": "flutter-fix-layout-issues",
+  "branch": "main",
+  "pushedAt": "2026-08-25T19:53:36Z",
+  "contentHash": "7ba9b0afa9035be6113a2f7ebc8f7d7fe637c0351545e4df06ab49632573e39d",
+  "fetchedAt": "2026-08-27T18:52:25.266Z"
+}
