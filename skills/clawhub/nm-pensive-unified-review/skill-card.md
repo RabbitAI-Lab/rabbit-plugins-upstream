@@ -1,41 +1,57 @@
-## Description: <br>
-Orchestrates multi-domain review across code, architecture, tests, security, and related quality areas in a single pass. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Orchestrates multi-domain review (code, arch, tests, security) in a single pass
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to coordinate comprehensive repository reviews, select relevant review domains, synthesize findings, and produce an integrated action plan before merges or releases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad review-related requests. <br>
-Mitigation: Invoke it only for explicit comprehensive review work or use a narrower review skill when the desired review domain is already known. <br>
-Risk: The skill may run a local backlog-capture write command without asking. <br>
-Mitigation: Require user confirmation before executing write commands and review generated backlog entries before keeping them. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to run comprehensive pre-release or multi-domain code reviews, selecting relevant review domains and consolidating findings into an action plan.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-unified-review) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown review report with findings, evidence, recommendations, and action items] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include prioritized severity levels, evidence appendices, and suggested local commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The skill directs the agent to run a local deferred-capture script for backlog findings without clear confirmation or storage details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before deployment, inspect scripts/deferred_capture.py, confirm what data it writes, and require explicit approval or disable deferred capture when persistence is not desired.
+
+Risk: Multi-domain review orchestration can produce incorrect or misleading findings if synthesized outputs are accepted without review.
+
+Mitigation: Require reviewers to validate findings against cited evidence, file paths, and project tests before acting on recommendations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-unified-review)
+- [Pensive plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+- [Review workflow core](artifact/modules/review-workflow-core.md)
+- [Output format templates](artifact/modules/output-format-templates.md)
+- [Quality checklist patterns](artifact/modules/quality-checklist-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown review report with findings, evidence appendix, action items, and optional shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May coordinate multiple review domains and preserve deferred backlog findings when the project supports that workflow.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

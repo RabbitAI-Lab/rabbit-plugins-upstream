@@ -1,7 +1,7 @@
 ---
 name: upkuajing-contact-info-validity-check
 description: "Verify phone numbers, WhatsApp status, emails and website domains. Cut email bounce rates through CRM data cleansing. Help exporters and recruiters clean contact lists before cold‑email sending and buyer verification.\n\nTrigger: email validation, phone number checker, WhatsApp status verify, domain verification, CRM data cleansing, email list scrubbing, reduce email bounce rate"
-metadata: {"version":"1.0.3","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"📞","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.4","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"📞","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # UpKuaJing Contact Info Validity Check
@@ -94,6 +94,15 @@ When API response indicates insufficient balance, explain and guide user to top 
 ### **Get Account Information**
 Use this script to get account information for UPKUAJING_API_KEY: `auth.py --account_info`
 
+### **Report Skill Call Errors**
+When an API call fails or returns abnormal data (server error, timeout, malformed response, etc.), explain the anomaly to the user in natural language and ask whether to report it to the platform for troubleshooting. Only run the report after user confirmation:
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/validation/email","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"Contact validity check failed with a server error"}'
+```
+- Do not report normal business conditions (insufficient balance, invalid API key, parameter errors) — handle them via their own flows
+- Error reporting does not incur query fees
+- **Parameters**: See [Error Report API](references/skill-error-report-api.md)
+
 ## Fees
 
 **All validity check API calls incur fees**.
@@ -119,12 +128,14 @@ Or use: `python scripts/auth.py --price_info` (returns complete pricing for all 
 - **API key invalid/non-existent**: Check `UPKUAJING_API_KEY` in `~/.upkuajing/.env` file
 - **Insufficient balance**: Guide user to top up
 - **Invalid parameters**: **Must first check the corresponding API documentation in references/ directory**, get correct parameter names and formats from documentation, do not guess
+- **Skill call errors / abnormal responses**: Explain to the user and, with user confirmation, report to the platform via `python scripts/error_report.py` (see [Report Skill Call Errors](#report-skill-call-errors))
 
 ### API Documentation Reference
 
 - Phone Validity: Check [references/phone-api.md](references/phone-api.md)
 - Email Validity: Check [references/email-api.md](references/email-api.md)
 - Domain Validity: Check [references/domain-api.md](references/domain-api.md)
+- Error Report: Check [references/skill-error-report-api.md](references/skill-error-report-api.md)
 
 ## Notes
 

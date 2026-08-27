@@ -107,7 +107,7 @@ summary: <1-3 句中文，无业务数字除非来自 manifest>
 1. 主 Agent：确认账户与日期区间。
 2. **决策**：拉数阶段若日志长 → Bash/Task + `handoff-p6-okki.md` §拉数；否则主会话执行模板 §拉数命令。
 3. **决策**：写 xlsx 阶段 → Task handoff（只读 `snapDir`，先 outline 后 JSON，见 `references/core/tips.md`）；或主会话若上下文充足。
-4. 主 Agent：合并交付话术 + 文件路径；金额与 ID 与 manifest 一致。
+4. 主 Agent：合并交付 **xlsx 路径** + 客户话术；金额与 ID 与 manifest 一致。**没有 `.xlsx` 不得收口**（用户明确只要话术除外）。
 
 ### P5 · 多账户多维度
 

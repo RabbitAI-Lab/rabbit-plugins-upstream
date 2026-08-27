@@ -5,7 +5,7 @@ description: 5项酒店搜索工具覆盖万豪品牌查询、酒店详情、套
 version: 1.1.2
 tags: [酒店搜索, 万豪酒店, 酒店推荐, 周边餐饮, 酒店套餐]
 tools:
-  - name: search_hotels
+  - name: searchHotels
     description: 搜索国内酒店，返回实时价格和预订链接
     primaryEnv: FLIGGY_PROXY_URL
     env:
@@ -20,28 +20,28 @@ tools:
         type: string
         description: 自然语言查询，如"三亚亚龙湾亲子酒店"
         required: true
-  - name: search_marriott_hotels
+  - name: searchMarriottHotels
     description: 搜索万豪集团旗下品牌酒店
     parameters:
       - name: params
         type: string
         description: 自然语言查询，如"上海万豪酒店"
         required: true
-  - name: get_marriott_hotel_info
+  - name: getMarriottHotelInfo
     description: 获取万豪酒店详细信息
     parameters:
       - name: params
         type: string
         description: 酒店名称或关键词
         required: true
-  - name: search_marriott_packages
+  - name: searchMarriottPackages
     description: 搜索万豪酒店套餐产品
     parameters:
       - name: params
         type: string
         description: 自然语言查询，如"三亚万豪含早套餐"
         required: true
-  - name: search_food
+  - name: searchFood
     description: 搜索酒店周边餐饮美食
     parameters:
       - name: params

@@ -272,7 +272,7 @@ def _customer_message(profile: str, checks: list[dict[str, object]]) -> tuple[st
             f"企业模板保真与参考风格重构都不能继续。失败项：{labels}",
             [
                 "修复依赖或更换可用环境后，重新运行 static-reference 预检并重试客户参考路线。",
-                "明确放弃客户参考路线，改用 TaoHtml 四套内置视觉系统。",
+                "明确放弃客户参考路线，改用 TaoHtml 八套内置视觉系统。",
             ],
         )
     if profile == "pdf":

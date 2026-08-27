@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/foundry-solidity",
   "slug": "foundry-solidity",
   "ownerHandle": null,
-  "version": "0.2.3",
-  "updatedAt": 1784747286761,
-  "contentHash": "fd4e816e6a2d1a97b0cbb48bd33f89458e9d24774b2d8ee5784e996bbc6817e7",
-  "fetchedAt": "2026-07-26T18:07:45.804Z"
+  "version": "0.2.4",
+  "updatedAt": 1787313662917,
+  "contentHash": "fc4d11b36858431c5def240e13394584da8655f44a1860ffc7dafd06243aeb9e",
+  "fetchedAt": "2026-08-27T18:56:30.604Z"
 }

@@ -1,41 +1,51 @@
-## Description: <br>
-AI video generation powered by CellCog via Seedance. Cinematic 1080p video with smooth motion, multi-shot narratives, lipsync, voice synthesis, scoring. Complete videos from a single prompt via ByteDance's Seedance model. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI video generation powered by CellCog via Seedance 2.5. Complete multi-minute videos from a single prompt: scripting, voice synthesis, lipsync, scoring, editing, with locked character consistency via 50 reference files. Full productions, not just clips, via ByteDance's Seedance model.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers, creators, and marketing teams use this skill to ask an agent to create Seedance-powered video productions through CellCog, including marketing videos, explainers, cinematic scenes, and spokesperson-style content. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Video prompts, scripts, descriptions, and attached media may be sent to an external CellCog service. <br>
-Mitigation: Use only approved content and avoid submitting secrets, regulated data, or confidential business material unless the organization has approved that use. <br>
-Risk: The skill requires a CELLCOG_API_KEY credential. <br>
-Mitigation: Store the API key in the agent environment or an approved secret manager and avoid placing it in prompts, source files, or generated artifacts. <br>
+## Use Case:
 
+External users, developers, and content teams use this skill to ask an agent to create marketing videos, explainers, cinematic content, and spokesperson videos through CellCog's Seedance video-generation workflow.
 
-## Reference(s): <br>
-- [CellCog Homepage](https://cellcog.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/nitishgargiitd/skills/seedance-video-generation-cellcog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with Python examples; generated CellCog outputs may include MP4 video files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python 3, the cellcog dependency, CELLCOG_API_KEY, and access to the external CellCog service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+Risk: Video prompts and attached image, video, or audio references are sent to CellCog and its model providers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with material approved for external processing, and avoid confidential, regulated, or copyrighted internal content unless organizational policy and CellCog's terms allow it.
+
+## Reference(s):
+
+- [CellCog homepage](https://cellcog.ai)
+- [ClawHub skill page](https://clawhub.ai/cellcog/skills/seedance-video-generation-cellcog)
+- [CellCog publisher profile](https://clawhub.ai/user/cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, code, shell commands, configuration, text, files]
+
+**Output Format:** [Markdown guidance with Python code blocks and shell commands; generated video assets are returned by the CellCog service, typically as MP4 output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and CELLCOG_API_KEY. Recommended video-generation settings are chat_mode="agent" and chat_tier="max".]
+
+## Skill Version(s):
+
+1.0.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

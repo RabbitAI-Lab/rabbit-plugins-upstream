@@ -1,44 +1,63 @@
-## Description: <br>
-Analyzes household public-area audio/video to detect family conflict signals, wait for a calm window, and produce aftercare suggestions or safety escalation guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes household public-area audio/video to detect family conflict signals, wait for a calm window, and suggest neutral aftercare actions such as soft music, gentle voice prompts, app messages, or safety escalation when red-line indicators appear.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to analyze household living-room, kitchen, or dining-area audio/video for conflict events and receive structured aftercare guidance, report links, or safety-resource escalation when redline signals are present. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive household conflict audio/video or URLs may be sent to the provider's cloud service and linked to a reused or created identity. <br>
-Mitigation: Use only with informed consent from recorded household members, and confirm report visibility, retention, deletion, and access controls before deployment. <br>
-Risk: Stored tokens, report links, or history could expose private family conflict records. <br>
-Mitigation: Protect tokens and report links, restrict history retrieval to authorized users, and document how local and cloud history can be deleted. <br>
-Risk: Aftercare prompts could be harmful if triggered during an active or unsafe conflict. <br>
-Mitigation: Require the calm-window and redline checks described by the artifact before triggering aftercare; route suspected violence, minors in conflict, dangerous objects, or injury signs to safety resources instead. <br>
+## Use Case:
 
+External users and smart-home developers can use this skill to process living-room, kitchen, or dining-room camera and microphone inputs for conflict event detection, calm-window assessment, aftercare recommendations, and historical report lookup. The skill is intended for household public spaces with consent and is not a substitute for counseling, emergency response, or domestic-safety services.
 
-## Reference(s): <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-family-conflict-aftercare-suggest-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, guidance] <br>
-**Output Format:** [Markdown report or JSON with conflict signals, aftercare recommendations, safety resources, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include historical report tables and safety-resource escalation guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Sensitive household audio/video may be processed through cloud services and report history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with consent from household members, verify backend endpoints, and confirm retention and report-access controls before installation.
+
+Risk: Hidden account and token persistence may affect privacy and access control.
+
+Mitigation: Review identity and token storage behavior before deployment and ensure users can understand and control report association.
+
+Risk: Deployment in private rooms, around minors, or in domestic safety situations can create serious privacy and safety concerns.
+
+Mitigation: Limit use to authorized household public spaces and require stronger controls and clear legal authorization for minors or domestic-safety contexts.
+
+Risk: Aftercare prompts during active or high-risk conflict could worsen a situation.
+
+Mitigation: Require calm-window gating for aftercare and route red-line indicators such as suspected physical violence, dangerous objects, injury signs, or minors present to safety-resource guidance.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-family-conflict-aftercare-suggest-analysis)
+- [API Documentation](artifact/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON-like structured analysis with event fields, recommendations, safety resources, report links, and optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local file or URL inputs, history listing, detail-level selection, and optional output-file writing.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact SKILL.md frontmatter lists 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

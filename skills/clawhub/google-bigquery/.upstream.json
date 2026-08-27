@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/google-bigquery",
   "slug": "google-bigquery",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781739753410,
-  "contentHash": "6a654581353bdbb92bd53d658e67a86143867392ec81415341999dd11dca7d87",
-  "fetchedAt": "2026-07-26T18:27:36.808Z"
+  "version": "1.1.0",
+  "updatedAt": 1787728801880,
+  "contentHash": "35ec290eaac68f206f2b8c0b48f2ba365c0e91c61dc3fe4f644e890cfcb78564",
+  "fetchedAt": "2026-08-27T18:28:27.848Z"
 }

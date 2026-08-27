@@ -1,41 +1,56 @@
-## Description: <br>
-Operate Bluesky through an OOMOL-connected account for profile lookup, post search, and confirmed text post creation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bluesky (bsky.social) connector for reading profiles, timelines, and posts, and creating authenticated text posts through OOMOL's oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to handle Bluesky tasks through the oo CLI, including reading profiles, searching posts, and creating text posts in an authenticated OOMOL-connected account after explicit confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create Bluesky posts in the connected account. <br>
-Mitigation: Confirm the exact payload and account effect with the user before running actions tagged as write. <br>
-Risk: Setup commands can install the oo CLI or start an OOMOL login flow. <br>
-Mitigation: Run installer, login, or connection steps only when a command fails because required setup is missing. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate Bluesky through an OOMOL-connected account, including profile lookup, home timeline reading, post search, and confirmed text posting.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Bluesky homepage](https://bsky.social) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and frontmatter metadata) <br>
+Risk: The skill can create Bluesky text posts from the authenticated account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact post text and intended account impact with the user before running any write action.
+
+Risk: First-time setup may require installing the oo CLI, signing in to OOMOL, and connecting a Bluesky account.
+
+Mitigation: Only perform setup after an auth, connection, or missing-command failure, and ensure the user understands the account connection step before proceeding.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-bluesky)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Bluesky](https://bsky.social)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector runs return JSON data with meta.executionId when executed through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

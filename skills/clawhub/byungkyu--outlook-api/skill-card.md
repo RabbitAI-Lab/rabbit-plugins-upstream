@@ -1,46 +1,66 @@
-## Description: <br>
-Outlook provides a Maton-managed Microsoft Graph integration for reading, sending, and managing Outlook mail, folders, calendar events, and contacts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Microsoft Outlook API integration with managed OAuth for reading, sending, and managing email, folders, calendar events, and contacts via Microsoft Graph through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to work with a connected Outlook account through Maton, including mailbox review, email sending, folder management, calendar event operations, and contact management. It is useful when a workflow needs Outlook access through CLI commands, direct API calls, or short code examples. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access and change email, folders, calendar events, and contacts in the connected Outlook account. <br>
-Mitigation: Install only if you trust Maton to broker Outlook access, and review recipients, message contents, folders, events, and contacts before approving write or delete actions. <br>
-Risk: When multiple Outlook accounts are connected, an action may target the wrong account. <br>
-Mitigation: Use a specific connection ID whenever more than one Outlook account is available. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to work with a user-authorized Outlook account: reviewing mailbox or calendar data, drafting or sending messages, and managing folders, events, and contacts through Maton.
 
-## Reference(s): <br>
-- [ClawHub Outlook skill listing](https://clawhub.ai/byungkyu/skills/outlook-api) <br>
-- [Microsoft Graph API overview](https://learn.microsoft.com/en-us/graph/api/overview) <br>
-- [Microsoft Graph Mail API](https://learn.microsoft.com/en-us/graph/api/resources/mail-api-overview) <br>
-- [Microsoft Graph Calendar API](https://learn.microsoft.com/en-us/graph/api/resources/calendar) <br>
-- [Microsoft Graph Contacts API](https://learn.microsoft.com/en-us/graph/api/resources/contact) <br>
-- [Microsoft Graph query parameters](https://learn.microsoft.com/en-us/graph/query-parameters) <br>
-- [Maton CLI manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with shell, HTTP, Python, and JavaScript examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Outlook OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The skill can read and modify mailbox, calendar, and contact data through user-authorized Maton access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Maton-mediated Outlook access is acceptable; use OAuth, connect only needed accounts and scopes, and require explicit confirmation before sending email, deleting items, or changing calendar/contact data.
+
+Risk: Using a long-lived Maton API key instead of OAuth increases the chance of credential exposure.
+
+Mitigation: Prefer the Maton CLI OAuth flow; use the raw HTTP/API-key fallback only when the CLI cannot be installed, and never print, log, or persist the key.
+
+Risk: Mailbox, calendar, and contact content can contain untrusted text.
+
+Mitigation: Treat fetched Outlook content as data, not instructions, and do not execute or interpolate it into shell commands or follow-up API actions without validation and user confirmation.
+
+## Reference(s):
+
+- [Outlook skill page](https://clawhub.ai/byungkyu/skills/outlook-api)
+- [Maton homepage](https://maton.ai)
+- [Microsoft Graph API overview](https://learn.microsoft.com/en-us/graph/api/overview)
+- [Microsoft Graph Mail API](https://learn.microsoft.com/en-us/graph/api/resources/mail-api-overview)
+- [Microsoft Graph Calendar API](https://learn.microsoft.com/en-us/graph/api/resources/calendar)
+- [Microsoft Graph Contacts API](https://learn.microsoft.com/en-us/graph/api/resources/contact)
+- [Microsoft Graph query parameters](https://learn.microsoft.com/en-us/graph/query-parameters)
+- [Maton docs](https://docs.maton.ai)
+- [Maton API reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, API calls, configuration, code, guidance]
+
+**Output Format:** [Markdown guidance with bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a user-authorized Outlook connection.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

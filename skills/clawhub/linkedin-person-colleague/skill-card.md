@@ -1,46 +1,62 @@
-## Description: <br>
-Find colleagues for a LinkedIn person using a company ID and personnel ID, then return colleague identifiers and job titles for recruiting, sales outreach, and account intelligence workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finds LinkedIn colleagues for a specified company ID and person ID using UpKuaJing data, returning colleague identifiers and job titles for organizational mapping and account intelligence.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Recruiters, sales teams, B2B lead-generation specialists, and account-intelligence researchers use this skill to discover colleagues and team relationships from UpKuaJing LinkedIn data when they already have the required company and person identifiers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: UpKuaJing API calls can incur fees. <br>
-Mitigation: Tell the user a query or top-up can cost money, check current pricing through the provided pricing command or link, and wait for explicit confirmation before executing paid actions. <br>
-Risk: Company and person identifiers are sent to UpKuaJing for LinkedIn colleague lookup. <br>
-Mitigation: Submit only identifiers needed for the user's approved recruiting, sales, or account-intelligence task, and avoid unnecessary personal data. <br>
-Risk: The API key may be stored in plaintext at ~/.upkuajing/.env. <br>
-Mitigation: Protect the local environment file, avoid sharing the key, and prefer secure environment management where available. <br>
+## Use Case:
 
+Recruiters, sales teams, and B2B account researchers use this skill to discover colleagues connected to a known LinkedIn person and company, map team relationships, and expand account intelligence with person IDs and job titles.
 
-## Reference(s): <br>
-- [Colleague List API Reference](references/linkedin-person-colleague-list-api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/linkedin-person-colleague) <br>
-- [UpKuaJing homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing API pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; colleague queries can return paginated results and fee information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata and skill metadata) <br>
+Risk: The skill uses a third-party UpKuaJing provider and stores an API key for authenticated requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the user is comfortable with UpKuaJing as the provider, protect the UPKUAJING_API_KEY value, and avoid sharing the key in prompts or logs.
+
+Risk: Colleague lookup and account top-up flows may incur paid API charges.
+
+Mitigation: Confirm current pricing and obtain explicit user confirmation before paid lookups, pagination requests, or top-up operations.
+
+Risk: Optional error reports may include troubleshooting context.
+
+Mitigation: Run error reporting only after user confirmation and avoid sending sensitive internal details in the report context.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/linkedin-person-colleague)
+- [UpKuaJing homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [UpKuaJing price description](https://www.upkuajing.com/web/openapi/price.html)
+- [LinkedIn person colleague list API](references/linkedin-person-colleague-list-api.md)
+- [Skill error report API](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a company ID and person ID; results are paginated with a cursor, and paid API calls require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

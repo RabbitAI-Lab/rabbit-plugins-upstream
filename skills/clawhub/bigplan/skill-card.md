@@ -1,42 +1,52 @@
-## Description: <br>
-BigPlan helps agents research a product direction by analyzing market, technology, supply-chain, pricing, and business-model factors, then producing high-, medium-, and low-tier product specification plans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BigPlan analyzes product directions across market, competitors, technology, and supply chain signals, then produces three high, medium, and low product specification plans for product research and planning.
 
-## Publisher: <br>
-[kobenfang](https://clawhub.ai/user/kobenfang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kobenfang](https://clawhub.ai/user/kobenfang)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Product managers, founders, and hardware planning teams use this skill to turn a product idea into a market, competitor, technology, supply-chain, cost, timeline, and positioning report. It is especially oriented toward hardware and electronics concepts that need high, medium, and low product specification options.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Broad product-analysis prompts may activate the skill and produce planning estimates that appear more precise than the available public evidence supports.
+
+Mitigation: Treat BOM costs, pricing, schedules, supplier assumptions, and market conclusions as planning references and validate them against current suppliers, customer research, and dated sources before making product decisions.
+
+Risk: The artifact notes that market data can lag search results by three to six months and that the current format is more suitable for hardware and electronics than pure software products.
+
+Mitigation: Check source dates, refresh market and competitor research before use, and add software-specific validation when applying the skill to software-only product ideas.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users, product managers, founders, and developers use this skill to structure product research for hardware-oriented product ideas. It produces market, technical, supply-chain, cost, pricing, timeline, and risk guidance to support product planning decisions. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Analysis, Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Broad product-analysis trigger phrases may activate the skill during general product questions. <br>
-Mitigation: Confirm that BigPlan-style product research is intended before relying on its output. <br>
-Risk: BOM, pricing, supplier, and timeline estimates may not be verified supplier quotes. <br>
-Mitigation: Treat estimates as research guidance and validate them against current suppliers, quotes, and market data before business decisions. <br>
-Risk: Market data and search-derived findings may be stale or incomplete. <br>
-Mitigation: Refresh key market, competitor, regulatory, and pricing data during review of the generated product plan. <br>
+**Output Format:** [Markdown product research report with structured market, technical, supply-chain, cost, risk, and product specification sections]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [BigPlan ClawHub page](https://clawhub.ai/kobenfang/bigplan) <br>
+**Other Properties Related to Output:** [Outputs may include estimated BOM costs, retail price ranges, development timelines, supplier assumptions, and market timing notes that require independent validation.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Structured Markdown product research report] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include market, technology, supply-chain, BOM, pricing, timeline, and risk estimates that should be verified before business use.] <br>
+1.0.5 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

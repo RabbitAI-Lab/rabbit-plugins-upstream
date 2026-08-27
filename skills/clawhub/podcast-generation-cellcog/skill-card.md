@@ -1,40 +1,54 @@
-## Description: <br>
-AI podcast generation and production powered by CellCog, including episode scripts, show notes, interview prep, audiograms, and finished MP3 podcast episodes from a prompt. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI podcast generation and production powered by CellCog, producing episode scripts, show notes, interview prep, audiograms, and full multi-voice podcast episodes with music, mastering, MP3 output, and chapter markers.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Podcast creators, producers, and agent users use this skill to plan, script, produce, document, and promote podcast episodes through CellCog. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Podcast prompts, scripts, guest research, and uploaded materials may be sent to CellCog under the user's API key. <br>
-Mitigation: Avoid including private guest data or unreleased business information unless that use is acceptable for the workflow. <br>
+## Use Case:
 
+External creators, podcast teams, and developers use this skill to ask an agent to plan, script, prepare, produce, document, and promote podcast episodes through CellCog.
 
-## Reference(s): <br>
-- [CellCog](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/podcast-generation-cellcog) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/nitishgargiitd) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python examples and setup commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog package, and CELLCOG_API_KEY; CellCog may return generated podcast assets such as finished MP3 files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release evidence) <br>
+Risk: Podcast prompts, guest details, scripts, and show branding information may be sent to CellCog when the skill uses CELLCOG_API_KEY.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review data handling requirements before use and avoid sending confidential or regulated material unless the CellCog service is approved for that data.
+
+Risk: The artifact is a guide and does not include the underlying CellCog SDK implementation.
+
+Mitigation: Verify CellCog dependency installation, setup materials, and API key configuration before relying on the skill in a production workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/cellcog/skills/podcast-generation-cellcog)
+- [CellCog homepage](https://cellcog.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with Python snippets and generated podcast assets such as MP3 audio and JSON chapter markers]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and CELLCOG_API_KEY; uses the CellCog external service for content and audio generation.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

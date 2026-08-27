@@ -59,7 +59,7 @@ description: >-
   （change-log 基线：拒学薄历史、只报持续越带、每次告警必引基线样本 —— 非黑盒异常检测）
 - 合规/信创：`compliance_mapping` `compliance_frameworks` `compliance_dengbao_levels`
   `compliance_report` `compliance_evidence_bundle`
-  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish` `stream_publish_event` `rca_narrate` `fleet_status` `fleet_incidents` `pdm_forecast`
+  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish` `uns_publish` `stream_publish_event` `rca_narrate` `fleet_status` `fleet_incidents` `pdm_forecast`
   `historian_push` `export_data`
 - 程序解读：`plc_program_outline` `plc_program_xref` `plc_program_section` `plc_program_visibility`（解读导出的 ST/AWL/L5X 程序,只读文件,强制引用行号）
 - 元：`protocols_supported`
@@ -79,4 +79,4 @@ description: >-
 | 协议 | 库(pin) | 规范/版本 | 覆盖 | 传输 | 自测 |
 |---|---|---|---|---|---|
 | SECS/GEM | `secsgem>=0.3,<1` | SECS-II(E5) · GEM(E30) · HSMS(E37/TCP)；SECS-I(E4) 待核实 | 面板/半导体设备 ↔ MES（HOST 侧） | HSMS/TCP | ✅ host+equipment 全软件自测；真机 待核实 |
-| OPC-UA | `asyncua>=1.0,<2` | OPC UA 1.0x（DA+HA+AC 子集）；FX/TSN 在路线 | 任意合规 Server | opc.tcp | ✅ mock+HDA |
+| OPC-UA | `asyncua>=2.0,<3` | OPC UA 1.0x（DA+HA+AC 子集）；FX/TSN 在路线 | 任意合规 Server | opc.tcp | ✅ mock+HDA |

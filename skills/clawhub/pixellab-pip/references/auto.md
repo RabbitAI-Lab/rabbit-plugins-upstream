@@ -4,7 +4,7 @@ Reference for the `auto` command and the cost-approval gate it governs. The gate
 
 ## Commands
 
-One word after the skill trigger; the `/`, `@`, `$` prefixes and the `on`/`off` variants all work, whether the app passes it as an argument or as prose:
+One short word after the skill trigger; the `/`, `@`, `$` prefixes and the `on`/`off` variants all work, whether the app passes it as an argument or as prose:
 
 ```text
 /pixellab-pip auto
@@ -12,11 +12,23 @@ One word after the skill trigger; the `/`, `@`, `$` prefixes and the `on`/`off` 
 $pixellab-pip auto off
 ```
 
-- `auto`: read the persisted state, toggle it, write the new state.
-- `auto on`: write `"auto": true`.
-- `auto off`: write `"auto": false`.
+- `auto`: run `python assets/bark.py auto` (reads, flips, and persists the value).
+- `auto on`: run `python assets/bark.py auto-on`.
+- `auto off`: run `python assets/bark.py auto-off`.
 
-Persist `auto` as a boolean in the same `pixellab-pip.json` that bark uses; follow the config location, precedence, read-only fallback, and field-preserving write rules in `references/bark.md`, writing `auto` without disturbing `bark`. Default is off: no config, no `auto` key, or a non-boolean value all mean off. After a successful write, reply `Auto is on.` or `Auto is off.` If persistence fails everywhere, say it could not be saved and do not claim it changed.
+`auto` is off by default: no config, no `auto` key, or a non-boolean value all mean off. After a successful write, reply `Auto is on.` or `Auto is off.`
+
+## Config
+
+`pixellab-pip.json` holds a boolean per setting:
+
+```json
+{
+  "auto": false
+}
+```
+
+The helper writes `auto` to `pixellab-pip.json` beside `SKILL.md` atomically, preserving the other key (notably `bark`). Do not hand-edit the JSON — the read-modify-write is what a short-turn agent corrupts (misreading the current value flips the toggle backwards). If Python is unavailable, hand-write `auto` as a boolean in that file, preserving `bark`; if the skill directory is read-only, write instead to `pixellab-pip/pixellab-pip.json` inside the OS user-config dir (`%APPDATA%` on Windows, `~/Library/Application Support` on macOS, `${XDG_CONFIG_HOME:-~/.config}` on Linux) — where the helper also reads it. Do not scan other config, home, shell, credential, or project directories for it. Do not rewrite config except when the user runs an explicit `auto` command. If persistence fails everywhere, say the setting could not be saved and do not claim it changed.
 
 ## The cost-approval gate
 
@@ -55,9 +67,9 @@ Filled example:
 >
 > 1. **`create_character`** · MCP · v3 · ~2 gen
 >    - `description`: "stout dwarf blacksmith, flat pixel art, leather apron" *(enhanced)*
->    - `size`: 48×48 · `n_directions`: 4 · `no_background`: true
+>    - `size`: 48 · `view`: side · `detail`: high detail
 > 2. **`animate_character`** · MCP · ~1 gen
->    - `action`: "walk" · `direction`: south · `template_animation_id`: `walking-8-frames`
+>    - `action_description`: "walk" · `directions`: ["south"] · `template_animation_id`: `walking-8-frames`
 >
 > Reply **yes / no**, or say what to **change**.
 > *Tip: reply `auto` (or `/pixellab-pip auto`) to run future jobs without this check.*
@@ -71,11 +83,17 @@ Handle the reply by intent, not literal tokens — infer what the user means fro
 
 Ask only once. After approval, run the whole approved chain without re-gating. If the plan later turns into a paid call the user did not approve — a different route, an extra retry or candidate, a batch expansion — that new spend needs its own brief approval. Free or local work (downloads, assembly, verification, balance/status reads, and the like) is never gated.
 
-### When auto is on — run, but remind
+### When auto is on — run, but show what's happening
 
-Skip the approval message. Once, early (before or at the first paid call), post a single quiet Markdown line that auto is on and how to turn it off, then proceed:
+Don't pause and don't gate per call, but still show the plan. Once, early (before or at the first paid call), post the same numbered list of predicted paid calls as the off-mode message above — identical per-call inputs, rough per-call and total cost, `(enhanced)`/`(rerouted)` flags, and the same localization rules. Only the framing changes: the ⚡ auto header replaces the 💳 approval header, the reply prompt is dropped, and a disable tip replaces the enable tip. Then run the whole chain without re-prompting.
 
-> ⚡ *Auto is on — running this job without a cost check. Disable anytime with `/pixellab-pip auto`.*
+Template — reuse the off-mode numbered blocks verbatim; only the header and footer differ:
+
+> ⚡ **Auto is on — running PixelLab job(s)** — **~{N} generations** *(or credits)*.
+>
+> {off-mode numbered per-call blocks, verbatim}
+>
+> *Disable auto with `/pixellab-pip auto`.*
 
 ## Scope
 

@@ -4,23 +4,28 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import shutil
 import subprocess
 import sys
+import zipfile
 from datetime import datetime, timezone
-from pathlib import Path
+from pathlib import Path, PurePosixPath
+from xml.etree import ElementTree as ET
 
 try:
     import yaml
     from jsonschema import Draft202012Validator, FormatChecker
 except ModuleNotFoundError as exc:  # pragma: no cover - clean-machine path
     missing = getattr(exc, "name", "PyYAML/jsonschema")
-    print(
-        f"缺少运行依赖 {missing}。请先执行：python -m pip install -r scripts/requirements.txt",
-        file=sys.stderr,
+    message = (
+        f"Missing runtime dependency {missing}. Run: python -m pip install -r scripts/requirements.txt"
+        if any(value == "en-US" for value in sys.argv) else
+        f"缺少运行依赖 {missing}。请先执行：python -m pip install -r scripts/requirements.txt"
     )
+    print(message, file=sys.stderr)
     raise SystemExit(4) from exc
 
 
@@ -31,6 +36,7 @@ if hasattr(sys.stderr, "reconfigure"):
 
 
 ROOT = Path(__file__).resolve().parents[1]
+MAINTAINER_DIR = ROOT / "maintainer"
 
 
 DELIVERY_DIRS = (
@@ -60,6 +66,106 @@ def current_version() -> str:
     return match.group(1) if match else "unknown"
 
 
+def validate_runtime_manifest(root: Path, expected_skill_version: str | None = None) -> list[str]:
+    """Validate the manifest contract and its closed set of runtime files."""
+    manifest_path = root / "runtime-manifest.json"
+    if not manifest_path.is_file():
+        return ["runtime-manifest.json is missing"]
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return [f"runtime manifest cannot be verified: {exc}"]
+    if not isinstance(manifest, dict):
+        return ["runtime manifest root must be an object"]
+
+    failures: list[str] = []
+    required = {"schema_version", "skill_version", "source_commit", "source_worktree_dirty", "files"}
+    missing_fields = sorted(required - set(manifest))
+    if missing_fields:
+        failures.append("runtime manifest missing required fields: " + ", ".join(missing_fields))
+    extra_fields = sorted(set(manifest) - required)
+    if extra_fields:
+        failures.append("runtime manifest has unsupported fields: " + ", ".join(extra_fields))
+    if manifest.get("schema_version") != "5.3.0":
+        failures.append("runtime manifest schema_version must be 5.3.0")
+    version = manifest.get("skill_version")
+    expected_version = expected_skill_version or current_version()
+    if not isinstance(version, str) or version != expected_version:
+        failures.append(f"runtime manifest skill_version must match {expected_version}")
+    source_commit = manifest.get("source_commit")
+    dirty = manifest.get("source_worktree_dirty")
+    if not isinstance(source_commit, str) or re.fullmatch(r"(?:[0-9a-f]{40}|[0-9a-f]{64}|uncommitted)(?:-dirty)?", source_commit) is None:
+        failures.append("runtime manifest source_commit must be a full Git SHA or uncommitted, with an optional -dirty suffix")
+    if not isinstance(dirty, bool):
+        failures.append("runtime manifest source_worktree_dirty must be boolean")
+    elif isinstance(source_commit, str) and bool(source_commit.endswith("-dirty")) != dirty:
+        failures.append("runtime manifest source_commit and source_worktree_dirty disagree")
+
+    declared: dict[str, dict] = {}
+    files = manifest.get("files")
+    if not isinstance(files, list) or not files:
+        failures.append("runtime manifest files must be a non-empty array")
+        files = []
+    for index, item in enumerate(files):
+        if not isinstance(item, dict):
+            failures.append(f"runtime manifest files[{index}] must be an object")
+            continue
+        item_fields = {"path", "size", "sha256"}
+        if set(item) != item_fields:
+            failures.append(f"runtime manifest files[{index}] must contain exactly path, size and sha256")
+            continue
+        relative = item.get("path")
+        normalized = PurePosixPath(relative) if isinstance(relative, str) else None
+        if (
+            not relative or normalized is None or normalized.is_absolute()
+            or normalized.as_posix() != relative or ".." in normalized.parts
+            or "\\" in relative or relative == "runtime-manifest.json"
+        ):
+            failures.append(f"runtime manifest files[{index}] has unsafe path: {relative!r}")
+            continue
+        if relative in declared:
+            failures.append(f"runtime manifest has duplicate path: {relative}")
+            continue
+        size, digest = item.get("size"), item.get("sha256")
+        if isinstance(size, bool) or not isinstance(size, int) or size < 0:
+            failures.append(f"runtime manifest has invalid size: {relative}")
+            continue
+        if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
+            failures.append(f"runtime manifest has invalid sha256: {relative}")
+            continue
+        declared[relative] = item
+
+    actual: dict[str, Path] = {}
+    try:
+        for path in root.rglob("*"):
+            if path.is_symlink():
+                failures.append(f"runtime contains unsupported symlink: {path.relative_to(root).as_posix()}")
+            elif path.is_file() and path != manifest_path:
+                actual[path.relative_to(root).as_posix()] = path
+    except OSError as exc:
+        failures.append(f"runtime files cannot be inventoried: {exc}")
+    missing_paths = sorted(set(declared) - set(actual))
+    extra_paths = sorted(set(actual) - set(declared))
+    if missing_paths:
+        preview = ", ".join(missing_paths[:5])
+        suffix = f" (+{len(missing_paths) - 5} more)" if len(missing_paths) > 5 else ""
+        failures.append(f"runtime manifest declares {len(missing_paths)} missing file(s): {preview}{suffix}")
+    if extra_paths:
+        preview = ", ".join(extra_paths[:5])
+        suffix = f" (+{len(extra_paths) - 5} more)" if len(extra_paths) > 5 else ""
+        failures.append(f"runtime manifest does not cover {len(extra_paths)} actual file(s): {preview}{suffix}")
+    for relative in sorted(set(actual) & set(declared)):
+        try:
+            data = actual[relative].read_bytes()
+        except OSError as exc:
+            failures.append(f"manifest file cannot be read: {relative}: {exc}")
+            continue
+        item = declared[relative]
+        if len(data) != item["size"] or hashlib.sha256(data).hexdigest() != item["sha256"]:
+            failures.append(f"manifest file drift: {relative}")
+    return failures
+
+
 def merge_markdown_template(base: str, overlay: str) -> str:
     """Replace exact H2 sections from a small local overlay; keep all other official sections."""
     directive = re.match(r"\s*<!--\s*extends:\s*unified-requirement-prd-template(?:\.md)?\s*-->\s*", overlay, re.I)
@@ -83,6 +189,142 @@ def merge_markdown_template(base: str, overlay: str) -> str:
         else:
             result = result.rstrip() + "\n\n" + replacement
     return result.rstrip() + "\n"
+
+
+def project_human(args: argparse.Namespace) -> int:
+    """Create a human-distribution Markdown projection without machine frontmatter."""
+    try:
+        raw = args.input.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        print(f"BLOCKED: 无法读取权威 Markdown：{exc}" if args.language == "zh-CN" else f"BLOCKED: cannot read canonical Markdown: {exc}")
+        return 2
+    lines = raw.lstrip("\ufeff").splitlines(keepends=True)
+    if lines and lines[0].strip() == "---":
+        closing = next((index for index, line in enumerate(lines[1:], 1) if line.strip() in {"---", "..."}), None)
+        if closing is None:
+            print("BLOCKED: YAML frontmatter 未闭合，不能安全生成分发副本" if args.language == "zh-CN" else "BLOCKED: YAML front matter is not closed; no safe distribution projection can be produced")
+            return 2
+        body = "".join(lines[closing + 1:])
+    else:
+        body = "".join(lines)
+    body = re.sub(r"<!--\s*ADS:[\s\S]*?-->", "", body, flags=re.I)
+    body = re.sub(r"\n{3,}", "\n\n", body).lstrip()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(body, encoding="utf-8", newline="\n")
+    if args.language == "zh-CN":
+        print(f"PASS: 已生成不含机器 frontmatter 的人类分发 Markdown：{args.output}")
+    else:
+        print(f"PASS: wrote human-distribution Markdown without machine front matter: {args.output}")
+    return 0
+
+
+def _docx_paragraphs(path: Path) -> list[str]:
+    paragraphs: list[str] = []
+    with zipfile.ZipFile(path) as archive:
+        members = [
+            name for name in archive.namelist()
+            if name == "word/document.xml" or re.fullmatch(r"word/(?:header|footer)\d+\.xml", name)
+        ]
+        if "word/document.xml" not in members:
+            raise ValueError("word/document.xml is missing")
+        namespace = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+        for member in members:
+            root = ET.fromstring(archive.read(member))
+            for paragraph in root.iter(f"{namespace}p"):
+                text = "".join(node.text or "" for node in paragraph.iter(f"{namespace}t"))
+                if text.strip():
+                    paragraphs.append(text.strip())
+    return paragraphs
+
+
+SECRET_ASSIGNMENT_RE = re.compile(
+    r'''(?ix)["']?(password|passwd|pwd|api[_-]?key|access[_-]?token|refresh[_-]?token|client[_-]?secret|secret[_-]?key)["']?\s*[:=]\s*["']?([^\s"';,]{8,})'''
+)
+BEARER_SECRET_RE = re.compile(r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]{12,}")
+PRIVATE_KEY_RE = re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")
+KNOWN_TOKEN_RE = re.compile(r"\b(?:gh[pousr]_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9_-]{20,})\b")
+
+
+def _looks_like_secret_reference(value: str) -> bool:
+    normalized = value.strip("[](){}<>'\" ").casefold()
+    if not normalized:
+        return True
+    safe_markers = ("redacted", "masked", "placeholder", "example", "dummy", "changeme", "secret-", "vault://", "env://", "${")
+    return any(marker in normalized for marker in safe_markers) or set(normalized) <= {"*", "x", "-", "_"}
+
+
+def _secret_issues(paragraphs: list[str]) -> list[str]:
+    """Return location-only findings; never echo a suspected secret value."""
+    findings: list[str] = []
+    for index, paragraph in enumerate(paragraphs, 1):
+        if PRIVATE_KEY_RE.search(paragraph):
+            findings.append(f"paragraph {index}: probable private key material")
+        if BEARER_SECRET_RE.search(paragraph):
+            findings.append(f"paragraph {index}: probable bearer credential")
+        if KNOWN_TOKEN_RE.search(paragraph):
+            findings.append(f"paragraph {index}: probable provider token")
+        for match in SECRET_ASSIGNMENT_RE.finditer(paragraph):
+            if not _looks_like_secret_reference(match.group(2)):
+                findings.append(f"paragraph {index}: probable plaintext credential in {match.group(1)}")
+    return findings
+
+
+def check_distribution(args: argparse.Namespace) -> int:
+    """Block metadata, raw Markdown, or probable plaintext secrets in a distribution copy."""
+    try:
+        if args.document.suffix.casefold() == ".docx":
+            paragraphs = _docx_paragraphs(args.document)
+        elif args.document.suffix.casefold() in {".md", ".markdown", ".txt", ".html", ".htm", ".yaml", ".yml", ".json"}:
+            paragraphs = [line.strip() for line in args.document.read_text(encoding="utf-8").splitlines() if line.strip()]
+        else:
+            raise ValueError("supported formats: .docx, .md, .markdown, .txt, .html, .yaml, .yml, .json")
+    except (OSError, UnicodeError, ValueError, zipfile.BadZipFile, ET.ParseError) as exc:
+        message = f"分发副本不可读取：{exc}" if args.language == "zh-CN" else f"Distribution copy is not readable: {exc}"
+        payload = {"status": "BLOCKED", "document": str(args.document), "issues": [message]}
+        print(json.dumps(payload, ensure_ascii=False, indent=2) if args.format == "json" else f"BLOCKED: {message}")
+        return 2
+
+    issues: list[str] = []
+    head = paragraphs[:40]
+    machine_key = re.compile(
+        r"^(?:document_language|language_source|delivery_level|schema_version|artifact|open_p0_unknown_ids|governance|unknowns|decisions)\s*:",
+        re.I,
+    )
+    for index, paragraph in enumerate(head, 1):
+        if paragraph == "---" or machine_key.search(paragraph):
+            issues.append(f"paragraph {index}: machine frontmatter leaked")
+    markdown_patterns = () if args.document.suffix.casefold() in {".md", ".markdown"} else (
+        (re.compile(r"^#{1,6}\s+"), "raw Markdown heading"),
+        (re.compile(r"```|~~~"), "raw Markdown fence"),
+        (re.compile(r"\*\*[^*]+\*\*|`[^`]+`"), "raw Markdown emphasis/code"),
+        (re.compile(r"^\|.*\|$"), "raw Markdown table row"),
+    )
+    for index, paragraph in enumerate(paragraphs, 1):
+        for pattern, label in markdown_patterns:
+            if pattern.search(paragraph):
+                issues.append(f"paragraph {index}: {label}")
+                break
+    issues.extend(_secret_issues(paragraphs))
+    issue_limit = max(0, args.max_issues)
+    displayed_issues = issues if issue_limit == 0 else issues[:issue_limit]
+    payload = {
+        "status": "BLOCKED" if issues else "PASS",
+        "document": str(args.document),
+        "paragraphs_checked": len(paragraphs),
+        "issue_count": len(issues),
+        "issues_truncated": len(displayed_issues) < len(issues),
+        "issues": displayed_issues,
+        "not_proven": ["layout/rendering", "page breaks", "fonts", "visual fidelity", "absence of encoded/image/contextual secrets"],
+    }
+    if args.format == "json":
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+    elif issues:
+        print("BLOCKED: 分发副本仍含机器元数据、未转换 Markdown 或疑似明文凭据" if args.language == "zh-CN" else "BLOCKED: distribution copy still contains machine metadata, raw Markdown, or a probable plaintext credential")
+        for issue in displayed_issues:
+            print(f"- {issue}")
+    else:
+        print("PASS: 分发副本未发现机器 frontmatter、原始 Markdown 或常见明文凭据；仍需渲染与人工隐私复核" if args.language == "zh-CN" else "PASS: no machine front matter, raw Markdown, or common plaintext credential pattern found; rendered layout and human privacy review remain required")
+    return 2 if issues else 0
 
 
 def init_custom(args: argparse.Namespace) -> int:
@@ -113,7 +355,8 @@ def init_custom(args: argparse.Namespace) -> int:
         target / "templates" / "my-team.md": "<!-- extends: unified-requirement-prd-template.md -->\n\n## 项目私有补充\n\n待补充团队特有的评审或审计要求。\n",
         target / "validators" / "my-team.yaml": (
             "rules:\n  - id: CUST-EXAMPLE-001\n    artifact: prd\n    assertion: must_match\n"
-            "    severity: GAP\n    pattern: '项目私有补充'\n    message: PRD 缺少团队私有补充章节\n"
+            "    domains: [my-team]\n    severity: GAP\n    pattern: '项目私有补充'\n"
+            "    message: PRD 缺少团队私有补充章节\n"
         ),
         target / "learning" / "candidates" / "project-local" / "CAND-EXAMPLE.yaml": (
             "schema_version: 5.3.0\ncandidate_id: CAND-MY-TEAM-001\ndomain: my-team\n"
@@ -257,47 +500,71 @@ def init_requirements(args: argparse.Namespace) -> int:
 
 
 def run_check(args: argparse.Namespace) -> int:
-    commands: list[list[str]] = [
+    if not MAINTAINER_DIR.is_dir():
+        if args.profile == "release":
+            print(
+                "BLOCKED: release assurance is maintainer-only and is not shipped in the runtime package; "
+                "run it from a source checkout"
+            )
+            return 2
+        failures = validate_runtime_manifest(ROOT)
+        for schema_path in sorted((ROOT / "schemas").glob("*.schema.json")):
+            try:
+                Draft202012Validator.check_schema(json.loads(schema_path.read_text(encoding="utf-8")))
+            except Exception as exc:  # bounded local schema audit; keep the exact filename
+                failures.append(f"invalid schema {schema_path.name}: {exc}")
+        config_result = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "validators" / "validate_spec_config.py"), str(ROOT / "examples" / "spec.config.example.yaml")],
+            cwd=ROOT,
+            text=True,
+            encoding="utf-8",
+            capture_output=True,
+        )
+        if config_result.returncode:
+            failures.append("spec config self-check failed: " + (config_result.stdout + config_result.stderr).strip())
+        if args.product_truth:
+            truth_result = subprocess.run(
+                [sys.executable, str(ROOT / "scripts" / "validators" / "validate_product_truth.py"), str(args.product_truth)],
+                cwd=Path.cwd(), text=True, encoding="utf-8", capture_output=True,
+            )
+            if truth_result.returncode:
+                failures.append("product truth validation failed: " + (truth_result.stdout + truth_result.stderr).strip())
+        if failures:
+            print(f"BLOCKED: runtime fast check found {len(failures)} issue(s)")
+            for failure in failures:
+                print("- " + failure)
+            return 2
+        print("PASS: runtime manifest, JSON Schemas and spec config are internally consistent")
+        print("NOT_PROVEN: maintainer release suite; project artifacts; browser behavior; business correctness")
+        return 0
+    fast_commands: list[list[str]] = [
         [sys.executable, "maintainer/tools/validators/validate_v5_architecture.py"],
         [sys.executable, "scripts/validators/validate_spec_config.py", "examples/spec.config.example.yaml"],
         [sys.executable, "maintainer/tools/validators/validate_runtime_rule_uniqueness.py"],
         [sys.executable, "maintainer/tools/validators/validate_domain_coverage.py"],
+        [sys.executable, "maintainer/tools/validators/validate_eval_catalog.py"],
+        [sys.executable, "maintainer/checks/check_v511_runtime_budget.py"],
+        [sys.executable, "maintainer/checks/check_v540_readme_commands.py"],
+        [sys.executable, "maintainer/tests/test_human_first_stage0_contracts.py"],
+        [sys.executable, "maintainer/tests/test_product_experience.py"],
+        [sys.executable, "maintainer/tools/validators/validate_release_claims.py"],
+    ]
+    release_only_commands: list[list[str]] = [
         [sys.executable, "maintainer/tools/validators/validate_domain_sources.py"],
         [sys.executable, "maintainer/tools/validators/validate_domain_contracts.py"],
-        [sys.executable, "maintainer/tools/validators/validate_eval_catalog.py"],
-        [sys.executable, "maintainer/tools/validators/validate_github_eval_cases.py"],
-        [sys.executable, "maintainer/tests/test_v502_coding_contract.py"],
-        [sys.executable, "maintainer/tests/test_v502_progressive_truth.py"],
-        [sys.executable, "maintainer/tests/test_v510_requirement_management.py"],
-        [sys.executable, "maintainer/tests/test_v510_unified_prd.py"],
-        [sys.executable, "maintainer/tests/test_v510_semantic_guards.py"],
-        [sys.executable, "maintainer/tests/test_v510_lightweight_gate.py"],
-        [sys.executable, "maintainer/tests/test_v510_industry_assurance.py"],
-        [sys.executable, "maintainer/tests/test_v511_runtime_budget.py"],
-        [sys.executable, "maintainer/tests/test_v511_domain_assurance.py"],
-        [sys.executable, "maintainer/tests/test_v515_page_delivery_contract.py"],
-        [sys.executable, "maintainer/tests/test_v516_ai_applicability.py"],
-        [sys.executable, "maintainer/tests/test_v530_contracts.py"],
-        [sys.executable, "maintainer/tests/test_v540_stage_contracts.py"],
-        [sys.executable, "maintainer/tests/test_v540_readme_commands.py"],
+        [sys.executable, "maintainer/checks/check_v502_progressive_truth.py"],
+        [sys.executable, "maintainer/checks/check_v510_requirement_management.py"],
+        [sys.executable, "maintainer/checks/check_v510_unified_prd.py"],
+        [sys.executable, "maintainer/checks/check_v510_lightweight_gate.py"],
+        [sys.executable, "maintainer/checks/check_v510_industry_assurance.py"],
+        [sys.executable, "maintainer/checks/check_v511_domain_assurance.py"],
+        [sys.executable, "maintainer/checks/check_v515_page_delivery_contract.py"],
+        [sys.executable, "maintainer/checks/check_v530_contracts.py"],
+        [sys.executable, "maintainer/checks/check_v540_stage_contracts.py"],
         [sys.executable, "scripts/validators/validate_requirement_patterns.py", "references/patterns/common-requirement-patterns.yaml"],
-        [
-            sys.executable,
-            "maintainer/tools/build_github_validation_matrix.py",
-            "--check",
-            "maintainer/evals/evidence/github-validation-matrix.yaml",
-        ],
-        [sys.executable, "maintainer/tools/validators/validate_release_claims.py"],
-        [sys.executable, "maintainer/tools/build_runtime_package.py", "--check"],
-        [sys.executable, "maintainer/tests/test_context_planning.py"],
-        [sys.executable, "maintainer/tests/test_evaluation_metrics.py"],
-        [sys.executable, "maintainer/tests/test_execution_state.py"],
-        [sys.executable, "maintainer/tests/test_cli_init.py"],
-        [sys.executable, "maintainer/tests/test_v5_agent_deadlock.py"],
-        [sys.executable, "maintainer/tests/test_v5_capsule_pollution.py"],
-        [sys.executable, "maintainer/tests/test_v5_change_drift.py"],
-        [sys.executable, "maintainer/tests/test_v5_schema_grill.py"],
-        [sys.executable, "maintainer/tests/test_v5_status.py"],
+        [sys.executable, "maintainer/checks/check_human_review_contracts.py"],
+        [sys.executable, "maintainer/checks/check_execution_state.py"],
+        [sys.executable, "maintainer/tests/test_runtime_resilience.py"],
         [
             sys.executable,
             "scripts/validators/validate_project_domain_capsule.py",
@@ -328,11 +595,8 @@ def run_check(args: argparse.Namespace) -> int:
             "maintainer/examples/publishing-learning-v5/delivery/projections/unified-prd.md",
         ],
         [sys.executable, "scripts/validators/validate_unified_prd.py", "maintainer/examples/publishing-learning-v5/delivery/projections/unified-prd.md"],
-        [sys.executable, "maintainer/tools/score_evaluation_run.py", "maintainer/evals/runs/chatwoot-voice-requirement-v5.yaml", "--quiet"],
-        [sys.executable, "maintainer/tools/score_evaluation_run.py", "maintainer/evals/runs/saleor-channel-id-design-v5.yaml", "--quiet"],
-        [sys.executable, "maintainer/tools/score_evaluation_run.py", "maintainer/evals/runs/openedx-reindex-design-v5.yaml", "--quiet"],
-        [sys.executable, "maintainer/tools/score_evaluation_run.py", "maintainer/evals/runs/orangehrm-password-policy-handoff-v5.yaml", "--quiet"],
     ]
+    commands = fast_commands if args.profile == "fast" else fast_commands + release_only_commands
     if args.product_truth:
         commands.append(
             [sys.executable, "scripts/validators/validate_product_truth.py", str(args.product_truth)]
@@ -355,11 +619,6 @@ def run_script(script: str, values: list[str]) -> int:
         [sys.executable, str(ROOT / "scripts" / script), *values],
         cwd=Path.cwd(), text=True,
     ).returncode
-
-
-def run_repo_tool(relative: str, values: list[str]) -> int:
-    """Run an explicitly located repository tool without mixing it into runtime scripts."""
-    return subprocess.run([sys.executable, str(ROOT / relative), *values], cwd=ROOT, text=True).returncode
 
 
 def plan_context(args: argparse.Namespace) -> int:
@@ -400,31 +659,15 @@ def build_trace(args: argparse.Namespace) -> int:
     return run_script("build_traceability_ledger.py", ["--truth", str(args.truth), "--output", str(args.output), "--baseline-version", args.baseline_version])
 
 
-def score_eval(args: argparse.Namespace) -> int:
-    values = [str(args.run)]
-    if args.output:
-        values.extend(["--output", str(args.output)])
-    if args.require_release_pass:
-        values.append("--require-release-pass")
-    if args.quiet:
-        values.append("--quiet")
-    return run_repo_tool("maintainer/tools/score_evaluation_run.py", values)
-
-
-def compare_evals(args: argparse.Namespace) -> int:
-    values = ["--baseline", str(args.baseline), "--candidate", str(args.candidate)]
-    if args.output:
-        values.extend(["--output", str(args.output)])
-    return run_repo_tool("maintainer/tools/compare_evaluation_runs.py", values)
-
-
 def status_report(args: argparse.Namespace) -> int:
+    evals_dir = MAINTAINER_DIR / "evals"
+    if not evals_dir.is_dir():
+        print("BLOCKED: maintainer evaluation assets are not shipped in the runtime package")
+        print(f"runtime skill version: {current_version()}")
+        return 2
     coverage = yaml.safe_load((ROOT / "references/domain-coverage.yaml").read_text(encoding="utf-8"))
     fixtures = yaml.safe_load((ROOT / "maintainer/evals/domain-fixtures.yaml").read_text(encoding="utf-8"))
-    github_cases = yaml.safe_load((ROOT / "maintainer/evals/github-cases.yaml").read_text(encoding="utf-8"))
-    matrix = yaml.safe_load((ROOT / "maintainer/evals/evidence/github-validation-matrix.yaml").read_text(encoding="utf-8"))
     catalog = yaml.safe_load((ROOT / "maintainer/evals/eval-catalog.yaml").read_text(encoding="utf-8"))
-    lifecycle_forward = yaml.safe_load((ROOT / "maintainer/evals/evidence/v517-lifecycle-forward-test-2026-07-15.yaml").read_text(encoding="utf-8"))
     maturity: dict[str, int] = {}
     practice: dict[str, int] = {}
     for domain in coverage.get("domains", []):
@@ -450,32 +693,39 @@ def status_report(args: argparse.Namespace) -> int:
             "contract_fixtures_passed": sum(
                 fixture.get("status") == "passed" for fixture in fixtures.get("fixtures", [])
             ),
-            "github_cases": len(github_cases.get("cases", [])),
-            "lifecycle_forward_test_cases": len(lifecycle_forward.get("cases", [])),
             "catalog_status": eval_status,
-            "github_matrix": matrix.get("summary", {}),
+        },
+        "trace_release_proxy": {
+            "status": "ready_with_limits",
+            "public_reference": "https://skillhub.cn/tutorials#trace-evaluation",
+            "boundary": "local evidence checklist only; not a SkillHub score or 4.9 prediction",
+            "dimensions": {
+                "trust": "passed", "reliability": "passed", "adaptability": "passed",
+                "convention": "passed", "effectiveness": "partial",
+            },
+            "effectiveness_limit": "three private real-project calibration shapes and deterministic regressions exposed and repaired contract gaps, but fresh blind Skill-on/Skill-off repetitions, controlled token/time accounting and versioned human ratings remain incomplete",
+            "private_calibration": {
+                "sample_shapes": ["same-baseline review A/B", "brownfield review retrofit", "multi-surface prototype acceptance"],
+                "publication": "anonymized aggregate only; raw files and customer/project names excluded",
+            },
         },
         "known_limitations": [
             "five domain methods have owner-attested production practice; all built-in packs pass deterministic contract checks but fresh-agent/expert maturity remains separate",
-            "GitHub 45 stage cells now have exploratory evidence, but every cell remains partial and zero cells are release-passed because independent repetitions, token measurements and real coding acceptance are absent",
+            "v5.4.7 review-workspace and adversarial contract probes are deterministic; isolated no-skill comparison, fresh-agent repetitions and versioned user feedback remain separate evidence",
             "domain expert, customer, production, legal, safety, and financial correctness are not proven",
-            "lifecycle simulations and private brownfield calibration expose method gaps but do not prove implementation or customer acceptance",
+            "deterministic fixtures and private brownfield calibration expose method gaps but do not prove implementation or customer acceptance",
         ],
     }
     if args.format == "yaml":
         rendered = yaml.safe_dump(report, allow_unicode=True, sort_keys=False)
     else:
-        matrix_summary = report["evaluation_assets"]["github_matrix"]
         rendered = (
             "# AI Delivery Spec Status\n\n"
             f"- Version: `{report['skill_version']}` (`pure_v5`)\n"
             f"- Domain packs: {report['domain_packs']['count']}; maturity: `{maturity}`\n"
             f"- Delivery practice: `{practice}`\n"
             f"- Production claims allowed by built-in packs: {report['domain_packs']['production_claims_allowed']}\n"
-            f"- Domain fixtures: {report['evaluation_assets']['domain_fixtures']}\n"
-            f"- Pinned GitHub cases: {report['evaluation_assets']['github_cases']}\n"
-            f"- GitHub stage cells: passed={matrix_summary.get('passed', 0)}, "
-            f"partial={matrix_summary.get('partial', 0)}, not_run={matrix_summary.get('not_run', 0)}\n\n"
+            f"- Domain fixtures: {report['evaluation_assets']['domain_fixtures']}\n\n"
             "## Known limitations\n\n"
             + "".join(f"- {item}\n" for item in report["known_limitations"])
         )
@@ -512,6 +762,7 @@ def quality_gate(args: argparse.Namespace) -> int:
         values = [
             "gate", "--profile", args.profile, "--format", args.format,
             "--diagnostics", args.diagnostics, "--max-findings", str(args.max_findings),
+            "--language", args.language,
         ]
         for artifact in args.artifact:
             values.extend(["--artifact", str(artifact)])
@@ -521,28 +772,44 @@ def quality_gate(args: argparse.Namespace) -> int:
         and args.requirement
         and args.requirement.suffix.casefold() in {".md", ".markdown"}
     ):
-        print(
-            "BLOCKED: --profile requirement 只校验 YAML 需求登记册；"
-            "Markdown 需求卡或 PRD 请改用："
-            f"python scripts/ai_delivery_spec_cli.py gate --profile prd --prd \"{args.requirement}\""
-        )
+        language = args.language
+        if language == "auto" and args.requirement.is_file():
+            sample = args.requirement.read_text(encoding="utf-8", errors="ignore")[:4000]
+            match = re.search(r"^document_language:\s*([^\s#]+)", sample, re.M)
+            language = "en-US" if match and match.group(1).casefold().startswith("en") else "zh-CN"
+        if language == "en-US":
+            print(
+                "BLOCKED: --profile requirement validates YAML requirement registers only. "
+                "For a Markdown requirement card or PRD, use: "
+                f"python scripts/ai_delivery_spec_cli.py gate --profile prd --prd \"{args.requirement}\" --language en-US"
+            )
+        else:
+            print(
+                "BLOCKED: --profile requirement 只校验 YAML 需求登记册；"
+                "Markdown 需求卡或 PRD 请改用："
+                f"python scripts/ai_delivery_spec_cli.py gate --profile prd --prd \"{args.requirement}\" --language zh-CN"
+            )
         return 2
     values = [
         "--profile", args.profile, "--level", args.level, "--stage", args.stage,
         "--format", args.format, "--diagnostics", args.diagnostics,
-        "--max-findings", str(args.max_findings),
+        "--max-findings", str(args.max_findings), "--language", args.language,
     ]
     for scope_ref in args.scope_ref:
         values.extend(["--scope-ref", scope_ref])
+    for domain in args.domain:
+        values.extend(["--domain", domain])
     if args.custom_root:
         values.extend(["--custom-root", str(args.custom_root)])
     option_names = {
         "requirement": "--requirement",
         "prd": "--prd",
         "prototype": "--prototype",
+        "prototype_baseline": "--prototype-baseline",
         "inventory": "--inventory",
         "manifest": "--manifest",
         "acceptance_run": "--acceptance-run",
+        "review_record": "--review-record",
     }
     for name, option in option_names.items():
         value = getattr(args, name)
@@ -551,6 +818,9 @@ def quality_gate(args: argparse.Namespace) -> int:
                 values.extend([option, str(item)])
         elif value:
             values.extend([option, str(value)])
+    if args.profile == "requirement":
+        for artifact in args.artifact:
+            values.extend(["--register", str(artifact)])
     return run_script("quality_gate.py", values)
 
 
@@ -750,16 +1020,49 @@ def assess_candidate(args: argparse.Namespace) -> int:
 
 
 def explain_finding(args: argparse.Namespace) -> int:
-    from quality_gate import guidance_for, repair_example_for
+    from quality_gate import (
+        english_guidance_for,
+        english_repair_example_for,
+        finding_code_match,
+        guidance_for,
+        repair_example_for,
+    )
 
-    cause, how_to_fix = guidance_for(args.code)
-    example = repair_example_for(args.code)
-    payload = {"code": args.code, "cause": cause, "how_to_fix": how_to_fix, "repair_example": example}
+    code = args.code.strip().upper()
+    match = finding_code_match(code)
+    if match == "unknown":
+        cause_zh = "未知 finding code：当前版本不认识该代码，也未命中任何已知代码家族。"
+        fix_zh = "检查拼写和 Skill/CLI 版本；先重跑原门禁并复制其真实 code，不要依据通用文案猜测修复。"
+        example_zh = "运行 gate --format json，从 findings[].code 复制完整代码后再次执行 explain-finding。"
+        cause_en = "This finding code is unknown to the current Skill/CLI version."
+        fix_en = "Check spelling and version, rerun the original gate, and copy its real code instead of guessing from generic guidance."
+        example_en = "Run gate --format json, copy the complete findings[].code, then call explain-finding again."
+    else:
+        cause_zh, fix_zh = guidance_for(code)
+        example_zh = repair_example_for(code)
+        cause_en, fix_en = english_guidance_for(code)
+        example_en = english_repair_example_for(code)
+    english = args.language == "en-US"
+    payload = {
+        "code": code,
+        "recognized": match != "unknown",
+        "match": match,
+        "output_language": "en-US" if english else "zh-CN",
+        "cause": cause_en if english else cause_zh,
+        "how_to_fix": fix_en if english else fix_zh,
+        "repair_example": example_en if english else example_zh,
+        "cause_zh": cause_zh, "fix_zh": fix_zh, "repair_example_zh": example_zh,
+        "cause_en": cause_en, "fix_en": fix_en, "repair_example_en": example_en,
+    }
     if args.format == "json":
         print(json.dumps(payload, ensure_ascii=False, indent=2))
     else:
-        print(f"{args.code}\n原因: {cause}\n修复: {how_to_fix}\n示例: {example}")
-    return 0
+        labels = ("Cause", "Fix", "Example") if english else ("原因", "修复", "示例")
+        print(
+            f"{code}\n{labels[0]}: {payload['cause']}\n"
+            f"{labels[1]}: {payload['how_to_fix']}\n{labels[2]}: {payload['repair_example']}"
+        )
+    return 2 if match == "unknown" else 0
 
 
 def resume_execution(args: argparse.Namespace) -> int:
@@ -778,10 +1081,16 @@ def resume_execution(args: argparse.Namespace) -> int:
             return 2
         state = max(set(candidates), key=lambda path: path.stat().st_mtime)
         print(f"INFO: 自动选择最近快照 {state}")
+    if not state.is_file():
+        print(f"BLOCKED: 执行快照不存在或不是文件：{state}")
+        return 2
     return run_script("manage_execution_state.py", ["resume", "--state", str(state)])
 
 
 def main() -> int:
+    help_language = next((sys.argv[index + 1] for index, value in enumerate(sys.argv[:-1]) if value == "--language"), "zh-CN")
+    english_help = help_language == "en-US"
+    gate_help = lambda en, zh: en if english_help else zh
     parser = argparse.ArgumentParser(prog="ai_delivery_spec_cli.py")
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -811,27 +1120,45 @@ def main() -> int:
     custom.add_argument("--force", action="store_true")
     custom.set_defaults(func=init_custom)
 
-    check = sub.add_parser("check", help="Run the maintainer assurance suite and optional artifact validators")
+    human = sub.add_parser("project-human", help=gate_help("Project canonical Markdown into a human-distribution Markdown copy", "将权威 Markdown 投影为不含机器 frontmatter 的人类分发副本"))
+    human.add_argument("--input", type=Path, required=True)
+    human.add_argument("--output", type=Path, required=True)
+    human.add_argument("--language", choices=["zh-CN", "en-US"], default="zh-CN")
+    human.set_defaults(func=project_human)
+
+    distribution = sub.add_parser("check-distribution", help=gate_help("Check a DOCX/text distribution copy for metadata, raw-Markdown, or probable credential leakage", "检查 DOCX/文本分发副本是否泄漏机器元数据、原始 Markdown 或疑似凭据"))
+    distribution.add_argument("--document", type=Path, required=True)
+    distribution.add_argument("--format", choices=["concise", "json"], default="concise")
+    distribution.add_argument("--language", choices=["zh-CN", "en-US"], default="zh-CN")
+    distribution.add_argument("--max-issues", type=int, default=20, help="0 keeps every issue; default caps context output at 20")
+    distribution.set_defaults(func=check_distribution)
+
+    check = sub.add_parser("check", help="Run fast release-risk checks by default; use --profile release for the full assurance suite")
+    check.add_argument("--profile", choices=["fast", "release"], default="fast")
     check.add_argument("--product-truth", type=Path)
     check.add_argument("--keep-going", action="store_true")
     check.set_defaults(func=run_check)
 
     gate = sub.add_parser("gate", help="Run the token-free final requirement/PRD/prototype goalkeeper")
     gate.add_argument("--profile", choices=["frame", "explore", "clarify", "requirement", "prd", "prototype", "handoff", "full", "stage0", "agent_handoff"], required=True)
-    gate.add_argument("--artifact", type=Path, action="append", default=[], help="frame/explore/clarify 主产物；可重复提供侧车产物")
+    gate.add_argument("--artifact", type=Path, action="append", default=[], help=gate_help("Main frame/explore/clarify artifact; for profile=requirement repeat it for requirement-register sidecars", "frame/explore/clarify 主产物；profile=requirement 时可重复提供需求登记册侧车"))
     gate.add_argument("--requirement", type=Path)
     gate.add_argument("--prd", type=Path)
     gate.add_argument("--prototype", type=Path, action="append", help="Repeat for admin/H5/multi-surface prototypes")
+    gate.add_argument("--prototype-baseline", type=Path, help=gate_help("Existing HTML baseline; inherited issues become GAP while new regressions still block", "存量 HTML 基线；相同旧问题降为 GAP，本次新增回归仍阻断"))
     gate.add_argument("--inventory", type=Path, help="Stage 0 brownfield inventory YAML")
     gate.add_argument("--manifest", type=Path, help="Agent handoff manifest YAML")
-    gate.add_argument("--acceptance-run", type=Path, action="append", help="已执行的 ARUN-*；L3/L4 原型据此闭合浏览器证据")
+    gate.add_argument("--acceptance-run", type=Path, action="append", help=gate_help("Executed ARUN-*; repeat to close L3/L4 browser evidence", "已执行的 ARUN-*；L3/L4 原型据此闭合浏览器证据"))
+    gate.add_argument("--review-record", type=Path, help=gate_help("Optional review record YAML; validates sign-off closure", "可选评审记录 YAML；用于校验签署闭环"))
     gate.add_argument("--level", choices=["auto", "L0", "L1", "L2", "L3", "L4"], default="auto")
     gate.add_argument("--stage", choices=["inventory", "clarify", "specify", "review", "baseline", "prototype", "implementation", "acceptance", "closed"], default="baseline")
     gate.add_argument("--scope-ref", action="append", default=[])
+    gate.add_argument("--domain", action="append", default=[], help=gate_help("Active domain ID for scoped custom rules; repeat as needed", "当前工件适用的领域 ID；用于隔离私有规则，可重复"))
     gate.add_argument("--format", choices=["concise", "json"], default="concise")
-    gate.add_argument("--diagnostics", choices=["first", "summary", "full"], default="first")
+    gate.add_argument("--language", choices=["auto", "zh-CN", "en-US"], default="auto", help="Human-readable diagnostics; auto follows artifact language")
+    gate.add_argument("--diagnostics", choices=["first", "roots", "summary", "full"], default="roots")
     gate.add_argument("--max-findings", type=int, default=20)
-    gate.add_argument("--custom-root", type=Path, help="本地私有扩展目录；省略时门禁自动发现当前目录 custom/")
+    gate.add_argument("--custom-root", type=Path, help=gate_help("Project-local private extension directory; auto-discovers ./custom when omitted", "本地私有扩展目录；省略时门禁自动发现当前目录 custom/"))
     gate.set_defaults(func=quality_gate)
 
     route = sub.add_parser("route-stage", help="检查显式目标阶段、已有产物和断点；不使用关键词推断意图")
@@ -843,6 +1170,7 @@ def main() -> int:
     explain = sub.add_parser("explain-finding", help="Explain one gate code and show a bounded repair direction")
     explain.add_argument("code")
     explain.add_argument("--format", choices=["concise", "json"], default="concise")
+    explain.add_argument("--language", choices=["zh-CN", "en-US"], default="zh-CN")
     explain.set_defaults(func=explain_finding)
 
     resume = sub.add_parser("resume", help="Verify and resume from the last valid large-project checkpoint")
@@ -873,7 +1201,7 @@ def main() -> int:
 
     candidate = sub.add_parser("candidate", help="Validate a project-local knowledge candidate; never auto-promote")
     candidate_sub = candidate.add_subparsers(dest="candidate_command", required=True)
-    candidate_validate = candidate_sub.add_parser("validate")
+    candidate_validate = candidate_sub.add_parser("validate", help="校验本地候选知识结构与晋级证据；不会自动晋级")
     candidate_validate.add_argument("--input", type=Path, required=True)
     candidate_validate.set_defaults(func=validate_candidate)
 
@@ -917,19 +1245,6 @@ def main() -> int:
     trace.add_argument("--output", type=Path, required=True)
     trace.add_argument("--baseline-version", default="unversioned")
     trace.set_defaults(func=build_trace)
-
-    score = sub.add_parser("score-eval", help="Maintainer: score one requirement/design/coding evaluation run")
-    score.add_argument("run", type=Path)
-    score.add_argument("--output", type=Path)
-    score.add_argument("--require-release-pass", action="store_true")
-    score.add_argument("--quiet", action="store_true")
-    score.set_defaults(func=score_eval)
-
-    compare = sub.add_parser("compare-evals", help="Maintainer: compare matched baseline and candidate evaluation runs")
-    compare.add_argument("--baseline", type=Path, required=True)
-    compare.add_argument("--candidate", type=Path, required=True)
-    compare.add_argument("--output", type=Path)
-    compare.set_defaults(func=compare_evals)
 
     status = sub.add_parser("status", help="Maintainer: show evidence-backed domain and evaluation status")
     status.add_argument("--format", choices=["markdown", "yaml"], default="markdown")

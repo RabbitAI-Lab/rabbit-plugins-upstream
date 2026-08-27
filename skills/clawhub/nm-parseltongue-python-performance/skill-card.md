@@ -1,41 +1,54 @@
-## Description: <br>
-Profiles Python code for performance bottlenecks and memory issues. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Profiles Python code for performance bottlenecks and memory issues.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to profile Python applications, identify CPU and memory bottlenecks, apply optimization patterns, and verify improvements with benchmarks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Python and memory-related triggers may activate the skill for tasks where profiling guidance is not needed. <br>
-Mitigation: Use the guidance only when the current task involves Python performance, profiling, optimization, benchmarking, or memory analysis. <br>
-Risk: Suggested profiling and package installation commands may affect the active development environment. <br>
-Mitigation: Review commands before running them and install profiling tools only in an appropriate project or virtual environment. <br>
+## Use Case:
 
+Developers and engineers use this skill to profile Python applications, identify CPU and memory bottlenecks, apply optimization patterns, and verify improvements with benchmarks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-parseltongue-python-performance) <br>
-- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/parseltongue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown with Python and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; suggested commands should be reviewed before execution in the target environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata) <br>
+Risk: Profiling production processes or installing profiling packages without review can affect live services or developer environments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review package installs and profiling commands before use, and run them in controlled environments or approved maintenance windows.
+
+Risk: Optimization advice can change batching, caching, multiprocessing, memory use, or database behavior in ways that alter application correctness.
+
+Mitigation: Profile first, benchmark changes, run regression tests, and review performance changes before deploying them.
+
+## Reference(s):
+
+- [python-performance on ClawHub](https://clawhub.ai/athola/skills/nm-parseltongue-python-performance)
+- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/parseltongue)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with Python code and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides profiling, benchmarking, memory-management, and optimization guidance; it does not install code or run hidden automation.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

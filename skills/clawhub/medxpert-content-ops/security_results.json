@@ -1,0 +1,35 @@
+{
+  "package": "medxpert-content-ops",
+  "version": "1.1.0",
+  "overall": 4.29,
+  "dimensions": [
+    {
+      "name": "敏感信息隔离",
+      "score": 2.0
+    },
+    {
+      "name": "元数据结构完整",
+      "score": 5.0
+    },
+    {
+      "name": "文档-代码一致性",
+      "score": 5.0
+    },
+    {
+      "name": "引用完整性",
+      "score": 5.0
+    },
+    {
+      "name": "跨平台声明",
+      "score": 5.0
+    },
+    {
+      "name": "打包纯净",
+      "score": 5.0
+    },
+    {
+      "name": "权属完备",
+      "score": 3.0
+    }
+  ]
+}

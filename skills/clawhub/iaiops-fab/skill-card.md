@@ -1,42 +1,57 @@
-## Description: <br>
-Iaiops Fab helps agents inspect semiconductor and display fab equipment over SECS/GEM and OPC-UA, combining equipment status, alarms, recipes, OEE, asset inventory, data quality, and downtime root-cause workflows with a read-first, MOC-gated write posture. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fab edition of iaiops for semiconductor and display fab equipment over SECS/GEM and OPC-UA, supporting status reads, diagnostics, OEE, asset inventory, data quality checks, SPC, and defect Pareto analysis with read-first and MOC-gated writes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Fab engineers, automation engineers, and operations teams use this skill to investigate SECS/GEM and OPC-UA equipment state, alarms, recipes, downtime, quality signals, and cross-protocol asset context in semiconductor or display fabs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Industrial write, export, and publish capabilities can affect production equipment or move fab data outside intended destinations. <br>
-Mitigation: Disable write, export, and publish tools unless they are required; require explicit approvals, destination allowlists, and dry-run review before enabling higher-impact actions. <br>
-Risk: The documented MOC controls may not be enforced by the installed pip package implementation. <br>
-Mitigation: Verify the installed implementation enforces the documented MOC controls before use in or near production fab systems. <br>
-Risk: Diagnostic and root-cause guidance can be misleading when equipment, MES, alarm, or historian signals are incomplete. <br>
-Mitigation: Review results against current fab context and corroborate recommendations with real equipment signals before operational action. <br>
+## Use Case:
 
+Developers and fab engineers use this skill to guide agents through semiconductor or display equipment diagnostics, SECS/GEM and OPC-UA status reads, data quality checks, OEE analysis, root-cause triage, SPC checks, and defect Pareto analysis. The skill emphasizes read-first operation and change-management gates for write-capable fab profile tools.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-fab) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured diagnostic results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include bounded samples, cited signal values, configuration checks, and MOC-gated action guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+Risk: Industrial data export, historian push, stream publish, and UNS publish capabilities may move sensitive fab data outside approved destinations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Restrict export and publish destinations, credentials, and network egress; require explicit approval and audit logging before enabling these tools in production or regulated fab environments.
+
+Risk: Write-capable fab profile tools can affect production equipment if change controls are bypassed.
+
+Mitigation: Keep write actions behind dry-run defaults, named approvals, pre-change value capture, rollback plans, and post-change audit records.
+
+Risk: Diagnostics and root-cause guidance may be incomplete or misleading if based on stale, unverified, or partial equipment signals.
+
+Mitigation: Require responses to cite live or recorded signals, confirm GEM and OPC-UA connectivity first, and route production decisions through fab operating procedures.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-fab)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline commands and tool names]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent responses should cite real signals for diagnostics and keep write actions behind dry-run, approval, audit, and rollback controls.]
+
+## Skill Version(s):
+
+0.23.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

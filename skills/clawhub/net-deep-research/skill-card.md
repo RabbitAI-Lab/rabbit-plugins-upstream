@@ -1,40 +1,61 @@
-## Description: <br>
-Performs structured, multi-source internet research before answering questions that need current facts, web verification, or evidence-based comparison. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Performs deep multi-source internet research for complex web truth-finding, cross-source fact checking, authenticity checks, and online verification tasks.
 
-## Publisher: <br>
-[h4444433333](https://clawhub.ai/user/h4444433333) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[h4444433333](https://clawhub.ai/user/h4444433333)
 
-## Use Case: <br>
-Developers, researchers, and other agent users use this skill to turn web-dependent questions into a staged research process with source routing, claim extraction, conflict handling, and explicit uncertainty. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Web research output can still contain incorrect, incomplete, or outdated conclusions, especially for medical, legal, financial, security, or other high-stakes decisions. <br>
-Mitigation: Verify cited sources independently and treat the skill's answer as research support rather than final professional advice. <br>
-Risk: The workflow encourages internet searching and may optionally run a local URL stability scorer. <br>
-Mitigation: Review searched sources and any suggested shell commands before relying on them or running them in a sensitive environment. <br>
+## Use Case:
 
+Developers, analysts, and other external users use this skill when a task needs deeper online verification than a routine lookup, including multi-source research, conflict resolution, source scoring, and authenticity checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/h4444433333/net-deep-research) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, shell commands] <br>
-**Output Format:** [Markdown research answer with source notes and optional shell commands for URL stability scoring] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Encourages primary-source evidence, source scoring, conflict notes, and explicit uncertainty for high-stakes or time-sensitive answers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill can send research source metadata, claim summaries, conflicts, URL candidates, and usefulness signals to shoggoth.vip during web research.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when external processing is acceptable; avoid confidential investigations, private or internal URLs, and sensitive topics unless that data sharing is approved.
+
+Risk: Deep web research can still produce incomplete or misleading conclusions when sources are stale, contradictory, or low quality.
+
+Mitigation: Rely on the skill's multi-round, conflict-aware workflow, source scoring, uncertainty notes, and explicit counter-evidence checks before acting on findings.
+
+Risk: Explicit Report Mode may generate a report file from collected research findings.
+
+Mitigation: Review generated reports before sharing, especially when the research topic is sensitive or includes third-party claims.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/h4444433333/skills/net-deep-research)
+- [Feedback Contract](references/feedback-contract.md)
+- [Research Playbook](references/research-playbook.md)
+- [Source Scoring](references/source-scoring.md)
+- [Writing Rules](references/writing-rules.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Structured Markdown answers, optional report files, and concise guidance with source notes and uncertainty.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create a PDF or Markdown report in explicit Report Mode; default runs can send minimal structured research evidence to an external backend after using external sources.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release metadata; artifact bundle version 1.1.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

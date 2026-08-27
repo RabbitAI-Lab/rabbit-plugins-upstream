@@ -1,48 +1,66 @@
-## Description: <br>
-Retrieves detailed school records, including institution type, geographic location, websites, and social media links, from UpKuaJing's global institutional data API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Obtains detailed school information, including classification, location, websites, and social media links, to support institution verification and academic network research.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Recruiters, researchers, analysts, and developers use this skill to verify educational institutions, enrich institutional records, and inspect academic network data for a known school ID. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid API lookups and top-up actions can incur charges. <br>
-Mitigation: Tell users charges apply and wait for explicit confirmation before running fee-bearing lookup or payment-order commands. <br>
-Risk: The skill stores and reads an UpKuaJing API key in ~/.upkuajing/.env. <br>
-Mitigation: Protect the local API key file, avoid exposing the key in responses or logs, and remove it when it is no longer needed. <br>
-Risk: Lookups send school identifiers and requests to UpKuaJing's outbound API. <br>
-Mitigation: Use the skill only when the user is comfortable making outbound requests to UpKuaJing for the requested lookup. <br>
-Risk: Institutional records may be incomplete, stale, or unsuitable as the sole basis for consequential decisions. <br>
-Mitigation: Verify important school details against authoritative institutional sources before using results for hiring, degree verification, or compliance decisions. <br>
+## Use Case:
 
+Recruiters, researchers, analysts, and verification teams use this skill to look up a known school ID and enrich institution records with school names, types, geographic details, websites, and social media links.
 
-## Reference(s): <br>
-- [School Detail API Reference](references/school-detail-api.md) <br>
-- [ClawHub Skill Listing](https://clawhub.ai/upkuajing/skills/global-company-person-school-detail) <br>
-- [UpKuaJing Homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Developer Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires UPKUAJING_API_KEY; paid API calls return a single school-detail response for a supplied school ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+Risk: School lookup requests are sent to the UpKuaJing provider API and may include institution identifiers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when provider API processing is acceptable for the lookup and avoid including unrelated sensitive personal data.
+
+Risk: The integration uses a paid API and each school detail query can incur charges.
+
+Mitigation: Confirm pricing and obtain explicit user approval before running fee-incurring queries.
+
+Risk: The API key may be stored locally in ~/.upkuajing/.env.
+
+Mitigation: Protect the local environment file, avoid sharing the key, and rotate the key if exposure is suspected.
+
+Risk: Optional error reports can send troubleshooting context and request details to the platform.
+
+Mitigation: Submit error reports only after user confirmation and exclude secrets or sensitive personal data from the report context.
+
+## Reference(s):
+
+- [School Detail API Reference](artifact/references/school-detail-api.md)
+- [Skill Error Report API Reference](artifact/references/skill-error-report-api.md)
+- [UpKuaJing Homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [UpKuaJing API Pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/global-company-person-school-detail)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON API responses and concise Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires UPKUAJING_API_KEY and explicit confirmation before fee-incurring lookup calls.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/tencentcloud-cos",
   "slug": "tencentcloud-cos",
   "ownerHandle": null,
-  "version": "1.1.6",
-  "updatedAt": 1780560934351,
-  "contentHash": "807cf1b8e6410a8828be554ad1d241241dec7f3d65aea0f6faf2ff99de22e906",
-  "fetchedAt": "2026-07-26T18:35:38.680Z"
+  "version": "1.2.0",
+  "updatedAt": 1787831521430,
+  "contentHash": "57f6f457c0c2da9d88538c01fa96c9fcbb2960b38cee6ab8cacfe324a8e35b3a",
+  "fetchedAt": "2026-08-27T18:22:29.869Z"
 }

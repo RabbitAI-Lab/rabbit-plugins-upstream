@@ -1,49 +1,70 @@
-## Description: <br>
-Build and test Solidity smart contracts with Foundry, including Forge tests, deployment scripts, and Cast/Anvil debugging. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build and test Solidity smart contracts with the Foundry toolkit.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and smart contract engineers use this skill to build, test, configure, debug, and deploy Ethereum/EVM contracts with Foundry tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes live blockchain transaction examples and private-key usage patterns. <br>
-Mitigation: Use dry runs, forks, or testnets by default; verify the chain ID and account before any broadcast or send operation. <br>
-Risk: Private keys, mnemonics, and API keys may be exposed if copied directly into commands or configuration. <br>
-Mitigation: Prefer isolated deployer keys, keystores, hardware wallets, and CI secrets with approval gates; avoid placing secrets directly on the command line. <br>
-Risk: Funded wallets or production contracts can be affected by incorrect deployment or interaction commands. <br>
-Mitigation: Review generated commands before execution and test contract interactions against local forks or non-production networks first. <br>
+## Use Case:
 
+Developers and engineers use this skill to build, test, configure, debug, and deploy Ethereum/EVM smart contracts with Foundry tools such as forge, cast, anvil, and chisel.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/foundry-solidity) <br>
-- [Skill Homepage](https://github.com/tenequm/skills/tree/main/skills/foundry-solidity) <br>
-- [Foundry Testing Guide](references/testing.md) <br>
-- [Foundry Deployment Guide](references/deployment.md) <br>
-- [Solidity Security & Audit Patterns](references/security.md) <br>
-- [Foundry Configuration Reference](references/configuration.md) <br>
-- [forge-std API Reference](references/forge-std-api.md) <br>
-- [Foundry & Solidity Resources](references/resources.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with Solidity, TOML, YAML, and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include deployment commands that require external RPC endpoints, API keys, or signing keys.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.3 (source: SKILL.md frontmatter and evidence release metadata) <br>
+Risk: Live transaction and private-key examples could move funds if copied without safeguards.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use local or testnet keys, dry-run before any --broadcast or cast send, and manually verify chain, account, recipient, value, and approvals before execution.
+
+Risk: Deployment and CI examples rely on sensitive environment variables such as PRIVATE_KEY and explorer API keys.
+
+Mitigation: Store secrets only in approved local or CI secret stores, never paste production seed phrases or private keys into commands, and restrict deployment approvals.
+
+## Reference(s):
+
+- [Foundry Solidity ClawHub page](https://clawhub.ai/tenequm/skills/foundry-solidity)
+- [Foundry Solidity homepage](https://github.com/tenequm/skills/tree/main/skills/foundry-solidity)
+- [Foundry & Solidity Resources](references/resources.md)
+- [Foundry Testing Guide](references/testing.md)
+- [forge-std API Reference](references/forge-std-api.md)
+- [Modern Solidity (0.8.30)](references/solidity-modern.md)
+- [Foundry Deployment Guide](references/deployment.md)
+- [Foundry Configuration Reference](references/configuration.md)
+- [Solidity Gas Optimization Guide](references/gas-optimization.md)
+- [Solidity Patterns and Idioms](references/patterns.md)
+- [Solidity Security & Audit Patterns](references/security.md)
+- [Debugging Workflows](references/debugging.md)
+- [Dependency Management](references/dependencies.md)
+- [CI/CD Integration](references/cicd.md)
+- [Chisel REPL](references/chisel.md)
+- [Cast Advanced Usage](references/cast-advanced.md)
+- [Anvil Advanced Usage](references/anvil-advanced.md)
+- [GitHub Actions encrypted secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets#using-encrypted-secrets-in-a-workflow)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with Solidity, TOML, YAML, and bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference optional Foundry CLI tools and optional RPC, explorer API key, and deployer key environment variables.]
+
+## Skill Version(s):
+
+0.2.4 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

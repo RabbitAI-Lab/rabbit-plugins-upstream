@@ -1,48 +1,64 @@
-## Description: <br>
-Manages energy capacity in Structs, including reactor infusion, generator infusion, buying agreements, selling surplus energy through providers, and diagnosing power problems. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through Structs power capacity, load budgeting, offline recovery, substation allocations, and reactor or generator infusion.
 
-## Publisher: <br>
-[abstrct](https://clawhub.ai/user/abstrct) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[abstrct](https://clawhub.ai/user/abstrct)
 
-## Use Case: <br>
-External Structs players and agents use this skill to plan and review wallet-signed energy capacity transactions, provider setup, agreement purchases, and power troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill guides real wallet-signed Structs energy transactions that can spend funds, lock funds, or create irreversible outcomes. <br>
-Mitigation: Before approval, verify the signing key, validator or struct ID, amount and denomination, commission, duration, cost, provider terms, and whether the action is irreversible or locks funds. <br>
-Risk: Suppressing CLI prompts with -y can bypass the final transaction review step. <br>
-Mitigation: Use interactive commands by default and avoid -y unless the exact transaction has already been reviewed. <br>
-Risk: Generator infusion destroys Alpha Matter and exposes value to loss if the generator is raided or destroyed. <br>
-Mitigation: Confirm the generator ID, ownership, amount, and defensive posture before signing generator infusion transactions. <br>
+## Use Case:
 
+External Structs players and operators use this skill to plan power headroom, recover from offline states, and prepare capacity-related transactions such as reactor infusion, generator infusion, allocations, and substation connections.
 
-## Reference(s): <br>
-- [Structs Energy Skill Page](https://clawhub.ai/abstrct/structs-energy) <br>
-- [structsd Install Skill](https://structs.ai/skills/structsd-install/SKILL) <br>
-- [Structs Economy Skill](https://structs.ai/skills/structs-economy/SKILL) <br>
-- [Structs Power Skill](https://structs.ai/skills/structs-power/SKILL) <br>
-- [Power Mechanics](https://structs.ai/knowledge/mechanics/power) <br>
-- [Energy Market Mechanics](https://structs.ai/knowledge/economy/energy-market) <br>
-- [Resource Mechanics](https://structs.ai/knowledge/mechanics/resources) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell commands and decision guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompts the agent to surface transaction details before wallet signing and to prefer interactive CLI confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.1 (source: server evidence) <br>
+Risk: The skill can guide signed game transactions that spend Alpha Matter or modify substation/player power state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm transaction amounts, targets, permissions, and power-state effects before signing.
+
+Risk: Generator infusion is irreversible and can place infused matter at risk if the generator is raided.
+
+Mitigation: Use generator infusion only after verifying ownership, generator type, online state, defenses, and the exact ualpha amount.
+
+Risk: Incorrect substation allocations or player migrations can reduce available power and knock dependent players or structs offline.
+
+Mitigation: Review allocation size, connection count, required permissions, and headroom before changing substation connections.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/abstrct/skills/structs-energy)
+- [Structs energy mechanics](https://structs.ai/knowledge/mechanics/energy)
+- [Structs power mechanics](https://structs.ai/knowledge/mechanics/power)
+- [Structs resources mechanics](https://structs.ai/knowledge/mechanics/resources)
+- [Structs conventions](https://structs.ai/skills/conventions)
+- [structsd install skill](https://structs.ai/skills/structsd-install/SKILL)
+- [structs-commerce skill](https://structs.ai/skills/structs-commerce/SKILL)
+- [resource-rich playbook](https://structs.ai/playbooks/situations/resource-rich)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands]
+
+**Output Format:** [Markdown guidance with inline shell commands and transaction checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent output may propose signed Structs transactions; users should confirm targets, amounts, denomination, and irreversible generator infusion warnings before approval.]
+
+## Skill Version(s):
+
+1.25.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

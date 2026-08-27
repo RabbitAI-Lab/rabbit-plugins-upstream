@@ -1,46 +1,58 @@
-## Description: <br>
-Collect videos published by a TikTok influencer or creator through Gecho Bridge MCP and return structured video metadata, captions, engagement metrics, publish times, and video links when available. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect public TikTok creator videos through Gecho Bridge MCP, returning metadata, captions, engagement metrics, publish times, and links when the required Chrome extension, TikTok session, and MCP server are available.
 
-## Publisher: <br>
-[gecho-ai](https://clawhub.ai/user/gecho-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gecho-ai](https://clawhub.ai/user/gecho-ai)
 
-## Use Case: <br>
-External users and developers use this skill to collect and summarize video metadata from a specific TikTok creator profile for creator research, influencer due diligence, and content analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow connects Gecho's Chrome extension and MCP bridge to an active TikTok web session. <br>
-Mitigation: Install only if that connection is acceptable, review the Gecho extension and bridge package before use, and keep login, CAPTCHA, and verification steps manual. <br>
-Risk: Saved result files may be written to a local directory selected during the workflow. <br>
-Mitigation: Use a dedicated local save directory that does not expose sensitive files. <br>
+## Use Case:
 
+External users, developers, and social media analysts use this skill to collect and summarize public video data from a specific TikTok creator profile through the Gecho Bridge MCP workflow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gecho-ai/skills/tiktok-influencer) <br>
-- [Gecho website](https://gecho.ai/) <br>
-- [Gecho Bridge README](https://github.com/gecho-ai/gecho-bridge/blob/main/README.md) <br>
-- [Gecho Chrome extension](https://chromewebstore.google.com/detail/pjkaeenpekolahdbccjfenjcmanemlbj?utm_source=item-share-cb) <br>
-- [OpenClaw setup video](https://www.youtube.com/watch?v=ggwY9hISHcQ) <br>
-- [Hermes setup video](https://www.youtube.com/watch?v=zHKnuWnxt_c) <br>
-- [Gecho YouTube channel](https://www.youtube.com/@Gecho-AI) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with shell command blocks and summarized JSON metadata] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Successful runs summarize the top 3 to 5 videos and include a saved local JSON file path when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.29 (source: server release evidence and artifact metadata) <br>
+Risk: The workflow depends on a live Chrome session, the Gecho extension, and the Gecho Bridge MCP server.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and review the extension and MCP package before use, keep TikTok open only in an intended browser session, and stop if login, CAPTCHA, verification, or blocked-page prompts appear.
+
+Risk: Creator research results may be sensitive when saved locally.
+
+Mitigation: Use a private save directory and avoid shared or synced folders for collected TikTok creator data.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gecho-ai/skills/tiktok-influencer)
+- [Gecho Website](https://gecho.ai/)
+- [Gecho Bridge README](https://github.com/gecho-ai/gecho-bridge/blob/main/README.md)
+- [Gecho Chrome Extension](https://chromewebstore.google.com/detail/pjkaeenpekolahdbccjfenjcmanemlbj?utm_source=item-share-cb)
+- [OpenClaw Setup Video](https://www.youtube.com/watch?v=ggwY9hISHcQ)
+- [Hermes Setup Video](https://www.youtube.com/watch?v=zHKnuWnxt_c)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries with setup commands and saved JSON file paths when available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Successful runs summarize selected creator-video results and avoid pasting the full raw JSON into chat.]
+
+## Skill Version(s):
+
+1.1.37 (source: release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

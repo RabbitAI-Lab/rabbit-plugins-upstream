@@ -1,7 +1,7 @@
 ---
 name: speechfy-tts
 description: "Multi-provider Text-to-Speech: Speechify API (primary) + Edge TTS (fallback). Gera .ogg (Opus) para voice messages."
-version: 1.0.0
+version: 1.1.0
 tags: [tts, speech, speechify, edge-tts, voice, audio]
 metadata:
   hermes:
@@ -79,7 +79,7 @@ All via environment variables (no hardcoded config):
 | `EDGE_TTS_CMD` | `edge-tts` | Edge TTS CLI command |
 | `SPEECHIFY_OUTPUT` | `/tmp/speech-output.ogg` | Default output path |
 | `SPEECHIFY_VAULT_ITEM` | `speechfy_key` | Vaultwarden item name |
-| `VAULT_RESOLVER` | `/opt/data/bin/vault-resolver` | Vault resolver path |
+| `VAULT_RESOLVER` | `vault-resolver` | Vault resolver path |
 | `SPEECHIFY_API_KEY` | — | Overrides vault (highest priority) |
 
 Resolution order: `SPEECHIFY_API_KEY` env var → vault-resolver → empty (skip).

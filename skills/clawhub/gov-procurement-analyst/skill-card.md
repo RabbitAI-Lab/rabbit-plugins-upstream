@@ -1,45 +1,64 @@
-## Description: <br>
-Gov Procurement Analyst helps suppliers, procurement agents, and purchasing teams analyze Chinese government procurement opportunities, bid decisions, compliance risks, contracts, policies, and bid-document drafting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A government procurement analysis assistant for opportunity discovery, bid decisions, document drafting, supplier due diligence, compliance checks, policy guidance, competitor profiling, scoring prediction, and local knowledge-base workflows.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Suppliers, bid teams, procurement agents, and purchasing units use this skill to find public procurement notices, match opportunities to an enterprise profile, assess bid viability, draft bid materials, and review compliance or contract risks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist sensitive company profile data, qualifications, historical projects, and generated bid materials on the local machine. <br>
-Mitigation: Use explicit invocation, avoid sensitive certificates unless local-only processing is confirmed, and review how to list, delete, or disable stored profiles, archives, and material libraries. <br>
-Risk: Broad triggers, timed pushes, and update actions may produce or deliver procurement analysis outside the user's intended scope. <br>
-Mitigation: Confirm the target project, company, and delivery channel before relying on reports, and disable scheduled pushes or update actions when they are not needed. <br>
-Risk: Bid, contract, policy, and complaint guidance may be incomplete or unsuitable for a specific procurement matter. <br>
-Mitigation: Have qualified procurement, legal, or finance reviewers check generated reports and filing materials before submission. <br>
+## Use Case:
 
+Bidders, procurement teams, and purchasing or agency users use this skill to discover public procurement opportunities, evaluate bid fit, draft and review bid materials, analyze supplier and competitor risk, and track government procurement outcomes. The skill is oriented to Chinese government procurement platforms and uses public data together with locally stored business context.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/gov-procurement-analyst) <br>
-- [Procurement platforms and compliance guide](references/procurement-platforms.md) <br>
-- [Anti-scraping best practices](references/anti-scraping-best-practices.md) <br>
-- [Enterprise profiling and matching algorithm](references/enterprise-profiling.md) <br>
+### Deployment Geography for Use:
 
+China, for workflows involving Chinese government procurement data and platforms.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown-style reports and guidance with optional JSON files from helper scripts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist local enterprise profiles, bid archives, material libraries, generated bid documents, and script output files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.7.0 (source: frontmatter, release evidence, README version history) <br>
+Risk: The skill may store business profiles, bid data, reports, and SQLite databases locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with approved business data, review local storage locations before production use, and define retention and deletion procedures.
+
+Risk: The skill can crawl public procurement websites and may encounter rate limits, anti-scraping controls, or source-specific usage restrictions.
+
+Mitigation: Limit collection to permitted public sources, respect rate limits and robots guidance, and disable collection against sources that require login or prohibit automated access.
+
+Risk: Scheduled competitor monitoring and webhook pushes may expose procurement or business-sensitive information.
+
+Mitigation: Disable scheduled pushes by default, review webhook destinations, and send notifications only to approved internal channels.
+
+Risk: A PowerShell hot-update path can introduce unreviewed code if the update source is not verified.
+
+Mitigation: Avoid hot updates unless the source is verified, pin reviewed releases, and rescan the skill after updates.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/gov-procurement-analyst)
+- [Data Source Platforms and Compliance Guide](references/procurement-platforms.md)
+- [Enterprise Profiling and Matching Algorithm Reference](references/enterprise-profiling.md)
+- [Anti-Scraping Strategy and Data Collection Best Practices](references/anti-scraping-best-practices.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown reports with optional JSON data files, inline SVG charts, and generated Word or PDF documents when dependencies are available.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local reports, procurement datasets, profiles, and SQLite knowledge bases during use.]
+
+## Skill Version(s):
+
+5.1.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

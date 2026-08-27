@@ -43,8 +43,9 @@ Tuple sort — each tier breaks ties of the one above:
 5. **Cheapest** unit price at the build qty — final tiebreaker.
 
 ```
-parts-select.py "100nF 0402 X7R" --qty 100        # → recommends C1525 (BASIC, 22M stock)
+parts-select.py "100nF 0402 X7R" --qty 100        # → offline hit in standard-parts.json (default; zero network)
 parts-select.py "10uF 0805" --json                 # → C440198 ; machine-readable for the agent
+parts-select.py "esd array usb" --online           # explicit opt-in: JLC catalog compare, then converge via `easyeda lib by-lcsc`
 ```
 
 ## Integration — closes the standardization loop
@@ -60,6 +61,15 @@ need a part ──▶ parts-select (pick optimal LCSC C#)
 This makes [`standard-parts.json`](./standard-parts.json) selections justified
 by live stock/price/basic data instead of a guess. Validated: 100nF→C1525,
 10µF→C440198, AMS1117→C6186 — all matched the curated standard library.
+
+**Already-placed parts** (standardizing an existing schematic — the 器件标准化
+panel's use case): don't delete+re-place by hand. `easyeda sch replace --id
+<primitiveId> --lcsc <C#>` swaps the placed component for the recommended device
+in one call — keeps designator/uniqueId/pose, drops the OLD part's identity
+fields (they follow the new device), rolls back on failure, and reports a
+`pinDiff`; a non-empty pinDiff means re-wire, then `sch drc`/`sch check`.
+Property-only assignment (writing a C# onto a part without changing the device)
+stays `easyeda sch modify --patch '{"supplierId":"C…"}'`.
 
 ## Known limitations / refinements
 

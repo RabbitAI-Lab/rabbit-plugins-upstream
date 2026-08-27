@@ -1,0 +1,32 @@
+# CHANGELOG
+
+## [0.1.2] - 2026-08-25
+
+### 修正
+
+- ClawHub 发布元数据：v0.1.1 首次发布漏传 `--name`，display name 退化为临时目录名 `Clawhub Publish Apple Smart Schedule`。bump 版本带 `--name "苹果智能日程提醒"` 重新发布，修正为正确显示名。本地 skill 本身无功能改动。
+
+## [0.1.1] - 2026-08-25
+
+### 修复
+
+- `scripts/create_event.sh` / `scripts/create_reminder.sh`：日历/清单查找由 `if exists ... else` 改为 `try/on error` 容错（`first calendar whose name is ...` / `first list whose name is ...`）。修复部分 macOS 状态（系统首次提示未授权、名称含特殊字符）下偶发的 -1728 误报「找不到」——命中失败直接回退 default list / 第一个日历，保留「找不到时落到默认」行为并打印 warning。
+
+## [0.1.0] - 2026-07-15
+
+### 新增
+
+- 首版 `apple-smart-schedule`：把一句自然语言（机票/高铁/开庭/会议/截止/聚会/看病等）或一张票据截图，自动变成苹果「日历」事件 + 按事件类型智能提前的「提醒事项」。
+- 5 个脚本：
+  - `scripts/create_event.sh`（osascript 建日历事件，python3 解析日期规避 locale 坑）
+  - `scripts/create_reminder.sh`（remindctl 优先，未装则 osascript 降级）
+  - `scripts/list_calendars.sh` / `list_reminder_lists.sh`（列日历/清单名，供首次配置）
+  - `scripts/setup_check.sh`（首次自检 + 授权指引）
+- `config/config.json`：时区、默认日历/清单、各类事件提前量（flight/train/court/meeting/deadline/social/default）。
+- `references/lead-times.md`：事件类型判断规则 + 提前量格式 + 航班/高铁字段录入模板。
+
+### 约定
+
+- 仅 macOS 运行；建好的日历/提醒经 iCloud 同步到 iPhone/iPad。
+- 航班/高铁备注只录行程有用字段（航司/舱位/机型/时长、车次/检票口/座位），**不录**乘客/票号/订单号。
+- 首次在每个终端运行会弹授权窗，点「好」即可（授权按调用的终端分别记录）。

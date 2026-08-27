@@ -1,45 +1,66 @@
-## Description: <br>
-查询公司海关贸易区域列表数据，返回国家/地区的贸易次数、金额、数量、重量和占比，用于市场分析。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+查询公司海关贸易区域列表数据，获取国家或地区的贸易次数、金额和占比，用于市场进入分析、客户分布研究和区域贸易情报。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-外贸团队、市场分析人员和代理开发者用此技能按公司和角色查询国家/地区级贸易分布，评估市场覆盖、重点出口市场和区域贸易占比。 <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores the UpKuajing API key in plaintext under ~/.upkuajing/.env. <br>
-Mitigation: Use only on trusted machines, keep the file permissions restricted, and avoid sharing logs or file contents that may expose the key. <br>
-Risk: The skill can make paid API calls and can create recharge payment URLs. <br>
-Mitigation: Require a separate, explicit user confirmation before fee-incurring queries, recharge orders, or new-key workflows. <br>
-Risk: The skill performs a version check against UpKuajing during API use. <br>
-Mitigation: Run it only in environments where that outbound check is acceptable and where UpKuajing API access is expected. <br>
+## Use Case:
 
+External trade teams, market analysts, and agents use this skill to query a company's country or region-level customs trade distribution, including trade count, amount, quantity, weight, and share. It helps compare regional market exposure and identify priority export or procurement markets.
 
-## Reference(s): <br>
-- [公司贸易区域列表 API 参考](references/customs-company-area-list-api.md) <br>
-- [UpKuajing](https://www.upkuajing.com) <br>
-- [UpKuajing Developer Platform](https://developer.upkuajing.com/) <br>
-- [UpKuajing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires UPKUAJING_API_KEY; paid API calls require explicit user confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md metadata and server release evidence) <br>
+Risk: The skill performs paid customs-data API calls and exposes account balance or recharge flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Tell the user a lookup or recharge action may incur cost, obtain explicit confirmation before paid actions, and use price information from the provider instead of estimating fees.
+
+Risk: The skill handles UPKUAJING_API_KEY and may store it in a local plaintext configuration file.
+
+Mitigation: Avoid displaying or pasting the API key, restrict local file access where possible, and rotate the key if it may have been exposed.
+
+Risk: Diagnostic error reports may include request context and response details.
+
+Mitigation: Review report contents with the user and send diagnostic reports only after explicit confirmation.
+
+Risk: The skill performs automatic provider version-check calls with local persistence.
+
+Mitigation: Install only if this provider communication is acceptable in the deployment environment and review local cache behavior during security assessment.
+
+## Reference(s):
+
+- [公司贸易区域列表 API 参考](references/customs-company-area-list-api.md)
+- [Agent调用Skill异常上报 API 参考](references/skill-error-report-api.md)
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-company-area-list-zh)
+- [跨境魔方官网](https://www.upkuajing.com)
+- [跨境魔方开放平台](https://developer.upkuajing.com/)
+- [开放平台价格说明](https://www.upkuajing.com/web/openapi/price.html)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Configuration, Guidance, Text]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; successful lookup responses include data, fee information, and request identifiers.]
+
+## Skill Version(s):
+
+1.0.1 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

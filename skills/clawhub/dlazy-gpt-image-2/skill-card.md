@@ -1,43 +1,60 @@
-## Description: <br>
-GPT Image 2 supports text-to-image generation and image editing with reference inputs through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GPT Image 2 generates images from text and edits or synthesizes images using reference inputs through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to call dLazy's hosted GPT Image 2 service for image generation, image editing, and synthesis from prompts and reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local image inputs may be uploaded to dLazy's hosted service. <br>
-Mitigation: Use only prompts and files that are appropriate to share with dLazy, and avoid submitting sensitive or regulated content unless approved. <br>
-Risk: Authentication stores a dLazy API key in local CLI configuration unless a per-run environment variable is used. <br>
-Mitigation: Use OS user permissions, rotate or revoke keys when needed, and prefer DLAZY_API_KEY for short-lived runs where persistent storage is not desired. <br>
+## Use Case:
 
+External users and developers use this skill to have an agent generate, edit, and synthesize images with GPT Image 2 using prompts and optional reference images.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-gpt-image-2) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Image URLs, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses with generated image URLs and task status fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports synchronous results or asynchronous generateId polling; generated media is hosted by dLazy.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: Prompts, parameters, and selected local media files are sent to dLazy cloud APIs for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompts and referenced media before invocation, and avoid sending sensitive or unapproved content.
+
+Risk: The dLazy API key may be stored in the local dLazy configuration file for persistent login.
+
+Mitigation: Protect the local configuration file, prefer per-invocation environment variables when appropriate, and rotate or revoke exposed keys.
+
+Risk: Generated image outputs are returned as externally hosted URLs on dLazy file storage.
+
+Mitigation: Review sharing, retention, and distribution requirements before using or publishing generated output URLs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-gpt-image-2)
+- [dLazy CLI Source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with bash command examples and JSON CLI result examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [CLI results include generated image metadata, hosted output URLs, and optional saved image files.]
+
+## Skill Version(s):
+
+1.3.9 (source: server release metadata; artifact frontmatter reports 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

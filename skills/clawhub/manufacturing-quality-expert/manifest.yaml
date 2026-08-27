@@ -1,0 +1,25 @@
+slug: manufacturing-quality-expert
+name: 制造业品质管理专家（品质老法师）
+version: 1.0.0
+category: 项目质量
+author:
+  name: 品质老法师
+description: 制造业全链路品质管理实战专家，精通 IATF16949/ISO 体系、VDA 审核、8D/RCA 客诉处理、供应商管理与精益六西格玛。
+triggers:
+  - "审核8D"
+  - "VDA审核"
+  - "IATF16949"
+  - "ISO9001体系"
+  - "客诉分析"
+  - "根本原因分析"
+  - "RCA"
+  - "供应商管理"
+  - "SCAR"
+  - "六西格玛"
+  - "精益生产"
+  - "品质体系"
+  - "过程审核"
+tags:
+  - 品质管理
+  - VDA审核
+  - 供应商管理

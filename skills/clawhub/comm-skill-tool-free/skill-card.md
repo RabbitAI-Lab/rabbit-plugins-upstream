@@ -1,40 +1,57 @@
-## Description: <br>
-Helps an agent draft context-aware, empathetic messages from conversation history, emotional cues, relationship context, and communication channel. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+沟通助手基础版 helps an agent draft empathetic, context-aware communication using conversation history, emotional cues, communication templates, and tone or channel settings.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Individuals and lightweight agent users use this skill to draft emails, messages, and difficult-conversation replies with structured, empathetic framing. It supports tone adjustment, emotional subtext review, and communication templates, but the user should review any draft before sending. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests broad command execution, file reading/searching, callbacks, and possible network/API access while handling sensitive communication content. <br>
-Mitigation: Use it only in an agent environment where those capabilities can be disabled or approved per action, and avoid confidential emails, customer complaints, credentials, or private conversation history unless the host agent and API provider are acceptable for that data. <br>
-Risk: Security evidence flags inconsistent privacy claims about whether sensitive messages stay local. <br>
-Mitigation: Review the skill before installation, verify the host agent and configured API provider data handling, and manually review generated drafts before sending. <br>
+## Use Case:
 
+External users and developers can use this skill to draft replies for difficult conversations, customer emails, and other communication scenarios where tone, relationship, channel, and emotional context matter.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/comm-skill-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown or structured JSON-style responses with draft text, status, result data, and execution logs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include optional settings such as tone, channel, relationship, framework, retry behavior, cache behavior, timeout, and output format.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: The skill requests broad file, shell, API, credential-checking, and callback behavior that is not clearly scoped to message drafting.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Grant only the tools needed for drafting, and require explicit approval before file access, shell commands, callbacks, external API calls, or credential checks.
+
+Risk: Conversation inputs may contain sensitive personal, customer, or business context.
+
+Mitigation: Review and redact sensitive content before sharing it with external services or saving generated drafts.
+
+Risk: Generated drafts may misread emotional context or create communication that is inappropriate for a sensitive situation.
+
+Mitigation: Have a human review drafts before sending, especially for high-stakes, legal, HR, customer, or conflict-related communication.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/comm-skill-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Communication drafts, structured guidance, and optional JSON, text, or CSV status output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include execution status, metadata, and operation logs when structured output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

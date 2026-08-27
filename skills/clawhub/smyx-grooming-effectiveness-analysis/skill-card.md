@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes pet grooming images or videos through server-side APIs to assess coat matting, shed-hair volume, grooming effectiveness, and hairball risk, with optional history lookup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet grooming images or videos to estimate coat matting, shed-hair volume, grooming effectiveness, hairball risk, and related history reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External pet-care users and developers use this skill to submit pet grooming media and receive structured grooming-effectiveness, matting, shed-hair, and hairball-risk results for care guidance. The outputs are for pet-care reference and are not a medical diagnosis or treatment plan. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images, videos, URLs, generated identity values, and report history may be handled by lifeemergence.com services. <br>
-Mitigation: Use the skill only where cloud processing and account-linked history are acceptable, and avoid submitting sensitive media unless retention and deletion expectations are clear. <br>
-Risk: The skill may silently create or reuse a local identity and store account tokens locally. <br>
-Mitigation: Run it in an isolated workspace or account, review local state before and after use, and prefer releases that document token storage, revocation, and deletion. <br>
-Risk: The server-side analysis is a pet-care aid and may not be reliable enough for medical decisions. <br>
-Mitigation: Treat results as grooming guidance only and consult a veterinary professional for health concerns, severe matting, abnormal shedding, or suspected hairball complications. <br>
+## Use Case:
 
+Pet owners, groomers, and pet-care teams use this skill to review grooming-session media and receive structured care-oriented observations about matting, loose hair, grooming effect, hairball risk, and prior reports. The output is for pet-care reference and is not a medical diagnosis or treatment plan.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-grooming-effectiveness-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown text with embedded JSON-style structured analysis and report links; optional file output when --output is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include a server-generated report export URL and historical report JSON when listing prior reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Pet media, media URLs, and identity data may be sent to configured backend services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media and URLs appropriate for the configured service, and avoid sensitive media or internal URLs unless backend destination, retention, token handling, and cleanup controls are documented.
+
+Risk: The skill can create or reuse account identifiers and store tokens locally.
+
+Mitigation: Review local identity and token storage behavior before installation, and deploy only in environments where that account-handling model is acceptable.
+
+Risk: Hairball-risk and grooming-effectiveness outputs are care-oriented estimates, not clinical findings.
+
+Mitigation: Present results as grooming guidance and route medical concerns or abnormal symptoms to a qualified veterinary professional.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-grooming-effectiveness-analysis)
+- [ClawHub publisher profile](https://clawhub.ai/user/18072937735)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Pet grooming analysis API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON-like structured text with report links and optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Analysis depends on user-provided image or video input, selected pet type, configured service endpoints, and optional history-list mode.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter reports 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

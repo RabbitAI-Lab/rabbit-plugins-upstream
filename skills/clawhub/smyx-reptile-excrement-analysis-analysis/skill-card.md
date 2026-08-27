@@ -1,45 +1,63 @@
-## Description: <br>
-Analyzes reptile enclosure images or video frames to identify urate size, color, and texture plus feces morphology, then returns a structured visual assessment with alert guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes reptile enclosure images or video frames to identify urate size, color, and texture alongside feces color and morphology, then returns structured health-oriented observations and suggested next actions.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External reptile keepers, breeders, and enclosure app developers use this skill to analyze reptile excrement images or video frames, retrieve cloud report history, and generate structured visual-health observations with recommended next actions. The skill is framed as visual assessment support, not disease diagnosis or prescription guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reptile media and report history are processed by LifeEmergence cloud services. <br>
-Mitigation: Use only media appropriate for cloud processing, avoid sensitive backgrounds or identifying information, and confirm data retention expectations before deployment. <br>
-Risk: The skill can create or reuse a local identity and store service tokens in the workspace. <br>
-Mitigation: Run it in a private, controlled workspace and remove the skill data directory or credentials when access is no longer needed. <br>
-Risk: History queries can return identity-linked report records. <br>
-Mitigation: Restrict use in shared environments and verify that the active workspace identity is the intended one before querying report history. <br>
+## Use Case:
 
+External reptile keepers, farm operators, and app or enclosure developers use this skill to submit reptile waste images or URLs, receive structured urate and feces observations, and review historical reports when available. The output is a visual assessment aid, not a veterinary diagnosis.
 
-## Reference(s): <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill source documentation](artifact/SKILL.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-reptile-excrement-analysis-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance, Files] <br>
-**Output Format:** [Structured text or JSON with report fields, Markdown tables for history lists, and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, alert levels, recommended actions, and disclaimers; depends on LifeEmergence cloud API responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter states 1.0.6) <br>
+Risk: Security evidence reports that uploaded reptile images, videos, URLs, report metadata, and an automatically selected identity may be sent to LifeEmergence cloud endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, use only if cloud processing is acceptable, and prefer an isolated workspace with a disposable account or identity for testing.
+
+Risk: Security evidence reports that tokens and profile data may be retained in a shared local SQLite database.
+
+Mitigation: Use a dedicated workspace, avoid sharing the workspace between unrelated tasks or users, and clear local data when the skill is no longer needed.
+
+Risk: Visual waste analysis can be mistaken for veterinary diagnosis or treatment advice.
+
+Mitigation: Treat outputs as non-diagnostic screening guidance, avoid medication or procedure recommendations, and direct significant or repeated abnormalities to a qualified reptile veterinarian.
+
+Risk: Poor image quality, missing scale references, substrate obstruction, or missing species and feeding context can make visual assessment unreliable.
+
+Mitigation: Require clear top-down pre-cleaning images or frames, adequate lighting, a size reference where possible, and species, feeding, shedding, brumation, and recent diet-change context before relying on results.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+- [Analysis API error and request format reference](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Markdown text containing structured JSON-like analysis results and optional report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save the returned analysis text to a requested output file; historical report queries return structured report lists.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence; artifact frontmatter reports 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

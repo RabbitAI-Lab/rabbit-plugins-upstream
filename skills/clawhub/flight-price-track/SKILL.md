@@ -4,13 +4,13 @@ display_name: 机票价格监控与比价
 description: 机票降价监控与多平台比价助手，搜索多平台实时价格对比，支持航线搜索、指定航班精确比价、低价日历、降价监控，帮你把握最佳购票时机。暑期机票价格监控。
 tags: [机票比价, 机票降价, 机票监控, 低价机票, 低价日历, 购票时机]
 tools:
-  - name: search_flights
+  - name: searchFlights
     description: 按航线搜索航班列表，返回多平台价格对比和价格状态分析
-  - name: compare_flight_prices
+  - name: compareFlightPrices
     description: 指定航班号查询多个平台实时价格并精确对比
-  - name: price_calendar
+  - name: priceCalendar
     description: 扫描多天价格找到最低价出发日
-  - name: create_price_watch
+  - name: createPriceWatch
     description: 输出结构化降价监控请求，由宿主Agent承接定时复查和降价通知
 primaryEnv: PROXY_TOKEN
 

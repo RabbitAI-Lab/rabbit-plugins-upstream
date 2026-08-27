@@ -1,46 +1,61 @@
-## Description: <br>
-Queries paginated UpKuaJing customs HS code trade data for a company, including HS codes, trade counts, amounts, quantities, weights, and trade percentages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries UpKuaJing customs data for a company's paginated HS-code trade breakdown, including trade counts, amounts, quantities, weights, and percentage share by HS code.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External users, developers, and trade analysts use this skill to query paginated HS code breakdowns for a supplier or buyer company through the UpKuaJing Open Platform API. It supports product-mix analysis and HS code drill-down across customs trade data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid API calls and top-up flows can incur costs. <br>
-Mitigation: Confirm the fee impact before executing queries or creating top-up orders, and use the published pricing page or auth.py --price_info for current pricing. <br>
-Risk: The skill stores and reads the UpKuaJing API key from ~/.upkuajing/.env. <br>
-Mitigation: Keep the API key private, restrict local file access where possible, and rotate the key if it may have been exposed. <br>
-Risk: Network calls send company query parameters to the third-party UpKuaJing API. <br>
-Mitigation: Use only data appropriate for the third-party service and avoid enabling API logging when query parameters or responses are sensitive. <br>
+## Use Case:
 
+External trade analysts, sourcing teams, and agent users use this skill to inspect a supplier or buyer's product mix by company ID, page through HS-code rows, and filter by dates, products, HS codes, or countries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-company-hscode-list) <br>
-- [Company HS Code List API](references/customs-company-hscode-list-api.md) <br>
-- [UpKuaJing homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing API pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; API calls may incur per-call fees and return paginated results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: The skill stores an UpKuaJing API key in a plaintext home-directory .env file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated API key where possible, restrict access to the local account, and rotate the key if the machine or workspace is shared.
+
+Risk: The skill can make paid UpKuaJing API calls after confirmation and can create top-up payment URLs on request.
+
+Mitigation: Require explicit user confirmation before paid queries or top-up flows, and check current pricing before use.
+
+Risk: The skill can send optional error reports to UpKuaJing and performs an automatic version check during API use.
+
+Mitigation: Confirm before reporting errors and disclose that API script runs may contact UpKuaJing for version checks.
+
+## Reference(s):
+
+- [Company HS Code List API](references/customs-company-hscode-list-api.md)
+- [Skill Error Report API](references/skill-error-report-api.md)
+- [UpKuaJing Homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/customs-company-hscode-list)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; query calls may incur fees and return paginated results with cursor-based continuation.]
+
+## Skill Version(s):
+
+1.0.1 (source: server evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

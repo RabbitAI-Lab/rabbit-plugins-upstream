@@ -1,47 +1,68 @@
-## Description: <br>
-Verify email validity and format, reduce email bounce rates, and clean contact lists for exporters, recruiters, and B2B sales teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Verify email address format and status for contact-list cleanup, CRM hygiene, candidate screening, supplier verification, and cold-outreach preparation.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External teams and agents use this skill to validate one or more email addresses through Upkuajing's remote API before outreach, CRM cleanup, recruiting checks, supplier verification, or buyer validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Email addresses are sent to Upkuajing's remote API for validation. <br>
-Mitigation: Use the skill only for addresses you are permitted to share with Upkuajing, and avoid submitting sensitive lists without appropriate review. <br>
-Risk: The skill stores UPKUAJING_API_KEY in a plaintext file under the user's home directory when using its key setup flow. <br>
-Mitigation: Prefer environment-variable secret management where possible, restrict filesystem access to the key file, and rotate the key if it may have been exposed. <br>
-Risk: API calls may incur fees and the skill includes account and top-up flows. <br>
-Mitigation: Confirm pricing and explicit user approval before paid validation, and review account balance or fee output after use. <br>
-Risk: The shared request helper performs an automatic version check before API requests. <br>
-Mitigation: Review or disable automatic version checking in environments that require strict data minimization or tightly controlled network destinations. <br>
+## Use Case:
 
+External users such as sales teams, recruiters, marketers, and trade operators use this skill to validate email addresses before outreach, list scrubbing, buyer checks, and CRM data cleansing. The skill returns structured validity results and fee information from the UpKuaJing Open Platform API.
 
-## Reference(s): <br>
-- [Email Validity API](references/email-api.md) <br>
-- [Upkuajing Homepage](https://www.upkuajing.com) <br>
-- [Upkuajing Open Platform](https://developer.upkuajing.com/) <br>
-- [Upkuajing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; sends email addresses to a paid remote API and returns validity status, reason, total count, and fee information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: Email addresses are sent to UpKuaJing's remote API for validation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for contact data that may be shared with that provider, and avoid sending sensitive or restricted email lists unless approved.
+
+Risk: The skill stores the UpKuaJing API key locally in a plaintext environment file when users create or provide a key.
+
+Mitigation: Protect the local account directory, avoid sharing the file, and rotate the key if it may have been exposed.
+
+Risk: Validation and recharge operations may incur fees.
+
+Mitigation: Require explicit user confirmation before any fee-incurring validation or top-up flow is run.
+
+Risk: Request and response logging could expose email lists or API response data if enabled.
+
+Mitigation: Keep request logging disabled for sensitive lists and review logs before sharing troubleshooting artifacts.
+
+Risk: The skill performs outbound version-check behavior during API requests.
+
+Mitigation: Review this behavior before installing in environments with restricted outbound network policies.
+
+## Reference(s):
+
+- [Email validity API reference](references/email-api.md)
+- [Skill error report API reference](references/skill-error-report-api.md)
+- [UpKuaJing homepage](https://www.upkuajing.com)
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/email-validity-check)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Validation output includes total count, per-email status records, fee details, and request identifiers when returned by the API.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

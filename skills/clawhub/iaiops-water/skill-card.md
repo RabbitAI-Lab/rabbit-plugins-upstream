@@ -1,38 +1,58 @@
-## Description: <br>
-Water-treatment edition of iaiops for waterworks, wastewater plants, and pump stations, covering Modbus-TCP/RTU, OPC-UA, HART-IP instrumentation, downtime root-cause analysis, data quality checks, and OEE guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Water-treatment edition of iaiops for waterworks, wastewater plants, and pump stations, supporting read-oriented Modbus, OPC-UA, HART-IP, water-quality, compliance, diagnostics, asset-health, and operational analysis workflows.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, engineers, and operators use this skill to inspect water-treatment telemetry, diagnose dataflow and equipment issues, and produce compliance-oriented analysis for waterworks, wastewater plants, and pump stations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan says the skill is mostly documentation-only but claims a read-only posture while listing push, export, and publish tools that could move operational data or change external state. <br>
-Mitigation: Install only when the actual MCP runtime is verified to expose read-only tools for this water edition, or when the environment has explicit allowlists and approvals for historian push, export, and stream publishing. <br>
+## Use Case:
 
+Water and wastewater operators, OT engineers, and developers use this skill to read plant telemetry, diagnose dataflow and downtime, assess data quality, and generate water-quality or compliance-oriented analysis from Modbus, OPC-UA, and HART-IP systems.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-water) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline command examples and named tool references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+Risk: The security evidence says the artifact is framed as read-only but exposes export, historian push, and publish-style tools without enough warning or scoping.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disable or gate export, historian push, and publish tools behind explicit user approval, destination allowlists, and audit logging before use.
+
+Risk: The security evidence marks the release suspicious for use around real water, wastewater, SCADA, or plant networks.
+
+Mitigation: Review the skill carefully before installation in operational environments and test it in a segregated non-production setting first.
+
+Risk: Artifact behavior includes workflows related to plant operations, compliance, alarms, and diagnostics where incorrect guidance could affect operational decisions.
+
+Mitigation: Require qualified operator review for recommendations, verify source measurements, and keep any production-control changes outside this skill unless separately approved through management-of-change procedures.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-water)
+- [Publisher profile](https://clawhub.ai/user/zw008)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and text guidance with inline tool names, shell commands, configuration notes, and operational analysis.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include compliance-style summaries, diagnostic findings, data-quality notes, and risk-aware operational recommendations based on user-provided or read-only plant data.]
+
+## Skill Version(s):
+
+0.23.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

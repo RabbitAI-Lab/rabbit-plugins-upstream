@@ -5,10 +5,9 @@ description: "ElevenLabs scribe_v1 speech-to-text with auto language detection a
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy elevenlabs-stt -h for help."}}
 ---
 
-# dlazy-elevenlabs-stt
+# 语音转文字 ElevenLabs STT
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 ElevenLabs scribe_v1 speech-to-text with auto language detection and optional speaker diarization. Suitable for subtitles, transcription, and meeting notes.
@@ -85,6 +84,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

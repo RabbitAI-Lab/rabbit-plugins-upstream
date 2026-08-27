@@ -1,47 +1,66 @@
-## Description: <br>
-ClickFunnels API integration with managed OAuth for managing contacts, products, orders, courses, forms, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ClickFunnels API integration with managed OAuth for managing contacts, products, orders, courses, forms, and webhooks through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to connect an agent to a ClickFunnels account through Maton, inspect business data, and prepare or execute approved sales, contact, order, course, form, and webhook operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can help an agent access or modify connected ClickFunnels business data, including contacts, products, orders, courses, forms, fulfillments, and webhooks. <br>
-Mitigation: Review write actions before execution and confirm the target resource and intended effect, especially deletes, GDPR redaction, fulfillment changes, and webhook creation. <br>
-Risk: The MATON_API_KEY grants access to the Maton proxy for the user's connected ClickFunnels account. <br>
-Mitigation: Store MATON_API_KEY as an environment variable and avoid displaying, logging, or sharing the key in chat or command output. <br>
-Risk: When multiple ClickFunnels connections exist, requests may affect the wrong account if no connection is specified. <br>
-Mitigation: Use the Maton-Connection header when more than one active connection is available. <br>
+## Use Case:
 
+Developers and business operators use this skill to inspect and manage ClickFunnels 2.0 account data and marketing automation workflows through Maton-managed OAuth.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/clickfunnels) <br>
-- [ClickFunnels API Introduction](https://developers.myclickfunnels.com/docs/intro) <br>
-- [ClickFunnels API Reference](https://developers.myclickfunnels.com/reference) <br>
-- [ClickFunnels Pagination Guide](https://developers.myclickfunnels.com/docs/pagination) <br>
-- [ClickFunnels Filtering Guide](https://developers.myclickfunnels.com/docs/filtering) <br>
-- [ClickFunnels Webhooks Overview](https://developers.myclickfunnels.com/docs/webhooks) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API endpoint references and Python, JavaScript, or shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a valid MATON_API_KEY environment variable, and an authorized ClickFunnels OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill can create, update, or delete ClickFunnels business data through Maton for the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read and list operations first, and review the target resource, payload, and intended effect before approving any write or delete action.
+
+Risk: Raw API passthrough can reach broad ClickFunnels API endpoints, including webhook changes with downstream side effects.
+
+Mitigation: Use OAuth, connect only the needed ClickFunnels account, specify the connection when multiple accounts exist, and review webhook changes carefully.
+
+Risk: Credentials or provider-issued tokens could be exposed if handled outside the Maton credential flow.
+
+Mitigation: Use Maton OAuth where possible, avoid printing or persisting credentials, and send API keys only to api.maton.ai when a CLI fallback is required.
+
+## Reference(s):
+
+- [ClickFunnels Skill on ClawHub](https://clawhub.ai/byungkyu/skills/clickfunnels)
+- [Maton Homepage](https://maton.ai)
+- [ClickFunnels API Introduction](https://developers.myclickfunnels.com/docs/intro)
+- [ClickFunnels API Reference](https://developers.myclickfunnels.com/reference)
+- [ClickFunnels Pagination Guide](https://developers.myclickfunnels.com/docs/pagination)
+- [ClickFunnels Filtering Guide](https://developers.myclickfunnels.com/docs/filtering)
+- [ClickFunnels Webhooks Overview](https://developers.myclickfunnels.com/docs/webhooks)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Guidance]
+
+**Output Format:** [Markdown with inline bash and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a connected ClickFunnels account.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

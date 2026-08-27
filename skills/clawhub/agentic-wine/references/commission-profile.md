@@ -37,9 +37,21 @@
 - Preferred region, if any
 - Preferred or excluded varieties
 - Existing vineyard relationship
-- Co-creation inventory checked
+- Co-creation parcels checked
 - Vintage measurements available
 - Blend flexibility
+
+## Vineyard state before reception
+
+- Soil moisture depths and matric potential, where available
+- Rainfall, evapotranspiration and vine water-stress evidence
+- Compaction and infiltration
+- Rhizosphere diagnosis and stated purpose of any amendment
+- Bunch exposure, humidity, disease pressure and fruit temperature
+- Acidity and route-specific maturity trajectory
+- Skin integrity, rot pressure and microbial indicators where available
+- Harvest segments by zone, exposure, maturity, sanitary state and intended route
+- Optional chemical or optical fingerprint method and reference population
 
 ## Production capacity
 

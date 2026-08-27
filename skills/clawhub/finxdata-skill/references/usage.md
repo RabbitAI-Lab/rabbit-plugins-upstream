@@ -10,6 +10,7 @@
 
 | 用户想做什么 | 推荐命令 | 说明 |
 | --- | --- | --- |
+| 按代码或名称查找股票 | `python3 scripts/finxdata.py stock search --query 阿里` | 需要 API Key，但不扣账户额度；最多返回 5 个 A/H 股匹配项。 |
 | 看一只股票的当前概况 | `python3 scripts/finxdata.py stock summary --code 600519` | 用于公司简介、主营信息和概要行情。 |
 | 对比几只股票最新行情 | `python3 scripts/finxdata.py stock quote --code 600519 000001 300750` | 报价接口支持批量代码，优先一次请求完成。 |
 | 查一只股票的财报明细 | `python3 scripts/finxdata.py stock financial --code 600519 --sections reports,mainops` | `reports` 查基础财报和三大报表；可按需组合 `mainops/holdernum/predict/performance/disclosure`。 |
@@ -22,6 +23,7 @@
 | 看公告跟踪 | `python3 scripts/finxdata.py track notice` | 返回公告跟踪快照；回答时优先提取公告时间、公司、事项类型、重要性和后续关注点。 |
 | 看龙虎榜 | `python3 scripts/finxdata.py market dragon-tiger --trade-date 2026-06-12 --limit 50` | 市场全量龙虎榜；个股席位用 `stock dragon-tiger-seats`。 |
 | 查限售解禁 | `python3 scripts/finxdata.py stock lockup --code 600519 --forward-days 180` | 覆盖未来待解禁和历史解禁。 |
+| 按股票筛选业绩预告 | `python3 scripts/finxdata.py stock forecast --code 600519` | `code` 可省略；省略时按页查询全市场业绩预告。 |
 | 查宏观指标 | `python3 scripts/finxdata.py economy china-types` 后接 `economy china --type <type>` | 先查可用类型，再查具体报表。 |
 | 查 FRED 时间序列 | `python3 scripts/finxdata.py fred series-list` 后接 `fred series --series-id FEDFUNDS` | 先查可用序列，再查观测值。 |
 | 查额度 | `python3 scripts/finxdata.py quota` | 用于解释 API Key 剩余次数、余额和重置等待时间。 |
@@ -62,7 +64,7 @@
 
 ## 配额和限制
 
-常规数据接口需要 `FINXDATA_API_KEY`，会消耗或检查账户额度。Agent 公开接口不需要 API Key，不扣注册用户额度，但必须提供 `--agent-type`，并受来源统计、IP 频率和服务端保护策略限制。
+常规数据接口需要 `FINXDATA_API_KEY`，会消耗或检查账户额度。`stock search` 只验证 API Key，不消耗账户额度。Agent 公开接口不需要 API Key，不扣注册用户额度，但必须提供 `--agent-type`，并受来源统计、IP 频率和服务端保护策略限制。
 
 `quota` 只反映 API Key 账户额度，不代表 Agent 公开接口的剩余次数。`quota` 返回字段含义：
 
@@ -104,7 +106,9 @@ Agent 公开接口失败时：
 | --- | --- |
 | `missing_api_key` | 本地没有配置 API Key，需要先申请并导出 `FINXDATA_API_KEY`。 |
 | `auth_failed` | API Key 错误、过期或没有接口权限。 |
+| `missing_agent_type` / `agent_auth_failed` | Agent 来源标识缺失、格式错误或没有接口权限。 |
 | `quota_limited` | 额度用尽或调用太频繁；先查 `quota`。 |
+| `agent_rate_limited` | Agent 免费接口达到单 IP 每日限额或频率限制；无需查 `quota`，按 `Retry-After` 或服务提示等待。 |
 | `not_found` | 接口、股票代码、日期或指标类型不存在。 |
 | `network_timeout` / `network_connect_failed` | 网络或服务连接问题；脚本已重试，稍后再试。 |
 | `service_unavailable` | 服务或上游数据暂时不可用；脚本已重试，稍后再试。 |
@@ -118,6 +122,7 @@ Agent 公开接口失败时：
 ```json
 {
   "code": 200,
+  "confidence": "高",
   "data": "### 600519 股票概要\n\n| 项目 | 值 |\n| --- | --- |\n| 最新价 | ... |"
 }
 ```

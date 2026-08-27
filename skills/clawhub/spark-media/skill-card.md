@@ -1,50 +1,67 @@
-## Description: <br>
-Spark Media helps an agent generate images from text, generate images from text plus a reference image, create text-to-video or image-to-video tasks, and query asynchronous video results using a Spark Media API key. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Spark Media helps agents generate images and videos from prompts, edit or animate reference images, create short media assets, and query media task status using SPARK_MEDIA_API_KEY.
 
-## Publisher: <br>
-[youteacherasia](https://clawhub.ai/user/youteacherasia) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[youteacher](https://clawhub.ai/user/youteacher)
 
-## Use Case: <br>
-External users and developers use this skill to request paid image and video generation through Spark Media, including marketing images, reference-image variations, short video prototypes, and follow-up video task status checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and reference images are sent to Spark Media and its upstream provider. <br>
-Mitigation: Avoid sensitive or confidential media and tell users before submitting prompts or reference images. <br>
-Risk: Image and video requests can spend account credit. <br>
-Mitigation: Confirm billed generation requests before execution and show the charged amount and remaining balance after successful calls. <br>
-Risk: Video generation is asynchronous and can leave tasks in submitted or processing states. <br>
-Mitigation: Return the task ID and current status, then query later until the task succeeds or fails. <br>
-Risk: Retrying paid or rate-limited requests incorrectly can cause confusion or duplicate work. <br>
-Mitigation: Use idempotency keys for image retries, distinguish daily spending limits from per-minute rate limits, and avoid resubmitting active video tasks. <br>
+## Use Case:
 
+External users and developers use this skill to create advertising images, product images, posters, short videos, and other media assets through the Spark Media service. It is also used to poll media generation tasks and retrieve completed results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/youteacherasia/skills/spark-media) <br>
-- [Spark Media homepage](https://media.open-idea.net) <br>
-- [API key configuration](references/API-KEY.md) <br>
-- [Behavior rules](references/BEHAVIOR-RULES.md) <br>
-- [HTTP request examples](references/HTTP-REQUESTS.md) <br>
-- [Image generation details](references/IMAGE-GENERATION.md) <br>
-- [Video task details](references/VIDEO-GENERATION.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API request examples, status summaries, generated media links or files, and billing lines] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Image results may include PNG files or display links; video generation returns task status first and media links after the asynchronous task succeeds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and server release evidence) <br>
+Risk: The skill uses SPARK_MEDIA_API_KEY to call an external Spark Media API, so leaked credentials could allow unauthorized generation requests or account charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Store SPARK_MEDIA_API_KEY only as a secret environment variable, do not paste full keys into chat, code, logs, prompts, or generated files, and verify AI_SKILLS_API_URL points to the intended endpoint.
+
+Risk: Prompts and reference images may be uploaded to the Spark Media service, including sensitive or user-provided image content.
+
+Mitigation: Upload only content needed for the task, obtain consent before sensitive image uploads or edits involving real people, and avoid unlawful, harmful, or privacy-invasive media generation.
+
+Risk: Generation calls may consume account balance, and retries or duplicate submissions can create unintended costs.
+
+Mitigation: Use a unique Idempotency-Key for each new logical request, reuse the same key for retries, follow Retry-After or bounded backoff, and stop automatic retries when idempotency or billing state is indeterminate.
+
+Risk: Media task responses may be missing fields, fail decoding, or have unknown status.
+
+Mitigation: Report abnormal responses clearly, do not fabricate media outputs, and rely on returned result fields and billing records instead of assumptions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/youteacher/skills/spark-media)
+- [AI Skills Platform](https://ai-skills.open-idea.net)
+- [API Key Configuration](artifact/references/API-KEY.md)
+- [Image Generation and Editing](artifact/references/IMAGE-GENERATION.md)
+- [Video Generation and Polling](artifact/references/VIDEO-GENERATION.md)
+- [HTTP Request Examples](artifact/references/HTTP-REQUESTS.md)
+- [Behavior, Errors, and Retry Rules](artifact/references/BEHAVIOR-RULES.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration]
+
+**Output Format:** [Markdown with inline shell commands, HTTP request examples, and media task guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct agents to submit prompts or reference images to an external media generation service and poll asynchronous video tasks.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence and skill metadata packageVersion)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -11,7 +11,7 @@ import { createProvider } from './providers/index.js';
 import type { IVoiceProvider } from './providers/index.js';
 import { loadSkills, registerSkills, isSkillFunction, getSkillTools, handleSkillCall, callSkillDirectly } from './skills/index.js';
 import type { HandleSkillCallDeps } from './skills/index.js';
-import { BRIDGE_CREDENTIAL as DEFAULT_BRIDGE_CREDENTIAL, CRM_ENABLED, CRM_TRANSCRIPT_ENRICHMENT_ENABLED, DEFAULT_OPENAI_VOICE, GATEWAY_BASE_URL, GATEWAY_CREDENTIAL, IS_PRODUCTION_RUNTIME, IS_TEST_RUNTIME, OPENAI_WEBHOOK_STRICT, OUTBOUND_CALLS_ENABLED, PROVIDER_WEBHOOK_STRICT, REALTIME_INTERRUPT_RESPONSE, REALTIME_MODEL, REALTIME_NOISE_REDUCTION, RUNTIME_PORT, getPersonalizationConfig, getTelephonyRuntimeConfig, getTelnyxRuntimeConfig, getVoiceProviderName, requireRuntimeEnv } from './config.js';
+import { BRIDGE_CREDENTIAL as DEFAULT_BRIDGE_CREDENTIAL, CRM_ENABLED, CRM_TRANSCRIPT_ENRICHMENT_ENABLED, DEFAULT_OPENAI_VOICE, GATEWAY_BASE_URL, GATEWAY_CREDENTIAL, IS_PRODUCTION_RUNTIME, IS_TEST_RUNTIME, OPENAI_WEBHOOK_STRICT, OUTBOUND_CALLS_ENABLED, PROVIDER_WEBHOOK_STRICT, REALTIME_INTERRUPT_RESPONSE, REALTIME_MODEL, REALTIME_NOISE_REDUCTION, REALTIME_VAD_PREFIX_PADDING_MS, REALTIME_VAD_SILENCE_DURATION_MS, REALTIME_VAD_THRESHOLD, RUNTIME_PORT, getPersonalizationConfig, getTelephonyRuntimeConfig, getTelnyxRuntimeConfig, getVoiceProviderName, requireRuntimeEnv } from './config.js';
 
 // ─── Security Helpers ───
 
@@ -842,9 +842,9 @@ const callAccept = {
                 noise_reduction: { type: REALTIME_NOISE_REDUCTION },
                 turn_detection: {
                   type: 'server_vad',
-                  threshold: 0.99,
-                  prefix_padding_ms: 500,
-                  silence_duration_ms: 800,
+                  threshold: REALTIME_VAD_THRESHOLD,
+                  prefix_padding_ms: REALTIME_VAD_PREFIX_PADDING_MS,
+                  silence_duration_ms: REALTIME_VAD_SILENCE_DURATION_MS,
                   interrupt_response: REALTIME_INTERRUPT_RESPONSE,
                 },
               },
@@ -877,7 +877,7 @@ const callAccept = {
               `[CRM] You are calling ${crmContact.name}. The person on the line IS ${crmContact.name}.`,
               contextLine,
               `Your objective for this call is: ${outboundObjective}`,
-              `Be yourself — warm, playful, a little flirty. Greet them by name like you're happy to hear them. If you have personal context, weave it in naturally (one quick line) — then pivot with something like "but the real reason I'm calling..." and pursue the objective. Stay on task but keep your personality. Don't become a robot just because you have a mission.`,
+              `Be yourself — warm, playful, and personable. Greet them by name like you're happy to hear them. If you have personal context, weave it in naturally (one quick line) — then pivot with something like "but the real reason I'm calling..." and pursue the objective. Stay on task but keep your personality. Don't become a robot just because you have a mission.`,
             ].filter(Boolean).join(' ');
           } else {
             // Inbound: personalized greeting with context is appropriate.
@@ -1038,13 +1038,20 @@ const callAccept = {
         const fnName = parsed?.name ?? pendingFunctionCalls.get(itemId)?.name ?? '';
         const fnArgs = parsed?.arguments ?? pendingFunctionCalls.get(itemId)?.args ?? '{}';
         pendingFunctionCalls.delete(itemId);
+        let fnArgKeys: string[] = [];
+        try {
+          const parsedArgs = JSON.parse(fnArgs);
+          if (parsedArgs && typeof parsedArgs === 'object' && !Array.isArray(parsedArgs)) {
+            fnArgKeys = Object.keys(parsedArgs).sort();
+          }
+        } catch {}
 
         writeJsonl({
           type: 'c2.function_call_detected',
           call_id: callId,
           received_at: new Date().toISOString(),
           fn_name: fnName,
-          fn_args: fnArgs,
+          arg_keys: fnArgKeys,
           item_id: itemId,
         });
 
@@ -1172,7 +1179,12 @@ const callAccept = {
 
 // ─── Load Amber Skills at startup ───
 const SKILLS_DIR = path.resolve(new URL('.', import.meta.url).pathname, '../../amber-skills');
-const loadedSkills = loadSkills(SKILLS_DIR);
+const loadedSkills = loadSkills(SKILLS_DIR).filter((skill) => {
+  if (skill.manifest.name !== 'crm') return true;
+  if (CRM_ENABLED) return true;
+  console.log('[skills] Skipping crm: AMBER_CRM_ENABLED is not true');
+  return false;
+});
 registerSkills(loadedSkills);
 
 app.listen(PORT, () => {

@@ -1,41 +1,61 @@
-## Description: <br>
-Api Integration helps agents produce guidance, Python request templates, authentication patterns, GraphQL examples, and HTTP error-handling advice for third-party API integrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+API集成开发助手 helps agents produce REST and GraphQL integration guidance, Python request templates, authentication patterns, and error-handling approaches for connecting third-party services.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and engineers use this skill to design REST, GraphQL, OAuth2, JWT, API key, and Basic Auth integrations for agent workflows. It is suited for third-party API integration, platform connection, and data synchronization tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated API-calling code or guidance could be pointed at untrusted endpoints or run with real credentials. <br>
-Mitigation: Review generated requests before execution, use trusted endpoints, and keep tokens in environment variables or a secret store. <br>
-Risk: Authentication examples may expose API keys, OAuth tokens, JWTs, or Basic Auth credentials if copied into version-controlled files. <br>
-Mitigation: Store secrets outside source control and rotate credentials if they are accidentally committed or shared. <br>
+## Use Case:
 
+Developers, engineers, and automation teams use this skill to design API integrations, choose authentication patterns, draft Python request code, prepare GraphQL queries, and handle common HTTP errors. It is intended for third-party service connection work, not closed API reverse engineering, API proxy deployment, key issuance, or monitoring.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/api-integration) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples, Python code snippets, and shell environment-variable commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Primarily documentation-style output; examples focus on Python requests and API credential handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Generated API integration code can be incorrect, incomplete, or unsuitable for a target service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated code against the target API documentation and test it in a controlled environment before using it with production systems.
+
+Risk: API keys, OAuth tokens, JWTs, or Basic Auth credentials can be exposed if embedded in code, logs, or prompts.
+
+Mitigation: Keep credentials in environment variables or a secrets manager, avoid hardcoding secrets, and redact sensitive values from logs and outputs.
+
+Risk: Write or shell execution permissions can allow the agent to create or test integration code in the project.
+
+Mitigation: Grant write or shell execution only when code generation or local testing is intended, and review commands before running them.
+
+Risk: Network calls to third-party APIs can fail, time out, hit rate limits, or return unauthorized responses.
+
+Mitigation: Use HTTPS, explicit timeouts, status-code handling, retry backoff for rate limits, and credential refresh handling for authentication failures.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/api-integration)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with Python, bash, and JSON code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include API request templates, authentication setup guidance, error-handling patterns, troubleshooting steps, and structured JSON output examples.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence; artifact frontmatter reports 1.0.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -51,7 +51,15 @@ class RagflowClient {
     const attempts = this.maxRetries + 1;
     for (let attempt = 1; attempt <= attempts; attempt++) {
       try {
-        return await this._doRequest(method, endpoint, headers, body, options.timeout, options.apiPrefix);
+        return await this._doRequest(
+          method,
+          endpoint,
+          headers,
+          body,
+          options.timeout,
+          options.apiPrefix,
+          options.rawResponse
+        );
       } catch (err) {
         lastError = err;
         if (this._isRetryable(err) && attempt < attempts) {
@@ -94,7 +102,7 @@ class RagflowClient {
     return err;
   }
 
-  _doRequest(method, endpoint, headers, body, timeoutOverride, apiPrefix = this.apiPrefix) {
+  _doRequest(method, endpoint, headers, body, timeoutOverride, apiPrefix = this.apiPrefix, rawResponse = false) {
     const url = this._buildUrl(endpoint, apiPrefix);
     const timeout = timeoutOverride || this.timeout;
 
@@ -107,6 +115,17 @@ class RagflowClient {
           const raw = Buffer.concat(chunks).toString("utf-8");
           try {
             const data = JSON.parse(raw);
+            if (rawResponse) {
+              if (res.statusCode >= 200 && res.statusCode < 300) {
+                resolve(data);
+              } else {
+                const err = new Error(data.message || `HTTP ${res.statusCode}`);
+                err.status = res.statusCode;
+                err.response = data;
+                reject(err);
+              }
+              return;
+            }
             if (data.code === 0) {
               resolve(data.data !== undefined ? data.data : {});
             } else {
@@ -385,11 +404,10 @@ class RagflowClient {
   }
 
   async getChunk(datasetId, documentId, chunkId) {
-    const result = await this.listChunks(datasetId, documentId, { id: chunkId });
-    const chunks = result?.chunks || (Array.isArray(result) ? result : []);
-    const chunk = chunks.find((item) => item.id === chunkId) || chunks[0];
-    if (!chunk) throw new Error(`Chunk not found: ${datasetId}/${chunkId}`);
-    return chunk;
+    return this.request(
+      "GET",
+      `/datasets/${datasetId}/documents/${documentId}/chunks/${chunkId}`
+    );
   }
 
   async _existingChunkIds(datasetId, documentId, chunkIds) {
@@ -475,15 +493,19 @@ class RagflowClient {
   async retrieve(params) {
     return this.request("POST", "/retrieval", { json: params });
   }
+
+  async updateMetadata(datasetId, data) {
+    return this.request("POST", `/datasets/${datasetId}/metadata/update`, { json: data });
+  }
   // ── Connector ──
 
-  async listConnectors(datasetId, params = {}) {
+  async listConnectors(params = {}) {
     const query = this._buildQuery(params);
-    return this.request("GET", `/datasets/${datasetId}/connectors?${query.toString()}`);
+    return this.request("GET", `/connectors?${query.toString()}`);
   }
 
-  async createConnector(datasetId, data) {
-    return this.request("POST", `/datasets/${datasetId}/connectors`, { json: data });
+  async createConnector(data) {
+    return this.request("POST", `/connectors`, { json: data });
   }
 
   async getConnector(connectorId) {
@@ -501,11 +523,27 @@ class RagflowClient {
   // ── RAPTOR ──
 
   async runRaptor(datasetId) {
-    return this.request("POST", `/datasets/${datasetId}/run_raptor`);
+    return this.request("POST", `/datasets/${datasetId}/index?type=raptor`);
   }
 
   async traceRaptor(datasetId) {
-    return this.request("GET", `/datasets/${datasetId}/trace_raptor`);
+    return this.request("GET", `/datasets/${datasetId}/index?type=raptor`);
+  }
+
+  async getKnowledgeGraph(datasetId) {
+    return this.request("GET", `/datasets/${datasetId}/graph`);
+  }
+
+  async deleteKnowledgeGraph(datasetId) {
+    return this.request("DELETE", `/datasets/${datasetId}/graph`);
+  }
+
+  async runGraphRag(datasetId) {
+    return this.request("POST", `/datasets/${datasetId}/index?type=graph`);
+  }
+
+  async traceGraphRag(datasetId) {
+    return this.request("GET", `/datasets/${datasetId}/index?type=graph`);
   }
 
   // ── Chat Assistant ──
@@ -546,6 +584,14 @@ class RagflowClient {
     return this.request("POST", `/chats/${chatId}/sessions`, { json: data });
   }
 
+  async getSession(chatId, sessionId) {
+    return this.request("GET", `/chats/${chatId}/sessions/${sessionId}`);
+  }
+
+  async updateSession(chatId, sessionId, data) {
+    return this.request("PATCH", `/chats/${chatId}/sessions/${sessionId}`, { json: data });
+  }
+
   async deleteSessions(chatId, ids) {
     return this.request("DELETE", `/chats/${chatId}/sessions`, { json: { ids } });
   }
@@ -568,7 +614,7 @@ class RagflowClient {
       const lastUserMessage = userMessages[userMessages.length - 1];
       if (lastUserMessage) payload.question = lastUserMessage.content;
     }
-    // v0.26.4: preserve messages when pass_all_history_messages is set
+    // preserve messages when pass_all_history_messages is set
     if (!payload.pass_all_history_messages && !payload.pass_all_history) {
       delete payload.messages;
     }
@@ -714,12 +760,20 @@ class RagflowClient {
 
   async listModels(params = {}) {
     const query = this._buildQuery(params);
+    const suffix = query.toString();
+    return this.request("GET", `/models${suffix ? `?${suffix}` : ""}`);
+  }
+
+  // Legacy model discovery (RAGFlow v0.26.x): factory-grouped model catalog.
+  // Superseded by GET /api/v1/models in v0.27.0 but kept for fallback.
+  async listModelsLegacy(params = {}) {
+    const query = this._buildQuery(params);
     return this.request("GET", `/llm/my_llms?${query.toString()}`, {
       apiPrefix: "/v1",
     });
   }
 
-  // ── Tenant Models (v0.26.4) ──
+  // ── Tenant Models ──
 
   async listAddedModels(params = {}) {
     const query = this._buildQuery(params);
@@ -735,7 +789,7 @@ class RagflowClient {
     return this.request("PATCH", "/models/default", { json: data });
   }
 
-  // ── Model Providers (v0.26.4) ──
+  // ── Model Providers ──
 
   async listProviders(params = {}) {
     const query = this._buildQuery(params);
@@ -827,6 +881,10 @@ class RagflowClient {
 
   async getSystemVersion() {
     return this.request("GET", "/system/version");
+  }
+
+  async getSystemHealth() {
+    return this.request("GET", "/system/healthz", { rawResponse: true });
   }
 
   async getLogLevels() {

@@ -1,41 +1,54 @@
-## Description: <br>
-Assess whether to escalate models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assess whether to escalate models.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agent operators use this skill to decide when model escalation is justified, document the reason, and avoid unnecessary cost or latency from premature escalation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may influence an agent to use more capable and potentially more costly models. <br>
-Mitigation: Require documented investigation, a bounded escalation scope, and a cost-benefit justification before changing model capability. <br>
-Risk: Incorrect escalation guidance could cause unnecessary latency or missed escalation for genuinely complex tasks. <br>
-Mitigation: Review the decision framework against local model policy and monitor escalations during rollout. <br>
+## Use Case:
 
+Developers and agent operators use this skill to decide when model escalation is justified, how to document the trade-off, and when to investigate before changing model capability.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-escalation-governance) <br>
-- [Source homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/abstract) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown guidance with checklists, decision criteria, and protocol steps] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; no code execution, persistence, data access, or credential handling was identified by the security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata) <br>
+Risk: Model escalation guidance can affect cost and latency when agents choose stronger or higher-effort models.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill against organizational model routing, budget, and latency policies before deployment.
+
+Risk: Misapplied escalation guidance can lead to unnecessary escalation or insufficient escalation for high-stakes decisions.
+
+Mitigation: Require agents to document the escalation reason, scope, and success criteria, and keep human review for high-stakes workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-escalation-governance)
+- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown]
+
+**Output Format:** [Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides decision criteria, escalation protocol guidance, and model capability notes; it does not execute code or access data.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

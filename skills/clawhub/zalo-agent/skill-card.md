@@ -1,47 +1,69 @@
-## Description: <br>
-Automates Zalo messaging, Official Account workflows, real-time listeners, webhooks, and MCP integration through the preinstalled zalo-agent CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automate Zalo messaging, Official Account (OA), and MCP server integration via zalo-agent-cli.
 
-## Publisher: <br>
-[PhucMPham](https://clawhub.ai/user/PhucMPham) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[phucmpham](https://clawhub.ai/user/phucmpham)
 
-## Use Case: <br>
-Developers and operators use this skill to have an agent prepare Zalo CLI workflows for messaging, groups, Official Accounts, webhooks, and MCP integrations. It is intended for environments where the user has already installed and authorized the zalo-agent command-line tool. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can help an agent operate real Zalo accounts or Official Accounts and send, forward, store, or expose private messages. <br>
-Mitigation: Use it only with trusted conversations and endpoints, confirm recipients and message content before account-changing actions, and apply filters or whitelists for listeners. <br>
-Risk: Exported credentials and session files can enable account takeover if copied, logged, committed, or shared. <br>
-Mitigation: Treat exported credentials as secrets, keep restrictive file permissions, avoid committing them, and delete or rotate credentials when no longer needed. <br>
-Risk: Webhook, MCP, or OA listener endpoints can expose account data if left unauthenticated or run with verification disabled. <br>
-Mitigation: Require authentication for remote MCP endpoints, use HTTPS and verified webhook domains, and avoid no-verify modes outside local testing. <br>
+## Use Case:
 
+Developers and operators use this skill to guide agents through Zalo CLI messaging, Official Account workflows, webhook listening, and MCP server setup. It is suited to account owners automating Zalo conversations, groups, followers, and related payment-message formats with explicit control over credentials and outbound messages.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/PhucMPham/zalo-agent) <br>
-- [Login flow](references/login-flow.md) <br>
-- [Command reference](references/command-reference.md) <br>
-- [Official Account command reference](references/oa-command-reference.md) <br>
-- [Listen mode guide](references/listen-mode-guide.md) <br>
-- [MCP guide](references/mcp-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include commands that operate live Zalo accounts, configure webhooks or MCP endpoints, and handle credential-related setup.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: server release metadata) <br>
+Risk: The skill can read message history, save event logs, and forward private message payloads to webhooks or MCP clients.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only accounts and Official Accounts you control, limit history searches to the minimum necessary scope, and forward message data only to approved localhost or authenticated HTTPS endpoints.
+
+Risk: Login, OA, webhook, and MCP workflows can expose credentials, tokens, QR login endpoints, or bearer-auth endpoints if misconfigured.
+
+Mitigation: Protect credential and log files, require explicit user confirmation before credential export, avoid exposing temporary QR or MCP endpoints publicly, and use bearer authentication for HTTP MCP mode.
+
+Risk: Outbound Zalo and OA message commands can send account messages, files, payment-related QR content, or bulk communications.
+
+Mitigation: Require explicit confirmation before sending messages or files, especially to groups, followers, or third-party recipients, and verify target IDs and message content before execution.
+
+Risk: Skipping webhook verification on exposed OA listeners can allow untrusted event injection.
+
+Mitigation: Use verified domains and authenticated HTTPS for production OA webhooks, and do not use --no-verify on exposed webhook listeners.
+
+## Reference(s):
+
+- [Zalo Agent CLI skill page](https://clawhub.ai/phucmpham/skills/zalo-agent)
+- [Publisher profile](https://clawhub.ai/user/phucmpham)
+- [zalo-agent CLI homepage](https://github.com/PhucMPham/zalo-agent-cli)
+- [Login Flow](references/login-flow.md)
+- [zalo-agent CLI Full Command Reference](references/command-reference.md)
+- [Listen Mode Real-Time Event Monitoring](references/listen-mode-guide.md)
+- [Official Account Command Reference](references/oa-command-reference.md)
+- [Zalo MCP Server Guide](references/mcp-guide.md)
+- [Evaluation Scenarios](evals/eval-scenarios.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, markdown]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a user-installed zalo-agent binary on Darwin or Linux. Some workflows require an authenticated Zalo account, human QR scan, OA credentials, or user-supplied webhook and MCP endpoints.]
+
+## Skill Version(s):
+
+1.7.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

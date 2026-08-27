@@ -1,46 +1,77 @@
-## Description: <br>
-Completes customer onboarding for the Famulor AI phone platform by gathering business requirements, creating prompts and knowledge bases, and deploying AI phone assistants. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate a Famulor workspace through its hosted MCP server, including assistants, conversation history, campaigns, messaging, telephony, knowledge, dashboards, automations, billing, settings, reseller administration, migrations, and long-running tasks.
 
-## Publisher: <br>
-[bekservice](https://clawhub.ai/user/bekservice) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bekservice](https://clawhub.ai/user/bekservice)
 
-## Use Case: <br>
-Developers, operators, and onboarding specialists use this skill to configure and deploy Famulor phone assistants for business customers, including industry-specific intake, prompt drafting, knowledge base setup, and API-based assistant creation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Famulor API key with broad account authority. <br>
-Mitigation: Install it only for trusted publishers and use a restricted API key if Famulor supports one. <br>
-Risk: The skill can change account resources and trigger outbound communication workflows beyond basic assistant setup. <br>
-Mitigation: Confirm destructive, outbound, campaign, SMS, WhatsApp, and phone-number actions before executing them. <br>
-Risk: Assistant setup may involve customer documents, call recordings, webhooks, or other regulated business data. <br>
-Mitigation: Confirm before sending documents or customer data, and review recording, webhook, and privacy obligations before deployment. <br>
+## Use Case:
 
+Employees, external operators, and developers use this skill to inspect and operate real Famulor workspace resources through the hosted MCP server. It supports assistant configuration, conversation history, campaigns, messaging, telephony, knowledge, dashboards, automations, billing, settings, reseller administration, migrations, and long-running task workflows.
 
-## Reference(s): <br>
-- [Famulor Skill on ClawHub](https://clawhub.ai/bekservice/famulor-skill) <br>
-- [Famulor Skill homepage](https://github.com/bekservice/Famulor-Skill) <br>
-- [Niche intelligence reference](references/niche_intelligence.md) <br>
-- [Famulor application](https://app.famulor.de) <br>
-- [Famulor API base](https://app.famulor.de/api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, API calls] <br>
-**Output Format:** [Markdown guidance with code snippets, configuration values, and API payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires FAMULOR_API_KEY for authenticated Famulor API actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill can operate real workspace data and supports broad administrative workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for intended Famulor workspaces, connect the smallest relevant MCP toolset, and use least-privilege OAuth scopes.
+
+Risk: Some workflows can trigger destructive, paid, external, or difficult-to-reverse actions such as outreach, live-call control, billing links, phone-number changes, migrations, exports, and persistent automations.
+
+Mitigation: Require explicit approval for the exact target and action, show material cost or irreversible impact when available, and verify completion with read-back or task status.
+
+Risk: Workspace conversations, transcripts, recordings, contacts, customer memories, and message previews may contain personal data.
+
+Mitigation: Retrieve and summarize only what the user needs, respect consent and retention settings, and avoid copying personal data into files or unrelated services.
+
+Risk: Credential and API-key workflows may expose sensitive secrets if handled through chat, commands, logs, or files.
+
+Mitigation: Use OAuth when possible, never ask users to paste secrets into chat, and require a secure handoff before creating or transferring credentials.
+
+## Reference(s):
+
+- [Famulor ClawHub release](https://clawhub.ai/bekservice/skills/famulor-skill)
+- [Famulor Skill repository](https://github.com/bekservice/Famulor-Skill)
+- [Famulor hosted MCP endpoint](https://app.famulor.io/mcp)
+- [Assistant design and onboarding](references/assistant-design.md)
+- [Assistants toolset](references/toolsets/assistants.md)
+- [Calls toolset](references/toolsets/calls.md)
+- [Campaigns toolset](references/toolsets/campaigns.md)
+- [Messaging toolset](references/toolsets/messaging.md)
+- [Telephony toolset](references/toolsets/telephony.md)
+- [Knowledge toolset](references/toolsets/knowledge.md)
+- [Dashboards toolset](references/toolsets/dashboards.md)
+- [Automations toolset](references/toolsets/automations.md)
+- [Billing toolset](references/toolsets/billing.md)
+- [Settings toolset](references/toolsets/settings.md)
+- [Platform toolset](references/toolsets/platform.md)
+- [Migration toolset](references/toolsets/migration.md)
+- [Tasks toolset](references/toolsets/tasks.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, API calls]
+
+**Output Format:** [Markdown and plain text with MCP tool calls or configuration snippets when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should reflect live MCP results and avoid exposing credentials, raw tokens, or unnecessary personal data.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,2 +1,2 @@
-- Fix native-currency prices to convert to SEK (#81)
-- Fix parent-to-virtual transfers to shift deposit column (#82)
+- Fix handle_dividend to credit capital from SEK total, not native-currency price (issue #85) (#85)
+- Fix currency mixup in dividend routing to virtual holders (issue #83) (#84)
