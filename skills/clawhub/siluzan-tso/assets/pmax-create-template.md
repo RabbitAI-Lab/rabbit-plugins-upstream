@@ -10,31 +10,33 @@
 
 ## Agent 常见坑
 
-| 场景          | 正确做法                                                                                                                                                            |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 创建 PMax     | `pmax-validate` → 用户确认 → `pmax-create`                                                                                                                          |
-| 文案超长      | `pmax-validate --json-out` 读 `lengthViolations`（含完整 `text`）；**勿自动截断**，列改写方案给用户确认后再改 JSON 并重跑 validate（同 Search `campaign-validate`） |
-| 金额          | JSON 填**主币种「元」**；CLI 提交前 `budget`、`targetCpa_BidingAmount` ×100                                                                                         |
+| 场景          | 正确做法                                                                                                                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 创建 PMax     | `pmax-validate` → **写代码**从 JSON 投影完整审查稿 → 用户确认 → `pmax-create`                                                                                                               |
+| 文案超长      | `pmax-validate --json-out` 读 `lengthViolations`（含完整 `text`）；**勿自动截断**，列改写方案给用户确认后再改 JSON 并重跑 validate（同 Search `campaign-validate`）                         |
+| 金额          | JSON 填**主币种「元」**；CLI 提交前 `budget`、`targetCpa_BidingAmount` ×100                                                                                                                 |
 | 图片          | **只填 `imagePaths`** 指向本地 PNG/JPEG（**相对路径相对 `--config-file` 所在目录**；`pmax-validate` 会检查文件是否存在）；`pmax-create` 自动上传并用 assetId 创建（勿把 Base64 提交进 Git） |
-| 视频          | JSON 填 **`videoPath`**（别名 `video` 亦可）；`pmax-create` 成功后 **必定**经 PyAPI 上传并链接（含 `--json-out`）。已有 YouTube 用 `youtubeUrlOrId`                 |
-| 附加资产      | **必填** `campaignExtensions`：宣传信息 ≥20、结构化摘要 ≥20、站内链接 ≥6、leadForm、WhatsApp                                                                        |
-| 文案数量      | 短标题 15、长标题 5（Google API 上限，须填满）、描述 5                                                                                                              |
-| Lead Gen 方案 | **默认**在 `campaignExtensions` 含 **`leadForm`**（B2B/询盘/留资）；仅 callouts/snippets 不算完整方案；用户明确不要才省略                                           |
-| 存量补表单    | 活动已创建时用 `ad extension lead-form`（见 `pmax-lead-form-template.md` 方式 B）                                                                                   |
-| 改已上线 PMax | 先 `ad pmax-get` 看 `_brandGuidelinesActive`；改品牌见 `pmax-api.md` § Brand Guidelines                                                                             |
-| 列表复核      | `ad campaigns -a <id> --json-out ./snap`，`channelTypeV2` 应为 `PERFORMANCE_MAX`                                                                                    |
+| 视频          | JSON 填 **`videoPath`**（别名 `video` 亦可）；`pmax-create` 成功后 **必定**经 PyAPI 上传并链接（含 `--json-out`）。已有 YouTube 用 `youtubeUrlOrId`                                         |
+| 附加资产      | **必填** `campaignExtensions`：宣传信息 ≥20、结构化摘要 ≥20、站内链接 ≥6、leadForm、WhatsApp                                                                                                |
+| 文案数量      | 短标题 15、长标题 5（Google API 上限，须填满）、描述 5                                                                                                                                      |
+| Lead Gen 方案 | **默认**在 `campaignExtensions` 含 **`leadForm`**（B2B/询盘/留资）；仅 callouts/snippets 不算完整方案；用户明确不要才省略                                                                   |
+| 存量补表单    | 活动已创建时用 `ad extension lead-form`（见 `pmax-lead-form-template.md` 方式 B）                                                                                                           |
+| 改已上线 PMax | 先 `ad pmax-get` 看 `_brandGuidelinesActive`；改品牌见 `pmax-api.md` § Brand Guidelines                                                                                                     |
+| 列表复核      | `ad campaigns -a <id> --json-out ./snap`，`channelTypeV2` 应为 `PERFORMANCE_MAX`                                                                                                            |
 
 ---
 
-## 方案生成（Agent 出投放方案时）
+## 方案生成与审查（Agent）
 
-出 PMax **投放方案**（Markdown + JSON）时，除标题/描述/图片外，**Lead Gen / B2B 场景默认包含潜在客户表单**：
+出 PMax 方案时：先落盘本模板同构 JSON，再按 `references/google-ads/rules/google-ads-pmax-launch-plan-template.md` **写代码**从 JSON 投影完整审查稿（默认 Markdown；用户要求 Excel 等则改输出格式）。审查稿须含全部短/长标题、描述与附加资产正文，**禁止**只交概览表。
 
-1. JSON：`campaignExtensions.leadForm` 字段结构与 `pmax-lead-form-template.json` 的 `leadForm` 相同（`businessName`、`headline`、`description`、`privacyPolicyUrl`、`finalUrl`、`fields`）。
-2. Markdown：单独一节 **「潜在客户表单」**，列出表单标题、描述、收集字段、隐私政策 URL；**不得**只在 JSON 里写而方案正文遗漏。
-3. `privacyPolicyUrl`：从落地页站点找 `/privacy`、`/terms` 等；找不到时向用户确认，**禁止**编造 URL。
-4. 用户说「不要表单 / 仅品牌曝光 / 纯电商 Shopping」→ 可省略 `leadForm` 并在方案中说明原因。
-5. `pmax-validate` 会校验 `leadForm`；创建后 `--json-out` 的 `campaignExtensions.leadForm` 段含 `ok` / `error`。
+**Lead Gen / B2B 默认含潜在客户表单**：
+
+1. JSON：`campaignExtensions.leadForm` 结构同 `pmax-lead-form-template.json` 的 `leadForm`。
+2. 审查稿单独一节 **「潜在客户表单」**（标题/描述/字段/privacyPolicyUrl）；不得只写在 JSON 里。
+3. `privacyPolicyUrl`：从站点找 `/privacy`、`/terms` 等；找不到则向用户确认，**禁止**编造。
+4. 用户明确不要表单 → 可省略 `leadForm` 并在审查稿说明原因。
+5. 创建阶段：`pmax-validate`；创建后 `--json-out` 的 `campaignExtensions.leadForm` 含 `ok` / `error`。
 
 ---
 
@@ -43,7 +45,7 @@
 ```bash
 siluzan-tso ad geo search -a <accountId> -q "United States"
 siluzan-tso ad pmax-validate --config-file ./pmax.json --json-out ./snap-pmax
-# 用户确认方案后：
+# Agent 写代码：读 pmax.json → 写出完整审查稿（见 google-ads-pmax-launch-plan-template.md）→ 用户确认后：
 siluzan-tso ad pmax-create --config-file ./pmax.json --json-out ./snap-pmax
 siluzan-tso ad campaigns -a <accountId> --json-out ./snap
 ```
@@ -92,9 +94,9 @@ siluzan-tso ad campaigns -a <accountId> --json-out ./snap
 
 **不**随 `POST .../campaign/pmax` 提交；活动创建成功后 CLI 自动调用 `extensionmanagement`。
 
-| 子字段               | 类型     | 说明                                                                     |
-| -------------------- | -------- | ------------------------------------------------------------------------ |
-| `callouts`           | string[] | 宣传信息（CALLOUT），每条 ≤25 字符，各创建 1 个扩展                      |
+| 子字段               | 类型     | 说明                                                                                   |
+| -------------------- | -------- | -------------------------------------------------------------------------------------- |
+| `callouts`           | string[] | 宣传信息（CALLOUT），每条 ≤25 字符，各创建 1 个扩展                                    |
 | `structuredSnippets` | object[] | `{ header, values }`；`values` 至少 3 项、每项 ≤25 字符；`header` 须为 Google 英文枚举 |
 
 **`structuredSnippets.header` 合法值（English，与网关 `structuredSnippetHeaders` 一致）**：
@@ -102,8 +104,8 @@ siluzan-tso ad campaigns -a <accountId> --json-out ./snap
 `Brands`, `Amenities`, `Styles`, `Types`, `Destinations`, `Services`, `Courses`, `Neighbourhoods`, `Shows`, `Insurance coverage`, `Degree programmes`, `Featured hotels`, `Models`
 
 勿自创标头（如 `Industries`/`Highlights`/`Certifications`/`Product Types` 等会在挂载时 HTTP 400）。`pmax-validate` 会提前拦截。
-| `leadForm`           | object   | 潜在客户表单；字段同 `pmax-lead-form-template.json` 的 `leadForm`        |
-| `businessMessage`    | object   | WhatsApp 私信；字段同 `pmax-whatsapp-template.json` 的 `businessMessage` |
+| `leadForm` | object | 潜在客户表单；字段同 `pmax-lead-form-template.json` 的 `leadForm` |
+| `businessMessage` | object | WhatsApp 私信；字段同 `pmax-whatsapp-template.json` 的 `businessMessage` |
 
 标头可选值：`ad extension snippet-headers`。WhatsApp 需 Google API 白名单（见 `pmax-whatsapp-template.md`）。
 

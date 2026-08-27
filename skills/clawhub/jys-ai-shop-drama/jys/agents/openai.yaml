@@ -1,0 +1,4 @@
+interface:
+  display_name: "JYS AI 带货短剧"
+  short_description: "统筹选套路、剧情去重、选品、写作与最终剧本交付的完整流程"
+  default_prompt: "Use $jys to 从选套路和产品开始，完成一份 AI 带货短剧脚本。"

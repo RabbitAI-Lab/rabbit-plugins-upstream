@@ -1,44 +1,60 @@
-## Description: <br>
-Tongyi Wanxiang 2.7 video model for text-to-video, first/last-frame-to-video, and reference-to-video generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tongyi Wanxiang 2.7 video model for text-to-video, first/last-frame-to-video, and reference-based video generation.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to invoke the dLazy hosted Wan2.7 video model from prompts and optional reference images, video, audio, or first and last frames. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local media may be uploaded to dLazy storage, and the security summary warns that uploads can occur even when using dry-run. <br>
-Mitigation: Avoid passing private local files unless upload is acceptable, and use `npx @dlazy/cli@1.2.3` for ad hoc runs when possible. <br>
-Risk: The skill uses a dLazy API key, and the security guidance warns that local CLI key storage may not enforce the restrictive permissions claimed by the artifact. <br>
-Mitigation: Prefer `DLAZY_API_KEY` per invocation in sensitive environments, or manually restrict permissions on `~/.dlazy/config.json` and rotate keys when needed. <br>
+## Use Case:
 
+External users and developers use this skill to invoke dLazy's hosted Wan 2.7 video generation workflow from an agent, using prompts and optional image, video, or audio inputs to produce generated media outputs.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-wan2-7) <br>
-- [Publisher Profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The wrapped CLI returns hosted media URLs for completed jobs or async task identifiers when no-wait mode is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Prompts and user-selected media files are sent to dLazy's hosted service for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not submit confidential prompts or media unless the intended dLazy account, organization, and service terms are acceptable for that data.
+
+Risk: The login flow can store a dLazy API key in the local CLI configuration.
+
+Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistent local key storage is not desired, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: The skill depends on npm or npx to run the pinned dLazy CLI.
+
+Mitigation: Review the pinned CLI package and install source before use, and keep execution within environments approved for third-party CLI tools.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-wan2-7)
+- [dLazy CLI source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy CLI homepage](https://github.com/dlazyai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media assets are returned as hosted URLs, or as asynchronous task identifiers when no-wait mode is used.]
+
+## Skill Version(s):
+
+1.3.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

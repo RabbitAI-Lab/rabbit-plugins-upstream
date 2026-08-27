@@ -41,6 +41,10 @@ AGENT_ENDPOINTS = {
 }
 
 ENDPOINTS: dict[tuple[str, str], dict[str, Any]] = {
+    ("stock", "search"): {
+        "path": "/api/v1/http/stock/search",
+        "parameters": [("query", True, None)],
+    },
     ("stock", "summary"): {
         "path": "/api/v1/http/stock/summary",
         "parameters": [("code", True, None)],
@@ -114,6 +118,7 @@ ENDPOINTS: dict[tuple[str, str], dict[str, Any]] = {
     ("stock", "forecast"): {
         "path": "/api/v1/http/stock/forecast",
         "parameters": [
+            ("code", False, None),
             ("page", False, 1),
             ("page_size", False, 50),
             ("refresh", False, None),
@@ -284,7 +289,7 @@ ENDPOINTS: dict[tuple[str, str], dict[str, Any]] = {
             ("series_id", True, None),
             ("observation_start", False, None),
             ("observation_end", False, None),
-            ("limit", False, None),
+            ("limit", False, 12),
         ],
     },
     ("fred", "key-indicators"): {
@@ -341,7 +346,13 @@ def fail(message: str, code: str = "error", exit_code: int = 1) -> None:
     raise SystemExit(exit_code)
 
 
-def friendly_http_error(status: int, body: str) -> tuple[str, str]:
+def friendly_http_error(
+    status: int,
+    body: str,
+    *,
+    agent_endpoint: bool = False,
+    retry_after: str | None = None,
+) -> tuple[str, str]:
     detail = body.strip()
     try:
         parsed = json.loads(detail)
@@ -356,9 +367,16 @@ def friendly_http_error(status: int, body: str) -> tuple[str, str]:
         pass
 
     if status in {401, 403}:
+        if agent_endpoint:
+            return (
+                "agent_auth_failed",
+                "Agent 来源标识无效或无权访问该接口。请检查 --agent-type；"
+                f"服务返回：{detail}",
+            )
         return (
             "auth_failed",
-            "API Key 无效或无权访问该接口。请确认 FINXDATA_API_KEY 是否正确、未过期，并且账号已开通对应权限。",
+            "API Key 无效或无权访问该接口。请确认 FINXDATA_API_KEY 是否正确、"
+            f"未过期，并且账号已开通对应权限。服务返回：{detail}",
         )
     if status == 404:
         return (
@@ -366,9 +384,17 @@ def friendly_http_error(status: int, body: str) -> tuple[str, str]:
             "接口或数据不存在。请先运行 summary 确认接口名称，或检查股票代码、日期、指标类型是否正确。",
         )
     if status == 429:
+        retry_hint = f" Retry-After: {retry_after} 秒。" if retry_after else ""
+        if agent_endpoint:
+            return (
+                "agent_rate_limited",
+                "Agent 免费接口已触发单 IP 每日限额或服务端频率保护；"
+                f"无需运行 quota，请稍后再试。服务返回：{detail}.{retry_hint}",
+            )
         return (
             "quota_limited",
-            "当前 API Key 已触发额度或频率限制。请先运行 quota 查看剩余额度；如果额度不足，需要等待重置、减少调用频率或升级/充值。",
+            "API Key 接口已触发账户额度、IP 或频率限制。可运行 quota 查看账户"
+            f"额度；若为频率限制，请稍后再试。服务返回：{detail}.{retry_hint}",
         )
     if status in {500, 502, 503, 504}:
         return (
@@ -453,7 +479,7 @@ def build_curl_args(
         "-H",
         "Accept: application/json",
         "-w",
-        "\n__HTTP_STATUS__:%{http_code}",
+        "\n__RETRY_AFTER__:%header{retry-after}\n__HTTP_STATUS__:%{http_code}",
     ]
     api_key = env_api_key(required=api_key_required)
     if api_key:
@@ -466,14 +492,14 @@ def build_curl_args(
     return args
 
 
-def run_curl(args: list[str]) -> None:
+def run_curl(args: list[str], *, agent_endpoint: bool = False) -> None:
     result = subprocess.run(args, capture_output=True, text=True, check=False)
     if result.returncode != 0:
         code, message = friendly_curl_error(result.returncode, result.stderr)
         fail(message, code=code, exit_code=result.returncode)
 
     marker = "\n__HTTP_STATUS__:"
-    body, separator, status_text = result.stdout.rpartition(marker)
+    body_with_metadata, separator, status_text = result.stdout.rpartition(marker)
     if not separator:
         fail("请求完成但无法读取 HTTP 状态码，请检查 curl 输出。", code="bad_response")
 
@@ -482,11 +508,23 @@ def run_curl(args: list[str]) -> None:
     except ValueError:
         fail("请求完成但 HTTP 状态码格式异常。", code="bad_response")
 
+    retry_marker = "\n__RETRY_AFTER__:"
+    body, retry_separator, retry_after = body_with_metadata.rpartition(retry_marker)
+    if not retry_separator:
+        body = body_with_metadata
+        retry_after = ""
+    retry_after = retry_after.strip()
+
     if 200 <= status < 300:
         print(body, end="" if body.endswith("\n") else "\n")
         return
 
-    code, message = friendly_http_error(status, body)
+    code, message = friendly_http_error(
+        status,
+        body,
+        agent_endpoint=agent_endpoint,
+        retry_after=retry_after or None,
+    )
     fail(message, code=code, exit_code=1)
 
 
@@ -541,7 +579,8 @@ def command_data(args: argparse.Namespace) -> None:
                 api_key_required=not is_agent,
                 idempotency_key=getattr(args, "idempotency_key", None),
                 agent_type=agent_type,
-            )
+            ),
+            agent_endpoint=is_agent,
         )
         return
 
@@ -558,7 +597,8 @@ def command_data(args: argparse.Namespace) -> None:
                     api_key_required=not is_agent,
                     idempotency_key=getattr(args, "idempotency_key", None),
                     agent_type=agent_type,
-                )
+                ),
+                agent_endpoint=is_agent,
             )
             if index < len(codes) - 1:
                 time.sleep(REQUEST_DELAY_SECONDS)
@@ -571,7 +611,8 @@ def command_data(args: argparse.Namespace) -> None:
             api_key_required=not is_agent,
             idempotency_key=getattr(args, "idempotency_key", None),
             agent_type=agent_type,
-        )
+        ),
+        agent_endpoint=is_agent,
     )
 
 

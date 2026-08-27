@@ -1,13 +1,15 @@
 ---
 name: dlazy-image-generate
 version: 1.3.5
-description: Image generation skill. Automatically selects the best dlazy CLI image model based on the prompt. 图片生成技能。根据提示词自动选择最佳的 dlazy CLI 图片生成模型。
+description: "Image generation skill. Automatically selects the best dlazy CLI image model based on the prompt. 图片生成技能。根据提示词自动选择最佳的 dlazy CLI 图片生成模型。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When this skill is called, use dlazy <subcommand>."}}
 ---
 
-# dlazy-image-generate
+# 图片生成 Image Generate
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
+
+
 
 
 
@@ -101,7 +103,7 @@ dlazy seedream-4.5 --prompt "a red fox in snow" \
 
 # Generate an image, then add TTS narration over a still
 dlazy seedream-4.5 --prompt "lighthouse at dawn" \
-  | dlazy keling-tts --text "Welcome to the coast." --image @0.url
+  | dlazy qwen-tts --text "Welcome to the coast." --image @0.url
 
 # Fan-out: pass every upstream output url into a batch step
 dlazy seedream-4.5 --prompt "city skyline" --n 4 \
@@ -130,7 +132,9 @@ This skill handles all image generation requests by selecting the best `dlazy` i
 - `dlazy recraft-v4-pro-vector`: High-fidelity text-to-vector model, 4MP-tier quality. Good for production SVG assets and detailed illustrations.
 - `dlazy recraft-v4-vector`: Text-to-vector model that outputs SVG results. Suitable for logos, icons, and scalable design assets.
 - `dlazy seedream-4.5`: High-quality text-to-image/image-to-image model, suitable for posters, realism, and creative scenes. Supports prompt + multiple reference images, outputting single high-res images (2K/4K).
+- `dlazy seedream-5.0`: Full version of the Doubao image model, generating 2K/3K/4K images from prompts and reference images. Suited to key visuals, posters and anything meant for large-format print.
 - `dlazy seedream-5.0-lite`: Lightweight high-speed image generation model, suitable for batch generation, sketches, and low-cost iteration. Supports prompt + reference images, outputting 2K/3K images.
+- `dlazy seedream-5.0-pro`: Professional tier of Seedream 5.0, stronger on fine detail, typography and complex composition. Suited to commercial key visuals and demanding brand assets.
 - `dlazy superres`: Image super-resolution tool: enhances image clarity and details, returning enhanced URL, suitable for low-res asset restoration and upscaling.
 - `dlazy vectorize`: Image-to-SVG tool: converts raster images (PNG/JPG) into color vector SVG and returns the URL, suitable for lossless scaling and vectorization of logos, icons, and flat illustrations.
 - `dlazy viduq2-t2i`: Vidu image model with text + reference image, ratio, and resolution control. Good for character art, covers, and high-res output.

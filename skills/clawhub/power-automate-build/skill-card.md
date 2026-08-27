@@ -1,48 +1,64 @@
-## Description: <br>
-Builds, scaffolds, deploys, and tests Power Automate cloud flows through the FlowStudio MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build, scaffold, and deploy Power Automate cloud flows using the FlowStudio MCP server.
 
-## Publisher: <br>
-[ninihen1](https://clawhub.ai/user/ninihen1) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ninihen1](https://clawhub.ai/user/ninihen1)
 
-## Use Case: <br>
-Developers and automation engineers use this skill to construct Power Automate flow definitions, wire connector references, deploy new or updated flows, and verify behavior through FlowStudio MCP. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to create or modify live Power Automate flows with real automation side effects. <br>
-Mitigation: Review the target environment, exact flow ID or creation plan, generated definition or diff, trigger exposure, connector accounts, and callback or SAS-bearing URLs before deployment. <br>
-Risk: Testing a deployed flow may send messages, write data, start approvals, or call external APIs. <br>
-Mitigation: Use non-production environments when possible and require explicit user confirmation before triggering or resubmitting flow runs. <br>
-Risk: The skill depends on sensitive FlowStudio MCP credentials and connector accounts. <br>
-Mitigation: Use least-privileged credentials, protect the FLOWSTUDIO_MCP_TOKEN, and confirm connector accounts before executing live operations. <br>
+## Use Case:
 
+Developers and automation engineers use this skill to create, update, deploy, verify, and test Power Automate cloud flow definitions through FlowStudio MCP without opening the Power Automate portal.
 
-## Reference(s): <br>
-- [FlowStudio MCP](https://mcp.flowstudio.app) <br>
-- [Flow definition schema](references/flow-schema.md) <br>
-- [Trigger type templates](references/trigger-types.md) <br>
-- [Core action patterns](references/action-patterns-core.md) <br>
-- [Data transform action patterns](references/action-patterns-data.md) <br>
-- [Connector action patterns](references/action-patterns-connectors.md) <br>
-- [Common build patterns](references/build-patterns.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON and Python code blocks plus MCP workflow guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a FLOWSTUDIO_MCP_TOKEN for live FlowStudio MCP operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: server release metadata) <br>
+Risk: The skill can guide an agent to create or modify live Power Automate cloud flows, which may send messages, write records, start approvals, or call external APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated flow definitions before deployment, confirm the target environment and flow name, and require explicit user approval before triggering test runs.
+
+Risk: FlowStudio JWTs, connector credentials, client secrets, and HTTP callback URLs can expose access if copied into flow definitions or shared logs.
+
+Mitigation: Treat tokens and callback URLs as secrets, avoid hardcoding secrets, and use parameters, environment variables, or approved connection mechanisms.
+
+Risk: Webhook or arbitrary JSON input can cause incorrect downstream behavior if the flow assumes unvalidated fields.
+
+Mitigation: Prefer explicit JSON schemas and validate webhook input before using it in downstream actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ninihen1/skills/power-automate-build)
+- [FlowStudio MCP](https://mcp.flowstudio.app)
+- [Flow Definition Schema](references/flow-schema.md)
+- [Trigger Types](references/trigger-types.md)
+- [Common Build Patterns](references/build-patterns.md)
+- [Action Patterns: Core](references/action-patterns-core.md)
+- [Action Patterns: Data Transforms](references/action-patterns-data.md)
+- [Action Patterns: Connectors](references/action-patterns-connectors.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration, JSON]
+
+**Output Format:** [Markdown guidance with JSON flow definitions, Python and shell snippets, and configuration steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent-facing instructions for building and deploying Power Automate flows via FlowStudio MCP; deployment can affect live cloud flows.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

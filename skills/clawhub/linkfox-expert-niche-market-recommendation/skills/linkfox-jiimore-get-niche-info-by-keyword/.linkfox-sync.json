@@ -1,0 +1,10 @@
+{
+  "eventId" : "be5cb1bf-6f67-4e4c-b56c-3c1302565ea8",
+  "operation" : "UPSERT",
+  "groupId" : "2067496336427061249",
+  "memberId" : "2067496336469004289",
+  "slug" : "linkfox-jiimore-get-niche-info-by-keyword",
+  "agentId" : null,
+  "version" : 1786193695405,
+  "syncedAt" : "2026-08-08T12:54:56.465480806Z"
+}

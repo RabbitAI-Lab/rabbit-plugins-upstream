@@ -1,43 +1,60 @@
-## Description: <br>
-Video search tool: queries Pixabay video API by keywords and returns stock video URLs and metadata for footage sourcing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Video search tool that queries the Pixabay video API by keyword and returns stock video URLs and metadata for footage sourcing.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, and agents use this skill to search for stock video footage by keyword and retrieve video URLs and metadata for media sourcing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries are sent to dLazy and a dLazy API key may be stored locally by the CLI. <br>
-Mitigation: Use DLAZY_API_KEY for per-invocation credentials when local key storage is not desired, and rotate or revoke keys from dLazy if needed. <br>
-Risk: The --save option writes returned assets to a caller-provided local path. <br>
-Mitigation: Use explicit trusted output paths and review downloaded files before reuse. <br>
+## Use Case:
 
+Developers, creators, and agent users use this skill to search for stock video footage by keyword, category, duration, and video type, then consume returned video URLs and metadata in downstream content workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-search-video) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files, Guidance] <br>
-**Output Format:** [JSON result envelope with video result metadata and URLs; optional local asset file when --save is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Async mode can return a generateId and status for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Search queries and task parameters are sent through dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when a dLazy-mediated workflow is acceptable for the data being searched.
+
+Risk: A persistent dLazy API key may be stored in the local CLI configuration.
+
+Mitigation: Use per-run DLAZY_API_KEY for temporary credentials, or review and manage ~/.dlazy/config.json when persistent authentication is not desired.
+
+Risk: The search workflow should only need keyword and filter parameters, but the CLI supports local file inputs for other dLazy tools.
+
+Mitigation: Avoid passing local files to this skill unless a future version explicitly requires them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-search-video)
+- [dLazy CLI source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with shell commands; runtime command output is JSON containing video search results, URLs, and metadata.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and outbound access to api.dlazy.com and files.dlazy.com; supports async task polling and optional local download.]
+
+## Skill Version(s):
+
+1.3.10 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

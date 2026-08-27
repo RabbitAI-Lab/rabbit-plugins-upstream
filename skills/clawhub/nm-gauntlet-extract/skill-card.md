@@ -1,41 +1,53 @@
-## Description: <br>
-Builds a Gauntlet knowledge base from AST extraction and AI enrichment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds the gauntlet knowledge base from AST extraction and AI enrichment.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to initialize or refresh codebase knowledge for Gauntlet challenges by extracting structure, enriching entries, and saving a local .gauntlet/knowledge.json file. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill indexes the target repository and writes local codebase knowledge, which could include unrelated private files if pointed at the wrong directory. <br>
-Mitigation: Run it only against intended codebases and avoid directories that contain unrelated private files or secrets. <br>
-Risk: The generated knowledge base may contain incomplete or inaccurate AI-enriched explanations. <br>
-Mitigation: Review .gauntlet/knowledge.json and coverage gaps before relying on the extracted knowledge for challenge work. <br>
+## Use Case:
 
+Developers and engineers use this skill to initialize or refresh repository knowledge for Gauntlet challenges by extracting code structure, enriching entries, linking related modules, preserving annotations, and reporting coverage gaps.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-gauntlet-extract) <br>
-- [Gauntlet plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and a local JSON knowledge-base file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces or refreshes .gauntlet/knowledge.json and reports category coverage, gaps, and difficulty distribution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The skill writes a repository knowledge file that can include sensitive implementation details or inaccurate AI-enriched explanations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only in the intended repository and review .gauntlet/knowledge.json before committing or sharing it.
+
+Risk: The workflow invokes an extractor script through CLAUDE_PLUGIN_ROOT, so an untrusted plugin installation could affect the generated knowledge.
+
+Mitigation: Use a trusted plugin installation and verify the referenced extractor script before running the skill.
+
+## Reference(s):
+
+- [Gauntlet plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet)
+
+## Skill Output:
+
+**Output Type(s):** [Files, JSON, Analysis, Shell commands]
+
+**Output Format:** [Markdown instructions with inline bash command and generated JSON knowledge file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes .gauntlet/knowledge.json, may preserve entries from .gauntlet/annotations/, and reports category summaries, coverage gaps, and difficulty distribution.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter says 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

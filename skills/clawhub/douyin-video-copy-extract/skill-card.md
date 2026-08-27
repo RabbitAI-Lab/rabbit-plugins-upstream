@@ -1,42 +1,58 @@
-## Description: <br>
-用于抖音文案提取、抖音文案一键提取、抖音视频文案提取、抖音视频转文字、抖音口播转文字和抖音逐字稿，用户粘贴抖音视频链接、分享文案或 aweme_id 后，提取视频上下文、原视频简介和口播逐字稿，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于抖音文案提取、抖音文案一键提取、抖音视频文案提取、抖音视频转文字、抖音口播转文字和抖音逐字稿；用户粘贴抖音视频链接、分享文案或 aweme_id 后，可提取视频上下文、原视频简介和口播逐字稿。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and agents use this skill to submit or check Douyin speech-to-text transcript jobs from a video URL, share text, aweme_id, or existing job_id. The skill returns visible video context, the original description, transcript text, copy-ready text, a concise version, and task status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends the provided Douyin URL, share text, aweme_id, or job_id to SocialDataX using SOCIALDATAX_API_KEY. <br>
-Mitigation: Use it only when the user is comfortable sharing that input with SocialDataX and has configured the intended SOCIALDATAX_API_KEY. <br>
-Risk: Transcript jobs may remain in progress after the initial command. <br>
-Mitigation: Keep the returned job_id and poll the same job instead of submitting duplicate transcript jobs. <br>
-Risk: Insufficient balance errors can lead to repeated failed submissions. <br>
-Mitigation: Stop submitting or polling after an insufficient balance response, show the recharge URL returned by the service, and resume only after the same account is funded. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to submit or check Douyin video speech-to-text transcript jobs from a video URL, share text, aweme_id, or job_id. The skill helps return visible video context, the original description, spoken transcript, copy-ready text, a concise version, and task status.
 
-## Reference(s): <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured transcript sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include a job_id, current status, and a follow-up polling command when transcript processing is not complete.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.5 (source: server release evidence) <br>
+Risk: A SocialDataX API key is required at runtime.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide it through SOCIALDATAX_API_KEY, keep it out of skill files and chat transcripts, and rotate it if exposed.
+
+Risk: The direct CLI may fetch and run the socialdatax-skills package with npx.
+
+Mitigation: Run it only in an environment where Node.js, npm, package installation, and network access are approved.
+
+Risk: Transcript jobs can be asynchronous and may consume credits if duplicate submissions are made.
+
+Mitigation: Keep and reuse the returned job_id for polling, and do not submit a second job while one is pending.
+
+## Reference(s):
+
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/douyin-video-copy-extract)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown text with transcript sections and inline CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include job_id, current job status, and the next polling command when transcription is not complete.]
+
+## Skill Version(s):
+
+0.1.7 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

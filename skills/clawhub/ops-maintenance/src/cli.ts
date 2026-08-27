@@ -14,6 +14,16 @@ import { getSmartLogAnalyzer } from './utils/smart-log-analyzer.js'
 import { getConfigChangeTracker } from './utils/config-change-tracker.js'
 import { getReportGenerator } from './utils/report-generator.js'
 import type { ReportFormat } from './utils/report-generator.js'
+import {
+  getAlertManager,
+  DEFAULT_ALERT_RULES,
+  type NotifyConfig
+} from './utils/alert-manager.js'
+import {
+  getPatrolScheduler,
+  DEFAULT_PATROL_JOBS,
+  type PatrolJob
+} from './utils/patrol-scheduler.js'
 
 const program = new Command()
 
@@ -412,6 +422,188 @@ program
  process.exit(1)
  }
  })
+
+// ============================================================
+// alert 命令组
+// ============================================================
+
+const alertCmd = program.command('alert').description('告警通知管理')
+
+alertCmd
+  .command('rules')
+  .description('查看告警规则')
+  .action(async () => {
+    try {
+      const am = getAlertManager()
+      const rules = am.getRules()
+      console.log('### 🚨 告警规则列表\n')
+      for (const rule of rules) {
+        const statusEmoji = rule.enabled ? '✅' : '❌'
+        const levelEmoji = { info: 'ℹ️', warning: '⚠️', critical: '🔴' }[rule.level]
+        console.log(`${statusEmoji} ${levelEmoji} **${rule.name}** (\`${rule.id}\`)`)
+        console.log(`   类型: ${rule.type} | 阈值: ${rule.threshold} | 间隔: ${rule.interval}s`)
+        console.log(`   渠道: ${rule.channels.join(', ')}`)
+        if (rule.description) console.log(`   ${rule.description}`)
+        console.log('')
+      }
+    } catch (error: any) {
+      console.error(`❌ 获取告警规则失败: ${error.message}`)
+    }
+  })
+
+alertCmd
+  .command('list')
+  .description('查看活跃告警')
+  .action(async () => {
+    try {
+      const am = getAlertManager()
+      const alerts = am.getActiveAlerts()
+      const stats = am.getAlertStats()
+      console.log(`### 🔔 活跃告警\n总计: ${stats.firing} 条活跃 | ${stats.silenced} 条静默 | ${stats.resolved} 条已恢复\n`)
+      if (alerts.length === 0) {
+        console.log('当前无活跃告警 ✨')
+      } else {
+        for (const alert of alerts) {
+          const levelEmoji = { info: 'ℹ️', warning: '⚠️', critical: '🔴' }[alert.level]
+          console.log(`${levelEmoji} **${alert.ruleName}** — ${alert.server}`)
+          console.log(`   当前: ${alert.value} | 阈值: ${alert.threshold}`)
+          console.log(`   触发: ${alert.firedAt} | 通知次数: ${alert.notifyCount}`)
+          console.log('')
+        }
+      }
+    } catch (error: any) {
+      console.error(`❌ 获取告警失败: ${error.message}`)
+    }
+  })
+
+alertCmd
+  .command('notify <channel> <config>')
+  .description('配置通知渠道 (email, feishu, wechat, webhook)')
+  .action(async (channel: string, config: string) => {
+    try {
+      const am = getAlertManager()
+      const notifyConfig = JSON.parse(config) as NotifyConfig
+      am.updateNotifyConfig(channel as any, notifyConfig)
+      console.log(`✅ 已更新 ${channel} 通知渠道配置`)
+    } catch (error: any) {
+      console.error(`❌ 配置失败: ${error.message}`)
+    }
+  })
+
+alertCmd
+  .command('stats')
+  .description('查看告警统计')
+  .action(async () => {
+    try {
+      const am = getAlertManager()
+      const stats = am.getAlertStats()
+      console.log('### 📊 告警统计\n')
+      console.log(`总计: ${stats.total} 条 | 🔴 触发 ${stats.firing} | ✅ 恢复 ${stats.resolved} | 🔇 静默 ${stats.silenced}\n`)
+    } catch (error: any) {
+      console.error(`❌ 获取统计失败: ${error.message}`)
+    }
+  })
+
+alertCmd
+  .command('silence <ruleId> <server> [duration]')
+  .description('静默告警')
+  .option('-d, --duration <minutes>', '静默时长(分钟)', '60')
+  .action(async (ruleId: string, server: string, opts: any) => {
+    try {
+      const am = getAlertManager()
+      const silenced = am.silence(`${ruleId}:${server}`, opts.duration * 60)
+      console.log(silenced ? `🔇 告警已静默 ${opts.duration} 分钟` : `❌ 未找到告警: ${ruleId} @ ${server}`)
+    } catch (error: any) {
+      console.error(`❌ 静默失败: ${error.message}`)
+    }
+  })
+
+alertCmd
+  .command('cleanup [days]')
+  .description('清理旧告警')
+  .option('--days <n>', '保留天数', '7')
+  .action(async (opts: any) => {
+    try {
+      const am = getAlertManager()
+      const removed = am.cleanup(parseInt(opts.days))
+      console.log(`🗑️ 已清理 ${removed} 条 ${opts.days} 天前的旧告警`)
+    } catch (error: any) {
+      console.error(`❌ 清理失败: ${error.message}`)
+    }
+  })
+
+// ============================================================
+// patrol 命令组
+// ============================================================
+
+const patrolCmd = program.command('patrol').description('定时巡检管理')
+
+patrolCmd
+  .command('list')
+  .description('查看巡检任务')
+  .action(async () => {
+    try {
+      const scheduler = getPatrolScheduler()
+      const jobs = scheduler.getJobs()
+      console.log('### 🕐 巡检任务列表\n')
+      for (const job of jobs) {
+        const statusEmoji = job.enabled ? '✅' : '❌'
+        console.log(`${statusEmoji} **${job.name}** (\`${job.id}\`)`)
+        console.log(`   调度: ${job.schedule} | 检查项: ${job.checks.map(c => c.type).join(', ')}`)
+        if (job.lastRun) console.log(`   上次执行: ${job.lastRun}`)
+        console.log('')
+      }
+    } catch (error: any) {
+      console.error(`❌ 获取巡检任务失败: ${error.message}`)
+    }
+  })
+
+patrolCmd
+  .command('run [jobId]')
+  .description('执行巡检')
+  .action(async (jobId?: string) => {
+    try {
+      const scheduler = getPatrolScheduler()
+      let results: any[]
+      if (jobId) {
+        results = await scheduler.runJobNow(jobId)
+      } else {
+        results = await scheduler.runAllNow()
+      }
+      const report = scheduler.generateReport(results)
+      console.log(scheduler.formatReport(report))
+    } catch (error: any) {
+      console.error(`❌ 巡检失败: ${error.message}`)
+    }
+  })
+
+patrolCmd
+  .command('start')
+  .description('启动定时巡检')
+  .action(async () => {
+    try {
+      const scheduler = getPatrolScheduler()
+      scheduler.start()
+      console.log('✅ 定时巡检已启动')
+      process.exit(0)
+    } catch (error: any) {
+      console.error(`❌ 启动失败: ${error.message}`)
+      process.exit(1)
+    }
+  })
+
+patrolCmd
+  .command('stop')
+  .description('停止定时巡检')
+  .action(async () => {
+    try {
+      const scheduler = getPatrolScheduler()
+      scheduler.stop()
+      console.log('⏹️ 定时巡检已停止')
+    } catch (error: any) {
+      console.error(`❌ 停止失败: ${error.message}`)
+    }
+  })
 
 // ============================================================
 // 启动

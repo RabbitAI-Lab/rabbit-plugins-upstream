@@ -1,41 +1,54 @@
-## Description: <br>
-Applies modular monolith guidance with enforced internal boundaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies modular monolith with enforced internal boundaries.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and architecture teams use this skill to decide when a modular monolith fits a codebase and to plan module boundaries, public contracts, and enforcement checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may appear during broad architecture prompts even when a modular monolith is not the right fit. <br>
-Mitigation: Confirm the application needs bounded modules and service-like autonomy without distributed-system overhead before applying the guidance. <br>
-Risk: Architecture recommendations can become misleading if module boundaries and contracts are not enforced. <br>
-Mitigation: Review proposed boundaries with project owners and back them with dependency checks, contract documentation, or CI enforcement before relying on the pattern. <br>
+## Use Case:
 
+Developers and software architects use this skill to decide when to apply a modular monolith and to outline module boundaries, contracts, enforcement checks, and migration considerations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-modular-monolith) <br>
-- [Claude Night Market archetypes](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown] <br>
-**Output Format:** [Markdown guidance with bullet lists and architecture recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; no tools, secrets, code execution, data access, or persistence are required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Broad triggers may invoke the skill during general architecture conversations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is asking about modular monolith design or internal module boundaries before applying the guidance.
+
+Risk: The architecture advice may be a poor fit for already-distributed systems or very small applications.
+
+Mitigation: Check the documented when-not-to-use cases before recommending modular boundary enforcement work.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-modular-monolith)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown guidance with architecture recommendations and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Non-executable architecture advice; no API calls, shell commands, or configuration changes are requested by the skill.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

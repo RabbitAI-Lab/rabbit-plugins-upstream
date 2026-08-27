@@ -126,15 +126,16 @@ Showcase your work:
 
 ---
 
-## Chat Mode for Resumes
+## Choosing Mode & Tier
 
-| Scenario | Recommended Mode |
-|----------|------------------|
-| Single resume or cover letter | `"agent"` |
-| Complete career package (resume + cover letter + LinkedIn + portfolio) | `"agent"` |
-| Career strategy with multiple role-specific resume variants | `"agent team"` |
+| Scenario | Recommended |
+|----------|-------------|
+| Resumes and cover letters | `chat_mode="agent"` (defaults to the `"flash"` tier) |
+| Career strategy with multiple role-specific variants | `chat_mode="agent", chat_tier="max"` |
 
-**Use `"agent"` for most resume work.** It handles individual documents and even multi-document packages excellently.
+**The flash tier is the default and handles most resume work well** — fast and economical. **Upgrade to `chat_tier="max"`** when quality disappoints or the work is genuinely complex: just re-run the same prompt with `chat_tier="max"`.
+
+Agent Team (`chat_mode="team"`) is reserved for deep research — don't use it for resume work.
 
 ---
 
@@ -154,6 +155,7 @@ Showcase your work:
 
 ## If CellCog is not installed
 
-Run `/cellcog-setup` (or `/cellcog:cellcog-setup` depending on your tool) to install and authenticate.
-**OpenClaw users:** Run `clawhub install cellcog` instead.
+**Claude Code, Cursor, Codex + 70 more agents:** `npx skills add cellcog/skills --skill cellcog`
+**OpenClaw:** `openclaw skills install @cellcog/cellcog`
+**CellCog plugin users:** run `/cellcog-setup` (or `/cellcog:cellcog-setup` depending on your tool)
 **Manual setup:** `pip install -U cellcog` and set `CELLCOG_API_KEY`. See the **cellcog** skill for SDK reference.

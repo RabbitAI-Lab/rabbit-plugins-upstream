@@ -1,41 +1,59 @@
-## Description: <br>
-Ai Podcast converts PDF URLs, pasted text, notes, and web links into shareable two-host conversational podcasts through the MagicPodcast API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI播客生成 converts public PDF URLs, pasted text, notes, and web links into multilingual two-host conversational podcast episodes through the MagicPodcast API and returns shareable podcast links.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External creators, educators, researchers, and teams use this skill to turn public PDF URLs or pasted text into shareable multilingual podcast episodes and check generation status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided PDF URLs or pasted text are sent to MagicPodcast for processing. <br>
-Mitigation: Avoid confidential, regulated, or internal-only documents unless the organization has approved MagicPodcast and its retention/sharing terms. <br>
+## Use Case:
 
+External content creators, educators, researchers, and teams use this skill to turn public PDFs or supplied text into shareable audio programs for learning, content distribution, and knowledge sharing.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/ai-podcast) <br>
-- [SkillHub Homepage](https://skillhub.cn) <br>
-- [MagicPodcast API Key Setup](https://www.magicpodcast.app/skill-platform) <br>
-- [MagicPodcast Dashboard](https://www.magicpodcast.app/app) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash and curl snippets, API status details, and podcast share links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MAGICPODCAST_API_KEY and sends selected PDF URLs or pasted text to MagicPodcast for processing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter lists 1.0.12) <br>
+Risk: User-provided text, notes, or public PDF URLs are sent to MagicPodcast for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not use confidential, regulated, or proprietary content unless the service privacy and retention terms have been reviewed and sharing is permitted.
+
+Risk: API keys can be exposed if pasted into prompts, logs, or files.
+
+Mitigation: Store MAGICPODCAST_API_KEY in an environment variable or secret store and avoid echoing or committing credentials.
+
+Risk: Generated podcast audio may omit, simplify, or misstate details from the source material.
+
+Mitigation: Review generated episodes before publishing, teaching from, or redistributing them.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/ai-podcast)
+- [MagicPodcast Skill Platform](https://www.magicpodcast.app/skill-platform)
+- [MagicPodcast Dashboard](https://www.magicpodcast.app/app)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Guidance]
+
+**Output Format:** [Markdown guidance with shell command snippets, API responses, dashboard links, and shareable podcast URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses asynchronous podcast generation; users may need to check task status before a share link is available.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

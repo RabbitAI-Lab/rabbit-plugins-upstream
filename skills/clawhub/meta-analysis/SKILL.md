@@ -3,10 +3,12 @@ name: meta-analysis
 cn_name: 医学Meta分析
 slug: meta-analysis
 displayName: 医学Meta分析 / Meta Analysis
-version: 1.7
-summary: 基于 R 的全方位 Meta 分析技能，覆盖 RevMan 全部功能 + Stata 等价（metareg/mvmeta）+ esc + RVE + 贝叶斯 NMA（Stan/JAGS）+ 生存 Meta + TSA + 单组率 Meta + 诊断 Meta + 系统评价流程；输出森林图、漏斗图、异质性(I²)、发表偏倚、亚组分析、元回归、网络 Meta。中英双语自动切换（默认英文/中文环境切中文），所有分析提供可复现 R 代码。
-license: MIT
-description: "基于 R 的全方位 Meta 分析技能，覆盖 RevMan 全部功能 + Stata 等价（metareg/mvmeta）+ esc + RVE + 贝叶斯 NMA（Stan/JAGS）+ 生存 Meta + TSA + 单组率 Meta + 诊断 Meta + 系统评价流程；输出森林图、漏斗图、异质性(I²)、发表偏倚、亚组分析、元回归、网络 Meta。所有分析提供可复现 R 代码。 / Comprehensive R-based meta-analysis skill covering RevMan 5.x + Stata equivalents (metareg/mvmeta) + esc + RVE + Bayesian NMA (Stan/JAGS) + survival meta + TSA + single-group meta + diagnostic meta + systematic review workflow; produces forest plots, funnel plots, heterogeneity (I²), publication bias, subgroup analysis, meta-regression, network meta. All analyses ship reproducible R code."
+version: 2.2.16
+summary: 基于 R 的全方位 Meta 分析技能，覆盖 RevMan 全部功能 + Stata 等价（metareg/mvmeta）+ esc + RVE + 贝叶斯 NMA（Stan/JAGS）+ 生存 Meta + TSA + 单组率 Meta + 诊断 Meta + 系统评价流程；输出森林图、漏斗图、异质性(I²)、发表偏倚、亚组分析、元回归、网络 Meta等共 23 种分析图形。中英双语自动切换（默认英文/中文环境切中文），所有分析提供可复现 R 代码。
+description: "基于 R 的全方位 Meta 分析技能，覆盖 RevMan 全部功能 + Stata 等价（metareg/mvmeta）+ esc + RVE + 贝叶斯 NMA（Stan/JAGS）+ 生存 Meta + TSA + 单组率 Meta + 诊断 Meta + 系统评价流程；输出森林图、漏斗图、异质性(I²)、发表偏倚、亚组分析、元回归、网络 Meta等共 23 种分析图形。中英双语自动切换（默认英文/中文环境切中文），所有分析提供可复现 R 代码。 / Comprehensive R-based meta-analysis skill covering RevMan 5.x + Stata equivalents (metareg/mvmeta) + esc + RVE + Bayesian NMA (Stan/JAGS) + survival meta + TSA + single-group meta + diagnostic meta + systematic review workflow; produces forest plots, funnel plots, heterogeneity (I²), publication bias, subgroup analysis, meta-regression, network meta, for a total of 23 analysis figures. Auto-switches language (defaults to English, switches to Chinese in zh-* environments). All analyses ship reproducible R code."
+
+required_commands: [python]
+invocable: true
 
 triggers:
   - "meta分析"
@@ -17,155 +19,167 @@ triggers:
   - "异质性"
   - "发表偏倚"
   - "元回归"
-  - "网络meta"
   - "network meta"
   - "贝叶斯meta"
   - "效应量转换"
-  - "单组率meta"
   - "TSA"
   - "诊断meta"
 permissions:
   scope: "user-space-only"
-  network: "optional"
-  network_note: "R package installation is a MANUAL user step — the skill NEVER downloads or installs packages at runtime. Network is touched ONLY if the user explicitly requests PDF full-text download from DOI/PMID lists (external services), which requires opt-in confirmation of the target list."
+  network: "required (all computation via coze cloud R engine; params/summary stats sent to coze, no local-R fallback; IPD only if user opts in)"
   filesystem: "writes only to the current working directory (meta_analysis/ and output/ report artifacts: generated .R scripts, .svg/.png figures, .csv tables); otherwise read-only"
-  data: "no external data transmission. R package installation is never performed by this skill — if the user installs packages, that is a manual action in their own R environment."
 metadata:
   {
     "openclaw": { "emoji": "📊", "icon": "assets/icon.svg" },
     "authors": ["medstatstar", "phoe-zip"],
-    "version": "1.7",
-    "license": "MIT",
     "homepage": "https://github.com/medstatstar/meta-analysis",
-    "tags": ["meta-analysis", "systematic-review", "clinical-trials", "R", "biostatistics", "evidence-based-medicine", "forest-plot", "network-meta-analysis", "bayesian", "metafor", "meta", "dmetar", "netmeta", "multinma", "gemtc", "revman", "robumeta", "clubSandwich", "esc", "dosresmeta", "mada", "metagear"],
+    "tags": ["meta-analysis", "systematic-review", "clinical-trials", "R", "biostatistics", "evidence-based-medicine", "forest-plot", "network-meta-analysis", "bayesian", "metafor", "meta", "netmeta", "gemtc", "revman", "robumeta", "clubSandwich", "esc", "dosresmeta", "mada", "metagear", "forestploter"],
   }
 ---
 
-# Meta-Analysis / 医学Meta分析
+# Meta-Analysis
 
-> R-based comprehensive meta-analysis. Every module ships reproducible R code. / 基于R的全方位Meta分析，所有分析提供可复现R代码。
+> R-based comprehensive meta-analysis. Every module ships reproducible R code.
 
-## Purpose / 技能目的
+## Language
 
-Meta-analysis is a cornerstone of evidence-based medicine. However, existing tools carry a learning curve — users must master statistical programming or rely on statisticians. This skill lowers that barrier entirely: any clinical professional can independently conduct meta-analysis via natural-language dialogue, producing publication-ready results backed by professional R code. Every step is powered by R's specialized packages with complete reproducibility. / Meta分析是循证医学的核心技术，但现有工具使用门槛较高。本技能让临床医学工作者通过自然语言对话独立完成Meta分析，输出符合出版要求的结果，全部基于R专业软件包，100%提供可复现R代码，供用户检查和重跑。
+- **English guide** → [README.md](https://github.com/medstatstar/meta-analysis/blob/main/README.md) · **中文指南** → [README_zh-CN.md](https://github.com/medstatstar/meta-analysis/blob/main/README_zh-CN.md)
+- Bilingual auto-switch: the answer language follows the user's question language (English question → English answer, Chinese question → Chinese answer).
 
-## Language Policy / 语言策略
+## 0. Execution discipline (speed-first)
 
- - Default to English; switch to Chinese when a Chinese-language environment is detected.
- - Common modules (frontmatter `description`/`displayName`, Core Functions table, triggers, etc.) ship full English + Chinese bilingual content.
- - Document sections that are language-agnostic use bilingual headings in **English / Chinese** order (e.g., `## Core Functions / 核心功能`).
- - Complex / less commonly used modules (e.g., advanced Bayesian NMA, survmeta, dosresmeta) may temporarily be English-only.
- - 默认英文；检测到中文环境时切换为中文提示。
- - 常用模块（frontmatter `description`/`displayName`、Core Functions 表、触发词等）备英文 + 中文两套。
- - 文档标题（不区分语言者）采用「英 / 中」顺序双语（如 `## Core Functions / 核心功能`）。
- - 复杂 / 少用模块（如高级贝叶斯 NMA、survmeta、dosresmeta）可暂只英文。
+> 🚀 **Top-level red line — higher priority than any "thinking/polishing" impulse. Violation = wasting the user's time.** Full boundaries/exceptions/anti-patterns in `references/speed-discipline.md`.
 
-## Initialization / 初始化
+### Two-track gating (code-driven routing, no LLM decision)
+The first message goes through `python scripts/classify.py` for **deterministic triage** (zero LLM decision):
+- **Compute track (compute)**: clear Simple / Complex → describe and immediately run `run_meta.py --query --data`; three steps to completion, fully bound by this discipline.
+- **Topic track (topic)**: vague / topic selection / feasibility → `literature_probe.py` + `generate_topic_report.py`; code-grounded, zero free-form improvisation.
+- Both tracks forbid reading source via Read/Grep/Bash to "confirm how to tune / which task to use" — that is `classify.py`'s job.
 
-0. **Integrity check / 完整性自检（必做，最先执行）**: 本技能将 R 源码以 Python 模板内嵌（scripts/r_*.py + r_templates.py）以规避部分技能市场（如 SkillHub）不允许发布 .R 文件的限制；安装后 `scripts/` 下**可能暂缺 .R**。请先运行自检：
-   ```bash
-   bash scripts/check_integrity.sh   # 退出码 0=可用(已生成或原本齐全)
-   ```
-   - 若 `scripts/*.R` 齐全 → 直接通过；
-   - 若缺失 → 脚本会**自动执行 `python r_templates.py` 从内嵌模板生成全部 .R**，无需用户手动下载。
-   
-   Do not rewrite R code by yourself; let it auto-generate when missing. / 不要自行重写 R 代码；缺失时让它自动生成即可。
-
-1. **R env / 检查 R**: `Rscript --version` → missing → https://cran.r-project.org/
-2. **Install / Install (manual)**: This skill **does NOT auto-install** R packages. Run `bash scripts/check_integrity.sh` (or pre-analysis self-check) to see missing packages; then **manually install** them in R (e.g. core packages `metafor`, `meta`, `netmeta`), or run `Rscript scripts/setup_packages.R` to view the full list.
-   - Packages needed: `metafor meta dmetar netmeta ggplot2 esc clubSandwich robumeta bayesmeta multinma gemtc dosresmeta survmeta mada metagear gridExtra ggforestplot svglite`
-   - ⚠️ Manual installation will connect to CRAN / GitHub and write to your R library (may execute package install hooks); please use a trusted network.
-3. **Workspace**: Create `meta_analysis/` + `output/` in the current working directory (⚠️ will write files — ensure the directory is correct and you have write permission).
-4. **Memory**: read `~/.workbuddy/MEMORY.md` for R config
-
-## Interactive Guide / 交互式引导
-
-**Design / 设计**: Vague prompt → Level 1 menu (7 categories). Select → Level 2 with data format hints. Sufficient info → run analysis directly. / 模糊提示 → Level 1主菜单(7类) → 选择后Level 2子菜单(含数据格式) → 信息充足后直接分析。
-
+### Agent operation card (copy verbatim, no variations)
+```bash
+# Compute track one-shot: report lands in --out-dir (user workspace); in-conversation data uses --data-json to skip file writes.
+# If data comes from a file, pass --data <csv|json absolute path> (csv auto-converts to JSON before sending to coze).
+python scripts/run_meta.py --query "<user original request>" --data-json '<[{"study":"S1",...}]>' --out-dir "<user workspace>/meta_analysis"
 ```
-=== Level 1: Main / 主菜单 ===
-1️⃣ Pairwise Meta / 两组Meta     4️⃣ Effect Size / 效应量转换    7️⃣ Review Workflow / 系统评价流程
-2️⃣ Heterogeneity & Bias / 异质性偏倚  5️⃣ Visualization / 可视化
-3️⃣ Advanced Models / 高级模型     6️⃣ Study Quality / 研究质量
+Read `META_HTML_REPORT=<path>` from stdout and pass directly to `present_files`; across turns, carve a subset into a new csv/json and re-issue the same command (always include `--out-dir`). Do NOT use this card for the topic track. Fallback `META_STATUS=build_failed` → re-run with `--colmap` per the hint.
+
+### Five iron rules
+1. **Execute, don't think**: when running the skill, only perform the workflow; no reasoning/trade-off/review/self-explanation; if a field is missing, ask only about that field.
+2. **Zero number rewriting**: cite `stats`/`pooled`/`heterogeneity`/`bias` verbatim; no rounding/conversion/re-formatting.
+3. **HTML report is the sole presentation surface**: `out['html_report']` is the final deliverable; no further processing; inline `show_widget` is deprecated, figures only appear in the HTML.
+4. **No local computation**: disable local R/Python self-computation; always forward to coze; if coze is unreachable, raise a structured error per §6, never fall back to local.
+5. **Call-count invariant**: compute track ≤1 call before fire (only `build_request`), ≤1 call after fire (only `present_files`); topic track ≤2; no retry loops. Cross-turn `--data-json` refill is input construction and does not count.
+
+### Already automated / anti-patterns (see `references/speed-discipline.md`)
+Subgroup columns auto-pass-through, column-name aliases auto-matched, artifact completeness guaranteed by `run_analysis` — the agent must not read source to verify, must not hand-assemble subgroup into request.json, must not declare "missing Q_between" each round (go straight to metareg).
+
+## 1. Triage — First step: classify the user's intent
+
+> **Routing is already done in code (§0 two-track gating)**: track / task judgment is delegated to `build_request.py` (which calls `classify.py`); the LLM no longer makes routing decisions and does not hand-write request.json. The table below is for understanding only — the LLM calls `run_analysis` directly from the generated `request.json` and `present_files(html)`.
+
+| Classification | Condition | Action |
+|---|---|---|
+| **Simple** | Single, specific intent (e.g., "pool OR from these 5 studies") | Reply directly, no menu |
+| **Complex** | Multi-decision / multi-parameter (e.g., "network meta with 3 interventions, subgroup, check inconsistency") | Present level-1 routing menu incl. "③ Can't decide? → explain the differences"; full menu → `references/interactive_menu.md` |
+| **Vague** | Unclear what user wants (e.g., "I need meta-analysis help") | Grill-me branch questions, 1–3 per round; "no topic / feasibility" → **Topic Selection** (§2.2) |
+
+If unsure between Simple and Complex → give short reply + optional expansion hint.
+
+## 2. Conversation guide
+
+### 2.1 Interactive menu
+Vague → Level 1 menu (7 categories). Select → Level 2 with data-format hints. Sufficient info → skip menu, run directly. Full menu tree + data formats → `references/interactive_menu.md`.
+> **Other formats?** Install `@skill:statdata-transfer` for 50+ format conversion.
+
+### 2.2 Topic Selection (upstream gate, self-contained)
+Trigger: no topic / feasibility check / "rejected as duplicate" / pre-PROSPERO audit → `references/topic-selection.md`. Two paths:
+- **Quick** (≤30 min): 1-page decision card — 4-dim scores (clinical/feasibility/data/novelty, 0–5, any ≤2 = veto) + screen verdict.
+- **Full** (5 stages + gates): PICO (`pico-guide.md`) → scoring + cross-checks R1–R6 → dedup (`dedup-search.md`) → PRISMA 2020/AMSTAR-2 (`compliance-precheck.md`) → 11-section report via `python scripts/generate_topic_report.py input.json output.md|html` (templates → `topic-report-template.md` / `prospero-mapping.md`).
+- **Dedup self-contained**: Stage 4 runs in-skill Europe PMC probe `adapters/literature_probe.py` (real hit counts + top titles) by default; novelty ranking grounded in actual literature. Comprehensive retrieval → use **ct-literature** skill first.
+  - ⛔ **Topic-track red line**: candidate ranking **must** be based on the probe's real hit counts + 4-dim score card; the LLM only paraphrases, strictly no free-form "which direction is good". Quick is ranked by the probe card; Full is reported by `generate_topic_report.py`, the LLM does not rewrite.
+
+## 3. Initialization & execution backend
+
+**Execution model (coze-only, absolute)**: all numerical computation runs through the coze meta-analysis workflow (R engine on coze side); local LLM only normalizes request + presents results/SVG. End users need no R install. Every analysis returns a `repro` field (R script + versions). No local computation — see §0 iron rule 4.
+**On startup**: 1. Backend default `https://ct-meta.coze.site/run` (override `COZE_META_ENDPOINT`); probe via `coze_client.health()`. 2. Workspace: create `meta_analysis/` + `output/`. 3. Memory: read R config from `~/.workbuddy/MEMORY.md` (R only).
+Endpoint self-test / R engine details → `references/ADVANCED.md` · `references/ADVANCED_zh-CN.md`.
+
+## 4. Core functions & API
+
+Module → R-package/function matrix → `references/advanced_api.md` · `references/ADVANCED.md`.
+**Rule (mandatory)**: any analysis MUST call existing functions — never rewrite inline. Unified entry `adapters/run_analysis.py` (default: coze). List + examples → `references/advanced_api.md`.
+
+## 5. Output specification
+
+**Artifacts**: `analysis_complete.R` + forest/funnel (`.svg`, inlined in HTML) + `results_summary.md` + `last_run.json` (full request+result echo, in `output/`). Per-round dataset CSV is an *input* the agent carves (e.g. `filtered_mdd.csv`); `run_analysis.py` does NOT auto-write `data_backup.csv`.
+
+**Rendering (HTML report sole surface)**: `figures[].svg` embedded into the single-file HTML report (`run_analysis`→`out['html_report']`), opened with `present_files`. Inline `show_widget` cancelled; SVG keeps natural width (never upscale to 680px; overflow scrolls). S3 offloading is transport-only — `_coze_truncated` present → truncation warning atop report.
+**LLM presentation hard constraints**: ① numbers verbatim (stats/pooled/heterogeneity/bias, no rewrite); ② figures only via HTML report.
+**Quality Gate**: R-side `run_quality_gate()` → gate JSON; red (k<3 / I²>75% / missing bias check) **blocks** presentation until manual confirmation. Numeric judgment by R, never read by LLM.
+figure_mode / render-timing → `references/ADVANCED.md`; inline/figure spec → `references/inline_rendering.md`.
+
+## 5.1 Cross-turn Continuity (mandatory)
+
+> **Runtime is stateless.** coze R engine re-supplies `task`+`data`+`params` each call, never persists config/column mapping. Semantic drift (model/method silently changing) = highest-risk failure.
+
+#### Cross-turn spec (minimal unit maintained within the conversation thread)
+```
+{"task":"pairwise_meta","data_path":"<current-round csv>","measure":"OR","model":"random","method":"REML","subgroup":"—"}
+```
+(yi/sei/slab column mapping is already auto-derived by `build_request.py`; no explicit inheritance needed; `run_meta.py` is self-sufficient from query+data each time.)
+
+#### Three hard rules
+1. **Echo a "Current analysis settings" block after every analysis (mandatory, after this round's numbers/figures):**
+   `## Current analysis settings: data=<csv> | measure=OR | model=random | method=REML | subgroup=— | task=pairwise_meta`
+   No field omitted (`—` placeholder) — lets LLM locate "most recent settings" on follow-up.
+2. **On follow-up, change only the changed fields:** locate most recent `## Current analysis settings:` block, read all fields, override only what changed (e.g. `task←subgroup_analysis`, `subgroup←region`); yi/sei/slab + model/method/measure inherited verbatim — dropping column mapping = effect-size mismatch.
+3. **Dataset supplied per round, not by magic pointer:** no auto `data_backup.csv`; carve subset into new csv + re-issue `run_meta.py` at it.
+
+#### Deterministic fallback
+Worried about dropping config? `scripts/merge_spec.py` (prev+cur via stdin → merged spec):
+```bash
+echo '{"prev":{"task":"pairwise_meta","data_path":"<csv>","measure":"OR","model":"random","method":"REML","subgroup":"—"},"cur":{"task":"subgroup_analysis","subgroup":"region"},"required":["task","data_path","measure","model","method","subgroup"]}' | python scripts/merge_spec.py
 ```
 
-```
-=== Level 2: Sub-Menus (excerpt) / 子菜单（示例）===
-[1] Pairwise: Binary(OR/RR/RD) | Continuous(SMD/MD) | Pre-calc(yi+CI) | Survival(HR/IRR) | Correlation(r→Zr)
-[2] Heterogeneity: I²/Q/τ² | Subgroup | Meta-regression | Pub Bias(Egger/Begg/Trim-fill) | Sensitivity | GOSH | Baujat
-[3] Advanced: Multi-arm NMA(netmeta) | Bayesian NMA Stan(multinma) | JAGS(gemtc) | Multilevel | Multivariate(UN/CS/AR1...) | IPD | Dose-Resp(dosresmeta) | Survival(survmeta) | TSA(run_tsa 自实现) | Bootstrap(bootmeta)
-[4] Effect Size: Mean→d | t/F/r→d | d↔Hedges'g | d↔logOR | r↔Z | OR↔logOR | Batch(escalc)
-[5] Viz: Forest(5 themes) | Funnel | Bubble | GOSH | Network | League Table | RoB Traffic-light | Power Curve | Drapery
-[6] Quality: RoB 1.0/2.0 | ROBINS-I | GRADE | PRISMA Checklist
-[7] Workflow: PRISMA Flow | Screening GUI | PDF Batch-download (⚠️ 需联网从外部服务获取全文，请确认版权/授权) | Digitize | NNT Meta
-```
+#### Endpoint capability boundaries (per coze `run_task.R` / `coze_contract.md` §3)
+- `pairwise_meta` ✅ complete (I²/τ², Egger/Begg, funnel plot, quality gate)
+- `subgroup_analysis` ✅ subgroup column **must** be passed as the param key `subgroup` (writing byvar/group/by silently fails)
+- `metareg` ✅ requires effect-size columns te/sete + covariate column `params.cov` (passing only raw columns degrades to pairwise_meta)
+- `nma` ✅ (≥2 arms per study); `nma_rank` ✅ (SUCRA/P-score); `survival_meta` ✅ (loghr/seloghr); `diagnostic_meta` ✅ (tp/fp/fn/tn, task name is not "diagnostic")
+- publication bias is embedded in pairwise_meta/funnel_plot; `sensitivity`/`pub_bias` are not registered tasks
+- default figures adapt to the task (`build_request` requests per `figure.plots`; override via `params_extra.plots`)
+> Few-shot samples → `references/interactive_menu.md` §6.
 
-Data formats & full details → `references/interactive_menu.md`
+## 6. Security & scope
 
-> **Other formats?** Install `@skill:statdata-transfer` for 50+ format conversion. / 其他格式？安装 `@skill:statdata-transfer`。
+**Execution model**: numeric computation via coze (LLM only normalizes + presents; numbers judged by R). **Data-exfiltration decision belongs to the user** — skill implements function + transparent disclosure, never a compliance gate.
 
-## Core Functions / 核心功能
+**Outbound disclosure (global mandatory)**:
+- **What is sent**: analysis data (event counts / sample sizes / effect sizes; no PII) POSTed to coze; sanitized by `sanitize_payload()` (strips ID/phone/email) first.
+- **Authorization**: default endpoint pre-approved in whitelist; custom `COZE_META_ENDPOINT` asks AUTH-BLOCK on first call, then whitelisted. Unauthorized → `_source=auth_blocked` with "cloud analysis not used" message.
+- **First outbound notice each session (once, bilingual)**: `I will send your analysis parameters to the cloud service https://ct-meta.coze.site/run for computation, together with a hostname hash (query_origin, for attribution/rate-limiting only). Please wait…` No repeat.
+- **Coze failure needs consent**: on failure/timeout, first ask (bilingual) `The coze cloud service is temporarily unavailable. May I automatically diagnose the issue?`; allowed → diagnose+retry; declined → deliver local answer with warning.
 
-| Module | R Packages & Functions |
-|--------|----------------------|
-| Single-Group Meta / 单组率均值 | `metaprop()` `metamean()` `metainc()` `metacor()` `metarate()` |
-| Pairwise Meta / 两组Meta | `metabin()` `metacont()` `metagen()` `rma()` — FE/RE(DL/HK)/MH/Peto |
-| Effect Size / 效应量 | `escalc()` `esc_mean_sd()` — SMD, OR, RR, RD, HR, ROM, ZCOR |
-| Forest/Funnel / 森林漏斗 | `forest()` `funnel()` + ggplot2 (5 themes) |
-| Heterogeneity / 异质性 | I², Q, τ², H², 95% PI — auto-reported |
-| Publication Bias / 偏倚 | `regtest()` `ranktest()` `trimfill()` `selmodel()` |
-| Subgroup & Reg / 亚组回归 | `rma(mods=~factor-1)` + `bubble()` |
-| Sensitivity / 敏感性 | Leave-one-out, Cumul, GOSH, quality filter |
-| Bayesian Pairwise / 贝叶斯两组 | `bayesmeta::bayesmeta()` — half-normal/JC prior |
-| Bayesian NMA / 贝叶斯NMA | `run_bayes_nma_multinma()`(Stan) · `run_bayes_nma_gemtc()`(JAGS) — 封装 multinma/gemtc |
-| Multilevel/MV Meta / 多水平多元 | `rma.mv()` + UN/CS/HCS/AR1/ID/DIAG |
-| Survival Meta / 生存Meta | `run_surv_meta()` — 封装 survmeta（HR/logHR 合并） |
-| TSA & Diagnostics | `run_tsa()`(自实现,O'Brien-Fleming 边界) · `baujat()` `drapery()` `bootmeta()` |
-| Dose-Response / 剂量反应 | `run_dose_resp()` — 封装 dosresmeta（连续 smd / 二分类 gl） |
-| Diagnosis Meta / 诊断准确性 | `mada::reitsma()` bivariate + SROC |
-| RVE Robust / 聚类稳健 | `robumeta::robu()` `clubSandwich::vcovCR(CR2)` |
-| Review Workflow / 评价流程 | `metagear`: PRISMA, screen, PDF, digitize |
-| Quality / 质量 | `rob()` RoB 1.0/2.0/ROBINS-I + GRADE |
-| Power / 功效 | `run_power_curve()`(自实现,无依赖) + subgroup power |
+**Other boundaries**: PDF full-text download ONLY on explicit user instruction (`adapters/pdf_fetch.py`, opt-in). Not clinical judgment. No literature DB search (downloads full text only when user provides DOI/PMID).
 
-## Reusable API / 复用接口（强制）
+## 7. User-uploaded files
 
-> **任何分析必须调用已有函数，禁止从零编写完整分析脚本。** 完整函数清单、调用示例与重依赖封装（TSA / 剂量反应 / 生存 Meta / 贝叶斯 NMA）见 `references/advanced_api.md`。
-> Rule: never rewrite the full pipeline inline — `source()` the skill scripts and call the functions. Full API reference → `references/advanced_api.md`.
+1. **Structured data (`.csv`/`.xlsx`/`.xls`)** → Type 4 template (`references/data_templates.md`: encoding / zh-en column match / missing-value / row-count).
+2. **Document/template (`.docx`/`.pptx`/`.pdf`/`.doc`)** → convert to md first: `.docx`/`.pptx` via `scripts/office_to_md.py`; `.pdf` via `pdf` skill (OCR for scans); `.doc`/scans → ask user for text version.
+**🔔 Pre-conversion notice (bilingual)**: `⚠️ All uploaded documents will be converted to md. PPT conversion can lose images/layout/animations/charts. We recommend converting yourself and checking first.`
+**Confidentiality**: skill never proactively judges/blocks upload confidentiality; whether IPD goes to coze is the user's call.
 
-## Security & Scope / 安全与范围
+## 8. Bug Reporting
 
-**Execution model / 运行模型**: R analysis runs on your local machine; this skill **does NOT auto-install R packages** (when missing, it only lists package names and prompts manual installation — you decide whether to connect to the network and install). It downloads full-text PDFs from external services ONLY on your **explicit instruction** (network involved — please confirm copyright/authorization yourself). Analysis artifacts are written to the `meta_analysis/` and `output/` directories in your current workspace by default.
-**Not clinical judgment / 不替代临床判断**: Results must be interpreted in conjunction with professional background.
-**No literature DB search / 不检索文献库**: This skill does not include literature database search; it only downloads full text on demand when you provide a DOI/PMID.
+Agent behavior only; implementation → `adapters/bug_report.py`, protocol → `references/bug_report_endpoint.md`.
+- **Trigger (≤1 proposal/session):** unexpected non-zero exit / engine error / user questions result — **and** retried ≥1. Explicit "report a bug" also triggers (no limit).
+- **Two-stage confirmation:** ① propose-with-preview (bilingual `confirm_prompt` + full sanitized report) → ② on consent `send_to_endpoint` (`https://ct-bugreport.coze.site/run`). Declined → never re-propose.
+- **Sanitization hard:** 11-key whitelist only, never raw data/subject records; `description` is the only free-text field, user-reviewed. No cloud call → `save_local_report()` (stays local).
 
-## Output / 输出
+## 9. Meta information
 
-`analysis_complete.R` + forest/funnel (`.svg`+`.png`) + `results_summary.md` + `data_backup.csv`.
-
-Output figures as editable SVG; editing methods and journal format conversion (EPS/PDF/TIFF) → `references/svg_editing.md`. / 图形以可编辑 SVG 输出；编辑方式与期刊格式转换（EPS/PDF/TIFF）见 `references/svg_editing.md`。
-
-## References / 参考
-
-| File | Content |
-|------|---------|
-| `interactive_menu.md` | Full Level 2 menus + data formats + dialogue examples |
-| `revman_complete.md` | RevMan→R 1:1 code mapping |
-| `stata_to_r_mapping.md` | Stata metareg/mvmeta→R equivalents |
-| `esc_robust_meta.md` | Effect size conversions + RVE reference |
-| `advanced_analysis.md` | Multilevel/IPD/Bayesian/Dose-Resp/Power |
-| `single_group_meta.md` | metaprop/metamean/metainc/metacor + NNT |
-| `bayesian_nma.md` | multinma (Stan) + gemtc (JAGS) full workflow |
-| `survival_meta.md` | survmeta + KM pseudo-IPD reconstruction |
-| `tsa_diagnostics.md` | TSA(run_tsa 自实现) + Baujat + Drapery + Bootmeta |
-| `diagnosis_meta.md` | mada::reitsma bivariate + SROC |
-| `review_workflow.md` | metagear: PRISMA, screening, PDF batch, digitize |
-| `data_templates.md` | Data input templates per type |
-| `citations.md` | Full citation list |
-| `r_packages.md` | Package details & installation |
-| `advanced_api.md` | 复用接口（强制）+ 重依赖封装：TSA / 剂量反应 / 生存 / Bayesian NMA |
-| `svg_editing.md` | SVG editing tools & journal format conversion |
-
-## Project Files / 项目文件
-
-`README.md` | `README_ZH.md` | `LICENSE` (MIT © 2025 medstatstar) | `requirements.txt` | `assets/icon.svg`
+**Traceability**: all factual claims cite a `ref-*.md` section or official guideline; unverifiable → mark `⚠️ official verify`.
+**References**: full index → `references/references.md`. Key: `interactive_menu.md`, `ADVANCED.md`/`ADVANCED_zh-CN.md`, `advanced_api.md`, `topic-selection.md`, `data_templates.md`, `svg_editing.md`. Units → `references/units.md`.
+**Project Files**: `README.md` | `README_zh-CN.md` | `CHANGELOG.md` | `AGENTS.md` | `LICENSE` (MIT © 2025 medstatstar) | `requirements.txt` | `assets/icon.svg`.
+**Changelog**: → `CHANGELOG.md`.

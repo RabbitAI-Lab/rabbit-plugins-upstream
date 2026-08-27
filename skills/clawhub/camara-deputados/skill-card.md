@@ -1,46 +1,63 @@
-## Description: <br>
-Monitor and research Brazilian Chamber of Deputies legislative activity, including deputies, bills, votes, committees, agendas, expenses, and legislative statuses through the public Dados Abertos API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Research Brazil's Chamber of Deputies using its official open-data API. Use for federal deputies, Chamber bills, votes, events, committees, parliamentary fronts, and CEAP expenses; use senado-federal for Senate-only records.
 
-## Publisher: <br>
-[olegantonov](https://clawhub.ai/user/olegantonov) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[olegantonov](https://clawhub.ai/user/olegantonov)
 
-## Use Case: <br>
-External researchers, journalists, civic analysts, and developers use this skill to search and monitor public Câmara dos Deputados data for deputies, proposições, votes, events, committees, parties, expenses, and legislative reference data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms, IDs, and date ranges used with the skill are sent to the public Câmara dos Deputados API. <br>
-Mitigation: Use only public or approved research queries, and avoid sensitive internal terms when calling the API. <br>
-Risk: Running the bundled Python client or CLI locally depends on Python package hygiene. <br>
-Mitigation: Use a virtual environment and pin or update dependencies before using the tooling in local or CI workflows. <br>
-Risk: Legislative agenda, vote, and status data can change as the public source updates. <br>
-Mitigation: Verify time-sensitive conclusions against the live official API before publication or operational use. <br>
+## Use Case:
 
+External users, developers, and researchers use this skill to answer factual questions about Brazil's Chamber of Deputies and to build reproducible API queries for deputies, propositions, votes, events, committees, parliamentary fronts, and CEAP expenses.
 
-## Reference(s): <br>
-- [Câmara dos Deputados Dados Abertos API](https://dadosabertos.camara.leg.br/api/v2) <br>
-- [Câmara dos Deputados Swagger UI](https://dadosabertos.camara.leg.br/swagger/api.html) <br>
-- [Portal de Dados Abertos da Câmara dos Deputados](https://www2.camara.leg.br/transparencia/dados-abertos) <br>
-- [API Endpoints Reference](references/api-endpoints.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/olegantonov/camara-deputados) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Shell commands, Code] <br>
-**Output Format:** [Markdown guidance with API URLs, curl examples, and Python snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses public read-only Câmara dos Deputados API responses; no authentication is required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Dependency versions may drift when the skill is installed in locked-down or production environments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin dependencies or install from a reviewed lockfile before deployment.
+
+Risk: Legislative data, reference codes, and current-day results can change, making cached or uncited answers misleading.
+
+Mitigation: Resolve reference endpoints at query time, include the retrieval date when freshness matters, and cite the exact API URL used.
+
+Risk: Upstream API errors, empty results, or pagination mistakes can be confused with a valid absence of records.
+
+Mitigation: Distinguish empty successful responses from HTTP or parsing errors and follow the API-provided next links during pagination.
+
+## Reference(s):
+
+- [Câmara dos Deputados Skill Page](https://clawhub.ai/olegantonov/skills/camara-deputados)
+- [Official Chamber Open Data API](https://dadosabertos.camara.leg.br/api/v2)
+- [Official Chamber API Swagger](https://dadosabertos.camara.leg.br/swagger/api.html)
+- [Portal de Dados Abertos](https://www2.camara.leg.br/transparencia/dados-abertos)
+- [Câmara API endpoint reference](references/api-endpoints.md)
+- [Tracking a proposition across both houses](references/cross-house.md)
+- [Chamber response, pagination, and time rules](references/response-shapes.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance, API calls]
+
+**Output Format:** [Markdown, Python snippets, shell commands, JSON-compatible API responses, and cited API URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should preserve official field names, separate Chamber data from interpretation, include retrieval dates when freshness matters, and cite exact API URLs for auditable answers.]
+
+## Skill Version(s):
+
+1.1.1 (source: SKILL.md metadata, pyproject.toml, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,50 +1,65 @@
-## Description: <br>
-凭 App Key 调用百炼®标书开放 API，完成招标文件智能解读、分包抽取、成品投标文件生成和可选合规审查。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+凭 App Key 调用百炼®标书开放 API，帮助代理完成招标文件智能解读、分包抽取、投标文件生成和可选合规审查，并明确提示文件上传、凭证保护和积分消耗。
 
-## Publisher: <br>
-[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666)
 
-## Use Case: <br>
-External users and business proposal teams use this skill to process local tender documents, generate editable bid documents, and review bid files for compliance risks through the BaiLian bid-document service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents may contain commercial, pricing, and personal information and are uploaded to the BaiLian service for processing. <br>
-Mitigation: Use the skill only after the user understands and consents to the upload, and submit only intended local files. <br>
-Risk: The App Key controls access to billable account credits and is stored locally. <br>
-Mitigation: Keep config.json private, avoid pasting the App Key into chat, and do not share links that contain App Key or bind_key parameters. <br>
-Risk: Bid-document generation consumes account credits. <br>
-Mitigation: Check the account balance before submitting generation jobs and confirm the user expects credit usage. <br>
-Risk: Optional endpoint overrides could route traffic away from the production BaiLian API. <br>
-Mitigation: Review ZCM_BASE before use and leave it unset when production API routing is required. <br>
-Risk: Generated bid documents and compliance reports may require business and legal review before use. <br>
-Mitigation: Treat generated files and risk findings as drafting and review aids, and have qualified staff verify final submissions. <br>
+## Use Case:
 
+External bid-writing users and their agents use this skill to analyze tender files, generate editable bid documents, and review bid submissions for compliance risks through the 百炼®标书 cloud API. The workflow is designed for user-provided local files and App Key based account access.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-review-pro) <br>
-- [Publisher profile](https://clawhub.ai/user/chichihaixiaojian666) <br>
-- [BaiLian bid-document service](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [API contract reference](references/api.md) <br>
-- [Usage guide](references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance, progress text, JSON results, .docx bid documents, and HTML or Word reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include local absolute file paths for generated reports and bid documents.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: release evidence) <br>
+Risk: Tender and bid documents may contain commercial, pricing, or personal information and are uploaded to the 百炼®标书 cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm user consent before upload and limit processing to user-provided local files sent to the documented 百炼®标书 API domain.
+
+Risk: The App Key is a full account credential and may expose billing or account access if shared in chat or links.
+
+Mitigation: Have the user store the App Key locally in config.json, do not request or echo it in conversation, and avoid forwarding URLs that contain key or bind_key parameters.
+
+Risk: Bid-document generation consumes the App Key account's points and long-running generation can be accidentally resubmitted.
+
+Mitigation: Check balance before generation, explain that generation is the paid step, and use job status or idempotency handling instead of resubmitting interrupted jobs.
+
+Risk: Generated bid text, extracted requirements, and compliance findings can be incomplete or require judgment.
+
+Mitigation: Preserve uncertain fields as 待填项, report partial semantic review status when applicable, and require human review before bid submission.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-review-pro)
+- [百炼®标书 Platform](https://biaoshu.zhiliaobiaoxun.com/)
+- [API Contract Reference](references/api.md)
+- [Usage Guide](references/usage.md)
+- [Knowledge Base Field Reference](references/knowledge-fields.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown or plain text guidance, JSON API results, HTML or Word reports, and editable .docx bid documents]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include absolute local file paths for generated reports or bid documents; reports use zh-CN procurement labels.]
+
+## Skill Version(s):
+
+1.0.14 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

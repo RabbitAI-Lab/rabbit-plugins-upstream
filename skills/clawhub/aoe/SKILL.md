@@ -69,6 +69,9 @@ aoe list --json
 
 # List across all profiles
 aoe list --all
+
+# Skip trashed and archived rows (default is every persisted session)
+aoe list --json --state=live
 ```
 
 **JSON output shape** (`aoe list --json`):
@@ -82,13 +85,14 @@ aoe list --all
     "tool": "claude",
     "command": "claude",
     "profile": "default",
+    "state": "live",
     "created_at": "2025-01-01T00:00:00Z",
     "workspace_repos": []
   }
 ]
 ```
 
-`command` is omitted when empty; `worktree` appears only for worktree-backed sessions. `list --json` does not include live status; use `aoe status --json` or `aoe session capture --json` for that.
+`command` is omitted when empty; `worktree` appears only for worktree-backed sessions. `state` is `live`, `archived`, or `trashed`; `trashed_at` and `archived_at` are set independently, and trashing leaves `archived_at` alone, so a session archived and then trashed carries both keys and reports `trashed`. Neither timestamp is durable, but they do not clear alike: `archived_at` is cleared by `aoe session unarchive`, by `aoe session favorite`, and by anything that wakes the session (`aoe send`, and `aoe session restart` when it sends its wake message), while `trashed_at` is cleared only by `aoe session restore`. Key off `state` rather than caching a timestamp. A trashed session stays in the listing and keeps its title, so check `state` before treating a row as a live session. `list --json` does not include live status; use `aoe status --json` or `aoe session capture --json` for that.
 
 ### Session lifecycle
 
@@ -137,9 +141,12 @@ aoe status -q   # just the waiting count (for scripting)
   "tool": "claude",
   "command": "claude",
   "status": "running",
+  "state": "live",
   "profile": "default"
 }
 ```
+
+`state` is `live`, `archived`, or `trashed`, the same vocabulary `aoe list --json` uses; `trashed_at` and `archived_at` are set independently, and trashing deliberately leaves `archived_at` alone, so a session archived and then trashed carries both keys and reports `trashed`. Neither timestamp is durable, and they do not clear alike: `archived_at` is cleared by `aoe session unarchive`, by `aoe session favorite`, and by anything that wakes the session, which means `aoe send` and `aoe session restart` when it sends its wake message (with `session.restart_wake_message` set to the empty string it does not send one, and the archive survives the restart). `trashed_at` is cleared only by `aoe session restore`. Read the current `state` rather than caching a timestamp; `status` is the pane's live status and does not carry it, since an archived session can still be running.
 
 **JSON output shape** (`aoe status --json`):
 ```json

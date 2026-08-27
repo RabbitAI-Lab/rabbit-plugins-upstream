@@ -1,0 +1,111 @@
+{
+  "name": "navigation-create",
+  "description": "Create Tradebee website navigation with two-level and child-mode constraints.",
+  "version": "1.0.0",
+  "input": {
+    "type": "object",
+    "properties": {
+      "language": {
+        "type": "string",
+        "description": "Required exact enabled site language selected from languages-get."
+      },
+      "navigation": {
+        "type": "object",
+        "description": "Required navigation data. Each language supports at most 20 first-level items and navigation supports at most two levels.",
+        "properties": {
+          "parent_navigation_id": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "description": "Defaults to 0 for a first-level item. For a second-level item, use a positive first-level ID returned by navigation-read where is_leaf=false; never use a second-level ID."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "description": "Required navigation display name containing 2-100 characters."
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "Required link containing 1-500 characters. Internal links must use /path without scheme or domain; external links must be absolute HTTP(S) URLs."
+          },
+          "system_children_type": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "minimum": 0,
+            "maximum": 7,
+            "default": 0,
+            "description": "Defaults to 0. System child-navigation type: 0 disables system children; 1 first-level product groups; 2 news groups; 3 FAQ groups; 4 certificate groups; 5 case groups; 6 all product groups without cover images; 7 blog groups. Values 1-7 are first-level only and require content=\"\" with no manual children."
+          },
+          "content": {
+            "type": "string",
+            "default": "",
+            "description": "Optional custom child-navigation HTML fragment for a first-level item. Before generating this field, call rule-get with the exact selected language and exact scene=navigation.content; stop if the call fails. Follow the returned payload: use one root section with a unique scoped class and one embedded style block at the end. Inline style attributes and external stylesheet links are forbidden. Do not include H1; prefer H2-H6. Each img src may be an HTTP(S) URL or data:image/...;base64,...; at most 50 images are allowed and each image must be at most 500 kB. The 100,000-character limit is calculated after removing img tags. The server uploads base64 images and replaces src with URLs. Use non-empty content only with system_children_type=0 and no manual children. It must be \"\" for system children, manual-child mode, and every second-level item."
+          },
+          "open_in_new_window": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to open the navigation URL in a new browser window or tab. Defaults to false."
+          },
+          "sort": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999999,
+            "default": 999999,
+            "description": "Navigation sort value. Smaller values appear earlier; valid range is 1-999999."
+          }
+        },
+        "required": [
+          "name",
+          "url"
+        ]
+      },
+      "confirmation": {
+        "type": "object",
+        "description": "Required explicit approval for the exact payload.",
+        "properties": {
+          "approved": {
+            "type": "boolean",
+            "description": "Must be true only after the user explicitly approves this operation."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the exact language and navigation payload approved by the user."
+          }
+        },
+        "required": [
+          "approved",
+          "summary"
+        ]
+      }
+    },
+    "required": [
+      "language",
+      "navigation",
+      "confirmation"
+    ]
+  },
+  "output": {
+    "type": "object",
+    "description": "API result containing navigation_id and is_leaf."
+  },
+  "dependencies": {
+    "navigation.parent_navigation_id": {
+      "skill": "navigation-read",
+      "field": "data.list[].navigation_id",
+      "mode": "select",
+      "constraint": "is_leaf=false"
+    }
+  }
+}

@@ -1,14 +1,13 @@
 ---
 name: dlazy-elevenlabs-tts
 version: 1.3.4
-description: ElevenLabs eleven_v3 text-to-speech with 12 curated multilingual voices and stability/similarity/style controls. Great for dubbing, audiobooks, and character dialog. Before picking a voice, you can search for the right one via elevenlabs-search. ElevenLabs eleven_v3 文本转语音，提供 12 种精选英文/多语种音色，支持稳定性、相似度、风格控制。适合配音、有声内容与角色对话。选择音色前，可以从 elevenlabs-search 检索合适的音色。
+description: "ElevenLabs eleven_v3 text-to-speech with 12 curated multilingual voices and stability/similarity/style controls. Great for dubbing, audiobooks, and character dialog. Before picking a voice, you can search for the right one via elevenlabs-search. ElevenLabs eleven_v3 文本转语音，提供 12 种精选英文/多语种音色，支持稳定性、相似度、风格控制。适合配音、有声内容与角色对话。选择音色前，可以从 elevenlabs-search 检索合适的音色。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy elevenlabs-tts -h for help."}}
 ---
 
-# dlazy-elevenlabs-tts
+# 语音合成 ElevenLabs TTS
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 ElevenLabs eleven_v3 text-to-speech with 12 curated multilingual voices and stability/similarity/style controls. Great for dubbing, audiobooks, and character dialog. Before picking a voice, you can search for the right one via elevenlabs-search.
@@ -90,6 +89,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

@@ -1,40 +1,58 @@
-## Description: <br>
-Searches domestic hotels, Marriott-brand properties, hotel packages, hotel details, and nearby dining using Fliggy and Gaode data through cloud proxy services. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+酒店智能搜索 provides five natural-language tools for domestic hotel search, Marriott brand search and details, package lookup, and nearby food recommendations using Fliggy and Gaode data.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and travel-planning agents use this skill to search hotels in China, compare Marriott options and packages, review hotel details, and find nearby restaurants with booking links where available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel, destination, and nearby-food search terms are sent to the skill publisher's cloud proxy and downstream Fliggy/Gaode services. <br>
-Mitigation: Avoid entering sensitive personal details beyond what is needed for the search. <br>
-Risk: Hotel prices and availability are returned from external services and may change before booking. <br>
-Mitigation: Confirm final pricing, policies, and availability on the linked booking page before purchase. <br>
+## Use Case:
 
+External travelers and travel-planning agents use this skill to search domestic China hotels, Marriott properties, hotel packages, and nearby restaurants, then review result links before completing bookings on external platforms.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/hotel-smart-pro) <br>
+### Deployment Geography for Use:
 
+Global, with hotel and food search coverage documented for domestic China only.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style text with hotel, package, dining, data-source, and booking-link details where available] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results depend on external Fliggy and Gaode proxy responses; prices and availability may change before booking.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.5 (source: server release evidence) <br>
+Risk: Hotel, food, and location search text is sent to the skill publisher's cloud proxy and then to Fliggy or Gaode.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid entering sensitive personal itinerary details unless the user accepts that data flow.
+
+Risk: Hotel prices, availability, and package details can change after the skill returns results.
+
+Mitigation: Verify current terms, pricing, and availability on the external booking page before making travel decisions.
+
+Risk: The skill may include extra travel suggestions that are prompts rather than supported booking actions.
+
+Mitigation: Treat suggestions as optional follow-up queries and confirm that the requested action is supported before relying on it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/hotel-smart-pro)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown-like text with hotel, package, and food results, including prices, ratings, addresses, data-source notes, and external booking links when available.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on external proxy, Fliggy, and Gaode responses; prices and availability can change, and booking is completed outside the skill.]
+
+## Skill Version(s):
+
+1.1.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,11 +1,10 @@
 ---
 name: zwjh-skill
 description: "统一记忆底座：长期记忆 + 知识图谱 + 自动沉淀 + 检索。让 AI「记得你」，跨会话持久记忆、实体/关系图谱、语义与时间线检索、记忆健康度审计、本地备份（可接百度网盘）。纯本地、零密钥、按硬件自适应，不拖累电脑。并保留 v1.7 的根因分析/预测性维护/进化报告。"
-version: 2.1.0
+version: 2.5.0
 ---
 
-
-# 长期记忆 / 知识图谱 会思考的进化 AI — zwjh-skill v2.1.0
+# 长期记忆 / 知识图谱 会思考的进化 AI — zwjh-skill v2.3.0
 
 > **安装后说「帮我配置 + 设置定时任务」，AI 自动完成一切。**
 >
@@ -50,6 +49,7 @@ version: 2.1.0
 | 备份 / 恢复 | `python scripts/cli.py backup` / `restore <路径>` |
 | 写日记 | `python scripts/cli.py diary --text "今天想清楚了一件事"` |
 | 看是否有新版本 | `python scripts/cli.py update-check` |
+| 查看/消解冲突 | `python scripts/cli.py conflicts` |
 | 一键配置定时任务 | `python scripts/cli.py setup` |
 | 总览 | `python scripts/cli.py status` |
 
@@ -212,6 +212,207 @@ python scripts/cli.py update-check
 
 ---
 
+### 模块 11：记忆冲突消解
+
+**做了什么**：当新记忆与旧记忆矛盾时，智能检测、分类、消解，避免"记错了还固执"。
+
+- **冲突自动检测**：写入时自动对比同 entity+predicate 的已有事实，计算语义相似度与矛盾度
+- **冲突分类**：信息更新（换工作）/ 信息纠错（之前记错）/ 视角变化（同义不同描述）/ 真实冲突（需仲裁）
+- **自动消解**：UPDATE / CORRECTION 类型自动处理（新替旧），PERSPECTIVE 自动合并
+- **冲突提示**：REAL_CONFLICT 生成对比报告，存入待处理队列，提示用户仲裁
+- **处理策略**：覆盖 / 保留两者 / 合并 / 忽略
+- **性能保障**：仅在同 entity+predicate 写入时触发，向量缓存，超时保护，不拖累写入
+
+**示例**：
+```bash
+python scripts/cli.py deposit --text "我之前记错了，张三其实去了字节跳动" --source conversation
+# → 自动检测到纠错模式，新值覆盖旧值
+
+python scripts/cli.py conflicts
+# → 查看待处理冲突
+python scripts/cli.py conflicts --resolve 1 --strategy 1
+# → 处理冲突 #1，策略：覆盖
+```
+
+---
+
+### 模块 12：记忆导出 / 迁移
+
+**做了什么**：多格式、可选中、跨平台迁移，消除数据锁定担忧。
+
+- **多格式导出**：Markdown（可读性）/ JSON（结构化）/ Neo4j Cypher（图数据库）/ CSV（Excel）/ Obsidian / Logseq
+- **选择性导出**：按实体类型 / 时间范围 / 重要度阈值筛选
+- **批量导入**：支持从 Markdown、JSON、Obsidian vault 批量导入
+- **零依赖**：所有格式纯标准库生成，无需额外工具
+
+**示例**：
+```bash
+python scripts/cli.py export --format markdown --output D:\backup
+python scripts/cli.py export --format obsidian --from-day 2026-01-01 --to-day 2026-07-31
+python scripts/cli.py export --format cypher --types person,project
+python scripts/cli.py export --format csv --output D:\export
+```
+
+---
+
+### 模块 13：时间线叙事生成
+
+**做了什么**：把分散的记忆组织成连贯的叙事，从"数据库"变成"有温度的回忆"。
+
+- **项目进展时间线**：输入项目名称，自动生成从立项到当前的所有关键节点
+- **人脉交互历史**：输入人名，生成与 TA 的所有互动时间线
+- **知识成长轨迹**：输入主题，展示认知变化（入门→深入）
+- **周期性回顾**：每周/每月自动生成回顾报告
+- **可插拔 LLM**：支持配置外部 LLM API，未配置时使用模板降级
+
+**示例**：
+```bash
+python scripts/cli.py narrative project --name "机器学习项目"
+python scripts/cli.py narrative person --name "张三"
+python scripts/cli.py narrative knowledge --name "Python"
+python scripts/cli.py narrative weekly
+python scripts/cli.py narrative monthly
+```
+
+---
+
+### 模块 14：多模态记忆
+
+**做了什么**：记忆从文字扩展到图片、音频、文件，全媒体覆盖。
+
+- **图片记忆**：AI 理解图片内容、拍摄时间、关联事件
+- **音频记忆**：会议录音摘要、关键决策关联到项目
+- **文件记忆**：文档摘要、存在路径、关联实体
+- **媒体理解适配器**：可插拔（本地模型 / LLM API / 手动描述）
+- **实体关联**：媒体文件自动链接到知识图谱实体
+
+**示例**：
+```bash
+python scripts/cli.py multimodal index-image --path D:\photo.jpg --entity "张三" --text "项目启动会合影"
+python scripts/cli.py multimodal index-audio --path D:\meeting.mp3 --project "智能客服"
+python scripts/cli.py multimodal index-file --path D:\contract.pdf --entity "李四" --project "合同审核"
+python scripts/cli.py multimodal list --type image
+```
+
+---
+
+### 模块 15：跨 skill 记忆总线（MCP 服务器）
+
+**做了什么**：把 zwjh-skill 的核心能力暴露为 MCP Tool，让其他 skill / Agent 直接调用，「可插拔基础设施」定位落地。
+
+- **3 个 MCP Tool**：`zwjh_query`（语义检索）/ `zwjh_deposit`（沉淀知识点）/ `zwjh_health`（健康度报告）
+- **零依赖**：纯标准库实现 MCP 协议（JSON-RPC 2.0 over stdio），不引入 `mcp` 包
+- **协议标准**：兼容 MCP 2024-11-05 规范，可与任何支持 MCP 的 Agent 集成
+
+**启动方式**：
+```bash
+python scripts/mcp_server.py
+# 或
+python scripts/cli.py mcp
+```
+
+**MCP 配置示例**（`~/.workbuddy/mcp.json`）：
+```json
+{
+  "mcpServers": {
+    "zwjh-memory": {
+      "command": "python",
+      "args": ["D:/skill/zwjh-skill/scripts/mcp_server.py"]
+    }
+  }
+}
+```
+
+---
+
+### 模块 16：自动归档策略（冷热分层）
+
+**做了什么**：按访问频率 + 时间衰减自动控制记忆膨胀，「热记忆保持、温记忆摘要、冷记忆高压缩归档」。
+
+- **热度算法**：`0.6 × ln(access_count + 1) + 0.4 × exp(-days_since_access / 30)`
+- **三层策略**：热（保持原样）/ 温（抽取式摘要，30~50% 压缩）/ 冷（仅保留事实，70~90% 压缩）
+- **自动触发**：`autopilot` 末尾自动调用，无需手动干预
+- **硬件感知**：批处理大小按 `hardware.tier` 分配
+
+**示例**：
+```bash
+python scripts/cli.py archive --dry-run    # 查看归档计划
+python scripts/cli.py archive              # 执行归档
+python scripts/cli.py archive --stats      # 查看归档统计
+```
+
+---
+
+### 模块 17：任务状态面板（Web 可视化增强）
+
+**做了什么**：在原有图谱可视化基础上，新增底部任务状态面板，autopilot 运行可观测。
+
+- **定时任务状态**：显示是否注册、频率、输出
+- **健康度评分**：实时显示当前健康度（绿/黄/红三色标识）
+- **归档统计**：热/温/冷记忆数量 + 压缩节省百分比
+- **可折叠设计**：不占用图谱空间，需要时展开
+
+**启动方式**：
+```bash
+python scripts/web_server.py
+# 浏览器打开 http://127.0.0.1:8080 → 底部任务状态面板
+```
+
+---
+
+### 模块 18：本地 Embedding 层（ONNX BGE）
+
+**做了什么**：接入 bge-small-zh v1.5 ONNX 量化模型，实现真正的语义向量检索。
+
+- **模型外部放置**：模型文件不打包，包内只带 SHA256 校验与下载指引
+- **零密钥**：用户下载 .onnx 放置 `models/` 即启用语义检索
+- **自动回退**：无模型时自动回退 TF-IDF（行为同旧版）
+- **向量存储**：SQLite BLOB 表，万条级暴力余弦检索
+- **扩展预留**：接口预留 HNSW 索引扩展点
+
+**模型信息**：
+- 模型：BAAI/bge-small-zh-v1.5 (ONNX INT8 量化)
+- 维度：512
+- 大小：约 30MB
+- 下载：放置 `models/bge-small-zh-v1.5-q.onnx`
+
+---
+
+### 模块 19：混合检索（三路召回 + RRF 融合）
+
+**做了什么**：检索升级为语义/关键词/时间三路召回 RRF 融合排序，返回结果附命中理由。
+
+- **三路召回**：语义（ONNX BGE）/ 关键词（TF-IDF）/ 时间衰减
+- **RRF 融合**：Reciprocal Rank Fusion 平滑融合多路结果
+- **可解释输出**：返回语义分/关键词分/时间分，让 Agent 知道为何召回
+- **向后兼容**：无 ONNX 模型时自动回退纯 TF-IDF
+
+**示例**：
+```bash
+python scripts/cli.py query "张三去哪了"
+# 返回: [{day, source, score, snippet, explanation: {semantic, keyword, time, summary}}]
+```
+
+---
+
+### 模块 20：存量记忆重建索引
+
+**做了什么**：后台分批重建存量记忆的向量索引，不阻塞使用。
+
+- **后台分批**：按硬件档位分配批次大小
+- **断点续传**：已处理的跳过，支持中断后继续
+- **进度输出**：实时显示处理进度
+- **让出 CPU**：每批处理后让出线程，不卡顿
+
+**示例**：
+```bash
+python scripts/cli.py rebuild-index           # 重建全部
+python scripts/cli.py rebuild-index --batch 100  # 大批次
+python scripts/cli.py embedder-info           # 查看模型状态
+```
+
+---
+
 ### 模块 10：知识图谱可视化（Web 界面）
 
 **做了什么**：在浏览器中直观探索实体关系网络，从"黑盒存储"变为"可视化探索"。
@@ -280,6 +481,10 @@ python scripts/cli.py demo
 
 ## 更新日志
 
+| v2.5.0 | 2026-08-24 | 新增：本地 embedding 层（ONNX BGE 语义向量 + TF-IDF 回退，模型外部放置 + SHA256 校验）；新增混合检索（语义/关键词/时间三路召回 RRF 融合排序）；新增检索解释（返回结果附命中理由分项）；新增存量记忆一键重建索引（后台分批不阻塞）；新增 embedder.py / rebuild_index.py；优化 retrieval.py 升级为 hybrid_search |
+| v2.4.0 | 2026-08-17 | 新增：跨 skill 记忆总线（MCP 服务器，暴露 query/deposit/health 为 MCP Tool，零依赖）；新增自动归档策略（冷热分层 + 时间衰减热度分，autopilot 自动触发）；新增任务状态 Web 面板（定时任务/健康度/归档统计可视化）；新增 mcp_server.py / archive.py；新增 CLI archive / mcp 命令 |
+| v2.3.0 | 2026-08-07 | 新增：多格式导出（Markdown/JSON/Cypher/CSV/Obsidian/Logseq）与选择性筛选；新增时间线叙事生成（项目/人脉/知识成长/周期回顾）；新增多模态记忆（图片/音频/文件索引）；新增 export.py / narrative.py / multimodal.py |
+| v2.2.0 | 2026-07-29 | 新增：记忆冲突消解（冲突自动检测 + 四类分类 + 自动/手动消解策略）；新增 conflict_resolver.py；新增 CLI conflicts 命令 |
 | v2.1.0 | 2026-07-17 | 新增：知识图谱 Web 可视化（力导向图/详情面板/路径探索/时间线/子图过滤）；增加 web_server.py 零依赖内置 HTTP 服务器；增加大规模图谱分层加载与聚合；新增 REST API |
 | v2.0.0 | 2026-07-08 | 新增：统一记忆底座（长期记忆 + 知识图谱 + 自动沉淀 + 检索 + 健康度 + 备份）；新增硬件自适应调度与技能更新提醒；保留 v1.7 能力；零密钥纯本地 |
 | v1.7.0 | 2026-06 | 优化：大幅简化操作（一键启动）、增强自愈能力（极少人工介入） |

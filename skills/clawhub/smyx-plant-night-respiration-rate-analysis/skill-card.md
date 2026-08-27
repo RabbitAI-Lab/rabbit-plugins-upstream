@@ -1,44 +1,60 @@
-## Description: <br>
-Estimates relative plant night respiration from thermal canopy images or videos, with optional CO2 context, and returns a structured analysis report with respiration intensity, risk prompts, recommendations, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Estimates relative plant night respiration intensity from plant-factory canopy thermal imagery and optional ambient CO2 data, then returns structured analysis, risk prompts, recommendations, and report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and agricultural operators use this skill to analyze night-period plant factory, climate chamber, or greenhouse thermal media and estimate a relative respiration intensity index. It supports monitoring metabolic activity and producing structured guidance for nighttime environmental control. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Plant media or URLs may be processed by the vendor's cloud service with weak user-facing scoping. <br>
-Mitigation: Avoid submitting sensitive facility footage or internal URLs unless the publisher documents retention, deletion, and URL-source restrictions. <br>
-Risk: The skill may silently create or reuse an identity and store account tokens locally. <br>
-Mitigation: Run it only in a controlled workspace, review credential handling before deployment, and clear local account state between users or tenants. <br>
-Risk: History queries may use the stored identity to retrieve cloud report records. <br>
-Mitigation: Confirm identity isolation and report-access expectations before using history features in shared environments. <br>
+## Use Case:
 
+External users and developers use this skill to analyze nighttime plant canopy thermal images or videos, optionally with CO2 context, to estimate relative respiration intensity for plant factories, artificial climate chambers, and closed greenhouses. It can also return historical analysis reports from the configured remote service.
 
-## Reference(s): <br>
-- [API Documentation](references/api_doc.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-night-respiration-rate-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown text with structured JSON report content and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include respiration intensity, level assessment, risk prompts, recommendations, and cloud report export URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter lists 1.0.5) <br>
+Risk: Plant media and report metadata may be sent to lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with plant imagery and metadata that are approved for that remote service, and review data-handling expectations before installation.
+
+Risk: The skill can automatically associate an internal identity and create or reuse remote/local account records.
+
+Mitigation: Confirm the identity flow is acceptable in the deployment environment and avoid using the skill where silent account association is not permitted.
+
+Risk: Service tokens may be stored in a local SQLite database under the workspace data directory.
+
+Mitigation: Restrict access to the workspace data directory, inspect stored credentials during review, and rotate or remove tokens when retiring the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-night-respiration-rate-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Plant night respiration API documentation](artifact/references/api_doc.md)
+- [Analysis API error-code reference](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON text containing structured analysis results, risk prompts, recommendations, report links, or historical report lists.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts local file paths or URLs for plant thermal imagery/video; supports basic, standard, and JSON detail modes plus optional file output.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter states 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

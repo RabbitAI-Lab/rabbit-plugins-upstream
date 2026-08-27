@@ -14,6 +14,8 @@ if __name__ == "__main__" and __package__ is None:
 from typing import Any, Dict, List, Optional
 
 from . import _config, _http
+from ._coerce import to_bool
+from ._errors import RecameraError
 
 __all__ = [
     "get_rule_system_info",
@@ -33,7 +35,7 @@ PATH_RECORD_RULE = "/cgi-bin/entry.cgi/record/rule/record-rule-config"
 PATH_HTTP_ACTIVATE = "/cgi-bin/entry.cgi/record/rule/http-rule-activate"
 
 
-def get_rule_system_info(device_name: str) -> Dict[str, Any]:
+def get_rule_system_info(device_name: Optional[str] = None) -> Dict[str, Any]:
     """Health / availability snapshot of the rule subsystem."""
     dev = _config.resolve(device_name)
     d = _http.get_json(dev, PATH_INFO) or {}
@@ -88,7 +90,7 @@ def _parse_avail_tty(v: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def get_record_config(device_name: str) -> Dict[str, Any]:
+def get_record_config(device_name: Optional[str] = None) -> Dict[str, Any]:
     """Return `{rule_enabled, writer: {format, interval_ms}}`."""
     dev = _config.resolve(device_name)
     d = _http.get_json(dev, PATH_CONFIG) or {}
@@ -103,7 +105,7 @@ def get_record_config(device_name: str) -> Dict[str, Any]:
 
 
 def set_record_config(
-    device_name: str,
+    device_name: Optional[str] = None,
     *,
     rule_enabled: bool,
     writer_format: str,
@@ -112,7 +114,7 @@ def set_record_config(
     """Enable/disable the rule pipeline and set the writer format (`JPG`/`MP4`/`RAW`)."""
     dev = _config.resolve(device_name)
     payload = {
-        "bRuleEnabled": bool(rule_enabled),
+        "bRuleEnabled": to_bool(rule_enabled, "rule_enabled"),
         "dWriterConfig": {
             "sFormat": str(writer_format).upper(),
             "iIntervalMs": int(writer_interval_ms),
@@ -122,7 +124,7 @@ def set_record_config(
     _http.expect_ok(resp, "set rule config")
 
 
-def get_schedule_rule(device_name: str) -> Optional[List[Dict[str, str]]]:
+def get_schedule_rule(device_name: Optional[str] = None) -> Optional[List[Dict[str, str]]]:
     """Active-weekdays list, or `None` when the schedule is disabled."""
     dev = _config.resolve(device_name)
     d = _http.get_json(dev, PATH_SCHEDULE) or {}
@@ -138,7 +140,7 @@ def get_schedule_rule(device_name: str) -> Optional[List[Dict[str, str]]]:
 
 
 def set_schedule_rule(
-    device_name: str,
+    device_name: Optional[str] = None,
     schedule: Optional[List[Dict[str, str]]] = None,
 ) -> None:
     """Pass `None` or `[]` (or omit) to disable (rule active 24/7)."""
@@ -158,8 +160,8 @@ def set_schedule_rule(
 _FULL_FRAME_REGION = [[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]]
 
 
-def get_record_trigger(device_name: str) -> Dict[str, Any]:
-    """Return the current trigger as a tagged-union dict; see :func:`trigger_to_json` for each shape."""
+def get_record_trigger(device_name: Optional[str] = None) -> Dict[str, Any]:
+    """Return the current trigger as a tagged-union dict; see :func:`trigger_to_json`."""
     dev = _config.resolve(device_name)
     d = _http.get_json(dev, PATH_RECORD_RULE) or {}
     return parse_trigger(d)
@@ -254,9 +256,9 @@ def _validate_confidence_range(rule_name: Any, confidence: List[Any]) -> None:
     """Enforce `confidence_range_filter = [min, max]` with both ∈ [0, 1] and min ≤ max."""
     label = f"rule {rule_name!r}" if rule_name else "rule"
     if not isinstance(confidence, list) or len(confidence) != 2:
+        detail = len(confidence) if isinstance(confidence, list) else type(confidence).__name__
         raise ValueError(
-            f"{label}: confidence_range_filter must be exactly [min, max]; "
-            f"got {len(confidence) if isinstance(confidence, list) else type(confidence).__name__} value(s)"
+            f"{label}: confidence_range_filter must be exactly [min, max]; got {detail} value(s)"
         )
     try:
         lo, hi = float(confidence[0]), float(confidence[1])
@@ -264,7 +266,7 @@ def _validate_confidence_range(rule_name: Any, confidence: List[Any]) -> None:
         raise ValueError(
             f"{label}: confidence_range_filter entries must be numeric; got {confidence!r}"
         ) from exc
-    if not (0.0 <= lo <= 1.0) or not (0.0 <= hi <= 1.0):
+    if lo < 0.0 or lo > 1.0 or hi < 0.0 or hi > 1.0:
         raise ValueError(
             f"{label}: confidence_range_filter values must be within [0.0, 1.0]; got [{lo}, {hi}]"
         )
@@ -321,7 +323,7 @@ def _trigger_patch(trigger: Dict[str, Any]) -> tuple[str, Dict[str, Any]]:
         confidence = list(trigger.get("confidence_range_filter", [0.0, 1.0]))
         _validate_confidence_range("sed", confidence)
         consecutive_window_ms = int(trigger.get("consecutive_window_ms", 0))
-        if not (0 <= consecutive_window_ms <= 60000):
+        if consecutive_window_ms < 0 or consecutive_window_ms > 60000:
             raise ValueError(
                 f"sed: consecutive_window_ms must be within [0, 60000]; got {consecutive_window_ms}"
             )
@@ -363,11 +365,13 @@ def trigger_to_json(trigger: Dict[str, Any]) -> Dict[str, Any]:
     Accepted shapes::
 
         {"kind": "timer", "interval_seconds": 60}
-        {"kind": "gpio", "name": "GPIO_01", "state": "FLOATING", "signal": "RISING", "debounce_ms": 0}
+        {"kind": "gpio", "name": "GPIO_01", "state": "FLOATING",
+         "signal": "RISING", "debounce_ms": 0}
         {"kind": "inference_set", "rules": [...]}
         {"kind": "http"} | {"kind": "always_on"}
         {"kind": "tty", "name": "...", "command": "..."}
-        {"kind": "sed", "model_id": "", "consecutive_window_ms": 0, "confidence_range_filter": [0.5, 1.0], "label_filter": ["Cat"]}
+        {"kind": "sed", "model_id": "", "consecutive_window_ms": 0,
+         "confidence_range_filter": [0.5, 1.0], "label_filter": ["Cat"]}
 
     Prefer :func:`set_record_trigger`, which performs a read-modify-write so
     other trigger kinds' remembered settings survive a kind switch.
@@ -375,7 +379,9 @@ def trigger_to_json(trigger: Dict[str, Any]) -> Dict[str, Any]:
     return _merge_trigger_payload(None, trigger)
 
 
-def set_record_trigger(device_name: str, trigger: Dict[str, Any]) -> None:
+def set_record_trigger(
+    device_name: Optional[str] = None, *, trigger: Dict[str, Any]
+) -> None:
     """Install *trigger* while preserving other kinds' remembered settings.
 
     Fetches the current `record-rule-config`, copies the sibling sub-objects
@@ -389,7 +395,7 @@ def set_record_trigger(device_name: str, trigger: Dict[str, Any]) -> None:
     dev = _config.resolve(device_name)
     try:
         current = _http.get_json(dev, PATH_RECORD_RULE)
-    except Exception:
+    except RecameraError:  # fresh/unreachable device: degrade to full-replace
         current = None
     payload = _merge_trigger_payload(
         current if isinstance(current, dict) else None, trigger
@@ -398,7 +404,7 @@ def set_record_trigger(device_name: str, trigger: Dict[str, Any]) -> None:
     _http.expect_ok(resp, "set record trigger")
 
 
-def activate_http_trigger(device_name: str) -> None:
+def activate_http_trigger(device_name: Optional[str] = None) -> None:
     """Fire a one-shot record event on an HTTP-kind trigger."""
     dev = _config.resolve(device_name)
     resp = _http.post_json(dev, PATH_HTTP_ACTIVATE)
@@ -414,17 +420,4 @@ COMMANDS = {
     "get_record_trigger": get_record_trigger,
     "set_record_trigger": set_record_trigger,
     "activate_http_trigger": activate_http_trigger,
-}
-COMMAND_SCHEMAS = {
-    "get_rule_system_info": {"required": {"device_name"}, "optional": set()},
-    "get_record_config": {"required": {"device_name"}, "optional": set()},
-    "set_record_config": {
-        "required": {"device_name", "rule_enabled", "writer_format"},
-        "optional": {"writer_interval_ms"},
-    },
-    "get_schedule_rule": {"required": {"device_name"}, "optional": set()},
-    "set_schedule_rule": {"required": {"device_name"}, "optional": {"schedule"}},
-    "get_record_trigger": {"required": {"device_name"}, "optional": set()},
-    "set_record_trigger": {"required": {"device_name", "trigger"}, "optional": set()},
-    "activate_http_trigger": {"required": {"device_name"}, "optional": set()},
 }

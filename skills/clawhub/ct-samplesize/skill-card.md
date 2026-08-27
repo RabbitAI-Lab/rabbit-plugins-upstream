@@ -1,51 +1,62 @@
-## Description: <br>
-Ct Samplesize helps clinical trial practitioners calculate sample size and statistical power across 37 test types using natural-language prompts backed by R packages, with safe-preview generated R code available for review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ct-samplesize helps clinical-trial practitioners calculate sample size and power across 49 trial-design scenarios using a remote Coze R compute service, with bilingual results, publication-grade SVG figures, and optional reproducible R code.
 
-## Publisher: <br>
-[medstatstar](https://clawhub.ai/user/medstatstar) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[medstatstar](https://clawhub.ai/user/medstatstar)
 
-## Use Case: <br>
-Clinical trial researchers, statisticians, and developers use this skill to estimate sample size, statistical power, and sensitivity curves for clinical trial designs. It can also produce reproducible R code for review, execution, or protocol documentation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Generated local R code may be executed when the user opts in with --yes. <br>
-Mitigation: Review the generated code in safe-preview mode before execution and run it only in a trusted local environment. <br>
-Risk: Optional CRAN package installation can download and install third-party R packages when --run-install is used. <br>
-Mitigation: Review package-install commands first and use trusted repositories and environment controls. <br>
-Risk: Clinical trial calculations can influence protocol or regulatory decisions if accepted without review. <br>
-Mitigation: Independently validate outputs and assumptions before using results for regulatory, clinical, or commercial decisions. <br>
-Risk: Curve and report generation can write files to user-selected output paths. <br>
-Mitigation: Use trusted output paths and review generated files before sharing or relying on them. <br>
+## Use Case:
 
+External clinical trial statisticians, investigators, trial designers, medical and regulatory affairs teams, publication authors, students, and methodologists use this skill to plan protocols, SAPs, feasibility assessments, and audit trails by calculating aggregate sample-size and power scenarios without installing local R.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/medstatstar/skills/ct-samplesize) <br>
-- [Project Homepage](https://github.com/medstatstar/ct-samplesize) <br>
-- [README](artifact/README.md) <br>
-- [CLI Examples](artifact/references/cli_examples.md) <br>
-- [Data Format Guide](artifact/references/data_format_guide.md) <br>
-- [Adaptive Simulator](artifact/references/adaptive_simulator.md) <br>
-- [Report Template](artifact/references/report_template.md) <br>
-- [Language Policy](artifact/references/language_policy.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Configuration guidance, Files] <br>
-**Output Format:** [Markdown with numeric results, CLI commands, generated R or Python code snippets, and optional PNG or JSON artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated R code is previewed by default; execution and CRAN package installation require explicit user opt-in.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.4.5 (source: ClawHub release metadata) <br>
+Risk: Live calculations can send trial-design parameters, a stable hostname hash, and locale to cloud endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use preview or mock mode, inspect the payload before live computation, and avoid cloud computation for confidential protocols unless the user explicitly approves the specific payload.
+
+Risk: The security assessment notes inconsistent preview and consent behavior around outbound computation.
+
+Mitigation: Require first-use outbound disclosure and prefer dry-run inspection before triggering remote compute on pre-approved endpoints.
+
+Risk: Clinical-trial sample-size and power outputs may affect protocol or regulatory decisions.
+
+Mitigation: Have a qualified statistician validate assumptions, formulas, generated code, and results before protocol, SAP, publication, or regulatory use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/medstatstar/skills/ct-samplesize)
+- [Project homepage](https://github.com/medstatstar/ct-samplesize)
+- [CLI examples](artifact/references/cli_examples.md)
+- [Data format guide](artifact/references/data_format_guide.md)
+- [Formulas](artifact/references/formulas.md)
+- [Security model](artifact/references/security_model.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown responses with numeric results, JSON request previews, inline SVG or PNG figure outputs, and optional R code blocks.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write figures to CTSS_OUTPUT_DIR; live cloud calculations can send aggregate trial-design parameters, a stable hostname hash, and locale.]
+
+## Skill Version(s):
+
+5.1.0 (source: SKILL.md frontmatter, CHANGELOG, and server release metadata; released 2026-08-22)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

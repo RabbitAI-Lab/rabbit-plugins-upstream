@@ -1,45 +1,60 @@
-## Description: <br>
-Powerful video generation with Kling v3 for high-quality text-to-video and image-to-video through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates high-quality videos from text prompts or image inputs with Kling v3 through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate videos from text prompts or image inputs via the dLazy-hosted Kling v3 service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, parameters, and local media paths are sent to the dLazy hosted API and media storage. <br>
-Mitigation: Use the skill only for media that may be processed by dLazy, and review inputs before invoking the CLI. <br>
-Risk: The dLazy API key may be stored in the local user configuration file. <br>
-Mitigation: Protect the local config file and rotate or revoke the key from the dLazy dashboard if exposure is suspected. <br>
-Risk: Video generation consumes dLazy credits. <br>
-Mitigation: Monitor credit usage and use dry-run or explicit parameters when cost awareness is needed. <br>
+## Use Case:
 
+External users, developers, and creative teams use this skill to ask an agent to generate Kling v3 videos from text prompts or from up to two image inputs, with options for aspect ratio, duration, mode, sound, async polling, and local saving.
 
-## Reference(s): <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is returned as hosted output URLs; asynchronous runs may return a task ID for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release and skill frontmatter) <br>
+Risk: Prompts and selected local media can be uploaded to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with content suitable for upload to dLazy, and avoid providing confidential or restricted media unless that use is approved.
+
+Risk: The dLazy API key is stored locally or supplied through the DLAZY_API_KEY environment variable.
+
+Mitigation: Protect local configuration and environment variables, and rotate or revoke the API key from dLazy if exposure is suspected.
+
+Risk: Generated outputs are hosted remotely and API usage may consume credits.
+
+Mitigation: Review generated output URLs before sharing, use dry-run or async controls where appropriate, and monitor account balance before running large jobs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3)
+- [dLazy homepage](https://dlazy.com)
+- [dLazy CLI source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Files, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON responses containing hosted output URLs or async task status.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated outputs are hosted remotely; async runs may return a generateId for polling, and --save can download the generated asset locally.]
+
+## Skill Version(s):
+
+1.3.9 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

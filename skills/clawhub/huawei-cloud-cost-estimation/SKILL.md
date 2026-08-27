@@ -4,7 +4,7 @@ description: Generate Huawei Cloud pre-order price estimates, safely provision a
 compatibility: hcloud KooCLI 7.2+, IAM permissions matching requested read/write operations, outbound network; no agent auto-install
 metadata:
   author: ontology-of-everything
-  version: "3.1.0"
+  version: "3.2.4"
   openclaw:
     requires:
       bins: [hcloud]
@@ -28,12 +28,18 @@ metadata:
 - **退订 / 停止使用资源** → Unsubscribe Guidance（仅控制台指引，不调用 CLI/API）。
 - 历史账单/余额/对账 → 费用中心或 BSS 账单只读 API；非华为云 → 拒绝；白名单外写操作 → 给控制台指引。
 
+## Execution Pace
+
+预计不超过 3 条 `hcloud` 时直达下一安全门禁；超过 3 条时每轮只执行 2–3 条（复用/并行只读/合并询价），说明已完成与下一步并友好询问是否继续。用户要求一次完成可连续执行；澄清、未知费用、`--dryrun`、写入确认不跳过。
+
 ## Pricing
 
-1. **Parse** — 抽取四元组 `cloud_service_type / resource_type / region / resource_spec` + 周期或使用量；读 `references/pricing/semantic/catalog.yml` 路由到 period / on-demand 模型。
-2. **Clarify** — 缺 region/数量/周期或用量/线性 size，或产品类目模糊、多变种未定 → 停下一轮问完（带 2–4 候选）。仅 safe-default 缺失（OS=linux、AZ=空、`fee_installment_mode=NA`）→ 披露后继续。确认话术用口语四元组，不暴露内部名。
-3. **Query** — 按 `references/pricing/commands.md`：先 `BSS/ListResourceSpecs` 实查规格，再询价（period → `ListRateOnPeriodDetail`；on-demand → `ListOnDemandResourceRatings`）；多产品一次放进 `product_infos.N.*`。
-4. **Verify & Present** — 分项加和 = 总价；币种/周期/数量对齐用户口径。分项 `[服务] [规格] [region] [数量×周期] = ¥<金额>` + 加总 + 「非最终账单」；默认官网价，响应有折扣才附折后。
+1. **Parse** — 抽取四元组 `cloud_service_type / resource_type / region / resource_spec` + 周期或使用量；读 `references/pricing/semantic/catalog.yml` 路由 period / on-demand。
+2. **Clarify** — 缺 region/数量/周期或用量/线性 size，或类目模糊、多变种未定 → 停下一轮问完（2–4 候选）。仅 safe-default 缺失（OS=linux、AZ=空、`fee_installment_mode=NA`）→ 披露后继续。口语四元组确认，不暴露内部名。
+3. **Query** — 按 Execution Pace 与 `references/pricing/commands.md`：
+   `ListServiceResources` → `ListResourceSpecs` → 按需 `ListUsageTypes(--resource_type_code)` → Measure Resolve → 询价。
+   多候选则问；Specs 命中仍可能失败；禁默认 Duration、禁容量槽/用量槽混用。
+4. **Verify & Present** — 分项加和=总价；币种/周期/数量对齐。分项 `[服务] [规格] [region] [数量×周期] = ¥<金额>` + 加总 + 「非最终账单」；默认官网价，有折扣才附折后。
 
 ## Lifecycle Create
 
@@ -41,7 +47,7 @@ metadata:
 
 1. **Allowlist** — 意图映射到 `references/lifecycle/commands.md` 命令主体；未命中即拒绝。
 2. **Help** — `hcloud <Service> <Operation> --help` 取必填/条件必填；`[APIE_ERROR]` 或无 schema 即停止，不猜参数。
-3. **Resolve** — 自动跑必要只读依赖查询（VPC/子网/AZ/镜像/规格等）；多候选让用户选，缺失项一轮问完。
+3. **Resolve** — 跑必要只读依赖（VPC/子网/AZ/镜像/规格等）；多候选让用户选，缺失项一轮问完；长链按 Execution Pace 交付。
 4. **Cost** — 能询价先走 Pricing 回表；不能询价则声明「价格未知且可能收费」并取得额外确认。
 5. **Dry** — 完整命令强制加全局 `--dryrun`（本地构造请求，非接口级 `dry_run`）；失败则修正重跑，不得转正式。
 6. **Confirm** — 回显资源/region/规格/数量/计费/金额或未知费用/批次顺序，等用户明确确认。
@@ -71,11 +77,12 @@ metadata:
 
 ## Reference Index（按需加载）
 
-| 何时读 | 文件 |
-| --- | --- |
-| 询价入口 | `references/pricing/semantic/catalog.yml` + `rfq-*.yml` |
-| 询价命令 / 响应字段 / 陷阱 | `references/pricing/commands.md` |
-| 开通安全 / 退订控制台指引 | `references/lifecycle/concepts.md` |
-| 开通命令白名单与依赖 | `references/lifecycle/commands.md` |
-| 403 或权限问题 | `references/pricing/iam-policies.md` |
-| hcloud 未就绪 | `references/cli-installation.md`（**仅转述给用户**，不代为执行） |
+两域同构：概念层答「是什么/为什么」，命令层答「怎么执行」。
+
+| 域 | 概念层 | 命令层 |
+| --- | --- | --- |
+| Pricing | `references/pricing/semantic/catalog.yml` + `rfq-*.yml`（事实/维度/路由） | `references/pricing/commands.md`（契约/响应字段/陷阱） |
+| Lifecycle | `references/lifecycle/concepts.md`（开通安全/退订控制台指引） | `references/lifecycle/commands.md`（白名单与依赖） |
+
+横切支撑：403 或权限问题 → `references/iam-policies.md`；
+hcloud 未就绪 → `references/cli-installation.md`（**仅转述给用户**，不代为执行）。

@@ -497,7 +497,11 @@
             "black-white-fluorescent-cards",
             "corporate-annual-report",
             "editorial-collage",
-            "rigorous-consulting-report"
+            "rigorous-consulting-report",
+            "deep-data-dashboard",
+            "warm-brand-narrative",
+            "minimal-product-whitespace",
+            "formal-government-bluewhite"
           ]
         },
         "theme_version": {"$ref": "#/$defs/short_string"},

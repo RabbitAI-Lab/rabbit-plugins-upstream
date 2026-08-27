@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/quickbooks",
   "slug": "quickbooks",
   "ownerHandle": null,
-  "version": "1.0.6",
-  "updatedAt": 1781739759130,
-  "contentHash": "bc3503342baee39a763d150a1c44f82d0f6c16ce3746cc24a6ce69b60c179ccf",
-  "fetchedAt": "2026-07-26T18:27:27.260Z"
+  "version": "1.1.0",
+  "updatedAt": 1787729681715,
+  "contentHash": "46cc8c265631bebae6a6ab9151eca47debe76e88eebaa24fe69b2b6fd5058675",
+  "fetchedAt": "2026-08-27T18:28:00.124Z"
 }

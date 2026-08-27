@@ -1,48 +1,66 @@
-## Description: <br>
-Searches LinkedIn professional records through the UpKuaJing Open Platform API using filters such as name, company, job title, industry, country, and contact-signal availability. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches LinkedIn professional records with name, company, job title, industry, geography, and contact-availability filters to support recruiting, sales prospecting, and B2B lead enrichment.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External recruiters, sales teams, and B2B lead-generation users can use this skill to find people in LinkedIn data by company, role, industry, geography, and contact-signal filters. It supports candidate sourcing, headhunting, lead discovery, and profile-result collection through a paid third-party API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a paid third-party API and searches can incur charges. <br>
-Mitigation: Confirm pricing and expected call count before execution, especially when query_count exceeds one result page. <br>
-Risk: The UpKuaJing API key may be stored in a local plaintext dotfile. <br>
-Mitigation: Prefer an environment variable when possible, restrict local file access, and remove the key when it is no longer needed. <br>
-Risk: Returned profile results are retained on disk. <br>
-Mitigation: Delete local task data and logs when retention is no longer necessary. <br>
-Risk: The skill can support broad contact-data enrichment. <br>
-Mitigation: Use only authorized, purpose-limited searches and avoid broad collection that does not meet privacy, legal, or organizational requirements. <br>
+## Use Case:
 
+Recruiters, sales teams, and B2B lead-generation specialists use this skill to find LinkedIn profiles and enrich prospect or candidate lists by company, role, industry, geography, and available contact fields. The skill can create or reuse an UpKuaJing API key, run paid LinkedIn person searches, and save returned records for follow-up workflows.
 
-## Reference(s): <br>
-- [LinkedIn Person List API reference](references/linkedin-person-list-api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/linkedin-person-search) <br>
-- [UpKuaJing homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing API pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON status output, and JSONL result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires UPKUAJING_API_KEY; API calls are billable; search results are persisted locally by task ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release and skill metadata) <br>
+Risk: The skill handles a paid UpKuaJing account credential stored in plaintext at ~/.upkuajing/.env.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated API key, avoid shared machines for the credential file, and rotate or remove the key when access is no longer needed.
+
+Risk: LinkedIn searches and account top-ups can incur fees.
+
+Mitigation: Check current pricing before use and require explicit user confirmation before paid calls, especially when the requested count requires multiple API calls.
+
+Risk: Search results may contain personal profile and contact-related data.
+
+Mitigation: Limit searches to legitimate recruiting, sales, or enrichment purposes and restrict access to generated JSONL result files.
+
+Risk: Error reports may include request context or raw response details.
+
+Mitigation: Submit error reports only after user confirmation and avoid sending secrets, raw personal data, or full API responses.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/linkedin-person-search)
+- [UpKuaJing Homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [UpKuaJing Pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [LinkedIn Person List API](references/linkedin-person-list-api.md)
+- [Skill Error Report API](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with shell commands, JSON API responses, and JSONL result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search output is saved under artifact task_data as JSONL, and each run returns task status, result file path, request id, record count, and fee details.]
+
+## Skill Version(s):
+
+1.0.3 (source: SKILL.md metadata, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

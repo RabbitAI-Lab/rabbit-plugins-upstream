@@ -21,6 +21,18 @@ import faqGroupUpdate from "./faqgroup-update/index.js";
 import inquiryRead from "./inquiry-read/index.js";
 import keywordsRank from "./keywords-rank/index.js";
 import languagesGet from "./languages-get/index.js";
+import navigationCreate from "./navigation-create/index.js";
+import navigationDelete from "./navigation-delete/index.js";
+import navigationRead from "./navigation-read/index.js";
+import navigationUpdate from "./navigation-update/index.js";
+import newsCreate from "./news-create/index.js";
+import newsDelete from "./news-delete/index.js";
+import newsRead from "./news-read/index.js";
+import newsUpdate from "./news-update/index.js";
+import newsGroupCreate from "./newsgroup-create/index.js";
+import newsGroupDelete from "./newsgroup-delete/index.js";
+import newsGroupRead from "./newsgroup-read/index.js";
+import newsGroupUpdate from "./newsgroup-update/index.js";
 import productsCreate from "./products-create/index.js";
 import productsDelete from "./products-delete/index.js";
 import productsRead from "./products-read/index.js";
@@ -42,6 +54,9 @@ const READ_ACTIONS = new Set([
     "inquiry-read",
     "keywords-rank",
     "languages-get",
+    "navigation-read",
+    "news-read",
+    "newsgroup-read",
     "products-read",
     "productsgroup-read",
     "rule-get",
@@ -64,6 +79,15 @@ const MUTATION_ACTIONS = new Set([
     "faqgroup-create",
     "faqgroup-delete",
     "faqgroup-update",
+    "navigation-create",
+    "navigation-delete",
+    "navigation-update",
+    "news-create",
+    "news-delete",
+    "news-update",
+    "newsgroup-create",
+    "newsgroup-delete",
+    "newsgroup-update",
     "products-create",
     "products-delete",
     "products-update",
@@ -312,6 +336,132 @@ const ACTIONS = {
         handler: languagesGet,
         buildArgs(args) {
             return {};
+        }
+    },
+    "navigation-create": {
+        handler: navigationCreate,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                navigation: args.navigation,
+                confirmation: args.confirmation
+            };
+        }
+    },
+    "navigation-delete": {
+        handler: navigationDelete,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                id_list: args.id_list,
+                confirmation: args.confirmation
+            };
+        }
+    },
+    "navigation-read": {
+        handler: navigationRead,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                navigation_id: args.navigation_id,
+                parent_navigation_id: args.parent_navigation_id,
+                fields: args.fields
+            };
+        }
+    },
+    "navigation-update": {
+        handler: navigationUpdate,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                navigation: args.navigation,
+                confirmation: args.confirmation
+            };
+        }
+    },
+    "news-create": {
+        handler: newsCreate,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                news: args.news,
+                confirmation: args.confirmation
+            };
+        }
+    },
+    "news-delete": {
+        handler: newsDelete,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                id_list: args.id_list,
+                confirmation: args.confirmation
+            };
+        }
+    },
+    "news-read": {
+        handler: newsRead,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                news_id: args.news_id,
+                newsgroup_id: args.newsgroup_id,
+                fields: args.fields,
+                current_page: args.pagination?.current_page,
+                page_size: args.pagination?.page_size
+            };
+        }
+    },
+    "news-update": {
+        handler: newsUpdate,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                news: args.news,
+                confirmation: args.confirmation
+            };
+        }
+    },
+    "newsgroup-create": {
+        handler: newsGroupCreate,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                newsgroup: args.newsgroup,
+                confirmation: args.confirmation
+            };
+        }
+    },
+    "newsgroup-delete": {
+        handler: newsGroupDelete,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                id_list: args.id_list,
+                confirmation: args.confirmation
+            };
+        }
+    },
+    "newsgroup-read": {
+        handler: newsGroupRead,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                newsgroup_id: args.newsgroup_id,
+                fields: args.fields,
+                current_page: args.pagination?.current_page,
+                page_size: args.pagination?.page_size
+            };
+        }
+    },
+    "newsgroup-update": {
+        handler: newsGroupUpdate,
+        buildArgs(args) {
+            return {
+                language: args.language,
+                newsgroup: args.newsgroup,
+                confirmation: args.confirmation
+            };
         }
     },
     "products-create": {

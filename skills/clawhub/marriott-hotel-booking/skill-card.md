@@ -1,43 +1,54 @@
-## Description: <br>
-Searches Marriott-family hotels by destination, brand keyword, and price, returning hotel prices, ratings, addresses, detail links, and package offers through travel-platform APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+搜索万豪集团旗下酒店并返回实时价格与预订链接，支持酒店详情查询和套餐优惠搜索。当用户需要预订万豪酒店、找喜来登、威斯汀、丽思卡尔顿、JW万豪、万丽、万枫、瑞吉等万豪旗下品牌酒店时使用
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and booking assistants use this skill to search Marriott-brand hotels, review hotel details, and find package offers before completing booking on external travel links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel search terms, locations, dates, and hotel identifiers are sent to the skill's cloud proxy and travel API providers. <br>
-Mitigation: Install only when that data sharing is acceptable, and avoid entering sensitive travel details unless the publisher documents the proxy and provider handling clearly. <br>
-Risk: The artifact includes transparency and credential-handling caveats, including a hardcoded default proxy token noted by security evidence. <br>
-Mitigation: Publisher should document the exact proxy endpoint and replace the hardcoded default token with a deployment-specific secret. <br>
-Risk: Returned prices and booking availability depend on external travel-platform data and may change. <br>
-Mitigation: Confirm final price, policies, and availability on the linked booking page before making travel decisions. <br>
+## Use Case:
 
+Travel-booking agents and users use this skill to search Marriott-family hotels, inspect hotel details, and find package offers with prices and booking links from the reported Feizhu Marriott source.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/marriott-hotel-booking) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-formatted text with hotel listings, prices, addresses, hotel identifiers, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results depend on external travel-platform data and live pricing availability.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release evidence; artifact frontmatter lists 1.1.2) <br>
+Risk: Travel-search details may be sent through the publisher's Tencent SCF proxy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing and only use the skill where routing these queries through that publisher-operated proxy is acceptable.
+
+Risk: The distributed script includes an embedded proxy credential.
+
+Mitigation: Treat the credential as exposed release material and verify the publisher's proxy controls before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/marriott-hotel-booking)
+- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands]
+
+**Output Format:** [Markdown text with booking links and command-line tool invocations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search, detail, and package results depend on the script parameters and returned data.]
+
+## Skill Version(s):
+
+1.1.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/audio-quality-check",
   "slug": "audio-quality-check",
   "ownerHandle": null,
-  "version": "0.1.2",
-  "updatedAt": 1784745786816,
-  "contentHash": "a7130cce2fae8d79029044de0923b5ed8e47770636428228f6f0f4e30ab2c281",
-  "fetchedAt": "2026-07-26T18:07:49.328Z"
+  "version": "0.1.4",
+  "updatedAt": 1787313058591,
+  "contentHash": "f52dd76b9f735eb0d311bfa261edddc864b6a7eb5d0d702c51f9ffbcaafe690a",
+  "fetchedAt": "2026-08-27T18:56:32.926Z"
 }

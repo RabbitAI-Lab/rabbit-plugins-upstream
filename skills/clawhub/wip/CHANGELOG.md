@@ -1,5 +1,65 @@
 # Changelog
 
+## [0.5.1](https://github.com/es6kr/skills/compare/wip-v0.5.0...wip-v0.5.1) (2026-08-26)
+
+
+### Bug Fixes
+
+* accumulate 16 patch-level bug fixes and guard enhancements across skills ([d214e5d](https://github.com/es6kr/skills/commit/d214e5dcc7fac1bc07baf3b6cec62999aea732f0))
+* promote accumulated skill fixes from the working checkout ([770bed2](https://github.com/es6kr/skills/commit/770bed2386266fc13f7d605505c2996037d4c371))
+* promote next-fix batch (consolidate fabrication guard, session rewind, config-driven PR base) ([7ca0ccb](https://github.com/es6kr/skills/commit/7ca0ccbf13cefafedc33a16a7361756c95f8b8f6))
+* **review-feedback:** apply review feedback for session rewind, cleanup regex, rag test, and resume urls ([543d88f](https://github.com/es6kr/skills/commit/543d88f189c415c5f7a911aa861cde9b382016bd))
+* **wip,hook-kit:** enhance register-before-execute and block-axis-merged-ask ([ee95d6f](https://github.com/es6kr/skills/commit/ee95d6f2df4f40a22b48b807b443185828422bc2))
+* **wip:** mark the PR-URL gate unenforced in both resume Don't/Do rows ([dd7b0c0](https://github.com/es6kr/skills/commit/dd7b0c0f1d069643187b15319516a29993824648))
+
+## [0.5.0](https://github.com/es6kr/skills/compare/wip-v0.4.5...wip-v0.5.0) (2026-08-20)
+
+
+### Features
+
+* promote next-feat staging (lifecycle guards, triage automation, and workflow safety procedures) ([77d58ac](https://github.com/es6kr/skills/commit/77d58ac3a771a4897043c9eea8b149ea1e8ba2ff))
+
+
+### Bug Fixes
+
+* **hook-kit:** repair hook paths broken by the within-marketplace relocation ([#340](https://github.com/es6kr/skills/issues/340)) ([0d9b701](https://github.com/es6kr/skills/commit/0d9b70181015e4822c7cf5cd2fe122d5af708d26))
+* promote next-fix batch (hook path repair, topic-dispatch scoping, conflict diagnosis) ([eb7ecb6](https://github.com/es6kr/skills/commit/eb7ecb61dda9701d78f12dc810781dc7cb687caa))
+
+## [0.4.5](https://github.com/es6kr/skills/compare/wip-v0.4.4...wip-v0.4.5) (2026-08-17)
+
+
+### Bug Fixes
+
+* promote next-fix staging (30 fixes across 14 skills) ([ee467c0](https://github.com/es6kr/skills/commit/ee467c045d779d7b80d30f160763ec3534a9742b))
+* wip single-item ask skip + hunk-split cross-ref ([0c4007a](https://github.com/es6kr/skills/commit/0c4007a18ae65b31ac7d308ea7d96a68b76b9ca4))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.4.4](https://github.com/es6kr/skills/compare/wip-v0.4.3...wip-v0.4.4) (2026-08-12)
+
+
+### Bug Fixes
+
+* **cleanup:** require a persistent walkthrough file at Step 4.5 ([a7556c6](https://github.com/es6kr/skills/commit/a7556c6ab18523fbdb0a0cae2514cefe5875a712))
+* promote accumulated next-fix fixes to main ([803bbd3](https://github.com/es6kr/skills/commit/803bbd3b9e4f8367ee1b955cfa2b6a536f85cee0))
+* **wip:** reference the walkthrough file as Claude Code's narrative-record medium ([28d9e56](https://github.com/es6kr/skills/commit/28d9e56071d41454f8c1a8f00dfe889556c6b43c))
+
+## [0.4.3](https://github.com/es6kr/skills/compare/wip-v0.4.2...wip-v0.4.3) (2026-08-05)
+
+
+### Bug Fixes
+
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([951c1e6](https://github.com/es6kr/skills/commit/951c1e6871e78e226757c6a7ae5ae53efeb7bfb0))
+
+## [0.4.2](https://github.com/es6kr/skills/compare/wip-v0.4.1...wip-v0.4.2) (2026-07-28)
+
+
+### Bug Fixes
+
+* **next-fix:** promote staged fixes across hook-kit, next, cleanup, fix-plan ([34f1c67](https://github.com/es6kr/skills/commit/34f1c67beee3a8279e0e80de4ab3a87ba2223d5c))
+* **next,fix,wip:** reduce meta-task over-registration + enforce skill-invocation resume ([beec453](https://github.com/es6kr/skills/commit/beec453da85d70c79ec9403c83259e7a4a28d303))
+* staging bundle — meta-task registration, next-call-gap, bash-guard consolidation, hook-kit FP fixes ([dc1b790](https://github.com/es6kr/skills/commit/dc1b790688808df7649ef390a22caa5f66a8aa40))
+
 ## [0.4.1](https://github.com/es6kr/skills/compare/wip-v0.4.0...wip-v0.4.1) (2026-07-23)
 
 

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/golang-graphql",
   "slug": "golang-graphql",
   "ownerHandle": null,
-  "version": "0.0.3",
-  "updatedAt": 1779469088887,
-  "contentHash": "28325a01697a9a414287ec5c34a95b0d33aa465701be568abfa718221fa18257",
-  "fetchedAt": "2026-07-26T18:41:13.205Z"
+  "version": "0.2.0",
+  "updatedAt": 1787318540987,
+  "contentHash": "b71812727fc1f63505221fae4240f7988756e977a25e8b4d67170c46d3ba9740",
+  "fetchedAt": "2026-08-27T18:56:12.764Z"
 }

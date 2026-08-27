@@ -1,44 +1,60 @@
-## Description: <br>
-Run evidence-gated coding sprints with frozen ACs, separated builder/verifier roles, and durable proof artifacts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Run evidence-gated coding sprints with frozen ACs, separated builder/verifier roles, and durable proof artifacts.
 
-## Publisher: <br>
-[leostehlik](https://clawhub.ai/user/leostehlik) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[leostehlik](https://clawhub.ai/user/leostehlik)
 
-## Use Case: <br>
-Developers and engineering teams use Proof Loop to run coding sprints where acceptance criteria are frozen before implementation, verifier work is separated from builder work, and completion is gated by durable proof artifacts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Helper commands can create or update repo-local task artifacts. <br>
-Mitigation: Confirm the repository root and task id before running helpers, and use dry-run mode before writing harness guidance files. <br>
-Risk: Existing harness guide files can be overwritten when force options are used. <br>
-Mitigation: Use --force only when intentionally replacing an existing guide file. <br>
+## Use Case:
 
+Developers and engineering teams use Proof Loop to run coding tasks with frozen acceptance criteria, separate builder and verifier roles, and repo-local proof artifacts before work is considered done.
 
-## Reference(s): <br>
-- [Proof Loop Workflow](references/workflow.md) <br>
-- [Artifact Schemas](references/artifacts.md) <br>
-- [Agent Brief Template](references/brief-template.md) <br>
-- [Loopsmith Bridge](references/loopsmith-bridge.md) <br>
-- [Proof Loop ClawHub Page](https://clawhub.ai/leostehlik/proof-loop) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, JSON, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance, JSON verdict artifacts, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates and checks repo-local proof artifacts under .agent/tasks/<TASK_ID>/ when its helpers are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.1 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Helper commands can create or update proof-task files in the selected repository.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the repository root and task id before running helpers, and review generated artifacts before relying on them.
+
+Risk: Installing harness guides changes agent guidance files in the target repository.
+
+Mitigation: Treat guide installation as an explicit repository change and use dry-run or review mode before writing files.
+
+Risk: A coding agent may treat the workflow as proof without independent verification.
+
+Mitigation: Require a fresh verifier session and keep PASS, FAIL, or UNKNOWN verdicts tied to each frozen acceptance criterion.
+
+## Reference(s):
+
+- [Proof Loop Workflow](references/workflow.md)
+- [Artifact Schemas](references/artifacts.md)
+- [Agent Brief Template](references/brief-template.md)
+- [Loopsmith Bridge](references/loopsmith-bridge.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance, JSON proof artifacts, and shell command recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates and checks repo-local task artifacts under .agent/tasks/<TASK_ID>/ when the user explicitly requests a Proof Loop workflow.]
+
+## Skill Version(s):
+
+0.2.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

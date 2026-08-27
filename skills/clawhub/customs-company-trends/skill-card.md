@@ -1,46 +1,66 @@
-## Description: <br>
-Delivers monthly customs trade trend breakdowns for companies, including shipment frequency, product quantity, gross weight, and transaction value with optional filters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gets monthly customs-trade breakdowns for a company, including shipment frequency, quantity, gross weight, and transaction value, using the UpKuaJing Open Platform API.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Export teams, analysts, and supply-chain managers use this skill to analyze monthly customs activity, supplier performance, seasonal fluctuations, and long-term trade-flow patterns across global customs data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid UpKuaJing API calls and top-up operations can incur charges. <br>
-Mitigation: Inform the user before fee-incurring actions, check current pricing through the documented price flow, and wait for explicit confirmation before executing paid queries or creating top-up orders. <br>
-Risk: The skill reads or creates a local API-key file at ~/.upkuajing/.env. <br>
-Mitigation: Keep UPKUAJING_API_KEY private, avoid sharing command output that contains credentials, and remove or rotate the key if it may have been exposed. <br>
-Risk: The scripts contact openapi.upkuajing.com for customs queries, account actions, pricing, and version checks. <br>
-Mitigation: Install and run the skill only in environments where outbound requests to the UpKuaJing API are acceptable. <br>
+## Use Case:
 
+Export teams, analysts, and supply-chain managers use this skill to study monthly company trade patterns, seasonal changes, supplier performance, and long-term trade-flow trends across customs data.
 
-## Reference(s): <br>
-- [Company Trade Trends API Reference](references/customs-company-trends-api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/customs-company-trends) <br>
-- [UpKuaJing Homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Developer Portal](https://developer.upkuajing.com/) <br>
-- [UpKuaJing API Pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns one record per month and includes fee information when the API response provides it.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release and skill metadata) <br>
+Risk: API calls can incur paid UpKuaJing charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user wants to spend credits before each charged query and use the pricing endpoint or pricing page for current costs.
+
+Risk: The skill stores and reads the UpKuaJing API key from the user's environment or ~/.upkuajing/.env.
+
+Mitigation: Keep the API key private, restrict local file access, and rotate the key if it may have been exposed.
+
+Risk: Top-up flows can return payment URLs.
+
+Mitigation: Review the payment URL before opening it and confirm the amount before completing payment.
+
+Risk: Raw API request and response logging can create local copies of query and response data if enabled.
+
+Mitigation: Leave raw API logging disabled unless local retention is acceptable, and protect or delete logs when no longer needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/customs-company-trends)
+- [UpKuaJing Homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [UpKuaJing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [Company Trade Trends API](references/customs-company-trends-api.md)
+- [Skill Error Report API](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Queries return monthly trend records with fee information and request IDs; the skill requires an UpKuaJing API key.]
+
+## Skill Version(s):
+
+1.0.2 (source: SKILL.md metadata, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

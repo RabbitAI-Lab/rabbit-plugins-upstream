@@ -1,15 +1,15 @@
 # ☎️ Amber — Give Your Agent Real Phone Capabilities
 
-**A phone capability layer for [OpenClaw](https://openclaw.ai)** — gives your OpenClaw agent inbound answering, screening, confirmed scheduling, optional outbound calling, local call logs/transcripts, optional local CRM/contact memory, contacts lookup, MCP tools, and a loopback-only dashboard via a provider-swappable telephony bridge + OpenAI Realtime. Twilio is the default and recommended provider. Claude Desktop/Cowork and other MCP-capable clients or agent harnesses can use the same phone, CRM, calendar, and call-history capabilities once configured.
+**A phone number and call-completion layer for [OpenClaw](https://openclaw.ai)** — gives your OpenClaw agent a real phone endpoint for answering callers, screening calls, placing confirmed outbound calls, booking appointments, taking messages, logging transcripts, resolving contacts, and exposing MCP tools via a provider-swappable telephony bridge + OpenAI Realtime. Twilio is the default and recommended provider. Claude Desktop/Cowork and other MCP-capable clients or agent harnesses can use the same phone, CRM, calendar, and call-history capabilities once configured.
 
 **Privacy notice:** Amber handles real communications data. Calls may be processed by Twilio or another voice provider and OpenAI Realtime, and local logs/transcripts are sensitive. CRM persistence is opt-in with `AMBER_CRM_ENABLED=true`; transcript-based CRM enrichment is separately opt-in with `AMBER_CRM_TRANSCRIPT_ENRICHMENT=true`. Configure caller notice/consent, access controls, retention, and deletion practices before using Amber with real callers.
 
-[![ClawHub](https://img.shields.io/badge/ClawHub-amber--voice--assistant-blue)](https://clawhub.ai/skills/amber-voice-assistant)
+[![ClawHub](https://img.shields.io/badge/ClawHub-amber--phone--agent-blue)](https://clawhub.ai/batthis/amber-phone-agent)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## What is Amber?
 
-Amber is not just a standalone voice bot or virtual receptionist. It operates as an extension of your OpenClaw instance, giving your agent real phone capabilities while delegating complex decisions (calendar lookups, contact resolution, approval workflows) back to OpenClaw mid-call via the `ask_openclaw` tool.
+Amber is not just a standalone voice bot or virtual receptionist. It gives an agent a reachable phone number and the workflow tools to complete calls: call the business, ask the question, book the slot, leave the message, screen the caller, and show the transcript afterward. It operates as an extension of your OpenClaw instance while delegating complex decisions (calendar lookups, contact resolution, approval workflows) back to OpenClaw mid-call via the `ask_openclaw` tool.
 
 ### Features
 
@@ -24,6 +24,28 @@ Amber is not just a standalone voice bot or virtual receptionist. It operates as
 - 📝 **AGENT.md** — customize all prompts, greetings, booking flow, and personality in a single editable markdown file (no code changes needed)
 
 ## 🆕 What's New
+
+### v5.5.50 — Sharper ClawHub Positioning (Aug 2026)
+
+- Reframed the first-screen listing copy around the concrete outcome: give an agent a phone number and let it complete real phone tasks
+- Moved inbound answering, confirmed outbound calling, booking, messages, transcripts, and MCP tools into the opening card language
+- Kept the protected ClawHub display name unchanged: `Amber — Phone-Capable Voice Agent`
+
+### v5.5.48 — Skill Card Evidence (Jul 2026)
+
+- Bundled an explicit ClawHub skill card for release verification evidence
+
+### v5.5.47 — CRM Off Means Off (Jul 2026)
+
+- Hide the CRM skill from the voice runtime and MCP tool list unless `AMBER_CRM_ENABLED=true`
+- Return a clear disabled message if an MCP client tries to call CRM while caller memory is off
+
+### v5.5.46 — CRM Install Robustness (Jul 2026)
+
+- Added setup wizard prompts for opt-in CRM caller memory and separate transcript enrichment consent
+- Added ClawHub install metadata for optional CRM skill dependencies
+- Added validation for CRM native SQLite dependency when caller memory is enabled
+- Documented CRM dependency install/rebuild steps for fresh installs and Node upgrades
 
 ### v5.3.1 — Security Scope Hardening (Feb 2026)
 
@@ -43,8 +65,12 @@ See [CRM skill docs](#-crm--contact-memory) below for details.
 
 ## Quick Start
 
+The setup wizard asks whether to enable local CRM caller memory. It defaults to off; enable it only when you have caller notice/consent and retention practices in place.
+
 ```bash
 cd runtime && npm ci
+cd ../amber-skills/crm && npm ci  # optional, required for AMBER_CRM_ENABLED=true
+cd ../../runtime
 cp ../references/env.example .env  # fill in your values
 npm run build && npm start
 ```
@@ -103,6 +129,7 @@ Amber can maintain local caller memory across calls and use operator-approved co
 - **Backfill-ready** — point the post-call extractor at old transcripts to prime the CRM from day one
 
 > **Native dependency:** The CRM skill uses `better-sqlite3`, which requires native compilation. On macOS, run `sudo xcodebuild -license accept` before `npm install` if you haven't already accepted the Xcode license. On Linux, ensure `build-essential` and `python3` are installed.
+> If CRM lookup starts failing after a Node.js upgrade, rebuild the native module with `cd amber-skills/crm && npm rebuild better-sqlite3`, then restart the Amber runtime.
 >
 > **Credential validation scope:** The setup wizard validates credentials only against official provider endpoints (Twilio API and OpenAI API) over HTTPS. It does not send secrets to arbitrary third-party services and does not print full secrets in console output.
 

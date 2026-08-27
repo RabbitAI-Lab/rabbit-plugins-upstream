@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/amazon-reviews",
+  "slug": "amazon-reviews",
+  "ownerHandle": null,
+  "version": "1.1.37",
+  "updatedAt": 1787388911230,
+  "contentHash": "eabb664ca6a092a6af16b4538cc445b586dfa80b1d2b7fc79219c8988d62ab47",
+  "fetchedAt": "2026-08-27T18:51:20.832Z"
+}

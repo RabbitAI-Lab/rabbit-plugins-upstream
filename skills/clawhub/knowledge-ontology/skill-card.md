@@ -1,43 +1,58 @@
-## Description: <br>
-Knowledge Ontology helps agents model local memory as a typed knowledge graph with entity relationships, constraint checks, schema evolution, and graph traversal planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+知识本体 helps agents model typed knowledge graphs with entity relationships, constraint validation, schema evolution, and graph traversal planning for structured, verifiable memory.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent builders use this skill to structure agent memory, model entity relationships, analyze dependencies and impacts, and plan multi-step operations through typed graph commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review found capability mismatches in the documentation, including unrelated paid-feature claims. <br>
-Mitigation: Review the documented capabilities before installation and rely only on behavior that is supported by the artifact and release evidence. <br>
-Risk: The skill accepts an optional callback URL even though the release is described as primarily local. <br>
-Mitigation: Do not provide callback URLs or secrets unless network behavior is clearly documented and constrained for the deployment environment. <br>
-Risk: Command examples can create, migrate, or modify local knowledge-graph files. <br>
-Mitigation: Review generated commands and run them in a controlled workspace with backups before applying them to important data. <br>
+## Use Case:
 
+Developers and agent builders use this skill to structure agent memory as a typed ontology, validate entity and relationship changes, plan graph operations, and preserve schema history during evolution.
 
-## Reference(s): <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/knowledge-ontology) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON result structures] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include graph schemas, entity records, validation reports, traversal results, and migration guidance for local knowledge-graph files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill requests broad file and command access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only in workspaces where broad read, write, and command execution are acceptable, and review proposed commands before execution.
+
+Risk: The evidence reports inconsistent statements about API keys and network use.
+
+Mitigation: Avoid providing real API keys unless the publisher clarifies the network behavior and credential requirements.
+
+Risk: Ontology graph content may include sensitive operational knowledge or credential references.
+
+Mitigation: Do not store raw secrets in the graph; use external secret references and keep graph files access-controlled.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/knowledge-ontology)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown with JSON examples and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe append-only JSONL graph operations, schema migration steps, validation results, and credential-reference patterns.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence; artifact frontmatter lists 2.0.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

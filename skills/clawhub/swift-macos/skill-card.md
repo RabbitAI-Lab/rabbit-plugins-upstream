@@ -1,65 +1,81 @@
-## Description: <br>
-Comprehensive macOS app development with Swift 6.3, SwiftUI, SwiftData, Swift Concurrency, Foundation Models, Swift Testing, ScreenCaptureKit, and app distribution. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Covers macOS app development with Swift 6.3, SwiftUI, SwiftData, Swift Concurrency, Foundation Models, Swift Testing, ScreenCaptureKit, and app distribution.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill to build native macOS apps with Swift, SwiftUI, SwiftData, modern concurrency, testing, system integration, screen and audio capture, and App Store or Developer ID distribution guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated macOS app guidance may involve screen or audio recording, process observation, login items, or background components. <br>
-Mitigation: Require informed user consent, visible recording or monitoring status, data minimization, public macOS permission APIs, and clear disable and uninstall controls in any generated app. <br>
-Risk: Installer, build, or distribution examples may encourage shortcuts that affect trust, permissions, or reviewability. <br>
-Mitigation: Review generated shell commands before execution, avoid unreviewed curl-to-bash installs, and validate signing, notarization, sandboxing, and permission behavior before release. <br>
+## Use Case:
 
+Developers and engineers use this skill for guidance when building native macOS apps with Swift, SwiftUI, SwiftData, modern concurrency, on-device Foundation Models, ScreenCaptureKit, testing, system integration, and app distribution.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/swift-macos) <br>
-- [Metadata homepage](https://github.com/tenequm/skills/tree/main/skills/swift-macos) <br>
-- [macOS App Development - Swift 6.3](SKILL.md) <br>
-- [App Lifecycle & Scenes](references/app-lifecycle.md) <br>
-- [macOS-Specific SwiftUI](references/swiftui-macos.md) <br>
-- [Models & Schema](references/models-schema.md) <br>
-- [ModelContainer & ModelContext](references/container-context.md) <br>
-- [Relationships & Predicates](references/relationships-predicates.md) <br>
-- [Schema Migrations](references/migrations.md) <br>
-- [CloudKit Sync](references/cloudkit-sync.md) <br>
-- [Approachable Concurrency](references/approachable-concurrency.md) <br>
-- [Actors & Isolation](references/actors-isolation.md) <br>
-- [Structured Concurrency](references/structured-concurrency.md) <br>
-- [Sendable & Data Race Safety](references/sendable-safety.md) <br>
-- [Async Patterns](references/async-patterns.md) <br>
-- [Concurrency Migration Guide](references/migration-guide.md) <br>
-- [Foundation Models Framework](references/foundation-models.md) <br>
-- [Screen Capture & Audio Recording](references/screen-capture-audio.md) <br>
-- [CoreAudio Process Tap](references/core-audio-tap.md) <br>
-- [System Integration](references/system-integration.md) <br>
-- [AppKit Interop](references/appkit-interop.md) <br>
-- [Architecture Patterns for macOS Apps](references/architecture.md) <br>
-- [Testing macOS Apps](references/testing.md) <br>
-- [macOS App Distribution](references/distribution.md) <br>
-- [Swift Package Manager & Build](references/spm-build.md) <br>
-- [Fall 2026 Releases](references/fall-2026-releases.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with Swift, shell, and configuration code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.3 (source: frontmatter, changelog, and server-resolved release metadata) <br>
+Risk: Examples may include shell commands or build steps that execute downloaded code or alter signing, notarization, or distribution state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before running them, execute them in an appropriate development environment, and confirm signing and distribution settings before release.
+
+Risk: CloudKit, ScreenCaptureKit, microphone, speech, pasteboard, accessibility, and related macOS APIs can involve user data or platform privacy controls.
+
+Mitigation: Add required privacy disclosures, request only necessary permissions, and test TCC behavior before shipping an app that uses those features.
+
+Risk: Test attachments, diagnostic logs, or captured media can contain secrets, tokens, personal data, or proprietary content.
+
+Mitigation: Redact sensitive values, avoid storing private data in logs or test artifacts, and apply retention controls appropriate to the project.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/swift-macos)
+- [Project Homepage](https://github.com/tenequm/skills/tree/main/skills/swift-macos)
+- [Swift Package Manager & Build](references/spm-build.md)
+- [Foundation Models Framework](references/foundation-models.md)
+- [Fall 2026 Releases (WWDC 2026)](references/fall-2026-releases.md)
+- [App Lifecycle & Scenes](references/app-lifecycle.md)
+- [Approachable Concurrency (Swift 6.2)](references/approachable-concurrency.md)
+- [Models & Schema](references/models-schema.md)
+- [ModelContainer & ModelContext](references/container-context.md)
+- [System Integration](references/system-integration.md)
+- [Testing macOS Apps](references/testing.md)
+- [macOS App Distribution](references/distribution.md)
+- [AppKit Interop](references/appkit-interop.md)
+- [Schema Migrations](references/migrations.md)
+- [Actors & Isolation](references/actors-isolation.md)
+- [macOS-Specific SwiftUI](references/swiftui-macos.md)
+- [CoreAudio Process Tap (CATap)](references/core-audio-tap.md)
+- [Structured Concurrency](references/structured-concurrency.md)
+- [Relationships & Predicates](references/relationships-predicates.md)
+- [Sendable & Data Race Safety](references/sendable-safety.md)
+- [Async Patterns](references/async-patterns.md)
+- [Screen Capture & Audio Recording](references/screen-capture-audio.md)
+- [CloudKit Sync](references/cloudkit-sync.md)
+- [Concurrency Migration Guide](references/migration-guide.md)
+- [Architecture Patterns for macOS Apps](references/architecture.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with Swift, shell, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent-facing development guidance; no files are generated by the skill itself.]
+
+## Skill Version(s):
+
+0.8.2 (source: SKILL.md frontmatter and CHANGELOG.md, released 2026-08-21)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

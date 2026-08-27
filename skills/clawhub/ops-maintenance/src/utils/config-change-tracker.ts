@@ -11,6 +11,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, statSy
 import { join } from 'path'
 import { createHash } from 'crypto'
 import { getAuditLogger } from './audit-logger.js'
+import { unlinkSync } from 'fs'
 
 const execAsync = promisify(exec)
 
@@ -315,7 +316,7 @@ export class ConfigChangeTracker {
       // 只保留最近 maxSnapshots 个
       const toDelete = files.slice(this.maxSnapshots)
       for (const f of toDelete) {
-        try { require('fs').unlinkSync(join(dir, f)) } catch { /* skip */ }
+        try { unlinkSync(join(dir, f)) } catch { /* skip */ }
       }
     }
   }

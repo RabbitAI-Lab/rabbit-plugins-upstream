@@ -1,0 +1,32 @@
+{
+  "schema": "ownership-attestation/1.0",
+  "package": "ai-brain-learning-memory",
+  "version": "2.3.2",
+  "author": "注册老炮",
+  "year": "2026",
+  "timestamp_utc": "2026-08-25T18:42:31.151220+00:00",
+  "timestamp_local": "2026-08-26T02:42:31.151229",
+  "package_fingerprint_sha256": "6f7ecca52b2ad7b1c30f992f7cff107008564721abe554545cac32d82db30dc7",
+  "files": [
+    {
+      "path": "LICENSE.md",
+      "sha256": "a109144ff7e130bcaa8025dd4e69cc5260d2e7cf0dbb2de0bbf735545e38b267"
+    },
+    {
+      "path": "SECURITY_AUDIT.md",
+      "sha256": "40e7c1451a10fe6b1d3a60acfe4e6bf2cb9b3d92bf331dde6fc31bf4a35a1aa7"
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "6a4e85dc82747fde2f07e8f377c553fd8998dad064eed7e1db9e3a7221482353"
+    },
+    {
+      "path": "references/调研出处与证据.md",
+      "sha256": "85bc0a206d641694be28a54a25a9e9e0654072ce55281aab6a6177bcb1cd42a5"
+    },
+    {
+      "path": "scripts/memory_eval_battery.py",
+      "sha256": "de8ff76bcdae4867068bc63295e367e45f31eab45e50a76bfacd78b4306c908d"
+    }
+  ]
+}

@@ -1,46 +1,66 @@
-## Description: <br>
-Retrieves LinkedIn-sourced education history by person ID, including schools, degrees, majors, minors, GPAs, and pagination data for candidate background review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Checks LinkedIn-sourced education history by personnel ID and returns schools, degrees, majors, minors, GPAs, pagination details, fee data, and request metadata for candidate screening.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Recruiters, HR teams, hiring managers, and authorized screening workflows use this skill to retrieve education records for a LinkedIn person ID when assessing candidate qualifications or verifying academic background. Review is recommended before installation because the security evidence flags candidate-data handling, paid API calls, plaintext API key storage, account top-up helpers, and version-check persistence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Candidate and employee education data may be sensitive and may require authorization before querying. <br>
-Mitigation: Use only for authorized screening or verification workflows and avoid exposing returned records beyond the intended hiring review process. <br>
-Risk: API calls may incur fees and the skill includes account top-up helpers. <br>
-Mitigation: Inform users about paid calls and obtain explicit confirmation before execution; verify pricing through the provider before running paginated lookups. <br>
-Risk: The skill stores API keys in plaintext under ~/.upkuajing and may write version-check cache data. <br>
-Mitigation: Protect local credential files, avoid printing .env contents in chat or logs, and disable or remove version-check or persistence behavior where telemetry retention is restricted. <br>
+## Use Case:
 
+Recruiters, HR teams, and hiring managers use this skill to verify candidate education backgrounds, assess qualifications, and support background-check workflows from LinkedIn-sourced personnel data. It requires proper authorization for the person being checked.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/upkuajing/skills/linkedin-person-education) <br>
-- [UpKuaJing homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing developer platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [LinkedIn person education list API reference](references/linkedin-person-education-list-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Text, Shell commands, Configuration guidance] <br>
-**Output Format:** [JSON API responses and concise Markdown guidance with shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; calls may incur fees and may return fee metadata with account balance and call cost.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release and artifact metadata) <br>
+Risk: The skill handles sensitive background-check data from LinkedIn-sourced education records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with proper authorization for the person being checked and within approved recruiting, HR, or background-verification workflows.
+
+Risk: The skill stores or reads an UpKuaJing API key from ~/.upkuajing/.env.
+
+Mitigation: Protect the local key file, limit access to the account, and rotate the API key if it may have been exposed.
+
+Risk: API calls incur fees and the skill includes account top-up support flows.
+
+Mitigation: Confirm fee-bearing actions in a separate user message and verify current pricing through the provider pricing page or price-info script before running paid queries.
+
+Risk: Error reports can include troubleshooting context from failed calls.
+
+Mitigation: Submit error reports only after user confirmation and avoid including sensitive candidate or credential details in the report context.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/linkedin-person-education)
+- [UpKuaJing homepage](https://www.upkuajing.com)
+- [UpKuaJing developer platform](https://developer.upkuajing.com/)
+- [Detailed price description](https://www.upkuajing.com/web/openapi/price.html)
+- [LinkedIn person education list API](references/linkedin-person-education-list-api.md)
+- [Skill error report API](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with Python shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Education lookup results include paginated records, fee information, and request IDs; error-reporting output returns report identifiers.]
+
+## Skill Version(s):
+
+1.0.3 (source: SKILL.md metadata, server release evidence, target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

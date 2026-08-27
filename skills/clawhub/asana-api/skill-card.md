@@ -1,47 +1,65 @@
-## Description: <br>
-Asana API integration with managed OAuth for accessing tasks, projects, workspaces, users, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Asana API integration with managed OAuth for accessing tasks, projects, workspaces, users, and webhooks through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to manage Asana work items, track projects, inspect workspace and user data, and integrate Asana workflows through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill brokers access to an Asana account through Maton and uses MATON_API_KEY for authentication. <br>
-Mitigation: Install only when the publisher and Maton broker are trusted, keep MATON_API_KEY out of logs, and verify authentication state before use. <br>
-Risk: Write actions can create, update, or delete Asana resources, including tasks, projects, workspaces, users, and webhooks. <br>
-Mitigation: Confirm the target resource and intended effect with the user before any create, update, delete, or webhook operation. <br>
-Risk: Webhook targets can send Asana event data to external or private endpoints. <br>
-Mitigation: Use only intentional, reachable webhook targets and avoid private or internal URLs unless that exposure is explicitly intended. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Asana work items, track projects, inspect workspace and user data, and integrate Asana workflows through authenticated Maton CLI or API calls.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/asana-api) <br>
-- [API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Asana API Documentation](https://developers.asana.com) <br>
-- [Asana API Reference](https://developers.asana.com/reference) <br>
-- [Asana LLM Reference](https://developers.asana.com/llms.txt) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, Code, Configuration] <br>
-**Output Format:** [Markdown with CLI, HTTP, Python, and JavaScript examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a valid MATON_API_KEY, and an authorized Asana OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: The skill can read and modify Asana data through a connected Maton account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, approve only the needed Asana account and scopes, and review proposed write, webhook, or membership changes before they run.
+
+Risk: Using API keys instead of OAuth can expose a long-lived credential.
+
+Mitigation: Use OAuth where possible; if an API key is required, do not print, persist, or pass it on the command line.
+
+Risk: Ambiguous defaults may target the wrong Maton profile or Asana connection.
+
+Mitigation: Specify the intended profile and connection when multiple accounts or connections are available.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/asana-api)
+- [Maton homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Asana API Documentation](https://developers.asana.com)
+- [Asana API Reference](https://developers.asana.com/reference)
+- [Asana LLM Reference](https://developers.asana.com/llms.txt)
+- [Related api-gateway skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, API Calls, Configuration]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and API request guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Maton CLI commands, raw HTTP fallback examples, jq filters, and SDK snippets for Asana operations.]
+
+## Skill Version(s):
+
+1.1.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

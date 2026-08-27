@@ -1,48 +1,65 @@
-## Description: <br>
-Search LinkedIn company data through UpKuaJing by company name, industry, size, founding year, geography, and contact availability. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search companies from LinkedIn filtered by industry, size, founding year, geography, and contact-data availability, then return firmographic company results from the UpKuaJing Open Platform API.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Sales teams, marketers, and B2B lead-generation specialists use this skill to discover LinkedIn company profiles, enrich firmographic records, and research target accounts for customer acquisition, market research, competitor analysis, and account-based sales. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: LinkedIn company-search queries and result data are sent to and returned from UpKuaJing's API. <br>
-Mitigation: Use the skill only for searches appropriate to share with UpKuaJing, and review saved results for sensitive contact or firmographic data. <br>
-Risk: API calls are paid and large searches can trigger multiple billable requests. <br>
-Mitigation: Confirm current pricing and expected call count before running large searches or account top-up flows. <br>
-Risk: The UpKuaJing API key may be stored locally in plaintext. <br>
-Mitigation: Protect the local credential file, avoid sharing it, and remove or rotate the key when it is no longer needed. <br>
-Risk: Search results and task metadata can remain in local files after execution. <br>
-Mitigation: Delete task output files when they are no longer required. <br>
+## Use Case:
 
+Sales teams, marketers, and B2B lead-generation specialists use this skill to find LinkedIn company profiles and enrich firmographic data for customer acquisition, market research, competitor analysis, and account-based sales.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/linkedin-company-search) <br>
-- [UpKuaJing homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [LinkedIn Company List API reference](references/linkedin-company-list-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, API calls, Files, Configuration] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON command output, and JSONL result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; list searches can create local task metadata and result files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and artifact metadata) <br>
+Risk: The skill uses a paid third-party data provider and API calls can incur charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm expected charges before paid searches, especially when query_count exceeds 20 or multiple calls are required.
+
+Risk: The skill stores the UpKuaJing API key in a local plaintext file when the user chooses that setup path.
+
+Mitigation: Prefer environment-variable storage where possible, restrict local file permissions, and rotate the API key if it may have been exposed.
+
+Risk: Searches and optional diagnostics send query, request, and error-report data to UpKuaJing APIs.
+
+Mitigation: Avoid submitting raw prompts, customer data, or sensitive context in search parameters or error reports, and confirm privacy and compliance obligations before using contact-data filters for outreach.
+
+Risk: The skill performs an automatic remote version check during API requests.
+
+Mitigation: Review outbound network behavior and allow the version-check endpoint only when it matches the deployment environment's network policy.
+
+## Reference(s):
+
+- [LinkedIn Company List API](references/linkedin-company-list-api.md)
+- [Skill Error Report API](references/skill-error-report-api.md)
+- [UpKuaJing Homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [Detailed Price Description](https://www.upkuajing.com/web/openapi/price.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with Python shell commands and JSON script outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search results are written to task data files and summarized with task ID, status, request ID, file path, fee, and account balance.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

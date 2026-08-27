@@ -1,43 +1,57 @@
-## Description: <br>
-Records browser sessions via Playwright and converts video to GIF. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Records browser sessions via Playwright and converts video to GIF.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to record automated browser interactions with Playwright for UI demos, tutorials, and documentation, then locate WebM output and convert it to GIF when needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Browser recordings may capture sensitive page content and are saved to disk as WebM or GIF files. <br>
-Mitigation: Use test accounts and sanitized data, store generated recordings in an appropriate location, and review videos before sharing. <br>
-Risk: Automated browser specs can exercise live web applications and create misleading demos if pages are not fully loaded or actions are flaky. <br>
-Mitigation: Use explicit waits, stable test data, and validate the generated recording before using it as documentation or a tutorial asset. <br>
+## Use Case:
 
+Developers and engineers use this skill to create browser-based UI demo recordings, documentation clips, and tutorial GIFs from Playwright specs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scry-browser-recording) <br>
-- [Source homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scry) <br>
-- [Spec execution module](modules/spec-execution.md) <br>
-- [Video capture module](modules/video-capture.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with bash and TypeScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces Playwright commands, configuration examples, and output path guidance; recordings are WebM files that may be converted to GIF by a dependent gif-generation skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence; artifact frontmatter reports 1.9.8) <br>
+Risk: Browser recordings can capture credentials, private production content, or other sensitive on-screen data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use test accounts and sanitized demo data, and avoid recording credentials or private production content.
+
+Risk: Generated videos and GIFs may preserve sensitive visual details after capture.
+
+Mitigation: Review videos and GIFs before sharing, and delete sensitive artifacts when no longer needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-scry-browser-recording)
+- [Publisher Profile](https://clawhub.ai/user/athola)
+- [Clawdis Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scry)
+- [Spec Execution Module](artifact/modules/spec-execution.md)
+- [Video Capture Module](artifact/modules/video-capture.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline TypeScript configuration and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to produce Playwright WebM recordings and optional GIF outputs.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter version is 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

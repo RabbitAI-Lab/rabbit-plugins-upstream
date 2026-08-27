@@ -1,41 +1,61 @@
-## Description: <br>
-Retrosynthesis helper for legitimate cheminformatics tasks using the synomega Python package, including single-step reactant prediction, multi-step route planning, and synthesizability scoring for target molecules provided as SMILES. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Synomega Skill helps agents use the local synomega Python package for retrosynthesis, forward reaction prediction, route planning, synthesizability scoring, reaction-plausibility screening, and multi-component reaction-network exploration for organic molecules.
 
-## Publisher: <br>
-[zbc0315](https://clawhub.ai/user/zbc0315) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zbc0315](https://clawhub.ai/user/zbc0315)
 
-## Use Case: <br>
-Developers, chemistry researchers, and cheminformatics users can use this skill to ask an agent for candidate disconnections, synthesis route plans, or makeability scores for specific target molecules. The host safety policy remains responsible for deciding whether requests involving hazardous, controlled, or dual-use compounds are allowed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: First use may download a few hundred MB of model and stock data into a local cache. <br>
-Mitigation: Prefetch the data, set a controlled cache location, or use local model and stock files in bandwidth-limited, air-gapped, privacy-sensitive, or reproducibility-critical environments. <br>
-Risk: Retrosynthesis can provide operational route assistance for hazardous, controlled, or otherwise dual-use compounds. <br>
-Mitigation: Apply the host safety policy before planning routes or providing actionable assistance for high-risk targets, and decline or escalate requests that appear unsafe. <br>
+## Use Case:
 
+Developers, chemists, and agent users use this skill to ask synthesis-planning and reaction-prediction questions from valid SMILES inputs, including how to make a target molecule, whether it is likely synthesizable, what reactants could produce it, or how a reactant mixture may evolve. The skill delegates safety decisions for hazardous, controlled, or dual-use chemistry to the host policy.
 
-## Reference(s): <br>
-- [Synomega package on PyPI](https://pypi.org/project/synomega/) <br>
-- [SynOmega Skill on ClawHub](https://clawhub.ai/zbc0315/skills/synomega) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON-producing helper commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Helper commands can output JSON for single-step predictions, route plans, and synthesizability scores.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: server release metadata) <br>
+Risk: The skill installs a local Python chemistry package and may download pretrained model and stock data on first use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: In bandwidth-limited, air-gapped, privacy-sensitive, or reproducibility-critical environments, prefetch assets, pin a trusted mirror, or configure local SYNOMEGA_MODEL and SYNOMEGA_STOCK paths before use.
+
+Risk: Retrosynthesis and route-planning capabilities can be dual-use for hazardous, controlled, or otherwise restricted compounds.
+
+Mitigation: Apply the host safety policy before providing operational synthesis assistance, and avoid automatically producing actionable routes for high-risk targets.
+
+Risk: Reaction predictions and synthesis routes are model-generated candidates rather than guaranteed laboratory outcomes.
+
+Mitigation: Treat predicted products, scores, and routes as decision-support outputs that require expert review and validation.
+
+## Reference(s):
+
+- [SynOmega documentation](https://zbc0315.github.io/synomega/)
+- [SynOmega package on PyPI](https://pypi.org/project/synomega/)
+- [SynOmega toolkit source](https://github.com/zbc0315/synomega)
+- [SynOmega skill source](https://github.com/zbc0315/synomega-skill)
+- [ClawHub skill page](https://clawhub.ai/zbc0315/skills/synomega)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON-producing helper outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are candidate chemistry predictions and route-planning guidance; generated plans should be reviewed before operational use.]
+
+## Skill Version(s):
+
+1.8.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,53 @@
-## Description: <br>
-Big Seed captures diary notes, life moments, ideas, emotions, and memories as local seeds, then helps an agent summarize patterns, build a personal portrait, and generate user-centered stories, scripts, reports, or memoir-style drafts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Big Seed is an AI diary and life-story skill that helps users save short personal notes, classify them, build a personal profile, and generate memoir-style stories, scripts, reports, and weekly summaries from local diary data.
 
-## Publisher: <br>
-[kobenfang](https://clawhub.ai/user/kobenfang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kobenfang](https://clawhub.ai/user/kobenfang)
 
-## Use Case: <br>
-External users and agents use this skill to explicitly save personal journal fragments, query local seed data, summarize recent patterns, and turn saved memories into profile notes, weekly summaries, stories, scripts, reports, or memoir-style writing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores intimate personal journal entries and memory fragments locally. <br>
-Mitigation: Use it only for information you are comfortable retaining on the device, and delete saved seeds that should not remain in local storage. <br>
-Risk: Weekly AI-generated summaries, profile notes, and stories may be sent to a chat destination by default. <br>
-Mitigation: Confirm the Feishu or chat delivery target before use, and disable weekly push if local-only journaling is required. <br>
-Risk: Personal content could be captured unintentionally if save intent is unclear. <br>
-Mitigation: Use explicit save commands and require confirmation for ambiguous trigger phrases before writing a seed. <br>
+## Use Case:
 
+External users use Big Seed to capture personal reflections, memories, emotions, and ideas as local diary entries. The skill then helps retrieve those entries, summarize personal patterns, and generate stories, memoir-style narratives, weekly briefings, or creative prompts from the saved material.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kobenfang/bigseed) <br>
-- [Publisher profile](https://clawhub.ai/user/kobenfang) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with shell command examples and JSON-backed local data records] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses explicit save commands for journal entries and can generate recurring weekly summaries, profile notes, and creative story outputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.15 (source: server release evidence) <br>
+Risk: The skill stores sensitive personal diary entries and attachments in a local plaintext data directory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in trusted local environments, avoid recording secrets or highly sensitive personal details, and review or delete saved entries when needed.
+
+Risk: Default weekly summaries may derive profiles and stories from diary data and push them to a chat destination such as Feishu.
+
+Mitigation: Confirm the delivery destination before use and disable weekly chat delivery if the user does not want automated summaries.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kobenfang/skills/bigseed)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with inline shell commands and JSON-backed local diary data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May update local JSON files under memory/bigseed-data and generate scheduled weekly chat summaries when enabled.]
+
+## Skill Version(s):
+
+2.0.16 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

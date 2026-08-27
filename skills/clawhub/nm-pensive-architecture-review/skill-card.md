@@ -1,44 +1,52 @@
-## Description: <br>
-Assesses architecture decisions, ADR compliance, and coupling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses architecture decisions, ADR compliance, and coupling.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to review architecture changes before merge, including ADR compliance, module coupling, design invariants, security and performance checks, and follow-up actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording may cause the skill to activate during general design or pattern discussions. <br>
-Mitigation: Narrow the trigger wording or invoke the skill explicitly when architecture review is intended. <br>
-Risk: Architecture recommendations can be incorrect if the agent silently revises existing design invariants. <br>
-Mitigation: Use the skill's invariant-conflict workflow to present preserve, layer, and revise options and escalate the final decision to a human reviewer. <br>
+## Use Case:
 
+Developers and engineers use this skill to review architecture changes, ADR coverage, module coupling, design invariants, and principle-level risks before merging substantial system changes.
 
-## Reference(s): <br>
-- [Pensive plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
-- [ADR Audit Module](modules/adr-audit.md) <br>
-- [Coupling Analysis Module](modules/coupling-analysis.md) <br>
-- [Principle Checks Module](modules/principle-checks.md) <br>
-- [FPF Architecture Review Methodology](modules/fpf-methodology.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands, checklists, diagrams, findings, recommendations, and follow-up actions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include approve, approve-with-actions, or block recommendations for architecture reviews.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: release evidence) <br>
+Risk: The skill may suggest local shell commands for repository inspection and may produce architecture recommendations that affect project direction.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed commands before execution and require human review for architecture decisions, especially invariant conflicts, ADR changes, and merge-blocking recommendations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-architecture-review)
+- [Source Homepage from ClawHub Metadata](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+- [FPF Framework](https://github.com/ailev/FPF)
+- [quint-code](https://github.com/m0n0x41d/quint-code)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown with structured findings, checklists, diagrams, and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include ADR audit findings, coupling analysis, invariant conflict options, principle checks, risk summaries, and follow-up actions.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

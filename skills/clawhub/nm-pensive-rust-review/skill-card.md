@@ -1,41 +1,54 @@
-## Description: <br>
-Audits Rust code for unsafe blocks, ownership issues, and Cargo dependency risks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audits Rust code for unsafe blocks, ownership issues, and Cargo dependency risks.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to review Rust changes for ownership, error handling, concurrency, unsafe code, dependency risk, performance, idioms, and test quality before merge or release. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can suggest local Cargo analysis commands, including commands that may install tools or perform dependency and network checks. <br>
-Mitigation: Review proposed commands before running them, especially installation, audit, outdated, deny, or other dependency-check commands. <br>
-Risk: Broad Rust-related triggers may activate the skill in contexts where its opinionated audit workflow is not needed. <br>
-Mitigation: Use it for Rust code-review tasks and disregard or disable it for unrelated review work. <br>
+## Use Case:
 
+Developers and engineers use this skill to review Rust changes before merge, with emphasis on unsafe code, ownership and lifetime issues, concurrency, error handling, dependency risk, idioms, tests, and SQL injection patterns.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-rust-review) <br>
-- [Project Homepage from ClawHub Metadata](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown review report with optional inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes categorized findings, recommendations, evidence logging, and an approve / approve with actions / block recommendation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: The skill includes optional commands such as cargo install cargo-mutants, cargo mutants --workspace, cargo audit, cargo outdated, and cargo deny check that can use network, CPU, disk, or project resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the project scope and explicitly approve tool, network, and resource use before running these commands.
+
+Risk: The skill is an opinionated Rust review assistant, so findings and recommendations may need project-specific validation.
+
+Mitigation: Treat output as review guidance and require maintainer review before merging code or applying blocking recommendations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-rust-review)
+- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown audit report with optional shell command suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Structured findings, risk assessments, recommendations, and approve/approve with actions/block decision.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

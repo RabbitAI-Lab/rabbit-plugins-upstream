@@ -7,6 +7,7 @@ the incoming JSON into the typed request models, resolve credentials (inline or
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from adidas_client import AdidasClickCredentials, credentials_from_env
@@ -68,6 +69,7 @@ def _coerce_request(value: Any) -> OrderRequest:
         notes=value.get("notes"),
         spread_delivery=bool(value.get("spread_delivery", False)),
         on_insufficient_stock=value.get("on_insufficient_stock", "pause"),
+        on_missing_product=value.get("on_missing_product", "pause"),
     )
 
 
@@ -113,7 +115,32 @@ def _coerce_check_request(value: Any) -> OrderRequest:
         notes=value.get("notes"),
         spread_delivery=bool(value.get("spread_delivery", False)),
         on_insufficient_stock=value.get("on_insufficient_stock", "pause"),
+        on_missing_product=value.get("on_missing_product", "pause"),
     )
+
+
+def _coerce_po_list(value: Any) -> list[str]:
+    """Coerce a PO argument into a list of PO number strings.
+
+    Accepts a list of strings (or of ``{"po_number"/"po"/"name": ...}`` dicts, so
+    a caller can pass rows straight from its own order data), or a single string
+    holding one or more POs separated by commas / whitespace.
+    """
+
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [part for part in re.split(r"[,\s]+", value.strip()) if part]
+    if isinstance(value, (list, tuple)):
+        out: list[str] = []
+        for item in value:
+            if isinstance(item, dict):
+                item = item.get("po_number") or item.get("po") or item.get("name")
+            if item is None:
+                continue
+            out.extend(_coerce_po_list(item) if isinstance(item, str) else [str(item)])
+        return out
+    return [str(value)]
 
 
 def _resolve_credentials(
@@ -147,7 +174,7 @@ def adidas_create_purchase_order(
     purchase_order: dict | None = None,
     confirm: bool = False,
     screenshot_path: str | None = None,
-    headless: bool = True,
+    headless: bool = False,
     username: str | None = None,
     password: str | None = None,
     base_url: str | None = None,
@@ -161,6 +188,7 @@ def adidas_create_purchase_order(
     notes: str | None = None,
     spread_delivery: bool = False,
     on_insufficient_stock: str = "pause",
+    on_missing_product: str = "pause",
     new_cart: bool = True,
 ) -> dict[str, Any]:
     """Place an adidas Click B2B purchase order via browser automation. **WRITE.**
@@ -184,6 +212,14 @@ def adidas_create_purchase_order(
     can confirm with the user; ``order`` orders them anyway (delayed delivery);
     ``skip`` removes them and orders the rest. See SKILL.md "Out-of-stock
     handling".
+
+    ``on_missing_product`` (``pause`` | ``skip`` | ``error``, default ``pause``)
+    controls styles adidas has no product listing for (a wrong article number,
+    or one this account is not offered): ``pause`` places nothing and returns
+    ``status="needs_confirmation"`` with a ``missing_products`` list so the agent
+    can take the choice back to the user; ``skip`` drops those lines and orders
+    the rest; ``error`` fails the run. See SKILL.md "Missing / unlisted product
+    handling".
     """
 
     from adidas_browser import create_purchase_order as _create  # lazy: optional dep
@@ -199,6 +235,7 @@ def adidas_create_purchase_order(
         "notes": notes,
         "spread_delivery": spread_delivery,
         "on_insufficient_stock": on_insufficient_stock,
+        "on_missing_product": on_missing_product,
     }
     request = _coerce_request(payload)
     credentials = _resolve_credentials(username, password, base_url)
@@ -229,6 +266,7 @@ def adidas_check_inventory_pricing(
     ship_method: str | None = None,
     spread_delivery: bool = False,
     on_insufficient_stock: str = "pause",
+    on_missing_product: str = "pause",
 ) -> dict[str, Any]:
     """Check adidas Click **inventory and/or wholesale pricing** — never orders.
 
@@ -247,6 +285,12 @@ def adidas_check_inventory_pricing(
     "DO NOT BUY {random}" marker so a leftover from a crash is obviously safe —
     override it with ``po_number`` (≤18 chars). Nothing is ever purchased.
 
+    A style adidas has no listing for never aborts the check: it comes back as a
+    ``not_found`` line plus a ``missing_products`` entry, and with
+    ``on_missing_product`` at ``pause`` (default) the result's status is
+    ``needs_confirmation`` so the agent escalates it to the user. ``skip``
+    downgrades that to a warning; ``error`` fails the check.
+
     Credentials come from ``ADIDAS_CLICK_USERNAME`` / ``ADIDAS_CLICK_PASSWORD``
     (or inline ``username`` / ``password``).
     """
@@ -261,6 +305,7 @@ def adidas_check_inventory_pricing(
         "ship_method": ship_method,
         "spread_delivery": spread_delivery,
         "on_insufficient_stock": on_insufficient_stock,
+        "on_missing_product": on_missing_product,
     }
     check_request = _coerce_check_request(payload)
     credentials = _resolve_credentials(username, password, base_url)
@@ -269,6 +314,56 @@ def adidas_check_inventory_pricing(
         request=check_request,
         credentials=credentials,
         check=check,
+        screenshot_path=screenshot_path,
+        headless=headless,
+    )
+    return to_dict(result)
+
+
+def adidas_get_order_tracking(
+    *,
+    po_numbers: list | str | None = None,
+    po_number: str | None = None,
+    pos: list | str | None = None,
+    screenshot_path: str | None = None,
+    headless: bool = False,
+    username: str | None = None,
+    password: str | None = None,
+    base_url: str | None = None,
+) -> dict[str, Any]:
+    """Get carrier **tracking numbers** for one or more PO numbers. **READ-ONLY.**
+
+    Searches the adidas Click order book for each PO in turn (a PO commonly maps
+    to several adidas orders), opens every matching order, and reads its
+    Delivery Tracking table (delivery note, ship date, carrier, tracking
+    number + link). An order with no Delivery Tracking link has not shipped: its
+    **expected** ship dates are read from the order's article rows instead and
+    are flagged as expected everywhere they appear.
+
+    POs may be passed as ``po_numbers`` (a list, or a comma/whitespace-separated
+    string), as ``pos``, or as a single ``po_number``. Nothing is written — no
+    cart is created and no order is modified.
+
+    The result carries per-PO / per-order detail plus ``table``, a ready-to-
+    render Markdown table of every tracking number with the expected-ship-date
+    rows annotated. A PO the order book returns nothing for comes back
+    ``status="not_found"`` (and flips the result to ``needs_confirmation``) so
+    the agent can confirm the number with the user; the other POs still run.
+
+    Credentials come from ``ADIDAS_CLICK_USERNAME`` / ``ADIDAS_CLICK_PASSWORD``
+    (or inline ``username`` / ``password``).
+    """
+
+    from adidas_browser import get_order_tracking as _tracking  # lazy: optional dep
+
+    requested = _coerce_po_list(po_numbers) or _coerce_po_list(pos) or _coerce_po_list(
+        po_number
+    )
+    credentials = _resolve_credentials(username, password, base_url)
+
+    result = _tracking(
+        po_numbers=requested,
+        credentials=credentials,
         screenshot_path=screenshot_path,
         headless=headless,
     )

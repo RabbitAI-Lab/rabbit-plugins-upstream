@@ -1,8 +1,8 @@
 # Models — friendly names, ids, traits
 
 **This table is the OpenRouter backend only.** `--model` (and config `model:`)
-is an **OpenRouter-only axis** — it is orthogonal to `--backend`, and the
-**Codex and Grok backends ignore it entirely**: there the image model is
+is an **OpenRouter-only axis** — it is orthogonal to `--backend`, and **Codex,
+Grok CLI, and Grok Bot native ignore it entirely**: there the image model is
 automatic (Codex → gpt-image-2; Grok → its built-in image tool) with no selector
 (`references/backends.md`). So only translate model names / honor `--model` when
 the OpenRouter backend is in play.
@@ -59,9 +59,10 @@ prices are OpenRouter's and drift. The Codex backend has no per-image charge
 
 **Cutouts:** `--cutout` without `--model` on OpenRouter selects
 `openai/gpt-5.4-image-2` (Grok/JPEG cannot produce compositing-ready cutouts).
-**Codex cutouts** also use chroma key — `codex exec` returns opaque PNG only.
-Chroma-key transparency is reliable on **Codex + chroma** and **OR GPT Image 2 +
-chroma**; it is not universal across all characters or models. Each pack's
-**`Cutout chroma:`** line in `character.md` sets the screen color (default
-magenta; green for forged-metal characters like Wick). Re-roll on screen bleed,
-accent halos, or noisy backgrounds. See `references/cutout.md`.
+**Codex cutouts** request native PNG alpha by default. The engine keeps chroma
+keying as an explicit Codex compatibility path (`--chroma`) and as the default
+OpenRouter path. Chroma reliability is not universal across all characters or
+models; a pack's optional **`Cutout chroma:`** line sets its fallback screen
+color (default magenta; green for forged-metal characters like Wick). Re-roll
+on screen bleed, accent halos, noisy backgrounds, or malformed native alpha.
+See `references/cutout.md`.

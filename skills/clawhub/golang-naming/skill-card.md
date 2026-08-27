@@ -1,44 +1,58 @@
-## Description: <br>
-Go naming guidance for packages, identifiers, constructors, types, errors, booleans, receivers, functions, options, acronyms, and tests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Go naming guidance for packages, identifiers, functions, methods, types, constants, errors, booleans, tests, and related refactoring decisions.
 
-## Publisher: <br>
-[samber](https://clawhub.ai/user/samber) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samber](https://clawhub.ai/user/samber)
 
-## Use Case: <br>
-Developers and engineering teams use this skill when writing, reviewing, or refactoring Go code to choose idiomatic names for packages, identifiers, APIs, errors, and tests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide edits to Go source files during refactoring, and naming changes may be incorrect or disruptive if accepted blindly. <br>
-Mitigation: Review proposed naming changes before accepting them, especially in important codebases. <br>
+## Use Case:
 
+Developers and engineers use this skill when writing, reviewing, or refactoring Go code to choose idiomatic names and avoid common naming mistakes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/samber/golang-naming) <br>
-- [Source homepage](https://github.com/samber/cc-skills-golang) <br>
-- [Packages, Files & Import Aliasing](artifact/references/packages-files.md) <br>
-- [Variables, Booleans, Receivers & Acronyms](artifact/references/identifiers.md) <br>
-- [Functions, Methods & Options](artifact/references/functions-methods.md) <br>
-- [Types, Constants & Errors](artifact/references/types-errors.md) <br>
-- [Test Naming](artifact/references/testing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown prose with Go code examples and review guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose source-file naming edits when invoked for refactoring; review changes before accepting them in important codebases.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Proposed Go identifier renames can affect public APIs, references across the repository, and downstream callers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed renames before applying them and prefer Go-aware rename tooling for changes that cross file or package boundaries.
+
+Risk: Naming guidance may be too broad for a repository with intentional local conventions or generated interoperability code.
+
+Mitigation: Check repository conventions and exempt generated, OS-specific, cgo, or otherwise intentional naming exceptions before changing code.
+
+## Reference(s):
+
+- [ClawHub metadata homepage](https://github.com/samber/cc-skills-golang)
+- [Packages, Files & Import Aliasing](artifact/references/packages-files.md)
+- [Variables, Booleans, Receivers & Acronyms](artifact/references/identifiers.md)
+- [Functions, Methods & Options](artifact/references/functions-methods.md)
+- [Types, Constants & Errors](artifact/references/types-errors.md)
+- [Test Naming](artifact/references/testing.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with code examples and optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose Go identifier renames or edits that should be reviewed before application.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,39 +1,55 @@
-## Description: <br>
-AI comic and manga generator powered by CellCog for comics, manga, webtoons, graphic novels, comic strips, sequential art, character-consistent panels, and visual storytelling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Comic Generator helps agents use CellCog to create comics, manga, webtoons, graphic novels, comic strips, and other sequential art with character-consistent panels.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-External creators, developers, and agents use this skill to generate comic and manga work through CellCog, including manga pages, webtoon episodes, comic strips, graphic novel pages, panel layouts, and character-consistent visual storytelling prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Comic prompts, character descriptions, and attached creative material may be processed by CellCog's external service. <br>
-Mitigation: Avoid submitting secrets, regulated personal data, or confidential unpublished IP unless that use fits the user's data-handling requirements. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to create comic and manga concepts, pages, strips, webtoon episodes, and graphic novel layouts through CellCog. It focuses prompts on panel planning, character consistency, style selection, and visual storytelling.
 
-## Reference(s): <br>
-- [CellCog](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/comic-manga-generator-cellcog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python SDK examples and shell/setup commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and CELLCOG_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release evidence) <br>
+Risk: The CellCog API key could be exposed through prompts, logs, or committed files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Store CELLCOG_API_KEY in the environment or an approved secret manager, and do not paste it into prompts or repositories.
+
+Risk: The skill depends on CellCog service behavior and billing expectations.
+
+Mitigation: Review CellCog's own skill or documentation before production use, especially SDK behavior, timeouts, and billing expectations.
+
+## Reference(s):
+
+- [Comic Generator on ClawHub](https://clawhub.ai/cellcog/skills/comic-manga-generator-cellcog)
+- [CellCog Publisher Profile](https://clawhub.ai/user/cellcog)
+- [CellCog](https://cellcog.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with Python examples, shell commands, and prompt guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call CellCog with creative chat mode and requires CELLCOG_API_KEY when used.]
+
+## Skill Version(s):
+
+1.0.16 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

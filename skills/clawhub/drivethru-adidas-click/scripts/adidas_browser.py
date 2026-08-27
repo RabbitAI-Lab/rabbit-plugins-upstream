@@ -28,8 +28,11 @@ import shutil
 import string
 import subprocess
 import sys
+import time
 from contextlib import contextmanager
+from datetime import datetime
 from typing import TYPE_CHECKING
+from urllib.parse import quote, urlparse
 
 from adidas_client import (  # noqa: E402  (sibling module, scripts dir on sys.path)
     AdidasAPIError,
@@ -46,6 +49,10 @@ from schemas import (  # noqa: E402  (sibling module)
     OrderRequest,
     OrderResult,
     ShipTo,
+    TrackingOrder,
+    TrackingPO,
+    TrackingResult,
+    TrackingShipment,
 )
 
 if TYPE_CHECKING:  # pragma: no cover — typing only
@@ -115,17 +122,38 @@ def _parse_available(indicator: str | None) -> int | None:
     return _to_int(text)
 
 
-class _InsufficientStockPause(Exception):
-    """Internal signal: some line isn't fully in stock and the policy is 'pause'.
+def _iso_date(value: str | None) -> str | None:
+    """A portal date ("Nov 8, 2026") as ISO ("2026-11-08"), or None if unparseable.
 
-    Carries the out-of-stock summary and a snapshot of all requested lines so
-    the entry point can return a ``needs_confirmation`` result without ordering.
+    Downstream systems (an ERP's expected-date field) want ISO; the raw string
+    is kept alongside it so a portal format change degrades to "we still know
+    what it said" rather than to nothing.
     """
 
-    def __init__(self, out_of_stock: list[dict], lines: list["OrderLineResult"]):
-        super().__init__("insufficient stock — awaiting confirmation")
+    parsed = _parse_ship_date(value)
+    return parsed.isoformat() if parsed else None
+
+
+class _OrderPause(Exception):
+    """Internal signal: the order needs a human decision before it can be placed.
+
+    Raised when a line isn't fully in stock and ``on_insufficient_stock`` is
+    ``pause``, and/or adidas has no product page for a requested style and
+    ``on_missing_product`` is ``pause``. Carries both summaries plus a snapshot
+    of all requested lines so the entry point can return a
+    ``needs_confirmation`` result without ordering anything.
+    """
+
+    def __init__(
+        self,
+        out_of_stock: list[dict],
+        lines: list["OrderLineResult"],
+        missing_products: list[dict] | None = None,
+    ):
+        super().__init__("order paused — awaiting confirmation")
         self.out_of_stock = out_of_stock
         self.lines = lines
+        self.missing_products = missing_products or []
 
 
 def _group_by_style(lines: list[OrderLine]) -> dict[str, list[OrderLine]]:
@@ -244,56 +272,85 @@ def _unit_price(line_total: str | None, quantity: int | None) -> str | None:
     return f"{symbol}{value / quantity:,.2f}"
 
 
-def _install_chromium() -> None:
-    """Download Playwright's Chromium browser binary (one-time, ~150 MB)."""
+# Debian/Ubuntu package names for Chromium's runtime shared libraries — listed
+# in the host-level error so the environment can be fixed.
+_CHROMIUM_SYSTEM_PACKAGES = (
+    "libglib2.0-0 libnss3 libnspr4 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 "
+    "libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 "
+    "libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2"
+)
 
-    subprocess.run(
-        [sys.executable, "-m", "playwright", "install", "chromium"],
-        check=True,
+
+def _run_playwright(*args: str) -> None:
+    """Run ``python -m playwright <args>``, raising on non-zero exit."""
+
+    subprocess.run([sys.executable, "-m", "playwright", *args], check=True)
+
+
+def _missing_binary(message: str) -> bool:
+    return "executable doesn't exist" in message
+
+
+def _missing_system_libs(message: str) -> bool:
+    return (
+        "shared librar" in message
+        or "libglib" in message
+        or "error while loading shared" in message
+        or "cannot open shared object" in message
     )
 
 
 def _launch_chromium(playwright, headless: bool):
-    """Launch Chromium, auto-installing the browser binary if it is missing.
+    """Launch Chromium, self-healing a missing binary or (best-effort) OS deps.
 
     The Playwright *package* is a declared dependency, but its Chromium *binary*
-    is a separate ~150 MB download that pip/uv does not fetch. There is no
-    OpenClaw install-time hook for it, so on the first run — if the binary is
-    absent — we install it once and retry, rather than requiring a manual
-    `python -m playwright install chromium`.
+    is a separate ~150 MB download that pip/uv doesn't fetch, and the browser
+    also needs OS-level shared libraries. There is no OpenClaw install-time hook
+    for either, so on the first run we try to install the binary (and, if the
+    launch fails on missing shared libraries, the system deps — which needs
+    root) and retry. If the host still lacks the libraries, we raise a precise,
+    actionable error rather than a raw stack trace.
     """
 
     try:
         return playwright.chromium.launch(headless=headless, args=_STEALTH_LAUNCH_ARGS)
     except Exception as exc:  # noqa: BLE001
         message = str(exc).lower()
-        looks_missing = (
-            "executable doesn't exist" in message
-            or "playwright install" in message
-            or "browsertype.launch" in message
-            and "download" in message
-        )
-        if not looks_missing:
+        if not (_missing_binary(message) or _missing_system_libs(message)):
             raise AdidasConfigError(
-                "Could not launch a Chromium browser for Playwright "
+                f"Could not launch a Chromium browser for Playwright "
                 f"(underlying error: {exc})."
             ) from exc
-        logger.info("Chromium binary missing — installing it once (~150 MB)…")
+
+        # Best-effort self-heal: install the binary and/or the OS deps.
         try:
-            _install_chromium()
-        except Exception as install_exc:  # noqa: BLE001
-            raise AdidasConfigError(
-                "Chromium is not installed and the automatic install failed. Run "
-                "`python -m playwright install chromium` manually. (install error: "
-                f"{install_exc})"
-            ) from install_exc
+            if _missing_binary(message):
+                logger.info("Chromium binary missing — installing it (~150 MB)…")
+                _run_playwright("install", "chromium")
+            if _missing_system_libs(message):
+                logger.info("Chromium system libraries missing — installing deps…")
+                _run_playwright("install-deps", "chromium")
+        except Exception as install_exc:  # noqa: BLE001 — retry decides the outcome
+            logger.warning("Automatic browser install step failed: %s", install_exc)
+
         try:
             return playwright.chromium.launch(headless=headless, args=_STEALTH_LAUNCH_ARGS)
         except Exception as retry_exc:  # noqa: BLE001
+            if _missing_system_libs(str(retry_exc).lower()):
+                raise AdidasConfigError(
+                    "Chromium is installed but the host is missing the system "
+                    "libraries it needs (e.g. libglib-2.0.so.0). This is a host/"
+                    "environment issue the skill can't fix without root. Fix it "
+                    "one of these ways: (1) run `python -m playwright install-deps "
+                    "chromium` (or `playwright install --with-deps chromium`) as "
+                    "root on the agent host; (2) have the OpenClaw environment's "
+                    "setup script / base image install Chromium's deps — apt "
+                    f"packages: {_CHROMIUM_SYSTEM_PACKAGES}. (error: {retry_exc})"
+                ) from retry_exc
             raise AdidasConfigError(
                 "Could not launch Chromium even after installing it. Run "
-                "`python -m playwright install chromium` and check the container "
-                f"has the required system libraries. (error: {retry_exc})"
+                "`python -m playwright install --with-deps chromium` and check the "
+                f"host has the required system libraries. (error: {retry_exc})"
             ) from retry_exc
 
 
@@ -376,9 +433,14 @@ def _insufficient_stock_message(out_of_stock: list[dict]) -> str:
         if s.get("status") == "unavailable":
             parts.append(f"{s['style']} size {s['size']} — not available (cannot be ordered)")
         else:
+            restock = (
+                f", restocks {s['restock_date']}"
+                if s.get("restock_date")
+                else ", no restock date posted"
+            )
             parts.append(
                 f"{s['style']} size {s['size']} — requested {s['requested']}, "
-                f"available {s['available'] or 0}"
+                f"available {s['available'] or 0}{restock}"
             )
     has_unavailable = any(s.get("status") == "unavailable" for s in out_of_stock)
     msg = (
@@ -395,6 +457,70 @@ def _insufficient_stock_message(out_of_stock: list[dict]) -> str:
             "be removed or substituted — 'order' cannot place them."
         )
     return msg
+
+
+def _validate_policies(request: OrderRequest) -> tuple[str, str]:
+    """Normalize and validate the two "what do I do about it" policies.
+
+    Returns ``(on_insufficient_stock, on_missing_product)`` lowercased. Called
+    before the browser launches as well as inside :meth:`add_lines`, so a typo
+    fails in milliseconds instead of after a login.
+    """
+
+    stock = (request.on_insufficient_stock or "pause").strip().lower()
+    if stock not in {"pause", "order", "skip"}:
+        raise AdidasConfigError(
+            f"on_insufficient_stock must be 'pause', 'order', or 'skip'; "
+            f"got {request.on_insufficient_stock!r}."
+        )
+    missing = (request.on_missing_product or "pause").strip().lower()
+    if missing not in {"pause", "skip", "error"}:
+        raise AdidasConfigError(
+            f"on_missing_product must be 'pause', 'skip', or 'error'; "
+            f"got {request.on_missing_product!r}."
+        )
+    return stock, missing
+
+
+def _missing_product_message(missing: list[dict], *, ordering: bool = True) -> str:
+    """Human-readable summary + the choices when adidas has no such product.
+
+    ``ordering`` false phrases it for a read-only check (which reports whatever
+    it *could* read rather than placing nothing).
+    """
+
+    parts = []
+    for m in missing:
+        # "*" is the whole-style inventory request (a check line with no size).
+        sizes = (
+            ", ".join(s for s in m.get("sizes", []) if s and s != "*") or "all sizes"
+        )
+        parts.append(f"{m['style']} ({sizes}) — {m.get('detail') or 'no product page'}")
+    head = (
+        f"adidas Click has no product listing for {len(missing)} requested "
+        f"style(s), so the order was NOT placed: "
+        if ordering
+        else (
+            f"adidas Click has no product listing for {len(missing)} requested "
+            f"style(s), so they could not be checked: "
+        )
+    )
+    tail = (
+        " Ask the user how to proceed, then re-run: correct the article number "
+        "(adidas article numbers encode the colorway, e.g. JW4306 — a base "
+        "style without the color code will not resolve); drop the style and "
+        "proceed with the rest (on_missing_product='skip'); or substitute a "
+        "different article."
+    )
+    note = ""
+    if any(m.get("reason") == "unresolved" for m in missing):
+        note = (
+            " NOTE: at least one style is 'unresolved' — the portal neither "
+            "showed the product nor said it was missing (it may be a slow page "
+            "or a portal change), so treat it as unconfirmed rather than proven "
+            "absent; a retry may resolve it."
+        )
+    return head + "; ".join(parts) + "." + tail + note
 
 
 def _resolve_state_name(state: str) -> str:
@@ -470,6 +596,27 @@ _SEARCH_SUBMIT_BUTTON = "#HeaderSearchSubmitButton"
 # Product page. adidas article numbers encode the color, so navigating straight
 # to the product URL lands on the right color with no color picker.
 _PRODUCT_PATH = "/adidas/reorder/product/{style}"
+# A style adidas does not offer has no size table to wait for, so the product
+# page is polled (rather than blocking on one long wait_for_selector) and gives
+# up sooner than the global timeout: an absent product must not burn 30s per
+# style before the caller can be told. A real product page renders its size
+# table well inside this budget.
+_PRODUCT_WAIT_MS = 15_000
+_PRODUCT_POLL_MS = 400
+# Grace window given to a slow size table after a not-found tell matches, before
+# the style is declared missing (see _wait_for_size_table).
+_PRODUCT_TELL_GRACE_MS = 2_000
+# Positive "no such product" tells, matched against the page's visible text once
+# the authenticated shell has painted. The portal's empty-product markup is NOT
+# captured (no selector is invented for it), so this is deliberately a text
+# match over the wording such pages use, backed by the URL check below. A false
+# positive is safe by construction: it can only route the style into the
+# missing-product escalation, which places nothing and asks the user.
+_PRODUCT_MISSING_TELL_RE = re.compile(
+    r"no results|no products? (?:were |was )?found|not found|no such (?:product|article)"
+    r"|does(?:n't| not) exist|no longer available|no items? match",
+    re.IGNORECASE,
+)
 
 # Cart / checkout. /adidas/reorder/cart opens the *active* cart. Quantities that
 # overflow availability (when spread is declined) go to a separate, inactive
@@ -531,6 +678,101 @@ _SIZE_TRANSLATION_PREFIX = "CartModule-SizeBar-SizeTranslation-"
 #   material total:   #CartModule-MaterialRow-Summary-TotalQuantity-{style}
 #   product name:     #CartModule-TinyProduct-{style}-ProductName
 
+# Availability-date tab (outside the size table). The button text is the
+# earliest date on which the product can ship. If it isn't today, the size
+# table's inventory numbers refer to *that future date*, not today — so no
+# quantity is orderable now regardless of what the tiles show. Must be
+# checked first, before reading any size-tile inventory.
+_AVAILABLE_DATE_BUTTON = "#DateTabButton"
+
+# Re-stock date. A size tile that will be replenished carries a little calendar
+# icon in its top-right corner:
+#   #CartModule-SizeTile-RestockIndicator-{style}-{code}
+# Its PRESENCE is the "this size gets restocked" tell. The date itself is NOT in
+# that markup — the portal renders it only in a hover tooltip ("Re-stock in
+# Nov 8, 2026"), so the driver hovers the icon and reads the tooltip that opens.
+_SIZE_TILE_RESTOCK_ID = "CartModule-SizeTile-RestockIndicator-{style}-{code}"
+# Cheap paths tried before hovering, in case the build exposes the date as an
+# attribute somewhere on (or under) the icon.
+_RESTOCK_ATTRS = ("title", "aria-label", "data-tooltip", "data-title")
+# The tooltip's own markup is NOT captured, so no selector is invented for it:
+# after the hover the page text is matched for the portal's wording. Anchored on
+# "re-stock" so an unrelated date elsewhere on the page can never be picked up.
+_RESTOCK_TOOLTIP_RE = re.compile(
+    r"re-?stock(?:ing|s)?\s*(?:in|on|:)?\s*"
+    r"([A-Za-z]{3,9}\s+\d{1,2},\s*\d{4})",
+    re.IGNORECASE,
+)
+_RESTOCK_HOVER_SETTLE_MS = 400
+
+# ---------------------------------------------------------------------------
+# Order book / delivery tracking (read-only surface)
+# ---------------------------------------------------------------------------
+
+# The order book is searched by PO through the URL, so no search-form selectors
+# are needed: /adidas/reorder/my/order-book?searchText={po}&page={n}&size={size}
+# &filterByRDD=false. Paging is done the same way (bump `page`) rather than
+# clicking an un-captured pager.
+_ORDER_BOOK_SEARCH_PATH = (
+    "/adidas/reorder/my/order-book"
+    "?searchText={po}&page={page}&size={size}&filterByRDD=false"
+)
+_ORDER_BOOK_PAGE_SIZE = 20
+_ORDER_BOOK_MAX_PAGES = 10  # 200 orders for one PO is already implausible
+# Result rows. Each row's cell holds one <div class="m-orderHeaderData"> whose
+# <h2 id="OrderHeaderRow{order}Heading"> text IS the adidas order number; the
+# item list below it carries the customer PO and the order type ("Re-Order").
+_ORDER_ROW = "div.m-orderHeaderData"
+_ORDER_ROW_HEADING = 'h2[id^="OrderHeaderRow"]'
+_ORDER_ROW_ID_RE = re.compile(r"OrderHeaderRow(.+?)Heading")
+_ORDER_ROW_PO = ".m-orderHeaderData__item span"
+_ORDER_ROW_TYPE = ".m-orderHeaderData__item .a-orderType"
+# The grid virtualizes rows, so collection scrolls until no new row appears.
+_ORDER_BOOK_SCROLL_PASSES = 20
+_ORDER_BOOK_WAIT_MS = 20_000
+_ORDER_BOOK_POLL_MS = 400
+
+# Order detail. The Delivery Tracking link's captured href
+# (/adidas/reorder/my/order-book/{order}/deliveries) gives both paths.
+_ORDER_DETAIL_PATH = "/adidas/reorder/my/order-book/{order}"
+_DELIVERIES_PATH = "/adidas/reorder/my/order-book/{order}/deliveries"
+# Present ONLY when the order has shipments — its absence is the "nothing has
+# shipped yet" tell, so a missing link is a result, not an error.
+_ORDER_TRACKING_LINK = "#OrderTrackingButtonLink"
+# Per-article expected-ship-date rows on an unshipped order: a chevron toggle
+# expands the article's week list, whose header shows the expected ship date.
+_ARTICLE_WEEK_TOGGLE = ".o-orderDetailArticle__weekToggle button"
+_ARTICLE_WEEK_NAME = ".o-orderDetailArticle__weekItemHeaderName"
+# Article container: inferred from the BEM block of the two captured elements
+# above (both are `o-orderDetailArticle__*`). Only used to group dates per
+# article — if it does not match, the dates are still reported order-level.
+_ARTICLE_BLOCK = ".o-orderDetailArticle"
+_ORDER_DETAIL_WAIT_MS = 20_000
+# Grace given to a slow-rendering Delivery Tracking link after the article rows
+# have painted, before the order is declared unshipped.
+_TRACKING_LINK_GRACE_MS = 2_000
+
+# Delivery Tracking page. One `__item` per delivery row. NOTE: each row also
+# holds a delivery-note PDF link whose href embeds a bearer access token — it is
+# deliberately NOT read or returned.
+_DELIVERY_ITEM = ".o-deliveryTrackingOverview__item"
+_DELIVERY_NOTE_LINK = 'a[id^="DownloadPdfCtaLink"]'
+_DELIVERY_SHIP_DATE = ".o-deliveryTrackingOverview__shipDate"
+_DELIVERY_CARRIER = ".o-deliveryTrackingOverview__carrier"
+_DELIVERY_TRACKING_LINK = ".m-trackingNumber__trackingNumber a"
+_DELIVERY_WAIT_MS = 20_000
+# Carrier names derived from the tracking URL host (adidas shows only a code
+# such as "UPSN"; the link it wraps names the actual carrier).
+_CARRIER_HOSTS = (
+    ("ups.com", "UPS"),
+    ("fedex.com", "FedEx"),
+    ("usps.com", "USPS"),
+    ("dhl.com", "DHL"),
+    ("ontrac.com", "OnTrac"),
+)
+# Expected-ship-date format on the article week header ("Feb 4, 2027").
+_SHIP_DATE_FORMATS = ("%b %d, %Y", "%B %d, %Y")
+
 
 # ---------------------------------------------------------------------------
 # Driver
@@ -551,6 +793,16 @@ class AdidasClickDriver:
         # Populated from the review page during complete_submission.
         self.order_total: str | None = None
         self.line_net_prices: list[str | None] = []
+        # Styles adidas served no product page for, keyed by style so a style
+        # visited more than once in a run (e.g. a check that falls back from
+        # pricing to an inventory read) is reported once.
+        self._missing_by_style: dict[str, dict] = {}
+
+    @property
+    def missing_products(self) -> list[dict]:
+        """Styles this run could not open a product page for, in request order."""
+
+        return list(self._missing_by_style.values())
 
     # -- cart management --------------------------------------------------
 
@@ -767,32 +1019,40 @@ class AdidasClickDriver:
         applies the ``on_insufficient_stock`` policy for any line whose full
         quantity is not available:
 
-        - ``pause`` (default): raise :class:`_InsufficientStockPause` — the entry
-          point returns ``needs_confirmation`` and **nothing is ordered**.
+        - ``pause`` (default): raise :class:`_OrderPause` — the entry point
+          returns ``needs_confirmation`` and **nothing is ordered**.
         - ``order``: enter it anyway, accepting delayed delivery (spread).
         - ``skip``: do not enter it (removed from the order); order the rest.
+
+        A style adidas serves **no product page** for is handled separately by
+        ``on_missing_product``: ``pause`` (default) raises the same
+        :class:`_OrderPause` carrying ``missing_products`` so the caller can
+        take the choice to the user, ``skip`` drops those lines and orders the
+        rest, and ``error`` fails the run outright.
 
         Lines are grouped by style so each product page is opened once; adidas
         encodes color in the article number, so no color selection is needed.
         """
 
-        policy = (request.on_insufficient_stock or "pause").strip().lower()
-        if policy not in {"pause", "order", "skip"}:
-            raise AdidasConfigError(
-                f"on_insufficient_stock must be 'pause', 'order', or 'skip'; "
-                f"got {request.on_insufficient_stock!r}."
-            )
+        policy, missing_policy = _validate_policies(request)
 
-        prepared = self._prepare_lines(request)
+        # "error" restores the pre-0.7 behaviour: a style adidas does not carry
+        # aborts the run inside _open_product instead of coming back as a
+        # decision for the caller.
+        prepared = self._prepare_lines(request, missing_ok=missing_policy != "error")
 
-        problems = [p for p in prepared if p["status"] != "ok"]
-        if policy == "pause" and problems:
-            raise _InsufficientStockPause(
+        missing = [p for p in prepared if p["status"] == "not_found"]
+        problems = [
+            p for p in prepared if p["status"] not in ("ok", "not_found")
+        ]
+        if (policy == "pause" and problems) or (missing_policy == "pause" and missing):
+            raise _OrderPause(
                 out_of_stock=[self._shortfall_dict(p) for p in problems],
                 lines=[
                     self._prepared_result(p, note=self._status_note(p))
                     for p in prepared
                 ],
+                missing_products=self.missing_products if missing else [],
             )
 
         results: list[OrderLineResult] = []
@@ -801,12 +1061,23 @@ class AdidasClickDriver:
         for p in prepared:
             status, style, line, code = p["status"], p["style"], p["line"], p["code"]
 
+            # A style with no product listing has nothing to enter a quantity
+            # into. Reaching here means the policy is "skip" (or a pause was
+            # already raised above), so drop the line and keep going.
+            if status == "not_found":
+                results.append(
+                    self._prepared_result(p, quantity=0, note=self._status_note(p))
+                )
+                continue
+
             # "Not available" sizes can never be ordered (no quantity input) —
-            # drop them under every policy, with a clear note.
+            # drop them under every policy, with a clear note. Date-gated
+            # products (available date != today) surface the future date so
+            # the caller knows when the size can ship.
             if status == "unavailable":
                 results.append(
                     self._prepared_result(
-                        p, quantity=0, note="not available — cannot be ordered"
+                        p, quantity=0, note=self._status_note(p)
                     )
                 )
                 continue
@@ -848,26 +1119,57 @@ class AdidasClickDriver:
             )
 
         if not entered_any:
+            reasons = []
+            if any(p["status"] == "not_found" for p in prepared):
+                reasons.append(
+                    "adidas has no product listing for "
+                    + ", ".join(sorted(self._missing_by_style))
+                )
+            if problems:
+                reasons.append("every requested size was out of stock or unavailable")
             raise AdidasConfigError(
-                "No lines could be ordered — every requested size was out of "
-                "stock or unavailable."
+                "No lines could be ordered — "
+                + ("; ".join(reasons) or "no line resolved to an orderable size")
+                + "."
             )
         return results
 
-    def _prepare_lines(self, request: OrderRequest) -> list[dict]:
+    def _prepare_lines(
+        self, request: OrderRequest, *, missing_ok: bool = True
+    ) -> list[dict]:
         """Resolve each line to its size code and classify availability.
 
         Opens each product once; scrolls the horizontal size row to bring each
         requested size into view (it lazy-loads). Classifies each size as:
         ``ok`` (enough stock), ``short`` (orderable but < requested — e.g. 0 with
-        a restock date), or ``unavailable`` (the "not available" / X cell, which
-        can never be ordered). Raises if a requested size is not offered at all.
+        a restock date), ``unavailable`` (the "not available" / X cell, which
+        can never be ordered), or ``not_found`` (adidas has no product page for
+        the style at all — see :meth:`_open_product`; ``missing_ok`` false raises
+        there instead). Raises if a requested size is not offered at all.
         """
 
         prepared: list[dict] = []
         for style, lines in _group_by_style(request.lines).items():
-            self._open_product(style)
+            if not self._open_product(style, missing_ok=missing_ok):
+                # adidas serves no listing for this style: record every one of
+                # its lines as not_found and let add_lines apply the policy.
+                for line in lines:
+                    entry = self._note_missing_line(style, line.size, line.quantity)
+                    prepared.append(
+                        {
+                            "style": style,
+                            "line": line,
+                            "code": None,
+                            "product_name": None,
+                            "indicator": None,
+                            "available": None,
+                            "status": "not_found",
+                            "detail": entry["detail"],
+                        }
+                    )
+                continue
             product_name = self._read_product_name(style)
+            available_today, available_date = self._product_available_today()
             code_map = self._size_code_map()
             for line in lines:
                 code = next(
@@ -880,7 +1182,21 @@ class AdidasClickDriver:
                         f"Size {line.size!r} is not offered for {style}. "
                         f"Available sizes: {', '.join(sorted(code_map)) or '(none read)'}."
                     )
-                status, indicator, available = self._classify_size(
+                if not available_today:
+                    prepared.append(
+                        {
+                            "style": style,
+                            "line": line,
+                            "code": code,
+                            "product_name": product_name,
+                            "indicator": None,
+                            "available": 0,
+                            "status": "unavailable",
+                            "available_date": available_date,
+                        }
+                    )
+                    continue
+                status, indicator, available, restock = self._classify_size(
                     style, code, line.quantity
                 )
                 prepared.append(
@@ -892,28 +1208,83 @@ class AdidasClickDriver:
                         "indicator": indicator,
                         "available": available,
                         "status": status,
+                        "restock_date": restock,
                     }
                 )
         return prepared
 
     def _classify_size(
         self, style: str, code: str, requested: int
-    ) -> tuple[str, str | None, int | None]:
-        """Return (status, indicator, available) for one size after scrolling it
-        into view. status ∈ {"ok", "short", "unavailable"}."""
+    ) -> tuple[str, str | None, int | None, str | None]:
+        """Return (status, indicator, available, restock_date) for one size after
+        scrolling it into view. status ∈ {"ok", "short", "unavailable"}.
+
+        ``restock_date`` is read **only for a short line** — the case a caller
+        has to explain to someone ("out of stock, back Nov 8") — because reading
+        it costs a hover per size. A flatly *unavailable* size has no restock
+        date by definition: it is never coming back.
+        """
 
         if not self._ensure_size_in_view(style, code):
-            return "unavailable", None, None
+            return "unavailable", None, None, None
         not_available = self.page.locator(
             f"#CartModule-SizeTile-Status-NotAvailable-{style}-{code}"
         )
         if not_available.count() > 0:
-            return "unavailable", None, None
+            return "unavailable", None, None, None
         indicator = self._read_inventory(style, code)
         available = _parse_available(indicator)
         if available is not None and available < requested:
-            return "short", indicator, available
-        return "ok", indicator, available
+            return "short", indicator, available, self._read_restock_date(style, code)
+        return "ok", indicator, available, None
+
+    def _read_restock_date(self, style: str, code: str) -> str | None:
+        """Return a size's re-stock date as the portal shows it ("Nov 8, 2026").
+
+        The size tile's calendar icon says *that* a size is coming back; the
+        date lives only in the tooltip that opens on hover. So: try the cheap
+        attribute paths first, then hover the icon and match the portal's
+        "Re-stock in …" wording in the text that appears. Returns None when the
+        size has no restock icon at all (nothing scheduled) or the tooltip never
+        rendered — a missing date is reported as unknown, never guessed.
+        """
+
+        icon = self.page.locator(
+            "#" + _SIZE_TILE_RESTOCK_ID.format(style=style, code=code)
+        ).first
+        try:
+            if icon.count() == 0:
+                return None
+        except Exception:  # noqa: BLE001
+            return None
+
+        for attr in _RESTOCK_ATTRS:
+            for target in (icon, icon.locator("[%s]" % attr).first):
+                try:
+                    if target.count() == 0:
+                        continue
+                    match = _RESTOCK_TOOLTIP_RE.search(target.get_attribute(attr) or "")
+                except Exception:  # noqa: BLE001
+                    continue
+                if match:
+                    return _clean(match.group(1))
+
+        try:
+            icon.scroll_into_view_if_needed(timeout=2_000)
+            icon.hover(timeout=5_000)
+            self.page.wait_for_timeout(_RESTOCK_HOVER_SETTLE_MS)
+            text = self.page.locator("body").inner_text()
+        except Exception:  # noqa: BLE001 — a tooltip that won't open is not a failure
+            return None
+        finally:
+            # Close the tooltip so the next size's hover reads its own date and
+            # not this one still fading out.
+            try:
+                self.page.mouse.move(0, 0)
+            except Exception:  # noqa: BLE001
+                pass
+        match = _RESTOCK_TOOLTIP_RE.search(text or "")
+        return _clean(match.group(1)) if match else None
 
     def _ensure_size_in_view(self, style: str, code: str) -> bool:
         """Scroll the horizontal size row until this size's cell is loaded.
@@ -961,16 +1332,35 @@ class AdidasClickDriver:
             "requested": p["line"].quantity,
             "available": p["indicator"],
             "status": p["status"],  # "short" (backorderable) or "unavailable"
+            # When adidas restocks the size, as shown and in ISO. None on an
+            # "unavailable" size (never restocked) or when no date was posted.
+            "restock_date": p.get("restock_date"),
+            "restock_date_iso": _iso_date(p.get("restock_date")),
         }
 
     @staticmethod
     def _status_note(p: dict) -> str | None:
+        if p["status"] == "not_found":
+            return (
+                f"not offered — adidas Click has no product listing for "
+                f"{p['style']} ({p.get('detail') or 'no product page'})"
+            )
         if p["status"] == "unavailable":
+            if p.get("available_date"):
+                return (
+                    f"not available until {p['available_date']} — "
+                    "no inventory available today"
+                )
             return "not available — cannot be ordered"
         if p["status"] == "short":
-            return (
+            note = (
                 f"out of stock — requested {p['line'].quantity}, "
                 f"available {p['indicator'] or 0}"
+            )
+            return (
+                f"{note}; restocks {p['restock_date']}"
+                if p.get("restock_date")
+                else f"{note}; no restock date posted"
             )
         return None
 
@@ -985,30 +1375,141 @@ class AdidasClickDriver:
             size=line.size,
             quantity=quantity if quantity is not None else line.quantity,
             available=p["indicator"],
+            restock_date=p.get("restock_date"),
+            restock_date_iso=_iso_date(p.get("restock_date")),
             note=note,
         )
 
     # -- product page -----------------------------------------------------
 
-    def _open_product(self, style: str) -> None:
+    def _open_product(self, style: str, *, missing_ok: bool = False) -> bool:
         """Navigate straight to a style's product page and await the size table.
 
         The size grid sits below the fold and **lazy-renders its per-size tiles
         only when scrolled into view**, so after the table container appears we
         scroll it into view and wait for this style's tiles to attach.
+
+        Returns True once the product is open. When adidas serves no listing for
+        the style (a wrong article number, or one this account is not offered),
+        ``missing_ok`` decides: True records the style in
+        :attr:`missing_products` and returns False so the caller can escalate to
+        the user, False raises :class:`AdidasAPIError` as before.
         """
 
         url = self.base_url + _PRODUCT_PATH.format(style=style)
         self.page.goto(url, wait_until="domcontentloaded")
-        try:
-            self.page.wait_for_selector(_SIZE_TABLE, timeout=_DEFAULT_TIMEOUT_MS)
-        except Exception as exc:  # noqa: BLE001
+        if self._wait_for_size_table():
+            self._ensure_size_tiles_rendered(style)
+            return True
+
+        reason, detail = self._missing_product_reason(style)
+        if not missing_ok:
             raise AdidasAPIError(
-                f"Could not open the product page for {style!r} — the size table "
-                "did not render. Check the article number (it must include the "
-                "color, e.g. JW4306)."
-            ) from exc
-        self._ensure_size_tiles_rendered(style)
+                f"Could not open the product page for {style!r} — {detail}. "
+                "Check the article number (it must include the color, e.g. "
+                "JW4306)."
+            )
+        logger.warning("adidas Click has no product page for %s (%s)", style, detail)
+        self._missing_by_style.setdefault(
+            style,
+            {
+                "style": style,
+                "sizes": [],
+                "requested": 0,
+                "reason": reason,
+                "detail": detail,
+            },
+        )
+        return False
+
+    def _note_missing_line(self, style: str, size: str, quantity: int | None) -> dict:
+        """Attach one requested size to a missing style's summary entry.
+
+        Creates the entry if it somehow isn't there yet, so recording a line can
+        never be the thing that fails a run.
+        """
+
+        entry = self._missing_by_style.setdefault(
+            style,
+            {
+                "style": style,
+                "sizes": [],
+                "requested": 0,
+                "reason": "unresolved",
+                "detail": "no product page could be opened",
+            },
+        )
+        label = size or "*"
+        if label not in entry["sizes"]:
+            entry["sizes"].append(label)
+            entry["requested"] += quantity or 0
+        return entry
+
+    def _wait_for_size_table(self) -> bool:
+        """Poll for the product's size table, bailing early on a not-found tell.
+
+        A blind ``wait_for_selector`` would spend the full timeout on every
+        style adidas does not carry, which is exactly the case the caller most
+        needs a fast answer for. So poll instead: return as soon as the table
+        attaches, and stop early once the page positively says there is no such
+        product.
+        """
+
+        deadline = time.monotonic() + _PRODUCT_WAIT_MS / 1000
+        while True:
+            if self.page.locator(_SIZE_TABLE).count() > 0:
+                return True
+            if self._missing_product_tell():
+                # Confirm before giving up: a stray match (a toast, a background
+                # widget, footer copy) must not beat a size table that is merely
+                # slow, so give the table one last grace window.
+                self.page.wait_for_timeout(_PRODUCT_TELL_GRACE_MS)
+                return self.page.locator(_SIZE_TABLE).count() > 0
+            if time.monotonic() >= deadline:
+                return self.page.locator(_SIZE_TABLE).count() > 0
+            self.page.wait_for_timeout(_PRODUCT_POLL_MS)
+
+    def _missing_product_tell(self) -> str | None:
+        """Return the page's "no such product" wording, if it is showing one.
+
+        Only trusted once the authenticated shell has painted — before that an
+        empty page means "still loading", not "no product". Returns None while
+        the page is still coming up or when no tell is present.
+        """
+
+        try:
+            if self.page.locator(_LOGGED_IN_MARKER).count() == 0:
+                return None
+            text = self.page.locator("body").first.inner_text()
+        except Exception:  # noqa: BLE001 — mid-navigation DOM churn
+            return None
+        match = _PRODUCT_MISSING_TELL_RE.search(text or "")
+        return _clean(match.group(0)) if match else None
+
+    def _missing_product_reason(self, style: str) -> tuple[str, str]:
+        """Classify why a product page never produced a size table.
+
+        ``not_found`` — the portal said so, or bounced off the product URL
+        entirely: the style is genuinely not offered on this account.
+        ``unresolved`` — neither the product nor a not-found tell appeared, so
+        the style is *unconfirmed*: it may be a slow page or a portal change,
+        and the caller should say so rather than assert the style is missing.
+        """
+
+        tell = self._missing_product_tell()
+        if tell:
+            return "not_found", f"the portal reported {tell!r}"
+        try:
+            url = self.page.url or ""
+        except Exception:  # noqa: BLE001
+            url = ""
+        if url and "/reorder/product/" not in url.lower():
+            return "not_found", f"the portal redirected off the product page (to {url})"
+        return (
+            "unresolved",
+            "the product page never rendered a size table (no confirmation "
+            "either way that the style exists)",
+        )
 
     def _ensure_size_tiles_rendered(self, style: str) -> None:
         """Scroll the size grid into view so its per-size tiles render, then wait.
@@ -1071,6 +1572,48 @@ class AdidasClickDriver:
             if code and label:
                 out[label] = code
         return out
+
+    def _product_available_today(self) -> tuple[bool, str | None]:
+        """Return ``(available_today, raw_date_text)`` from the availability tab.
+
+        The product page shows an availability-date button
+        (``#DateTabButton``) outside the size table — its text is the earliest
+        date on which the product can ship (e.g. ``"Jul 31, 2026"``). If that
+        isn't today, the size-tile inventory numbers refer to that future date
+        and nothing is orderable now; the order flow and inventory read both
+        gate on this before trusting the size tiles.
+
+        Fail-open: a missing/unparseable date returns ``(True, raw_or_None)``
+        with a warning log — a portal shape change should not silently block
+        every order. The raw text is returned either way so callers can
+        surface it.
+        """
+
+        from datetime import date, datetime
+
+        try:
+            raw = _clean(
+                self.page.locator(_AVAILABLE_DATE_BUTTON).first.inner_text()
+            ) or None
+        except Exception:  # noqa: BLE001
+            raw = None
+        if not raw:
+            logger.warning(
+                "adidas product page: availability date button (%s) missing "
+                "or empty — skipping the today check",
+                _AVAILABLE_DATE_BUTTON,
+            )
+            return True, None
+        try:
+            parsed = datetime.strptime(raw, "%b %d, %Y").date()
+        except ValueError:
+            logger.warning(
+                "adidas product page: could not parse availability date %r "
+                "(expected e.g. 'Jul 31, 2026') — skipping the today check",
+                raw,
+            )
+            return True, raw
+        return parsed == date.today(), raw
 
     def _read_inventory(self, style: str, code: str) -> str | None:
         """Return the inventory-indicator text for a size (e.g. '300+', '160', '0')."""
@@ -1432,20 +1975,45 @@ class AdidasClickDriver:
         can ask "how much of JW4306 is in stock across sizes?" in one line.
 
         A size that isn't offered is reported with a note (not raised) so one bad
-        size never aborts the whole check.
+        size never aborts the whole check — and likewise a **style** adidas has
+        no product page for is reported as ``not_found`` lines and recorded in
+        :attr:`missing_products`, so the other styles in the same check still
+        get read.
         """
 
         results: list[CheckLineResult] = []
         for style, lines in _group_by_style(request.lines).items():
-            self._open_product(style)
+            if not self._open_product(style, missing_ok=True):
+                for line in lines:
+                    entry = self._note_missing_line(style, line.size, line.quantity)
+                    results.append(
+                        CheckLineResult(
+                            style=style,
+                            size=line.size,
+                            color=line.color,
+                            requested_quantity=line.quantity,
+                            status="not_found",
+                            in_stock=False,
+                            note=(
+                                "not offered — adidas Click has no product "
+                                f"listing for {style} ({entry['detail']})"
+                            ),
+                        )
+                    )
+                continue
             product_name = self._read_product_name(style)
+            available_today, available_date = self._product_available_today()
             code_map = self._size_code_map()
             for line in lines:
                 wants_all = _norm(line.size) in {"", "*", "all"}
                 if wants_all:
                     for label, code in code_map.items():
                         results.append(
-                            self._inventory_line(style, label, code, product_name, line, None)
+                            self._inventory_line(
+                                style, label, code, product_name, line, None,
+                                available_today=available_today,
+                                available_date=available_date,
+                            )
                         )
                     continue
                 code = next(
@@ -1468,7 +2036,11 @@ class AdidasClickDriver:
                     )
                     continue
                 results.append(
-                    self._inventory_line(style, line.size, code, product_name, line, line.quantity)
+                    self._inventory_line(
+                        style, line.size, code, product_name, line, line.quantity,
+                        available_today=available_today,
+                        available_date=available_date,
+                    )
                 )
         return results
 
@@ -1480,12 +2052,38 @@ class AdidasClickDriver:
         product_name: str | None,
         line: OrderLine,
         requested: int | None,
+        *,
+        available_today: bool = True,
+        available_date: str | None = None,
     ) -> "CheckLineResult":
-        """Classify one size's stock into a :class:`CheckLineResult` (no cart)."""
+        """Classify one size's stock into a :class:`CheckLineResult` (no cart).
+
+        Short-circuits to ``unavailable`` when the product page's availability
+        date isn't today — the size-tile numbers refer to that future date, so
+        reading them for a "today" answer would report ghost stock.
+        """
+
+        if not available_today:
+            return CheckLineResult(
+                style=style,
+                size=size_label,
+                color=line.color or (product_name or ""),
+                requested_quantity=requested,
+                available=None,
+                available_count=0,
+                status=_INVENTORY_STATUS["unavailable"],
+                in_stock=False,
+                note=(
+                    f"not available until {available_date} — "
+                    "no inventory available today"
+                    if available_date
+                    else "not available — no inventory available today"
+                ),
+            )
 
         # Classify against 1 unit so "short" means "cannot even ship one" (== 0
         # with a restock date); the raw indicator carries the actual level.
-        status, indicator, available = self._classify_size(style, code, 1)
+        status, indicator, available, restock = self._classify_size(style, code, 1)
         return CheckLineResult(
             style=style,
             size=size_label,
@@ -1495,6 +2093,17 @@ class AdidasClickDriver:
             available_count=available,
             status=_INVENTORY_STATUS.get(status, status),
             in_stock=status == "ok",
+            restock_date=restock,
+            restock_date_iso=_iso_date(restock),
+            # An out-of-stock size is only actionable with its return date, so
+            # say it on the line itself — including when adidas posted none.
+            note=(
+                f"out of stock — restocks {restock}"
+                if restock
+                else "out of stock — no restock date posted"
+            )
+            if status == "short"
+            else None,
         )
 
     def delete_cart(self, name: str) -> int:
@@ -1509,6 +2118,303 @@ class AdidasClickDriver:
 
         self._ensure_carts_panel_open()
         return self._delete_carts_named(name)
+
+    # -- delivery tracking (read-only) ------------------------------------
+
+    def find_orders_for_po(self, po_number: str) -> list[dict]:
+        """Search the order book for ``po_number`` and return its order rows.
+
+        The search is driven purely through the URL
+        (``?searchText=…&page=…&size=…``), so no search-form selectors are
+        needed and paging is a URL bump. One PO commonly has **several** adidas
+        orders, so every page is walked until a page adds nothing new.
+
+        Returns ``[{order_number, po_number, order_type, exact}, ...]`` in the
+        order the portal listed them. ``exact`` marks the rows whose PO cell
+        matches the requested PO — adidas's search also matches PO *prefixes*
+        (searching ``P1343`` surfaces ``P13433`` and ``P13434``), so the caller
+        keeps the exact ones and reports the rest rather than tracking a PO the
+        user did not ask about.
+        """
+
+        found: dict[str, dict] = {}
+        for page_index in range(_ORDER_BOOK_MAX_PAGES):
+            url = self.base_url + _ORDER_BOOK_SEARCH_PATH.format(
+                po=quote(po_number, safe=""),
+                page=page_index,
+                size=_ORDER_BOOK_PAGE_SIZE,
+            )
+            self.page.goto(url, wait_until="domcontentloaded")
+            rows = self._collect_order_rows()
+            new = [row for row in rows if row["order_number"] not in found]
+            for row in new:
+                found[row["order_number"]] = row
+            # Stop on a short page (last one), or when a page repeats what we
+            # already have (the portal ignoring `page` must not loop forever).
+            if len(rows) < _ORDER_BOOK_PAGE_SIZE or not new:
+                break
+
+        wanted = _norm(po_number)
+        for row in found.values():
+            row["exact"] = _norm(row["po_number"]) == wanted
+        return list(found.values())
+
+    def _collect_order_rows(self) -> list[dict]:
+        """Read every order row on the current order-book page.
+
+        The results grid virtualizes its rows, so this scrolls down and re-scans
+        until two consecutive passes add nothing — otherwise the orders below
+        the fold would silently go missing (and a PO's later orders are exactly
+        the ones a tracking lookup must not drop).
+        """
+
+        self._wait_for_order_rows()
+        seen: dict[str, dict] = {}
+        idle_passes = 0
+        for _ in range(_ORDER_BOOK_SCROLL_PASSES):
+            before = len(seen)
+            for row in self.page.locator(_ORDER_ROW).all():
+                info = self._order_row_info(row)
+                if info and info["order_number"] not in seen:
+                    seen[info["order_number"]] = info
+            if len(seen) == before:
+                idle_passes += 1
+                if idle_passes >= 2:
+                    break
+            else:
+                idle_passes = 0
+            self.page.mouse.wheel(0, 600)
+            self.page.wait_for_timeout(250)
+        return list(seen.values())
+
+    def _wait_for_order_rows(self) -> bool:
+        """Poll for order rows; return False when the search found nothing.
+
+        A PO with no orders renders no rows at all, and that is a legitimate
+        (reportable) outcome rather than an error — so this polls to a modest
+        budget instead of blocking on one long ``wait_for_selector``.
+        """
+
+        deadline = time.monotonic() + _ORDER_BOOK_WAIT_MS / 1000
+        while True:
+            if self.page.locator(_ORDER_ROW).count() > 0:
+                return True
+            if time.monotonic() >= deadline:
+                return False
+            self.page.wait_for_timeout(_ORDER_BOOK_POLL_MS)
+
+    def _order_row_info(self, row) -> dict | None:
+        """Parse one order-book row into ``{order_number, po_number, order_type}``.
+
+        A row that cannot be parsed (a header/placeholder row, or one recycled
+        by the grid mid-scan) yields None rather than failing the lookup.
+        """
+
+        try:
+            heading = row.locator(_ORDER_ROW_HEADING).first
+            if heading.count() == 0:
+                return None
+            order_number = _clean(heading.inner_text())
+            if not order_number:
+                match = _ORDER_ROW_ID_RE.match(heading.get_attribute("id") or "")
+                order_number = match.group(1) if match else ""
+            if not order_number:
+                return None
+            po_locator = row.locator(_ORDER_ROW_PO).first
+            po_number = _clean(po_locator.inner_text()) if po_locator.count() else ""
+            type_locator = row.locator(_ORDER_ROW_TYPE).first
+            order_type = (
+                _clean(type_locator.inner_text()) if type_locator.count() else ""
+            )
+        except Exception:  # noqa: BLE001 — a recycled row is not a failure
+            return None
+        return {
+            "order_number": order_number,
+            "po_number": po_number,
+            "order_type": order_type or None,
+        }
+
+    def open_order(self, order_number: str) -> bool:
+        """Open an order's detail page; return True if it has shipment tracking.
+
+        The Delivery Tracking link is rendered **only** for an order with
+        shipments, so its absence is the portal's own "nothing has shipped yet"
+        tell. To keep a slow render from being read as "unshipped", the page is
+        polled for either the link or the article rows, and once the article
+        rows are up the link still gets a short grace window.
+
+        Raises :class:`AdidasAPIError` if neither ever appears (the page did not
+        load) — the caller downgrades that to one unreadable order.
+        """
+
+        self.page.goto(
+            self.base_url + _ORDER_DETAIL_PATH.format(order=order_number),
+            wait_until="domcontentloaded",
+        )
+        deadline = time.monotonic() + _ORDER_DETAIL_WAIT_MS / 1000
+        while True:
+            if self.page.locator(_ORDER_TRACKING_LINK).count() > 0:
+                return True
+            if self.page.locator(_ARTICLE_WEEK_TOGGLE).count() > 0:
+                self.page.wait_for_timeout(_TRACKING_LINK_GRACE_MS)
+                return self.page.locator(_ORDER_TRACKING_LINK).count() > 0
+            if time.monotonic() >= deadline:
+                break
+            self.page.wait_for_timeout(_ORDER_BOOK_POLL_MS)
+        raise AdidasAPIError(
+            f"The adidas order page for {order_number!r} did not render — "
+            "neither the Delivery Tracking link nor the article rows appeared."
+        )
+
+    def read_delivery_tracking(self, order_number: str) -> list[dict]:
+        """Click through to Delivery Tracking and read the carrier / tracking rows.
+
+        Must be called on an order page where :meth:`open_order` returned True.
+        One order can ship in several deliveries, and one delivery note can
+        carry more than one parcel, so every row of the table is returned:
+        ``[{delivery_note, ship_date, carrier, carrier_name, tracking_number,
+        tracking_url}, ...]``.
+
+        The row's delivery-note PDF link is **not** read: its href embeds a
+        bearer access token, which must not leak into a tool result.
+        """
+
+        link = self.page.locator(_ORDER_TRACKING_LINK).first
+        href = link.get_attribute("href") or ""
+        target = href or _DELIVERIES_PATH.format(order=order_number)
+        if target.startswith("/"):
+            target = self.base_url + target
+
+        try:
+            link.click()
+        except Exception:  # noqa: BLE001 — fall back to the link's own target
+            self.page.goto(target, wait_until="domcontentloaded")
+        if not self._await_delivery_rows() and "/deliveries" not in self.page.url:
+            # The click never took (an SPA link that swallowed it): go to the
+            # captured href directly rather than reporting an empty table.
+            self.page.goto(target, wait_until="domcontentloaded")
+            self._await_delivery_rows()
+
+        shipments: list[dict] = []
+        for item in self.page.locator(_DELIVERY_ITEM).all():
+            shipment = self._delivery_row(item)
+            if shipment:
+                shipments.append(shipment)
+        return shipments
+
+    def _await_delivery_rows(self) -> bool:
+        """Poll for the delivery table's rows; False if none showed up in time."""
+
+        try:
+            self.page.wait_for_load_state("networkidle")
+        except Exception:  # noqa: BLE001 — an idle network is a nicety, not a gate
+            pass
+        deadline = time.monotonic() + _DELIVERY_WAIT_MS / 1000
+        while True:
+            if self.page.locator(_DELIVERY_ITEM).count() > 0:
+                return True
+            if time.monotonic() >= deadline:
+                return False
+            self.page.wait_for_timeout(_ORDER_BOOK_POLL_MS)
+
+    def _delivery_row(self, item) -> dict | None:
+        """Parse one Delivery Tracking row; None if it holds nothing readable."""
+
+        def text(selector: str) -> str:
+            locator = item.locator(selector).first
+            try:
+                return _clean(locator.inner_text()) if locator.count() else ""
+            except Exception:  # noqa: BLE001
+                return ""
+
+        try:
+            tracking = item.locator(_DELIVERY_TRACKING_LINK).first
+            tracking_number = _clean(tracking.inner_text()) if tracking.count() else ""
+            tracking_url = (
+                tracking.get_attribute("href") if tracking.count() else None
+            ) or None
+            row = {
+                "delivery_note": text(_DELIVERY_NOTE_LINK) or None,
+                "ship_date": text(_DELIVERY_SHIP_DATE) or None,
+                "carrier": text(_DELIVERY_CARRIER) or None,
+                "carrier_name": _carrier_from_url(tracking_url),
+                "tracking_number": tracking_number or None,
+                "tracking_url": tracking_url,
+            }
+        except Exception:  # noqa: BLE001
+            return None
+        return row if any(row.values()) else None
+
+    def read_expected_ship_dates(self) -> list[dict]:
+        """Expand each article row on an unshipped order and read its ship dates.
+
+        Must be called on an order page where :meth:`open_order` returned False
+        (no shipments). Each article carries a chevron toggle that reveals a week
+        list whose header is the expected ship date. Returns
+        ``[{article, dates: [...]}, ...]``; when the article container class does
+        not match, every date found is returned as one order-level entry rather
+        than dropping the dates.
+        """
+
+        toggles = self.page.locator(_ARTICLE_WEEK_TOGGLE)
+        for index in range(min(toggles.count(), 50)):
+            toggle = toggles.nth(index)
+            try:
+                if self._article_dates_shown(toggle):
+                    continue  # already expanded — clicking would collapse it
+                toggle.scroll_into_view_if_needed(timeout=2_000)
+                toggle.click(timeout=5_000)
+                self.page.wait_for_timeout(300)
+            except Exception:  # noqa: BLE001 — one stubborn row must not stop the rest
+                continue
+
+        try:
+            articles = self.page.evaluate(
+                """
+                ([blockSel, nameSel]) => {
+                  const dates = (root) => Array.from(
+                    root.querySelectorAll(nameSel)
+                  ).map(el => (el.textContent || '').trim()).filter(Boolean);
+                  const uniq = (xs) => Array.from(new Set(xs));
+                  const blocks = Array.from(document.querySelectorAll(blockSel));
+                  if (blocks.length) {
+                    return blocks.map(b => {
+                      const head = b.querySelector('h2, h3, .a-heading');
+                      return {
+                        article: head ? (head.textContent || '').trim() : null,
+                        dates: uniq(dates(b)),
+                      };
+                    }).filter(a => a.dates.length);
+                  }
+                  const all = uniq(dates(document));
+                  return all.length ? [{article: null, dates: all}] : [];
+                }
+                """,
+                [_ARTICLE_BLOCK, _ARTICLE_WEEK_NAME],
+            )
+        except Exception:  # noqa: BLE001
+            return []
+        return articles or []
+
+    def _article_dates_shown(self, toggle) -> bool:
+        """True when this article's week list is already expanded."""
+
+        try:
+            return bool(
+                toggle.evaluate(
+                    """
+                    (el, [blockSel, nameSel]) => {
+                      const root = el.closest(blockSel) || el.closest('li') ||
+                        el.parentElement?.parentElement;
+                      if (!root) return false;
+                      return root.querySelectorAll(nameSel).length > 0;
+                    }
+                    """,
+                    [_ARTICLE_BLOCK, _ARTICLE_WEEK_NAME],
+                )
+            )
+        except Exception:  # noqa: BLE001
+            return False
 
     # -- helpers ----------------------------------------------------------
 
@@ -1632,7 +2538,9 @@ def create_purchase_order(
     if not request.lines:
         raise AdidasConfigError("at least one order line is required.")
 
-    # Sanitize the Customer PO up front (fail fast, before launching a browser).
+    # Validate the out-of-stock / missing-product policies and sanitize the
+    # Customer PO up front (fail fast, before launching a browser).
+    _validate_policies(request)
     original_po = request.po_number
     clean_po, po_changed = _sanitize_po_number(original_po)
     if not clean_po:
@@ -1699,16 +2607,30 @@ def create_purchase_order(
 
             try:
                 result.lines = driver.add_lines(request)
-            except _InsufficientStockPause as pause:
-                # on_insufficient_stock == "pause" and something is short: place
-                # nothing and hand the decision back to the agent/user.
+            except _OrderPause as pause:
+                # Something needs a human decision — a short line under
+                # on_insufficient_stock="pause", and/or a style adidas does not
+                # carry under on_missing_product="pause". Place nothing and hand
+                # the decision back to the agent/user.
                 result.status = "needs_confirmation"
                 result.lines = pause.lines
                 result.out_of_stock = pause.out_of_stock
+                result.missing_products = pause.missing_products
                 result.total_quantity = sum(
                     ln.quantity for ln in pause.lines if ln.quantity
                 ) or None
-                result.message = _insufficient_stock_message(pause.out_of_stock)
+                result.message = " ".join(
+                    part
+                    for part in (
+                        _missing_product_message(pause.missing_products)
+                        if pause.missing_products
+                        else "",
+                        _insufficient_stock_message(pause.out_of_stock)
+                        if pause.out_of_stock
+                        else "",
+                    )
+                    if part
+                )
                 if screenshot_path:
                     driver.screenshot(screenshot_path)
                     result.screenshot_path = screenshot_path
@@ -1716,6 +2638,18 @@ def create_purchase_order(
             result.total_quantity = sum(
                 ln.quantity for ln in result.lines if ln.quantity
             ) or None
+            # Reached here with missing styles means on_missing_product="skip":
+            # the order goes ahead without them, so say plainly what was dropped
+            # rather than leaving it to a per-line note.
+            result.missing_products = driver.missing_products
+            if result.missing_products:
+                result.warnings.append(
+                    "Skipped "
+                    + ", ".join(m["style"] for m in result.missing_products)
+                    + " — adidas Click has no product listing for "
+                    + ("them" if len(result.missing_products) > 1 else "it")
+                    + " (on_missing_product='skip')."
+                )
 
             if not CHECKOUT_IMPLEMENTED:
                 result.status = "not_implemented"
@@ -1784,6 +2718,8 @@ def _line_stock(line: OrderLineResult) -> tuple[str | None, bool | None]:
     """
 
     note = (line.note or "").lower()
+    if "not offered" in note:
+        return "not_found", False
     if "not available" in note:
         return "unavailable", False
     count = _parse_available(line.available)
@@ -1826,6 +2762,8 @@ def _checkline_results(
                 in_stock=in_stock,
                 unit_price=_unit_price(net, ln.quantity) if net else None,
                 line_total=net,
+                restock_date=ln.restock_date,
+                restock_date_iso=ln.restock_date_iso,
                 note=ln.note,
             )
         )
@@ -1851,6 +2789,32 @@ def _safe_delete_cart(
             "Remove it in the portal — it is named to signal DO NOT BUY."
         )
         return False
+
+
+def _apply_missing_products(
+    driver: "AdidasClickDriver",
+    result: CheckResult,
+    *,
+    escalate: bool,
+) -> str:
+    """Attach any missing styles to a check result; return the message prefix.
+
+    ``escalate`` (``on_missing_product`` left at ``pause``) flips the result to
+    ``needs_confirmation`` so the caller takes the missing styles to the user
+    instead of quietly reporting a short list of lines. Everything the check
+    *did* read is kept either way.
+    """
+
+    result.missing_products = driver.missing_products
+    if not result.missing_products:
+        return ""
+    message = _missing_product_message(result.missing_products, ordering=False)
+    if escalate:
+        result.status = "needs_confirmation"
+    else:
+        result.warnings.append(message)
+        return ""
+    return message + " "
 
 
 def check_inventory_pricing(
@@ -1879,6 +2843,14 @@ def check_inventory_pricing(
     buy. Since the order is never placed, the check never pauses on short stock —
     a ``pause`` policy is upgraded to ``order`` so every orderable line gets a
     price.
+
+    A style adidas serves **no product page** for never aborts the check: those
+    lines come back with ``status="not_found"``, the rest are read as usual, and
+    the styles are summarised in ``missing_products``. With
+    ``on_missing_product`` left at ``pause`` (default) the result's status
+    becomes ``needs_confirmation`` so the caller escalates the missing styles to
+    the user; ``skip`` reports them as a warning instead, and ``error`` fails the
+    check outright.
     """
 
     check = (check or "both").strip().lower()
@@ -1892,6 +2864,15 @@ def check_inventory_pricing(
         )
 
     needs_cart = check in {"pricing", "both"}
+
+    # A check reports on every style it *can* read and hands the ones adidas has
+    # no listing for back to the caller, so the driver never pauses or raises
+    # mid-run on a missing style: it drops those lines and the caller escalates
+    # from ``missing_products`` below. ``error`` is still honoured for a caller
+    # that wants a missing style to fail the check outright.
+    _, missing_policy = _validate_policies(request)
+    if missing_policy != "error":
+        request.on_missing_product = "skip"
 
     pre_warnings: list[str] = []
     po_number: str | None = None
@@ -1944,8 +2925,12 @@ def check_inventory_pricing(
                 if screenshot_path:
                     driver.screenshot(screenshot_path)
                     result.screenshot_path = screenshot_path
-                result.message = (
-                    f"Inventory check complete for {len(result.lines)} line(s) — "
+                prefix = _apply_missing_products(
+                    driver, result, escalate=missing_policy == "pause"
+                )
+                readable = sum(1 for ln in result.lines if ln.status != "not_found")
+                result.message = prefix + (
+                    f"Inventory check complete for {readable} line(s) — "
                     "no cart was created."
                 )
                 return result
@@ -1960,18 +2945,24 @@ def check_inventory_pricing(
 
             try:
                 order_lines = driver.add_lines(request)
-            except AdidasConfigError as exc:
-                # e.g. every requested size is unavailable — nothing to price.
-                # Report inventory instead, then clean up the (empty) cart.
+            except (AdidasConfigError, AdidasAPIError) as exc:
+                # e.g. every requested size is unavailable, or a requested size
+                # is not offered — nothing to price. Report inventory instead,
+                # then clean up the (empty) cart: a throwaway DO-NOT-BUY cart
+                # must never be left behind because a line failed to resolve.
+                # Delete first, so a failing inventory read cannot strand it.
+                result.cart_deleted = _safe_delete_cart(driver, po_number, result)
                 result.lines = driver.read_inventory(request)
                 result.total_quantity = (
                     sum((ln.requested_quantity or 0) for ln in result.lines) or None
                 )
-                result.cart_deleted = _safe_delete_cart(driver, po_number, result)
                 if screenshot_path:
                     driver.screenshot(screenshot_path)
                     result.screenshot_path = screenshot_path
-                result.message = (
+                prefix = _apply_missing_products(
+                    driver, result, escalate=missing_policy == "pause"
+                )
+                result.message = prefix + (
                     "Pricing check could not add any line to the cart "
                     f"({exc}); inventory levels are reported instead."
                 )
@@ -2000,7 +2991,10 @@ def check_inventory_pricing(
                 else f" NOTE: the throwaway cart {po_number!r} could NOT be "
                 "auto-deleted — remove it in the portal."
             )
-            result.message = (
+            prefix = _apply_missing_products(
+                driver, result, escalate=missing_policy == "pause"
+            )
+            result.message = prefix + (
                 f"Pricing check complete — {priced} line(s) priced"
                 + (f", order total {result.order_total}." if result.order_total else ".")
                 + tail
@@ -2012,3 +3006,320 @@ def check_inventory_pricing(
             raise AdidasTransportError(
                 f"Unexpected failure during the adidas Click check flow: {exc}"
             ) from exc
+
+
+# ---------------------------------------------------------------------------
+# Delivery tracking (read-only)
+# ---------------------------------------------------------------------------
+
+
+def _carrier_from_url(url: str | None) -> str | None:
+    """Name the carrier from a tracking URL's host, or None if unrecognized.
+
+    adidas shows only its own carrier code ("UPSN"), so the human carrier is
+    read off the link the code wraps (``ups.com/track?...`` -> UPS).
+    """
+
+    if not url:
+        return None
+    try:
+        host = (urlparse(url).hostname or "").lower()
+    except Exception:  # noqa: BLE001
+        return None
+    for domain, name in _CARRIER_HOSTS:
+        if host == domain or host.endswith("." + domain):
+            return name
+    return None
+
+
+def _parse_ship_date(value: str | None):
+    """Parse a portal date ("Feb 4, 2027") to a date, or None if unparseable."""
+
+    text = _clean(value)
+    if not text:
+        return None
+    for fmt in _SHIP_DATE_FORMATS:
+        try:
+            return datetime.strptime(text, fmt).date()
+        except ValueError:
+            continue
+    return None
+
+
+def _earliest_expected(expected: list[dict]) -> str | None:
+    """The earliest expected ship date across an order's articles, as displayed.
+
+    Falls back to the first date seen when none of them parse, so a portal date
+    format change degrades to "some date" rather than to nothing.
+    """
+
+    dates = [date for entry in expected for date in entry.get("dates", []) if date]
+    if not dates:
+        return None
+    parsed = [(_parse_ship_date(date), date) for date in dates]
+    dated = [pair for pair in parsed if pair[0] is not None]
+    if not dated:
+        return dates[0]
+    return min(dated, key=lambda pair: pair[0])[1]
+
+
+def _cell(value: str | None) -> str:
+    """One Markdown table cell — em-dash for empty, pipes escaped."""
+
+    text = _clean(value)
+    return text.replace("|", "\\|") if text else "—"
+
+
+def _tracking_table(pos: list[TrackingPO]) -> str:
+    """Render the whole lookup as one Markdown table, PO by PO.
+
+    Shipped rows carry the real delivery note / carrier / tracking number.
+    Rows for an order that has **not** shipped are annotated: the ship date is
+    marked *(expected)* and the note says so, so an expected date can never be
+    mistaken for an actual shipment.
+    """
+
+    header = (
+        "| PO | Order # | Delivery Note | Ship Date | Carrier | Tracking # | Note |\n"
+        "| --- | --- | --- | --- | --- | --- | --- |"
+    )
+    rows: list[str] = []
+    for po in pos:
+        if not po.orders:
+            rows.append(
+                f"| {_cell(po.po_number)} | — | — | — | — | — | "
+                f"{_cell(po.note or 'no orders found')} |"
+            )
+            continue
+        for order in po.orders:
+            if order.status == "shipped" and order.shipments:
+                for shipment in order.shipments:
+                    carrier = shipment.carrier_name or shipment.carrier
+                    rows.append(
+                        f"| {_cell(po.po_number)} | {_cell(order.order_number)} | "
+                        f"{_cell(shipment.delivery_note)} | "
+                        f"{_cell(shipment.ship_date)} | {_cell(carrier)} | "
+                        f"{_cell(shipment.tracking_number)} | shipped |"
+                    )
+            elif order.status == "not_shipped":
+                entries = order.expected_ship_dates or [{"article": None, "dates": []}]
+                for entry in entries:
+                    article = entry.get("article")
+                    dates = entry.get("dates") or [None]
+                    for date in dates:
+                        note = "not shipped — expected ship date"
+                        if article:
+                            note += f" ({article})"
+                        rows.append(
+                            f"| {_cell(po.po_number)} | {_cell(order.order_number)} | "
+                            f"— | "
+                            + (f"{_cell(date)} *(expected)*" if date else "—")
+                            + f" | — | not shipped yet | {_cell(note)} |"
+                        )
+            else:
+                rows.append(
+                    f"| {_cell(po.po_number)} | {_cell(order.order_number)} | — | — | "
+                    f"— | — | {_cell(order.note or 'could not be read')} |"
+                )
+    return "\n".join([header, *rows])
+
+
+def _po_status(orders: list[TrackingOrder]) -> str:
+    """Roll an order list up to the PO's status (see :class:`TrackingPO`).
+
+    An order that could not be read is never folded into "not shipped" — we do
+    not know whether it shipped, and reporting a guess as a fact is worse than
+    saying the PO is only partly known.
+    """
+
+    if not orders:
+        return "not_found"
+    statuses = [o.status for o in orders]
+    if all(status == "unreadable" for status in statuses):
+        return "unreadable"
+    if all(status == "shipped" for status in statuses):
+        return "shipped"
+    if all(status == "not_shipped" for status in statuses):
+        return "not_shipped"
+    return "partial"
+
+
+def get_order_tracking(
+    *,
+    po_numbers: list[str],
+    credentials: AdidasClickCredentials | None = None,
+    screenshot_path: str | None = None,
+    headless: bool = False,
+) -> TrackingResult:
+    """Look up carrier tracking numbers for one or more PO numbers. **READ-ONLY.**
+
+    Logs in once (same headed/anti-bot browser as the ordering flow) and then,
+    **one PO at a time**: searches the order book for the PO, opens every order
+    it returned (a PO commonly has several), and either reads that order's
+    Delivery Tracking table (carrier + tracking number per delivery) or — when
+    the order has no Delivery Tracking link, i.e. nothing has shipped — expands
+    its article rows and reads the **expected** ship dates instead.
+
+    Nothing is written: no cart is created, no order is touched. The result
+    carries per-PO/per-order detail plus a ready-to-render Markdown ``table``
+    where expected ship dates are annotated as such.
+
+    A PO the order book returns no orders for is reported with
+    ``status="not_found"`` and flips the overall status to
+    ``needs_confirmation`` so the caller can check the PO number with the user;
+    every other PO is still looked up.
+    """
+
+    wanted = [_clean(po) for po in (po_numbers or []) if _clean(po)]
+    if not wanted:
+        raise AdidasConfigError(
+            "at least one PO number is required (po_numbers: [\"P13434\", ...])."
+        )
+    # De-duplicate while keeping the caller's order — searching the same PO
+    # twice would just repeat the same browser work.
+    seen: set[str] = set()
+    po_list = [po for po in wanted if not (_norm(po) in seen or seen.add(_norm(po)))]
+
+    if credentials is None:
+        credentials = credentials_from_env()
+
+    result = TrackingResult(status="checked")
+    with _browser_page(headless) as page:
+        driver = AdidasClickDriver(page, credentials.base_url)
+        try:
+            driver.login(credentials)
+
+            for po_number in po_list:
+                po_result = TrackingPO(po_number=po_number)
+                rows = driver.find_orders_for_po(po_number)
+                exact = [row for row in rows if row.get("exact")]
+                other = [row for row in rows if not row.get("exact")]
+                if other:
+                    # adidas's order-book search also matches PO prefixes, so
+                    # say plainly which orders were left out rather than
+                    # reporting tracking for a PO nobody asked about.
+                    result.warnings.append(
+                        f"Search for {po_number!r} also returned "
+                        f"{len(other)} order(s) for other POs ("
+                        + ", ".join(
+                            sorted({row["po_number"] or "?" for row in other})
+                        )
+                        + ") — those were not tracked."
+                    )
+
+                for row in exact:
+                    po_result.orders.append(
+                        _track_one_order(driver, row, po_number, result)
+                    )
+
+                po_result.order_count = len(po_result.orders)
+                po_result.shipment_count = sum(
+                    len(order.shipments) for order in po_result.orders
+                )
+                po_result.status = _po_status(po_result.orders)
+                if po_result.status == "not_found":
+                    po_result.note = (
+                        "The adidas order book returned no order carrying this "
+                        "PO number."
+                        + (
+                            " The search did match other POs — check the number."
+                            if other
+                            else ""
+                        )
+                    )
+                    result.not_found_pos.append(po_number)
+                result.pos.append(po_result)
+
+            result.total_orders = sum(po.order_count for po in result.pos)
+            result.total_shipments = sum(po.shipment_count for po in result.pos)
+            result.table = _tracking_table(result.pos)
+            unreadable = [
+                order.order_number
+                for po in result.pos
+                for order in po.orders
+                if order.status == "unreadable"
+            ]
+            # A PO with no orders, or an order whose page would not load, means
+            # the answer is incomplete — flag it rather than handing back a
+            # table that silently omits an order.
+            if result.not_found_pos or unreadable:
+                result.status = "needs_confirmation"
+
+            if screenshot_path:
+                driver.screenshot(screenshot_path)
+                result.screenshot_path = screenshot_path
+
+            found_pos = len(result.pos) - len(result.not_found_pos)
+            result.message = (
+                f"Tracking lookup complete — {found_pos} of {len(result.pos)} PO(s) "
+                f"matched {result.total_orders} order(s) with "
+                f"{result.total_shipments} shipment(s)."
+            )
+            if result.not_found_pos:
+                result.message += (
+                    " No orders were found for "
+                    + ", ".join(result.not_found_pos)
+                    + " — confirm the PO number(s) with the user."
+                )
+            if unreadable:
+                result.message += (
+                    " Order(s) " + ", ".join(unreadable) + " could not be read "
+                    "— their status is unknown (see warnings)."
+                )
+            return result
+        except (AdidasConfigError, AdidasAPIError, AdidasTransportError):
+            raise
+        except Exception as exc:  # noqa: BLE001 — normalize unexpected failures
+            raise AdidasTransportError(
+                f"Unexpected failure during the adidas Click tracking lookup: {exc}"
+            ) from exc
+
+
+def _track_one_order(
+    driver: "AdidasClickDriver",
+    row: dict,
+    po_number: str,
+    result: TrackingResult,
+) -> TrackingOrder:
+    """Read one order's shipments (or expected ship dates), never raising.
+
+    A single unreadable order must not lose the tracking already gathered for
+    the other orders/POs in the run, so any failure here becomes that order's
+    ``unreadable`` status plus a run warning.
+    """
+
+    order = TrackingOrder(
+        order_number=row["order_number"],
+        po_number=row.get("po_number") or po_number,
+        order_type=row.get("order_type"),
+    )
+    try:
+        if driver.open_order(order.order_number):
+            order.shipments = [
+                TrackingShipment(**shipment)
+                for shipment in driver.read_delivery_tracking(order.order_number)
+            ]
+            order.status = "shipped"
+            if not order.shipments:
+                # The Delivery Tracking link was there but the table came back
+                # empty — say so rather than implying "nothing shipped".
+                order.note = (
+                    "The order has a Delivery Tracking page but no delivery rows "
+                    "could be read — check it in the portal."
+                )
+        else:
+            order.status = "not_shipped"
+            order.expected_ship_dates = driver.read_expected_ship_dates()
+            order.expected_ship_date = _earliest_expected(order.expected_ship_dates)
+            if not order.expected_ship_dates:
+                order.note = (
+                    "Nothing has shipped and no expected ship date was shown on "
+                    "the order."
+                )
+    except Exception as exc:  # noqa: BLE001 — one bad order must not sink the run
+        order.status = "unreadable"
+        order.note = str(exc)
+        result.warnings.append(
+            f"Order {order.order_number} (PO {po_number}) could not be read: {exc}"
+        )
+    return order

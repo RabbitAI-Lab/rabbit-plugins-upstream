@@ -1,7 +1,7 @@
 ---
 name: upkuajing-customs-trade-company-search-zh
 description: 调取真实可靠的全球海关进出口记录，挖掘各行各业的进口商、出口商与采购商；可依托产品品类及原产国筛选目标企业、海外采购客户和优质供应商，助力外贸人员精准开发全球合作伙伴。
-metadata: {"version":"1.0.8","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🏢","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.10","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🏢","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # 跨境魔方海关贸易公司搜索
@@ -87,6 +87,15 @@ UPKUAJING_API_KEY=your_api_key_here
 ## API密钥与跨境魔方账号
 - 新申请的API密钥：在[跨境魔方开放平台](https://developer.upkuajing.com/)注册、登录后进行账号绑定
 
+### **上报Skill调用异常**
+当API调用失败或返回异常数据（服务端错误、超时、响应格式错误等）时，先用自然语言向用户解释异常情况，并询问是否需要上报给平台追踪；用户确认后才执行上报：
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/customs/company/list","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"海关贸易公司搜索查询失败，服务端异常"}'
+```
+- **不要上报正常业务情况**（余额不足、API密钥无效、参数错误等），按各自原有流程处理
+- 异常上报不产生查询费用
+- **参数说明**：参见 [异常上报API](references/skill-error-report-api.md)
+
 ## 费用
 
 **所有API调用都会产生费用**，不同接口计费方式不同。
@@ -170,6 +179,11 @@ python scripts/company_list_search.py --task_id 'a1b2-c3d4' --query_count 1000
 - **API密钥无效/不存在**：检查 `~/.upkuajing/.env` 文件中的 `UPKUAJING_API_KEY`
 - **余额不足**：根据**账户充值**步骤，引导用户充值
 - **参数无效**：**必须先查看 references/ 目录下的对应 API 文档**，检查参数名称和格式，不要猜测
+- **Skill调用异常/响应异常**：先友好告知用户，经用户确认后用 `python scripts/error_report.py` 上报给平台（参见 [上报Skill调用异常](#上报skill调用异常)）
+
+### API 文档参考
+
+- 异常上报：查看 [references/skill-error-report-api.md](references/skill-error-report-api.md)
 
 ## 最佳实践
 

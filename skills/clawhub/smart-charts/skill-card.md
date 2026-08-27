@@ -1,43 +1,58 @@
-## Description: <br>
-Smart Charts reads user-supplied CSV, Excel, and JSON files, analyzes data characteristics with LLM assistance, recommends chart types, and generates interactive ECharts HTML visualizations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Intelligent chart generation and data analysis skill. Reads user-supplied data files (CSV/Excel/JSON), analyzes data characteristics with LLM assistance, auto-recommends and generates interactive ECharts visualizations. Use when the user asks to analyze data, generate charts, create visualizations, or work with tabular data files.
 
-## Publisher: <br>
-[neuhanli](https://clawhub.ai/user/neuhanli) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[neuhanli](https://clawhub.ai/user/neuhanli)
 
-## Use Case: <br>
-Developers, analysts, and external users use this skill to turn uploaded tabular data into recommended interactive charts and lightweight data summaries. It is most useful for CSV, Excel, and JSON datasets that can be parsed locally and rendered as ECharts HTML. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated pandas transform code may run against user data without an explicit confirmation gate. <br>
-Mitigation: Run the skill in a constrained environment and review transform code before execution, especially for sensitive datasets. <br>
-Risk: Generated HTML loads JavaScript from public CDNs. <br>
-Mitigation: Use the generated charts only where public CDN access is acceptable, or require a trusted offline asset path before using the skill in restricted environments. <br>
+## Use Case:
 
+Developers, analysts, and external users use this skill to inspect local tabular data files and generate offline interactive HTML charts. It is suited for data analysis and visualization workflows that need chart recommendations, pandas transforms, chart artifacts, and concise interpretation.
 
-## Reference(s): <br>
-- [Smart Charts Skill Documentation](artifact/SKILL.md) <br>
-- [Smart Charts CLI Reference](artifact/REFERENCE.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/neuhanli/skills/smart-charts) <br>
-- [Publisher Profile](https://clawhub.ai/user/neuhanli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files] <br>
-**Output Format:** [Markdown guidance with shell commands, structured JSON status, and generated HTML chart files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated HTML loads ECharts from public CDNs and is usually written under smart_charts_output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill automatically runs model-generated pandas transform code under an overstated sandbox claim.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use trusted datasets, review transform code before execution in sensitive workflows, and run the skill in a contained environment for private or high-value data.
+
+Risk: The skill reads local data files and writes generated HTML charts that may contain sensitive source data or derived summaries.
+
+Mitigation: Limit input paths to intended datasets and treat generated HTML outputs as sensitive until reviewed.
+
+Risk: Generated charts and interpretations can be misleading if the transform uses the wrong aggregation grain or chart inputs.
+
+Mitigation: Check the CLI's data_preview, data_rows, and plot_stats fields before relying on or sharing the chart interpretation.
+
+## Reference(s):
+
+- [Reference](artifact/references/REFERENCE.md)
+- [ClawHub skill page](https://clawhub.ai/neuhanli/skills/smart-charts)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with bash and Python snippets; generated artifacts are offline HTML charts with JSON CLI status output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reads local CSV, TSV, TXT, Excel, and JSON files; writes interactive ECharts HTML; network access is not required.]
+
+## Skill Version(s):
+
+7.0.1 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
