@@ -1,43 +1,57 @@
-## Description: <br>
-Refreshes README structure and content using repo context and exemplar research. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Refreshes README structure and content using repo context and exemplar research.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and documentation maintainers use this skill to restructure a README after meaningful project changes, using repository context, language detection, exemplar research, and review steps to guide edits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad documentation and research triggers may activate the workflow for requests that are not intended to update a README. <br>
-Mitigation: Confirm the target file and README scope before allowing edits. <br>
-Risk: README restructuring can introduce inaccurate claims, stale links, or misleading guidance. <br>
-Mitigation: Review the README diff, verify links and citations, and keep claims grounded in repository evidence before relying on the output. <br>
+## Use Case:
 
+Developers and maintainers use this skill to audit a repository, research README exemplars, restructure README.md, and report verification evidence after significant project changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-update-readme) <br>
-- [Sanctum plugin homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [Language Audit Patterns](modules/language-audit.md) <br>
-- [Exemplar Research Patterns](modules/exemplar-research.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown prose, README edits, command snippets, and verification notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May edit README.md or a specified documentation file and may include citations from exemplar research.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter lists 1.9.8) <br>
+Risk: The skill may activate on broad documentation or research requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for intentional README restructuring and confirm the target documentation file before accepting edits.
+
+Risk: README edits and web-researched citations can introduce inaccurate or unsupported claims.
+
+Mitigation: Review proposed README changes and verify citations against repository evidence before merging.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-update-readme)
+- [ClawHub publisher profile](https://clawhub.ai/user/athola)
+- [OpenClaw homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+- [Language audit patterns](modules/language-audit.md)
+- [Exemplar research patterns](modules/exemplar-research.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, citation notes, and README edit instructions.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces language audit notes, exemplar research citations, README structure edits, and a verification report; no credential environment variables were detected.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter says 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,65 @@
-## Description: <br>
-查询跨境魔方全球企业数据库中的学校详情，包括学校名称、类型、地理位置、网站和社交媒体链接。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+依托全球企业数据库调取人员对应的院校详细资料，获取完整教育档案，梳理目标人员就读院校及整体教育背景，辅助开展客户尽调与人脉分析。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Recruiters, researchers, analysts, and data enrichment teams use this skill to look up detailed school records by school ID when verifying education history, researching institutions, or enriching organization datasets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill performs paid API lookups and account recharge actions through the Upkuajing service. <br>
-Mitigation: Confirm each billed lookup or recharge action before execution and review pricing or payment URLs before use. <br>
-Risk: The skill depends on a private UPKUAJING_API_KEY that may be stored locally. <br>
-Mitigation: Keep the API key private, prefer protected environment configuration, and avoid sharing the local credential file contents. <br>
+## Use Case:
 
+Recruiters, researchers, analysts, and external business users use this skill to retrieve detailed school records by school ID for education verification, institution research, academic network analysis, and customer due diligence.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/upkuajing/skills/global-company-person-school-detail-zh) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer platform](https://developer.upkuajing.com/) <br>
-- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [School detail API reference](references/school-detail-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [JSON responses and concise Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; school detail lookups are paid API calls and return fee metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence and artifact metadata) <br>
+Risk: The skill stores the UPKUAJING API key in a local plaintext file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only on trusted machines, restrict local file access, and rotate the API key if the host or account may have been exposed.
+
+Risk: The school detail lookup is a paid API call.
+
+Mitigation: Tell the user that the query may incur charges and wait for explicit confirmation before running paid requests.
+
+Risk: Error reports may include request context.
+
+Mitigation: Review the error-report context with the user before submission and avoid sending unnecessary personal, credential, or sensitive business data.
+
+Risk: Version checks and diagnostic calls contact the UPKUAJING service in addition to the primary lookup.
+
+Mitigation: Install and run the skill only when this network behavior is acceptable for the environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/global-company-person-school-detail-zh)
+- [upkuajing publisher profile](https://clawhub.ai/user/upkuajing)
+- [Upkuajing homepage](https://www.upkuajing.com)
+- [School detail API reference](references/school-detail-api.md)
+- [Skill error report API reference](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Paid API calls return school details, fee information, and request identifiers when successful.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

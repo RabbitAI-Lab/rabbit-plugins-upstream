@@ -1,6 +1,6 @@
 ---
-name: agent-ping-pong
-version: 2.8.0
+name: ping-pong
+version: 2.8.1
 description: "Your OpenClaw is the brain. Codex or Claude Code are the hands. The clipboard is the protocol."
 homepage: https://github.com/highnoonoffice/agent-ping-pong
 source: https://github.com/highnoonoffice/agent-ping-pong
@@ -542,3 +542,7 @@ Continuation is automatic: every subsequent block in the chain (fix rounds, foll
 **Context in the handoff block helps.** Codex has no memory. A one-paragraph context block (what MC is, what tab this affects, what aesthetic to match) produces meaningfully better output than a bare spec. Worth the extra lines.
 
 **PRs to vault for spec files are pointless.** Spec files going into prompts/ on main don't need a PR — they have no review gate and no approval value. Commit direct to main. PRs are for code that needs eyes before it merges, not documentation files.
+
+---
+
+Built by Joseph Voelbel / High Noon Office. Questions or want to build on this? josephvoelbel.com/contact

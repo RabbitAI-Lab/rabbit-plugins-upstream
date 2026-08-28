@@ -2,12 +2,10 @@
 """百炼®标书开放 API 轻客户端（thin client）。
 
 封装「提交 → 轮询 → 取结果」异步模型，零第三方依赖（仅标准库）。
-凭证通过本地凭证文件 config.json 传入；可选环境变量仅覆盖路径/地址（不含凭证）：
-  ZCM_BASE     Base URL，默认生产 https://biaoshu.zhiliaobiaoxun.com/api/open/v1
-  ZCM_CONFIG   凭证文件路径，默认 skill 内 config.json（含 app_key/可选 base/output_dir）
+凭证通过本地凭证文件 config.json 传入；可选环境变量仅覆盖本地输出路径：
   ZCM_OUTPUT_DIR  成品标书 .docx 存放目录；未设时默认 skill 同级的 biaoshu-bailian-files/
 
-App Key 只从 skill 内 config.json 读取（旧版 ~/.zcm/config.json 仍可读，兼容已有安装）。
+App Key 只从 skill 内 config.json 读取。
 凭证文件权限 600。config.json 含真实 Key，**勿上传发布包**（发布包不含配置文件）。
 App Key 仅能在官网自助注册获取（本 skill 不代注册）。
 用 login 显式保存凭证、logout 清除。
@@ -22,6 +20,7 @@ App Key 仅能在官网自助注册获取（本 skill 不代注册）。
   generate   <project_id> [opts]    生成成品标书 → 下载 .docx
   compliance <project_id> <f...>    合规审查投标文件 → 打印完整合规结果
   report     --job <id> | --in f    把解读/合规结果渲染成 HTML/Word 报告
+  knowledge-base [category]         按类别查询知识库（排除历史标书库 / 标书模板库）
 
 interpret / compliance 可加 --report html|docx|both 在取结果后直接出报告。
   job        <job_id>               查单个任务状态（不轮询）
@@ -30,6 +29,7 @@ interpret / compliance 可加 --report html|docx|both 在取结果后直接出�
 
 提交类子命令（interpret/packages/generate/compliance）默认自动轮询到终态，
 加 --no-wait 只提交并打印 job_id。
+Locale scope: zh-CN (Simplified Chinese) by design for mainland-China bidding workflows. User-facing help text, platform menu names, risk labels, and generated report prompts default to Chinese because they mirror procurement terminology used by the underlying platform and report artifacts. Assistants may explain those terms in the user's language when needed, but in-product labels remain zh-CN.
 """
 import argparse
 import json
@@ -44,15 +44,17 @@ import uuid
 DEFAULT_BASE = "https://biaoshu.zhiliaobiaoxun.com/api/open/v1"
 
 # skill 版本（单一事实来源）。适配的后端 API 版本与契约快照见 references/api.md 顶部。
-SKILL_VERSION = "2.2.0"
+SKILL_VERSION = "2.2.1"
 API_TARGET = "/api/open/v1"
-CONTRACT_SNAPSHOT = "2026-07-20"
+CONTRACT_SNAPSHOT = "2026-08-10"
 
 # 渠道码：开发线留空（不带渠道）；发布/装配变体时按平台 excel 注入（ClawHub 基线 s113，变体 s81–s114）。
 # 非空时官网链接追加 ?ch=。
 CHANNEL = "s100"
 SIGNUP_URL = "https://biaoshu.zhiliaobiaoxun.com/" + (f"?ch={CHANNEL}" if CHANNEL else "")
 
+# Locale scope: zh-CN labels are intentional for mainland-China bidding workflows;
+# assistants may translate explanations externally, but in-product menu names and prompts remain Chinese.
 # 文档第 6 节错误码 → 友好提示
 ERROR_HINTS = {
     "missing_credentials": "缺少鉴权头：请在本 skill 目录下的 config.json 写入 app_key（或用 login 保存）。",
@@ -102,28 +104,19 @@ def log(msg):
 
 
 def creds_path():
-    """凭证文件：默认 skill 内 config.json；ZCM_CONFIG 可覆盖路径。"""
-    env = os.environ.get("ZCM_CONFIG", "").strip()
-    return env or os.path.join(skill_dir(), "config.json")
-
-
-def _user_creds_path():
-    """旧位置 ~/.zcm/config.json（ZCM_HOME 可改目录），仅作只读回退（兼容已有安装）。"""
-    home = os.environ.get("ZCM_HOME", "").strip() or os.path.join(
-        os.path.expanduser("~"), ".zcm")
-    return os.path.join(home, "config.json")
+    """凭证文件：固定为 skill 内 config.json（不可由环境变量重定向）。"""
+    return os.path.join(skill_dir(), "config.json")
 
 
 def load_creds_file():
-    """读凭证：先 skill 内 config.json，再回退旧版 ~/.zcm/config.json（兼容已有安装）。"""
-    for p in (creds_path(), _user_creds_path()):
-        try:
-            with open(p, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                if isinstance(data, dict):
-                    return data
-        except (FileNotFoundError, ValueError, OSError):
-            continue
+    """读凭证：仅 skill 内 config.json。"""
+    try:
+        with open(creds_path(), "r", encoding="utf-8") as f:
+            data = json.load(f)
+            if isinstance(data, dict):
+                return data
+    except (FileNotFoundError, ValueError, OSError):
+        pass
     return {}
 
 
@@ -171,11 +164,8 @@ def _guide_insufficient_balance(err=None):
 
 
 def base_url():
-    env_base = os.environ.get("ZCM_BASE", "").strip()
-    if env_base:
-        return env_base.rstrip("/")
-    stored = load_creds_file()
-    return str(stored.get("base") or DEFAULT_BASE).rstrip("/")
+    """ClawHub 净化线固定只访问生产开放 API，禁止任何本地覆盖。"""
+    return DEFAULT_BASE
 
 
 def skill_dir():
@@ -305,7 +295,7 @@ def request_json(method, path, *, headers=None, data=None, json_body=None):
     except urllib.error.HTTPError as e:
         _handle_http_error(e)
     except urllib.error.URLError as e:
-        die(f"网络错误：{e.reason}\n  → 检查 ZCM_BASE（当前 {base_url()}）与网络连通性。", code=1)
+        die(f"网络错误：{e.reason}\n  → 检查网络连通性与开放 API 地址（当前 {base_url()}）。", code=1)
 
 
 def encode_multipart(fields, files):
@@ -478,8 +468,7 @@ def cmd_login(args):
     stored = load_creds_file()
     if args.app_key:
         stored["app_key"] = args.app_key.strip()
-    if args.base:
-        stored["base"] = args.base.strip().rstrip("/")
+    stored.pop("base", None)
     if args.output_dir:
         stored["output_dir"] = os.path.expanduser(args.output_dir.strip())
     if not stored.get("app_key"):
@@ -504,6 +493,20 @@ def cmd_me(args):
     bal = data.get("wallet_balance")
     if bal is not None:
         log(f"积分余额：{bal}")
+
+
+def cmd_knowledge_base(args):
+    path = "/knowledge-base"
+    if getattr(args, "category", None):
+        path += f"/{args.category}"
+    query = []
+    if getattr(args, "category", None):
+        query.append(f"page={args.page}")
+        query.append(f"page_size={args.page_size}")
+    if query:
+        path += "?" + "&".join(query)
+    data = request_json("GET", path)
+    print(json.dumps(data, ensure_ascii=False, indent=2))
 
 
 def _precheck_balance():
@@ -718,7 +721,7 @@ def cmd_progress_stream(args):
 
 
 def build_parser():
-    p = argparse.ArgumentParser(description="百炼®标书开放 API 轻客户端")
+    p = argparse.ArgumentParser(description="百炼®标书开放 API 轻客户端 / zh-CN client for mainland-China bidding workflows")
     p.add_argument("--version", action="version",
                    version=f"biaoshu-bailian {SKILL_VERSION}　·　适配 {API_TARGET}　·　契约快照 {CONTRACT_SNAPSHOT}")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -731,7 +734,6 @@ def build_parser():
 
     sp = sub.add_parser("login", help="保存凭证到 skill 内 config.json")
     sp.add_argument("--app-key", help="App Key，形如 bk_live_xxxxx（必填）")
-    sp.add_argument("--base", help="可选：Base URL")
     sp.add_argument("--output-dir", help="可选：成品标书 .docx 默认存放目录")
     sp.set_defaults(func=cmd_login)
 
@@ -740,6 +742,12 @@ def build_parser():
 
     sp = sub.add_parser("me", help="查连通性与积分余额")
     sp.set_defaults(func=cmd_me)
+
+    sp = sub.add_parser("knowledge-base", help="按类别查询知识库（排除历史标书库 / 标书模板库）")
+    sp.add_argument("category", nargs="?", help="可选：company_profile / qualifications / performances / financial_reports")
+    sp.add_argument("--page", type=int, default=1, help="分页类页码（默认 1）")
+    sp.add_argument("--page-size", type=int, default=50, help="分页类每页条数（默认 50）")
+    sp.set_defaults(func=cmd_knowledge_base)
 
     sp = sub.add_parser("interpret", help="智能解读招标文件 → 完整解读结果")
     sp.add_argument("source", help="本地文件(.pdf/.doc/.docx)")

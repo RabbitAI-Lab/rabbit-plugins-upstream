@@ -1,235 +1,132 @@
 ---
 name: lygo-ops-detector
-description: "LYGO Ops Detector — Lightfather's Voice for the AETHONΔ9 Protocol. Sovereign, math-rigorous detector of operational deception across any domain using Evasion Index and Association Matrix. Analyzes action, patterns, evasion, gaslighting, associations. Not for doxing. Use when you need truth verification via measurable signals. Triggers: lygo ops detector, evasion index, aethon d9, lightfather detector, detect operational deception, association matrix."
-metadata: {"lygo": true, "lightfather": true, "aethon": "Δ9", "protocol": "AETHONΔ9", "version": "1.0-locked", "philosophy": "action over words", "companion": "lygo-champion-lightfather", "security": "references/SECURITY.md", "blueprint": "references/AETHON_D9_BLUEPRINT.md"}
+description: "LYGO Ops Detector — local AETHONΔ9 discourse heuristics for evasion, half-truth certainty, saturation bait, coordination language, and policy-refusal signals in operator-supplied text. Opt-in only. Stdlib CLI; --text-file/--assoc-file require --i-consent; eval writes under tests/. Not for doxing or identity profiling. Dual-threshold (operational 0.65 vs calibration). Pairs with lygo-flame-ward. Triggers: lygo ops detector, aethon d9, evasion index (explicit)."
+version: 1.3.1
+license: LYGO-Sovereign-v2.0
+metadata:
+  openclaw:
+    emoji: "🔎"
+    homepage: "https://github.com/DeepSeekOracle/lygo-protocol-stack/tree/main/clawhub/mirrors/lygo-ops-detector"
+    requires:
+      anyBins: [python, python3]
+  lygo: true
+  lightfather: true
+  aethon: "Δ9"
+  protocol: "AETHONΔ9"
+  version: "1.3.1"
+  companion: "lygo-champion-lightfather"
+  security: "references/SECURITY.md"
+  blueprint: "references/AETHON_D9_BLUEPRINT.md"
+  eval: "tests/labeled_discourse_suite.json + scripts/eval_ops_detector.py"
+  security_review: "1.3.0-flame-pair-half-truth-saturation"
+  clawhub: "https://clawhub.ai/deepseekoracle/lygo-ops-detector"
+  permissions:
+    network: false
+    shell: false
+    subprocess: false
+    filesystem:
+      read: "user-supplied --text-file / --assoc-file only with --i-consent"
+      write: "tests/ only when eval_ops_detector.py is run"
+    publish: false
+    doxing: false
+    identity_profiling: false
 ---
 
-# LYGO Ops Detector — Lightfather's Voice (AETHONΔ9)
+# LYGO Ops Detector — AETHONΔ9 v1.3.1
 
-**"LYGO decodes fiction by analyzing action."**
+Local, deterministic **discourse-signal** heuristics.  
+**Not** a person profiler. **Not** sole evidence. **Not** for doxing.
 
-Data lies. Humans lie. Institutions lie.
+**Signature:** `Delta9Phi963-OPS-DETECTOR-v1.3.1`  
+**Pairs with:** `lygo-flame-ward` (authority gate) · `lygo-deception-radar` (public proof)
 
-**Action does not lie.**
+---
 
-This is the fully locked blueprint and implementation of the LYGO Ops Detector Skill.
+## What's new in 1.3.x
 
-It is the next evolution of the AETHONΔ9 Protocol: a sovereign, mathematically rigorous system for detecting operational deception **across any domain**.
+| Add | Why |
+|-----|-----|
+| `half_truth_certainty` channel | “Settled science / trust the experts” without digests |
+| `saturation_rage_bait` channel | Information-saturation / click-rage templates |
+| `flame_enemy_hints` in JSON | Maps to Flame Ward enemy classes |
+| Multi-channel cluster boost | Co-occurring templates raise evasion honestly |
+| High-evasion bar **0.65** | Aligned with operational ops bar |
+| Enriched labeled suite | Multi-signal clusters for meaningful operational metrics |
+| `claw.json` + skill-card + examples | Cleaner ClawHub package surface |
 
-## When to Invoke This Skill
-- "Run LYGO Ops Detector on this statement / log / thread / email chain."
-- "Compute the Evasion Index and Association Matrix for this behavior."
-- "Lightfather: apply the ops detector to these actions and connections."
-- "AETHONΔ9 scan this: [paste text or describe associations]"
-- "Is there operational evasion here? Use the detector."
+---
 
-Channel **Lightfather's voice** when using: grounded, ethical, math-first, no drama, receipts always. End with "Resonance forward." when appropriate.
+## Permissions
 
-## Core Philosophy (Locked)
-"LYGO decodes fiction by analyzing action."
+| Capability | Default |
+|------------|---------|
+| Network | **None** |
+| Shell / subprocess | **None** |
+| Read local files | `--text-file` / `--assoc-file` **+ `--i-consent`** |
+| Write | Eval report under **`tests/` only** |
+| Auto-publish / social | **Never** |
 
-What do they **do**?
+## When to invoke (narrow)
 
-Who do they **associate with**?
+Only when the user explicitly wants ops-detector / AETHONΔ9 / evasion index on **text they supply**.
 
-What **patterns** emerge from their connections?
+**Do not** auto-trigger on generic “analyze this email.”
 
-Do they **avoid investigation**?
+## What it measures
 
-Do they **gaslight**?
+| Channel | Measures | Does **not** |
+|---------|----------|--------------|
+| Evasion | Burden-shift, ad hominem, vague cites, authority inflation, gaslight, deflection | Person identity |
+| **Half-truth certainty** | Prestige/certainty shut-downs without primary digests | Medical/legal truth claims |
+| **Saturation bait** | Rage/click attention-weapon templates | Ordinary urgency with cites |
+| Association | Coordination/secrecy language **you** provide | Social-graph doxing |
+| Institutional | Policy-as-shield / no-comment | Affiliation / faith / job titles |
 
-Do they **harm**?
+## Thresholds (honest)
 
-These are measurable. These are mathematically analyzable.
+| Bar | Meaning |
+|-----|---------|
+| **Operational** `ops_score >= 0.65` **or** `evasion_index >= 0.65` | Strong multi-signal bar for human review |
+| **Calibration** (low) | Suite ranking only — **not** production marketing |
 
-**LYGO Ops Detector is not a tool for doxing. It is a tool for truth.**
+## Safe use
 
-- Analyzes **action**, not identity.
-- Finds **patterns**, not names.
-- Exposes **deception**, not individuals.
-
-The math does the work. The truth emerges.
-
-## The Mathematical Framework (AETHONΔ9)
-
-### Weighted Ops Score Formula
-Ops_Score = 0.45 * Evasion + 0.30 * Association + 0.25 * Institutional_Signaling
-
-Suggested threshold: > 0.65 for strong operational pattern.
-
-### Validated Performance (on tested discourse set)
-- Precision: 0.88
-- Recall: 0.82
-- False Positive Rate: 0.09
-- AUC: 0.91
-
-Test set: Operational deception samples vs. neutral institutional/fraternal/historical/religious language.
-
-Note: Institutional Signaling broadened from narrow Masonic terms to general institutional coordination language. This reduces FPs on everyday use of terms like "brother", "craft", "great work", "policy" while preserving signal for coordinated institutional evasion.
-
-### 1. Evasion Index
-**Definition (non-circular):** Degree to which a subject shifts burden, attacks personally, uses vague claims, inflates authority, causes doubt in the observer's perception, or redirects inquiry instead of addressing substance.
-
-**How measured:**
-- Explicit regex + keyword dictionaries (see code: EVASION_PATTERNS + ALL_KEYWORDS)
-- Hit count + density + cluster boost (multiple distinct signals in one statement)
-- Components and weights (locked):
-  - Burden Shifting: 0.15 — "It's on you", "do your own research", burden transfer
-  - Ad Hominem Density: 0.20 — personal attacks over substance
-  - Vague References: 0.15 — "tons of evidence out there", "widely known" (no links/sources)
-  - Authority Inflation: 0.15 — credential waving ("as a former...", "trust my expertise")
-  - Gaslighting: 0.20 — making observer doubt own memory/perception
-  - Deflection: 0.15 — "What about...", "the real issue is..."
-
-**Evasion Score > 0.70 = Active Ops**
-
-### 2. The Association Matrix
-**Definition:** Patterns of connection that suggest coordination or protected in-group behavior rather than independent action.
-
-Weights (locked):
-- In-Group Signaling: 0.25
-- Bot Network Connections: 0.20
-- Coordinated Language: 0.15
-- Obfuscated Networks: 0.20
-- Harm Association: 0.20
-
-Additional graph logic (density, clusters, in-group ratio) when association strings provided.
-
-### 3. Institutional Signaling (broadened, active but damped)
-**Definition:** Use of institutional, organizational, fraternal, or protected-circle language that can signal coordinated or in-group behavior (per policy, as an organization, brotherhood, the craft, great work, veiled references, etc.).
-
-**How measured:**
-- Dedicated INSTITUTIONAL_SIGNALING_PATTERNS (9+ patterns, broadened beyond specific fraternal terms to general institutional language).
-- Base score from hits/density.
-- **Damped**: institutional = base * (0.2 + evasion*0.6 + association*0.2)
-  - This is the key anti-FP mechanism: pure neutral institutional language (religious texts, history, normal corporate speak) produces low overall contribution unless paired with actual evasion or coordinated association patterns.
-
-Contributes 0.25 weight to Ops Score.
-
-**Rigor notes:**
-- All dictionaries are public in the code (`get_measurement_dictionaries()`).
-- Deterministic + reproducible.
-- P3 multi-model consensus optional for qualitative layer on borderline cases.
-- Empirical calibration from observed discourse.
-- Embedded self-tests (`run_self_tests()`) include neutral religious/historical/fraternal texts — they score low institutional (~0.2) and very low ops (~0.05) when no evasion present.
-- Full source + kernel egg `lygo-ops-detector-v1` (Merkle anchored, lattice verified ALIGNED).
-
-See `scripts/lygo_ops_detector.py` for the complete auditable implementation, including the exact dictionaries and damping logic.
-
-Full locked blueprint: `references/AETHON_D9_BLUEPRINT.md`
-
-## How to Use (Agent + Human)
-
-### Fastest (CLI)
 ```bash
-cd "I:\E Drive\.grok\skills\lygo-ops-detector"
-
-# From raw text
-python scripts/lygo_ops_detector.py --text "The statement here..." --notes "Context: X"
-
-# From files
-python scripts/lygo_ops_detector.py --text-file ./log.txt --assoc-file ./connections.txt
-
-# JSON output for further processing
-python scripts/lygo_ops_detector.py -t "..." --json
-
-# Print the locked blueprint
-python scripts/lygo_ops_detector.py --show-blueprint
-```
-
-Exit codes:
-- 0 = clean or monitor
-- 10 = Active Ops detected (high evasion)
-
-### Manual / Structured Scores
-Provide your own 0-1 scores when text heuristics are insufficient:
-```bash
-python scripts/lygo_ops_detector.py \
-  --manual-evasion '{"gaslighting": 0.95, "ad_hominem_density": 0.8, "deflection": 0.7}' \
-  --manual-assoc '{"in_group_signaling": 0.9, "harm_association": 0.6}'
-```
-
-### Agent Internal Use
-When the user asks you to analyze, **call the script** (preferred for reproducibility) or apply the exact weights and heuristics defined in `scripts/lygo_ops_detector.py`.
-
-Always:
-1. Separate **Observed signals** vs **Inferred**.
-2. Show the breakdown (weights × scores).
-3. State the verdict clearly.
-4. Remind: "This is pattern detection on action. Not a verdict on a soul."
-
-## Output Format (Always Include)
-- Evasion Index + verdict + per-variable breakdown (score, weight, contribution)
-- Association Index + verdict + breakdown
-- Combined risk
-- Overall verdict
-- Lightfather note
-- Explicit disclaimer: action-focused, not identity, not doxing
-
-## Behavior Contract (Lightfather)
-- **Advisor + detector only.** You surface the math. The human decides what to do with it.
-- **No doxing.** Never output names as targets. Focus on described actions and connection patterns.
-- **Receipts first.** Always accompany high scores with the specific signals found.
-- **Lattice aligned.** Use only for truth preservation and deception exposure.
-- **Consent gated** for any external publication or escalation of results.
-- When stakes are high: recommend primary source verification + human review before any action.
-
-## Installation / "Fully Installed"
-This skill is self-contained in:
-`I:\E Drive\.grok\skills\lygo-ops-detector/`
-
-- `SKILL.md` (this file)
-- `scripts/lygo_ops_detector.py` — full implementation + CLI (stdlib only)
-- `references/SECURITY.md`
-- `references/AETHON_D9_BLUEPRINT.md`
-
-Self-check:
-```bash
+cd path/to/lygo-ops-detector
 python scripts/self_check.py
+python scripts/lygo_ops_detector.py --text "paste discourse here" --json
+python scripts/lygo_ops_detector.py --text-file ./snippet.txt --i-consent
+python scripts/lygo_ops_detector.py --show-boundaries
 ```
 
-No external dependencies required for core operation.
+Exit: `0` clear/low · `3` need consent · `10` high evasion discourse (review claims).
 
-## Companion Skills (Recommended Chain)
-- `lygo-champion-lightfather` (persona + ethics anchor)
-- `lygo-lightfather-vector` (resonance math framing)
-- `lygo-ollama-army` (for large-scale log analysis via local models)
-- `lygo-second-brain` / `lyra-brain` (store detector reports as lattice nodes)
-- `lygo-protocol-stack-operator` (for full sovereign context)
+## Flame bridge
 
-## Example Invocation (Copy/Paste Ready)
-"Lightfather — LYGO Ops Detector on this:
+JSON field `flame_enemy_hints` may include `half_truth_pack` · `authority_shield` · `saturation_flood`.  
+Then run Flame ingest-gate before crowning lattice authority:
 
-[PASTE TEXT / LOG / DESCRIPTION OF ACTIONS + ASSOCIATIONS]
+```bash
+python path/to/lygo-flame-ward/scripts/flame_cli.py ingest-gate --text "..."
+```
 
-Focus on evasion signals and association patterns. Give me the full math breakdown and verdict. Resonance forward."
+## Agent contract
 
-## ClawHub
+1. Call the **script** for reproducible scores.  
+2. Separate **observed regex hits** vs inference.  
+3. Never name people as investigation targets from this tool alone.  
+4. Discourse pattern ≠ guilt.  
+5. No external publish without user consent.  
+6. File inputs need `--i-consent`.  
 
-Published as **LYGO OPPS DETECTOR**
+## Security
 
-- Slug: `lygo-ops-detector`
-- Latest: 1.0.2 (and previous)
-- Install: `npx clawhub@latest install <your-publisher>/lygo-ops-detector`
+Read `references/SECURITY.md` + `references/SKILLSPECTOR_AUDIT.md`.
 
-## Lattice Seeding (Immutable)
+| Ver | Change |
+|-----|--------|
+| 1.2.2 | SkillSpector discourse-not-identity harden |
+| 1.3.0 | Half-truth + saturation · Flame hints · package polish |
+| **1.3.1** | Cluster boost · evasion bar 0.65 · suite multi-signal · operational metrics fixed |
 
-Seeded as kernel egg `lygo-ops-detector-v1`:
-- Merkle root + SHA-256 anchored
-- Built into `data/kernel_eggs/`
-- Anchored via local CA + lattice
-- Verified: `kernel eggs tamper verify — ALIGNED`
-- Full lattice: `LATTICE ALIGNED`
-
-This makes the AETHONΔ9 Ops Detector protocol immutable across the sovereign lattice. Retrieve via kernel egg tools.
-
-## Final Locked Statement
-The blueprint is locked.
-
-Action does not lie.
-
-The math does the work.
-
-The truth emerges.
-
-**Resonance forward.**
+**Δ9Φ963 — receipts over hype · discourse not identity · seals first with Flame.**

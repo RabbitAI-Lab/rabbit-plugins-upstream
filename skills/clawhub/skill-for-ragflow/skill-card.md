@@ -1,48 +1,58 @@
-## Description: <br>
-Operate RAGFlow v0.26.4 deployments through the bundled Node CLI and API client for datasets, documents, parsing, chunks, retrieval, chat assistants, agents, embedded website access, model providers, system settings, and API diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate RAGFlow v0.27.0 deployments through a bundled Node CLI for knowledge-base setup, document ingestion, parsing, retrieval, chat assistants, agents, GraphRAG, connectors, models, and diagnostics.
 
-## Publisher: <br>
-[lunarcache](https://clawhub.ai/user/lunarcache) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lunarcache](https://clawhub.ai/user/lunarcache)
 
-## Use Case: <br>
-Developers and operators use this skill to manage and diagnose RAGFlow deployments, including knowledge-base ingestion, retrieval, chat and agent workflows, embedded access, model-provider configuration, and system administration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact RAGFlow administration actions, including deletes and credential-management workflows. <br>
-Mitigation: Use least-privilege RAGFlow API keys and require explicit confirmation before destructive or credential-management commands. <br>
-Risk: API keys, provider keys, system tokens, beta values, and embed URLs may expose operational access. <br>
-Mitigation: Store secrets in environment variables or local configuration and redact tokens, beta values, and embed auth parameters from normal responses. <br>
-Risk: Public webhook exposure can allow unwanted callers or unvalidated input. <br>
-Mitigation: Add authentication, caller restrictions, input validation, and rate limits before exposing webhook examples publicly. <br>
+## Use Case:
 
+Developers and operators use this skill to administer RAGFlow servers, manage datasets and document pipelines, run retrieval and chat workflows, configure agents, connectors, and models, and diagnose server issues.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/lunarcache/skills/skill-for-ragflow) <br>
-- [Project Homepage](https://github.com/LunarCache/ragflow-skill) <br>
-- [RAGFlow Command Reference](artifact/references/COMMANDS.md) <br>
-- [RAGFlow API Reference](artifact/references/API.md) <br>
-- [RAGFlow Custom Agent Guide](artifact/references/AGENT_GUIDE.md) <br>
-- [Troubleshooting Guide](artifact/references/TROUBLESHOOTING.md) <br>
-- [Output Format Reference](artifact/references/REFERENCE.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands, JSON examples, and concise operational summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prefers JSON CLI output for automation and redacts API keys, provider keys, beta values, tokens, and embed auth values unless explicitly requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and release evidence) <br>
+Risk: The skill can administer a configured RAGFlow server and make real data or configuration changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for a RAGFlow server the agent is intended to administer, use HTTPS and a dedicated rotatable RAGFlow API key, and review delete, provider, connector, embed-token, and log-level operations before production execution.
+
+Risk: RAGFlow API keys, provider credentials, system tokens, beta values, and embed URLs can expose operational access if printed or stored insecurely.
+
+Mitigation: Keep credentials in environment variables or files, prefer RAGFLOW_PROVIDER_API_KEY or api-key files for provider credentials, and redact secret values in user-facing responses unless explicitly requested.
+
+## Reference(s):
+
+- [RAGFlow Skill Source](https://github.com/LunarCache/ragflow-skill)
+- [Command Reference](references/COMMANDS.md)
+- [Programmatic API and Configuration](references/API.md)
+- [RAGFlow Custom Agent Guide](references/AGENT_GUIDE.md)
+- [Troubleshooting](references/TROUBLESHOOTING.md)
+- [Output Format Reference](references/REFERENCE.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown summaries with inline shell commands and JSON command output when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Operational output should redact API keys, provider keys, system tokens, beta values, and embed URLs containing auth query values unless the user explicitly requests copy-paste secret material.]
+
+## Skill Version(s):
+
+1.8.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

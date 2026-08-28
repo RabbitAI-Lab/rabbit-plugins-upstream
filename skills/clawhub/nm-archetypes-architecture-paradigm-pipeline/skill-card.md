@@ -1,41 +1,57 @@
-## Description: <br>
-Applies pipes-and-filters for sequential data transformations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies pipes-and-filters for sequential data transformations.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and architects use this skill to decide when and how to apply a pipes-and-filters pipeline for ETL, streaming analytics, CI/CD, and other sequential data transformations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be triggered for broad architecture, pipeline, or streaming discussions where pipes-and-filters guidance is not intended. <br>
-Mitigation: Confirm that the user is asking about sequential data transformations before applying the pattern-specific guidance. <br>
-Risk: Architecture guidance can be incomplete or misleading if adopted without review. <br>
-Mitigation: Review the proposed pipeline stages, schemas, back-pressure behavior, and operational assumptions before implementation. <br>
+## Use Case:
 
+Developers and software architects use this skill to decide when and how to structure systems as pipes-and-filters pipelines for ETL, streaming analytics, CI/CD flows, and other sequential data transformations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-pipeline) <br>
-- [Project Homepage from ClawHub Metadata](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown guidance with architecture recommendations, deliverables, and risk mitigations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; no tools, MCP references, credential variables, or shell commands were detected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata) <br>
+Risk: The skill uses broad architecture and data-processing trigger terms that may activate during general design discussions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and narrow trigger terms before installation if stricter activation behavior is required.
+
+Risk: Pipeline architecture advice can lead to incorrect design decisions if applied without workload-specific review.
+
+Mitigation: Have engineers validate proposed filters, pipe technology, schemas, back-pressure behavior, and observability plans before implementation.
+
+Risk: Pipeline systems can suffer from bottlenecks, schema drift, or back-pressure failures.
+
+Mitigation: Use per-stage scaling, compatibility tests, load testing, retry policies, buffering validation, and stage-level monitoring.
+
+## Reference(s):
+
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown, Configuration]
+
+**Output Format:** [Markdown guidance with architecture steps, deliverables, component vocabulary, and risk mitigations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only; no executable behavior, privileged access, or sensitive data access is indicated by security evidence.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release metadata; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

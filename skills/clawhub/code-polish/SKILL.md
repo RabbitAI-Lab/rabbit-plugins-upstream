@@ -1,12 +1,13 @@
 ---
 name: polish
-description: Pre-release code review - runs lint/type checks, launches parallel review agents (cleanliness, design, efficiency, side-effect gating) on the diff, validates findings, and fixes with approval. Use before committing, pushing, or releasing changes.
+description: Pre-release code review - runs lint/type checks, launches parallel review agents (cleanliness, design, efficiency, side-effect gating) on the diff, validates findings, and fixes with approval. Run when the user asks for a polish or pre-release review, or told you earlier to polish before committing or pushing.
 metadata:
-  version: "2.4.1"
+  version: "2.6.0"
+  categories: "development"
+  topics: "code-review, linting, refactoring, pre-release, diff-review"
   openclaw:
     homepage: https://github.com/tenequm/skills/tree/main/skills/polish
     emoji: "✨"
-disable-model-invocation: true
 argument-hint: "[base-ref]"
 allowed-tools: "Bash(git diff *), Bash(git show *), Bash(git status *), Bash(git rev-parse *), Bash(git log *)"
 ---
@@ -30,7 +31,7 @@ Base ref argument (optional): $ARGUMENTS
 - Do NOT add comments, docstrings, or type annotations to code that doesn't have them
 - Distinguish legitimate operational logging (`logger.info`, `logger.error`) from debug leftovers (`console.log`, `console.debug`)
 - When fixing, make minimal targeted edits - don't refactor surrounding code
-- Only flag issues in changed/added lines, not pre-existing code
+- The diff is the hunting scope - review the changed code, don't audit the whole repo. But anything real the review surfaces along the way (a pre-existing flaw the diff touches, a stale sibling path, an adjacent issue) is a finding in its category, tagged `(pre-existing)` or `(out of diff)` - never parked in a side note
 - Reuse suggestions must point to a specific existing function/utility in the codebase, not hypothetical "you could extract this"
 - Do not flag efficiency on cold paths, one-time setup code, or scripts that run once
 
@@ -110,13 +111,13 @@ Looks for runtime performance and resource issues.
 
 ### Agent 4: Side-Effect Gating
 
-Closed-scope correctness check. Finds costly or irreversible side-effects that run before the checks meant to gate them. Does NOT judge whether business logic is correct - that is `/review`'s job.
+Closed-scope correctness check. Finds costly or irreversible side-effects that run before the checks meant to gate them. Does NOT judge whether business logic is correct - that is `/code-review`'s job.
 
 - **Inventory the side-effects**: list every costly or irreversible side-effect introduced or relocated in the diff - charges/payments, DB writes/deletes, mutating external calls, file writes, notifications/emails, irreversible state changes
 - **Inventory the gates**: for each side-effect, list the checks that must precede it - input validation (shape/type/range), authentication, authorization, precondition/existence checks, idempotency/dedup
 - **Cross-check ordering**: flag any side-effect reachable on a control-flow path where a gate runs after it, or not at all. Trace ACROSS the middleware/handler boundary - middleware that fires a side-effect before calling `next()` is the prime suspect; the validation that should gate it often lives in the downstream handler
 - **Missing rollback**: flag a committed side-effect with no compensation when a later step on the same request can still fail (e.g. charged, then the request errors)
-- **Out of scope** - route to `/review`: whether the business logic is correct, pricing math, algorithmic correctness, anything without a crisp invariant
+- **Out of scope** - route to `/code-review`: whether the business logic is correct, pricing math, algorithmic correctness, anything without a crisp invariant
 
 Every finding must cite the side-effect line, the gate it precedes (or "ungated"), and the control-flow path. No finding without two line references.
 
@@ -131,7 +132,7 @@ For each finding:
 - **Debug leftovers** - confirm the flagged line is actually a debug artifact, not structured logging (`logger.*`, `c.var.logger.*`)
 - **Efficiency / design claims** - read the surrounding context to confirm the pattern matches. Drop speculative findings that don't hold up with full context
 - **Side-effect gating / behavior-drift claims** - confirm by reading the actual control flow: the side-effect line, the gate line, and the path between (including downstream handlers and middleware order). Validate a relocation regression against *the code it replaced*, not against sibling paths that may share the same flaw. Never drop one as "a behavior decision" or "out of scope" - if it holds up it is the highest-severity finding
-- **Rewritten or moved paths** - when a finding lands on rewritten/relocated code, check whether the flaw already existed at HEAD (or in the pre-move version). If it did, keep it but report it as pre-existing-carried-through, not a new regression. Separately flag any test coverage deleted with the old path and not replaced
+- **Rewritten or moved paths** - when a finding lands on rewritten/relocated code, check whether the flaw already existed at HEAD (or in the pre-move version). If it did, keep it as a finding tagged `(pre-existing)` - the regression vs. carried-through distinction is signal, not a demotion. Separately flag any test coverage deleted with the old path and not replaced
 
 Only findings that survive validation proceed to the report.
 
@@ -158,11 +159,9 @@ Synthesize validated findings into a single deduplicated report. If multiple age
 1. `path/to/file.ts:30-45` - sequential awaits on independent API calls, use Promise.all
 2. ...
 
-### Observations (non-blocking)
-1. `path/to/file.ts:88` - flock fallback catches all lock errors, not just unsupported-filesystem ones - a behavior note, not a defect; your call
-
 ### Dropped after validation
 1. `path/to/view.py:12` - per-mousemove getBoundingClientRect - the element is CSS-fixed, so the rect is cached and there is no layout flush
+2. `path/to/file.ts:88` - flock fallback catches all lock errors, not just unsupported-filesystem ones - validated but not actionable; nothing to change
 
 **Total: X issues across Y categories**
 
@@ -173,9 +172,9 @@ Synthesize validated findings into a single deduplicated report. If multiple age
 
 List **Correctness** first, and always - including at `(0 issues)`, since a zero there is a real signal that side-effect ordering was checked. A correctness zero must state what was traced - which side-effects were inventoried and which gates cover them - not just the count. It must never be batch-approved alongside cosmetic items.
 
-**Observations** are validated behavior notes that aren't defects - the user's call, never blocking. **Dropped after validation** lists agent findings Phase 4 dismissed, with the reason - it substantiates the counts. Omit either section when empty.
+There is no non-blocking "observations" section: anything validated and worth acting on is a finding in its category (tagged `(pre-existing)` or `(out of diff)` where applicable); anything not worth acting on goes under **Dropped after validation** with the reason. That section substantiates the counts - omit it when empty.
 
-End the report with a per-finding **Recommendation** line: which findings you'd fix and which you'd skip, so the user can approve by reference.
+End the report with a per-finding **Recommendation** line: which findings you'd fix and which you'd skip, so the user can approve by reference. Judge on long-term codebase benefit. Out-of-diff findings default to fix; recommend deferring one only when fixing it would bloat the change beyond what belongs in this commit, and say so explicitly rather than leaving it open-ended. Scope hygiene loses when the fix is smaller than the explanation for deferring it - defer only what genuinely forces a decision or a change that introduces more risk than the value it provides; a low-risk fix that just makes maintenance easier is a fix, not a deferral.
 
 If zero issues found, report "Clean - no issues found", substantiate the correctness zero (what was traced and why it's clean), and offer next actions - e.g. commit as-is, or leave for the user's own review - then stop.
 

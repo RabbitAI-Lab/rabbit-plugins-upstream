@@ -266,12 +266,12 @@ def main():
 
     # search_homestay
     s = sub.add_parser("search", help="结构化搜索特色民宿")
-    s.add_argument("--dest_name", required=True, help="目的地，如大理、莫干山、三亚")
-    s.add_argument("--key_words", default="", help="关键词，如海景、亲子、山景")
-    s.add_argument("--poi_name", default="", help="附近景点，如洱海、灵隐寺")
-    s.add_argument("--check_in_date", default="", help="入住日期 YYYY-MM-DD")
-    s.add_argument("--check_out_date", default="", help="退房日期 YYYY-MM-DD")
-    s.add_argument("--max_price", type=int, default=0, help="最高价格，0不限")
+    s.add_argument("--destName", required=True, help="目的地，如大理、莫干山、三亚")
+    s.add_argument("--keyWords", default="", help="关键词，如海景、亲子、山景")
+    s.add_argument("--poiName", default="", help="附近景点，如洱海、灵隐寺")
+    s.add_argument("--checkInDate", default="", help="入住日期 YYYY-MM-DD")
+    s.add_argument("--checkOutDate", default="", help="退房日期 YYYY-MM-DD")
+    s.add_argument("--maxPrice", type=int, default=0, help="最高价格，0不限")
     s.add_argument("--sort", default="", help="排序：price_asc/price_desc/rate_desc")
 
     # recommend_homestay
@@ -283,23 +283,23 @@ def main():
     if args.action == "search":
         # 结构化搜索：飞猪+途牛双源
         fliggy_items = _fliggy_search(
-            args.dest_name, args.key_words, args.poi_name,
-            args.check_in_date, args.check_out_date,
-            args.max_price, args.sort
+            args.destName, args.keyWords, args.poiName,
+            args.checkInDate, args.checkOutDate,
+            args.maxPrice, args.sort
         )
         tuniu_items = _tuniu_search(
-            args.dest_name, "民宿",
-            args.check_in_date, args.check_out_date
+            args.destName, "民宿",
+            args.checkInDate, args.checkOutDate
         )
 
         merged = _merge_and_dedup(fliggy_items, tuniu_items, args.sort)
 
         # 价格过滤
-        if args.max_price > 0:
-            merged = [h for h in merged if h["price"] <= args.max_price]
+        if args.maxPrice > 0:
+            merged = [h for h in merged if h["price"] <= args.maxPrice]
 
         text = _format_homestay_list(merged)
-        text += _build_tips(args.dest_name)
+        text += _build_tips(args.destName)
         print(text)
 
     elif args.action == "recommend":

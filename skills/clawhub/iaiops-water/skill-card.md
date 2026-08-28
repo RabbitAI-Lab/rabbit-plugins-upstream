@@ -1,38 +1,52 @@
-## Description: <br>
-Water-treatment edition of iaiops for waterworks, wastewater plants, and pump stations, covering Modbus-TCP/RTU, OPC-UA, HART-IP instrumentation, downtime root-cause analysis, data quality checks, and OEE guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+iaiops-water helps agents inspect water-treatment operations through read-first Modbus, OPC-UA, and HART-IP workflows for instrumentation, data quality, root-cause analysis, OEE, and compliance checks.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[zw008](https://clawhub.ai/user/zw008)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, operators, and engineers use this skill to guide monitoring, diagnostics, compliance checks, and incident investigation for waterworks, wastewater plants, pump stations, SCADA/PLC gateways, and process instrumentation.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The artifact describes a read-only water-treatment profile while also listing external push, publish, historian push, and export capabilities.
+
+Mitigation: Clarify or separate those capabilities from the read-only profile, and require explicit user approval, destination allowlists, and audit controls before operational use.
+
+Risk: Operational guidance for water-treatment environments could affect safety, compliance, or incident response if used without site review.
+
+Mitigation: Review the skill before installation in any operational environment and keep production-control changes behind the documented management-of-change process.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, engineers, and operators use this skill to inspect water-treatment telemetry, diagnose dataflow and equipment issues, and produce compliance-oriented analysis for waterworks, wastewater plants, and pump stations. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan says the skill is mostly documentation-only but claims a read-only posture while listing push, export, and publish tools that could move operational data or change external state. <br>
-Mitigation: Install only when the actual MCP runtime is verified to expose read-only tools for this water edition, or when the environment has explicit allowlists and approvals for historian push, export, and stream publishing. <br>
+**Output Format:** [Markdown guidance with tool names, configuration examples, and inline shell commands]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-water) <br>
+**Other Properties Related to Output:** [Read-first operational guidance; production-control changes require separate approval controls outside this skill.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline command examples and named tool references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+0.23.1 (source: server release metadata)
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

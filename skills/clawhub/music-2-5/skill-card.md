@@ -1,44 +1,59 @@
-## Description: <br>
-Use when someone wants an original AI song with vocals: sung lyrics, a style prompt track, or source audio for a music video. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants an original AI song with vocals: sung lyrics, a style prompt track, or source audio for a music video.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-External developers and agents use this skill to prepare Replicate requests for MiniMax music-2.5, collecting lyrics, style prompts, audio format settings, and follow-on workflow guidance for original AI songs with vocals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lyrics and style prompts are sent to Replicate/MiniMax for generation. <br>
-Mitigation: Confirm the user is comfortable sharing those inputs with the third-party model provider before making API calls. <br>
-Risk: The Replicate API token could be exposed if pasted into prompts, code, or generated files. <br>
-Mitigation: Use REPLICATE_API_TOKEN from the environment and avoid echoing or writing the secret value. <br>
-Risk: The workflow depends on referenced Pruna helper skills and may require ffmpeg or ffprobe for music-video slicing and assembly. <br>
-Mitigation: Install or load the prerequisite skills and confirm required local tools are available before generation or downstream video work. <br>
+## Use Case:
 
+External users, developers, and creative teams use this skill to guide an agent through generating original songs with vocals from lyrics and an optional style prompt through Replicate's MiniMax music-2.5 model.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/music-2-5) <br>
-- [Replicate MiniMax music-2.5 predictions endpoint](https://api.replicate.com/v1/models/minimax/music-2.5/predictions) <br>
-- [MiniMax privacy policy](https://www.minimax.io/platform/protocol/privacy-policy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API requests] <br>
-**Output Format:** [Markdown with inline bash and JSON request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to confirm REPLICATE_API_TOKEN, collect lyrics and optional music settings, call Replicate, poll for completion, and download generated audio.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence and skill frontmatter metadata) <br>
+Risk: The skill sends lyrics and prompts to an external provider through Replicate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting private or sensitive lyrics, prompts, or source material, and review MiniMax and Replicate handling policies before use.
+
+Risk: The skill depends on Replicate credentials and may trigger paid external API calls.
+
+Mitigation: Use a Replicate token with appropriate account limits and confirm required inputs before making prediction requests.
+
+Risk: The skill asks agents to install related Pruna dependency skills before generation.
+
+Mitigation: Verify the Pruna dependency skills before installation and allow only dependencies needed for the intended workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/music-2-5)
+- [MiniMax privacy policy](https://www.minimax.io/platform/protocol/privacy-policy)
+- [Replicate MiniMax music-2.5 prediction endpoint](https://api.replicate.com/v1/models/minimax/music-2.5/predictions)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls]
+
+**Output Format:** [Markdown with inline bash, curl, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides credential setup, required lyrics input, optional music settings, Replicate prediction polling, and generated audio download.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

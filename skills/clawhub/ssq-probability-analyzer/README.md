@@ -1,0 +1,62 @@
+# 双色球一站看 · 专家观点 + 娱乐选号 + 开奖核对
+
+**SSQ Probability Analyzer** — a free, honest double-color-ball (双色球) assistant: aggregate expert views, generate fun picks, verify your ticket against the real draw, and compute duplicates/box savings. No paid "master numbers", no hype — it tells you plainly *why you can't beat the odds*.
+
+> 数学上任何选号思路都不优于随机；本工具仅供娱乐参考，长期玩必亏，请量力而行，绝不作为收益依据。
+
+## 5 分钟快速入门
+
+**前置依赖**：Python 3.8+（仅用标准库，无需 `pip install` 任何包）。
+
+```bash
+# 在技能目录下运行，自动：联网取数 → 预测 → 22 项自检护栏 → 报告复制到桌面
+python run_ssq.py
+
+# 离线跑（不联网取数）：
+python run_ssq.py --skip-download
+
+# 想看"为什么彩票不可预判"的随机性检验：
+python run_ssq.py --randomness
+```
+
+运行后会生成 HTML 报告并复制到桌面，双击即可在浏览器打开。
+
+## 核心功能
+
+- 🧠 **全网专家观点一站看**：聚合多家平台分析师的当期推荐与思路（三区比/大小比/重号/连号/质合/跨度/遗漏），附来源原文链接，逐条与公开原文核对（verified）。
+- 🎲 **娱乐选号**：机选 / 生日号，纯随机娱乐，不声称有任何预测力。
+- 🏆 **开奖即时核对中奖**：开奖后一键核对你买的号中没中，给出真实中奖等级。
+- 💡 **胆拖帮你算省钱**：输入胆拖结构，自动算注数、金额、相对直选省多少。
+- 🛡️ **诚实框架（no_edge）**：内置随机性检验、选号套路打假、22 项自检护栏；明确标注"无预测力 / 仅作逆向观察 / 负期望"。
+- 🔔 **开奖订阅提醒**：内置自动化（默认 ACTIVE），每期自动出报告、开奖自动核对。
+
+## 使用场景
+
+- "给我这期双色球的娱乐组合" → 生成机选/生日娱乐号。
+- "看看这期双色球专家推荐" → 汇总真实专家观点。
+- "帮我核对开奖中没中" → 即时核对中奖。
+- "双色球选号推荐" → 给出娱乐参考 + 诚实声明。
+
+## 安全说明（ClawHub 审查相关）
+
+- 本技能**仅为指令与脚本的集合**，不下载、不执行任何外部可执行二进制文件。
+- 运行时会通过 Python 标准库联网获取**公开彩票开奖数据**（非可执行程序），断网时自动回退内置离线数据，不影响使用。
+- SKILL.md 中不包含 `curl` / `wget` / 下载二进制 / 远程脚本等指令。
+
+## 文件结构
+
+```
+ssq-probability-analyzer/
+├── SKILL.md            # 技能手册（必需）
+├── README.md           # 本文档
+├── CHANGELOG.md        # 版本变更日志
+├── LICENSE             # MIT-0
+├── references/         # 参考文档（FAQ 等）
+└── scripts/
+    ├── run_ssq.py      # 入口
+    └── lib/            # 模块与离线数据
+```
+
+## 免责声明
+
+双色球为纯随机游戏，任何分析方法均不提高中奖概率。本工具所有产出仅供娱乐，不构成任何购彩建议或收益承诺。请理性购彩、量力而行。

@@ -1,25 +1,5 @@
 #!/usr/bin/env python3
-"""ClawHub skill: live MLB moneyline trading through Simmer SDK only.
-
-The signal comes from ESPN's live MLB scoreboard. The adapter intentionally
-fails closed when the game, probability, market identity, or executable quote
-cannot be validated. Real orders require ``--live``; the default uses Simmer's
-paper execution against real venue prices.
-
-This file is a self-contained monofile. The ESPN feed client, the live-win-
-probability/risk mathematics, and the Simmer execution runtime all live here,
-so the packaged skill has no local module dependencies at all -- its only
-third-party import is the Simmer SDK. The layout is:
-
-    1. Configuration schema and shared primitives
-    2. Signal + risk core (ESPN parsing, market identity, EV, Kelly inputs)
-    3. ESPN live feed client (stdlib HTTP, fails closed)
-    4. Simmer execution runtime (discovery, sizing, safeguards, CLI)
-
-Every ESPN parser below is defensive: ESPN's public site API is undocumented,
-so a game is tradeable only when it is explicitly live, both teams are
-recognized, and a valid current/fallback win probability exists.
-"""
+"""Trade live MLB prediction markets through Simmer. Paper mode is the default."""
 
 from __future__ import annotations
 
@@ -27,2311 +7,3063 @@ import argparse
 import json
 import math
 import os
-import re
 import sys
 import time
-import urllib.error
-import urllib.parse
-import urllib.request
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import asdict, dataclass, is_dataclass
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Callable, Iterable, Mapping, Sequence
+from typing import Any, Protocol
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode, urlparse
+from urllib.request import Request, urlopen
 
-from simmer_sdk import SimmerClient
-from simmer_sdk.skill import get_config_path, load_config, update_config
 from simmer_sdk.sizing import SIZING_CONFIG_SCHEMA, size_position
+from simmer_sdk.skill import get_config_path, load_config, update_config
 
-try:
-    sys.stdout.reconfigure(line_buffering=True)
-except (AttributeError, OSError):
-    pass
+from mlb_state import (
+    DailyTradeState,
+    TradeStateStore,
+    UninitializedTradeStateError,
+)
+from mlb_strategy import (
+    StrategyConfig,
+    fair_probability_for_team,
+    infer_yes_team,
+    select_trade,
+    source_allowed,
+)
+
+_stdout_reconfigure = getattr(sys.stdout, "reconfigure", None)
+if callable(_stdout_reconfigure):
+    try:
+        _stdout_reconfigure(line_buffering=True)
+    except OSError:
+        pass
 
 SKILL_SLUG = "mlb-live-trader"
 TRADE_SOURCE = "sdk:mlb-live-trader"
-VERSION = "1.0.0"
-VENUE = "polymarket"
-_STATE_PATH = Path(__file__).resolve().with_name(".mlb-live-trader-state.json")
-_LOCK_PATH = Path(__file__).resolve().with_name(".mlb-live-trader.lock")
-
-# The standard sizing schema is deliberately merged, as required by Simmer's
-# skill contract. Skill-specific controls use namespaced environment variables.
-CONFIG_SCHEMA: dict[str, dict[str, Any]] = {
-    **SIZING_CONFIG_SCHEMA,
-    "starting_balance": {
-        "env": "SIMMER_MLB_LIVE_TRADER_STARTING_BALANCE",
-        "default": 1000.0,
-        "type": float,
-    },
-    "probability_haircut": {
-        "env": "SIMMER_MLB_LIVE_TRADER_PROBABILITY_HAIRCUT",
-        "default": 0.90,
-        "type": float,
-    },
-    "early_game_confidence": {
-        "env": "SIMMER_MLB_LIVE_TRADER_EARLY_GAME_CONFIDENCE",
-        "default": 0.75,
-        "type": float,
-    },
-    "fee_buffer": {
-        "env": "SIMMER_MLB_LIVE_TRADER_FEE_BUFFER",
-        "default": 0.01,
-        "type": float,
-    },
-    "max_bankroll_fraction": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MAX_BANKROLL_FRACTION",
-        "default": 0.02,
-        "type": float,
-    },
-    "max_position_usd": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MAX_POSITION_USD",
-        "default": 25.0,
-        "type": float,
-    },
-    "max_game_exposure_usd": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MAX_GAME_EXPOSURE_USD",
-        "default": 35.0,
-        "type": float,
-    },
-    "portfolio_exposure_cap_usd": {
-        "env": "SIMMER_MLB_LIVE_TRADER_PORTFOLIO_EXPOSURE_CAP_USD",
-        "default": 100.0,
-        "type": float,
-    },
-    "daily_spend_limit_usd": {
-        "env": "SIMMER_MLB_LIVE_TRADER_DAILY_SPEND_LIMIT_USD",
-        "default": 100.0,
-        "type": float,
-    },
-    "min_order_shares": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MIN_ORDER_SHARES",
-        "default": 5.0,
-        "type": float,
-    },
-    "min_market_price": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MIN_MARKET_PRICE",
-        "default": 0.03,
-        "type": float,
-    },
-    "max_market_price": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MAX_MARKET_PRICE",
-        "default": 0.97,
-        "type": float,
-    },
-    "max_spread": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MAX_SPREAD",
-        "default": 0.08,
-        "type": float,
-    },
-    "max_slippage": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MAX_SLIPPAGE",
-        "default": 0.03,
-        "type": float,
-    },
-    "book_liquidity_fraction": {
-        "env": "SIMMER_MLB_LIVE_TRADER_BOOK_LIQUIDITY_FRACTION",
-        "default": 0.80,
-        "type": float,
-    },
-    "min_inning": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MIN_INNING",
-        "default": 1,
-        "type": int,
-    },
-    "max_inning": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MAX_INNING",
-        "default": 12,
-        "type": int,
-    },
-    "max_quote_age_seconds": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MAX_QUOTE_AGE_SECONDS",
-        "default": 90.0,
-        "type": float,
-    },
-    "cooldown_seconds": {
-        "env": "SIMMER_MLB_LIVE_TRADER_COOLDOWN_SECONDS",
-        "default": 300,
-        "type": int,
-    },
-    "poll_seconds": {
-        "env": "SIMMER_MLB_LIVE_TRADER_POLL_SECONDS",
-        "default": 15,
-        "type": int,
-    },
-    "max_trades_per_run": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MAX_TRADES_PER_RUN",
-        "default": 3,
-        "type": int,
-    },
-    "market_query_limit": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MARKET_QUERY_LIMIT",
-        "default": 25,
-        "type": int,
-    },
-    "espn_timeout_seconds": {
-        "env": "SIMMER_MLB_LIVE_TRADER_ESPN_TIMEOUT_SECONDS",
-        "default": 8.0,
-        "type": float,
-    },
-    "max_summary_requests": {
-        "env": "SIMMER_MLB_LIVE_TRADER_MAX_SUMMARY_REQUESTS",
-        "default": 15,
-        "type": int,
-    },
-}
-# Raise the standard SDK default from any-positive-EV to a meaningful live edge.
-CONFIG_SCHEMA["min_ev"] = {
-    **SIZING_CONFIG_SCHEMA["min_ev"],
-    "default": 0.05,
-}
-
-_CLIENTS: dict[bool, SimmerClient] = {}
-
-
-# ---------------------------------------------------------------------------
-# Shared primitives
-# ---------------------------------------------------------------------------
-
-
-def _finite_float(value: Any) -> float | None:
-    """Coerce to a finite float, or ``None``. NaN/inf and junk are rejected."""
-    try:
-        result = float(value)
-    except (TypeError, ValueError):
-        return None
-    return result if math.isfinite(result) else None
-
-
-# The signal core historically exposed this identical coercion under a second
-# name. Both names stay bound so either import site keeps working.
-_safe_float = _finite_float
-
-
-def _mapping(value: Any) -> Mapping[str, Any]:
-    return value if isinstance(value, Mapping) else {}
-
-
-def _sequence(value: Any) -> Sequence[Any]:
-    if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
-        return value
-    return ()
-
-
-def _safe_int(value: Any, default: int = 0) -> int:
-    try:
-        return int(float(value))
-    except (TypeError, ValueError):
-        return default
-
-
-def _safe_probability(value: Any) -> float | None:
-    probability = _safe_float(value)
-    if probability is None or not 0.0 <= probability <= 1.0:
-        return None
-    return probability
-
-
-# ---------------------------------------------------------------------------
-# Signal + risk core
-# ---------------------------------------------------------------------------
-
-# Canonical nickname -> (full name, common abbreviations/aliases).
-_TEAM_DATA: dict[str, tuple[str, tuple[str, ...]]] = {
-    "diamondbacks": ("Arizona Diamondbacks", ("ari", "d-backs", "dbacks")),
-    "braves": ("Atlanta Braves", ("atl",)),
-    "orioles": ("Baltimore Orioles", ("bal", "o's")),
-    "red sox": ("Boston Red Sox", ("bos", "redsox")),
-    "cubs": ("Chicago Cubs", ("chc",)),
-    "white sox": ("Chicago White Sox", ("cws", "chw", "whitesox")),
-    "reds": ("Cincinnati Reds", ("cin",)),
-    "guardians": ("Cleveland Guardians", ("cle",)),
-    "rockies": ("Colorado Rockies", ("col",)),
-    "tigers": ("Detroit Tigers", ("det",)),
-    "astros": ("Houston Astros", ("hou",)),
-    "royals": ("Kansas City Royals", ("kc", "kcr")),
-    "angels": ("Los Angeles Angels", ("laa", "anaheim angels")),
-    "dodgers": ("Los Angeles Dodgers", ("lad",)),
-    "marlins": ("Miami Marlins", ("mia",)),
-    "brewers": ("Milwaukee Brewers", ("mil",)),
-    "twins": ("Minnesota Twins", ("min",)),
-    "mets": ("New York Mets", ("nym",)),
-    "yankees": ("New York Yankees", ("nyy",)),
-    "athletics": ("Athletics", ("ath", "oak", "oakland athletics", "a's")),
-    "phillies": ("Philadelphia Phillies", ("phi",)),
-    "pirates": ("Pittsburgh Pirates", ("pit",)),
-    "padres": ("San Diego Padres", ("sd", "sdp")),
-    "giants": ("San Francisco Giants", ("sf", "sfg")),
-    "mariners": ("Seattle Mariners", ("sea",)),
-    "cardinals": ("St. Louis Cardinals", ("stl", "saint louis cardinals")),
-    "rays": ("Tampa Bay Rays", ("tb", "tbr")),
-    "rangers": ("Texas Rangers", ("tex",)),
-    "blue jays": ("Toronto Blue Jays", ("tor", "bluejays")),
-    "nationals": ("Washington Nationals", ("wsh", "was")),
-}
-
-_CLEAN_RE = re.compile(r"[^a-z0-9]+")
-_WS_RE = re.compile(r"\s+")
-_GAME_ONE_RE = re.compile(r"(?:game|gm)\s*(?:1|one)\b", re.IGNORECASE)
-_GAME_TWO_RE = re.compile(r"(?:game|gm)\s*(?:2|two)\b", re.IGNORECASE)
-_DOUBLEHEADER_RE = re.compile(r"\bdouble[ -]?header\b", re.IGNORECASE)
-_EXPLICIT_WIN_RE = re.compile(
-    r"\b(?:will|does)\s+(.+?)\s+(?:win|beat)\b", re.IGNORECASE
+ESPN_SCOREBOARD_URL = (
+    "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard"
 )
+ESPN_SUMMARY_URL = "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/summary"
+MIN_SHARES_PER_ORDER = 5.0
+CONFIG_PATH = Path(__file__).with_name("config.json")
 
-# Anything containing these phrases is not a full-game moneyline.
-_PROP_TERMS = (
-    "spread",
-    "run line",
-    "handicap",
-    "o/u",
-    "over/under",
-    "total runs",
-    "team total",
-    "first 5",
-    "1st 5",
-    "first five",
-    "inning",
-    "hits",
-    "home run",
-    "strikeout",
-    "rbi",
-    "series",
-    "championship",
-    "world series",
-    "make the playoffs",
-    "win the division",
-    "regular season wins",
-    "margin of victory",
-)
 
-
-@dataclass(frozen=True)
-class LiveGameState:
-    event_id: str
-    game_date: str
-    game_number: int
-    event_start_time: str | None
-    away_team: str
-    home_team: str
-    away_name: str
-    home_name: str
-    away_abbreviation: str
-    home_abbreviation: str
-    away_score: int
-    home_score: int
-    inning: int
-    inning_half: str
-    status_detail: str
-    outs: int
-    balls: int
-    strikes: int
-    on_first: bool
-    on_second: bool
-    on_third: bool
-    pitcher: str | None
-    batter: str | None
-    last_play_id: str | None
-    last_play_text: str | None
-    probability_play_id: str | None
-    home_win_probability: float
-    probability_source: str
-    venue_name: str | None
-    neutral_site: bool
-    play_by_play_available: bool
-    was_suspended: bool
-    weather_temperature_f: float | None
-    weather_condition: str | None
-    broadcast: str | None
-    fetched_at: int
-    is_doubleheader: bool = False
-
-    @property
-    def score(self) -> str:
-        return (
-            f"{self.away_abbreviation} {self.away_score}-"
-            f"{self.home_score} {self.home_abbreviation}"
-        )
-
-    @property
-    def runners(self) -> str:
-        occupied = [
-            base
-            for base, is_on in (
-                ("1B", self.on_first),
-                ("2B", self.on_second),
-                ("3B", self.on_third),
-            )
-            if is_on
-        ]
-        return ",".join(occupied) if occupied else "empty"
-
-    @property
-    def count(self) -> str:
-        return f"{self.balls}-{self.strikes}"
-
-    @property
-    def state_key(self) -> str:
-        play = self.probability_play_id or self.last_play_id or "no-play-id"
-        return f"{self.event_id}:{play}"
-
-
-@dataclass(frozen=True)
-class StrategyConfig:
-    min_edge: float = 0.05
-    probability_haircut: float = 0.90
-    early_game_confidence: float = 0.75
-    fee_buffer: float = 0.01
-    kelly_multiplier: float = 0.25
-    max_bankroll_fraction: float = 0.02
-    max_position_usd: float = 25.0
-    max_game_exposure_usd: float = 35.0
-    min_order_shares: float = 5.0
-    min_inning: int = 1
-    max_inning: int = 12
-    max_quote_age_seconds: float = 90.0
-    min_market_price: float = 0.03
-    max_market_price: float = 0.97
-
-
-@dataclass(frozen=True)
-class MarketCandidate:
-    side: str
-    yes_team: str
-    raw_yes_probability: float
-    adjusted_yes_probability: float
-    p_win: float
-    quoted_price: float
-    execution_price: float
-    effective_price: float
-    edge: float
-    confidence: float
-    raw_kelly_fraction: float
-
-
-@dataclass(frozen=True)
-class SizedSignal:
-    candidate: MarketCandidate
-    amount_usd: float
-    shares: float
-    skip_reason: str | None = None
-
-
-@dataclass(frozen=True)
-class SummaryProbability:
-    home_win_probability: float
-    play_id: str | None
-
-
-def _clean(value: str) -> str:
-    return _WS_RE.sub(" ", _CLEAN_RE.sub(" ", (value or "").lower())).strip()
-
-
-def canonical_team(value: str) -> str:
-    """Normalize ESPN/Polymarket/Simmer team labels to a stable nickname."""
-    cleaned = _clean(value)
-    if not cleaned:
-        return ""
-    for canonical, (full, aliases) in _TEAM_DATA.items():
-        candidates = (canonical, full, *aliases)
-        for candidate in candidates:
-            normalized = _clean(candidate)
-            if cleaned == normalized or cleaned.endswith(f" {normalized}"):
-                return canonical
-    return cleaned
-
-
-def full_team_name(canonical: str) -> str:
-    entry = _TEAM_DATA.get(canonical)
-    return entry[0] if entry else canonical.title()
-
-
-def team_search_terms(canonical: str) -> tuple[str, ...]:
-    entry = _TEAM_DATA.get(canonical)
-    if not entry:
-        return (canonical,)
-    full, aliases = entry
-    return tuple(dict.fromkeys((full, canonical, *aliases)))
-
-
-def _nested_name(container: Mapping[str, Any], key: str) -> str | None:
-    block = _mapping(container.get(key))
-    athlete = _mapping(block.get("athlete"))
-    for field in ("displayName", "fullName", "shortName"):
-        value = athlete.get(field)
-        if isinstance(value, str) and value.strip():
-            return value.strip()
-    return None
-
-
-def _broadcast_name(competition: Mapping[str, Any]) -> str | None:
-    direct = competition.get("broadcast")
-    if isinstance(direct, str) and direct.strip():
-        return direct.strip()
-    for item in _sequence(competition.get("broadcasts")):
-        names = _sequence(_mapping(item).get("names"))
-        for name in names:
-            if isinstance(name, str) and name.strip():
-                return name.strip()
-    return None
-
-
-def parse_summary_probability(payload: Mapping[str, Any]) -> SummaryProbability | None:
-    """Return the newest valid ESPN home-win probability from a summary payload."""
-    history = _sequence(payload.get("winprobability"))
-    for point in reversed(history):
-        item = _mapping(point)
-        probability = _safe_probability(item.get("homeWinPercentage"))
-        if probability is None:
-            continue
-        play_id = item.get("playId") or item.get("play_id")
-        return SummaryProbability(probability, str(play_id) if play_id else None)
-    return None
-
-
-def _doubleheader_info(competition: Mapping[str, Any]) -> tuple[int, bool]:
-    """Return (game number, is doubleheader) from ESPN competition notes.
-
-    An explicit Game 1/Game 2 marker is treated as a doubleheader marker even
-    when ESPN omits the word ``doubleheader``. A generic doubleheader note with
-    no game number returns ``0`` so downstream market matching fails closed.
-    """
-    headlines = [
-        str(_mapping(note).get("headline") or "")
-        for note in _sequence(competition.get("notes"))
-    ]
-    combined = " ".join(headlines)
-    if _GAME_TWO_RE.search(combined):
-        return 2, True
-    if _GAME_ONE_RE.search(combined):
-        return 1, True
-    if _DOUBLEHEADER_RE.search(combined):
-        return 0, True
-    return 1, False
-
-
-def parse_scoreboard(
-    payload: Mapping[str, Any],
-    *,
-    fetched_at: int | None = None,
-    summary_probabilities: Mapping[str, SummaryProbability] | None = None,
-    only_live: bool = True,
-) -> list[LiveGameState]:
-    """Parse ESPN's live scoreboard defensively and fail closed.
-
-    Only games with a valid win probability are returned. If the scoreboard's
-    latest play lacks one, callers may provide a per-event probability parsed
-    from the summary endpoint's newest ``winprobability`` point.
-    """
-    now = (
-        int(datetime.now(timezone.utc).timestamp())
-        if fetched_at is None
-        else int(fetched_at)
-    )
-    root_day = str(_mapping(payload.get("day")).get("date") or "")[:10]
-    fallbacks = summary_probabilities or {}
-    output: list[LiveGameState] = []
-
-    for raw_event in _sequence(payload.get("events")):
-        event = _mapping(raw_event)
-        event_id = str(event.get("id") or "")
-        competitions = _sequence(event.get("competitions"))
-        if not event_id or not competitions:
-            continue
-        competition = _mapping(competitions[0])
-        status = _mapping(competition.get("status"))
-        status_type = _mapping(status.get("type"))
-        state = str(status_type.get("state") or "").lower()
-        status_name = str(status_type.get("name") or "")
-        if only_live and state != "in" and status_name != "STATUS_IN_PROGRESS":
-            continue
-
-        home: Mapping[str, Any] | None = None
-        away: Mapping[str, Any] | None = None
-        for raw_competitor in _sequence(competition.get("competitors")):
-            competitor = _mapping(raw_competitor)
-            if competitor.get("homeAway") == "home":
-                home = competitor
-            elif competitor.get("homeAway") == "away":
-                away = competitor
-        if home is None or away is None:
-            continue
-
-        home_meta = _mapping(home.get("team"))
-        away_meta = _mapping(away.get("team"))
-        home_name = str(home_meta.get("displayName") or home_meta.get("name") or "")
-        away_name = str(away_meta.get("displayName") or away_meta.get("name") or "")
-        home_team = canonical_team(home_name)
-        away_team = canonical_team(away_name)
-        if (
-            home_team not in _TEAM_DATA
-            or away_team not in _TEAM_DATA
-            or home_team == away_team
-        ):
-            continue
-
-        situation = _mapping(competition.get("situation"))
-        last_play = _mapping(situation.get("lastPlay"))
-        probability = _mapping(last_play.get("probability"))
-        home_probability = _safe_probability(probability.get("homeWinPercentage"))
-        probability_source = "scoreboard"
-        probability_play_id = last_play.get("id")
-        if home_probability is None:
-            fallback = fallbacks.get(event_id)
-            # A probability without its own play ID cannot be tied to the live
-            # state and may be stale relative to ``lastPlay``. Fail closed.
-            if fallback is None or not fallback.play_id:
-                continue
-            home_probability = fallback.home_win_probability
-            probability_play_id = fallback.play_id
-            probability_source = "summary"
-
-        event_date = str(event.get("date") or competition.get("date") or "")[:10]
-        game_date = root_day or event_date
-        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", game_date):
-            continue
-        detail = str(status_type.get("detail") or status_type.get("shortDetail") or "")
-        lowered_detail = detail.lower()
-        if lowered_detail.startswith("top"):
-            half = "top"
-        elif lowered_detail.startswith(("bot", "bottom")):
-            half = "bottom"
-        else:
-            half = "unknown"
-
-        venue = _mapping(competition.get("venue"))
-        weather = _mapping(event.get("weather")) or _mapping(competition.get("weather"))
-        weather_temp = _safe_float(weather.get("temperature"))
-        weather_condition = weather.get("conditionId") or weather.get("displayValue")
-        if not isinstance(weather_condition, str) or not weather_condition.strip():
-            weather_condition = None
-
-        game_number, is_doubleheader = _doubleheader_info(competition)
-        output.append(
-            LiveGameState(
-                event_id=event_id,
-                game_date=game_date,
-                game_number=game_number,
-                event_start_time=(
-                    str(event.get("date") or competition.get("date"))
-                    if event.get("date") or competition.get("date")
-                    else None
-                ),
-                away_team=away_team,
-                home_team=home_team,
-                away_name=away_name,
-                home_name=home_name,
-                away_abbreviation=str(
-                    away_meta.get("abbreviation") or away_team[:3]
-                ).upper(),
-                home_abbreviation=str(
-                    home_meta.get("abbreviation") or home_team[:3]
-                ).upper(),
-                away_score=_safe_int(away.get("score")),
-                home_score=_safe_int(home.get("score")),
-                inning=max(1, _safe_int(status.get("period"), 1)),
-                inning_half=half,
-                status_detail=detail or "In Progress",
-                outs=min(3, max(0, _safe_int(situation.get("outs")))),
-                balls=min(4, max(0, _safe_int(situation.get("balls")))),
-                strikes=min(3, max(0, _safe_int(situation.get("strikes")))),
-                on_first=bool(situation.get("onFirst", False)),
-                on_second=bool(situation.get("onSecond", False)),
-                on_third=bool(situation.get("onThird", False)),
-                pitcher=_nested_name(situation, "pitcher"),
-                batter=_nested_name(situation, "batter"),
-                last_play_id=(
-                    str(last_play.get("id")) if last_play.get("id") else None
-                ),
-                last_play_text=(
-                    str(last_play.get("text")) if last_play.get("text") else None
-                ),
-                probability_play_id=(
-                    str(probability_play_id) if probability_play_id else None
-                ),
-                home_win_probability=home_probability,
-                probability_source=probability_source,
-                venue_name=(
-                    str(venue.get("fullName")) if venue.get("fullName") else None
-                ),
-                neutral_site=bool(competition.get("neutralSite", False)),
-                play_by_play_available=bool(
-                    competition.get("playByPlayAvailable", False)
-                ),
-                was_suspended=bool(competition.get("wasSuspended", False)),
-                weather_temperature_f=weather_temp,
-                weather_condition=weather_condition,
-                broadcast=_broadcast_name(competition),
-                fetched_at=now,
-                is_doubleheader=is_doubleheader,
-            )
-        )
-    return output
-
-
-def game_progress(game: LiveGameState) -> float:
-    """Approximate fraction of regulation completed from inning/half/outs."""
-    inning_index = max(0, game.inning - 1)
-    completed_halves = float(inning_index * 2)
-    if game.inning_half == "bottom":
-        completed_halves += 1.0
-    completed_halves += max(0.0, min(1.0, game.outs / 3.0))
-    return max(0.0, min(1.0, completed_halves / 18.0))
-
-
-def adjusted_home_probability(
-    game: LiveGameState, config: StrategyConfig
-) -> tuple[float, float]:
-    """Shrink ESPN's live model toward 50% to absorb latency/model error.
-
-    Confidence rises smoothly as the game progresses. The shrinkage is a risk
-    control, not a claim that ESPN probabilities are calibrated to Polymarket.
-    """
-    progress = game_progress(game)
-    early = max(0.0, min(1.0, config.early_game_confidence))
-    progress_confidence = early + (1.0 - early) * math.sqrt(progress)
-    confidence = max(
-        0.0, min(1.0, config.probability_haircut * progress_confidence)
-    )
-    adjusted = 0.5 + (game.home_win_probability - 0.5) * confidence
-    return max(0.001, min(0.999, adjusted)), confidence
-
-
-def probability_for_team(
-    game: LiveGameState, team: str, config: StrategyConfig
-) -> tuple[float, float, float]:
-    adjusted_home, confidence = adjusted_home_probability(game, config)
-    canonical = canonical_team(team)
-    if canonical == game.home_team:
-        return game.home_win_probability, adjusted_home, confidence
-    if canonical == game.away_team:
-        return 1.0 - game.home_win_probability, 1.0 - adjusted_home, confidence
-    raise ValueError(f"team {team!r} is not in ESPN game {game.event_id}")
-
-
-def _find_team_position(text: str, canonical: str) -> int | None:
-    cleaned = _clean(text)
-    positions: list[int] = []
-    for term in team_search_terms(canonical):
-        term_clean = _clean(term)
-        if not term_clean:
-            continue
-        position = cleaned.find(term_clean)
-        if position >= 0:
-            positions.append(position)
-    return min(positions) if positions else None
-
-
-def is_full_game_moneyline_text(text: str) -> bool:
-    lowered = _clean(text)
-    return bool(lowered) and not any(_clean(term) in lowered for term in _PROP_TERMS)
-
-
-def infer_yes_team(
-    question: str,
-    game: LiveGameState,
-    resolution_criteria: str | None = None,
-) -> str | None:
-    """Infer which team the market's YES/outcome-0 token represents.
-
-    Explicit ``Will TEAM win`` wording wins. For two-team sports questions, the
-    first team named is treated as outcome 0. Ambiguous or prop markets fail
-    closed rather than guessing.
-    """
-    combined = " ".join(
-        part for part in (question, resolution_criteria or "") if part
-    )
-    # Resolution rules for a full-game market often mention innings (for
-    # postponement/suspension handling). Prop filtering therefore belongs on
-    # the user-facing question, not on the legal resolution prose.
-    if not is_full_game_moneyline_text(question):
-        return None
-
-    explicit = _EXPLICIT_WIN_RE.search(question)
-    if explicit:
-        explicit_team = canonical_team(explicit.group(1))
-        if explicit_team in {game.away_team, game.home_team}:
-            return explicit_team
-
-    away_pos = _find_team_position(question, game.away_team)
-    home_pos = _find_team_position(question, game.home_team)
-    if away_pos is not None and home_pos is not None:
-        return game.away_team if away_pos < home_pos else game.home_team
-
-    q_clean = _clean(question)
-    if any(word in q_clean.split() for word in ("win", "beat")):
-        if away_pos is not None:
-            return game.away_team
-        if home_pos is not None:
-            return game.home_team
-    return None
-
-
-def market_matches_game(
-    question: str,
-    game: LiveGameState,
-    *,
-    resolution_criteria: str | None = None,
-    resolves_at: str | None = None,
-) -> bool:
-    combined = " ".join(
-        part for part in (question, resolution_criteria or "") if part
-    )
-    if not is_full_game_moneyline_text(question):
-        return False
-    # Doubleheaders are an easy way to buy the right teams in the wrong game.
-    # Require an explicit matching Game 1/Game 2 marker for every ESPN event
-    # identified as a doubleheader; generic/unknown numbering fails closed.
-    market_is_game_one = bool(_GAME_ONE_RE.search(combined))
-    market_is_game_two = bool(_GAME_TWO_RE.search(combined))
-    if market_is_game_one and market_is_game_two:
-        return False
-    if game.is_doubleheader:
-        if game.game_number == 1 and not market_is_game_one:
-            return False
-        if game.game_number == 2 and not market_is_game_two:
-            return False
-        if game.game_number not in {1, 2}:
-            return False
-    elif market_is_game_one or market_is_game_two:
-        return False
-    if _find_team_position(combined, game.away_team) is None:
-        return False
-    if _find_team_position(combined, game.home_team) is None:
-        return False
-    if resolves_at:
-        try:
-            resolved_date = datetime.fromisoformat(
-                resolves_at.replace("Z", "+00:00")
-            ).date()
-            game_date = datetime.fromisoformat(game.game_date).date()
-            if abs((resolved_date - game_date).days) > 1:
-                return False
-        except (TypeError, ValueError):
-            return False
-    return True
-
-
-def _valid_price(value: float | None) -> bool:
-    return value is not None and math.isfinite(value) and 0.0 < value < 1.0
-
-
-def candidate_for_side(
-    *,
-    game: LiveGameState,
-    yes_team: str,
-    yes_price: float,
-    side: str,
-    config: StrategyConfig,
-    execution_price: float | None = None,
-) -> MarketCandidate | None:
-    if side not in {"yes", "no"}:
-        raise ValueError(f"unsupported side {side!r}")
-    if not _valid_price(yes_price):
-        return None
-    raw_yes, adjusted_yes, confidence = probability_for_team(game, yes_team, config)
-    quoted = yes_price if side == "yes" else 1.0 - yes_price
-    execution = quoted if execution_price is None else execution_price
-    if not _valid_price(execution):
-        return None
-    if not config.min_market_price <= execution <= config.max_market_price:
-        return None
-    p_win = adjusted_yes if side == "yes" else 1.0 - adjusted_yes
-    effective = min(0.999, execution + max(0.0, config.fee_buffer))
-    edge = p_win - effective
-    raw_kelly = (
-        0.0
-        if effective >= 1.0
-        else max(0.0, (p_win - effective) / (1.0 - effective))
-    )
-    return MarketCandidate(
-        side=side,
-        yes_team=canonical_team(yes_team),
-        raw_yes_probability=raw_yes,
-        adjusted_yes_probability=adjusted_yes,
-        p_win=p_win,
-        quoted_price=quoted,
-        execution_price=execution,
-        effective_price=effective,
-        edge=edge,
-        confidence=confidence,
-        raw_kelly_fraction=raw_kelly,
-    )
-
-
-def choose_candidate(
-    *,
-    game: LiveGameState,
-    yes_team: str,
-    yes_price: float,
-    config: StrategyConfig,
-    yes_execution_price: float | None = None,
-    no_execution_price: float | None = None,
-    quote_age_seconds: float | None = None,
-) -> MarketCandidate | None:
-    if game.inning < config.min_inning or game.inning > config.max_inning:
-        return None
-    if game.was_suspended or not game.play_by_play_available:
-        return None
-    if quote_age_seconds is not None and quote_age_seconds > config.max_quote_age_seconds:
-        return None
-    candidates = [
-        candidate_for_side(
-            game=game,
-            yes_team=yes_team,
-            yes_price=yes_price,
-            side="yes",
-            config=config,
-            execution_price=yes_execution_price,
-        ),
-        candidate_for_side(
-            game=game,
-            yes_team=yes_team,
-            yes_price=yes_price,
-            side="no",
-            config=config,
-            execution_price=no_execution_price,
-        ),
-    ]
-    eligible = [
-        candidate
-        for candidate in candidates
-        if candidate is not None and candidate.edge >= config.min_edge
-    ]
-    if not eligible:
-        return None
-    return max(
-        eligible,
-        key=lambda item: (item.edge, item.raw_kelly_fraction, item.side == "yes"),
-    )
-
-
-def fractional_kelly_size(
-    candidate: MarketCandidate,
-    *,
-    bankroll: float,
-    config: StrategyConfig,
-    current_game_exposure_usd: float = 0.0,
-) -> SizedSignal:
-    """Standalone fractional-Kelly sizing with hard USD and share caps."""
-    if bankroll <= 0:
-        return SizedSignal(candidate, 0.0, 0.0, "insufficient_bankroll")
-    if candidate.edge < config.min_edge:
-        return SizedSignal(candidate, 0.0, 0.0, "edge_too_small")
-    raw_amount = (
-        bankroll
-        * candidate.raw_kelly_fraction
-        * max(0.0, config.kelly_multiplier)
-    )
-    bankroll_cap = bankroll * max(0.0, config.max_bankroll_fraction)
-    game_cap = max(
-        0.0,
-        config.max_game_exposure_usd - max(0.0, current_game_exposure_usd),
-    )
-    amount = min(
-        raw_amount,
-        bankroll_cap,
-        config.max_position_usd,
-        game_cap,
-        bankroll,
-    )
-    amount = math.floor(max(0.0, amount) * 100.0) / 100.0
-    if amount <= 0:
-        return SizedSignal(candidate, 0.0, 0.0, "risk_cap")
-    shares = amount / candidate.execution_price
-    if shares + 1e-9 < config.min_order_shares:
-        return SizedSignal(candidate, amount, shares, "below_minimum_shares")
-    return SizedSignal(candidate, amount, shares, None)
-
-
-def build_reasoning(
-    game: LiveGameState, candidate: MarketCandidate, amount_usd: float
-) -> str:
-    team = (
-        candidate.yes_team
-        if candidate.side == "yes"
-        else game.home_team
-        if candidate.yes_team == game.away_team
-        else game.away_team
-    )
-    people = ", ".join(
-        part
-        for part in (
-            f"pitcher={game.pitcher}" if game.pitcher else "",
-            f"batter={game.batter}" if game.batter else "",
-        )
-        if part
-    )
-    play_text = (game.last_play_text or "").replace("\n", " ").strip()
-    if len(play_text) > 140:
-        play_text = play_text[:137] + "..."
-    context = (
-        f"count={game.count}, outs={game.outs}, runners={game.runners}"
-        + (f", {people}" if people else "")
-    )
-    return (
-        f"ESPN MLB live signal: buy {candidate.side.upper()} "
-        f"({full_team_name(team)}); raw_yes={candidate.raw_yes_probability:.1%}, "
-        f"adjusted_yes={candidate.adjusted_yes_probability:.1%}, "
-        f"p_win={candidate.p_win:.1%}, execution={candidate.execution_price:.3f}, "
-        f"fee_adjusted={candidate.effective_price:.3f}, edge={candidate.edge:.1%}, "
-        f"confidence={candidate.confidence:.2f}, size=${amount_usd:.2f}. "
-        f"Game {game.status_detail}, {game.score}; {context}. "
-        f"ESPN event={game.event_id}, play="
-        f"{game.probability_play_id or game.last_play_id or 'unknown'}, "
-        f"probability_source={game.probability_source}"
-        + (f", last_play={play_text!r}" if play_text else "")
-        + "."
-    )
-
-
-def game_identity(game: LiveGameState) -> tuple[str, frozenset[str], int]:
-    return game.game_date, frozenset((game.away_team, game.home_team)), game.game_number
-
-
-def find_matching_game(
-    games: Iterable[LiveGameState],
-    *,
-    game_date: str,
-    away_team: str,
-    home_team: str,
-    game_number: int = 1,
-) -> LiveGameState | None:
-    target_teams = frozenset((canonical_team(away_team), canonical_team(home_team)))
-    exact: list[LiveGameState] = []
-    pair_only: list[LiveGameState] = []
-    for game in games:
-        if frozenset((game.away_team, game.home_team)) != target_teams:
-            continue
-        pair_only.append(game)
-        if game.game_date == game_date and game.game_number == game_number:
-            exact.append(game)
-    if len(exact) == 1:
-        return exact[0]
-    # Date mismatches near UTC midnight are tolerable only for a unique, normal
-    # single game. Never downgrade doubleheader identity to team-pair matching.
-    safe_pair_only = [
-        game
-        for game in pair_only
-        if not game.is_doubleheader and game.game_number == 1 and game_number == 1
-    ]
-    return safe_pair_only[0] if len(safe_pair_only) == 1 else None
-
-
-# ---------------------------------------------------------------------------
-# ESPN live feed client
-# ---------------------------------------------------------------------------
-
-ESPN_SITE_BASE = "https://site.api.espn.com"
-_SCOREBOARD_PATH = "/apis/site/v2/sports/baseball/mlb/scoreboard"
-_SUMMARY_PATH = "/apis/site/v2/sports/baseball/mlb/summary"
-
-
-class EspnApiError(RuntimeError):
-    """Raised when ESPN data cannot be fetched or validated safely."""
-
-
-@dataclass(frozen=True)
-class EspnSnapshot:
-    fetched_at: int
-    live_games: tuple[LiveGameState, ...]
-    live_event_count: int
-    summary_fallback_count: int
-
-
-class EspnLiveClient:
-    """Defensive stdlib client for ESPN's public, undocumented MLB JSON feed."""
+class StatePathResolver:
+    """Resolve one conservative risk ledger across local skill installs."""
 
     def __init__(
         self,
         *,
-        base_url: str = ESPN_SITE_BASE,
-        timeout_seconds: float = 8.0,
-        retries: int = 2,
-        max_response_bytes: int = 12_000_000,
-        max_summary_requests: int = 15,
-        opener: Callable[..., Any] | None = None,
-        sleeper: Callable[[float], None] = time.sleep,
+        environment: Mapping[str, str] | None = None,
+        home: Path | None = None,
     ) -> None:
-        parsed = urllib.parse.urlparse(base_url)
-        if parsed.scheme != "https" or not parsed.netloc:
-            raise ValueError("ESPN base URL must be an absolute HTTPS URL")
-        self.base_url = base_url.rstrip("/")
-        self.timeout_seconds = max(1.0, float(timeout_seconds))
-        self.retries = max(0, int(retries))
-        self.max_response_bytes = max(1024, int(max_response_bytes))
-        self.max_summary_requests = max(0, int(max_summary_requests))
-        self._opener = opener or urllib.request.urlopen
-        self._sleep = sleeper
-
-    def _get_json(self, path: str, params: Mapping[str, str] | None = None) -> dict[str, Any]:
-        query = urllib.parse.urlencode(dict(params or {}))
-        url = f"{self.base_url}{path}" + (f"?{query}" if query else "")
-        request = urllib.request.Request(
-            url,
-            headers={
-                "Accept": "application/json",
-                "Accept-Encoding": "identity",
-                "User-Agent": "MLB-Live-Trader/1.0 (+ClawHub skill; contact via repository)",
-            },
-            method="GET",
-        )
-        last_error: BaseException | None = None
-        for attempt in range(self.retries + 1):
-            try:
-                with self._opener(request, timeout=self.timeout_seconds) as response:
-                    status = int(getattr(response, "status", 200))
-                    if status != 200:
-                        raise EspnApiError(f"ESPN returned HTTP {status}")
-                    raw = response.read(self.max_response_bytes + 1)
-                    if len(raw) > self.max_response_bytes:
-                        raise EspnApiError("ESPN response exceeded configured size limit")
-                decoded = json.loads(raw.decode("utf-8"))
-                if not isinstance(decoded, dict):
-                    raise EspnApiError("ESPN response root was not an object")
-                return decoded
-            except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, UnicodeDecodeError, OSError, EspnApiError) as exc:
-                last_error = exc
-                if attempt < self.retries:
-                    self._sleep(0.35 * (2**attempt))
-        raise EspnApiError(f"ESPN request failed safely: {type(last_error).__name__}") from last_error
-
-    def fetch_scoreboard(self, date_yyyymmdd: str | None = None) -> dict[str, Any]:
-        params = {"dates": date_yyyymmdd} if date_yyyymmdd else None
-        return self._get_json(_SCOREBOARD_PATH, params)
-
-    def fetch_summary(self, event_id: str) -> dict[str, Any]:
-        if not event_id.isdigit():
-            raise ValueError("ESPN event ID must be numeric")
-        return self._get_json(_SUMMARY_PATH, {"event": event_id})
-
-    @staticmethod
-    def _live_events_missing_probability(scoreboard: Mapping[str, Any]) -> list[str]:
-        missing: list[str] = []
-        events = scoreboard.get("events")
-        if not isinstance(events, list):
-            return missing
-        for raw_event in events:
-            if not isinstance(raw_event, dict):
-                continue
-            event_id = str(raw_event.get("id") or "")
-            competitions = raw_event.get("competitions")
-            if not event_id or not isinstance(competitions, list) or not competitions:
-                continue
-            competition = competitions[0] if isinstance(competitions[0], dict) else {}
-            status = competition.get("status") if isinstance(competition.get("status"), dict) else {}
-            status_type = status.get("type") if isinstance(status.get("type"), dict) else {}
-            if status_type.get("state") != "in" and status_type.get("name") != "STATUS_IN_PROGRESS":
-                continue
-            situation = competition.get("situation") if isinstance(competition.get("situation"), dict) else {}
-            last_play = situation.get("lastPlay") if isinstance(situation.get("lastPlay"), dict) else {}
-            probability = last_play.get("probability") if isinstance(last_play.get("probability"), dict) else {}
-            try:
-                value = float(probability.get("homeWinPercentage"))
-                valid = 0.0 <= value <= 1.0
-            except (TypeError, ValueError):
-                valid = False
-            if not valid:
-                missing.append(event_id)
-        return missing
-
-    @staticmethod
-    def _live_event_count(scoreboard: Mapping[str, Any]) -> int:
-        count = 0
-        events = scoreboard.get("events")
-        if not isinstance(events, list):
-            return 0
-        for raw_event in events:
-            if not isinstance(raw_event, dict):
-                continue
-            competitions = raw_event.get("competitions")
-            if not isinstance(competitions, list) or not competitions or not isinstance(competitions[0], dict):
-                continue
-            status = competitions[0].get("status")
-            status = status if isinstance(status, dict) else {}
-            status_type = status.get("type")
-            status_type = status_type if isinstance(status_type, dict) else {}
-            if status_type.get("state") == "in" or status_type.get("name") == "STATUS_IN_PROGRESS":
-                count += 1
-        return count
-
-    def fetch_live_snapshot(self, *, fetched_at: int | None = None) -> EspnSnapshot:
-        now = int(time.time()) if fetched_at is None else int(fetched_at)
-        scoreboard = self.fetch_scoreboard()
-        fallbacks: dict[str, SummaryProbability] = {}
-        missing = self._live_events_missing_probability(scoreboard)
-        for event_id in missing[: self.max_summary_requests]:
-            try:
-                fallback = parse_summary_probability(self.fetch_summary(event_id))
-            except (EspnApiError, ValueError):
-                continue
-            if fallback is not None and fallback.play_id:
-                fallbacks[event_id] = fallback
-        games = parse_scoreboard(
-            scoreboard,
-            fetched_at=now,
-            summary_probabilities=fallbacks,
-            only_live=True,
-        )
-        return EspnSnapshot(
-            fetched_at=now,
-            live_games=tuple(games),
-            live_event_count=self._live_event_count(scoreboard),
-            summary_fallback_count=len(fallbacks),
-        )
-
-
-# ---------------------------------------------------------------------------
-# Simmer execution runtime
-# ---------------------------------------------------------------------------
-
-
-@dataclass(frozen=True)
-class MarketEvaluation:
-    market: Any
-    game: LiveGameState
-    candidate: MarketCandidate
-    query: str
-    yes_team: str
-    quote_age_seconds: float
-    spread: float
-    top_size_shares: float
-
-
-@dataclass(frozen=True)
-class TradePlan:
-    evaluation: MarketEvaluation
-    amount_usd: float
-    shares: float
-    limit_price: float
-    bankroll: float
-    game_exposure_usd: float
-
-
-@dataclass(frozen=True)
-class SafeguardResult:
-    ok: bool
-    reason: str
-    preflight_id: str | None = None
-    context: Mapping[str, Any] | None = None
-
-
-class RunLock:
-    """Simple process lock so overlapping cron/automaton runs cannot double-buy."""
-
-    def __init__(self, path: Path, stale_after_seconds: int = 900) -> None:
-        self.path = path
-        self.stale_after_seconds = stale_after_seconds
-        self._owned = False
-
-    def __enter__(self) -> "RunLock":
-        try:
-            age = time.time() - self.path.stat().st_mtime
-            if age > self.stale_after_seconds:
-                self.path.unlink(missing_ok=True)
-        except FileNotFoundError:
-            pass
-        try:
-            fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
-        except FileExistsError as exc:
-            raise RuntimeError("another MLB Live Trader process already holds the run lock") from exc
-        with os.fdopen(fd, "w", encoding="utf-8") as handle:
-            handle.write(f"pid={os.getpid()} started={int(time.time())}\n")
-        self._owned = True
-        return self
-
-    def __exit__(self, _exc_type, _exc, _tb) -> None:
-        if self._owned:
-            self.path.unlink(missing_ok=True)
-            self._owned = False
-
-
-def get_client(*, live: bool, config: Mapping[str, Any]) -> SimmerClient:
-    """Return a singleton Simmer client; API keys are read only by the SDK."""
-    key = bool(live)
-    if key not in _CLIENTS:
-        _CLIENTS[key] = SimmerClient.from_env(
-            venue=VENUE,
-            live=key,
-            starting_balance=float(config["starting_balance"]),
-        )
-    return _CLIENTS[key]
-
-
-def _emit(quiet: bool, message: str, *, force: bool = False) -> None:
-    if force or not quiet:
-        print(message, flush=True)
-
-
-def _json_default(value: Any) -> Any:
-    if is_dataclass(value):
-        return asdict(value)
-    if isinstance(value, Path):
-        return str(value)
-    return str(value)
-
-
-def _as_mapping(value: Any) -> Mapping[str, Any]:
-    if isinstance(value, Mapping):
-        return value
-    if is_dataclass(value):
-        return asdict(value)
-    return {}
-
-
-def _field(value: Any, name: str, default: Any = None) -> Any:
-    if isinstance(value, Mapping):
-        return value.get(name, default)
-    return getattr(value, name, default)
-
-
-def _is_true(value: Any) -> bool:
-    if isinstance(value, bool):
-        return value
-    if isinstance(value, (int, float)):
-        return bool(value)
-    return str(value or "").strip().lower() in {"true", "yes", "1", "on"}
-
-
-def _validate_config(config: Mapping[str, Any]) -> None:
-    method = str(config["position_sizing"])
-    if method not in {"fractional_kelly", "kelly", "fixed"}:
-        raise ValueError("position_sizing must be fractional_kelly, kelly, or fixed")
-    unit_interval_open = (
-        "probability_haircut",
-        "early_game_confidence",
-        "max_bankroll_fraction",
-        "book_liquidity_fraction",
-    )
-    for key in unit_interval_open:
-        value = float(config[key])
-        if not 0.0 < value <= 1.0:
-            raise ValueError(f"{key} must be in (0, 1]")
-    unit_interval = (
-        "kelly_multiplier",
-        "min_ev",
-        "fee_buffer",
-        "min_market_price",
-        "max_market_price",
-        "max_spread",
-        "max_slippage",
-    )
-    for key in unit_interval:
-        value = float(config[key])
-        if not 0.0 <= value < 1.0:
-            raise ValueError(f"{key} must be in [0, 1)")
-    positive = (
-        "starting_balance",
-        "max_position_usd",
-        "max_game_exposure_usd",
-        "portfolio_exposure_cap_usd",
-        "daily_spend_limit_usd",
-        "min_order_shares",
-        "max_quote_age_seconds",
-        "cooldown_seconds",
-        "poll_seconds",
-        "max_trades_per_run",
-        "market_query_limit",
-        "espn_timeout_seconds",
-        "max_summary_requests",
-        "min_inning",
-        "max_inning",
-    )
-    for key in positive:
-        if float(config[key]) <= 0:
-            raise ValueError(f"{key} must be positive")
-    if float(config["min_market_price"]) < 0.01:
-        raise ValueError("min_market_price must be at least $0.01")
-    if float(config["min_market_price"]) >= float(config["max_market_price"]):
-        raise ValueError("min_market_price must be below max_market_price")
-    if int(config["min_inning"]) > int(config["max_inning"]):
-        raise ValueError("min_inning cannot exceed max_inning")
-    if float(config["max_position_usd"]) > float(config["portfolio_exposure_cap_usd"]):
-        raise ValueError("max_position_usd cannot exceed portfolio_exposure_cap_usd")
-
-
-def _strategy_config(config: Mapping[str, Any]) -> StrategyConfig:
-    return StrategyConfig(
-        min_edge=float(config["min_ev"]),
-        probability_haircut=float(config["probability_haircut"]),
-        early_game_confidence=float(config["early_game_confidence"]),
-        fee_buffer=float(config["fee_buffer"]),
-        kelly_multiplier=float(config["kelly_multiplier"]),
-        max_bankroll_fraction=float(config["max_bankroll_fraction"]),
-        max_position_usd=float(config["max_position_usd"]),
-        max_game_exposure_usd=float(config["max_game_exposure_usd"]),
-        min_order_shares=float(config["min_order_shares"]),
-        min_inning=int(config["min_inning"]),
-        max_inning=int(config["max_inning"]),
-        max_quote_age_seconds=float(config["max_quote_age_seconds"]),
-        min_market_price=float(config["min_market_price"]),
-        max_market_price=float(config["max_market_price"]),
-    )
-
-
-def _empty_state() -> dict[str, Any]:
-    return {
-        "version": 1,
-        "utc_date": datetime.now(timezone.utc).date().isoformat(),
-        "daily_spend_usd": 0.0,
-        "signals": {},
-        "games": {},
-    }
-
-
-def _load_state(path: Path = _STATE_PATH) -> dict[str, Any]:
-    state = _empty_state()
-    try:
-        loaded = json.loads(path.read_text(encoding="utf-8"))
-    except FileNotFoundError:
-        return state
-    except (OSError, json.JSONDecodeError):
-        return state
-    if not isinstance(loaded, dict) or loaded.get("version") != 1:
-        return state
-    for key in ("signals", "games"):
-        if not isinstance(loaded.get(key), dict):
-            loaded[key] = {}
-    today = datetime.now(timezone.utc).date()
-    if loaded.get("utc_date") != today.isoformat():
-        loaded["utc_date"] = today.isoformat()
-        loaded["daily_spend_usd"] = 0.0
-    # Prune stale game/signal records. They are idempotency metadata, not a ledger.
-    cutoff = today - timedelta(days=3)
-    loaded["games"] = {
-        event_id: item
-        for event_id, item in loaded["games"].items()
-        if isinstance(item, dict)
-        and _parse_date(str(item.get("game_date") or ""), date.min) >= cutoff
-    }
-    cutoff_ts = time.time() - (3 * 86400)
-    loaded["signals"] = {
-        key: item
-        for key, item in loaded["signals"].items()
-        if isinstance(item, dict) and float(item.get("timestamp") or 0) >= cutoff_ts
-    }
-    loaded["daily_spend_usd"] = max(0.0, float(loaded.get("daily_spend_usd") or 0.0))
-    return loaded
-
-
-def _parse_date(value: str, default: date) -> date:
-    try:
-        return date.fromisoformat(value)
-    except ValueError:
-        return default
-
-
-def _save_state(state: Mapping[str, Any], path: Path = _STATE_PATH) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temp = path.with_name(f".{path.name}.{os.getpid()}.tmp")
-    temp.write_text(
-        json.dumps(state, indent=2, sort_keys=True, default=_json_default) + "\n",
-        encoding="utf-8",
-    )
-    os.chmod(temp, 0o600)
-    temp.replace(path)
-
-
-def _event_exposure(state: Mapping[str, Any], event_id: str) -> float:
-    games = _as_mapping(state.get("games"))
-    item = _as_mapping(games.get(event_id))
-    return max(0.0, float(item.get("reserved_usd") or 0.0))
-
-
-def _event_is_blocked(
-    state: Mapping[str, Any], game: LiveGameState, cooldown_seconds: int
-) -> str | None:
-    signals = _as_mapping(state.get("signals"))
-    if game.state_key in signals:
-        return "duplicate ESPN play/probability signal"
-    item = _as_mapping(_as_mapping(state.get("games")).get(game.event_id))
-    if item.get("market_id"):
-        return "this skill already opened/reserved one position for the game"
-    last_attempt = _finite_float(item.get("last_attempt_at"))
-    if last_attempt is not None and time.time() - last_attempt < cooldown_seconds:
-        return "game cooldown is active"
-    return None
-
-
-def _record_trade(
-    state: dict[str, Any],
-    *,
-    plan: TradePlan,
-    result: Any,
-    live: bool,
-) -> None:
-    now = int(time.time())
-    game = plan.evaluation.game
-    market = plan.evaluation.market
-    actual_cost = _finite_float(_field(result, "cost"))
-    reserved = plan.amount_usd if actual_cost is None or actual_cost <= 0 else actual_cost
-    state["daily_spend_usd"] = round(
-        float(state.get("daily_spend_usd") or 0.0) + reserved, 2
-    )
-    state.setdefault("signals", {})[game.state_key] = {
-        "timestamp": now,
-        "event_id": game.event_id,
-        "market_id": str(_field(market, "id", "")),
-        "side": plan.evaluation.candidate.side,
-    }
-    state.setdefault("games", {})[game.event_id] = {
-        "game_date": game.game_date,
-        "last_attempt_at": now,
-        "market_id": str(_field(market, "id", "")),
-        "side": plan.evaluation.candidate.side,
-        "reserved_usd": round(reserved, 2),
-        "entry_price": plan.evaluation.candidate.execution_price,
-        "live": bool(live),
-        "trade_id": _field(result, "trade_id"),
-        "order_id": _field(result, "order_id"),
-        "fill_status": _field(result, "fill_status"),
-    }
-    _save_state(state)
-
-
-def _positions_as_dicts(client: SimmerClient) -> list[dict[str, Any]]:
-    positions = client.get_positions(venue=VENUE)
-    output: list[dict[str, Any]] = []
-    for position in positions:
-        if is_dataclass(position):
-            output.append(asdict(position))
-        elif isinstance(position, Mapping):
-            output.append(dict(position))
-    return output
-
-
-def _has_game_position(positions: Sequence[Mapping[str, Any]], game: LiveGameState) -> bool:
-    for position in positions:
-        if str(position.get("status") or "active").lower() not in {"active", "open", "pending"}:
-            continue
-        question = str(position.get("question") or "")
-        if not question:
-            continue
-        if market_matches_game(question, game):
-            shares_yes = float(position.get("shares_yes") or 0.0)
-            shares_no = float(position.get("shares_no") or 0.0)
-            if shares_yes > 0 or shares_no > 0:
-                return True
-    return False
-
-
-def _market_queries(game: LiveGameState) -> tuple[str, ...]:
-    options = (
-        f"{game.away_name} {game.home_name}",
-        f"{game.away_team} {game.home_team}",
-    )
-    return tuple(dict.fromkeys(query.strip() for query in options if query.strip()))
-
-
-def _discover_markets(
-    client: SimmerClient,
-    game: LiveGameState,
-    *,
-    limit: int,
-) -> list[tuple[Any, str]]:
-    by_id: dict[str, tuple[Any, str]] = {}
-    for query in _market_queries(game):
-        markets = client.get_markets(
-            status="active",
-            limit=limit,
-            include="resolution_criteria",
-            q=query,
-            venue=VENUE,
-            sort="volume",
-        )
-        for market in markets:
-            market_id = str(_field(market, "id", ""))
-            if market_id:
-                by_id.setdefault(market_id, (market, query))
-        # Avoid a second API call once the server-side query found a valid match.
-        if any(_market_matches(market, game) for market, _ in by_id.values()):
-            break
-    return list(by_id.values())
-
-
-def _market_matches(market: Any, game: LiveGameState) -> bool:
-    if str(_field(market, "status", "")).lower() != "active":
-        return False
-    if _field(market, "is_live_now") is False:
-        return False
-    source = str(_field(market, "import_source", "") or "").lower()
-    if source and source != "polymarket":
-        return False
-    question = str(_field(market, "question", ""))
-    criteria = _field(market, "resolution_criteria")
-    resolves_at = _field(market, "resolves_at")
-    return market_matches_game(
-        question,
-        game,
-        resolution_criteria=str(criteria) if criteria else None,
-        resolves_at=str(resolves_at) if resolves_at else None,
-    )
-
-
-def _quote_age(market: Any) -> float | None:
-    direct = _finite_float(_field(market, "quote_age_seconds"))
-    if direct is not None:
-        return max(0.0, direct)
-    quote_ts = _finite_float(_field(market, "quote_ts"))
-    if quote_ts is None:
-        return None
-    return max(0.0, time.time() - quote_ts)
-
-
-def _evaluate_market(
-    market: Any,
-    game: LiveGameState,
-    query: str,
-    core_config: StrategyConfig,
-    config: Mapping[str, Any],
-) -> MarketEvaluation | None:
-    if not _market_matches(market, game):
-        return None
-    question = str(_field(market, "question", ""))
-    criteria_raw = _field(market, "resolution_criteria")
-    criteria = str(criteria_raw) if criteria_raw else None
-    yes_team = infer_yes_team(question, game, criteria)
-    if yes_team is None:
-        return None
-
-    best_bid = _finite_float(_field(market, "best_bid"))
-    best_ask = _finite_float(_field(market, "best_ask"))
-    if best_bid is None or best_ask is None or not 0.0 < best_bid < best_ask < 1.0:
-        return None
-    spread = _finite_float(_field(market, "spread"))
-    spread = best_ask - best_bid if spread is None else spread
-    if spread < 0 or spread > float(config["max_spread"]):
-        return None
-    age = _quote_age(market)
-    if age is None or age > float(config["max_quote_age_seconds"]):
-        return None
-
-    yes_mid = _finite_float(_field(market, "current_probability"))
-    if yes_mid is None or not 0.0 < yes_mid < 1.0:
-        yes_mid = (best_bid + best_ask) / 2.0
-    no_ask = 1.0 - best_bid
-    candidate = choose_candidate(
-        game=game,
-        yes_team=yes_team,
-        yes_price=yes_mid,
-        config=core_config,
-        yes_execution_price=best_ask,
-        no_execution_price=no_ask,
-        quote_age_seconds=age,
-    )
-    if candidate is None:
-        return None
-
-    top_size = _finite_float(
-        _field(market, "best_ask_size")
-        if candidate.side == "yes"
-        else _field(market, "best_bid_size")
-    )
-    if top_size is None or top_size < float(config["min_order_shares"]):
-        return None
-    return MarketEvaluation(
-        market=market,
-        game=game,
-        candidate=candidate,
-        query=query,
-        yes_team=yes_team,
-        quote_age_seconds=age,
-        spread=spread,
-        top_size_shares=top_size,
-    )
-
-
-def _bankroll_and_safe_size(
-    client: SimmerClient,
-    *,
-    live: bool,
-    config: Mapping[str, Any],
-) -> tuple[float, float]:
-    if live:
-        check = client.ensure_can_trade(
-            min_usd=max(
-                1.0,
-                float(config["min_order_shares"]) * float(config["min_market_price"]),
-            ),
-            venue=VENUE,
-            safety_buffer=max(0.02, float(config["fee_buffer"])),
-        )
-        if not _is_true(check.get("ok")):
-            raise RuntimeError(
-                "Simmer balance preflight failed: "
-                f"{check.get('reason', 'unknown')} (balance={check.get('balance', 0)})"
-            )
-        bankroll = float(check.get("balance") or 0.0)
-        max_safe = float(check.get("max_safe_size") or 0.0)
-        return bankroll, max_safe
-    summary = client.get_paper_summary() or {}
-    bankroll = float(summary.get("balance") or config["starting_balance"])
-    return bankroll, bankroll
-
-
-def _make_plan(
-    evaluation: MarketEvaluation,
-    *,
-    bankroll: float,
-    max_safe_size: float,
-    state: Mapping[str, Any],
-    config: Mapping[str, Any],
-) -> TradePlan | None:
-    candidate = evaluation.candidate
-    amount = size_position(
-        p_win=candidate.p_win,
-        market_price=candidate.effective_price,
-        bankroll=bankroll,
-        method=str(config["position_sizing"]),
-        kelly_multiplier=float(config["kelly_multiplier"]),
-        min_ev=float(config["min_ev"]),
-        max_fraction=float(config["max_bankroll_fraction"]),
-    )
-    event_exposure = _event_exposure(state, evaluation.game.event_id)
-    daily_remaining = max(
-        0.0,
-        float(config["daily_spend_limit_usd"])
-        - float(state.get("daily_spend_usd") or 0.0),
-    )
-    game_remaining = max(0.0, float(config["max_game_exposure_usd"]) - event_exposure)
-    book_cap = (
-        evaluation.top_size_shares
-        * candidate.execution_price
-        * float(config["book_liquidity_fraction"])
-    )
-    amount = min(
-        amount,
-        float(config["max_position_usd"]),
-        bankroll * float(config["max_bankroll_fraction"]),
-        max_safe_size,
-        daily_remaining,
-        game_remaining,
-        book_cap,
-        bankroll,
-    )
-    amount = math.floor(max(0.0, amount) * 100.0) / 100.0
-    if amount <= 0:
-        return None
-
-    # Preserve the configured EV even if the FAK order walks beyond top-of-book.
-    max_by_ev = candidate.p_win - float(config["min_ev"]) - float(config["fee_buffer"])
-    max_by_slippage = candidate.execution_price * (
-        1.0 + float(config["max_slippage"])
-    )
-    limit_price = min(max_by_ev, max_by_slippage, 0.99)
-    # User-provided skill standard requires at least a $0.01 price. The SDK
-    # performs market-specific tick rounding; this code intentionally does not.
-    if not 0.01 <= candidate.execution_price <= limit_price <= 0.99:
-        return None
-    # Simmer/Polymarket enforces the minimum after price rounding. Estimate the
-    # worst-case share count at the FAK limit rather than at the top-of-book ask.
-    shares = amount / limit_price
-    if shares + 1e-9 < float(config["min_order_shares"]):
-        return None
-    return TradePlan(
-        evaluation=evaluation,
-        amount_usd=amount,
-        shares=shares,
-        limit_price=limit_price,
-        bankroll=bankroll,
-        game_exposure_usd=event_exposure,
-    )
-
-
-def _blocking_recommendation(container: Mapping[str, Any]) -> str | None:
-    for key in ("recommendation", "recommended_action", "action", "decision"):
-        value = str(container.get(key) or "").strip().lower()
-        if any(term in value for term in ("hold", "skip", "avoid", "do not trade", "block")):
-            return f"{key}={value}"
-    return None
-
-
-def _recommended_side(container: Mapping[str, Any]) -> str | None:
-    """Extract an explicit YES/NO recommendation without guessing direction."""
-    for key in ("recommended_side", "side", "trade_side", "direction", "recommendation"):
-        value = str(container.get(key) or "").strip().lower()
-        if not value:
-            continue
-        tokens = set(value.replace("_", " ").replace("-", " ").split())
-        has_yes = "yes" in tokens
-        has_no = "no" in tokens
-        if has_yes != has_no:
-            return "yes" if has_yes else "no"
-    return None
-
-
-def _slippage_fraction(
-    container: Mapping[str, Any], planned_amount: float | None = None
-) -> float | None:
-    ratio_keys = (
-        "estimated_slippage",
-        "slippage_pct",
-        "slippage_fraction",
-        "price_impact",
-        "price_impact_pct",
-    )
-
-    def ratio(item: Mapping[str, Any]) -> float | None:
-        for key in ratio_keys:
-            value = _finite_float(item.get(key))
-            if value is not None:
-                return value / 100.0 if value > 1.0 else value
-        return None
-
-    direct = ratio(container)
-    if direct is not None:
-        return direct
-
-    estimates = container.get("estimates")
-    candidates: list[tuple[float | None, float]] = []
-    if isinstance(estimates, Mapping):
-        iterable = []
-        for key, value in estimates.items():
-            if not isinstance(value, Mapping):
-                continue
-            amount = _finite_float(value.get("amount") or value.get("size_usd"))
-            if amount is None:
-                amount = _finite_float(str(key).replace("$", ""))
-            iterable.append((amount, value))
-    elif isinstance(estimates, Sequence) and not isinstance(estimates, (str, bytes)):
-        iterable = [
-            (
-                _finite_float(item.get("amount") or item.get("size_usd")),
-                item,
-            )
-            for item in estimates
-            if isinstance(item, Mapping)
-        ]
-    else:
-        iterable = []
-    for amount, item in iterable:
-        value = ratio(item)
-        if value is not None:
-            candidates.append((amount, value))
-    if not candidates:
-        return None
-    if planned_amount is None:
-        return max(value for _amount, value in candidates)
-    sized = [(amount, value) for amount, value in candidates if amount is not None]
-    if not sized:
-        return max(value for _amount, value in candidates)
-    at_or_above = sorted((item for item in sized if item[0] >= planned_amount), key=lambda x: x[0])
-    if at_or_above:
-        return at_or_above[0][1]
-    return max(sized, key=lambda x: x[0])[1]
-
-
-def check_context_safeguards(
-    *,
-    client: SimmerClient,
-    plan: TradePlan,
-    config: Mapping[str, Any],
-    live: bool,
-    no_safeguards: bool,
-) -> SafeguardResult:
-    """Run SDK context/discipline checks plus a non-skippable preflight."""
-    context: Mapping[str, Any] | None = None
-    market_id = str(_field(plan.evaluation.market, "id", ""))
-    if not no_safeguards:
-        raw_context = client.get_market_context(
-            market_id,
-            venue=VENUE,
-            # Simmer's context endpoint accepts the market's YES probability,
-            # regardless of which token this strategy plans to buy.
-            my_probability=plan.evaluation.candidate.adjusted_yes_probability,
-        )
-        context = _as_mapping(raw_context)
-        if not context:
-            return SafeguardResult(False, "market context unavailable")
-        positions = _as_mapping(context.get("positions"))
-        venue_position = _as_mapping(positions.get(VENUE))
-        if _is_true(venue_position.get("has_position")):
-            return SafeguardResult(False, "existing Polymarket position in this market", context=context)
-        legacy_position = _as_mapping(context.get("position"))
-        if _is_true(legacy_position.get("has_position")):
-            return SafeguardResult(False, "existing position in this market", context=context)
-
-        discipline = _as_mapping(context.get("discipline"))
-        for key in ("would_flip_flop", "is_flip_flop", "flip_flop"):
-            if _is_true(discipline.get(key)):
-                return SafeguardResult(False, f"discipline safeguard: {key}", context=context)
-        recommendation = _blocking_recommendation(discipline)
-        if recommendation:
-            return SafeguardResult(False, f"discipline safeguard: {recommendation}", context=context)
-
-        edge = _as_mapping(context.get("edge"))
-        candidate_side = plan.evaluation.candidate.side
-        if candidate_side == "yes":
-            recommendation = _blocking_recommendation(edge)
-            if recommendation:
-                return SafeguardResult(False, f"edge safeguard: {recommendation}", context=context)
-            sdk_edge = _finite_float(edge.get("user_edge"))
-            if sdk_edge is None:
-                sdk_edge = _finite_float(edge.get("edge"))
-            if sdk_edge is not None and sdk_edge < float(config["min_ev"]):
-                return SafeguardResult(
-                    False,
-                    "SDK context YES edge fell below the configured gate",
-                    context=context,
-                )
+        """Initialize state-location inputs.
+
+        Args:
+            environment: Environment containing state-home and path overrides.
+            home: Injectable user home for deterministic tests.
+        """
+        self._environment = environment if environment is not None else os.environ
+        self._home = home or Path.home()
+
+    def resolve(self) -> Path:
+        """Return an installation-independent owner-local ledger path.
+
+        Returns:
+            Explicit shared path or an XDG skill-wide state path.
+
+        Raises:
+            ValueError: If an explicit state path is not absolute.
+        """
+        explicit = self._environment.get("SIMMER_MLB_STATE_PATH")
+        if explicit:
+            explicit_path = Path(explicit)
+            if not explicit_path.is_absolute():
+                raise ValueError("SIMMER_MLB_STATE_PATH must be absolute")
+            return explicit_path
+
+        state_home_value = self._environment.get("XDG_STATE_HOME")
+        if state_home_value:
+            state_home = Path(state_home_value)
+            if not state_home.is_absolute():
+                raise ValueError("XDG_STATE_HOME must be absolute")
         else:
-            # The context API receives a YES probability, so a signed ``edge``
-            # is a YES edge and cannot be compared directly with this NO trade's
-            # local executable-price edge. Honor only an explicit contrary side.
-            recommended_side = _recommended_side(edge)
-            if recommended_side is not None and recommended_side != "no":
-                return SafeguardResult(
-                    False,
-                    f"SDK context recommends {recommended_side.upper()}, not NO",
-                    context=context,
+            state_home = self._home / ".local" / "state"
+        return state_home / "simmer" / SKILL_SLUG / "live_state.json"
+
+    def legacy_path(self) -> Path:
+        """Return the pre-v2.2 installation-local ledger path.
+
+        Returns:
+            Path eligible for one-time migration into the central ledger.
+        """
+        return Path(__file__).with_name("live_state.json")
+
+
+_SDK_SIZING_SCHEMA: dict[str, dict[str, Any]] = {
+    "position_sizing": {
+        **SIZING_CONFIG_SCHEMA["position_sizing"],
+        "env": "SIMMER_POSITION_SIZING",
+    },
+    "kelly_multiplier": {
+        **SIZING_CONFIG_SCHEMA["kelly_multiplier"],
+        "env": "SIMMER_KELLY_MULTIPLIER",
+        "default": 0.20,
+    },
+    "min_ev": {
+        **SIZING_CONFIG_SCHEMA["min_ev"],
+        "env": "SIMMER_MIN_EV",
+    },
+}
+
+CONFIG_SCHEMA: dict[str, dict[str, Any]] = {
+    **_SDK_SIZING_SCHEMA,
+    "paper_min_edge": {
+        "env": "SIMMER_MLB_PAPER_MIN_EDGE",
+        "default": 0.02,
+        "type": float,
+    },
+    "live_min_edge": {
+        "env": "SIMMER_MLB_LIVE_MIN_EDGE",
+        "default": 0.03,
+        "type": float,
+    },
+    "early_inning_penalty": {
+        "env": "SIMMER_MLB_EARLY_PENALTY",
+        "default": 0.02,
+        "type": float,
+    },
+    "middle_inning_penalty": {
+        "env": "SIMMER_MLB_MIDDLE_PENALTY",
+        "default": 0.01,
+        "type": float,
+    },
+    "summary_penalty": {
+        "env": "SIMMER_MLB_SUMMARY_PENALTY",
+        "default": 0.0125,
+        "type": float,
+    },
+    "score_penalty": {
+        "env": "SIMMER_MLB_SCORE_PENALTY",
+        "default": 0.04,
+        "type": float,
+    },
+    "stale_after_seconds": {
+        "env": "SIMMER_MLB_STALE_AFTER",
+        "default": 30.0,
+        "type": float,
+    },
+    "stale_penalty_per_minute": {
+        "env": "SIMMER_MLB_STALE_PENALTY",
+        "default": 0.005,
+        "type": float,
+    },
+    "max_stale_penalty": {
+        "env": "SIMMER_MLB_MAX_STALE_PENALTY",
+        "default": 0.02,
+        "type": float,
+    },
+    "wide_spread_after": {
+        "env": "SIMMER_MLB_WIDE_SPREAD_AFTER",
+        "default": 0.04,
+        "type": float,
+    },
+    "spread_penalty_multiplier": {
+        "env": "SIMMER_MLB_SPREAD_PENALTY",
+        "default": 0.50,
+        "type": float,
+    },
+    "max_spread_penalty": {
+        "env": "SIMMER_MLB_MAX_SPREAD_PENALTY",
+        "default": 0.03,
+        "type": float,
+    },
+    "fallback_fee_bps": {
+        "env": "SIMMER_MLB_FALLBACK_FEE_BPS",
+        "default": 0.0,
+        "type": float,
+    },
+    "execution_buffer": {
+        "env": "SIMMER_MLB_EXECUTION_BUFFER",
+        "default": 0.0,
+        "type": float,
+    },
+    "max_quote_age_seconds": {
+        "env": "SIMMER_MLB_MAX_QUOTE_AGE",
+        "default": 60.0,
+        "type": float,
+    },
+    "max_signal_age_seconds": {
+        "env": "SIMMER_MLB_MAX_SIGNAL_AGE",
+        "default": 90.0,
+        "type": float,
+    },
+    "max_signal_future_skew_seconds": {
+        "env": "SIMMER_MLB_MAX_SIGNAL_FUTURE_SKEW",
+        "default": 5.0,
+        "type": float,
+    },
+    "max_spread_paper": {
+        "env": "SIMMER_MLB_MAX_SPREAD_PAPER",
+        "default": 0.14,
+        "type": float,
+    },
+    "max_spread_live": {
+        "env": "SIMMER_MLB_MAX_SPREAD_LIVE",
+        "default": 0.10,
+        "type": float,
+    },
+    "max_position_usd": {
+        "env": "SIMMER_MLB_MAX_POSITION",
+        "default": 5.0,
+        "type": float,
+    },
+    "max_bankroll_fraction": {
+        "env": "SIMMER_MLB_MAX_BANKROLL_FRACTION",
+        "default": 0.05,
+        "type": float,
+    },
+    "min_trade_usd": {"env": "SIMMER_MLB_MIN_TRADE", "default": 1.0, "type": float},
+    "max_trades_per_run": {
+        "env": "SIMMER_MLB_MAX_TRADES_RUN",
+        "default": 4,
+        "type": int,
+    },
+    "max_live_trades_per_day": {
+        "env": "SIMMER_MLB_MAX_TRADES_DAY",
+        "default": 12,
+        "type": int,
+    },
+    "live_daily_budget_usd": {
+        "env": "SIMMER_MLB_DAILY_BUDGET",
+        "default": 25.0,
+        "type": float,
+    },
+    "paper_bankroll_usd": {
+        "env": "SIMMER_MLB_PAPER_BANKROLL",
+        "default": 100.0,
+        "type": float,
+    },
+    "allow_score_fallback_paper": {
+        "env": "SIMMER_MLB_SCORE_FALLBACK_PAPER",
+        "default": True,
+        "type": bool,
+    },
+    "allow_score_fallback_live": {
+        "env": "SIMMER_MLB_SCORE_FALLBACK_LIVE",
+        "default": False,
+        "type": bool,
+    },
+    "context_max_slippage": {
+        "env": "SIMMER_MLB_MAX_SLIPPAGE",
+        "default": 0.12,
+        "type": float,
+    },
+    "synthetic_spread": {
+        "env": "SIMMER_MLB_SYNTHETIC_SPREAD",
+        "default": 0.01,
+        "type": float,
+    },
+    "market_query": {"env": "SIMMER_MLB_MARKET_QUERY", "default": "MLB", "type": str},
+    "order_type": {"env": "SIMMER_MLB_ORDER_TYPE", "default": "FAK", "type": str},
+}
+
+CONFIG_LIMITS: dict[str, tuple[float, float]] = {
+    "kelly_multiplier": (0.05, 1.0),
+    "min_ev": (0.0, 0.2),
+    "paper_min_edge": (0.0, 0.2),
+    "live_min_edge": (0.0, 0.2),
+    "early_inning_penalty": (0.0, 0.1),
+    "middle_inning_penalty": (0.0, 0.1),
+    "summary_penalty": (0.0, 0.1),
+    "score_penalty": (0.0, 0.15),
+    "stale_after_seconds": (5.0, 180.0),
+    "stale_penalty_per_minute": (0.0, 0.03),
+    "max_stale_penalty": (0.0, 0.1),
+    "wide_spread_after": (0.0, 0.2),
+    "spread_penalty_multiplier": (0.0, 2.0),
+    "max_spread_penalty": (0.0, 0.1),
+    "fallback_fee_bps": (0.0, 1000.0),
+    "execution_buffer": (0.0, 0.05),
+    "max_quote_age_seconds": (5.0, 300.0),
+    "max_signal_age_seconds": (5.0, 300.0),
+    "max_signal_future_skew_seconds": (0.0, 30.0),
+    "max_spread_paper": (0.01, 0.5),
+    "max_spread_live": (0.01, 0.5),
+    "max_position_usd": (1.0, 1000.0),
+    "max_bankroll_fraction": (0.001, 0.5),
+    "min_trade_usd": (1.0, 100.0),
+    "max_trades_per_run": (1.0, 20.0),
+    "max_live_trades_per_day": (1.0, 100.0),
+    "live_daily_budget_usd": (1.0, 10000.0),
+    "paper_bankroll_usd": (10.0, 100000.0),
+    "context_max_slippage": (0.0, 0.5),
+    "synthetic_spread": (0.0, 0.1),
+}
+
+
+@dataclass(frozen=True)
+class LiveGame:
+    game_id: str
+    home_team: str
+    away_team: str
+    home_score: int
+    away_score: int
+    inning: int
+    detail: str
+    competition: Mapping[str, Any]
+    same_matchup_events: int = 1
+
+
+@dataclass(frozen=True)
+class GameSignal:
+    game: LiveGame
+    home_probability: float
+    source: str
+    age_seconds: float
+    observed_monotonic: float | None = None
+
+
+@dataclass(frozen=True)
+class Quote:
+    """Executable outcome prices and top-of-book metadata."""
+
+    yes_ask: float | None
+    no_ask: float | None
+    spread: float
+    fee_bps: float | None
+    yes_ask_size: float | None = None
+    no_ask_size: float | None = None
+    quote_age_seconds: float | None = None
+    quote_timestamp: float | None = None
+
+
+class ConfigLoader(Protocol):
+    """Load a resolved Simmer skill configuration."""
+
+    def __call__(
+        self,
+        schema: Mapping[str, Mapping[str, Any]],
+        skill_file: str,
+        *,
+        slug: str,
+    ) -> Mapping[str, Any]:
+        """Return resolved values for one skill."""
+
+
+class ConfigUpdater(Protocol):
+    """Persist approved Simmer skill configuration overrides."""
+
+    def __call__(
+        self, updates: Mapping[str, Any], skill_file: str
+    ) -> Mapping[str, Any]:
+        """Persist and return the merged configuration."""
+
+
+class ConfigPathResolver(Protocol):
+    """Resolve the SDK-owned configuration path."""
+
+    def __call__(self, skill_file: str) -> str | Path:
+        """Return the path used by the Simmer config adapter."""
+
+
+class PositionSizeFunction(Protocol):
+    """Calculate a position through the Simmer sizing contract."""
+
+    def __call__(
+        self,
+        *,
+        p_win: float,
+        market_price: float,
+        bankroll: float,
+        method: str,
+        kelly_multiplier: float,
+        min_ev: float,
+        max_fraction: float,
+    ) -> float:
+        """Return a proposed order amount in dollars."""
+
+
+class RuntimeConfigValidator:
+    """Validate high-impact runtime settings before they reach the SDK."""
+
+    _POSITION_SIZING_METHODS = frozenset({"fixed", "kelly", "fractional_kelly"})
+    _ORDER_TYPES = frozenset({"FAK", "FOK", "GTC", "GTD"})
+
+    def validate(self, config: Mapping[str, Any]) -> dict[str, Any]:
+        """Return a validated copy of runtime configuration values.
+
+        Args:
+            config: Resolved or partial runtime configuration.
+
+        Returns:
+            A mutable validated copy.
+
+        Raises:
+            ValueError: If any runtime setting has an unsafe type or value.
+        """
+        values = dict(config)
+        for key, specification in CONFIG_SCHEMA.items():
+            if key not in values:
+                continue
+            expected_type = specification["type"]
+            raw_value = values[key]
+            if expected_type is bool and not isinstance(raw_value, bool):
+                raise ValueError(f"{key} must be a boolean")
+            if expected_type is str and not isinstance(raw_value, str):
+                raise ValueError(f"{key} must be a string")
+        for key, (minimum, maximum) in CONFIG_LIMITS.items():
+            if key not in values:
+                continue
+            raw_value = values[key]
+            expected_type = CONFIG_SCHEMA[key]["type"]
+            if isinstance(raw_value, bool) or not isinstance(raw_value, (int, float)):
+                raise ValueError(f"{key} must be numeric")
+            if expected_type is int and not isinstance(raw_value, int):
+                raise ValueError(f"{key} must be an integer")
+            numeric_value = float(raw_value)
+            if not math.isfinite(numeric_value):
+                raise ValueError(f"{key} must be finite")
+            if not minimum <= numeric_value <= maximum:
+                raise ValueError(f"{key} must be between {minimum:g} and {maximum:g}")
+        method = values.get("position_sizing")
+        if method is not None and str(method) not in self._POSITION_SIZING_METHODS:
+            allowed = ", ".join(sorted(self._POSITION_SIZING_METHODS))
+            raise ValueError(f"position_sizing must be one of: {allowed}")
+        order_type = values.get("order_type")
+        if order_type is not None:
+            normalized_order_type = str(order_type).strip().upper()
+            if normalized_order_type not in self._ORDER_TYPES:
+                allowed_order_types = ", ".join(sorted(self._ORDER_TYPES))
+                raise ValueError(f"order_type must be one of: {allowed_order_types}")
+            values["order_type"] = normalized_order_type
+        return values
+
+
+class ConfigValueParser:
+    """Coerce human-readable configuration values without silent fallback."""
+
+    _TRUE_VALUES = frozenset({"1", "true", "yes", "on"})
+    _FALSE_VALUES = frozenset({"0", "false", "no", "off"})
+
+    @classmethod
+    def coerce(cls, value: Any, expected_type: type) -> Any:
+        """Convert one boundary value to its declared configuration type.
+
+        Args:
+            value: Raw CLI or environment value.
+            expected_type: Declared schema type.
+
+        Returns:
+            Typed configuration value.
+
+        Raises:
+            ValueError: If the value cannot be converted unambiguously.
+        """
+        if expected_type is bool:
+            if isinstance(value, bool):
+                return value
+            normalized = str(value).strip().lower()
+            if normalized in cls._TRUE_VALUES:
+                return True
+            if normalized in cls._FALSE_VALUES:
+                return False
+            raise ValueError("Expected an explicit boolean value")
+        return expected_type(value)
+
+
+class RuntimeConfigRepository:
+    """Load and update runtime settings through the public Simmer SDK API."""
+
+    def __init__(
+        self,
+        *,
+        loader: ConfigLoader = load_config,
+        updater: ConfigUpdater = update_config,
+        path_resolver: ConfigPathResolver = get_config_path,
+        skill_file: str = __file__,
+        validator: RuntimeConfigValidator | None = None,
+        environment: Mapping[str, str] | None = None,
+    ) -> None:
+        """Initialize the SDK config adapter.
+
+        Args:
+            loader: Public SDK config loader.
+            updater: Public SDK config updater.
+            path_resolver: Public SDK config-path resolver.
+            skill_file: Entrypoint used to locate ``config.json``.
+            validator: Boundary validator for high-impact settings.
+            environment: Injectable environment containing SDK overrides.
+        """
+        self._loader = loader
+        self._updater = updater
+        self._path_resolver = path_resolver
+        self._skill_file = skill_file
+        self._validator = validator or RuntimeConfigValidator()
+        self._environment = environment if environment is not None else os.environ
+
+    def load(self) -> dict[str, Any]:
+        """Return the fully resolved runtime configuration.
+
+        Returns:
+            A mutable copy of the resolved configuration.
+
+        Raises:
+            TypeError: If the SDK returns an invalid config payload.
+            RuntimeError: Propagated from the SDK for invalid configuration.
+        """
+        self._validate_raw_config_sources()
+        resolved = self._loader(CONFIG_SCHEMA, self._skill_file, slug=SKILL_SLUG)
+        if not isinstance(resolved, Mapping):
+            raise TypeError("Simmer configuration must resolve to a mapping")
+        return self._validator.validate(resolved)
+
+    def save(self, updates: Mapping[str, Any]) -> dict[str, Any]:
+        """Persist validated configuration overrides.
+
+        Args:
+            updates: Parsed setting names and values.
+
+        Returns:
+            The SDK's merged configuration.
+
+        Raises:
+            TypeError: If the SDK returns an invalid config payload.
+            RuntimeError: Propagated from the SDK when persistence fails.
+        """
+        self._validate_raw_config_sources()
+        validated = self._validator.validate(updates)
+        saved = self._updater(validated, self._skill_file)
+        if not isinstance(saved, Mapping):
+            raise TypeError("Simmer configuration update must return a mapping")
+        return self._validator.validate(saved)
+
+    def path(self) -> Path:
+        """Return the SDK-owned local configuration path.
+
+        Returns:
+            Absolute or relative path reported by the SDK.
+        """
+        return Path(self._path_resolver(self._skill_file))
+
+    def _validate_raw_config_sources(self) -> None:
+        """Reject malformed file and environment values before SDK fallback."""
+        self._validate_persisted_config()
+        for key, specification in CONFIG_SCHEMA.items():
+            environment_name = specification.get("env")
+            if not isinstance(environment_name, str):
+                continue
+            raw_value = self._environment.get(environment_name)
+            if raw_value is None:
+                continue
+            try:
+                parsed = ConfigValueParser.coerce(
+                    raw_value,
+                    specification["type"],
+                )
+                self._validator.validate({key: parsed})
+            except (TypeError, ValueError) as exc:
+                raise ValueError(
+                    f"{environment_name} contains an invalid value"
+                ) from exc
+
+    def _validate_persisted_config(self) -> None:
+        """Reject a corrupt local file before the SDK can fall back silently."""
+        config_path = self.path()
+        try:
+            serialized = config_path.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            return
+        except OSError as exc:
+            raise RuntimeError(f"Cannot read Simmer config at {config_path}") from exc
+        try:
+            payload = json.loads(serialized)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(
+                f"Simmer config at {config_path} contains invalid JSON"
+            ) from exc
+        if not isinstance(payload, Mapping):
+            raise RuntimeError(f"Simmer config at {config_path} must be a JSON object")
+        unknown_keys = sorted(set(payload).difference(CONFIG_SCHEMA))
+        if unknown_keys:
+            names = ", ".join(unknown_keys)
+            raise ValueError(f"Simmer config contains unknown settings: {names}")
+        self._validator.validate(payload)
+
+
+@dataclass(frozen=True)
+class PositionSizingRequest:
+    """Inputs required to size one approved trade candidate."""
+
+    bankroll: float
+    fair_probability: float
+    market_price: float
+    method: str
+    kelly_multiplier: float
+    min_ev: float
+    max_position_usd: float
+    max_bankroll_fraction: float
+    min_trade_usd: float
+
+
+class SdkPositionSizer:
+    """Apply Simmer sizing and hard venue/strategy caps without flooring up."""
+
+    def __init__(self, size_function: PositionSizeFunction = size_position) -> None:
+        """Initialize the sizing adapter.
+
+        Args:
+            size_function: Injectable Simmer sizing implementation.
+        """
+        self._size_function = size_function
+
+    def size(self, request: PositionSizingRequest) -> float:
+        """Return a bounded order amount or zero when it is too small.
+
+        Args:
+            request: Validated sizing inputs for one candidate.
+
+        Returns:
+            Dollar amount rounded to cents, or zero when the SDK result cannot
+            satisfy the minimum order without increasing risk.
+        """
+        cap = min(
+            request.max_position_usd,
+            request.bankroll * request.max_bankroll_fraction,
+        )
+        venue_minimum = max(
+            0.01,
+            request.min_trade_usd,
+            MIN_SHARES_PER_ORDER * request.market_price,
+        )
+        if request.bankroll <= 0 or cap < venue_minimum:
+            return 0.0
+
+        proposed = self._size_function(
+            p_win=request.fair_probability,
+            market_price=request.market_price,
+            bankroll=request.bankroll,
+            method=request.method,
+            kelly_multiplier=request.kelly_multiplier,
+            min_ev=request.min_ev,
+            max_fraction=request.max_bankroll_fraction,
+        )
+        if not isinstance(proposed, (int, float)) or not math.isfinite(float(proposed)):
+            return 0.0
+        amount = round(min(float(proposed), cap), 2)
+        if amount < venue_minimum:
+            return 0.0
+        return amount
+
+
+class MarketDiscoveryError(RuntimeError):
+    """Raised when every Simmer market-discovery request fails."""
+
+
+class MarketCatalog:
+    """Read active Polymarket-backed markets through the public Simmer API."""
+
+    _FIELDS = (
+        "id",
+        "market_id",
+        "question",
+        "title",
+        "name",
+        "description",
+        "slug",
+        "subtitle",
+        "event_title",
+        "status",
+        "yes_label",
+        "yes_outcome",
+        "outcome",
+        "selection",
+        "token_name",
+        "outcomes",
+        "outcome_names",
+        "tokens",
+        "outcome_prices",
+        "outcomePrices",
+        "current_probability",
+        "probability",
+        "price",
+        "resolves_at",
+        "is_live_now",
+        "opens_at",
+        "resolution_criteria",
+        "best_bid",
+        "best_ask",
+        "best_bid_size",
+        "best_ask_size",
+        "spread",
+        "spread_pct",
+        "quote_ts",
+        "quote_age_seconds",
+        "fee_rate_bps",
+        "taker_fee_bps",
+        "liquidity_tier",
+        "polymarket_token_id",
+        "polymarket_no_token_id",
+        "polymarket_condition_id",
+        "polymarket_neg_risk",
+    )
+
+    def __init__(self, client: Any, *, limit: int = 100) -> None:
+        self._client = client
+        self._limit = limit
+
+    def find_active(self, *, query: str) -> list[dict[str, Any]]:
+        """Return active MLB markets using filtered, volume-sorted requests."""
+        attempts = (
+            {"q": query},
+            {"tags": "mlb"},
+        )
+        failures: list[Exception] = []
+        for selector in attempts:
+            try:
+                rows = self._client.get_markets(
+                    status="active",
+                    venue="polymarket",
+                    sort="volume",
+                    limit=self._limit,
+                    **selector,
+                )
+            except Exception as exc:
+                failures.append(exc)
+                continue
+            markets = [self._to_mapping(row) for row in rows]
+            markets = [
+                market
+                for market in markets
+                if market.get("id") or market.get("market_id")
+            ]
+            if markets:
+                return markets
+        if failures and len(failures) == len(attempts):
+            raise MarketDiscoveryError("Simmer market discovery failed") from failures[
+                -1
+            ]
+        return []
+
+    @classmethod
+    def _to_mapping(cls, market: Any) -> dict[str, Any]:
+        if isinstance(market, Mapping):
+            return dict(market)
+        return {
+            field: getattr(market, field)
+            for field in cls._FIELDS
+            if hasattr(market, field)
+        }
+
+
+class MarketTimingPolicy:
+    """Bind a live contract to the current ESPN game window."""
+
+    _MIN_RESOLUTION_DELTA_SECONDS = 0.0
+    _MAX_RESOLUTION_DELTA_SECONDS = 12.0 * 60.0 * 60.0
+
+    def rejection_reason(
+        self,
+        market: Mapping[str, Any],
+        game: LiveGame,
+    ) -> str | None:
+        """Return why market timing cannot represent the current live game.
+
+        Args:
+            market: Simmer market metadata.
+            game: Matched live ESPN game.
+
+        Returns:
+            A stable rejection reason, or ``None`` for a current game window.
+        """
+        if market.get("is_live_now") is not True:
+            return "market is not confirmed live"
+        if game.same_matchup_events != 1:
+            return "same-day matchup is an ambiguous doubleheader"
+        game_time = self._parse_timestamp(game.competition.get("date"))
+        resolution_time = self._parse_timestamp(market.get("resolves_at"))
+        if game_time is None or resolution_time is None:
+            return "market or game timing is unavailable"
+        delta = (resolution_time - game_time).total_seconds()
+        if not (
+            self._MIN_RESOLUTION_DELTA_SECONDS
+            <= delta
+            <= self._MAX_RESOLUTION_DELTA_SECONDS
+        ):
+            return "market resolution does not match the live game window"
+        return None
+
+    @staticmethod
+    def _parse_timestamp(value: Any) -> datetime | None:
+        if not value:
+            return None
+        try:
+            parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        except ValueError:
+            return None
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed.astimezone(timezone.utc)
+
+
+class MarketContextReader:
+    """Read Simmer diagnostics for the strategy's own probability estimate."""
+
+    def __init__(self, client: Any) -> None:
+        self._client = client
+
+    def get(
+        self,
+        market_id: str,
+        *,
+        fair_yes_probability: float,
+    ) -> Mapping[str, Any] | None:
+        """Return Polymarket context calculated against the supplied fair value."""
+        context = self._client.get_market_context(
+            market_id,
+            venue="polymarket",
+            my_probability=fair_yes_probability,
+        )
+        return context if isinstance(context, Mapping) else None
+
+
+class QuoteExtractor:
+    """Build executable YES and NO quotes from Simmer top-of-book data."""
+
+    def __init__(self, *, synthetic_spread: float) -> None:
+        self._synthetic_spread = synthetic_spread
+
+    def extract(
+        self,
+        market: Mapping[str, Any],
+        context: Mapping[str, Any] | None,
+    ) -> Quote:
+        """Prefer real order-book prices and use midpoint estimates only as fallback."""
+        prices = _prices_from_outcomes(market)
+        yes_bid = _first_number(market.get("best_bid"))
+        explicit_yes = _first_number(
+            market.get("yes_ask"),
+            market.get("best_ask"),
+            market.get("ask_price"),
+            _nested_number(context, ("yes_ask", "best_ask", "ask_price")),
+        )
+        reported_spread = _first_number(
+            market.get("spread"),
+            market.get("spread_pct"),
+            _nested_number(context, ("spread", "spread_pct", "bid_ask_spread")),
+        )
+        book_spread = (
+            explicit_yes - yes_bid
+            if explicit_yes is not None and yes_bid is not None
+            else None
+        )
+        if book_spread is not None and book_spread < 0:
+            spread = book_spread
+        elif book_spread is not None:
+            spread = max(
+                self._synthetic_spread,
+                book_spread,
+                reported_spread if reported_spread is not None else 0.0,
+            )
+        else:
+            spread = (
+                reported_spread
+                if reported_spread is not None
+                else self._synthetic_spread
+            )
+        explicit_no = _first_number(
+            market.get("no_ask"),
+            market.get("best_no_ask"),
+            _nested_number(context, ("no_ask", "best_no_ask")),
+        )
+
+        midpoint = _first_number(
+            market.get("current_probability"),
+            market.get("probability"),
+            market.get("price"),
+            prices[0] if prices else None,
+        )
+        no_midpoint = (
+            prices[1]
+            if len(prices) > 1
+            else (1.0 - midpoint if midpoint is not None else None)
+        )
+        half_spread = spread / 2.0
+        yes_ask = (
+            explicit_yes
+            if explicit_yes is not None
+            else (midpoint + half_spread if midpoint is not None else None)
+        )
+        is_neg_risk = market.get("polymarket_neg_risk") is True
+        no_ask: float | None
+        if explicit_no is not None:
+            no_ask = explicit_no
+        elif is_neg_risk:
+            no_ask = None
+        elif yes_bid is not None:
+            no_ask = 1.0 - yes_bid
+        else:
+            no_ask = no_midpoint + half_spread if no_midpoint is not None else None
+
+        if yes_ask is not None:
+            yes_ask = min(0.99, max(0.01, yes_ask))
+        if no_ask is not None:
+            no_ask = min(0.99, max(0.01, no_ask))
+
+        fee_bps = _first_number(
+            market.get("fee_rate_bps"),
+            market.get("taker_fee_bps"),
+            _nested_number(context, ("fee_rate_bps", "taker_fee_bps", "base_fee_bps")),
+        )
+        explicit_no_size = _first_number(
+            market.get("no_ask_size"),
+            market.get("best_no_ask_size"),
+            _nested_number(context, ("no_ask_size", "best_no_ask_size")),
+        )
+        no_ask_size = (
+            explicit_no_size
+            if explicit_no is not None
+            else (None if is_neg_risk else _first_number(market.get("best_bid_size")))
+        )
+        return Quote(
+            yes_ask=yes_ask,
+            no_ask=no_ask,
+            spread=spread,
+            fee_bps=fee_bps,
+            yes_ask_size=_first_number(market.get("best_ask_size")),
+            no_ask_size=no_ask_size,
+            quote_age_seconds=_first_number(market.get("quote_age_seconds")),
+            quote_timestamp=_first_number(market.get("quote_ts")),
+        )
+
+
+class QuotePolicy:
+    """Apply hard spread and freshness limits before strategy evaluation."""
+
+    def __init__(
+        self,
+        *,
+        max_spread: float,
+        max_age_seconds: float,
+        require_age: bool,
+        clock: Callable[[], float] | None = None,
+        wall_clock: Callable[[], float] | None = None,
+    ) -> None:
+        """Initialize snapshot-relative quote safety limits.
+
+        Args:
+            max_spread: Maximum executable bid/ask spread.
+            max_age_seconds: Maximum total age at evaluation time.
+            require_age: Whether missing server age metadata must reject.
+            clock: Injectable monotonic clock used to include local delay.
+            wall_clock: Injectable epoch clock used to include response transit.
+        """
+        self._max_spread = max_spread
+        self._max_age_seconds = max_age_seconds
+        self._require_age = require_age
+        self._clock = clock or time.monotonic
+        self._wall_clock = wall_clock or time.time
+        self._snapshot_time = self._clock()
+
+    def rejection_reason(self, quote: Quote) -> str | None:
+        """Return a concise rejection reason, or None when the quote is usable."""
+        if not math.isfinite(quote.spread) or quote.spread < 0:
+            return "quote spread is invalid"
+        if quote.spread > self._max_spread:
+            return f"spread {quote.spread:.1%} exceeds limit"
+        local_age = max(0.0, self._clock() - self._snapshot_time)
+        age_candidates: list[float] = []
+        if quote.quote_age_seconds is not None:
+            if (
+                not math.isfinite(quote.quote_age_seconds)
+                or quote.quote_age_seconds < 0
+            ):
+                return "quote age is invalid"
+            age_candidates.append(quote.quote_age_seconds + local_age)
+        if quote.quote_timestamp is not None:
+            if not math.isfinite(quote.quote_timestamp):
+                return "quote timestamp is invalid"
+            timestamp_age = self._wall_clock() - quote.quote_timestamp
+            if timestamp_age < 0:
+                return "quote timestamp is in the future"
+            age_candidates.append(timestamp_age)
+        if not age_candidates:
+            return "quote age is unavailable" if self._require_age else None
+        total_age = max(age_candidates)
+        if total_age > self._max_age_seconds:
+            return f"quote age {total_age:.0f}s exceeds limit"
+        return None
+
+
+def _parse_bool(value: Any) -> bool:
+    """Delegate strict boolean parsing to the configuration value parser."""
+    return bool(ConfigValueParser.coerce(value, bool))
+
+
+def _coerce(value: Any, type_fn: type) -> Any:
+    """Delegate boundary coercion to the class-based parser."""
+    return ConfigValueParser.coerce(value, type_fn)
+
+
+def load_runtime_config() -> dict[str, Any]:
+    """Load settings through the canonical Simmer config adapter.
+
+    Returns:
+        Resolved runtime configuration.
+    """
+    return RuntimeConfigRepository().load()
+
+
+def save_config(updates: Mapping[str, Any]) -> dict[str, Any]:
+    """Persist settings through the canonical Simmer config adapter.
+
+    Args:
+        updates: Parsed configuration overrides.
+
+    Returns:
+        Merged configuration returned by the SDK.
+    """
+    return RuntimeConfigRepository().save(updates)
+
+
+class SimmerClientProvider:
+    """Create and cache Simmer clients without crossing execution boundaries."""
+
+    def __init__(
+        self,
+        *,
+        client_factory: Callable[..., Any] | None = None,
+        readonly_factory: Callable[..., Any] | None = None,
+        environment: Mapping[str, str] | None = None,
+    ) -> None:
+        """Initialize mode-keyed client construction.
+
+        Args:
+            client_factory: Injectable mutable Simmer client constructor.
+            readonly_factory: Injectable ``SimmerClient.readonly`` constructor.
+            environment: Environment mapping containing API and venue settings.
+        """
+        self._client_factory = client_factory
+        self._readonly_factory = readonly_factory
+        self._environment = environment if environment is not None else os.environ
+        self._clients: dict[tuple[bool, bool], Any] = {}
+
+    def get(self, *, live: bool) -> Any:
+        """Return a mutable client scoped to exactly one execution mode.
+
+        Args:
+            live: Whether the client may submit real orders.
+
+        Returns:
+            Mode-scoped Simmer client.
+
+        Raises:
+            RuntimeError: If the SDK or API key is unavailable.
+        """
+        return self._get(live=live, readonly=False)
+
+    def get_readonly(self, *, live: bool) -> Any:
+        """Return a read-only client for paper or live portfolio inspection.
+
+        Args:
+            live: Portfolio namespace to inspect without enabling mutations.
+
+        Returns:
+            SDK-enforced read-only Simmer client.
+        """
+        return self._get(live=live, readonly=True)
+
+    def _get(self, *, live: bool, readonly: bool) -> Any:
+        key = (live, readonly)
+        if key in self._clients:
+            return self._clients[key]
+        mutable_factory, readonly_factory = self._factories()
+        api_key = self._environment.get("SIMMER_API_KEY")
+        if not api_key:
+            raise RuntimeError("SIMMER_API_KEY is not set")
+        venue = self._environment.get("TRADING_VENUE", "polymarket")
+        if live:
+            if venue.strip().lower() != "polymarket":
+                raise RuntimeError(
+                    "Live MLB trading requires Polymarket (TRADING_VENUE=polymarket)"
+                )
+            venue = "polymarket"
+        factory = readonly_factory if readonly else mutable_factory
+        client = factory(api_key=api_key, venue=venue, live=live)
+        self._clients[key] = client
+        return client
+
+    def _factories(self) -> tuple[Callable[..., Any], Callable[..., Any]]:
+        if self._client_factory is not None and self._readonly_factory is not None:
+            return self._client_factory, self._readonly_factory
+        try:
+            from simmer_sdk import SimmerClient
+        except ImportError as exc:
+            raise RuntimeError(
+                "simmer-sdk is not installed; run: pip install 'simmer-sdk==0.24.6'"
+            ) from exc
+        mutable_factory = self._client_factory or SimmerClient
+        readonly_factory = self._readonly_factory or SimmerClient.readonly
+        return mutable_factory, readonly_factory
+
+
+_CLIENT_PROVIDER = SimmerClientProvider()
+
+
+def get_client(*, live: bool) -> Any:
+    """Delegate mutable client access to the mode-scoped provider.
+
+    Args:
+        live: Whether the client may submit real orders.
+
+    Returns:
+        Mode-scoped Simmer client.
+    """
+    return _CLIENT_PROVIDER.get(live=live)
+
+
+def get_readonly_client(*, live: bool) -> Any:
+    """Delegate status access to the SDK-enforced read-only provider.
+
+    Args:
+        live: Portfolio namespace to inspect.
+
+    Returns:
+        Read-only Simmer client.
+    """
+    return _CLIENT_PROVIDER.get_readonly(live=live)
+
+
+def http_json(
+    url: str, params: Mapping[str, Any] | None = None, timeout: float = 12.0
+) -> Any:
+    """Read JSON from the fixed ESPN HTTPS adapter boundary.
+
+    Args:
+        url: Approved ESPN endpoint URL.
+        params: Optional query parameters.
+        timeout: Network timeout in seconds.
+
+    Returns:
+        Decoded JSON payload.
+
+    Raises:
+        ValueError: If the URL is outside the approved ESPN HTTPS host.
+        RuntimeError: If ESPN is unavailable or returns invalid JSON.
+    """
+    parsed_url = urlparse(url)
+    if parsed_url.scheme != "https" or parsed_url.hostname != "site.api.espn.com":
+        raise ValueError("http_json requires an approved ESPN HTTPS URL")
+    if params:
+        url = f"{url}?{urlencode(params)}"
+    request = Request(url, headers={"User-Agent": "mlb-live-trader/2.2.1"})
+    try:
+        with urlopen(request, timeout=timeout) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except HTTPError as exc:
+        raise RuntimeError(f"HTTP {exc.code} from {url}") from exc
+    except URLError as exc:
+        raise RuntimeError(f"Could not reach {url}: {exc.reason}") from exc
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"Invalid JSON from {url}") from exc
+
+
+def _to_int(value: Any) -> int:
+    try:
+        return int(float(value))
+    except (TypeError, ValueError):
+        return 0
+
+
+def _probability(value: Any) -> float | None:
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if number > 1.0:
+        number /= 100.0
+    if 0.0 <= number <= 1.0:
+        return number
+    return None
+
+
+@dataclass(frozen=True)
+class ScoreboardGameRow:
+    """One complete ESPN scoreboard event before live-state filtering."""
+
+    game_id: str
+    home: tuple[str, int]
+    away: tuple[str, int]
+    state: str
+    status: Mapping[str, Any]
+    competition: Mapping[str, Any]
+
+    @property
+    def matchup_key(self) -> tuple[str, str]:
+        """Return an order-independent team-pair identity."""
+        first, second = sorted((self.home[0], self.away[0]))
+        return first, second
+
+
+class ScoreboardParser:
+    """Parse the full ESPN slate before selecting in-progress games."""
+
+    def parse(self, payload: Mapping[str, Any]) -> list[LiveGame]:
+        """Return complete live games annotated with matchup multiplicity.
+
+        Args:
+            payload: ESPN scoreboard response.
+
+        Returns:
+            In-progress games. Each includes the number of same-team events in
+            the full returned slate so doubleheaders can fail closed.
+        """
+        events = payload.get("events", [])
+        if not isinstance(events, Sequence) or isinstance(events, (str, bytes)):
+            return []
+        rows = [
+            row
+            for event in events
+            if isinstance(event, Mapping)
+            for row in [self._parse_event(event)]
+            if row is not None
+        ]
+        matchup_counts: dict[tuple[str, str], int] = {}
+        for row in rows:
+            matchup_counts[row.matchup_key] = matchup_counts.get(row.matchup_key, 0) + 1
+
+        games: list[LiveGame] = []
+        for row in rows:
+            if row.state != "in":
+                continue
+            inning = _to_int(
+                row.status.get("period")
+                or row.competition.get("situation", {}).get("inning")
+            )
+            status_type = row.status.get("type") or {}
+            games.append(
+                LiveGame(
+                    game_id=row.game_id,
+                    home_team=row.home[0],
+                    away_team=row.away[0],
+                    home_score=row.home[1],
+                    away_score=row.away[1],
+                    inning=max(1, inning),
+                    detail=str(
+                        status_type.get("shortDetail")
+                        or row.status.get("displayClock")
+                        or "live"
+                    ),
+                    competition=row.competition,
+                    same_matchup_events=matchup_counts[row.matchup_key],
+                )
+            )
+        return games
+
+    @staticmethod
+    def _parse_event(event: Mapping[str, Any]) -> ScoreboardGameRow | None:
+        competitions = event.get("competitions", [])
+        if not isinstance(competitions, Sequence) or not competitions:
+            return None
+        first_competition = competitions[0]
+        if not isinstance(first_competition, Mapping):
+            return None
+        competition = dict(first_competition)
+        if event.get("date") and not competition.get("date"):
+            competition["date"] = event["date"]
+        status_value = competition.get("status") or event.get("status") or {}
+        if not isinstance(status_value, Mapping):
+            return None
+        status = dict(status_value)
+        status_type = status.get("type") or {}
+        if not isinstance(status_type, Mapping):
+            return None
+        state = str(status_type.get("state", "")).lower()
+
+        home: tuple[str, int] | None = None
+        away: tuple[str, int] | None = None
+        competitors = competition.get("competitors", [])
+        if not isinstance(competitors, Sequence):
+            return None
+        for competitor in competitors:
+            if not isinstance(competitor, Mapping):
+                continue
+            team_value = competitor.get("team") or {}
+            if not isinstance(team_value, Mapping):
+                continue
+            team = team_value.get("displayName") or team_value.get("name")
+            parsed = (str(team or ""), _to_int(competitor.get("score")))
+            if not parsed[0]:
+                continue
+            if competitor.get("homeAway") == "home":
+                home = parsed
+            elif competitor.get("homeAway") == "away":
+                away = parsed
+        if home is None or away is None:
+            return None
+        return ScoreboardGameRow(
+            game_id=str(event.get("id", "")),
+            home=home,
+            away=away,
+            state=state,
+            status=status,
+            competition=competition,
+        )
+
+
+def fetch_live_games() -> list[LiveGame]:
+    """Delegate ESPN scoreboard parsing to the full-slate parser."""
+    payload = http_json(ESPN_SCOREBOARD_URL)
+    return ScoreboardParser().parse(payload if isinstance(payload, Mapping) else {})
+
+
+def _probability_from_object(value: Any) -> float | None:
+    if not isinstance(value, Mapping):
+        return None
+    for key in ("homeWinPercentage", "homeWinProbability", "home_win_probability"):
+        parsed = _probability(value.get(key))
+        if parsed is not None:
+            return parsed
+    return None
+
+
+def score_fallback_probability(game: LiveGame) -> float:
+    score_diff = game.home_score - game.away_score
+    innings_left = max(0.5, 9.5 - float(game.inning))
+    home_advantage = 0.12 * min(1.0, innings_left / 9.0)
+    logit = (0.90 * score_diff / math.sqrt(innings_left)) + home_advantage
+    return 1.0 / (1.0 + math.exp(-logit))
+
+
+class GameSignalBuilder:
+    """Build deterministic ESPN signals behind an injectable clock and I/O port."""
+
+    def __init__(
+        self,
+        *,
+        http_reader: Callable[..., Any] | None = None,
+        clock: Callable[[], datetime] | None = None,
+        monotonic_clock: Callable[[], float] | None = None,
+    ) -> None:
+        """Initialize the ESPN signal adapter.
+
+        Args:
+            http_reader: Injectable JSON reader for ESPN summary requests.
+            clock: Injectable aware UTC clock for freshness decisions.
+            monotonic_clock: Injectable elapsed-time clock for downstream age.
+        """
+        self._http_reader = http_reader or http_json
+        self._clock = clock or (lambda: datetime.now(timezone.utc))
+        self._monotonic_clock = monotonic_clock or time.monotonic
+
+    def build(
+        self,
+        game: LiveGame,
+        config: Mapping[str, Any],
+        *,
+        live: bool,
+    ) -> GameSignal | None:
+        """Return a usable signal or fail closed on unverifiable live evidence.
+
+        Args:
+            game: Parsed in-progress MLB game.
+            config: Resolved runtime configuration.
+            live: Whether the signal may authorize a real trade.
+
+        Returns:
+            A validated signal, or ``None`` when evidence is unavailable,
+            stale, future-dated, or mismatched to the current ESPN play.
+        """
+        situation = game.competition.get("situation", {})
+        last_play = (
+            situation.get("lastPlay", {}) if isinstance(situation, Mapping) else {}
+        )
+        last_play_id = str(last_play.get("id") or "")
+        direct = _probability_from_object(last_play.get("probability", {}))
+        if direct is not None:
+            age = self._timestamp_age(
+                last_play.get("wallclock") or last_play.get("startDate")
+            )
+            if not live or self._is_fresh(age, config):
+                return self._create_signal(
+                    game,
+                    direct,
+                    "live",
+                    max(0.0, age or 0.0),
                 )
 
-        slippage = _slippage_fraction(
-            _as_mapping(context.get("slippage")), plan.amount_usd
+        summary = self._http_reader(ESPN_SUMMARY_URL, {"event": game.game_id})
+        rows = summary.get("winprobability", []) if isinstance(summary, Mapping) else []
+        for row in reversed(rows):
+            parsed = _probability_from_object(row)
+            if parsed is None:
+                continue
+            age = self._timestamp_age(row.get("wallclock") or row.get("timestamp"))
+            row_play_id = str(row.get("playId") or row.get("play_id") or "")
+            if live and (
+                not self._is_fresh(age, config)
+                or not last_play_id
+                or not row_play_id
+                or row_play_id != last_play_id
+            ):
+                continue
+            return self._create_signal(
+                game,
+                parsed,
+                "summary",
+                max(0.0, age if age is not None else 15.0),
+            )
+
+        allowed = (
+            config["allow_score_fallback_live"]
+            if live
+            else config["allow_score_fallback_paper"]
         )
-        if slippage is not None and slippage > float(config["max_slippage"]):
-            return SafeguardResult(False, f"SDK slippage {slippage:.2%} exceeds cap", context=context)
+        if allowed:
+            return self._create_signal(
+                game,
+                score_fallback_probability(game),
+                "score",
+                0.0,
+            )
+        return None
 
-        warnings = context.get("warnings")
-        if isinstance(warnings, Sequence) and not isinstance(warnings, (str, bytes)):
-            for warning in warnings:
-                lowered = str(warning).lower()
-                if any(
-                    term in lowered
-                    for term in ("conflict", "flip-flop", "already hold", "unsafe", "low liquidity")
-                ):
-                    return SafeguardResult(False, f"SDK context warning: {warning}", context=context)
-
-    # Readiness/exposure preflight remains mandatory even with --no-safeguards.
-    preflight = client.preflight(
-        venue=VENUE if live else "sim",
-        planned_amount=plan.amount_usd,
-        exposure_cap_usd=float(config["portfolio_exposure_cap_usd"]),
-    )
-    if not _is_true(_field(preflight, "ok_to_trade")):
-        blockers = _field(preflight, "blockers", [])
-        return SafeguardResult(
-            False,
-            f"preflight blocked trade: {', '.join(map(str, blockers)) or 'unknown blocker'}",
-            preflight_id=str(_field(preflight, "client_preflight_id", "")) or None,
-            context=context,
+    def _create_signal(
+        self,
+        game: LiveGame,
+        probability: float,
+        source: str,
+        age_seconds: float,
+    ) -> GameSignal:
+        """Create one signal with its downstream elapsed-time baseline."""
+        return GameSignal(
+            game=game,
+            home_probability=probability,
+            source=source,
+            age_seconds=age_seconds,
+            observed_monotonic=float(self._monotonic_clock()),
         )
-    return SafeguardResult(
-        True,
-        "ok",
-        preflight_id=str(_field(preflight, "client_preflight_id", "")) or None,
-        context=context,
-    )
+
+    def _timestamp_age(self, value: Any) -> float | None:
+        if not value:
+            return None
+        text = str(value).replace("Z", "+00:00")
+        try:
+            parsed = datetime.fromisoformat(text)
+        except ValueError:
+            return None
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        now = self._clock()
+        if now.tzinfo is None:
+            now = now.replace(tzinfo=timezone.utc)
+        return (
+            now.astimezone(timezone.utc) - parsed.astimezone(timezone.utc)
+        ).total_seconds()
+
+    @staticmethod
+    def _is_fresh(age: float | None, config: Mapping[str, Any]) -> bool:
+        if age is None:
+            return False
+        return (
+            -float(config["max_signal_future_skew_seconds"])
+            <= age
+            <= float(config["max_signal_age_seconds"])
+        )
 
 
-def _trade_was_committed(result: Any) -> bool:
-    """Interpret Simmer's fill status as the authoritative execution result.
+class SignalFreshnessPolicy:
+    """Revalidate total signal age after downstream processing delays."""
 
-    ``success`` can mean the request was accepted, not that an order/fill now
-    exists. FAK no-fill/failed responses must not consume local exposure, while
-    submitted/unconfirmed responses are reserved to prevent duplicate orders.
+    def __init__(self, clock: Callable[[], float] | None = None) -> None:
+        """Initialize the deterministic elapsed-time source.
+
+        Args:
+            clock: Injectable monotonic clock.
+        """
+        self._clock = clock or time.monotonic
+
+    def current_age(
+        self,
+        signal: GameSignal,
+        *,
+        live: bool,
+        max_age_seconds: float,
+    ) -> float | None:
+        """Return total signal age or ``None`` when live evidence is unsafe.
+
+        Args:
+            signal: Signal carrying its initial wall-clock age and observation.
+            live: Whether the value may authorize a live order.
+            max_age_seconds: Hard live freshness limit.
+
+        Returns:
+            Current non-negative age, or ``None`` for invalid or stale evidence.
+        """
+        age = float(signal.age_seconds)
+        if not math.isfinite(age) or age < 0:
+            return None
+        observed = signal.observed_monotonic
+        if observed is None:
+            return None if live else age
+        current = float(self._clock())
+        if (
+            not math.isfinite(observed)
+            or not math.isfinite(current)
+            or current < observed
+        ):
+            return None
+        current_age = age + (current - observed)
+        if live and current_age > max_age_seconds:
+            return None
+        return current_age
+
+
+def build_game_signal(
+    game: LiveGame, config: Mapping[str, Any], *, live: bool
+) -> GameSignal | None:
+    """Delegate compatibility calls to the class-based signal builder.
+
+    Args:
+        game: Parsed in-progress MLB game.
+        config: Resolved runtime configuration.
+        live: Whether the signal may authorize a real trade.
+
+    Returns:
+        Validated ESPN signal or ``None``.
     """
-    if result is None:
+    return GameSignalBuilder().build(game, config, live=live)
+
+
+def fetch_markets(client: Any, query: str) -> list[dict[str, Any]]:
+    return MarketCatalog(client).find_active(query=query)
+
+
+class FiniteNumberParser:
+    """Normalize untrusted numeric metadata without admitting NaN or infinity."""
+
+    @staticmethod
+    def parse(value: Any) -> float | None:
+        """Return one finite float or ``None`` for unusable input.
+
+        Args:
+            value: Untrusted SDK or HTTP boundary value.
+
+        Returns:
+            Finite floating-point value, or ``None``.
+        """
+        try:
+            parsed = float(value)
+        except (TypeError, ValueError):
+            return None
+        return parsed if math.isfinite(parsed) else None
+
+
+_NUMBER_PARSER = FiniteNumberParser()
+
+
+def _number(value: Any) -> float | None:
+    """Delegate legacy numeric parsing calls to the finite parser."""
+    return _NUMBER_PARSER.parse(value)
+
+
+def _first_number(*values: Any) -> float | None:
+    for value in values:
+        parsed = _number(value)
+        if parsed is not None:
+            return parsed
+    return None
+
+
+def _prices_from_outcomes(market: Mapping[str, Any]) -> list[float]:
+    value = market.get("outcome_prices") or market.get("outcomePrices")
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except json.JSONDecodeError:
+            value = []
+    if not isinstance(value, Sequence):
+        return []
+    prices = []
+    for item in value:
+        parsed = _number(item)
+        if parsed is not None:
+            prices.append(parsed)
+    return prices
+
+
+def _nested_number(mapping: Any, keys: Sequence[str]) -> float | None:
+    if not isinstance(mapping, Mapping):
+        return None
+    for key in keys:
+        parsed = _number(mapping.get(key))
+        if parsed is not None:
+            return parsed
+    for value in mapping.values():
+        if isinstance(value, Mapping):
+            parsed = _nested_number(value, keys)
+            if parsed is not None:
+                return parsed
+    return None
+
+
+def extract_quote(
+    market: Mapping[str, Any],
+    context: Mapping[str, Any] | None,
+    synthetic_spread: float,
+) -> Quote:
+    return QuoteExtractor(synthetic_spread=synthetic_spread).extract(market, context)
+
+
+class ContextSafeguardPolicy:
+    """Evaluate Simmer context without allowing unknown live safety state."""
+
+    _BLOCKING_ACTIONS = ("skip", "hold", "avoid", "do not trade", "block")
+
+    def __init__(self, *, max_slippage: float, require_context: bool) -> None:
+        """Initialize context requirements.
+
+        Args:
+            max_slippage: Maximum estimated execution slippage.
+            require_context: Whether missing context must block execution.
+        """
+        self._max_slippage = max_slippage
+        self._require_context = require_context
+
+    def evaluate(self, context: Mapping[str, Any] | None) -> tuple[bool, str]:
+        """Return whether a candidate passes SDK context safeguards.
+
+        Args:
+            context: Context payload returned by Simmer.
+
+        Returns:
+            ``(allowed, reason)`` with a stable human-readable block reason.
+        """
+        if not context:
+            if self._require_context:
+                return False, "market context unavailable"
+            return True, ""
+
+        warnings = context.get("warnings", [])
+        if not isinstance(warnings, Sequence) or isinstance(warnings, str):
+            warnings = [warnings]
+        warning_text = " ".join(str(item).upper() for item in warnings)
+        if "MARKET RESOLVED" in warning_text or "MARKET CLOSED" in warning_text:
+            return False, "market is closed"
+        if any(term in warning_text for term in ("CONFLICT", "ALREADY HOLD")):
+            return False, "market context reports a conflict"
+
+        positions = context.get("positions", {})
+        if isinstance(positions, Mapping):
+            venue_position = positions.get("polymarket")
+            if isinstance(venue_position, Mapping) and venue_position.get(
+                "has_position"
+            ):
+                return False, "existing Polymarket position in this market"
+
+        discipline = context.get("discipline", {})
+        if isinstance(discipline, Mapping):
+            if str(discipline.get("warning_level", "")).lower() == "severe":
+                return False, "severe flip-flop warning"
+            if self._blocking_recommendation(discipline):
+                return False, "discipline recommends skipping the trade"
+
+        edge = context.get("edge", {})
+        if isinstance(edge, Mapping) and self._blocking_recommendation(edge):
+            return False, "edge analysis recommends skipping the trade"
+
+        slippage = _nested_number(
+            context,
+            ("slippage_pct", "estimated_slippage", "slippage"),
+        )
+        if slippage is not None and slippage > self._max_slippage:
+            return False, f"slippage {slippage:.1%} exceeds limit"
+        return True, ""
+
+    @classmethod
+    def _blocking_recommendation(cls, container: Mapping[str, Any]) -> bool:
+        for key in ("recommendation", "recommended_action", "action", "decision"):
+            value = str(container.get(key) or "").lower()
+            if any(term in value for term in cls._BLOCKING_ACTIONS):
+                return True
         return False
-    fill_status = str(_field(result, "fill_status", "unknown") or "unknown").strip().lower()
-    if fill_status in {"failed", "no_fill", "no-fill", "rejected", "cancelled", "canceled"}:
-        return False
-    if fill_status in {
-        "filled",
-        "partially_filled",
-        "partially-filled",
-        "partial",
-        "submitted",
-        "unconfirmed",
-        "confirmed",
-    }:
+
+
+def check_context(
+    context: Mapping[str, Any] | None,
+    max_slippage: float,
+) -> tuple[bool, str]:
+    """Evaluate optional context for compatibility callers.
+
+    Args:
+        context: Simmer context payload, when available.
+        max_slippage: Maximum accepted execution slippage.
+
+    Returns:
+        ``(allowed, reason)`` for a context-optional check.
+    """
+    return ContextSafeguardPolicy(
+        max_slippage=max_slippage,
+        require_context=False,
+    ).evaluate(context)
+
+
+def portfolio_balance(portfolio: Any, fallback: float) -> float:
+    if isinstance(portfolio, Mapping):
+        for key in ("balance_usdc", "available_balance", "cash_balance", "balance"):
+            value = _number(portfolio.get(key))
+            if value is not None and value >= 0:
+                return value
+    return fallback
+
+
+def strategy_config(config: Mapping[str, Any]) -> StrategyConfig:
+    keys = StrategyConfig.__dataclass_fields__.keys()
+    return StrategyConfig(**{key: config[key] for key in keys})
+
+
+@dataclass(frozen=True)
+class LivePreflightDecision:
+    """Represent one fail-closed SDK readiness decision."""
+
+    allowed: bool
+    reason: str = ""
+    terminal_error: bool = False
+    client_preflight_id: str | None = None
+
+
+class LivePreflightChecker(Protocol):
+    """Define the narrow live-readiness boundary used by orchestration."""
+
+    def check(
+        self,
+        client: Any,
+        *,
+        planned_amount: float,
+        exposure_cap_usd: float,
+    ) -> LivePreflightDecision:
+        """Return whether one planned Polymarket trade is ready."""
+        ...
+
+
+class SdkLivePreflightChecker:
+    """Validate one planned order through the pinned Simmer SDK contract."""
+
+    def check(
+        self,
+        client: Any,
+        *,
+        planned_amount: float,
+        exposure_cap_usd: float,
+    ) -> LivePreflightDecision:
+        """Call Simmer preflight and reject blockers or malformed responses.
+
+        Args:
+            client: Mode-scoped mutable Simmer client.
+            planned_amount: Final bounded order size in USDC.
+            exposure_cap_usd: Conservative cross-venue exposure cap.
+
+        Returns:
+            A decision that distinguishes normal blockers from boundary errors.
+        """
+        try:
+            result = client.preflight(
+                venue="polymarket",
+                planned_amount=planned_amount,
+                exposure_cap_usd=exposure_cap_usd,
+            )
+        except Exception:
+            return LivePreflightDecision(
+                allowed=False,
+                reason="Simmer Polymarket preflight call failed",
+                terminal_error=True,
+            )
+
+        resolved_venue = getattr(result, "resolved_venue", None)
+        if (
+            not isinstance(resolved_venue, str)
+            or resolved_venue.strip().lower() != "polymarket"
+        ):
+            return LivePreflightDecision(
+                allowed=False,
+                reason="Simmer preflight did not resolve to Polymarket",
+                terminal_error=True,
+            )
+
+        ok_to_trade = getattr(result, "ok_to_trade", None)
+        blockers_value = getattr(result, "blockers", None)
+        if not isinstance(ok_to_trade, bool) or not isinstance(blockers_value, list):
+            return LivePreflightDecision(
+                allowed=False,
+                reason="Simmer Polymarket preflight returned an invalid result",
+                terminal_error=True,
+            )
+
+        blockers = tuple(str(blocker) for blocker in blockers_value)
+        if blockers or not ok_to_trade:
+            detail = ", ".join(blockers) if blockers else "UNSPECIFIED_BLOCKER"
+            return LivePreflightDecision(
+                allowed=False,
+                reason=f"Simmer Polymarket preflight blocked: {detail}",
+            )
+
+        spendable_balance_value = getattr(result, "spendable_balance", None)
+        if (
+            isinstance(spendable_balance_value, bool)
+            or not isinstance(spendable_balance_value, (int, float))
+            or not math.isfinite(float(spendable_balance_value))
+        ):
+            return LivePreflightDecision(
+                allowed=False,
+                reason=(
+                    "Simmer Polymarket preflight returned no finite spendable balance"
+                ),
+                terminal_error=True,
+            )
+        if float(spendable_balance_value) < planned_amount:
+            return LivePreflightDecision(
+                allowed=False,
+                reason="Simmer Polymarket preflight blocked: INSUFFICIENT_BALANCE",
+            )
+
+        client_preflight_id = getattr(result, "client_preflight_id", None)
+        if not isinstance(client_preflight_id, str) or not client_preflight_id.strip():
+            return LivePreflightDecision(
+                allowed=False,
+                reason="Simmer Polymarket preflight returned no client_preflight_id",
+                terminal_error=True,
+            )
+        return LivePreflightDecision(
+            allowed=True,
+            client_preflight_id=client_preflight_id.strip(),
+        )
+
+
+class TradeExecutor:
+    """Submit one bounded order and classify confirmation uncertainty."""
+
+    _CONFIRMED_FAILURE_STATES = frozenset(
+        {
+            "rejected",
+            "failed",
+            "cancelled",
+            "canceled",
+            "expired",
+            "not_submitted",
+            "skipped",
+        }
+    )
+
+    def execute(
+        self,
+        client: Any,
+        *,
+        live: bool,
+        market_id: str,
+        side: str,
+        amount: float,
+        price: float,
+        order_type: str,
+        reasoning: str,
+    ) -> dict[str, Any]:
+        """Return a structured confirmed, rejected, or ambiguous outcome.
+
+        Args:
+            client: Mode-scoped Simmer client.
+            live: Whether this request targets real execution.
+            market_id: Runtime-discovered market identifier.
+            side: YES or NO side.
+            amount: Dollar amount reserved for this attempt.
+            price: Bounded executable limit price.
+            order_type: Simmer order type.
+            reasoning: Public, secret-free execution rationale.
+
+        Returns:
+            Structured result containing an explicit ``ambiguous`` flag.
+        """
+        client_live = getattr(client, "live", live)
+        if bool(client_live) != live:
+            return {
+                "success": False,
+                "ambiguous": False,
+                "error": "Simmer client execution mode does not match the request",
+            }
+
+        kwargs = {
+            "market_id": market_id,
+            "side": side,
+            "amount": amount,
+            "source": TRADE_SOURCE,
+            "reasoning": reasoning,
+            "skill_slug": SKILL_SLUG,
+            "order_type": order_type,
+        }
+        if live:
+            kwargs["venue"] = "polymarket"
+        if order_type.upper() in {"GTC", "GTD", "FOK", "FAK"}:
+            kwargs["price"] = price
+        try:
+            sdk_result = client.trade(**kwargs)
+        except Exception as exc:
+            return {
+                "success": False,
+                "ambiguous": True,
+                "error": str(exc),
+            }
+
+        result = {
+            "success": bool(getattr(sdk_result, "success", False)),
+            "simulated": bool(getattr(sdk_result, "simulated", False)),
+            "trade_id": getattr(sdk_result, "trade_id", None),
+            "order_id": getattr(sdk_result, "order_id", None),
+            "fill_status": getattr(sdk_result, "fill_status", None),
+            "skip_reason": getattr(sdk_result, "skip_reason", None),
+            "error": getattr(sdk_result, "error", None),
+            "error_code": getattr(sdk_result, "error_code", None),
+            "error_hint": getattr(sdk_result, "error_hint", None),
+        }
+        if result["success"] and result["simulated"] != (not live):
+            result["success"] = False
+            result["ambiguous"] = True
+            result["error"] = "Simmer result execution mode does not match the request"
+            return result
+        result["ambiguous"] = self._is_ambiguous_failure(result)
+        return result
+
+    def _is_ambiguous_failure(self, result: Mapping[str, Any]) -> bool:
+        if result.get("success"):
+            return False
+        if result.get("trade_id") or result.get("order_id"):
+            return True
+        fill_status = str(result.get("fill_status") or "").strip().lower()
+        if fill_status in self._CONFIRMED_FAILURE_STATES:
+            return False
+        if result.get("skip_reason") and fill_status in {
+            "",
+            "unknown",
+            "not_submitted",
+            "skipped",
+        }:
+            return False
         return True
-    shares = _finite_float(_field(result, "shares_filled")) or 0.0
-    cost = _finite_float(_field(result, "cost")) or 0.0
-    return shares > 0.0 or cost > 0.0
 
 
 def execute_trade(
+    client: Any,
     *,
-    client: SimmerClient,
-    plan: TradePlan,
-    config: Mapping[str, Any],
-    state: dict[str, Any],
     live: bool,
-    no_safeguards: bool,
-    quiet: bool,
-) -> Any | None:
-    """Apply safeguards and execute a tagged, publicly reasoned Simmer trade."""
-    safeguard = check_context_safeguards(
-        client=client,
-        plan=plan,
-        config=config,
-        live=live,
-        no_safeguards=no_safeguards,
-    )
-    if not safeguard.ok:
-        _emit(quiet, f"  SKIP safeguard: {safeguard.reason}")
-        return None
+    market_id: str,
+    side: str,
+    amount: float,
+    price: float,
+    order_type: str,
+    reasoning: str,
+) -> dict[str, Any]:
+    """Delegate one order to the class-based execution adapter.
 
-    evaluation = plan.evaluation
-    game = evaluation.game
-    candidate = evaluation.candidate
-    market = evaluation.market
-    reasoning = build_reasoning(game, candidate, plan.amount_usd)
-    reasoning += (
-        f" Simmer market={_field(market, 'id')}, query={evaluation.query!r}, "
-        f"spread={evaluation.spread:.3f}, quote_age={evaluation.quote_age_seconds:.1f}s, "
-        f"top_size={evaluation.top_size_shares:.2f}, limit={plan.limit_price:.3f}, "
-        f"sizing={config['position_sizing']}@{float(config['kelly_multiplier']):.2f}x, "
-        f"preflight={safeguard.preflight_id or 'not-returned'}."
-    )
-    signal_data = {
-        "signal_source": "espn_live_mlb",
-        "espn_event_id": game.event_id,
-        "espn_play_id": game.probability_play_id or game.last_play_id or "unknown",
-        "edge": round(candidate.edge, 6),
-        "confidence": round(candidate.confidence, 6),
-        "raw_probability": round(candidate.raw_yes_probability, 6),
-        "adjusted_probability": round(candidate.adjusted_yes_probability, 6),
-        "p_win": round(candidate.p_win, 6),
-        "execution_price": round(candidate.execution_price, 6),
-        "inning": game.inning,
-        "outs": game.outs,
-        "score": game.score,
-    }
-    mode = "LIVE" if live else "DRY/PAPER"
-    _emit(
-        quiet,
-        f"  {mode} BUY {candidate.side.upper()} ${plan.amount_usd:.2f} "
-        f"(~{plan.shares:.2f} shares) @ limit {plan.limit_price:.3f}\n"
-        f"    {reasoning}",
-        force=True,
-    )
-    result = client.trade(
-        market_id=str(_field(market, "id")),
-        side=candidate.side,
-        amount=plan.amount_usd,
-        action="buy",
-        venue=VENUE,
-        order_type="FAK",
-        price=plan.limit_price,
-        reasoning=reasoning,
-        source=TRADE_SOURCE,
-        skill_slug=SKILL_SLUG,
-        allow_rebuy=False,
-        signal_data=signal_data,
-    )
-    success = _is_true(_field(result, "success"))
-    fill_status = str(_field(result, "fill_status", "unknown"))
-    committed = _trade_was_committed(result)
-    if committed:
-        _record_trade(state, plan=plan, result=result, live=live)
-        _emit(
-            quiet,
-            f"  RESULT committed success={success} simulated={_field(result, 'simulated', False)} "
-            f"fill={fill_status} shares={_field(result, 'shares_filled', 0)} "
-            f"cost=${float(_field(result, 'cost', 0) or 0):.2f}",
-            force=True,
-        )
-    else:
-        _emit(
-            quiet,
-            f"  RESULT not committed: "
-            f"{_field(result, 'error') or _field(result, 'skip_reason') or fill_status}",
-            force=True,
-        )
-    return result
+    Args:
+        client: Mode-scoped Simmer client.
+        live: Whether this request targets real execution.
+        market_id: Runtime-discovered market identifier.
+        side: YES or NO side.
+        amount: Dollar amount reserved for this attempt.
+        price: Bounded executable limit price.
+        order_type: Simmer order type.
+        reasoning: Public, secret-free execution rationale.
 
-
-def _best_evaluation(
-    client: SimmerClient,
-    game: LiveGameState,
-    *,
-    core_config: StrategyConfig,
-    config: Mapping[str, Any],
-    quiet: bool,
-) -> MarketEvaluation | None:
-    found = _discover_markets(
+    Returns:
+        Structured result with confirmation uncertainty classified.
+    """
+    return TradeExecutor().execute(
         client,
-        game,
-        limit=int(config["market_query_limit"]),
-    )
-    evaluations: list[MarketEvaluation] = []
-    for market, query in found:
-        evaluation = _evaluate_market(market, game, query, core_config, config)
-        if evaluation is not None:
-            evaluations.append(evaluation)
-    if not evaluations:
-        _emit(quiet, "    no matching liquid full-game moneyline with a fresh executable quote")
-        return None
-    return max(
-        evaluations,
-        key=lambda item: (
-            item.candidate.edge,
-            item.candidate.raw_kelly_fraction,
-            -item.spread,
-        ),
+        live=live,
+        market_id=market_id,
+        side=side,
+        amount=amount,
+        price=price,
+        order_type=order_type,
+        reasoning=reasoning,
     )
 
 
-def run_strategy_once(
-    *,
-    client: SimmerClient,
-    config: Mapping[str, Any],
-    live: bool,
-    no_safeguards: bool,
-    quiet: bool,
-) -> int:
-    """One scan → score → gate → size → execute cycle."""
-    state = _load_state()
-    if live:
-        try:
-            client.auto_redeem()
-        except Exception as exc:  # Keep trading fail-safe if redemption infrastructure is degraded.
-            _emit(quiet, f"auto-redeem warning: {type(exc).__name__}", force=True)
-    # Official Simmer guidance calls this once per run before discovery so an
-    # underfunded wallet does not generate a storm of rejected trade attempts.
-    bankroll, max_safe_size = _bankroll_and_safe_size(client, live=live, config=config)
-    espn = EspnLiveClient(
-        base_url=ESPN_SITE_BASE,
-        timeout_seconds=float(config["espn_timeout_seconds"]),
-        max_summary_requests=int(config["max_summary_requests"]),
-    )
-    snapshot = espn.fetch_live_snapshot()
-    _emit(
-        quiet,
-        f"ESPN live snapshot: {snapshot.live_event_count} in-progress event(s), "
-        f"{len(snapshot.live_games)} tradeable probability state(s), "
-        f"{snapshot.summary_fallback_count} summary fallback(s)",
-        force=True,
-    )
-    if not snapshot.live_games:
-        _emit(quiet, "No live MLB game currently has a validated ESPN win probability.", force=True)
-        return 0
+class AutomatonReporter:
+    """Emit the single JSON record consumed by managed Simmer runs."""
 
-    positions = _positions_as_dicts(client)
-    core_config = _strategy_config(config)
-    candidates: list[MarketEvaluation] = []
-    for game in snapshot.live_games:
-        _emit(
-            quiet,
-            f"  {game.away_abbreviation} {game.away_score} @ {game.home_abbreviation} "
-            f"{game.home_score} — {game.status_detail}; ESPN home WP "
-            f"{game.home_win_probability:.1%} ({game.probability_source})",
-        )
-        blocked = _event_is_blocked(state, game, int(config["cooldown_seconds"]))
-        if blocked:
-            _emit(quiet, f"    skip: {blocked}")
-            continue
-        if _has_game_position(positions, game):
-            _emit(quiet, "    skip: an existing position already matches this MLB game")
-            continue
-        evaluation = _best_evaluation(
-            client,
-            game,
-            core_config=core_config,
-            config=config,
-            quiet=quiet,
-        )
-        if evaluation is not None:
-            _emit(
-                quiet,
-                f"    candidate {evaluation.candidate.side.upper()} edge "
-                f"{evaluation.candidate.edge:.1%} @ {evaluation.candidate.execution_price:.3f}",
+    def __init__(self, *, enabled: bool, writer: Callable[[str], None] = print) -> None:
+        """Initialize a managed-run reporter.
+
+        Args:
+            enabled: Whether the process is managed by Automaton.
+            writer: Injectable line writer for deterministic tests.
+        """
+        self._enabled = enabled
+        self._writer = writer
+        self._emitted = False
+
+    def emit(self, report: Mapping[str, Any]) -> None:
+        """Emit at most one structured report line.
+
+        Args:
+            report: Internal strategy counters and optional failure details.
+        """
+        if not self._enabled or self._emitted:
+            return
+        payload: dict[str, Any] = {
+            "signals": int(report.get("signals_found", report.get("signals", 0))),
+            "trades_attempted": int(report.get("trades_attempted", 0)),
+            "trades_executed": int(report.get("trades_executed", 0)),
+        }
+        skip_reason = report.get("skip_reason")
+        if not skip_reason and payload["signals"] == 0:
+            skip_reason = "no_signal"
+        if skip_reason:
+            payload["skip_reason"] = str(skip_reason)
+
+        errors = report.get("execution_errors")
+        if isinstance(errors, Sequence) and not isinstance(errors, (str, bytes)):
+            normalized_errors = [str(error) for error in errors if error]
+        else:
+            normalized_errors = []
+        if (
+            not normalized_errors
+            and report.get("status") == "error"
+            and report.get("message")
+        ):
+            normalized_errors = [str(report["message"])]
+        if normalized_errors:
+            payload["execution_errors"] = normalized_errors
+
+        self._writer(
+            json.dumps(
+                {"automaton": payload},
+                separators=(",", ":"),
+                sort_keys=True,
             )
-            candidates.append(evaluation)
+        )
+        self._emitted = True
 
-    candidates.sort(
-        key=lambda item: (-item.candidate.edge, item.spread, item.quote_age_seconds)
+
+def emit_automaton_report(report: Mapping[str, Any]) -> None:
+    """Emit a managed Automaton report through the class-based adapter.
+
+    Args:
+        report: Internal strategy counters and optional failure details.
+    """
+    AutomatonReporter(
+        enabled=bool(os.environ.get("AUTOMATON_MANAGED")),
+    ).emit(report)
+
+
+class PositionPresenter:
+    """Render SDK position dataclasses without exposing unrelated fields."""
+
+    def __init__(self, *, writer: Callable[[str], None] = print) -> None:
+        """Initialize the position view.
+
+        Args:
+            writer: Injectable line writer for deterministic tests.
+        """
+        self._writer = writer
+
+    def show(self, client: Any) -> bool:
+        """Fetch and render current positions.
+
+        Args:
+            client: Simmer client or deterministic fake.
+
+        Returns:
+            ``True`` when the read succeeded, otherwise ``False``.
+        """
+        try:
+            positions = client.get_positions(
+                venue=getattr(client, "venue", "polymarket")
+            )
+        except Exception as exc:
+            self._writer(f"Could not fetch positions: {exc}")
+            return False
+        if not positions:
+            self._writer("No open positions.")
+            return True
+        for position in positions:
+            if is_dataclass(position) and not isinstance(position, type):
+                values = asdict(position)
+            elif isinstance(position, Mapping):
+                values = dict(position)
+            else:
+                values = {
+                    "question": getattr(position, "question", None),
+                    "market_id": getattr(position, "market_id", None),
+                    "shares_yes": getattr(position, "shares_yes", 0),
+                    "shares_no": getattr(position, "shares_no", 0),
+                }
+            market = (
+                values.get("question") or values.get("market_id") or "unknown market"
+            )
+            legs = []
+            for side, raw_shares in (
+                ("YES", values.get("shares_yes", 0)),
+                ("NO", values.get("shares_no", 0)),
+            ):
+                shares = _number(raw_shares) or 0.0
+                if shares:
+                    legs.append(f"{side} {shares:g} shares")
+            self._writer(f"{market}: {', '.join(legs) if legs else '0 shares'}")
+        return True
+
+
+def show_positions(client: Any) -> bool:
+    """Render current positions through the class-based presenter.
+
+    Args:
+        client: Simmer client or deterministic fake.
+
+    Returns:
+        ``True`` when the read succeeded, otherwise ``False``.
+    """
+    return PositionPresenter().show(client)
+
+
+class LiveAccountActivityClient(Protocol):
+    """Expose only the read APIs needed to prove an account is clean."""
+
+    def get_positions(self, *, venue: str) -> Any:
+        """Return current positions for one venue."""
+
+    def get_trades(
+        self,
+        *,
+        venue: str,
+        since: str,
+        include_failed: bool,
+        limit: int,
+        offset: int,
+    ) -> Any:
+        """Return recent trade receipts for one venue."""
+
+
+class LiveAccountActivityProbe:
+    """Prove that no live account activity can survive a ledger reset."""
+
+    _LOOKBACK = timedelta(hours=96)
+
+    def __init__(self, clock: Callable[[], datetime] | None = None) -> None:
+        """Initialize the aware UTC clock used for the receipt window.
+
+        Args:
+            clock: Injectable aware timestamp source.
+        """
+        self._clock = clock or (lambda: datetime.now(timezone.utc))
+
+    def assert_clean(self, client: LiveAccountActivityClient) -> None:
+        """Raise unless read-only evidence proves the account is empty.
+
+        Args:
+            client: SDK read-only client.
+
+        Raises:
+            RuntimeError: If activity exists or the proof is unavailable.
+        """
+        now = self._clock()
+        if not isinstance(now, datetime) or now.tzinfo is None:
+            raise RuntimeError(
+                "Live-state initialization clock must be an aware timestamp"
+            )
+        try:
+            positions = client.get_positions(venue="polymarket")
+        except Exception as exc:
+            raise RuntimeError(
+                "Cannot prove that open Polymarket positions are absent"
+            ) from exc
+        if not isinstance(positions, list):
+            raise RuntimeError("Polymarket positions response is invalid")
+        if positions:
+            raise RuntimeError(
+                "open Polymarket positions prevent live-state initialization"
+            )
+
+        since = (
+            (now.astimezone(timezone.utc) - self._LOOKBACK)
+            .isoformat(timespec="seconds")
+            .replace("+00:00", "Z")
+        )
+        try:
+            history = client.get_trades(
+                venue="polymarket",
+                since=since,
+                include_failed=True,
+                limit=200,
+                offset=0,
+            )
+        except Exception as exc:
+            raise RuntimeError(
+                "Cannot prove that recent Polymarket trade receipts are absent"
+            ) from exc
+        if not isinstance(history, Mapping):
+            raise RuntimeError("Polymarket trade history response is invalid")
+        trades = history.get("trades")
+        total_count = history.get("total_count")
+        if (
+            not isinstance(trades, list)
+            or isinstance(total_count, bool)
+            or not isinstance(total_count, int)
+            or total_count < 0
+            or total_count != len(trades)
+        ):
+            raise RuntimeError("Polymarket trade history response is invalid")
+        if trades:
+            raise RuntimeError(
+                "recent Polymarket trade receipts prevent live-state initialization"
+            )
+
+
+@dataclass(frozen=True)
+class LiveStateInitializationResult:
+    """Describe whether explicit live-state initialization created a ledger."""
+
+    state: DailyTradeState
+    created: bool
+
+
+class LiveStateInitializer:
+    """Create an empty live ledger only after read-only reconciliation."""
+
+    def __init__(
+        self,
+        *,
+        state_store: TradeStateStore,
+        activity_probe: LiveAccountActivityProbe | None = None,
+        clock: Callable[[], datetime] | None = None,
+    ) -> None:
+        """Initialize durable state and read-only audit collaborators.
+
+        Args:
+            state_store: Central risk-ledger repository.
+            activity_probe: Optional account-evidence policy.
+            clock: Injectable clock used when constructing the default probe.
+        """
+        self._state_store = state_store
+        self._activity_probe = activity_probe or LiveAccountActivityProbe(clock)
+
+    def initialize(
+        self,
+        client: LiveAccountActivityClient,
+    ) -> LiveStateInitializationResult:
+        """Load existing state or safely create the first empty ledger.
+
+        Args:
+            client: SDK read-only live account client.
+
+        Returns:
+            Existing or newly created live-state result.
+        """
+        with self._state_store.execution_lock(live=True):
+            try:
+                state = self._state_store.load(live=True)
+            except UninitializedTradeStateError:
+                self._activity_probe.assert_clean(client)
+                state = self._state_store.initialize_empty()
+                return LiveStateInitializationResult(state=state, created=True)
+            return LiveStateInitializationResult(state=state, created=False)
+
+
+def initialize_live_state(
+    client: LiveAccountActivityClient,
+) -> LiveStateInitializationResult:
+    """Delegate explicit initialization to the class-based service.
+
+    Args:
+        client: SDK read-only live account client.
+
+    Returns:
+        Existing or newly created state result.
+    """
+    resolver = StatePathResolver()
+    state_store = TradeStateStore(
+        resolver.resolve(),
+        legacy_path=resolver.legacy_path(),
     )
-    placed = 0
-    remaining_bankroll = bankroll
-    remaining_safe_size = max_safe_size
-    for evaluation in candidates:
-        if placed >= int(config["max_trades_per_run"]):
-            break
-        plan = _make_plan(
-            evaluation,
-            bankroll=remaining_bankroll,
-            max_safe_size=remaining_safe_size,
-            state=state,
-            config=config,
+    return LiveStateInitializer(state_store=state_store).initialize(client)
+
+
+class StrategyRunner:
+    """Orchestrate one paper or live cycle through injected adapters."""
+
+    def __init__(
+        self,
+        *,
+        client_provider: Callable[..., Any] | None = None,
+        games_provider: Callable[[], list[LiveGame]] | None = None,
+        signal_builder: Callable[..., GameSignal | None] | None = None,
+        market_provider: Callable[[Any, str], list[dict[str, Any]]] | None = None,
+        state_store: TradeStateStore | None = None,
+        quote_clock: Callable[[], float] | None = None,
+        signal_freshness_policy: SignalFreshnessPolicy | None = None,
+        trade_executor: TradeExecutor | None = None,
+        position_sizer: SdkPositionSizer | None = None,
+        live_preflight_checker: LivePreflightChecker | None = None,
+    ) -> None:
+        """Initialize deterministic application-layer dependencies.
+
+        Args:
+            client_provider: Mode-scoped Simmer client provider.
+            games_provider: ESPN live-game provider.
+            signal_builder: ESPN probability signal builder.
+            market_provider: Simmer market discovery adapter.
+            state_store: Persistent live risk-state adapter.
+            quote_clock: Monotonic clock for snapshot aging.
+            signal_freshness_policy: Hard total-age policy for ESPN evidence.
+            trade_executor: Classified Simmer execution adapter.
+            position_sizer: Simmer SDK position-sizing adapter.
+            live_preflight_checker: Fail-closed Simmer readiness adapter.
+        """
+        self._client_provider = client_provider or get_client
+        self._games_provider = games_provider or fetch_live_games
+        self._signal_builder = signal_builder or build_game_signal
+        self._market_provider = market_provider or fetch_markets
+        if state_store is not None:
+            self._state_store = state_store
+        else:
+            state_path_resolver = StatePathResolver()
+            self._state_store = TradeStateStore(
+                state_path_resolver.resolve(),
+                legacy_path=state_path_resolver.legacy_path(),
+            )
+        self._quote_clock = quote_clock or time.monotonic
+        self._signal_freshness_policy = (
+            signal_freshness_policy or SignalFreshnessPolicy(self._quote_clock)
         )
-        if plan is None:
-            _emit(quiet, f"  SKIP {evaluation.game.event_id}: sizing/liquidity/min-share gate")
-            continue
-        result = execute_trade(
-            client=client,
-            plan=plan,
-            config=config,
-            state=state,
+        self._trade_executor = trade_executor or TradeExecutor()
+        self._position_sizer = position_sizer or SdkPositionSizer()
+        self._live_preflight_checker = (
+            live_preflight_checker or SdkLivePreflightChecker()
+        )
+
+    def run(
+        self,
+        *,
+        live: bool,
+        quiet: bool,
+        use_context: bool,
+        config: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        """Run one cycle while holding the whole-run live-state lock.
+
+        Args:
+            live: Whether real execution is explicitly enabled.
+            quiet: Whether informational output is suppressed.
+            use_context: Whether context checks are requested in paper mode.
+            config: Validated runtime configuration.
+
+        Returns:
+            Structured counters for CLI and Automaton reporting.
+        """
+        with self._state_store.execution_lock(live=live):
+            return self._run_unlocked(
+                live=live,
+                quiet=quiet,
+                use_context=use_context,
+                config=config,
+            )
+
+    def _run_unlocked(
+        self,
+        *,
+        live: bool,
+        quiet: bool,
+        use_context: bool,
+        config: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        mode = "live" if live else "paper"
+        report: dict[str, Any] = {
+            "status": "ok",
+            "mode": mode,
+            "signals_found": 0,
+            "candidates_found": 0,
+            "trades_attempted": 0,
+            "trades_executed": 0,
+            "errors": 0,
+            "execution_errors": [],
+        }
+        print(f"MLB Live Trader — {mode} mode")
+        if not live:
+            print(
+                "Paper mode is the default. Nothing here touches the live state file."
+            )
+
+        state = self._state_store.load(live=live)
+        client = self._client_provider(live=live)
+        if bool(getattr(client, "live", live)) != live:
+            raise RuntimeError("Simmer client execution mode does not match the run")
+
+        try:
+            portfolio = client.get_portfolio()
+        except Exception:
+            portfolio = None
+        bankroll = portfolio_balance(
+            portfolio,
+            float(config["paper_bankroll_usd"]) if not live else 0.0,
+        )
+        if not live and bankroll <= 0:
+            bankroll = float(config["paper_bankroll_usd"])
+        if bankroll <= 0:
+            raise RuntimeError("No available bankroll reported by Simmer")
+
+        signals = self._collect_signals(
             live=live,
-            no_safeguards=no_safeguards,
             quiet=quiet,
+            config=config,
+            report=report,
         )
-        if _trade_was_committed(result):
-            placed += 1
-            remaining_bankroll = max(0.0, remaining_bankroll - plan.amount_usd)
-            remaining_safe_size = max(0.0, remaining_safe_size - plan.amount_usd)
+        report["signals_found"] = len(signals)
+        if not signals:
+            report["skip_reason"] = "no_signal"
+            if not quiet:
+                print("No live MLB games with a usable probability.")
+            return report
 
-    if not candidates:
-        _emit(quiet, "No trade passed live-state, identity, quote, EV, and risk gates.", force=True)
-    elif placed == 0:
-        _emit(quiet, "Candidates existed, but every trade failed sizing or safeguards.", force=True)
-    return placed
+        quote_policy = QuotePolicy(
+            max_spread=float(
+                config["max_spread_live"] if live else config["max_spread_paper"]
+            ),
+            max_age_seconds=float(config["max_quote_age_seconds"]),
+            require_age=live,
+            clock=self._quote_clock,
+        )
+        markets = self._market_provider(client, str(config["market_query"]))
+        if not markets:
+            report["skip_reason"] = "no_market"
+            if not quiet:
+                print("No active MLB markets found through Simmer.")
+            return report
+
+        seen_this_run: set[str] = set()
+        games_traded_this_run: set[str] = set()
+        strategy = strategy_config(config)
+        context_reader = MarketContextReader(client)
+        timing_policy = MarketTimingPolicy()
+        context_policy = ContextSafeguardPolicy(
+            max_slippage=float(config["context_max_slippage"]),
+            require_context=live,
+        )
+        skip_reasons: list[str] = []
+        context_enabled = use_context or live
+
+        for signal in signals:
+            if self._run_limit_reached(report, config):
+                break
+            if not source_allowed(
+                signal.source,
+                mode,
+                allow_score_live=bool(config["allow_score_fallback_live"]),
+            ):
+                continue
+
+            game = signal.game
+            for market in markets:
+                if self._run_limit_reached(report, config):
+                    break
+                market_id = str(market.get("id") or market.get("market_id") or "")
+                if not market_id or market_id in seen_this_run:
+                    continue
+
+                yes_team = infer_yes_team(market, game.home_team, game.away_team)
+                if yes_team is None:
+                    continue
+                if live:
+                    timing_rejection = timing_policy.rejection_reason(market, game)
+                    if timing_rejection is not None:
+                        skip_reasons.append(timing_rejection)
+                        continue
+                fair_yes = fair_probability_for_team(
+                    signal.home_probability,
+                    yes_team,
+                    game.home_team,
+                    game.away_team,
+                )
+                if fair_yes is None:
+                    continue
+                seen_this_run.add(market_id)
+
+                if live:
+                    state = self._state_store.refresh(state, live=True)
+                    if self._blocked_by_live_state(
+                        state=state,
+                        market_id=market_id,
+                        game_id=game.game_id,
+                        games_traded_this_run=games_traded_this_run,
+                        config=config,
+                    ):
+                        continue
+
+                context = None
+                if context_enabled:
+                    try:
+                        context = context_reader.get(
+                            market_id,
+                            fair_yes_probability=fair_yes,
+                        )
+                    except Exception as exc:
+                        if live:
+                            report["errors"] += 1
+                            skip_reasons.append("market context unavailable")
+                            if not quiet:
+                                print(
+                                    f"Skip {yes_team}: market context unavailable "
+                                    f"({exc})"
+                                )
+                            continue
+                    allowed, reason = context_policy.evaluate(context)
+                    if not allowed:
+                        skip_reasons.append(reason)
+                        if not quiet:
+                            print(f"Skip {yes_team}: {reason}")
+                        continue
+
+                quote = extract_quote(
+                    market,
+                    context,
+                    float(config["synthetic_spread"]),
+                )
+                quote_rejection = quote_policy.rejection_reason(quote)
+                if quote_rejection is not None:
+                    skip_reasons.append(quote_rejection)
+                    if not quiet:
+                        print(f"Skip {yes_team}: {quote_rejection}")
+                    continue
+
+                signal_age = self._signal_freshness_policy.current_age(
+                    signal,
+                    live=live,
+                    max_age_seconds=float(config["max_signal_age_seconds"]),
+                )
+                if signal_age is None:
+                    skip_reasons.append("signal became stale before execution")
+                    continue
+
+                decision = select_trade(
+                    fair_yes_probability=fair_yes,
+                    yes_ask=quote.yes_ask,
+                    no_ask=quote.no_ask,
+                    mode=mode,
+                    inning=game.inning,
+                    source=signal.source,
+                    age_seconds=signal_age,
+                    spread=quote.spread,
+                    fee_bps=quote.fee_bps,
+                    config=strategy,
+                )
+                if decision is None:
+                    continue
+                report["candidates_found"] += 1
+
+                minimum = max(
+                    float(config["min_trade_usd"]),
+                    MIN_SHARES_PER_ORDER * decision.price,
+                )
+                amount = self._position_sizer.size(
+                    PositionSizingRequest(
+                        bankroll=bankroll,
+                        fair_probability=decision.fair_probability,
+                        market_price=decision.price,
+                        method=str(config["position_sizing"]),
+                        kelly_multiplier=float(config["kelly_multiplier"]),
+                        min_ev=float(config["min_ev"]),
+                        max_position_usd=float(config["max_position_usd"]),
+                        max_bankroll_fraction=float(config["max_bankroll_fraction"]),
+                        min_trade_usd=float(config["min_trade_usd"]),
+                    )
+                )
+                if amount <= 0:
+                    skip_reasons.append("position below venue minimum or sizing gate")
+                    continue
+
+                final_quote_rejection = quote_policy.rejection_reason(quote)
+                if final_quote_rejection is not None:
+                    skip_reasons.append(final_quote_rejection)
+                    continue
+
+                client_preflight_id: str | None = None
+                if live:
+                    if (
+                        self._signal_freshness_policy.current_age(
+                            signal,
+                            live=True,
+                            max_age_seconds=float(config["max_signal_age_seconds"]),
+                        )
+                        is None
+                    ):
+                        skip_reasons.append("signal became stale before execution")
+                        continue
+                    state = self._state_store.refresh(state, live=True)
+                    if self._blocked_by_live_state(
+                        state=state,
+                        market_id=market_id,
+                        game_id=game.game_id,
+                        games_traded_this_run=games_traded_this_run,
+                        config=config,
+                    ):
+                        continue
+                    remaining = float(config["live_daily_budget_usd"]) - state.spent_usd
+                    amount = min(amount, max(0.0, remaining))
+                    if amount < minimum:
+                        continue
+                    preflight = self._live_preflight_checker.check(
+                        client,
+                        planned_amount=amount,
+                        exposure_cap_usd=float(config["live_daily_budget_usd"]),
+                    )
+                    if not preflight.allowed:
+                        skip_reasons.append(preflight.reason)
+                        report["skip_reason"] = preflight.reason
+                        if preflight.terminal_error:
+                            report["status"] = "error"
+                            report["errors"] += 1
+                            report["execution_errors"].append(preflight.reason)
+                        return report
+                    client_preflight_id = preflight.client_preflight_id
+                    state = self._state_store.reserve_trade(
+                        state,
+                        live=True,
+                        market_id=market_id,
+                        game_id=game.game_id,
+                        amount_usd=amount,
+                        game_resolves_at=str(market.get("resolves_at") or "") or None,
+                    )
+
+                    post_reservation_reason = quote_policy.rejection_reason(quote)
+                    if post_reservation_reason is None and (
+                        self._signal_freshness_policy.current_age(
+                            signal,
+                            live=True,
+                            max_age_seconds=float(config["max_signal_age_seconds"]),
+                        )
+                        is None
+                    ):
+                        post_reservation_reason = "signal became stale before execution"
+                    if post_reservation_reason is not None:
+                        state = self._state_store.release_trade(
+                            state,
+                            live=True,
+                            market_id=market_id,
+                            game_id=game.game_id,
+                            amount_usd=amount,
+                        )
+                        skip_reasons.append(post_reservation_reason)
+                        continue
+
+                reasoning = (
+                    f"ESPN {decision.fair_probability:.1%}, "
+                    f"ask {decision.price:.1%}, "
+                    f"net edge {decision.net_edge:.1%}, inning {game.inning}, "
+                    f"source {signal.source}"
+                )
+                if client_preflight_id is not None:
+                    reasoning = (
+                        f"{reasoning}, client_preflight_id={client_preflight_id}"
+                    )
+                result = self._trade_executor.execute(
+                    client,
+                    live=live,
+                    market_id=market_id,
+                    side=decision.side,
+                    amount=amount,
+                    price=decision.price,
+                    order_type=str(config["order_type"]).upper(),
+                    reasoning=reasoning,
+                )
+                report["trades_attempted"] += 1
+                if not result.get("success"):
+                    report["errors"] += 1
+                    self._record_execution_error(result, report, skip_reasons)
+                    if result.get("ambiguous"):
+                        report["status"] = "ambiguous"
+                        report["skip_reason"] = (
+                            "ambiguous submission; reconcile orders and positions "
+                            "before rerunning"
+                        )
+                        if not quiet:
+                            print(
+                                f"Trade status is ambiguous for {yes_team}; "
+                                "stopping for reconciliation."
+                            )
+                        return report
+                    if live:
+                        state = self._state_store.release_trade(
+                            state,
+                            live=True,
+                            market_id=market_id,
+                            game_id=game.game_id,
+                            amount_usd=amount,
+                        )
+                    if not quiet:
+                        print(
+                            f"Trade failed for {yes_team}: "
+                            f"{result.get('error') or 'confirmed rejection'}"
+                        )
+                    continue
+
+                report["trades_executed"] += 1
+                games_traded_this_run.add(game.game_id)
+                print(
+                    f"{mode.upper()} {decision.side.upper()} {yes_team} — "
+                    f"${amount:.2f} at {decision.price:.3f}; "
+                    f"net edge {decision.net_edge:.1%}"
+                )
+                break
+
+        if skip_reasons:
+            report["skip_reason"] = ", ".join(dict.fromkeys(skip_reasons))
+        elif report["trades_executed"] == 0:
+            report["skip_reason"] = "no_candidate"
+        if not quiet:
+            print(
+                f"Done: {report['signals_found']} signals, "
+                f"{report['candidates_found']} candidates, "
+                f"{report['trades_executed']} trades."
+            )
+        return report
+
+    def _collect_signals(
+        self,
+        *,
+        live: bool,
+        quiet: bool,
+        config: Mapping[str, Any],
+        report: dict[str, Any],
+    ) -> list[GameSignal]:
+        """Collect valid ESPN signals while isolating per-game failures."""
+        signals: list[GameSignal] = []
+        for game in self._games_provider():
+            try:
+                signal = self._signal_builder(game, config, live=live)
+            except Exception as exc:
+                report["errors"] += 1
+                if not quiet:
+                    print(
+                        f"{game.away_team} at {game.home_team}: "
+                        f"ESPN lookup failed: {exc}"
+                    )
+                continue
+            if signal is not None:
+                signals.append(signal)
+        return signals
+
+    @staticmethod
+    def _run_limit_reached(
+        report: Mapping[str, Any], config: Mapping[str, Any]
+    ) -> bool:
+        """Return whether this cycle used its bounded submission allowance."""
+        return int(report["trades_attempted"]) >= int(config["max_trades_per_run"])
+
+    @staticmethod
+    def _blocked_by_live_state(
+        *,
+        state: Any,
+        market_id: str,
+        game_id: str,
+        games_traded_this_run: set[str],
+        config: Mapping[str, Any],
+    ) -> bool:
+        """Return whether durable live counters prohibit this candidate."""
+        return bool(
+            market_id in state.market_ids
+            or game_id in state.game_ids
+            or game_id in games_traded_this_run
+            or state.trades >= int(config["max_live_trades_per_day"])
+            or state.spent_usd >= float(config["live_daily_budget_usd"])
+        )
+
+    @staticmethod
+    def _record_execution_error(
+        result: Mapping[str, Any],
+        report: dict[str, Any],
+        skip_reasons: list[str],
+    ) -> None:
+        """Normalize one failed SDK result into managed-run diagnostics."""
+        skip_reason = result.get("skip_reason")
+        if skip_reason:
+            skip_reasons.append(str(skip_reason))
+        error = result.get("error") or result.get("error_hint")
+        if error:
+            report["execution_errors"].append(str(error))
 
 
-def _show_positions(client: SimmerClient, *, live: bool) -> None:
-    positions = _positions_as_dicts(client)
-    payload: dict[str, Any] = {
-        "mode": "live" if live else "dry/paper",
-        "venue": VENUE,
-        "source": TRADE_SOURCE,
-        "positions": positions,
-        "local_state": _load_state(),
-    }
-    if not live:
-        payload["paper_summary"] = client.get_paper_summary()
-    else:
-        payload["portfolio"] = client.get_portfolio(venue=VENUE)
-    print(json.dumps(payload, indent=2, default=_json_default), flush=True)
+def run_strategy(
+    *,
+    live: bool,
+    quiet: bool,
+    use_context: bool,
+    config: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Delegate a strategy cycle to the class-based orchestrator.
+
+    Args:
+        live: Whether real execution is explicitly enabled.
+        quiet: Whether informational output is suppressed.
+        use_context: Whether SDK context safeguards are enabled in paper mode.
+        config: Validated runtime configuration.
+
+    Returns:
+        Structured run counters for CLI and Automaton reporting.
+    """
+    return StrategyRunner().run(
+        live=live,
+        quiet=quiet,
+        use_context=use_context,
+        config=config,
+    )
 
 
-def _show_config(config: Mapping[str, Any]) -> None:
-    payload = {
-        "skill": SKILL_SLUG,
-        "version": VERSION,
-        "config_path": str(get_config_path(__file__)),
-        "values": dict(config),
-    }
-    print(json.dumps(payload, indent=2, sort_keys=True, default=_json_default), flush=True)
+def print_config(config: Mapping[str, Any]) -> None:
+    for key in sorted(config):
+        print(f"{key}={config[key]}")
 
 
-def _parse_set_values(items: Iterable[str]) -> dict[str, Any]:
+def parse_updates(items: Sequence[str]) -> dict[str, Any]:
+    """Parse and validate user-supplied configuration overrides.
+
+    Args:
+        items: Sequence of ``KEY=VALUE`` strings.
+
+    Returns:
+        Validated typed configuration updates.
+
+    Raises:
+        ValueError: If an item, key, value, or sizing method is invalid.
+    """
     updates: dict[str, Any] = {}
     for item in items:
         if "=" not in item:
-            raise ValueError(f"--set expects KEY=VALUE, got {item!r}")
+            raise ValueError(f"Expected KEY=VALUE, got: {item}")
         key, raw = item.split("=", 1)
-        key = key.strip()
         if key not in CONFIG_SCHEMA:
-            raise ValueError(f"unknown config key {key!r}")
-        converter = CONFIG_SCHEMA[key].get("type", str)
-        if converter is bool:
-            normalized = raw.strip().lower()
-            if normalized not in {"true", "false", "1", "0", "yes", "no", "on", "off"}:
-                raise ValueError(f"invalid boolean value {raw!r}")
-            value = normalized in {"true", "1", "yes", "on"}
-        else:
-            value = converter(raw)
-        updates[key] = value
-    return updates
+            raise ValueError(f"Unknown config key: {key}")
+        updates[key] = _coerce(raw, CONFIG_SCHEMA[key]["type"])
+    return RuntimeConfigValidator().validate(updates)
 
 
-def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        prog="mlb_live_trader.py",
-        description="Trade live MLB full-game moneylines from ESPN win probability via Simmer.",
-    )
-    parser.add_argument(
-        "--live",
-        action="store_true",
-        help="execute real Polymarket orders; default is Simmer dry/paper execution",
-    )
-    parser.add_argument("--positions", action="store_true", help="show positions and local state")
-    parser.add_argument("--config", action="store_true", help="print resolved config and exit")
-    parser.add_argument(
-        "--set",
-        action="append",
-        default=[],
-        metavar="KEY=VALUE",
-        help="persist a config override; repeatable",
-    )
-    parser.add_argument(
-        "--no-safeguards",
-        action="store_true",
-        help="skip SDK context/discipline checks; hard risk controls and preflight remain",
-    )
-    parser.add_argument("--quiet", action="store_true", help="suppress nonessential scan output")
-    parser.add_argument("--loop", action="store_true", help="poll continuously instead of one cycle")
-    return parser
+class TraderCli:
+    """Coordinate CLI actions and guarantee one managed-run report."""
 
+    def __init__(
+        self,
+        *,
+        config_loader: Callable[[], dict[str, Any]] | None = None,
+        mutable_client_provider: Callable[..., Any] | None = None,
+        readonly_client_provider: Callable[..., Any] | None = None,
+        strategy_runner: Callable[..., dict[str, Any]] | None = None,
+        positions_presenter: Callable[[Any], bool] | None = None,
+        live_state_initializer: Callable[
+            [LiveAccountActivityClient], LiveStateInitializationResult
+        ]
+        | None = None,
+        reporter: Callable[[Mapping[str, Any]], None] | None = None,
+    ) -> None:
+        """Initialize testable CLI dependencies.
 
-def main(argv: Sequence[str] | None = None) -> int:
-    args = _build_parser().parse_args(argv)
-    config = load_config(CONFIG_SCHEMA, __file__, slug=SKILL_SLUG)
-    try:
-        _validate_config(config)
-        if args.set:
-            updates = _parse_set_values(args.set)
-            preview = dict(config)
-            preview.update(updates)
-            _validate_config(preview)
-            saved = update_config(updates, __file__)
-            print(
-                json.dumps(
-                    {
-                        "updated": updates,
-                        "config_path": str(get_config_path(__file__)),
-                        "stored": saved,
-                    },
-                    indent=2,
-                    sort_keys=True,
-                ),
-                flush=True,
-            )
-            return 0
-        if args.config:
-            _show_config(config)
-            return 0
+        Args:
+            config_loader: Validated Simmer configuration loader.
+            mutable_client_provider: Trading client provider.
+            readonly_client_provider: SDK-enforced read-only client provider.
+            strategy_runner: Strategy orchestration entrypoint.
+            positions_presenter: Read-only portfolio presenter.
+            live_state_initializer: Explicit reconciled-ledger workflow.
+            reporter: Managed Automaton report adapter.
+        """
+        self._config_loader = config_loader or load_runtime_config
+        self._mutable_client_provider = mutable_client_provider or get_client
+        self._readonly_client_provider = readonly_client_provider or get_readonly_client
+        self._strategy_runner = strategy_runner or run_strategy
+        self._positions_presenter = positions_presenter or show_positions
+        self._live_state_initializer = live_state_initializer or initialize_live_state
+        self._reporter = reporter or emit_automaton_report
 
-        client = get_client(live=args.live, config=config)
-        if args.positions:
-            _show_positions(client, live=args.live)
-            return 0
+    def run(self, argv: Sequence[str] | None = None) -> int:
+        """Execute one CLI action and emit exactly one final report.
 
-        mode = "LIVE REAL-MONEY" if args.live else "DRY/PAPER"
-        _emit(args.quiet, f"MLB Live Trader {VERSION} — {mode}", force=True)
-        if args.no_safeguards:
-            _emit(
-                args.quiet,
-                "WARNING: SDK context safeguards disabled; hard caps/preflight remain active.",
-                force=True,
-            )
-        with RunLock(_LOCK_PATH):
-            if not args.loop:
-                run_strategy_once(
-                    client=client,
-                    config=config,
-                    live=args.live,
-                    no_safeguards=args.no_safeguards,
-                    quiet=args.quiet,
+        Args:
+            argv: Optional arguments excluding the executable name.
+
+        Returns:
+            Process-style exit code.
+        """
+        parser = self._build_parser()
+        report = self._base_report(live=False)
+        try:
+            try:
+                args = parser.parse_args(argv)
+            except SystemExit as exc:
+                exit_code = int(exc.code) if isinstance(exc.code, int) else 1
+                if exit_code == 0:
+                    report["skip_reason"] = "help_only"
+                else:
+                    report.update(
+                        status="error",
+                        errors=1,
+                        message="Command-line argument parsing failed",
+                        skip_reason="argument_error",
+                    )
+                return exit_code
+
+            self._validate_initialization_action(args)
+            if args.initialize_live_state:
+                report["mode"] = "live"
+                client = self._readonly_client_provider(live=True)
+                result = self._live_state_initializer(client)
+                report["skip_reason"] = (
+                    "live_state_initialized"
+                    if result.created
+                    else "live_state_already_initialized"
+                )
+                print(
+                    "Live state initialized."
+                    if result.created
+                    else "Live state was already initialized."
                 )
                 return 0
 
-            while True:
-                started = time.monotonic()
-                try:
-                    run_strategy_once(
-                        client=client,
-                        config=config,
-                        live=args.live,
-                        no_safeguards=args.no_safeguards,
-                        quiet=args.quiet,
+            live = bool(args.live)
+            report["mode"] = "live" if live else "paper"
+            if args.set:
+                updates = parse_updates(args.set)
+                repository = RuntimeConfigRepository()
+                repository.save(updates)
+                print(
+                    "Saved: "
+                    + ", ".join(f"{key}={value}" for key, value in updates.items())
+                )
+                print(f"Saved to: {repository.path()}")
+                report["skip_reason"] = "config_updated"
+                return 0
+
+            if args.positions:
+                client = self._readonly_client_provider(live=live)
+                if not self._positions_presenter(client):
+                    report.update(
+                        status="error",
+                        errors=1,
+                        message="Could not fetch positions",
+                        skip_reason="positions_unavailable",
                     )
-                except (EspnApiError, RuntimeError, ValueError) as exc:
-                    _emit(
-                        args.quiet,
-                        f"cycle failed closed: {type(exc).__name__}: {exc}",
-                        force=True,
-                    )
-                delay = max(0.0, int(config["poll_seconds"]) - (time.monotonic() - started))
-                time.sleep(delay)
-    except KeyboardInterrupt:
-        print("stopped", flush=True)
-        return 130
-    except (EspnApiError, RuntimeError, ValueError) as exc:
-        print(f"error: {type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
-        return 2
+                    return 1
+                report["skip_reason"] = "positions_only"
+                return 0
+
+            config = self._config_loader()
+            if args.config:
+                print_config(config)
+                report["skip_reason"] = "config_only"
+                return 0
+
+            report = self._strategy_runner(
+                live=live,
+                quiet=args.quiet,
+                use_context=not args.no_context,
+                config=config,
+            )
+            return 0 if report.get("status") == "ok" else 1
+        except Exception as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            report.update(
+                status="error",
+                errors=1,
+                message=str(exc),
+                skip_reason="runtime_error",
+            )
+            return 1
+        finally:
+            self._reporter(report)
+
+    @staticmethod
+    def _validate_initialization_action(args: argparse.Namespace) -> None:
+        """Reject combinations that could blur a read-only state audit."""
+        if not args.initialize_live_state:
+            return
+        if args.live or args.paper or args.positions or args.config or args.set:
+            raise ValueError(
+                "--initialize-live-state must be used alone after stopping prior "
+                "live schedulers"
+            )
+
+    @staticmethod
+    def _base_report(*, live: bool) -> dict[str, Any]:
+        """Return complete zeroed counters for non-strategy CLI actions."""
+        return {
+            "status": "ok",
+            "mode": "live" if live else "paper",
+            "signals_found": 0,
+            "candidates_found": 0,
+            "trades_attempted": 0,
+            "trades_executed": 0,
+            "errors": 0,
+        }
+
+    @staticmethod
+    def _build_parser() -> argparse.ArgumentParser:
+        """Build the supported command-line contract."""
+        parser = argparse.ArgumentParser(
+            description=(
+                "Trade live MLB markets through Simmer; paper mode is default."
+            )
+        )
+        mode = parser.add_mutually_exclusive_group()
+        mode.add_argument(
+            "--paper",
+            "--dry-run",
+            dest="paper",
+            action="store_true",
+            help="Use simulated trades (default)",
+        )
+        mode.add_argument("--live", action="store_true", help="Place real trades")
+        parser.add_argument(
+            "--positions",
+            action="store_true",
+            help="Show positions through a read-only SDK client and exit",
+        )
+        parser.add_argument(
+            "--initialize-live-state",
+            action="store_true",
+            help="Read-only account audit followed by one-time live-ledger setup",
+        )
+        parser.add_argument(
+            "--config", action="store_true", help="Show resolved config and exit"
+        )
+        parser.add_argument(
+            "--set",
+            action="append",
+            default=[],
+            metavar="KEY=VALUE",
+            help="Save a config override",
+        )
+        parser.add_argument(
+            "--no-context",
+            "--no-safeguards",
+            dest="no_context",
+            action="store_true",
+            help="Skip optional context checks in paper mode",
+        )
+        parser.add_argument(
+            "--quiet",
+            "-q",
+            action="store_true",
+            help="Only print trades and errors",
+        )
+        return parser
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    """Delegate process entry to the class-based CLI service.
+
+    Args:
+        argv: Optional arguments excluding the executable name.
+
+    Returns:
+        Process-style exit code.
+    """
+    return TraderCli().run(argv)
 
 
 if __name__ == "__main__":

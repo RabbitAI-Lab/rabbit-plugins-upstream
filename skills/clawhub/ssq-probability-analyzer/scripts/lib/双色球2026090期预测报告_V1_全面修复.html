@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>双色球第2026090期预测报告 V1 - 全面修复版</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+/* ===== 年轻化·活力主题：极光流动背景 + 漂浮装饰 ===== */
+body { font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif; background: #070617; color: #e8e8f0; padding: 20px; position: relative; min-height: 100vh; overflow-x: hidden; }
+body::before { content: ""; position: fixed; inset: -20%; z-index: -2;
+  background:
+    radial-gradient(40% 38% at 15% 20%, rgba(123,92,255,.42), transparent 60%),
+    radial-gradient(38% 36% at 82% 18%, rgba(255,75,124,.38), transparent 60%),
+    radial-gradient(42% 40% at 70% 80%, rgba(0,200,255,.34), transparent 60%),
+    radial-gradient(40% 38% at 25% 82%, rgba(255,180,40,.30), transparent 60%);
+  filter: blur(8px); animation: aurora 18s ease-in-out infinite alternate; }
+@keyframes aurora { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(2%, -2%) scale(1.06); } 百分之百 { transform: translate(-2%, 2%) scale(1.02); } }
+body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .5;
+  background-image:
+    radial-gradient(circle at 12% 30%, rgba(255,255,255,.07) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 62%, rgba(255,255,255,.06) 0 2px, transparent 3px),
+    radial-gradient(circle at 45% 85%, rgba(255,255,255,.05) 0 1.5px, transparent 3px);
+  background-size: 260px 260px, 320px 320px, 200px 200px; }
+.fblob { position: fixed; border-radius: 50%; z-index: -1; pointer-events: none; filter: blur(2px); opacity: .55; animation: blobFloat 12s ease-in-out infinite; }
+@keyframes blobFloat { 0%,百分之百 { transform: translateY(0) rotate(0); } 50% { transform: translateY(-26px) rotate(18deg); } }
+
+.container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+/* 玻璃拟态容器 */
+.header { text-align: center; padding: 34px 20px; border-radius: 18px; margin-bottom: 18px;
+  background: rgba(20,18,46,.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,.10); box-shadow: 0 8px 40px rgba(123,92,255,.18); }
+.header h1 { font-size: 30px; margin-bottom: 10px; font-weight: 900; letter-spacing: .5px;
+  background: linear-gradient(92deg, #ff5e8a, #ffb347, #5ee0ff, #9b7bff); -webkit-background-clip: text; background-clip: text; color: transparent;
+  background-size: 250% 百分之百; animation: titleFlow 8s linear infinite; }
+@keyframes titleFlow { to { background-position: 250% 0; } }
+.header .subtitle { color: #b9b6d6; font-size: 14px; }
+.header .meta { margin-top: 16px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.header .meta-item { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.10); padding: 8px 18px; border-radius: 20px; font-size: 13px; transition: transform .15s, background .15s; }
+.header .meta-item:hover { transform: translateY(-2px); background: rgba(255,255,255,.13); }
+.header .meta-item strong { color: #ffd24a; }
+.section { background: rgba(18,16,40,.60); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 16px; padding: 24px; margin: 20px 0; border: 1px solid rgba(255,255,255,.10); box-shadow: 0 6px 28px rgba(0,0,0,.28); }
+.section-title { font-size: 20px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,.10);
+  background: linear-gradient(92deg, #ffd24a, #ff7a8a, #5ee0ff); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800; }
+.warning { background: #2a1010; border: 1px solid #ff4444; border-radius: 8px; padding: 15px; margin: 15px 0; }
+.warning h3 { color: #ff6b6b; margin-bottom: 8px; }
+.warning p { color: #ff9999; font-size: 14px; line-height: 1.6; }
+.info { background: #0d1a2a; border: 1px solid #0066cc; border-radius: 8px; padding: 15px; margin: 15px 0; }
+.info h3 { color: #00aaff; margin-bottom: 8px; }
+.info p { color: #88ccff; font-size: 14px; line-height: 1.6; }
+table { width: 百分之百; border-collapse: collapse; margin: 10px 0; }
+th { background: #1a2050; padding: 10px; text-align: center; color: #00d4ff; font-size: 13px; }
+td { padding: 8px; text-align: center; border-bottom: 1px solid #1a2050; font-size: 13px; }
+.ball { display: inline-block; width: 36px; height: 36px; line-height: 36px; border-radius: 50%; text-align: center; font-weight: bold; font-size: 16px; margin: 2px; }
+.ball-red { background: linear-gradient(135deg, #ff4444, #cc0000); color: white; }
+.ball-blue { background: linear-gradient(135deg, #0099ff, #0066cc); color: white; }
+.group-card { background: #0d1130; border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid #00d4ff; }
+.group-card h3 { color: #00d4ff; margin-bottom: 10px; }
+.group-card .strategy { color: #888; font-size: 13px; margin-bottom: 15px; }
+.balls-container { text-align: center; padding: 10px; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 15px 0; }
+.stat-card { background: #0d1130; padding: 15px; border-radius: 8px; text-align: center; }
+.stat-card .value { font-size: 28px; color: #00d4ff; font-weight: bold; }
+.stat-card .label { font-size: 12px; color: #888; margin-top: 5px; }
+.disclaimer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; padding: 20px; border-top: 1px solid #1a2050; }
+.v8-badge { display: inline-block; background: #00aa44; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
+.antiscam { background: linear-gradient(135deg, #0d2818, #16331f); border: 2px solid #00dd88; border-radius: 14px; padding: 20px 22px; margin: 18px 0; }
+.antiscam .shield-title { font-size: 21px; color: #00ffaa; font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.antiscam .lead { color: #c8f0d8; font-size: 14px; line-height: 1.7; margin-bottom: 16px; }
+.antiscam .props { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.antiscam .prop { background: #0a1f14; border: 1px solid #00aa66; border-radius: 10px; padding: 13px 14px; }
+.antiscam .prop .ico { font-size: 20px; }
+.antiscam .prop .ttl { color: #00ffaa; font-size: 15px; font-weight: bold; margin: 6px 0 4px; }
+.antiscam .prop .desc { color: #a8d8c0; font-size: 12.5px; line-height: 1.5; }
+.antiscam .honest { margin-top: 14px; background: #2a0d0d; border: 1px solid #ff4444; border-radius: 8px; padding: 11px; color: #ffb3b3; font-size: 13px; text-align: center; font-weight: bold; }
+
+/* ===== 近期一等奖领奖故事（年轻化·娱乐·诚实） ===== */
+.win-stories { margin: 14px 0; background: linear-gradient(135deg, #1a1030 0%, #2a1840 百分之百); border: 1px solid #6c4cff; border-radius: 14px; padding: 16px 16px 14px; box-shadow: 0 4px 18px rgba(108,76,255,0.18); }
+.win-stories .ws-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.win-stories .ws-emoji { font-size: 26px; line-height: 1; }
+.win-stories .ws-title { font-size: 18px; font-weight: 800; color: #fff; }
+.win-stories .ws-title .hl { color: #ffd24a; }
+.win-stories .ws-sub { color: #c9b8ff; font-size: 12.5px; margin: 2px 0 12px; }
+.win-stories .ws-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 560px) { .win-stories .ws-grid { grid-template-columns: 1fr; } }
+.win-stories .ws-imgs { display: flex; gap: 10px; margin: 4px 0 9px; }
+.win-stories .ws-img { flex: 1 1 0; width: 50%; height: 130px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255,210,74,0.45); box-shadow: 0 3px 12px rgba(108,76,255,0.22); }
+.win-stories .ws-img-note { color: #c9b8ff; font-size: 11.5px; margin: 0 0 12px; line-height: 1.5; }
+.win-stories .ws-img-note strong { color: #ffd24a; }
+.win-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 11px 12px; transition: transform .15s; }
+.win-card:hover { transform: translateY(-2px); border-color: #ffd24a; }
+.win-card .wc-top { display: flex; align-items: baseline; gap: 6px; margin-bottom: 5px; }
+.win-card .wc-prize { font-size: 17px; font-weight: 800; color: #ffd24a; }
+.win-card .wc-place { font-size: 12px; color: #9d8bff; }
+.win-card .wc-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; line-height: 1.35; }
+.win-card .wc-sum { font-size: 12.5px; color: #d8d0f0; line-height: 1.5; }
+.win-card .wc-foot { margin-top: 7px; font-size: 11px; color: #8c7fb8; }
+.win-card .wc-foot .src { color: #7fd0ff; }
+.win-stories .ws-note { margin-top: 12px; background: rgba(255,210,74,0.10); border: 1px dashed #ffd24a; border-radius: 8px; padding: 9px 11px; color: #ffe39a; font-size: 12.5px; line-height: 1.55; }
+.win-stories .ws-empty { color: #c9b8ff; font-size: 13px; text-align: center; padding: 8px 0; }
+.win-stories .ws-src-tag { display: inline-block; background: rgba(127,208,255,0.15); color: #7fd0ff; border-radius: 6px; padding: 1px 7px; font-size: 11px; margin-left: 4px; }
+.win-card .wc-badge { display: inline-block; background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #fff; font-size: 11px; font-weight: 700; border-radius: 6px; padding: 1px 7px; margin-bottom: 7px; box-shadow: 0 1px 5px rgba(255,75,43,0.45); }
+.win-card .wc-badge.b2 { background: linear-gradient(135deg, #7b5cff, #4b8bff); box-shadow: 0 1px 5px rgba(75,139,255,0.45); }
+
+
+.draw-countdown { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 14px 0; padding: 14px 18px; background: linear-gradient(135deg, #ff7a18 0%, #ff3d3d 55%, #c20000 百分之百); border-radius: 16px; box-shadow: 0 6px 22px rgba(255,61,61,0.30); overflow: hidden; }
+.draw-countdown .cd-left { display: flex; align-items: center; gap: 12px; }
+.draw-countdown .cd-emoji { font-size: 34px; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25)); }
+.draw-countdown .cd-title { font-size: 16px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+.draw-countdown .cd-label { font-size: 12.5px; color: #ffe2c2; margin-top: 2px; }
+.draw-countdown .cd-clock { display: flex; align-items: flex-end; gap: 6px; }
+.draw-countdown .cd-box { display: inline-block; min-width: 46px; text-align: center; background: rgba(0,0,0,0.32); color: #fff; font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; padding: 6px 4px; border-radius: 10px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); }
+.draw-countdown .cd-clock i { color: #fff; font-style: normal; font-size: 13px; font-weight: 700; padding-bottom: 8px; }
+@media (max-width: 640px) { .draw-countdown { flex-direction: column; align-items: flex-start; } .draw-countdown .cd-box { min-width: 38px; font-size: 21px; } }
+
+.fun-card { display: flex; align-items: center; gap: 14px; margin: 12px 0; padding: 13px 16px; background: linear-gradient(135deg, #fff7e6 0%, #ffe9c7 百分之百); border: 1px dashed #ff9d3d; border-radius: 14px; box-shadow: 0 3px 14px rgba(255,157,61,0.15); }
+.fun-card .fc-emoji { font-size: 30px; line-height: 1; }
+.fun-card .fc-body { flex: 1; }
+.fun-card .fc-tag { font-size: 14px; font-weight: 800; color: #c25b00; }
+.fun-card .fc-honest { font-size: 11px; font-weight: 600; color: #9a6b3f; background: rgba(194,91,0,0.10); border-radius: 6px; padding: 1px 6px; }
+.fun-card .fc-text { font-size: 13px; color: #6b4a2a; margin-top: 3px; line-height: 1.5; }
+
+/* ===== 开场欢天喜地特效（旋转彩灯 + 烟花 + 流光） ===== */
+.party-hero { position: relative; overflow: hidden; border-radius: 16px; padding: 22px 24px; margin: 0 0 14px;
+  background: linear-gradient(130deg, #ff416c, #ff4b2b, #f7971e, #ffd200, #f7971e, #ff4b2b, #ff416c);
+  background-size: 300% 300%; animation: heroShift 9s ease infinite; box-shadow: 0 6px 24px rgba(255,75,43,0.35); }
+@keyframes heroShift { 0% { background-position: 0% 50%; } 50% { background-position: 百分之百 50%; } 百分之百 { background-position: 0% 50%; } }
+.party-hero .party-lights { position: absolute; inset: -60%; pointer-events: none; mix-blend-mode: screen;
+  background: conic-gradient(from 0deg,
+    rgba(255,255,255,0) 0deg, rgba(255,255,255,.38) 22deg, rgba(255,255,255,0) 44deg,
+    rgba(255,255,255,.38) 88deg, rgba(255,255,255,0) 132deg, rgba(255,255,255,.38) 176deg,
+    rgba(255,255,255,0) 220deg, rgba(255,255,255,.38) 264deg, rgba(255,255,255,0) 308deg,
+    rgba(255,255,255,.38) 352deg, rgba(255,255,255,0) 360deg);
+  animation: spinLights 7s linear infinite; }
+@keyframes spinLights { to { transform: rotate(360deg); } }
+.party-hero .fw { position: absolute; width: 72px; height: 72px; border-radius: 50%; opacity: 0; pointer-events: none;
+  background: radial-gradient(circle, rgba(255,255,255,.95) 0%, rgba(255,210,0,.55) 28%, rgba(255,75,43,0) 62%);
+  animation: fwPop 2.6s ease-out infinite; }
+@keyframes fwPop { 0% { transform: scale(0.15); opacity: 1; } 60% { opacity: .9; } 百分之百 { transform: scale(1.35); opacity: 0; } }
+.party-hero .fw1 { top: -14px; left: 12%; animation-delay: 0s; }
+.party-hero .fw2 { top: 28px; left: 54%; animation-delay: .9s; }
+.party-hero .fw3 { top: -26px; left: 82%; animation-delay: 1.7s; }
+.party-hero .party-content { position: relative; z-index: 2; text-align: center; }
+.party-hero .party-title { font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 1px; text-shadow: 0 2px 10px rgba(0,0,0,.28); }
+.party-hero .party-sub { margin-top: 6px; font-size: 13px; color: #fff5e6; text-shadow: 0 1px 5px rgba(0,0,0,.22); }
+@media (max-width: 560px) { .party-hero .party-title { font-size: 19px; } }
+
+/* ===== 互动娱乐：幸运转盘 / 老黄历 / 水晶球塔罗 ===== */
+.prop.wheel-prop { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+.wheel-wrap { position: relative; width: 180px; height: 180px; margin: 8px auto 4px; }
+.wheel-canvas { width: 180px; height: 180px; border-radius: 50%; border: 5px solid #00dd88; box-shadow: 0 0 16px rgba(0,221,136,.5); transition: transform 4.6s cubic-bezier(.15,.7,.25,1); display: block; }
+.wheel-ptr { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 11px solid transparent; border-right: 11px solid transparent; border-top: 20px solid #ffd200; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4)); z-index: 3; }
+.wheel-float { position: absolute; top: -10px; right: -10px; background: linear-gradient(135deg,#ffd200,#ff9d3d); color: #5a3b00; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.3); animation: wheelBob 1.4s ease-in-out infinite; pointer-events: none; z-index: 4; }
+@keyframes wheelBob { 0%,百分之百 { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.wheel-btn { margin-top: 4px; background: linear-gradient(135deg,#00dd88,#00aa66); color: #06240f; border: none; border-radius: 20px; padding: 7px 18px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 3px 10px rgba(0,221,136,.4); }
+.wheel-btn:active { transform: scale(.96); }
+.wheel-btn:disabled { opacity: .6; cursor: default; }
+.wheel-result { margin-top: 8px; min-height: 38px; font-size: 13px; color: #d8f0e0; text-align: center; line-height: 1.45; }
+
+/* 中奖庆祝特效层（固定全屏，纯 CSS/JS，零联网） */
+.cele-overlay { position: fixed; inset: 0; z-index: 9999; pointer-events: none; display: none; overflow: hidden; }
+.cele-overlay.show { display: block; }
+.cele-flash { position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, rgba(255,210,0,.35), rgba(255,75,43,0) 60%); animation: celeFlash .5s ease-in-out 6; }
+@keyframes celeFlash { 0%,百分之百 { opacity: 0; } 50% { opacity: 1; } }
+.cele-fw { position: absolute; width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.95) 0%, rgba(255,210,0,.55) 28%, rgba(255,75,43,0) 62%); opacity: 0; animation: celeFw 1.4s ease-out infinite; }
+@keyframes celeFw { 0% { transform: scale(.2); opacity: 1; } 70% { opacity: .8; } 百分之百 { transform: scale(1.6); opacity: 0; } }
+.cele-ticket { position: absolute; top: -50px; font-size: 30px; animation: celeFall linear forwards; }
+@keyframes celeFall { to { transform: translateY(112vh) rotate(540deg); opacity: .15; } }
+.cele-banner { position: absolute; top: 17%; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg,#ff416c,#ff4b2b); color: #fff; padding: 14px 32px; border-radius: 40px; font-size: 20px; font-weight: 900; box-shadow: 0 6px 24px rgba(255,75,43,.5); animation: celePop .5s ease; text-align: center; white-space: nowrap; }
+@keyframes celePop { 0% { transform: translateX(-50%) scale(.3); opacity: 0; } 百分之百 { transform: translateX(-50%) scale(1); opacity: 1; } }
+
+/* 老黄历 / 水晶球塔罗 通用卡片 */
+.fun-game { margin: 14px 0; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 8px 26px rgba(0,0,0,.30); }
+.fun-game .fg-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
+.fun-game .fg-badge { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 3px 10px rgba(0,0,0,.30); }
+.fun-game .fg-title { font-size: 15px; font-weight: 800; }
+.fun-game .fg-sub { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-left: 6px; vertical-align: middle; }
+.fun-game .fg-body { padding: 0 16px 16px; }
+.fun-game .fg-text { font-size: 13px; line-height: 1.65; min-height: 20px; }
+.fun-game .fg-btn { margin-top: 12px; border: none; border-radius: 22px; padding: 9px 20px; font-size: 13.5px; font-weight: 800; cursor: pointer; color: #fff; box-shadow: 0 4px 14px rgba(0,0,0,.25); transition: transform .12s, filter .12s; }
+.fun-game .fg-btn:hover { filter: brightness(1.08); }
+.fun-game .fg-btn:active { transform: scale(.96); }
+
+/* ===== 放大版娱乐卡 · 东方秘术 vs 西方星象 双风格差异化（神秘·高科技） ===== */
+.entertain-big { max-width: 560px; margin: 26px auto; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,.16); box-shadow: 0 22px 60px rgba(0,0,0,.50); position: relative; animation: ssqCardFloat 7s ease-in-out infinite; }
+@keyframes ssqCardFloat { 0%,百分之百{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+.entertain-big .fg-head { padding: 20px 22px; display: flex; align-items: center; gap: 16px; position: relative; z-index: 3; }
+.entertain-big .fg-badge { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; flex: 0 0 auto; box-shadow: 0 8px 22px rgba(0,0,0,.4), inset 0 0 14px rgba(255,255,255,.3); }
+.entertain-big .fg-badge svg { width: 40px; height: 40px; display: block; }
+.entertain-big .fg-title { font-size: 20px; font-weight: 800; letter-spacing: .5px; }
+.entertain-big .fg-sub { font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 10px; display: inline-block; margin-top: 4px; }
+.entertain-big .fg-body { padding: 0 22px 24px; position: relative; z-index: 3; }
+.entertain-big .fg-text { font-size: 15px; min-height: 26px; line-height: 1.6; }
+.entertain-big .fg-btn { margin-top: 16px; padding: 14px 34px; font-size: 16px; cursor: pointer; border: none; border-radius: 26px; font-weight: 800; position: relative; overflow: hidden; box-shadow: 0 10px 26px rgba(0,0,0,.38); transition: transform .15s, filter .15s; }
+.entertain-big .fg-btn::after { content: ""; position: absolute; top: 0; left: -60%; width: 50%; height: 百分之百; background: linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent); transform: skewX(-20deg); animation: ssqShimmer 3.6s ease-in-out infinite; }
+@keyframes ssqShimmer { 0%{left:-60%} 60%,百分之百{left:140%} }
+.entertain-big .fg-btn:hover { transform: translateY(-2px); filter: brightness(1.12); }
+.entertain-big .fg-btn:active { transform: scale(.97); }
+.ent-slogan { text-align: center; font-size: 15px; font-weight: 800; line-height: 1.65; padding: 15px 22px; position: relative; z-index: 3; }
+/* ---------- 东方秘术 · 老黄历（鎏金漆器 + 祥云暗纹 + 印章） ---------- */
+.almanac-card { background: radial-gradient(120% 80% at 50% -10%, rgba(255,210,74,.18), transparent 60%), linear-gradient(160deg, #2b0a0a 0%, #501414 52%, #7a2a14 百分之百); }
+.almanac-card::before { content: ""; position: absolute; inset: 0; z-index: 0; opacity: .14; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M20 78 q0 -22 22 -22 q4 -16 22 -16 q18 0 22 18 q16 0 16 16 q0 12 -16 12 z' fill='none' stroke='%23ffd24a' stroke-width='3'/%3E%3C/svg%3E"); background-size: 150px 150px; }
+.almanac-card .ent-slogan { color: #ffe9b0; background: linear-gradient(135deg, rgba(255,200,60,.26), rgba(255,90,30,.14)); border-bottom: 1px solid rgba(255,210,74,.35); }
+.almanac-card .fg-head { background: linear-gradient(135deg, rgba(255,210,74,.22), rgba(255,120,40,.10)); border-bottom: 1px solid rgba(255,210,74,.30); }
+.almanac-card .fg-badge { background: radial-gradient(circle at 35% 30%, #ffe9a8, #d99a1a); box-shadow: 0 8px 22px rgba(255,170,40,.45), inset 0 0 14px rgba(255,255,255,.4); }
+.almanac-card .fg-badge svg { animation: ssqAlmGlow 3.4s ease-in-out infinite; }
+@keyframes ssqAlmGlow { 0%,百分之百{transform:scale(1); filter:drop-shadow(0 0 2px rgba(255,210,74,.6))} 50%{transform:scale(1.07); filter:drop-shadow(0 0 9px rgba(255,210,74,.95))} }
+.almanac-card .fg-title { color: #ffd98a; text-shadow: 0 0 10px rgba(255,200,60,.35); }
+.almanac-card .fg-sub { background: rgba(255,210,74,.22); color: #ffd98a; }
+.almanac-card .fg-text { color: #ffe6cc; }
+.almanac-card .fg-btn { background: linear-gradient(135deg, #ffc24a, #ff7a18); color: #3a0f12; box-shadow: 0 10px 26px rgba(255,122,24,.45); }
+.alm-seal { margin-left: auto; width: 44px; height: 44px; border-radius: 9px; background: linear-gradient(135deg, #c01818, #7a0e0e); border: 2px solid #ffd24a; display: flex; align-items: center; justify-content: center; color: #ffd98a; font-size: 21px; font-weight: 900; transform: rotate(-8deg); box-shadow: 0 4px 12px rgba(0,0,0,.4); flex: 0 0 auto; }
+.almanac-card::after { content: ""; position: absolute; top: 0; left: -120%; width: 60%; height: 百分之百; z-index: 2; background: linear-gradient(110deg, transparent, rgba(255,225,150,.16), transparent); transform: skewX(-18deg); animation: ssqGoldSweep 6.5s ease-in-out infinite; }
+@keyframes ssqGoldSweep { 0%{left:-120%} 55%,百分之百{left:160%} }
+/* ---------- 西方星象 · 水晶球（深空星云 + 星轨 + 全息） ---------- */
+.tarot-card { background: radial-gradient(130% 90% at 50% 0%, rgba(120,90,255,.22), transparent 60%), linear-gradient(165deg, #070a26 0%, #141048 50%, #2a1268 百分之百); }
+.tarot-card .ent-slogan { color: #e7dcff; background: linear-gradient(135deg, rgba(150,110,255,.26), rgba(60,150,255,.14)); border-bottom: 1px solid rgba(170,140,255,.35); }
+.tarot-card .fg-head { background: linear-gradient(135deg, rgba(150,110,255,.22), rgba(60,150,255,.10)); border-bottom: 1px solid rgba(170,140,255,.30); }
+.tarot-card .fg-badge { background: radial-gradient(circle at 35% 30%, #e9ddff, #6a4bd6); box-shadow: 0 8px 22px rgba(120,90,255,.5), inset 0 0 14px rgba(255,255,255,.35); }
+.tarot-card .fg-badge svg { animation: ssqOrbGlow 3.6s ease-in-out infinite; }
+@keyframes ssqOrbGlow { 0%,百分之百{transform:scale(1); filter:drop-shadow(0 0 3px rgba(150,120,255,.6))} 50%{transform:scale(1.07); filter:drop-shadow(0 0 11px rgba(150,120,255,1))} }
+.tarot-card .fg-title { color: #dccbff; text-shadow: 0 0 12px rgba(150,110,255,.4); }
+.tarot-card .fg-sub { background: rgba(170,140,255,.22); color: #dccbff; }
+.tarot-card .fg-text { color: #e6e0ff; }
+.tarot-card .fg-btn { background: linear-gradient(135deg, #7b9bff, #b15cff); color: #0e0830; box-shadow: 0 10px 26px rgba(123,92,255,.5); }
+.tarot-card .fg-badge::before { content: ""; position: absolute; inset: -9px; border-radius: 50%; border: 1.5px dashed rgba(180,160,255,.55); animation: ssqRingSpin 9s linear infinite; }
+.tarot-card .fg-badge::after { content: ""; position: absolute; inset: -15px; border-radius: 50%; border: 1px solid rgba(150,110,255,.30); animation: ssqRingSpinRev 14s linear infinite reverse; }
+@keyframes ssqRingSpin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+@keyframes ssqRingSpinRev { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+/* 图标内闪烁星芒(灵动感) */
+.ssq-spk, .ssq-spk2 { animation: ssqSpark 2.4s ease-in-out infinite; transform-origin: center; }
+@keyframes ssqSpark { 0%,百分之百{opacity:.3; transform:scale(.7)} 50%{opacity:1; transform:scale(1.2)} }
+/* 西方星象：星空背景 overlay */
+.tarot-card::before { content: ""; position: absolute; inset: 0; z-index: 0; opacity: .5; pointer-events: none;
+  background-image: radial-gradient(1.4px 1.4px at 20% 30%, #fff, transparent), radial-gradient(1.2px 1.2px at 70% 20%, #cfe0ff, transparent), radial-gradient(1.6px 1.6px at 40% 70%, #fff, transparent), radial-gradient(1.1px 1.1px at 85% 60%, #b9c8ff, transparent), radial-gradient(1.3px 1.3px at 60% 85%, #fff, transparent), radial-gradient(1px 1px at 15% 80%, #e0d4ff, transparent);
+  background-repeat: no-repeat; animation: ssqTwinkle 4s ease-in-out infinite; }
+@keyframes ssqTwinkle { 0%,百分之百{opacity:.35} 50%{opacity:.7} }
+.alm-grid { display: flex; gap: 12px; margin: 12px 0; position: relative; z-index: 3; }
+.alm-col { flex: 1; font-size: 13px; line-height: 1.55; padding: 10px 12px; background: rgba(255,210,74,.10); border: 1px solid rgba(255,210,74,.18); border-radius: 12px; }
+.alm-col b { font-size: 13px; }
+.alm-row { font-size: 12.5px; margin: 7px 0; color: #ffd9b0; position: relative; z-index: 3; }
+.alm-q { font-size: 12.5px; margin-top: 9px; padding: 9px 12px; background: rgba(255,210,74,.14); border-left: 3px solid #ffd24a; border-radius: 9px; color: #ffe6cc; position: relative; z-index: 3; }
+.tarot-row { font-size: 13px; margin: 7px 0; color: #e6e0ff; position: relative; z-index: 3; }
+.tarot-pull { margin: 10px 0; padding: 11px 13px; background: rgba(150,110,255,.14); border: 1px solid rgba(170,140,255,.22); border-radius: 12px; border-left: 3px solid #b388ff; position: relative; z-index: 3; }
+.tarot-pull b { color: #e0d2ff; font-size: 14px; }
+.tarot-mean { font-size: 12.5px; color: #c9b8ff; }
+.tarot-cheer { font-size: 12.5px; margin-top: 9px; padding: 9px 12px; background: rgba(150,110,255,.12); border-radius: 9px; color: #dccbff; position: relative; z-index: 3; }
+
+/* ===== 年轻化·活力：首屏问候 / 连续打卡 / 等级进度 / 刮刮卡 / 彩蛋 ===== */
+.greet-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 14px; padding: 12px 18px; border-radius: 14px;
+  background: linear-gradient(135deg, rgba(123,92,255,.20), rgba(0,200,255,.14)); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.greet-bar .g-left { font-size: 16px; font-weight: 800; color: #fff; }
+.greet-bar .g-left .g-emoji { font-size: 20px; margin-right: 6px; }
+.greet-bar .g-left .g-sub { font-size: 12.5px; font-weight: 600; color: #d6d2f5; margin-left: 8px; }
+.greet-bar .g-right { display: flex; align-items: center; gap: 10px; }
+.g-streak { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,120,40,.20); border: 1px solid rgba(255,138,61,.4); padding: 5px 12px; border-radius: 18px; font-size: 13px; font-weight: 800; color: #ffd24a; }
+.g-streak .flame { filter: drop-shadow(0 0 4px rgba(255,140,40,.8)); }
+.g-level { min-width: 150px; }
+.g-level .gl-top { display: flex; justify-content: space-between; font-size: 11.5px; color: #cfe9ff; margin-bottom: 3px; }
+.g-level .gl-bar { height: 8px; border-radius: 6px; background: rgba(255,255,255,.12); overflow: hidden; }
+.g-level .gl-fill { height: 百分之百; border-radius: 6px; background: linear-gradient(90deg, #5ee0ff, #9b7bff); transition: width .8s cubic-bezier(.2,.8,.2,1); box-shadow: 0 0 8px rgba(123,92,255,.6); }
+
+/* 刮刮卡 */
+.scratch-card { position: relative; margin: 14px 0; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,210,74,.30);
+  background: linear-gradient(160deg, #2a1840, #3a1a5a); box-shadow: 0 10px 30px rgba(0,0,0,.32); }
+.scratch-card .sc-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px 6px; }
+.scratch-card .sc-emoji { font-size: 26px; }
+.scratch-card .sc-title { font-size: 16px; font-weight: 800; color: #ffd98a; }
+.scratch-card .sc-sub { font-size: 12px; color: #d9c8ff; margin-left: auto; }
+.scratch-card .sc-stage { position: relative; height: 178px; margin: 6px 16px 14px; border-radius: 12px; overflow: hidden; background: rgba(0,0,0,.25); }
+.scratch-card .sc-prize { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 8px; overflow: auto; }
+.scratch-card .sc-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.scratch-card .sc-name { color: #ffd98a; font-size: 11.5px; white-space: nowrap; }
+.scratch-card .sc-balls { display: flex; gap: 2px; }
+.scratch-card .sc-prize .ball { width: 26px; height: 26px; line-height: 26px; font-size: 12px; margin: 0; }
+.scratch-card .sc-hint { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font-size: 12px; color: #ffe39a; opacity: .85; pointer-events: none; }
+.scratch-card canvas { position: absolute; inset: 0; width: 百分之百; height: 百分之百; cursor: grab; touch-action: none; }
+.scratch-card canvas:active { cursor: grabbing; }
+.scratch-card .sc-reveal { position: absolute; top: 8px; right: 10px; background: linear-gradient(135deg,#ffb347,#ff7a18); color: #3a0f12; border: none; border-radius: 16px; padding: 5px 13px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 3px 10px rgba(255,122,24,.4); }
+.scratch-card .sc-reveal:active { transform: scale(.95); }
+
+/* 结尾留存钩子 */
+.stay-hook { margin: 18px 0 6px; padding: 16px 18px; border-radius: 16px; text-align: center;
+  background: linear-gradient(135deg, rgba(255,94,138,.18), rgba(123,92,255,.18)); border: 1px solid rgba(255,255,255,.12); }
+.stay-hook .sh-title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+.stay-hook .sh-text { font-size: 13px; color: #e3dfff; line-height: 1.6; }
+.stay-hook .sh-cta { display: inline-block; margin-top: 10px; background: linear-gradient(135deg,#ff5e8a,#ff7a18); color: #fff; border: none; border-radius: 20px; padding: 8px 22px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 16px rgba(255,94,138,.45); }
+.stay-hook .sh-cta:active { transform: scale(.96); }
+
+/* 漂浮装饰（纯 CSS，零联网） */
+.flobs { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.flobs i { position: absolute; border-radius: 50%; filter: blur(34px); opacity: .55; animation: blobFloat 14s ease-in-out infinite; }
+.flobs .b1 { width: 280px; height: 280px; left: -70px; top: 6%; background: radial-gradient(circle, #7b5cff, rgba(123,92,255,0)); animation-delay: 0s; }
+.flobs .b2 { width: 340px; height: 340px; right: -90px; top: 38%; background: radial-gradient(circle, #ff4b7c, rgba(255,75,124,0)); animation-delay: 3.5s; }
+.flobs .b3 { width: 250px; height: 250px; left: 28%; bottom: -70px; background: radial-gradient(circle, #00c8ff, rgba(0,200,255,0)); animation-delay: 7s; }
+
+/* 微交互：悬停上浮 + 发光（年轻化精致感） */
+.group-card { transition: transform .18s, box-shadow .18s, border-color .18s; }
+.group-card:hover { transform: translateY(-4px); border-left-color: #ffd24a; box-shadow: 0 12px 34px rgba(123,92,255,.28); }
+.stat-card { transition: transform .18s, box-shadow .18s; }
+.stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(0,200,255,.22); }
+.header .meta-item { transition: transform .15s, background .15s; }
+.header .meta-item:hover { transform: translateY(-2px); background: rgba(255,255,255,.14); }
+.antiscam .prop { transition: transform .15s, box-shadow .15s; }
+.antiscam .prop:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,221,136,.25); }
+.win-card { transition: transform .15s, border-color .15s; }
+.wheel-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.fun-game { transition: transform .18s, box-shadow .18s; }
+.fun-game:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(0,0,0,.40); }
+.scratch-card { transition: transform .18s, box-shadow .18s; }
+.scratch-card:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(0,0,0,.40); }
+
+/* 点击 LOGO 满屏烟花彩蛋 */
+.logo-egg { cursor: pointer; user-select: none; transition: transform .15s; }
+.logo-egg:hover { transform: scale(1.02); }
+.logo-egg:active { transform: scale(.98); }
+</style>
+</head>
+<body>
+<div class="flobs"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+<div class="container">
+
+<div class="header">
+<h1 class="logo-egg" title="点我放烟花🎆">双色球第2026090期预测报告 V1 <span class="v8-badge">全面修复</span></h1>
+<p class="subtitle">3488期历史数据 | 1,107,568组合穷举 | 0位专家ECI | 回测完全复刻预测管线 | 端到端自动化</p>
+<div class="meta">
+<div class="meta-item">数据: <strong>3488期</strong></div>
+<div class="meta-item">最新: <strong>2026091期</strong></div>
+<div class="meta-item">自动化: <strong>10/10步</strong></div>
+<div class="meta-item">回测: <strong>完全复刻预测</strong></div>
+<div class="meta-item">生成: <strong>2026-08-11 11:53</strong></div>
+</div>
+</div>
+
+<div class="greet-bar">  <div class="g-left"><span class="g-emoji" id="ssqGreetEmoji">👋</span><span id="ssqGreetWord">你好呀</span><span class="g-sub">今天也来转运啦？</span></div>  <div class="g-right">    <span class="g-streak" title="连续查看天数"><span class="flame">🔥</span><span id="ssqStreakN">1</span> 天连看</span>    <div class="g-level" title="理性娱乐达人等级">      <div class="gl-top"><span id="ssqLv">Lv.1 新股民</span><span id="ssqXp">0/50</span></div>      <div class="gl-bar"><div class="gl-fill" id="ssqLvFill" style="width:0%"></div></div>    </div>  </div></div><script>function ssqGreet(){var h=new Date().getHours();var e="👋",w="你好呀";if(h<6){e="🌙";w="夜深了，早点休息，明天再来转运";}else if(h<11){e="🌅";w="早安，新的一天从好心情开始";}else if(h<14){e="☀️";w="午安，今天想转运吗？";}else if(h<18){e="🌤️";w="下午好，喝口水继续冲";}else if(h<22){e="🌆";w="晚上好，今晚开奖更刺激";}else{e="🌙";w="夜猫子，注意别上头哦";}var ge=document.getElementById("ssqGreetEmoji"),gw=document.getElementById("ssqGreetWord");if(ge)ge.textContent=e;if(gw)gw.textContent=w;}function ssqEngage(){try{var t=new Date();var key="ssq_dlv1";var d=JSON.parse(localStorage.getItem(key)||"{}");var today=t.toDateString();var y=new Date(t.getTime()-86400000).toDateString();var streak=(d.date===today)?(d.streak||1):((d.date===y)?(d.streak||0)+1:1);var xp=((d.xp||0)+14);if(xp>500)xp=500;localStorage.setItem(key,JSON.stringify({date:today,streak:streak,xp:xp}));var lv=Math.floor(xp/50)+1;var names=["新股民","小彩民","理性达人","娱乐高手","防割韭菜侠","运势收藏家","彩票明白人","幸运星","锦鲤本鲤","双色球之王"];var nm=names[Math.min(lv-1,names.length-1)];var prog=((xp%50)/50*100).toFixed(0);var sn=document.getElementById("ssqStreakN");if(sn)sn.textContent=streak;var sl=document.getElementById("ssqLv");if(sl)sl.textContent="Lv."+lv+" "+nm;var sx=document.getElementById("ssqXp");if(sx)sx.textContent=(xp%50)+"/50";var sf=document.getElementById("ssqLvFill");if(sf)sf.style.width=prog+"%";}catch(e){}}function ssqEgg(){if(typeof ssqCelebrate==="function"){ssqCelebrate();}else{var ov=document.getElementById("ssqCele");if(ov){ov.classList.add("show");setTimeout(function(){ov.classList.remove("show");},3000);}}}if(document.readyState!=="loading"){ssqGreet();ssqEngage();}else{document.addEventListener("DOMContentLoaded",function(){ssqGreet();ssqEngage();});}var lg=document.querySelector(".logo-egg");if(lg){lg.addEventListener("click",ssqEgg);}</script>
+
+<div class="antiscam">
+  <div class="shield-title">🛡️ 防割韭菜盾 · 双色球理性购彩科普助手</div>
+  <div class="lead">双色球开奖是纯随机，<strong style="color:#ff8888;">任何"大师指导 / 可确保的中奖结果说法 / 不实数据"都是割韭菜</strong>。本工具不宣称中奖，只做三件事，帮你买得明白：</div>
+  <div class="props">
+    <div class="prop"><div class="ico">🎯</div><div class="ttl">选号有依据</div><div class="desc">5 组策略组合，全部过 9 项过滤器，每注都标注"娱乐参考、不保证结果"。</div></div>
+    <div class="prop"><div class="ico">💰</div><div class="ttl">省钱有工具</div><div class="desc">胆拖优化器：同样覆盖心仪号码，花更少的钱（详见报告第四节）。</div></div>
+    <div class="prop"><div class="ico">🔍</div><div class="ttl">中奖有核对</div><div class="desc">开奖后一键核对：中没中、中几等奖、该拿多少，秒知道。</div></div>
+    <div class="prop wheel-prop" id="ssq-wheel"><div class="ico">🎰</div><div class="ttl">手气摇奖机</div><div class="desc">点一下转盘，看看今天运气～（纯娱乐，与真实中奖无关）</div><div class="wheel-wrap"><div class="wheel-ptr"></div><canvas id="ssqWheelCv" class="wheel-canvas" width="360" height="360"></canvas><div class="wheel-float" id="ssqWheelFloat">👆 试试今天手气如何</div></div><button class="wheel-btn" id="ssqWheelBtn" onclick="ssqSpin()">🎯 点我摇奖</button><div class="wheel-result" id="ssqWheelRes">转盘已就位，等你来转～</div></div><div class="cele-overlay" id="ssqCele"><div class="cele-flash"></div><div class="cele-banner" id="ssqCeleBanner">🎉 恭喜你中奖啦！</div></div><script>function ssqDrawWheel(){var cv=document.getElementById("ssqWheelCv"); if(!cv)return;var ctx=cv.getContext("2d"); var n=12, R=180, cx=180, cy=180;var segs=[["🥇一等奖","#ff4d6d"],["🍀锦鲤","#ffd166"],["🥈二等奖","#06d6a0"],["💰旺财","#4cc9f0"],["🥉三等奖","#b388ff"],["🚀冲鸭","#f72585"],["💎四等奖","#fb8500"],["🌟好运","#8ac926"],["🎯五等奖","#4895ef"],["😄开心","#f15bb5"],["🍀六等奖","#c1e100"],["✅稳了","#ffb703"]];ctx.clearRect(0,0,360,360);for(var i=0;i<n;i++){var a0=i*2*Math.PI/n-Math.PI/2, a1=(i+1)*2*Math.PI/n-Math.PI/2;ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,a0,a1); ctx.closePath();ctx.fillStyle=segs[i][1]; ctx.fill();ctx.save(); ctx.translate(cx,cy); ctx.rotate((a0+a1)/2);ctx.textAlign="right"; ctx.font="bold 18px sans-serif";ctx.lineWidth=3; ctx.strokeStyle="rgba(0,0,0,.55)"; ctx.strokeText(segs[i][0], R-12, 8);ctx.fillStyle="#fff"; ctx.fillText(segs[i][0], R-12, 8); ctx.restore();}ctx.beginPath(); ctx.arc(cx,cy,40,0,7); ctx.fillStyle="#0a1f14"; ctx.fill();ctx.fillStyle="#00dd88"; ctx.font="bold 26px sans-serif"; ctx.textAlign="center"; ctx.fillText("🎰",cx,cy+9);}var ssqWheelCur=0, ssqWheelOn=false;function ssqSpin(){var btn=document.getElementById("ssqWheelBtn"), res=document.getElementById("ssqWheelRes"), fl=document.getElementById("ssqWheelFloat");if(ssqWheelOn)return; ssqWheelOn=true; if(fl)fl.style.display="none";btn.disabled=true; res.textContent="转盘飞速旋转中…🌀";var wins=[0,2,4,6,8,10]; var win=wins[Math.floor(Math.random()*wins.length)];var msgs={0:"🥇 天选之子！你抽中【一等奖手气签】—— 今天气场全开，好运挡不住！",2:"🥈 棒极了！你抽中【二等奖手气签】—— 你很有财运，今天适合小确幸～",4:"🥉 厉害！你抽中【三等奖手气签】—— 偏财运在线，理性娱乐别上头💛",6:"💎 妙啊！你抽中【四等奖手气签】—— 小幸运敲门，今天心情美美的✨",8:"🎯 不错！你抽中【五等奖手气签】—— 稳稳的开心，运气在慢慢升温🌟",10:"🍀 喜气！你抽中【六等奖手气签】—— 重在参与，快乐才是头奖🎉"};var land=(360 - win*30 - 15);var m=((ssqWheelCur%360)+360)%360;var delta=360*6 + ((land - m + 360)%360);ssqWheelCur += delta;document.getElementById("ssqWheelCv").style.transform="rotate("+ssqWheelCur+"deg)";setTimeout(function(){ ssqWheelOn=false; btn.disabled=false;res.innerHTML="<strong style='color:#ffd24a'>"+msgs[win]+"</strong>";ssqCelebrate(); }, 4700);}function ssqCelebrate(){var ov=document.getElementById("ssqCele"); if(!ov)return;ov.classList.add("show");for(var i=0;i<6;i++){var f=document.createElement("div"); f.className="cele-fw";f.style.left=(8+i*16)+"%"; f.style.top=(12+(i%2)*34)+"%"; f.style.animationDelay=(i*0.22)+"s"; ov.appendChild(f);}for(var j=0;j<36;j++){var t=document.createElement("div"); t.className="cele-ticket";t.textContent=["🎫","🎟️","💴","✨","🍀"][j%5];t.style.left=Math.random()*100+"%"; t.style.animationDuration=(2.4+Math.random()*2.2)+"s";t.style.animationDelay=(Math.random()*1.2)+"s"; ov.appendChild(t);}setTimeout(function(){ ov.classList.remove("show");var ex=ov.querySelectorAll(".cele-fw,.cele-ticket"); for(var k=0;k<ex.length;k++){ex[k].remove();} }, 5400);}if(document.readyState!=="loading"){ssqDrawWheel();}else{document.addEventListener("DOMContentLoaded",ssqDrawWheel);}</script>
+  </div>
+  <div class="honest">📊 诚实结论：一等奖概率恒 1/17,721,088 ｜ 期望回报 −53% ｜ 请娱乐量力，绝不可当作"有收益"的依据</div>
+</div>
+
+<div class="party-hero"><div class="party-lights"></div><div class="fw fw1"></div><div class="fw fw2"></div><div class="fw fw3"></div><div class="party-content"><div class="party-title">🎉 双色球 · 快乐开奖时刻 🎉</div><div class="party-sub">别人的好运，是你今天最解压的快乐源泉～ 花两块钱，买一份小期待 💛</div></div></div>
+
+<div class="draw-countdown" id="ssq-cd"><div class="cd-left"><div class="cd-emoji">⏰</div><div class="cd-txt"><div class="cd-title">距离下期开奖还有</div><div class="cd-label">📅 8月11日 周二 21:15（周二 / 周四 / 周日开奖）</div></div></div><div class="cd-clock"><span class="cd-box" id="ssq-cd-d">--</span><i>天</i><span class="cd-box" id="ssq-cd-h">--</span><i>时</i><span class="cd-box" id="ssq-cd-m">--</span><i>分</i><span class="cd-box" id="ssq-cd-s">--</span><i>秒</i></div></div><script>(function(){var t=33715;var d=document.getElementById("ssq-cd-d"),h=document.getElementById("ssq-cd-h"),m=document.getElementById("ssq-cd-m"),s=document.getElementById("ssq-cd-s");function p(n){return (n<10?"0":"")+n;}function tick(){if(t<0)t=0;var dd=Math.floor(t/86400),r=t%86400,hh=Math.floor(r/3600),mm=Math.floor((r%3600)/60),ss=r%60;d.textContent=dd;h.textContent=p(hh);m.textContent=p(mm);s.textContent=p(ss);t--;if(t<0)return;setTimeout(tick,1000);}tick();})();</script>
+
+<div class="win-stories"><div class="ws-head"><span class="ws-emoji">🏆</span><div class="ws-title">近期<span class="hl">一等奖</span>领奖故事</div></div><div class="ws-sub">别人的好运，是今天最解压的快乐源泉～ 看故事图个乐，理性娱乐不上头 💛</div><div class="ws-grid"><div class="win-card"><span class="wc-badge">🔥 最新爆款</span><div class="wc-top"><span class="wc-prize">1666万元</span><span class="wc-place">· 广东惠州</span></div><div class="wc-title">惠州5注5倍合买中1666万，隔了一个月才发现</div><div class="wc-sum">杨先生和几位同事路过福彩站点合买了一张5注5倍单式票。因工作忙没留意开奖信息，中奖一个多月后才核对发现中了1666万。他表示中奖是意外之喜，今后仍会保持平和心态，继续支持福彩公益。</div><div class="wc-foot"><span class="src">新快报</span> ｜ 2026-07-15</div></div><div class="win-card"><span class="wc-badge b2">✨ 热议领奖</span><div class="wc-top"><span class="wc-prize">1006万元</span><span class="wc-place">· 广东广州</span></div><div class="wc-title">广州1006万大奖得主弃奖前3天现身，淡定兑奖</div><div class="wc-sum">老彩民因常出差、买的彩票没空核对，一直不知自己中了千万大奖。眼看60天兑奖期将满、福彩贴告示寻人，他在弃奖前3天才现身。面对千万奖金，他平静地说：中大奖当然开心，但生活还是如往常一样。</div><div class="wc-foot"><span class="src">光明网 / 信息时报</span> ｜ 2026-06-05</div></div></div><div class="ws-note">✨ 故事均来自<strong>公开真实报道</strong>，中奖是<strong>万里挑一的运气</strong>——享受别人的高光时刻就好，别把"别人的幸运"当"自己的计划"。你花的两块钱，买的是一份小期待，理性娱乐，量力而行 💛</div></div>
+
+
+
+<div class="section">
+<div class="section-title">一、数据概览</div>
+<table>
+<tr><th>指标</th><th>值</th></tr>
+<tr><td>总历史期数</td><td>3488</td></tr>
+<tr><td>数据时间范围</td><td>2003-02-23 ~ 2026-08-09</td></tr>
+<tr><td>最新期号</td><td>2026091</td></tr>
+<tr><td>最新红球</td><td><span class="ball ball-red" style="width:28px;height:28px;line-height:28px;font-size:13px;">02</span> <span class="ball ball-red" style="width:28px;height:28px;line-height:28px;font-size:13px;">13</span> <span class="ball ball-red" style="width:28px;height:28px;line-height:28px;font-size:13px;">14</span> <span class="ball ball-red" style="width:28px;height:28px;line-height:28px;font-size:13px;">16</span> <span class="ball ball-red" style="width:28px;height:28px;line-height:28px;font-size:13px;">20</span> <span class="ball ball-red" style="width:28px;height:28px;line-height:28px;font-size:13px;">24</span></td></tr>
+<tr><td>最新蓝球</td><td><span class="ball ball-blue" style="width:28px;height:28px;line-height:28px;font-size:13px;">05</span></td></tr>
+<tr><td>数据校验</td><td>✓ 全部通过</td></tr>
+<tr><td>预测目标期号</td><td>2026090</td></tr>
+</table>
+</div>
+
+<div class="section">
+<div class="section-title">二、第2026090期推荐号码（5组，全部通过9项过滤器 + 每组成本/优劣点）</div>
+<div class="info" style="border-color:#00dd88;">
+<p style="color:#00dd88; font-size:14px; line-height:1.8;">
+💡 <strong>采用成本速览</strong>：每组 = 红球1注 + 蓝球复式，5 组共 <strong>15 注</strong>，
+基本投注 <strong>¥30</strong>。<br>
+<strong style="color:#ffcc00;">提醒：5 组期望等价，全买不提升中奖概率、只增成本；任选 1 组即可控制投入，建议 ≤ 月收入 0.5%。</strong>
+</p>
+</div>
+
+<div class="section" style="border:2px solid #ffaa00;">
+<div class="section-title">🎯 开奖前必读 · 预期差距说明（请先读这段，再看下面号码）</div>
+<div class="info" style="border-color:#ffaa00;">
+<p style="color:#ffbb00; font-size:15px; line-height:1.9;">
+<strong>你马上要看到的 5 组号码，在"中奖概率"上和闭眼随机选 5 注完全等价。</strong>下面把"差多少算正常"提前讲清楚，免得开奖后你以为系统坏了：
+</p>
+<ul style="margin:8px 0; padding-left:20px; color:#ffd9a0; line-height:1.9; font-size:14px;">
+<li>🔢 红球 33 选 6：每组平均只能命中 <strong>1.09 个</strong>（大概率只中 0~2 个）；<strong>单组"一个红球都不中"的概率高达 26.7%</strong>。</li>
+<li>🔵 蓝球仅 1 个：命中概率 <strong>6.25%</strong>，<strong>单组蓝球不中的概率 93.8%</strong>。</li>
+<li>🏆 一等奖（6+1）恒等概率 <strong>1/17,721,088</strong>——与用什么方法、什么"大师"选号<strong>毫无关系</strong>。</li>
+<li>📉 因此"预测 vs 开奖差很多"是<strong>公平随机摇奖的最常见结果</strong>。反过来说：如果本系统能稳定贴近开奖号，那才是摇奖机不独立、被人操控的<strong>危险信号</strong>。</li>
+<li>✅ 唯一理性动作：控制投入（建议 ≤ 月收入 0.5%），把本报告当<strong>娱乐消费凭证</strong>而非致富方案。开奖后本报告会自动生成「实际开奖对账」告诉你这期差多少、是否在随机范围内。</li>
+</ul>
+</div>
+</div>
+<div class="scratch-card">  <div class="sc-head"><span class="sc-emoji">🎫</span><span class="sc-title">刮开看今日幸运号码</span><span class="sc-sub">纯娱乐参考 · 不保证结果</span></div>  <div class="sc-stage">    <div class="sc-prize" id="ssqScratchPrize"><div class="sc-row"><span class="sc-name">第1组 综合共识</span><div class="sc-balls"><span class="ball ball-red">06</span><span class="ball ball-red">14</span><span class="ball ball-red">16</span><span class="ball ball-red">19</span><span class="ball ball-red">24</span><span class="ball ball-red">25</span> <span class="ball ball-blue">02</span><span class="ball ball-blue">04</span><span class="ball ball-blue">09</span></div></div><div class="sc-row"><span class="sc-name">第2组 热号追踪</span><div class="sc-balls"><span class="ball ball-red">04</span><span class="ball ball-red">06</span><span class="ball ball-red">10</span><span class="ball ball-red">16</span><span class="ball ball-red">17</span><span class="ball ball-red">33</span> <span class="ball ball-blue">03</span><span class="ball ball-blue">04</span><span class="ball ball-blue">16</span></div></div><div class="sc-row"><span class="sc-name">第3组 冷号回补</span><div class="sc-balls"><span class="ball ball-red">01</span><span class="ball ball-red">03</span><span class="ball ball-red">06</span><span class="ball ball-red">16</span><span class="ball ball-red">21</span><span class="ball ball-red">29</span> <span class="ball ball-blue">02</span><span class="ball ball-blue">13</span><span class="ball ball-blue">14</span></div></div><div class="sc-row"><span class="sc-name">第4组 遗漏优选</span><div class="sc-balls"><span class="ball ball-red">03</span><span class="ball ball-red">09</span><span class="ball ball-red">15</span><span class="ball ball-red">26</span><span class="ball ball-red">28</span><span class="ball ball-red">30</span> <span class="ball ball-blue">07</span><span class="ball ball-blue">08</span><span class="ball ball-blue">15</span></div></div><div class="sc-row"><span class="sc-name">第5组 熵均衡</span><div class="sc-balls"><span class="ball ball-red">02</span><span class="ball ball-red">04</span><span class="ball ball-red">05</span><span class="ball ball-red">06</span><span class="ball ball-red">26</span><span class="ball ball-red">31</span> <span class="ball ball-blue">09</span><span class="ball ball-blue">13</span><span class="ball ball-blue">15</span></div></div></div>    <button class="sc-reveal" onclick="ssqRevealNow()">直接看 ✨</button>    <canvas id="ssqScratchCv"></canvas>    <div class="sc-hint" id="ssqScratchHint">👆 用鼠标 / 手指刮开银层</div>  </div></div><script>function ssqScratchInit(){var cv=document.getElementById("ssqScratchCv");if(!cv)return;var stage=cv.parentElement;var w=stage.clientWidth,h=stage.clientHeight;cv.width=w;cv.height=h;var ctx=cv.getContext("2d");function fill(){var g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,"#cfd6e6");g.addColorStop(.5,"#aeb8cf");g.addColorStop(1,"#e3e9f4");ctx.globalCompositeOperation="source-over";ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.fillStyle="rgba(80,92,120,.9)";ctx.font="bold 19px sans-serif";ctx.textAlign="center";ctx.fillText("刮开看号码 ✨",w/2,h/2-6);ctx.font="12px sans-serif";ctx.fillText("（纯娱乐，不保证结果）",w/2,h/2+18);}fill();var drawing=false,erased=0;function pos(e){var r=cv.getBoundingClientRect();var cx=(e.touches?e.touches[0].clientX:e.clientX)-r.left;var cy=(e.touches?e.touches[0].clientY:e.clientY)-r.top;return{x:cx,y:cy};}function erase(x,y){ctx.globalCompositeOperation="destination-out";ctx.beginPath();ctx.arc(x,y,24,0,7);ctx.fill();}function ratio(){try{var dt=ctx.getImageData(0,0,w,h).data;var c=0,t=0;for(var i=3;i<dt.length;i+=48){t++;if(dt[i]===0)c++;}return t?c/t:0;}catch(e){return 0;}}function move(e){if(!drawing)return;if(e.cancelable)e.preventDefault();var p=pos(e);erase(p.x,p.y);erased++;if(erased%5===0&&ratio()>0.5){ssqRevealNow();}}cv.addEventListener("mousedown",function(e){drawing=true;var p=pos(e);erase(p.x,p.y);});cv.addEventListener("mousemove",move);window.addEventListener("mouseup",function(){drawing=false;});cv.addEventListener("touchstart",function(e){drawing=true;var p=pos(e);erase(p.x,p.y);},{passive:false});cv.addEventListener("touchmove",move,{passive:false});window.addEventListener("touchend",function(){drawing=false;});window.addEventListener("resize",function(){w=stage.clientWidth;h=stage.clientHeight;cv.width=w;cv.height=h;fill();});}function ssqRevealNow(){var cv=document.getElementById("ssqScratchCv");if(!cv)return;cv.style.transition="opacity .45s";cv.style.opacity="0";setTimeout(function(){cv.style.display="none";},460);var hi=document.getElementById("ssqScratchHint");if(hi)hi.style.display="none";}if(document.readyState!=="loading"){ssqScratchInit();}else{document.addEventListener("DOMContentLoaded",ssqScratchInit);}</script>
+<div class="group-card">
+<h3>第1组: 综合共识</h3>
+<p class="strategy">策略: CDM+马尔可夫+频率+遗漏加权[0.40,0.25,0.20,0.15] 后验采样(期号扰动)</p>
+<div class="balls-container">
+<span style="color:#888;">红球:</span>
+<span class="ball ball-red">06</span><span class="ball ball-red">14</span><span class="ball ball-red">16</span><span class="ball ball-red">19</span><span class="ball ball-red">24</span><span class="ball ball-red">25</span>
+</div>
+<div class="balls-container">
+<span style="color:#888;">蓝球复式:</span>
+<span class="ball ball-blue">02</span><span class="ball ball-blue">04</span><span class="ball ball-blue">09</span>
+</div>
+<p style="color:#ffcc00; font-size:13px; margin-top:6px;">
+💰 <strong>成本</strong>：3 注（红球1注 + 蓝球复式）｜ 基本 <strong>¥6</strong>
+</p>
+<p style="color:#66ccff; font-size:12px; margin-top:6px;">
+📊 <strong>历史相似形态出现率</strong>：在历史 3488 期中，与本组形态（AC/和值/跨度/奇偶/大小/012路/连号/质数）相近的开奖共 <strong>2</strong> 期，占比 <strong>0.1%</strong>。
+<span style="color:#99aab5;">（这是该形态在历史开奖中出现的频率，<strong>不是</strong>本注会中奖的概率；一等奖对任何形态概率相同 1/17,721,088）</span>
+</p>
+<p style="color:#9ad; font-size:12px; margin-top:4px; background:#0c1422; border:1px solid #1c3a5a; border-radius:6px; padding:8px;">
+🎰 <strong>固定号码历史回测</strong>（若每期都固定投注本组这注 6+1，在所有历史开奖逐期核对）：共 <strong>3488</strong> 期，任意奖级中奖 <strong>650</strong> 期（期率 <strong>18.64%</strong>），总投入 <strong>¥20928</strong>，总奖金 <strong>¥4080</strong>，ROI <strong>-80.5%</strong>。
+<span style="color:#99aab5;">（描述"过去若这么买会怎样"，<strong>不预示未来</strong>；固定号码长期 ROI 为负属数学期望，印证系统 no_edge 诚实结论）</span><br>
+<span style="color:#7fb;">奖级分布：六等奖598期、五等奖49期、四等奖3期</span>
+</p>
+<div style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
+<div style="flex:1; min-width:240px; background:#0d1a14; border:1px solid #00aa55; border-radius:8px; padding:10px;">
+<div style="color:#00dd88; font-size:13px; font-weight:bold; margin-bottom:6px;">✅ 优点（为何列它为候选）</div>
+<ul style="margin:0; padding-left:18px; color:#88ffbb; font-size:12px; line-height:1.7;"><li>AC=7（离散度理想区间5-9）</li><li>和值104（合理区间80-160）</li><li>跨度19（合理区间16-31）</li><li>奇偶比2:4（均衡）</li><li>大小比3:3（均衡）</li><li>质数1个（合理1-3）</li><li>012路231（三类齐全，分布均匀）</li><li>连号组数1（≤1，符合常见形态）</li><li>多模型(CDM+马尔可夫+频率+遗漏)加权融合的共识锚点</li></ul>
+</div>
+<div style="flex:1; min-width:240px; background:#1a140d; border:1px solid #cc8800; border-radius:8px; padding:10px;">
+<div style="color:#ffbb00; font-size:13px; font-weight:bold; margin-bottom:6px;">⚠️ 注意（劣势 / 风险）</div>
+<ul style="margin:0; padding-left:18px; color:#ffcc88; font-size:12px; line-height:1.7;"><li>重号3个（vs上期，>2，追旧偏多）</li><li>属频率家族融合，与其他锚点互补而非独立预测</li><li>数学上无预测优势：V1.0强化引擎 200期 ROI -82.2% ≈ 随机 -78.2%（Bootstrap 95%CI 下界未>0）</li><li>期望红球命中≈随机 1.09 球；凯利 f* 为负，单注期望净亏≈¥1.00</li></ul>
+</div>
+</div>
+<p style="color:#888; font-size:12px; margin-top:8px;">AC=7(✓) | 和值=104(✓) | 跨度=19(✓) | 奇偶=2(✓) | 大小=3(✓) | 质合=1(✓) | 012路=231(✓) | 连号=1(✓) | 重号=3(✗)</p>
+</div>
+<div class="group-card">
+<h3>第2组: 热号追踪</h3>
+<p class="strategy">策略: 近30期高频热号 后验采样(期号扰动)</p>
+<div class="balls-container">
+<span style="color:#888;">红球:</span>
+<span class="ball ball-red">04</span><span class="ball ball-red">06</span><span class="ball ball-red">10</span><span class="ball ball-red">16</span><span class="ball ball-red">17</span><span class="ball ball-red">33</span>
+</div>
+<div class="balls-container">
+<span style="color:#888;">蓝球复式:</span>
+<span class="ball ball-blue">03</span><span class="ball ball-blue">04</span><span class="ball ball-blue">16</span>
+</div>
+<p style="color:#ffcc00; font-size:13px; margin-top:6px;">
+💰 <strong>成本</strong>：3 注（红球1注 + 蓝球复式）｜ 基本 <strong>¥6</strong>
+</p>
+<p style="color:#66ccff; font-size:12px; margin-top:6px;">
+📊 <strong>历史相似形态出现率</strong>：在历史 3488 期中，与本组形态（AC/和值/跨度/奇偶/大小/012路/连号/质数）相近的开奖共 <strong>3</strong> 期，占比 <strong>0.1%</strong>。
+<span style="color:#99aab5;">（这是该形态在历史开奖中出现的频率，<strong>不是</strong>本注会中奖的概率；一等奖对任何形态概率相同 1/17,721,088）</span>
+</p>
+<p style="color:#9ad; font-size:12px; margin-top:4px; background:#0c1422; border:1px solid #1c3a5a; border-radius:6px; padding:8px;">
+🎰 <strong>固定号码历史回测</strong>（若每期都固定投注本组这注 6+1，在所有历史开奖逐期核对）：共 <strong>3488</strong> 期，任意奖级中奖 <strong>679</strong> 期（期率 <strong>19.47%</strong>），总投入 <strong>¥20928</strong>，总奖金 <strong>¥7180</strong>，ROI <strong>-65.7%</strong>。
+<span style="color:#99aab5;">（描述"过去若这么买会怎样"，<strong>不预示未来</strong>；固定号码长期 ROI 为负属数学期望，印证系统 no_edge 诚实结论）</span><br>
+<span style="color:#7fb;">奖级分布：六等奖634期、五等奖41期、四等奖3期、三等奖1期</span>
+</p>
+<div style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
+<div style="flex:1; min-width:240px; background:#0d1a14; border:1px solid #00aa55; border-radius:8px; padding:10px;">
+<div style="color:#00dd88; font-size:13px; font-weight:bold; margin-bottom:6px;">✅ 优点（为何列它为候选）</div>
+<ul style="margin:0; padding-left:18px; color:#88ffbb; font-size:12px; line-height:1.7;"><li>AC=9（离散度理想区间5-9）</li><li>和值86（合理区间80-160）</li><li>跨度29（合理区间16-31）</li><li>奇偶比2:4（均衡）</li><li>大小比4:2（均衡）</li><li>质数1个（合理1-3）</li><li>012路231（三类齐全，分布均匀）</li><li>连号组数1（≤1，符合常见形态）</li><li>重号1个（vs上期，≤2，未过度追旧）</li><li>追踪近30期高频热号，顺势而为</li></ul>
+</div>
+<div style="flex:1; min-width:240px; background:#1a140d; border:1px solid #cc8800; border-radius:8px; padding:10px;">
+<div style="color:#ffbb00; font-size:13px; font-weight:bold; margin-bottom:6px;">⚠️ 注意（劣势 / 风险）</div>
+<ul style="margin:0; padding-left:18px; color:#ffcc88; font-size:12px; line-height:1.7;"><li>追热遇变冷周期易失效</li><li>数学上无预测优势：V1.0强化引擎 200期 ROI -82.2% ≈ 随机 -78.2%（Bootstrap 95%CI 下界未>0）</li><li>期望红球命中≈随机 1.09 球；凯利 f* 为负，单注期望净亏≈¥1.00</li></ul>
+</div>
+</div>
+<p style="color:#888; font-size:12px; margin-top:8px;">AC=9(✓) | 和值=86(✓) | 跨度=29(✓) | 奇偶=2(✓) | 大小=4(✓) | 质合=1(✓) | 012路=231(✓) | 连号=1(✓) | 重号=1(✓)</p>
+</div>
+<div class="group-card">
+<h3>第3组: 冷号回补</h3>
+<p class="strategy">策略: 遗漏值最大(冷号) 后验采样(期号扰动)</p>
+<div class="balls-container">
+<span style="color:#888;">红球:</span>
+<span class="ball ball-red">01</span><span class="ball ball-red">03</span><span class="ball ball-red">06</span><span class="ball ball-red">16</span><span class="ball ball-red">21</span><span class="ball ball-red">29</span>
+</div>
+<div class="balls-container">
+<span style="color:#888;">蓝球复式:</span>
+<span class="ball ball-blue">02</span><span class="ball ball-blue">13</span><span class="ball ball-blue">14</span>
+</div>
+<p style="color:#ffcc00; font-size:13px; margin-top:6px;">
+💰 <strong>成本</strong>：3 注（红球1注 + 蓝球复式）｜ 基本 <strong>¥6</strong>
+</p>
+<p style="color:#66ccff; font-size:12px; margin-top:6px;">
+📊 <strong>历史相似形态出现率</strong>：在历史 3488 期中，与本组形态（AC/和值/跨度/奇偶/大小/012路/连号/质数）相近的开奖共 <strong>4</strong> 期，占比 <strong>0.1%</strong>。
+<span style="color:#99aab5;">（这是该形态在历史开奖中出现的频率，<strong>不是</strong>本注会中奖的概率；一等奖对任何形态概率相同 1/17,721,088）</span>
+</p>
+<p style="color:#9ad; font-size:12px; margin-top:4px; background:#0c1422; border:1px solid #1c3a5a; border-radius:6px; padding:8px;">
+🎰 <strong>固定号码历史回测</strong>（若每期都固定投注本组这注 6+1，在所有历史开奖逐期核对）：共 <strong>3488</strong> 期，任意奖级中奖 <strong>649</strong> 期（期率 <strong>18.61%</strong>），总投入 <strong>¥20928</strong>，总奖金 <strong>¥4080</strong>，ROI <strong>-80.5%</strong>。
+<span style="color:#99aab5;">（描述"过去若这么买会怎样"，<strong>不预示未来</strong>；固定号码长期 ROI 为负属数学期望，印证系统 no_edge 诚实结论）</span><br>
+<span style="color:#7fb;">奖级分布：六等奖596期、五等奖50期、四等奖3期</span>
+</p>
+<div style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
+<div style="flex:1; min-width:240px; background:#0d1a14; border:1px solid #00aa55; border-radius:8px; padding:10px;">
+<div style="color:#00dd88; font-size:13px; font-weight:bold; margin-bottom:6px;">✅ 优点（为何列它为候选）</div>
+<ul style="margin:0; padding-left:18px; color:#88ffbb; font-size:12px; line-height:1.7;"><li>AC=7（离散度理想区间5-9）</li><li>跨度28（合理区间16-31）</li><li>奇偶比4:2（均衡）</li><li>大小比4:2（均衡）</li><li>质数2个（合理1-3）</li><li>012路321（三类齐全，分布均匀）</li><li>连号组数0（≤1，符合常见形态）</li><li>重号1个（vs上期，≤2，未过度追旧）</li><li>押注遗漏最大号码，赌冷号均值回归</li></ul>
+</div>
+<div style="flex:1; min-width:240px; background:#1a140d; border:1px solid #cc8800; border-radius:8px; padding:10px;">
+<div style="color:#ffbb00; font-size:13px; font-weight:bold; margin-bottom:6px;">⚠️ 注意（劣势 / 风险）</div>
+<ul style="margin:0; padding-left:18px; color:#ffcc88; font-size:12px; line-height:1.7;"><li>和值76 偏离80-160</li><li>冷号可能继续冷，纯均值回归假设</li><li>数学上无预测优势：V1.0强化引擎 200期 ROI -82.2% ≈ 随机 -78.2%（Bootstrap 95%CI 下界未>0）</li><li>期望红球命中≈随机 1.09 球；凯利 f* 为负，单注期望净亏≈¥1.00</li></ul>
+</div>
+</div>
+<p style="color:#888; font-size:12px; margin-top:8px;">AC=7(✓) | 和值=76(✓) | 跨度=28(✓) | 奇偶=4(✓) | 大小=4(✓) | 质合=2(✓) | 012路=321(✓) | 连号=0(✓) | 重号=1(✓)</p>
+</div>
+<div class="group-card">
+<h3>第4组: 遗漏优选</h3>
+<p class="strategy">策略: 遗漏值最大组合(无专家数据替代ECI) 后验采样</p>
+<div class="balls-container">
+<span style="color:#888;">红球:</span>
+<span class="ball ball-red">03</span><span class="ball ball-red">09</span><span class="ball ball-red">15</span><span class="ball ball-red">26</span><span class="ball ball-red">28</span><span class="ball ball-red">30</span>
+</div>
+<div class="balls-container">
+<span style="color:#888;">蓝球复式:</span>
+<span class="ball ball-blue">07</span><span class="ball ball-blue">08</span><span class="ball ball-blue">15</span>
+</div>
+<p style="color:#ffcc00; font-size:13px; margin-top:6px;">
+💰 <strong>成本</strong>：3 注（红球1注 + 蓝球复式）｜ 基本 <strong>¥6</strong>
+</p>
+<p style="color:#66ccff; font-size:12px; margin-top:6px;">
+📊 <strong>历史相似形态出现率</strong>：在历史 3488 期中，与本组形态（AC/和值/跨度/奇偶/大小/012路/连号/质数）相近的开奖共 <strong>2</strong> 期，占比 <strong>0.1%</strong>。
+<span style="color:#99aab5;">（这是该形态在历史开奖中出现的频率，<strong>不是</strong>本注会中奖的概率；一等奖对任何形态概率相同 1/17,721,088）</span>
+</p>
+<p style="color:#9ad; font-size:12px; margin-top:4px; background:#0c1422; border:1px solid #1c3a5a; border-radius:6px; padding:8px;">
+🎰 <strong>固定号码历史回测</strong>（若每期都固定投注本组这注 6+1，在所有历史开奖逐期核对）：共 <strong>3488</strong> 期，任意奖级中奖 <strong>670</strong> 期（期率 <strong>19.21%</strong>），总投入 <strong>¥20928</strong>，总奖金 <strong>¥4100</strong>，ROI <strong>-80.4%</strong>。
+<span style="color:#99aab5;">（描述"过去若这么买会怎样"，<strong>不预示未来</strong>；固定号码长期 ROI 为负属数学期望，印证系统 no_edge 诚实结论）</span><br>
+<span style="color:#7fb;">奖级分布：六等奖634期、五等奖33期、四等奖3期</span>
+</p>
+<div style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
+<div style="flex:1; min-width:240px; background:#0d1a14; border:1px solid #00aa55; border-radius:8px; padding:10px;">
+<div style="color:#00dd88; font-size:13px; font-weight:bold; margin-bottom:6px;">✅ 优点（为何列它为候选）</div>
+<ul style="margin:0; padding-left:18px; color:#88ffbb; font-size:12px; line-height:1.7;"><li>AC=8（离散度理想区间5-9）</li><li>和值111（合理区间80-160）</li><li>跨度27（合理区间16-31）</li><li>奇偶比3:3（均衡）</li><li>大小比3:3（均衡）</li><li>质数1个（合理1-3）</li><li>012路411（三类齐全，分布均匀）</li><li>连号组数0（≤1，符合常见形态）</li><li>重号0个（vs上期，≤2，未过度追旧）</li></ul>
+</div>
+<div style="flex:1; min-width:240px; background:#1a140d; border:1px solid #cc8800; border-radius:8px; padding:10px;">
+<div style="color:#ffbb00; font-size:13px; font-weight:bold; margin-bottom:6px;">⚠️ 注意（劣势 / 风险）</div>
+<ul style="margin:0; padding-left:18px; color:#ffcc88; font-size:12px; line-height:1.7;"><li>数学上无预测优势：V1.0强化引擎 200期 ROI -82.2% ≈ 随机 -78.2%（Bootstrap 95%CI 下界未>0）</li><li>期望红球命中≈随机 1.09 球；凯利 f* 为负，单注期望净亏≈¥1.00</li></ul>
+</div>
+</div>
+<p style="color:#888; font-size:12px; margin-top:8px;">AC=8(✓) | 和值=111(✓) | 跨度=27(✓) | 奇偶=3(✓) | 大小=3(✓) | 质合=1(✓) | 012路=411(✓) | 连号=0(✓) | 重号=0(✓)</p>
+</div>
+<div class="group-card">
+<h3>第5组: 熵均衡</h3>
+<p class="strategy">策略: 无偏均匀(最大多样性/随机基准) 后验采样</p>
+<div class="balls-container">
+<span style="color:#888;">红球:</span>
+<span class="ball ball-red">02</span><span class="ball ball-red">04</span><span class="ball ball-red">05</span><span class="ball ball-red">06</span><span class="ball ball-red">26</span><span class="ball ball-red">31</span>
+</div>
+<div class="balls-container">
+<span style="color:#888;">蓝球复式:</span>
+<span class="ball ball-blue">09</span><span class="ball ball-blue">13</span><span class="ball ball-blue">15</span>
+</div>
+<p style="color:#ffcc00; font-size:13px; margin-top:6px;">
+💰 <strong>成本</strong>：3 注（红球1注 + 蓝球复式）｜ 基本 <strong>¥6</strong>
+</p>
+<p style="color:#66ccff; font-size:12px; margin-top:6px;">
+📊 <strong>历史相似形态出现率</strong>：在历史 3488 期中，与本组形态（AC/和值/跨度/奇偶/大小/012路/连号/质数）相近的开奖共 <strong>2</strong> 期，占比 <strong>0.1%</strong>。
+<span style="color:#99aab5;">（这是该形态在历史开奖中出现的频率，<strong>不是</strong>本注会中奖的概率；一等奖对任何形态概率相同 1/17,721,088）</span>
+</p>
+<p style="color:#9ad; font-size:12px; margin-top:4px; background:#0c1422; border:1px solid #1c3a5a; border-radius:6px; padding:8px;">
+🎰 <strong>固定号码历史回测</strong>（若每期都固定投注本组这注 6+1，在所有历史开奖逐期核对）：共 <strong>3488</strong> 期，任意奖级中奖 <strong>669</strong> 期（期率 <strong>19.18%</strong>），总投入 <strong>¥20928</strong>，总奖金 <strong>¥3965</strong>，ROI <strong>-81.1%</strong>。
+<span style="color:#99aab5;">（描述"过去若这么买会怎样"，<strong>不预示未来</strong>；固定号码长期 ROI 为负属数学期望，印证系统 no_edge 诚实结论）</span><br>
+<span style="color:#7fb;">奖级分布：六等奖621期、五等奖46期、四等奖2期</span>
+</p>
+<div style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
+<div style="flex:1; min-width:240px; background:#0d1a14; border:1px solid #00aa55; border-radius:8px; padding:10px;">
+<div style="color:#00dd88; font-size:13px; font-weight:bold; margin-bottom:6px;">✅ 优点（为何列它为候选）</div>
+<ul style="margin:0; padding-left:18px; color:#88ffbb; font-size:12px; line-height:1.7;"><li>AC=8（离散度理想区间5-9）</li><li>跨度29（合理区间16-31）</li><li>奇偶比2:4（均衡）</li><li>大小比4:2（均衡）</li><li>质数3个（合理1-3）</li><li>012路123（三类齐全，分布均匀）</li><li>连号组数1（≤1，符合常见形态）</li><li>重号1个（vs上期，≤2，未过度追旧）</li><li>无偏均匀采样，提供最大多样性/随机基准</li></ul>
+</div>
+<div style="flex:1; min-width:240px; background:#1a140d; border:1px solid #cc8800; border-radius:8px; padding:10px;">
+<div style="color:#ffbb00; font-size:13px; font-weight:bold; margin-bottom:6px;">⚠️ 注意（劣势 / 风险）</div>
+<ul style="margin:0; padding-left:18px; color:#ffcc88; font-size:12px; line-height:1.7;"><li>和值74 偏离80-160</li><li>不利用任何历史模式，等价于随机参照</li><li>数学上无预测优势：V1.0强化引擎 200期 ROI -82.2% ≈ 随机 -78.2%（Bootstrap 95%CI 下界未>0）</li><li>期望红球命中≈随机 1.09 球；凯利 f* 为负，单注期望净亏≈¥1.00</li></ul>
+</div>
+</div>
+<p style="color:#888; font-size:12px; margin-top:8px;">AC=8(✓) | 和值=74(✓) | 跨度=29(✓) | 奇偶=2(✓) | 大小=4(✓) | 质合=3(✓) | 012路=123(✓) | 连号=1(✓) | 重号=1(✓)</p>
+</div>
+<div class="group-card" style="border-left-color:#ffaa00;">
+<h3 style="color:#ffaa00;">🏆 性价比最高胆拖组合: 1胆6拖+蓝0胆8拖</h3>
+<div class="balls-container">
+<span style="color:#888;">胆码(参考):</span>
+<span class="ball ball-red" style="border:3px solid #00d4ff;">10</span>
+</div>
+<div class="balls-container">
+<span style="color:#888;">拖码:</span>
+<span class="ball ball-red" style="opacity:0.7;">05</span><span class="ball ball-red" style="opacity:0.7;">06</span><span class="ball ball-red" style="opacity:0.7;">22</span><span class="ball ball-red" style="opacity:0.7;">26</span><span class="ball ball-red" style="opacity:0.7;">29</span><span class="ball ball-red" style="opacity:0.7;">33</span>
+</div>
+<div class="balls-container">
+<span style="color:#888;">蓝球:</span>
+<span class="ball ball-blue">01</span><span class="ball ball-blue">02</span><span class="ball ball-blue">07</span><span class="ball ball-blue">09</span><span class="ball ball-blue">10</span><span class="ball ball-blue">14</span><span class="ball ball-blue">15</span><span class="ball ball-blue">16</span>
+</div>
+<p style="color:#aaa; font-size:13px; margin-top:10px;">
+红球C(6,5) = 6组 × 蓝球复式8码 = 8组 = <strong>48注</strong><br>
+成本: <strong>96元</strong>(基本) / <strong>96元</strong>(复式)
+</p>
+<div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+<div style="flex:1; min-width:150px; background:#0d1a14; border:1px solid #00aa55; border-radius:8px; padding:8px;">
+<div style="color:#00dd88; font-size:12px; font-weight:bold;">① 号码最可靠</div>
+<div style="color:#aaffcc; font-size:18px; font-weight:bold;">0.894</div>
+<div style="color:#88ffbb; font-size:11px;">方案号码平均模型评分(越高越准)</div>
+</div>
+<div style="flex:1; min-width:150px; background:#0d141a; border:1px solid #0088aa; border-radius:8px; padding:8px;">
+<div style="color:#00aadd; font-size:12px; font-weight:bold;">② 成本最低</div>
+<div style="color:#aaddff; font-size:18px; font-weight:bold;">96元</div>
+<div style="color:#88ddff; font-size:11px;">48注基本 / 96元复式</div>
+</div>
+<div style="flex:1; min-width:150px; background:#1a140d; border:1px solid #cc8800; border-radius:8px; padding:8px;">
+<div style="color:#ffbb00; font-size:12px; font-weight:bold;">③ 中一等奖概率最高</div>
+<div style="color:#ffcc66; font-size:18px; font-weight:bold;">62.5%</div>
+<div style="color:#ffcc88; font-size:11px;">至少中任一奖(MC) / 五等奖5.1%</div>
+</div>
+</div>
+<p style="color:#00dd88; font-size:13px; margin-top:8px;">📊 综合性价比评分: <strong>0.976</strong> (三指标加权最优, 形态自适应)</p>
+<div style="margin-top:10px;">
+<div style="color:#ffaa00; font-size:13px; font-weight:bold; margin-bottom:4px;">候选方案对比 (top3)</div>
+<table style="width:百分之百; border-collapse:collapse; font-size:12px;">
+<tr style="color:#888; border-bottom:1px solid #555;"><th style="padding:4px 8px;text-align:left;">形态</th><th style="padding:4px 8px;text-align:left;">成本</th><th style="padding:4px 8px;text-align:left;">准度</th><th style="padding:4px 8px;text-align:left;">中奖概率</th><th style="padding:4px 8px;text-align:left;">评分</th></tr>
+
+<tr style="border-bottom:1px solid #333;">
+<td style="padding:4px 8px;color:#ffcc66;">1胆6拖+蓝0胆8拖</td>
+<td style="padding:4px 8px;color:#aaa;">48注 / 96元</td>
+<td style="padding:4px 8px;color:#88ffbb;">0.894</td>
+<td style="padding:4px 8px;color:#88ddff;">62.5%</td>
+<td style="padding:4px 8px;color:#ffaa00;font-weight:bold;">0.976</td>
+</tr>
+<tr style="border-bottom:1px solid #333;">
+<td style="padding:4px 8px;color:#ffcc66;">1胆6拖+蓝0胆7拖</td>
+<td style="padding:4px 8px;color:#aaa;">42注 / 84元</td>
+<td style="padding:4px 8px;color:#88ffbb;">0.894</td>
+<td style="padding:4px 8px;color:#88ddff;">56.1%</td>
+<td style="padding:4px 8px;color:#ffaa00;font-weight:bold;">0.958</td>
+</tr>
+<tr style="border-bottom:1px solid #333;">
+<td style="padding:4px 8px;color:#ffcc66;">1胆6拖+蓝1胆6拖</td>
+<td style="padding:4px 8px;color:#aaa;">42注 / 84元</td>
+<td style="padding:4px 8px;color:#88ffbb;">0.894</td>
+<td style="padding:4px 8px;color:#88ddff;">9.3%</td>
+<td style="padding:4px 8px;color:#ffaa00;font-weight:bold;">0.650</td>
+</tr>
+</table>
+</div>
+<div style="margin-top:10px;">
+<div style="color:#ffaa00; font-size:13px; font-weight:bold; margin-bottom:4px;">容错保底表 (红球命中 m 个, 最坏情形仍达)</div>
+<table style="width:百分之百; border-collapse:collapse; font-size:12px;">
+<tr style="color:#888; border-bottom:1px solid #555;"><th style="padding:4px 8px;text-align:left;">红球命中m</th><th style="padding:4px 8px;text-align:left;">最坏红球命中</th><th style="padding:4px 8px;text-align:left;">保底奖级</th></tr>
+
+<tr style="border-bottom:1px solid #333;">
+<td style="padding:4px 8px;color:#aaa;">0</td>
+<td style="padding:4px 8px;color:#aaa;">0</td>
+<td style="padding:4px 8px;color:#ff8888;">不中</td>
+</tr>
+<tr style="border-bottom:1px solid #333;">
+<td style="padding:4px 8px;color:#aaa;">1</td>
+<td style="padding:4px 8px;color:#aaa;">1</td>
+<td style="padding:4px 8px;color:#ff8888;">不中</td>
+</tr>
+<tr style="border-bottom:1px solid #333;">
+<td style="padding:4px 8px;color:#aaa;">2</td>
+<td style="padding:4px 8px;color:#aaa;">2</td>
+<td style="padding:4px 8px;color:#ff8888;">不中</td>
+</tr>
+<tr style="border-bottom:1px solid #333;">
+<td style="padding:4px 8px;color:#aaa;">3</td>
+<td style="padding:4px 8px;color:#aaa;">3</td>
+<td style="padding:4px 8px;color:#ff8888;">不中</td>
+</tr>
+<tr style="border-bottom:1px solid #333;">
+<td style="padding:4px 8px;color:#aaa;">4</td>
+<td style="padding:4px 8px;color:#aaa;">4</td>
+<td style="padding:4px 8px;color:#ffcc88;">至少中五等奖(最坏情形)</td>
+</tr>
+<tr style="border-bottom:1px solid #333;">
+<td style="padding:4px 8px;color:#aaa;">5</td>
+<td style="padding:4px 8px;color:#aaa;">5</td>
+<td style="padding:4px 8px;color:#ffcc88;">至少中四等奖(最坏情形)</td>
+</tr>
+<tr style="border-bottom:1px solid #333;">
+<td style="padding:4px 8px;color:#aaa;">6</td>
+<td style="padding:4px 8px;color:#aaa;">5</td>
+<td style="padding:4px 8px;color:#ffcc88;">至少中四等奖(最坏情形)</td>
+</tr>
+</table>
+</div>
+<p style="color:#888; font-size:11px; margin-top:8px; line-height:1.6;">【数学诚实声明】任何单注一等奖概率恒为 1/17,721,088, 胆拖不改变它。胆拖的本质是'在既定预算下优化投入结构'(用确信的胆码锁定高置信号 + 拖码低成本覆盖),而非让期望转正。表中'中奖概率'是基于模型对号码置信度的加权蒙特卡洛估计(非官方随机概率),仅用于比较不同胆拖结构在'模型置信下'的中奖覆盖差异。真实随机下所有结构等价, 请以娱乐心态量力而行。</p>
+</div>
+<div class="section" style="border:2px solid #4aa3ff;">
+<div class="section-title">📊 附 · 第2026090期实际开奖对账（开奖后自动生成）</div>
+<div class="info" style="border-color:#4aa3ff;">
+<p style="color:#9ad; font-size:14px; line-height:1.9;">
+开奖号 <strong style="color:#fff;">红球 02 04 15 23 25 27 ｜ 蓝球 03</strong>。
+下面把"你这期预测的 5 组"逐组与真实开奖核对——这就是"差这么多"的真相：
+</p>
+<table>
+<tr><th>策略组</th><th>你预测的红球</th><th>你预测的蓝球</th><th>红球命中</th><th>蓝球命中</th><th>合计</th></tr>
+<tr><td>第1组 综合共识</td><td>06 14 16 19 24 25</td><td>02 04 09</td><td style='color:#ff6b6b;'>1/6</td><td style='color:#ff6b6b;'>0/1</td><td>1 个</td></tr><tr><td>第2组 热号追踪</td><td>04 06 10 16 17 33</td><td>03 04 16</td><td style='color:#ff6b6b;'>1/6</td><td style='color:#ff6b6b;'>1/1</td><td>2 个</td></tr><tr><td>第3组 冷号回补</td><td>01 03 06 16 21 29</td><td>02 13 14</td><td style='color:#ff6b6b;'>0/6</td><td style='color:#ff6b6b;'>0/1</td><td>0 个</td></tr><tr><td>第4组 遗漏优选</td><td>03 09 15 26 28 30</td><td>07 08 15</td><td style='color:#ff6b6b;'>1/6</td><td style='color:#ff6b6b;'>0/1</td><td>1 个</td></tr><tr><td>第5组 熵均衡</td><td>02 04 05 06 26 31</td><td>09 13 15</td><td style='color:#ff6b6b;'>2/6</td><td style='color:#ff6b6b;'>0/1</td><td>2 个</td></tr>
+</table>
+<p style="margin-top:10px; color:#ffcc00; font-size:14px; line-height:1.9;">
+📐 <strong>随机期望对照</strong>：红球平均应中 <strong>1.09 个</strong>（单组 0 红概率 26.7%），蓝球命中 <strong>0.062 个</strong>。
+本组 5 组实际平均中红球 <strong>1.00 个</strong>、蓝球 <strong>0.20 个</strong>——与随机期望<strong>相差无几，完全在噪声内</strong>。
+</p>
+<p style="color:#99aab5; font-size:13px; line-height:1.8;">
+结论：没有任何一组"神奇地贴近开奖号"，这正是公平随机摇奖应有的样子。若系统能稳定命中，反而是摇奖机不独立的危险信号。头奖恒等概率 1/17,721,088，与选号方法无关。</p>
+</div>
+</div>
+
+<div class="section" style="border-color:#ff7700;">
+<div class="section-title">📐 长期显著性检验 · 本系统到底有没有“预测力”？（基于账本 10 组真实累计）</div>
+<table>
+<tr><th>维度</th><th>实测命中</th><th>随机期望</th><th>差距</th><th>精确二项检验 p 值</th><th>结论</th></tr>
+<tr><td>前区(每组6选)</td><td>13 / 60 次比较</td><td>10.9</td><td>+2.1</td><td>0.502</td><td>与随机无显著差异(p≥0.05)：当前无任何“预测力”证据</td></tr>
+<tr><td>后区(每组3选1)</td><td>1 / 30 次比较</td><td>1.9</td><td>-0.9</td><td>1.000</td><td>与随机无显著差异(p≥0.05)：当前无任何“预测力”证据</td></tr>
+</table>
+<p style="color:#ffd9a0; line-height:1.8;">
+累计 10 组标准预测中，中奖分布：<strong>未中奖×9、六等奖×1</strong>。<br>
+<strong>解读：</strong>只要 p≥0.05，就说明系统命中与“闭眼随机选”没有统计区别——所有中奖（含上一期六等奖）都应归因于<strong>随机运气</strong>，而非分析能力。
+若未来某期 p 跌破 0.05，才值得认真排查是否真出现可量化信号（也仍可能是小概率波动，需更多期复核）。
+</p>
+</div>
+<div class="entertain-big tarot-card"><div class="ent-slogan">🌌 星河为你转动 —— 让水晶球接通今夜星轨，抽一张属于你的塔罗</div><div class="fg-head"><div class="fg-badge"><svg class="tarot-ico" viewBox="0 0 64 64" aria-hidden="true"><defs><radialGradient id="ssqBallG" cx="38%" cy="30%" r="72%"><stop offset="0" stop-color="#fbf7ff"/><stop offset="0.45" stop-color="#b39bff"/><stop offset="1" stop-color="#6a4bd6"/></radialGradient><radialGradient id="ssqBallHalo" cx="50%" cy="50%" r="50%"><stop offset="0.68" stop-color="rgba(170,140,255,0)"/><stop offset="1" stop-color="rgba(170,140,255,.6)"/></radialGradient></defs><circle cx="32" cy="32" r="27" fill="url(#ssqBallHalo)"/><ellipse cx="32" cy="53" rx="18" ry="4.5" fill="rgba(255,255,255,0.18)"/><circle cx="32" cy="30" r="21" fill="url(#ssqBallG)"/><circle cx="25" cy="22" r="5.5" fill="rgba(255,255,255,0.65)"/><circle cx="39" cy="35" r="3" fill="rgba(255,255,255,0.5)"/><g class="ssq-spk2"><text x="44" y="13" font-size="14" fill="#ffffff">✦</text></g><g class="ssq-spk"><text x="13" y="49" font-size="11" fill="#cdbcff">✧</text></g></svg></div><div class="fg-title">水晶球 · 塔罗占卜<span class="fg-sub">西方星象 · 玄学娱乐</span></div></div><div class="fg-body"><div class="fg-text" id="ssqTarot">让水晶球看看今天谁在罩着你～</div><button class="fg-btn" onclick="ssqTarot()">🔮 请水晶球算一卦</button></div></div><script>function ssqTarot(){var star=["白羊座","金牛座","双子座","巨蟹座","狮子座","处女座","天秤座","天蝎座","射手座","摩羯座","水瓶座","双鱼座"];var noble=["正北","东北","正东","东南","正南","西南","正西","西北"];var cards=[["太阳（正位）","你今天光芒万丈，自信就是你的运气"],["星星（正位）","希望降临，低谷已过，往前走就对了"],["恋人（正位）","关系和谐，适合与人合作达成好事"],["力量（正位）","内在力量在线，能稳稳 hold 住小挑战"],["命运之轮（正位）","转机出现，今天有意外小惊喜"],["愚人（正位）","保持天真与好奇，新机会正在敲门"],["女祭司（正位）","直觉很准，相信自己的第一感觉"],["节制（正位）","平衡感好，张弛有度好运自然来"],["高塔（逆位）","风暴已过，今天趋于平稳安心"],["世界（正位）","圆满暗示，事情会有好收尾"]];var cheer=["今天有人悄悄为你撑腰，放心冲","贵人方位已点亮，多往人多的地方凑","你比自己想的更被偏爱，开心点","宇宙今天偏爱你，笑一个🌞"];function rnd(a){return a[Math.floor(Math.random()*a.length)];}var s=rnd(star), n=rnd(noble), c=rnd(cards), ch=rnd(cheer);var out="<div class='tarot-row'>🌟 今日守护星座：<b>"+s+"</b></div>";out+="<div class='tarot-row'>🧭 贵人方位：<b>"+n+"</b></div>";out+="<div class='tarot-pull'>🃏 塔罗：<b>"+c[0]+"</b><br><span class='tarot-mean'>"+c[1]+"</span></div>";out+="<div class='tarot-cheer'>"+ch+"（纯西方玄学娱乐，给你一点小信心✨）</div>";document.getElementById("ssqTarot").innerHTML=out;}</script>
+</div>
+
+<div class="section">
+<div class="section-title">三、凯利公式资金管理</div>
+<div class="stat-grid">
+<div class="stat-card"><div class="value">-53.1%</div><div class="label">期望回报率（负期望）</div></div>
+<div class="stat-card"><div class="value">-1.44e-07</div><div class="label">凯利f*（负值=不投注）</div></div>
+<div class="stat-card"><div class="value">1.06</div><div class="label">每注期望净亏损(元)</div></div>
+<div class="stat-card"><div class="value">1/17.7M</div><div class="label">一等奖概率</div></div>
+</div>
+<div class="warning">
+<h3>💰 凯利公式结论</h3>
+<p>双色球期望回报率<strong>-53.1%</strong>（每投2元期望收回0.94元）。凯利公式f*为负值，<strong>数学结论是不应投注</strong>。</p>
+<p style="margin-top:8px;"><strong>务实建议</strong>：将彩票视为娱乐消费，每期投入≤月可支配收入的0.5%。</p>
+</div>
+</div>
+
+<div class="section" style="border:2px solid #ffaa00;">
+<div class="section-title">四、命中现实分布 + 与随机对照</div>
+<div class="info">
+<h3>ℹ️ 你最该看的板块：本系统历史上"大概中几等奖"</h3>
+<p style="color:#ffbb00; font-size:15px; line-height:1.8;">
+<strong>先给结论：双色球是均匀随机摇奖，任何方法（含本系统）在"提高一等奖命中率"上，数学上不可能优于随机。</strong>
+下面用<strong>真实样本外回测</strong>（不是嘴上说）把"差距"摆出来，让你每次看推荐前先校准期望：
+</p>
+</div>
+<div class="stat-grid">
+<div class="stat-card"><div class="value" style="color:#ff6b6b;">-82.2%</div><div class="label">本系统 ROI（V1.0强化引擎 200期实测）</div></div>
+<div class="stat-card"><div class="value" style="color:#ff6b6b;">-78.2%</div><div class="label">纯随机基线 ROI</div></div>
+<div class="stat-card"><div class="value" style="color:#ff6b6b;">0 次</div><div class="label">200期内一等奖（理论 1/17.7M）</div></div>
+<div class="stat-card"><div class="value" style="color:#ff6b6b;">0.0%</div><div class="label">蒙特卡洛1年(156期)正收益概率</div></div>
+</div>
+<table>
+<tr><th>维度</th><th>本系统（V1.0强化引擎 200期）</th><th>纯随机基线</th><th>判定</th></tr>
+<tr><td>样本外 ROI</td><td>-82.2%</td><td>-78.2%</td><td>无显著差异（Bootstrap 95% CI=[-0.83,+0.04]pp，下界未&gt;0）</td></tr>
+<tr><td>中奖期率（≥九等奖）</td><td>34.0%</td><td>28.7%</td><td>随机反而更高（本系统投注组合数少）</td></tr>
+<tr><td>红球平均命中</td><td>1.07~1.13 球</td><td>1.16 球</td><td>≈随机（V1.0 ML 自评 788期，结论 no_edge）</td></tr>
+<tr><td>一等奖命中</td><td>0 次 / 200期</td><td>0 次 / 200期</td><td>两者皆≈理论概率，均无法靠技巧提升</td></tr>
+<tr><td>1年期望净盈亏</td><td colspan="2">期望净亏 ¥-1,283，正收益概率仅 0.0%</td><td>负期望游戏，凯利 f* 为负</td></tr>
+</table>
+<p style="margin-top:10px; color:#ffcc00;"><strong>因此：本系统推荐的号码，与"闭眼随机选一注"在期望上等价。如果你仍要买，唯一理性动作是<strong>控制投入</strong>（≤月收入0.5%），并把本报告当作"娱乐消费凭证"而非"致富方案"。</strong></p>
+</div>
+
+
+<div class="section" style="border:1px solid #aa66ff;">
+<div class="section-title">五、各号码出现频率参考（描述性，非预测概率）</div>
+<div class="info">
+<h3>ℹ️ 关于"每个号码出现概率"的诚实说明（避免误读）</h3>
+<ul style="margin:8px 0; padding-left:20px; color:#88ccff; line-height:1.8;">
+<li><strong>新浪等站点展示的"出现概率"实为历史经验频率</strong>（某号出现次数÷总期数），是<strong>描述过去</strong>，不是<strong>预测下期</strong>。本板块同理。</li>
+<li><strong>理论概率（恒定、每号相等）</strong>：红球任一单号本期出现概率 = 6/33 ≈ 18.18%；蓝球任一单号 = 1/16 = 6.25%。由排列组合决定，与选不选无关。</li>
+<li><strong>任一 6+1 组合</strong>的单期出现概率恒为 <strong>1/17,721,088</strong>（红球 C(33,6)=1,107,568 × 蓝球 16）。"最热组合"与"最冷组合"<strong>概率完全相等</strong>——热/冷只是所含单号的历史频率高低，不改变整注概率。</li>
+<li><strong>结论</strong>：此维度仅作<strong>娱乐化/描述性选号参考</strong>，不含任何预测力（no_edge）。请勿据此推断"某号下期更可能出"。</li>
+</ul>
+</div>
+<div class="section" style="background:#0d1130;">
+<div class="section-title" style="font-size:16px;">红球 01-33 历史频率 vs 理论概率（3488期）</div>
+<table>
+<tr><th>号码</th><th>历史频率</th><th>理论(6/33)</th><th>偏差</th></tr>
+<tr><td>01</td><td>19.35%</td><td>18.18%</td><td style='color:#ff6b6b;'>+1.17pp</td></tr><tr><td>02</td><td>18.89%</td><td>18.18%</td><td style='color:#ff6b6b;'>+0.71pp</td></tr><tr><td>03</td><td>18.35%</td><td>18.18%</td><td style='color:#8899aa;'>+0.17pp</td></tr><tr><td>04</td><td>17.78%</td><td>18.18%</td><td style='color:#8899aa;'>-0.41pp</td></tr><tr><td>05</td><td>17.89%</td><td>18.18%</td><td style='color:#8899aa;'>-0.29pp</td></tr><tr><td>06</td><td>19.07%</td><td>18.18%</td><td style='color:#ff6b6b;'>+0.88pp</td></tr><tr><td>07</td><td>18.78%</td><td>18.18%</td><td style='color:#ff6b6b;'>+0.60pp</td></tr><tr><td>08</td><td>18.61%</td><td>18.18%</td><td style='color:#8899aa;'>+0.42pp</td></tr><tr><td>09</td><td>18.55%</td><td>18.18%</td><td style='color:#8899aa;'>+0.37pp</td></tr><tr><td>10</td><td>18.55%</td><td>18.18%</td><td style='color:#8899aa;'>+0.37pp</td></tr><tr><td>11</td><td>17.46%</td><td>18.18%</td><td style='color:#66ccff;'>-0.72pp</td></tr><tr><td>12</td><td>17.80%</td><td>18.18%</td><td style='color:#8899aa;'>-0.38pp</td></tr><tr><td>13</td><td>18.18%</td><td>18.18%</td><td style='color:#8899aa;'>-0.01pp</td></tr><tr><td>14</td><td>19.67%</td><td>18.18%</td><td style='color:#ff6b6b;'>+1.49pp</td></tr><tr><td>15</td><td>17.55%</td><td>18.18%</td><td style='color:#66ccff;'>-0.64pp</td></tr><tr><td>16</td><td>17.57%</td><td>18.18%</td><td style='color:#66ccff;'>-0.61pp</td></tr><tr><td>17</td><td>19.12%</td><td>18.18%</td><td style='color:#ff6b6b;'>+0.94pp</td></tr><tr><td>18</td><td>19.04%</td><td>18.18%</td><td style='color:#ff6b6b;'>+0.85pp</td></tr><tr><td>19</td><td>18.35%</td><td>18.18%</td><td style='color:#8899aa;'>+0.17pp</td></tr><tr><td>20</td><td>18.64%</td><td>18.18%</td><td style='color:#8899aa;'>+0.45pp</td></tr><tr><td>21</td><td>16.92%</td><td>18.18%</td><td style='color:#66ccff;'>-1.27pp</td></tr><tr><td>22</td><td>19.32%</td><td>18.18%</td><td style='color:#ff6b6b;'>+1.14pp</td></tr><tr><td>23</td><td>17.20%</td><td>18.18%</td><td style='color:#66ccff;'>-0.98pp</td></tr><tr><td>24</td><td>17.43%</td><td>18.18%</td><td style='color:#66ccff;'>-0.75pp</td></tr><tr><td>25</td><td>17.75%</td><td>18.18%</td><td style='color:#8899aa;'>-0.44pp</td></tr><tr><td>26</td><td>19.29%</td><td>18.18%</td><td style='color:#ff6b6b;'>+1.11pp</td></tr><tr><td>27</td><td>18.61%</td><td>18.18%</td><td style='color:#8899aa;'>+0.42pp</td></tr><tr><td>28</td><td>16.66%</td><td>18.18%</td><td style='color:#66ccff;'>-1.52pp</td></tr><tr><td>29</td><td>17.00%</td><td>18.18%</td><td style='color:#66ccff;'>-1.18pp</td></tr><tr><td>30</td><td>18.12%</td><td>18.18%</td><td style='color:#8899aa;'>-0.06pp</td></tr><tr><td>31</td><td>17.12%</td><td>18.18%</td><td style='color:#66ccff;'>-1.07pp</td></tr><tr><td>32</td><td>18.89%</td><td>18.18%</td><td style='color:#ff6b6b;'>+0.71pp</td></tr><tr><td>33</td><td>16.51%</td><td>18.18%</td><td style='color:#66ccff;'>-1.67pp</td></tr>
+</table>
+</div>
+<div class="section" style="background:#0d1130;">
+<div class="section-title" style="font-size:16px;">蓝球 01-16 历史频率 vs 理论概率（3488期）</div>
+<table>
+<tr><th>号码</th><th>历史频率</th><th>理论(1/16)</th><th>偏差</th></tr>
+<tr><td>01</td><td>6.82%</td><td>6.25%</td><td style='color:#ff6b6b;'>+0.57pp</td></tr><tr><td>02</td><td>5.93%</td><td>6.25%</td><td style='color:#8899aa;'>-0.32pp</td></tr><tr><td>03</td><td>6.22%</td><td>6.25%</td><td style='color:#8899aa;'>-0.03pp</td></tr><tr><td>04</td><td>6.14%</td><td>6.25%</td><td style='color:#8899aa;'>-0.11pp</td></tr><tr><td>05</td><td>6.22%</td><td>6.25%</td><td style='color:#8899aa;'>-0.03pp</td></tr><tr><td>06</td><td>6.25%</td><td>6.25%</td><td style='color:#8899aa;'>+0.00pp</td></tr><tr><td>07</td><td>6.25%</td><td>6.25%</td><td style='color:#8899aa;'>+0.00pp</td></tr><tr><td>08</td><td>5.82%</td><td>6.25%</td><td style='color:#8899aa;'>-0.43pp</td></tr><tr><td>09</td><td>6.11%</td><td>6.25%</td><td style='color:#8899aa;'>-0.14pp</td></tr><tr><td>10</td><td>5.85%</td><td>6.25%</td><td style='color:#8899aa;'>-0.40pp</td></tr><tr><td>11</td><td>6.39%</td><td>6.25%</td><td style='color:#8899aa;'>+0.14pp</td></tr><tr><td>12</td><td>6.42%</td><td>6.25%</td><td style='color:#8899aa;'>+0.17pp</td></tr><tr><td>13</td><td>5.85%</td><td>6.25%</td><td style='color:#8899aa;'>-0.40pp</td></tr><tr><td>14</td><td>6.19%</td><td>6.25%</td><td style='color:#8899aa;'>-0.06pp</td></tr><tr><td>15</td><td>6.77%</td><td>6.25%</td><td style='color:#ff6b6b;'>+0.52pp</td></tr><tr><td>16</td><td>6.77%</td><td>6.25%</td><td style='color:#ff6b6b;'>+0.52pp</td></tr>
+</table>
+</div>
+<div style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
+
+<div class="group-card" style="border-left-color:#ff6b6b; flex:1; min-width:280px;">
+<h3 style="color:#ff6b6b; margin-bottom:8px;">🔥 最热组合（由历史频率最高单号构成）</h3>
+<div class="balls-container">
+<span style="color:#888;">红球(6码):</span>
+<span class="ball ball-red">01</span><span class="ball ball-red">06</span><span class="ball ball-red">14</span><span class="ball ball-red">17</span><span class="ball ball-red">22</span><span class="ball ball-red">26</span>
+</div>
+<div class="balls-container">
+<span style="color:#888;">蓝球(1码):</span>
+<span class="ball ball-blue">01</span>
+</div>
+<p style="color:#ffcc00; font-size:13px; margin-top:6px;">
+🎯 该组合单期出现概率 = <strong>1/17,721,088</strong>（≈5.643e-08），与"最冷组合"或任意一注<strong>完全相等</strong>。
+</p>
+</div>
+
+<div class="group-card" style="border-left-color:#66ccff; flex:1; min-width:280px;">
+<h3 style="color:#66ccff; margin-bottom:8px;">❄️ 最冷组合（由历史频率最低单号构成）</h3>
+<div class="balls-container">
+<span style="color:#888;">红球(6码):</span>
+<span class="ball ball-red">21</span><span class="ball ball-red">23</span><span class="ball ball-red">28</span><span class="ball ball-red">29</span><span class="ball ball-red">31</span><span class="ball ball-red">33</span>
+</div>
+<div class="balls-container">
+<span style="color:#888;">蓝球(1码):</span>
+<span class="ball ball-blue">08</span>
+</div>
+<p style="color:#ffcc00; font-size:13px; margin-top:6px;">
+🎯 该组合单期出现概率 = <strong>1/17,721,088</strong>（≈5.643e-08），与"最冷组合"或任意一注<strong>完全相等</strong>。
+</p>
+</div>
+</div>
+<div class="warning">
+<h3>⚠️ 关键澄清：组合概率不存在"热冷梯度"</h3>
+<p style="color:#ff9999; font-size:14px; line-height:1.7;">
+你曾推断"既然单号有当期出现概率，组合肯定也有"——逻辑上每个组合<strong>确实有</strong>概率，但它是<strong>恒等</strong>的 1/17,721,088：在约 2142 万种可能里每种恰好一次，历史样本里 99.99% 的组合<strong>一次都没出现过</strong>，根本无法像单号那样排出"热/冷"。所以"最热/最冷组合"只能按"所含单号的历史冷热"构造，它<strong>不代表</strong>该组合更可能中。真正的"分析一等奖的方法"不在频率排名（见本次方法学说明 / 回复）。
+</p>
+</div>
+</div>
+
+<div class="entertain-big almanac-card"><div class="ent-slogan">🏮 翻开今日老黄历 —— 宜忌、冲煞、吉神、吉时，今日运程一页尽览</div><div class="fg-head"><div class="fg-badge"><svg class="alm-ico" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="ssqAlmG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset="1" stop-color="#e0a020"/></linearGradient></defs><rect x="14" y="10" width="36" height="44" rx="6" fill="url(#ssqAlmG)" stroke="#7a2418" stroke-width="2.5"/><rect x="14" y="10" width="36" height="44" rx="6" fill="none" stroke="#fff6da" stroke-width="1.5" opacity="0.7"/><line x1="22" y1="22" x2="42" y2="22" stroke="#7a2418" stroke-width="3" stroke-linecap="round"/><line x1="22" y1="32" x2="42" y2="32" stroke="#7a2418" stroke-width="3" stroke-linecap="round"/><line x1="22" y1="42" x2="34" y2="42" stroke="#7a2418" stroke-width="3" stroke-linecap="round"/><circle class="ssq-spk" cx="50" cy="13" r="3.4" fill="#fffbe6"/></svg></div><div class="fg-title">今日老黄历<span class="fg-sub">东方秘术 · 玄学娱乐</span></div><span class="alm-seal">運</span></div><div class="fg-body"><div class="fg-text" id="ssqAlm">翻开看看今天适合做点啥～</div><button class="fg-btn" onclick="ssqAlmOpen()">📜 翻开今日黄历</button></div></div><script>function ssqAlmOpen(){var yi=["出行","会友","买花","看电影","吃火锅","散步","读书","理财规划","整理房间","晒太阳","喝奶茶"];var ji=["熬夜","emo","冲动消费","赖床","内耗","暴饮暴食","拖延","生闷气","钻牛角尖"];var chong=["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"];var jiShen=["金匮","天德","玉堂","司命","青龙","明堂"];var js=["子时(23-1)","卯时(5-7)","巳时(9-11)","午时(11-13)","申时(15-17)","酉时(17-19)"];var qian=["今日宜主动出击，好事近了","可确保的中奖结果求进，别急","贵人暗中相助，多笑一笑","财气在东南，心态放轻松","宜与旧友联络，缘分在线"];var d=new Date(); var seed=(d.getFullYear()*372+d.getMonth()*31+d.getDate());function pk(a){return a[((seed%a.length)+a.length)%a.length];}function pk3(a){var r=[],used={};for(var i=0;i<3;i++){var x=a[((seed+i*5)%a.length)];if(used[x]){x=a[((seed+i*5+3)%a.length)];}used[x]=1;r.push(x);}return r;}var yi3=pk3(yi), ji3=pk3(ji);var out="📅 "+(d.getMonth()+1)+"月"+d.getDate()+"日 · 老黄历今日播报<br>";out+="<div class='alm-grid'><div class='alm-col'><b style='color:#06d6a0'>宜</b> "+yi3.join("、")+"</div>"+"<div class='alm-col'><b style='color:#ff6b6b'>忌</b> "+ji3.join("、")+"</div></div>";out+="<div class='alm-row'>冲煞：<b>"+pk(chong)+"</b> ｜ 吉神：<b>"+pk(jiShen)+"</b> ｜ 吉时：<b>"+pk(js)+"</b></div>";out+="<div class='alm-q'>🔮 "+pk(qian)+"（东方秘术娱乐，别太当真😄）</div>";document.getElementById("ssqAlm").innerHTML=out;}</script><div class="fun-card"><div class="fc-emoji">🎲</div><div class="fc-body"><div class="fc-tag">今日小彩蛋 · 财运提示 <span class="fc-honest">（纯娱乐，与中奖无关）</span></div><div class="fc-text">理性娱乐，量力而行，今晚开奖当看个热闹，中不中都是好心情 🎉</div></div></div>
+<div class="warning">
+<h3>⚠️ 最终诚实结论</h3>
+<ul style="margin:8px 0; padding-left:20px; color:#ff9999; line-height:1.8;">
+<li><strong>预测层面</strong>: V1修复版回测（完全复刻预测管线）确认，所有策略不比随机好（p>0.05）</li>
+<li><strong>过滤器层面</strong>: 排除88.13%不合理组合，但<strong>不改变中奖概率</strong>，只缩小选择范围</li>
+<li><strong>逆向层面</strong>: ECI理论收益≈0（一等奖概率太低），且专家代表性存疑</li>
+<li><strong>资金层面</strong>: 凯利f*为负值，期望回报-53.1%，彩票是消费不是投资</li>
+<li><strong>自动化</strong>: V1实现10/10步自动化，一键运行；专家推荐由 Phase 0.6 自动抓取、战绩由 Phase 0.7 自动回填</li>
+</ul>
+<p style="margin-top:10px;"><strong>一句话：数学上不应投注。如果将彩票视为娱乐消费，以下推荐在"如果买"的前提下提供了相对合理的选号方案——过滤器确保形态合理，ECI逆向减少分奖，胆拖控制成本，追踪消除确认偏差。</strong></p>
+</div>
+
+<div class="stay-hook">  <div class="sh-title">⏰ 明天 21:15 开奖，记得回来看你中没中</div>  <div class="sh-text">把本报告收藏起来，<b>连续打卡</b>解锁你的「专属运势签」🃏｜ 点上方标题 LOGO 还能放烟花🎆<br>  理性娱乐、买得明白，才是真正的「锦鲤体质」✨</div>  <button class="sh-cta" onclick="ssqEgg()">🎆 来一发烟花</button></div>
+
+<div class="disclaimer">
+<p>本报告基于3488期双色球历史数据 + 1,107,568组合穷举 + 0位专家真实推荐。</p>
+<p>V1修复版回测完全复刻预测管线（相同权重/CDM先验/有效组合过滤/蓝球/扩展窗口）。</p>
+<p>统计结论：无方法能超越随机基线（p>0.05）。凯利公式确认彩票为负期望游戏（期望回报-53.1%）。</p>
+
+<h3 style="margin-top:14px; color:#88c0ff;">🛡️ 权威来源与反诈提醒（请务必阅读）</h3>
+<ul style="margin:6px 0; padding-left:20px; line-height:1.85;">
+<li><strong>官方定性（中国体育彩票官方订阅号 2025-02-12 / 央视网）</strong>：「再强大的AI也无法预知开奖号码」。双色球每次开奖都是<strong>独立随机事件</strong>，开奖号码随机产生，根本无法预测；物理摇奖机每球运动受空气流动、微小震动影响，<strong>不可测、不可控</strong>；上一期中奖号码对下一期<strong>毫无影响</strong>（如同连续抛硬币，第11次仍是50%）。</li>
+<li><strong>为什么有人"觉得预测准"？</strong>官方解释有两层：①<strong>纯运气</strong>——全国每天成千上万人购彩，总有人恰好与开奖数字一致，与用什么方法选号无关；②<strong>选择性展示套路</strong>——所谓"大师"让不同人买不同号，只晒中奖的、删掉没中的，制造"神奇"假象。本报告的"历史中奖参考 / 号码频率"均为<strong>描述过去</strong>，不预测未来。</li>
+<li><strong>警惕诈骗</strong>：任何「不实渠道消息 / 有偿预测 / 可确保的中奖结果 / 不中可确保的中奖结果 / 不实退款套路」均属违规违法（违反《彩票管理条例》，涉嫌刑法第266条诈骗罪，据法治日报）。唯一<strong>合法购彩渠道 = 线下体彩实体店</strong>；凡要求「下载App购彩 / 线上充值 / 陌生转账」的平台均为非法。建议安装「国家反诈中心APP」。</li>
+<li><strong>2026规则要点</strong>：双色球共 <strong>6 个奖级</strong>（一~六等奖）；一等奖/二等奖为浮动奖，其中<strong>一等奖单注最高限额 500 万元</strong>（每注 2 元，<strong>不开放追加投注</strong>）；三至六等奖为固定奖（三 3000 / 四 200 / 五 10 / 六 5 元）；每注 36% 纳入公益金。</li>
+</ul>
+<p style="margin-top:10px; color:#ffcc00;"><strong>理性购彩：彩票是具有公益属性的娱乐方式，并非投资致富途径。量力而行、小额参与，把本报告当作"娱乐消费凭证"而非"致富方案"。</strong></p>
+<p style="margin-top:10px;">生成时间: 2026-08-11 11:53 | 自动化脚本: ssq_auto.py V1（诚实预测 · 反诈科普版）</p>
+</div>
+
+</div>
+</body>
+</html>

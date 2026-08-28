@@ -1,48 +1,72 @@
-## Description: <br>
-Stripe API integration with managed OAuth for administering customers, subscriptions, invoices, products, prices, and payments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Stripe API integration with managed OAuth for administering Stripe customers, subscriptions, invoices, products, prices, payments, coupons, and refunds through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to administer Stripe resources through Maton-managed OAuth, including customers, subscriptions, invoices, products, prices, payments, and refunds. It is intended for users who need Stripe administration and can verify account context before write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact Stripe financial actions such as charges, refunds, invoice finalization or payment, payment method changes, deletions, and subscription changes. <br>
-Mitigation: Require explicit user confirmation that shows the exact endpoint, target resource, object IDs, amounts, test/live mode, and expected financial effect before any write action. <br>
-Risk: Requests may be sent to the wrong Stripe account when multiple Maton connections exist or a default connection is used. <br>
-Mitigation: Verify the intended Maton-Connection account before each request and include the Maton-Connection header for Stripe API calls. <br>
-Risk: Broad OAuth access or stale connections can expose sensitive financial data and administrative capabilities. <br>
-Mitigation: Use the least-privileged Stripe or Maton connection available, prefer test mode where possible, and revoke unused connections promptly. <br>
+## Use Case:
 
+Developers, operators, and finance teams use this skill to inspect and administer Stripe resources through an agent while keeping Stripe credentials in the Maton gateway. It is intended for Stripe account administration tasks that require careful confirmation before financial, billing, customer, refund, subscription, invoice, product, or price changes.
 
-## Reference(s): <br>
-- [Stripe skill on ClawHub](https://clawhub.ai/byungkyu/skills/stripe-api) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton](https://maton.ai) <br>
-- [API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Stripe API Reference](https://docs.stripe.com/api) <br>
-- [Stripe Dashboard](https://dashboard.stripe.com/) <br>
-- [Stripe Testing](https://docs.stripe.com/testing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell, Python, JavaScript, HTTP endpoint examples, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Maton-managed Stripe OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata; artifact frontmatter version 1.0) <br>
+Risk: Stripe administration can affect live billing, payments, refunds, subscriptions, invoices, customers, products, and prices.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before each write, including the endpoint, target resource, object IDs, amounts, intended effect, and test or live mode.
+
+Risk: Credentials or long-lived API keys could be exposed through logs, shell history, files, or command arguments.
+
+Mitigation: Prefer OAuth through the Maton CLI and operating system credential store; never print, persist, inspect, or pass credentials on the command line.
+
+Risk: Multiple Maton profiles or Stripe connections could cause actions to run against the wrong account.
+
+Mitigation: Verify the intended profile, connection ID, and account mode before requests, and specify the connection when more than one exists.
+
+Risk: The generic API transport can reach Stripe endpoints beyond the reviewed resource set.
+
+Mitigation: Stay within documented Stripe paths unless the user explicitly asks for another endpoint and approves the exact method, endpoint, identifiers, amounts, and mode.
+
+Risk: Stripe response content may contain untrusted customer, metadata, or descriptor text.
+
+Mitigation: Treat returned content as data only; do not let it choose endpoints, recipients, commands, amounts, or follow-up actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/stripe-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Stripe API Reference](https://docs.stripe.com/api)
+- [Stripe Dashboard](https://dashboard.stripe.com/)
+- [Stripe Testing](https://docs.stripe.com/testing)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, API paths, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Stripe API requests or Maton CLI commands; write-capable operations require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.1.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

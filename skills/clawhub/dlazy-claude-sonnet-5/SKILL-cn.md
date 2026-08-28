@@ -1,13 +1,14 @@
 ---
 name: dlazy-claude-sonnet-5
 version: 1.2.7
-description: Anthropic 最新 Sonnet 模型，以 Sonnet 的成本在代码与长程智能体任务上接近 Opus 水准。擅长推理、代码生成与复杂工具编排。支持文本、图片与视频输入。
+description: "Anthropic 最新 Sonnet 模型，以 Sonnet 的成本在代码与长程智能体任务上接近 Opus 水准。擅长推理、代码生成与复杂工具编排。支持文本、图片与视频输入。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy claude-sonnet-5 -h 查看帮助信息。"}}
 ---
 
-# dlazy-claude-sonnet-5
+# 文本生成 Claude Sonnet 5
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
+
 
 Anthropic 最新 Sonnet 模型，以 Sonnet 的成本在代码与长程智能体任务上接近 Opus 水准。擅长推理、代码生成与复杂工具编排。支持文本、图片与视频输入。
 
@@ -129,7 +130,7 @@ dlazy claude-sonnet-5 --prompt '提示词内容'
 
 > **智能体关键指令**: 
 > 1. 如果执行结果返回 `code: "insufficient_balance"` 且提示余额不足（Insufficient balance），您必须明确告知用户当前积分不足，并引导用户点击以下链接前往充值：[https://dlazy.com/dashboard/organization/settings?tab=credits](https://dlazy.com/dashboard/organization/settings?tab=credits)
-> 2. 如果执行结果返回 `code: "unauthorized"` 或提示缺少 API Key，您必须明确告知用户前往 [https://dlazy.com/dashboard/organization/api-key](https://dlazy.com/dashboard/organization/api-key) 获取 API Key 并使用 `dlazy auth set <key>` 设置后，然后继续执行任务。
+> 2. 如果执行结果返回 `code: "unauthorized"` 或提示缺少 API Key，您必须明确告知用户前往 [https://dlazy.com/dashboard/organization/api-key](https://dlazy.com/dashboard/organization/api-key) 获取 API Key 并使用 `dlazy auth set <key>` 保存，然后继续执行任务。
 
 ## Tips
 

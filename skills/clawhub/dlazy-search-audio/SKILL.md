@@ -5,9 +5,10 @@ description: "Audio search tool: searches Pixabay Music and returns royalty-free
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy search_audio -h for help."}}
 ---
 
-# dlazy-search_audio
+# 音频素材搜索 Search Audio
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
+
 
 Audio search tool: searches Pixabay Music and returns royalty-free track URLs and metadata for background music selection. Use 2-3 short English style keywords (e.g. 'upbeat pop energetic'); a long phrase or sentence returns zero results. Each hit's track URL is in the `url` field.
 
@@ -97,7 +98,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "search_audio",
-    "modelId": "search_audio",
+    "modelId": "search-audio",
     "outputs": [
       {
         "type": "json",

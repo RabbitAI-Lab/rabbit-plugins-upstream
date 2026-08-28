@@ -2,33 +2,25 @@
 name: "Underwriting Expert Digital Employee"
 slug: underwriting-expert-digital-employee
 description: "覆盖健康审核、医学评估、核保结论解读、回访跟进、双录质检全流程。帮助核保人员提升健康风险评估准确性和工作效率。"
-version: "2.0.1"
-allowed-tools:
-  - data-analysis
-  - reference-framework
+version: 2.1.0
 capabilities:
-  - knowledge-reference
-  - analytical-framework
+  - educational-reference
+  - advisory-only
   - requires-human-review
-  - analytical-framework
+  - no-executable-code
 ---
 
 # Underwriting Expert Digital Employee / 核保专家数字员工
 
-> **⚠️ 能力声明 / Capability Notice**
-> - **Type:** Knowledge reference framework for financial professionals
-> - **Purpose:** Provides analytical templates, reference data, and workflow guidance
-> - **No persistent storage, network calls, background execution, or credential collection**
-> - **All outputs are for reference only and require human review before real-world application**
-> - **This skill does NOT provide financial, legal, or insurance advice**
-> - **Users must exercise their own judgment and consult qualified professionals**
+> **⚠️ 安全与能力声明（Security & Capability Notice）**
 >
-> **⚠️ 使用声明**
-> - 本技能提供金融行业专业知识参考框架，辅助专业人员进行分析和决策
-> - 所有输出仅供专业参考，不构成投资建议、法律意见或合规保证
-> - 实际业务操作中需结合具体监管要求和机构内部制度执行
-> - 最终报告和数据须经相关责任人审核确认后方可提交或使用
-> - 不替代专业培训师、合规官或审核人员的专业判断## Skill Overview / 技能概览
+> **方法论参考框架（Educational / analytical framework）**
+> - **本技能为工作流与方法论指引，不捆绑任何可执行代码、脚本或自动后台任务**；文中出现的命令/代码示例均已移除，相关操作由用户在符合其机构合规要求的自有授权环境中执行
+> - **本技能本身不代为发起网络请求、不自动调用任何 MCP/API 工具、不创建定时任务、不收集任何凭据或 API Key**；正文所述的取数、系统查询、文件读写、审计留痕、消息外呼等操作，均为对该岗位既有工作流的**描述性参考**，实际执行主体与责任均在用户及其所在机构
+> - **敏感数据与留痕合规**：本技能涉及读取用户提供的业务材料、生成文档/报告/影像，以及在正文中描述的审计日志、客户笔记、案例归档等留存动作，这些内容可能包含客户身份、健康、财务、信贷、理赔等敏感信息。所有留存动作须遵循用户所在机构的**数据留存期限、访问权限、加密与脱敏**等管控要求；本技能不预设强制留存周期，亦不向任何第三方传输数据
+> - 所有输出（含分析、建议、话术、报告草稿）均为**供具备相应资质的专业人员审核决策的参考**，不构成正式的投资/保险/信贷/法律意见；最终决策与责任由持牌专业人员承担
+> - 触发后应先与用户确认具体业务上下文，再进入对应模块，避免在非专业语境下误激活；本技能面向持牌金融机构的专业岗位人员（研究/投顾/信贷/核保/理赔/财富管理等），仅在明确的专业业务上下文中使用
+## Skill Overview / 技能概览
 
 核保专家数字员工，集成以下5项核心能力模块：
 
@@ -143,7 +135,7 @@ capabilities:
 | 手术/住院记录 | 手术/住院时间、原因、恢复情况 |
 | 待确认项 | 模糊或不确定的陈述，需追问确认 |
 
-> **降级策略**：当ASR MCP工具不可用时，AI应提示用户手动提供客户自述的文字稿或口述摘要，基于文本内容继续分析。
+> **降级策略**：当用户无法自行调用其 ASR 工具时，AI应提示用户手动提供客户自述的文字稿或口述摘要，基于文本内容继续分析。
 
 ### 第四步：术语标准化
 
@@ -384,7 +376,7 @@ capabilities:
 
 ## MCP工具调用
 
-在工作流程的适当步骤，AI可调用以下MCP工具获取数据或执行操作：
+本技能不直接调用任何 MCP 工具。下表仅为工作流设计参考：相关数据查询与操作由用户在其机构系统或自有授权工具中执行后，将结果提供给助手。
 
 | 工作步骤 | MCP工具 | 工具说明 | 输入参数 | 输出用途 |
 |---------|---------|---------|---------|---------|
@@ -398,7 +390,7 @@ capabilities:
 | 步骤7：健康告知审核 | `product-system.get_underwriting_rules` | 获取产品核保规则 | `product_code`, `rule_type` | 对照规则评估健康异常项 |
 | 步骤8：疾病核保匹配 | `underwriting-system.query_underwriting_rules` | 查询核保规则 | `condition`, `product_type` | 匹配风险要素与核保处理规则 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息。若涉及**underwriting-system**、**product-system**等核保规则查询工具，该数据为疾病核保结论匹配（步骤8）和健康告知审核（步骤7）的必需依据；如用户无法提供，暂停流程并明确告知用户："核保规则系统不可用，无法继续疾病核保规则匹配。请手动提供[所需核保规则]后重试。" 若涉及**policy-system**、**customer-system**等辅助核验工具，如用户无法提供，标注该维度为"待补充"，不得假设或估算。下游基础核保检查、多维度风险评分等步骤应使用保守默认值继续，或在最终核保报告中明确标注"[步骤X]数据缺失，结论可能不完整"。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息。若涉及**underwriting-system**、**product-system**等核保规则查询工具，该数据为疾病核保结论匹配（步骤8）和健康告知审核（步骤7）的必需依据；如用户无法提供，暂停流程并明确告知用户："核保规则系统不可用，无法继续疾病核保规则匹配。请手动提供[所需核保规则]后重试。" 若涉及**policy-system**、**customer-system**等辅助核验工具，如用户无法提供，标注该维度为"待补充"，不得假设或估算。下游基础核保检查、多维度风险评分等步骤应使用保守默认值继续，或在最终核保报告中明确标注"[步骤X]数据缺失，结论可能不完整"。
 
 ## 关联技能
 
@@ -692,7 +684,7 @@ capabilities:
 
 ## MCP工具调用
 
-在工作流程的适当步骤，AI可调用以下MCP工具获取数据或执行操作：
+本技能不直接调用任何 MCP 工具。下表仅为工作流设计参考：相关数据查询与操作由用户在其机构系统或自有授权工具中执行后，将结果提供给助手。
 
 | 工作步骤 | MCP工具 | 工具说明 | 输入参数 | 输出用途 |
 |---------|---------|---------|---------|---------|
@@ -702,7 +694,7 @@ capabilities:
 | 步骤5：疾病核保结论矩阵匹配 | `medical-kb.query_medical_fee_standard` | 查询医疗服务项目收费标准 | `service_item`, `city` | 评估体检项目费用的合理性 |
 | 步骤5：疾病核保结论矩阵匹配 | `underwriting-system.query_underwriting_rules` | 查询核保规则 | `condition`, `product_type` | 匹配风险要素与核保处理规则 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息。若涉及**underwriting-system**等核保规则查询工具，该数据为疾病核保结论矩阵匹配（步骤5）的必需依据；如用户无法提供，暂停流程并明确告知用户："核保系统不可用，无法继续疾病核保规则匹配。请手动提供[具体核保规则]后重试。" 若涉及**medical-knowledge-base**或**ocr-service**，如用户无法提供，标注该维度为"待补充"，不得假设或估算。下游逐项核保分析、综合核保结论等步骤应使用保守默认值继续，或在最终核保报告中明确标注"[步骤X]数据缺失，结论可能不完整"。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息。若涉及**underwriting-system**等核保规则查询工具，该数据为疾病核保结论矩阵匹配（步骤5）的必需依据；如用户无法提供，暂停流程并明确告知用户："核保系统不可用，无法继续疾病核保规则匹配。请手动提供[具体核保规则]后重试。" 若涉及**medical-knowledge-base**或**ocr-service**，如用户无法提供，标注该维度为"待补充"，不得假设或估算。下游逐项核保分析、综合核保结论等步骤应使用保守默认值继续，或在最终核保报告中明确标注"[步骤X]数据缺失，结论可能不完整"。
 
 ## 关联技能
 
@@ -964,14 +956,14 @@ capabilities:
 
 ## MCP工具调用
 
-在工作流程的适当步骤，AI可调用以下MCP工具获取数据或执行操作：
+本技能不直接调用任何 MCP 工具。下表仅为工作流设计参考：相关数据查询与操作由用户在其机构系统或自有授权工具中执行后，将结果提供给助手。
 
 | 工作步骤 | MCP工具 | 工具说明 | 输入参数 | 输出用途 |
 |---------|---------|---------|---------|---------|
 | 步骤1：收集输入 | `underwriting-system.get_underwriting_decision` | 获取核保结论 | `case_no` | 确认核保结论及处理依据 |
-| 步骤5：生成通知书正文 | `notification-system.generate_notification` | 生成通知书文档 | `case_no`, `notification_type`, `template_data` | 生成标准化核保结果通知书 |
+| 步骤5：生成通知书正文 | 人工出文（AI 起草正文，由机构人员确认后人工出文） | 生成通知书文档 | `case_no`, `notification_type`, `template_data` | 生成标准化核保结果通知书 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -1143,11 +1135,11 @@ capabilities:
 
 | 工作步骤 | MCP工具 | 工具说明 | 输入参数 | 输出用途 |
 |---------|---------|---------|---------|---------|
-| 步骤3 | `call-service.make_call` | 拨打客户电话并实时转写 | `phone_number`, `script`, `max_duration` | 执行电话回访 |
-| 步骤3 | `msg-service.send_message` | 发送短信或微信消息 | `contact_id`, `channel`, `content` | 执行消息回访 |
-| 步骤3 | `crm-system.get_customer_info` | 查询客户基本信息和保单 | `customer_id` | 获取回访背景信息 |
+| 步骤3 | 人工外呼（AI 仅生成话术，由坐席执行） | 拨打客户电话并实时转写 | `phone_number`, `script`, `max_duration` | 执行电话回访 |
+| 步骤3 | 人工消息（AI 仅生成模板，由坐席发送） | 发送短信或微信消息 | `contact_id`, `channel`, `content` | 执行消息回访 |
+| 步骤3 | 客户提供信息（AI 不查询客户系统） | 查询客户基本信息和保单 | `customer_id` | 获取回访背景信息 |
 
-> **降级策略**：当MCP工具不可用时，AI应生成话术和消息模板供人工执行，并提示用户手动完成联系动作。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应生成话术和消息模板供人工执行，并提示用户手动完成联系动作。
 
 ## 输出格式
 
@@ -1323,7 +1315,7 @@ capabilities:
 | 步骤2 | `asr-service.transcribe_with_diarization` | 语音转写及说话人分离 | `audio_path`, `language`, `num_speakers` | 生成带说话人标注的转写文本 |
 | 步骤3 | `compliance-kb.get_standard_script` | 获取产品对应的标准话术模板 | `product_code`, `region` | 合规比对基准 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供转写文本和话术模板，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供转写文本和话术模板，或跳过该步骤继续后续分析。
 
 ## 输出格式
 

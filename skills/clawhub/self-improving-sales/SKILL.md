@@ -98,7 +98,7 @@ When sales learnings prove broadly applicable, promote them:
 
 ### Optional: Enable Hook
 
-For automatic reminders at session start:
+Opt-in and project-scoped. Enabling a hook persists across future sessions; skip this unless you need reminders:
 
 ```bash
 cp -r hooks/openclaw ~/.openclaw/hooks/self-improving-sales
@@ -393,7 +393,8 @@ When a learning is broadly applicable (not a one-off deal quirk), promote it to 
 
 1. **Distill** the learning into a concise, actionable asset
 2. **Add** to appropriate target (battle card entry, objection script, playbook rule)
-3. **Update** original entry:
+3. **Show a reviewed diff and apply only after explicit user approval**
+4. **Update** original entry:
    - Change `**Status**: pending` → `**Status**: promoted`
    - Add `**Promoted**: battle card` (or `objection script`, `pricing playbook`, `MEDDIC framework`)
 
@@ -503,6 +504,8 @@ Targets: battle cards, objection scripts, pricing playbooks, MEDDIC/BANT framewo
 
 Enable automatic reminders through agent hooks. This is **opt-in**.
 
+Hooks persist across sessions once installed. Keep them **project-scoped**. Do **not** install user-level or global hooks. Never use an empty `matcher`. `PostToolUse` inspects command output in-process; do not log raw output, secrets, or transcripts.
+
 ### Quick Setup (Claude Code / Codex)
 
 Create `.claude/settings.json` in your project:
@@ -510,7 +513,7 @@ Create `.claude/settings.json` in your project:
 ```json
 {
   "hooks": {
-    "UserPromptSubmit": [{"matcher": "", "hooks": [{"type": "command", "command": "./skills/self-improving-sales/scripts/activator.sh"}]}],
+    "UserPromptSubmit": [{"matcher": "deal|pipeline|forecast|objection|competitor|pricing|quota|MEDDIC", "hooks": [{"type": "command", "command": "./skills/self-improving-sales/scripts/activator.sh"}]}],
     "PostToolUse": [{"matcher": "Bash", "hooks": [{"type": "command", "command": "./skills/self-improving-sales/scripts/error-detector.sh"}]}]
   }
 }
@@ -528,6 +531,8 @@ The `UserPromptSubmit` hook injects a sales-focused reminder (~50-100 tokens). T
 See `references/hooks-setup.md` for detailed configuration and troubleshooting.
 
 ## Automatic Skill Extraction
+
+Extracted skills are untrusted until a human reviews the generated `SKILL.md`. Do not keep or publish an extracted skill without explicit user approval.
 
 When a sales learning is valuable enough to become a reusable skill, extract it.
 
@@ -570,7 +575,7 @@ When a sales learning is valuable enough to become a reusable skill, extract it.
 7. **Anonymize appropriately** — use deal size ranges and avoid customer PII in shared logs
 8. **Distinguish decision-maker objections from user objections** — different responses required
 9. **Record what you tried** — failed responses are as valuable as successful ones
-10. **Promote aggressively** — if an objection appears in 3 deals, it deserves a battle card
+10. **Promote after review when recurrence appears** — if an objection appears in 3 deals, it deserves a battle card
 
 ## Multi-Agent Support
 
@@ -636,3 +641,7 @@ When guidance conflicts, apply:
 ### Ownership Rules
 - This skill writes only to `.learnings/sales/` in stackable mode.
 - It may read other skill folders for cross-linking, but should not rewrite their entries.
+- Standalone mode writes to this project's `.learnings/*.md` log files only.
+- Stackable mode writes only to the namespaced folder above and must not rewrite other skills' log entries.
+- Promotion into `AGENTS.md`, `SOUL.md`, `TOOLS.md`, `MEMORY.md`, rules, hooks, or generated skills is not a logging write. Show a reviewed diff and apply only after explicit user approval.
+

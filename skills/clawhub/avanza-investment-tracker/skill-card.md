@@ -1,44 +1,59 @@
-## Description: <br>
-Process Avanza CSV exports, calculate TWRR/Modified Dietz returns, and track portfolio performance. Use when importing stock transactions, calculating investment returns, or managing portfolio data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Process Avanza CSV exports, calculate TWRR/Modified Dietz returns, and track portfolio performance. Use when importing stock transactions, calculating investment returns, or managing portfolio data.
 
-## Publisher: <br>
-[patello](https://clawhub.ai/user/patello) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[patello](https://clawhub.ai/user/patello)
 
-## Use Case: <br>
-External users and developers use this skill to import Avanza CSV exports into a local SQLite portfolio database, update price data, and generate portfolio, return, risk, and account reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores financial transaction data in a local SQLite database. <br>
-Mitigation: Keep the database outside the skill directory, restrict access to the workspace data folder, and back up the database before major imports or account changes. <br>
-Risk: Optional price and benchmark features contact external market-data services. <br>
-Mitigation: Use --update-prices never and avoid risk, beta, or benchmark options when offline-only processing or reduced third-party data exposure is required. <br>
-Risk: Commands such as reset --hard, delete-tx, and account delete can remove or rebuild portfolio data. <br>
-Mitigation: Keep backups, confirm the selected database path, and use preview or targeted deletion options where available before destructive changes. <br>
+## Use Case:
 
+External users and developers use this skill to import Avanza investment CSV exports, track portfolio accounts and holdings, update market prices, and calculate investment performance and risk metrics.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/patello/skills/avanza-investment-tracker) <br>
-- [Workflows](references/workflows.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands; CLI commands may emit tables or JSON when --format json is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update a user-selected local SQLite database and read Avanza CSV exports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.12.2 (source: server release metadata) <br>
+Risk: Commands can reset, delete, or rebuild local financial records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep database backups and use `delete-tx --dry-run` before deleting transactions; reserve `reset --hard` and virtual account deletion for intentional cleanup.
+
+Risk: Market-data, risk, or beta updates may contact external services and disclose asset names or tickers.
+
+Mitigation: Use `--update-prices never` when external price requests are not desired, and review `--risk` or `--beta` usage before running those reports.
+
+Risk: Unpinned dependency installation can make results less reproducible.
+
+Mitigation: Pin and review the `requests` dependency before installing the skill in a managed or commercial environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/patello/skills/avanza-investment-tracker)
+- [Workflows](references/workflows.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and CLI/configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose commands that import, update, reset, or delete local portfolio records; review commands before execution.]
+
+## Skill Version(s):
+
+2.13.0 (source: ClawHub release metadata and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

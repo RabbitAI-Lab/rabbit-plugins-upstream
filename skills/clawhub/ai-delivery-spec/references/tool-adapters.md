@@ -1,16 +1,18 @@
 # Coding Agent 与国产工具适配 / Tool Adapters — v5.4
 
 只有明确指定 Coding Agent、国产模型或需求协作工具消费已固化需求时才加载本文件。统一 PRD 始终是唯一
-评审基线；工具规则只能投影约束，不能新增业务行为。
+评审基线；工具规则只能投影约束，不能新增业务行为。可见的研发评审模式服务产品、前端、后端和测试
+快速阅读，不是 Coding Agent 的第二份 PRD；Agent 使用结构化 handoff 与稳定 ID 切片。
 
 ## 共用交接合同
 
-来源顺序如下，工具规则不是新的权威来源；Stable ID（稳定 ID）在所有投影中保持不变：
+以下是 Coding Agent 的有界读取顺序，不是业务权威优先级；业务语义仍以已批准 PRD/Truth 与 CHG 为准，
+工具规则和 handoff 只能路由/投影约束。Stable ID（稳定 ID）在所有投影中保持不变：
 
 ```text
-根/模块 AGENTS.md → handoff manifest/当前基线 → 统一 PRD
-→ 可选 Product Truth ID 切片 → 已批准 CHG-* → 锁定原型
-→ 验收记录 → 工程基线/仓库约束
+根/模块 AGENTS.md（路由/工程守卫） → handoff manifest/当前 packet
+→ 同 hash 的统一 PRD或 Product Truth ID 切片 → 已批准 CHG-*
+→ 锁定产品原型的 VIEW/REG/ACT → 工程基线/仓库约束 → 验收记录
 ```
 
 - 一次只实现绑定 `REQ/MOD/FLOW/VIEW/REG/ACT/FLD/STM/STATE/METRIC/REL/API/AC` 的一个纵切。
@@ -19,7 +21,11 @@
 - 仓库路径、框架和技术架构属于下游工程事实，不能反向扩大产品范围。
 - 测试和实现证据必须回链到 `AC-*` 与 `REQ-*`。
 - 大任务只加载一个 PRD/Truth 切片并保存检查点，禁止让一个模型重写巨型事实源。
+- 评审工作台只给人类走读；Agent 可用其稳定锚点核对页面落点，但不读取角色文案来补规则。manifest 缺失、
+  baseline hash 不同或 STEP/AC 解析失败时返回 GAP/REV，不得降级为“看原型猜实现”。
 
+- 人类可见标题、验收叙述和图节点跟随用户语言；机器状态、字段/API名和 Schema 关键字保持原值，
+  通过“草稿（`draft`）”这类显式映射消除歧义，不把混合语言当作技术精确。
 ## 工具路由
 
 | 工具/模型 | 适配规则 |

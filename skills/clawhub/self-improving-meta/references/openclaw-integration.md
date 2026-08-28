@@ -55,7 +55,7 @@ mkdir -p ~/.openclaw/workspace/.learnings
 
 ## Promotion Targets (Meta-Specific)
 
-Meta-learnings promote directly into the files they govern:
+Meta-learnings promote into the files they govern only after explicit user approval of a reviewed diff:
 
 | Learning Type | Promote To | Example |
 |---------------|------------|---------|
@@ -102,7 +102,7 @@ Is it about agent behavior or personality?
 
 ## Inter-Agent Communication
 
-OpenClaw provides tools for cross-session communication. Use only when cross-session sharing is explicitly needed.
+OpenClaw provides tools for cross-session communication. Do not send cross-session messages unless the user explicitly consents to that specific send. Keep payloads redacted.
 
 ### sessions_send
 

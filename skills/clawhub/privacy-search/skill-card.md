@@ -1,45 +1,61 @@
-## Description: <br>
-Privacy Search helps an agent run multi-engine search workflows with privacy modes, local SearXNG management, result deduplication, diagnostics, and optional JSON output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Privacy Search provides a privacy-oriented multi-engine search workflow with CLI and MCP tools for parallel search, answer synthesis, page fetching, caching, export, ranking, diagnostics, and local SearXNG integration.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Developers and agent users use this skill to perform privacy-oriented command-line searches, select search engines, manage a local SearXNG instance, inspect privacy settings, and diagnose network, configuration, or engine failures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Strict privacy mode can automatically send searches to lower-privacy engines. <br>
-Mitigation: Prefer explicitly selecting trusted engines such as local SearXNG, and ask the publisher to make lower-privacy fallback opt-in. <br>
-Risk: Search queries may be sensitive and can disclose metadata to selected search engines or update services. <br>
-Mitigation: Review before installing, use local SearXNG for sensitive searches, and disable update checks when metadata disclosure matters. <br>
-Risk: The pip and Docker latest SearXNG setup paths may introduce supply-chain risk. <br>
-Mitigation: Avoid latest-tag install paths unless reviewed, and pin or verify dependencies and container images before deployment. <br>
+## Use Case:
 
+Developers and agent builders use this skill to add privacy-oriented web search, source-backed answer synthesis, and page fetching to command-line workflows or MCP-compatible agents.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/fyniujin/skills/privacy-search) <br>
-- [Quick Start Guide](references/QUICK_START.md) <br>
-- [Search Engine Adapter Documentation](references/engines.md) <br>
-- [Domestic Search Engine Guide](references/engines_zh.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [CLI text or JSON search results, Markdown guidance, shell commands, and configuration recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Searches may contact external engines unless local SearXNG or explicitly trusted engines are selected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Sensitive search queries and fetched page content can leave the machine when external search engines, page fetching, or synthesis providers are used.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use strict mode, local SearXNG where appropriate, and avoid external LLM synthesis for confidential work unless privacy controls are explicitly configured.
+
+Risk: Local cache and search history can retain sensitive query material on disk.
+
+Mitigation: Disable cache/history for sensitive workflows or clear them after use with the documented cache and history commands.
+
+Risk: Setup, update checks, Docker or pip-based SearXNG installation, and MCP use broaden the host and network impact of the skill.
+
+Mitigation: Review setup steps before installation, disable startup update checks if needed, and run the MCP server only in trusted local agent environments.
+
+## Reference(s):
+
+- [ClawHub privacy-search release page](https://clawhub.ai/fyniujin/skills/privacy-search)
+- [Quick Start](references/QUICK_START.md)
+- [Search engine adapters](references/engines.md)
+- [Chinese engines and fallback strategy](references/engines_zh.md)
+- [MCP tool schema](references/mcp_schema.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance, CLI text, JSON search results, MCP JSON-RPC tool responses, and exported Markdown/HTML/PDF search results.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include result URLs, snippets, source citations, cache status, diagnostic notices, fetched page text, and privacy reports.]
+
+## Skill Version(s):
+
+1.7.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -16,6 +16,6 @@ After completing this task, evaluate if agent infrastructure learnings emerged:
 - Could memory entries be pruned or updated?
 
 If yes: Log to .learnings/ using the self-improving-meta format.
-If infrastructure fix needed: Apply directly to the affected file.
+If an infrastructure fix is needed: propose a minimal patch and apply only after explicit user approval.
 </meta-improvement-reminder>
 EOF

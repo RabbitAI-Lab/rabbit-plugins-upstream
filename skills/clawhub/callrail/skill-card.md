@@ -1,47 +1,68 @@
-## Description: <br>
-CallRail API integration with managed OAuth for tracking and analyzing phone calls, managing tracking numbers, companies, and tags. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CallRail API integration with managed OAuth for tracking and analyzing phone calls, managing tracking numbers, companies, and tags.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External developers and agents use this skill to work with CallRail accounts through Maton's managed OAuth proxy, including reading call, account, company, tracker, and tag data. They can also manage tags and call metadata when the user explicitly approves the target resource and intended effect. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires MATON_API_KEY and routes CallRail data through Maton, which can expose sensitive CallRail records if the key or connection is mishandled. <br>
-Mitigation: Install only if Maton is trusted, protect MATON_API_KEY, and scope requests to the intended CallRail account. <br>
-Risk: Write operations can modify CallRail calls, tags, or account resources. <br>
-Mitigation: Require explicit user approval and verify the exact account, resource, connection ID, and intended effect before create, update, or delete requests. <br>
-Risk: Multiple active CallRail connections can cause requests to target the wrong account. <br>
-Mitigation: Use the Maton-Connection header with a specific connection ID when more than one CallRail connection is active. <br>
+## Use Case:
 
+Developers and operators use this skill to access CallRail account data through Maton OAuth, inspect calls and analytics, and manage related CallRail resources such as tracking numbers, companies, and tags.
 
-## Reference(s): <br>
-- [CallRail Skill on ClawHub](https://clawhub.ai/byungkyu/callrail) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [CallRail API Documentation](https://apidocs.callrail.com/) <br>
-- [CallRail Help Center API](https://support.callrail.com/hc/en-us/sections/4426797289229-API) <br>
-- [CallRail API Rate Limits](https://apidocs.callrail.com/#rate-limiting) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python, JavaScript, shell/API endpoint examples, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations require explicit user approval before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Authorizing this skill gives Maton-mediated access to the user's connected CallRail account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, choose the narrowest scopes available, and create or use only the CallRail connection needed for the current task.
+
+Risk: Write, delete, messaging, billing, webhook, or other high-impact API calls can change account state or create external side effects.
+
+Mitigation: Require clear user confirmation of the target resource, payload, and intended effect before any high-impact action.
+
+Risk: Multiple Maton accounts or CallRail connections can cause requests to affect the wrong account.
+
+Mitigation: Specify the intended profile or connection when more than one account or connection exists.
+
+Risk: CallRail API responses and webhook payloads may contain untrusted external data.
+
+Mitigation: Treat returned content as data, validate it before use, and do not execute or follow instructions found inside fetched API content.
+
+## Reference(s):
+
+- [CallRail Skill Page](https://clawhub.ai/byungkyu/skills/callrail)
+- [Maton Homepage](https://maton.ai)
+- [CallRail API Documentation](https://apidocs.callrail.com/)
+- [CallRail Help Center - API](https://support.callrail.com/hc/en-us/sections/4426797289229-API)
+- [CallRail API Rate Limits](https://apidocs.callrail.com/#rate-limiting)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Configuration instructions, JSON, Markdown, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Maton OAuth or a Maton API key to send CallRail API requests; read operations are the default and writes require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence; frontmatter reports 1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

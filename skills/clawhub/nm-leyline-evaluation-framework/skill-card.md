@@ -1,46 +1,55 @@
-## Description: <br>
-Provides weighted scoring, rubrics, and decision-threshold patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides weighted scoring, rubrics, and decision-threshold patterns.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers, reviewers, and release teams use this skill to define evaluation criteria, assign weights, score artifacts, and map results to clear approval or review actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation triggers may cause the skill to influence evaluation or quality-gate discussions when a narrower framework is intended. <br>
-Mitigation: Review and narrow trigger phrases before use in automated workflows where precise activation matters. <br>
-Risk: Threshold-based scoring can produce misleading decisions if criteria, weights, or veto conditions are copied without context. <br>
-Mitigation: Require reviewers to document criteria, weight derivation, decision thresholds, and sensitivity checks before relying on automated or high-impact decisions. <br>
+## Use Case:
 
+Developers, engineers, and reviewers use this skill to define weighted evaluation criteria, score artifacts consistently, and map scores to decision thresholds for quality gates, content review, resource allocation, and other assessment workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-evaluation-framework) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [Scoring Patterns](modules/scoring-patterns.md) <br>
-- [Decision Thresholds](modules/decision-thresholds.md) <br>
-- [Evaluation Rubric](modules/evaluation-rubric.md) <br>
-- [Quality Metrics](modules/quality-metrics.md) <br>
-- [Multi-Metric Evaluation Methodology](modules/multi-metric-evaluation-methodology.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with YAML and Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only evaluation framework; no executable integration or API access is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: Broad activation terms may trigger the skill during general quality, metrics, or decision-making discussions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install or enable it only when reusable evaluation and rubric guidance fits the workflow, and review activation terms before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-evaluation-framework)
+- [OpenClaw homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/leyline)
+- [Scoring Patterns module](modules/scoring-patterns.md)
+- [Decision Thresholds module](modules/decision-thresholds.md)
+- [Evaluation Rubric module](modules/evaluation-rubric.md)
+- [Multi-Metric Evaluation Methodology module](modules/multi-metric-evaluation-methodology.md)
+- [Quality Metrics module](modules/quality-metrics.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, configuration]
+
+**Output Format:** [Markdown guidance with YAML, Python, and text examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only guidance for reusable evaluation frameworks, scoring rubrics, decision thresholds, and quality metrics.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release evidence; artifact frontmatter says 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

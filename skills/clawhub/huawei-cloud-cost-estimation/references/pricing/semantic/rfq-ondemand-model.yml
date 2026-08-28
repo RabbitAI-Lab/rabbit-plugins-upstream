@@ -39,9 +39,9 @@ facts:
       - { name: resource_type,      type: string,  max_length: 400, dimension: Dim_ResourceType }
       - { name: resource_spec,      type: string,  max_length: 400, dimension: Dim_ResourceSpec }
       - { name: region,             type: string,  max_length: 64, dimension: Dim_Region }
-      - { name: usage_factor,       type: string,  max_length: 64, dimension: Dim_UsageType, notes: "取值见 commands.md 字段对照" }
-      - { name: usage_value,        type: number, notes: "使用量数值" }
-      - { name: usage_measure_id,   type: integer, dimension: Dim_MeasureUnit, notes: "取自 BSS/ListMeasureUnits" }
+      - { name: usage_factor,       type: string,  max_length: 64, dimension: Dim_UsageType, notes: "ListUsageTypes.code；禁止默认 Duration" }
+      - { name: usage_value,        type: number, notes: "用量槽标量；见 commands.md Measure Resolve" }
+      - { name: usage_measure_id,   type: integer, dimension: Dim_MeasureUnit, notes: "用量槽≠size_measure_id；见 Measure Resolve" }
       - { name: subscription_num,   type: integer, min: 1, max: 10000 }
       - { name: available_zone,     type: string, max_length: 64, dimension: Dim_AvailabilityZone, required: false, notes: "空/null = 不筛选" }
       - { name: resource_size,      type: integer, max: 214783647, required: conditional, condition: linear_product }
@@ -58,9 +58,10 @@ dimensions:
     kind: conformed_dimension
     business_key: usage_factor_code
     source_operations: [BSS/ListUsageTypes]
-    attributes: [code, name, measure_type]
-    notes: 具体取值与适用服务见 commands.md；首次未知调 BSS/ListUsageTypes。
+    attributes: [code, name, resource_type_code, service_type_code]
+    query_keys: [resource_type_code]
+    notes: 必带 --resource_type_code；无 measure → Measure Resolve（commands.md）。
 
 evidence_boundary:
-  - 字段必填以 references/pricing/commands.md 中 BSS/ListOnDemandResourceRatings 的 contract 块为唯一真源。
-  - usage_value 是询价标量，不是历史用量；余额/已发生账单/对账超出 RFQ 范围。
+  - 字段必填以 references/pricing/commands.md 中 ListOnDemandResourceRatings contract 为唯一真源。
+  - usage_value 是询价标量，非历史用量；账单/余额/对账超出 RFQ。

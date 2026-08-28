@@ -1,42 +1,60 @@
-## Description: <br>
-Big8 is an entertainment-focused Chinese metaphysics assistant for BaZi readings, face reading, feng shui image analysis, zodiac horoscopes, I Ching-style daily divination, and Chinese almanac guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Big8 is a Chinese fortune-telling assistant for BaZi readings, feng shui and face-reading image analysis, horoscope lookup, daily hexagrams, and Chinese almanac guidance.
 
-## Publisher: <br>
-[kobenfang](https://clawhub.ai/user/kobenfang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kobenfang](https://clawhub.ai/user/kobenfang)
 
-## Use Case: <br>
-Chinese-speaking users use this skill for entertainment-oriented fortune-telling, feng shui, face reading, horoscope, BaZi, divination, and almanac responses. Agents can route text, birth dates, and optional face or room images into the appropriate mode, call the bundled Python helper for structured calculations, and present concise Chinese readings and suggestions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks users to submit face photos or room images for analysis, and the security summary flags unclear privacy claims about image processing and retention. <br>
-Mitigation: Use it only when the runtime clearly explains where images are processed and whether they are retained; avoid uploading images of other people without consent. <br>
-Risk: Face reading, feng shui, fortune-telling, zodiac, divination, and almanac outputs may be mistaken for authoritative personal guidance. <br>
-Mitigation: Present readings as entertainment and cultural reference only, and do not rely on them for medical, legal, financial, or major life decisions. <br>
-Risk: Birth dates, face images, and room photos can reveal sensitive personal information. <br>
-Mitigation: Minimize submitted personal details, prefer non-identifying images where possible, and remove or redact unnecessary sensitive context before use. <br>
+## Use Case:
 
+External users use Big8 for entertainment-style Chinese fortune-telling, including BaZi chart explanations, feng shui layout suggestions from room photos, face-reading from selfies, horoscope compatibility, daily hexagrams, and almanac checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kobenfang/big8) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown-formatted Chinese responses, with JSON returned by helper commands for BaZi, zodiac, divination, and almanac calculations.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use user-provided birth date, time, optional gender, timezone or country, text questions, and optional face or room images; readings should remain entertainment-oriented and avoid medical, legal, or financial advice.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill may process selfies, face images, and private room photos for entertainment-style analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with images the user is comfortable sharing with the active agent or vision system, and avoid third-party faces without permission.
+
+Risk: The artifact makes broad privacy claims, while security evidence says image inference and retention details are unclear.
+
+Mitigation: Treat privacy guarantees as unverified unless the publisher clarifies where image inference occurs and how long inputs are retained.
+
+Risk: Fortune-telling, face-reading, feng shui, and almanac outputs can be mistaken for deterministic advice.
+
+Mitigation: Present outputs as entertainment or cultural reference and avoid medical, legal, financial, or life-changing decisions based on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kobenfang/skills/big8)
+- [Skill instructions](artifact/SKILL.md)
+- [Big8 plan](artifact/big8-plan.md)
+- [Big8 helper script](artifact/scripts/big8.py)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with occasional JSON helper-script outputs and inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Entertainment-style outputs; image modes depend on user-provided face or room photos and vision analysis.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

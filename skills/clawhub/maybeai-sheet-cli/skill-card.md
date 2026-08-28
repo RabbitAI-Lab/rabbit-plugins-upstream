@@ -1,56 +1,62 @@
-## Description: <br>
-Use when the user works with MaybeAI spreadsheets through the mbs CLI for workbook inspection, local or remote-URL file import, native cross-workbook import/export, worksheet/range/table writes, full worksheet data refreshes that keep headers, formulas, worksheet styling, chart/image CRUD, dashboard validate/refresh flows, or sharing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents using the mbs CLI to inspect, import, edit, calculate, export, dashboard, template, and share MaybeAI spreadsheets with model-aware verification.
 
-## Publisher: <br>
-[no7dw](https://clawhub.ai/user/no7dw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[no7dw](https://clawhub.ai/user/no7dw)
 
-## Use Case: <br>
-Developers and operators use this skill to drive MaybeAI spreadsheet work through the mbs CLI, including workbook inspection, imports, targeted reads and writes, formulas, styling, chart and image operations, dashboard refreshes, and sharing. It is intended for deliberate spreadsheet automation where commands are inspected, targeted, and verified before results are reported. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Spreadsheet automation can expose sensitive workbook data or use a MaybeAI API token against unintended data. <br>
-Mitigation: Install only if you trust MaybeAI with the referenced spreadsheet data and token; prefer worksheet listing or narrow reads before broad profiling of sensitive workbooks. <br>
-Risk: Sharing commands can grant unintended workbook access. <br>
-Mitigation: Confirm the exact workbook, recipient, and viewer/editor/public setting before running sharing commands. <br>
-Risk: Exports can write spreadsheet files to unapproved or conflicting local paths. <br>
-Mitigation: Export only to approved, non-conflicting local paths. <br>
-Risk: Writes, imports, refreshes, formulas, and styling can modify the wrong worksheet or create misleading spreadsheet results. <br>
-Mitigation: Inspect workbook metadata first, target worksheets explicitly, use dry runs where available, pass --verify on supported writes, and read back or check errors before reporting success. <br>
+## Use Case:
 
+Developers, analysts, and spreadsheet operators use this skill to have an agent work through MaybeAI spreadsheet workflows with the mbs CLI, including workbook discovery, imports, Sheet and Base reads or writes, formulas, SQL materialization, chart/image operations, dashboard flows, exports, and sharing.
 
-## Reference(s): <br>
-- [MaybeAI Uni Homepage](https://github.com/OmniMCP-AI/maybeai-uni) <br>
-- [Command Catalog](references/cli-commands.md) <br>
-- [Read and Write Reference](references/read-write.md) <br>
-- [File Management Reference](references/file-management.md) <br>
-- [Workbook Profile Reference](references/workbook-profile.md) <br>
-- [Sharing and Permissions Reference](references/permission-sharing.md) <br>
-- [Formulas and SQL Reference](references/formulas-sql.md) <br>
-- [Pivot Tables Reference](references/pivot-tables.md) <br>
-- [Lineage Trace Reference](references/lineage-trace.md) <br>
-- [Charts and Formatting Reference](references/charts-formatting.md) <br>
-- [Errors and Recovery Reference](references/errors-recovery.md) <br>
-- [Clickable References Guide](references/clickable-refs.md) <br>
-- [SQL Formula Showcase](references/sql-formula-showcase.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should name exact workbooks, worksheets, ranges, files, and verification steps when proposing or reporting spreadsheet actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.16.2 (source: frontmatter and server release evidence) <br>
+Risk: An agent using this skill can read or modify specified MaybeAI workbooks with the configured API token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for intended spreadsheet automation, confirm workbook IDs before mutations, and use dry-run and verify flows for destructive or unfamiliar changes.
+
+Risk: Sharing, export, and delete workflows can expose data, grant unintended access, or remove workbook content.
+
+Mitigation: Avoid public or editor sharing unless explicitly requested, store exported files in secure locations, and require confirmation before destructive operations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/no7dw/skills/maybeai-sheet-cli)
+- [Project homepage](https://github.com/OmniMCP-AI/maybeai-uni)
+- [CLI Command Reference](references/cli-commands.md)
+- [Read/Write Reference](references/read-write.md)
+- [File Management Reference](references/file-management.md)
+- [Permission And Sharing Reference](references/permission-sharing.md)
+- [Formulas and SQL Reference](references/formulas-sql.md)
+- [Charts and Formatting Reference](references/charts-formatting.md)
+- [Errors and Recovery Reference](references/errors-recovery.md)
+- [Workbook Inspection Reference](references/workbook-profile.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON configuration examples, and operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are agent-facing instructions for using the installed mbs CLI and should be checked against runtime help before execution.]
+
+## Skill Version(s):
+
+v0.21.4 (source: SKILL.md frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

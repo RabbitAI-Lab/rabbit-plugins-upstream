@@ -1,41 +1,50 @@
-## Description: <br>
-Installs an egregore watchdog daemon through launchd or systemd so egregore can relaunch autonomously. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Installs egregore watchdog daemon via launchd or systemd for autonomous relaunching.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and operators use this skill when setting up egregore on a workstation or server and want a local watchdog to relaunch sessions when work is available. It is not intended for CI/CD runners or environments where manual control over session launches is required. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill installs a persistent watchdog using launchd or systemd that can relaunch egregore on a schedule. <br>
-Mitigation: Review the scheduler unit or plist before installation, confirm the user wants persistent relaunch behavior, and keep the uninstall command available. <br>
-Risk: The security scan verdict is suspicious because persistence requires clearer consent and removal guidance. <br>
-Mitigation: Confirm the installation target, schedule interval, log location, and removal path before enabling the watchdog. <br>
+## Use Case:
 
+Developers and engineers use this skill after initializing an egregore project or setting up egregore on a new machine when they want the session watchdog to relaunch work automatically.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-egregore-install-watchdog) <br>
-- [Egregore project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/egregore) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with bash commands and verification guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide installation of a persistent user-level launchd or systemd watchdog when the proposed commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The skill installs a persistent watchdog that can relaunch autonomous egregore sessions in the background.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when autonomous relaunching is intended; review the referenced install scripts, confirm they run as the current user rather than root, and verify how to disable the launchd or systemd timer.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-egregore-install-watchdog)
+- [OpenClaw Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/egregore)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes operating-system-specific launchd and systemd installation, verification, logging, troubleshooting, and uninstall guidance.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

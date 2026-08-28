@@ -1,0 +1,55 @@
+{
+  "_comment": [
+    "OPTIONAL in v1.4.0 — providers are auto-discovered from environment keys.",
+    "Use this file only to pin models, order providers, or reach custom endpoints.",
+    "It records api_key_env NAMES only. Never put a key value in this file.",
+    "'dialect' is the v1.4 field name; the v1.3 field 'kind' is still accepted."
+  ],
+  "providers": [
+    {
+      "name": "anthropic-primary",
+      "dialect": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "weight": 80
+    },
+    {
+      "name": "gemini-reviewer",
+      "dialect": "gemini",
+      "model": "gemini-flash-latest",
+      "api_key_env": "GEMINI_API_KEY",
+      "weight": 75
+    },
+    {
+      "name": "openai-compatible",
+      "dialect": "openai",
+      "base_url": "https://api.groq.com/openai/v1",
+      "model": "openai/gpt-oss-120b",
+      "alt_models": ["llama-3.3-70b-versatile"],
+      "api_key_env": "GROQ_API_KEY",
+      "weight": 70
+    },
+    {
+      "name": "cohere",
+      "dialect": "cohere",
+      "model": "command-r-plus",
+      "api_key_env": "COHERE_API_KEY",
+      "weight": 55
+    },
+    {
+      "name": "local-ollama",
+      "dialect": "ollama",
+      "base_url": "http://localhost:11434",
+      "model": "qwen2.5:14b-instruct",
+      "weight": 45,
+      "notes": "no API key needed; keeps the whole job on-device"
+    },
+    {
+      "name": "offline-mock",
+      "dialect": "mock",
+      "model": "deterministic-mock",
+      "weight": 1,
+      "notes": "deterministic, network-free; used for CI and dry runs"
+    }
+  ]
+}

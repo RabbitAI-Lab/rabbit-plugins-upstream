@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/email-validity-check",
   "slug": "email-validity-check",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1784189600256,
-  "contentHash": "bcd8d7ac1732c3fa95f662a6e7549535db52939e70e28a1c3c3c62314aa5d6af",
-  "fetchedAt": "2026-07-26T18:13:27.669Z"
+  "version": "1.0.2",
+  "updatedAt": 1787563882624,
+  "contentHash": "2d1c3db2661d4f5f60b096e3ef56b0fb0b262c0b57192f9bd9bd64cd950998fe",
+  "fetchedAt": "2026-08-28T19:50:50.440Z"
 }

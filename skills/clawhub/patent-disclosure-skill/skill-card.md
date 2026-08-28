@@ -1,53 +1,76 @@
-## Description: <br>
-Drafts Chinese patent technical disclosures from project materials, including novelty search, redacted drafting, self-checks, and iteration, or turns existing patents into plain-language notes and Obsidian knowledge graphs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+China patents skill for mining patent points, drafting invention, utility-model, and design disclosures, reading patents in plain language, monitoring policy signals, and assisting with office-action responses.
 
-## Publisher: <br>
-[handsomestwei](https://clawhub.ai/user/handsomestwei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[handsomestwei](https://clawhub.ai/user/handsomestwei)
 
-## Use Case: <br>
-Developers, inventors, patent engineers, and technical teams use this skill to identify patentable points from project materials, draft Chinese patent disclosure packages, convert Word or PowerPoint inputs for review, and iterate disclosure files. They can also use it to read existing patent publications or PDFs into plain-language Markdown notes, claim trees, public-clue summaries, and Obsidian knowledge graph artifacts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist sensitive patent drafts, PDFs, public clues, Canvas graphs, Obsidian notes, and revision summaries. <br>
-Mitigation: Use a test or backed-up vault first, confirm output paths before writes, and avoid saving real contact details unless they are required. <br>
-Risk: The skill can modify an Obsidian vault and its settings. <br>
-Mitigation: Disable Obsidian output or write to a local outputs directory when vault changes are not desired. <br>
-Risk: The skill can perform network requests for public-clue fetching or CNIPA browser automation. <br>
-Mitigation: Enable those flows only when those external requests are acceptable for the patent matter being handled. <br>
-Risk: On Windows, Mermaid rendering may use an npx shell fallback. <br>
-Mitigation: Prefer a locally installed mmdc path before rendering diagrams. <br>
+## Use Case:
 
+Developers, inventors, and patent practitioners use this skill to turn project materials, patent numbers, PDFs, and office-action materials into China patent disclosure drafts, plain-language patent notes, prior-art search summaries, policy review backlogs, and review-ready office-action response drafts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/handsomestwei/skills/patent-disclosure-skill) <br>
-- [README](README.md) <br>
-- [Installation guide](INSTALL.md) <br>
-- [Patent PDF sources](references/patent_pdf_sources.yaml) <br>
-- [Patent Obsidian format](references/patent_obsidian_format.md) <br>
-- [IPC application hints](references/ipc_application_hints.yaml) <br>
-- [Patent domain rules](references/patent_domain_rules.yaml) <br>
-- [Tooling guide](tools/README.md) <br>
-- [Patent reader tooling guide](tools/patent_reader/README.md) <br>
-- [CNIPA patent publication search](http://epub.cnipa.gov.cn/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown documents, Word documents, JSON Canvas files, shell commands, and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can persist disclosure drafts, revision logs, patent-reader outputs, public-clue files, Obsidian notes, Canvas graphs, CSS, and Bases configuration depending on the selected workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill requests broad local project-document access, command execution, and writes to output, Obsidian, and office-action data directories.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only in workspaces where those permissions are acceptable, and keep sensitive projects isolated from unrelated local files.
+
+Risk: Mode D can automatically use a third-party book-to-skill helper.
+
+Mitigation: Review and pin that helper before use, or install a manually reviewed version instead of accepting an automatic install path.
+
+Risk: Embedding credentials may be stored in plaintext configuration.
+
+Mitigation: Prefer environment variables or a protected secret store, and avoid passing API keys on command lines.
+
+Risk: Document parsers, browser automation, and optional CAD tooling increase dependency and file-processing exposure.
+
+Mitigation: Pin dependencies for production use and process untrusted Office, PDF, and CAD inputs inside a sandbox.
+
+Risk: Office-action response outputs are drafts that could be legally consequential if filed without review.
+
+Mitigation: Require qualified human review before submitting any generated response or disclosure material.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/handsomestwei/skills/patent-disclosure-skill)
+- [Publisher profile](https://clawhub.ai/user/handsomestwei)
+- [README](artifact/README.md)
+- [Installation guide](artifact/INSTALL.md)
+- [Patent domain rules](artifact/references/patent_domain_rules.yaml)
+- [Patent type search rules](artifact/references/patent_type_search.yaml)
+- [Patent PDF sources](artifact/references/patent_pdf_sources.yaml)
+- [Patent Obsidian format](artifact/references/patent_obsidian_format.md)
+- [Schema reference index](artifact/references/schemas/README.md)
+- [Patent reader tooling](artifact/tools/patent_reader/README.md)
+- [Office-action tooling](artifact/tools/oa/README.md)
+- [book-to-skill helper](https://github.com/virgiliojr94/book-to-skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, DOCX, YAML, JSON, SVG/PNG diagrams, shell commands, and configuration files depending on the workflow mode]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs can be written to timestamped disclosure folders, Obsidian vaults, office-action data directories, or evolution backlog files; office-action drafts require human review before filing.]
+
+## Skill Version(s):
+
+3.9.0 (source: SKILL.md frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

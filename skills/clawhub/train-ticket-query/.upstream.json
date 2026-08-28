@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/train-ticket-query",
   "slug": "train-ticket-query",
   "ownerHandle": null,
-  "version": "1.1.3",
-  "updatedAt": 1783254827816,
-  "contentHash": "f15114dd87331b643867009ba1cc2142f92d829be69a3c0884d43c3270d612ea",
-  "fetchedAt": "2026-07-26T18:20:10.479Z"
+  "version": "1.1.4",
+  "updatedAt": 1787755817339,
+  "contentHash": "1a9ef27a89fddedd7e1b39b332077f442c294515e412f41a58b7704cce801681",
+  "fetchedAt": "2026-08-28T19:38:32.184Z"
 }

@@ -32,7 +32,7 @@ Multi-source enrichment with built-in fallback across multiple underlying provid
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail"}' \
   --records '[{"email":"alice@acme.com"},{"email":"bob@globex.com"}, ...]' \
   --wait-until-finished
 ```
@@ -43,7 +43,7 @@ At 0.1 cred/email, 1,000 emails = 100 credits. Default verify step in any prospe
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"detectJobChange","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"detectJobChange"}' \
   --records '[
     {"professional_email":"alice@acme.com","contact_linkedin":"https://linkedin.com/in/alicesmith"},
     {"professional_email":"bob@globex.com","contact_linkedin":"https://linkedin.com/in/bobjones"},
@@ -65,7 +65,7 @@ Filter to `MOVED` for outbound timing. See [`../recipes/job-change-monitoring.md
 ```bash
 # Only run on rows where cargo.matchProspect / enrichProspectDetails returned no data
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"enrichContact","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"enrichContact"}' \
   --records '[
     {"linkedin":"https://linkedin.com/in/alice","include_extra_fields":true},
     {"first_name":"Bob","last_name":"Jones","domain":"globex.com"}
@@ -93,6 +93,12 @@ cargo-ai orchestration action execute-batch \
 - `enrichContact` / `enrichCompany` — **second rung**, after cargo native, before peopleDataLabs.
 - `findPhone` — **last rung** of the phone chain (after prospeo, FullEnrich). Demote any rung that misses on the pilot's first ~10 rows for the rest of the batch.
 
+## Recurring use
+
+- **`detectJobChange` is the canonical recurring signal** — save it as a play over the tracked-contact segment at the every-2-weeks default; the fresh-cadence anti-pattern above explains why tighter is pure re-billing at 3 credits/record. Cadence table: [`../recipes/save-as-play.md`](../recipes/save-as-play.md); full pattern: [`../recipes/job-change-monitoring.md`](../recipes/job-change-monitoring.md).
+- **`verifyEmail` recurs as verify-before-send** — a node at the top of each send-wave play, gated to rows entering the wave with a missing or stale verdict; never a standing timer over the whole model.
+- **In-play gate for enrichment:** `enrichContact` / `enrichCompany` (1–2 credits) gate on the target enrichment column being empty — segment re-evaluation must not re-bill filled rows; the underlying person/company data is stable enough that a blanket refresh buys nothing.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"waterfall","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"waterfall","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

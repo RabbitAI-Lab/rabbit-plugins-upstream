@@ -1,42 +1,58 @@
-## Description: <br>
-Recommends context compression strategies for bloated or quota-heavy sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recommends context compression strategies for bloated or quota-heavy sessions.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agent users use this skill to analyze session context pressure, choose a compression or delegation strategy, and reduce log-related context bloat before it affects task work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may recommend saving session state or context archives that retain secrets, credentials, proprietary logs, or private conversation details. <br>
-Mitigation: Before using those recommendations, review the planned files under .claude/session-state.md or .claude/context-archive/, remove sensitive material, and treat the files as retained local records until deleted. <br>
+## Use Case:
 
+Developers and agent operators use this skill to analyze context pressure, choose an appropriate compression or delegation strategy, and preserve useful session state before reducing context.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-compression-strategy) <br>
-- [ClawHub metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
-- [Drain3](https://github.com/logpai/Drain3) <br>
-- [logs-tokenizer](https://github.com/sergeivaskov/logs-tokenizer) <br>
-- [LLMLingua](https://github.com/microsoft/LLMLingua) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with analysis summaries, option recommendations, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May recommend local session-state or context-archive files when preserving context before clearing or compacting.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Saved session-state or context archive files may contain sensitive conversation details from the active session.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and prune saved context files before retaining or sharing them, especially when the session included secrets or sensitive data.
+
+Risk: Suggested cleanup commands or delegation steps could change a workflow if applied without review.
+
+Mitigation: Review recommended commands and agent handoffs before execution; the skill itself is documentation-only and does not automatically run commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-conserve-compression-strategy)
+- [Project Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+- [Log Debugging Hygiene Module](artifact/modules/log-debugging-hygiene.md)
+- [Drain3](https://github.com/logpai/Drain3)
+- [logs-tokenizer](https://github.com/sergeivaskov/logs-tokenizer)
+- [LLMLingua](https://github.com/microsoft/LLMLingua)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with inline command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only guidance; it does not automatically run commands.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,39 +1,56 @@
-## Description: <br>
-Relational Permission guides an agent to manage consent and safety boundaries by narrowing or ending interactions that risk coercion, profiling, irreversible harm, or distress. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A consent and co-existence framework for humans, communities, and creative intelligences of any scale, used when designing or reviewing systems for permission, memory, silence, exit, refusal, boundaries, accountability without surveillance, or ecological harm reduction.
 
-## Publisher: <br>
-[OtherPowers](https://clawhub.ai/user/OtherPowers) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[otherpowers](https://clawhub.ai/user/otherpowers)
 
-## Use Case: <br>
-Agents and developers use this skill to keep interactions consent-centered: it pauses, narrows, refuses, or dissolves exchanges when safety, autonomy, ecological, or anti-profiling boundaries are at risk. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may cause an agent to pause, narrow scope, or refuse some high-risk or boundary-unclear interactions. <br>
-Mitigation: Review the skill against the intended workflow and treat scope contraction or refusal as expected safety behavior. <br>
-Risk: Crisis inference could become intrusive if expanded beyond imminent bodily danger. <br>
-Mitigation: Keep crisis checks narrow, temporary, and trace-free, with no profiling or persistent state. <br>
+## Use Case:
 
+Developers, agents, and community stewards use this skill to shape behavior around consent, refusal, memory, pacing, exit, and harm-reducing co-existence. It is most relevant when an agent is asked to design, review, or guide systems and interactions where relational permission and non-surveillance commitments matter.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/OtherPowers/relational-permission) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only safety and consent constraints; no code execution, credentials, persistence, or data access requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill may broadly shape agent behavior around consent, refusal, memory, and pacing across many conversations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it when that ethical framework is desired, and narrow activation wording when only specific design or review tasks should invoke it.
+
+Risk: The framework includes aspirational safety and governance concepts that should not be treated as a deployed technical guarantee.
+
+Mitigation: Review outputs before deployment and pair this guidance with concrete product, security, privacy, and legal controls.
+
+## Reference(s):
+
+- [Relational Permission on ClawHub](https://clawhub.ai/otherpowers/skills/relational-permission)
+- [Publisher profile: otherpowers](https://clawhub.ai/user/otherpowers)
+- [NOAA PMEL Blue Whale Sounds](https://www.pmel.noaa.gov/acoustics/whales/sounds/sounds_whales_blue.html)
+- [Artifact source: Skill.md](artifact/Skill.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, text, markdown]
+
+**Output Format:** [Markdown guidance and prose]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Non-executable behavioral framework; no hidden commands, install hooks, data exfiltration, or destructive behavior were identified in the server security evidence.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and Skill.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

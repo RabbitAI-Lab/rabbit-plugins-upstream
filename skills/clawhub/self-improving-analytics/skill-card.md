@@ -1,45 +1,63 @@
-## Description: <br>
-Captures data quality issues, metric drift, pipeline failures, misleading visualizations, metric definition mismatches, and data freshness problems to enable continuous analytics improvement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures analytics learnings about data quality issues, metric drift, pipeline failures, misleading visualizations, metric definition mismatches, and data freshness problems so teams can improve analytics workflows over time.
 
-## Publisher: <br>
-[jose-compu](https://clawhub.ai/user/jose-compu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jose-compu](https://clawhub.ai/user/jose-compu)
 
-## Use Case: <br>
-Developers, analytics engineers, and data teams use this skill to capture recurring analytics issues, data quality lessons, metric definition conflicts, and improvement requests so they can be reviewed and promoted into durable analytics standards. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent analytics learning logs and reminders can influence future agent behavior beyond the immediate task. <br>
-Mitigation: Prefer project-local setup, review generated or modified guidance files before trusting them, and keep logged entries concise and relevant. <br>
-Risk: Optional hooks can inspect broad command output and may surface analytics reminders in unrelated contexts if enabled too widely. <br>
-Mitigation: Use analytics-specific hook filters where possible, avoid global user-level hooks, and leave Bash output detection disabled unless needed. <br>
-Risk: Analytics logs may accidentally capture connection strings, credentials, API keys, PII, or raw query results. <br>
-Mitigation: Redact sensitive values, summarize failures instead of storing full outputs, and follow the skill guidance not to log credentials or PII. <br>
+## Use Case:
 
+Data practitioners, analytics engineers, and agent users use this skill to record pipeline incidents, data quality findings, metric-definition conflicts, and analytics feature requests in local learning files. Teams can later review those entries and promote recurring patterns into data dictionaries, runbooks, dashboard standards, or data quality SLAs.
 
-## Reference(s): <br>
-- [Self-Improving Analytics on ClawHub](https://clawhub.ai/jose-compu/self-improving-analytics) <br>
-- [OpenClaw Integration](references/openclaw-integration.md) <br>
-- [Hook Setup Guide](references/hooks-setup.md) <br>
-- [Entry Examples](references/examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and reusable log-entry templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or updates local .learnings markdown files when the agent follows the workflow; optional hooks can inject reminders.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: Local .learnings files may capture sensitive analytics details if users paste raw query output, credentials, or personal data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use redacted summaries, avoid connection strings, database credentials, API keys, and PII, and review entries before sharing or promoting them.
+
+Risk: Hooks can persist across sessions and may be too broad if enabled outside the intended project.
+
+Mitigation: Keep hooks project-scoped, prefer the lightweight prompt reminder by default, and avoid global hook installation.
+
+Risk: PostToolUse error detection inspects command output and may surface sensitive pipeline or query context.
+
+Mitigation: Enable PostToolUse only when command-output inspection is desired and avoid logging SQL results or transcripts verbatim.
+
+Risk: Promoting analytics learnings into agent files, runbooks, or generated skills can preserve incorrect guidance if not reviewed.
+
+Mitigation: Review proposed edits and generated skills before applying them, and promote only recurring or broadly applicable patterns.
+
+## Reference(s):
+
+- [OpenClaw Integration](references/openclaw-integration.md)
+- [Hook Setup Guide](references/hooks-setup.md)
+- [Entry Examples](references/examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell, SQL, JSON, and YAML examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local .learnings markdown entries, optional hook reminder text, and reviewable skill scaffolds.]
+
+## Skill Version(s):
+
+1.1.1 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

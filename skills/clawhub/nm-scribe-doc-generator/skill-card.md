@@ -1,48 +1,62 @@
-## Description: <br>
-Generates or remediates documentation with human-quality writing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates or remediates documentation with human-quality writing.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers, technical writers, and documentation maintainers use this skill to draft new documentation or remediate existing documentation and comments so they lead with a clear thesis, avoid AI-writing markers, and preserve the intended meaning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad writing or polish requests. <br>
-Mitigation: Confirm the target files, document type, audience, thesis, and requested mode before drafting or remediation. <br>
-Risk: The skill can read a local .scribe style profile. <br>
-Mitigation: Treat the style profile as local project context and avoid exposing sensitive profile content in generated documentation. <br>
-Risk: The skill can edit documentation or comment text during remediation. <br>
-Mitigation: Review diffs before accepting changes, preserve technical meaning, and limit code-file changes to docstrings or comments. <br>
-Risk: Generated or remediated documentation may introduce inaccurate or misleading guidance. <br>
-Mitigation: Run the documented slop detector and quality gates, verify commands, paths, versions, and links, and require user approval before finalization. <br>
+## Use Case:
 
+Developers and documentation authors use this skill to draft, revise, and quality-check Markdown documentation, docstrings, and technical prose. It emphasizes thesis-first structure, specific claims, low-boilerplate language, and review before applying major changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-doc-generator) <br>
-- [Claude Night Market scribe plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
-- [Generation guidelines module](artifact/modules/generation-guidelines.md) <br>
-- [Quality gates module](artifact/modules/quality-gates.md) <br>
-- [Remediation workflow module](artifact/modules/remediation-workflow.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown prose, checklists, inline shell commands, and documentation or comment edits.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can apply a local .scribe style profile when available and can propose or perform documentation and comment remediation when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter reports 1.9.8) <br>
+Risk: Broad activation terms may cause the skill to engage on general writing or polishing requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it when an opinionated documentation-writing assistant is desired, and review proposed edits before applying them.
+
+Risk: Documentation edits can accidentally change technical meaning or introduce misleading guidance.
+
+Mitigation: Preserve the original technical intent, request approval for major restructuring or deletions, and verify commands, file paths, links, and version numbers.
+
+Risk: The referenced Claude Code plugin and related skills are separate components.
+
+Mitigation: Review those components independently before installing or relying on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-doc-generator)
+- [Publisher profile](https://clawhub.ai/user/athola)
+- [Scribe plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe)
+- [Generation guidelines](artifact/modules/generation-guidelines.md)
+- [Quality gates](artifact/modules/quality-gates.md)
+- [Remediation workflow](artifact/modules/remediation-workflow.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance, proposed edits, checklists, and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May request user approval before major documentation restructuring or technical-content changes.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

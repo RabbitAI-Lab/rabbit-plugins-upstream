@@ -146,6 +146,9 @@ GET /make/api/v2/data-stores/{dataStoreId}
 
 ### Hooks (Webhooks)
 
+> **⚠ Enabling a hook restarts an automation.** A Make hook is the inbound entry point of a scenario, so enabling one resumes real work on every incoming event — the scenario may send mail, write to CRMs, or move money, with no further prompt for each run. Read the scenario's blueprint to see what it actually does before enabling, and confirm with the user that they want it live. Disabling is the safe direction, but it silently stops an automation someone may depend on, so name the scenario and confirm that too.
+
+
 #### List Hooks
 ```bash
 GET /make/api/v2/hooks?teamId={teamId}

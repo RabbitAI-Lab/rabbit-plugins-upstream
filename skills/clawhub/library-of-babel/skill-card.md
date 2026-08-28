@@ -1,43 +1,54 @@
-## Description: <br>
-Bidirectional mathematical engine for Borges' Library of Babel that locates text at permanent coordinates, reads pages from coordinates, and scores pages by Shannon entropy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Library of Babel maps text to deterministic Library of Babel coordinates, reads pages from supplied coordinates, and supports page entropy analysis.
 
-## Publisher: <br>
-[highnoonoffice](https://clawhub.ai/user/highnoonoffice) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[highnoonoffice](https://clawhub.ai/user/highnoonoffice)
 
-## Use Case: <br>
-Developers and external users use this skill to explore Borges' Library of Babel concept, locate text at deterministic coordinates, read deterministic page text from coordinates, and inspect page entropy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-added codex entries can persist private or sensitive text and source labels in codex.json. <br>
-Mitigation: Use add_to_codex only with text intended to be saved, and review or remove codex.json entries before sharing the skill. <br>
-Risk: The skill is a local mathematical/demo tool and its generated pages or entropy labels can be mistaken for authoritative source material. <br>
-Mitigation: Treat page text and entropy classifications as deterministic exploratory outputs, and verify any substantive claims against external sources. <br>
+## Use Case:
 
+Developers and external users can use this skill to locate text in a deterministic Library of Babel coordinate system, read pages from coordinates, and evaluate generated pages with entropy metrics.
 
-## Reference(s): <br>
-- [Library of Babel skill page](https://clawhub.ai/highnoonoffice/library-of-babel) <br>
-- [Technical specification](references/spec.md) <br>
-- [Core math engine](references/babel_core.py) <br>
-- [Demo helpers](references/demo.py) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown with text results and inline Python or shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Deterministic local outputs; add_to_codex can persist user-supplied entries in codex.json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: server-resolved release evidence) <br>
+Risk: The skill text says there is no storage, while the optional codex feature may persist user-added text to a local codex.json file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not add private or sensitive text to the codex unless local persistence is acceptable.
+
+Risk: The published artifact references Python demo and core files that are not included.
+
+Mitigation: Confirm required files are present before relying on runnable demos or code examples.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/highnoonoffice/skills/library-of-babel)
+- [Publisher profile](https://clawhub.ai/user/highnoonoffice)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with Python and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Deterministic coordinate, page, codex, and entropy outputs; included artifact references Python demo files that are not present in the release artifact.]
+
+## Skill Version(s):
+
+0.1.3 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,59 @@
-## Description: <br>
-Audits Makefiles for build correctness, portability, and recipe duplication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audits Makefiles for build correctness, portability, and recipe duplication.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to review Makefile changes, map dependencies, identify duplicated recipes, check portability, and summarize recommended follow-up actions before committing build-system changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run Make-related validation commands against repository files. <br>
-Mitigation: Use it in a trusted or sandboxed repository, review proposed commands first, and avoid executing generated Make targets from untrusted projects. <br>
-Risk: The plugin dogfood workflow can apply generated build targets when an --apply flow is used. <br>
-Mitigation: Require a diff and explicit confirmation before applying changes, then review modified Makefiles before committing. <br>
+## Use Case:
 
+Developers and engineers use this skill to review Makefile changes, map build dependencies, find duplicated recipes, and identify portability issues before committing build-system updates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-makefile-review) <br>
-- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, shell commands, code, guidance] <br>
-**Output Format:** [Markdown with findings, context, dependency analysis, duplication candidates, portability issues, missing targets, and a recommendation.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Makefile target suggestions and command outputs with file and line references.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+Risk: Optional make-based testing can execute project build logic.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before running them and use a trusted workspace for any make target execution.
+
+Risk: Optional apply-style generation can change Makefile-related files.
+
+Mitigation: Inspect the resulting git diff before accepting generated changes.
+
+Risk: Broad build-related triggers may activate during unrelated Makefile discussion.
+
+Mitigation: Invoke the skill intentionally for Makefile review work.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-makefile-review)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/athola)
+- [OpenClaw Metadata Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell and Makefile code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces review findings with context, dependency analysis, duplication candidates, portability issues, missing targets, and an approval recommendation.]
+
+## Skill Version(s):
+
+1.9.19 (source: release evidence; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

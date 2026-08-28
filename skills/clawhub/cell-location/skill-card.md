@@ -1,43 +1,58 @@
-## Description: <br>
-This skill helps agents query Juhe's paid 5G cell-tower location service with MCC, MNC, LAC/TAC, and CI values, then hands the HTTP 402 payment flow to Alipay before returning location data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides paid cell-tower location lookup from MCC, MNC, TAC/LAC, and CI values through Juhe's API and an Alipay AI payment flow.
 
-## Publisher: <br>
-[juhemcp](https://clawhub.ai/user/juhemcp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[juhemcp](https://clawhub.ai/user/juhemcp)
 
-## Use Case: <br>
-External users and agents use this skill to resolve provided cell-tower identifiers into static location details for base-station verification, device-location parsing, and nearby-service workflows. Use it only when the user supplies or confirms the required MCC, MNC, LAC/TAC, and CI values and intends to pay for the lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; service examples and carrier-code guidance in the artifact are China-focused. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries send user-provided cell-tower parameters to Juhe and may incur payment through Alipay. <br>
-Mitigation: Before each query, confirm the MCC, MNC, LAC/TAC, and CI values, disclose the provider submission, and review the Alipay order details before approving payment. <br>
-Risk: Cell-tower location lookups can be misused for unauthorized location inference. <br>
-Mitigation: Use the skill only for user-authorized lookups and decline requests that seek illegal tracking or lack the required base-station parameters. <br>
-Risk: Changing the request parameters or HTTP 402 payment response can break the paid lookup workflow. <br>
-Mitigation: Preserve the submitted JSON parameters and pass the full 402 Payment-Needed response to the Alipay payment skill without alteration. <br>
+## Use Case:
 
+External users and agents use this skill to resolve a base-station identifier tuple into basic geographic location information after confirming payment. It is intended for authorized location checks, nearby-service support, and cell-site position verification.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/juhemcp/cell-location) <br>
-- [Juhe A2A query endpoint](https://apis.juhe.cn/a2a/query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with JSON request and response examples plus curl command blocks.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user-provided cell-tower identifiers and an Alipay payment handoff for HTTP 402 responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release evidence) <br>
+Risk: The lookup sends user-provided cell-tower identifiers to Juhe's third-party API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user is comfortable sharing those identifiers with Juhe and only for locations they are authorized to check.
+
+Risk: The skill uses a paid Alipay flow before returning precise location data.
+
+Mitigation: Confirm the submitted parameters and payment details with the user before proceeding.
+
+Risk: Cell-tower location data could be misused to locate another person without consent.
+
+Mitigation: Decline requests that appear to involve unauthorized tracking or non-consensual location checks.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/juhemcp/skills/cell-location)
+- [Juhe A2A query endpoint](https://apis.juhe.cn/a2a/query)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Guidance, Text]
+
+**Output Format:** [Markdown guidance with JSON request examples and payment-flow instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return order details, latitude, longitude, and address when payment and lookup succeed.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

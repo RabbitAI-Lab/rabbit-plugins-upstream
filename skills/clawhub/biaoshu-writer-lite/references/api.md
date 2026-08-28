@@ -1,8 +1,8 @@
 # 百炼®标书开放 API 契约参考
 
-> **契约兼容标注（skill biaoshu-bailian 2.2.0）**
+> **契约兼容标注（skill biaoshu-bailian 2.2.1）**
 > - 适配后端 API：`/api/open/v1`
-> - 契约核对日期：2026-07-23（净化线移除 experience/feedback 与 skill/version 版本检查端点；凭证仅经本地 config.json、不读环境变量）（后端字段/枚举变化时更新此处并 bump 版本）
+> - 契约核对日期：2026-08-10（`max_total_pages` 同步到 500；余额门槛/扣积分说明细化）（后端字段/枚举变化时更新此处并 bump 版本）
 > - 关键枚举快照：`risk_level ∈ {high, review, tip}` · `result_type ∈ {suspected, detected}` · `priority ∈ {high, medium, low}`
 > - 渲染兼容策略：`report.py` 同时兼容文档值（高/中/低）与实测值、证据多形态、缺字段不崩——契约小幅漂移只需 PATCH，不触发 MAJOR。
 
@@ -42,7 +42,8 @@
 - **上传方式**：本 skill 一律 `multipart/form-data` 直传本地文件（后端另有 `file_url` 入参，**本 skill 不使用**，也不做任何远程抓取）。
 - **限流**：每 App Key 默认 60 req/min、同时进行任务 ≤ 3；超限 429。
 - **统一错误体**：`{ "error": { "code": "...", "message": "..." } }`
-- **计费**：仅在 ③生成（正文逐条 + 导出）发生一次；①解读、②抽包不扣费，仅受限流约束。
+- **计费**：实际扣积分只发生在 ③生成（正文逐条 + 导出）；①解读、②抽包、④合规审查本身不扣积分。
+- **余额门槛**：通过开放 API / Skill 提交时，①解读、③生成、④合规审查都要求 `wallet_balance >= 1` 才能发起；②抽包与各类查询接口不受该门槛限制。
 - **结果时效**：任务结果与 .docx 默认保留约 7 天，过期取结果返回 404 `result_expired`。⚠️ 这意味着**结果在此期间留存于百炼®标书服务器**（第三方存储）；上传文件与历史数据以账户身份存于平台，用户可登录官网查看管理——向用户交代结果时请一并说明。
 
 ## 9 个端点详情
@@ -66,15 +67,15 @@
 ```json
 {"service":"bid_document",
  "result":{"packages":[...],"is_multi_package":true,"package_count":2,
-           "suggested_pages":50,"max_total_pages":300}}
+           "suggested_pages":50,"max_total_pages":500}}
 ```
 - 把 `packages` 给用户挑选，收集选中的 `package_ids`。
 - `is_multi_package=false` 时可跳过选包，generate 不带 `package_ids`。
 
 ### `POST /bid-documents/{project_id}/generate` — 生成成品标书
 - 入参 JSON：`{"package_ids":[11,12],"total_pages":80}`（非多包可省略 body 或传 `{}`）。
-- 返回 `{"job_id":"..."}`。内部串行「选包 → 抽需求 → 大纲 → 逐条正文 → 导出」，耗时长。
-- 进度阶段加权：`select / requirements / outline / content / export`。
+- 返回 `{"job_id":"..."}`。内部串行「选包 → 抽需求 → 大纲 → 逐条正文 → 制式模板填充 → 导出」，耗时长。
+- 进度阶段加权：`select / requirements / outline / content / templates / export`。
 - **结果是流式 .docx 二进制**（非 JSON），响应头 `Content-Disposition: attachment; filename="bid_<job_id>.docx"`。
 
 ### `POST /projects/{project_id}/compliance-reviews` — 合规审查
@@ -97,17 +98,45 @@
 ### `POST /jobs/{job_id}/cancel` — 取消
 - 尽力而为；已过的扣费点不退款。
 
+### `GET /knowledge-base` — 开放知识库分类总览
+
+- 返回开放给 skill 的资料库分类与数据量。
+- **明确排除**：历史标书库、标书模板库。
+
+### `GET /knowledge-base/{category}` — 按类别查询知识库
+
+- `category` 当前支持：
+  - `company_profile`
+  - `qualifications`
+  - `performances`
+  - `financial_reports`
+- 返回按类别分组的结构化 JSON。
+- 分页类默认 `page=1`、`page_size=50`，最大也只允许 `50`。
+- 只返回白名单字段：
+  - `company_profile`：公司名称、企业类型、营业期限、统一社会信用编码、注册地址、办公地址、法人名称、职务、法人联系方式
+  - `qualifications`：资质名称、证书编号、有效期限
+  - `performances`：合同名称、客户名称、合同金额、完成时间
+  - `financial_reports`：当前仅开放分类入口，不开放具体字段
+- **不返回任何附件信息**：包括但不限于访问地址、文件流、base64、附件存在标记。
+- 字段说明与回填边界由 skill 侧 [knowledge-fields.md](knowledge-fields.md) 补充约束。
+
 ### 402 insufficient_balance 错误体新增字段
 
 `phone_bound`（bool）；另有 `bind_url` / `recharge_url`（**均携带明文 `bind_key=<app_key>`**）。
 🔒 **本 skill 不使用也不转发这些带 Key 的链接**（防凭证经会话记录/截图/链接预览泄露）——积分不足一律引导用户自行登录官网充值（不含参数的普通链接）。
 
-### 积分前置闸门（提交时 402）
+### 余额门槛 vs 实际扣积分（提交时 402）
 
 积分余额 < 1 时，`POST /interpretations`、`POST /bid-documents/{pid}/generate`、
-`POST /projects/{pid}/compliance-reviews` 三个计费入口在**提交时**直接返回 402
-`insufficient_balance`（错误体含上述引导字段），充值或绑定手机号领积分后方可操作；
-抽包（packages）与查询类接口不受限。skill 侧提交前也会先调 `GET /me` 预检余额。
+`POST /projects/{pid}/compliance-reviews` 三个提交入口都会在**提交时**直接返回 402
+`insufficient_balance`（错误体含上述引导字段）；充值后方可操作。
+
+这和“是否实际扣积分”是两件事：
+- **余额门槛**：解读 / 生成 / 合规三个入口都要求余额大于 0 才能提交。
+- **实际扣积分**：仍只有生成会真实消耗积分；解读、抽包、合规审查本身不扣积分。
+- **不受门槛限制**：抽包（packages）、`GET /me`、任务查询、结果获取等查询类接口不受该门槛限制。
+
+skill 侧提交前也会先调 `GET /me` 做预检，优先把这层差异解释给用户，避免把“余额不足拦截”误说成“这一步会扣积分”。
 
 ## 错误码速查
 
@@ -131,6 +160,8 @@
 - **幂等**：网络重试带相同 `Idempotency-Key`（UUID），避免重复建任务/重复扣费。
 - **计费**：扣 App Key 所属用户积分，与网页同价；生成前用 `GET /me` 看 `wallet_balance` 预判。
 - **内容质量依赖知识库**：正文质量取决于 owner 租户的公司资料库；资料缺失会致内容退化（不硬失败）。
+- **知识库查询接口**：skill 可独立查询企业信息 / 资质 / 业绩 / 财务报告，再由本地模型做待填项匹配与回填；历史标书库、标书模板库不在本接口开放范围内。
+- **知识库安全边界**：只能按 App Key 所属租户取数，不接受外部 `tenant_id` / `user_id`；接口有单独限流与访问审计日志。
 - **来源标记**：经开放 API 产生的数据标记为 **skill** 来源（网页端为「平台」），便于在网页历史/消费流水里区分。
 
 > 字段口径与根目录《百炼®标书Skill服务.md》附录 A/B 一致；`scripts/report.py` 据此渲染报告。
@@ -180,7 +211,8 @@
 }
 ```
 
-- **summary{}** 汇总：`high_count` / `review_count` / `tip_count` / `similarity_count` / `manual_unchecked_count` / `conclusion`(一句话结论) / `conclusion_phase`(full/rules_only/semantic_partial) / `overview_ready` / `semantic_review.state` / `semantic_review.message_zh`。
+- **summary{}** 汇总：`high_count` / `review_count` / `tip_count` / `similarity_count` / `manual_unchecked_count` / `conclusion`(一句话结论) / `conclusion_phase`(full/rules_only/semantic_partial) / `overview_ready` / `semantic_review.state` / `semantic_review.message_zh`。`semantic_review` 用于提示语义审查是否完整完成；不是 full/complete 时，对用户不得表述为完整审查。
+- **partial_summary{}** 阶段性/部分结果摘要：字段可能随引擎变化，常见为阶段性风险计数、阶段状态、说明文案。存在该字段时，HTML 报告总览区应展示，作为“当前结果完整性”的补充。
 - **bid_files[]** 被查文件：`id` / `filename` / `content_hash` / `metadata` / `created_at`。
 - **issues[]** 合规问题（核心）：`id` / `bid_file_id` / `bid_filename` / `issue_type`(如 `hard_field_presence` 等) / `risk_level` / `result_type` / `title` / `description` / `tender_evidence` / `bid_evidence` / `suggestion` / `confidence`(0-1) / `status` / `user_note`。
   > ⚠️ **实测枚举值**：`risk_level` = **`high`/`review`/`tip`**；`result_type` = **`suspected`/`detected`**。`summary.high_count/review_count/tip_count` 按 `risk_level` 计数。
@@ -189,4 +221,4 @@
 - **manual_items[]** 人工核查清单：`category` / `title`(简短标题) / `description` / `source` / `is_checked` / `note`(备注) / `checked_by` / `checked_at`。
 - **scope_summary_lines[]** 检查范围摘要（适合报告开头展示）。
 
-报告推荐布局：总览 → 风险摘要(summary) → 高风险问题(issues 高) → 待人工复核(result_type=semantic) → 格式提示(低) → 多文件相似度 → 人工核查清单。`scripts/report.py` 已实现此布局。
+报告推荐布局：总览（风险摘要、检查范围、语义审查状态、部分结果摘要） → 高风险问题(issues 高) → 待人工复核(result_type=semantic) → 格式提示(低) → 多文件相似度 → 人工核查清单。`scripts/report.py` 已实现此布局。

@@ -1,14 +1,13 @@
 ---
 name: dlazy-recraft-v4-pro-vector
 version: 1.3.5
-description: 高保真文本到矢量模型，4MP 级品质。适合生产级 SVG 素材与精细插画。
+description: "高保真文本到矢量模型，4MP 级品质。适合生产级 SVG 素材与精细插画。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy recraft-v4-pro-vector -h 查看帮助信息。"}}
 ---
 
-# dlazy-recraft-v4-pro-vector
+# 矢量图生成 Recraft V4 Pro Vector
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 高保真文本到矢量模型，4MP 级品质。适合生产级 SVG 素材与精细插画。
@@ -84,6 +83,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

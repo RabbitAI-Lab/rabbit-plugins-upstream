@@ -1,41 +1,54 @@
-## Description: <br>
-Audits the DSA problem bank for coverage gaps and proposes new YAML entries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audits the DSA problem bank for coverage gaps and proposes new YAML entries.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and maintainers use this skill to review DSA problem-bank coverage, identify gaps against the manifest, and prepare proposed YAML entries for human approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated problem proposals can be incomplete, inaccurate, or misaligned with the existing DSA problem bank. <br>
-Mitigation: Review the markdown report and validate proposed YAML entries before merging any changes. <br>
-Risk: Repository or service actions may be privileged when the skill is used inside broader release or administration workflows. <br>
-Mitigation: Use scoped access, review commands before execution, and avoid granting unrelated production credentials. <br>
+## Use Case:
 
+Developers and maintainers use this skill to audit a DSA problem bank, identify categories below expected NeetCode coverage, and prepare a markdown proposal report for human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-gauntlet-gauntlet-curate) <br>
-- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, YAML, Shell commands, Guidance] <br>
-**Output Format:** [Markdown report with YAML proposal snippets and shell command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Proposal-only output; human review is required before modifying problem-bank YAML files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: release evidence) <br>
+Risk: The skill runs local Gauntlet scripts and writes a temporary markdown report.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the expected Gauntlet workspace and review the generated report path before invoking the skill.
+
+Risk: Proposed YAML problem entries could be incorrect or unsuitable if merged without review.
+
+Mitigation: Review the proposal report and validate entries before applying any changes to the problem bank.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-gauntlet-gauntlet-curate)
+- [Gauntlet plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown report with YAML proposal snippets and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes a temporary report and requires human review before any problem-bank changes.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter says 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

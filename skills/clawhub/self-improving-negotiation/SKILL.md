@@ -496,6 +496,8 @@ rg -n "agreement_risk|term_ambiguity|redline_unresolved" .learnings/NEGOTIATION_
 
 Use hooks to inject reminders and detect negotiation signals.
 
+Hooks persist across sessions once installed. Keep them **project-scoped**. Do **not** install user-level or global hooks. Never use an empty `matcher`. `PostToolUse` inspects command output in-process; do not log raw output, secrets, or transcripts.
+
 ### Example configuration
 
 ```json
@@ -503,7 +505,7 @@ Use hooks to inject reminders and detect negotiation signals.
   "hooks": {
     "UserPromptSubmit": [
       {
-        "matcher": "",
+        "matcher": "counteroffer|concession|anchor|BATNA|walk-away|term.?sheet",
         "hooks": [
           { "type": "command", "command": "./skills/self-improving-negotiation/scripts/activator.sh" }
         ]
@@ -526,6 +528,8 @@ Hook behavior is reminder-only; no execution of agreement or approval actions.
 See `references/hooks-setup.md`.
 
 ## Automatic Skill Extraction
+
+Extracted skills are untrusted until a human reviews the generated `SKILL.md`. Do not keep or publish an extracted skill without explicit user approval.
 
 If a learning is stable and reusable, extract a new skill.
 
@@ -638,3 +642,7 @@ When guidance conflicts, apply:
 ### Ownership Rules
 - This skill writes only to `.learnings/negotiation/` in stackable mode.
 - It may read other skill folders for cross-linking, but should not rewrite their entries.
+- Standalone mode writes to this project's `.learnings/*.md` log files only.
+- Stackable mode writes only to the namespaced folder above and must not rewrite other skills' log entries.
+- Promotion into `AGENTS.md`, `SOUL.md`, `TOOLS.md`, `MEMORY.md`, rules, hooks, or generated skills is not a logging write. Show a reviewed diff and apply only after explicit user approval.
+

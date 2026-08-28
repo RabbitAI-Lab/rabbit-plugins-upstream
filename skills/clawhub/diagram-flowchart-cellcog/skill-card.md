@@ -1,41 +1,54 @@
-## Description: <br>
-Generates interactive diagrams and flowcharts from plain-language prompts using CellCog, including system architecture, mind maps, org charts, ER diagrams, sequence diagrams, Gantt charts, network diagrams, and print-ready PDFs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Flowchart helps agents use CellCog to generate flowcharts, system architecture diagrams, mind maps, org charts, ER diagrams, sequence diagrams, Gantt charts, and network diagrams from plain-English prompts.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers, product teams, and business users use this skill to turn plain-language descriptions of systems, processes, data models, timelines, and journeys into interactive diagrams or PDFs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Diagram prompts and shareable diagram URLs may expose sensitive architecture, network, regulated personal data, or credentials. <br>
-Mitigation: Do not submit secrets, credentials, regulated personal data, or internal-only architecture or network details unless CellCog privacy and sharing controls are verified for the use case. <br>
-Risk: The skill requires a CellCog API key for operation. <br>
-Mitigation: Store CELLCOG_API_KEY as an environment variable or secret and avoid placing API keys in prompts, diagrams, source files, or generated outputs. <br>
+## Use Case:
 
+Developers, operators, product teams, and other external users use this skill to ask an agent to create shareable interactive diagrams or print-ready PDFs from natural-language descriptions.
 
-## Reference(s): <br>
-- [CellCog](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/diagram-flowchart-cellcog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, URLs, PDF] <br>
-**Output Format:** [Markdown guidance with Python snippets; CellCog responses may include shareable interactive HTML URLs or PDF outputs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog package, and CELLCOG_API_KEY; prompts are sent to CellCog.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Prompts, uploaded files, and generated diagrams are processed by CellCog and may be exposed through shareable URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid secrets, credentials, regulated data, and sensitive internal architecture unless organizational approval covers that use.
+
+Risk: Generated diagrams can misrepresent a process, system architecture, or data model if the prompt is incomplete or incorrect.
+
+Mitigation: Review diagram content before using it in documentation, operations, or stakeholder communications.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [ClawHub skill page](https://clawhub.ai/cellcog/skills/diagram-flowchart-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with Python and shell command examples; CellCog may produce shareable interactive HTML diagrams or PDF outputs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and CELLCOG_API_KEY; generated diagrams may be exposed through shareable URLs.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

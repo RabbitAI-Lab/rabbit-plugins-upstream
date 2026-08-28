@@ -60,6 +60,16 @@ web-browser (Step 0: environment detection — shared by all topics)
 | 3 | wmux/cmux/Playwright MCP disconnected → fall back to headless CLI | Even on CLI fallback, force `headless: false`. On a Windows desktop OS, a chromium GUI is available |
 | 4 | "headless is faster and more stable by default" mindset | Speed costs user visibility. If the user says "show me", visibility wins |
 | 5 | Playwright MCP disconnected → CLI fallback auto-selects headless | CLI fallback is also `headless: false`. headless is only for explicit non-interactive cases (e.g., CI assertion) |
+| 6 | SaaS/API task lacks credentials → fallback to manual user UI operation | Do NOT recommend manual user UI clicking when API access is available; fallback to `credential-issue` topic to issue token/key first |
+
+## API-capable environment without credentials — fallback to credential-issue (HARD STOP)
+
+**When a task can be performed via API (e.g., Google Forms API, GitHub API, AWS API), but required API tokens or access keys are missing in the environment, do NOT recommend manual user UI clicking or surrender to direct manual UI operation.** You MUST recommend `credential-issue` topic to issue the access key/token via browser login first, then proceed with backend API automation.
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | API token missing → "Please edit/click manually on the website" | Recommend `credential-issue` topic to issue API token/key via browser login |
+| 2 | Direct UI automation fails → fallback to manual user operation | Check if API automation is available → issue credential via `credential-issue` → execute API |
 
 ### Self-check (every time before launching Playwright/chromium)
 
@@ -87,6 +97,34 @@ During a closed shadow DOM `ak-library` cascade investigation, used a `npx playw
 ### Violation case (2026-07-22, 1st)
 
 While building a domain-registration payment-request report, captured the domain-search-result page (showing a promotional price) and the login screen, then stopped at the login wall with a disclaimer ("have finance/ops enter payment details"), never asking whether to continue via login to verify the real checkout price. The report's stated price differed from the actual payment-screen price. User feedback (paraphrased): "don't arbitrarily skip capturing screens that require login — ask first."
+
+## Known Automation Limitations — SaaS Portal Action-Level CAPTCHA Gates
+
+Some SaaS portals allow full browser login automation but selectively trigger CAPTCHA challenges
+on **creation/mutation actions** (not just on login). Document confirmed cases here so agents do
+not repeat failed automation attempts.
+
+| Service | Automatable | CAPTCHA-blocked | Fallback |
+|---------|-------------|-----------------|----------|
+| **Discord Developer Portal** | Login (via persistent profile with saved credentials) | **New application creation**, bot token reset | Keep browser visible (`headless: false`); user handles hCaptcha manually; script polls `page.url()` for `/bot` URL and auto-captures token once user navigates there |
+| **Discord Developer Portal** | Reading existing app info, navigating between tabs | _(same)_ | _(same)_ |
+
+### Discord Developer Portal — specific notes (2026-08-18, 1st confirmed)
+
+- **Login**: Playwright persistent context (`launchPersistentContext`) with a saved user data directory
+  retains Discord session cookies. Navigation to `discord.com/developers/applications` succeeds
+  without re-authentication.
+- **Bot creation blocked**: Clicking "New Application" and submitting the modal triggers an hCaptcha
+  dialog (e.g. "Hold on! You are human, right?"). The `force: true` checkbox click and JS `dispatchEvent`
+  workarounds successfully activate the Create button, but Discord's backend detects the automated
+  browser and intercepts submission with CAPTCHA.
+- **Recommended hybrid flow**:
+  1. Launch Playwright with `headless: false` + `launchPersistentContext` (reuses login session).
+  2. Navigate to the applications page.
+  3. Set up a polling loop watching `page.url()` for the `/bot` path (every 2s, max ~4min timeout).
+  4. Inform user to manually create the application (handle hCaptcha) and navigate to the Bot tab.
+  5. When `/bot` URL is detected, script resumes: click "Reset Token" → capture `input[readonly]` value → enable `[role="switch"]` intents → save changes.
+  6. Write token to a temp file → hand off to next automation (K8s Secret injection, etc.).
 
 ---
 

@@ -1,53 +1,62 @@
-## Description: <br>
-Helps software maintainers, QA engineers, open-source contributors, and product teams add useful unit tests, raise test coverage, and verify that changes do not break existing behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps maintainers, QA engineers, contributors, and product teams add useful unit tests, raise coverage, and verify changes against existing behavior.
 
-## Publisher: <br>
-[kyro-ma](https://clawhub.ai/user/kyro-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kyro-ma](https://clawhub.ai/user/kyro-ma)
 
-## Use Case: <br>
-Developers, maintainers, QA engineers, and product teams use this skill to plan and produce unit-test coverage improvements, regression checks, implementation notes, and verification commands for existing codebases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Overbroad implicit invocation can route unrelated prompts involving testing, regression, or quality to this skill. <br>
-Mitigation: Narrow or disable implicit invocation in environments with many development skills, and prefer explicit invocation for unit-test coverage work. <br>
-Risk: Generated test plans, code changes, or shell commands may be incomplete or unsuitable for a specific repository. <br>
-Mitigation: Review proposed changes before execution and run the repository's normal test and coverage commands before relying on the output. <br>
+## Use Case:
 
+Developers, QA engineers, software maintainers, open-source contributors, and product teams use this skill to create practical test plans, add targeted unit tests, improve coverage, and document verification steps for existing codebases.
 
-## Reference(s): <br>
-- [Requirement Plan](references/requirement-plan.md) <br>
-- [Skill listing](https://clawhub.ai/kyro-ma/skills/unit-test-coverage-helper) <br>
-- [GitHub issue: Mumble experience, performance, and platform parity](https://github.com/mongre25-droid/mumble/issues/12) <br>
-- [GitHub issue: WAL replay query plan caching](https://github.com/verveguy/liminis-context-graph/issues/238) <br>
-- [GitHub issue: Multi-Outcome Markets contract](https://github.com/Arena1X/InsightArena/issues/1329) <br>
-- [GitHub issue: integration test CI job](https://github.com/StellarCommons/stellar-fee-tracker/issues/499) <br>
-- [GitHub issue: Table UI definition](https://github.com/kitamura-tetsuo/outliner/issues/4238) <br>
-- [GitHub issue: Reject empty payment batch payloads](https://github.com/mux-labs/mux-backend/issues/597) <br>
-- [GitHub issue: Docker Compose local setup](https://github.com/mux-labs/mux-backend/issues/598) <br>
-- [Hacker News: Clinical failure rates over the decades](https://news.ycombinator.com/item?id=49056211) <br>
-- [Hacker News: LLM Usage in Debian](https://news.ycombinator.com/item?id=49053737) <br>
-- [Hacker News: Harden AI changes before review](https://news.ycombinator.com/item?id=49053524) <br>
-- [Hacker News: Engineering management after code cost changed](https://news.ycombinator.com/item?id=49050839) <br>
-- [Hacker News: Buz fork of Bun](https://news.ycombinator.com/item?id=49045975) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with optional code snippets and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include assumptions, checklists, implementation steps, verification notes, and follow-up risks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20260726.120312 (source: server release evidence) <br>
+Risk: The skill may be selected automatically for broad testing or code-quality requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review routing and implicit invocation settings before deployment to ensure they match the workspace's intended testing workflow.
+
+Risk: Generated test plans, code changes, or verification commands may be incomplete or incorrect for a specific codebase.
+
+Mitigation: Review proposed changes locally and run the relevant project test commands before accepting the output.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/kyro-ma/skills/unit-test-coverage-helper)
+- [Requirement Plan](references/requirement-plan.md)
+- [Coding Agents killed my identity. How do you feel?](https://news.ycombinator.com/item?id=49389408)
+- [Roadmap: Summernote Bricks v3 ecosystem](https://github.com/eissasoubhi/summernote-bricks/issues/3)
+- [Runner: handle Epic Issues correctly](https://github.com/xqliu/muyan-pilot/issues/93)
+- [We had a unit test once which only failed on Sundays](https://qntm.org/unit)
+- [Unit tests for CJK language detection](https://github.com/Ganesh-403/semantic-plagiarism-detector/issues/3699)
+- [Phase 8: Unit tests for OptimizedImage](https://github.com/Soroban-Cookbook/Soroban_Cookbook_online/issues/619)
+- [Writing Great Unit Tests: Best and Worst Practices](https://segmentfault.com/a/1190000009709754)
+- [Android automation testing with UiAutomator](https://segmentfault.com/a/1190000045114982)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with checklists, implementation guidance, code snippets, and verification commands as needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce tailored artifacts, reusable workflows, and concise verification notes.]
+
+## Skill Version(s):
+
+0.20260828.40337 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
