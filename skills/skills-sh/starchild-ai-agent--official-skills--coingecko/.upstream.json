@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/coingecko",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "coingecko",
+  "branch": "main",
+  "pushedAt": "2026-08-27T02:18:18Z",
+  "contentHash": "926f3f0e50bb78046b4ac9ab3b46158ca5fa1ab2abe0f650b93084175b65bb93",
+  "fetchedAt": "2026-08-28T19:31:25.901Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/create-verification-skill",
+  "repo": "cursor/plugins",
+  "skillId": "create-verification-skill",
+  "branch": "main",
+  "pushedAt": "2026-08-28T17:12:06Z",
+  "contentHash": "9c70cd61ec5e6e016a95bad46f9b75abd7354db73435eda5fb724eb3e3418d00",
+  "fetchedAt": "2026-08-28T19:31:12.202Z"
+}
