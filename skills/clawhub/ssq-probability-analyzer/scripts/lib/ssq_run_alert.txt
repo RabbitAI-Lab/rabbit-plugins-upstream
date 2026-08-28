@@ -1,0 +1,4 @@
+ALERT
+2026-08-28 00:12:56 | 双色球排程异常:
+  - 上次排程运行未成功: 结果码 255 (未知), 时间 2026/8/27 20:10:31
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复

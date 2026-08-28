@@ -1,58 +1,80 @@
-## Description: <br>
-HyperFrames Core provides the composition contract for building one renderable HyperFrames project, covering DOM timing attributes, clips, tracks, sub-compositions, variables, media playback, deterministic rendering, validation, Tailwind projects, and plan formats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The HyperFrames composition contract - build one renderable project with composition structure, data-* timing attributes, class="clip", tracks, sub-compositions, variables, framework-owned media playback, deterministic-render rules, validation, Tailwind projects, and STORYBOARD.md / SCRIPT.md plan formats.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and engineers use this skill to author, edit, and validate HyperFrames video compositions and related planning files. It helps agents produce renderable HTML/CSS/JavaScript compositions, storyboard and script documents, validation commands, and project-scoped guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to edit composition, storyboard, brief, and script files and run local HyperFrames commands. <br>
-Mitigation: Use it only in intended HyperFrames projects, review project-scoped changes, and run the documented HyperFrames validation commands before rendering or delivery. <br>
-Risk: Non-Latin or multilingual visible text can render incorrectly if the project lacks matching shipped fonts. <br>
-Mitigation: Provide project-shipped fonts with the needed script coverage before rendering non-Latin text. <br>
-Risk: Incorrect timing, media ownership, duplicate IDs, or non-deterministic animation behavior can produce blank, inconsistent, or misleading video frames. <br>
-Mitigation: Follow the deterministic-rendering, media, and ID rules in the references and verify output with snapshots, preview, and HyperFrames checks. <br>
+## Use Case:
 
+Developers and video automation agents use this skill to build and edit one renderable HyperFrames HTML video composition with deterministic timing, media handling, storyboard/script planning artifacts, and validation checks.
 
-## Reference(s): <br>
-- [Minimal Composition](references/minimal-composition.md) <br>
-- [Composition Patterns](references/composition-patterns.md) <br>
-- [Data Attributes Reference](references/data-attributes.md) <br>
-- [Tracks and Clips](references/tracks-and-clips.md) <br>
-- [Sub-Compositions](references/sub-compositions.md) <br>
-- [Variables and Media](references/variables-and-media.md) <br>
-- [Determinism, Animation Runtime, and Layout](references/determinism-rules.md) <br>
-- [Full-Screen Motion Pattern](references/full-screen-motion.md) <br>
-- [Storyboard Format](references/storyboard-format.md) <br>
-- [The Review Loop](references/review-loop.md) <br>
-- [Production Loop](references/production-loop.md) <br>
-- [Brief Contract](references/brief-contract.md) <br>
-- [Brief Format](references/brief-format.md) <br>
-- [Script Format](references/script-format.md) <br>
-- [Subagent Dispatch](references/subagent-dispatch.md) <br>
-- [Frame Worker Core Contract](references/frame-worker-core.md) <br>
-- [HyperFrames Tailwind](references/tailwind.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with HTML, CSS, JavaScript, JSON, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce project-scoped HyperFrames composition files, planning documents, frame-worker packets, and validation commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server release evidence) <br>
+Risk: Project-local file mutation can change composition, storyboard, script, or frame-packet files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated plans and diffs before accepting changes, and keep work in a version-controlled project directory.
+
+Risk: Background preview and render tooling can run local services or longer-lived processes.
+
+Mitigation: Start preview/render commands only in trusted projects, stop background processes after review, and run the documented HyperFrames checks before rendering.
+
+Risk: Worker fan-out can delegate frame work with bounded but project-derived packets.
+
+Mitigation: Inspect the storyboard and packet inputs before dispatch, and keep worker output constrained to the intended project files.
+
+Risk: Public publish actions can expose generated video or project outputs.
+
+Mitigation: Require explicit human approval before any render delivery or public publishing step.
+
+## Reference(s):
+
+- [HyperFrames Core Skill Page](https://clawhub.ai/heygen-com/skills/hyperframes-core)
+- [Minimal Composition](references/minimal-composition.md)
+- [Composition Patterns](references/composition-patterns.md)
+- [Data Attributes Reference](references/data-attributes.md)
+- [Tracks and Clips](references/tracks-and-clips.md)
+- [Creator Editing Recipes](references/creator-editing-recipes.md)
+- [Sub-Compositions](references/sub-compositions.md)
+- [Variables and Media](references/variables-and-media.md)
+- [Determinism, Animation Runtime, and Layout](references/determinism-rules.md)
+- [Full-Screen Motion Pattern](references/full-screen-motion.md)
+- [Storyboard Format](references/storyboard-format.md)
+- [Review Loop](references/review-loop.md)
+- [Production Loop](references/production-loop.md)
+- [Brief Contract](references/brief-contract.md)
+- [Brief Format](references/brief-format.md)
+- [Script Format](references/script-format.md)
+- [Subagent Dispatch](references/subagent-dispatch.md)
+- [Frame Worker Core Contract](references/frame-worker-core.md)
+- [HyperFrames Tailwind](references/tailwind.md)
+- [GSAP CDN](https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with HTML, JavaScript, shell command, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or update project-local HyperFrames files and frame-packet artifacts.]
+
+## Skill Version(s):
+
+1.0.22 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

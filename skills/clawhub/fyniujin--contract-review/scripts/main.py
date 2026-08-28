@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-合同审查主入口 v3.0
+合同审查主入口 v5.1
 完整工作流：文本提取 → 结构解析 → 风险审查 → 报告生成
 新增：硬件自适应调度、历史版本对比、Word 报告生成、更新检测、危险文件拦截
+v5.0 新增：法条引用溯源、谈判辅助、双语对照
+v5.1 新增：指导案例引用溯源、金额校验引擎、多语种扩展（日/韩）
 """
 
 import json
-import os
 import sys
 import time
 import subprocess
@@ -52,8 +53,27 @@ def print_progress(step: str, detail: str = "", done: bool = False):
         print(f"  ⏳ {step} {detail}...", flush=True)
 
 
-def print_banner(version: str = "3.0"):
+def get_skill_version(default: str = "4.0.0") -> str:
+    """v4.0 从 SKILL.md frontmatter 读取版本号，避免版本硬编码脱节"""
+    try:
+        skill_md = Path(__file__).parent.parent / 'SKILL.md'
+        if not skill_md.exists():
+            return default
+        with open(skill_md, 'r', encoding='utf-8') as f:
+            for _ in range(30):  # 只读 frontmatter 区域
+                line = f.readline()
+                if not line:
+                    break
+                if line.startswith('version:'):
+                    return line.split(':', 1)[1].strip().strip('"\'') or default
+    except Exception:
+        pass
+    return default
+
+
+def print_banner(version: str = None):
     """打印工具横幅"""
+    version = version or get_skill_version()
     print("\n" + "=" * 50, flush=True)
     print(f"📋 合同智能审查 v{version}", flush=True)
     print("=" * 50, flush=True)
@@ -102,8 +122,11 @@ def install_ollama():
     
     print("Ollama 未安装。请选择安装方式：")
     print()
-    print("1. macOS / Linux（一键安装）")
-    print("   运行: curl -fsSL https://ollama.ai/install.sh | sh")
+    print("1. macOS / Linux")
+    print("   先下载脚本到本地：curl -fsSL -o install-ollama.sh https://ollama.ai/install.sh")
+    print("   查看脚本内容确认无异常：cat install-ollama.sh")
+    print("   执行安装：bash install-ollama.sh")
+    print("   清理脚本：rm install-ollama.sh")
     print()
     print("2. Windows")
     print("   访问 https://ollama.ai/download 下载 OllamaSetup.exe")
@@ -211,10 +234,52 @@ def show_history(contract_text: Optional[str] = None):
             print(f"     最近审查: {c['last_reviewed']}")
 
 
+# v4.0 行业展示名与可选别名
+INDUSTRY_DISPLAY = {
+    'medical': ('医疗/医药', '医疗器械采购、临床试验、药品配送、多点执业'),
+    'construction': ('建筑/建设工程', '施工总承包、专业分包、EPC、监理、材料设备采购'),
+    'cross_border': ('跨境电商/国际贸易', '国际货物买卖、跨境平台入驻、海外仓、国际物流'),
+    'internet': ('互联网/软件', '软件开发外包、SaaS 服务、数据合规、平台运营、AI 应用'),
+}
+
+
+def show_industries():
+    """v4.0 列出支持的行业专项及规则数量"""
+    from pathlib import Path as _Path
+    import yaml as _yaml
+
+    base = _Path(__file__).parent.parent / 'references' / 'industries'
+    print(f"\n{'=' * 60}")
+    print("🏭 支持的行业专项合规审查 (v4.0)")
+    print(f"{'=' * 60}")
+
+    total = 0
+    for code, (name, scope) in INDUSTRY_DISPLAY.items():
+        rule_path = base / code / 'rules.yaml'
+        count = 0
+        if rule_path.exists():
+            try:
+                with open(rule_path, 'r', encoding='utf-8') as f:
+                    data = _yaml.safe_load(f.read(2 * 1024 * 1024)) or {}
+                count = len(data.get('rules', []))
+            except Exception:
+                count = 0
+        total += count
+        status = '✅' if count else '⚠️ 规则文件缺失'
+        print(f"\n  {status} {name}  （--industry {code}）")
+        print(f"     专项规则：{count} 条")
+        print(f"     适用场景：{scope}")
+
+    print(f"\n{'-' * 60}")
+    print(f"  合计 {total} 条行业专项规则")
+    print(f"  用法：python scripts/main.py 合同.pdf --industry medical")
+    print(f"{'=' * 60}\n")
+
+
 def main():
     """主函数"""
     parser = argparse.ArgumentParser(
-        description='合同智能审查工具 v3.0',
+        description='合同智能审查工具 v4.0',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 使用示例:
@@ -222,6 +287,10 @@ def main():
   python scripts/main.py 合同.pdf --role 甲方          # 从甲方视角审查
   python scripts/main.py 合同.pdf --format docx        # 输出 Word 报告
   python scripts/main.py 合同.pdf --diff old.json      # 版本对比审查
+  python scripts/main.py 合同.pdf --industry medical   # 医疗行业专项审查（v4.0）
+  python scripts/main.py 合同.pdf --revise             # 生成一键修订稿（v4.0）
+  python scripts/main.py 合同.pdf --revise --revise-output 修订稿.docx
+  python scripts/main.py --list-industries             # 查看支持的行业（v4.0）
   python scripts/main.py --history                     # 查看历史记录
   python scripts/main.py --history --text "合同内容"    # 查看该合同历史
   python scripts/main.py 合同.pdf --install-ollama     # 安装本地模型
@@ -255,12 +324,54 @@ def main():
                         help='显示硬件信息和性能配置（v3.0）')
     parser.add_argument('--check-update', action='store_true',
                         help='检查 Skill 更新（v3.0）')
+    # ===== v4.0 新增参数 =====
+    parser.add_argument('--industry', default='',
+                        help='行业专项审查（v4.0）：medical/construction/cross_border/internet，'
+                             '也支持中文如 医疗/建筑/跨境/互联网')
+    parser.add_argument('--list-industries', action='store_true',
+                        help='列出支持的行业专项及规则数量（v4.0）')
+    parser.add_argument('--revise', action='store_true',
+                        help='生成一键修订稿，自动匹配条款库推荐文本（v4.0）')
+    parser.add_argument('--revise-output', default='',
+                        help='修订稿输出路径（v4.0，默认 revision.docx）')
+    parser.add_argument('--revise-format', default='auto',
+                        choices=['auto', 'docx', 'md'],
+                        help='修订稿格式（v4.0，默认按输出后缀自动判断）')
+    parser.add_argument('--full-revision', action='store_true',
+                        help='修订稿包含合同全文并就地标记（v4.0，默认仅输出修订清单）')
+    parser.add_argument('--no-clause-match', action='store_true',
+                        help='关闭条款库自动匹配（v4.0）')
+    # ===== v5.0 新增参数 =====
+    parser.add_argument('--legal-base', action='store_true',
+                        help='启用法条引用溯源，为每个风险点匹配相关法律条文（v5.0）')
+    parser.add_argument('--negotiate', default='',
+                        help='启用谈判辅助，指定历史合同版本目录（v5.0），'
+                             '目录下按时间顺序放置多个版本文件')
+    parser.add_argument('--align', default='',
+                        help='启用中英双语对照审查，指定另一语言版本路径（v5.0），'
+                             '与当前版本进行段落对齐')
+    parser.add_argument('--align-priority', default='zh',
+                        choices=['zh', 'en', 'strict'],
+                        help='双语对照时以哪个版本为准（v5.0，默认 zh）')
+    # ===== v5.1 新增参数 =====
+    parser.add_argument('--guiding-cases', action='store_true',
+                        help='启用指导案例引用溯源，为风险点匹配最高法指导案例（v5.1）')
+    parser.add_argument('--align-ja', default='',
+                        help='启用中日双语对照审查，指定日语版本路径（v5.1）')
+    parser.add_argument('--align-ko', default='',
+                        help='启用中韩双语对照审查，指定韩语版本路径（v5.1）')
+    parser.add_argument('--validate-amounts', action='store_true',
+                        help='启用关键金额校验（大小写一致性+勾稽关系验证）（v5.1）')
 
     args = parser.parse_args()
     
     start_time = time.time()
     
     # ===== v3.0 特殊命令处理 =====
+    
+    if args.list_industries:
+        show_industries()
+        return
     
     if args.check_update:
         from updater import UpdateChecker
@@ -306,8 +417,8 @@ def main():
         if not args.file:
             return
     
-    # ===== v3.0 硬件检测与性能调度 =====
-    print_banner("3.0")
+    # ===== 硬件检测与性能调度 =====
+    print_banner()
     
     from hardware_detector import HardwareDetector
     hw_detector = HardwareDetector()
@@ -315,14 +426,10 @@ def main():
     hw_summary = hw_detector.format_hardware_summary()
     print(f"🖥️  {hw_summary} | 等级: {hw_config['hardware_tier']}", flush=True)
     
-    # ===== v3.0 异步更新检测（不阻塞） =====
+    # ===== v5.2.1 安全更新：移除自动远程版本检查 =====
+    # 安全增强：不再在审查流程中自动拉取远程版本
+    # 更新检查仅在用户显式使用 --check-update 时执行
     update_info = None
-    try:
-        from updater import UpdateChecker
-        update_checker = UpdateChecker()
-        update_info = update_checker.check()
-    except Exception:
-        pass  # 更新检测失败不影响审查
     
     try:
         total_steps = 5
@@ -389,12 +496,36 @@ def main():
         # Step 3: 规则引擎检查
         print_step(3, total_steps, "规则引擎检查")
         
-        from rule_engine import RuleEngine
+        from rule_engine import RuleEngine, normalize_industry
         rules_path = Path(__file__).parent.parent / 'references' / 'risk_rules.yaml'
         engine = RuleEngine(str(rules_path))
-        rule_risks = engine.check_all(contract_text, structure.contract_type, structure.to_dict())
+        
+        # v4.0 行业专项审查
+        industry_code = normalize_industry(args.industry)
+        industry_name = ''
+        if args.industry and not industry_code:
+            print_warning(
+                f"未识别的行业「{args.industry}」，已忽略行业专项规则。"
+                f"可用值：{', '.join(INDUSTRY_DISPLAY.keys())}"
+            )
+        elif industry_code:
+            industry_name = INDUSTRY_DISPLAY.get(industry_code, (industry_code, ''))[0]
+            print(f"  🏭 启用 {industry_name} 行业专项规则")
+        
+        rule_risks = engine.check_all(
+            contract_text, structure.contract_type, structure.to_dict(),
+            industry=industry_code,
+        )
         
         print_success(f"完成 {len(rule_risks)} 项硬规则检查")
+        
+        # v4.0 行业专项规则均为语义审查型，需 LLM 参与才能生效，
+        # 在 --no-llm 模式下明确告知用户，避免误以为已完成行业审查。
+        if industry_code and args.no_llm:
+            print_warning(
+                f"{industry_name}行业专项规则为语义审查型，需 AI 参与才能生效。"
+                f"当前为 --no-llm 模式，本次仅执行通用硬规则检查。"
+            )
         
         # Step 4: LLM 审查（可选）
         print_step(4, total_steps, "AI 审查")
@@ -413,6 +544,7 @@ def main():
                     contract_text=contract_text,
                     contract_type=structure.contract_type,
                     party_role=args.role,
+                    industry=industry_code,
                 )
                 llm_risks = llm_result.get('risks', [])
                 missing_clauses = llm_result.get('missing_clauses', [])
@@ -471,10 +603,64 @@ def main():
             'currency': structure.currency,
             'missing_clauses': missing_clauses,
             'special_notes': special_notes,
+            'industry': industry_code,
+            'industry_name': industry_name,
+            'file_name': Path(args.file).name if args.file else '文本输入',
         }
         
-        generator = ReportGenerator()
+        generator = ReportGenerator(enable_clause_match=not args.no_clause_match)
         
+        # v4.0 条款库匹配（统一在此执行，Word/Markdown/JSON 三种格式共享结果）
+        if not args.no_clause_match:
+            unique_risks = generator._enrich_with_clauses(
+                unique_risks, structure.contract_type
+            )
+            matched = sum(1 for r in unique_risks if r.get('clause_id'))
+            if matched:
+                print_success(f"条款库匹配 {matched} 条推荐替换文本")
+        
+        # ===== v5.0 法条引用溯源（必须在报告生成前执行，否则法条引用不会出现在报告中） =====
+        legal_cite_count = 0
+        if args.legal_base:
+            try:
+                from legal_retriever import LegalRetriever
+                retriever = LegalRetriever()
+                if retriever.is_available:
+                    unique_risks = retriever.enrich_risks(unique_risks)
+                    legal_cite_count = sum(1 for r in unique_risks if r.get('legal_basis'))
+                    print_success(f"法条引用溯源完成，已为 {legal_cite_count} 个风险点匹配法律条文")
+                    # 季度更新提醒
+                    reminder = retriever.check_update_reminder()
+                    if reminder:
+                        print_warning(reminder)
+                else:
+                    print_warning("法条数据库不可用，请确认 references/legal_basis/ 目录存在")
+            except ImportError:
+                print_warning("法条检索引擎未安装，跳过法条引用溯源")
+            except Exception as e:
+                print_warning(f"法条引用溯源失败: {e}")
+        
+        # ===== v5.1 指导案例引用溯源（必须在报告生成前执行） =====
+        case_cite_count = 0
+        if args.guiding_cases:
+            try:
+                from case_retriever import CaseRetriever
+                case_retriever = CaseRetriever()
+                if case_retriever.is_available:
+                    unique_risks = case_retriever.enrich_risks(unique_risks)
+                    case_cite_count = sum(1 for r in unique_risks if r.get('guiding_cases'))
+                    print_success(f"指导案例引用溯源完成，已为 {case_cite_count} 个风险点匹配指导案例")
+                    # 月度更新提醒
+                    reminder = case_retriever.check_update_reminder()
+                    if reminder:
+                        print_warning(reminder)
+                else:
+                    print_warning("指导案例数据库不可用，请确认 references/guiding_cases/ 目录存在")
+            except ImportError:
+                print_warning("指导案例检索引擎未安装，跳过指导案例引用溯源")
+            except Exception as e:
+                print_warning(f"指导案例引用溯源失败: {e}")
+
         # ===== v3.0 版本对比 =====
         diff_result = None
         if args.diff:
@@ -527,6 +713,196 @@ def main():
                     f.write(report)
                 print_success(f"报告已保存至: {output_path}")
         
+        # ===== v4.0 一键修订稿 =====
+        if args.revise:
+            try:
+                from contract_reviser import ContractReviser
+                reviser = ContractReviser()
+                revise_out = args.revise_output or 'revision.docx'
+                revise_result = reviser.revise(
+                    unique_risks,
+                    contract_info,
+                    revise_out,
+                    contract_text=contract_text if args.full_revision else '',
+                    fmt=args.revise_format,
+                )
+                print_success(
+                    f"修订稿已生成: {revise_result['output']}"
+                    f"（{revise_result['count']} 条修订建议"
+                    + (f"，原文定位 {revise_result['located']} 处" if args.full_revision else "")
+                    + "）"
+                )
+                if revise_result['count'] == 0:
+                    if not unique_risks:
+                        print("  ℹ️  本次未发现需修订的风险点，修订稿为空稿", flush=True)
+                    else:
+                        print_warning("未生成修订条目：风险点缺少推荐条款文本")
+            except Exception as e:
+                print_warning(f"修订稿生成失败: {e}")
+        
+        # ===== v5.0 谈判辅助 =====
+        negotiate_result = None
+        if args.negotiate:
+            try:
+                from negotiation_analyzer import NegotiationAnalyzer
+                negotiate_analyzer = NegotiationAnalyzer()
+                versions = []
+                version_dir = Path(args.negotiate)
+                if version_dir.exists():
+                    version_files = sorted(version_dir.glob('*'))
+                    for vf in version_files:
+                        if vf.is_file() and vf.suffix in ('.txt', '.md', '.docx', '.pdf'):
+                            try:
+                                from extract_text import TextExtractor
+                                ext = TextExtractor(enable_security=False)
+                                vtext = ext.extract(str(vf)).get('text', '')
+                                versions.append({
+                                    'content': vtext,
+                                    'timestamp': vf.stem,
+                                    'party': '对方' if '对方' in vf.name else '我方',
+                                })
+                            except Exception:
+                                pass
+                if len(versions) >= 2:
+                    negotiate_result = negotiate_analyzer.analyze_versions(versions, args.role)
+                    hold = len(negotiate_result.get('hold_firm_clauses', []))
+                    flex = len(negotiate_result.get('flexible_clauses', []))
+                    print_success(f"谈判分析完成：识别 {hold} 个必争条款，{flex} 个可让步条款")
+                    # 保存谈判文档
+                    negotiate_doc_path = Path(args.output).parent if args.output else Path('.')
+                    negotiate_doc_path = negotiate_doc_path / 'negotiation_brief.md'
+                    negotiate_analyzer.generate_negotiation_doc(
+                        negotiate_result, contract_info, str(negotiate_doc_path)
+                    )
+                    print_success(f"谈判准备文档已保存: {negotiate_doc_path}")
+                else:
+                    print_warning(f"谈判辅助需要至少 2 个版本，当前仅找到 {len(versions)} 个")
+            except ImportError:
+                print_warning("谈判分析引擎未安装，跳过谈判辅助")
+            except Exception as e:
+                print_warning(f"谈判辅助失败: {e}")
+
+        # ===== v5.1 关键金额校验 =====
+        amount_validation_result = None
+        if args.validate_amounts:
+            try:
+                from amount_validator import AmountValidator
+                validator = AmountValidator()
+                # 从合同文本中提取金额字段
+                amount_fields = validator.extract_amount_fields(contract_text)
+                if amount_fields:
+                    # 构建校验输入（字段名: (金额值, None)）
+                    fields_to_validate = {name: (value, None) for name, value in amount_fields.items()}
+                    amount_validation_result = validator.validate(fields_to_validate)
+                    if amount_validation_result['is_valid']:
+                        print_success(f"金额校验通过（{amount_validation_result['total_checks']} 项检查）")
+                    else:
+                        print_warning(f"金额校验发现 {amount_validation_result['failed']} 项错误")
+                        for e in amount_validation_result['errors']:
+                            print_warning(f"  - {e['field']}: {e['message']}")
+                else:
+                    print("  ℹ️  未在合同文本中识别到金额字段", flush=True)
+            except ImportError:
+                print_warning("金额校验引擎未安装，跳过金额校验")
+            except Exception as e:
+                print_warning(f"金额校验失败: {e}")
+
+        # ===== v5.0 中英双语对照 =====
+        align_result = None
+        if args.align:
+            try:
+                from bilingual_aligner import BilingualAligner
+                aligner = BilingualAligner()
+                other_path = Path(args.align)
+                if other_path.exists():
+                    from extract_text import TextExtractor
+                    ext = TextExtractor(enable_security=False)
+                    other_text = ext.extract(str(other_path)).get('text', '')
+                    # 判断哪个是中文哪个是英文
+                    if args.align_priority == 'en':
+                        zh_text_align = other_text
+                        en_text_align = contract_text
+                    else:
+                        zh_text_align = contract_text
+                        en_text_align = other_text
+                    align_result = aligner.analyze(zh_text_align, en_text_align, args.align_priority)
+                    stats_align = align_result['statistics']
+                    print_success(
+                        f"双语对照完成：匹配 {stats_align['matched']} 段，"
+                        f"不一致 {stats_align['inconsistencies']} 项"
+                    )
+                    # 保存双语报告
+                    align_report_path = Path(args.output).parent if args.output else Path('.')
+                    align_report_path = align_report_path / 'bilingual_report.md'
+                    with open(align_report_path, 'w', encoding='utf-8') as f:
+                        f.write(aligner.generate_report(align_result))
+                    print_success(f"双语对照报告已保存: {align_report_path}")
+                else:
+                    print_warning(f"对照版本文件不存在: {args.align}")
+            except ImportError:
+                print_warning("双语对齐引擎未安装，跳过双语对照")
+            except Exception as e:
+                print_warning(f"双语对照失败: {e}")
+
+        # ===== v5.1 多语种双语对照（日语/韩语） =====
+        align_ja_result = None
+        align_ko_result = None
+        if args.align_ja:
+            try:
+                from bilingual_aligner import BilingualAligner
+                aligner = BilingualAligner(target_lang="ja")
+                ja_path = Path(args.align_ja)
+                if ja_path.exists():
+                    from extract_text import TextExtractor
+                    ext = TextExtractor(enable_security=False)
+                    ja_text = ext.extract(str(ja_path)).get('text', '')
+                    align_ja_result = aligner.analyze(contract_text, ja_text, args.align_priority)
+                    stats_ja = align_ja_result['statistics']
+                    print_success(
+                        f"中日对照完成：匹配 {stats_ja['matched']} 段，"
+                        f"不一致 {stats_ja['inconsistencies']} 项"
+                    )
+                    # 保存双语报告
+                    ja_report_path = Path(args.output).parent if args.output else Path('.')
+                    ja_report_path = ja_report_path / 'bilingual_ja_report.md'
+                    with open(ja_report_path, 'w', encoding='utf-8') as f:
+                        f.write(aligner.generate_report(align_ja_result))
+                    print_success(f"中日对照报告已保存: {ja_report_path}")
+                else:
+                    print_warning(f"日语版本文件不存在: {args.align_ja}")
+            except ImportError:
+                print_warning("双语对齐引擎未安装，跳过中日对照")
+            except Exception as e:
+                print_warning(f"中日对照失败: {e}")
+
+        if args.align_ko:
+            try:
+                from bilingual_aligner import BilingualAligner
+                aligner = BilingualAligner(target_lang="ko")
+                ko_path = Path(args.align_ko)
+                if ko_path.exists():
+                    from extract_text import TextExtractor
+                    ext = TextExtractor(enable_security=False)
+                    ko_text = ext.extract(str(ko_path)).get('text', '')
+                    align_ko_result = aligner.analyze(contract_text, ko_text, args.align_priority)
+                    stats_ko = align_ko_result['statistics']
+                    print_success(
+                        f"中韩对照完成：匹配 {stats_ko['matched']} 段，"
+                        f"不一致 {stats_ko['inconsistencies']} 项"
+                    )
+                    # 保存双语报告
+                    ko_report_path = Path(args.output).parent if args.output else Path('.')
+                    ko_report_path = ko_report_path / 'bilingual_ko_report.md'
+                    with open(ko_report_path, 'w', encoding='utf-8') as f:
+                        f.write(aligner.generate_report(align_ko_result))
+                    print_success(f"中韩对照报告已保存: {ko_report_path}")
+                else:
+                    print_warning(f"韩语版本文件不存在: {args.align_ko}")
+            except ImportError:
+                print_warning("双语对齐引擎未安装，跳过中韩对照")
+            except Exception as e:
+                print_warning(f"中韩对照失败: {e}")
+
         elapsed = time.time() - start_time
         
         print("\n" + "=" * 50, flush=True)

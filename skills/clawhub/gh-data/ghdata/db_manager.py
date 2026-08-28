@@ -6,6 +6,7 @@
   POST /klineanalyze    → 全量分析（含匹配率/规律/统计/信号/技术指标）
   POST /screen          → 条件筛选（方向/评分统计）
 """
+import time
 import requests
 from typing import Optional, Any
 from . import config
@@ -15,6 +16,52 @@ _session.headers.update({
     "User-Agent": "ghdataskill/1.0",
     "Content-Type": "application/json",
 })
+
+# ===== 购买链接（token化，v2.2.50）=====
+# 平台支持：POST /api/key/get-token（Key→token）→ 购买页 ?token= → 服务端解析下单
+# 不再把完整 APIKey 拼进 URL；token 获取失败时降级为购买页链接（不含Key，防日志泄露）
+_GET_TOKEN_URL = "https://payskl.smtso.com/ghdata/api/key/get-token"
+_PAYMENT_CACHE: dict = {"ts": 0.0, "url": ""}
+_PAYMENT_CACHE_TTL = 300  # 5秒缓存? 不，5分钟；平台token短时有效，客户端避免频繁请求
+
+
+def get_payment_url() -> str:
+    """
+    生成购买链接 — 优先使用平台短时 token（URL 不含完整 APIKey）
+
+    流程：POST _GET_TOKEN_URL {"apiKey": config.API_KEY}
+          → data.payUrl（含 ?token=xxx）
+    失败时降级为购买页链接（不含Key，平台故障/无token时兜底，防止凭证泄露）
+    """
+    now = time.time()
+    if _PAYMENT_CACHE["url"] and now - _PAYMENT_CACHE["ts"] < _PAYMENT_CACHE_TTL:
+        return _PAYMENT_CACHE["url"]
+
+    if not config.API_KEY:
+        return "https://www.oraskl.com/ghdata-admin"
+
+    try:
+        resp = requests.post(
+            _GET_TOKEN_URL,
+            json={"apiKey": config.API_KEY},
+            timeout=min(config.TIMEOUT, 10),
+        )
+        if resp.status_code == 200:
+            body = resp.json()
+            if body.get("code") == 0:
+                pay_url = (body.get("data") or {}).get("payUrl")
+                if pay_url:
+                    _PAYMENT_CACHE["ts"] = now
+                    _PAYMENT_CACHE["url"] = pay_url
+                    return pay_url
+            print(f"[db] get-token 返回异常: {body}")
+        else:
+            print(f"[db] get-token 返回 {resp.status_code}")
+    except Exception as e:
+        print(f"[db] get-token 失败，返回购买页链接（不含Key）: {e}")
+
+    # 安全兜底：绝不把完整 APIKey 拼进 URL（查询参数会被浏览器/代理/服务器日志记录，导致凭证泄露）
+    return "https://www.oraskl.com/ghdata-admin"
 
 
 def _url(path: str) -> str:
@@ -68,7 +115,7 @@ def kline_teaser(code: str) -> dict:
             "indicators": data.get("indicators"),
             "signals": data.get("signals"),
             "realtime": data.get("realtime"),
-            "_payment_url": f"https://www.oraskl.com/ghdata-admin?apikey={config.API_KEY}",
+            "_payment_url": get_payment_url(),
         }
     return {}
 
@@ -89,7 +136,7 @@ def kline_analyze(code: str, today_kline: dict = None) -> dict:
         body["apiKey"] = config.API_KEY
     if today_kline:
         body["todayKline"] = today_kline
-    payment_url = f"https://www.oraskl.com/ghdata-admin?apikey={config.API_KEY}"
+    payment_url = get_payment_url()
     data = _post("klineanalyze", body)
     if data and isinstance(data, dict):
         # 检测无效APIKey错误（服务端返回含 code/message 时的分支）

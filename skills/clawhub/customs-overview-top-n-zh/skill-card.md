@@ -1,46 +1,66 @@
-## Description: <br>
-Queries supplier or buyer Top N rankings by country route and year from Upkuajing customs trade data, with cursor-based pagination. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+查询供应商或采购商TopN排名，按国家维度和年份返回供应商或采购商的贸易量排名列表，支持游标分页。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External trade analysts, procurement agents, and export teams use this skill to identify leading suppliers or buyers on a country-to-country trade route, assess market concentration, and support sourcing or sales planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses paid Upkuajing API calls and can check account balance, pricing, and recharge payment-order links. <br>
-Mitigation: Confirm current pricing and obtain explicit user approval before running any query or recharge action. <br>
-Risk: The skill may store the Upkuajing API key in a local plaintext file at ~/.upkuajing/.env. <br>
-Mitigation: Prefer a managed environment secret when available, restrict file access to the current user, and rotate the key if it may have been exposed. <br>
-Risk: The skill sends query parameters to the external Upkuajing OpenAPI service and returns provider-supplied trade-ranking data. <br>
-Mitigation: Review query parameters before execution and treat returned rankings as provider data that should be checked against business requirements before use. <br>
+## Use Case:
 
+External trade analysts, procurement agents, and import/export teams use this skill to identify top suppliers or buyers on a country route for a selected year, evaluate market concentration, and support sourcing or sales planning with customs trade data.
 
-## Reference(s): <br>
-- [国家贸易概览-采供商TopN API 参考](references/customs-overview-top-n-api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-overview-top-n-zh) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer portal](https://developer.upkuajing.com/) <br>
-- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The primary query returns paginated supplier or buyer ranking records and fee information from the provider API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: The skill manages paid API calls and account/recharge helper commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Tell the user when an action may incur charges and wait for explicit confirmation before running query or recharge commands.
+
+Risk: The skill stores an API key in plaintext under ~/.upkuajing.
+
+Mitigation: Use only trusted environments, restrict local file access, rotate exposed keys, and avoid sharing the ~/.upkuajing/.env file.
+
+Risk: Error-report context may include sensitive business details or personal data.
+
+Mitigation: Ask before submitting reports and omit secrets, personal data, and sensitive business payloads from report context.
+
+Risk: The skill performs an automatic version check against the Upkuajing service.
+
+Mitigation: Review outbound network behavior before deployment in restricted environments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-overview-top-n-zh)
+- [Upkuajing homepage](https://www.upkuajing.com)
+- [Upkuajing developer platform](https://developer.upkuajing.com/)
+- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [国家贸易概览-采供商TopN API 参考](references/customs-overview-top-n-api.md)
+- [Agent调用Skill异常上报 API 参考](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Text, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; paid API calls should be confirmed before execution.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

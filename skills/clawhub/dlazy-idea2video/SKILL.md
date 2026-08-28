@@ -1,7 +1,7 @@
 ---
 name: dlazy-idea2video
 version: 1.3.9
-description: "Turn a user's idea into the full pipeline: **story → characters → 3-view portraits → scenes → shots → keyframes → shot videos → concat**. First emit a **plan template** for the user to confi"
+description: Turn a user's idea into the full pipeline: **story → characters → 3-view portraits → scenes → shots → keyframes → shot videos → concat**. First emit a **plan template** for the user to confi
 triggers:
   - Idea → Video Generation Plan
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当你需要使用此技能时，请严格遵循此技能提供的指南进行规划和执行。你可以通过调用 dlazy CLI 的各类生成模型（如 dlazy seedream-4.5 等）来完成实际的图片渲染。注意：Windows PowerShell 中不允许使用 `&` 或 `&&` 进行命令串联或后台运行，请单独且同步地执行命令。"}}
@@ -39,7 +39,7 @@ CLI 会把 key 保存在你的用户配置目录（macOS/Linux 上为 `~/.dlazy/
 
 - **CLI 源代码**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
 - **维护者**: dlazyai
-- **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.2.3` 版本）
+- **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.0.9` 版本）
 - **官网**: [dlazy.com](https://dlazy.com)
 
 如果你不希望在系统上长期保留一个全局 CLI，可以按需运行：
@@ -65,7 +65,7 @@ name: 'idea2video'
 description: 'One-click pipeline that turns a single idea into a complete video-production plan: produces a plan template for the user to review/adjust, then expands it into canvas shapes and applies them via drawToCanvas.'
 ---
 
-# Idea → Video Generation Plan
+# 创意转视频 Idea to Video
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

@@ -5,9 +5,10 @@ description: "音频搜索工具：检索 Pixabay Music，并返回免版税音�
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy search_audio -h 查看帮助信息。"}}
 ---
 
-# dlazy-search_audio
+# 音频素材搜索 Search Audio
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
+
 
 音频搜索工具：检索 Pixabay Music，并返回免版税音乐链接与元数据，适合挑选背景音乐。查询请用 2-3 个简短英文风格词（如 'upbeat pop energetic'），整句或过长关键词会返回 0 结果；每条结果的音乐链接在 `url` 字段。
 
@@ -97,7 +98,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "search_audio",
-    "modelId": "search_audio",
+    "modelId": "search-audio",
     "outputs": [
       {
         "type": "json",
@@ -130,7 +131,7 @@ dlazy search_audio --prompt '提示词内容'
 
 > **智能体关键指令**: 
 > 1. 如果执行结果返回 `code: "insufficient_balance"` 且提示余额不足（Insufficient balance），您必须明确告知用户当前积分不足，并引导用户点击以下链接前往充值：[https://dlazy.com/dashboard/organization/settings?tab=credits](https://dlazy.com/dashboard/organization/settings?tab=credits)
-> 2. 如果执行结果返回 `code: "unauthorized"` 或提示缺少 API Key，您必须明确告知用户前往 [https://dlazy.com/dashboard/organization/api-key](https://dlazy.com/dashboard/organization/api-key) 获取 API Key 并使用 `dlazy auth set <key>` 设置后，然后继续执行任务。
+> 2. 如果执行结果返回 `code: "unauthorized"` 或提示缺少 API Key，您必须明确告知用户前往 [https://dlazy.com/dashboard/organization/api-key](https://dlazy.com/dashboard/organization/api-key) 获取 API Key 并使用 `dlazy auth set <key>` 保存，然后继续执行任务。
 
 ## Tips
 

@@ -1,48 +1,73 @@
-## Description: <br>
-HyperFrames routes video, animation, and motion-graphics requests into the right workflow, resumes existing projects, and manages project inspection, validation, preview, rendering, publishing, and batch rendering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HyperFrames routes agent requests to create, edit, animate, render, inspect, validate, preview, publish, or batch-render HTML-based video compositions and related workflows.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill as the entry point for creating, editing, validating, rendering, and publishing HyperFrames video projects from briefs, URLs, GitHub PRs, Figma inputs, existing footage, or music. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run npx-based HyperFrames commands and install or refresh related workflow skills. <br>
-Mitigation: Review command summaries, keep projects under version control, and run HyperFrames validation after upgrades or workflow changes. <br>
-Risk: Site capture, Figma or GitHub inputs, media generation, and publishing can use networked services when requested. <br>
-Mitigation: Confirm external inputs and publishing intent before use, and avoid sending sensitive material to networked services unless approved. <br>
-Risk: Project edits, renders, and publishing actions may create or update video project artifacts. <br>
-Mitigation: Inspect diffs, previews, and validation results before treating generated output as final or public. <br>
+## Use Case:
 
+Developers, creators, and video teams use HyperFrames to turn briefs, URLs, PRs, Figma inputs, existing footage, music, or Remotion source into routed video projects and to manage existing HyperFrames projects through inspection, validation, preview, render, publish, and batch-render operations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes) <br>
-- [Publisher profile](https://clawhub.ai/user/heygen-com) <br>
-- [HyperFrames entry point](SKILL.md) <br>
-- [Intent interview](references/intent-interview.md) <br>
-- [Capability menu](references/capability-menu.md) <br>
-- [Skill lifecycle](references/skill-lifecycle.md) <br>
-- [Workflow route contracts](references/routes/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, code, configuration, and project artifact descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include workflow routing decisions, project file changes, validation summaries, preview or render commands, and publishing guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.19 (source: server release metadata) <br>
+Risk: Workflow setup and rendering can run HyperFrames npx commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed commands and run them in a trusted project workspace before allowing execution.
+
+Risk: Site capture, user media, PRs, and Figma inputs may contain sensitive or third-party content.
+
+Mitigation: Confirm source permissions and redact sensitive material before capture, generation, or render.
+
+Risk: Project upgrades and publishing can change package pins or expose finished videos publicly.
+
+Mitigation: Require explicit approval for upgrades and publishing, then validate the project after any upgrade.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes)
+- [Publisher profile](https://clawhub.ai/user/heygen-com)
+- [HyperFrames entry point](artifact/SKILL.md)
+- [Intent layer](artifact/references/intent-interview.md)
+- [Capability menu](artifact/references/capability-menu.md)
+- [Pitch round](artifact/references/pitch-round.md)
+- [Skill installation and freshness](artifact/references/skill-lifecycle.md)
+- [Route: embedded-captions](artifact/references/routes/embedded-captions.md)
+- [Route: faceless-explainer](artifact/references/routes/faceless-explainer.md)
+- [Route: general-video](artifact/references/routes/general-video.md)
+- [Route: motion-graphics](artifact/references/routes/motion-graphics.md)
+- [Route: music-to-video](artifact/references/routes/music-to-video.md)
+- [Route: pr-to-video](artifact/references/routes/pr-to-video.md)
+- [Route: product-launch-video](artifact/references/routes/product-launch-video.md)
+- [Route: remotion-to-hyperframes](artifact/references/routes/remotion-to-hyperframes.md)
+- [Route: slideshow](artifact/references/routes/slideshow.md)
+- [Route: talking-head-recut](artifact/references/routes/talking-head-recut.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and project file instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routes work to HyperFrames workflows and domain skills; may produce or modify project briefs, HTML compositions, configuration, media references, and render commands.]
+
+## Skill Version(s):
+
+1.0.24 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

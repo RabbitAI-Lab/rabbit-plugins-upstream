@@ -1,47 +1,70 @@
-## Description: <br>
-Dropbox Business provides managed OAuth access for administering Dropbox Business teams, including members, groups, folders, devices, audit logs, sharing, file requests, and member file access. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dropbox Business API integration with managed OAuth for administering team members, groups, team folders, devices, audit logs, member file access, sharing, and file requests.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Dropbox Business administrators and operations teams use this skill to inspect and administer team resources through a Maton-managed OAuth connection. It supports guarded Dropbox Business API workflows where write, delete, and member file access actions require explicit user approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill grants a third-party gateway admin-level access to a Dropbox Business team. <br>
-Mitigation: Install only when that access is intended, use the least-privileged admin account available, review Dropbox OAuth permissions, and keep MATON_API_KEY protected. <br>
-Risk: Write, delete, and member-file-access actions can change team resources or expose sensitive member files. <br>
-Mitigation: Require explicit user confirmation with specific resource identifiers and a business justification before those actions are executed. <br>
-Risk: High-impact operations such as member removal, device revocation, admin-role changes, and permanent folder deletion may be difficult or impossible to reverse. <br>
-Mitigation: Summarize consequences before execution, prefer reversible actions where available, and confirm destructive flags such as wipe_data and keep_account. <br>
+## Use Case:
 
+Dropbox Business administrators and operations teams use this skill to inspect and manage team resources through Maton-authenticated Dropbox Business API calls. It is intended for admin workflows such as member, group, team-folder, device, sharing, audit-log, and member-file-access operations.
 
-## Reference(s): <br>
-- [Dropbox Business on ClawHub](https://clawhub.ai/byungkyu/dropbox-business) <br>
-- [Maton](https://maton.ai) <br>
-- [Dropbox Business API Documentation](https://www.dropbox.com/developers/documentation/http/teams) <br>
-- [Dropbox Team Administration Guide](https://developers.dropbox.com/dbx-team-administration-guide) <br>
-- [Dropbox Team Files Guide](https://developers.dropbox.com/dbx-team-files-guide) <br>
-- [Dropbox Authentication Types](https://www.dropbox.com/developers/reference/auth-types) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell and Python request examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and a Dropbox Business OAuth connection; high-impact actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The skill can perform high-impact Dropbox Business admin actions, including write, delete, member removal, team-folder deletion, device revocation, and admin-permission changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privileged admin account, default to read and list calls, confirm the exact resource identifier, explain the intended effect, and require explicit approval before any change.
+
+Risk: Member file access is privacy-sensitive and can expose individual users' Dropbox content.
+
+Mitigation: Allow member file access only when the user explicitly requests it with a clear business justification.
+
+Risk: Ambiguous Maton profiles or Dropbox Business connections can send a request to the wrong account.
+
+Mitigation: Specify the intended profile and connection when more than one account or connection is available.
+
+Risk: Long-lived API keys and provider tokens can leak through logs, shell history, files, or command-line arguments.
+
+Mitigation: Prefer OAuth through the Maton CLI and the operating system credential store; never print, persist, or pass credentials on the command line.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/dropbox-business)
+- [Publisher profile](https://clawhub.ai/user/byungkyu)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Dropbox Business API Documentation](https://www.dropbox.com/developers/documentation/http/teams)
+- [Dropbox Team Administration Guide](https://developers.dropbox.com/dbx-team-administration-guide)
+- [Dropbox Team Files Guide](https://developers.dropbox.com/dbx-team-files-guide)
+- [Dropbox Authentication Types](https://www.dropbox.com/developers/reference/auth-types)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown guidance with bash and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes Dropbox Business endpoint paths, approval gates, and credential-handling guidance.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

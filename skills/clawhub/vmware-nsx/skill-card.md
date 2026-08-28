@@ -1,44 +1,62 @@
-## Description: <br>
-Manages VMware NSX networking resources, including segments, Tier-0 and Tier-1 gateways, NAT rules, routing, IP pools, health checks, and connectivity troubleshooting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill whenever the user needs to manage VMware NSX networking, including segments, gateways, NAT, routing, IP pools, and NSX network health.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure engineers use this skill to inspect, configure, and troubleshoot VMware NSX networking across segments, gateways, NAT, static routes, IP pools, fabric inventory, and health endpoints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can directly change live VMware NSX network infrastructure, and MCP write tools execute without the CLI double-confirmation safeguards. <br>
-Mitigation: Use least-privilege NSX service accounts, approve the exact operation and target before MCP writes, and prefer CLI dry-run plus confirmation for changes. <br>
-Risk: Local NSX credentials and generated MCP configuration can expose access to network infrastructure if mishandled. <br>
-Mitigation: Review MCP configuration before applying it, keep ~/.vmware-nsx/.env locked down, and use a secret manager for production credentials where possible. <br>
+## Use Case:
 
+Developers and infrastructure engineers use this skill to inspect and manage VMware NSX networking resources, including segments, Tier-0 and Tier-1 gateways, NAT rules, static routes, IP pools, and health checks. It supports local CLI workflows and MCP-based agent workflows for NSX network operations.
 
-## Reference(s): <br>
-- [VMware NSX GitHub repository](https://github.com/zw008/VMware-NSX) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and structured tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dry-run recommendations, target selection, and MCP tool-use guidance for NSX operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release metadata) <br>
+Risk: Production configuration examples may disable SSL certificate verification while the skill handles powerful NSX credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use certificate verification with a valid CA bundle for production targets and review any configuration that sets verify_ssl to false before deployment.
+
+Risk: The skill can perform state-changing NSX network operations with credentials that may affect routing, NAT, segments, gateways, and IP pools.
+
+Mitigation: Use least-privilege NSX accounts, require explicit approval for writes, prefer dry-run previews for CLI changes, and keep write operations covered by audit policy.
+
+Risk: Local credential and audit files may expose sensitive operational context if filesystem permissions are weak.
+
+Mitigation: Protect ~/.vmware-nsx/.env and ~/.vmware/audit.db with restrictive permissions and avoid storing reusable production secrets where possible.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-nsx)
+- [Project Homepage](https://github.com/vmware-skills/VMware-NSX)
+- [Setup Guide](artifact/references/setup-guide.md)
+- [CLI Reference](artifact/references/cli-reference.md)
+- [Capabilities](artifact/references/capabilities.md)
+- [Agent Guardrails](artifact/references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands, configuration snippets, and structured operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include NSX CLI commands, MCP tool-use guidance, dry-run recommendations, and setup or troubleshooting steps.]
+
+## Skill Version(s):
+
+1.8.10 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

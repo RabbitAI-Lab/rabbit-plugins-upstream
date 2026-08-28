@@ -1,0 +1,36 @@
+[2026-08-08 21:37:19] ALERT
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复
+[2026-08-09 21:30:02] ALERT
+  - 上次排程运行未成功: 结果码 -2147020576 (未知), 时间 2026/8/9 21:14:05
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复
+[2026-08-11 09:21:09] ALERT
+  - 上次排程运行未成功: 结果码 -2147020576 (未知), 时间 2026/8/9 21:14:05
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复
+[2026-08-15 21:30:01] ALERT
+  - 上次排程运行未成功: 结果码 -2147020576 (未知), 时间 2026/8/14 9:19:55
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复
+[2026-08-17 09:40:40] ALERT
+  - 上次排程运行未成功: 结果码 255 (未知), 时间 2026/8/16 20:19:46
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复
+[2026-08-19 21:30:01] ALERT
+  - 上次排程运行未成功: 结果码 -2147020576 (未知), 时间 2026/8/18 20:38:39
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复
+[2026-08-20 21:30:01] ALERT
+  - 上次排程运行未成功: 结果码 255 (未知), 时间 2026/8/20 20:10:00
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复
+[2026-08-23 15:02:22] ALERT
+  - 上次排程运行未成功: 结果码 255 (未知), 时间 2026/8/20 20:10:00
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复
+[2026-08-24 09:23:43] ALERT
+  - 上次排程运行未成功: 结果码 -2147020576 (未知), 时间 2026/8/24 9:23:20
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复
+  - ssq_run_alert.txt 比最新产物还新 -> 存在未处理的排程失败告警
+[2026-08-25 19:32:21] ALERT
+  - 上次排程运行未成功: 结果码 -2147020576 (未知), 时间 2026/8/24 9:23:20
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复
+[2026-08-25 21:30:02] ALERT
+  - 上次排程运行未成功: 结果码 255 (未知), 时间 2026/8/25 20:10:00
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复
+[2026-08-28 00:12:56] ALERT
+  - 上次排程运行未成功: 结果码 255 (未知), 时间 2026/8/27 20:10:31
+  - 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复

@@ -1,45 +1,60 @@
-## Description: <br>
-Generates 1-22 second sound effects from text prompts using the ElevenLabs text-to-sound model through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ElevenLabs text-to-sound model that generates 1-22 second sound effects from a description for foley, ambience, alerts, and game SFX.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, and game or audio teams use this skill to generate short foley, ambience, alerts, and game sound effects from text descriptions through a cloud generation API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review flagged persistent API-key storage whose promised file-permission protection was not evident in the reviewed CLI package. <br>
-Mitigation: Prefer passing DLAZY_API_KEY per invocation on shared machines, or verify the permissions on ~/.dlazy/config.json after login. <br>
-Risk: Prompts and supported media paths are sent to the dLazy hosted API and generated outputs are hosted by dLazy media storage. <br>
-Mitigation: Avoid sending sensitive prompts or private media unless the user accepts the service and data-handling implications. <br>
-Risk: The documented output example uses image/png for a sound-effect skill, and the security guidance treats that example as unreliable. <br>
-Mitigation: Validate returned output types, MIME types, and URLs before presenting generated media as final audio output. <br>
+## Use Case:
 
+Developers and content creators use this skill to ask an agent to generate short sound effects through the dLazy CLI and ElevenLabs SFX model. It is suited for creating foley, ambience, alerts, and game audio assets from text prompts.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-sfx) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance] <br>
-**Output Format:** [JSON responses and generated media URLs, with shell-command guidance for setup and error recovery.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key and supports prompt, duration, prompt_influence, dry-run, no-wait, and timeout options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: server release and frontmatter) <br>
+Risk: Prompts and any explicitly provided media paths are sent to dLazy-hosted API and file services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with content appropriate for dLazy-hosted processing, and avoid sending sensitive prompts or media unless the user accepts that service boundary.
+
+Risk: The skill requires a dLazy API key for authenticated API calls.
+
+Mitigation: Use the documented login or per-invocation environment variable flow, and rotate or revoke the key from the dLazy dashboard if exposure is suspected.
+
+Risk: A global CLI install persists a third-party command on the user's system.
+
+Mitigation: Use the documented npx invocation for on-demand execution when a persistent global CLI install is not desired.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-sfx)
+- [dLazy CLI Source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [CLI command guidance and JSON result metadata with generated asset URLs; optional downloaded media file when --save is used.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key and uses the pinned @dlazy/cli 1.2.3 package.]
+
+## Skill Version(s):
+
+1.3.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

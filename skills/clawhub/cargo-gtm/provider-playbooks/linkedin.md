@@ -65,7 +65,7 @@ LinkedIn page-level enrichment, URL resolution, and activity signals. **Cheapest
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"findProfileUrl","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"findProfileUrl"}' \
   --records '[{"fullName":"Alice Smith","companyName":"Acme"},{"fullName":"Bob Jones","companyName":"Globex"}]' \
   --wait-until-finished
 ```
@@ -77,12 +77,12 @@ Then run `enrichProfile` on each returned URL and cross-check name + company —
 ```bash
 # 1. Find the post(s)
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"searchPosts","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"searchPosts"}' \
   --data '{"searchKeywords":"revenue operations benchmarks","sortBy":"Latest","datePosted":"Past week"}' \
   --wait-until-finished
 # 2. Pull who engaged (billed per item — cap the pull)
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"searchPostReactions","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"searchPostReactions"}' \
   --data '{"urn":"7181234567890123456","type":"ALL"}' \
   --wait-until-finished
 ```
@@ -93,7 +93,7 @@ cargo-ai orchestration action execute \
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"extractCompanyEmployeesInsights","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"extractCompanyEmployeesInsights"}' \
   --data '{"linkedinUrl":"https://linkedin.com/company/acme","affiliates":false}' \
   --wait-until-finished
 ```
@@ -120,6 +120,14 @@ Chain with `extractSimilarCompanies` (0.25) for a cheap lookalike seed list, or 
 - Posts / jobs / activity extraction — **SIGNAL stage**: engagement pools and personalization inputs; `searchJobs` sits beside `theirStack.searchJobs` (both 0.5) for hiring intent.
 - Engagement actions — post-VERIFY activation touches, outside the sourcing spine.
 
+## Recurring use
+
+Split by data half-life: **posts, jobs, and activity decay — profiles and company pages don't**.
+
+- **Scheduled pulls:** `searchJobs` daily (hiring intent) and `searchPosts` weekly, with `datePosted` matched to the cadence (`Past 24 hours` / `Past week`) so each run bills only the fresh window — cadence defaults in [`../recipes/save-as-play.md`](../recipes/save-as-play.md). Per-item activity pulls (`extractProfilePostActivity` et al., 0.05/item) fit a pre-outreach refresh, sized first per the per-item pitfall above.
+- **Don't re-pull stable pages:** `enrichProfile` / `enrichCompany` (0.25) on a timer re-bills unchanged rows; in a play, gate them on an empty enriched field.
+- **In-play gate:** run `findProfileUrl` only where the LinkedIn-URL column is still empty.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"linkedin","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"linkedin","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

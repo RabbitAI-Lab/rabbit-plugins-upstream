@@ -1,4 +1,4 @@
-import { appendPreviewNotice, getApiKeyOrError, getHtmlLengthWithoutImages, hasOwn, isPlainObject, validateHtmlWithoutH1, validateLanguage, validateSeo } from "../validation.js";
+import { appendPreviewNotice, getApiKeyOrError, getHtmlLengthWithoutImages, hasOwn, isPlainObject, validateHtml, validateLanguage, validateSeo } from "../validation.js";
 
 export default async function CustomPageCreate(args = {}) {
     if (!args || typeof args !== "object" || Array.isArray(args)) {
@@ -61,10 +61,11 @@ export default async function CustomPageCreate(args = {}) {
         };
     }
 
-    const contentStructureError = validateHtmlWithoutH1(args.custompage.content, "custompage.content", {
+    const contentStructureError = validateHtml(args.custompage.content, "custompage.content", {
         required: true,
         actionLabel: "custompage-create",
-        maxImageCount: 50
+        maxImageCount: 50,
+        allowH1: true
     });
     if (contentStructureError) {
         return {

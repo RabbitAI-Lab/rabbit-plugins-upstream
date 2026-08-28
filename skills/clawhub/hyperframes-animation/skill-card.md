@@ -1,49 +1,61 @@
-## Description: <br>
-Provides HyperFrames animation authoring guidance, including atomic motion rules, multi-phase blueprints, scene transitions, runtime adapters, and choreography audit support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides HyperFrames animation guidance across atomic motion rules, scene blueprints, transitions, design techniques, runtime adapters, and animation-map auditing.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and designers use this skill to select and compose deterministic HyperFrames motion patterns, scene blueprints, transitions, and runtime-specific animation code for web and video compositions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Example HTML loads JavaScript from public CDNs. <br>
-Mitigation: Review CDN sources and use pinned or locally hosted dependencies when running examples in controlled environments. <br>
-Risk: The animation-map helper can bootstrap HyperFrames packages when they are not bundled in the local environment. <br>
-Mitigation: Set HYPERFRAMES_SKILL_PKG_VERSION to an exact version before running the helper when deterministic dependency resolution is required. <br>
+## Use Case:
 
+Developers and motion authors use this skill to select and combine HyperFrames animation rules, blueprints, transitions, runtime adapters, and audit tools for deterministic, seek-safe composition work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes-animation) <br>
-- [Skill overview](artifact/SKILL.md) <br>
-- [Rules index](artifact/rules-index.md) <br>
-- [Blueprints index](artifact/blueprints-index.md) <br>
-- [Transitions overview](artifact/transitions/overview.md) <br>
-- [Motion techniques](artifact/techniques.md) <br>
-- [GSAP documentation](https://gsap.com/docs/v3/) <br>
-- [Anime.js documentation](https://animejs.com/documentation/) <br>
-- [Lottie-web project](https://github.com/airbnb/lottie-web) <br>
-- [MDN CSS animation reference](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code snippets, shell commands, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce deterministic HyperFrames animation recipes, runtime adapter guidance, and animation-map audit commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+Risk: Examples or generated compositions may fetch animation libraries from public CDNs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: For production use, vendor or pin remote libraries and apply integrity controls before running or shipping the composition.
+
+Risk: The animation-map script can fall back to an unpinned package version when used outside a bundled install.
+
+Mitigation: Set HYPERFRAMES_SKILL_PKG_VERSION when running the script outside the bundled CLI or skill installation.
+
+Risk: Glitch, flash, and high-brightness effects can create accessibility and photosensitivity concerns.
+
+Mitigation: Provide reduced-motion and photosensitivity-safe alternatives before shipping these effects.
+
+## Reference(s):
+
+- [HyperFrames Animation Skill Page](https://clawhub.ai/heygen-com/skills/hyperframes-animation)
+- [Rules Index](artifact/rules-index.md)
+- [Blueprints Index](artifact/blueprints-index.md)
+- [Scene Transitions Overview](artifact/transitions/overview.md)
+- [Visual Techniques Reference](artifact/techniques.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration, Analysis]
+
+**Output Format:** [Markdown guidance with code snippets, shell commands, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [HyperFrames-native guidance emphasizes deterministic, seek-safe animation timelines.]
+
+## Skill Version(s):
+
+1.0.18 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

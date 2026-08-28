@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/wikipedia",
   "slug": "wikipedia",
   "ownerHandle": null,
-  "version": "1.1.1",
-  "updatedAt": 1783465566802,
-  "contentHash": "c0b319253cc013dad229d65f0caf621a890139895611bb1a7681f6b52b0b02ea",
-  "fetchedAt": "2026-07-26T18:18:28.631Z"
+  "version": "1.1.6",
+  "updatedAt": 1787895442563,
+  "contentHash": "6a04cfa430046929cb26a172d65691cd2f9c80d1fe11b4a31e20285ec6a4f93b",
+  "fetchedAt": "2026-08-28T19:33:56.076Z"
 }

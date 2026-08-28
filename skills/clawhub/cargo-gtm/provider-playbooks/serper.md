@@ -31,7 +31,7 @@ Billing is **fixed per query, not per record** — a `limit: 100` call costs the
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"serper","actionSlug":"searchPlaces","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"serper","actionSlug":"searchPlaces"}' \
   --data '{"query":"dentists in Austin, TX","country":"us","limit":100}' \
   --wait-until-finished
 ```
@@ -42,7 +42,7 @@ One query = 0.05 credits for up to 100 places. To build a bigger TAM, fan out **
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"serper","actionSlug":"search","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"serper","actionSlug":"search"}' \
   --data '{"query":"Acme GmbH funding announcement","country":"de","locale":"de","limit":10}' \
   --wait-until-finished
 ```
@@ -67,9 +67,15 @@ Pipe the results into an LLM step (`anthropic.instruct`) to extract the fact you
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"serper","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"serper","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**
 
 ## Pairs with
 
 - [`../recipes/build-tam.md`](../recipes/build-tam.md) — the local-SMB sourcing variant.
 - [`../recipes/outreach-activation.md`](../recipes/outreach-activation.md) — quick public-web facts feeding the personalization step.
+
+## Recurring use
+
+- **Signal-triggered, not timer-driven.** Google results are live, so re-running `search` on a row that just fired a signal (funding, job change, site visit) is legitimate re-research; a blanket scheduled re-search of a whole list is the fan-out anti-pattern above wired to a cron.
+- **In-play gate:** filter to rows where the research output column is empty or the triggering signal is newer than the last search, so segment re-evaluation never re-bills settled rows.
+- **`searchPlaces` re-pulls:** local TAM churns slowly — if scheduled at all, re-run the same fixed query set (0.05 per query either way) and dedupe places against the Companies model before any paid enrichment runs downstream.

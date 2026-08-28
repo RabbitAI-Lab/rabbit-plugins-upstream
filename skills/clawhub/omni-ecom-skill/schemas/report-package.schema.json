@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "omni-ecom://schemas/report-package-1.0.json",
+  "title": "Omni E-commerce Report Package",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "team_id", "team_version", "team_version_changes", "version_diff", "report_revision", "task_type", "task_profile", "review_stage", "collaboration_mode", "collaboration_status", "expert_participation", "run_id", "client_scope", "gate_status", "status", "title", "period", "scope", "data_gate", "claim_ledger", "metrics", "facts", "judgments", "actions", "missing_data", "sources", "provenance"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "team_id": { "type": "string", "minLength": 1 },
+    "team_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "team_version_label": { "type": "string", "minLength": 1 },
+    "team_release_name": { "type": "string", "minLength": 1 },
+    "team_release_date": { "type": "string", "minLength": 1 },
+    "team_previous_version": { "type": "string" },
+    "team_version_changes": { "type": "array", "items": { "type": "string" } },
+    "version_diff": { "type": "object" },
+    "collaboration_mode": { "enum": ["comprehensive", "single_point"] },
+    "report_revision": { "type": "string", "pattern": "^R[1-9][0-9]*$" },
+    "task_type": { "enum": ["store_diagnosis", "weekly_report", "monthly_report", "quarterly_report", "annual_report", "campaign_review", "data_quality_audit", "single_topic"] },
+    "task_profile": { "type": "object" },
+    "review_stage": { "enum": ["awaiting_delivery_review", "not_required"] },
+    "collaboration_status": { "enum": ["awaiting_delivery_review", "verified_data_gate", "single_point"] },
+    "expert_participation": {
+      "type": "array",
+      "minItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["agent_id", "display_name", "profession", "role", "participation_status", "agent_task_ids", "contribution_summary", "handoff_files", "handoff_sha256"],
+        "properties": {
+          "agent_id": { "type": "string", "minLength": 1 },
+          "display_name": { "type": "string", "minLength": 1 },
+          "profession": { "type": "string", "minLength": 1 },
+          "role": { "enum": ["lead", "member"] },
+          "participation_status": { "enum": ["contributed", "pending_review", "not_invoked"] },
+          "agent_task_ids": { "type": "array", "items": { "type": "string", "pattern": "^agent-[0-9A-Za-z_-]+$" } },
+          "agent_view_urls": { "type": "array", "items": { "type": "string", "format": "uri" } },
+          "agent_return_statuses": { "type": "array", "items": { "const": "completed" } },
+          "agent_returned_at": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "agent_return_files": { "type": "array", "items": { "type": "string", "pattern": "^[^/\\\\]+\\.return\\.json$" } },
+          "contribution_summary": { "type": "string" },
+          "handoff_files": { "type": "array", "items": { "type": "string" } },
+          "handoff_sha256": { "type": "array", "items": { "type": "string", "pattern": "^[0-9a-f]{64}$" } }
+        }
+      }
+    },
+    "run_id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,80}$" },
+    "client_scope": { "type": "string", "minLength": 1 },
+    "gate_status": { "enum": ["PASS", "WARN", "BLOCKED"] },
+    "status": { "enum": ["data_blocked", "draft_diagnosis", "ready_for_review"] },
+    "title": { "type": "string", "minLength": 1 },
+    "period": { "type": "string", "minLength": 1 },
+    "scope": { "type": "object" },
+    "data_gate": { "type": "object" },
+    "claim_ledger": {
+      "type": "object",
+      "required": ["file", "sha256", "claims_count", "claims"],
+      "properties": {
+        "file": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "claims_count": { "type": "integer", "minimum": 1 },
+        "verified_count": { "type": "integer", "minimum": 0 },
+        "derived_count": { "type": "integer", "minimum": 0 },
+        "unknown_count": { "type": "integer", "minimum": 0 },
+        "claims": { "type": "array", "minItems": 1 }
+      }
+    },
+    "metrics": { "type": "array" },
+    "facts": { "type": "array" },
+    "judgments": { "type": "array" },
+    "hypotheses": { "type": "array" },
+    "actions": { "type": "array" },
+    "missing_data": { "type": "array" },
+    "risks": { "type": "array" },
+    "sources": { "type": "array" },
+    "provenance": { "type": "object" }
+  }
+}

@@ -1,45 +1,64 @@
-## Description: <br>
-Detects abnormal body temperature rise or drop in livestock and poultry from thermal or visible-light imagery and returns fever or hypothermia early warnings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects abnormal body temperature rise or drop in livestock and poultry from thermal or visible-light imagery, and outputs fever/hypothermia early warnings based on visual thermal features. | 通过热成像或视觉特征识别畜禽体温异常，预警发热。
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External operators and developers use this skill to submit livestock or poultry thermal and visible-light images or videos for body-temperature anomaly screening, including fever, hypothermia, and historical report lookup. It supports early health screening workflows but does not provide disease diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Livestock images, videos, and report queries are sent to the Life Emergence cloud service. <br>
-Mitigation: Review data handling, retention, and account ownership requirements before installation, and submit only media approved for cloud processing. <br>
-Risk: The skill can create or reuse a local identity and persist authentication tokens in the workspace database. <br>
-Mitigation: Restrict access to the workspace data directory, review local storage before sharing the workspace, and rotate or revoke tokens when needed. <br>
-Risk: Outputs are screening results rather than veterinary diagnosis or treatment advice. <br>
-Mitigation: Use results as early-warning support and require veterinary or laboratory confirmation before disease response decisions. <br>
+## Use Case:
 
+Farm operators, veterinarians, and developers use this skill to screen livestock and poultry thermal or visible-light images and videos for body-temperature abnormalities and to retrieve historical fever or hypothermia warning reports. It supports early health screening but does not provide disease diagnosis or treatment advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-livestock-fever-detection-analysis) <br>
-- [Life Emergence skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown or JSON text with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured analysis results, historical report records, and report export links returned by the cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter says 1.0.3) <br>
+Risk: Livestock media may be uploaded to the configured service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media that is approved for the service, and confirm data handling expectations before installation.
+
+Risk: Report history is tied to an automatically managed identity and tokens may be stored in the workspace data directory.
+
+Mitigation: Run the skill in an isolated workspace and review identity and token storage before using it with sensitive data.
+
+Risk: The release includes development HTTP endpoint configuration.
+
+Mitigation: Review and replace endpoint configuration with the intended production or approved service endpoints before use.
+
+Risk: The output is a screening result, not a veterinary diagnosis or treatment recommendation.
+
+Mitigation: Use results as an early-warning signal and escalate suspected disease cases to qualified veterinary or laboratory review.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-livestock-fever-detection-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [Livestock Fever Detection API Documentation](artifact/references/api_doc.md)
+- [Common Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files]
+
+**Output Format:** [Markdown or JSON-style structured analysis, with optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include abnormality levels, estimated temperature ranges, individual locations, report links, and historical report tables.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter says 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

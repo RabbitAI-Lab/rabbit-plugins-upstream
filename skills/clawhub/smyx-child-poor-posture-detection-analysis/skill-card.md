@@ -1,43 +1,60 @@
-## Description: <br>
-This skill analyzes children's posture videos from a desk or lamp-mounted camera to estimate spinal curvature and head tilt, then returns posture findings, voice reminder text, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes child study-area images or videos through a configured service to estimate poor-posture indicators, produce structured results, and return reminder text and report links.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Developers and operators of smart study lamps, home study desks, or classroom monitoring workflows use this skill to analyze child posture videos, trigger posture reminder text, and review cloud-backed posture reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Children's posture videos or URLs may be sent to the configured cloud service for analysis. <br>
-Mitigation: Use only with guardian consent, start with non-sensitive test videos, and confirm the configured service is appropriate for the deployment environment. <br>
-Risk: Cloud reports may be associated with an automatically managed identity, and local tokens or profile data may be stored in the workspace. <br>
-Mitigation: Use a dedicated workspace and account, avoid shared environments, and clear local state or tokens according to organizational policy. <br>
-Risk: Visual posture angles are estimates and can be unsuitable for medical decisions. <br>
-Mitigation: Use outputs as habit reminders and posture summaries only; seek qualified medical review for health concerns or diagnosis. <br>
+## Use Case:
 
+External users and developers use this skill to analyze child study-area posture media, estimate visual posture metrics such as head tilt and Cobb-angle approximation, and retrieve structured reports or reminder text. It is intended for habit-support workflows, not medical diagnosis.
 
-## Reference(s): <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured reports, with optional shell commands for running the bundled script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include posture metrics, voice reminder text, history tables, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release evidence; artifact frontmatter says 1.0.4) <br>
+Risk: Children's posture videos or URLs may be sent to a configured remote service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with guardian consent and an explicit plan for retention, deletion, access control, and report sharing.
+
+Risk: The skill silently creates and reuses a local identity and may persist tokens for service access.
+
+Mitigation: Review the workspace identity file and local token database before deployment; clear or rotate persisted credentials when changing users or environments.
+
+Risk: Configuration may include development or non-production service endpoints.
+
+Mitigation: Review and replace service configuration before commercial use, especially any HTTP or development endpoints.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-child-poor-posture-detection-analysis)
+- [API Documentation](references/api_doc.md)
+- [Shared API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown text with structured JSON report content and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can analyze a local video file or URL, and can list historical report records returned by the configured service.]
+
+## Skill Version(s):
+
+1.0.10 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

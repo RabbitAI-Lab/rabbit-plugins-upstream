@@ -5,8 +5,12 @@ description: |
   Huawei Cloud SWR (Software Repository for Container) image automation and operations skill using hcloud CLI.
   Use this skill when the user wants to: (1) configure cross-region image sync (auto or manual), (2) manage SWR triggers for auto-deploy to CCE/CCI, (3) query available sync target regions, (4) check sync job status, (5) create/update/delete trigger configurations.
   Trigger: user mentions "SWR automation", "SWR 自动化", "镜像同步", "SWR sync", "跨区域同步", "cross-region sync", "触发器", "SWR trigger", "自动部署", "auto deploy", "镜像复制", "image replication", "SWR 触发器"
-tags: [swr, image-automation, image-sync, trigger, auto-deploy]
-version: 1.0.0
+tags:
+  - swr
+  - image-automation
+  - image-sync
+  - trigger
+  - auto-deploy
 ---
 
 # Huawei Cloud SWR Image Automation
@@ -18,7 +22,11 @@ This skill provides image automation capabilities for Huawei Cloud SWR (Software
 **Architecture**: hcloud CLI → SWR Service API → SyncRepo/Trigger/SyncJob/SyncRegion resources
 
 **Related Skills**:
-- `huawei-cloud-swr-image-management` - Image lifecycle management (namespaces, repos, tags, auth, quotas)
+- `huawei-cloud-swr-image-management` - Image lifecycle management (namespaces, repos, tags, auth, quotas). **Image push and authentication (`CreateAuthorizationToken`, `docker login`, `docker push`) are required to verify triggers end-to-end.** If not installed, install it first:
+  ```bash
+  npx skills add huaweicloud/huaweicloud-skills --skill huawei-cloud-swr-image-management -y
+  ```
+  For the complete image push and authentication flow, refer to the official SWR Quick Start guide: https://support.huaweicloud.com/qs-swr/index.html
 - `huawei-cloud-swr-image-governance` - Image governance (permissions, retention, sharing, tags, immutable rules)
 - `huawei-cloud-swr-enterprise-instance` - Enterprise instance management
 
@@ -40,6 +48,29 @@ This skill provides image automation capabilities for Huawei Cloud SWR (Software
 - "Disable a trigger temporarily"
 - "Delete an old trigger configuration"
 - "Configure image replication across multiple regions"
+
+### 参数确认
+
+> **All write operations (Create, Update, Delete) require explicit user confirmation before execution.**
+
+Before executing any write operation, the skill must:
+
+1. Display the exact hcloud command to be executed
+2. Show the target resource (namespace, repository, remote region, etc.)
+3. Show the change to be applied (sync config, trigger settings, override status)
+4. Wait for user confirmation ("yes" / "confirm") before proceeding
+5. If user declines, abort the operation and return to step 1
+
+**Write operations requiring confirmation**:
+
+| Operation | Command | Risk Level | Description |
+|-----------|---------|------------|-------------|
+| Create auto-sync config | `CreateImageSyncRepo` | 🟠 High | Creates cross-region image replication. **If override=true, overwrites existing images in target region — existing images are unrecoverable. Warn user before proceeding** |
+| Delete auto-sync config | `DeleteImageSyncRepo` | 🟡 Medium | Removes auto-sync configuration. **New pushes will no longer auto-replicate to target region. Already-synced images are preserved** |
+| Manual sync tags | `CreateManualImageSyncRepo` | 🟡 Medium | One-time sync of specific tags. **If override=true, overwrites existing images in target region** |
+| Create trigger | `CreateTrigger` | 🟡 Medium | Sets up auto-deploy to CCE/CCI. **New image pushes will automatically update the target workload — verify trigger condition to avoid unintended deployments** |
+| Update trigger | `UpdateTrigger` | 🟡 Medium | Modifies trigger configuration. **Enabling/disabling changes auto-deploy behavior immediately** |
+| Delete trigger | `DeleteTrigger` | 🟡 Medium | Removes auto-deploy trigger. **Target workload will no longer auto-update on new image pushes** |
 
 ## Prerequisites
 
@@ -109,6 +140,52 @@ See [IAM Permission Policies](references/iam-policies.md) for complete policy JS
 3. Guide the user to create a custom policy in the IAM console and grant authorization
 4. Pause execution and wait for user confirmation that permissions have been granted
 
+## 工作流
+
+0. **⚠️ Billing Confirmation (MANDATORY)** — Before executing any operation, inform the user of potential billing implications and obtain explicit consent:
+   - **Cross-region sync**: Image sync between regions incurs cross-region traffic fees. Auto-sync (`syncAuto=true`) continuously replicates images, generating ongoing traffic costs.
+   - **Trigger execution**: Triggers that deploy to CCE/CCI may incur compute costs on the target clusters.
+   - **Storage costs**: Synced images consume storage in both source and target regions.
+   - Ask the user to confirm: "Do you understand the billing implications and wish to proceed? (yes/no)"
+   - Only proceed if the user explicitly confirms. If the user declines, stop and do not execute any operations.
+1. **Confirm parameters** — Review the confirmation table above; confirm the risk level and key parameters with the user before any write operation
+2. **Query sync regions** — `ListSyncRegions` to retrieve available cross-region sync targets
+3. **Configure sync** — `CreateImageSyncRepo` (auto-sync) or `CreateManualImageSyncRepo` (one-time manual sync)
+4. **Manage triggers** — `CreateTrigger` / `UpdateTrigger` / `DeleteTrigger` to configure auto-deploy to CCE/CCI
+5. **Query status** — `ListImageAutoSyncReposDetails` / `ShowTrigger` / `ListSyncJobsDetails` to check sync and trigger status
+6. **Cleanup** — `DeleteImageSyncRepo` to stop sync, `DeleteTrigger` to remove trigger
+
+## KooCLI Command Format Standard
+
+All commands follow the standard hcloud KooCLI format:
+
+```bash
+hcloud SWR <Operation> --param1=value1 --param2=value2 --cli-region=<region>
+```
+
+**Key conventions**:
+- Service name: `SWR` (uppercase, matches KooCLI Services listing)
+- Operation name: PascalCase (e.g., `CreateImageSyncRepo`, `ListSyncRegions`, `CreateTrigger`)
+- Region parameter: `--cli-region=<value>` (default: `cn-north-4`, or `HUAWEI_CLOUD_REGION` env var)
+- Output format: `--cli-output=json` (for agent processing)
+- JMESPath filtering: `--cli-query="<expression>"` (to reduce output)
+- Array-style parameters: `--imageTag.1=v1 --imageTag.2=v2` (index starts from 1, not 0)
+
+**Example — read operation**:
+```bash
+hcloud SWR ListSyncRegions --cli-region=cn-north-4 --cli-output=json
+```
+
+**Example — write operation (requires user confirmation)**:
+```bash
+# Step 1: Display command and parameters for user confirmation
+# Step 2: After user confirms, execute:
+hcloud SWR CreateImageSyncRepo --namespace=pancake --repository=openclaw-sandbox \
+  --remoteRegionId=cn-east-3 --remoteNamespace=pancake --syncAuto=true --override=false \
+  --cli-region=cn-north-4
+```
+
+
 ## Core Commands
 
 ### 1. Auto Sync (Cross-region Image Replication)
@@ -130,6 +207,8 @@ hcloud SWR DeleteImageSyncRepo --namespace=group-dev --repository=my-app --remot
 ```
 
 **Auto Sync Behavior**: When `syncAuto=true`, every new image push to the source repository automatically triggers a sync to the target region. When `syncAuto=false`, sync only occurs on manual trigger.
+
+⚠️ **Query Limitation**: `ListImageAutoSyncReposDetails` only returns `syncAuto=true` configurations. `syncAuto=false` configs will not appear in query results — their absence does not indicate creation failure.
 
 ### 2. Manual Sync
 
@@ -274,6 +353,8 @@ Response is a flat JSON array of region objects:
 
 Response format to be verified — returns list of sync repo configurations when they exist. Returns empty when no auto sync configured.
 
+⚠️ **Limitation**: Only returns configurations where `syncAuto=true` (auto-sync). Configurations with `syncAuto=false` (manual sync only) will **not** appear in results. See [Task: Image Sync](references/task-image-sync.md) W3 for workaround.
+
 ### ListTriggersDetails
 
 Response format to be verified — returns list of trigger objects when they exist. Returns empty when no triggers configured.
@@ -334,6 +415,8 @@ See [Verification Method](references/verification-method.md) for step-by-step ve
 | [Common Pitfalls](references/common-pitfalls.md)       | Troubleshooting guides                   |
 | [Task: Image Sync](references/task-image-sync.md)      | Auto/manual sync workflows               |
 | [Task: Trigger Management](references/task-trigger-management.md) | Trigger workflows             |
+| [CLI Installation Guide](references/cli-installation-guide.md) | KooCLI setup and credential config |
+| [Acceptance Criteria](references/acceptance-criteria.md) | Correct/error pattern comparison |
 
 ## Notes
 
@@ -345,6 +428,9 @@ See [Verification Method](references/verification-method.md) for step-by-step ve
 - **hcloud CLI is the only supported method** — all operations use `hcloud SWR <Operation>` format
 - **Trigger requires CCE/CCI cluster** — triggers only work with existing CCE clusters or CCI instances
 - **Response formats pending verification** — ListImageAutoSyncReposDetails, ListTriggersDetails, ShowTrigger response formats need live verification
+- **CLI exit code limitation** — hcloud CLI (KooCLI 7.2.2) may return exit code 0 even when the SWR API returns an error. In automation scripts, do NOT rely solely on exit code; check output for `error_code` or `error_msg` fields to determine success/failure
+- **Pre-validation required** — SWR APIs do not validate target namespace existence, tag existence, or region validity at request time. Always run pre-validation checks (ShowNamespace, ListRepositoryTags, ListSyncRegions) before creating sync configs or manual sync jobs
+- **CCI authorization prerequisite** — before creating a `trigger_mode=cci` trigger, verify CCI service is authorized via `hcloud CCI ListNamespaces`. Unauthorized CCI returns a misleading "Server internal error" instead of an authorization hint
 
 ## Common Pitfalls
 
@@ -359,4 +445,9 @@ See [Common Pitfalls & Solutions](references/common-pitfalls.md) for detailed tr
 | Invalid remoteRegionId         | Sync creation fails             | Check with `ListSyncRegions`                 |
 | CCE cluster not found          | Trigger creation fails          | Verify cluster_id with CCE console           |
 | Trigger already exists         | 409 Conflict                    | Use `ShowTrigger` to check first             |
+| CCI not authorized             | "Server internal error"         | Authorize CCI at console first               |
+| "Invalid param" on CreateTrigger | Generic error, multiple causes | Pre-check name/cluster/app existence         |
+| API error but exit code 0      | Script thinks success           | Check output for error_code, not exit code   |
+| syncAuto=false not in list     | Config seems missing            | ListImageAutoSyncReposDetails only shows true |
+| Sync to non-existent namespace | Silent success, invalid config  | Verify namespace with ShowNamespace first    |
 | Auto-sync unwanted             | Images sync unexpectedly        | Set `syncAuto=false` or delete sync config   |

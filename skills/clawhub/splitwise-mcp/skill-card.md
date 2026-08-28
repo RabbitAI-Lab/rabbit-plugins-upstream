@@ -1,44 +1,59 @@
-## Description: <br>
-Access and manage Splitwise expenses, groups, friends, balances, notifications, categories, and currencies through a registered MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Accesses Splitwise expense, group, friend, balance, and receipt data through the splitwise-mcp MCP server, including expense and group-management actions.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill to connect an agent to Splitwise so it can answer questions about shared expenses and perform account-affecting expense or group actions through the Splitwise API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify Splitwise account data, including creating, editing, deleting expenses and changing group membership. <br>
-Mitigation: Use explicit confirmations before account-changing actions, review previews carefully, and verify group, user, and expense identifiers before execution. <br>
-Risk: The Splitwise API key authorizes account access and is attached to requests made by the MCP server. <br>
-Mitigation: Keep SPLITWISE_API_KEY private in the MCP environment or local .env file, avoid exposing it in logs or shared configs, and rotate it if exposed. <br>
-Risk: Custom split updates replace the full users array, and deleted expenses are soft-deleted with restoration handled in the Splitwise web app. <br>
-Mitigation: Review the complete split before updates and confirm delete actions only after checking the target expense. <br>
+## Use Case:
 
+External users and agents use this skill to query Splitwise expenses, groups, friends, balances, and receipts, and to create or modify Splitwise expenses and group membership after configuring the splitwise-mcp server with a Splitwise API key.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/chrischall/skills/splitwise-mcp) <br>
-- [splitwise-mcp npm package](https://www.npmjs.com/package/splitwise-mcp) <br>
-- [Splitwise API app registration](https://secure.splitwise.com/apps/register) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, API calls, Configuration, Guidance] <br>
-**Output Format:** [Natural-language guidance with MCP tool calls and JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read and modify Splitwise account data when the configured server executes tool calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.3 (source: server release evidence) <br>
+Risk: The skill can create, edit, delete, or restore Splitwise expenses and can change group membership.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure the agent to ask for explicit confirmation before financial or group-management actions.
+
+Risk: The MCP server requires a Splitwise API key that is attached to requests.
+
+Mitigation: Install only from a trusted package source and store the key in the MCP environment rather than in prompts or shared files.
+
+Risk: Receipt retrieval can expose receipt contents or write receipt files to the server filesystem.
+
+Mitigation: Use inline receipt viewing, PDF text extraction, or a controlled output directory when handling receipts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/splitwise-mcp)
+- [splitwise-mcp npm package](https://www.npmjs.com/package/splitwise-mcp)
+- [Splitwise app registration](https://secure.splitwise.com/apps/register)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance]
+
+**Output Format:** [Markdown guidance with MCP tool calls, JSON configuration snippets, shell commands, and optional receipt file paths or inline receipt content.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SPLITWISE_API_KEY; receipt retrieval can return inline bytes or text, or write files to a configured output directory.]
+
+## Skill Version(s):
+
+2.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

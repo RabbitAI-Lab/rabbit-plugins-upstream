@@ -1,46 +1,74 @@
-## Description: <br>
-Kit (formerly ConvertKit) API integration with managed OAuth for managing email subscribers, forms, tags, sequences, broadcasts, and custom fields. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kit (formerly ConvertKit) API integration with managed OAuth for managing subscribers, forms, tags, sequences, broadcasts, custom fields, and webhooks through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to operate Kit email marketing workflows through Maton-managed OAuth, including subscriber, tag, form, sequence, broadcast, custom field, purchase, email template, and webhook operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access subscriber and customer data in the connected Kit account through Maton-managed OAuth. <br>
-Mitigation: Install only when Maton and the connected Kit account are trusted, keep MATON_API_KEY private, and scope actions to the intended account. <br>
-Risk: Write, delete, webhook, broadcast, or connection-management operations can modify email marketing resources. <br>
-Mitigation: Confirm the target resource, account connection, and intended effect with the user before executing any modifying request. <br>
-Risk: Multiple Kit connections can route requests to the wrong account if the connection is not specified. <br>
-Mitigation: Use the Maton-Connection header when multiple Kit accounts exist. <br>
+## Use Case:
 
+Developers and agent users use this skill to inspect and manage Kit email-marketing resources through Maton-authenticated API calls. It supports list-first workflows for subscribers, tags, forms, sequences, broadcasts, custom fields, purchases, templates, and webhooks, with explicit approval before connection creation or data-changing operations.
 
-## Reference(s): <br>
-- [Kit Skill on ClawHub](https://clawhub.ai/byungkyu/skills/kit) <br>
-- [Kit API Overview](https://developers.kit.com/api-reference/overview) <br>
-- [Kit API Subscribers](https://developers.kit.com/api-reference/subscribers/list-subscribers) <br>
-- [Kit API Tags](https://developers.kit.com/api-reference/tags/list-tags) <br>
-- [Kit API Forms](https://developers.kit.com/api-reference/forms/list-forms) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline API paths, JSON examples, and Python, JavaScript, or shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and explicit user approval before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence; artifact frontmatter reports 1.0) <br>
+Risk: Authorizing Maton creates access to the connected Kit account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, review connection scopes, connect only the intended account, and require user approval before creating a new Kit connection.
+
+Risk: Subscriber, tag, sequence, broadcast, webhook, and deletion changes can affect email-marketing data or trigger downstream communication workflows.
+
+Mitigation: Default to read and list calls, verify resource identifiers first, and confirm the target, payload, and intended effect before any POST, PUT, PATCH, or DELETE call.
+
+Risk: Multiple Maton profiles or Kit connections can cause actions to target the wrong account.
+
+Mitigation: Specify the intended profile and connection when more than one account or connection is available.
+
+Risk: Long-lived API keys and provider-issued tokens can be exposed through logs, shell history, command arguments, or files.
+
+Mitigation: Use OAuth when possible; if raw HTTP is unavoidable, keep keys out of output and command arguments, avoid persistence, send them only to api.maton.ai, and rotate any key that was exposed.
+
+Risk: Content returned by the Kit API may contain untrusted instructions or values.
+
+Mitigation: Treat API responses as data, validate external values before reuse, and never execute or follow instructions embedded in fetched content.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/kit)
+- [Maton Homepage](https://maton.ai)
+- [Kit API Overview](https://developers.kit.com/api-reference/overview)
+- [Kit API Subscribers](https://developers.kit.com/api-reference/subscribers/list-subscribers)
+- [Kit API Tags](https://developers.kit.com/api-reference/tags/list-tags)
+- [Kit API Forms](https://developers.kit.com/api-reference/forms/list-forms)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Code, Configuration instructions]
+
+**Output Format:** [Markdown guidance with bash, JSON, Python, and JavaScript snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and explicit user approval before creating connections or executing writes.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata; frontmatter metadata version 1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

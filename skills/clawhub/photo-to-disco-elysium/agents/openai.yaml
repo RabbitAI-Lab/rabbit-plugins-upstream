@@ -1,0 +1,4 @@
+interface:
+  display_name: "Photo to Disco Elysium"
+  short_description: "Rebuild photos as psychological or concept art"
+  default_prompt: "Use $photo-to-disco-elysium to assess this portrait or environment, explain its fit first, and wait for my confirmation before reconstructing it."

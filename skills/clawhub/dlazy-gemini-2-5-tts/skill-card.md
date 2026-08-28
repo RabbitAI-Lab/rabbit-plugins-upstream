@@ -1,46 +1,60 @@
-## Description: <br>
-Generate multilingual, highly natural audio using Gemini 2.5 text-to-speech. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate multilingual, highly natural audio using Gemini 2.5 text-to-speech.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate Chinese or English text-to-speech audio through the dLazy CLI, choosing a prompt and voice for cloud generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local media paths may be processed by dLazy's hosted API and media storage. <br>
-Mitigation: Use only prompts and files appropriate for third-party cloud processing, and confirm the user intends to send them before invocation. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Prefer per-invocation environment variables for temporary use, keep local config permissions restricted, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: The skill documentation shows an output schema mismatch for this text-to-speech workflow. <br>
-Mitigation: Inspect the actual CLI JSON response at runtime before downstream processing and avoid assuming the documented image-oriented example is authoritative. <br>
+## Use Case:
 
+Developers and agents use this skill to generate Mandarin or English speech from text prompts through the dLazy Gemini 2.5 TTS command, returning hosted output URLs or async task status.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-gemini-2-5-tts) <br>
-- [Publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI homepage from skill metadata](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package from skill metadata](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands; command responses are JSON containing hosted generation result URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; prompts are sent to api.dlazy.com and generated assets are hosted on files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.3 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and explicitly provided media files are sent to the dLazy cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is comfortable sharing the prompt and any referenced files with dLazy before invoking the TTS command.
+
+Risk: The dLazy CLI can store an API key in the local user configuration.
+
+Mitigation: Use the per-invocation DLAZY_API_KEY option when persistent local credential storage is not appropriate.
+
+Risk: The skill depends on a pinned third-party npm package and hosted API endpoints.
+
+Mitigation: Review the pinned npm package or source and allow api.dlazy.com and files.dlazy.com only in environments that approve those dependencies.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-gemini-2-5-tts)
+- [dLazy CLI homepage](https://github.com/dlazyai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Audio URLs, Configuration guidance]
+
+**Output Format:** [Markdown instructions with bash commands and JSON CLI responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media is hosted on files.dlazy.com; --no-wait can return an async task ID for polling.]
+
+## Skill Version(s):
+
+1.3.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

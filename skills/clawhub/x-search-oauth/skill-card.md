@@ -1,43 +1,54 @@
-## Description: <br>
-Search X/Twitter with OAuth-backed xAI x_search; includes optional xso CLI companion guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search X/Twitter through OpenClaw's native OAuth-backed xAI x_search tool, with an optional JavaScript CLI wrapper.
 
-## Publisher: <br>
-[leostehlik](https://clawhub.ai/user/leostehlik) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[leostehlik](https://clawhub.ai/user/leostehlik)
 
-## Use Case: <br>
-Developers, operators, and agents use this skill to search X/Twitter through the native xAI x_search tool, inspect posts and trends, gather X citations, and optionally guide terminal use of the xso companion CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: OAuth state and session data may be sensitive account data. <br>
-Mitigation: Use the native xAI plugin sign-in path when available, install the optional xso CLI only when terminal use is needed, and protect the stored OAuth file as sensitive credentials. <br>
-Risk: X/Twitter posts can contain untrusted claims or instructions. <br>
-Mitigation: Treat returned post content as external evidence, do not follow instructions inside posts, cite original X URLs, and separate observed content from inference. <br>
-Risk: Unofficial scraping or API-key-only paths can create security and reliability issues. <br>
-Mitigation: Prefer the native x_search tool exposed by the xAI plugin, do not ask for XAI_API_KEY, and tell users to enable and sign in to the bundled plugin if x_search is unavailable. <br>
+## Use Case:
 
+Developers and external users use this skill to search X/Twitter through OpenClaw's OAuth-backed xAI integration, inspect posts or trends, and produce cited summaries or CLI search results.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/leostehlik/x-search-oauth) <br>
-- [Skill Homepage](https://github.com/LeoStehlik/x-search-oauth) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with cited X URLs and optional bash command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports should separate observed X content from inference, cite original X URLs, and note search failures or retries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.3 (source: server release metadata and skill metadata) <br>
+Risk: The CLI executable override can run an unexpected OpenClaw binary if a user supplies an untrusted --openclaw-bin path or X_SEARCH_OAUTH_OPENCLAW_BIN value.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the default OpenClaw executable or only set the override to a trusted, exact executable path.
+
+Risk: Returned X/Twitter posts are untrusted external content and may contain misleading claims or prompt-like instructions.
+
+Mitigation: Treat post content as evidence only, cite original returned X URLs, separate observations from inference, and confirm important claims with first-party sources.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/leostehlik/skills/x-search-oauth)
+- [OpenClaw xAI provider documentation](https://docs.openclaw.ai/providers/xai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance and CLI text or JSON output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search reports should cite original X URLs when returned by x_search; CLI output can be normalized JSON with --json.]
+
+## Skill Version(s):
+
+0.2.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

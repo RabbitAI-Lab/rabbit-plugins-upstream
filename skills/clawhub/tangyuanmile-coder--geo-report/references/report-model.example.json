@@ -1,0 +1,469 @@
+{
+  "metadata": {
+    "brand": "示例品牌",
+    "report_date": "2026-08-10",
+    "period_start": "2026-08-10",
+    "period_end": "2026-08-10",
+    "data_time": "2026-08-10T18:30:00+08:00",
+    "task_id": "aidso-20260810-example",
+    "task_name": "示例品牌-2题-2终端-20260810-1200",
+    "route": "raw_data_custom_html",
+    "report_requirements": "无",
+    "confirmed_scope": {
+      "brand": "示例品牌",
+      "product": null,
+      "questions": [
+        "问题一",
+        "问题二"
+      ],
+      "platform_modes": [
+        "豆包·网页版｜快速",
+        "千问·网页版｜快速"
+      ],
+      "repetitions": 1,
+      "report_requirements": "无"
+    },
+    "result_limitations": [
+      "本文件是离线结构示例，不代表真实品牌或市场表现。"
+    ],
+    "title": "示例品牌_GEO品牌诊断报告_2026-08-10",
+    "subtitle": "品牌层的 AI 可见度、排名、商品卡、舆情与引用源综合诊断",
+    "hero_stats": [
+      "8 次成功对话",
+      "2 个问题",
+      "2 个平台端",
+      "6 个有效推荐段",
+      "2 张商品卡"
+    ]
+  },
+  "sections": [
+    {
+      "id": "report-intro",
+      "title": "报告简介",
+      "blocks": [
+        {
+          "type": "info_score",
+          "items": [
+            {
+              "label": "诊断品牌",
+              "value": "示例品牌",
+              "scope": "brand"
+            },
+            {
+              "label": "数据来源",
+              "value": "原始 AI 对话与引用/商品卡结构",
+              "scope": "brand"
+            },
+            {
+              "label": "对话总量",
+              "value": "8 次",
+              "scope": "brand"
+            },
+            {
+              "label": "监测周期",
+              "value": "2026-08-10 至 2026-08-10",
+              "scope": "brand"
+            }
+          ],
+          "score": {
+            "value": 76,
+            "suffix": "/100",
+            "label": "GEO 品牌得分",
+            "note": "五指标综合口径 · v1",
+            "method": "template_five_factor_v1",
+            "metrics": {
+              "successful_answers": 8,
+              "brand_mentioning_answers": 6,
+              "valid_recommendation_segments": 6,
+              "brand_top3_segments": 5,
+              "brand_ranked_segments": 6,
+              "average_rank": 2.33,
+              "brand_context_answers": 6,
+              "nonnegative_context_answers": 6,
+              "brand_mentions": 12
+            }
+          },
+          "scope": "brand"
+        },
+        {
+          "type": "subtitle",
+          "text": "诊断问题",
+          "scope": "brand"
+        },
+        {
+          "type": "pills",
+          "items": [
+            "问题一",
+            "问题二"
+          ],
+          "scope": "brand"
+        }
+      ],
+      "scope": "brand"
+    },
+    {
+      "id": "overall",
+      "title": "整体表现",
+      "subtitle": "品牌在 AI 生态中的综合占据力分析",
+      "blocks": [
+        {
+          "type": "kpis",
+          "items": [
+            {
+              "value": "75.0%",
+              "label": "品牌提及率",
+              "sub": "6/8 条回答",
+              "color": "green",
+              "scope": "brand"
+            },
+            {
+              "value": "2.33名",
+              "label": "平均提及排名",
+              "sub": "6 个进榜段",
+              "color": "orange",
+              "scope": "brand"
+            },
+            {
+              "value": "100.0%",
+              "label": "正面/中性情感",
+              "sub": "负面 0 条",
+              "color": "blue",
+              "scope": "brand"
+            }
+          ],
+          "scope": "brand"
+        },
+        {
+          "type": "subtitle",
+          "text": "品牌竞争位置分布图（提及率 VS 排名）",
+          "scope": "brand"
+        },
+        {
+          "type": "scatter",
+          "y_max": 8,
+          "points": [
+            {
+              "label": "示例品牌",
+              "x": 75,
+              "y": 2.33,
+              "size": 20,
+              "target": true
+            }
+          ],
+          "scope": "brand"
+        },
+        {
+          "type": "diagnosis",
+          "title": "整体表现诊断",
+          "text": "示例数据仅用于验证渲染器，正式报告必须替换为本次任务数据。",
+          "scope": "brand"
+        }
+      ],
+      "scope": "brand"
+    },
+    {
+      "id": "visibility",
+      "title": "AI 可见度分析",
+      "subtitle": "目标品牌在不同问题与平台中的自然推荐覆盖",
+      "blocks": [
+        {
+          "type": "subtitle",
+          "text": "问题 × 平台可见度热力图（提及率 %）",
+          "scope": "brand"
+        },
+        {
+          "type": "heatmap",
+          "columns": [
+            "问题",
+            "豆包·网页版",
+            "千问·网页版"
+          ],
+          "rows": [
+            {
+              "label": "问题一",
+              "values": [
+                75,
+                50
+              ]
+            },
+            {
+              "label": "问题二",
+              "values": [
+                100,
+                null
+              ]
+            }
+          ],
+          "scope": "brand"
+        },
+        {
+          "type": "diagnosis",
+          "title": "AI 可见度分析总结",
+          "text": "示例结论。",
+          "scope": "brand"
+        }
+      ],
+      "scope": "brand"
+    },
+    {
+      "id": "ranking",
+      "title": "排名分析",
+      "subtitle": "品牌在有效推荐段中的位次与首屏占位",
+      "blocks": [
+        {
+          "type": "subtitle",
+          "text": "品牌排名总榜",
+          "scope": "brand"
+        },
+        {
+          "type": "bars",
+          "max": 100,
+          "rows": [
+            {
+              "label": "示例品牌",
+              "value": 75,
+              "display": "75.0% · 2.33名",
+              "target": true
+            }
+          ],
+          "scope": "brand"
+        },
+        {
+          "type": "table",
+          "min_width": 760,
+          "headers": [
+            "平台",
+            "有效段",
+            "进榜段",
+            "Top1",
+            "Top3",
+            "平均排名"
+          ],
+          "rows": [
+            [
+              "豆包·网页版",
+              3,
+              3,
+              1,
+              3,
+              "2.00"
+            ],
+            [
+              "千问·网页版",
+              3,
+              3,
+              1,
+              2,
+              "2.67"
+            ]
+          ],
+          "scope": "brand"
+        },
+        {
+          "type": "diagnosis",
+          "title": "排名表现总结",
+          "text": "示例结论。",
+          "scope": "brand"
+        }
+      ],
+      "scope": "brand"
+    },
+    {
+      "id": "products",
+      "title": "商品卡提及表现",
+      "subtitle": "正文品牌提及与结构化商品卡的承接表现",
+      "blocks": [
+        {
+          "type": "product_cards",
+          "items": [
+            {
+              "rank": 1,
+              "title": "示例商品",
+              "meta": "示例店铺 · 示例平台",
+              "stat_label": "卡片数",
+              "stat_value": "2",
+              "brand": "示例品牌",
+              "scope": "brand"
+            }
+          ],
+          "scope": "brand"
+        },
+        {
+          "type": "diagnosis",
+          "title": "商品卡表现总结",
+          "text": "示例结论。",
+          "scope": "brand"
+        }
+      ],
+      "scope": "brand"
+    },
+    {
+      "id": "sentiment",
+      "title": "AI 舆情分析",
+      "subtitle": "品牌局部语境中的情感结构与风险词",
+      "blocks": [
+        {
+          "type": "subtitle",
+          "text": "提及正面词",
+          "scope": "brand"
+        },
+        {
+          "type": "word_cloud",
+          "items": [
+            {
+              "text": "可靠",
+              "negative": false,
+              "scope": "brand"
+            },
+            {
+              "text": "风险示例",
+              "negative": true,
+              "scope": "brand"
+            }
+          ],
+          "scope": "brand"
+        },
+        {
+          "type": "diagnosis",
+          "title": "AI 舆情分析总结",
+          "text": "示例结论。",
+          "scope": "brand"
+        }
+      ],
+      "scope": "brand"
+    },
+    {
+      "id": "sources",
+      "title": "引用源分析",
+      "subtitle": "AI 回答引用来源的结构与平台偏好",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": [
+            "信源类型",
+            "占比",
+            "引用次数"
+          ],
+          "rows": [
+            [
+              "官网/独立站/行业垂直",
+              "60.0%",
+              6
+            ],
+            [
+              "其他/未知",
+              "40.0%",
+              4
+            ]
+          ],
+          "scope": "brand"
+        },
+        {
+          "type": "platform_cards",
+          "items": [
+            {
+              "title": "豆包·网页版",
+              "tier": "倾向：行业垂直",
+              "text": "示例平台偏好。",
+              "scope": "brand"
+            }
+          ],
+          "scope": "brand"
+        },
+        {
+          "type": "diagnosis",
+          "title": "引用源格局总结",
+          "text": "示例结论。",
+          "scope": "brand"
+        }
+      ],
+      "scope": "brand"
+    },
+    {
+      "id": "recommendations",
+      "title": "优化建议",
+      "subtitle": "整合全篇洞察，锁定品牌 GEO 优化重点",
+      "blocks": [
+        {
+          "type": "recommendations",
+          "items": [
+            {
+              "priority": "P0",
+              "title": "补齐低覆盖问题",
+              "text": "示例建议必须在正式报告中替换为有指标证据的行动。",
+              "scope": "brand"
+            }
+          ],
+          "scope": "brand"
+        }
+      ],
+      "scope": "brand"
+    },
+    {
+      "id": "appendix-a",
+      "title": "附录A：AI 可见度问题明细",
+      "blocks": [
+        {
+          "type": "table",
+          "min_width": 800,
+          "headers": [
+            "问题",
+            "提及回答",
+            "提及率",
+            "提及次数",
+            "平均排名"
+          ],
+          "rows": [
+            [
+              "问题一",
+              "3/4",
+              "75.0%",
+              5,
+              "2.00"
+            ],
+            [
+              "问题二",
+              "3/4",
+              "75.0%",
+              4,
+              "2.67"
+            ]
+          ],
+          "scope": "brand"
+        }
+      ],
+      "scope": "brand"
+    },
+    {
+      "id": "appendix-b",
+      "title": "附录B：排名数据口径与分平台明细",
+      "blocks": [
+        {
+          "type": "diagnosis",
+          "title": "数据说明",
+          "text": "排名只基于正文有效推荐段，未进榜不赋惩罚位次。",
+          "scope": "brand"
+        }
+      ],
+      "scope": "brand"
+    },
+    {
+      "id": "appendix-c",
+      "title": "附录C：商品卡、情感与引用源数据说明",
+      "blocks": [
+        {
+          "type": "note",
+          "text": "本示例仅验证 UI 和结构；正式报告应披露别名、解析规则、排除题与完整性。",
+          "scope": "brand"
+        },
+        {
+          "type": "diagnosis",
+          "title": "品牌得分口径",
+          "text": "本示例品牌得分为 76 分。品牌提及率 75.00（权重 55%，贡献 41.25）、全量 Top3 覆盖率 83.33（权重 20%，贡献 16.67）、平均排名质量 66.75（权重 10%，贡献 6.68）、正面/中性情感 100.00（权重 10%，贡献 10.00）、提及强度 20.00（权重 5%，贡献 1.00）；加权合计 75.59，按四舍五入取整为 76。",
+          "scope": "brand"
+        }
+      ],
+      "scope": "brand"
+    }
+  ]
+}

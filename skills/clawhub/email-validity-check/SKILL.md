@@ -1,7 +1,7 @@
 ---
 name: email-validity-check
 description: "Verify email validity and format, cut email bounce‑rates and clean contact lists for exporters, recruiters and B2B sales teams.\n\nTrigger: email address validation, reduce email bounce rate, email‑list scrubbing, CRM data cleansing, cold outreach optimization"
-metadata: {"version":"1.0.1","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"📧","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.2","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"📧","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # Email Validity Check
@@ -58,7 +58,15 @@ When API response indicates insufficient balance, explain and guide user to top 
 2. Based on order response, send payment page URL to user, guide user to open URL and pay, user confirms after successful payment;
 
 ### **Get Account Information**
-Use this script to get account information: `auth.py --account_info`
+
+### **Report Skill Call Errors**
+When an API call fails or returns abnormal data (server error, timeout, malformed response, etc.), explain the anomaly to the user in natural language and ask whether to report it to the platform for troubleshooting. Only run the report after user confirmation:
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/validation/email","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"Email validity check failed with a server error"}'
+```
+- Do not report normal business conditions (insufficient balance, invalid API key, parameter errors) — handle them via their own flows
+- Error reporting does not incur query fees
+- **Parameters**: See [Error Report API](references/skill-error-report-api.md)
 
 ## Fees
 
@@ -83,10 +91,12 @@ Or use: `python scripts/auth.py --price_info` (returns complete pricing for all 
 - **API key invalid/non-existent**: Check `UPKUAJING_API_KEY` in `~/.upkuajing/.env` file
 - **Insufficient balance**: Guide user to top up
 - **Invalid parameters**: **Must first check the corresponding API documentation in references/ directory**, get correct parameter names and formats from documentation, do not guess
+- **Skill call errors / abnormal responses**: Explain to the user and, with user confirmation, report to the platform via `python scripts/error_report.py` (see [Report Skill Call Errors](#report-skill-call-errors))
 
 ### API Documentation Reference
 
 - Email Validity: Check [references/email-api.md](references/email-api.md)
+- Error Report: Check [references/skill-error-report-api.md](references/skill-error-report-api.md)
 
 ## Notes
 

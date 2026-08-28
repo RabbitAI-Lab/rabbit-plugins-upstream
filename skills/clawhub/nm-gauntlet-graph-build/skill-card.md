@@ -1,38 +1,54 @@
-## Description: <br>
-Builds or updates a local code knowledge graph for a repository using tree-sitter AST parsing and SQLite. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds or updates the code knowledge graph via tree-sitter AST and SQLite.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and coding agents use this skill to build or refresh a repository code graph before codebase search, blast-radius analysis, or flow tracing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill scans the selected directory and writes local graph files under .gauntlet/. <br>
-Mitigation: Run it only on repositories intended for indexing, confirm the target path before execution, and review generated .gauntlet files before relying on them. <br>
+## Use Case:
 
+Developers and engineers use graph-build to build or refresh a local source-code graph before codebase search, blast-radius analysis, or flow tracing.
 
-## Reference(s): <br>
-- [Gauntlet plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update .gauntlet/graph.db and .gauntlet/.gitignore in the selected repository.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The skill indexes source structure from the selected directory into .gauntlet/graph.db.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only in the intended repository and review handling of the generated .gauntlet/graph.db file; the skill creates .gauntlet/.gitignore to help prevent accidental commits.
+
+Risk: The related full plugin experience includes additional agents, hooks, and commands outside this skill text.
+
+Mitigation: Review the full plugin separately before installing or enabling those additional components.
+
+## Reference(s):
+
+- [graph-build on ClawHub](https://clawhub.ai/athola/skills/nm-gauntlet-graph-build)
+- [claude-night-market gauntlet plugin](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, markdown, guidance]
+
+**Output Format:** [Markdown with bash commands and JSON result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update .gauntlet/graph.db and .gauntlet/.gitignore in the selected codebase.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter states 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "omni-ecom://schemas/pdf-delivery-1.0.json",
+  "title": "Chart-led PDF delivery receipt",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "status",
+    "team_version",
+    "report_revision",
+    "report_file",
+    "report_sha256",
+    "chart_count",
+    "page_count",
+    "blank_pages",
+    "verified_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "status": { "const": "pdf_render_verified" },
+    "team_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "report_revision": { "type": "string", "pattern": "^R[1-9][0-9]*$" },
+    "report_file": { "const": "report.pdf" },
+    "report_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "chart_count": { "type": "integer", "minimum": 3 },
+    "page_count": { "type": "integer", "minimum": 1, "maximum": 17 },
+    "blank_pages": { "type": "array", "maxItems": 0 },
+    "verified_at": { "type": "string", "minLength": 1 }
+  }
+}

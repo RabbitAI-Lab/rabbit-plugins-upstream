@@ -1,39 +1,58 @@
-## Description: <br>
-Use when someone wants a fast AI image - product shots, hero visuals, mood boards, or draft photos from a text prompt. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone explicitly wants the fastest, cheapest photo generation -- mood boards, bulk panels, or quick iterations -- not when controlled photoreal or in-image text is needed.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers, creators, and external users use this skill to draft prompts, choose aspect ratios, and call Pruna's p-image model for fast text-to-image generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes a disable_safety_checker option, which could bypass normal provider safety controls. <br>
-Mitigation: Review the skill before installing, avoid using disable_safety_checker, and provide external tokens or custom weights only when their purpose and destination are understood. <br>
+## Use Case:
 
+Developers and external agent users use this skill to route simple still-image requests to Pruna's p-image API, draft faithful prompts, confirm prompt and aspect ratio before generation, and produce curl commands for async or quick test calls.
 
-## Reference(s): <br>
-- [p-image on ClawHub](https://clawhub.ai/pruna-ai/skills/p-image) <br>
-- [Pruna predictions API endpoint](https://api.pruna.ai/v1/predictions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON request bodies] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires PRUNA_API_KEY; required input is prompt, with optional aspect ratio, seed, LoRA settings, Hugging Face token, and safety-checker control.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill uses a Pruna API key for network image-generation requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm PRUNA_API_KEY is configured only in the execution environment and avoid exposing it in prompts, logs, or shared command output.
+
+Risk: Image-generation requests may consume paid or limited quota.
+
+Mitigation: Show the drafted prompt and aspect ratio before making API calls unless the user has already locked the wording.
+
+Risk: Simple image generation may be a poor fit for controlled photorealism, readable in-image text, edits, or video.
+
+Mitigation: Route those requests to the more specific Pruna skills named by the artifact instead of re-running p-image.
+
+## Reference(s):
+
+- [ClawHub p-image release page](https://clawhub.ai/pruna-ai/skills/p-image)
+- [Pruna predictions API endpoint](https://api.pruna.ai/v1/predictions)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline bash code blocks and API request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires PRUNA_API_KEY for API calls; image generation can consume paid quota.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

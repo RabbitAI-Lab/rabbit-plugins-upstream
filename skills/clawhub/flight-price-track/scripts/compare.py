@@ -620,7 +620,7 @@ def cmd_compare(args):
     from_city = args.from_city
     to_city = args.to_city
     dep_date = args.dep_date
-    flight_no = args.flight_no.strip().upper()
+    flight_no = args.flightNo.strip().upper()
 
     # 查所有平台
     fliggy_result = search_fliggy_flights(from_city, to_city, dep_date)
@@ -730,7 +730,7 @@ def cmd_calendar(args):
     """低价日历（扫描多日价格）"""
     from_city = args.from_city
     to_city = args.to_city
-    start_date = args.start_date
+    start_date = args.startDate
     days = min(args.days, 30)
 
     calendar = []
@@ -888,15 +888,15 @@ def main():
     compare_p.add_argument("--from", dest="from_city", required=True, help="出发城市")
     compare_p.add_argument("--to", dest="to_city", required=True, help="到达城市")
     compare_p.add_argument("--date", dest="dep_date", required=True, help="出发日期 YYYY-MM-DD")
-    compare_p.add_argument("--flight-no", dest="flight_no", required=True, help="航班号，如 CA1234")
+    compare_p.add_argument("--flightNo", dest="flightNo", required=True, help="航班号，如 CA1234")
     compare_p.add_argument("--target", type=int, default=None, help="目标价格")
-    compare_p.add_argument("--last-price", type=int, default=None, help="上次查询价格（用于对比变动）")
+    compare_p.add_argument("--lastPrice", type=int, default=None, help="上次查询价格（用于对比变动）")
 
     # calendar
     cal_p = subparsers.add_parser("calendar", help="低价日历")
     cal_p.add_argument("--from", dest="from_city", required=True, help="出发城市")
     cal_p.add_argument("--to", dest="to_city", required=True, help="到达城市")
-    cal_p.add_argument("--start-date", dest="start_date", required=True, help="起始日期 YYYY-MM-DD")
+    cal_p.add_argument("--startDate", dest="startDate", required=True, help="起始日期 YYYY-MM-DD")
     cal_p.add_argument("--days", type=int, default=14, help="扫描天数（最多30）")
 
     # monitor

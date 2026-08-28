@@ -1,53 +1,64 @@
-## Description: <br>
-Seedancer helps agents act as AI film directors for Seedance 2.0 workflows, turning single-shot and multi-shot video generation requests into structured prompts, review checkpoints, retake plans, and sequence handoffs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Seedancer helps AI filmmakers turn scripts and scene ideas into structured video, image, shot, asset, and production prompts using gated directing workflows.
 
-## Publisher: <br>
-[taosiuman](https://clawhub.ai/user/taosiuman) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[taosiuman](https://clawhub.ai/user/taosiuman)
 
-## Use Case: <br>
-Creators, marketers, and production teams use this skill to plan Seedance 2.0 video generation work with structured intake, mode selection, asset mapping, prompt drafting, review, retake, and sequence continuity workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security evidence is clean but explicitly low-confidence. <br>
-Mitigation: Review the marketplace page and packaged files before installation, and confirm that the skill purpose matches the expected Seedance prompt workflow. <br>
-Risk: Prompt guidance for video generation can still produce unsafe IP, likeness, or brand usage if user inputs include protected material. <br>
-Mitigation: Use the skill's safety gate and human review checkpoints to rewrite protected references into original, rights-safe descriptions before generation. <br>
-Risk: Generated prompt drafts may contain incorrect platform capability claims. <br>
-Mitigation: Verify platform capabilities, model names, pricing, and API claims against current sources before relying on them. <br>
+## Use Case:
 
+External creators, developers, and production teams use this skill to convert scripts or scene requests into AI video generation prompts, pre-production assets, shot plans, bilingual JSON prompts, and quality-control guidance for Seedance, Kling, Veo, and related image models.
 
-## Reference(s): <br>
-- [Seedancer ClawHub page](https://clawhub.ai/taosiuman/seedancer) <br>
-- [Publisher profile](https://clawhub.ai/user/taosiuman) <br>
-- [Release notes](release-notes.md) <br>
-- [Anti-Slop Lexicon](references/anti-slop-lexicon.md) <br>
-- [Camera Language, Optics & Visual Style Glossary](references/camera-and-styles.md) <br>
-- [Continuation Handoff](references/continuation-handoff.md) <br>
-- [Model Mechanics](references/model-mechanics.md) <br>
-- [Mode Reference & Interaction Notes](references/modes-and-recipes.md) <br>
-- [Seedancer Recipe Collection](references/recipes.md) <br>
-- [Reference Role Map](references/reference-role-map.md) <br>
-- [Retake Protocol](references/retake-protocol.md) <br>
-- [Sequence Project State](references/sequence-project-state.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Structured conversational guidance and Markdown prompt drafts, with occasional code blocks or shell commands for setup tasks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are intended for human review before video generation or workflow execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: frontmatter, release evidence) <br>
+Risk: Users may include confidential scripts, unreleased story bibles, client assets, or likeness references in prompts that are later sent to hosted APIs or external generation tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm approval to use sensitive material before submitting it to external services, and follow the provider's data handling policies.
+
+Risk: Generated production prompts and shot plans may be treated as final creative or compliance guidance without review.
+
+Mitigation: Review outputs before use, especially for client work, likeness handling, safety constraints, and model-provider policy compliance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/taosiuman/skills/seedancer)
+- [README](README.md)
+- [Release notes](release-notes.md)
+- [Changelog](CHANGELOG.md)
+- [License](LICENSE)
+- [Scene prototype routing](references/scene-prototypes.md)
+- [Camera-emotion sync](references/camera-emotion-sync.md)
+- [Performance micro-beats](references/performance-micro-beats.md)
+- [JSON API output mode](references/json-api-mode.md)
+- [Lighting rules](references/lighting-rules.md)
+- [Deliverable system](references/deliverable-system.md)
+- [Output format rules](references/output-format.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, structured JSON prompt objects, and concise shell or configuration snippets when a workspace setup is requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can emit bilingual EN/ZH prompt objects and production-stage deliverables such as script analysis, creative baselines, asset prompts, shot plans, retake guidance, and diagnostic notes.]
+
+## Skill Version(s):
+
+7.0.0 (source: server release evidence, SKILL.md frontmatter, README, CHANGELOG, and release notes)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

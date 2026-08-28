@@ -1,52 +1,66 @@
-## Description: <br>
-Use when someone wants a slideshow story with narration or music, using picture-book illustrated frames with Ken Burns or gentle p-video motion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants a slideshow story with narration or music: picture-book illustrated frames with Ken Burns or gentle p-video motion.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-External creators and developers use this skill to plan and generate illustrated story reels with staged approval gates for stills, audio, optional p-video motion, and final MP4 assembly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid API calls can incur cost during still, audio, and optional p-video phases. <br>
-Mitigation: Use the documented approval gates before TTS, music, video, and assembly steps. <br>
-Risk: API credentials may be exposed if broadly shared with subagents or logs. <br>
-Mitigation: Keep PRUNA_API_KEY and REPLICATE_API_TOKEN scoped to the parent agent or approved per-lane work only. <br>
-Risk: Local ffmpeg assembly may overwrite an existing MP4 at the target path. <br>
-Mitigation: Use a dedicated output directory and confirm the final MP4 path before assembly. <br>
-Risk: Plan files and generated media may contain confidential prompts, narration, or project details. <br>
-Mitigation: Treat plan.json and media under the output directory as confidential local files. <br>
+## Use Case:
 
+Developers and creative agents use this skill to plan and generate illustrated story reels with per-beat stills, narration or music, optional gentle p-video motion, and local ffmpeg assembly.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/illustrated-story-reel) <br>
-- [Illustrated story reel API reference](references/illustrated-story-reel-api.md) <br>
-- [Illustrated story reel staged gates](references/illustrated-story-reel-gates.md) <br>
-- [Illustrated story reel p-video motion](references/illustrated-story-reel-p-video-motion.md) <br>
-- [Illustrated story reel positive still prompts](references/illustrated-story-reel-prompts.md) <br>
-- [Illustrated story reel quality gates](references/illustrated-story-reel-quality.md) <br>
-- [Pruna P-API predictions endpoint](https://api.pruna.ai/v1/predictions) <br>
-- [Pruna P-API file upload endpoint](https://api.pruna.ai/v1/files) <br>
-- [Replicate predictions endpoint](https://api.replicate.com/v1/models/{owner}/{name}/predictions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with JSON story plans, API payloads, shell commands, and generated media paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces plan.json and staged media under the output directory; final assembly is usually story_reel.mp4.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server evidence, release metadata, and skill metadata) <br>
+Risk: The workflow uses Pruna and Replicate credentials and may upload prompts or generated media to those services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm service use before installing, keep API keys in controlled environment variables, and avoid exposing credentials in prompts or broad subagent contexts.
+
+Risk: Local ffmpeg assembly can overwrite the chosen output MP4 path.
+
+Mitigation: Confirm the output directory and filename before assembly and keep backups of files that should not be replaced.
+
+Risk: Plan files and generated media can contain confidential prompts, narration, or project details.
+
+Mitigation: Store outputs in an appropriate directory, limit sharing, and remove plan or media artifacts when they are no longer needed.
+
+Risk: Paid media generation phases can incur cost before the final reel is assembled.
+
+Mitigation: Use the documented approval gates before stills, audio, optional p-video clips, and final assembly.
+
+## Reference(s):
+
+- [Illustrated story reel - API reference](artifact/references/illustrated-story-reel-api.md)
+- [Illustrated story reel - staged gates](artifact/references/illustrated-story-reel-gates.md)
+- [Illustrated story reel - p-video motion](artifact/references/illustrated-story-reel-p-video-motion.md)
+- [Illustrated story reel - positive still prompts](artifact/references/illustrated-story-reel-prompts.md)
+- [Illustrated story reel - quality gates](artifact/references/illustrated-story-reel-quality.md)
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/illustrated-story-reel)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON planning templates, shell command examples, API call patterns, and generated media file paths.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can produce plan JSON and paths for stills, audio, optional clips, and the assembled story_reel.mp4 after user approval gates.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

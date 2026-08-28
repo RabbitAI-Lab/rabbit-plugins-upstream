@@ -5,7 +5,7 @@ description: "网站转视频、URL 转视频、链接转视频、落地页转�
 metadata: {"clawdbot":{"emoji":"🌐","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，新任务运行 'dlazy chat --skill website-to-video --prompt ...'，继续已有项目用 'dlazy chat --project <id> --prompt ...'（用 'dlazy projects list' 查 id）；不要同时传 --skill 和 --project。"}}
 ---
 
-# website-to-video
+# 网站转视频 Website to Video
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

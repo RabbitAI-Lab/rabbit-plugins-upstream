@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/mp2rss",
   "slug": "mp2rss",
   "ownerHandle": null,
-  "version": "0.2.0",
-  "updatedAt": 1779764235680,
-  "contentHash": "3d3d83b843563be508390e428208dde88d4414726eb443148b138798dc3d8ebc",
-  "fetchedAt": "2026-07-26T18:39:57.174Z"
+  "version": "0.2.2",
+  "updatedAt": 1787889448215,
+  "contentHash": "806c4cbd5a4539c05256df6572469c3465961c6a64dbe9caed3439ebf6ea75a3",
+  "fetchedAt": "2026-08-28T19:34:19.704Z"
 }

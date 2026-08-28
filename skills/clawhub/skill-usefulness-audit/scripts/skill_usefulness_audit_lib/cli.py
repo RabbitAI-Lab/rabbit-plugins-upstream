@@ -438,6 +438,17 @@ def _table_report_section(
     ]
 
 
+def _basis_for_report(item: dict[str, object]) -> str:
+    basis = str(item["basis"])
+    if str(item["usage_source"]) != "missing":
+        return basis
+    if basis == "calls=0":
+        return "calls=unknown"
+    if basis.startswith("calls=0;"):
+        return "calls=unknown" + basis[len("calls=0"):]
+    return basis
+
+
 def _score_report_rows(ranked: list[dict[str, object]]) -> list[list[str]]:
     return [
         [
@@ -445,20 +456,20 @@ def _score_report_rows(ranked: list[dict[str, object]]) -> list[list[str]]:
             str(item["display_name"]),
             str(item["source"]),
             str(item["kind"]),
-            str(item["calls"]),
-            fmt_optional_int(item["recent_30d_calls"]),
+            "-" if str(item["usage_source"]) == "missing" else str(item["calls"]),
+            "-" if str(item["usage_source"]) == "missing" else fmt_optional_int(item["recent_30d_calls"]),
             f"{item['usage_score']:.1f}",
             f"{item['uniqueness_score']:.1f}",
             f"{item['impact_score']:.1f}",
             fmt_optional_float(item["community_prior_score"]),
             fmt_optional_float(item["confidence_score"]),
             str(item["risk_level"]),
-            f"{item['local_score']:.1f}",
-            f"{item['quality_penalty']:.1f}",
-            f"{item['final_score']:.1f}",
+            fmt_score(item["local_score"]),
+            fmt_score(item["quality_penalty"]),
+            fmt_score(item["final_score"]),
             str(item["verdict"]),
             str(item["action"]),
-            str(item["basis"]),
+            _basis_for_report(item),
         ]
         for index, item in enumerate(ranked, start=1)
     ]
@@ -488,12 +499,12 @@ def _ablation_report_section(
         "",
         f"## {report_text(language, 'cost_ablation_plan')}",
         "",
-        f"- {report_text(language, 'strategy')}: {ablation_plan['strategy']}",
-        f"- {report_text(language, 'eligible_general_skills')}: {ablation_plan['eligible_general_skills']}",
-        f"- {report_text(language, 'candidate_skills')}: {ablation_plan['candidate_skills']}",
-        f"- {report_text(language, 'deferred_general_skills')}: {ablation_plan['deferred_general_skills']}",
-        f"- {report_text(language, 'expected_model_cost_reduction').format(baseline_policy=baseline_policy)}: {realistic_reduction}%",
-        f"- {report_text(language, 'expected_accuracy_impact')}: {ablation_plan['accuracy_tradeoff']['expected_accuracy_impact']}",
+        f"- {report_pair(language, report_text(language, 'strategy'), ablation_plan['strategy'])}",
+        f"- {report_pair(language, report_text(language, 'eligible_general_skills'), ablation_plan['eligible_general_skills'])}",
+        f"- {report_pair(language, report_text(language, 'candidate_skills'), ablation_plan['candidate_skills'])}",
+        f"- {report_pair(language, report_text(language, 'deferred_general_skills'), ablation_plan['deferred_general_skills'])}",
+        f"- {report_pair(language, report_text(language, 'expected_model_cost_reduction').format(baseline_policy=baseline_policy), f'{realistic_reduction}%')}",
+        f"- {report_pair(language, report_text(language, 'expected_accuracy_impact'), ablation_plan['accuracy_tradeoff']['expected_accuracy_impact'])}",
         "",
         markdown_table(report_headers(language, "ablation"), rows),
     ]
@@ -516,8 +527,8 @@ def _diagnostic_report_sections(
     quality_rows = [
         [
             str(item["display_name"]),
-            f"{item['quality_penalty']:.1f}",
-            f"{item['quality_penalty_uncapped']:.1f}",
+            fmt_score(item["quality_penalty"]),
+            fmt_score(item["quality_penalty_uncapped"]),
             short_risk_flags(list(item["quality_flags"])),
             summarize_quality_evidence(list(item["quality_evidence"]), language=language),
         ]
@@ -554,9 +565,9 @@ def _action_report_sections(
     action_rows = [
         [
             str(item["display_name"]),
-            f"{item['local_score']:.1f}",
-            f"{item['quality_penalty']:.1f}",
-            f"{item['final_score']:.1f}",
+            fmt_score(item["local_score"]),
+            fmt_score(item["quality_penalty"]),
+            fmt_score(item["final_score"]),
             fmt_optional_float(item["confidence_score"]),
             str(item["risk_level"]),
             str(item["action"]),
@@ -567,9 +578,9 @@ def _action_report_sections(
     delete_rows = [
         [
             str(item["display_name"]),
-            f"{item['local_score']:.1f}",
-            f"{item['quality_penalty']:.1f}",
-            f"{item['final_score']:.1f}",
+            fmt_score(item["local_score"]),
+            fmt_score(item["quality_penalty"]),
+            fmt_score(item["final_score"]),
             str(item["kind"]),
             str(item["action"]),
             action_reason_for_report(str(item["delete_trigger"]), language),
@@ -597,9 +608,10 @@ def _evidence_gap_report_sections(
             gaps.append(missing_evidence_label("ablation", language))
         if item["missing_community"]:
             gaps.append(missing_evidence_label("community", language))
-        missing_rows.append([str(item["display_name"]), str(item["kind"]), ", ".join(gaps)])
+        gap_separator = "、" if normalize_report_language(language) == "zh-CN" else ", "
+        missing_rows.append([str(item["display_name"]), str(item["kind"]), gap_separator.join(gaps)])
     not_audited_rows = [
-        [item["path"], not_audited_reason_label(item["reason"], language)]
+        [f"`{item['path']}`", not_audited_reason_label(item["reason"], language)]
         for item in not_audited
     ]
     return [
@@ -631,19 +643,21 @@ def _build_markdown_report(
         "",
         f"# {report_text(report_language, 'title')}",
         "",
-        f"- {report_text(report_language, 'skills_audited')}: {len(ranked)}",
-        f"- {report_text(report_language, 'usage_files')}: {path_counts['usage']}",
-        f"- {report_text(report_language, 'history_files')}: {path_counts['history']}",
-        f"- {report_text(report_language, 'ablation_files')}: {path_counts['ablation']}",
-        f"- {report_text(report_language, 'community_files')}: {path_counts['community']}",
-        f"- {report_text(report_language, 'report_mode')}: {report_mode}",
-        f"- {report_text(report_language, 'recommended_actions')}: {len(recommended_actions)}",
-        f"- {report_text(report_language, 'delete_candidates')}: {len(delete_candidates)}",
-        f"- {report_text(report_language, 'not_audited_count')}: {len(not_audited)}",
+        f"- {report_pair(report_language, report_text(report_language, 'skills_audited'), len(ranked))}",
+        f"- {report_pair(report_language, report_text(report_language, 'usage_files'), path_counts['usage'])}",
+        f"- {report_pair(report_language, report_text(report_language, 'history_files'), path_counts['history'])}",
+        f"- {report_pair(report_language, report_text(report_language, 'ablation_files'), path_counts['ablation'])}",
+        f"- {report_pair(report_language, report_text(report_language, 'community_files'), path_counts['community'])}",
+        f"- {report_pair(report_language, report_text(report_language, 'report_mode'), report_mode)}",
+        f"- {report_pair(report_language, report_text(report_language, 'recommended_actions'), len(recommended_actions))}",
+        f"- {report_pair(report_language, report_text(report_language, 'delete_candidates'), len(delete_candidates))}",
+        f"- {report_pair(report_language, report_text(report_language, 'not_audited_count'), len(not_audited))}",
         "",
         *decision_summary(ranked, language=report_language),
         "",
         f"## {report_text(report_language, 'score_table')}",
+        "",
+        report_text(report_language, "score_axes_note"),
         "",
         markdown_table(report_headers(report_language, "score"), _score_report_rows(ranked)),
         *_ablation_report_section(ablation_plan, report_language),
@@ -846,15 +860,23 @@ def build_parser() -> argparse.ArgumentParser:
     audit_parser.add_argument("--ablation-file", action="append", help="JSON or JSONL file with ablation cases.")
     audit_parser.add_argument("--community-file", action="append", help="Offline JSON/JSONL/CSV/TSV file with registry metrics.")
     audit_parser.add_argument("--markdown-out", help="Write the full Markdown evidence report to this file.")
-    audit_parser.add_argument(
-        "--report-language",
-        default="auto",
-        help=(
-            "Summary and Markdown evidence language: auto, en, or zh-CN. Auto reads "
-            "SKILL_AUDIT_REPORT_LANGUAGE or the "
-            "process locale; unsupported or unclear values fall back to English."
-        ),
-    )
+    if chinese_only_report_profile_enabled():
+        audit_parser.add_argument(
+            "--report-language",
+            default="zh-CN",
+            choices=("zh-CN",),
+            help="Report language is fixed to zh-CN by this package profile.",
+        )
+    else:
+        audit_parser.add_argument(
+            "--report-language",
+            default="auto",
+            help=(
+                "Summary and Markdown evidence language: auto, en, or zh-CN. Auto reads "
+                "SKILL_AUDIT_REPORT_LANGUAGE or the "
+                "process locale; unsupported or unclear values fall back to English."
+            ),
+        )
     audit_parser.add_argument("--json-out", help="Write machine-readable JSON output to this file.")
     audit_parser.add_argument("--ablation-plan-out", help="Write a cost-efficient ablation plan JSON file.")
     audit_parser.add_argument(

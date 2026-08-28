@@ -19,7 +19,7 @@ Create `.claude/settings.json`:
   "hooks": {
     "UserPromptSubmit": [
       {
-        "matcher": "",
+        "matcher": "counteroffer|concession|anchor|BATNA|walk-away|term.?sheet",
         "hooks": [
           {
             "type": "command",

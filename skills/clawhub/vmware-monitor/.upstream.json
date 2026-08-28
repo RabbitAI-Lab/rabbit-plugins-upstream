@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-monitor",
   "slug": "vmware-monitor",
   "ownerHandle": null,
-  "version": "1.8.8",
-  "updatedAt": 1784668858165,
-  "contentHash": "129aba46b929e34b1142caf0fcc87309e28d767a04d1067ba9ec6b54c4ee44c8",
-  "fetchedAt": "2026-07-26T18:08:51.721Z"
+  "version": "1.8.11",
+  "updatedAt": 1787885796659,
+  "contentHash": "5116ae121887d1d8b3c7236f7b41709d94f8314feeaf59d4ba1a35a0a1052eda",
+  "fetchedAt": "2026-08-28T19:34:48.212Z"
 }

@@ -95,6 +95,12 @@ API key auth — no login flow or token rotation. The key is attached to every r
 | `sw_create_expense(group_id, description, cost, split_equally? \| users?)` | Create an expense — equal split or custom per-person split |
 | `sw_update_expense(expense_id, ...)` | Edit an existing expense (custom split requires full `users` array) |
 | `sw_delete_expense(id)` | Soft-delete an expense |
+| `sw_undelete_expense(id)` | Restore a soft-deleted expense |
+
+### Receipts
+| Tool | Description |
+|------|-------------|
+| `sw_get_receipt(id, size?, inline?, extract_text?, output_dir?, write?)` | Download the receipt attached to an expense. `inline: true` returns the bytes in the result (images **and** PDFs); `extract_text: true` returns a PDF's text layer; by default it also writes the file and returns the path |
 
 ### Utilities
 | Tool | Description |
@@ -128,6 +134,14 @@ sw_create_expense(group_id, "Hotel", "200.00", users: [
 ])
 ```
 
+**Get the receipt for an expense:**
+```
+sw_list_expenses(...) → find expense ID
+sw_get_receipt(id, extract_text: true) → line items and totals as text
+sw_get_receipt(id, inline: true)       → the actual bytes, when you need to see it
+sw_get_receipt(id)                     → writes e.g. ./splitwise-receipt-4644814211.pdf
+```
+
 **Search and edit an expense:**
 ```
 sw_list_expenses(group_id, dated_after: "2026-01-01") → find expense ID
@@ -139,5 +153,9 @@ sw_update_expense(expense_id, description: "Corrected description", cost: "95.00
 - `cost` is always a decimal string (e.g. `"25.00"`)
 - `split_equally: true` and `users` array are mutually exclusive
 - For custom split updates, the **full `users` array is required** — the API replaces the entire split
-- `sw_delete_expense` is a soft delete; restoration requires the Splitwise web app
+- `sw_delete_expense` is a soft delete — restore with `sw_undelete_expense`
+- The `receipt.original` / `receipt.large` URLs on an expense are **not public** — fetching them without the API key returns 401. Always use `sw_get_receipt`, which fetches them with the server's own credentials
+- `sw_get_receipt` writes into `output_dir`, else `$SPLITWISE_OUTPUT_DIR`, else the working directory, and never overwrites an existing file
+- That path is on the **server's** filesystem. If you can't read it — a hosted or containerised server — use `inline: true` (bytes) or `extract_text: true` (PDF text) instead of the path
+- `extract_text` only works on PDFs, and only when the PDF has a text layer; a scanned or photographed receipt returns `text_note` instead, and needs `inline: true` to read
 - API default for `sw_list_expenses` is 20 results when `limit` is omitted

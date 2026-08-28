@@ -1,0 +1,47 @@
+{
+  "status": "no_edge_confirmed",
+  "n_groups": 30,
+  "n_records": 8,
+  "theoretical": {
+    "front_mean": 1.0909,
+    "back_mean": 0.0625,
+    "total_mean": 1.1534
+  },
+  "empirical": {
+    "front_mean": 0.9,
+    "total_mean": 1.1667,
+    "front_hist": [
+      10,
+      14,
+      5,
+      1,
+      0,
+      0,
+      0
+    ],
+    "total_hist": [
+      7,
+      14,
+      6,
+      3,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "monte_carlo": {
+    "front_mean": 0.8333,
+    "total_mean": 0.9,
+    "n": 30
+  },
+  "tests": {
+    "front_z_pvalue": 0.228231,
+    "front_chi_pvalue": 0.956224,
+    "total_chi_pvalue": 0.98878,
+    "min_pvalue": 0.228231,
+    "front_effect": 0.1909,
+    "total_effect": 0.0133
+  },
+  "conclusion": "自证通过: 系统累积 30 个推荐分组的前区命中均值 0.900 ≈ 理论随机期望 1.091 (蒙特卡洛随机基线 0.833), 最小显著性 p=0.228 >> 0.01 —— 系统自身推荐与纯随机无显著差异, 确认无预测优势 (no_edge)。双色球头奖恒为 1/17,721,088。"
+}

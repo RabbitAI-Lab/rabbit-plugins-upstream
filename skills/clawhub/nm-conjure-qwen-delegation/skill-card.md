@@ -1,43 +1,55 @@
-## Description: <br>
-Delegates tasks to Qwen CLI via delegation-core for Alibaba's models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Delegates tasks to Qwen CLI via delegation-core for Alibaba's models.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to delegate large-context analysis, summarization, batch processing, and multi-file review tasks to a configured Qwen CLI environment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected prompts and file contents can be processed by the external Qwen CLI or provider. <br>
-Mitigation: Limit delegated prompts and file sets to intended, non-sensitive material and review what will be sent before execution. <br>
-Risk: Broad activation triggers such as cli can make the skill available in situations where Qwen delegation was not intended. <br>
-Mitigation: Narrow or disable generic triggers and invoke Qwen delegation explicitly when that behavior is desired. <br>
-Risk: Delegated model output can be incomplete, incorrect, or unsuitable for direct application. <br>
-Mitigation: Review Qwen responses before applying generated code, configuration, or operational guidance. <br>
+## Use Case:
 
+Developers and engineers use this skill to delegate batch processing, summarization, and multi-file analysis to the Qwen CLI through delegation-core when Qwen is installed and configured.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conjure-qwen-delegation) <br>
-- [Conjure homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with bash command examples and CLI usage guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Output may include Qwen CLI commands, model selection guidance, authentication setup, and delegation patterns; structured output depends on the requested Qwen format.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter says 1.9.8) <br>
+Risk: Selected files may be sent to the configured Qwen provider when users run the suggested commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review file globs before delegation and avoid including secrets or sensitive files.
+
+Risk: Qwen credentials can be exposed if API keys are hard-coded or committed.
+
+Mitigation: Keep API keys in normal secret-management flows and do not hard-code them in skill files or examples.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conjure-qwen-delegation)
+- [Conjure plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure)
+- [Qwen-specific configuration](modules/qwen-specifics.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference selected file globs that the user passes to Qwen CLI.]
+
+## Skill Version(s):
+
+1.9.19 (source: release evidence; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

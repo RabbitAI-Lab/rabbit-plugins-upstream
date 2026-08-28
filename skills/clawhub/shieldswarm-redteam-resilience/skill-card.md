@@ -1,49 +1,63 @@
-## Description: <br>
-ShieldSwarm is a defensive multi-agent SRE, SecOps, red-team, and purple-team resilience commander for authorized OpenClaw and Arena-like services. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ShieldSwarm is a defensive, authorization-gated SRE/SecOps red-team and purple-team resilience commander that provides mode selection, validation guidance, approval gates, ROE, rollback, postmortem, model-resilience, redaction, and bounded-diagnostic workflows.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-External developers, SREs, SecOps teams, and authorized operators use this skill to plan defensive resilience work, incident response, model fallback review, red-team or purple-team exercises, rollback planning, and postmortems with explicit authorization and evidence-handling gates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill could be misapplied to attack traffic, bypass testing, credential handling, or unapproved production changes. <br>
-Mitigation: Use it only for authorized defensive operations or resilience planning, and confirm scope, approvers, rollback ownership, and data redaction rules before real-system work. <br>
-Risk: Operational recommendations could expose sensitive logs, prompts, screenshots, HAR data, customer data, or secrets if evidence is not sanitized. <br>
-Mitigation: Require redacted evidence summaries, avoid collecting credentials or raw tokens, and apply the bundled redaction and evidence-handling templates before sharing artifacts. <br>
-Risk: Defensive red-team or incident-response plans can still disrupt production if executed without approval gates. <br>
-Mitigation: Use rules of engagement, explicit abort conditions, human approval, dry runs, one-change-at-a-time execution, and documented rollback ownership before risky changes. <br>
+## Use Case:
 
+Developers, SREs, SecOps operators, and authorized resilience teams use this skill to plan defensive incident-response, red-team, purple-team, model-resilience, approval, rollback, and evidence-handling workflows. It is intended for authorized systems and explicitly excludes offensive testing, login bypass, credential collection, spam, and unapproved production changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/shieldswarm-redteam-resilience) <br>
-- [Publisher profile](https://clawhub.ai/user/orionshaowswmw) <br>
-- [Agent discovery card](artifact/AGENT_DISCOVERY.md) <br>
-- [Quickstart template](artifact/templates/quickstart.md) <br>
-- [Operator authorization template](artifact/templates/operator_authorization.yaml) <br>
-- [Red-team rules of engagement template](artifact/templates/red_team_roe.yaml) <br>
-- [Model resilience policy template](artifact/templates/model_resilience_policy.yaml) <br>
-- [Local self-test harness](artifact/tools/shieldswarm_selftest.py) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Shell commands] <br>
-**Output Format:** [Markdown guidance with YAML templates, local reports, checklists, diffs, and approval artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are intended for human review before execution and may include redacted evidence summaries, rollback plans, incident updates, and validation logs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Users may rely on referenced helper scripts that are not present in the published artifact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify or add the referenced validator and approval scripts before relying on enforcement claims; use the shipped self-test and inspect available files before use.
+
+Risk: Approval records, evidence logs, screenshots, HAR files, and diagnostics can contain secrets, private prompts, or sensitive operational data.
+
+Mitigation: Scope file and shell access to the working directory, redact secrets before sharing artifacts, and protect locally written approval or evidence logs.
+
+Risk: Defensive red-team or incident-response workflows can be misused outside authorized scope.
+
+Mitigation: Install and use only for authorized defensive operations with explicit rules of engagement, least privilege, abort conditions, and rollback ownership.
+
+## Reference(s):
+
+- [Skill definition](artifact/SKILL.md)
+- [README](artifact/README.md)
+- [Agent discovery card](artifact/AGENT_DISCOVERY.md)
+- [Changelog](artifact/CHANGELOG.md)
+- [Authorization intake template](artifact/templates/authorization_intake.yaml)
+- [Red-team rules of engagement template](artifact/templates/red_team_roe.yaml)
+- [Model resilience policy template](artifact/templates/model_resilience_policy.yaml)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance, Shell commands]
+
+**Output Format:** [Markdown guidance with YAML templates and inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should be reviewed by an authorized human operator; approval, rollback, and evidence logs may contain sensitive operational context and should be protected.]
+
+## Skill Version(s):
+
+2.0.1 (source: artifact/SKILL.md frontmatter, artifact/CHANGELOG.md, and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

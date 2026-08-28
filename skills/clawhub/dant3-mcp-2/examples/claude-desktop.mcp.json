@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "dant3": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://dant3.net/mcp"
+      ]
+    }
+  }
+}

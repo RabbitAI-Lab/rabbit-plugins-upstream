@@ -1,9 +1,9 @@
 ---
 name: insurance-advisor-china
 description: 中国大陆AI保险顾问。为个人和家庭提供全方位的保险咨询、产品对比、方案设计、投保指导。当用户询问保险配置、保险方案、产品对比、重疾险/医疗险/寿险/意外险/储蓄险推荐、保费计算、保障缺口分析、需求分析、核保合规、理赔等问题时使用。
-version: 1.8.347
+version: 2.0.0
 tags: insurance, china, financial, advisor, product-comparison, medical, family-protection, health
-last_published: 2026-07-26
+last_published: 2026-08-29
 ---
 
 # 中国大陆AI保险顾问
@@ -59,6 +59,8 @@ python3 scripts/needs_analyzer.py
 1. 从 `references/products.json` 加载产品数据
 2. 按险种类型筛选产品
 3. 生成横向对比表格
+
+**🆕 质量过滤（2026-08-20 quality-aware）**：加载产品时自动跳过 `data_quality="garbage"` 的未识别产品（37 款），不进入对比/推荐列表。返回结果中带 `disclaimers` 数组，根据 `coverage_period_quality` 和 `listing_time_quality` 自动生成产品时效提示。
 
 **输出必须包含**：
 - 产品名称、公司名称

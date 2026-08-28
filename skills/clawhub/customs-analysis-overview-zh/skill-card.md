@@ -1,48 +1,66 @@
-## Description: <br>
-Queries Upkuajing customs analysis overview data by country, returning supplier and buyer counts with cursor pagination. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+按国家维度查询指定 HS 编码相关海关贸易概览数据，返回供应商和采购商数量汇总并支持游标分页。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Trade analysts, market researchers, and import-export operators use this skill to compare supplier and buyer activity across countries for a customs product analysis overview. Agents can use it to guide paid API queries, inspect fee-bearing JSON results, and continue through cursor-paginated country rows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill calls a paid third-party customs data API and each query can incur charges. <br>
-Mitigation: Confirm each paid query in a separate user message before running the query or account action. <br>
-Risk: The skill may read, use, or create an API key stored in plaintext under ~/.upkuajing/.env. <br>
-Mitigation: Avoid displaying the credential file contents in chat or logs, and use a safer secret store when the runtime supports one. <br>
-Risk: The skill can create API keys and recharge payment URLs for the Upkuajing account flow. <br>
-Mitigation: Review account and billing actions before execution and require explicit user confirmation. <br>
-Risk: The skill sends requests to openapi.upkuajing.com, including a daily version-check request during API use. <br>
-Mitigation: Review outbound network behavior before installation in restricted or compliance-sensitive environments. <br>
+## Use Case:
 
+Trade analysts, market researchers, and import/export operators use this skill to compare supplier and buyer presence by country for customs-market overview analysis and target-market planning.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-analysis-overview-zh) <br>
-- [分析报告-概览 API 参考](references/customs-analysis-overview-api.md) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer platform](https://developer.upkuajing.com/) <br>
-- [Upkuajing API pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [API results include country rows, supplier counts, buyer counts, latest trade date fields, cursor pagination, and fee information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md metadata) <br>
+Risk: The skill stores a vendor API key in a plaintext home-directory .env file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated API key, keep ~/.upkuajing/.env private, and rotate the key if it may have been exposed.
+
+Risk: Normal query and recharge workflows can create paid vendor API activity.
+
+Mitigation: Confirm pricing and obtain explicit user approval before billable calls or recharge-order creation.
+
+Risk: Optional diagnostic error reports can send request context to the vendor.
+
+Mitigation: Review report contents before submission and omit sensitive trade data or credentials from diagnostic context.
+
+Risk: The implementation performs a vendor version-check side effect during API request handling.
+
+Mitigation: Install and run only in environments where outbound version-check traffic to the vendor is acceptable.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/customs-analysis-overview-zh)
+- [跨境魔方 Homepage](https://www.upkuajing.com)
+- [跨境魔方 Developer Platform](https://developer.upkuajing.com/)
+- [OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [分析报告-概览 API 参考](references/customs-analysis-overview-api.md)
+- [Agent调用Skill异常上报 API 参考](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON responses with concise natural-language guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns paginated country-level supplier and buyer counts with fee and requestId metadata.]
+
+## Skill Version(s):
+
+1.0.1 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

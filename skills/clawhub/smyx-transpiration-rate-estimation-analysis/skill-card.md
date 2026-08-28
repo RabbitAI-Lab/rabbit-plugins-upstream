@@ -1,43 +1,58 @@
-## Description: <br>
-Estimates an indoor plant transpiration rate index from thermal or RGB leaf imagery with optional environmental data, then returns a structured plant stress and root water-uptake assessment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Estimates an indoor plant transpiration-rate index from thermal or RGB leaf images plus optional environmental data, producing water-stress, root water-uptake, and plant-care guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Developers, plant-care operators, greenhouse teams, and smart-planter workflows use this skill to analyze leaf imagery and produce transpiration-rate, root water-uptake, stress, and care-guidance outputs for indoor plants. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cloud-backed analysis sends media, URLs, identity data, and report-history requests to lifeemergence.com services. <br>
-Mitigation: Use only with data appropriate for third-party cloud processing, and avoid private files or URLs unless the publisher clarifies consent, retention, and authentication handling. <br>
-Risk: The security evidence says the skill automatically creates or reuses backend identities and stores token-capable local SQLite state. <br>
-Mitigation: Review local storage and identity behavior before deployment, restrict execution to trusted environments, and clear local state when account linkage should not persist. <br>
-Risk: The authoritative security verdict is suspicious because user-facing disclosure around cloud processing, identity reuse, and local token storage is weak. <br>
-Mitigation: Require deployment review and user disclosure before enabling the skill in workflows that handle sensitive images, URLs, or account-linked history. <br>
+## Use Case:
 
+Developers, plant-care teams, greenhouse operators, and smart-planter workflows use this skill to analyze leaf images or videos, estimate a relative transpiration-rate index, assess root water-uptake vitality, and retrieve cloud report history.
 
-## Reference(s): <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON text, with optional file output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured analysis results, report links, history-query output, and command examples for local script execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; SKILL.md frontmatter lists 1.0.4) <br>
+Risk: Plant images, videos, or URLs may be sent to Life Emergence cloud APIs for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only approved media, disclose cloud processing to users, and avoid submitting sensitive or unnecessary visual data.
+
+Risk: Cloud report history is tied to an internally created or reused identity.
+
+Mitigation: Constrain identity-related environment variables and confirm that report-history behavior matches the deployment's consent and retention expectations.
+
+Risk: Tokens and user records may be stored in a local workspace SQLite database.
+
+Mitigation: Limit workspace file access, protect or rotate stored credentials, and remove local state when the skill is decommissioned.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown reports and tables, with optional JSON/detail output and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save output to a caller-specified file; historical report queries return structured report records with links when available.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter lists 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

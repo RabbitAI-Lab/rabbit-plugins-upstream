@@ -1,46 +1,66 @@
-## Description: <br>
-Queries Upkuajing customs data for company-level HS-code trade statistics, including monthly trends, HS-code distribution, trade counts, and share of trade. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+查询公司海关贸易HS编码维度统计数据，分析HS编码分布、贸易量分解和月度贸易趋势。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Trade analysts, sourcing teams, and supply-chain operators use this skill to inspect how a company’s import or export activity breaks down by HS code and how those product categories change over time. The skill helps agents prepare and run paid Upkuajing API queries, then interpret returned HS-code and monthly trend data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may read or create ~/.upkuajing/.env and store UPKUAJING_API_KEY there in plaintext. <br>
-Mitigation: Keep the file private, prefer environment-variable injection where practical, never paste or display the full API key in chat, and rotate the key if it is exposed. <br>
-Risk: The skill makes paid Upkuajing API calls and can create recharge payment links. <br>
-Mitigation: Review pricing or recharge links first, tell the user a query will incur charges, and wait for explicit confirmation in a separate message before running charged commands. <br>
-Risk: Company IDs and query filters are sent to Upkuajing over network API calls. <br>
-Mitigation: Confirm the requested company and filters are appropriate to share with Upkuajing, and send only the parameters needed for the analysis. <br>
+## Use Case:
 
+External trade teams and agents use this skill to query Upkuajing customs data for a company and analyze trade composition by HS code, including monthly trends, trade counts, and HS-code share. It supports category analysis and supply-chain decisions that depend on company-level import/export product distribution.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-company-hscode-stats-zh) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer platform](https://developer.upkuajing.com/) <br>
-- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [公司贸易HS编码维度统计 API 参考](references/customs-company-hscode-stats-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [API responses include HS-code statistics, monthly trend data, and fee details; charged queries require explicit user confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The skill requires access to an Upkuajing API key and may store that key in ~/.upkuajing/.env.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated API key, keep the file private, avoid sharing the key in prompts or reports, and rotate the key if exposure is suspected.
+
+Risk: Normal HS-code statistics queries are paid API calls.
+
+Mitigation: Tell the user that the query will incur a charge and wait for explicit confirmation before executing paid calls.
+
+Risk: Recharge flows can expose users to payment links and account-balance decisions.
+
+Mitigation: Present recharge links as Upkuajing payment actions, ask users to verify the destination before payment, and continue only after the user confirms completion.
+
+Risk: Diagnostic error reports can include business context or request details.
+
+Mitigation: Ask for confirmation before reporting errors and avoid including secrets or unnecessary sensitive business details in diagnostic context.
+
+## Reference(s):
+
+- [公司贸易HS编码维度统计 API 参考](references/customs-company-hscode-stats-api.md)
+- [Agent调用Skill异常上报 API 参考](references/skill-error-report-api.md)
+- [Upkuajing Homepage](https://www.upkuajing.com)
+- [Upkuajing Developer Platform](https://developer.upkuajing.com/)
+- [Upkuajing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/customs-company-hscode-stats-zh)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and formatted JSON API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; successful queries include data, fee information, and requestId.]
+
+## Skill Version(s):
+
+1.0.1 (source: SKILL.md frontmatter metadata, release evidence, target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
