@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/managed-airflow-dag-authoring",
+  "repo": "google/skills",
+  "skillId": "managed-airflow-dag-authoring",
+  "branch": "main",
+  "pushedAt": "2026-08-28T19:26:35Z",
+  "contentHash": "bc0414640afdbceb16212d99f87c9d7edbf1a857672471708967117ddf14d8c4",
+  "fetchedAt": "2026-08-28T19:31:12.949Z"
+}

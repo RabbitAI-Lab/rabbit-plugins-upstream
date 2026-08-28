@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/elevenlabs/skills/speech-engine",
+  "repo": "elevenlabs/skills",
+  "skillId": "speech-engine",
+  "branch": "main",
+  "pushedAt": "2026-08-28T13:55:42Z",
+  "contentHash": "08475157e48c27120af6c86b0809c44a5d499d80f5bc9ea0215fb648ee2fe8e4",
+  "fetchedAt": "2026-08-28T19:31:28.103Z"
+}

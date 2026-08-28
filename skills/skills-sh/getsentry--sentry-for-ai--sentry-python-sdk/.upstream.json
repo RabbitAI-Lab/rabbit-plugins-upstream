@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-python-sdk",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-python-sdk",
+  "branch": "main",
+  "pushedAt": "2026-08-27T16:25:25Z",
+  "contentHash": "548e6a641eb7587b1eb08a924dc4e82c12f469cd24a3a6f3e83d607bb3c0257f",
+  "fetchedAt": "2026-08-28T19:31:55.152Z"
+}

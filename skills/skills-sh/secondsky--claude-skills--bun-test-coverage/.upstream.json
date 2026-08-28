@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/bun-test-coverage",
+  "repo": "secondsky/claude-skills",
+  "skillId": "bun-test-coverage",
+  "branch": "main",
+  "pushedAt": "2026-08-24T09:50:04Z",
+  "contentHash": "cbca8491bc17e50a3f219f87bc95d255e00b154d805ff0e448f39e65b98696be",
+  "fetchedAt": "2026-08-28T19:31:57.134Z"
+}
