@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/blockchain/hyperliquid",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "9145ae6e9dba3b0553ba0e1330730d165c4264e21eaa7b1a4604097f56c2e92a",
-  "fetchedAt": "2026-07-26T17:03:56.988Z"
+  "pushedAt": "2026-08-29T13:11:02Z",
+  "contentHash": "d1c21a97eac62bd24260968a67427bc6ee30794f21a0e439103ee685e24f49f6",
+  "fetchedAt": "2026-08-29T13:14:20.083Z"
 }
