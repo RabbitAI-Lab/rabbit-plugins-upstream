@@ -1,40 +1,55 @@
-## Description: <br>
-React architecture patterns, TypeScript, Next.js, hooks, and testing for component structure, state management, routing, Vitest, React Testing Library, and React code review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides React architecture, TypeScript, Next.js, hooks, and testing guidance for agents working on React component structure, state management, routing, Vitest, React Testing Library, or code review.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill for React and Next.js implementation guidance, code review, state management decisions, and frontend test patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Playwright auth-state files can contain reusable test sessions. <br>
-Mitigation: Use dedicated low-privilege test accounts, keep e2e/.auth files out of version control and CI artifacts, and regenerate sessions when needed. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to implement and review React and Next.js frontends with TypeScript, state management, performance, accessibility-oriented testing, and end-to-end test practices.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-react-frontend) <br>
-- [Testing React (Vitest + RTL)](references/testing.md) <br>
-- [E2E Testing with Playwright](references/e2e-testing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with TypeScript and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes React, Next.js, Vitest, React Testing Library, and Playwright patterns.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.1 (source: server release metadata) <br>
+Risk: Projects may copy the Playwright auth-state example without isolating test credentials or generated session files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use dedicated test accounts, keep generated auth-state files out of source control, and review projects that adopt the example.
+
+Risk: React and Next.js version-specific guidance can become stale as framework APIs change.
+
+Mitigation: Verify current official framework documentation before applying App Router, React 19, or other version-specific patterns.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-react-frontend)
+- [Testing React (Vitest + RTL)](artifact/references/testing.md)
+- [E2E Testing with Playwright](artifact/references/e2e-testing.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with TypeScript, TSX, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May recommend checking current official React or Next.js documentation before applying version-specific framework behavior.]
+
+## Skill Version(s):
+
+4.4.3 (source: server release metadata and user changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

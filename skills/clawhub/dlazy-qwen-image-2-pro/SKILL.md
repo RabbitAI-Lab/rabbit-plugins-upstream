@@ -1,14 +1,13 @@
 ---
 name: dlazy-qwen-image-2-pro
 version: 1.3.5
-description: Alibaba Bailian qwen-image-2.0-pro general image generation. Excels at complex text rendering, multi-line layout, photorealistic detail, and strong semantic adherence — great for mixed text/image designs. 阿里云百炼 qwen-image-2.0-pro 千问通用图像生成模型，擅长复杂文本渲染、多行布局、真实质感与语义遵循，支持中英文混排与精细图文设计。
+description: "Alibaba Bailian qwen-image-2.0-pro general image generation. Excels at complex text rendering, multi-line layout, photorealistic detail, and strong semantic adherence — great for mixed text/image designs. 阿里云百炼 qwen-image-2.0-pro 千问通用图像生成模型，擅长复杂文本渲染、多行布局、真实质感与语义遵循，支持中英文混排与精细图文设计。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy qwen-image-2-pro -h for help."}}
 ---
 
-# dlazy-qwen-image-2-pro
+# 文生图 通义 Qwen Image 2 Pro
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Alibaba Bailian qwen-image-2.0-pro general image generation. Excels at complex text rendering, multi-line layout, photorealistic detail, and strong semantic adherence — great for mixed text/image designs.
@@ -87,6 +86,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

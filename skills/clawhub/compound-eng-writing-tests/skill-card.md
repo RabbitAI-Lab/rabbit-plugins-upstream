@@ -1,42 +1,55 @@
-## Description: <br>
-Generic test writing discipline: test quality, real assertions, anti-patterns, and rationalization resistance for writing, improving, or fixing tests across languages and frameworks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generic test-writing discipline for writing tests, adding coverage, and fixing failing tests across languages and frameworks, with emphasis on test quality, real assertions, anti-patterns, and rationalization resistance.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this skill when writing tests, adding test coverage, improving weak tests, or fixing failing tests. It guides test design toward behavior-focused assertions, realistic dependencies, edge-case coverage, and resistance to common rationalizations for skipping tests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Recommended test-isolation steps may involve real test databases, temporary files, containers, or manual cleanup commands. <br>
-Mitigation: Review proposed commands and configuration changes before applying them, especially in important local environments or shared test infrastructure. <br>
-Risk: Generic testing guidance may conflict with framework-specific conventions. <br>
-Mitigation: Apply framework-specific testing skills or project documentation first when they provide more precise tooling or patterns. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to plan, write, and review tests that prove behavior, avoid mock-heavy or assertion-light coverage, and resist rationalizations for skipping tests.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-writing-tests) <br>
-- [Anti-patterns extended notes](artifact/references/anti-patterns-extended.md) <br>
-- [Rationalization table](artifact/references/rationalization-table.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with examples, checklists, and occasional code or shell command suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No generated files by default; recommendations may include test cases, assertions, fixture changes, and local test commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: evidence.json release.version) <br>
+Risk: Suggested database resets, Docker volume teardown, or test commands could be misapplied to production or shared data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run destructive reset or teardown commands only against disposable test environments after confirming the active project, database, and container context.
+
+Risk: Generic test-writing guidance can be over-applied without repository or framework context, producing misleading tests or weak assertions.
+
+Mitigation: Use the repository's CI command, checked-in test runner, and any active framework-specific skill as the authority for tooling and conventions; review generated tests for behavior-focused assertions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-writing-tests)
+- [Anti-Patterns: Extended Notes](references/anti-patterns-extended.md)
+- [Rationalization Table](references/rationalization-table.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands]
+
+**Output Format:** [Markdown guidance with inline code or shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable artifacts are bundled; outputs depend on the repository and test framework being used.]
+
+## Skill Version(s):
+
+4.4.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

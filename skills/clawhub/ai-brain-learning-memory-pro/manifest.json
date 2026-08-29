@@ -1,0 +1,40 @@
+{
+  "schema": "ownership-attestation/1.0",
+  "package": "AI记忆工程实战版",
+  "version": "1.0.0",
+  "author": "注册老炮",
+  "year": "2026",
+  "timestamp_utc": "2026-08-26T15:06:51.544475+00:00",
+  "timestamp_local": "2026-08-26T23:06:51.544483",
+  "package_fingerprint_sha256": "7df1d8c644cc73d6241d711213760fd549aef2e08598e528a29383fddb8c4ac4",
+  "files": [
+    {
+      "path": "LICENSE.md",
+      "sha256": "5416746360f13e79761cd77b2a7655ff5446803e513f206e31e93a7abd3091ac"
+    },
+    {
+      "path": "SECURITY_AUDIT.md",
+      "sha256": "dddebae31c2962e52ea4f6cafcac962d8b0806565838925e5419f2f5fe7ee569"
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "3b7b1f619b0b87bb591411c8e373a202f7d4014657d2d05e2d5ff83295a6977b"
+    },
+    {
+      "path": "references/调研出处与证据.md",
+      "sha256": "fb47dd6d92fe3da00059398e3d08a3bc7bbbfaa866151752259046a36133001f"
+    },
+    {
+      "path": "scripts/memory_eval_battery.py",
+      "sha256": "ffd017f31883f2b07d40c0eef4c88ebf3fc22468bb8ec8f29ea9b56698efaf2c"
+    },
+    {
+      "path": "security-radar.svg",
+      "sha256": "bcc29b89957e31c78f44e0f4c346ba8642f3dcfb59e6dcf6d63f39c74c928523"
+    },
+    {
+      "path": "security_results.json",
+      "sha256": "e4f2add5a2334b4ab4abf9c845b236c12d00072db87abd3cd3f5fe5fcecef407"
+    }
+  ]
+}

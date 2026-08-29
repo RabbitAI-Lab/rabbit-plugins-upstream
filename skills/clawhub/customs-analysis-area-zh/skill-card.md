@@ -1,46 +1,62 @@
-## Description: <br>
-Queries country and region distribution data for a specified HS code through the Upkuajing customs trade API, returning trade counts, trade amounts, buyer counts, and supplier counts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries country and region-level customs trade distribution data for a specified HS code, including trade count, amount, buyer count, and supplier count.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External trade analysts, market researchers, and import/export teams use this skill to compare exporter or importer activity by country for a selected HS code and recent-month window. It helps identify active markets and geographic distribution patterns from customs trade data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores and reads an Upkuajing API key from the local environment or ~/.upkuajing/.env. <br>
-Mitigation: Protect the local key file, avoid displaying or pasting the API key unnecessarily, and install only when the Upkuajing account and queries involved are trusted. <br>
-Risk: Customs-data API calls are billable and may consume account balance. <br>
-Mitigation: Check current pricing with the documented price command or pricing page and require a separate explicit confirmation before running billable queries. <br>
-Risk: Recharge support flows can return a payment URL. <br>
-Mitigation: Review the recharge URL before opening it and continue only after the user confirms payment completion. <br>
+## Use Case:
 
+Trade analysts, market researchers, and import/export practitioners use this skill to compare export-country and import-country activity for an HS code and identify priority regional markets. It helps agents prepare customs trade geography analysis while handling API setup, pricing checks, and error-reporting workflows.
 
-## Reference(s): <br>
-- [分析报告-区域分布 API 参考](references/customs-analysis-area-api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-analysis-area-zh) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer platform](https://developer.upkuajing.com/) <br>
-- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [API responses include paginated country-level trade metrics and fee information when returned by the service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md metadata and server release evidence) <br>
+Risk: The skill stores and reads a UPKUAJING API key from a plaintext file under the user's home directory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated API key with limited exposure, avoid displaying the key in chat or logs, and remove the file when access is no longer needed.
+
+Risk: The skill can perform paid customs queries and account or recharge-related API calls.
+
+Mitigation: Confirm every paid query or recharge step in a separate user message before execution and check official pricing before estimating cost.
+
+Risk: Error reports may include request context or response details.
+
+Mitigation: Review the report content before submission and avoid sending secrets, personal data, or unrelated business-sensitive details.
+
+## Reference(s):
+
+- [区域分布 API 参考](artifact/references/customs-analysis-area-api.md)
+- [Skill Error Report API Reference](artifact/references/skill-error-report-api.md)
+- [跨境魔方](https://www.upkuajing.com)
+- [跨境魔方 OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [跨境魔方 Developer Platform](https://developer.upkuajing.com/)
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/customs-analysis-area-zh)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires UPKUAJING_API_KEY; paid API queries require explicit user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

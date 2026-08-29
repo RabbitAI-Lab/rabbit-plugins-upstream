@@ -1,42 +1,56 @@
-## Description: <br>
-Software implementation planning with file-based persistence (.plan/) for code changes that touch multiple files, have ambiguous scope, or require architectural decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Software implementation planning with file-based persistence (.plan/). Use when planning code changes touching 3+ files or with ambiguous scope. Skip for typos, single-file fixes, and research/scanning/audit work that produces reports rather than code.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this workflow to turn implementation requests into concrete, verifiable plans before coding. It is aimed at multi-file changes, ambiguous scopes, and work that benefits from persistent session notes in `.plan/`. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Starting a new plan can overwrite existing `.plan` files in the current workspace. <br>
-Mitigation: Review or preserve existing `.plan` files before initializing a new plan when those files contain work that must be kept. <br>
+## Use Case:
 
+Developers and engineering agents use this workflow to decide when implementation planning is warranted, create persistent planning artifacts, and hand off approved multi-phase code changes.
 
-## Reference(s): <br>
-- [ia-planning Specification](SPEC.md) <br>
-- [Execution & Decomposition Patterns](references/execution-and-methodology.md) <br>
-- [Operational Patterns](references/operational-patterns.md) <br>
-- [Plan Deepening](references/plan-deepening.md) <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-planning) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown planning files and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local `.plan/` files and add `.plan/` to `.gitignore` when the initialization script is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: The scaffold script can create or update local .plan/ files and add .plan/ to .gitignore.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review repository state before running the scaffold script and inspect generated planning files before relying on them.
+
+Risk: Optional execution handoff can route an approved plan into later agent implementation work.
+
+Mitigation: Review the plan, scope boundaries, and acceptance checks before approving subagent-driven or inline execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-planning)
+- [Execution and methodology](references/execution-and-methodology.md)
+- [Operational patterns](references/operational-patterns.md)
+- [Plan deepening](references/plan-deepening.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown planning documents and conversational guidance with optional shell commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can create or update .plan/task_plan.md, .plan/findings.md, .plan/progress.md, and .gitignore when the scaffold script is run.]
+
+## Skill Version(s):
+
+4.4.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

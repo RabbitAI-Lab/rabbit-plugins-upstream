@@ -36,7 +36,7 @@ def get_api_key():
     if key:
         return key
 
-    vault_resolver = os.environ.get("VAULT_RESOLVER", "/opt/data/bin/vault-resolver")
+    vault_resolver = os.environ.get("VAULT_RESOLVER", "vault-resolver")
     if os.path.isfile(vault_resolver):
         try:
             proc = subprocess.run(
@@ -106,21 +106,54 @@ def try_speechify(text, output_path):
         log(f"Speechify error: {e}")
         return False
 
+def resolve_edge_cmd():
+    """Resolve the edge-tts binary: env override, then PATH, then known paths."""
+    cmd = os.environ.get("EDGE_TTS_CMD", "") or "edge-tts"
+    if os.path.sep in cmd or os.path.isfile(cmd):
+        return cmd
+    # Not an absolute path — look it up on PATH first
+    from shutil import which
+    found = which(cmd)
+    if found:
+        return found
+    # Fallback to known install locations (uv tool / profile .local/bin)
+    candidates = [
+        os.path.expanduser("~/.local/bin/edge-tts"),
+        "/usr/local/bin/edge-tts",
+    ]
+    for c in candidates:
+        if os.path.isfile(c):
+            return c
+    return cmd
+
 def try_edge_tts(text, output_path):
     """Fallback via Edge TTS (Microsoft)."""
-    edge_cmd = os.environ.get("EDGE_TTS_CMD", "edge-tts")
+    edge_cmd = resolve_edge_cmd()
+    tmp = output_path + ".edge.mp3"
     try:
         subprocess.run(
             [edge_cmd, "--voice", EDGE_VOICE,
              "--text", text,
-             "--write-media", output_path],
+             "--write-media", tmp],
             capture_output=True, timeout=60, check=True
         )
+        # edge-tts grava MP3 mesmo com extensão .ogg — converte para Opus
+        # para garantir voice bubble nativa no Telegram.
+        subprocess.run(
+            ["ffmpeg", "-y", "-i", tmp,
+             "-c:a", "libopus", "-b:a", "32k",
+             output_path],
+            capture_output=True, timeout=30, check=True
+        )
+        os.remove(tmp)
         if os.path.getsize(output_path) > 1000:
             log(f"Edge TTS OK ({EDGE_VOICE})")
             return True
         return False
     except Exception as e:
+        if os.path.exists(tmp):
+            try: os.remove(tmp)
+            except OSError: pass
         log(f"Edge TTS error: {e}")
         return False
 

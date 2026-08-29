@@ -1,45 +1,60 @@
-## Description: <br>
-OpenClaw skill for using galdr's ARC workflow to turn YouTube URLs or local audio files into grounded, time-ordered listening-experience prompts backed by listener-state traces: pattern, attention, pulse, heard pressure, surface balance/evidence, harmony, melody, overtones, and silence/re-entry structure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Galdr helps OpenClaw agents turn YouTube URLs or local audio files into grounded, time-ordered listening-experience prompts backed by listener-state traces and optional music-video frame extraction.
 
-## Publisher: <br>
-[sellemain](https://clawhub.ai/user/sellemain) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sellemain](https://clawhub.ai/user/sellemain)
 
-## Use Case: <br>
-Developers and external users use Galdr to analyze music from YouTube URLs or local audio files, assemble grounded ARC listening-experience prompts, and extract structural evidence such as listener-state traces or video frames. It is best suited for song analysis, structural listening prose, and evidence packets for downstream model writing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: YouTube URLs, downloaded context, lyrics, frame descriptions, and assembled prompts can include information that may be shared with third-party services when fetch workflows or model CLI piping are used. <br>
-Mitigation: Review assembled prompts before sending them to external model endpoints, and prefer local files or blind/metrics-only modes when less contextual data should be included. <br>
-Risk: The skill depends on the separate galdr CLI and media tooling, so installation and execution inherit the trust and runtime risks of that CLI and its dependencies. <br>
-Mitigation: Install galdr only from trusted sources, verify PyPI metadata or the listed project repository when provenance matters, and run diagnostic commands before use. <br>
-Risk: Downloading copyrighted audio can create rights or policy issues when the operator lacks appropriate authorization. <br>
-Mitigation: Use local files or fetch only content where the operator has appropriate rights or context, and avoid using the skill for unauthorized downloading. <br>
+## Use Case:
 
+Developers, engineers, and agent operators use Galdr to analyze songs or music videos, generate evidence-backed listening-experience prompts, and create analysis packets for downstream model writing.
 
-## Reference(s): <br>
-- [Galdr Metric Reference](references/metrics.md) <br>
-- [Galdr PyPI Project](https://pypi.org/project/galdr/) <br>
-- [Galdr Project Repository Listed By Skill](https://github.com/sellemain/galdr) <br>
-- [ClawHub Skill Page](https://clawhub.ai/sellemain/skills/galdr) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell and Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces prompts and guidance for running the separate galdr CLI; generated prompts may include metrics, lyrics, background context, or frame descriptions depending on mode.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.1 (source: server release metadata) <br>
+Risk: Galdr workflows may contact remote media or context services and may include track-derived lyrics, metadata, or local-audio details in prompts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run Galdr only from trusted sources, and review assembled prompts before sending them to Claude, llm, or any other external model service.
+
+Risk: Local analysis files can contain audio-derived traces, lyrics, metadata, and generated prompt material.
+
+Mitigation: Store outputs in an appropriate workspace, limit access for private audio, and remove generated analysis files when they are no longer needed.
+
+Risk: Fetching or downloading copyrighted audio may be inappropriate without rights or a valid use context.
+
+Mitigation: Confirm the operator has the necessary rights or context before downloading or analyzing copyrighted media.
+
+## Reference(s):
+
+- [Galdr metric reference](references/metrics.md)
+- [Galdr PyPI project](https://pypi.org/project/galdr/)
+- [Galdr source repository referenced by the skill](https://github.com/sellemain/galdr)
+- [ClawHub Galdr skill page](https://clawhub.ai/sellemain/skills/galdr)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and optional JSON or text file outputs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates local analysis files and prompts; full mode can include track-derived lyrics, background, and frames.]
+
+## Skill Version(s):
+
+0.7.1 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

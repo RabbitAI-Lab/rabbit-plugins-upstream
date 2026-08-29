@@ -138,6 +138,7 @@ GET /google-analytics-data/v1beta/properties/{propertyId}/metadata
 ## Notes
 
 - Authentication is automatic - the router injects the OAuth token
+- **Automatic auth means reports run against the user's live Google Analytics properties**, including any the connected Google user can reach on behalf of clients or other teams. Confirm the property ID with the user before reporting, and treat returned rows as real visitor data - user IDs, locations, and device details are personal data, so summarize rather than dumping raw rows.
 - Property IDs are numeric (e.g., `521310447` from URL `p521310447`)
 - GA4 properties only (Universal Analytics not supported)
 - Use metadata endpoint to discover available dimensions/metrics

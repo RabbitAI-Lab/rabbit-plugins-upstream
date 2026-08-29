@@ -1,51 +1,71 @@
-## Description: <br>
-Operational guide for managing Cloudways servers and applications across one or several Cloudways accounts via the official Cloudways MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operational guide for managing Cloudways servers and applications across one or several Cloudways accounts via the official hosted Cloudways MCP server.
 
-## Publisher: <br>
-[benkalsky](https://clawhub.ai/user/benkalsky) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[benkalsky](https://clawhub.ai/user/benkalsky)
 
-## Use Case: <br>
-Developers, operators, and agency teams use this skill to connect agents to the official Cloudways MCP server, inspect Cloudways infrastructure, run monitoring and audit workflows, and plan maintenance actions with explicit confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: An agent may receive credentials or tokens that grant Cloudways account access. <br>
-Mitigation: Start with READ tokens for audits and monitoring, use LIMITED tokens for narrow workflows, reserve FULL ACCESS only for required account-wide changes, and never print tokens in responses. <br>
-Risk: Write or destructive Cloudways operations can stop services, overwrite applications, change access, or delete resources. <br>
-Mitigation: Require explicit confirmation of account, target server or application, tool, parameters, and expected impact before writes; use double confirmation for destructive actions. <br>
-Risk: Multiple Cloudways accounts can expose similarly named resources with non-interchangeable IDs. <br>
-Mitigation: Verify the MCP connection/account before every operation and never reuse server or application IDs across accounts. <br>
+## Use Case:
 
+Developers and operations teams use this skill to connect to and operate Cloudways MCP for server and application monitoring, maintenance, onboarding audits, automation planning, and controlled write operations across one or more Cloudways accounts.
 
-## Reference(s): <br>
-- [Installation - Cloudways MCP Server](references/installation.md) <br>
-- [Tools Catalog - Cloudways MCP](references/tools-catalog.md) <br>
-- [Workflows - Monitoring](references/workflows-monitoring.md) <br>
-- [Workflows - Maintenance](references/workflows-maintenance.md) <br>
-- [Workflows - Onboarding & Audit](references/workflows-onboarding.md) <br>
-- [Workflows - Automation](references/workflows-automation.md) <br>
-- [How to Use Cloudways MCP Server for AI-Based Server Management](https://support.cloudways.com/en/articles/14654372-how-to-use-cloudways-mcp-server-for-ai-based-server-management) <br>
-- [Cloudways MCP Server Tools](https://support.cloudways.com/en/articles/15798823-cloudways-mcp-server-tools) <br>
-- [Cloudways MCP v1.2 Announcement](https://www.cloudways.com/blog/cloudways-mcp-v1-2-112-new-tools-role-based-access-tokens-and-full-cloudways-api-coverage/) <br>
-- [Cloudways API Documentation](https://developers.cloudways.com/docs/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command snippets, tables, and confirmation prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses read, write, and destructive risk labels for Cloudways MCP operations and asks for explicit confirmation before write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata and frontmatter) <br>
+Risk: Cloudways write and destructive tools can affect live servers, applications, domains, SSL, backups, team access, billing, and subscriptions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill's explicit confirmation workflow for all write tools and double confirmation for destructive actions, including a clear account, target, parameters, and expected impact.
+
+Risk: Overprivileged or exposed Cloudways tokens can allow broad account changes.
+
+Mitigation: Use the minimum Cloudways token role needed, keep tokens out of committed files and logs, avoid legacy API keys, and reserve FULL ACCESS for deliberate write workflows.
+
+Risk: Multiple Cloudways accounts can lead to wrong-account operations or reused IDs across accounts.
+
+Mitigation: Verify the account before every operation, keep per-account MCP connections separate, and never reuse server or application IDs across accounts.
+
+Risk: Documented tool catalogs can lag behind the live Cloudways MCP server.
+
+Mitigation: Treat the live connected MCP tools as the source of truth when a tool name or capability differs from the skill documentation.
+
+## Reference(s):
+
+- [Cloudways MCP skill page](https://clawhub.ai/benkalsky/skills/cloudways-mcp)
+- [How to Use Cloudways MCP Server for AI-Based Server Management](https://support.cloudways.com/en/articles/14654372-how-to-use-cloudways-mcp-server-for-ai-based-server-management)
+- [Cloudways MCP Server Tools](https://support.cloudways.com/en/articles/15798823-cloudways-mcp-server-tools)
+- [Cloudways MCP v1.2 announcement](https://www.cloudways.com/blog/cloudways-mcp-v1-2-112-new-tools-role-based-access-tokens-and-full-cloudways-api-coverage/)
+- [Cloudways API documentation](https://developers.cloudways.com/docs/)
+- [Installation - Cloudways MCP Server](references/installation.md)
+- [Tools Catalog - Cloudways MCP](references/tools-catalog.md)
+- [Workflows - Monitoring](references/workflows-monitoring.md)
+- [Workflows - Maintenance](references/workflows-maintenance.md)
+- [Workflows - Onboarding and Audit](references/workflows-onboarding.md)
+- [Workflows - Automation and Integration](references/workflows-automation.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration, API calls]
+
+**Output Format:** [Markdown guidance with command snippets, confirmation prompts, tool names, and workflow checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a configured Cloudways MCP connection; write and destructive operations require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.4.1 (source: evidence.release.version and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

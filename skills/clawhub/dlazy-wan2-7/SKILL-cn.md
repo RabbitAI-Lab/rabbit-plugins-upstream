@@ -1,14 +1,13 @@
 ---
 name: dlazy-wan2.7
 version: 1.3.4
-description: 通义万相 2.7 视频模型 —— 单一模型支持文生视频、图生视频、首尾帧视频及参考图生成视频。
+description: "通义万相 2.7 视频模型 —— 单一模型支持文生视频、图生视频、首尾帧视频及参考图生成视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy wan2.7 -h 查看帮助信息。"}}
 ---
 
-# dlazy-wan2.7
+# 视频生成 通义万相 Wan 2.7
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 通义万相 2.7 视频模型 —— 支持文生视频，首尾帧生视频，以及参考图/视频生视频。
@@ -94,6 +93,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -106,7 +106,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "wan2.7",
-    "modelId": "wan2.7",
+    "modelId": "bailian-wan-2-7",
     "outputs": [
       {
         "type": "image",

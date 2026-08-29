@@ -20,14 +20,41 @@ SWR triggers enable automatic deployment updates when new images are pushed. A t
 
 Set up auto-deploy to a CCE workload when new images are pushed:
 
-**Pre-creation Checklist**:
+**Pre-creation Checklist** (all steps are mandatory — skipping may result in misleading errors):
 1. Verify repository exists:
 ```bash
 hcloud SWR ShowRepository --namespace=group-dev --repository=my-app --cli-region=cn-north-4
 ```
-2. Obtain CCE cluster ID from CCE console
-3. Verify deployment exists in the CCE cluster
-4. Decide trigger type and condition
+2. Check for existing trigger name conflicts — `CreateTrigger` returns a generic "Invalid param" error for duplicate names without specifying the cause:
+```bash
+hcloud SWR ListTriggersDetails --namespace=group-dev --repository=my-app --cli-region=cn-north-4
+# Check if a trigger with the same --name already exists.
+# If the name already exists:
+#   Tell the user: "Trigger name {name} already exists. Please choose a different name."
+#   Do NOT proceed with CreateTrigger.
+```
+3. For `trigger_mode=cce`: verify the CCE cluster exists — `CreateTrigger` returns "Invalid param" for non-existent clusters without indicating which parameter is invalid:
+```bash
+hcloud CCE ShowCluster --cluster_id={cluster_id} --cli-region=cn-north-4
+# If the command returns 404 or cluster not found:
+#   Tell the user: "CCE cluster {cluster_id} does not exist. Please verify the cluster ID and retry."
+#   Do NOT proceed with CreateTrigger.
+```
+4. For `trigger_mode=cci`: verify CCI service is authorized — `CreateTrigger` returns "Server internal error: fail to get k8s deployment" when CCI is not authorized, which is misleading:
+```bash
+hcloud CCI ListNamespaces --cli-region=cn-north-4
+# If the command returns 403 or "user has no agency to cci":
+#   Tell the user: "CCI service is not authorized. Please authorize CCI service first."
+#   Tell the user: "Authorization link: https://console.huaweicloud.com/cci/?region=cn-north-4"
+#   Tell the user: "Click Service Authorization -> agree, then retry."
+#   Do NOT proceed with CreateTrigger.
+```
+5. Verify the target deployment/statefulset exists in the CCE/CCI cluster
+6. Decide trigger type and condition
+
+**Error Interpretation Guide** (when `CreateTrigger` fails):
+- `SVCSTG.SWR.4000014 "Invalid param"`: This is a generic error. Check: (a) trigger name already exists, (b) cluster_id does not exist, (c) namespace/application name is wrong. Use the pre-creation checklist above to identify the specific cause.
+- `SVCSTG.SWR.5004002 "Server internal error: fail to get k8s deployment"`: This usually means CCI service is not authorized (not a deployment issue). Follow step 4 above to authorize CCI.
 
 ```bash
 # Create trigger for ALL image pushes to CCE deployment
@@ -56,6 +83,8 @@ hcloud SWR CreateTrigger --namespace=group-dev --repository=my-app --name=contai
 - `--trigger_mode`: `cce` (CCE cluster, requires `cluster_id`) or `cci` (CCI instance)
 - `--container`: Optional — target specific container within multi-container pods
 
+⚠️ **CAUTION**: Triggers automatically update CCE/CCI workloads on new image pushes. Verify the trigger condition and target workload to avoid unintended deployments. Confirm before proceeding.
+
 **Post-creation Verification**:
 
 ```bash
@@ -73,6 +102,8 @@ hcloud SWR ListTriggersDetails --namespace=group-dev --repository=my-app --cli-r
 - Audit all trigger configurations for a repository
 - Verify trigger was created correctly
 - Check trigger enable/disable status
+
+> **WARNING — `trigger_history` API difference**: `ListTriggersDetails` returns `null` for the `trigger_history` field, while `ShowTrigger` returns the actual execution history records. This is a known API behavior, not an error. To query trigger execution history, **always use `ShowTrigger`** instead of `ListTriggersDetails`. Using `ListTriggersDetails` for history will incorrectly show null, leading to the false conclusion that the trigger has never executed.
 
 ### W3: View Trigger Details
 
@@ -102,7 +133,7 @@ hcloud SWR UpdateTrigger --namespace=group-dev --repository=my-app --trigger=dep
 
 ### W5: Delete a Trigger
 
-⚠️ **Best Practice**: Disable trigger before deleting to prevent unintended deployments during the deletion process.
+⚠️ **CAUTION**: Deleting a trigger stops auto-deployment. The target workload will no longer auto-update on new image pushes. Best practice: disable trigger before deleting to prevent unintended deployments during the deletion process.
 
 ```bash
 # 1. Disable trigger first (recommended)

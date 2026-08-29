@@ -111,13 +111,13 @@ def counted_mr_type(labels: list[str], title: str) -> str:
         or "type::docs" in labels
     ):
         return ""
-    if "type::fix" in labels:
-        return "fix"
+    if "type::bug" in labels:
+        return "bug"
     if "type::feature" in labels:
         return "feature"
 
     if lowered.startswith("fix:") or lowered.startswith("fix("):
-        return "fix"
+        return "bug"
     if lowered.startswith("feat:") or lowered.startswith("feat("):
         return "feature"
     return ""

@@ -1,14 +1,13 @@
 ---
 name: dlazy-kling-v3-omni
 version: 1.3.4
-description: 使用可灵 (Kling) v3 Omni 全能视频生成模型，支持多模态输入（图片、提示词）生成震撼的动态视频。
+description: "使用可灵 (Kling) v3 Omni 全能视频生成模型，支持多模态输入（图片、提示词）生成震撼的动态视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy kling-v3-omni -h 查看帮助信息。"}}
 ---
 
-# dlazy-kling-v3-omni
+# 全能视频生成 可灵 Kling V3 Omni
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 使用可灵 (Kling) v3 Omni 全能视频生成模型，支持多模态输入（图片、提示词）生成震撼的动态视频。
@@ -84,7 +83,6 @@ Options:
   --prompt [prompt]                    提示词
   --generation_mode [generation_mode]  生成模式（frames=首尾帧; components=参考图） [default: frames] (choices: "frames", "components")
   --images [images...]                 参考图 [image: url or local path] (max 7)
-  --subjects [subjects...]             主体 (max 3) [only when !(generation_mode="frames")]
   --videos [videos...]                 参考视频 [video: url or local path] (max 1) [only when !(generation_mode="frames")]
   --video_refer_type [video_refer_type]参考视频类型 [default: feature] (choices: "feature", "base") [only when videos non-empty]
   --keep_original_sound [keep_original_sound]保留原声（仅限参考视频） [default: false] [only when videos non-empty]
@@ -95,6 +93,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

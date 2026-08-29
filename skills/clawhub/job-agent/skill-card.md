@@ -1,43 +1,58 @@
-## Description: <br>
-Use AgentMesh Job Agent for resume-driven job discovery, signed review and automatic selected delivery on Boss直聘, 猎聘, 智联招聘 and 51Job. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use AgentMesh Job Agent for resume-driven job discovery, signed review, user-confirmed delivery and audit on Boss直聘, 猎聘, 智联招聘 and 51Job.
 
-## Publisher: <br>
-[jiyangnan](https://clawhub.ai/user/jiyangnan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jiyangnan](https://clawhub.ai/user/jiyangnan)
 
-## Use Case: <br>
-External users and job seekers use this skill to drive AgentMesh Job Agent for resume analysis, job discovery, signed review, and delivery of selected applications or greetings across supported recruiting platforms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically send real job applications and platform greetings after a round starts without a final per-platform confirmation. <br>
-Mitigation: Review selected jobs carefully before delivery begins, and start rounds only when automatic delivery of selected items is acceptable. <br>
-Risk: The skill may use the user's resume, API key, browser login sessions, and recruiting-platform accounts. <br>
-Mitigation: Use accounts and resumes intended for this workflow, keep credential setup under user control, and stop when the CLI reports required user action. <br>
+## Use Case:
 
+Job seekers and their agents use this skill to operate AgentMesh Job Agent for resume analysis, job discovery, reviewed delivery, and audit across supported job sites. It is designed to keep credentials, target inputs, paid actions, and final application sends under explicit user control.
 
-## Reference(s): <br>
-- [Job Agent homepage](https://jobagent.agentmesh360.com/) <br>
-- [AgentMesh360 app](https://agentmesh360.com/app/) <br>
-- [ClawHub skill page](https://clawhub.ai/jiyangnan/skills/job-agent) <br>
-- [Publisher profile](https://clawhub.ai/user/jiyangnan) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown instructions with CLI command blocks and concise status/reporting text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to run the jobagent CLI, relay required user prompts, and report audit and delivery results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.7 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The CLI can access AgentMesh360 account state, job-site browser sessions, resume data, and paid credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that access is acceptable, keep account state bound to the intended user, and monitor credit use during each workflow.
+
+Risk: The skill can send job applications after workflow confirmations.
+
+Mitigation: Review each generated preview, use explicit exclude or cancel choices when needed, and authorize delivery only after the final candidate list is correct.
+
+Risk: Managed client updates and one recovery installer path may run without a separate prompt.
+
+Mitigation: Use the official signed update and recovery flow, preserve local state, and stop on update failures instead of disabling signature or archive checks.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/jiyangnan/skills/job-agent)
+- [AgentMesh360 Job Agent Homepage](https://jobagent.agentmesh360.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the jobagent CLI and may use JOBAGENT_API_BASE as an optional testing override.]
+
+## Skill Version(s):
+
+0.5.40 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

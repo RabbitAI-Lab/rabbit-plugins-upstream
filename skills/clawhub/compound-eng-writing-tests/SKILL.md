@@ -14,6 +14,16 @@ description: >-
 
 Tests prove behavior works. A test that can't fail is worthless. A test that tests mocks instead of real code is theater.
 
+## Discover the Test Setup First
+
+Before writing the first test, establish what this repository actually runs. Reaching for a default command is how a suite goes green locally and red in CI.
+
+- **Runner and its config**: whichever manifest and test-config file the project's ecosystem uses. Framework-specific detail belongs to the language skills listed under Integration.
+- **The checked-in wrapper over any global binary.** A globally installed binary routinely resolves to a different version than the project pins, so prefer the project-local invocation (`uv run pytest` over bare `pytest`, `vendor/bin/phpunit` over `phpunit`).
+- **Focused vs. full invocation**: the edit loop needs to run one file or one test; completion needs the whole suite. Learn both forms.
+- **Where tests live and how neighbouring test files are named** -- match the existing convention rather than importing one.
+- **The command CI gates on** (`.github/workflows/*.yml`). When CI and the README disagree, CI is authoritative.
+
 ## Writing Good Tests
 
 ### One behavior per test
@@ -74,6 +84,8 @@ Mocks should be a last resort, not a first choice. Every mock is an assumption a
 
 **Exception: framework-provided test doubles.** Framework faking mechanisms (Laravel `Queue::fake()`/`Event::fake()`, React test providers, `vi.mock` for API layers) are idiomatic and maintained alongside the framework -- use them. The rule targets hand-rolled mocks that drift, not framework-blessed utilities.
 
+**Where to cut the mock seam.** When a mock is warranted (the right column above -- external APIs, gateways, delivery services, rate-limited SDKs), place it at the last point owned code touches the unowned resource: mock the payment-client wrapper, not `fetch`; the mailer adapter, not the SMTP transport. Mocking below the wrapper re-implements the third party's behavior inside the test suite and leaves the wrapper's own logic untested. Database queries stay on the left column -- a real test DB, not a mocked repository.
+
 ### Tests expose bugs, not the reverse
 
 If a test uncovers broken or buggy behavior, fix the source code -- never adjust the test to match incorrect behavior. A test that passes against a bug is worse than no test at all.
@@ -123,11 +135,29 @@ Write tests alongside the implementation, not after. By the time the feature is 
 
 Extended rationale, fix ladders, and mechanics for the longer items: [anti-patterns-extended.md](./references/anti-patterns-extended.md).
 
+### Reaching for a default test command
+
+**Symptom:** the bare global runner passes locally, while CI invokes the project-pinned wrapper and fails on a different dependency set or a different runner entirely.
+
+**Fix:** Establish the runner, the checked-in wrapper, and the CI command before writing tests (see "Discover the Test Setup First").
+
 ### Testing mock behavior instead of real behavior
 
 **Symptom:** Test passes but production breaks. Tests assert that mocks were called correctly, not that the actual system works.
 
 **Fix:** Replace mocks with real objects for internal code (see "Use real objects when practical").
+
+### Sleeping instead of waiting on a condition
+
+**Symptom:** `sleep(2)` / `setTimeout` / `time.sleep()` before asserting on async work. A sleep is a race condition with a timer attached: too short flakes under load, long enough is wasted wall-clock in every run forever.
+
+**Fix:** Wait on the observable condition with a deadline -- poll for the record, the event, or the state change (framework helpers: `waitFor`, `assertEventually`, polling with timeout). The deadline bounds the wait; the condition ends it.
+
+### Re-running a flaky test to green
+
+**Symptom:** A test fails intermittently and the response is re-run until it passes. Each re-run silences a detector -- the flake is a real race, ordering dependency, or shared-state bug in the test or the code.
+
+**Fix:** Treat flaky as red: fix it now, or skip it visibly with a reason and an owner (a linked issue, a named TODO) so it cannot quietly rot. Never leave it in the suite passing-by-retry.
 
 ### Test-only methods in production code
 

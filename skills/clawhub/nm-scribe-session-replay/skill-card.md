@@ -1,41 +1,55 @@
-## Description: <br>
-Nm Scribe Session Replay converts a Claude Code session JSONL file into an animated GIF terminal replay. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts a Claude Code session JSONL file into an animated GIF terminal replay.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to turn past Claude Code sessions into GIF replays for pull request evidence, demos, tutorials, or internal sharing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose sensitive local Claude session history by listing previews and rendering full transcripts into shareable GIFs. <br>
-Mitigation: Use a narrow turn range, exclude tool output unless needed, and review the generated GIF for secrets or confidential context before sharing. <br>
-Risk: Generated session replays may carry confidential development context into pull requests, chat, or tutorials. <br>
-Mitigation: Treat generated GIFs as sensitive until redacted and share them only in destinations appropriate for the underlying session content. <br>
+## Use Case:
 
+Developers and engineers use this skill to turn selected Claude Code session history into animated terminal replay GIFs for pull requests, tutorials, demos, and visual evidence.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-session-replay) <br>
-- [Project homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [GIF file path and concise text status, with optional shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can filter turn ranges and visible layers before rendering; GIF output should be reviewed for sensitive session content before sharing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Session replays may expose private code, secrets, customer data, or internal discussion from Claude session history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for explicit session replay requests, prefer a specific session path, limit turns and visible layers, and inspect or redact generated GIFs before sharing.
+
+Risk: Broad triggers can make session replay behavior easier to invoke than intended.
+
+Mitigation: Confirm the user wants a replay and the chosen session is appropriate before parsing or rendering shareable output.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-session-replay)
+- [ClawHub publisher profile](https://clawhub.ai/user/athola)
+- [clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline commands, generated VHS tape path, and rendered GIF path]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce a temporary VHS tape file and an animated GIF through the configured scry:vhs-recording integration.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release evidence; artifact frontmatter lists 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

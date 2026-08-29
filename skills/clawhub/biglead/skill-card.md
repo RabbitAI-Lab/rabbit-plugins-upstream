@@ -1,42 +1,57 @@
-## Description: <br>
-BigLead helps an agent search public web sources for B2B company leads by industry, product, and region, cross-check sources, extract available contact details, and manage a local lead database. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BigLead helps agents find and manage B2B sales prospects by searching public company sources, extracting public business contact details, validating leads across sources, and maintaining a local lead database.
 
-## Publisher: <br>
-[kobenfang](https://clawhub.ai/user/kobenfang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kobenfang](https://clawhub.ai/user/kobenfang)
 
-## Use Case: <br>
-Sales, market research, and competitive analysis users use this skill to identify target companies, gather publicly available business and contact information, deduplicate leads, and export prospecting records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can collect and locally store company names, business details, phone numbers, emails, and source URLs from public web sources. <br>
-Mitigation: Install it only for intentional lead prospecting tasks, and review exported CSV files because they may contain contact information. <br>
-Risk: Broad trigger terms such as `list` may start lead prospecting when that was not the user's intent. <br>
-Mitigation: Use specific prospecting prompts and avoid vague trigger terms unless lead search is intended. <br>
-Risk: Public company and contact information may be incomplete or out of date. <br>
-Mitigation: Verify important lead details against current official or primary sources before outreach. <br>
+## Use Case:
 
+Sales, business development, and market research users can use this skill to build targeted B2B lead lists from public company information, track follow-up status, and export prospect records. The skill is most useful when the user provides an industry, product category, or region to guide search and deduplication.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kobenfang/biglead) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown lead reports with inline shell commands, plus local JSON and CSV lead data files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stores lead records, search history, and CSV exports under memory/lead-data/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: Local lead records and CSV exports may contain business contact details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit access to memory/lead-data/ and exported CSV files, and delete those records when they are no longer needed.
+
+Risk: Public prospect information may be stale, incomplete, or unsuitable for outreach without review.
+
+Mitigation: Verify important leads against official company sources before using the data for sales or research decisions.
+
+Risk: Broad or repeated searches can create duplicate records or unnecessary collection of prospect data.
+
+Mitigation: Use the existing and duplicate-check workflows before adding new leads, and keep search batches limited.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kobenfang/skills/biglead)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files]
+
+**Output Format:** [Markdown lead reports with inline shell commands and JSON/CSV-backed lead records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Stores local lead data under memory/lead-data/ and can export CSV files.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

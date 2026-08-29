@@ -1,0 +1,13 @@
+# 用户的简历、面试回答、评分 —— 明文存本地,别推上去
+data/session.json
+data/scores.json
+data/score-report.html
+data/server-info.json
+data/*.tmp
+
+# example 文件是要进版本库的
+!data/session.example.json
+!data/scores.example.json
+
+__pycache__/
+*.pyc

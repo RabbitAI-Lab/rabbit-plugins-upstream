@@ -123,7 +123,7 @@ When security learnings prove broadly applicable, promote them:
 
 ### Optional: Enable Hook
 
-For automatic reminders at session start:
+Opt-in and project-scoped. Enabling a hook persists across future sessions; skip this unless you need reminders:
 
 ```bash
 cp -r hooks/openclaw ~/.openclaw/hooks/self-improving-security
@@ -153,7 +153,7 @@ Add to AGENTS.md, CLAUDE.md, or `.github/copilot-instructions.md`:
 When security issues or findings occur:
 1. Log to `.learnings/SECURITY_INCIDENTS.md`, `LEARNINGS.md`, or `FEATURE_REQUESTS.md`
 2. **ALWAYS redact secrets before logging**
-3. Review and promote broadly applicable findings to:
+3. After explicit user approval of a reviewed diff, promote broadly applicable findings to:
    - `CLAUDE.md` - security conventions and constraints
    - `AGENTS.md` - incident response workflows
    - `.github/copilot-instructions.md` - security context for Copilot
@@ -336,8 +336,9 @@ When a finding is broadly applicable, promote it to permanent security documenta
 ### How to Promote
 
 1. **Distill** the finding into a concise security rule or control
-2. **Add** to appropriate section in target file (create file if needed)
-3. **Update** original entry:
+2. **Prepare** a minimal patch for the appropriate section in the target file (create file if needed)
+3. **Show a reviewed diff and apply only after explicit user approval**
+4. **Update** original entry:
    - Change `**Status**: pending` → `**Status**: promoted`
    - Add `**Promoted**: HARDENING.md` (or whichever target)
 
@@ -429,7 +430,7 @@ Use to filter findings by security domain:
 7. **Document blast radius** — who and what is affected if this is exploited
 8. **Track remediation timeline** — time-to-fix is a key security metric
 9. **Link related entries** — attack chains often span multiple findings
-10. **Promote aggressively** — proven security patterns belong in hardening checklists
+10. **Promote after review when recurrence appears** — proven security patterns belong in hardening checklists
 
 ## Periodic Review
 
@@ -462,6 +463,8 @@ grep -h "CVE:" .learnings/*.md | sort -u
 
 Enable automatic reminders through agent hooks. This is **opt-in**.
 
+Hooks persist across sessions once installed. Keep them **project-scoped**. Do **not** install user-level or global hooks. Never use an empty `matcher`. `PostToolUse` inspects command output in-process; do not log raw output, secrets, or transcripts.
+
 ### Conservative Mode (Recommended)
 - Default to manual logging (no hooks); if reminders are useful, enable `UserPromptSubmit` with `scripts/activator.sh` only.
 - Enable `PostToolUse` (`scripts/error-detector.sh`) only in trusted environments when you explicitly want command-output pattern checks.
@@ -474,7 +477,7 @@ Create `.claude/settings.json` in your project:
 {
   "hooks": {
     "UserPromptSubmit": [{
-      "matcher": "",
+      "matcher": "security|vuln|CVE|auth|permission|secret|credential|compliance",
       "hooks": [{
         "type": "command",
         "command": "./skills/self-improving-security/scripts/activator.sh"
@@ -490,7 +493,7 @@ Create `.claude/settings.json` in your project:
 {
   "hooks": {
     "UserPromptSubmit": [{
-      "matcher": "",
+      "matcher": "security|vuln|CVE|auth|permission|secret|credential|compliance",
       "hooks": [{
         "type": "command",
         "command": "./skills/self-improving-security/scripts/activator.sh"
@@ -517,6 +520,8 @@ Create `.claude/settings.json` in your project:
 See `references/hooks-setup.md` for detailed configuration and troubleshooting.
 
 ## Automatic Skill Extraction
+
+Extracted skills are untrusted until a human reviews the generated `SKILL.md`. Do not keep or publish an extracted skill without explicit user approval.
 
 When a security learning is valuable enough to become a reusable skill, extract it.
 
@@ -637,3 +642,7 @@ When guidance conflicts, apply:
 ### Ownership Rules
 - This skill writes only to `.learnings/security/` in stackable mode.
 - It may read other skill folders for cross-linking, but should not rewrite their entries.
+- Standalone mode writes to this project's `.learnings/*.md` log files only.
+- Stackable mode writes only to the namespaced folder above and must not rewrite other skills' log entries.
+- Promotion into `AGENTS.md`, `SOUL.md`, `TOOLS.md`, `MEMORY.md`, rules, hooks, or generated skills is not a logging write. Show a reviewed diff and apply only after explicit user approval.
+

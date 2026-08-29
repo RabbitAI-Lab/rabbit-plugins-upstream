@@ -91,6 +91,7 @@ Form state           → React Hook Form
 - `content-visibility: auto` + `contain-intrinsic-size` on long lists -- skips off-screen layout/paint
 
 **Re-render optimization:**
+- Never define a component inside another component. Each parent render creates a new function identity, and React compares element *types* to decide whether to update or replace -- a new type means the whole subtree unmounts and remounts, so local state is lost, effects re-run, and DOM nodes are recreated. Symptoms are behavioral, not slow: an input loses focus on every keystroke, animations restart, scroll position resets. Hoist the component to module scope and pass what it needed via props. The React Compiler does not save this one -- the type identity changes before memoization applies
 - Derive state during render, not in effects
 - Subscribe to derived booleans, not raw objects (`state.items.length > 0` not `state.items`)
 - Functional setState for stable callbacks: `setCount(c => c + 1)`
@@ -124,6 +125,8 @@ Form state           → React Hook Form
 **Decision:** Server Component unless it needs hooks, event handlers, or browser APIs. Split: server parent + client child. Isolate interactive components as `'use client'` leaf components -- keep server components static with no global state or event handlers.
 
 **Server → client boundary:** pass only the fields a client component actually uses, not whole ORM rows or fetch objects. Every prop crossing the `'use client'` boundary is serialized into the payload, so a 50-field `user` object read for one field still ships all 50.
+
+**Client-only state that drives first paint** (theme, locale, feature flag, auth hint): reading `localStorage` during render breaks SSR, and reading it in `useEffect` paints the default first, so the correct value arrives one frame later as a visible flash. Set the value on the document with a small synchronous inline script that runs before hydration -- typically writing a `class` or `data-` attribute on `<html>` that CSS already keys on. The script is developer-authored and must never interpolate user, request, or database data; it is the one place `dangerouslySetInnerHTML` is warranted, and only for a literal string.
 
 **Routing patterns:**
 - Route groups `(name)` -- organize without affecting URL
@@ -159,13 +162,13 @@ Form state           → React Hook Form
 - Use `userEvent` over `fireEvent` for realistic interactions
 - `findBy*` for async elements, `waitFor` after state-triggering actions
 - `vi.clearAllMocks()` in `beforeEach`. Recreate state per test.
-General testing discipline (anti-patterns, rationalization resistance): see [ia-writing-tests](../ia-writing-tests/SKILL.md) skill.
+General testing discipline (anti-patterns, rationalization resistance): see the `ia-writing-tests` skill.
 See [testing patterns and examples](./references/testing.md) for component, hook, and mocking examples.
 See [e2e testing](./references/e2e-testing.md) for Playwright patterns.
 
 ## Tailwind Integration
 
-For Tailwind v4 configuration, utility patterns, dark mode, and component variants, see [ia-tailwind-css](../ia-tailwind-css/SKILL.md) skill.
+For Tailwind v4 configuration, utility patterns, dark mode, and component variants, see the `ia-tailwind-css` skill.
 
 **Class sorting in JSX**: keep Tailwind classes in canonical order (enforce via `eslint-plugin-better-tailwindcss`).
 

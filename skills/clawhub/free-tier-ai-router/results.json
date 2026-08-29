@@ -1,0 +1,1019 @@
+[
+ {
+  "provider": "gemini",
+  "model": "gemini-2.5-flash",
+  "http": "404",
+  "sec": 0.33,
+  "ok": false,
+  "sample": "",
+  "error": "This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-2.5-pro",
+  "http": "429",
+  "sec": 0.33,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-2.0-flash",
+  "http": "429",
+  "sec": 0.32,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-2.0-flash-001",
+  "http": "429",
+  "sec": 0.13,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-2.0-flash-lite-001",
+  "http": "429",
+  "sec": 0.13,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-2.0-flash-lite",
+  "http": "429",
+  "sec": 0.3,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-2.5-flash-preview-tts",
+  "http": "400",
+  "sec": 0.33,
+  "ok": false,
+  "sample": "",
+  "error": "The requested combination of response modalities (TEXT) is not supported by the model. models/gemini-2.5-flash"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-2.5-pro-preview-tts",
+  "http": "429",
+  "sec": 0.13,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemma-4-26b-a4b-it",
+  "http": "200",
+  "sec": 1.59,
+  "ok": true,
+  "sample": "The user is asking for a specific response: \"Reply with exac",
+  "error": null
+ },
+ {
+  "provider": "gemini",
+  "model": "gemma-4-31b-it",
+  "http": "200",
+  "sec": 1.94,
+  "ok": true,
+  "sample": "The user wants a response consisting of exactly one word: \"O",
+  "error": null
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-flash-latest",
+  "http": "200",
+  "sec": 1.24,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-flash-lite-latest",
+  "http": "200",
+  "sec": 0.63,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-pro-latest",
+  "http": "429",
+  "sec": 0.29,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-2.5-flash-lite",
+  "http": "404",
+  "sec": 0.3,
+  "ok": false,
+  "sample": "",
+  "error": "This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use a "
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-2.5-flash-image",
+  "http": "429",
+  "sec": 0.13,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3-pro-preview",
+  "http": "429",
+  "sec": 0.29,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3-flash-preview",
+  "http": "200",
+  "sec": 1.05,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.1-pro-preview",
+  "http": "429",
+  "sec": 0.3,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.1-pro-preview-customtools",
+  "http": "429",
+  "sec": 0.29,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite-preview",
+  "http": "200",
+  "sec": 0.55,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite",
+  "http": "200",
+  "sec": 0.63,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3-pro-image-preview",
+  "http": "429",
+  "sec": 0.31,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3-pro-image",
+  "http": "429",
+  "sec": 0.33,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "nano-banana-pro-preview",
+  "http": "429",
+  "sec": 0.32,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-image-preview",
+  "http": "429",
+  "sec": 0.37,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-image",
+  "http": "429",
+  "sec": 0.3,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite-image",
+  "http": "429",
+  "sec": 0.11,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.5-flash",
+  "http": "200",
+  "sec": 5.0,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "http": "200",
+  "sec": 0.54,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-omni-flash-preview",
+  "http": "429",
+  "sec": 0.29,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.6-flash",
+  "http": "200",
+  "sec": 1.47,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "gemini",
+  "model": "lyria-3-clip-preview",
+  "http": "429",
+  "sec": 0.33,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "lyria-3-pro-preview",
+  "http": "429",
+  "sec": 0.29,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-tts-preview",
+  "http": "400",
+  "sec": 0.37,
+  "ok": false,
+  "sample": "",
+  "error": "Request contains an invalid argument."
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-robotics-er-1.5-preview",
+  "http": "404",
+  "sec": 0.3,
+  "ok": false,
+  "sample": "",
+  "error": "This model models/gemini-robotics-er-1.5-preview is no longer available. Please update your code to use a newe"
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-robotics-er-1.6-preview",
+  "http": "200",
+  "sec": 1.51,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-2.5-computer-use-preview-10-2025",
+  "http": "429",
+  "sec": 0.13,
+  "ok": false,
+  "sample": "",
+  "error": "You exceeded your current quota, please check your plan and billing details. For more information on this erro"
+ },
+ {
+  "provider": "gemini",
+  "model": "antigravity-preview-05-2026",
+  "http": "400",
+  "sec": 0.37,
+  "ok": false,
+  "sample": "",
+  "error": "This model only supports Interactions API."
+ },
+ {
+  "provider": "gemini",
+  "model": "deep-research-max-preview-04-2026",
+  "http": "400",
+  "sec": 0.34,
+  "ok": false,
+  "sample": "",
+  "error": "This model only supports Interactions API."
+ },
+ {
+  "provider": "gemini",
+  "model": "deep-research-preview-04-2026",
+  "http": "400",
+  "sec": 0.32,
+  "ok": false,
+  "sample": "",
+  "error": "This model only supports Interactions API."
+ },
+ {
+  "provider": "gemini",
+  "model": "deep-research-pro-preview-12-2025",
+  "http": "400",
+  "sec": 0.29,
+  "ok": false,
+  "sample": "",
+  "error": "This model only supports Interactions API."
+ },
+ {
+  "provider": "mistral",
+  "model": "codestral-2508",
+  "http": "200",
+  "sec": 0.34,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "codestral-latest",
+  "http": "200",
+  "sec": 0.3,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "devstral-2512",
+  "http": "200",
+  "sec": 0.33,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "devstral-latest",
+  "http": "200",
+  "sec": 0.38,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "devstral-medium-latest",
+  "http": "200",
+  "sec": 0.39,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "labs-leanstral-1-5",
+  "http": "403",
+  "sec": 0.23,
+  "ok": false,
+  "sample": "",
+  "error": "Model labs-leanstral-1-5 is a Labs model. To use Labs models, an admin must enable them in your organization s"
+ },
+ {
+  "provider": "mistral",
+  "model": "labs-leanstral-1-5-1",
+  "http": "403",
+  "sec": 0.23,
+  "ok": false,
+  "sample": "",
+  "error": "Model labs-leanstral-1-5-1 is a Labs model. To use Labs models, an admin must enable them in your organization"
+ },
+ {
+  "provider": "mistral",
+  "model": "magistral-medium-2509",
+  "http": "200",
+  "sec": 1.89,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "magistral-medium-latest",
+  "http": "200",
+  "sec": 2.96,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "magistral-small-2509",
+  "http": "200",
+  "sec": 0.88,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "magistral-small-latest",
+  "http": "200",
+  "sec": 0.42,
+  "ok": true,
+  "sample": "Okay.",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "ministral-14b-2512",
+  "http": "200",
+  "sec": 0.41,
+  "ok": true,
+  "sample": "Got it.",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "ministral-14b-latest",
+  "http": "200",
+  "sec": 0.4,
+  "ok": true,
+  "sample": "Got it.",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "ministral-3b-2512",
+  "http": "200",
+  "sec": 0.34,
+  "ok": true,
+  "sample": "Understood!",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "ministral-3b-latest",
+  "http": "200",
+  "sec": 0.34,
+  "ok": true,
+  "sample": "Understood!",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "ministral-8b-2512",
+  "http": "200",
+  "sec": 0.32,
+  "ok": true,
+  "sample": "Understood.",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "ministral-8b-latest",
+  "http": "200",
+  "sec": 0.32,
+  "ok": true,
+  "sample": "Understood.",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-code-agent-latest",
+  "http": "200",
+  "sec": 0.51,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-code-fim-latest",
+  "http": "200",
+  "sec": 0.31,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-code-latest",
+  "http": "200",
+  "sec": 0.34,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-large-2512",
+  "http": "200",
+  "sec": 0.53,
+  "ok": true,
+  "sample": "Understood.",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-large-latest",
+  "http": "200",
+  "sec": 0.53,
+  "ok": true,
+  "sample": "Sure.",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-medium",
+  "http": "200",
+  "sec": 0.36,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-medium-2505",
+  "http": "200",
+  "sec": 0.39,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-medium-2508",
+  "http": "200",
+  "sec": 0.37,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-medium-2604",
+  "http": "200",
+  "sec": 0.39,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-medium-3",
+  "http": "200",
+  "sec": 0.4,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-medium-3-5",
+  "http": "200",
+  "sec": 0.7,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-medium-3.5",
+  "http": "200",
+  "sec": 0.38,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-medium-latest",
+  "http": "200",
+  "sec": 0.35,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-small-2506",
+  "http": "200",
+  "sec": 0.39,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-small-2603",
+  "http": "200",
+  "sec": 0.41,
+  "ok": true,
+  "sample": "Okay.",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-small-latest",
+  "http": "200",
+  "sec": 0.37,
+  "ok": true,
+  "sample": "Okay",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-tiny-2407",
+  "http": "200",
+  "sec": 0.32,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-tiny-latest",
+  "http": "200",
+  "sec": 0.32,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-vibe-cli-fast",
+  "http": "200",
+  "sec": 0.42,
+  "ok": true,
+  "sample": "Okay",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-vibe-cli-latest",
+  "http": "200",
+  "sec": 0.42,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-vibe-cli-with-tools",
+  "http": "200",
+  "sec": 0.37,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "open-mistral-nemo",
+  "http": "200",
+  "sec": 0.33,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "open-mistral-nemo-2407",
+  "http": "200",
+  "sec": 0.37,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "voxtral-small-2507",
+  "http": "200",
+  "sec": 0.34,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "mistral",
+  "model": "voxtral-small-latest",
+  "http": "200",
+  "sec": 0.38,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "inclusionai/ling-3.0-flash:free",
+  "http": "200",
+  "sec": 1.24,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "poolside/laguna-s-2.1:free",
+  "http": "200",
+  "sec": 1.72,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "poolside/laguna-xs-2.1:free",
+  "http": "200",
+  "sec": 1.58,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "cohere/north-mini-code:free",
+  "http": "200",
+  "sec": 4.93,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3.5-content-safety:free",
+  "http": "200",
+  "sec": 1.81,
+  "ok": true,
+  "sample": "User Safety: safe",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "http": "200",
+  "sec": 0.68,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+  "http": "200",
+  "sec": 1.21,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "http": "200",
+  "sec": 10.21,
+  "ok": false,
+  "sample": "",
+  "error": "Internal Server Error"
+ },
+ {
+  "provider": "openrouter",
+  "model": "google/gemma-4-31b-it:free",
+  "http": "429",
+  "sec": 0.17,
+  "ok": false,
+  "sample": "",
+  "error": "Provider returned error"
+ },
+ {
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "http": "200",
+  "sec": 1.01,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+  "http": "200",
+  "sec": 0.45,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-nano-12b-v2-vl:free",
+  "http": "200",
+  "sec": 3.63,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-nano-9b-v2:free",
+  "http": "200",
+  "sec": 2.63,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "openrouter",
+  "model": "openai/gpt-oss-20b:free",
+  "http": "200",
+  "sec": 3.15,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "kilo",
+  "model": "kilo-auto/free",
+  "http": "200",
+  "sec": 1.35,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "kilo",
+  "model": "stepfun/step-3.7-flash:free",
+  "http": "200",
+  "sec": 5.96,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "kilo",
+  "model": "inclusionai/ling-3.0-flash:free",
+  "http": "200",
+  "sec": 1.35,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "kilo",
+  "model": "poolside/laguna-s-2.1:free",
+  "http": "200",
+  "sec": 0.9,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "kilo",
+  "model": "poolside/laguna-xs-2.1:free",
+  "http": "200",
+  "sec": 2.7,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "kilo",
+  "model": "cohere/north-mini-code:free",
+  "http": "200",
+  "sec": 2.68,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "kilo",
+  "model": "nvidia/nemotron-3.5-content-safety:free",
+  "http": "200",
+  "sec": 2.44,
+  "ok": true,
+  "sample": "User Safety: safe",
+  "error": null
+ },
+ {
+  "provider": "kilo",
+  "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "http": "200",
+  "sec": 6.17,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "kilo",
+  "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+  "http": "200",
+  "sec": 1.9,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "kilo",
+  "model": "google/lyria-3-pro-preview",
+  "http": "402",
+  "sec": 0.24,
+  "ok": false,
+  "sample": "",
+  "error": "Add credits to continue, or switch to a free model"
+ },
+ {
+  "provider": "kilo",
+  "model": "google/lyria-3-clip-preview",
+  "http": "402",
+  "sec": 0.38,
+  "ok": false,
+  "sample": "",
+  "error": "Add credits to continue, or switch to a free model"
+ },
+ {
+  "provider": "kilo",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "http": "200",
+  "sec": 1.44,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "kilo",
+  "model": "openrouter/free",
+  "http": "200",
+  "sec": 8.49,
+  "ok": true,
+  "sample": "OK",
+  "error": null
+ },
+ {
+  "provider": "cerebras",
+  "model": "gemma-4-31b",
+  "http": "402",
+  "sec": 0.13,
+  "ok": false,
+  "sample": "",
+  "error": "Payment required to access this resource. Visit your billing tab."
+ },
+ {
+  "provider": "cerebras",
+  "model": "zai-glm-4.7",
+  "http": "402",
+  "sec": 0.16,
+  "ok": false,
+  "sample": "",
+  "error": "Payment required to access this resource. Visit your billing tab."
+ },
+ {
+  "provider": "cerebras",
+  "model": "gpt-oss-120b",
+  "http": "402",
+  "sec": 0.14,
+  "ok": false,
+  "sample": "",
+  "error": "Payment required to access this resource. Visit your billing tab."
+ }
+]

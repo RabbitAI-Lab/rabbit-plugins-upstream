@@ -1,47 +1,54 @@
-## Description: <br>
-Applies NIST/CWE security hardening to Python and Rust code. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies NIST/CWE security hardening to Python and Rust code.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and security engineers use this skill to audit repositories for Python, Rust, supply-chain, CI/CD, container, and frontier security hardening gaps. It produces citation-backed findings and concrete remediation proposals for user approval, filing, deferral, or rejection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad security-hardening audits may trigger from generic Python, Rust, or security language and produce noisy findings. <br>
-Mitigation: Review findings and proposals before acting, and use the report-only and approval-gate workflow to decide whether to apply, file, defer, or reject each item. <br>
-Risk: Approved fixes can modify source code, CI configuration, dependency policy, or container settings. <br>
-Mitigation: Apply changes as discrete, reviewable units, rerun project gates after each change, and revert any change that fails validation. <br>
+## Use Case:
 
+Developers and security engineers use this skill to perform repository-wide security hardening audits for Python and Rust code, map findings to NIST SSDF and CWE references, and prepare concrete remediation proposals for review.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-harden) <br>
-- [Source Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
-- [NIST and CWE Citation Backbone](modules/nist-controls.md) <br>
-- [Python Hardening Checks](modules/python-checks.md) <br>
-- [Rust Hardening Checks](modules/rust-checks.md) <br>
-- [Cross-Cutting Hardening Checks](modules/cross-cutting.md) <br>
-- [Frontier Hardening Checks](modules/frontier-checks.md) <br>
-- [Proposal Shape](modules/proposal-shape.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with findings tables, remediation proposals, diff snippets, shell commands, and configuration snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [First run is report-only; applying remediations requires user approval or an explicit auto-apply flag.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence; artifact frontmatter says 1.9.8) <br>
+Risk: Repository-wide scanning can inspect a large amount of local code and produce remediation proposals that may change security-sensitive behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep initial runs in report-only mode, review each proposal and citation, and approve changes one finding at a time.
+
+Risk: Auto-apply mode or approved proposals can create commits or GitHub-facing artifacts.
+
+Mitigation: Enable auto-apply only after reviewing a report, keep critical findings behind explicit approval, and rerun project gates after each applied change.
+
+## Reference(s):
+
+- [harden skill page on ClawHub](https://clawhub.ai/athola/skills/nm-pensive-harden)
+- [ClawDIS metadata homepage: claude-night-market/pensive](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports with findings tables, remediation proposals, shell commands, code and configuration snippets, and optional commits or GitHub-facing artifacts after approval.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [First runs should remain report-only; approved changes are intended to be applied one finding at a time with validation gates.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release metadata; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

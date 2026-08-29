@@ -1,0 +1,15 @@
+{
+  "output_dir": "public/audio",
+  "generation": {"seed": 2026, "temperature": 0.72, "top_p": 0.9},
+  "cover": {"title": "ORDER COFFEE IN NATURAL ENGLISH", "seconds": 3},
+  "segments": [
+    {"file":"01-narrator-intro.wav","speaker":"narrator","text":"At a café, don’t just say: coffee.","voice_profile":"An approachable English-learning narrator in their early thirties with clear contemporary American English and a warm conversational tone.","performance":"Open with friendly curiosity and lightly emphasize coffee."},
+    {"file":"02-narrator-upgrade.wav","speaker":"narrator","text":"A more natural start is: I’d like…","voice_profile":"An approachable English-learning narrator in their early thirties with clear contemporary American English and a warm conversational tone.","performance":"Sound encouraging and slow slightly before the model phrase."},
+    {"file":"03-customer-order.wav","speaker":"customer","text":"Hi! I’d like a latte, please.","voice_profile":"A friendly woman in her early twenties speaking natural contemporary American English, relaxed and politely confident.","performance":"Start brightly, then soften into a courteous request."},
+    {"file":"04-barista-question.wav","speaker":"barista","text":"Sure. For here or to go?","voice_profile":"A warm male barista in his mid twenties speaking natural contemporary American English with an easy service tone.","performance":"Sound welcoming and use a natural rising intonation on the choice."},
+    {"file":"05-customer-answer.wav","speaker":"customer","text":"To go, please.","voice_profile":"A friendly woman in her early twenties speaking natural contemporary American English, relaxed and politely confident.","performance":"Answer promptly and politely with a light smile."},
+    {"file":"06-narrator-close.wav","speaker":"narrator","text":"One more useful phrase: That’s all, thanks.","voice_profile":"An approachable English-learning narrator in their early thirties with clear contemporary American English and a warm conversational tone.","performance":"Introduce the phrase clearly and make the model sound natural."},
+    {"file":"07-narrator-repeat.wav","speaker":"narrator","text":"Try the whole order: I’d like a latte. To go, please. That’s all, thanks.","voice_profile":"An approachable English-learning narrator in their early thirties with clear contemporary American English and a warm conversational tone.","performance":"Coach the learner calmly, separating the three phrases with useful pauses."},
+    {"file":"08-narrator-tag.wav","speaker":"narrator","text":"Small phrase. Big upgrade.","voice_profile":"An approachable English-learning narrator in their early thirties with clear contemporary American English and a warm conversational tone.","performance":"Finish with concise satisfaction rather than an advertising voice."}
+  ]
+}

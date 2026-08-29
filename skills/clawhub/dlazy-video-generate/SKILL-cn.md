@@ -1,13 +1,15 @@
 ---
 name: dlazy-video-generate
 version: 1.4.6
-description: 视频生成技能。根据提示词自动选择最佳的 dlazy CLI 视频生成模型。
+description: "视频生成技能。根据提示词自动选择最佳的 dlazy CLI 视频生成模型。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，请自动选择对应的 dlazy 子命令执行。"}}
 ---
 
-# dlazy-video-generate
+# 视频生成 Video Generate
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
+
+
 
 
 
@@ -101,7 +103,7 @@ dlazy seedream-4.5 --prompt "雪地里的红狐" \
 
 # 文生图 + TTS 配音（拿第一个 output 的 url 作为画面）
 dlazy seedream-4.5 --prompt "黎明的灯塔" \
-  | dlazy keling-tts --text "欢迎来到海岸。" --image @0.url
+  | dlazy qwen-tts --text "欢迎来到海岸。" --image @0.url
 
 # 批量分发：把上游所有 output 的 url 一次性传给批处理步骤
 dlazy seedream-4.5 --prompt "城市天际线" --n 4 \
@@ -122,11 +124,13 @@ dlazy seedream-4.5 --prompt "城市天际线" --n 4 \
 - `dlazy jimeng-i2v-first`: 即梦首帧生视频模型，使用首帧图+文本生成视频。适合让静态图片自然动起来的单镜头场景。
 - `dlazy jimeng-i2v-first-tail`: 即梦首尾帧视频模型，支持首帧与尾帧约束以控制镜头起止状态，适合转场与动作收束明确的片段。
 - `dlazy jimeng-omnihuman-1.5`: 即梦同源数字人模型，支持任意画幅包含人物/主体的图片结合音频生成高质量数字人视频。
-- `dlazy kling-v3`: Kling V3 通用视频模型，支持文本+最多 4 张参考图，适合稳定产出短视频片段与日常创作流程。
+- `dlazy kling-v3`: Kling V3 通用视频模型，支持文生视频、首帧生视频与首尾帧生视频，适合稳定的短视频片段与日常创作流程。
 - `dlazy kling-v3-omni`: Kling Omni 视频模型，支持多参考图、时长、模式（std/pro）与可选音频。适合高控制度的视频合成任务。
+- `dlazy minimax-h3`: MiniMax 海螺全模态视频模型，原生立体声音频，5–15 秒 2K 出片。支持文生视频、首尾帧过渡与多素材参考（保持人物与场景一致）。
 - `dlazy pixverse-c1`: 爱诗 PixVerse C1 视频生成模型（擅长打斗、法术特效、高速运动等高动态场景），一站式覆盖文生视频、图生视频、首尾帧生视频与参考图生视频：未提供图时走文生视频，仅首帧时走图生视频，首+尾帧时走首尾帧生视频，提供参考图时走参考图生视频。
 - `dlazy seedance-2.0`: 字节最新视频生成模型，支持多模态参考生视频（图片+视频+音频）、首尾帧及文生视频，适合高质量多样化视频创作。
 - `dlazy seedance-2.0-fast`: 字节最新视频生成模型 Fast 版，生成速度更快，支持多模态参考生视频、首尾帧及文生视频。
+- `dlazy seedance-2.5`: 字节跳动新一代视频生成模型，单条最长 30 秒、支持原生 4K，指令跟随与长叙事能力大幅提升。支持多模态参考（图片+视频+音频）与首尾帧，适合成片级叙事与广告创意。
 - `dlazy sync-lipsync-3`: fal.ai sync-lipsync v3 唇形对齐模型，输入一段视频和一段音频，输出说话人嘴型与音频对齐的新视频。适合配音、外语本地化、虚拟人重新对口型。
 - `dlazy veo-3.1`: 高质量视频生成模型，支持文本生视频与单图驱动视频。适合广告短片、镜头感强的成片生成（速度较慢、质量更高）。
 - `dlazy veo-3.1-fast`: 快速版视频生成模型，支持文本生视频与单图/多图/首尾帧驱动。适合时间敏感的预览与快速迭代场景。

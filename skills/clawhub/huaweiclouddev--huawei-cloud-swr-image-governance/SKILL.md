@@ -6,7 +6,6 @@ description: |
   Use this skill when the user wants to: (1) manage SWR namespace permissions - grant/query/modify/revoke, (2) manage repository permissions - grant/query/modify/revoke, (3) manage image retention rules - create/list/update/delete, (4) manage shared download domains - create/list/update/delete, (5) manage image sharing - list shared repos/query feature gates, (6) check SWR agency status and create agency delegation, (7) list repo accessories and references.
   Trigger: user mentions "SWR image governance", "SWR 镜像治理", "SWR 权限管理", "SWR retention", "SWR 保留策略", "SWR 共享域名", "SWR 共享镜像", "SWR 委托", "SWR agency", "namespace permissions", "repository permissions", "镜像权限", "保留规则", "共享下载", "镜像分享"
 tags: [swr, image-governance, permissions, retention, sharing]
-version: 1.0.0
 ---
 
 # Huawei Cloud SWR Image Governance
@@ -21,6 +20,24 @@ This skill provides governance capabilities for Huawei Cloud SWR (Software Repos
 - `huawei-cloud-swr-image-management` - Image lifecycle management (namespace, repo, tag, auth, quota)
 - `huawei-cloud-swr-image-automation` - Image automation ops (sync, triggers, domains)
 - `huawei-cloud-swr-enterprise-instance` - Enterprise instance management
+
+**Out of Scope**:
+
+This skill does **NOT** support the following operations. If the user requests any of these, inform them and suggest the correct skill:
+
+| Operation | Use Instead | Reason |
+|-----------|-------------|--------|
+| Create/Delete/List namespaces | `huawei-cloud-swr-image-management` | Namespace lifecycle, not governance |
+| Create/Delete repositories or tags | `huawei-cloud-swr-image-management` | Repo/tag lifecycle, not governance |
+| Push/pull images (docker login) | `huawei-cloud-swr-image-management` | Image operations, not governance |
+| Create authorization tokens | `huawei-cloud-swr-image-management` | Token management, not governance |
+| List SWR quotas | `huawei-cloud-swr-image-management` | Quota query, not governance |
+| Create image sync rules | `huawei-cloud-swr-image-automation` | Sync is automation, not governance |
+| Create/Delete triggers | `huawei-cloud-swr-image-automation` | Triggers are automation, not governance |
+| Start security scans | `huawei-cloud-swr-image-automation` | Scanning is automation, not governance |
+| Create immutable (不可变) rules | N/A (not supported by any current skill) | Use Huawei Cloud SWR console |
+| View audit logs | Use Huawei Cloud console or CES | Audit logs are not governance operations |
+| Create/Delete enterprise instances | `huawei-cloud-swr-enterprise-instance` | Instance lifecycle, not governance |
 
 **Capabilities**:
 - Grant, query, modify, and revoke namespace-level permissions
@@ -41,6 +58,53 @@ This skill provides governance capabilities for Huawei Cloud SWR (Software Repos
 - "Check if image sharing feature is enabled"
 - "Check agency delegation status for SWR"
 - "Revoke a user's permission on a repository"
+
+## Workflow
+
+0. **⚠️ Billing Confirmation (MANDATORY)** — Before executing any operation, inform the user of potential billing implications and obtain explicit consent:
+   - **Governance operations**: Permission management, retention rules, and sharing configuration are free. However, retention rules that delete images reduce storage costs, while shared download domains may increase traffic costs.
+   - **Agency delegation**: Creating SWR agency delegation does not incur direct costs but enables cross-service operations that may have billing implications.
+   - Ask the user to confirm: "Do you understand the billing implications and wish to proceed? (yes/no)"
+   - Only proceed if the user explicitly confirms. If the user declines, stop and do not execute any operations.
+1. **Parse user request** — identify the governance operation (permissions, retention, domains, sharing, agency)
+2. **Check scope** — if the requested operation is listed in [Out of Scope](#out-of-scope), inform the user and suggest the correct skill. Do not execute the operation.
+3. **Verify prerequisites** — check hcloud CLI installation and credential configuration
+4. **Confirm parameters** — display the operation, target resources, and parameters to the user for confirmation
+5. **Execute read operations** — for query operations (Show, List, Check), run hcloud CLI directly
+6. **Confirm write operations** — for write operations (Create, Update, Delete), prompt user confirmation before execution (see [Parameter Confirmation](#参数确认))
+7. **Parse and format output** — extract relevant fields, format as table or structured output
+8. **Report results** — present results with context (e.g., permission changes, retention rule details)
+9. **Suggest next actions** — recommend related operations (e.g., after granting permission, suggest verifying with Show)
+
+### 参数确认
+
+> **All write operations (Create, Update, Delete) require explicit user confirmation before execution.**
+
+Before executing any write operation, the skill must:
+
+1. Display the exact hcloud command to be executed
+2. Show the target resource (namespace, repository, domain, etc.)
+3. Show the change to be applied (permission level, retention rule, domain settings)
+4. Wait for user confirmation ("yes" / "confirm") before proceeding
+5. If user declines, abort the operation and return to step 1
+
+**Write operations requiring confirmation**:
+
+| Operation | Command | Risk Level | Description |
+|-----------|---------|------------|-------------|
+| Grant namespace permission | `CreateNamespaceAuth` | 🟡 Medium | Grants access to all repos under namespace. **If auth=7, grants full control (create/delete repos, manage permissions)** — warn user accordingly |
+| Update namespace permission | `UpdateNamespaceAuth` | 🟡 Medium | Changes access level for namespace. **Permission downgrade may prevent the user from performing existing operations, impacting business workflows** |
+| Revoke namespace permission | `DeleteNamespaceAuth` | 🟠 High | Removes all access to namespace. **May cause business interruption — any CI/CD pipelines or services using this namespace will immediately lose access** |
+| Grant repo permission | `CreateUserRepositoryAuth` | 🟡 Medium | Grants access to specific repository. **If auth=7, grants full control of this repository** |
+| Update repo permission | `UpdateUserRepositoryAuth` | 🟡 Medium | Changes access level for repository. **Permission downgrade may break existing workflows that depend on the current access level** |
+| Revoke repo permission | `DeleteUserRepositoryAuth` | 🟠 High | Removes all access to repository. **May cause business interruption — services pulling from this repo will immediately lose access** |
+| Create retention rule | `CreateRetention` | 🟠 High | Creates automated cleanup policy. **When the rule executes, tags not matching retention conditions are automatically deleted and data is unrecoverable** |
+| Update retention rule | `UpdateRetention` | 🟠 High | Modifies cleanup policy. **Changing conditions may cause previously retained tags to be deleted — data is unrecoverable** |
+| Delete retention rule | `DeleteRetention` | 🟡 Medium | Removes automated cleanup policy. Existing tags are preserved, but no future cleanup will occur |
+| Create shared domain | `CreateRepoDomains` | 🟡 Medium | Shares images with another account via cross-organization access |
+| Update shared domain | `UpdateRepoDomains` | 🟡 Medium | Changes sharing settings (e.g., expiration, permissions) |
+| Delete shared domain | `DeleteRepoDomains` | 🟠 High | Revokes cross-account access. **Users in the target organization will immediately lose the ability to pull images via this domain** |
+| Create agency | `CreateAgency` | 🟠 High | Creates SWR delegation. **Grants SWR permission to access other services (OBS, CCE) on your behalf — confirm the delegation scope before proceeding** |
 
 ## Prerequisites
 
@@ -125,6 +189,35 @@ See [IAM Permission Policies](references/iam-policies.md) for complete policy JS
 3. Guide the user to create a custom policy in the IAM console and grant authorization
 4. Pause execution and wait for user confirmation that permissions have been granted
 
+## KooCLI Command Format Standard
+
+All commands follow the standard hcloud KooCLI format:
+
+```bash
+hcloud SWR <Operation> --param1=value1 --param2=value2 --cli-region=<region>
+```
+
+**Key conventions**:
+- Service name: `SWR` (uppercase, matches KooCLI Services listing)
+- Operation name: PascalCase (e.g., `ShowNamespaceAuth`, `CreateRetention`, `ListRepoDomains`)
+- Region parameter: `--cli-region=<value>` (default: `cn-north-4`, or `HUAWEI_CLOUD_REGION` env var)
+- Output format: `--cli-output=json` (for agent processing)
+- JMESPath filtering: `--cli-query="<expression>"` (to reduce output)
+- Array-style parameters: `--1.auth=7 --1.user_id=xxx` (index starts from 1, not 0)
+- Nested object parameters: `--rules.1.template=tag_rule --rules.1.params='{"num":"10"}'`
+
+**Example — read operation**:
+```bash
+hcloud SWR ShowNamespaceAuth --namespace=pancake --cli-region=cn-north-4 --cli-output=json
+```
+
+**Example — write operation (requires user confirmation)**:
+```bash
+# Step 1: Display command and parameters for user confirmation
+# Step 2: After user confirms, execute:
+hcloud SWR CreateNamespaceAuth --namespace=pancake --1.auth=7 --1.user_id=<user-id> --1.user_name=<user-name> --cli-region=cn-north-4
+```
+
 ## Core Commands
 
 ### 1. Namespace Permissions
@@ -141,13 +234,16 @@ hcloud SWR CreateNamespaceAuth --namespace=pancake --1.auth=7 --1.user_id=05949e
 # Update namespace permission for a user
 hcloud SWR UpdateNamespaceAuth --namespace=pancake --1.auth=3 --1.user_id=05949eb5350010e21f85c017722182de --1.user_name=hwstaff_p00506267 --cli-region=cn-north-4
 
-# Revoke namespace permission for a user
-hcloud SWR DeleteNamespaceAuth --namespace=pancake --1.user_id=05949eb5350010e21f85c017722182de --1.user_name=hwstaff_p00506267 --cli-region=cn-north-4
+# Revoke namespace permission for a user (DELETE uses array<string>, not array<object>)
+hcloud SWR DeleteNamespaceAuth --namespace=pancake --1=05949eb5350010e21f85c017722182de --cli-region=cn-north-4
 ```
 
 **Auth Values**: `7` = manage (full control), `3` = edit (push/pull), `1` = read (pull only)
 
-**⚠️ Array-Style Parameters**: Permission operations use `--[N].auth`, `--[N].user_id`, `--[N].user_name` format where `[N]` is the array index (starting from 1). For a single user, use `--1.auth=7 --1.user_id=xxx --1.user_name=xxx`. See [Common Pitfalls](references/common-pitfalls.md) for details.
+**⚠️ Array-Style Parameters**: Permission operations use different array formats:
+- **Create/Update** (array<object>): Use `--[N].auth`, `--[N].user_id`, `--[N].user_name` format where `[N]` is the array index (starting from 1). For a single user, use `--1.auth=7 --1.user_id=xxx --1.user_name=xxx`.
+- **Delete** (array<string>): Use `--[N]=<user_id>` format — the array element is directly a user ID string. For a single user, use `--1=<user_id>`. Do NOT use `--1.user_id=` or `--1.user_name=` for Delete operations.
+See [Common Pitfalls](references/common-pitfalls.md) for details.
 
 ### 2. Repository Permissions
 
@@ -163,8 +259,8 @@ hcloud SWR CreateUserRepositoryAuth --namespace=pancake --repository=openclaw-sa
 # Update repository permission for a user
 hcloud SWR UpdateUserRepositoryAuth --namespace=pancake --repository=openclaw-sandbox --1.auth=3 --1.user_id=05949eb5350010e21f85c017722182de --1.user_name=hwstaff_p00506267 --cli-region=cn-north-4
 
-# Revoke repository permission for a user
-hcloud SWR DeleteUserRepositoryAuth --namespace=pancake --repository=openclaw-sandbox --1.user_id=05949eb5350010e21f85c017722182de --1.user_name=hwstaff_p00506267 --cli-region=cn-north-4
+# Revoke repository permission for a user (DELETE uses array<string>, not array<object>)
+hcloud SWR DeleteUserRepositoryAuth --namespace=pancake --repository=openclaw-sandbox --1=05949eb5350010e21f85c017722182de --cli-region=cn-north-4
 ```
 
 **Auth Values**: Same as namespace permissions: `7` = manage, `3` = edit, `1` = read
@@ -193,16 +289,16 @@ See [Task: Retention Management](references/task-retention-management.md) for de
 hcloud SWR ListRetentions --namespace=pancake --repository=openclaw-sandbox --cli-region=cn-north-4
 
 # Create a retention rule (keep last 10 tags)
-hcloud SWR CreateRetention --namespace=pancake --repository=openclaw-sandbox --algorithm=or --rules.1.template=tag_rule --rules.1.params.num=10 --rules.1.tag_selectors.1.kind=label --rules.1.tag_selectors.1.pattern=latest --cli-region=cn-north-4
+hcloud SWR CreateRetention --namespace=pancake --repository=openclaw-sandbox --algorithm=or --rules.1.template=tag_rule --rules.1.params='{"num":"10"}' --rules.1.tag_selectors.1.kind=label --rules.1.tag_selectors.1.pattern=latest --cli-region=cn-north-4
 
 # Create a retention rule (keep tags from last 30 days)
-hcloud SWR CreateRetention --namespace=pancake --repository=openclaw-sandbox --algorithm=or --rules.1.template=date_rule --rules.1.params.days=30 --rules.1.tag_selectors.1.kind=label --rules.1.tag_selectors.1.pattern=latest --cli-region=cn-north-4
+hcloud SWR CreateRetention --namespace=pancake --repository=openclaw-sandbox --algorithm=or --rules.1.template=date_rule --rules.1.params='{"days":"30"}' --rules.1.tag_selectors.1.kind=label --rules.1.tag_selectors.1.pattern=latest --cli-region=cn-north-4
 
 # Show retention rule details
 hcloud SWR ShowRetention --namespace=pancake --repository=openclaw-sandbox --retention_id=<id> --cli-region=cn-north-4
 
 # Update a retention rule
-hcloud SWR UpdateRetention --namespace=pancake --repository=openclaw-sandbox --retention_id=<id> --algorithm=or --rules.1.template=tag_rule --rules.1.params.num=5 --rules.1.tag_selectors.1.kind=label --rules.1.tag_selectors.1.pattern=latest --cli-region=cn-north-4
+hcloud SWR UpdateRetention --namespace=pancake --repository=openclaw-sandbox --retention_id=<id> --algorithm=or --rules.1.template=tag_rule --rules.1.params='{"num":"5"}' --rules.1.tag_selectors.1.kind=label --rules.1.tag_selectors.1.pattern=latest --cli-region=cn-north-4
 
 # Delete a retention rule
 hcloud SWR DeleteRetention --namespace=pancake --repository=openclaw-sandbox --retention_id=<id> --cli-region=cn-north-4
@@ -230,17 +326,26 @@ See [Task: Shared Domains](references/task-shared-domains.md) for detailed workf
 hcloud SWR ListRepoDomains --namespace=pancake --repository=openclaw-sandbox --cli-region=cn-north-4
 
 # Create a shared download domain
-hcloud SWR CreateRepoDomains --namespace=pancake --repository=openclaw-sandbox --domain=shared-domain-name --cli-region=cn-north-4
+# --access_domain: Huawei Cloud IAM domain name (tenant name/account name) of the target account to share with
+# --deadline: Expiration time in UTC format; use "forever" for permanent access
+# --permit: Permission type; currently only "read" is supported
+hcloud SWR CreateRepoDomains --namespace=pancake --repository=openclaw-sandbox --access_domain=<iam-domain-name> --deadline=forever --permit=read --cli-region=cn-north-4
 
 # Show shared domain details
-hcloud SWR ShowAccessDomain --namespace=pancake --repository=openclaw-sandbox --access_domain=shared-domain-name --cli-region=cn-north-4
+hcloud SWR ShowAccessDomain --namespace=pancake --repository=openclaw-sandbox --access_domain=<iam-domain-name> --cli-region=cn-north-4
 
 # Update a shared download domain
-hcloud SWR UpdateRepoDomains --namespace=pancake --repository=openclaw-sandbox --domain=shared-domain-name --permit=read --cli-region=cn-north-4
+hcloud SWR UpdateRepoDomains --namespace=pancake --repository=openclaw-sandbox --access_domain=<iam-domain-name> --deadline=forever --permit=read --cli-region=cn-north-4
 
 # Delete a shared download domain
-hcloud SWR DeleteRepoDomains --namespace=pancake --repository=openclaw-sandbox --access_domain=shared-domain-name --cli-region=cn-north-4
+hcloud SWR DeleteRepoDomains --namespace=pancake --repository=openclaw-sandbox --access_domain=<iam-domain-name> --cli-region=cn-north-4
 ```
+
+**Shared Domain Parameters**:
+- `--access_domain`: The Huawei Cloud IAM domain name (shared tenant name) of the account you want to share the image with. This is the target account's domain name, not a custom domain identifier.
+- `--deadline`: Expiration time in UTC format (e.g., `2025-12-31T23:59:59Z`). Use `forever` for permanent access.
+- `--permit`: Permission type. Currently only `read` (download/pull) is supported.
+- `--description` (optional): Human-readable description of the shared domain.
 
 ### 6. Image Sharing
 
@@ -308,13 +413,14 @@ hcloud SWR ListReferences --namespace=pancake --repository=openclaw-sandbox --cl
 
 ### Domain Parameters
 
-| Parameter       | Required | Description            | Constraints                                    |
-| --------------- | -------- | ---------------------- | ---------------------------------------------- |
-| `--namespace`   | Yes      | Namespace name         | Must exist                                     |
-| `--repository`  | Yes      | Repository name        | Must exist                                     |
-| `--domain`      | Yes (create) | Shared domain name | Domain identifier                              |
-| `--access_domain` | Yes (show/delete) | Domain name   | Same as domain                                 |
-| `--permit`      | Yes (update) | Permission type   | `read`                                         |
+| Parameter         | Required | Description                          | Constraints                                    |
+| ----------------- | -------- | ------------------------------------ | ---------------------------------------------- |
+| `--namespace`     | Yes      | Namespace name                       | Must exist                                     |
+| `--repository`    | Yes      | Repository name                      | Must exist                                     |
+| `--access_domain` | Yes      | Huawei Cloud IAM domain name (shared tenant name) | Target account's domain name, not a custom identifier |
+| `--deadline`      | Yes (create/update) | Expiration time           | UTC format (e.g., `2025-12-31T23:59:59Z`) or `forever` |
+| `--permit`        | Yes (create/update) | Permission type          | `read` (only supported value)                  |
+| `--description`   | No       | Domain description                   | Default: empty string                          |
 
 ## Output Format
 
@@ -355,6 +461,8 @@ See [Verification Method](references/verification-method.md) for step-by-step ve
 | [Task: Retention Management](references/task-retention-management.md) | Retention rule workflows |
 | [Task: Shared Domains](references/task-shared-domains.md) | Shared domain workflows |
 | [Task: Image Sharing](references/task-image-sharing.md) | Image sharing workflows |
+| [CLI Installation Guide](references/cli-installation-guide.md) | KooCLI installation and configuration |
+| [Acceptance Criteria](references/acceptance-criteria.md) | Correct/error pattern comparison |
 
 ## Notes
 

@@ -1,41 +1,55 @@
-## Description: <br>
-Session retrospective and skill audit for reflecting on sessions, reviewing lessons learned, and auditing what went well or wrong. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Session retrospective and skill audit for reflecting on conversations, reviewing lessons learned, auditing what went well or wrong, and improving session effectiveness.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and agent users use this skill to review a completed session, identify mistakes, friction, wasted effort, and wins, and decide which lessons should be preserved. It also audits invoked skills and proposes concrete improvements or diffs when skill changes are warranted. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Saved memories or skill edits can influence future agent behavior if approved without review. <br>
-Mitigation: Review each proposed memory entry or skill diff before approving persistence. <br>
-Risk: Session retrospectives may quote or summarize sensitive conversation content. <br>
-Mitigation: Do not persist secrets, credentials, private URLs, customer data, unredacted personal information, or machine-specific paths. <br>
+## Use Case:
 
+Developers and agent operators use ia-reflect to conduct structured retrospectives after a session, identify mistakes, friction, wins, and operational learnings, and decide which lessons should be persisted for future work.
 
-## Reference(s): <br>
-- [ia-reflect on ClawHub](https://clawhub.ai/iliaal/skills/compound-eng-reflect) <br>
-- [Skill specification](artifact/SPEC.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with findings, prioritized improvements, review prompts, and proposed diffs when skill audits are requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose memory entries or skill edits for user approval; review proposed changes before they are persisted.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.1 (source: server release evidence) <br>
+Risk: The skill can persist approved retrospective lessons into local agent memory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each proposed memory item before approving persistence, and avoid storing secrets, credentials, customer data, or sensitive personal/project information.
+
+Risk: A retrospective or skill audit can produce incorrect or overly broad recommendations that affect future agent behavior.
+
+Mitigation: Treat recommendations and proposed diffs as reviewable guidance, apply only concrete changes with clear evidence, and run the documented validation gates for skill edits.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-reflect)
+- [SKILL.md](SKILL.md)
+- [SPEC.md](SPEC.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Code, Configuration]
+
+**Output Format:** [Markdown with numbered recommendations, audit findings, proposed diffs, and memory-capture prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose local memory updates and skill edits only after user review or approval.]
+
+## Skill Version(s):
+
+4.4.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,50 +1,62 @@
-## Description: <br>
-Design KWDB schemas and generate DDL for relational, time-series, and mixed workloads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Design KWDB schemas and generate DDL for relational, time-series, and mixed workloads.
 
-## Publisher: <br>
-[kwdb](https://clawhub.ai/user/kwdb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kwdb](https://clawhub.ai/user/kwdb)
 
-## Use Case: <br>
-Developers and database engineers use this skill to classify KWDB workloads, gather schema requirements, design relational, time-series, or mixed schemas, and generate reviewable KWDB DDL with validation steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated DROP, CASCADE, retention, and privilege SQL can affect data, dependencies, or access if applied without review. <br>
-Mitigation: Treat generated SQL as review-only until the target database, environment, backups, dependency impact, and least-privilege requirements are verified. <br>
-Risk: Broad schema and DDL triggers may activate the skill for adjacent database tasks outside its intended scope. <br>
-Mitigation: Confirm the request is KWDB schema design or DDL before relying on the generated guidance. <br>
+## Use Case:
 
+Developers and engineers use this skill to design KWDB table structures, indexes, constraints, views, partitioning, retention policies, and other DDL for relational, time-series, and mixed workloads.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kwdb/skills/kwdb-schema-design) <br>
-- [Core Rules and Decision Tree](references/key-rules.md) <br>
-- [Requirement Disambiguation Questions](references/disambiguation.md) <br>
-- [Skill Scope and Boundaries](references/_scope.md) <br>
-- [Table DDL Reference](references/table-ddl-ref.md) <br>
-- [Index DDL Reference](references/index-ddl-ref.md) <br>
-- [Constraint Reference](references/constraint-ref.md) <br>
-- [Data Type Reference](references/type-ref.md) <br>
-- [Partitioning Reference](references/partitioning-ref.md) <br>
-- [Time-Series Retention Reference](references/retention-ref.md) <br>
-- [Output Templates](assets/output-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with SQL and validation command code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces reviewable KWDB DDL, schema rationale, assumptions, and validation steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: release evidence) <br>
+Risk: Generated DROP, CASCADE, retention, or privilege commands could cause data loss, authorization changes, or compliance issues if run without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the target database, backups, retention requirements, and authorization before executing generated destructive DDL or privilege commands.
+
+Risk: Generic SQL requests may be mistaken for KWDB-specific schema design tasks.
+
+Mitigation: Clarify whether KWDB is intended before applying KWDB-specific DDL syntax or schema guidance.
+
+## Reference(s):
+
+- [KWDB Schema Design on ClawHub](https://clawhub.ai/kwdb/skills/kwdb-schema-design)
+- [Core Rules and Decision Tree](references/key-rules.md)
+- [Requirement Disambiguation Questions](references/disambiguation.md)
+- [Skill Scope and Boundaries](references/_scope.md)
+- [Table DDL Reference](references/table-ddl-ref.md)
+- [Index DDL Reference](references/index-ddl-ref.md)
+- [Constraint Reference](references/constraint-ref.md)
+- [Data Type Reference](references/type-ref.md)
+- [Time-Series Retention Reference](references/retention-ref.md)
+- [Output Templates](assets/output-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown with SQL code blocks and validation commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs include workload classification, assumptions, schema design rationale, executable KWDB DDL, and validation steps.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

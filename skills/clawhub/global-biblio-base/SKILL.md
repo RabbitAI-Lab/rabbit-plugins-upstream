@@ -2,26 +2,30 @@
 slug: global-biblio-base
 name: global-biblio-base
 displayName: 全球12亿文献知识库（8千万中文期刊可下载）
-version: 3.9.3
+version: 3.9.7
 description: |
-  全球12亿文献知识库（8千万中文期刊可下载）——覆盖8000万篇授权中文期刊全文+12.28亿条全球文献元数据（含期刊7.19亿、专利2.15亿、会议论文7155万、学位论文2473万、标准268万等）。
-  内置三级检索策略（宽检索高查全/窄检索高查准/平衡策略），支持关键词检索、文献详情查看、全文下载（中文直接下载+外文十级渠道自动探测+OA免费下载）、迭代优化检索、引文追溯、分类号检索、结果质量评估。
-  ✨ 亮点：每篇文献提供原始数据库来源链接（覆盖300+数据库，如Scopus/WoS/EI/PubMed等，覆盖率100%，平均4.75个链接/篇），可直接跳转验证文献真实性。
-  💎 OA文献下载：OA文献（Gold/Hybrid/Bronze/Green OA）通过十级渠道免费获取PDF，不消耗SmartLib配额。
-  当前为试用版：首次使用自动注册开通，免费 100 次检索 / 月 + 10 次全文下载 / 月，全程对话驱动，无需付费或人工申请。付费套餐（体验卡 / 个人版月 / 专业版月 / 单篇下载 / 下载包）现已开放，价格与额度见下方「💰 套餐与额度」章节；配额不足时会自动弹出套餐选择，也可主动说「升级 / 充值 / 购买」唤起。企业 / 机构定制请联系 vipsmart@vipslib.com。
-  适用于用户需要查找中外文学术论文、期刊文献、学位论文、专利、标准等场景。
-  当用户表达"查论文""找文献""检索学术""搜索期刊""查专利""找标准""找论文""搜文献""学术检索""文献调研""文献综述""下文献""下论文""下载论文""论文下载""搜论文""查SCI""查EI""英文论文""中文论文""论文搜索""文献搜索""学术搜索""找参考文献""写毕业论文""开题报告文献""课题查新""论文查新""文献调研工具""考研文献""帮我找论文""论文在哪找""怎么查文献"等意图时触发。
-  也适用于用户提到具体学术主题并希望获取相关论文的场景，如"帮我找一些关于XX的论文""XX领域有哪些研究""帮我写文献综述""引用几篇文献支撑论点"。
-  英文触发词："find papers", "search literature", "write literature review", "find supporting citations", "search papers", "literature review"。
-  若检测到 API 凭证未配置，自动通过 smartlib-gateway 注册开通（免费 100 次/月），全程对话驱动无需人工申请。
-  / Global 1.2B literature knowledge base (80M Chinese journal articles downloadable).
-  Three-tier search strategy (broad/high-recall, narrow/high-precision, balanced), keyword search, detail view, full-text download, iterative refinement, citation tracing, classification-based search, result quality assessment.
-  Free trial: auto-registration (100 searches + 10 full-text downloads per month), quota consumed per API call. Paid plans (trial card / personal month / pro month / single download / download pack) now available — see "💰 Plans & Quota" section below; package picker auto-shows when quota is low, or say "升级 / 充值" to open it. For institutional/enterprise plans, contact vipsmart@vipslib.com.
-  Triggers on Chinese/English intents like "find papers", "search literature", "查论文", "找文献", "学术检索", "write literature review", "find supporting citations".
-  Auto-detects missing API credentials and auto-registers via smartlib-gateway (100 free/month).
-  Production URL: read from config.json → SMARTLIB_GATEWAY_URL (SmartLib Gateway Production).
+  全球12亿文献知识库（8千万中文期刊可下载）——通过 SmartLib 开放平台 API 提供中外文学术文献检索与下载能力，覆盖 8000 万篇授权中文期刊全文 + 12.28 亿条全球文献元数据（期刊 7.19 亿 / 专利 2.15 亿 / 会议 7155 万 / 学位论文 2473 万 / 标准 268 万）。
+
+  能力：中英文关键词检索、文献详情、中文期刊 PDF 全文下载、外文 OA 文献十级渠道免费下载（不消耗配额）、智能关键词扩展、核心期刊优先排序、相关性重排、引文追溯、分类号检索。
+
+  配额：首次使用自动注册，免费 100 次检索 + 10 次下载 / 月；耗尽自动弹出套餐（体验卡 / 个人版月 / 专业版月 / 单篇下载 / 下载包），可说「升级 / 充值」唤起；企业 / 机构定制联系 vipsmart@vipslib.com。
+
+  触发：用户表达"查论文""找文献""检索学术""搜期刊""查专利""找标准""下论文""写文献综述""找参考文献""查 SCI/EI"等意图时启用；也适用"帮我找关于 XX 的论文""写文献综述""找几篇引用支撑论点"。英文："find papers" "search literature" "write literature review" "find supporting citations"。
+
+  调用前必须先用 /consume 获取 consume_token，再凭 token 调 /search（每次计费接口调用都需一次 /consume）。
 agent_created: true
 ---
+
+## 🤖 AI 执行摘要 / AI Execution Summary（先读这段）
+
+- **何时触发**：用户要查 / 找 / 下载中外文学术文献（论文、期刊、专利、标准、学位论文），或要写文献综述、找引用支撑、做课题查新。
+- **不触发（转其他技能）**：引用核查 / "这篇是真的吗" → `smartlib-citation-checker`；论文写作辅助、非文献类查询。
+- **两个前置硬规则**：① 动手前必须先向用户索取邮箱（禁止用 config 预填邮箱、禁止臆造邮箱）；② 每次计费接口调用前先 `/consume` 取 `consume_token`，再带 token 调 `/search`（token 单次使用、约 60s 有效，过期/已用需重新 `/consume`）。
+- **输入**：用户自然语言检索意图 + 邮箱。
+- **产出**：检索结果列表（含核心收录标注、原始数据库来源链接）、文献详情、PDF 下载链接（中文期刊直下 / 外文 OA 多渠道探测）。
+- **配额模型**：免费 100 次检索 + 10 次下载 / 月；耗尽时 Gateway 返回 429，技能自动弹出套餐卡片（体验卡 / 个人版月 / 专业版月 / 单篇下载 / 下载包），用户也可说「升级 / 充值」唤起；企业 / 机构定制联系 vipsmart@vipslib.com。
+- **红线**：不改功能；不臆造邮箱；不在对话中泄露 `SMARTLIB_GATEWAY_SECRET`；付费墙内外文文献无法获取全文。
+- **凭证来源**：`config.json` → `SMARTLIB_GATEWAY_URL` / `SMARTLIB_GATEWAY_SECRET`（SMARTLIB_EMAIL 运行后由注册写入，勿预填）。
 
 # 全球12亿文献知识库（8千万中文期刊可下载）
 
@@ -237,9 +241,10 @@ agent_created: true
    ↓
 ② 创建订单:
    POST {SMARTLIB_GATEWAY_URL}/api/pay/create
-   Headers: {"Authorization": "Bearer {SMARTLIB_GATEWAY_SECRET}"}
-   Body: {"plan": "<plan_key>", "email": "<已注册用户邮箱>"}
+   Headers: 无需认证（网关仅校验邮箱已注册，不要求 Authorization；严禁在对话/前端暴露任何密钥）
+   Body: {"plan": "<plan_key>", "email": "<已注册用户邮箱>", "amount": <套餐价格，单位「元」，须与上表「价格」列完全一致>}
    ⚠️ email 必须是当前已注册用户邮箱（来自注册/配额上下文），严禁使用 config 里的 SMARTLIB_EMAIL（其值为 null）。
+   ⚠️ amount **必填且必须精确等于上方套餐表的「价格」**（网关会校验，偏差 >0.01 元直接 400 amount_mismatch）。取值：trial_card=9.9 / personal_month=39 / pro_month=99 / single_download=2.5 / download_pack=20。严禁留空、严禁写 0、**严禁用「分」**（如 990 会被判成 ¥990 而失败）。
    返回: {"code_url", "out_trade_no", "amount", "plan", "quota"}
    ↓
 ③ 生成微信支付二维码 HTML（用 qrcode.js 渲染 code_url；页面含套餐名/金额/配额/二维码/订单号；禁止显示用户邮箱）
@@ -249,6 +254,22 @@ agent_created: true
    （3s 轮询，最多 20 次≈60s；超时提示重新发起）
    支付成功返回 {"status":"paid","auto_recharged":true,...} → 对话通知"✅ 支付成功，已到账 N 次" + 自动重试上次中断的检索
 ```
+
+### ⚠️ 半成功态（微信繁忙 / 502）处理
+
+`/api/pay/create` 在「订单已建、但微信侧暂忙」时会返回 **502**。新网关（v52.4+ 落库对账版）会在响应体里带回真实 `out_trade_no`（形如 `{"error":"wechatpay_error","out_trade_no":"WB...","code_url":null,"status":"wechat_failed"}`）；旧网关可能不含该字段。两种情况处理不同：
+
+正确处理方式（务必遵守）：
+
+1. **绝不展示任何你自行推断/拼接/记忆的订单号。** 只允许展示网关响应里真实返回的 `out_trade_no`。
+2. 若 502 响应**含** `out_trade_no`（新网关）：直接展示真实单号，并说明支付码暂未生成：
+   > 微信支付通道暂时繁忙，订单已提交（订单号 {out_trade_no}）但支付二维码暂未生成。请 1~2 分钟后回复「重试」，我会生成新的支付码。此过程未产生任何扣款。
+3. 若 502 响应**不含** `out_trade_no`（旧网关兜底）：用通用话术，**绝不补号**：
+   > 微信支付通道暂时繁忙，订单已提交但未生成支付二维码。请 1~2 分钟后回复「重试」，我会重新发起并生成新的支付码。此过程未产生任何扣款。
+4. 说明：**每次「重试」都会由网关新建一笔订单**，旧 pending 订单自动失效、无害，用户无需做任何清理。
+5. **不要说「复用此订单重试」**——网关不支持复用 pending 单重新发起支付，重试一定是新单。
+
+> 对比：若返回 **200** 且 body 含 `code_url` + `out_trade_no`，才是真正下单成功，此时才渲染二维码并展示真实订单号（见上方 ③）。
 
 ### 安全机制
 - `out_trade_no` UNIQUE 防重复充值；二维码 5 分钟有效
@@ -978,7 +999,8 @@ Body: {
 | **403** | 权限不足 | 提示"当前凭证无此接口权限，请确认 API 套餐是否已开通此接口" |
 | **429** | 请求频率超限 | 等待 5 秒后自动重试 |
 | **499** | 参数错误 | 检查 Rule 语法（运算符大写、有空格）、FilterRule 字段代码、PageSize 范围 |
-| **500/502/503** | 服务端错误 | 自动重试 3 次 → 全部失败后提示"SmartLib 服务暂时不可用" |
+| **502（wechatpay_error / 系统繁忙）** | 微信支付通道暂忙（订单已建但未出码） | **不视为服务端故障、不要自动重试 3 次**（重试会加重微信节流）。按「半成功态」话术告知用户稍后重试；响应若带回 `out_trade_no` 可展示真实单号，否则切勿编造 |
+| **500/503** | 网关服务端错误 | 自动重试 3 次（指数退避 1s→2s→4s）→ 全部失败后提示"SmartLib 服务暂时不可用，通常 5 分钟内恢复" |
 | **网络超时** | 请求无响应 | 自动重试 3 次 → 提示"请检查网络是否可访问 data.smart.vipslib.com" |
 | **无结果** | API 返回空列表 | 按「结果数量自适应策略」自动提供扩展建议 |
 | **凭证缺失** | 环境变量未设置 | 自动触发 Pre-flight 注册流程 |
@@ -1065,6 +1087,10 @@ Body: {
 | v3.9.1 | 2026-07-19 | /quota 返回字段补充下载额度（download_quota_free / download_reset_at / download_paid_remain / download_remain），与 v52.1 统一钱包对齐 |
 | v3.9.2 | 2026-07-22 | 配额不足时自动弹出套餐选择与微信支付，无需再说「我要升级」；补充完整套餐映射表与支付流程（创建订单/二维码/轮询到账），购买使用已注册用户邮箱 |
 | v3.9.3 | 2026-07-22 | FAQ 补充 3 条实战提示：① consume_token 仅单次使用且约 60s 过期（与云端 Access/Refresh Token 区分）② Windows Git Bash curl 下载中文名 PDF 易失败→改用 Python urllib ③ 中文关键词命中低→中英双检/上位词扩检/字段渐进；新增「检索召回优化提示」小节 |
+| v3.9.4 | 2026-08-03 | description 精简至 ≤1024 字符（修复 Claude/豆包 上传 zip 报 "field 'description' must be at most 1024 characters"）；新增 AI 执行摘要层（D4），提升 agent 触发与执行可读性；功能与计费逻辑不变 |
+| v3.9.5 | 2026-08-27 | 支付体验优化：支付失败时不再给出无法支付的订单号，改为清晰的重试指引；修复了部分情况下支付必报金额错误的隐患 |
+| v3.9.6 | 2026-08-27 | 配置净化：移除配置文件中的个人邮箱与非必要冗余字段，隐私更清爽 |
+| v3.9.7 | 2026-08-27 | 配置文件结构优化：恢复并保留邮箱字段（默认空值），确保首次使用初始化更稳定 |
 
 ---
 

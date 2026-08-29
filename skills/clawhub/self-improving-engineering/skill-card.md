@@ -1,46 +1,61 @@
-## Description: <br>
-Captures architecture decisions, code quality issues, build and deployment failures, dependency problems, performance regressions, tech debt, and test gaps as structured learning logs for continuous engineering improvement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures architecture decisions, code quality issues, build and deploy failures, dependency problems, performance regressions, tech debt accumulation, and test gaps for continuous engineering improvement.
 
-## Publisher: <br>
-[jose-compu](https://clawhub.ai/user/jose-compu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jose-compu](https://clawhub.ai/user/jose-compu)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to capture build failures, architecture findings, test gaps, dependency issues, performance regressions, and feature requests in project learning logs. Teams can promote recurring or broadly useful learnings into ADRs, coding standards, CI/CD runbooks, or workspace instruction files after review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Learning logs or promoted instructions could capture secrets, sensitive operational details, or misleading guidance. <br>
-Mitigation: Redact secrets and sensitive details before logging or committing .learnings files, and review diffs before adding guidance to AGENTS.md, CLAUDE.md, SOUL.md, TOOLS.md, ADRs, or Copilot instructions. <br>
-Risk: Optional hooks can add reminders broadly if installed with a global empty matcher. <br>
-Mitigation: Keep hooks project-scoped by default, use the activator-only setup unless broader behavior is intentional, and avoid global empty matchers unless reminders are wanted on every prompt. <br>
-Risk: Optional command-output checks may encounter sensitive terminal output. <br>
-Mitigation: Enable PostToolUse error detection only in trusted environments and do not log or forward raw command output verbatim. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to capture recurring engineering learnings, build and deployment failures, test gaps, dependency issues, performance regressions, and feature requests in local Markdown logs so the patterns can be reviewed and promoted into durable project guidance.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/jose-compu/self-improving-engineering) <br>
-- [OpenClaw integration guide](references/openclaw-integration.md) <br>
-- [Hook setup guide](references/hooks-setup.md) <br>
-- [Entry examples](references/examples.md) <br>
-- [Agent Skills specification](https://agentskills.io/specification) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown learning entries and setup guidance with shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or append local .learnings markdown files and may provide optional hook configuration guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release metadata) <br>
+Risk: Persistent hooks can affect future agent sessions if enabled broadly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep hooks opt-in and project-scoped, and prefer the lightweight activator hook unless reminder automation is needed.
+
+Risk: Optional command-output pattern checks can expose sensitive terminal output to hook logic.
+
+Mitigation: Avoid optional PostToolUse scanning in sensitive sessions and do not log raw command output, secrets, tokens, private keys, environment variables, or full configuration files.
+
+Risk: Generated or promoted skill content can carry incorrect or overly broad engineering guidance.
+
+Mitigation: Review generated skills and promoted guidance before keeping, publishing, or applying them to shared project context.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/jose-compu/skills/self-improving-engineering)
+- [OpenClaw Integration](references/openclaw-integration.md)
+- [Hook Setup Guide](references/hooks-setup.md)
+- [Entry Examples](references/examples.md)
+- [Agent Skills Specification](https://agentskills.io/specification)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, configuration examples, and local Markdown log templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates or updates local learning logs and may emit short hook reminders when explicitly enabled.]
+
+## Skill Version(s):
+
+1.2.2 (source: server evidence release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

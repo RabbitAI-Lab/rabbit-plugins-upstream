@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "team_id": "omni-ecom",
+  "team_version": "1.5.11",
+  "release_name": "Numeric claim provenance, formula and attribution hotfix",
+  "release_date": "2026-08-24",
+  "previous_version": "1.5.10",
+  "changes": [
+    "继承 v1.5.10 对最终复核等待、回执绑定和发布验真的闭环修复",
+    "新增 claim-ledger.schema.json 与 claim_guard.py；每个数字必须绑定来源文件、字段、期间、SHA256和状态",
+    "锁定转化率、访客价值、ROAS/ROI与净ROAS公式，来源或归因范围不一致时自动阻断",
+    "build_report_package 强制接收 --claim-ledger，并生成 claim-receipt.json；completion_gate 强制核验 claim-receipt 与冻结报告哈希",
+    "新增 claim_guard_smoke.py，覆盖真实失败场景：GMV/访客误写转化率、概览花费与流量GMV拼接ROI、未知数字硬编码",
+    "收紧正式交付规则：无数字来源回执或未完成凭证时不得调用 present_files；禁止团长手写PDF绕过闸门",
+    "清理项目长期记忆中的客户品牌、客户数字和误称编造结论，只保留匿名化质量规则",
+    "新增 team_bootstrap_guard.py，记录真实 TeamCreate 的 team_name、运行号、版本和宿主模式，禁止续跑时猜测或伪造团队身份",
+    "新增 collaboration_resume_guard.py，按同一 run_id 判断四位回传、sealed handoff、报告、复核和正式完成所处阶段，禁止跨运行串接回执",
+    "新增续跑冒烟测试，覆盖建团缺失、成员未齐、报告待生成、复核待完成和正式完成五种状态",
+    "团队启动若在宿主规定时间内没有真实 team_name，必须返回 collaboration_unavailable_timeout，不重复创建、不读取业务数据、不生成报告",
+    "复核结果必须同时绑定 review_attempt_id、report_revision 和真实 Agent task ID，迟到或错误尝试不能解锁",
+    "新增 completion_gate.py；未完成成员回传、PDF验真、独立复核、公域隔离中的任一环节，主任务不得显示正式完成",
+    "新增店铺诊断、周报、月报、季报、年报、大促复盘、数据审计和单项专题八类任务配置",
+    "最终 completion-receipt.json 合并六岗位真实贡献与子任务号，交付复核岗不再在最终完成凭证中消失",
+    "真实客户隔离名单迁移到本机私有目录，公开技能包不再携带历史客户品牌名称",
+    "保留 v1.5.10 的 sealed handoff、默认图表化 PDF、逐页渲染、版本标注和客户隔离能力"
+  ],
+  "compatibility": {
+    "reads": ["handoff.schema.json@1.0", "action-record.schema.json@1.0", "report-package.schema.json@1.0"],
+    "writes": ["report-package.schema.json@1.0", "completion-receipt.schema.json@1.0", "connector-call.schema.json@1.0"],
+    "upgrade_note": "v1.5.8~v1.5.10 报告仍可读取；v1.5.11 新报告增加 claim-ledger/claim-receipt，正式完成必须绑定数字来源回执、冻结报告哈希，并以 review_attempt_id 隔离交付复核尝试。"
+  }
+}

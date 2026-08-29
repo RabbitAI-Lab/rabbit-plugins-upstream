@@ -1,0 +1,4 @@
+qwen-tts>=0.1.1
+torch>=2.5
+soundfile>=0.12
+huggingface-hub>=0.25

@@ -1,47 +1,60 @@
-## Description: <br>
-Enforces validation and evidence before claiming work complete. Use before declaring implementation done, creating a PR, or submitting deliverables for review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enforces validation and evidence before claiming work complete, for use before declaring implementation done, creating a PR, or submitting deliverables for review.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agents use this skill before implementation completion, pull request submission, or review handoff to require reproducible tests, acceptance criteria, evidence logs, and known-issue checks before claiming work is done. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Evidence logs and command output can expose tokens, account IDs, internal hostnames, or sensitive environment values. <br>
-Mitigation: Review and redact evidence logs before sharing them outside the intended audience. <br>
-Risk: Stricter proof-of-work gates can make testing and validation tasks more process-heavy. <br>
-Mitigation: Apply the skill when completion claims, reviews, or deliverables need reproducible evidence, and keep evidence snippets focused on the claim being proven. <br>
-Risk: Validation examples include shell commands that inspect local state and may need adaptation to the user's environment. <br>
-Mitigation: Run commands in the target environment, avoid destructive variants, and record pass, fail, partial, or blocked status honestly. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to define acceptance criteria, run validation, capture evidence logs, and avoid premature completion claims before handing off implementation, review, configuration, or deployment work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-proof-of-work) <br>
-- [Publisher profile](https://clawhub.ai/user/athola) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
-- [Atlassian definition of done](https://www.atlassian.com/agile/project-management/definition-of-done) <br>
-- [Cargo cult programming](https://en.wikipedia.org/wiki/Cargo_cult_programming) <br>
-- [Software Reuse in the Generative AI Era](https://dl.acm.org/doi/10.1145/3755881.3755981) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with checklists, command examples, evidence logs, acceptance criteria, and retry prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs emphasize reproducible evidence, pass/fail status, blockers, and user-verifiable completion claims.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+Risk: Agents may treat example command snippets as blanket permission to install packages, start services, or change local environments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require user approval for package installs and service starts, and prefer dry runs or isolated local test environments for validation.
+
+Risk: Evidence logs may capture secrets, account details, or sensitive local configuration when commands and outputs are recorded.
+
+Mitigation: Redact secrets and account details before storing or sharing captured evidence.
+
+Risk: Proof-of-work routines can create misleading confidence if checks are performed mechanically or against stale assumptions.
+
+Mitigation: Pair command output with acceptance criteria, version checks, known-issue review, and clear blocker reporting.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-proof-of-work)
+- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+- [Atlassian Agile Definition of Done](https://www.atlassian.com/agile/project-management/definition-of-done)
+- [Cargo cult programming](https://en.wikipedia.org/wiki/Cargo_cult_programming)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with command snippets, checklists, and evidence logs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Evidence should cite commands, outputs, timestamps, acceptance criteria, and known blockers when applicable.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release; artifact frontmatter lists 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

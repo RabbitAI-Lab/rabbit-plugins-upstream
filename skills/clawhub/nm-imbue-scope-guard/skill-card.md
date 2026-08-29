@@ -1,46 +1,59 @@
-## Description: <br>
-Scores feature worthiness and enforces branch-size limits against overengineering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scores feature worthiness and enforces branch-size limits against overengineering.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to evaluate proposed features before and during implementation. It helps agents score business value against complexity, compare work against backlog priorities, and keep branches within documented scope limits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can steer an agent to create GitHub issues and publish detailed Discussion context for deferred work, which may expose private project reasoning. <br>
-Mitigation: Require explicit approval before GitHub issue or Discussion creation, preview the exact content, and default to local backlog notes for sensitive repositories. <br>
-Risk: The security scan marked the release suspicious because the workflow encourages external writes even though the skill is mostly planning and scope-control guidance. <br>
-Mitigation: Install only when scope discipline is desired, and review generated commands and publication steps before execution. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to decide whether proposed features belong in the current branch, should be deferred to backlog, or require explicit justification before proceeding.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-scope-guard) <br>
-- [OpenClaw metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
-- [Decision framework](modules/decision-framework.md) <br>
-- [Anti-overengineering rules](modules/anti-overengineering.md) <br>
-- [Branch threshold management](modules/branch-management.md) <br>
-- [GitHub issue integration](modules/github-integration.md) <br>
-- [Baseline testing scenarios](modules/baseline-scenarios.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with scoring tables, checklists, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose backlog entries, GitHub issue content, and GitHub Discussion content for deferred work.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter says 1.9.8) <br>
+Risk: The skill can create persistent GitHub records that include detailed reasoning or project context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval before creating issues, labels, comments, or Discussions, and review or redact content before publication.
+
+Risk: Default Discussion publication may expose sensitive planning context in repositories where Discussions are visible to a broader audience.
+
+Mitigation: Disable default Discussion publication for sensitive work or require an opt-in confirmation before posting.
+
+Risk: Blocking hooks or branch thresholds can interrupt normal delivery work if applied without project-specific judgment.
+
+Mitigation: Treat thresholds as governance prompts and document human-approved overrides when branch size is justified.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-scope-guard)
+- [Publisher profile](https://clawhub.ai/user/athola)
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown with decision tables, checklists, and inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce GitHub issue, label, comment, and Discussion content when documenting deferred work]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

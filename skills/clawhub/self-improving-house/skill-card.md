@@ -1,45 +1,60 @@
-## Description: <br>
-Captures smart-home automation conflicts, sensor drift, device connectivity failures, integration regressions, safety rule gaps, and energy optimization opportunities for continuous domotics improvement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures smart-home automation conflicts, sensor drift, device connectivity failures, integration regressions, safety gaps, and energy optimization opportunities for continuous domotics improvement.
 
-## Publisher: <br>
-[jose-compu](https://clawhub.ai/user/jose-compu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jose-compu](https://clawhub.ai/user/jose-compu)
 
-## Use Case: <br>
-Developers, smart-home operators, and agent users use this skill to record domotics learnings, issues, and feature requests so recurring automation conflicts, sensor drift, connectivity failures, safety gaps, and energy opportunities can be reviewed and promoted into safer operating patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Domotics logs can expose sensitive household details such as lock PINs, alarm codes, tokens, Wi-Fi credentials, or occupancy schedules. <br>
-Mitigation: Do not log secrets or private household schedules in plaintext; redact sensitive details before sharing logs or generated skills. <br>
-Risk: Optional hook matchers can become too broad and create noisy or poorly scoped reminders. <br>
-Mitigation: Keep hooks opt-in and narrow matchers to domotics-specific terms before enabling reminder automation. <br>
-Risk: Generated skill scaffolds may contain incomplete TODOs or unsafe domotics assumptions if enabled without review. <br>
-Mitigation: Review and scan generated skill scaffolds before enabling or sharing them, especially for routines involving locks, alarms, gas, water, or heaters. <br>
+## Use Case:
 
+External developers and smart-home operators use this skill to capture domotics issues, learnings, and feature requests, then promote recurring patterns into safer automation playbooks, compatibility notes, rule libraries, or safety standards.
 
-## Reference(s): <br>
-- [ClawHub skill release](https://clawhub.ai/jose-compu/self-improving-house) <br>
-- [Domotics Entry Examples](references/examples.md) <br>
-- [Domotics Hook Setup Guide](references/hooks-setup.md) <br>
-- [OpenClaw Integration](references/openclaw-integration.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Code] <br>
-**Output Format:** [Markdown guidance with inline shell commands, configuration snippets, and optional hook or scaffold code] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes or updates local markdown learning logs when the user applies the guidance; optional hooks are reminder-only.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Optional hooks can persist across sessions and broad Bash output detection may trigger reminders from common smart-home terms.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review hook setup before enabling it, keep hooks project-scoped, and enable Bash output detection only when reminder triggering on command output is desired.
+
+Risk: Learning files may accidentally capture sensitive smart-home details such as lock codes, alarm codes, credentials, or private household schedules.
+
+Mitigation: Keep secrets and private schedules out of logs; record only the minimum operational context needed to diagnose the issue.
+
+Risk: Domotics recommendations can affect high-impact routines involving locks, alarms, gas or water shutoff, and heaters if later implemented without review.
+
+Mitigation: Use human confirmation, conservative fallback states, and notify-only behavior for high-impact routines; keep this skill reminder-only and separate from actuator execution.
+
+## Reference(s):
+
+- [Domotics Entry Examples](artifact/references/examples.md)
+- [Domotics Hook Setup Guide](artifact/references/hooks-setup.md)
+- [OpenClaw Integration (Domotics)](artifact/references/openclaw-integration.md)
+- [ClawHub Skill Page](https://clawhub.ai/jose-compu/skills/self-improving-house)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and optional code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reminder-only workflow; does not directly control physical devices.]
+
+## Skill Version(s):
+
+1.0.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

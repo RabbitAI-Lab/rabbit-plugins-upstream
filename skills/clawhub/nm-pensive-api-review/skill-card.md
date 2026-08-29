@@ -1,50 +1,64 @@
-## Description: <br>
-Evaluates API surface design, consistency, and exemplar alignment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluates API surface design, consistency, and exemplar alignment.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to review public API changes, design new API surfaces, audit consistency, and validate documentation before release. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad triggers may surface the skill during general API design or documentation discussions. <br>
-Mitigation: Invoke it intentionally for API surface reviews and confirm that its checklist matches the current review task. <br>
-Risk: The workflow can propose local search, documentation, and build commands as part of API inventory and governance checks. <br>
-Mitigation: Review proposed commands before execution and keep an evidence log of commands and findings. <br>
+## Use Case:
 
+Developers and engineers use this skill to review public API changes, design new API surfaces, audit consistency, and validate documentation readiness before release.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-api-review) <br>
-- [Source homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
-- [pandas DataFrame API](https://pandas.pydata.org/docs/reference/frame.html) <br>
-- [requests API](https://requests.readthedocs.io/en/latest/api/) <br>
-- [tokio runtime API](https://docs.rs/tokio/latest/tokio/runtime/) <br>
-- [serde API](https://docs.rs/serde/latest/serde/) <br>
-- [Go net/http package](https://pkg.go.dev/net/http) <br>
-- [Go database/sql package](https://pkg.go.dev/database/sql) <br>
-- [Express API](https://expressjs.com/en/4x/api.html) <br>
-- [Stripe API](https://stripe.com/docs/api) <br>
-- [GitHub REST API](https://docs.github.com/en/rest) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown report with command examples, file references, findings, recommendations, and an approval decision.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include API inventory counts, exemplar comparisons, consistency issues, documentation gaps, and timed action items.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter lists 1.9.8) <br>
+Risk: Broad activation terms may invoke the skill during general design or documentation work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill when an API review is intended and confirm the review scope before following its workflow.
+
+Risk: The workflow suggests shell and documentation-generation commands that may be costly or noisy in large or sensitive repositories.
+
+Mitigation: Review proposed commands first and run them in an appropriate workspace with repository-specific limits.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-api-review)
+- [ClawHub publisher profile](https://clawhub.ai/user/athola)
+- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+- [pandas DataFrame API](https://pandas.pydata.org/docs/reference/frame.html)
+- [requests API](https://requests.readthedocs.io/en/latest/api/)
+- [tokio Runtime API](https://docs.rs/tokio/latest/tokio/runtime/)
+- [serde API](https://docs.rs/serde/latest/serde/)
+- [Go net/http package](https://pkg.go.dev/net/http)
+- [Go database/sql package](https://pkg.go.dev/database/sql)
+- [Express 4.x API](https://expressjs.com/en/4x/api.html)
+- [Stripe API documentation](https://stripe.com/docs/api)
+- [GitHub REST API documentation](https://docs.github.com/en/rest)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown report with command evidence, API inventory, exemplar alignment analysis, findings, release decision, and action plan]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include file and line references, numerical API inventory counts, and recommended documentation or migration actions.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release evidence; artifact frontmatter says 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

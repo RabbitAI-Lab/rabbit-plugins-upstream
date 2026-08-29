@@ -1,42 +1,55 @@
-## Description: <br>
-Cloudflare Browser Run helps agents render URLs or raw HTML through Cloudflare Browser Run and return rendered HTML, Markdown, links, selected elements, or structured JSON. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cloudflare Browser Run helps agents render URLs or raw HTML through an OOMOL-connected Cloudflare Browser Run account and return HTML, Markdown, links, selected elements, or structured JSON.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when an agent needs browser-rendered page content from Cloudflare Browser Run, including HTML, Markdown, links, extracted JSON, selected element scraping, or account listing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: URLs, raw HTML, rendered page content, and scrape targets may be processed through the OOMOL and Cloudflare connector. <br>
-Mitigation: Avoid submitting sensitive or regulated content unless the connected services and account configuration are approved for that data. <br>
-Risk: One-time install, login, and connection commands can change the local setup or account connection state. <br>
-Mitigation: Run setup commands only when an action fails because the CLI, authentication, or Cloudflare Browser Run connection is missing or expired. <br>
+## Use Case:
 
+Developers and agents use this skill to access Cloudflare Browser Run through the OOMOL oo CLI, inspect action schemas, render pages or raw HTML, and extract content as HTML, Markdown, links, elements, or JSON.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-cloudflare-browser-rendering) <br>
-- [Cloudflare Browser Run Documentation](https://developers.cloudflare.com/browser-run/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on the selected Cloudflare Browser Run action and may include rendered HTML, Markdown, links, selected element data, structured JSON, or account information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup can involve installing the oo CLI, signing in, and connecting Cloudflare credentials through OOMOL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and connect only when needed, review setup URLs before use, and avoid repeating login or connection steps unless an auth or connection error requires it.
+
+Risk: Rendering private or sensitive pages can expose page content through the connected Browser Run workflow.
+
+Mitigation: Review target URLs and payloads before rendering sensitive pages, and use only accounts and scopes intended for the task.
+
+## Reference(s):
+
+- [Cloudflare Browser Run documentation](https://developers.cloudflare.com/browser-run/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include rendered HTML, Markdown, extracted JSON, discovered links, selected HTML elements, or account listings returned by the connector.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

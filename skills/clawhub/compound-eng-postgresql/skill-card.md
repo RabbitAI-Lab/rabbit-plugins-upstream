@@ -1,43 +1,63 @@
-## Description: <br>
-PostgreSQL schema design, query optimization, indexing, and administration for work with PostgreSQL, JSONB, partitioning, RLS, CTEs, window functions, and EXPLAIN ANALYZE. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PostgreSQL schema design, query optimization, indexing, and administration for work involving PostgreSQL, JSONB, partitioning, RLS, CTEs, window functions, or EXPLAIN ANALYZE.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill for PostgreSQL schema design, query review, indexing strategy, migration safety, full-text search, RLS, operations, and administration guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated PostgreSQL guidance may affect production data, availability, or access controls when applied directly. <br>
-Mitigation: Review any generated SQL before running it on production, especially schema migrations, RLS policies, backups, failover, indexes, and bulk updates. <br>
-Risk: The skill provides database administration and migration guidance rather than executable enforcement. <br>
-Mitigation: Use normal change review, testing, backups, and production deployment controls before applying database changes. <br>
+## Use Case:
 
+Developers and database engineers use this skill for PostgreSQL schema design, migrations, indexing, query optimization, row-level security, full-text search, connection pooling, operations, and recovery planning.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/iliaal/compound-eng-postgresql) <br>
-- [Concurrency patterns](artifact/references/concurrency-patterns.md) <br>
-- [PostgreSQL full-text search](artifact/references/full-text-search.md) <br>
-- [PostgreSQL operations](artifact/references/operations.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with SQL, shell command, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces advisory PostgreSQL guidance; review generated SQL before production use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.1 (source: server-resolved ClawHub release metadata) <br>
+Risk: SQL examples, migration patterns, RLS policies, failover steps, backup procedures, and full-text-search language settings may be unsafe if copied directly into a production database without adaptation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and test examples against the target schema and workload before applying them, especially for migrations, production operations, and security policies.
+
+Risk: Schema changes, backfills, index creation, and read-modify-write loops can lock tables, rewrite data, or drop concurrent writes if applied without the documented safeguards.
+
+Mitigation: Use the skill's migration safety guidance, including concurrent index creation, batched backfills, atomic updates, row-level locks, or compare-and-swap retries where appropriate.
+
+Risk: Operational settings for replication, WAL, autovacuum, timeouts, and connection pools can affect availability or recovery objectives.
+
+Mitigation: Validate operational recommendations in staging, monitor PostgreSQL metrics, and align backup, replication, and pool sizing decisions with production service requirements.
+
+## Reference(s):
+
+- [PostgreSQL Skill Definition](SKILL.md)
+- [ia-postgresql Specification](SPEC.md)
+- [Concurrency Patterns](references/concurrency-patterns.md)
+- [PostgreSQL Full-Text Search](references/full-text-search.md)
+- [PostgreSQL Operations](references/operations.md)
+- [Performance Patterns](references/performance-patterns.md)
+- [ClawHub Skill Page](https://clawhub.ai/iliaal/skills/compound-eng-postgresql)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline SQL and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces advisory PostgreSQL guidance and examples; it does not execute commands or modify databases on its own.]
+
+## Skill Version(s):
+
+4.4.3 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,55 @@
-## Description: <br>
-Extracts writing style patterns from exemplar text into a reusable profile. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Extracts writing style patterns from exemplar text into a reusable profile.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers, writers, and content teams use this skill to analyze exemplar writing and create reusable style profiles. The profiles combine quantitative metrics, selected passages, anti-patterns, and validation notes for consistent generation or editing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad triggers such as style, voice, and tone may activate the skill more often than intended. <br>
-Mitigation: Confirm that style learning is intended before collecting exemplars or generating a profile. <br>
-Risk: User-provided exemplar text may contain sensitive, proprietary, or personal writing. <br>
-Mitigation: Use only exemplar material that is approved for style reference and remove unnecessary secrets or confidential details. <br>
-Risk: A generated profile may overfit limited exemplars or misrepresent the target voice. <br>
-Mitigation: Validate the profile against new content, compare metrics to the exemplars, and revise before relying on it for production writing. <br>
+## Use Case:
 
+Developers, writers, and agents use this skill to analyze exemplar text, extract measurable style features, select representative passages, and generate a reusable style profile for consistent downstream writing or editing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-style-learner) <br>
-- [Scribe plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
-- [Feature Extraction Module](modules/feature-extraction.md) <br>
-- [Exemplar Reference Module](modules/exemplar-reference.md) <br>
-- [Style Application Module](modules/style-application.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown with YAML-style profile sections and exemplar passages] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include quantitative style metrics, selected exemplars, anti-patterns, and validation notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Style profiles may retain excerpts from exemplar documents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only source text that may be reused or quoted, and review generated profiles before sharing or publishing them.
+
+Risk: Broad style-related triggers may surface the skill for general writing requests.
+
+Mitigation: Confirm that the user wants style-profile extraction or style-guided writing before applying the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-style-learner)
+- [Publisher profile](https://clawhub.ai/user/athola)
+- [Project homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scribe)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and YAML-style profile guidance with inline command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces reusable style profiles with quantitative metrics, exemplar passages, anti-patterns, and validation guidance.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

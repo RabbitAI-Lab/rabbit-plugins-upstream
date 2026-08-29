@@ -1,39 +1,60 @@
-## Description: <br>
-Analyzes fixed-camera elder-care video to detect loneliness-related behaviors, compute a loneliness index, and produce warm companionship recommendations and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Using fixed-camera home or care-room video, this skill analyzes daily activity for loneliness-related behaviors such as prolonged solitude, static gazing, sighing, and talking to oneself, then returns a structured loneliness-support report.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External care teams, family caregivers, and smart-aging platform developers use this skill to review consented video from solitary-living elder homes or private care rooms, identify loneliness indicators, and generate structured care recommendations. It also supports cloud report history lookup for previously generated loneliness and companionship reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-loneliness-comfort-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+External caregivers, family-care platforms, and elder-care service developers use this skill to analyze elder activity video, produce structured behavior statistics, estimate a loneliness index, and suggest warm companionship actions. It should be used only with appropriate consent and human oversight.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with structured analysis results, report links, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Handles sensitive private-room video and cloud report history; use only with explicit consent and review cloud retention and access controls before deployment.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.4) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill handles highly sensitive in-home or care-room video and optional audio through configured cloud APIs.
+
+Mitigation: Use only with explicit consent from the elder and authorized caregivers; verify configured API endpoints, access controls, raw media retention, and report retention before deployment.
+
+Risk: The skill silently creates or reuses identity-linked accounts and may store local tokens or account identifiers for report history and export links.
+
+Mitigation: Restrict access to the local workspace data directory, audit stored identifiers and tokens, rotate or remove credentials when no longer needed, and limit who can open history or export URLs.
+
+Risk: Loneliness estimates and companionship suggestions can be mistaken for clinical mental-health findings or may trigger unwanted interventions.
+
+Mitigation: Treat outputs as behavior statistics and support suggestions, not medical diagnosis; keep human review in the care workflow and honor opt-out or reminder-shutdown requests.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-loneliness-comfort-analysis)
+- [API interface documentation](artifact/references/api_doc.md)
+- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Markdown and structured JSON-style analysis reports, with optional report export links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include loneliness metrics, behavior summaries, companionship recommendations, historical report lists, and cloud report links.]
+
+## Skill Version(s):
+
+1.0.7 (source: ClawHub release metadata; artifact frontmatter states 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,54 @@
-## Description: <br>
-List is a smart form and notes skill that records expenses, shipments, logs, reminders, and attachments into local structured JSON files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+List is a smart form and notes skill that records bookkeeping entries, shipments, operational logs, notes, and attachments, then supports classification, querying, summaries, and reminders.
 
-## Publisher: <br>
-[kobenfang](https://clawhub.ai/user/kobenfang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kobenfang](https://clawhub.ai/user/kobenfang)
 
-## Use Case: <br>
-External users and developers use this skill to capture everyday bookkeeping, notes, shipment records, operational logs, and attachment archives through natural-language prompts such as "记一下". <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can save user-provided records and attachments immediately after clear command-style prompts. <br>
-Mitigation: Use it only in workspaces where local record persistence is expected, and confirm ambiguous requests before recording. <br>
-Risk: Bookkeeping notes and document attachments may contain personal, financial, or sensitive business information. <br>
-Mitigation: Avoid storing secrets or highly sensitive documents unless workspace access, retention, and deletion practices are managed. <br>
+## Use Case:
 
+External users and teams use this skill to capture everyday expenses, notes, shipments, logs, receipt images, and document references in structured records. It is intended for quick entry, later lookup, recurring summaries, and reminders around personal or business recordkeeping.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kobenfang/listform) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/kobenfang) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown responses with JSON-backed local records and shell command invocations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Records and attachments are saved under workspace/memory/list-data when the skill is invoked.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release evidence) <br>
+Risk: The skill may record sensitive personal, business, receipt, contract, or operational information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation, make auto-save and attachment analysis behavior clear to users, and avoid storing sensitive data unless the deployment has appropriate consent and retention controls.
+
+Risk: The helper script can escape its intended data folder and copy arbitrary local files into persistent storage.
+
+Mitigation: Restrict record type names, confine file writes to the skill data directory, and limit attachments to explicit user-provided uploads.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kobenfang/skills/listform)
+- [ClawHub publisher profile](https://clawhub.ai/user/kobenfang)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Plain text or Markdown responses, with JSON record data handled by the bundled command-line helper.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update local JSON records and attachment copies when installed and invoked by an agent.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,36 +1,17 @@
-# Meta-Analysis Skill — R Package Requirements
-# All packages are auto-installed on first skill activation
-# R version required: >= 4.0
+# Meta-Analysis Skill — Dependency Manifest / 依赖清单
+#
+# 计算模型：COZE-ONLY（云端计算，本地零依赖）。
+# Compute model: COZE-ONLY (cloud compute, zero local deps).
+#
+# 所有数值计算均在 coze 端 meta-analysis 工作流的 R 引擎中完成（唯一路径）。终端用户
+# 无需本地安装 R、无需本地计算。回退逻辑已于 2026-08-26 取消：coze 不可达/未授权时
+# 直接返回结构化错误，不再调用本地 R。原本地引擎代码保留于 adapters/_dev/local_engine.py
+# （git/clawhub 忽略、不随发布包分发，仅供开发调试，已不在运行路径中）。
+# Python 适配器（adapters/coze_client.py、scripts/i18n.py、scripts/generate_topic_report.py）
+# 仅依赖 Python 标准库。
 
-# Core meta-analysis
-metafor          # Statistical engine (rma, rma.mv, escalc, forest, funnel)
-meta             # RevMan-compatible (metabin, metacont, metagen, funnel, forest)
-dmetar           # Companion to "Doing Meta-Analysis in-R" (GOSH, RoB, power)
-netmeta          # Network meta-analysis (NMA)
-bayesmeta        # Bayesian meta-analysis
-
-# Effect size conversion
-esc              # Effect size computation (esc_mean_sd, esc_t, esc_or)
-
-# Cluster-robust variance estimation
-robumeta         # Robust variance estimation for dependent effect sizes
-clubSandwich     # Cluster-robust SE with small-sample corrections (CR2, HC3)
-
-# Data manipulation
-tidyverse        # Data wrangling (dplyr, tidyr, readr)
-readxl           # Excel import
-haven            # SPSS/Stata import
-
-# Publication-ready graphics
-ggplot2          # Grammar of graphics
-gridExtra        # Arrange multiple plots
-
-# Risk of bias
-robvis           # Risk of bias visualization (RoB 2.0 traffic light)
-
-# Reporting
-rmarkdown        # Dynamic reports
-knitr            # Report rendering
-
-# Optional/GitHub-only (auto-fallback to CRAN)
-# (none)
+# ---------------------------------------------------------------------------
+# 唯一真实可选 Python 依赖（仅 PNG 输出模式需要）
+# ---------------------------------------------------------------------------
+# cairosvg        # 仅当要求 PNG 输出时，由 adapters/rendering.svg_to_png 按需 import；
+#                 # 默认输出 SVG，不需要。安装：pip install cairosvg

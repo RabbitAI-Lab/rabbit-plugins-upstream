@@ -60,10 +60,18 @@ OPC-UA，pH/浊度/电导率/液位/流量变送器走 HART（经网关）。
   （change-log 基线：拒学薄历史、只报持续越带、每次告警必引基线样本 —— 非黑盒异常检测）
 - 合规/信创：`compliance_mapping` `compliance_frameworks` `compliance_dengbao_levels`
   `compliance_report` `compliance_evidence_bundle`
-  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish` `stream_publish_event` `rca_narrate` `fleet_status` `fleet_incidents` `pdm_forecast`
+  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish` `uns_publish` `stream_publish_event` `rca_narrate` `fleet_status` `fleet_incidents` `pdm_forecast`
   `historian_push` `export_data`
 - 程序解读：`plc_program_outline` `plc_program_xref` `plc_program_section` `plc_program_visibility`（解读导出的 ST/AWL/L5X 程序,只读文件,强制引用行号）
-- 元：`protocols_supported`
+- 元：`protocols_supported`(产品能做什么)· `site_readiness`(这个站点今天能跑什么、还差什么;零联网)
+- 调查层（§13，八步证据闭环）：`investigation_readiness` `investigation_open` `investigation_show`
+  `investigation_list` — 「真出事时这个站能走到第几步、每个缺口还差什么」，以及对一个**已过去的窗口**
+  逐步走完并留档（不碰设备）。缺口分两种:**你没供**(给命令) 与 **产品供不了**。
+- 产线关系与机制库：`line_relation_declare` `line_relations_list` `mechanism_library_check`
+  `mechanism_library_list` — 上下游由**人声明**（D25:线上下游共现是必然，推不出因果）；
+  机制库按 ISO 14224 分 mode/mechanism/cause，**可排除、绝不确认**，
+  库里没有这条原因 → `nothing_known`（不是「无异议」）。
+
 
 ## Workflows
 
@@ -83,5 +91,5 @@ OPC-UA，pH/浊度/电导率/液位/流量变送器走 HART（经网关）。
 |---|---|---|---|---|---|
 | Modbus-TCP | `pymodbus>=3.5,<4` | App 1.1b3；FC 1/2/3/4/5/6/15/16 | 分析仪/加药撬/任意 TCP 从站 | TCP/502 | ✅ |
 | Modbus-RTU | `pymodbus>=3.5,<4` + `pyserial>=3.5` | Modbus serial (RTU) | 串口从站（泵站 RTU/表计） | RS-485/serial | ✅ socat PTY verified 2026-07-02；物理 RS-485 待核实 |
-| OPC-UA | `asyncua>=1.0,<2` | OPC UA 1.0x（DA+HA+AC 子集） | 任意合规 Server / SCADA | opc.tcp | ✅ mock+HDA |
+| OPC-UA | `asyncua>=2.0,<3` | OPC UA 1.0x（DA+HA+AC 子集） | 任意合规 Server / SCADA | opc.tcp | ✅ mock+HDA |
 | HART-IP | `hart-protocol>=2023.6,<2025`（extra） | HART-IP（经网关） | 水质/过程变送器 | UDP/TCP 5094 | ⚠️ codec CI 自测；真机网关 待核实 |

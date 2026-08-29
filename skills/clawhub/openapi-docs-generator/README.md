@@ -14,10 +14,10 @@ Evidence coverage: 12 signals across 3 source families.
 
 ## Evidence
 
-- csdn-search: [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search: [Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues: [Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues: [[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
+- csdn-search: [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=77a225c95d914c12940d10993fe6c8b3&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-159013081-null-null.142^v102^pc_search_result_base9&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues: [LIB-01: Deliver the remote Libraries contract and server state](https://github.com/ScottArbeit/Grace/issues/1038)
+- github-issues: [[docs] Swagger/OpenAPI Alignment Audit: Spec Matches Implementation](https://github.com/ExcelDsigN-tech/dukapay/issues/437)
+- github-issues: [🐝 Hive Advisory Report](https://github.com/weavster-dev/weavster/issues/1)
 - segmentfault-search: [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search: [javascript](https://segmentfault.com/t/javascript)
 - segmentfault-search: [typescript](https://segmentfault.com/t/typescript)
@@ -25,7 +25,7 @@ Evidence coverage: 12 signals across 3 source families.
 - segmentfault-search: [答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
 - segmentfault-search: [OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
 - segmentfault-search: [答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues: [Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- github-issues: [Docs: specify request and response schemas for `GET /agents/count`](https://github.com/Stellar-Ecosystem/lodestar/issues/615)
 
 ## How This Skill Meets The Requirement
 

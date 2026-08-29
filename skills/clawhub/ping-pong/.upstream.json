@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/ping-pong",
   "slug": "ping-pong",
   "ownerHandle": null,
-  "version": null,
-  "updatedAt": 1779219450866,
-  "contentHash": "2ad41984332d0b468ba5b65115355e5bc7c59c2f4cffcab80d1084a7094dc4b2",
-  "fetchedAt": "2026-07-26T18:42:59.014Z"
+  "version": "2.8.2",
+  "updatedAt": 1787629277643,
+  "contentHash": "5aad3cd32520c85fa275e557693f139bd86f3a4d028897cfffa7d17cd38ca972",
+  "fetchedAt": "2026-08-29T13:36:08.615Z"
 }

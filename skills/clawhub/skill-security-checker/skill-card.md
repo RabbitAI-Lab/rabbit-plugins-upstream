@@ -1,39 +1,62 @@
-## Description: <br>
-Skill Security Checker audits agent skill folders for static security patterns, dependency issues, permission risks, quality checks, and optional sandboxed runtime behavior, producing text, JSON, or HTML reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Skill Security Checker scans ClawHub, SkillHub, and WorkBuddy skill directories for security, dependency, permission, supply-chain, sandbox, and compliance issues and can produce text, JSON, HTML, or SARIF reports.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Developers and skill publishers use this skill to check ClawHub, WorkBuddy, or SkillHub skills before release or in CI/CD, with findings, scores, and remediation guidance for security and quality issues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The server security review flags the release as suspicious because optional dynamic scanning with allowed domains may provide broader Docker network access than the documentation implies. <br>
-Mitigation: Use static scanning or dynamic scanning without allowed domains by default; enable allowed domains only for reviewed targets and treat that mode as general network access for scanned code. <br>
+## Use Case:
 
+Developers and security reviewers use this skill to audit skill directories before release, assess third-party skills, and generate CI-friendly reports with remediation guidance.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/fyniujin/skills/skill-security-checker) <br>
-- [Scan Patterns Reference](references/scan-patterns.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Terminal text, JSON, or HTML reports with findings, scores, and remediation suggestions.] <br>
-**Output Parameters:** [1D; target skill path plus optional format, output path, update-check, dynamic scan, allow-domain, and timeout flags.] <br>
-**Other Properties Related to Output:** [Runs locally; dynamic mode can execute scanned code in Docker or Windows Sandbox.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may contact GitHub by default for update checks, which can be undesirable in offline or sensitive environments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run with --skip-update when network access should be avoided.
+
+Risk: The optional syscall monitor uses root or administrator telemetry paths, and the server security summary says this high-privilege behavior needs review before installation.
+
+Mitigation: Avoid --syscall-monitor unless the operator has reviewed and accepted the privilege requirements, telemetry behavior, and implementation limits.
+
+Risk: Dynamic scanning executes target skill code in a sandbox when enabled.
+
+Mitigation: Use --dynamic only with Docker or Windows Sandbox available, keep default network isolation, and allow only trusted domains with --allow-domain.
+
+Risk: The scanner reads skill directories and can write cache or report files.
+
+Mitigation: Run it only against intended directories and direct outputs to approved locations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/skill-security-checker)
+- [scan-patterns.md](artifact/references/scan-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands plus text, JSON, HTML, and SARIF report outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may be printed to the terminal or written to caller-selected output files; optional features can read local caches, write report/cache files, and perform a GitHub update check unless skipped.]
+
+## Skill Version(s):
+
+3.3.0 (source: SKILL.md frontmatter and evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

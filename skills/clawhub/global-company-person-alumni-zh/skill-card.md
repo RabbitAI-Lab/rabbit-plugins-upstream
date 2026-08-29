@@ -1,47 +1,66 @@
-## Description: <br>
-依托全球企业数据库检索目标公司对应的校友以及离职前员工名单，梳理企业历史人员脉络，挖掘潜在商务联系人并拓展业务合作机会。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+依托全球企业数据库检索目标公司对应的校友以及离职前员工名单，梳理企业历史人员脉络，挖掘潜在商务联系人并拓展业务合作机会。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Recruiters, sales teams, B2B lead builders, and relationship analysts use this skill to look up alumni or former colleague links for a person and organization context through the Upkuajing global company database. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API calls can incur vendor charges, including additional charges for paginated follow-up requests. <br>
-Mitigation: Confirm the user understands the charge before each paid lookup and use the vendor pricing command or pricing page instead of estimating costs. <br>
-Risk: The skill may store UPKUAJING_API_KEY in a plaintext file under the user's home directory. <br>
-Mitigation: Use local file permissions or a separate secret-management process for the API key, and avoid sharing the file contents. <br>
-Risk: Recharge workflows can create payment URLs for the vendor service. <br>
-Mitigation: Review any payment URL before opening it or sending funds, and confirm the transaction with the account owner. <br>
+## Use Case:
 
+Recruiters, sales teams, B2B lead builders, and relationship researchers use this skill to query alumni-style people lists from Upkuajing's global company data by person ID and school ID. It supports talent sourcing, background research, contact-list expansion, and professional network analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/global-company-person-alumni-zh) <br>
-- [Publisher profile](https://clawhub.ai/user/upkuajing) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer portal](https://developer.upkuajing.com/) <br>
-- [Upkuajing API pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [全球企业库校友列表 API 参考](references/person-alumni-list-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns paginated alumni records and fee information when provided by the vendor API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: release evidence and skill metadata) <br>
+Risk: The skill contacts Upkuajing services and may trigger billable API calls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user's intent and billing awareness before running paid lookup or pagination commands, and use the pricing endpoint or published pricing page for current cost information.
+
+Risk: The API key may be stored in a local plaintext file under the user's home directory.
+
+Mitigation: Prefer environment-variable injection where possible, avoid displaying or pasting the key, and restrict local file permissions for any saved credential file.
+
+Risk: Optional error reporting can send request context and failure details to the provider.
+
+Mitigation: Review the error report content with the user and send it only after explicit confirmation.
+
+Risk: The scan summary notes under-disclosed support and version-check network calls.
+
+Mitigation: Review network behavior before deployment and account for provider version-check and support endpoints in security approvals.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/global-company-person-alumni-zh)
+- [Upkuajing homepage](https://www.upkuajing.com)
+- [Upkuajing developer platform](https://developer.upkuajing.com/)
+- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [Person alumni list API reference](artifact/references/person-alumni-list-api.md)
+- [Skill error report API reference](artifact/references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Alumni-list responses include data, fee information, and request identifiers; paginated results use a cursor for follow-up calls.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

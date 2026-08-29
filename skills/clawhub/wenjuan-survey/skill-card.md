@@ -1,51 +1,62 @@
-## Description: <br>
-问卷网 helps agents create, edit, publish, stop, report on, and export data from Wenjuan survey, form, vote, and assessment projects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+问卷网 helps agents create, publish, edit, monitor, and export Wenjuan surveys, forms, votes, and assessments through documented Node.js workflows.
 
-## Publisher: <br>
-[wenjuanwang](https://clawhub.ai/user/wenjuanwang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wenjuanwang](https://clawhub.ai/user/wenjuanwang)
 
-## Use Case: <br>
-External users and agents use this skill to operate Wenjuan projects, including creating and publishing questionnaires, managing questions and project metadata, viewing reports, and exporting response data. It is intended for accounts where the user has authority to manage the corresponding Wenjuan surveys. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use saved account credentials to publish, stop, edit, delete, and export survey data. <br>
-Mitigation: Install only for Wenjuan accounts the user is authorized to operate, review each high-impact action before execution, and keep local credential directories private. <br>
-Risk: Several high-impact actions rely on documented user confirmation rather than built-in confirmation gates. <br>
-Mitigation: Require explicit user approval before publishing, stopping collection, editing, deleting questions, or exporting response data. <br>
-Risk: Local tokens or exported survey data could be exposed if committed or shared. <br>
-Mitigation: Do not commit token files or exports, and keep ~/.wenjuan and the skill .wenjuan directory out of shared artifacts. <br>
-Risk: The setup script can install Node.js dependencies or tooling on the host. <br>
-Mitigation: Prefer installing Node.js and dependencies through the user's normal trusted system package workflow before running the skill setup script. <br>
+## Use Case:
 
+External users and developers use this skill to create and manage Wenjuan survey, vote, form, and assessment projects, including publishing, reporting, response export, and high-level response statistics.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wenjuanwang/wenjuan-survey) <br>
-- [Wenjuan Homepage](https://www.wenjuan.com) <br>
-- [README](README.md) <br>
-- [Skill Overview](references/skill_overview.md) <br>
-- [Create Survey](references/create_survey.md) <br>
-- [Authentication](references/auth.md) <br>
-- [Export Data](references/export_data.md) <br>
-- [Project JSON Structure Guide](references/project_json_structure_guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and script output summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create, modify, publish, stop, delete, report on, or export Wenjuan survey data when the user authorizes the requested action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release evidence, SKILL.md frontmatter, package.json) <br>
+Risk: Setup and update paths can run high-impact installation actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install Node.js from trusted channels, use the locked npm dependencies, and review setup or update commands before running them, especially unattended setup.
+
+Risk: The skill can receive Wenjuan account access and store local authentication tokens.
+
+Mitigation: Store tokens in a private WENJUAN_TOKEN_DIR and remove ~/.wenjuan and the skill .wenjuan/auth.json when finished on shared systems.
+
+Risk: Changing the Wenjuan host can direct authenticated actions to an unintended endpoint.
+
+Mitigation: Keep WENJUAN_HOST unset unless intentionally using a trusted endpoint.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wenjuanwang/skills/wenjuan-survey)
+- [Wenjuan homepage](https://www.wenjuan.com)
+- [Skill overview](references/skill_overview.md)
+- [Create survey workflow](references/create_survey.md)
+- [Authentication](references/auth.md)
+- [Project JSON structure guide](references/project_json_structure_guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON survey structures, Wenjuan URLs, and generated or downloaded files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update Wenjuan projects and local credential, poster, or export files after authentication and required user confirmation.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release metadata, SKILL.md frontmatter, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

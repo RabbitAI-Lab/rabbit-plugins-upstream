@@ -1,14 +1,13 @@
 ---
 name: dlazy-kling-image-o1
 version: 1.3.5
-description: Generate exquisite images with Kling o1 model. Supports text-to-image and image-to-image. 使用可灵 (Kling) o1 模型生成精美图像，支持文生图与参考图生图。
+description: "Generate exquisite images with Kling o1 model. Supports text-to-image and image-to-image. 使用可灵 (Kling) o1 模型生成精美图像，支持文生图与参考图生图。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy kling-image-o1 -h for help."}}
 ---
 
-# dlazy-kling-image-o1
+# 图像生成 可灵 Kling Image O1
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Generate exquisite images with Kling o1 model. Supports text-to-image and image-to-image.
@@ -84,11 +83,12 @@ dlazy kling-image-o1 -h
 Options:
   --prompt [prompt]                    Prompt
   --images [images...]                 Images [image: url or local path] (max 10)
-  --clarity [clarity]                  Clarity [default: 2k] (choices: "2k", "4k")
+  --clarity [clarity]                  Clarity [default: 2k] (choices: "2k")
   --aspect_ratio [aspect_ratio]        Aspect Ratio [default: 16:9] (choices: "16:9", "9:16", "1:1", "4:3", "3:4", "3:2", "2:3", "21:9", "auto")
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

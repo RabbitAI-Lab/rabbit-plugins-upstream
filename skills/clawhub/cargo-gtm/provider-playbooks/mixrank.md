@@ -29,7 +29,7 @@ Premium person/company enrichment — two actions, both **4 credits**, the most 
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"mixrank","actionSlug":"findPerson","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"mixrank","actionSlug":"findPerson"}' \
   --data '{"phone":"+14155551234"}' \
   --wait-until-finished
 ```
@@ -39,7 +39,7 @@ cargo-ai orchestration action execute \
 ```bash
 # Only on rows the cheaper enrich rungs missed
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"mixrank","actionSlug":"findPerson","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"mixrank","actionSlug":"findPerson"}' \
   --records '[
     {"firstName":"Alice","lastName":"Smith","companyName":"Acme","domain":"acme.com"},
     {"socialUrl":"https://linkedin.com/in/bobjones"}
@@ -59,9 +59,16 @@ Stack every identifier you have per row — more keys, better match confidence a
 
 **ENRICH stage, last rung.** Person: `linkedin.enrichProfile` (0.25) → `cargo.enrichProspectDetails` (2) → `peopleDataLabs` (3) → **mixrank (4)**. Company: `waterfall.enrichCompany` / `oceanio.enrichCompany` (1) → `peopleDataLabs.enrichCompany` (3) → **mixrank (4)**. Promote it out of order only for the phone-keyed niche. See [`../references/stage-action-map.md`](../references/stage-action-map.md).
 
+## Recurring use
+
+No scheduled fit — **last-rung, per-record backfill only**; at 4 credits a recurring blanket pass is the fastest way to torch a budget.
+
+- **In-play gate:** double gate — run only where the cheaper rungs' output fields are still empty *and* at least one identifier is present (the no-required-fields pitfall means an empty row bills 4 credits on every re-evaluation).
+- **Time-sensitivity:** identity resolution is stable — re-running `findPerson` / `findCompany` on a matched row re-buys the same answer, and fixed-cost-on-miss means even a "retry later" pass must be deliberately scoped.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"mixrank","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"mixrank","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**
 
 ## Pairs with
 
