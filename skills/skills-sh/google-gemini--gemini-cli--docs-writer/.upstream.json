@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google-gemini/gemini-cli/docs-writer",
+  "repo": "google-gemini/gemini-cli",
+  "skillId": "docs-writer",
+  "branch": "main",
+  "pushedAt": "2026-08-29T01:56:42Z",
+  "contentHash": "ef4515cce781131ec3b6c39da48f50aeb3e8b52587706e247111c18c7ec80536",
+  "fetchedAt": "2026-08-29T13:15:04.739Z"
+}

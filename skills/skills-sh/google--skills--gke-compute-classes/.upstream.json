@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-compute-classes",
+  "repo": "google/skills",
+  "skillId": "gke-compute-classes",
+  "branch": "main",
+  "pushedAt": "2026-08-28T23:32:13Z",
+  "contentHash": "de944236ee5d662800d48d3c88efc40575a42d487a338bb03dfbaaa949d9eebc",
+  "fetchedAt": "2026-08-29T13:14:26.974Z"
+}

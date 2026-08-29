@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/planetscale/database-skills/postgres",
+  "repo": "planetscale/database-skills",
+  "skillId": "postgres",
+  "branch": "main",
+  "pushedAt": "2026-08-28T15:20:33Z",
+  "contentHash": "06dd84e5e79d4cc2cfd7361bdca0656ee814c7093a98655d73c2fef82855fe5f",
+  "fetchedAt": "2026-08-29T13:15:19.872Z"
+}
