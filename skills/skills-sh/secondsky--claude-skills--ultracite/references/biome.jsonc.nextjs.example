@@ -1,0 +1,66 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
+  // Next.js preset includes React preset automatically
+  "extends": ["ultracite/biome/core", "ultracite/biome/next"],  // v7 paths
+
+  // Optional: Customize formatter
+  "formatter": {
+    "enabled": true,
+    "indentWidth": 2,
+    "lineWidth": 100  // Next.js projects often use wider lines
+  },
+
+  // Optional: Customize linter
+  "linter": {
+    "enabled": true,
+    "rules": {
+      // Next.js specific customizations
+      "performance": {
+        // Ensure next/image is used (default: error)
+        "noImgElement": "error"
+      }
+    }
+  },
+
+  // Optional: Exclude Next.js build outputs (Biome 2.x: files.includes with ! negation)
+  "files": {
+    "includes": [
+      "**",
+      "!.next",
+      "!out",
+      "!dist",
+      "!build",
+      "!coverage",
+      "!node_modules",
+      "!**/*.generated.ts",
+      "!.vercel",
+      "!.turbo"
+    ]
+  },
+
+  // Optional: Overrides for specific files (Biome 2.x: overrides[].includes)
+  "overrides": [
+    {
+      // Allow certain patterns in config files
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "warn"
+          }
+        }
+      }
+    },
+    {
+      // Relax rules for App Router server components
+      "includes": ["app/**/*page.tsx", "app/**/*layout.tsx"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "noUseAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/useosint/skills/find-hidden-subdomains",
+  "repo": "useosint/skills",
+  "skillId": "find-hidden-subdomains",
+  "branch": "main",
+  "pushedAt": "2026-08-03T00:38:10Z",
+  "contentHash": "0a9730a55c39be5f8076ea66154e41e6f32ce00bbb181e36d6f4a08ebd645ba8",
+  "fetchedAt": "2026-08-29T13:12:54.548Z"
+}

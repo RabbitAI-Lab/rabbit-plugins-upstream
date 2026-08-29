@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/flutter/agent-plugins/flutter-add-widget-preview",
+  "repo": "flutter/agent-plugins",
+  "skillId": "flutter-add-widget-preview",
+  "branch": "main",
+  "pushedAt": "2026-08-29T00:33:30Z",
+  "contentHash": "4a030e5c7d0493f8b1e0e4ae9af24174be174a91f5aa0572df54e69be7260130",
+  "fetchedAt": "2026-08-29T13:12:55.809Z"
+}
