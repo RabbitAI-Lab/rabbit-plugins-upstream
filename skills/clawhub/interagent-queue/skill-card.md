@@ -1,40 +1,60 @@
-## Description: <br>
-Monitor and log MIAB transaction ledger events to a file. Requires miab-broker as a prerequisite. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deprecated under the name interagent-queue, this skill observes a miab-broker ledger, writes human-readable callback logs, and can send configured closed-bottle summaries to chat.
 
-## Publisher: <br>
-[albzhu](https://clawhub.ai/user/albzhu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[albzhu](https://clawhub.ai/user/albzhu)
 
-## Use Case: <br>
-Developers and agent operators use this skill to observe MIAB callback ledger activity, inspect queue status, and record human-readable transaction events to a local log. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local logs may preserve MIAB task and result details on disk. <br>
-Mitigation: Keep secrets out of ledger task and result text, review the configured log path, and rotate or delete logs that may contain sensitive work details. <br>
-Risk: The observer depends on miab-broker state and configurable filesystem paths. <br>
-Mitigation: Verify miab-broker is installed and initialized, then check CLAW_HOME, CLAW_LEDGER, CLAW_QUEUE_LOG, LYRA_WORKSPACE, and CLAW_QUEUE_STATE before enabling logging. <br>
+## Use Case:
 
+Developers and operators using miab-broker use this skill to monitor callback ledger activity, keep local human-readable logs, and optionally route closed-bottle summaries to a configured chat target during migration to miab-observer.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/albzhu/skills/interagent-queue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with bash commands; script output is JSON status data and plain-text log entries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes queue state and log files under configurable CLAW_* paths and requires an existing miab-broker ledger.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: Ledger text can be relayed into chat as written when closed-bottle notifications are enabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set CLAW_CLOSED_TARGET deliberately, review notify_closed_dryrun.py output first, and avoid routing untrusted ledger content to channels where mentions or deceptive formatting would be disruptive.
+
+Risk: Cron jobs that keep calling the old interagent_queue.py path can stop working after migration.
+
+Mitigation: Install miab-observer 2.0.0, update cron command paths to the renamed script, and confirm state files still point at the intended CLAW_HOME and LYRA_WORKSPACE before removing interagent-queue.
+
+Risk: Operator recovery from an unusable cursor state can replay historical ledger entries if the state file is deleted intentionally.
+
+Mitigation: Inspect and repair last_processed_line when possible; delete the state file only when accepting a full replay is appropriate.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/albzhu/skills/interagent-queue)
+- [Publisher profile](https://clawhub.ai/user/albzhu)
+- [SKILL.md](artifact/SKILL.md)
+- [CHANGELOG.md](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [JSON status responses, Markdown-style log entries, and configured chat messages from local Python CLI scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reads miab-broker ledger state; notification delivery requires CLAW_CLOSED_TARGET and delegates egress to openclaw message send.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release metadata and CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

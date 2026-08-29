@@ -32,9 +32,9 @@ Material requirements: clean fractions, acidity, aromatic definition and tempera
 
 Critical decisions: direct press or fraction split, turbidity, oxygen protection, fermentation temperature, lees contact, malolactic choice and stabilization.
 
-## Orange or skin-contact wine
+## Skin-contact (orange) route
 
-Use only when the brand and audience benefit from visible texture, tannin and process character.
+A maceration route on a white base, not a separate colour: the constructor takes `white` and the skin contact is a G5 route decision. Use only when the brand and audience benefit from visible texture, tannin and process character.
 
 Material requirements: healthy skins, phenolic maturity and controlled extraction.
 

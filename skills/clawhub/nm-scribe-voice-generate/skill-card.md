@@ -1,46 +1,62 @@
-## Description: <br>
-Generates text in a learned writing voice. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates text in a learned writing voice.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Writers and content teams use this skill to draft prose in an authorized, extracted writing voice. The skill loads local voice profiles, selects an appropriate register, frames source material as working notes, and produces polished text for review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads local voice profile files and optional project voice overrides, which may contain personal writing samples or sensitive context. <br>
-Mitigation: Install only where the agent may access those files, and review profile and override contents before use. <br>
-Risk: Generated text may imitate a writing voice that the user is not authorized to use. <br>
-Mitigation: Use only voice profiles you are authorized to imitate and review generated text before publication. <br>
-Risk: The workflow may silently rewrite banned phrases or punctuation before showing the final draft. <br>
-Mitigation: Review the final output against the source material and style requirements before sharing it. <br>
+## Use Case:
 
+Writers, developers, and agent users use this skill to draft prose from local voice profiles, selected registers, and user-provided source material.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-scribe-voice-generate) <br>
-- [Scribe Plugin Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
-- [Generation Pipeline Module](artifact/modules/generation-pipeline.md) <br>
-- [Register Selection Module](artifact/modules/register-selection.md) <br>
-- [Source Framing Module](artifact/modules/source-framing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or prose text with optional inline guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May silently clean banned phrases and punctuation before presenting the draft.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: release evidence; artifact frontmatter says 1.9.8) <br>
+Risk: Voice profiles and source material may contain sensitive writing samples or private draft content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep voice profiles free of material that should not be sent into generation context, and review source material before use.
+
+Risk: Silent cleanup can change generated wording before the user sees the draft.
+
+Mitigation: Treat cleanup as draft editing, not an auditable final rewrite, and review the output before publishing or reuse.
+
+Risk: The skill can produce prose that closely follows a learned writing voice.
+
+Mitigation: Use only authorized voice profiles and review generated text for appropriate attribution, consent, and context.
+
+Risk: Broad trigger terms can cause the skill to be selected for writing tasks where voice generation is not intended.
+
+Mitigation: Review configured triggers and invoke the skill only when the user wants text drafted from a specific voice profile.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-voice-generate)
+- [Project homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scribe)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown with generated prose and inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May apply draft cleanup for banned phrases and punctuation before optional review.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

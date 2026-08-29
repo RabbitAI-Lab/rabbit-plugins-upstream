@@ -63,6 +63,7 @@ uuid. CLI: `easyeda board …`. Maps to `eda.dmt_Board.*`.
 
 - `board.list` / `board.current` — all boards (name + bound schematic + pcb) / the current one. A board can hold only a PCB or only a schematic — the missing side is reported as `null`.
 - `board.create` — bind a schematic and/or PCB into a new board (`--schematic` / `--pcb`). The fix for a floating/unlinked PCB before `import_changes`.
+- `board.rebind` — repair a **stale/orphaned** Board binding (e.g. a rebuild-from-empty PCB left the Board pointing at a deleted schematic uuid, crashing `board list` and faking a DRC Netlist Error): deletes the old Board (by `--name`, else current) and re-creates it bound to `--schematic` (+ `--pcb`), rolling back on failure; `--force` to move a schematic already bound elsewhere. 曾被 daemon 挡成 `UNKNOWN_ACTION`(protocol 目录漏登记),现已可用——不必再走 `board delete` + `board create` 手工两步。CLI: `easyeda board rebind --schematic <schUuid> --pcb <pcbUuid>`.
 - `easyeda pcb new-board` (`board.new_pcb`) — new board + fresh empty PCB page bound to a schematic. **A schematic belongs to only ONE board**, so this refuses if the target schematic is already bound (it would MOVE it out, orphaning the old board's PCB — the "原理图没了" trap). Work inside the existing board instead; pass `--force` only to move it deliberately.
 - `board.rename` — rename a board (`--name` → `--new`).
 - `board.copy` — duplicate a board (its schematic + PCB).
@@ -94,384 +95,50 @@ Act on the focused canvas; the editor view shortcuts. CLI: `easyeda view …`.
 
 ### Routing (copper tracks + vias)
 
-Real routing primitives — **additive creates** (no confirm), like the schematic
-`wire.create`. Bind to a net **by name** (pull from `pcb.nets.list`); layer ids from
-`pcb.layers.list`. EasyEDA's `create()` is **lenient** — it can return no primitive on a
-bad layer/coords without throwing, so each action verifies a primitive came back and
-fails honestly otherwise. **PCB autosave is on** (debounced) — still **save explicitly**
-at checkpoints. There is **no one-call autorouter** on this build
-(`pcb_Document.autoRouting` is undefined — see `docs/ecosystem-survey.md` §6/§7); route
-segment-by-segment, or use the file-exchange autoroute flow. **布线档如何选见
-[`design-flow.md`](./design-flow.md) P7 三档阶梯——稠密板默认不是 file-exchange autoroute,而是
-请用户点 EasyEDA 原生「布线→自动布线」(人机协作档);Freerouting 仅全 headless 无人可点时兜底。**
-
-- `pcb.line.create` — a copper **track** (导线): line segment on a copper layer
-  (`TOP=1`, `BOTTOM=2`; **inner-copper ids are higher** — `id 3` is silkscreen, not
-  copper, so read real ids from `pcb.layers.list`) between `(startX,startY)` and
-  `(endX,endY)` (mil, y-up), `lineWidth` (default 6 mil), optional `net`. Verify with
-  `pcb.drc.check`.
-- `pcb.via.create` — a **via** (过孔) at `(x,y)` with `holeDiameter` (drill, default 12
-  mil) + `diameter` (outer pad, default 24 mil), optional `net`.
-- `pcb.line.list` / `pcb.via.list` — read what's routed (filter by net/layer) before
-  rip-up or reroute.
-- `pcb.route.rip_up` — **reliable rip-up**: delete tracks+arcs+vias, `--net` to scope
-  (string or list) or omit for ALL. **Copper layers only** — never deletes the board
-  outline, silkscreen/assembly/mechanical artwork, or **locked** primitives. The
-  iteration primitive: `rip_up → re-route`. (Reports `{requested, ok}` per type, since
-  `delete()` is a batch boolean.)
-- `easyeda pcb clear` (`pcb.page.clear`) — **一键整版复位**,`sch clear` 的 PCB 对称版。
-  一次删掉所有**板级内容** primitive:器件 + 布线(轨/弧/过孔)+ 铺铜/填充(pour/fill)+
-  keep-out/规则区域 + 自由丝印(**丝印层 3/4** 的字符串 + 线/弧图形,不碰铜层/文档层的自由文字或
-  机械/装配线弧)。`pcb delete`(`pcb.component.delete`)**只删器件**,
-  布线/铺铜/区域/丝印会静默残留(`components.list` 看着空了、铜其实还在)——要真正清板重来
-  用这个。**默认保留锁定图元 + 板框(layer 11)**(板框是布局前提,和 `sch clear` 保留图框对称)。
-  收窄:`--only components,routing,copper,regions,silk`(逗号子集,省略 = 全部);`--no-preserve-outline`
-  连板框一起删;`--include-locked` 连锁定图元一起删(危险)。**无 undo**,确认门控。
-  **默认自带 verify 复合流程(#121)**:清 → save → `doc reload` → 二遍清 → 最终 dry-run 计数——
-  部分图元只在 save/reload 时被引擎物化,单次 handler 调用内任何枚举(含 #112 的循环)都看不到
-  (R2 实测 reload 后冒出 3 条轨);返回 `{pass1, pass2, remainingAfterVerify, verified}`,
-  `remainingAfterVerify` 非零 = 锁定/保留件或更深的引擎问题,绝不假报干净。`--no-verify` 回到
-  单遍(快,但你要自己 reload 后 `--dry-run` 复查)。
-  ⚠️ **破坏性**:生产流程必须**先 `--dry-run` 报告删除计数、等用户确认**,再执行。
-  生成→检测→清板→重试闭环用这个。
-- `easyeda pcb via-delete --ids …` / `pcb track-delete --ids …` (`pcb.route.delete`) —
-  **surgical delete by primitiveId**: one bad via no longer costs re-routing the whole
-  net (rip-up is net-scoped). Ids come from `pcb via-list` / `pcb track-list` / `pcb drc
-  --json` `objs`; **pull them fresh — ids churn after edits**. `--ids` takes **CSV
-  (`id1,id2`) or a JSON array (`'["id1","id2"]'`) — both work**; all delete-by-id
-  commands (`pcb delete` / `pour-delete` / `region delete` / `fill delete` /
-  `track-delete` / `via-delete`) now accept both formats (issue #109), so `pcb drc
-  --json` `objs` arrays paste straight in. Each subcommand guards its
-  kind (pasting track ids into `via-delete` errors out); locked primitives are skipped,
-  stale ids reported as `notFound`. The result's `removed[]` echoes each primitive's full
-  before-state (net/layer/geometry) so the audit log can recreate it. **Embedded-primitive
-  pre-check + readback (#120, live-verified)**: a footprint-embedded via's id is its
-  parent component's primitiveId + a suffix (`ba45…f3` + `e184`); deleting one lies
-  TWICE — the SDK returns true AND an immediate getAll shows it gone, but the next
-  save/reload re-materializes it from the footprint. The handler refuses these UPFRONT
-  (`notDeletable[]` with the parent component + `ok:false`; use `pcb via-bond` to net
-  them, or delete the whole component) and additionally readback-verifies the rest
-  (`removed`/`count` only count what actually vanished; unattributable survivors land
-  in `notDeleted`). ⚠️ **After surgical
-  edits (delete/via-hop/fill changes), a burst of same-net (usually GND) Connection
-  Errors in DRC is pour-mediated connectivity gone stale, not real breaks — run
-  `pcb pour-rebuild` first, then re-judge** (verified live: 11→1 baseline).
-- `easyeda pcb via-bond [--component U1] [--dry-run]` — **bond netless footprint-embedded
-  vias (EPAD thermal vias) to the net of the pad they sit in** (#118). Scans every net:""
-  via whose center sits inside a net-carrying pad's copper rect and assigns that pad's
-  net via raw `eda.pcb_PrimitiveVia.modify` (debug-exec backed — works on every deployed
-  connector, no re-import). Idempotent, readback-verified (`{planned, assigned, verified}`).
-  ⚠️ **Platform limit (live-verified)**: the assignment does NOT survive a doc reload —
-  embedded vias re-materialize netless every time; re-run after any reload, before
-  DRC / power-planes. `pcb check`'s **netless-via-in-pad** WARN fires whenever a re-bond
-  is due, with this command as the fix.
-- `easyeda pcb via-hop --net N --from-x … --from-y … --to-x … --to-y …`
-  (`pcb.route.via_hop`) — **composite layer hop**: entry stub → via → hop-layer track →
-  via → exit stub. **track↔via registers as connected on its own** — no bond fill needed
-  (see the truth table below). Vias sit `--stub` (default 20mil) inside the endpoints so
-  they stay **off pads** (via-on-pad ≠ connected). `--layer` (default 1=TOP) /
-  `--hop-layer` (default 2=BOTTOM), `--width`. `--bond-fill` (default **off**) adds
-  optional extra copper over the vias for thermal/current — not for connectivity. Rolls
-  back everything it created on mid-sequence failure. Verify with `pcb drc`.
-- `pcb.clear_routing` — native `clearRouting` (`@alpha`, may be undefined on this build,
-  and does NOT protect unlocked outline) — prefer `pcb.route.rip_up`.
-
-#### 连通性键合真值表 (what actually registers as CONNECTED)
-
-⚠️ **Corrected 2026-07-07 (跟进 pro-api-sdk#31).** The earlier claim — "track↔via does
-not register on 4-layer / ex-PLANE boards, a bond fill is the only reliable bridge" —
-was **our misdiagnosis** and has been retracted (official confirmed live; we reproduced
-the correction on real hardware). What actually happened: DRC Connection Errors are
-driven by netlist **ratlines**; a `track(L1)→via→track(L2)→via→track(L1)` bridge between
-two same-net pads **satisfies the ratline and clears the error** in every plane state
-(clean 4-layer / Inner=PLANE / flipped SIGNAL↔PLANE — all tested). The original
-"+5V/U0TXD floating" symptom was **stale pour-mediated GND connectivity**, cured by
-`pcb pour-rebuild` (same phenomenon as the ⚠️ note under `via-delete` above) — the fills
-that "fixed" it were a red herring; the re-pour/recompute did the work.
-
-| junction | registers? |
-|---|---|
-| track endpoint on a via (center or inside via copper) | ✅ (needs a fresh ratline recompute) |
-| via on a track's body (mid-segment) | ✅ |
-| pad ↔ track endpoint at pad center | ✅ |
-| net-bound FILL overlapping via + track | ✅ (works, but **not** required) |
-| pour (same net) flowing over via | ✅ (but pour reflow has its own traps — see pour section) |
-| via ON a pad | ⚠️ offset + stub anyway (a via centered on a pad is redundant, not a bond failure) |
-
-**Via-bridge SOP**: just route the hop with `pcb via-hop` — no bond fill needed. If DRC
-shows same-net (usually GND) Connection Errors after routing surgery, that's **stale
-pour connectivity**: run `pcb pour-rebuild`, let ratlines recompute, then re-judge — do
-**not** paper over it with fills.
-
-### Copper pour (铺铜)
-
-A pour is a net-bound copper region (usually GND/power plane). **The agent passes raw
-points** — the connector builds the `IPCB_Polygon` (`pcb_MathPolygon.createPolygon`)
-and re-pours; passing raw points to the bare `eda.*` create fails ("无法创建覆铜边框图元").
-
-- `pcb.pour.create` — pour from a closed polygon `points` (`[[x,y],…]`, mil, y-up) on a
-  copper layer, bound to a `net` (**required — a netless pour is dead copper; `pcb pour`
-  now refuses an empty `--net`, issue #34**). `fill = solid` (default) `| grid | grid45`.
-  Size it to the board outline; verify `poured:true` + `pcb.drc.check`.
-- `pcb.pour.list` / `pcb.pour.delete` — inspect / remove pours.
-- `pcb pour-clean --netless` (daemon-side) — remove pours bound to **no net** (net:"" dead
-  copper that `pour-fit --replace` can't clear — it only matches same-net pours). `--dry-run`
-  lists them first. Detected by `pcb check` (netless-pour rule).
-- `pcb.pour.rebuild` — re-pour all (or by net) after moving components/routing so the
-  copper reflows around new obstacles.
-- `pcb pour-fit` (daemon-side) — **auto-size a pour to the board**: reads the outline
-  and insets its bbox by `--inset` (mil, default 20) so copper keeps edge clearance
-  (fixes Board-Outline-to-Copper), then pours `--net`/`--layer`. `--replace` (default)
-  clears the net's existing pours first so they don't stack. v1 pours a RECTANGLE within
-  the bbox; for an odd outline draw a custom polygon with `pcb pour`. `--dry-run` previews.
-- `pcb via-stitch` (daemon-side) — fill a `--rect "x0,y0,x1,y1"` with a `--pitch`-spaced
-  grid of `--net` vias: **thermal vias** under a power-IC center pad (tie it to the GND
-  plane) or **GND stitching** between top & bottom pours. Run `pcb pour-rebuild` after so
-  the planes reflow onto the new vias. `--margin` insets from the rect edges. `--dry-run`.
-
-### Keep-out / rule regions (禁止区域)
-
-A region (`eda.pcb_PrimitiveRegion`) is a polygon carrying **rule types** that keep
-things OUT of an area — antenna clearance, board-edge inset, mechanical exclusion.
-It is **NOT net-bound copper** (that's a pour) — `create` takes no net. EasyEDA's own
-DRC + copper pour respect it (a pour avoids a `no-pours` region). Same raw-points
-convention as pour (connector builds the polygon).
-
-- `pcb region create` (`pcb.region.create`) — specify the area **three ways** (pick one):
-  `--points '[[x,y],…]'` (explicit polygon), `--rect x0,y0,x1,y1` (rectangular
-  shorthand), or **`--ref <designator>`** (the placed component's bbox — e.g. the
-  antenna module). `--margin <mil>` expands the `--rect`/`--ref` box outward (antenna
-  clearance). `--rule` (repeatable, name or enum number): `no-components(2)` /
-  `no-wires(5)` / `no-fills(6)` / `no-pours(7)` / `no-inner-electrical(8)` /
-  `follow-rule(9)`. **Default** (no `--rule`) is a hard keep-out
-  `[no-components, no-wires, no-pours]` — the antenna / board-edge case. `--locked`
-  pins it. Verify with `pcb region list` + `pcb drc`.
-  E.g. antenna keep-out under U1: `pcb region create --ref U1 --margin 40 --rule no-pours`.
-- `pcb region list` / `pcb region delete` — inspect / remove (note `pcb delete`
-  removes components, NOT regions — use `region delete`). `--ids` takes CSV or a
-  JSON array.
-
-> **Read-back limit (verified #18):** `--name` on a region is fire-and-forget —
-> `getState_RegionName` never reads it back, so `region list` shows `null` and the
-> injected DSN keepout is named `region_keepout_N`. Likewise `pcb fill`'s `fillMode`
-> always reads back `solid`. Geometry / layer / net / **ruleType** persist fine —
-> just don't gate logic on reading a region's name or a fill's mode. Platform SDK
-> quirk (same family as the netflag rotation echo trap), not fixable from here.
-
-> **ESP32-S3-WROOM-1 ships with NO antenna keep-out** — you must create it (test-case
-> P1). **`getDsnFile` drops regions**, but `pcb export-dsn` now **re-injects** them as
-> Specctra `(keepout (polygon …))` by default (reports `keepouts=N`; `--raw` to skip),
-> so external Freerouting no longer routes under the antenna. Transform is a verified
-> pure translation (1:1 mil, no flip).
-
-### Net-bound filled region (填充区域 / 异形大块铜)
-
-`eda.pcb_PrimitiveFill` — a **STATIC filled polygon bound to a net** (a 3V3/RF-ground
-patch, thermal copper, an odd-shaped plane). Three net-copper primitives, don't confuse:
-**fill** (static, no reflow), **pour** (`覆铜`, reflows around obstacles), **region**
-(keep-out, no net). Same raw-points convention.
-
-- `pcb fill create` (`pcb.fill.create`) — area via `--points` | `--rect x0,y0,x1,y1` |
-  `--at x,y --size w,h` | `--ref <designator>` (+ `--margin`), on a `--layer`, bound to
-  `--net`. `--fill-mode solid` (default) `| mesh | inner`. `--locked`. Verify with
-  `pcb fill list`. ⚠️ **`--rect` 的四个数是两个对角点 `x0,y0,x1,y1`,不是 `x,y,宽,高`**
-  (issue #109 实踩:按 x,y,w,h 传参生成盖住 USB-C 区的巨型 fill,原生 DRC 爆 ~50 条)——
-  想按「角点 + 宽高」表达就用 **`--at x,y --size w,h`**(与 `--rect` 互斥,`--size` 从
-  `--at` 向 +x/+y 延伸)。**防呆护栏**:fill bbox 面积 > 板框 bbox 的 **25%**(板框可读时;
-  读不到板框则 > 4,000,000 mil² ≈ 50×50mm)直接拒绝,报错教两角点语义;确属故意的超大 fill
-  加 `--force-large` 放行。
-- `pcb fill list` / `pcb fill delete` — inspect / remove (filter list by `--layer`/`--net`);
-  `delete --ids` takes CSV or a JSON array.
-
-**Board cutout / slot (挖槽) — `pcb slot`.** A fill on the **MULTI layer (12)** IS a
-board cutout (per the eda API: *"填充所属层为 MULTI 时代表挖槽区域"*; manufacturing
-emits it as a `BoardCutout`). `pcb slot --rect … | --ref ANT1 --margin 20` mills a
-hole — antenna isolation / mechanical opening. No net. It's a `pcb_PrimitiveFill` on
-layer 12, so list/delete via `pcb fill list --layer 12` / `pcb fill delete`.
-
-**M3 安装孔 — `pcb mount-holes`** (issue #102). Places corner mounting holes
-**automatically and collision-checked** — never hand-place M3 holes at guessed
-coordinates (#102: a blind hole landed on C1). Reads the real board outline
-(errors without one — run `pcb outline-fit` first), computes each corner center
-at `--inset` (default 197mil ≈ 5mm) from both edges, and mills a near-circular
-MULTI-layer cutout (`--dia` default 126mil = M3 Ø3.2mm) — the same primitive as
-`pcb slot`, so `pcb place-constrained` avoids it as a **Tier-1 obstacle** and
-`pcb check` keeps copper off the milled edge. Each corner is checked against
-every component's rendered bbox with the fastener keep-out radius
-`max(hole R+40mil, M3 washer R118mil)` (conventions §2.3): a conflicting corner
-is **warned + skipped**, never force-placed (`--clearance` overrides the radius
-for a smaller fastener head you knowingly accept); a corner that already has a
-cutout reports `exists` (idempotent rerun). `--corners tl,tr,bl,br` picks a
-subset; `--dry-run` prints the per-corner plan. Save after placing; delete via
-`pcb fill list --layer 12` + `pcb fill delete`.
-
-  easyeda pcb mount-holes --dry-run          # plan only
-  easyeda pcb mount-holes                    # 4 corners, M3 defaults
-  easyeda pcb mount-holes --corners tl,tr --inset 250
-> **Snapshot can't confirm it visually** — `pcb snapshot` (`getCurrentRenderedAreaImage`)
-> does NOT auto-redraw after API edits and does not render filled copper/cutouts, so a
-> fresh snapshot shows a **stale frame**. Verify slots/fills/pours by **data** (`pcb fill
-> list`, DRC, manufacture export), not screenshot — the snapshot is for component layout only.
->
-> **Stale-frame detection (issue #31).** `pcb snapshot` now has parity with `sch snapshot`:
-> the result exposes a frame `sha256`, and `--previous-sha256 <sha>` lets the connector
-> detect a byte-identical (stale) frame, force a redraw (ratline recompute + zoom-to-all)
-> and retry once, reporting `stale:true` if it still cannot refresh. **Reliable recording
-> workflow** for user-facing videos/tutorials where the visual artifact is required:
-> 1. `easyeda view region --left … --right … --top … --bottom …`（或 `easyeda view fit`）框住目标视口。
-> 2. `easyeda pcb snapshot --fit=false --previous-sha256 <上一次的 sha256>`。
-> 3. 若结果 `stale:true`，说明画布未刷新 — 告警/失败，不要用该帧。
-> 4. 用 `pcb list` / `pcb drc` / `pcb check` / `pcb layout-lint` 做**权威**正确性校验（截图只作视觉终检）。
->
-> **底面视觉 QA（issue #40）** — 不再需要人工点 UI 切层。`easyeda pcb view-side --side bottom`
-> 会选底铜为当前层并聚焦底面铜+丝印层，随后 `easyeda pcb snapshot`（thread `--previous-sha256`
-> 防陈帧）即反映底面（底丝印/底铜/背面装配标记）。更细的显隐用 `easyeda pcb layer-visibility
-> --preset bottom-only|top-only|copper-only|silk-only` 或 `--show/--hide`。切当前编辑层用
-> `easyeda pcb layer-set --layer bottom|Inner1|<id>`。**注意**：EasyEDA 无原生画布翻面/镜像视图
-> API，`view-side` 是「层聚焦」近似（切当前层 + 只显示该面层），不是物理翻板；丝印极性仍以
-> `pcb check` 的 silkscreen-flipped 规则（`layer=4` + `mirror=true`）做数据级判定为准。
-
-> **Routing boundary (load-bearing — see `docs/ecosystem-survey.md` §7):** EasyEDA's
-> interactive 布线 menu (single/multi/differential **routing**, stretch, optimize,
-> length-tuning/serpentine, fanout, remove-loops) has **NO `eda.*` API** — the agent
-> cannot do smart/avoiding/push-and-shove routing. Programmatic routing is limited to:
-> create tracks/vias/pours by coordinate (above), rip-up, the `@alpha` `autoRouting`
-> (undefined on 3.2.148), or read-primitives → external engine → write (the official
-> kirouting pattern). So route segment-by-segment, pour planes, and leave smart routing
-> to the human/UI. **Shipped: copper pour + rip-up (R1/R2).** **net-class WIDTHS
-> are shipped daemon-side** (R3-width): `pcb net-classes` prints the role→spec-width
-> ladder, `route-short` sizes each net by role (signal / power-branch / power-trunk /
-> high-current — `pcb_netclass.go`), and `pcb check` **width-under-spec** gates
-> under-sized power tracks. Still pending: writing those roles into EasyEDA's NATIVE
-> net-class rules (`createNetClass`/`overwriteNetRules`, @beta — so the native DRC
-> enforces per-class width) + diff-pair/equal-length **definitions** (read side is
-> in `pcb.report`).
+**已移至 [`pcb-routing.md`](pcb-routing.md)** —— 本节内容整体搬出，减少每次调用的上下文成本（RFC #178）。需要时读那个文件。
 
 ### Schematic → PCB sync + component CRUD
 
-- `pcb.import_changes` — **sync components/netlist from the schematic** (从原理图导入变更). How parts first arrive on the board: ensures a Board links SCH+PCB, then `importChanges`, then recomputes ratlines. **Mutates the board; confirm first.** Returns `imported:false` (with a reason) for a floating/unlinked PCB.
-  > **✅ #20 误诊已订正(#124 破案,2026-07-17)**:`importChanges` 从来不是 no-op——它弹「确认导入信息」对话框等人点「应用修改」,API 返回 true 只代表**对话框弹出**(某些状态下 promise 甚至永不 resolve)。headless 没人点 = 看似 no-op。handler 现在**自动点「应用修改」**(`confirm:false` 保留人工审查)并报 `{confirm, componentsBefore/After}` 计数差为真值;**clear→reimport 往返已打通**(真机:清空板 → import → 20 件全自动落板)。增量添加同样可行。`pcb add-component`(below)仍是逐件精确控制(--nets 赋网 + 内嵌 via 键合)的互补路径。⚠️ import-changes 是 `InvalidatesStage:placement_confirmed` 的 action——别为刷飞线跑它,会级联失效 workflow 授权链。
-- `pcb add-component` (`pcb.add_component`) — **the working way to add a part to an existing board.** Places the footprint (`--library` + `--uuid`, a device) at `--x/--y` on `--layer`, links it to its schematic twin (`--designator` + `--unique-id`), assigns each pad's net from `--nets` (a JSON `padNumber→net` map), and recomputes ratlines — directly wiring net→pad, which is what `importChanges` would normally do. **Get `--nets` and `--unique-id` from `sch read`** (the netlist is only readable while the schematic is the active doc, so you pass them in). Workflow: ① place + wire the part in the schematic → ② `sch read` (note its pin nets + `uniqueId`) → ③ `pcb add-component … --designator U2 --unique-id gge9 --nets '{"5":"3V3","3":"GND"}'`. Verify with `pcb list --include-pads` + `pcb drc`. **Embedded-via bonding (#118)**: footprints that EMBED vias (QFN EPAD thermal vias) used to land with `net:""` — the EPAD never bonded to the GND plane and DRC fired one "SMD Pad to Via" per via, with no repair path (embedded vias can't be deleted, #120). The handler now assigns every netless via inside a just-assigned pad's copper rect that pad's net via `pcb_PrimitiveVia.modify` (@beta) and readback-verifies it — the result's `embeddedVias {assigned, verified, failed}` reports the outcome. ⚠️ **The assignment does NOT survive a doc reload** (live-verified: the platform re-materializes embedded vias netless every time) — re-run `pcb via-bond` after any reload, before DRC/power-planes; `pcb check`'s **netless-via-in-pad** WARN is the tripwire.
-- `pcb.component.modify` (`pcb modify`) — move (x/y), rotate, flip layer (top/bottom), lock, designator/BOM flags. Patch x/y = **anchor**; `pcb modify --center --x <cx> --y <cy>` writes by **bbox center** instead (CLI converts via the live bbox; mutually exclusive with a rotation change in the same call — rotate first, then center).
-- `pcb.component.delete` (`pcb delete --ids`) — delete component primitives **by id** (`--ids` CSV or JSON array). **Confirm first** (no undo). ⚠️ **只删器件**,布线/铺铜/区域/丝印会残留 —— 要整版清板重来用 **`easyeda pcb clear`**(`pcb.page.clear`,见上「一键整版复位」)。
+**已移至 [`pcb-layout.md`](pcb-layout.md)** —— 本节内容整体搬出，减少每次调用的上下文成本（RFC #178）。需要时读那个文件。
 
-### Layout adjustment (deterministic — EasyEDA exposes no align/grid API)
+## PCB mutation → `doc reload` 门(铁律 5,daemon 机械强制)
 
-- `pcb.align` — `mode = left | right | top | bottom | centerX | centerY` (y-up: `top` = larger y), aligned to the group extent.
-- `pcb.distribute` — even center spacing, `axis = x | y`, extremes fixed.
-- `pcb.grid_snap` — round component anchors to `grid` (mil; SMD 25, THT 50).
-- `pcb.components.move` — translate a group by relative `dx` / `dy`.
-- `pcb.components.arrange` — coarse auto-layout **seed** (priority P6): `mode=cluster` groups by shared local nets then grid-packs each cluster into a tidy non-overlapping block; `mode=grid` packs a flat grid. Skips locked parts.
-- `easyeda pcb auto-place` — **module-aware** heuristic placement (daemon-side). Main chips (≥ `--main-pins`, default 8, distinct pins) are anchors that stay put — but a **connector-designated part (J*/CN*/USB*/SIM*/BAT*) never competes for main whatever its pin count (#131)**: a 16-pad USB-C out-pins a small IC, and calling it main made it steal the decoupling caps that belong to the regulator; high- and low-pin connectors alike are skipped with a diag for `place-constrained` to seat. `--anchor U1,U5` FORCES parts into the main set and `--exclude-main <des>` bars them (an excluded high-pin part stays put) — explicit beats every heuristic; every satellite (cap/R/LED) is pulled to the chip edge nearest the pad it connects to (the **nearest same-net pad** — a chip repeats GND/VCC many times), then packed along that edge with no overlap: decoupling caps land by their power pin (3V3/VCC), signal R's by their signal pin, an LED chains beside its series resistor. **v1.1 also re-orients** each 2-pin satellite so its connecting pad faces the chip (rotation 0/90/180/270, packed with the post-rotation bbox); `--no-rotate` keeps the v1 translate-only behavior. **With 2+ main chips**, any that overlap / sit closer than `--multi-gap` (default 150 mil) are spread into a left-to-right row (leftmost stays put) before satellites are placed; `--multi-gap 0` disables it. **Spacing is rule-aware**: `--gap`/`--pitch` default to values derived from the board's live DRC rule (clearance + track width, via `pcb.drc.rules`) instead of a fixed 40/30, so packing never creates sub-clearance corridors. `--dry-run` prints the plan without moving. A SEED — refine by hand + verify with `pcb drc`. Prefer over `arrange` when there is a clear main chip.
-- `easyeda pcb outline-fit` — **tighten the board outline to the placed parts** (daemon-side). Reads every component's bbox, adds `--margin` (default 100 mil), and replaces the outline with that rectangle. Fixes low utilization (ceshi 17%→71%); reports util before/after. **Run AFTER `auto-place`, BEFORE pour/route** (changing the outline after copper exists can strand it). `--dry-run` previews.
-- `easyeda pcb outline-round` — **rounded-rectangle board outline** (圆角板框, daemon-side). Rounds the current outline bbox (or `--rect x0,y0,x1,y1`, `--margin` to expand) with corner `--radius` (default ≈12% of the shorter side, clamped to half). Corners are chord-approximated (`--segments` per 90°, default 6) since `pcb.outline.set` takes a polygon — verified: the board-outline layer renders, snapshot shows curved corners. Run BEFORE pour/route. `--dry-run` prints the polygon.
-- `easyeda pcb silk-align` — **POSITION-AWARE designator (位号) auto-placement** (v2, designed via a 3-lens workflow). Per part it ranks the 4 sides by **local free space** (corridor clearance to nearest obstacle) + **board position** (edge parts pulled inward, never off-board) + a **crowd-axis bonus** (a part in a tight stack gets its label pushed PERPENDICULAR to the stack — the ceshi C2/C1/R1/C3 fix), then places via a ladder (base offset → grow rings → diagonals) at the lowest-cost slot. **Core fix vs v1: the obstacle set now includes OTHER parts' PADS** (a label over exposed copper is fab-clipped — why C1's label used to land on C2's pad), component bodies, keep-out regions (mechanical=hard/copper=soft), the **board outline** (containment), and other/frozen labels. Most-constrained-first order. Rotation stays **0** (upright, keeps `pcb check` clean); **bottom parts → bottom silk + mirror** (retry-without-mirror fallback). A boxed-in part is **left + reported in `unresolved`**, never moved onto a pad. `--side` biases the default, `--offset` = base gap, `--refs` limits to specific parts (others frozen). Outputs `aligned`/`warned`/`unresolved`/`skipped`.
-- `easyeda pcb silk-add` — **add a FREE silkscreen string** (board marking / credit / note) at `--x/--y` with config: `--layer` (3=top silk default, 4=bottom), `--font-size` (mil), `--line-width` (stroke mil), `--rotation`. Legible JLCPCB-safe defaults (font 40 / stroke 6) — **a small font (<~32mil) with a thick stroke smears the glyphs (糊)**. Returns primitiveId + rendered bbox (check it fits + clears parts). Then restyle/reposition with `pcb silk-set`.
-- `easyeda pcb silk-set` — **batch-adjust existing silk** (designators + free strings): `--ids '[...]'` + any of `--x/--y/--rotation/--font-size/--line-width/--text` (only given keys change). **ALIGN shortcut**: `--align center|mid|centerx|centery|left|right|top|bottom` + `--ref <designator>|board|outline|fill` positions each silk relative to that reference bbox (e.g. `--ref board --align centerx` centers the board credit; `--ref U1 --align top` aligns a label to U1's top), computed from the silk's own bbox. Uses the reliable `.modify(id,props)` — **rotation persists but a `pcb snapshot` before a document reload shows the OLD orientation (stale render); judge by `pcb check`/silk list, not a screenshot**.
-- `easyeda pcb silk-import-svg` — **import an SVG (logo / brand mark / artwork) as a FILLED silkscreen graphic** (`pcb.silk.import_svg` → `eda.pcb_PrimitiveImage.create`) — the typed path for placing a vector graphic on a PCB **without `debug.exec_js`**. The CLI parses the SVG (path `M/L/H/V/C/S/Q/T/A/Z`, `polygon`/`polyline`/`rect`/`circle`/`ellipse`/`line`, nested `transform`, viewBox), **flattens every curve to line segments**, applies viewBox→mil scaling, and sends the resulting **complex polygon** (contours + **even-odd holes**, so a logo's counters — the hole in an "o" — punch through) to the connector, which creates **one** image primitive on the silk layer. `--file <path>`/`--svg <string>`; `--x/--y` (or `--at "x,y"`) = where the artwork's **top-left** lands (mil); `--width`/`--height` in mil (`--keep-aspect` for uniform scaling; only one given ⇒ aspect always preserved); `--layer` 3=top (default) / 4=bottom (auto-mirrors); `--rotation`/`--mirror`; `--flatten-tol` (curve tolerance mil). **`--dry-run` parses + scales WITHOUT touching the editor** and prints target bbox / contour count / vertex count / **min-feature** (a DFM proxy — warns when < `--min-line-width`, JLCPCB silk min ≈ 6 mil) — always dry-run first. **Fill rule is even-odd; stroke-only art is not stroked (all geometry is filled).** Returns `primitiveId` + rendered `bbox`. **Real-machine verified**: creates on top/bottom silk, holes punch, rotation/mirror honored, and it **persists across `doc reload` + `pcb save`** (same primitiveId/bbox). Note: the image is a distinct primitive type — it does **not** appear in `pcb silk-list` (that lists silk *text*); read it back via `pcb check` (runs clean) or a snapshot. After a real import follow reload → check → `pcb save`.
-- **Teardrops (泪滴) — platform wall.** `eda.*` has NO create/apply-teardrop API (teardrops appear only as a `getManufactureFile` object type, never as a constructable primitive) — like the interactive routing menu, it's UI-only. Apply teardrops by hand in EasyEDA (右键 → 泪滴) before fabrication; the agent can't automate it.
-- `easyeda pcb route-critical` — **P7.0 关键网络先行,一条命令(#127)**:自动布线器最不擅长的两类先确定性做掉再锁死。**① power**:铜层数 ≥4 → `power-planes`(内电层),2 层 → `power-pour`(双面 GND+轨局部 pour);**② diff**:差分对识别双源合并——**块库 `signals` map**(type=diff_pair,带 90Ω/120Ω 阻抗与 `length_match_mm` 预算;USB_D/RS485_AB/USB-hub 各下行对)+ 保守**名字模式**扫描实网(`X_DP/X_DM`、`X_P/X_N`、`X+/X−`),每对用 short-route 规划器 45° 角同层成对布线,**逐对实测两侧长度与 skew**,超预算(默认 5mil,块值优先)**响亮报告不静默接受**(v1 不做蛇形调谐——本项目的对都是连接器→芯片短对,"成对、尽量短"就是规格);**③ lock**:`pcb.track.lock` 锁住布好的对网。之后剩余普通信号交正常档(route-short/用户点原生自动布线)。同 route-short 的 stage 门;`--dry-run` 只识别+规划;`--skip-power`/`--skip-diff`/`--no-lock` 单独关某步。
-- `easyeda pcb track-lock` — **锁定/解锁已布铜皮**(#127,typed action `pcb.track.lock`,已从 debug.exec_js 版毕业):track+**arc**(beautify 圆角,旧 JS 版漏)+via+net-bound fill(`--no-fills` 排除);`--net`(可重复/逗号)/`--ids`/`--all`(仍要求 net≠"",板框永不隐式锁)三选一,`--unlock` 反向。**pour 永不锁**(要 reflow)。幂等:已处于目标态只计数。P7.0 契约:关键铜锁死后,原生自动布线/rip-up/pour-rebuild 都动不了它(rip_up 明确跳过 locked)。
-- `easyeda pcb zones` — **功能分区一等公民(#126)**:把 S0 方案书 spec 的 `modules[].zone`(MCU 区/电源区/RF 区…)落成可执行、可校验的 claim 表。`zones set --spec <s0-spec.json>`(或手动 `--module "RF=right-top:U2,ANT1"`,可重复)把 module→{九宫格 zone, 器件清单} 持久化进项目 workflow 状态(与 stage 门同库,跨 cwd 生效);zone 词汇 = 原理图 autolayout 同一套九宫格(`left/center/right × top/bottom` 及全高/全宽形式,共享词汇表),矩形在**消费时**从实时板框 bbox 解析(改板框不用重设 claim)。消费方:① `pcb place-constrained` — 被 claim 的**主芯片**若在区外→迁入该区(spiral 找位,diag `main:zoned:<module>`),**卫星件**合法化限制在区内(区满则出区放置+`satellite:zone-overflow` 诊断,check 会继续曝光);**边缘件豁免**(出边是比分区更硬的约束,diag 标 `:zone-exempt`);② `pcb check` 的 **zone-violation** 规则(见上文规则清单)。`zones status` 显示 claim + 实时违规速览;`zones clear` 清除。claim 是 spec 契约:布局失效/重摆不清它,只有 clear/重 set 会动。真机验证:ceshi 4 违规 → place-constrained 落区后 1(剩余那条正是「claim 与贴边矛盾」的真问题)。
-- `easyeda pcb layout-lint` — **score placement quality + predict routability BEFORE routing**。Plain mode 的 `--min-gap` 默认仍是电气 clearance,仅供诊断。**Gate mode 已装配感知(#99)**:先 `pcb stage set-assembly --profile hand-solder|reflow`;`--gate` 读取该档案,手焊将间距地板钳到 ≥40mil,任何 tight pair 都失败,再执行 #97 的 `--min-score`(默认60)+`--max-crossings`(默认8)门。通过才持久化 `pre_route_passed`,与 `outline_confirmed` 一起解锁布线。因此“默认约6mil无告警”不再能冒充“适合手焊”。**烙铁进入通道已机械化**:hand-solder 下 gate 同时跑 solder-access 检查——每个器件的 bbox 四侧至少一侧要有 ≥ `largePadAccessMil`(默认60mil)的净通道(去耦可贴近 IC,但另一翼必须可操作;板边=天然可达),四面被围报 `no-access` 且 gate 失败、`confirm-layout` 拒绝。v1 是器件 bbox 级近似(pad 尺寸未从连接器暴露,按 pad 分类大焊盘留待后续);Type-C 外壳脚/SOT-223 的进入**方向**是否合理仍建议截图复核。
-- `easyeda pcb route-short` — **short-trace self-router** (daemon-side, the heuristic tier — NOT `pcb autoroute`/Freerouting). Per net: MST over pads, then a track per hop ≤ `--max-len` (Manhattan) on the pads' shared layer. **Skips power+ground nets by default** (VCC/3V3/GND/… via `isGlobalNet`) — they belong in a POUR, not thin tracks; `--route-power` forces routing them. (Measured on ceshi: routing 3V3 as thin tracks caused **18 of 27** Safe-Spacing violations — pouring power instead dropped Safe-Spacing 27→3. Do `pcb pour` GND + each power net after routing signal. Residual No-Connection on a 2-layer board = the pour can't reach every scattered power pad on a shared layer; that needs via-stitching / a dedicated plane layer.) Also skips already-routed nets, cross-layer hops (need a via), over-long hops (maze tier). **Widths are net-class rule-aware**: each net's width is picked by **role** (signal / power-branch 3V3·1V8 / power-trunk +5V / high-current VBUS·VIN — the §7.8 role split on the §1.2 metric grid: 0.25/0.4/0.5mm, `pcb_netclass.go`), seeded from the board's live DRC track-width spec (`pcb.drc.rules`, clamped ≥ the rule minimum) so a 3V3 branch gets 0.25mm (≈9.84mil) while a VBUS input gets 0.5mm (≈19.69mil), instead of the old flat power/signal 20/10 mil buckets. `pcb net-classes` prints the active ladder; `--width-signal` overrides the signal role, `--width-power` forces ONE width across all power roles (legacy), `--width` forces everything. **Corner style** via `--corner`: `90` (Manhattan L, default), `45` (chamfer — avoids acid traps/reflections), `round` (chord-approximated fillet, `--round-radius`; native arcs don't commit on this build so it's segmented). **Obstacle-aware (v2/v3)**: each hop picks the L orientation (horizontal- vs vertical-first) that crosses the fewest already-placed **other-net** tracks + other-net pads; `--no-avoid` restores the v1 naive horizontal-first. **Hard clearance gate (#111/#119/#122)**: other-net **pads**, **vias**, **same-layer tracks** (crossing OR under-clearance parallel run — the R2 SPIHD×SPIWP shorts) and **board cutouts/slots** (max(clearance,8mil) band, Slot Region to Track) are a **veto, not a cost** — a hop that cannot clear them detours (`--multilayer`) or lands in diagnostics unrouted; route-short never draws what `pcb check`/native DRC would flag (judges are shared with `findClearanceViolations`). Still NOT a maze router (no push-shove/vias/rip-up) — **run after `auto-place`** so hops are short/clear, then `pcb drc`. `--dry-run` previews. **布线档选择见 [`design-flow.md`](./design-flow.md) P7 三档阶梯**:稀疏 → 本 `route-short`;**稠密默认 = ② 人机协作档(停手请用户点 EasyEDA 原生「布线→自动布线」)**;`pcb autoroute`(external Freerouting)仅全 headless 无人可点时兜底,**绝不顶替 ②**。**门禁(issue #97)**:`route-short`/`autoroute` 默认要求项目状态 `outline_confirmed` + `pre_route_passed`(经 `pcb stage confirm-outline` + `pcb layout-lint --gate`),否则拒绝执行(CLI 与 daemon 双层拦截,详见上方 Board outline 段的 stage-state 说明);**force 分级(#132)**:`--force <理由>` 只放行软缺口(机械骨架至少一项已确认;state 不可知=可能零确认,同样拒),零确认板需 `--force-unsafe <理由>`;CLI 与 daemon 同一分级(`forceUnsafe` 随 forceReason 传到 /action 层)。两者均仅本次执行有效、不落确认、入审计(被拒尝试记 force-refused),`--dry-run` 只出计划不触发门禁。
-- `easyeda pcb stackup` — **board stackup: copper layer count + inner-layer types** (`pcb.stackup.set` / read via `pcb layers`). `pcb stackup set --layers 4` sets the count (2|4|6|…|32, `eda.pcb_Layer.setTheNumberOfCopperLayers`); `--plane 15 --plane 16` / `--signal 15` set inner layers' type (SIGNAL↔PLANE/内电层, `modifyLayer` — only INNER layers accept a type change). Set the layer count BEFORE routing/pouring inner layers. **A net-bound 内电层 (PLANE) IS achievable via API** — verified recipe: pour the net on the inner layer **while it is still SIGNAL** (`pcb pour`/`power-planes`), THEN flip the type (`--plane 15`), THEN `pcb pour-rebuild`. The net-bound fill survives the flip and DRC stays clean (0 Plane-Zone/via clashes). Doing it in the other order (flip type first, then pour on a PLANE layer) is the path that breaks — the pour lands netless on L1. `power-planes` does this for you (`--gnd-plane`, on by default).
-- `easyeda pcb power-planes` — **4-layer power distribution (the proper fix for the 2-layer pour conflict)**. Ensures ≥4 copper layers, assigns GND + power nets to inner layers, **via-stitches every power/ground pad DOWN to its plane** (the connection point the inner pour needs — without it the inner pour is all isolated islands and deposits nothing), then pours each net on its inner layer, then **flips the GND inner layer to 内电层/PLANE** (`--gnd-plane`, on by default) and rebuilds. **Order matters: vias BEFORE the pour** (empty otherwise), and the plane-flip AFTER the pour (the verified pour-while-SIGNAL → flip → rebuild recipe keeps the fill and DRC clean). The power layer stays 信号层 so its pour is an ordinary positive plane — matching the common customer stackup **GND=内电层 / VCC(3V3)=信号层** (e.g. `esp32MiniRequire.md`). `--gnd-layer 15 --power-layer 16` (defaults); `--gnd-plane=false` keeps GND a plain signal-layer pour. **Validated on ceshi: DRC 31 → 0, No-Connection → 0** — dedicated planes solve what a shared 2-layer pour can't (two power nets stranding each other's pads). Run AFTER auto-place + outline-fit + route-short (signals). Two power nets sharing one plane layer re-create the conflict (warned) — give each its own inner layer on 6+ layers. `--dry-run` prints the net→layer plan. **State interop (#114/#117)**: the run records two verdicts into the workflow state — nets it deliberately ROUTED AS TRACKS (no plane left, `powerTracksNets`) and nets it poured onto a layer then flipped to PLANE (`planePouredNets`). The `post_route_checked` gate exempts both from `power-not-poured` blocking; the second matters because **PLANE-layer pours are invisible to `pcb.pour.list` after a `doc reload` (#110)** — without the record the gate would re-flag the GND the command just poured and suggest re-running it (deadlock, #117). Standalone `pcb check` (no state) degrades a GND finding to **INFO** whenever the board carries a net-unknown PLANE layer — treat `pcb drc` Connection=0 as the arbiter, do NOT re-pour.
-- `easyeda pcb power-pour` — **2-layer power distribution (the 2-layer analog of `power-planes`)**. Delivers every power net through copper **POUR area** instead of thin tracks: **GND** → a board-outline-fitted pour on `--gnd-layers` (default **both**, the reference plane); **each non-GND rail** (3V3/5V/VBUS… via `isGlobalNet`) → a **LOCAL pour** bounded to the bbox of ITS OWN pads (+`--margin`) on the **top** layer, so a small rail doesn't claim the whole board. Every region is a **DYNAMIC pour** (retreats from other-net copper by the clearance rule) — different-net regions never short, whereas a static `fill` would; **that's why it uses pours, not fills.** Rails with <2 pads are skipped; `--replace` clears same-net pours first (default on), `--rebuild` reflows after (default on), `--rails skip` pours only GND. Run AFTER auto-place + outline-fit + route-short (signals), then `pcb check` (**power-not-poured** should clear) + `pcb drc`. Use `power-planes` for 4-layer boards. Core in `pcb_powerpour.go`; `--dry-run` prints the nets→layers→rects plan.
-- `easyeda pcb beautify` — **走线美化 (routing beautification, `pcb.beautify`)** — round sharp track corners into arcs once routing is final (the aesthetics/manufacturability post-process; design-flow **P7.9**). Chains connected same-net/same-layer segments into polylines and fillets each interior corner (radius = `max(track width) * --radius-ratio`, default 3), replacing the originals with trimmed lines + arcs. Because it deletes+recreates copper it **self-guards**: a DRC binary-search (`--drc-retry`, default 4) shrinks or straightens any corner that violates clearance, then it **rebuilds copper pours** (same-net bonding goes stale after track edits — the familiar `pour-rebuild` step, folded in). **Diff-pair / equal-length nets** get concentric-arc protection when the build exposes `pcb_Drc.getAllDifferentialPairs`/`getAllEqualLengthNetGroups`, else those corners stay straight. **Copper layers only** — never touches silkscreen/outline; skips locked copper. **Always `--dry-run` first** (reports paths/lines/arcs WITHOUT mutating — safe on any board, even one you don't want to change), then run for real and `pcb save`. Flags: `--selected` (only tracks selected in EasyEDA, default whole board), `--net` (**repeatable** — `--net USB_DP --net USB_DM` beautifies only those nets; the safest way to apply on a dense board — small blast radius, dry-run + DRC each net), `--layer` filter, `--force-arc` (round even too-short segments), `--merge-u` (fuse tight U-bends into one arc), `--no-protect`/`--no-drc`/`--no-pour-rebuild`. **On a dense, not-yet-DRC-clean board prefer per-net over a full-board pass** — a whole-board run both has a large blast radius and surfaces the board's pre-existing violations alongside its own. Absorbed from the open-source **Easy_EDA_PCB_Beautify** (m-RNA, Apache-2.0; see repo `NOTICE`). Line-width bezier smoothing is a documented follow-up. Advice from upstream: pad-to-track joints may need a manual look, exclude RF/high-speed nets from a global pass (do them per-`--net`), preview Gerber before fab.
+改完铜再读,读到的是**旧引擎状态**:每个 PCB 文档有自己的枚举缓存,
+rip-up / route / delete / via / track / pour 这类 mutation 之后,
+`pcb list` / `line.list` / `via.list` / `pour.list` / `nets.list` / `drc.check` / `report`
+都可能返回 mutation 之前的画面,直到文档被真正关闭重开。
 
-#### 待支持 — 布线/覆铜质量 (roadmap, not yet implemented)
+**这条现在是机械门,不是提醒。** daemon 在 `/action` 派发层直接**拒绝**这种读,
+返回错误码 **`STALE_READ`**,消息里带着该跑的下一条命令:
 
-v1 (`route-short` / `pour`) is mechanically correct but coarse. Planned quality upgrades:
+```
+STALE_READ: pcb.components.list —— PCB 自 pcb.line.create 后未 reload,读到的是旧引擎状态。
+下一步: easyeda doc reload --project <name>
+(绕过: --force-stale-read "<理由>",入审计)
+```
 
-- ✅ **填充区域 / 轮廓对象 (net-bound filled region, 异形大块铜)** (task #17, done) — `pcb fill create`
-  (`eda.pcb_PrimitiveFill`, net-bound static copper). See the "Net-bound filled region" section above.
-- ✅ **DSN keep-out injection** (task #17, done) — `pcb export-dsn` re-injects `pcb_PrimitiveRegion`
-  keep-out as `(keepout (polygon …))` into the DSN `(structure)` (getDsnFile drops them). Default on;
-  `--raw` skips. End-to-end Freerouting *honor* check is part of the #5 maze-tier toolchain.
-- ✅ **DFM 审查 (design-for-manufacture audit)** (task #33, done) — `pcb check`: acute-angle / dangling-end /
-  non-orthogonal(自由角度走线)/ track-over-pad(走线压焊盘=短路)/ silkscreen-flipped(丝印正反/放反)/
-  overlapping- & single-layer-via / 2-pin width-mismatch / duplicate-segment. Copper rules reconstructed
-  Go-side from placed copper; the silkscreen rule reads `pcb.silk.list` (text layer+mirror). See the
-  `pcb check` bullet in **Read / inspect**. Absorbs the official DFM tool's geometry checks
-  (`docs/marketplace-coverage.md`, HIGH item).
+- **修法就一条**:`easyeda doc reload --project <name>`(它自己会先 save,不丢改动)。
+  确定性复位 = `rip-up → save → reload`。
+- **`pcb pour-rebuild` 也解锁**:它本来就是「铺铜连通性 stale」的修法。
+  DRC 手术后同网(多为 GND)Connection Error 暴增,先跑它,那不是真断。
+- **不会误伤的**:`pcb save`、`pcb pour-rebuild`、任何 `--dry-run` 预览(issue #112),
+  以及只改视图的 `view-side` / `layers set-current` / `layers visibility`
+  —— 这些不脏化枚举,不会 arm 这道门。
+- **`pcb snapshot` 不被拦**(它是画布的照片,不是枚举),但仍会带 `staleRisk` 提示。
+  注意:截图发白/发旧的修法是**把窗口切前台**,不是 reload——两回事。
+- **绕过**:`--force-stale-read "<理由>"`(**不是** `--force` —— 那是布线阶段门 #132,
+  两者互不相干别混用)。只授权本次调用,**入审计**
+  (审计里记成 `daemon.stale_read.force`),窗口仍然是脏的,下一条无 force 的读照样被拒。
 
-### Board outline (板框)
-
-The board outline anchors edge keep-out, connectors-to-edge and mounting holes, so
-`place-constrained`'s edge heuristic needs *some* outline to snap to. **Two legal
-paths, by whether mechanical dimensions exist (issue #97 — these do NOT conflict):**
-
-- **有机械尺寸/外壳约束**: build a rough outline from the spec FIRST (`outline.set` /
-  `outline-round`), then place against those real edges, then let the user confirm and
-  tighten it.
-- **无机械尺寸**: rough-place first with a **temporary oversize outline** (`outline-fit`
-  with a generous `--margin` so `place-constrained` has an edge to snap to), then tighten
-  the outline (`outline-fit`/`outline-round`) once placement is done.
-
-Both paths end with the user confirming placement (`pcb stage confirm-layout`) and the
-outline (`pcb stage confirm-outline`) before the routability gate. Any outline edit
-(`outline-fit`/`outline-round`) after a confirmation invalidates `outline_confirmed`
-downstream, so it must be re-confirmed.
-
-**Stage state is enforced, global, and fingerprinted (#97 follow-up):** state lives at
-`~/.easyeda-agent/workflow/<project>.json` (not the cwd — `EASYEDA_WORKFLOW_DIR`
-overrides); the daemon ALSO gates the raw routing actions (`pcb.line.create` /
-`pcb.via.create` / `pcb.import_autoroute` → `STAGE_BLOCKED`) and auto-invalidates
-downstream confirmations after any placement/outline mutation (response carries a
-`workflow stage invalidated` warning). `confirm-layout`/`confirm-outline` pin the
-sign-off to a **document fingerprint** (poses / outline geometry) — an out-of-band
-edit (GUI drag, `debug.exec_js`, another agent) makes the next gate auto-invalidate
-and point back to the right stage. Cut in at any stage / resume a session with
-`easyeda workflow status --reconcile` (re-sync marker ↔ live document) then
-`easyeda workflow advance` (idempotent: runs mechanical acceptance, stops with the
-exact next command at human sign-off points). `--force <reason>` on route commands is
-per-run and audited — nothing is confirmed by a force.
-
-- `pcb.outline.set` — set the outline from a closed polygon `points` (`[[x,y],…]`, mil,
-  y-up). Replaces any existing outline; reports `allInside`/`outside` (components out of
-  the board). **Confirm first** (redraws the board edge).
-- `pcb.outline.get` — current outline (segment/arc count + bbox).
-- `pcb.outline.clear` — remove the outline.
-
-**The agent generates the `points`** for the wanted shape. Curves are **line-segment
-approximated** (~48–120 segments) — native arcs do not commit on this build, so a true
-circle/arc needs the EasyEDA UI (圆形/圆弧 tool) or an SVG import. Recipes (centre `(cx,cy)`,
-all mil):
-
-| Shape | Points |
-|---|---|
-| Rectangle `w×h` | the 4 corners |
-| Rounded-rect | corners replaced by N-step quarter-circle fillets of radius `r` |
-| Circle Ø`d` | `N≈72`: `[cx+r·cosθ, cy+r·sinθ]` for `θ=2πi/N`, `r=d/2` |
-| Instrument / dashboard (异形) | squircle `x=a·sign(cosθ)·|cosθ|^(2/n)`, `y=b·sign(sinθ)·|sinθ|^(2/n)` (n≈3.6) + width taper `x·(1+k·y/b)` + top-centre arch — a wide rounded shield |
-
-Size the outline to enclose the component extent (`pcb.components.list --includeBBox`)
-with margin, then verify `allInside` from the response.
-
-## Auto-layout — execute per the conventions
-
-Follow the priority hierarchy in
-[`pcb-layout-conventions.md`](./pcb-layout-conventions.md)
-(**P0 mechanical/enclosure > P1 safety/isolation > P2 EMI hot-loop + critical decoupling >
-P3 reference-plane/return > P4 thermal keep-out > P5 functional grouping > P6 DFM >
-P7 grid/align/silkscreen** — P7 is cosmetic and never overrides a function-driven position).
-
-Operational order:
-
-1. **Read state** — `pcb.components.list` (`includeBBox`+`includePads`) + `pcb.layers.list` (`copperLayerCount`) + `pcb.nets.list`; classify each part by net/designator (anchor / hot / sensitive / IC / passive).
-2. **P0** — place connectors (J/USB) and mounting holes (H/MH) at enclosure coords and **`lock`** them; treat as immovable obstacles; edge connectors open outward.
-3. **P6 coarse seed** — when the board has a clear main chip, `easyeda pcb auto-place` (module-aware: satellites hug the chip pin they connect to); otherwise `pcb.components.arrange mode=cluster` for a net-clustered seed. Run `--dry-run` first to review the plan.
-4. **P2/P4 local overrides** — decoupling caps tight to the IC power pin (≤2-layer ≤150 mil; 4+-layer ≤250 mil **but leave via room**); crystal + 2 load caps tight to the MCU osc pins inside a 200 mil guard; minimize the switcher input loop `{Cin + switch + catch-diode}` bbox; spread hot parts ≥400 mil; keep heat-sensitive parts (electrolytics/crystals/sensors) ≥200 mil from heat.
-5. **P7 tidy-up** — `pcb.align` / `pcb.distribute` / `pcb.grid_snap`, **without breaking any function-driven position**.
-6. **Verify** — `pcb.drc.check` (and the PCB linter once it lands); fix by rule number. Pull fresh primitiveIds before each mutation; confirm destructive ops; log before/after.
-
-**Key corrections from review** (see the conventions doc): decoupling effectiveness is governed by the cap's **mounting-loop inductance** (pad→via→plane), not raw distance; **default a single solid ground plane** partitioned by placement (do *not* split-ground by default); all hard thresholds are **conditioned on stackup / fab / enclosure** context.
+> 为什么升成硬门:49 天 171554 条审计记录里,这条规则此前只发一句非阻塞警告,
+> 结果 **1780 次脏读、18.1% 违反率**——agent 看见警告照读。被机器拒绝的规则不漏,
+> 靠记忆的规则漏。
 
 ## Guardrails
 
 - Confirm before `pcb.component.delete`, `pcb.import_changes`, or a bulk `arrange`/auto-layout plan.
-- Confirm before saving unless the user asked to save.
+- Save automatically at an already-defined passed stage and verify `saved:true`; pause first
+  only when the user explicitly requested step-by-step approval.
 - Do not claim completion after a mutation until readback / DRC verifies it (or state the remaining risk).
 - No undo — record before/after into the audit log so a move can be reversed by re-applying the old coordinates.
 - Treat `File`/`Blob` outputs (gerber/pick-and-place/3D) as artifacts.

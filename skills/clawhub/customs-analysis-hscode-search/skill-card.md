@@ -1,47 +1,66 @@
-## Description: <br>
-Searches UpKuaJing customs data for matching HS codes by product name and HS code keyword so agents can prepare downstream trade analysis reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches UpKuaJing customs data for HS codes matching a product name and HS code keyword so analysts can use the codes in deeper trade analysis workflows.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-Trade analysts, exporters, import-export professionals, and agents use this skill to find likely customs classification codes before running deeper market, competitor, or trade-flow analysis. It is intended for HS code lookup using the paid UpKuaJing Open Platform API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a paid external API, and each HS code search can incur account charges. <br>
-Mitigation: Tell the user that the query is billable and wait for explicit confirmation before making a charged API call or creating a top-up order. <br>
-Risk: The API key may be stored in plaintext under ~/.upkuajing/.env. <br>
-Mitigation: Prefer supplying UPKUAJING_API_KEY through a managed secret mechanism when available and restrict access to any local credential file. <br>
-Risk: The helper scripts include account, balance, key creation, and top-up workflows. <br>
-Mitigation: Use account and payment helpers only after the user explicitly requests them, and show payment URLs without completing payment on the user's behalf. <br>
-Risk: The security review notes an automatic version check to UpKuaJing. <br>
-Mitigation: Inform operators that the skill may contact UpKuaJing for version information before API use and review that behavior before deployment. <br>
+## Use Case:
 
+External trade analysts, exporters, import-export professionals, and agents use this skill to find matching HS codes before running customs trade analysis, market research, or competitor monitoring workflows.
 
-## Reference(s): <br>
-- [HS Code Search API Reference](references/customs-analysis-hscode-search-api.md) <br>
-- [UpKuaJing Homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing Open API Pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Natural-language guidance with optional shell commands and JSON API results containing matching HS code strings, pagination cursor, and fee details.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python, httpx, and UPKUAJING_API_KEY; queries are paid per API call.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: The skill reads and may write UPKUAJING_API_KEY in ~/.upkuajing/.env.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated API key, restrict access to the local .env file, and avoid sharing logs or outputs that may reveal credential material.
+
+Risk: HS code searches and top-up flows can involve paid UpKuaJing account activity.
+
+Mitigation: Review current pricing and require explicit user confirmation before any fee-incurring API call or payment-page flow.
+
+Risk: Confirmed error reports may send troubleshooting context to the platform.
+
+Mitigation: Send error reports only after user confirmation and avoid including sensitive business data beyond what is needed to diagnose the failed call.
+
+Risk: The skill performs automatic version checks and writes local version-check cache state.
+
+Mitigation: Review this behavior before installation in restricted environments and monitor local files under ~/.upkuajing.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/customs-analysis-hscode-search)
+- [UpKuaJing Homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [UpKuaJing OpenAPI Pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [HS Code Search API Reference](references/customs-analysis-hscode-search-api.md)
+- [Skill Error Report API Reference](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with direct Python command examples and JSON API responses from the script]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns matching HS code strings and may include pagination, fee, balance, and request identifier details from the API response.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,4 +1,4 @@
-# 场外指数基金信息查询 — 接口字段权威参考
+# 场外指数基金信息查询 — V2 接口字段权威参考
 
 > 编写脚本前必读：数据路径、字段名、单位均以本文件为准。
 >
@@ -21,13 +21,13 @@
 
 ---
 
-## `POST /skill/v1/search/oef` — 关键词搜索场外基金
+## `POST /skill/v2/search/oef` — 关键词搜索场外基金
 
 **请求参数**
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| keyword | string | 是 | 支持基金名称、代码模糊搜索 |
+| keyword | string | 否 | 支持基金名称、代码模糊搜索 |
 | page | integer | 否 | 页码，从1开始，默认1 |
 | pageSize | integer | 否 | 每页条数，建议10-100，默认10 |
 
@@ -46,6 +46,7 @@
 | fundScale | number | 基金规模（**元**，÷1e8=亿）⚠️ 与 oef/detail 的 rptFundScale 同单位同值 |
 | navPctChg1D | number | 日涨跌幅（%） |
 | eodPctChg1W/1M/3M/TY/1Y/3Y/5Y | number | 各周期涨跌幅（%） |
+| annTrackError1Y | number | 近1年年化跟踪误差（%），V2 搜索新增字段 |
 | excessReturn1Y | number | 近1年超额收益（%） |
 | unitAccBonus | number | 单位累计分红（元） |
 | accBonusCount | integer | 累计分红次数（次） |
@@ -73,13 +74,15 @@
 | relatedETFCode | string | 相关ETF代码 |
 | relatedETFSht | string | 相关ETF简称 |
 
-> 跟踪误差读取规则：`search/oef` 不提供年化跟踪误差；需要跟踪误差时请求 `oef/detail`，读取 `annTrackError1Y`。
+> 跟踪误差读取规则：V2 `search/oef` 可返回 `annTrackError1Y`；有有效值时不必重复调用详情，字段为空且用户明确询问时再请求 `oef/detail`。
 
 **分页信息路径**：`$.data.totalNum`、`$.data.pageNum`、`$.data.pageSize`
 
+> **筛选与分页规则**：本接口无服务端筛选参数，筛选、排序和比较必须基于已取回的搜索结果在本地完成——搜索响应已随附规模（`fundScale`）、近1年收益（`eodPctChg1Y`）、年化跟踪误差（`annTrackError1Y`）等比较字段，不为每只候选重复请求 `oef/detail`。`pageSize` 建议直接取大值（如 50-100）一次取回候选；根据 `totalNum` 判断是否还有未覆盖结果，仅当已取页面确实无匹配候选时才翻页，**最多翻页 5 页**（约 500 条），仍覆盖不全时在回答中明确说明筛选阈值、覆盖范围与排序口径，不得继续翻页扫库。确需详情时，多产品必须用 `oef/detail` 批量一次传入全部代码（最多10个），禁止逐个单查。
+
 ---
 
-## `POST /skill/v1/oef/detail` — 批量场外基金详情
+## `POST /skill/v2/oef/detail` — 批量场外基金详情
 
 **请求参数**
 
@@ -146,7 +149,7 @@
 
 ---
 
-## `POST /skill/v1/oef/holdings` — 批量场外基金持仓
+## `POST /skill/v2/oef/holdings` — 批量场外基金持仓
 
 **请求参数**
 
@@ -177,7 +180,7 @@
 
 ---
 
-## `POST /skill/v1/oef/return` — 批量场外基金区间收益率
+## `POST /skill/v2/oef/return` — 批量场外基金区间收益率
 
 **请求参数**
 
@@ -207,7 +210,7 @@
 
 ---
 
-## `POST /skill/v1/oef/dividends` — 批量场外基金历史分红
+## `POST /skill/v2/oef/dividends` — 批量场外基金历史分红
 
 **请求参数**
 
@@ -246,7 +249,7 @@
 | fundScale | `$.data.data[]`（search/oef） | 元（与rptFundScale同值同单位） | ÷1e8=亿 |
 | holdNavRat | oef/holdings.holdingItems[] | % | 直接展示 |
 | cashDvdPerShTax | oef/dividends.dividendItems[] | 元/份 | 直接展示 |
-| annTrackError1Y | oef/detail.detail | % | 直接展示；搜索接口没有该字段时先查 detail |
+| annTrackError1Y | search/oef、oef/detail.detail | % | 直接展示；搜索字段为空且用户明确询问时再查 detail |
 
 ## 名称字段使用规则
 
@@ -280,7 +283,7 @@
 | 规模字段名 | fundScale（元，÷1e8=亿） | rptFundScale（元，÷1e8=亿） |
 | 规模报告日期字段 | 无 | rptDt |
 | 销售服务费 | 无 | saleServiceFee |
-| 溢折率/实时行情 | ETF skill 不展示实时行情字段 | 无（场外无溢折率） |
+| 溢折率/实时行情 | V2 ETF skill 可查询盘口和分钟行情 | 无（场外无盘中成交价、成交量、换手率、IOPV或溢折率） |
 | 场内分红发放日 | payDt | payDt（通常null） |
 | 场外分红发放日 | divPayDt | divPayDt |
 | 上市日 | lstDt | 无 |

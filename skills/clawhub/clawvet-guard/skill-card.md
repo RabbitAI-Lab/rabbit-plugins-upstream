@@ -1,42 +1,49 @@
-## Description: <br>
-Vet any OpenClaw skill for prompt injection, credential theft, and RCE before you install it. Runs a clawvet scan and blocks risky installs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use before installing, enabling, or running any third-party OpenClaw skill, and when the user says "install this skill", "is this skill safe", "scan/vet/check this skill", or "should I trust this".
 
-## Publisher: <br>
-[mohibshaikh](https://clawhub.ai/user/mohibshaikh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mohibshaikh](https://clawhub.ai/user/mohibshaikh)
 
-## Use Case: <br>
-Developers and agent users use this skill to scan OpenClaw skills before installation, review risk grades and findings, and block skills that show high-risk behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can ask the agent to run Bash commands with npx to execute clawvet scans. <br>
-Mitigation: Install only when that execution model is acceptable, and review the exact command and target before running scans. <br>
-Risk: Scanner results may miss issues in unknown third-party skills or be treated as stronger assurance than they provide. <br>
-Mitigation: Treat scan results as evidence for review, surface high and critical findings, and require user approval before proceeding on moderate risk results. <br>
+## Use Case:
 
+Developers and security-conscious users use this skill before installing, enabling, or running third-party OpenClaw or ClawHub skills. It guides an agent to run ClawVet scans and report risk grades, scores, and high-severity findings before proceeding.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mohibshaikh/skills/clawvet-guard) <br>
-- [Server-resolved GitHub provenance](https://github.com/MohibShaikh/clawvet/tree/master/skills/clawvet-guard) <br>
-- [Source repository](https://github.com/MohibShaikh/clawvet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON scan-result interpretation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke npx clawvet scans that return riskGrade, riskScore, findingsCount, and findings details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: The skill uses npx-based scanner commands, which may fetch scanner code at runtime.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin or preinstall a trusted ClawVet version in environments that require stricter supply-chain control.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/mohibshaikh/skills/clawvet-guard)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, markdown]
+
+**Output Format:** [Markdown with inline shell commands and JSON result interpretation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scanner output may include risk grades, scores, finding counts, and finding details from ClawVet.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

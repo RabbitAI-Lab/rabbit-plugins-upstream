@@ -1,14 +1,13 @@
 ---
 name: dlazy-kling-v3
 version: 1.3.5
-description: 使用可灵 (Kling) v3 强大的视频生成模型，支持高质量的文生视频与图生视频。
+description: "使用可灵 (Kling) v3 强大的视频生成模型，支持高质量的文生视频与图生视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy kling-v3 -h 查看帮助信息。"}}
 ---
 
-# dlazy-kling-v3
+# 视频生成 可灵 Kling V3
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 使用可灵 (Kling) v3 强大的视频生成模型，支持高质量的文生视频与图生视频。
@@ -82,9 +81,7 @@ dlazy kling-v3 -h
 
 Options:
   --prompt [prompt]                    提示词
-  --generation_mode [generation_mode]  生成模式（frames=首尾帧; components=参考图） [default: frames] (choices: "frames", "components")
-  --images [images...]                 参考图 [image: url or local path] (max 4)
-  --subjects [subjects...]             主体 (max 3) [only when !(generation_mode="frames")]
+  --images [images...]                 参考图 [image: url or local path] (max 2)
   --aspect_ratio [aspect_ratio]        画幅比例 [default: 16:9] (choices: "16:9", "9:16", "1:1")
   --duration [duration]                时长（秒） [default: 5] (choices: "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
   --mode [mode]                        模式 [default: std] (choices: "std", "pro")
@@ -92,6 +89,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

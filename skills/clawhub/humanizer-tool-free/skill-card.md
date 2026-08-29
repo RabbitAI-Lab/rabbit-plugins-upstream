@@ -1,42 +1,50 @@
-## Description: <br>
-Humanizer Tool Free helps an agent identify and rewrite AI-like writing patterns, add a more personal voice, and polish single paragraphs or full texts while preserving the original meaning and target tone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向个人用户的 AI 文本痕迹去除工具，让写作更自然。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and agents use this skill to make AI-generated or overly polished text read more naturally for personal blogs, email, social media copy, and single-document polishing. It is intended for rewriting and tone adjustment, not for guaranteeing that text will bypass AI detectors. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is mainly a text-rewriting workflow, but server security evidence flags broad read, command execution, and write capabilities. <br>
-Mitigation: Review before installing, run only in a scoped workspace, and require explicit confirmation before any command execution or file write. <br>
-Risk: The artifact describes vague save, modify, delete, import, and export operations that could affect files beyond the provided text. <br>
-Mitigation: Limit use to user-provided text and approve any save, export, modification, or deletion request before it is performed. <br>
+## Use Case:
 
+External users, writers, independent developers, and teams use this skill to identify AI-like phrasing in Chinese or English text and rewrite single passages or articles with a more natural voice while preserving meaning. It is intended for marketing copy, writing content, title optimization, and content creation rather than pure technical documentation.
 
-## Reference(s): <br>
-- [Humanizer Tool Free ClawHub page](https://clawhub.ai/thcjp/skills/humanizer-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Artifact skill instructions](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown or plain text with optional JSON-shaped response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include rewritten text, detected writing-pattern notes, status fields, result metadata, and execution logs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill requests command execution and file-writing capabilities that are broader than expected for a text rewriting workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing and prefer a version that removes exec/write access when only text transformation is required.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/humanizer-tool-free)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or plain text containing trace findings, rewritten text, and usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Designed for single-passage or single-article rewriting; batch processing and custom style libraries are described as paid-version capabilities.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

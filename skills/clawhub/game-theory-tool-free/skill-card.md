@@ -1,41 +1,53 @@
-## Description: <br>
-Game Theory Tool Free helps students, researchers, and decision makers analyze strategic interactions with payoff matrices, Nash equilibria, prisoner's dilemma examples, repeated games, and decision trees. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+策略互动分析工具,支持纳什均衡、囚徒困境与决策树分析。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users, students, researchers, business analysts, and game designers use this skill to model two-player games, compute or explain basic equilibria, and produce structured game-theory analysis for learning and decision support. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests broad write and command-execution capability without enough scoping or user-control guidance. <br>
-Mitigation: Review before installation, use it only for game-theory analysis, and require explicit confirmation before file writes, resets or imports, package installation, or network and system diagnostics. <br>
-Risk: Game-theory outputs may simplify real decisions and omit ethical, long-term, or domain-specific factors. <br>
-Mitigation: Treat results as decision-support analysis and review conclusions with relevant human expertise before using them for consequential choices. <br>
+## Use Case:
 
+Students, researchers, business decision makers, and game designers use this skill to model two-player strategic interactions, analyze payoff matrices, identify pure-strategy Nash equilibria, and produce concise game-theory reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/game-theory-tool-free) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or plain text with optional Python and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return structured analysis, result summaries, logs, examples, or export guidance; optional Python/NumPy snippets are used for matrix analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Broad analytics triggers could route unrelated analysis, reporting, statistics, or visualization tasks into this skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for explicit game-theory tasks involving payoff matrices, strategic interaction, Nash equilibrium, prisoner-dilemma, or decision-tree analysis.
+
+Risk: The artifact requests write-capable behavior for save, export, modify, reset, and import actions.
+
+Mitigation: Require explicit user confirmation before any save, export, modify, reset, or import action, and review proposed shell commands before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/game-theory-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Markdown reports with text explanations, optional Python code examples, and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include game-theory analysis status, payoff matrix interpretation, equilibrium results, decision-tree reasoning, and export/save guidance.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

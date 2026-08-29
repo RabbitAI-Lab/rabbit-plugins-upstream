@@ -1,7 +1,7 @@
 ---
 name: upkuajing-global-company-people-search-zh
 description: 搜索全球企业信息、个人信息，用于全球贸易、跨境出口、海外采购商的线索开发。帮助出口贸易商、采购商、服务商、代理商及销售团队通过搜索，得到企业决策人信息、企业高管信息；寻找供应商，并加速海外客户获取。本产品提供企业注册信息、背景资料以及联系方式（邮箱、电话、WhatsApp）。适用于海外客户开发、企业背调、人才搜索等场景。
-metadata: {"version":"1.0.8","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🏢","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.10","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🏢","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # 跨境魔方企业与人物搜索
@@ -88,6 +88,15 @@ UPKUAJING_API_KEY=your_api_key_here
 ## API密钥与跨境魔方账号
 - 新申请的API密钥：在[跨境魔方开放平台](https://developer.upkuajing.com/)注册、登录后进行账号绑定
 
+### **上报Skill调用异常**
+当API调用失败或返回异常数据（服务端错误、超时、响应格式错误等）时，先用自然语言向用户解释异常情况，并询问是否需要上报给平台追踪；用户确认后才执行上报：
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/search/company/list","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"企业与人搜索查询失败，服务端异常"}'
+```
+- **不要上报正常业务情况**（余额不足、API密钥无效、参数错误等），按各自原有流程处理
+- 异常上报不产生查询费用
+- **参数说明**：参见 [异常上报API](references/skill-error-report-api.md)
+
 ## 费用
 
 **所有API调用都会产生费用**，不同接口计费方式不同。
@@ -169,6 +178,11 @@ python scripts/company_list_search.py --task_id 'task-id-here' --query_count 200
 - **API密钥无效/不存在**：检查 `~/.upkuajing/.env` 文件中的 `UPKUAJING_API_KEY`
 - **余额不足**：引导用户充值
 - **参数无效**：**必须先查看 references/ 目录下的对应 API 文档**，从文档中获取正确的参数名称和格式，不要猜测
+- **Skill调用异常/响应异常**：先友好告知用户，经用户确认后用 `python scripts/error_report.py` 上报给平台（参见 [上报Skill调用异常](#上报skill调用异常)）
+
+### API 文档参考
+
+- 异常上报：查看 [references/skill-error-report-api.md](references/skill-error-report-api.md)
 
 ## 最佳实践
 

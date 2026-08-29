@@ -150,7 +150,7 @@ All Brave Search API responses include:
 - Maximum 10 pages (offset 0-9)
 - Privacy-focused search engine
 - Results include web, news, videos, discussions, FAQ, infobox
-- Uses API key authentication
+- Authentication is handled by the gateway. Upstream, Brave Search uses an API key rather than OAuth, but that key belongs to the Maton connection and is injected server-side: do not build an `Authorization` header, do not ask the user for a Brave Search key, and never place one in a request, a script, or a trigger destination. Requests carry the Maton credential only, exactly like every other app in this gateway.
 - Some endpoints require additional subscription plans
 
 ## Resources

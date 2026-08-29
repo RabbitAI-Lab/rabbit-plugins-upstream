@@ -1,44 +1,51 @@
-## Description: <br>
-Build or review frontend UI for clean, restrained, human-designed interfaces without generic AI visual patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build or review frontend UI for clean, restrained, human-designed interfaces without generic AI visual patterns.
 
-## Publisher: <br>
-[leostehlik](https://clawhub.ai/user/leostehlik) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[leostehlik](https://clawhub.ai/user/leostehlik)
 
-## Use Case: <br>
-Developers and AI coding agents use this skill when creating or reviewing frontend UI to avoid generic AI visual patterns and produce restrained, usable interfaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can shape frontend implementation choices and may conflict with product, accessibility, security, localization, or existing design-system requirements. <br>
-Mitigation: Treat the rules as advisory visual-quality constraints and preserve explicit product, accessibility, security, localization, and design-system requirements when they conflict. <br>
-Risk: Generated UI may still include misleading, decorative, or hard-to-use interface patterns if the checklist is skipped. <br>
-Mitigation: Use the bundled review checklist and reference files before accepting generated frontend work. <br>
+## Use Case:
 
+Developers and coding-agent users apply this skill when building or reviewing visible frontend interfaces. It provides practical visual rules, review criteria, and palette guidance to avoid generic AI-generated UI patterns while preserving product requirements and existing design systems.
 
-## Reference(s): <br>
-- [Banned UI Patterns](references/banned-patterns.md) <br>
-- [Colour Palettes](references/colour-palettes.md) <br>
-- [No Slop UI Review Checklist](examples/review-checklist.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/leostehlik/no-slop-ui) <br>
-- [Publisher Profile](https://clawhub.ai/user/leostehlik) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Configuration] <br>
-**Output Format:** [Markdown guidance with frontend code and configuration recommendations when applicable] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory visual-quality rules subordinate to accessibility, security, localization, product requirements, and existing design systems.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.1 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill can influence frontend design choices beyond its visual-quality scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Apply it as advisory UI guidance only, and preserve accessibility, security, localization, product requirements, data correctness, and existing design-system constraints.
+
+## Reference(s):
+
+- [Banned UI Patterns](references/banned-patterns.md)
+- [Colour Palettes](references/colour-palettes.md)
+- [No Slop UI Review Checklist](examples/review-checklist.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code]
+
+**Output Format:** [Markdown guidance with possible code or configuration changes during frontend work]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory visual-quality guidance scoped to UI design and frontend implementation tasks.]
+
+## Skill Version(s):
+
+0.2.2 (source: SKILL.md metadata and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

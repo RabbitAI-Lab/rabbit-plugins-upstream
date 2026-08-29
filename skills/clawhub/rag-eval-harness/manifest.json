@@ -1,0 +1,44 @@
+{
+  "schema": "ownership-attestation/1.0",
+  "package": "RAG评估与防幻觉验证",
+  "version": "1.1.0",
+  "author": "注册老炮 (MedXpert)",
+  "year": "2026",
+  "timestamp_utc": "2026-08-27T16:06:43.067297+00:00",
+  "timestamp_local": "2026-08-28T00:06:43.067307",
+  "package_fingerprint_sha256": "f37abde5ba8c3ab415e9e2306a5711939e3c5a9c7f87c7837eae3b7aed40ec7f",
+  "files": [
+    {
+      "path": "LICENSE.md",
+      "sha256": "5416746360f13e79761cd77b2a7655ff5446803e513f206e31e93a7abd3091ac"
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "6c6c681422901c90270eea280a6c5b1e55853f0c09298c92966334f14b335693"
+    },
+    {
+      "path": "references/capability_eval_suite/run_suite.py",
+      "sha256": "aae3aebd3d7b5e063842a97771f4783d5ba29f1d35f51d3b41fdeddf6853b39b"
+    },
+    {
+      "path": "references/capability_eval_suite/suite_registry.json",
+      "sha256": "c018e551baca876505f6945a4acabd8ab268c8bf14b8f1208b015dcbfe5bd7bf"
+    },
+    {
+      "path": "references/medxpert_rag_eval.py",
+      "sha256": "936c6aa224da5dbca66771a34397c11246032655996a8ef39c68929c7750b5d3"
+    },
+    {
+      "path": "security-radar.svg",
+      "sha256": "e072b2f98c247a973644521cb33687692068fe74a9ace85c58c0f8e0616be920"
+    },
+    {
+      "path": "security_results.json",
+      "sha256": "ebfb44c8c183ff0a584feb04e215a662de89a591d566509ecfd5d6540108d9f9"
+    },
+    {
+      "path": "安全审计报告.md",
+      "sha256": "d033de98150638c381347a4fdab0f75918c9fd14ed7db6f56246808f6207395b"
+    }
+  ]
+}

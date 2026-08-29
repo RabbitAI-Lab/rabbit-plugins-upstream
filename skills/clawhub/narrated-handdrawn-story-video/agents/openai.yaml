@@ -1,0 +1,4 @@
+interface:
+  display_name: "叙事手绘故事视频"
+  short_description: "面向中文成语故事的多场景手绘同步短视频完整制作流程"
+  default_prompt: "Use $narrated-handdrawn-story-video to turn this Chinese story into a narrated, multi-scene hand-drawn short video."

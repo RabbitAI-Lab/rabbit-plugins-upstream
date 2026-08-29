@@ -1,0 +1,4 @@
+interface:
+  display_name: "JYS S5 · 最终整理"
+  short_description: "整理人物场景道具、添加场景标注并生成最终标题与完整剧本"
+  default_prompt: "Use $jys-s5 to 生成3类6个标题并整理最终版完整剧本。"

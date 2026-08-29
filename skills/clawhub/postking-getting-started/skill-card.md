@@ -1,43 +1,60 @@
-## Description: <br>
-First-run flow for PostKing: authenticate, top up credits, onboard a brand from a URL, connect socials, and ship a first post. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Router skill for PostKing — confirms the active brand, then hands off to the right specialist skill for posts, blogs, landing pages, SEO, or setup.
 
-## Publisher: <br>
-[bitsandtea](https://clawhub.ai/user/bitsandtea) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bitsandtea](https://clawhub.ai/user/bitsandtea)
 
-## Use Case: <br>
-External PostKing users and agents use this skill as the first-run onboarding path: checking authentication, funding credits, creating or selecting a brand, connecting social accounts, and scheduling an initial post. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Funding steps may charge a saved card immediately or start a recurring subscription after checkout. <br>
-Mitigation: Confirm the exact pack, tier, interval, and expected charge with the user before calling billing tools. <br>
-Risk: Social connection steps can link a PostKing brand to an external social account. <br>
-Mitigation: Ask which platform to connect and wait for the user to complete and confirm the OAuth flow. <br>
-Risk: Brand onboarding can crawl a website and generate brand themes from user-provided details. <br>
-Mitigation: Confirm the brand name and website URL in the current conversation before onboarding. <br>
+## Use Case:
 
+External PostKing users and agents use this skill as the starting point for PostKing work: it confirms the active brand, checks account connectivity, and routes the request to the specialist skill for the requested content or setup task.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/bitsandtea/skills/postking-getting-started) <br>
-- [PostKing MCP endpoint](https://mcp.postking.app/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, API calls] <br>
-**Output Format:** [Markdown guidance with staged tool calls and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [One onboarding stage per turn; user confirmation is required before billing, brand, social account, and post-scheduling decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill can guide an agent through PostKing authentication, including legacy password-based CLI flags.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer device-code or magic-link login flows and avoid pasting passwords or API keys into prompts when possible.
+
+Risk: Brand-scoped actions can affect the wrong PostKing workspace if the active brand is incorrect.
+
+Mitigation: Confirm the active brand before publishing, scheduling, billing, or deleting content.
+
+Risk: Some referenced PostKing commands can publish, schedule, purchase credits, subscribe to plans, or delete resources.
+
+Mitigation: Review billing, publishing, scheduling, and destructive commands before allowing an agent to run them.
+
+## Reference(s):
+
+- [pking command reference](references/commands.md)
+- [Installing postking-cli](references/install.md)
+- [PostKing MCP endpoint](https://mcp.postking.app/mcp)
+- [ClawHub skill page](https://clawhub.ai/bitsandtea/skills/postking-getting-started)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline MCP tool calls and CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routes to specialist PostKing skills and may surface PostKing dashboard URLs returned by commands.]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

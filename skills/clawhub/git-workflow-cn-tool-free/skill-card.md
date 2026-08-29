@@ -1,38 +1,54 @@
-## Description: <br>
-A Chinese-language Git workflow helper for independent developers that provides guidance for branch management, merge conflict handling, Conventional Commits messages, common Git command lookup, and rollback operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Git 分支管理、冲突解决与提交规范助手，覆盖个人开发者日常版本控制场景。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and independent engineers use this skill to plan Git branches, generate Conventional Commits messages, inspect and resolve common merge conflicts, and get command guidance for everyday repository maintenance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can direct an agent to run repository-changing or destructive Git commands such as push, pull, reset, branch deletion, merge abort, stash clear/drop, and git clean. <br>
-Mitigation: Review every proposed Git command before execution, create a backup branch before risky changes, and avoid using the skill on shared repositories unless the remote impact is acceptable. <br>
+## Use Case:
 
+Developers and engineers use this skill for Chinese-language Git workflow guidance, including branch management, merge-conflict handling, rollback steps, and Conventional Commits message drafting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/git-workflow-cn-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and structured JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose repository-changing Git commands that require user review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill may suggest Git commands that modify repositories, push to remotes, change global Git configuration, or delete local untracked work, branches, and stashes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated commands before execution, prefer preview or safer variants first, and keep backups for important work.
+
+Risk: Cleanup and force-delete Git examples can remove local work when used without understanding repository state.
+
+Mitigation: Check repository status, create a backup branch or stash, and use preview commands such as git clean -n before destructive cleanup.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/git-workflow-cn-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline Git shell commands and commit-message templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language responses focused on Git command guidance and review-before-execution workflows.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact metadata lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

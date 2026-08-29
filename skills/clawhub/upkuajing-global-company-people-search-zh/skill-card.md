@@ -1,51 +1,70 @@
-## Description: <br>
-搜索全球企业信息、个人信息，用于全球贸易、跨境出口、海外采购商的线索开发。帮助出口贸易商、采购商、服务商、代理商及销售团队通过搜索，得到企业决策人信息、企业高管信息；寻找供应商，并加速海外客户获取。本产品提供企业注册信息、背景资料以及联系方式（邮箱、电话、WhatsApp）。适用于海外客户开发、企业背调、人才搜索等场景。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches global company and people data to help trade, export, purchasing, and B2B sales teams find companies, decision makers, contact details, and supplier or prospect leads.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External users, sales teams, exporters, sourcing teams, and business developers use this skill to search global company and person records, find decision makers, retrieve company or person details, and obtain contact channels for B2B lead generation and supplier discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends searched company or person identifiers to a third-party contact-data service and may return personal contact data. <br>
-Mitigation: Confirm the provider's privacy and legal terms before use, limit searches to lawful business purposes, and avoid bulk or unsolicited outreach that may violate applicable rules. <br>
-Risk: The skill stores API keys in ~/.upkuajing/.env. <br>
-Mitigation: Restrict file permissions for the local credential file or move the key into a managed secret store when operating in a shared or managed environment. <br>
-Risk: API calls can incur charges and some searches may perform many calls. <br>
-Mitigation: Review pricing with the provider and require explicit user confirmation before paid or bulk operations. <br>
+## Use Case:
 
+External users such as exporters, B2B sales teams, purchasing agents, and market researchers use this skill to search for overseas companies and contacts, retrieve company or person details, and obtain contact channels for authorized lead generation and supplier discovery.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/upkuajing-global-company-people-search-zh) <br>
-- [Publisher profile](https://clawhub.ai/user/upkuajing) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer portal](https://developer.upkuajing.com/) <br>
-- [Upkuajing API pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [Company list API reference](references/company-list-api.md) <br>
-- [Person list API reference](references/human-list-api.md) <br>
-- [Company detail API reference](references/company-detail-api.md) <br>
-- [Person detail API reference](references/human-detail-api.md) <br>
-- [Contact API reference](references/contact-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON, files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON API responses, and generated task result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python, httpx, and UPKUAJING_API_KEY; list searches may write task result data and contact-data responses may include personal information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: SKILL.md metadata, release evidence) <br>
+Risk: The skill can retrieve personal contact information for people and companies.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for lawful, authorized outreach or research, and review any returned contact data before storing, sharing, or acting on it.
+
+Risk: Search, detail, contact, account, and recharge actions may create paid API activity.
+
+Mitigation: Confirm the intended query size, ID count, and pricing before running paid operations, and check account balance or pricing when cost is unclear.
+
+Risk: The API key may be stored in a plaintext local .env file.
+
+Mitigation: Prefer a protected environment variable when possible, restrict access to ~/.upkuajing/.env, and avoid displaying or sharing that file.
+
+Risk: Search results may be written to local JSONL files that can contain sensitive business or personal data.
+
+Mitigation: Review local task result files for sensitive data, limit access to generated files, and remove result files when they are no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/upkuajing-global-company-people-search-zh)
+- [Upkuajing homepage](https://www.upkuajing.com)
+- [Upkuajing developer platform](https://developer.upkuajing.com/)
+- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [Company list API reference](references/company-list-api.md)
+- [Human list API reference](references/human-list-api.md)
+- [Company detail API reference](references/company-detail-api.md)
+- [Human detail API reference](references/human-detail-api.md)
+- [Contact API reference](references/contact-api.md)
+- [Skill error report API reference](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local JSONL result files for search tasks and may return task IDs, request IDs, fee summaries, and file paths.]
+
+## Skill Version(s):
+
+1.0.10 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

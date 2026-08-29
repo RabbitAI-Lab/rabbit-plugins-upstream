@@ -1,0 +1,33 @@
+{
+  "backend": "local",
+  "answer_mode": "fast",
+  "coze": {
+    "bot_id": "",
+    "endpoint": "https://api.coze.cn/v1/chat",
+    "token_env": "COZE_TOKEN"
+  },
+  "auto_approve_endpoints": [
+    "https://ct-advisor.coze.site/run",
+    "https://ct-bugreport.coze.site/run"
+  ],
+  "data_context": {
+    "mode": "local",
+    "sibling_outputs": {
+      "ct-registry": "ct-registry/out_live",
+      "ct-safety": "ct-safety/out_live",
+      "ct-literature": "ct-literature/out_live"
+    }
+  },
+  "qa_store": {
+    "mode": "noop",
+    "local_path": "data/qa_log.jsonl",
+    "remote_dsn": ""
+  },
+  "refiner": {
+    "endpoint": "https://ct-advisor.coze.site/run",
+    "token_env": "CT_ADVISOR_COZE_TOKEN",
+    "timeout": 60,
+    "long_timeout": 300,
+    "race_window": 30
+  }
+}

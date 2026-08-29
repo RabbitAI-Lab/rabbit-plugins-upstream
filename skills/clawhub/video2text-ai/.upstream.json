@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/video2text-ai",
   "slug": "video2text-ai",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1784470299934,
-  "contentHash": "17feba25d6661c2fa92c78acfd83746ef822002910509708f395fd42879db734",
-  "fetchedAt": "2026-07-26T18:10:33.932Z"
+  "version": "1.0.1",
+  "updatedAt": 1787967214059,
+  "contentHash": "90251fb8b8fe0abfff430c2b6211a875cfd8473fd5d705355ff1131a50f0ccc2",
+  "fetchedAt": "2026-08-29T13:17:04.049Z"
 }

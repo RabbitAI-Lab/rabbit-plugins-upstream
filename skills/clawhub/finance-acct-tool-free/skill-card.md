@@ -1,40 +1,61 @@
-## Description: <br>
-A finance and accounting starter skill for personal users and small businesses that guides bookkeeping, bank reconciliation, basic tax calculations, and standard financial report generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+财务会计入门工具 helps individuals and small businesses record transactions, reconcile bank statements, calculate basic taxes, and generate basic financial reports.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Personal users, freelancers, independent developers, and small businesses use this skill to guide local finance workflows including bookkeeping, bank reconciliation, basic VAT and income-tax calculations, and financial statement generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests local write and command-execution ability for sensitive accounting workflows. <br>
-Mitigation: Review commands and file changes before execution, especially for imports, records, reconciliations, and generated reports. <br>
-Risk: Callback URLs could send financial results outside the local environment. <br>
-Mitigation: Avoid using callback_url with real financial data unless the destination and data handling are fully understood. <br>
+## Use Case:
 
+External users, independent developers, and small business operators use this skill to get agent guidance and command examples for local bookkeeping, reconciliation, basic tax calculation, and financial report generation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/finance-acct-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, markdown] <br>
-**Output Format:** [Markdown guidance with bash, YAML, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local file creation and command execution for SQLite-backed finance workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: ClawHub release evidence; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill asks for read and exec authority for financial workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before execution and limit them to intended local accounting files and trusted working directories.
+
+Risk: The referenced finance.py implementation and runtime setup are not fully established by the evidence.
+
+Mitigation: Confirm the source and behavior of finance.py before using the skill with bank statements, tax data, or production accounting records.
+
+Risk: The local-only privacy claim is under-scoped while network and API behavior are not fully documented.
+
+Mitigation: Use test data first and avoid sensitive financial data until network behavior and data handling are verified.
+
+Risk: Generated bookkeeping, tax, and report guidance may be incomplete or incorrect for a user's jurisdiction or accounting policy.
+
+Mitigation: Have financial and tax outputs reviewed by a qualified person before relying on them for filing, audit, or business decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/finance-acct-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell command examples, YAML snippets, and report-generation guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include local finance command examples and generated report filenames; actual execution depends on the user's local finance.py implementation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

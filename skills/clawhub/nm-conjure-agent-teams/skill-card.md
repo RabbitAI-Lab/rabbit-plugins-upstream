@@ -1,44 +1,58 @@
-## Description: <br>
-Coordinates Claude agent teams via filesystem protocol. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coordinates Claude agent teams via filesystem protocol.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to coordinate multiple Claude CLI agents on parallel implementation, review, refactoring, testing, and task handoff workflows. It is most relevant when work can be split across agents and coordinated through explicit tasks, messages, roles, and health checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Team task and message history may be stored in plaintext local files. <br>
-Mitigation: Avoid putting secrets, credentials, or sensitive data in task descriptions, team messages, or local coordination files. <br>
-Risk: The skill can launch and manage multiple local Claude agents. <br>
-Mitigation: Use it only in repositories where parallel agent work is acceptable, and review team formation, task ownership, and agent roles before starting work. <br>
-Risk: Stalled-agent recovery may terminate or replace local agent panes. <br>
-Mitigation: Review team deletion, pane-kill, restart, and replacement actions before allowing them to run. <br>
+## Use Case:
 
+Developers and agent operators use this skill to coordinate multiple Claude Code agents on parallel implementation, review, refactoring, and task-management workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-conjure-agent-teams) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/athola) <br>
-- [Clawdis Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces coordination patterns for local agent teams, including task files, inbox messages, team configuration, role routing, and health-monitoring guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Team workflows can launch, terminate, restart, and reassign Claude/tmux teammate sessions with limited explicit operator guardrails.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill in a controlled workspace and require human approval before recovery, shutdown, or reassignment actions on critical work.
+
+Risk: The workflow creates persistent team, task, inbox, and lock files under ~/.claude that can affect later agent sessions if left stale.
+
+Mitigation: Before removing lock files or deleting team state, confirm no related agents or tmux panes are still running and inspect the affected team/task directories.
+
+Risk: Parallel agents can create conflicting file changes or duplicate work when tasks overlap or stalled agents are automatically released.
+
+Mitigation: Use role and risk-tier assignment rules, approval gates for high-risk tasks, and worktree isolation for parallel editing when file ownership may overlap.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conjure-agent-teams)
+- [Conjure plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance may describe persistent team, task, and inbox files under ~/.claude and tmux or iTerm2 teammate sessions.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

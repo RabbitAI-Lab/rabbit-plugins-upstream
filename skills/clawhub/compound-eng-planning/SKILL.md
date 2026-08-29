@@ -33,11 +33,13 @@ Planning tokens are cheaper than implementation tokens. Front-load thinking; sca
 
 Run this gate before *When to Plan* below — a weak goal wastes tokens on any path and produces an unverifiable result. Answer these five questions first:
 
-1. **What concrete thing will be true when this is done?** (named artifact, system state, or user-visible behavior — not "improve X" or "investigate Y")
+1. **What concrete thing will be true when this is done?** (named artifact, system state verifiable without knowing the changed component's internals, or user-visible behavior — not "improve X" or "investigate Y")
 2. **What evidence will prove it?** (specific test, command, screenshot, metric — not "looks right")
 3. **What quantitative or binary threshold defines success?** (p95 < 250ms; `npm run test:checkout` passes; `gh pr view 123` shows no unresolved threads)
 4. **What scope boundaries matter?** (which files/modules/environments are in scope; which are explicitly not)
 5. **What should cause the agent to stop and ask?** (which decisions belong to the user, not Claude)
+
+Then apply the Means test to the answer to question 1: **if the implementation changed, would this still be the goal?** If not, what was named is a Means, not the Objective. A request that supplies only an approach ("move the retry logic out of the controller into a job") passes all five questions while anchoring the plan to a mechanism -- and when the mechanism turns out wrong there is nothing left to re-derive the plan from. Recover the Objective from why the approach was proposed, keep the approach as the current best route, and record it as a decision rather than as the goal. An outcome-shaped Objective can still be a disguised mechanism -- apply the altitude test: could a reader who does not know the changed component's internals tell whether it was met? "X no longer holds the request open while it waits" fails that test; the real Objective is whatever depended on it ("checkout p95 under 300ms").
 
 Reject pure-activity goals ("make progress", "keep investigating", "improve things") -- repair them into a verifiable outcome or ask one concise clarification before planning. Skip this gate only when the request already names a specific artifact AND a clear success signal in the user's own words -- the same choice-free cases listed under *When to Plan* below. Anything vaguer than that runs the gate.
 
@@ -52,7 +54,7 @@ Reject pure-activity goals ("make progress", "keep investigating", "improve thin
 
 **Stress test the "looks atomic" case.** Many requests look atomic but hide design decisions. *"Add caching to this endpoint"* sounds atomic, but TTL, invalidation, cache-key shape, and backend selection are all KTDs -- write the plan. The same trap hides in "migrate package A to B" and "add rate limiting". Genuine skips are choice-free: *"fix typo in README line 47"*, *"rename `oldFn` to `newFn` across the repo"*, *"bump lodash to 4.17.21"* (unless breaking changes warrant a unit-by-unit migration).
 
-When skipping the plan doc, work proceeds directly to `/ia-work` or to implementation, and any decisions made along the way land in the commit message or `docs/solutions/` if worth carrying forward.
+When skipping the plan doc, work proceeds directly to execution (`/ia-work` in Claude Code) or to implementation, and any decisions made along the way land in the commit message or `docs/solutions/` if worth carrying forward.
 
 ## Planning Files
 
@@ -63,11 +65,11 @@ SKILL_DIR="<absolute path of the directory containing this SKILL.md>"
 bash "$SKILL_DIR/scripts/init-plan.sh" "Feature Name"
 ```
 
-Substitute the real absolute path before running; never execute the command with the angle-bracket placeholder. Anchor the call to `SKILL_DIR` rather than a bare `init-plan.sh` — a relative path resolves against the caller's working directory, not the skill, and breaks from a subdirectory or under a non-Claude harness.
+Substitute the real absolute path before running; never execute the command with the angle-bracket placeholder. The script refuses to overwrite a `task_plan.md` that still has unchecked tasks -- that is the never-overwrite gate below; pass `--force` only after deciding which plan wins. Anchor the call to `SKILL_DIR` rather than a bare `init-plan.sh` — a relative path resolves against the caller's working directory, not the skill, and breaks from a subdirectory or under a non-Claude harness.
 
 This creates `.plan/` with the three pre-populated files below and adds `.plan/` to `.gitignore`.
 
-`.plan/` files are ephemeral working state -- do not commit them; old files are overwritten when starting a new feature. Within a multi-phase feature, use numbered intermediate files (`01-setup.md`, `02-phase1-complete.md`) to preserve state across phases. `docs/plans/` is the separate, committed home for a formal plan document; `.plan/` supports the work session.
+`.plan/` files are ephemeral working state -- do not commit them; old files are overwritten when starting a new feature. Before overwriting, check the existing `task_plan.md` for unchecked tasks: same work continuing means update in place, different work over an incomplete plan means stop and ask which plan wins -- never bulk-close or silently discard another plan's open items (the same rule applies to items mirrored into an external tracker). Within a multi-phase feature, use numbered intermediate files (`01-setup.md`, `02-phase1-complete.md`) to preserve state across phases. `docs/plans/` is the separate, committed home for a formal plan document; `.plan/` supports the work session.
 
 | File | Purpose | Update When |
 |------|---------|-------------|
@@ -109,7 +111,11 @@ When target behavior is hard to describe but an existing implementation embodies
 | `path/to/file.ts` | Create | [what this file does] |
 | `path/to/existing.ts` | Modify | [what changes and why] |
 
+## Next Step
+[one line: the phase and task to resume on]
+
 ## Phase 1: [Name]
+**Status**: pending | in_progress | complete
 **Files**: [specific files, max 5-8 per phase]
 **Posture**: [test-first | characterization-first | external-delegate]
 **Tasks**:
@@ -129,6 +135,8 @@ When target behavior is hard to describe but an existing implementation embodies
 ```
 
 ### Plan Quality Rules
+
+**Keep phase state current.** Changing a phase's `Status` also refreshes `## Next Step`. That one line is what the resume protocol reads after a compaction or a new session, so a stale `Next Step` is worse than none -- it resumes work that already happened.
 
 **No placeholders in tasks.** Every task must contain actual code patterns, commands, or file paths. Forbid: "TBD", "TODO", "handle errors appropriately", "add validation", "implement as needed", "similar to above", "Similar to Task N", "See above." Tasks may be read out of order -- repeat the spec, code pattern, or file path in every task that needs it. A step that cannot be specified concretely needs further breakdown before it belongs in a plan.
 
@@ -213,7 +221,7 @@ When a plan is complete, offer the user an explicit choice -- subagent-driven (d
 ## Integration
 
 - **Predecessor:** `ia-brainstorming` when requirements are ambiguous -- use an existing brainstorm spec (`docs/brainstorms/`) as input and skip idea refinement.
-- **Architecture decisions:** `/ia-adr` to record significant trade-offs (chosen approach, what was given up); ADRs outlive the plan.
+- **Architecture decisions:** record significant trade-offs (chosen approach, what was given up) as an ADR (`/ia-adr` in Claude Code); ADRs outlive the plan.
 - **Threat modeling:** dispatch `ia-security-sentinel` in threat-model mode before implementation when the plan adds auth flows, payment handling, external API surfaces, or new trust boundaries -- architectural gaps are cheaper to fix in the plan than the code.
 - **Prose quality:** `ia-writing` to humanize plan language and strip AI slop.
 - **Execution handoff:** after approval, per *Execution Handoff* above.

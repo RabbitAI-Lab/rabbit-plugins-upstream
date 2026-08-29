@@ -1,45 +1,57 @@
-## Description: <br>
-Runs coding tasks in non-interactive environments through a PTY with automatic prompt responses, timeout control, output capture, and project file synchronization. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+代码执行工具免费版 runs programming tasks in non-interactive environments through a PTY, with automatic prompt responses and file synchronization.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and engineers use this skill to delegate code review, refactoring, feature development, and bug-fix tasks to an agent that can execute commands and synchronize resulting file changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can execute commands and synchronize file changes across a project directory. <br>
-Mitigation: Run it in a disposable clone or container and review all diffs before applying changes to important repositories. <br>
-Risk: Automatic prompt approval can accept actions the user did not explicitly review. <br>
-Mitigation: Avoid using it on sensitive repositories unless confirmation handling and requested tasks are reviewed first. <br>
-Risk: Callback URLs and API keys can expose execution results or credentials if configured unsafely. <br>
-Mitigation: Use only trusted callback endpoints and protect credentials such as API keys. <br>
-Risk: Running with sudo or root privileges increases the impact of command execution or file ownership changes. <br>
-Mitigation: Avoid sudo/root runtime execution and prefer a dedicated low-privilege user. <br>
+## Use Case:
 
+Developers and automation users use this skill to run code review, refactoring, feature implementation, debugging, testing, and deployment tasks through an agent-controlled code execution workflow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/code-runner-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, code blocks, command output, and synchronized project files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include execution logs, status values, and changed project files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Automated command execution and file write-back can modify project files unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill only in an isolated disposable workspace and review diffs before keeping changes.
+
+Risk: Auto-confirmation and sudo guidance can approve or elevate actions without enough human review.
+
+Mitigation: Avoid sudo/root, use a least-privileged dedicated user, and inspect commands before allowing privileged execution.
+
+Risk: External CLI and API use can expose private source code, prompts, or API keys.
+
+Mitigation: Do not expose sensitive repositories or credentials unless the external CLI and execution environment are trusted.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/code-runner-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or text with code snippets, shell commands, configuration examples, and execution-result summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include stdout/stderr-style command output and file-change guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

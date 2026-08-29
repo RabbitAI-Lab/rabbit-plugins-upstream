@@ -27,6 +27,18 @@ Users should invoke `tradebee` as the primary skill. The subdirectories remain a
 | `custompage-read` | `custompage-read` | Read custom page list data |
 | `custompage-update` | `custompage-update` | Update an existing custom page |
 | `custompage-delete` | `custompage-delete` | Move custom pages to the recycle bin by ID list |
+| `news-create` | `news-create` | Create and publish news |
+| `news-read` | `news-read` | Read news with optional article/group filters |
+| `news-update` | `news-update` | Update news with automatic backup |
+| `news-delete` | `news-delete` | Delete news by ID list |
+| `newsgroup-create` | `newsgroup-create` | Create a news group |
+| `newsgroup-read` | `newsgroup-read` | Read news groups |
+| `newsgroup-update` | `newsgroup-update` | Update a news group with automatic backup |
+| `newsgroup-delete` | `newsgroup-delete` | Delete news groups by ID list |
+| `navigation-create` | `navigation-create` | Create first- or second-level navigation |
+| `navigation-read` | `navigation-read` | Read the complete two-level navigation tree |
+| `navigation-update` | `navigation-update` | Update navigation with automatic backup |
+| `navigation-delete` | `navigation-delete` | Cascade-delete navigation by ID list |
 | `productsgroup-create` | `productsgroup-create` | Create and publish a product group |
 | `productsgroup-update` | `productsgroup-update` | Update an existing product group |
 | `productsgroup-delete` | `productsgroup-delete` | Delete product groups by ID list |
@@ -64,6 +76,7 @@ Never provide API keys in tool inputs, prompts, examples, logs, or chat text. Co
 
 For any generated HTML fragment in:
 
+- `news.description`
 - `blog.description`
 - `products.description`
 - `productsgroup.section.top`
@@ -105,6 +118,7 @@ Failure rule:
 
 Expected scene mapping:
 
+- `news.description` -> `news.description`
 - `blog.description` -> `blog.description`
 - `products.description` -> `products.description`
 - `productsgroup.section.top` -> `productsgroup.section.top`
@@ -172,6 +186,18 @@ tradebee/
   custompage-delete/
   custompage-read/
   custompage-update/
+  navigation-create/
+  navigation-delete/
+  navigation-read/
+  navigation-update/
+  news-create/
+  news-delete/
+  news-read/
+  news-update/
+  newsgroup-create/
+  newsgroup-delete/
+  newsgroup-read/
+  newsgroup-update/
   inquiry-read/
   keywords-rank/
   languages-get/

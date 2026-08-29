@@ -1,43 +1,58 @@
-## Description: <br>
-Orchestrates the full project lifecycle by auto-detecting state and routing to the correct phase. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Orchestrates the full project lifecycle by auto-detecting state and routing to the correct phase.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to start or resume project workflows, select the appropriate mission type, route through brainstorm, specification, planning, and execution phases, review plans, and persist mission state for recovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can reduce routine oversight when users give casual autonomy directives. <br>
-Mitigation: Use supervised or checkpoint-heavy settings for sensitive work and avoid casual autonomy phrases when review gates should remain active. <br>
-Risk: The skill can create GitHub issues from project artifacts through delegated workflow behavior. <br>
-Mitigation: Keep automatic issue creation disabled or review proposed issue text before allowing external-facing actions. <br>
-Risk: The skill persists mission state and plan history under .attune, which can retain project details across sessions. <br>
-Mitigation: Periodically inspect, redact, or clean the .attune directory, especially before sharing a workspace. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to start or resume multi-phase project work, moving from brainstorming through specification, planning, and execution based on existing project artifacts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-mission-orchestrator) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with structured workflow artifacts and JSON state files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update project documents, .attune state/history files, code, tests, and GitHub issues through delegated development skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+Risk: The skill can create GitHub issues for deferred backlog items during phase transitions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or disable automatic GitHub issue creation before use, and require confirmation for external-facing actions.
+
+Risk: The skill persists mission state, plan history, review feedback, errors, and trust data under .attune files.
+
+Mitigation: Inspect .attune files before sharing or committing them, and keep them out of shared repositories when they contain project history or review feedback.
+
+Risk: Broad autonomy directives and --auto mode can reduce routine checkpoints during project execution.
+
+Mitigation: Avoid broad autonomy directives on sensitive projects and keep safety checkpoints for destructive operations, external-facing actions, scope expansion, and budget overruns.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-mission-orchestrator)
+- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline commands and JSON state schemas]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update project artifacts, .attune state files, plan feedback history, and GitHub issues when enabled.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter says 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

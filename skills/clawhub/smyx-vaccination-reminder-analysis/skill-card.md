@@ -1,44 +1,61 @@
-## Description: <br>
-Analyzes pet face image or video inputs, identifies the pet, checks linked vaccination records against the current date, and returns due or overdue vaccination reminder results without providing medical advice. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet face images or video URLs to identify a registered pet, compare its vaccination record with the current date, and return due or overdue vaccination reminders without providing veterinary medical advice.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External pet hospital staff, boarding center operators, and pet insurance reviewers use this skill to check whether a known pet's vaccination record is due or overdue from pet face media and linked records. The skill is intended for database comparison and reminder workflows, not veterinary medical advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet media, identity-linked request data, and vaccination or report history may be sent to the configured Life Emergence cloud services. <br>
-Mitigation: Install only in environments where the publisher and cloud service are trusted, and confirm consent, tenant scoping, data retention, and access policies before use. <br>
-Risk: The skill can silently create or reuse identities and store service tokens locally. <br>
-Mitigation: Review local workspace database and token storage behavior, isolate deployments by tenant or account, and rotate or revoke tokens when access changes. <br>
-Risk: Historical report lookup can expose prior vaccination analysis results and report links with weak user control. <br>
-Mitigation: Restrict who can trigger history lookup, verify identity scoping before enabling the skill, and audit access to generated report links. <br>
+## Use Case:
 
+External pet hospitals, boarding centers, and insurance reviewers use this skill to check pet vaccination due status from a submitted face image or video and associated vaccination records. It returns database-comparison reminders, history listings, and report links rather than medical advice.
 
-## Reference(s): <br>
-- [Pet vaccination reminder API documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands] <br>
-**Output Format:** [Markdown or JSON analysis results with report links for completed cloud analyses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can write results to a user-specified output file and can return historical report lists from the configured cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Pet images, videos, URLs, and vaccination-record-linked data are sent to third-party cloud services for analysis and history retrieval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only where the lifeemergence.com backend is approved for this data, and confirm user consent, data-retention rules, and processing terms before deployment.
+
+Risk: The skill silently creates or reuses a local identity and persists session tokens for cloud API access.
+
+Mitigation: Review whether silent account creation and local token storage are acceptable, run the skill in an isolated workspace, and remove or rotate stored credentials when access is no longer needed.
+
+Risk: History queries can return identity-linked vaccination reminder records and report links.
+
+Mitigation: Restrict history-list usage to authorized operators and avoid exposing generated report links outside approved workflows.
+
+## Reference(s):
+
+- [Skill API Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-vaccination-reminder-analysis)
+- [Publisher Profile](https://clawhub.ai/user/smyx-sunjinhui)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json]
+
+**Output Format:** [Markdown or JSON structured analysis report, with optional saved output file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include due or overdue status, recognized pet record details, history-list tables, and report links depending on the cloud API response.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact frontmatter declares 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

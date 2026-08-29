@@ -1,44 +1,60 @@
-## Description: <br>
-This skill helps an agent call Flyelep's product replacement API to replace a product in an image while preserving the original scene, background, lighting, and composition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Replaces the product in an image with a specified product image through the Flyelep AI Tool API while preserving the original background, lighting, and scene composition.
 
-## Publisher: <br>
-[flyelepai](https://clawhub.ai/user/flyelepai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[flyelepai](https://clawhub.ai/user/flyelepai)
 
-## Use Case: <br>
-External users and developers use this skill to submit product-image replacement requests to Flyelep with a source image URL, optional replacement product image URL, model choice, and prompt constraints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Flyelep secretKey is required for API authentication and could expose account access or billing if stored or shared improperly. <br>
-Mitigation: Provide the secretKey only at runtime in the request header, avoid committing it to files or persistent configuration, and rotate it if exposure is suspected. <br>
-Risk: Source and replacement image URLs, plus prompts, are sent to a third-party service. <br>
-Mitigation: Confirm trust in Flyelep before use and avoid submitting private or sensitive images unless the user accepts Flyelep's data handling and billing terms. <br>
-Risk: Requests can fail when image URLs are not public direct links, credentials are invalid, the modelType is outside 0 or 1, or long generations time out. <br>
-Mitigation: Validate inputs before calling the API, use only public direct image URLs, pass modelType 0 or 1, and allow a 120-300 second timeout for generation. <br>
+## Use Case:
 
+External users and developers use this skill to replace a product subject in an existing image with one or more target product images while retaining the original scene context.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/flyelepai/flyelep-product-replace) <br>
-- [Flyelep product replacement API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/aiTool/productReplace) <br>
-- [Flyelep control board](https://www.flyelep.cn/controlboard) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with JSON and bash examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The downstream API returns a generated image URL; the skill instructs agents to show that URL directly rather than reading back image contents.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill requires a Flyelep secretKey at runtime.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Request the secretKey only from the user at execution time and avoid storing it in skill files, repositories, logs, or persistent configuration.
+
+Risk: Source and replacement product images are sent to Flyelep for processing.
+
+Mitigation: Use only images whose privacy and data-handling requirements are compatible with Flyelep processing, and avoid private or sensitive images unless that transfer is acceptable.
+
+Risk: Local image files may need to be uploaded to obtain public image URLs before product replacement.
+
+Mitigation: Confirm that the user wants local files uploaded and reuse the returned public URL only for the current task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/flyelepai/skills/flyelep-product-replace)
+- [Flyelep product replacement API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/aiTool/productReplace)
+- [Flyelep file upload API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/file/upload)
+- [Flyelep control board](https://www.flyelep.cn/controlboard)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON payloads and curl commands; successful API calls return a product-replaced image URL.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a user-provided secretKey and source/replacement product images; modelType is fixed to 9; replaceImageUrl accepts up to 3 comma-separated images.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

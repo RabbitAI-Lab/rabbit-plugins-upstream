@@ -1,48 +1,66 @@
-## Description: <br>
-查询跨境魔方海关数据中的企业基础贸易统计，包括交易次数、重量、数量、金额、合作伙伴数量和贸易时间范围。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill queries Upkuajing customs import-export data by company ID and company role to summarize trade count, weight, quantity, amount, partner count, and trade date range.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External trade teams, analysts, and researchers use this skill to query a paid Upkuajing customs API by company ID and company role, then review aggregate trade scale and partner-network indicators for supplier screening, buyer validation, and trade intelligence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid API calls can incur charges for each company trade-statistics query. <br>
-Mitigation: Tell the user the query is paid, retrieve current pricing when needed, and wait for a separate explicit confirmation before running a cost-incurring script. <br>
-Risk: The API key is stored in ~/.upkuajing/.env and is used for authenticated requests. <br>
-Mitigation: Keep the file private, avoid exposing the key in chat or logs, and rotate the key if it may have been shared. <br>
-Risk: When account balance is insufficient, the skill can create a recharge order and return a payment URL. <br>
-Mitigation: Create recharge orders only after the user asks to proceed, and have the user verify the payment page before paying. <br>
-Risk: The skill performs a small automatic version check and cache update under ~/.upkuajing. <br>
-Mitigation: Disclose this network and local-cache behavior to users who require strict egress or filesystem controls. <br>
+## Use Case:
 
+External trade teams, analysts, and researchers use this skill to retrieve company-level customs trade summaries and assess trade scale and partner-network breadth. It supports supplier screening, buyer validation, and trade intelligence workflows that require paid Upkuajing API access.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-company-stats-zh) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer platform](https://developer.upkuajing.com/) <br>
-- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [Company trade statistics API reference](references/customs-company-stats-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [JSON API responses with concise human-facing guidance and direct Python command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires UPKUAJING_API_KEY and explicit user confirmation before paid API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md metadata) <br>
+Risk: The skill stores a paid Upkuajing API key in ~/.upkuajing/.env.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Protect the .env file, limit local access to the key, and rotate the key if exposure is suspected.
+
+Risk: Customs data queries can incur charges through the Upkuajing API.
+
+Mitigation: Confirm each billable call with the user in a separate message before executing the query.
+
+Risk: The skill contacts openapi.upkuajing.com and performs an automatic version check.
+
+Mitigation: Install only where this network behavior is acceptable and monitor outbound access to the expected Upkuajing API host.
+
+Risk: Optional error reports can include business context from failed API calls.
+
+Mitigation: Send error reports only after user confirmation and avoid including sensitive business details.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-company-stats-zh)
+- [Upkuajing homepage](https://www.upkuajing.com)
+- [Upkuajing developer platform](https://developer.upkuajing.com/)
+- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [Company trade statistics API reference](artifact/references/customs-company-stats-api.md)
+- [Skill error report API reference](artifact/references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; billable API calls should be confirmed separately before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

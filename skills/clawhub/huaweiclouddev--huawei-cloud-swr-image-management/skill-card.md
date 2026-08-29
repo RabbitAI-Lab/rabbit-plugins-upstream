@@ -1,48 +1,71 @@
-## Description: <br>
-Huawei Cloud SWR (Software Repository for Container) image lifecycle management skill using hcloud CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Huawei Cloud SWR image lifecycle management skill using the hcloud CLI for namespaces, repositories, tags, login credentials, and quota checks.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev)
 
-## Use Case: <br>
-Developers and cloud platform engineers use this skill to manage Huawei Cloud SWR namespaces, image repositories, tags, login credentials, and quotas through hcloud CLI workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Registry credentials, AK/SK values, security tokens, and decoded Docker login passwords may be exposed in chat, logs, shell history, or committed files. <br>
-Mitigation: Use least-privilege IAM identities, prefer temporary credentials, avoid printing secrets, store credentials in secret managers or environment variables, and rotate long-term credentials regularly. <br>
-Risk: Namespace, repository, and tag deletion operations can permanently remove SWR resources or image versions. <br>
-Mitigation: Confirm namespace, repository, and tag targets with the user before destructive commands, inspect resource details first, and run post-deletion verification only after explicit approval. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to manage Huawei Cloud SWR container-image namespaces, repositories, tags, authentication, and quota status through guided hcloud CLI workflows.
 
-## Reference(s): <br>
-- [Common Pitfalls](references/common-pitfalls.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [SWR API Reference Guide](references/swr-api-guide.md) <br>
-- [Task: Auth Management](references/task-auth-management.md) <br>
-- [Task: Namespace Management](references/task-namespace-management.md) <br>
-- [Task: Quota Management](references/task-quota-management.md) <br>
-- [Task: Repository Management](references/task-repository-management.md) <br>
-- [Task: Tag Management](references/task-tag-management.md) <br>
-- [Verification Method](references/verification-method.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash and JSON code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include hcloud CLI commands, IAM policy guidance, Docker login steps, and verification checklists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can retrieve SWR registry login credentials, and security evidence flags that live registry secrets may be handled or relayed in chat.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer temporary tokens, avoid pasting or displaying decoded credentials in chat, keep secrets in local terminals or secret stores, and rotate long-term credentials periodically.
+
+Risk: The skill can delete namespaces, repositories, and tags, which can permanently remove SWR resources and image versions.
+
+Mitigation: Require explicit user confirmation, show the exact target and command before execution, verify targets with read-only commands first, and use least-privilege IAM permissions.
+
+Risk: Installation guidance includes remote hcloud installer commands.
+
+Mitigation: Inspect remote installers before running them and prefer trusted Huawei Cloud distribution channels.
+
+## Reference(s):
+
+- [SWR API Reference Guide](artifact/references/swr-api-guide.md)
+- [Huawei Cloud KooCLI Installation Guide](artifact/references/cli-installation-guide.md)
+- [IAM Permission Policies](artifact/references/iam-policies.md)
+- [Task: Namespace Management](artifact/references/task-namespace-management.md)
+- [Task: Repository Management](artifact/references/task-repository-management.md)
+- [Task: Tag Management](artifact/references/task-tag-management.md)
+- [Task: Auth Management](artifact/references/task-auth-management.md)
+- [Task: Quota Management](artifact/references/task-quota-management.md)
+- [Parameter Reference](artifact/references/parameter-reference.md)
+- [SWR Output Format Reference](artifact/references/output-format.md)
+- [Verification Method](artifact/references/verification-method.md)
+- [Common Pitfalls and Solutions](artifact/references/common-pitfalls.md)
+- [Acceptance Criteria](artifact/references/acceptance-criteria.md)
+- [Huawei Cloud SWR API documentation](https://support.huaweicloud.com/api-swr2/swr_03_0701.html)
+- [Huawei Cloud KooCLI updates](https://support.huaweicloud.com/wtsnew-hcli/index.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with hcloud CLI commands, JSON output interpretation, and confirmation prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include structured tables, command snippets, and safety confirmations for write, billing, and credential-related operations.]
+
+## Skill Version(s):
+
+1.0.3 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

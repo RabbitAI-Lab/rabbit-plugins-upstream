@@ -1,43 +1,53 @@
-## Description: <br>
-特色民宿搜索与AI智能推荐，覆盖景区民宿、古镇客栈、乡村精品民宿，多旅游平台数据直连，零配置即装即用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+特色民宿搜索与AI智能推荐，覆盖景区民宿、古镇客栈、乡村精品民宿，并支持多旅游平台数据直连。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users and travel-planning agents use this skill to search and compare specialty homestays, inns, and guesthouses by destination, dates, nearby attractions, price, and natural-language preferences. It returns candidate stays with practical details and links for booking on external travel platforms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel search queries, destinations, dates, and preferences are sent to the skill publisher's cloud proxy and downstream travel platforms. <br>
-Mitigation: Avoid entering highly sensitive personal details in free-text searches and review external platform terms before booking. <br>
-Risk: Prices, availability, ratings, and booking links are returned from external travel platforms and may change. <br>
-Mitigation: Confirm price, availability, cancellation terms, and booking details on the external travel site before purchase. <br>
+## Use Case:
 
+Travelers and travel-planning agents use this skill to search and compare distinctive homestays, inns, and boutique rural lodging in China by destination, landmark, date, price, or free-form lodging preferences.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/homestay-finder) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
-- [Fliggy proxy service](https://1439498936-6sysdjjt99.ap-guangzhou.tencentscf.com) <br>
-- [Tuniu proxy service](https://1439498936-0junm3maxj.ap-guangzhou.tencentscf.com) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-formatted search and recommendation results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include homestay names, prices, ratings, addresses, nearby points of interest, images, booking links, data-source notes, and follow-up travel-planning prompts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.7 (source: server release evidence) <br>
+Risk: User search terms, destinations, landmarks, travel dates, and free-form lodging preferences are sent to cloud proxy services and downstream travel platforms.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when that data sharing is acceptable; avoid entering sensitive personal details beyond what is needed for lodging search.
+
+Risk: The artifact contains a bundled proxy token, which is not ideal secret handling.
+
+Mitigation: Review proxy-token handling before deployment and rotate or externalize credentials where operationally appropriate.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/homestay-finder)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Markdown lodging recommendations with prices, ratings, addresses, images, data-source notes, and booking links when available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results are based on travel-platform proxy responses and may include real-time price changes.]
+
+## Skill Version(s):
+
+1.2.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

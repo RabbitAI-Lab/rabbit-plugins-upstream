@@ -24,13 +24,15 @@
 
 ## ID 来源速查
 
-| 需要的 ID           | 获取命令                                                                |
-| ------------------- | ----------------------------------------------------------------------- |
-| `accountId`（`-a`） | `siluzan-tso list-accounts --json-out ./snap` → `mediaCustomerId`       |
-| 广告系列 `id`       | `siluzan-tso ad campaigns -a <accountId> --json-out ./snap` → `id`      |
-| 广告组 `id`、`name` | `siluzan-tso ad groups -a <accountId> --json-out ./snap` → `id`、`name` |
-| 广告 `id`           | `siluzan-tso ad list -a <accountId> --json-out ./snap` → `id`           |
-| 关键词 `id`         | `siluzan-tso ad keywords -a <accountId> --json-out ./snap` → `id`       |
+| 需要的 ID           | 获取命令                                                                                                                                 |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `accountId`（`-a`） | `siluzan-tso list-accounts -m Google --json-out ./snap` → `mediaCustomerId`（**纯数字**；UI 的 `123-456-7890` 可原样传入，CLI 去连字符） |
+| 广告系列 `id`       | `siluzan-tso ad campaigns -a <accountId> --json-out ./snap` → `id`                                                                       |
+| 广告组 `id`、`name` | `siluzan-tso ad groups -a <accountId> --json-out ./snap` → `id`、`name`                                                                  |
+| 广告 `id`           | `siluzan-tso ad list -a <accountId> --json-out ./snap` → `id`                                                                            |
+| 关键词 `id`         | `siluzan-tso ad keywords -a <accountId> --json-out ./snap` → `id`                                                                        |
+
+> **Google CID**：带连字符进网关曾导致 `HTTP 403：123-456-7890`；现 CLI 已归一化。仍失败时用纯数字重试；**禁止臆测授权过期**，须 `account check-access -a <mediaCustomerId>`（详见 [google-ads.md](google-ads.md) Gotchas / `accounts-permissions.md`）。
 
 ---
 
@@ -42,9 +44,16 @@
 siluzan-tso ad campaigns -a <accountId> [--start <YYYY-MM-DD>] [--end <YYYY-MM-DD>] [--json-out ./snap]
 ```
 
-落盘 JSON 中 **`budget` 为日预算**（主币种「元」，CLI 已 ÷100），另有 `statusDisplay`（状态文案）。
+落盘 JSON 中 **`budget` 为日预算**（主币种「元」，CLI 已 ÷100），另有 **`statusV2`**（`Enabled`/`Paused`/`Removed`）与 **`statusDisplay`**（`{statusV2}·日程文案`，如 `Enabled·有效`、`Enabled·投放期已结束`、`Removed·已删除`）。
+
+> **消歧**：`statusDisplay` 含「投放期已结束」**不是**系列已删除——以 **`statusV2`** 为准；仅 `Removed` 才不可在其下新建组/广告。日程结束仍可 `ad-create`（是否投放另看预算与系列开关）。
+
+命令名：列表是 **`ad campaigns`**（兼容别名 `campaign-list`），**没有** `google-ads` 命名空间。`--json-out` **必须带路径**（落盘，勿管道 stdout）。
+
 带 `--start` / `--end` 时，同行的 **`spend` / `impressions` / `clicks` / `conversions` 为该闭区间合计**（**不是**日消耗）。
 与日预算比较「是否超预算」时，**必须** `start=end=统计日`；多日窗口须先 ÷ 天数或改用 `balance-scan.dailySpend` / `overview.averageDailyCost` 再谈「日均」。
+
+> **缓存**：网关侧此列表按 `账户 + 日期区间` 缓存 60 秒（Redis）。若刚 `campaign-create` / `campaign-edit` / `campaign-status` / `campaign-delete` 后立刻查询想看到最新结果，加 `--fresh` 跳过缓存（网关 `newest=true`）；日常巡检/报表不需要，留空更省配额。
 
 ### 启停
 
@@ -69,6 +78,8 @@ siluzan-tso ad campaign-delete -a <accountId> --id <campaignId>
 ```bash
 siluzan-tso ad groups -a <accountId> [--start/--end <date>] [--json-out ./snap]
 ```
+
+> **缓存**：同 `ad campaigns`，网关按 `账户 + 日期区间` 缓存 60 秒；刚 `adgroup-create` / `adgroup-edit` 等写操作后要立刻看到最新结果时加 `--fresh`（网关 `newest=true`）。
 
 ### 创建
 
@@ -135,6 +146,8 @@ siluzan-tso ad list -a <accountId> [--start/--end <date>] [--include-deleted] [-
 
 ### 创建（RSA）
 
+写操作细节与 `--commit` 见 `google-ads-write.md`（**ad ad-create**）。CLI **提交前本地校验**字数/条数，超限直接失败、不打 API。
+
 ```bash
 siluzan-tso ad ad-create \
   -a <accountId> \
@@ -143,10 +156,17 @@ siluzan-tso ad ad-create \
   --headlines "标题1,标题2,标题3" \
   --descriptions "描述1,描述2" \
   [--path1 <≤15字符>] [--path2 <≤15字符>] \
+  --commit "创建 RSA …" \
   [--json-out <path>]
 ```
 
-`--headlines` 至少 3 条（≤30字符），`--descriptions` 至少 2 条（≤90字符）。**`--json-out`** 落盘返回网关响应（含 `id` 等字段），便于批量脚本拿到 adId 后续编辑/启停。
+| 字段                | 数量     | 每条上限（Google 字符宽，CJK×2） |
+| ------------------- | -------- | -------------------------------- |
+| `--headlines`       | **3–15** | **≤30**                          |
+| `--descriptions`    | **2–4**  | **≤90**                          |
+| `--path1`/`--path2` | 可选     | **≤15**                          |
+
+提交前用脚本 `len`/CJK×2 自检；**禁止**一次塞入 >4 条描述。创建后暂停：`ad ad-status … --status Paused --commit "…"`。
 
 ### 启停 / 删除
 
@@ -183,6 +203,8 @@ siluzan-tso ad keyword-create \
 
 **支持空格多词短语**（如 `how to make`、`home cooking`）。匹配类型与 Web 一致：裸词=广泛，`"短语"`=词组，`[词]`=完全；也可用 `--match-type`。多词/带引号时推荐 `--keywords-file`，避免 shell 转义。
 
+**三级层级：** Campaign（系列）/ AdGroup（组）/ **Account（账户级，Sammamish 2026-08 新增）**。不传 `--level` 时按是否传 `--adgroup-id` 自动判断 Campaign / AdGroup（兼容旧用法）；**账户级必须显式传 `--level Account`**，且不能传 `--campaign-id` / `--adgroup-id`。账户级否词一次生效于整个账户下所有系列（对应 Google Ads「Account Settings → Negative keywords」），**无需再去 Google 后台手工应用**——这是本次新增前的旧限制，现已由接口直接支持。
+
 ```bash
 # 添加（默认系列层级；传 --adgroup-id 则为组层级）
 # 多词短语直接写空格，逗号分隔多条——CLI 支持，无需改后台手工补
@@ -198,11 +220,23 @@ siluzan-tso ad keyword-negative-create \
   --campaign-id <campaignId> --campaign-name <campaignName> \
   --keywords-file ./negatives.json --match-type Phrase
 
-# 删除（先用 ad keywords --negative --json-out ./snap 获取 id）
+# 添加账户级否词（--level Account；无需 campaign-id/adgroup-id）
+siluzan-tso ad keyword-negative-create \
+  -a <accountId> --level Account \
+  --keywords "free,jobs,DIY"
+
+# 查询：--level Account|Campaign|AdGroup 按层级过滤；不传则三级都返回（用输出里的「级别」区分）
+siluzan-tso ad keywords -a <accountId> --negative --level Account --json-out ./snap
+siluzan-tso ad keywords -a <accountId> --negative --level AdGroup
+
+# 删除/编辑对三级通用（先用 ad keywords --negative --json-out ./snap 获取 id，无需额外传层级）
+# 编辑成功后 id 可能变（网关先建后删），以 CLI 提示的新 id 为准
 siluzan-tso ad keyword-negative-delete -a <accountId> --id <negativeKeywordId>
 ```
 
 > **禁止**因「多词」就让用户去 Google Ads 后台手工补否词——那是 Agent 误判；用上面命令即可。
+> 账户级否词账户上限约 1000 词；权限不足返回 `403`，Google 侧错误返回 `400`。
+> 查询 `--level AdGroup` 时 CLI 会映射为网关历史值 `appliedlevel=Ad group`（有空格），调用方无需关心。
 
 ---
 
@@ -235,7 +269,8 @@ siluzan-tso ad search-terms -a <accountId> [--start/--end YYYY-MM-DD] [--json-ou
 
 ```bash
 # 搜索 locationId（单国）
-siluzan-tso ad geo search -a <accountId> -q <地名>
+# 单国搜索（--json-out 含 picked / targetedLocations / nameToId，与 resolve 同构字段）
+siluzan-tso ad geo search -a <accountId> -q <地名> --json-out ./snap-geo
 
 # 批量解析地名→id（投放方案多国；落盘含 locations / targetedLocations / nameToId）
 siluzan-tso ad geo resolve -a <accountId> --from-file ./locations.json --json-out ./snap-geo
@@ -266,6 +301,6 @@ siluzan-tso ad geo remove -a <accountId> --campaign-id <id> --location-id <id>
 
 - `add`：写入 `PUT …/criterion/{account}` 时 CLI 会换算为后端百分比。
 - `set-bid`：直接设置出价系数；与 `ad device-bid set`（系列级）同口径。
-- `list` 返回的 `bidModifier` 为 Google **倍率**（如 `1.2` = +20%），不是百分比整数。
+- `list` 返回的 `bidModifier` 为 Google **倍率**（如 `1.2` = +20%），不是百分比整数。未设置的 `0` 展示为 `—`（与 Google 后台一致），不要写成 `-100%`。
 
 ---

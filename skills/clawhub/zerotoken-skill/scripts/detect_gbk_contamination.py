@@ -45,18 +45,12 @@ from typing import List, Optional, Tuple
 
 
 # ── 安全打印（解决 #6: GBK 控制台 UnicodeEncodeError）──
-_STDOUT_ENCODING = getattr(sys.stdout, 'encoding', 'utf-8') or 'utf-8'
+# 统一实现见 safe_io.py（ensure_utf8_stdio / safe_print），此处仅复用。
+from safe_io import ensure_utf8_stdio, safe_print
 
+sp = safe_print  # 兼容本文件既有的调用名
 
-def sp(*args, **kwargs) -> None:
-    """safe_print：GBK 环境不崩溃。"""
-    try:
-        print(*args, **kwargs)
-    except UnicodeEncodeError:
-        sa = [a.encode(_STDOUT_ENCODING, errors='replace').decode(
-              _STDOUT_ENCODING, errors='replace')
-              if isinstance(a, str) else str(a) for a in args]
-        print(*sa, **kwargs)
+ensure_utf8_stdio()
 
 
 # ── 核心检测算法 ──────────────────────────────────────────
@@ -351,7 +345,7 @@ def fix_contamination(directory_or_file: str, extensions: Optional[List[str]] = 
                     bak_path = filepath + '.bak'
                     shutil.copy2(filepath, bak_path)
 
-                with open(filepath, 'w', encoding='utf-8') as f:
+                with open(filepath, 'w', encoding='utf-8', newline='\n') as f:
                     f.write(repaired_text)
 
                 sp(f"  [修复] {rel:<55} UTF-8部分={utf8_len}B + GBK部分={gbk_len}B")

@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes post-feeding aquarium or aquaculture video through a cloud API to estimate fish gathering, feeding intensity, remaining feed, and a 0-100 feeding activity score with alerts and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Through built-in cameras of smart feeders or fixed cameras on aquariums, the skill analyzes post-feeding fish videos to estimate gathering, feeding intensity, remaining feed, and a 0-100 feeding activity score.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Aquarium owners, aquaculture operators, and developers use this skill to submit post-feeding fish videos or video URLs for visual feeding-activity reports, abnormal appetite alerts, and historical report queries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Aquarium or aquaculture media, video URLs, platform identity values, and generated account identifiers may be sent to publisher cloud services. <br>
-Mitigation: Install only after reviewing publisher trust and user/operator consent; use non-sensitive test media when evaluating. <br>
-Risk: The skill can create or reuse local user identities and store tokens for future history queries. <br>
-Mitigation: Evaluate in an isolated workspace or account and review local identity/token records before reuse or removal. <br>
-Risk: Feeding activity results may be mistaken for disease diagnosis or authorization to control aquarium equipment. <br>
-Mitigation: Treat results as visual activity guidance, require human review for fish-health decisions, and do not allow feeding, medication, or water-change actions without explicit authorization. <br>
+## Use Case:
 
+Developers and aquarium or aquaculture operators use this skill to analyze post-feeding video from smart feeders, fixed aquarium cameras, or aquaculture cameras. It returns structured feeding activity reports, alert levels, and non-medication recommendations for follow-up observation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fish-feeding-activity-analysis) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown text with structured JSON analysis fields and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save results to a local output file and can return historical report lists from the publisher cloud API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release evidence; artifact frontmatter reports 1.0.5) <br>
+Risk: Aquarium videos, URLs, and report history may be tied to an automatically managed cloud identity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only where remote analysis and account-linked history are acceptable, and confirm identity separation and deletion controls before use in shared workspaces.
+
+Risk: The skill stores service tokens locally.
+
+Mitigation: Install and run it only in workspaces where local token storage is acceptable, and review local credential handling before deployment.
+
+Risk: Visual feeding analysis can be unreliable when footage is outside the feeding window, no feeding event is detected, or water clarity is poor.
+
+Mitigation: Treat `feeding_signal_unreliable` as a request to recapture footage, and avoid appetite-decline alerts or operational decisions from unreliable video.
+
+## Reference(s):
+
+- [API 接口文档](references/api_doc.md)
+- [smyx_analysis API 接口文档](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Structured report text or JSON, with Markdown tables for history listings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports include feeding activity score, key submetrics, alert level, recommended actions, next-feeding suggestions, and report links when returned by the service.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata; SKILL.md frontmatter lists 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

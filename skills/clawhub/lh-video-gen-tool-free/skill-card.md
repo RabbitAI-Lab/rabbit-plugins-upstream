@@ -1,43 +1,55 @@
-## Description: <br>
-竖版视频生成免费版 helps personal content creators turn Markdown scripts into 9:16 vertical short videos with TTS narration, burned-in subtitles, and synchronized visuals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+从Markdown脚本一键生成9:16竖版短视频，支持TTS配音、字幕烧录与画面同步，适合个人内容创作者。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External creators and developers use this skill to generate a single vertical MP4 video from Markdown scene descriptions, narration text, subtitles, and optional prebuilt images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated or suggested shell commands may install dependencies, run FFmpeg or Chrome, or invoke a custom TTS command. <br>
-Mitigation: Review commands before execution and run them in a trusted workspace with expected media dependencies installed. <br>
-Risk: Narration text may be sent to the configured TTS service, and the artifact states the default TTS may require network access. <br>
-Mitigation: Use approved TTS providers, avoid sensitive text in scripts, or configure a local TTS command when privacy requirements apply. <br>
-Risk: The skill is intended for media and video workflows and is not appropriate for copyrighted media processing. <br>
-Mitigation: Use it only with content you have rights to process and keep generated media workflows scoped to the stated video-generation use case. <br>
+## Use Case:
 
+External content creators and developers use this skill to turn Markdown scripts into single 9:16 short videos with TTS narration, subtitle cards, synchronized timing, and MP4 composition.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/lh-video-gen-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May result in local MP4, PNG, audio, subtitle, and temporary media files when the proposed commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: ClawHub server release evidence) <br>
+Risk: Custom TTS command templates can enable broad command execution despite the artifact's whitelist claim.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in trusted workflows, review every --tts-command value before execution, and prefer fixed, well-known TTS commands with carefully quoted arguments.
+
+Risk: Untrusted scripts or speech text used with custom command templates may increase command execution risk.
+
+Mitigation: Avoid untrusted Markdown scripts and speech text when custom TTS templates are enabled.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/lh-video-gen-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+- [Artifact skill definition](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and generated media file paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create MP4 videos, subtitle images, TTS audio clips, and temporary media assets through FFmpeg, browser screenshot, and TTS tooling.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact metadata version is 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

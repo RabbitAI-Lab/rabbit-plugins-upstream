@@ -11,6 +11,8 @@ paths: "**/*.php"
 
 # PHP & Laravel Development
 
+Scoped to framework-level PHP. Work on php-src internals or a native PHP extension is C, not PHP: the `ia-c-systems` skill covers it, including the Zend API conventions (`gen_stub` arginfo, the request-scoped allocator, custom object handlers, `.phpt`).
+
 ## Code Style
 
 - `declare(strict_types=1)` in every file
@@ -19,7 +21,7 @@ paths: "**/*.php"
 - No single-letter variables -- `$exception` not `$e`, `$request` not `$r`
 - `?string` not `string|null`. Always specify `void`. Import classnames, never inline FQN.
 - Validation uses array notation `['required', 'email']` for easier custom rule classes
-- PHPStan level 8+ (`phpstan analyse --level=8`); aim for 9 on new projects. `@phpstan-type` / `@phpstan-param` for generic collection types.
+- PHPStan level 8+ (`phpstan analyse --level=8`); aim for 9 on new projects. `@phpstan-type` / `@phpstan-param` for generic collection types. The missing-iterable-value-type check lands at **level 6** (and every level above it), so any project at 8+ inherits it: use the generic form on every iterable -- `@return Collection<int, User>`, `@param array<int, MyObject>` -- and array-shape notation `array{first: SomeClass, second: SomeClass}` for fixed-key returns; a bare `Collection` or `array` will not clear it.
 
 ## Modern PHP (8.4)
 
@@ -39,6 +41,7 @@ Use when applicable -- no explanatory comments for these in generated code:
 
 - **Escalate structure only when it pays for itself.** Simple CRUD → a fat Eloquent model + Form Request is correct; do not add layers. Reach for an **Action class** when an operation crosses model boundaries or gains a 3rd caller. Extract a **non-Eloquent domain object** only when a business rule needs testing without booting the DB, or protects an invariant the model can't. Default down the ladder, not up -- an unused abstraction is a defect, not foresight.
 - **Thin controllers** -- only validate, call service/action, return response. Domain behavior (scopes, accessors, relationships) lives in models; cross-cutting orchestration in service classes.
+- **Never call `env()` outside `config/`.** Wherever `php artisan config:cache` has run (the deploy sequence requires it, so typically production), every `env()` call outside a config file returns `null` -- silently, with no error. Read through `config('services.github.token')` and put third-party credentials in `config/services.php` rather than inventing a new config file.
 - **Service classes** for business logic with readonly DI: `__construct(private readonly PaymentService $payments)`
 - **Action classes** (single-purpose invokable) for operations crossing service boundaries
 - **Form Requests** for all validation -- never inline in controllers, never inside services. Add `toDto()` so services receive typed, pre-validated data; internal code trusts that input was validated at the boundary.
@@ -103,7 +106,7 @@ Use when applicable -- no explanatory comments for these in generated code:
 
 - Batching: `Bus::batch([...])->then()->catch()->finally()->dispatch()`; chaining: `Bus::chain([new Step1, new Step2])->dispatch()`
 - Rate limiting: `Redis::throttle('api')->allow(10)->every(60)->then(fn() => ...)`
-- `ShouldBeUnique` interface to prevent duplicate processing
+- `ShouldBeUnique` interface to prevent duplicate processing -- it is a de-duplication hint, not an at-least-once guarantee. When the lock is already held the dispatch is **silently discarded**: no job queued, no exception, no log line, and `dispatch()` returns normally. Where the skip is user-visible (a re-clicked "regenerate report" that produces nothing), check the lock before dispatching and surface the state. A `Illuminate\Queue\Events\UniqueJobSkipped` event exists on the `13.x` branch but had not landed in a tagged release as of 13.24 -- confirm it is in the installed version before listening for it
 - Always handle failures -- implement `failed()` on jobs
 
 ## Testing (PHPUnit)
@@ -152,6 +155,8 @@ Real production footguns, invisible to PHPStan and feature tests alone. Extended
 
 **`BelongsToMany::attach` / `detach` / `sync` / `updateExistingPivot` are query-builder writes -- no pivot model events fire.** Observers and audit traits record nothing. Fix: make the pivot a real `Pivot` model (`->using(PivotModel::class)`) and write through it with `firstOrCreate(...)->fill([...])->save()`.
 
+**`QueryException::getMessage()` interpolates raw query bindings plus host/database into the message** -- any log sink or APM recording exception messages leaks parameter values on every failed query. Recent versions add per-connection `mask_bindings_in_exception_messages` (env `DB_MASK_BINDINGS`), default off; enable in production if query exceptions reach logs (confirm the option exists in the installed version).
+
 **`Carbon::parse('2020')` is today at 20:20, not year 2020** -- a bare 4-digit string parses as `HHMM` time-of-day, breaking `before_or_equal:today` / `after` / `before` on year-only input. Fix: `Carbon::createFromFormat('Y', $year)->startOfYear()` + partial-date-aware rules; when migrating a field's validator type, audit its sibling validators for the same incompatibility.
 
 ## Discipline
@@ -162,6 +167,7 @@ Real production footguns, invisible to PHPStan and feature tests alone. Extended
 - New abstraction requires 3+ usage sites; otherwise inline it
 - No empty catch blocks -- log or rethrow, never swallow
 - Verify before declaring done: `./vendor/bin/phpstan analyse --level=8 && ./vendor/bin/phpunit` with zero warnings
+- Checkpoint per stage, not only at the end: `migrate:status` after a migration, `route:list --path=<prefix>` after routing changes, `queue:work --once` after adding a job, `pint --test` before the PR -- each catches its failure class while the change is small
 
 ## Production Performance
 

@@ -1,45 +1,63 @@
-## Description: <br>
-Identifies weed species and coverage density from field top-view images, and outputs a weed distribution heatmap dataset to support precision weeding decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies weed species and coverage density from field top-view images, and outputs a weed distribution heatmap dataset to support precision weeding decisions. | 通过田间图像识别杂草种类与覆盖密度，生成除草建议区域热力图。
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Agricultural operators, agronomy teams, and developers use this skill to analyze field top-view images or videos for weed species, distribution areas, density levels, heatmap data, and historical weed assessment reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Farm images or videos, supplied URLs, and account-linked identifiers may be sent to the lifeemergence.com API for analysis. <br>
-Mitigation: Install and run the skill only when that third-party data sharing is acceptable, and avoid submitting sensitive or unnecessary field imagery. <br>
-Risk: The skill can create local SQLite identity state and store service tokens in the workspace data directory. <br>
-Mitigation: Use an isolated workspace, protect or clear the workspace data directory after use, and avoid shared workspaces unless identity and report access are separated. <br>
-Risk: Weed analysis results may be incomplete or unsuitable as direct agronomic treatment instructions. <br>
-Mitigation: Treat outputs as field-management reference material and confirm operational weeding or herbicide decisions with agronomy procedures or qualified personnel. <br>
+## Use Case:
 
+Agricultural operators, agronomy teams, and agent users can use this skill to analyze field images or videos for weed species, coverage density, distribution areas, pressure level, heatmap data, and report links. It is intended to support precision weeding decisions, not to provide herbicide or treatment recommendations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-farmland-weed-identification-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Farmland Weed API documentation](artifact/references/api_doc.md) <br>
-- [Common AI analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown and structured JSON-like analysis text, with optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can include weed species lists, density levels, heatmap data, report links, and historical report tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter says 1.0.2) <br>
+Risk: The skill sends field images or videos and identity-linked requests to the provider backend.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media that is appropriate to share with the provider, and confirm data retention, access, and deletion practices before production use.
+
+Risk: The skill creates or reuses a local identity and stores authentication tokens in a workspace SQLite database.
+
+Mitigation: Run the skill in an isolated workspace, protect the workspace data directory, and remove or rotate stored credentials when access is no longer needed.
+
+Risk: The security evidence reports development HTTP endpoint configuration.
+
+Mitigation: Ask the publisher to ship production HTTPS endpoint configuration and verify endpoint settings before installation.
+
+Risk: History lookups can retrieve reports associated with the current identity.
+
+Mitigation: Require clear user confirmation before report-history queries and avoid exposing report links outside the intended user context.
+
+## Reference(s):
+
+- [Farmland weed analysis API reference](artifact/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-farmland-weed-identification-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files]
+
+**Output Format:** [Structured text or JSON analysis output, with Markdown tables for history listings and optional saved result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns weed species, coverage density, distribution areas, pressure level, heatmap data, and report links when available.]
+
+## Skill Version(s):
+
+1.0.10 (source: ClawHub release metadata; artifact frontmatter states 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/kwdb-text2sql-aiot",
   "slug": "kwdb-text2sql-aiot",
   "ownerHandle": null,
-  "version": "1.2.0",
-  "updatedAt": 1784787649823,
-  "contentHash": "ad6ca22fcf398f043c58ceed6c69cbc30197560fabae038db02b0264a19d19f2",
-  "fetchedAt": "2026-07-26T18:07:23.856Z"
+  "version": "1.2.1",
+  "updatedAt": 1787878135322,
+  "contentHash": "fa71e4958414091209d67298b893d190f8b6d04dcba49cb8e96eb8d7e9dfb92e",
+  "fetchedAt": "2026-08-29T13:23:20.872Z"
 }

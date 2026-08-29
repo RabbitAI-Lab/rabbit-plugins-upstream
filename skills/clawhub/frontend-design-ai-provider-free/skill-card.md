@@ -1,40 +1,53 @@
-## Description: <br>
-Guides agents through frontend UI design choices and can produce HTML/CSS/JS, React, or Vue implementation code for personal and small-project interfaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+前端设计-免费版 helps agents guide frontend and UI design work, including components, pages, small applications, brand visuals, and implementation-ready HTML/CSS/JavaScript or React/Vue code.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, frontend learners, and small-project builders use this skill to shape distinctive UI concepts and generate implementation code for components, pages, portfolios, small applications, and landing pages. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests shell-command access even though the security summary says command execution appears unnecessary for a Markdown design-guidance skill. <br>
-Mitigation: Review shell access before installation and only allow project commands, package installation, tests, or generated-code execution after explicit user confirmation. <br>
-Risk: Generated frontend code can overwrite or change project files when the agent is asked to save, import, reset, or apply implementation changes. <br>
-Mitigation: Confirm target paths and overwrite behavior before writing files, and review generated code before committing or deploying it. <br>
+## Use Case:
 
+Developers, designers, and external users can use this skill to plan distinctive frontend aesthetics and generate implementation guidance or code for personal sites, small applications, landing pages, posters, and brand-oriented UI work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/frontend-design-ai-provider-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with prose, tables, and inline code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include frontend implementation snippets and optional setup commands depending on the user's project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill may receive command-execution and file-write authority even though the security evidence describes it as mostly a frontend design guide.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it in a constrained project workspace and require explicit confirmation before shell commands run or files are modified.
+
+Risk: Generated frontend guidance or implementation code may not match project constraints, accessibility needs, or production quality expectations.
+
+Mitigation: Review generated designs and code before use, and test responsive behavior, accessibility, and security-relevant changes in the target project.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/frontend-design-ai-provider-free)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with code blocks and implementation snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include frontend implementation files or commands when granted write or exec authority.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

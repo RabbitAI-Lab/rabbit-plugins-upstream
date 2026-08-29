@@ -1,40 +1,62 @@
-## Description: <br>
-Guides agents and users through installing AKShare and using its Python interfaces for financial market and macroeconomic data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Get Chinese financial data via AKShare, including stock, fund, bond, futures, macroeconomic, and related market data.
 
-## Publisher: <br>
-[anyJohn](https://clawhub.ai/user/anyJohn) <br>
+This skill is for research and development only.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[anyjohn](https://clawhub.ai/user/anyjohn)
 
-## Use Case: <br>
-Developers, analysts, and agent operators use this skill as a concise AKShare reference for installing the library, validating the environment, and identifying Python APIs for stocks, futures, options, funds, forex, bonds, crypto, and macroeconomic data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: AKShare calls may contact public financial-data websites whose availability, formats, and data quality can change. <br>
-Mitigation: Cross-check important results against authoritative sources and validate financial data before using it for decisions. <br>
-Risk: Installing Python packages can introduce dependency or reproducibility risk. <br>
-Mitigation: Use a Python virtual environment, verify the AKShare and pandas package names, and pin versions when reproducibility matters. <br>
+## Use Case:
 
+Developers and finance analysts use this skill to guide an agent in retrieving public Chinese and related market data through AKShare APIs. It is suited for research and data exploration workflows that need code examples, API names, and troubleshooting guidance.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/anyJohn/akshare-zh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, code] <br>
-**Output Format:** [Markdown with shell commands and Python API names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-style guidance; does not execute data retrieval itself.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Broad finance trigger terms may activate this skill for general finance questions where AKShare is not the intended source.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm AKShare is the intended data source before relying on results or installing packages.
+
+Risk: Public market data can be delayed, stale, unavailable, or inconsistent across sources.
+
+Mitigation: Validate time ranges, check update notes, and compare important results against multiple sources before using them for decisions.
+
+Risk: Financial data may be mistaken for investment advice.
+
+Mitigation: Treat outputs as research data and require human review before any financial decision.
+
+## Reference(s):
+
+- [AKShare Complete API List](references/api-list.md)
+- [AKShare Documentation](https://akshare.akfamily.xyz/)
+- [AKShare GitHub](https://github.com/akfamily/akshare)
+- [AKShare Installation Guide](https://akshare.akfamily.xyz/installation.html)
+- [AKShare Interface List](https://akshare.akfamily.xyz/tutorial.html)
+- [AKShare Interface Changelog](https://akshare.akfamily.xyz/changelog.html)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with Python and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes AKShare API names, installation commands, usage examples, and data-quality cautions.]
+
+## Skill Version(s):
+
+0.1.1 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

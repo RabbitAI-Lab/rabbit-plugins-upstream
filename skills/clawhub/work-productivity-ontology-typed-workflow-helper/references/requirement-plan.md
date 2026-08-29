@@ -2,7 +2,7 @@
 
 ## Live Requirement
 
-Validated demand: Agent users show strong demand for ontology-style workflows on Clawhub. They need practical help fixing bugs, hardening setup and safety, improving reliability, or creating adjacent skills inspired by the same job-to-be-done. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Agent users show strong demand for ontology-style workflows on Clawhub. They need practical help fixing bugs, hardening setup and safety, improving reliability, or creating adjacent skills inspired by the same job-to-be-done. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
 ## Audience
 
@@ -20,12 +20,12 @@ Demand: 70/70
 
 Local feasibility: 30/30
 
-Evidence coverage: 12 signals across 3 source families.
+Evidence coverage: 12 signals across 4 source families.
 
 Scoring rationale:
 
 - Evidence count: 12; required minimum: 3.
-- Distinct source families: 3; sources: clawhub, github, segmentfault.
+- Distinct source families: 4; sources: clawhub, csdn, github, hacker-news.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
@@ -33,18 +33,18 @@ Scoring rationale:
 
 ## Evidence
 
-- clawhub-popular-skill (2026-05-11T09:25:56.797000+00:00): [Popular Clawhub skill demand: Self-Improving + Proactive Agent has 205,564 downloads](https://clawhub.ai/skills/self-improving)
-- clawhub-popular-skill (2026-05-11T07:50:52.489000+00:00): [Popular Clawhub skill demand: ontology has 194,568 downloads](https://clawhub.ai/skills/ontology)
-- clawhub-popular-skill (2026-05-11T07:53:37.068000+00:00): [Popular Clawhub skill demand: Multi Search Engine has 157,954 downloads](https://clawhub.ai/skills/multi-search-engine)
-- clawhub-popular-skill (2026-06-19T07:09:19.124000+00:00): [Popular Clawhub skill demand: AdMapix has 132,642 downloads](https://clawhub.ai/skills/admapix)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [第十章：OntologyOps 完整方案](https://segmentfault.com/a/1190000047947726)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [Comp 3710 人工智能](https://segmentfault.com/a/1190000041581431)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [4种通过LLM进行文本知识图谱的构建方法对比介绍](https://segmentfault.com/a/1190000044569069)
-- github-issues (2026-07-24T12:47:07+00:00): [[Architecture][Enterprise Context] 회사 온톨로지·Knowledge Graph·권한 기반 Context Resolver 설계](https://github.com/nodease/mbased/issues/643)
+- clawhub-popular-skill (2026-05-11T09:25:56.797000+00:00): [Popular Clawhub skill demand: Self-Improving + Proactive Agent has 207,792 downloads](https://clawhub.ai/skills/self-improving)
+- clawhub-popular-skill (2026-05-11T07:50:52.489000+00:00): [Popular Clawhub skill demand: ontology has 197,040 downloads](https://clawhub.ai/skills/ontology)
+- clawhub-popular-skill (2026-05-11T07:53:37.068000+00:00): [Popular Clawhub skill demand: Multi Search Engine has 159,854 downloads](https://clawhub.ai/skills/multi-search-engine)
+- clawhub-popular-skill (2026-06-19T07:09:19.124000+00:00): [Popular Clawhub skill demand: AdMapix has 133,074 downloads](https://clawhub.ai/skills/admapix)
+- clawhub-popular-skill (2026-05-11T07:48:49.679000+00:00): [Popular Clawhub skill demand: Notion has 101,582 downloads](https://clawhub.ai/skills/notion)
+- hacker-news-ask-hn (2026-08-23T17:45:35+00:00): [Talk Like Claude Day](https://news.ycombinator.com/item?id=49410803)
+- github-issues (2026-08-19T23:44:05+00:00): [[Buyer Gap] Persist and explain Event Lineage channel evidence](https://github.com/ContextualWisdomLab/LineageWeave/issues/274)
+- github-issues (2026-08-17T10:37:19+00:00): [[Skills 周报] 2026-08-17 ClawHub 热门 Skills Top 10](https://github.com/shufanli/AI-Product-Compass/issues/48)
+- csdn-search (2026-08-25T04:46:55.183376+00:00): [knowledge graph](https://wenku.csdn.net/doc/5rikmthbu1?ops_request_misc=elastic_search_misc&request_id=87e7eea3a348452580771a6e161a9ad2&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-2-5rikmthbu1-null-null.142^v102^pc_search_result_base4&utm_term=ontology%20typed%20knowledge%20graph)
+- csdn-search (2026-08-25T04:46:55.183376+00:00): [knowledge Graph](?ops_request_misc=elastic_search_misc&request_id=87e7eea3a348452580771a6e161a9ad2&biz_id=&utm_medium=distribute.pc_search_result.none-task-favorite-2~all~ElasticSearch~search_v2-4-30904526-null-null.142^v102^pc_search_result_base4&utm_term=ontology%20typed%20knowledge%20graph)
+- csdn-search (2026-08-25T04:46:55.183376+00:00): [knowledge _ graph](https://wenku.csdn.net/doc/5ft6mrixva?ops_request_misc=elastic_search_misc&request_id=87e7eea3a348452580771a6e161a9ad2&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-5-5ft6mrixva-null-null.142^v102^pc_search_result_base4&utm_term=ontology%20typed%20knowledge%20graph)
+- csdn-search (2026-08-25T04:46:55.183376+00:00): [snik- graph :snik- ontology 的可视化](https://wenku.csdn.net/doc/1z5ka42dmf?ops_request_misc=elastic_search_misc&request_id=87e7eea3a348452580771a6e161a9ad2&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-7-1z5ka42dmf-null-null.142^v102^pc_search_result_base4&utm_term=ontology%20typed%20knowledge%20graph)
 
 ## How The Skill Meets The Requirement
 

@@ -1,14 +1,13 @@
 ---
 name: dlazy-seedance-2.0-fast
 version: 1.3.4
-description: Fast version of ByteDance's Seedance 2.0. Generates videos faster with support for multi-modal references, first/last frame, and text-to-video. 字节跳动 Seedance 2.0 极速版视频生成模型，生成速度更快，支持多模态参考生视频、首尾帧及文生视频。
+description: "Fast version of ByteDance's Seedance 2.0. Generates videos faster with support for multi-modal references, first/last frame, and text-to-video. 字节跳动 Seedance 2.0 极速版视频生成模型，生成速度更快，支持多模态参考生视频、首尾帧及文生视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy seedance-2.0-fast -h for help."}}
 ---
 
-# dlazy-seedance-2.0-fast
+# 快速视频生成 Seedance 2.0 Fast
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Fast version of ByteDance's Seedance 2.0. Generates videos faster with support for multi-modal references, first/last frame, and text-to-video.
@@ -93,6 +92,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -105,7 +105,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "seedance-2.0-fast",
-    "modelId": "seedance-2.0-fast",
+    "modelId": "doubao-seedance-2-0-fast",
     "outputs": [
       {
         "type": "image",

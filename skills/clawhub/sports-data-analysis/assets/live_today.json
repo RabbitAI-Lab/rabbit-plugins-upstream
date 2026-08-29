@@ -1,0 +1,141 @@
+{
+  "date": "2026-08-28",
+  "title": "今日体育赛事总览（自动源样本·待联网补齐）",
+  "updated_at": "2026-08-28 09:33",
+  "_is_live": true,
+  "_source": "thesportsdb-free",
+  "_auto_thin": true,
+  "_live_error": null,
+  "_sports_live": [
+    "american_football"
+  ],
+  "_thin_hint": "自动源仅返回稀薄样本（无 key 时为常态）。出报告前请由智能体用 WebSearch 联网补齐当日真实全量赛事（中超/日职/韩K/荷甲/葡超/英冠/西甲/沙职/美职/篮球等），以保证「信息全」。详见 SKILL.md Live 模式第 5 条。",
+  "matches": [
+    {
+      "sport": "american_football",
+      "sport_cn": "美式足球",
+      "match": "Cleveland Browns vs New England Patriots",
+      "league": "NFL",
+      "country": "United States",
+      "kickoff_local": "2026-08-28 08:00",
+      "teams": [
+        {
+          "name": "Cleveland Browns"
+        },
+        {
+          "name": "New England Patriots"
+        }
+      ],
+      "info_points": [
+        "赛程来自 TheSportsDB 公开数据（实时当日对阵·免费样本）。",
+        "本场为真实当日对阵；战术 / 状态 / 专家维度待补充公开情报后完善。"
+      ],
+      "live": true,
+      "experts": [
+        {
+          "name": "Cleveland Browns 官网（赛前新闻）",
+          "tier": "权威专家",
+          "source": "clevelandbrowns.com 赛前发布会 https://www.clevelandbrowns.com/news/browns-starters-to-not-play-in-preseason-finale-vs-the-patriots-injury-report",
+          "view": "主帅 Todd Monken 确认主力（含首发 QB Deshaun Watson）不打季前赛收官战；QB Dillon Gabriel 与新秀 QB Taylen Green 将出场，常规赛第1周替补 Shedeur Sanders 也不打。DE Alex Wright 于 8/23 进 IR，DT Maliek Collins 8/24 恢复训练。收官战以阵容评估与边缘球员考察为核心，非赛果导向。"
+        },
+        {
+          "name": "ESPN 赛事中心（伤停）",
+          "tier": "数据方分析师",
+          "source": "ESPN 赛事页 https://www.espn.com/nfl/game/_/gameId/401873299/patriots-browns",
+          "view": "伤停报告：Patriots 多名轮换存疑（Gabe Jacas LB 疑、Julian Hill TE IR 等）；Browns 伤停含 Quinshon Judkins RB 疑、Jerry Jeudy WR 疑、Denzel Ward CB 疑、Mason Graham DT 疑等。比赛地 Huntington Bank Field，属真实当日对阵。"
+        },
+        {
+          "name": "Sportsnet 赛前预览",
+          "tier": "知名解说",
+          "source": "Sportsnet 预览页 https://www.sportsnet.ca/football/nfl/games/a35b428e-960f-4c3e-a012-b314018e44eb/preview",
+          "view": "比赛信息：Pre-Season，场馆 Huntington Bank Field（Cleveland, OH）；双方伤停清单（Patriots：Schooler S NFI、Landry LB PUP 等；Browns：Owusu-Koramoah LB PUP-R、Watson LB 疑 等）。属真实当日对阵，季前赛收官战以考察为主。"
+        }
+      ],
+      "experts_refreshed_at": "2026-08-28 09:37"
+    },
+    {
+      "sport": "american_football",
+      "sport_cn": "美式足球",
+      "match": "Los Angeles Chargers vs Los Angeles Rams",
+      "league": "NFL",
+      "country": "United States",
+      "kickoff_local": "2026-08-28 10:00",
+      "teams": [
+        {
+          "name": "Los Angeles Chargers"
+        },
+        {
+          "name": "Los Angeles Rams"
+        }
+      ],
+      "info_points": [
+        "赛程来自 TheSportsDB 公开数据（实时当日对阵·免费样本）。",
+        "本场为真实当日对阵；战术 / 状态 / 专家维度待补充公开情报后完善。"
+      ],
+      "live": true,
+      "experts": [
+        {
+          "name": "Los Angeles Chargers 官网",
+          "tier": "权威专家",
+          "source": "chargers.com 训练营/深度图 https://www.chargers.com/",
+          "view": "训练营与首发深度图：新任 OC Mike McDaniel 谈进攻体系与首发左护锋位置竞争；Harbaugh 计划让 Justin Herbert 与主力打前两档（季前赛「彩排」思路）；Trey Lance 与 DJ Uiagalelei 竞争替补 QB。属真实赛程（SoFi，收官战）。"
+        },
+        {
+          "name": "Sportsnet 赛前预览",
+          "tier": "数据方分析师",
+          "source": "Sportsnet 预览页 https://www.sportsnet.ca/football/nfl/games/e9f3a97a-9e54-45eb-83f2-da3af6b87ba4",
+          "view": "比赛信息：场馆 SoFi Stadium（Inglewood, CA）；双方伤停清单（Rams：Turner DT 疑、Woods WR RESERVE-RET 等；Chargers：Rogers CB 疑、Reed CB 腿筋疑、Slater OT 膝疑 等）。属真实当日对阵。"
+        },
+        {
+          "name": "FOX Sports（数据/球员新闻）",
+          "tier": "知名解说",
+          "source": "FOX Sports 比赛数据页 https://www.foxsports.com/nfl/preseason-week-4-los-angeles-rams-vs-los-angeles-chargers-aug-27-2026-game-boxscore-11174",
+          "view": "季前赛战绩 Rams 2-0、Chargers 1-1；球员新闻：Justin Herbert 预计在收官战对 Rams 出场，Ty Simpson（Rams）季前赛累计 263 传跑码、Trey Lance（Chargers）237 传跑码。以上为客观数据呈现，不含赛果判定。"
+        }
+      ],
+      "experts_refreshed_at": "2026-08-28 09:37"
+    },
+    {
+      "sport": "american_football",
+      "sport_cn": "美式足球",
+      "match": "Miami Dolphins vs Atlanta Falcons",
+      "league": "NFL",
+      "country": "United States",
+      "kickoff_local": "2026-08-29 07:00",
+      "teams": [
+        {
+          "name": "Miami Dolphins"
+        },
+        {
+          "name": "Atlanta Falcons"
+        }
+      ],
+      "info_points": [
+        "赛程来自 TheSportsDB 公开数据（实时当日对阵·免费样本）。",
+        "本场为真实当日对阵；战术 / 状态 / 专家维度待补充公开情报后完善。"
+      ],
+      "live": true,
+      "experts": [
+        {
+          "name": "ESPN 赛事中心（伤停）",
+          "tier": "数据方分析师",
+          "source": "ESPN 赛事页 https://www.espn.com/nfl/game/_/gameId/401873304/falcons-dolphins",
+          "view": "比赛信息：Hard Rock Stadium（Miami Gardens, FL），CBS Miami 转播；伤停报告 Falcons：Michael Penix Jr. QB 疑（膝-ACL）、Jalon Walker LB IR（膝-ACL）等；Dolphins：Quinn Ewers QB 疑（腹股沟）、Ollie Gordon II RB 疑（肋骨）、Chris Bell WR 疑（膝-ACL）等。属真实当日对阵。"
+        },
+        {
+          "name": "Sports Illustrated（Dolphins Onsi）",
+          "tier": "知名解说",
+          "source": "SI.com 季前赛前瞻 https://si.com/nfl/dolphins/onsi/what-to-know-about-and-how-to-watch-the-miami-dolphins-preseason-01kzxpb6y2sa",
+          "view": "海豚季前赛收官战 8/28（美东 7pm）vs Falcons @ Hard Rock Stadium，NFL Network 转播；两队季前赛交手 22 次（海豚 12-9 领先），上次 2024 年海盗主场 20-13 胜。属真实赛程。"
+        },
+        {
+          "name": "CBS Sports（Falcons 队页）",
+          "tier": "数据方分析师",
+          "source": "CBS Sports Falcons 队页 https://www.cbssports.com/nfl/teams/ATL/atlanta-falcons/",
+          "view": "赛程与伤停：下一场 8/28 @ Miami（Hard Rock）；伤停含 Jalon Walker LB（膝-ACL）、James Pearce Jr. DE（停赛）、Michael Penix Jr. QB（膝-ACL）等。属真实当日赛程与伤停数据，不含赛果判断。"
+        }
+      ],
+      "experts_refreshed_at": "2026-08-28 09:37"
+    }
+  ]
+}

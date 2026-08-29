@@ -1,46 +1,66 @@
-## Description: <br>
-Find alumni connections in LinkedIn data from a person ID and school ID for talent sourcing and B2B contact enrichment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Find alumni connections from LinkedIn-derived data using a person ID and school ID.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External recruiters, sales teams, and B2B lead-generation specialists use this skill to identify alumni ties between a person and school in LinkedIn-derived data. It supports talent sourcing, institutional-network research, and contact-database expansion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a paid UpKuaJing API and each alumni-list page can incur a fee. <br>
-Mitigation: Confirm pricing and get explicit user approval before running fee-incurring API calls; use the pricing command or pricing page for current costs. <br>
-Risk: The API key may be stored in a plaintext ~/.upkuajing/.env file. <br>
-Mitigation: Protect local credential files, avoid sharing the key, and remove or rotate the key if the environment is no longer trusted. <br>
-Risk: Alumni lookup results may contain personal or contact-related data. <br>
-Mitigation: Use the data only with a lawful and policy-compliant basis for recruiting, sales, or research workflows. <br>
+## Use Case:
 
+External users such as recruiters, sales teams, and B2B lead-generation specialists use this skill to identify alumni-related ties between people and educational institutions. It supports talent sourcing, institutional network research, and contact enrichment workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/linkedin-person-alumni) <br>
-- [UpKuaJing homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [UpKuaJing pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [LinkedIn person alumni list API reference](references/linkedin-person-alumni-list-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses with alumni records, pagination cursor, and fee information, plus concise guidance when credentials, balance, or parameters need attention.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python, httpx, and UPKUAJING_API_KEY; calls may incur per-page UpKuaJing API fees.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: evidence.release.version and SKILL.md metadata) <br>
+Risk: The skill stores the UpKuaJing API key in a plaintext file under the user's home directory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege local access, avoid sharing the file, rotate exposed keys, and prefer environment-level secret management where available.
+
+Risk: Alumni lookup API calls can incur fees, including additional calls for paginated results.
+
+Mitigation: Confirm paid execution with the user before making chargeable calls and use provider pricing information instead of estimating costs.
+
+Risk: The skill queries LinkedIn-derived personal data.
+
+Mitigation: Review privacy, consent, contractual, and regulatory obligations before use and limit queries to appropriate business purposes.
+
+Risk: Error reports may include request context or response details.
+
+Mitigation: Ask for confirmation before reporting errors and avoid including raw personal data, secrets, or unnecessary sensitive details.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/linkedin-person-alumni)
+- [UpKuaJing homepage](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [UpKuaJing price information](https://www.upkuajing.com/web/openapi/price.html)
+- [LinkedIn person alumni list API reference](references/linkedin-person-alumni-list-api.md)
+- [Skill error report API reference](references/skill-error-report-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON responses and concise Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python, httpx, and an UpKuaJing API key; alumni list calls are paid and paginated.]
+
+## Skill Version(s):
+
+1.0.5 (source: server evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
