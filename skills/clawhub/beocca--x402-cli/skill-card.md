@@ -1,45 +1,67 @@
-## Description: <br>
-A simple CLI that helps AI agents discover x402 services, make paywalled requests, and manage local EVM wallets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A simple CLI that helps AI agents discover x402 services and make paywalled requests.
 
-## Publisher: <br>
-[beocca](https://clawhub.ai/user/beocca) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[beocca](https://clawhub.ai/user/beocca)
 
-## Use Case: <br>
-Developers and agent operators use this skill to list and search x402 services, create local EVM wallets, and make paywalled HTTP requests through an agent-accessible CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can use a spend-capable EVM wallet to authorize paid x402 requests. <br>
-Mitigation: Use a dedicated low-balance or ephemeral wallet, avoid primary wallet keys, and apply external spending limits where available. <br>
-Risk: The request command performs paid requests immediately without a built-in confirmation prompt or spending cap. <br>
-Mitigation: Review the destination URL, headers, payload, and expected payment before execution, and route commands through a human or policy approval layer when needed. <br>
-Risk: Wallet creation writes a plaintext private key file to disk. <br>
-Mitigation: Keep wallet files out of version control and shared storage, preserve owner-only permissions, and fund wallets only with the minimum operational balance. <br>
+## Use Case:
 
+Developers and agent builders use x402-CLI to discover x402-enabled services, inspect their payment requirements, and make paywalled HTTP requests from an agent workflow.
 
-## Reference(s): <br>
-- [x402 homepage](https://www.x402.org) <br>
-- [ClawHub skill page](https://clawhub.ai/beocca/skills/x402-cli) <br>
-- [AgNet OpenAPI](https://api.agnet.world/openapi.json) <br>
-- [AgMsg OpenAPI](https://api.agmsg.world/openapi.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [CLI text and JSON responses, with Markdown usage guidance and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Discovery commands can optionally save JSON files; wallet creation can write a plaintext wallet JSON file with owner-only permissions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: The skill can spend real Base USDC from the configured wallet without a built-in approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a fresh, dedicated wallet with a very small balance and add an external approval gate before allowing an agent to call request pay.
+
+Risk: Agents can send payments or request data from arbitrary x402 service URLs, including untrusted or malicious endpoints.
+
+Mitigation: Use domain and recipient allowlists, inspect payment requirements with request info first, and monitor paid requests.
+
+Risk: The wallet private key is supplied through CLIENT_EVM_WALLET_SECRET and exposure gives control of the wallet.
+
+Mitigation: Do not use a personal or high-value wallet, avoid hardcoding or logging the secret, and clear the environment variable after use.
+
+Risk: Saved request and response files may contain sensitive request bodies or service responses.
+
+Mitigation: Avoid --save when interacting with untrusted services or when request bodies and responses may contain secrets or sensitive data.
+
+## Reference(s):
+
+- [x402-CLI ClawHub Skill Page](https://clawhub.ai/beocca/skills/x402-cli)
+- [x402 Official Site](https://x402.org/)
+- [x402 Documentation](https://docs.x402.org/introduction)
+- [x402 GitHub Repository](https://github.com/x402-foundation/x402)
+- [CDP x402 Facilitator Docs](https://docs.cdp.coinbase.com/x402/introduction)
+- [x402scan](https://www.x402scan.com/)
+- [x402scan GitHub Repository](https://github.com/Merit-Systems/x402scan)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance]
+
+**Output Format:** [JSON responses on stdout, optional saved JSON files, and Markdown usage guidance with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands return one JSON object with stable error_code values; request pay requires CLIENT_EVM_WALLET_SECRET and can move Base USDC.]
+
+## Skill Version(s):
+
+1.2.4 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

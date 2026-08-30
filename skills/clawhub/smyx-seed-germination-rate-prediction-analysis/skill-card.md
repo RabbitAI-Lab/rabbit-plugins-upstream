@@ -1,45 +1,63 @@
-## Description: <br>
-Analyzes seedling tray images or videos with AI object detection to count emerged seedlings and estimate germination rate for incubators, greenhouse trays, home pots, and seed-company tests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes seedling tray images or videos with AI object detection to identify emerged seedlings, count germinated seeds, estimate germination rate, and return structured report output.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze seed tray images or videos, estimate germinated seed counts and rates, and retrieve cloud-hosted history reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Seed tray media may be uploaded to or processed by a cloud-backed service. <br>
-Mitigation: Use the skill only with media approved for external cloud processing and avoid private or sensitive media unless that processing is acceptable. <br>
-Risk: The skill can use or create an internal identity and store authentication tokens locally. <br>
-Mitigation: Review identity and token storage behavior before installation, and avoid shared workspaces unless local credential persistence is acceptable. <br>
-Risk: The skill can fetch account-associated history reports. <br>
-Mitigation: Confirm the account context and report-retention expectations before using history-report features. <br>
+## Use Case:
 
+External users and developers use this skill to analyze greenhouse, incubator, home planting, or seed-test tray media and estimate germination rates from visual seedling counts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-seed-germination-rate-prediction-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands] <br>
-**Output Format:** [Markdown text with JSON payloads and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save analysis output to a file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; SKILL.md frontmatter says 1.0.5) <br>
+Risk: Seed images or videos, input URLs, and report metadata are sent to configured remote services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only approved media and service endpoints, disclose the upload behavior to users, and avoid confidential or regulated imagery unless the service is authorized for that data.
+
+Risk: The skill can automatically create or reuse a cloud identity and store tokens in a local workspace database.
+
+Mitigation: Review identity creation and token retention policies before deployment, isolate workspaces by user or environment, and remove local database/token files according to organizational retention requirements.
+
+Risk: Remote report and history operations may expose prior analysis records if service-side access controls are not appropriate.
+
+Mitigation: Confirm the publisher service's history access controls and use report-listing commands only in approved accounts and workspaces.
+
+Risk: Endpoint ownership, account lifecycle, token deletion, and environment selection are not documented clearly enough in the provided evidence.
+
+Mitigation: Require publisher documentation for service ownership and data handling, and pin deployment to documented production HTTPS endpoints before approval.
+
+## Reference(s):
+
+- [Seed Germination API Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration]
+
+**Output Format:** [Markdown or JSON analysis report with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save the generated report content to a user-specified output file.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,62 @@
-## Description: <br>
-Resend API integration with managed authentication for sending transactional emails and managing domains, contacts, templates, broadcasts, webhooks, and API keys. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Resend API integration with managed authentication for sending transactional emails and managing domains, contacts, templates, broadcasts, webhooks, and API keys.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to manage a connected Resend account through Maton, including sending transactional or broadcast email and administering domains, templates, contacts, webhooks, and API keys. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: MATON_API_KEY grants access to connected Resend account operations. <br>
-Mitigation: Keep MATON_API_KEY private and install the skill only when you intend to manage a Resend account through Maton. <br>
-Risk: Write operations can send email, modify account resources, configure webhooks, or create and delete API keys. <br>
-Mitigation: Approve create, update, send, and delete operations only after checking recipients, sender, content, webhook destination, resource IDs, and API key impact. <br>
-Risk: Multiple Resend connections can cause requests to target the wrong account. <br>
-Mitigation: Use the intended Maton connection and include the Maton-Connection header when multiple connections exist. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Resend through Maton-managed authentication for email delivery, audience, domain, template, broadcast, webhook, and API-key workflows. It is suited to tasks that need read/list checks first and explicit user approval before writes or new connections.
 
-## Reference(s): <br>
-- [ClawHub Resend Skill](https://clawhub.ai/byungkyu/resend-api) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Resend API Documentation](https://resend.com/docs/api-reference/introduction) <br>
-- [Resend Dashboard](https://resend.com) <br>
-- [ClawHub API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, shell command, HTTP endpoint, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY for live API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Maton-mediated access can affect the connected Resend account, including sending email, deleting resources, creating webhooks, broadcasts, or API keys.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact account, connection, recipients, payloads, and resource IDs before any send, delete, webhook, broadcast, or API-key operation.
+
+Risk: Credentials or provider-issued tokens may be exposed if copied into logs, files, shell history, command arguments, or unrelated hosts.
+
+Mitigation: Prefer OAuth and the Maton CLI credential store; do not print, persist, or inspect tokens, and send fallback API keys only to api.maton.ai.
+
+Risk: External Resend content and webhook payloads may contain untrusted instructions or data.
+
+Mitigation: Treat API responses as data, validate values before reuse, and do not execute or follow instructions found inside fetched content.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/resend-api)
+- [Maton Homepage](https://maton.ai)
+- [Resend API Documentation](https://resend.com/docs/api-reference/introduction)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with bash commands, JSON payloads, and SDK code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Network access and a Maton account are required; write operations require explicit user approval.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

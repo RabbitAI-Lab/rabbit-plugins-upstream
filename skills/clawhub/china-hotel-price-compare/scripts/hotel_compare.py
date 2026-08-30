@@ -955,24 +955,24 @@ def compare_hotels(city, check_in="", check_out="", keyword="", hotel_name="", m
 def main():
     parser = argparse.ArgumentParser(description="跨平台酒店比价 - 5大旅游平台酒店价格对比")
     parser.add_argument("--city", required=True, help="城市名，如上海、北京、三亚")
-    parser.add_argument("--check_in", default="", help="入住日期，如2026-07-01")
-    parser.add_argument("--check_out", default="", help="退房日期，如2026-07-03")
+    parser.add_argument("--checkIn", default="", help="入住日期，如2026-07-01")
+    parser.add_argument("--checkOut", default="", help="退房日期，如2026-07-03")
     parser.add_argument("--keyword", default="", help="搜索关键词，如外滩、迪士尼")
-    parser.add_argument("--hotel_name", default="", help="酒店名称，用于精确比价模式")
-    parser.add_argument("--max_price", type=int, default=0, help="最高价格过滤")
-    parser.add_argument("--poi_name", default="", help="附近地标/POI名称")
-    parser.add_argument("--min_score", type=float, default=0, help="最低评分过滤")
+    parser.add_argument("--hotelName", default="", help="酒店名称，用于精确比价模式")
+    parser.add_argument("--maxPrice", type=int, default=0, help="最高价格过滤")
+    parser.add_argument("--poiName", default="", help="附近地标/POI名称")
+    parser.add_argument("--minScore", type=float, default=0, help="最低评分过滤")
     args = parser.parse_args()
 
     result = compare_hotels(
         city=args.city,
-        check_in=args.check_in,
-        check_out=args.check_out,
+        check_in=args.checkIn,
+        check_out=args.checkOut,
         keyword=args.keyword,
-        hotel_name=args.hotel_name,
-        max_price=args.max_price,
-        poi_name=args.poi_name,
-        min_score=args.min_score,
+        hotel_name=args.hotelName,
+        max_price=args.maxPrice,
+        poi_name=args.poiName,
+        min_score=args.minScore,
     )
     print(result)
 

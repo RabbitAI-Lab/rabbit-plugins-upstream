@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-policy",
   "slug": "vmware-policy",
   "ownerHandle": null,
-  "version": "1.8.8",
-  "updatedAt": 1784668745559,
-  "contentHash": "4137619b7dcfc414c54802b62b25f775e49843ced218692d41b57804017e4c3d",
-  "fetchedAt": "2026-07-26T18:08:52.678Z"
+  "version": "1.10.0",
+  "updatedAt": 1788081682236,
+  "contentHash": "5eb4e3a42f4d8731968913b9b91e4e7908cf56d78f01b5919461a6903154aa57",
+  "fetchedAt": "2026-08-30T13:00:50.561Z"
 }

@@ -1,49 +1,63 @@
-## Description: <br>
-深知写作助手 helps agents draft, revise, review, and generate Word-formatted Chinese official documents and formal workplace materials, using DKnowC outline and search services when policy, data, or case support is needed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+dknowc official doc writer helps office, administrative, secretarial, and enterprise users draft, revise, review, and deliver structured formal workplace documents, with optional trusted search for policy, data, standards, and case references.
 
-## Publisher: <br>
-[dknownai](https://clawhub.ai/user/dknownai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dknownai](https://clawhub.ai/user/dknownai)
 
-## Use Case: <br>
-External users, employees, and document-drafting agents use this skill to prepare Chinese government-style and enterprise formal documents, including notices, reports, requests, replies, meeting minutes, speeches, plans, summaries, and management measures. It can route tasks through drafting, review, DKnowC search, source-note generation, and Word or red-head Word delivery depending on the request. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send drafting and search content to DKnowC cloud services. <br>
-Mitigation: Use it only for content your organization permits for third-party cloud processing; avoid confidential, classified, personnel, legal, or unreleased internal material unless authorized. <br>
-Risk: The skill can register a third-party account and persist an API key in local config.ini. <br>
-Mitigation: Run registration only after explicit user consent, keep config.ini out of shared or packaged artifacts, and remove or protect it when the key should no longer be available. <br>
-Risk: Generated official documents may include policy, data, or case claims that require review before use. <br>
-Mitigation: Review generated documents and source-note HTML before delivery, and verify high-risk factual claims against approved sources. <br>
+## Use Case:
 
+Employees and external business users use this skill to turn notes, meeting records, source materials, and rough drafts into formal Chinese workplace documents such as notices, reports, letters, meeting minutes, plans, summaries, speeches, and research materials. When supporting evidence is needed, the skill can retrieve traceable policy, data, standard, and case materials and produce a separate provenance report.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dknownai/skills/dknownai-official-doc-writer) <br>
-- [README.md](artifact/README.md) <br>
-- [Task router](artifact/reference/task_router.md) <br>
-- [Search policy](artifact/reference/search_policy.md) <br>
-- [Material usage guidance](artifact/reference/material_usage_guidance.md) <br>
-- [Output guide](artifact/reference/output_guide.md) <br>
-- [Review checklist](artifact/reference/review_checklist.md) <br>
-- [DKnowC dependable search endpoint](https://open.dknowc.cn/dependable/search/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses, shell commands, configuration updates, .docx files, and optional HTML source-note files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local Word documents, red-head Word documents, source-note HTML, search result JSON, and local config.ini when the user consents to DKnowC API-key setup.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.2.1 (source: server release evidence, artifact _meta.json, README.md, and CHANGE_log.md released 2026-07-24) <br>
+Risk: Search setup can register or access a third-party account and collect phone verification information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the account setup and verification flow with the user before requesting a phone number or verification code.
+
+Risk: The skill can persist a raw API key in the user's shell profile.
+
+Mitigation: Use a platform secret store or temporary session key where possible, and obtain explicit approval before writing credentials to ~/.zshrc.
+
+Risk: Search-backed drafting may send internal drafts or source material to Beijing Caizhi/dknowc services.
+
+Mitigation: Use search-backed drafting only for material approved for external processing, and avoid submitting confidential internal drafts unless that use is authorized.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dknownai/skills/dknownai-official-doc-writer)
+- [README](README.md)
+- [Skill definition](SKILL.md)
+- [Search policy](reference/search_policy.md)
+- [Output guide](reference/output_guide.md)
+- [Review checklist](reference/review_checklist.md)
+- [MCP introduction](official-docs/input/mcp_intro_content.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance, generated DOCX files, optional HTML provenance reports, and shell commands or configuration snippets when setup is required]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search-backed tasks may produce a separate traceability report; PDF export is not generated by the skill.]
+
+## Skill Version(s):
+
+3.4.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,23 @@
+slug: six-sigma-expert
+name: 六西格玛持续改善专家（Minitab 统计分析）
+version: 1.0.0
+category: 项目质量
+author:
+  name: 品质老法师
+description: 精通 Minitab 22 的制造业品质统计专家，覆盖 SPC 过程控制、MSA 测量系统、DOE 试验设计、FMEA 失效分析，遵循 AIAG VDA 与 DMAIC 标准。
+triggers:
+  - "SPC分析"
+  - "CPK"
+  - "过程能力"
+  - "MSA"
+  - "GRR"
+  - "DOE"
+  - "FMEA"
+  - "Minitab"
+  - "控制图"
+  - "Xbar-R"
+  - "六西格玛统计"
+tags:
+  - SPC统计分析
+  - DOE试验设计
+  - FMEA失效分析

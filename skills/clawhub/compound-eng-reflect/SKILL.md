@@ -52,11 +52,13 @@ Before listing improvements, scan the session for operational insights worth pre
 
 Exclude harness-level noise — "File has not been read yet", token-limit truncations, bash-quoting slips, and other tooling artifacts. Those aren't project learnings; capture the *project's* behavior, not the agent's mechanics.
 
+Also scan for **information-access gaps**: points where the session stalled or guessed because the agent lacked read access to something a human would have checked — dev-server logs, a third-party dashboard, a staging database, CI output. Distinct from the harness noise excluded above: a one-off tooling hiccup isn't reusable, but a standing access gap is, since granting access pays off in every future session. Each gap is an improvement candidate ("grant readonly access to X" or "pipe X into a file the agent can read"), often higher-leverage than a prompt tweak.
+
 ### 4. Improvements
 
 Numbered list of **concrete improvements**, ranked by impact. Each item: one sentence, imperative, actionable. Cap at 10 items: if more surface, the bottom items are noise -- drop them rather than batching or splitting.
 
-Ask: *"Which of these should I remember for future chats?"*
+Ask via AskUserQuestion (Claude Code; load with ToolSearch `select:AskUserQuestion` if not loaded) or request_user_input (Codex); fall back to numbered options in chat: *"Which of these should I remember for future chats?"*
 
 Save approved items to memory files at `~/.claude/projects/<project-slug>/memory/` (replace `<project-slug>` with the slug matching the current working directory, e.g., `-home-ilia-ai-whetstone`) using the Write tool with proper frontmatter (see MEMORY.md index).
 
@@ -74,7 +76,15 @@ For each skill invoked during the session:
 
 **C. Other** -- Missing edge cases, vague directives (rewrite as measurable criteria or remove), naked negations (add "do Y instead" or remove).
 
-Present proposed changes as diffs. Ask: *"Apply these? (all / pick / skip)"*
+**D. Guidance mismatch** -- fires when a skill was invoked and its advice turned out wrong, stale, or inapplicable *here*. A, B, and C all judge a skill standing alone; this one anchors the finding to the line that actually misfired. Record four fields, all required:
+- the **verbatim excerpt** from SKILL.md or its reference that produced the wrong behavior
+- the **project context** that made it not apply (language, runner, framework version, house convention)
+- **what happened** when it was followed
+- **what was done instead**
+
+A skill invoked with no mismatch gets an explicit "no mismatch" line, same discipline as "no harvestable items is a valid outcome". "Line X is wrong in context Y, here's the workaround" is an actionable edit; "this skill has vague directives" is a research task.
+
+Present proposed changes as diffs. Ask via AskUserQuestion (Claude Code; load with ToolSearch `select:AskUserQuestion` if not loaded) or request_user_input (Codex); fall back to numbered options in chat: *"Apply these? (all / pick / skip)"*
 
 ### 6. Capture Markers
 
@@ -92,7 +102,7 @@ Present proposed changes as diffs. Ask: *"Apply these? (all / pick / skip)"*
 
 If 2+ similar tasks appear that no existing skill covers, suggest a new skill (1-2 sentence description). Create only after confirmation.
 
-**Proactive trigger:** When the user corrects you, clarifies the same thing twice, or shows frustration, append: "Tip: Type `/ia-reflect` when you're ready -- I'll review what we can improve."
+**Proactive trigger:** When the user corrects you, clarifies the same thing twice, or shows frustration, offer a retrospective when they're ready -- "I'll review what we can improve." Name the invocation the active harness actually supports (`/ia-reflect` in Claude Code, this skill by name elsewhere); never print a slash command on a harness that has none.
 
 ## Self-Check
 

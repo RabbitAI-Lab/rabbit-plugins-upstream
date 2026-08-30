@@ -1,42 +1,56 @@
-## Description: <br>
-AI-powered insurance agent training coach that generates question banks, skill assessments, personalized training plans, and role-play practice for insurance-agent development. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered insurance agent training coach that helps create product profiles, question banks, agent skill assessments, personalized training plans, role-play drills, and progress reports for insurance-agent development.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External insurance trainers, agency managers, and agents use this skill to structure training plans, generate practice question banks, run role-play coaching, and assess agent readiness for customer conversations. Outputs are training references and should be reviewed by licensed insurance or compliance professionals before real-world sales use.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Training content may be mistaken for financial, legal, insurance, or compliance advice.
+
+Mitigation: Treat all outputs as training references and require review by licensed insurance or compliance professionals before use in real customer interactions.
+
+Risk: Agent, customer, or visit details could include sensitive personal information.
+
+Mitigation: Avoid entering real customer PII unless the user's own compliant systems, policies, and data-handling controls permit it.
+
+Risk: Generated sales scripts or product recommendations may contain outdated, misleading, or non-compliant statements.
+
+Mitigation: Check all scripts, product claims, and recommendations against current regulatory requirements and internal compliance guidance before use.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Insurance training teams and agents use this skill to create training content, assessment prompts, role-play scenarios, and daily practice plans for insurance sales development. Generated guidance is for training support and should be reviewed by licensed insurance or compliance staff before real-world use. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global, with China-specific regulatory examples and compliance references. <br>
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Generated insurance scripts, product comparisons, and regulatory claims may be incomplete or inaccurate if used as compliance or sales advice. <br>
-Mitigation: Have licensed insurance or compliance staff review generated materials before use with agents or customers. <br>
-Risk: Users may provide real customer PII or sensitive business data while preparing training scenarios. <br>
-Mitigation: Use approved local handling controls and avoid entering real customer PII unless the organization has authorized that workflow. <br>
-Risk: Document-upload parsing claims may be misunderstood as a verified document-processing implementation. <br>
-Mitigation: Treat document parsing behavior as a training-content framework capability unless separately validated in the deployment environment. <br>
+**Output Format:** [Markdown and JSON-style structured training materials]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-agent-trainer) <br>
+**Other Properties Related to Output:** [Produces advisory training content such as product profiles, question banks, daily training plans, role-play dialogue, evaluation reports, and growth-path recommendations.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text with example JSON and Python snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces training materials, question banks, role-play prompts, assessment reports, and practice-plan guidance that require human review.] <br>
+5.2.4 (source: frontmatter and server release evidence)
 
-## Skill Version(s): <br>
-5.2.3 (source: server evidence and frontmatter) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,14 +1,13 @@
 ---
 name: dlazy-jimeng-omnihuman-1.5
 version: 1.3.4
-description: Generate realistic digital human broadcast videos from portrait images and audio/text using Jimeng OmniHuman 1.5. 使用即梦 (Jimeng) OmniHuman 1.5 模型，通过人像图片和音频/文本生成逼真的数字人播报视频。
+description: "Generate realistic digital human broadcast videos from portrait images and audio/text using Jimeng OmniHuman 1.5. 使用即梦 (Jimeng) OmniHuman 1.5 模型，通过人像图片和音频/文本生成逼真的数字人播报视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy jimeng-omnihuman-1.5 -h for help."}}
 ---
 
-# dlazy-jimeng-omnihuman-1.5
+# 数字人视频 即梦 OmniHuman 1.5
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Generate realistic digital human broadcast videos from portrait images and audio/text using Jimeng OmniHuman 1.5.
@@ -85,11 +84,12 @@ Options:
   --images [images...]                 Images [image: url or local path] (max 1)
   --audio [audio...]                   Audio [audio: url or local path] (max 1)
   --prompt [prompt]                    Prompt
-  --resolution [resolution]            Resolution [default: 1080p] (choices: "720p", "1080p")
+  --resolution [resolution]            Resolution (audio limit: 1080p ≤30s, 720p ≤60s) [default: 1080p] (choices: "720p", "1080p")
   --fast_mode [fast_mode]              Fast Mode [default: false]
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -102,7 +102,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "jimeng-omnihuman-1.5",
-    "modelId": "jimeng-omnihuman-1.5",
+    "modelId": "jimeng-omnihuman-1-5",
     "outputs": [
       {
         "type": "image",

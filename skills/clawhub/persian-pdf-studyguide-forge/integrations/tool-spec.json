@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema": "forge.tool-spec/1",
+  "comment": "One JSON-Schema tool definition, reusable verbatim as an OpenAI function tool, an Anthropic tool, a Gemini functionDeclaration, a LangChain StructuredTool, or an MCP tool inputSchema. See integrations/README.md for the four one-line adapters.",
+  "name": "persian_pdf_studyguide_forge",
+  "description": "Convert an operator-authorized Persian/RTL PDF into an accessible, self-contained offline HTML study guide with dual-OCR evidence, model-assisted correction, session-grounded flashcards/quizzes/tables, measured fidelity, QA gates and verified ZIP packaging. Works with any LLM provider or fully offline. Call with command='doctor' first to check readiness.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "describe",
+          "doctor",
+          "selftest",
+          "compat",
+          "reproduce",
+          "extract",
+          "correct",
+          "sessions",
+          "enrich",
+          "verify",
+          "build",
+          "audit",
+          "qa",
+          "package",
+          "run"
+        ],
+        "description": "Pipeline stage. Use 'run' for the whole pipeline, 'doctor' to check the environment, 'describe' for capabilities."
+      },
+      "pdf": {
+        "type": "string",
+        "description": "Path to the authorized source PDF. Required for 'extract' and 'run'."
+      },
+      "work": {
+        "type": "string",
+        "default": "work",
+        "description": "Workspace directory where all artifacts are written."
+      },
+      "title": {
+        "type": "string",
+        "default": "راهنمای مطالعه",
+        "description": "Title shown in the generated study guide."
+      },
+      "providers": {
+        "type": "string",
+        "description": "Optional path to providers.json. Omit to auto-discover models from environment variables."
+      },
+      "maximum": {
+        "type": "boolean",
+        "default": false,
+        "description": "Maximum enrichment: 3 tables, 10 flashcards, 4 mnemonics, 10 review points, 5 quiz questions and 4 clinical scenarios per session."
+      },
+      "auto_sessions": {
+        "type": "boolean",
+        "default": false,
+        "description": "Accept detected session boundaries without human review. The resulting guide is marked unreviewed."
+      },
+      "no_verify": {
+        "type": "boolean",
+        "default": false,
+        "description": "Skip the independent flashcard answer verification pass."
+      },
+      "only": {
+        "type": "string",
+        "description": "Comma-separated provider or dialect filter for 'compat' and 'reproduce'."
+      },
+      "mock": {
+        "type": "boolean",
+        "default": false,
+        "description": "Include the deterministic offline provider. Lets the whole pipeline run with no API keys and no network."
+      }
+    },
+    "required": [
+      "command"
+    ],
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "description": "Exactly one JSON document on stdout. Shape depends on the command; every response is canonical JSON with sorted keys.",
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": [
+          "COMPLETE",
+          "PAUSED_FOR_SESSION_REVIEW"
+        ]
+      },
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "DEGRADED",
+          "NOT_READY",
+          "REPRODUCIBLE",
+          "INSUFFICIENT",
+          "NO_USABLE_PROVIDER"
+        ]
+      },
+      "results": {
+        "type": "object",
+        "description": "per-stage exit codes"
+      },
+      "html": {
+        "type": "string"
+      },
+      "zip": {
+        "type": "string"
+      },
+      "error": {
+        "type": "string"
+      }
+    }
+  },
+  "invocation": {
+    "argv": [
+      "python3",
+      "scripts/forge.py",
+      "<command>",
+      "--work",
+      "<work>"
+    ],
+    "stdin_json": {
+      "command": "run",
+      "pdf": "lecture.pdf",
+      "work": "work",
+      "maximum": true
+    },
+    "stdin_argv": [
+      "python3",
+      "scripts/forge.py",
+      "--stdin"
+    ]
+  },
+  "safety": {
+    "authorization_required": "Process only material the operator is authorized to use.",
+    "network": "Optional. Disabled entirely with FORGE_MOCK=1.",
+    "secrets": "Read from environment at call time; never printed, cached or written to artifacts.",
+    "no_fabrication": "Undeterminable flashcard answers are dropped rather than invented; raw OCR evidence is never edited."
+  }
+}

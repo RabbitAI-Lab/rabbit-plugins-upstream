@@ -1,43 +1,54 @@
-## Description: <br>
-搜索万豪集团旗下喜来登酒店，返回实时价格与预订链接，支持酒店详情查询和套餐优惠搜索，基于飞猪官方数据直连。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+搜索万豪集团旗下喜来登酒店并返回实时价格与预订链接，支持酒店详情查询和套餐优惠搜索。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users and travel-planning agents use this skill to search Sheraton hotels, compare nightly prices, inspect hotel details, and obtain booking links for completion on Fliggy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel destinations, dates, and query terms are sent through a cloud proxy whose endpoint is not clearly declared. <br>
-Mitigation: Install only when the proxy data flow is acceptable for the intended users, and avoid submitting sensitive personal travel details. <br>
-Risk: The artifact includes a shared embedded proxy token according to the security evidence. <br>
-Mitigation: Review token handling before deployment and prefer per-installation or managed credentials where available. <br>
-Risk: Hotel prices, package details, and availability may change after the skill returns results. <br>
-Mitigation: Confirm current price, availability, and booking terms on the linked Fliggy page before purchase. <br>
+## Use Case:
 
+External users and travel-assistant agents use this skill to search Sheraton hotels, inspect hotel details, and find package offers with live prices and booking links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/sheraton-hotel-booking) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style text with hotel listings, detail summaries, prices, IDs, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results depend on the configured proxy and the upstream travel platform; prices and availability should be confirmed on the booking page.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.7 (source: server release evidence) <br>
+Risk: Search destinations, dates, hotel names, and related filters are sent to an external proxy service to retrieve live hotel results.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for intended Sheraton hotel searches and avoid sending unnecessary sensitive traveler details.
+
+Risk: Live hotel prices, availability, details, and package data depend on the external service response and may be incomplete or unavailable.
+
+Mitigation: Show only returned data, preserve booking links when present, and do not add prices, ratings, amenities, or hotel details that the tool did not return.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/sheraton-hotel-booking)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown text with hotel search results, details, package offers, and booking links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results should reflect returned hotel data without adding unsupported prices, ratings, amenities, or booking details.]
+
+## Skill Version(s):
+
+1.1.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

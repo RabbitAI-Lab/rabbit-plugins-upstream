@@ -145,15 +145,39 @@ class GridCLI(cmd.Cmd):
         super().__init__()
         self.db_path = None
 
-    def set_books(self, path):
-        """Open a books.db file."""
+    def set_books(self, path, force=False):
+        """Open a books.db file. force=True takes a stale lock (open --force)."""
         if not _check_workspace(path):
             return False
         if not os.path.exists(path):
             print(f"  File not found: {path}")
             return False
-        models.set_db_path(path)
-        models._ensure_columns()
+        try:
+            # gated open: integrity check → daily snapshot → migrate
+            models.init_db(path, force_lock=force)
+        except models.BooksLocked as e:
+            # v130 — a refusal must carry the way out, here as much as on the
+            # lock screen. Nobody should have to go and delete a file by hand.
+            print(f"\n  !! {e.headline}")
+            print(f"     {e.prog} · PID {e.pid} · {e.host} · since {e.started}")
+            print(f"     {e.detail}")
+            if e.warn:
+                print(f"     {e.warn}")
+            print(f"\n     {e.door}")
+            print(f"     If you are sure, open it anyway:  open {path} --force\n")
+            return False
+        except ValueError as e:
+            print(f"  !! {e}")
+            return False
+        if force:
+            print("  !! lock cleared by the operator")
+        for line in models.re_repair_note():
+            print(f"  !! {line}")
+        st = models.backup_status()
+        if st['error']:
+            print(f"  !! {st['note']}")
+        elif st['note']:
+            print(f"  {st['note']}")
         self.db_path = path
         name = models.get_meta('company_name', os.path.basename(os.path.dirname(path)))
         self.prompt = f'Grid/{name}> '
@@ -180,10 +204,10 @@ class GridCLI(cmd.Cmd):
 
     def _check_ceiling_date(self, date_str):
         """Check if a date is after the fiscal year end. Returns True if OK to post."""
-        ceiling = models.get_meta('fy_end_date', '')
+        ceiling = models.fiscal_ceiling()
         if ceiling and date_str > ceiling:
             print(f"  Cannot post on {date_str} — fiscal year ends {ceiling}.")
-            print(f"  Run 'rollforward' to advance to the next fiscal year.")
+            print(f"  Use 'ceiling next' to open the following year.")
             return False
         return True
 
@@ -255,6 +279,11 @@ class GridCLI(cmd.Cmd):
       Import a bank OFX/QBO file. Applies rules automatically.
       Example: importofx downloads/jan2025.qbo BANK.CHQ
 
+    importgl <csvfile> <bank_account>
+      Import a pre-categorized GL CSV (Date, Description, Amount, CrossAccount).
+      No rules applied — cross-account is specified per row.
+      Example: importgl fy2024_bank_cdn.csv BANK.CDN
+
     importaje <file> [ref_prefix]
       Import CaseWare AJE export (IIF or Venice format).
       Maps CsW accounts to Grid accounts, posts all entries.
@@ -290,11 +319,11 @@ class GridCLI(cmd.Cmd):
 
     delrule <id>             Delete an import rule
 
-  YEAR-END
-    rollforward [YYYY-MM-DD]  Roll fiscal year forward (posts RE offset, sets lock)
-    ye [YYYY-MM-DD]           Alias for rollforward
-    ceiling [date]            Show or set fiscal year ceiling
-    validate                  Validate report chain (IS→BS, RE.OFS, totals)
+  FISCAL
+    aje [...]                 Adjusting entries — years, entries, post, delete
+    fye [YYYY-MM-DD]          Show or set the fiscal year end being worked on
+    ceiling [cy|next]         How far past that year-end posting stays open
+    validate                  Validate report chain (IS→NI→RE, totals, BS balance)
 
   OTHER
     reconcile <account>      Show reconciliation summary
@@ -307,10 +336,17 @@ class GridCLI(cmd.Cmd):
     # ─── open / close ────────────────────────────────────────────
 
     def do_open(self, arg):
-        """Open a books.db file. Usage: open <path/to/books.db>"""
+        """Open a books.db file. Usage: open <path/to/books.db> [--force]
+        --force takes the books from a stale lock — the same deliberate door
+        F3 offers on the web lock screen."""
+        arg = arg.strip()
+        force = False
+        for flag in ('--force', '-f'):
+            if arg.endswith(flag):
+                arg, force = arg[:-len(flag)].strip(), True
         arg = arg.strip().strip('"').strip("'")
         if not arg:
-            print("  Usage: open <path/to/books.db>")
+            print("  Usage: open <path/to/books.db> [--force]")
             print("  You can also point to a folder that contains books.db.")
             return
         path = os.path.expanduser(arg)
@@ -330,7 +366,7 @@ class GridCLI(cmd.Cmd):
             folder = os.path.dirname(path) or arg
             print(f"  To create new books: new {folder}")
             return
-        self.set_books(path)
+        self.set_books(path, force=force)
 
     def do_close(self, arg):
         """Close the current books."""
@@ -338,6 +374,126 @@ class GridCLI(cmd.Cmd):
         self.db_path = None
         self.prompt = 'Grid> '
         print("  Books closed.")
+
+    def do_check(self, arg):
+        """Check the books: is anything wrong, is anything outstanding. Usage: check"""
+        if not self._require_books():
+            return
+        r = models.check_books()
+        mark = {'ok': '  ok ', 'attention': '  ** ', 'error': ' !!! '}
+        print()
+        for c in r['checks']:
+            print(f"{mark[c['status']]}{c['name']:<40} {c['detail']}")
+        print(f"\n  {r['summary']}\n")
+
+    def do_backup(self, arg):
+        """Snapshot the open books to backups/ (checkpointed, verified). Usage: backup"""
+        if not self._require_books():
+            return
+        try:
+            path = models.backup_books(force=True)
+            print(f"  Backed up: {path}")
+            snaps = models.list_backups()
+            print(f"  {len(snaps)} snapshot(s) on file (newest {models.BACKUP_KEEP} kept)")
+        except Exception as e:
+            print(f"  !! Backup failed: {e}")
+
+    def do_openings(self, arg):
+        """Opening balances (conversion). Usage:
+             openings                     — where these books stand
+             openings <file.csv>          — post a conversion from a CSV
+             openings delete              — delete the conversion so it can be redone
+
+        CSV columns: account, description, amount — one row per line of the prior-year
+        trial balance. amount is signed as Grid displays: a plain number is a DEBIT,
+        (1000.00) or -1000.00 is a CREDIT. The conversion date is the prior fiscal year
+        end unless the file's first line is `date,YYYY-MM-DD`.
+
+        Retained earnings is NEVER in the file — Grid computes it as the residual and
+        posts it to RE.OB, creates TRX.OPEN, and lands the whole thing atomically.
+        """
+        if not self._require_books():
+            return
+        arg = (arg or '').strip()
+
+        if not arg:
+            st = models.openings_state()
+            print(f"  Status: {st['status']}")
+            if st['status'] == 'posted':
+                ob = models.get_account_by_name(models.OPENING_RE_ACCT)
+                re_c = -models.get_account_balance(ob['id']) if ob else 0
+                conv = models.get_account_by_name(models.CONVERSION_ACCT)
+                print(f"  Converted at {st['conversion_date']} — {st['entry_count']} entries")
+                print(f"  Opening retained earnings: {models.fmt_amount_plain(re_c)} CR")
+                print(f"  {models.CONVERSION_ACCT}: "
+                      f"{models.fmt_amount_plain(models.get_account_balance(conv['id']))} "
+                      f"(must be 0.00)")
+            elif st['status'] == 'needed':
+                print(f"  Nothing posted yet. Default conversion date: {st['default_date']}")
+                print(f"  Post one with:  openings <file.csv>")
+            elif st['status'] == 'declined':
+                print("  Brand-new client — started at zero, no conversion.")
+            else:
+                print("  These books have activity but no conversion entry.")
+            return
+
+        if arg.lower() == 'delete':
+            try:
+                n = models.delete_opening_balances()
+                print(f"  Conversion deleted — {n} entries removed.")
+            except ValueError as e:
+                print(f"  !! {e}")
+            return
+
+        if not os.path.exists(arg):
+            print(f"  !! File not found: {arg}")
+            return
+        date = models.default_conversion_date()
+        rows = []
+        with open(arg, 'r', encoding='utf-8-sig') as f:
+            for n, raw in enumerate(csv.reader(f), start=1):
+                if not raw or not any(c.strip() for c in raw):
+                    continue
+                if n == 1 and raw[0].strip().lower() == 'date':
+                    date = raw[1].strip()
+                    continue
+                if n == 1 and raw[0].strip().lower() in ('account', 'acct'):
+                    continue                                    # header
+                acct = raw[0].strip()
+                desc = raw[1].strip() if len(raw) > 1 else ''
+                amt = raw[2].strip() if len(raw) > 2 else ''
+                try:
+                    cents = models.parse_amount(amt) if amt else 0
+                except ValueError:
+                    print(f"  !! line {n} ({acct}): '{amt}' is not an amount")
+                    return
+                rows.append({'account': acct, 'description': desc, 'amount': cents})
+
+        v = models.validate_opening_rows(date, rows)
+        for r in v['rows']:
+            if r['error']:
+                print(f"  !! {r['account'] or '(no account)'}: {r['error']}")
+            elif r['warning']:
+                print(f"   ? {r['account']}: {r['warning']}")
+        if not v['ok']:
+            for e in v['errors']:
+                print(f"  !! {e}")
+            print("  Nothing posted.")
+            return
+        print(f"  Conversion date  : {date}")
+        print(f"  Debits / Credits : {models.fmt_amount_plain(v['debit_cents'])} / "
+              f"{models.fmt_amount_plain(v['credit_cents'])}")
+        print(f"  Retained earnings: {models.fmt_amount_plain(v['re_credit_cents'])} CR  (computed)")
+        print(f"  {v['re_note']}")
+        try:
+            res = models.post_opening_balances(date, rows)
+        except ValueError as e:
+            print(f"  !! {e}")
+            return
+        conv = models.get_account_by_name(models.CONVERSION_ACCT)
+        print(f"  Posted {len(res['txn_ids'])} entries as {res['batch']}.")
+        print(f"  {models.CONVERSION_ACCT} is now "
+              f"{models.fmt_amount_plain(models.get_account_balance(conv['id']))}")
 
     def do_info(self, arg):
         """Show company info and database stats."""
@@ -355,11 +511,13 @@ class GridCLI(cmd.Cmd):
             txn_count = db.execute("SELECT COUNT(*) FROM transactions").fetchone()[0]
             line_count = db.execute("SELECT COUNT(*) FROM lines").fetchone()[0]
 
-        ceiling = models.get_meta('fy_end_date', '')
+        ceiling = models.fiscal_ceiling()
+        mode = models.get_meta('fy_ceiling_mode', 'cy') or 'cy'
+        anchor = models.fiscal_anchor()
         print(f"  Company:      {name}")
-        print(f"  Fiscal YE:    {fye} {fy}")
+        print(f"  Working YE:   {anchor['cy_end'] if anchor else (fye + ' ' + fy)}")
         print(f"  Lock date:    {lock or '(none)'}")
-        print(f"  FY ceiling:   {ceiling or '(none)'}")
+        print(f"  FY ceiling:   {ceiling or '(none)'} ({'one year ahead' if mode == 'next' else 'same as working YE'})")
         print(f"  File:         {self.db_path}")
         print(f"  Size:         {os.path.getsize(self.db_path):,} bytes")
         print(f"  Accounts:     {len(posting)} posting, {len(accts) - len(posting)} total")
@@ -409,7 +567,7 @@ class GridCLI(cmd.Cmd):
         Usage: new <folder> ["Company Name"] [MM-DD]
 
         Creates the folder if needed, initializes books.db with the full
-        default chart of accounts, reports (BS, IS, AJE, TRX, RE.OFS),
+        default chart of accounts, reports (BS, IS, AJE, TRX),
         import rules, and tax codes.
 
         Examples:
@@ -471,7 +629,7 @@ class GridCLI(cmd.Cmd):
             print(f"  Error creating books: {e}")
             return
 
-        ceiling = models.get_meta('fy_end_date', '')
+        ceiling = models.fiscal_ceiling()
         print(f"  ✓ Created new books: {company_name}")
         print(f"    Folder:     {folder}")
         print(f"    Database:   {db_path}")
@@ -881,6 +1039,9 @@ class GridCLI(cmd.Cmd):
         if not self._check_posting_account(cr_acct):
             return
 
+        if not desc or not desc.strip():
+            print("  ⚠ Warning: blank description. Transactions should have descriptions for audit trail.")
+
         try:
             txn_id = models.add_simple_transaction(date_str, '', desc, dr_acct['id'], cr_acct['id'], cents)
             txn, lines = models.get_transaction(txn_id)
@@ -928,6 +1089,9 @@ class GridCLI(cmd.Cmd):
             return
         if not self._check_ceiling_date(date_str):
             return
+
+        if not desc or not desc.strip():
+            print("  ⚠ Warning: blank description. Transactions should have descriptions for audit trail.")
 
         lines = []
         running = 0
@@ -1067,6 +1231,33 @@ class GridCLI(cmd.Cmd):
 
         models.delete_transaction(txn_id)
         print(f"  ✓ Deleted #{txn_id}: {txn['date']} | {txn['description']} | {len(lines)} lines")
+
+    def do_reclass(self, arg):
+        """Reclassify a suspense transaction. Usage: reclass <txn_id> <account> [tax_code]"""
+        if not self._require_books():
+            return
+        parts = arg.strip().split()
+        if len(parts) < 2:
+            print("  Usage: reclass <txn_id> <account> [tax_code]")
+            print("  Example: reclass 42 EX.OFFICE G5")
+            return
+        if not parts[0].isdigit():
+            print(f"  Invalid transaction ID: '{parts[0]}'")
+            return
+        txn_id = int(parts[0])
+        target = parts[1]
+        tax_code = parts[2] if len(parts) > 2 else ''
+        try:
+            r = models.reclassify_suspense(txn_id, target, tax_code)
+            print(f"  ✓ Reclassified #{txn_id}: EX.SUSP → {r['new_account']}  ${r['amount_display']}")
+            if r['tax_applied']:
+                print(f"    Tax: {r['tax_applied']}  ${r['tax_amount_cents']/100:,.2f}  Net: ${r['net_amount_cents']/100:,.2f}")
+            if r['rule_created']:
+                print(f"    Auto-rule: '{r['rule_keyword']}' → {r['new_account']}")
+            if r['warning']:
+                print(f"    ⚠ {r['warning']}")
+        except ValueError as e:
+            print(f"  Error: {e}")
 
     def do_search(self, arg):
         """Search transactions. Usage: search <query>"""
@@ -1235,6 +1426,17 @@ class GridCLI(cmd.Cmd):
             if len(all_errors) > 20:
                 print(f"    ... and {len(all_errors) - 20} more")
 
+        # Show possible duplicates
+        dupes = result.get('possible_duplicates', [])
+        if dupes:
+            print(f"\n  ⚠ Possible duplicates ({len(dupes)}):")
+            print(f"    These rows match existing transactions (same date + amount).")
+            print(f"    They were posted — review and delete if they are actual duplicates.")
+            for d in dupes[:10]:
+                print(f"    Row {d['row']}: {d['date']}  {models.fmt_amount(abs(d['amount'])):>12s}  {d['description']}")
+            if len(dupes) > 10:
+                print(f"    ... and {len(dupes) - 10} more")
+
         # Next steps
         if suspense:
             print(f"\n  {suspense} items went to suspense (no matching rule).")
@@ -1283,6 +1485,8 @@ class GridCLI(cmd.Cmd):
         print(f"    Rows processed: {result['rows_processed']}")
         print(f"    Posted:         {result['posted']}")
         print(f"    Skipped:        {result['skipped']}")
+        if result.get('fitid_skipped'):
+            print(f"    FITID dupes:    {result['fitid_skipped']} (skipped — already imported)")
         if result['to_suspense']:
             print(f"    To suspense:    {result['to_suspense']}")
 
@@ -1293,11 +1497,154 @@ class GridCLI(cmd.Cmd):
             if len(result['errors']) > 20:
                 print(f"    ... and {len(result['errors']) - 20} more")
 
+        # Show possible duplicates
+        dupes = result.get('possible_duplicates', [])
+        if dupes:
+            print(f"\n  ⚠ Possible duplicates ({len(dupes)}):")
+            print(f"    These rows match existing transactions (same date + amount).")
+            print(f"    They were posted — review and delete if they are actual duplicates.")
+            for d in dupes[:10]:
+                print(f"    Row {d['row']}: {d['date']}  {models.fmt_amount(abs(d['amount'])):>12s}  {d['description']}")
+            if len(dupes) > 10:
+                print(f"    ... and {len(dupes) - 10} more")
+
         if result['to_suspense']:
             print(f"\n  {result['to_suspense']} items went to suspense (no matching rule).")
             print("  Review them: ledger EX.SUSP")
             print("  Add rules to prevent this: addrule <keyword> <account>")
         if result['posted']:
+            print(f"\n  Verify the import: ledger {bank_acct['name']}")
+
+    def do_importgl(self, arg):
+        """Import a pre-categorized general ledger CSV.
+        Usage: importgl <csvfile> <bank_account>
+        Example: importgl fy2024_bank_cdn.csv BANK.CDN
+
+        CSV format: Date, Description, Amount, CrossAccount
+        Positive = debit to bank_account, negative = credit.
+        Cross-accounts must already exist. No rules applied.
+
+        Use when converting from another accounting system (a legacy GL, QuickBooks GL,
+        Sage, etc.) where every transaction already has its cross-account known.
+        """
+        if not self._require_books():
+            return
+
+        parts = _split_args(arg)
+        if len(parts) < 2:
+            print("  Usage: importgl <csvfile> <bank_account>")
+            print("  Example: importgl fy2024_bank_cdn.csv BANK.CDN")
+            print()
+            print("  CSV format: Date, Description, Amount, CrossAccount")
+            return
+
+        csv_path = os.path.expanduser(parts[0])
+        if not _check_workspace(csv_path):
+            return
+        if not os.path.exists(csv_path):
+            print(f"  File not found: {csv_path}")
+            return
+
+        bank_acct = resolve_account(parts[1])
+        if not bank_acct:
+            return
+
+        if not self._check_posting_account(bank_acct):
+            return
+
+        # Read CSV
+        try:
+            with open(csv_path, 'r', encoding='utf-8-sig') as f:
+                reader = csv.reader(f)
+                rows_raw = list(reader)
+        except Exception as e:
+            print(f"  Cannot read CSV file: {e}")
+            return
+
+        if not rows_raw:
+            print("  Empty CSV file.")
+            return
+
+        # Detect header
+        first = rows_raw[0]
+        has_header = any(h.strip().lower() in ('date', 'description', 'amount', 'crossaccount', 'cross_account')
+                         for h in first)
+        data_rows = rows_raw[1:] if has_header else rows_raw
+
+        if not data_rows:
+            print("  No data rows in CSV (only a header).")
+            return
+
+        # Build row dicts
+        import_data = []
+        parse_errors = []
+        for row_num, row in enumerate(data_rows, start=2 if has_header else 1):
+            if len(row) < 4:
+                parse_errors.append((row_num, f"Need 4 columns, got {len(row)}", ' | '.join(row)))
+                continue
+
+            row_date = row[0].strip()
+            row_desc = row[1].strip()
+            cross_acct = row[3].strip()
+
+            if not row_desc:
+                parse_errors.append((row_num, "Missing description", row_date))
+                continue
+
+            if not cross_acct:
+                parse_errors.append((row_num, "Missing cross-account", row_desc[:30]))
+                continue
+
+            try:
+                amount_cents = parse_amount(row[2])
+            except Exception:
+                parse_errors.append((row_num, f"Bad amount '{row[2].strip()}'", row_desc[:30]))
+                continue
+
+            import_data.append({
+                'date': row_date,
+                'description': row_desc,
+                'amount_cents': amount_cents,
+                'cross_account': cross_acct,
+            })
+
+        result = models.import_gl_rows(bank_acct['id'], import_data)
+        posted = result['posted']
+        skipped = result['skipped'] + len(parse_errors)
+
+        # Summary
+        print(f"\n  GL import complete: {csv_path}")
+        print(f"    Rows processed: {len(data_rows)}")
+        print(f"    Posted:         {posted}")
+        print(f"    Skipped:        {skipped}")
+
+        # Show errors
+        all_errors = [(r, reason, detail) for r, reason, detail in parse_errors]
+        if result.get('errors'):
+            for e in result['errors']:
+                all_errors.append((e['row'], e['reason'], ''))
+        if all_errors:
+            print(f"\n  Errors ({len(all_errors)}):")
+            for row_num, reason, detail in all_errors[:20]:
+                msg = f"    Row {row_num}: {reason}"
+                if detail:
+                    msg += f" — {detail}"
+                print(msg)
+            if len(all_errors) > 20:
+                print(f"    ... and {len(all_errors) - 20} more")
+
+        # Show possible duplicates
+        dupes = result.get('possible_duplicates', [])
+        if dupes:
+            print(f"\n  Possible duplicates ({len(dupes)}):")
+            print(f"    These rows match existing transactions (same date + amount).")
+            print(f"    They were posted — review and delete if they are actual duplicates.")
+            for d in dupes[:10]:
+                print(f"    Row {d['row']}: {d['date']}  {models.fmt_amount(abs(d['amount'])):>12s}  {d['description']}")
+            if len(dupes) > 10:
+                print(f"    ... and {len(dupes) - 10} more")
+
+        if posted:
             print(f"\n  Verify the import: ledger {bank_acct['name']}")
 
     def do_importaje(self, arg):
@@ -1413,7 +1760,7 @@ class GridCLI(cmd.Cmd):
             return
 
         # Post entries
-        result = models.import_aje_entries(parsed['entries'], account_map, ref_prefix)
+        result = models.import_aje_entries(parsed['entries'], account_map, ref_prefix, journal_account=ref_prefix)
 
         print(f"\n  Import complete:")
         print(f"    Posted:   {result['posted']}")
@@ -1729,6 +2076,39 @@ class GridCLI(cmd.Cmd):
         except OSError as e:
             print(f"  Cannot write file: {e}")
 
+    def do_exportwriteup(self, arg):
+        """Export the write-up handoff (for Willy, the working-paper program).
+        Usage: exportwriteup [filename]
+
+        One JSON: CY + PY fully itemized, five fiscal years of per-account
+        comparatives, the chart with leadsheet codes, the statement layouts,
+        and the check_books verdict the write-up program's gate reads.
+        Default filename: <Company>_<FY>_writeup.json beside the books.
+        """
+        if not self._require_books():
+            return
+        import json as _json
+        try:
+            payload = models.export_writeup()
+        except ValueError as e:
+            print(f"  {e}")
+            return
+        fname = arg.strip()
+        if not fname:
+            safe = payload['meta']['company_name'].replace(' ', '_')[:40]
+            fname = os.path.join(
+                os.path.dirname(models.get_db_path()),
+                f"{safe}_{payload['meta']['fiscal_year']}_writeup.json")
+        with open(fname, 'w') as f:
+            _json.dump(payload, f, indent=1)
+        m = payload['meta']
+        print(f"  Wrote {fname}")
+        print(f"  {m['itemized_transactions']} transactions itemized "
+              f"({m['py_start']} .. {m['cy_end']}); "
+              f"{m['transactions_before_window']} before / "
+              f"{m['transactions_after_window']} after the window; "
+              f"5 comparative years; {len(payload['accounts'])} accounts.")
+
     def do_exporttb(self, arg):
         """Export trial balance to CSV file.
         Usage: exporttb [filename] [as-of-date]
@@ -2015,7 +2395,11 @@ class GridCLI(cmd.Cmd):
                 print(f"  Invalid date: '{date_str}'")
                 print("  Use YYYY-MM-DD format, e.g. 2025-12-31")
                 return
-            models.set_meta('lock_date', normalized)
+            try:
+                models.set_fiscal_settings(lock_date=normalized)
+            except ValueError as e:
+                print(f"  {e}")
+                return
             print(f"  ✓ Lock date set: {normalized}")
             print("  Transactions on or before this date cannot be posted, edited, or deleted.")
         else:
@@ -2033,9 +2417,9 @@ class GridCLI(cmd.Cmd):
         """Validate the report total-to chain.
         Usage: validate
 
-        Checks that the IS chain reaches RE on the BS, that RE.OFS and RE.OPEN
-        accounts exist, that total report items have accounts linked, and that
-        the BS balances.
+        Checks that the IS chain reaches RE on the BS, that RE.OB totals into RE
+        and RE.OPEN/RE.CLOSE are computed display lines, that total report items
+        have accounts linked, and that the BS balances (and BS RE == IS Closing RE).
         """
         if not self._require_books():
             return
@@ -2064,90 +2448,269 @@ class GridCLI(cmd.Cmd):
             print(f"\n  {len(errors)} error(s) found. The report chain has problems.")
         print()
 
-    # ─── YE rollover ───────────────────────────────────────────
+    def do_trace(self, arg):
+        """Trace the accumulation tree for a report account.
+        Usage: trace <account> [as-of-date]
 
-    def do_rollforward(self, arg):
-        """Roll fiscal year forward. Posts closing RE offset entry, sets lock, advances ceiling.
-        Usage: rollforward [YYYY-MM-DD]
-        Example: rollforward 2025-12-31
+        Shows what feeds into the account total, with amounts and sources.
+        Useful for understanding why a total shows a particular number.
 
-        Reads RE.CLOSE (not RE from BS) to get the correct closing retained earnings.
-        Posts:  Dr RE.OFS / Cr RE.OPEN  for that amount (dated first day of new FY).
-        Sets lock date to the YE date. Advances fiscal year ceiling to next year.
+        Examples:
+          trace RE                      # All-time RE accumulation
+          trace RE 2025-05-31           # RE as of a specific date
+          trace NETEARN 2024-06-01 2025-05-31  # NETEARN for a date range
         """
         if not self._require_books():
             return
 
-        ye_date = arg.strip() if arg.strip() else None
-
-        if not ye_date:
-            # Prompt for it
-            fye_md = models.get_meta('fiscal_year_end', '12-31')
-            fy = models.get_meta('fiscal_year', '')
-            if fy and fye_md:
-                suggested = f"{fy}-{fye_md}"
-            else:
-                suggested = ''
-            try:
-                ye_date = input(f"  Fiscal year end date [{suggested}]: ").strip() or suggested
-            except (EOFError, KeyboardInterrupt):
-                print("\n  Cancelled.")
-                return
-
-        normalized = _normalize_date(ye_date)
-        if not normalized:
-            print(f"  Invalid date: '{ye_date}'")
-            print("  Use YYYY-MM-DD format, e.g. 2025-12-31")
-            return
-        ye_date = normalized
-
-        try:
-            result = models.rollforward(ye_date)
-        except ValueError as e:
-            print(f"  Error: {e}")
+        parts = _split_args(arg)
+        if not parts:
+            print("  Usage: trace <account> [date_to | date_from date_to]")
             return
 
-        print(f"\n  Rollforward")
-        print(f"  ──────────────────")
-        print(f"  Fiscal year end:    {ye_date}")
-        print(f"  RE.CLOSE balance:   {fmt(result['closing_re'])}")
-        print(f"  Posting date:       {result['new_fy_start']}")
-        print(f"  Entry:              {result['description']}")
+        acct_name = parts[0].upper()
+        date_from = None
+        date_to = None
+        if len(parts) == 2:
+            date_to = models.normalize_date(parts[1])
+        elif len(parts) >= 3:
+            date_from = models.normalize_date(parts[1])
+            date_to = models.normalize_date(parts[2])
 
-        if result['ofs_raw'] > 0:
-            print(f"    Dr RE.OFS    {fmt(result['ofs_raw'])}")
-            print(f"    Cr RE.OPEN   {fmt(result['open_raw'])}")
-        else:
-            print(f"    Dr RE.OPEN   {fmt(-result['open_raw'])}")
-            print(f"    Cr RE.OFS    {fmt(-result['ofs_raw'])}")
+        result = models.trace_account(acct_name, date_from, date_to)
 
-        print(f"  ✓ Posted #{result['txn_id']}: {result['description']}")
-        print(f"  ✓ Lock date set to {result['lock_date']}")
-        print(f"  ✓ FY ceiling advanced to {result['fy_end_date']}")
-        print(f"  ✓ Fiscal year updated to {result['fiscal_year']}")
-        print(f"\n  Rollforward complete.")
+        if result['display'] == 0 and not result['contributors']:
+            print(f"\n  {acct_name}: not found on any report or has no activity.")
+            return
 
-    def do_ye(self, arg):
-        """Alias for rollforward."""
-        return self.do_rollforward(arg)
+        nb = result['normal_balance']
+        period = ""
+        if date_from and date_to:
+            period = f" ({date_from} to {date_to})"
+        elif date_to:
+            period = f" (as of {date_to})"
 
-    def do_ceiling(self, arg):
-        """Show or set fiscal year end date (ceiling). Usage: ceiling [YYYY-MM-DD]"""
+        print(f"\n  {acct_name} ({nb}-normal){period}")
+        print(f"  Display: {models.fmt_amount(result['display'])}")
+        if result['own_raw'] != 0:
+            sign = 1 if nb == 'D' else -1
+            print(f"  Own postings: {models.fmt_amount(result['own_raw'] * sign)}")
+
+        if result['feeds_into']:
+            print(f"  Feeds into: {', '.join(result['feeds_into'])}")
+
+        if result['contributors']:
+            print(f"\n  {'Account':<20s} {'Report':<6s} {'Own':>14s} {'+ Received':>14s} {'= Dumped':>14s}")
+            print(f"  {'─'*20} {'─'*6} {'─'*14} {'─'*14} {'─'*14}")
+            for c in result['contributors']:
+                sign = 1 if nb == 'D' else -1
+                own_d = models.fmt_amount(c['own_raw'] * sign) if c['own_raw'] else '—'
+                acc_d = models.fmt_amount(c['accumulated'] * sign) if c['accumulated'] else '—'
+                val_d = models.fmt_amount(c['display'])
+                print(f"  {c['name']:<20s} {c['report']:<6s} {own_d:>14s} {acc_d:>14s} {val_d:>14s}")
+
+            print(f"  {'─'*20} {'─'*6} {'─'*14} {'─'*14} {'─'*14}")
+            total_dumped = sum(c['value_dumped'] for c in result['contributors'])
+            sign = 1 if nb == 'D' else -1
+            print(f"  {'Total':<27s} {'':>14s} {'':>14s} {models.fmt_amount(total_dumped * sign):>14s}")
+        print()
+
+    # ─── YE rollover ───────────────────────────────────────────
+
+
+
+
+    def do_aje(self, arg):
+        """Adjusting entries. Usage:
+             aje                          — the years on file
+             aje <journal>                — the adjustments in one year
+             aje new [NAME] [description] — set a year up (suggests if omitted)
+             aje post <journal> <file.csv>  — post ONE entry from a CSV
+             aje del <journal> <ref>      — remove one entry, every leg of it
+
+        The post CSV carries the entry's header on its first lines and then the
+        legs — this is one adjustment, not a batch:
+
+            ref,26AJE03
+            date,2026-12-31
+            description,Rcd 2026 tax provision
+            EX.TAX,100.00
+            GST.PAY,(80.00)
+            AP,(20.00)
+
+        ref and date may be omitted — the next reference in the journal's own
+        sequence and the working year-end are used. Amount is signed as Grid
+        displays: plain is a DEBIT, brackets or a leading minus is a CREDIT.
+        NEVER include the journal account itself; Grid posts that side.
+        """
         if not self._require_books():
             return
+        parts = (arg or '').strip().split()
 
+        if not parts:
+            js = models.aje_journals()
+            if not js:
+                print("  No years of adjusting entries yet.")
+                print("  Set one up with:  aje new")
+                return
+            for j in js:
+                n = len(models.aje_groups(j['id']))
+                bal = models.get_account_balance(j['id'])
+                flag = '' if bal == 0 else f"  !! journal is {models.fmt_amount_plain(bal)}, should be 0.00"
+                print(f"  {j['name']:<10} {(j['description'] or ''):<28} {n:>3} entr"
+                      f"{'y' if n == 1 else 'ies'}   next {models.next_aje_ref(j['id'])}{flag}")
+            return
+
+        cmd = parts[0].lower()
+
+        if cmd == 'new':
+            sug = models.suggest_aje_batch()
+            name = parts[1] if len(parts) > 1 else sug['account']
+            desc = ' '.join(parts[2:]) if len(parts) > 2 else sug['description']
+            try:
+                acct = models.create_aje_batch(name, desc)
+            except ValueError as e:
+                print(f"  !! {e}")
+                return
+            print(f"  ✓ {acct['name']} — {acct['description']}")
+            print(f"    First entry will be {models.next_aje_ref(acct['id'])}")
+            return
+
+        if cmd == 'del':
+            if len(parts) < 3:
+                print("  Usage: aje del <journal> <ref>")
+                return
+            acct = models.get_account_by_name(parts[1])
+            if not acct or not models.is_aje_journal(acct['id']):
+                print(f"  '{parts[1]}' is not a year of adjusting entries.")
+                return
+            try:
+                n = models.delete_aje(acct['id'], parts[2])
+                print(f"  ✓ {parts[2]} removed ({n} lines).")
+            except ValueError as e:
+                print(f"  !! {e}")
+            return
+
+        if cmd == 'post':
+            if len(parts) < 3:
+                print("  Usage: aje post <journal> <file.csv>")
+                return
+            acct = models.get_account_by_name(parts[1])
+            if not acct or not models.is_aje_journal(acct['id']):
+                print(f"  '{parts[1]}' is not a year of adjusting entries.")
+                return
+            path = os.path.expanduser(' '.join(parts[2:]))
+            if not os.path.exists(path):
+                print(f"  File not found: {path}")
+                return
+            ref = date_str = desc = ''
+            rows = []
+            import csv as _csv
+            with open(path, newline='', encoding='utf-8-sig') as fh:
+                for raw in _csv.reader(fh):
+                    if not raw or not (raw[0] or '').strip():
+                        continue
+                    key = raw[0].strip().lower()
+                    val = (raw[1].strip() if len(raw) > 1 else '')
+                    if key == 'ref':          ref = val
+                    elif key == 'date':       date_str = val
+                    elif key == 'description': desc = val
+                    else:
+                        try:
+                            rows.append({'account': raw[0].strip(),
+                                         'amount': models.parse_amount(val) if val else 0})
+                        except ValueError:
+                            print(f"  !! '{val}' is not an amount (line for {raw[0].strip()})")
+                            return
+            anchor = models.fiscal_anchor()
+            try:
+                v = models.post_aje(acct['id'], ref or models.next_aje_ref(acct['id']),
+                                    date_str or (anchor['cy_end'] if anchor else ''),
+                                    desc, rows)
+            except ValueError as e:
+                print(f"  !! {e}")
+                return
+            print(f"  ✓ {v['ref']} posted — {len(v['txn_ids'])} legs, "
+                  f"Dr {models.fmt_amount_plain(v['debit_cents'])} "
+                  f"Cr {models.fmt_amount_plain(v['credit_cents'])}")
+            print(f"    {acct['name']} balance: "
+                  f"{models.fmt_amount_plain(models.get_account_balance(acct['id']))} (must be 0.00)")
+            print(f"    Next reference: {models.next_aje_ref(acct['id'])}")
+            return
+
+        acct = models.get_account_by_name(parts[0])
+        if not acct or not models.is_aje_journal(acct['id']):
+            print(f"  '{parts[0]}' is not a year of adjusting entries. Try:  aje")
+            return
+        groups = models.aje_groups(acct['id'])
+        if not groups:
+            print(f"  {acct['name']} has no adjustments yet. First will be "
+                  f"{models.next_aje_ref(acct['id'])}.")
+            return
+        for g in groups:
+            flag = '' if g['balanced'] else '   !! out of balance'
+            print(f"  {g['date']}  {g['ref']:<10} {g['description']}{flag}")
+            for l in g['lines']:
+                print(f"      {(l['account'] or '—'):<16} "
+                      f"{models.fmt_amount_plain(l['amount']):>14}")
+        print(f"  {len(groups)} entr{'y' if len(groups) == 1 else 'ies'}; "
+              f"next {models.next_aje_ref(acct['id'])}")
+
+    def do_fye(self, arg):
+        """Show or set the fiscal year end being WORKED ON — the year the
+        statements report. Usage: fye [YYYY-MM-DD]"""
+        if not self._require_books():
+            return
         arg = arg.strip()
         if arg:
             normalized = _normalize_date(arg)
             if not normalized:
                 print(f"  Invalid date: '{arg}'")
-                print("  Use YYYY-MM-DD format, e.g. 2025-12-31")
+                print("  Use YYYY-MM-DD format, e.g. 2026-05-31")
                 return
-            models.set_meta('fy_end_date', normalized)
-            print(f"  ✓ Fiscal year ceiling set to {normalized}")
+            try:
+                r = models.set_fiscal_settings(working_ye=normalized)
+            except ValueError as e:
+                print(f"  {e}")
+                return
+            print(f"  ✓ Working year-end: {r['working_ye']}")
+            print(f"    Posting closes after {r['ceiling']}")
         else:
-            ceiling = models.get_meta('fy_end_date', '')
-            print(f"  Fiscal year ceiling: {ceiling or '(none)'}")
+            a = models.fiscal_anchor()
+            if not a:
+                print("  Fiscal year end: (not set)")
+                print("  Set one with: fye YYYY-MM-DD")
+                return
+            print(f"  Working year-end: {a['cy_end']}")
+            print(f"  Current period:   {a['cy_start']} to {a['cy_end']}")
+            print(f"  Comparative:      {a['py_start']} to {a['py_end']}")
+            print(f"  Posting closes:   {models.fiscal_ceiling()}")
+
+    def do_ceiling(self, arg):
+        """Show or set how far past the working year-end posting stays open.
+        Usage: ceiling [cy|next]   (cy = stop at the working YE, next = one year on)"""
+        if not self._require_books():
+            return
+
+        arg = arg.strip().lower()
+        if arg:
+            if arg not in ('cy', 'next'):
+                print(f"  Unknown setting: '{arg}'")
+                print("  Use 'ceiling cy' (stop at the working year-end) or")
+                print("      'ceiling next' (open the following year).")
+                return
+            try:
+                r = models.set_fiscal_settings(ceiling_mode=arg)
+            except ValueError as e:
+                print(f"  {e}")
+                return
+            print(f"  ✓ Posting now closes after {r['ceiling']}")
+        else:
+            mode = models.get_meta('fy_ceiling_mode', 'cy') or 'cy'
+            anchor = models.fiscal_anchor()
+            print(f"  Working year-end:   {anchor['cy_end'] if anchor else '(not set)'}")
+            print(f"  Posting closes:     {models.fiscal_ceiling() or '(none)'}"
+                  f" ({'one year ahead' if mode == 'next' else 'same as working YE'})")
 
     # ─── quit ────────────────────────────────────────────────────
 
@@ -2175,119 +2738,10 @@ class GridCLI(cmd.Cmd):
 # ─── Argument parsing helper ─────────────────────────────────────
 
 def _normalize_csv(rows_raw):
-    """Pre-process CSV: detect format, repair rows with extra fields, normalize.
-
-    Handles three scenarios:
-      1. Standard Grid format (3-4 columns) — repairs rows with extra commas
-      2. Multi-column bank CSVs (5+ columns) — auto-detects date/desc/amount
-         columns from header keywords and normalizes to 3-column format
-      3. Rows with extra fields from unquoted commas in descriptions —
-         merges extra text back into description, shifts amounts to correct position
-
-    Returns (has_header, data_rows, repairs).
-    repairs: list of (row_number, extra_field_count, description_preview).
-    """
-    if not rows_raw:
-        return False, [], []
-
-    first_row = rows_raw[0]
-    header = [h.strip().lower() for h in first_row]
-    has_header = any(kw in ' '.join(header) for kw in
-                     ['date', 'description', 'amount', 'debit', 'credit'])
-    start = 1 if has_header else 0
-    data_rows = [list(r) for r in rows_raw[start:]]
-    expected = len(first_row)
-    repairs = []
-
-    if has_header and expected > 4:
-        # ── Multi-column bank CSV ──
-        # Auto-detect column roles from header keywords
-        date_col = None
-        amt_cols = []
-        desc_cols = []
-
-        for i, h in enumerate(header):
-            if 'date' in h and date_col is None:
-                date_col = i
-            elif '$' in h or h in ('amount', 'debit', 'credit'):
-                amt_cols.append(i)
-            elif any(kw in h for kw in ['description', 'desc', 'memo',
-                                        'payee', 'detail', 'narrative']):
-                desc_cols.append(i)
-            # Everything else (account type, number, cheque#, balance) is skipped
-
-        if date_col is None or not amt_cols:
-            # Can't auto-detect — fall through to standard parsing
-            return has_header, data_rows, repairs
-
-        # Normalize each row to 3 columns: [date, description, amount]
-        normalized = []
-        for idx, row in enumerate(data_rows):
-            n = len(row)
-            row_num = idx + start + 1
-
-            date_val = row[date_col].strip() if date_col < n else ''
-
-            if n > expected:
-                # REPAIR: row has extra fields from unquoted commas in text.
-                # Key insight: amounts get pushed to the END of the row.
-                amt_start = n - len(amt_cols)
-
-                # Description: everything between date col and amount region
-                desc_parts = []
-                for i in range(date_col + 1, amt_start):
-                    v = row[i].strip()
-                    if v:
-                        desc_parts.append(v)
-
-                # Amount: first non-empty in the trailing region
-                amt_val = ''
-                for v in row[amt_start:]:
-                    v = v.strip()
-                    if v:
-                        amt_val = v
-                        break
-
-                extra = n - expected
-                desc_joined = ': '.join(desc_parts)
-                repairs.append((row_num, extra, desc_joined[:50]))
-            else:
-                # Normal row — extract by detected column positions
-                desc_parts = []
-                for c in desc_cols:
-                    if c < n and row[c].strip():
-                        desc_parts.append(row[c].strip())
-
-                amt_val = ''
-                for c in amt_cols:
-                    if c < n and row[c].strip():
-                        amt_val = row[c].strip()
-                        break
-
-                desc_joined = ': '.join(desc_parts)
-
-            normalized.append([date_val, desc_joined, amt_val])
-
-        return has_header, normalized, repairs
-
-    # ── Standard Grid format (3-4 columns) ──
-    # Only repair rows with extra fields; leave column structure intact
-    for i, row in enumerate(data_rows):
-        if len(row) > expected:
-            row_num = i + start + 1
-            extra = len(row) - expected
-            amt_count = expected - 2  # 1 for 3-col, 2 for 4-col
-
-            date_val = row[0]
-            desc_fields = row[1 : len(row) - amt_count]
-            amt_fields = row[len(row) - amt_count:]
-
-            merged = ', '.join(f.strip() for f in desc_fields)
-            data_rows[i] = [date_val, merged] + amt_fields
-            repairs.append((row_num, extra, merged[:50]))
-
-    return has_header, data_rows, repairs
-
+    """Delegates to models.normalize_csv — ONE csv normalizer for all interfaces
+    (content-based header detection, extra-field repair, signed Debit/Credit
+    netting on multi-column exports)."""
+    return models.normalize_csv(rows_raw)
 
 def _split_args(s):
     """Split command arguments, respecting quoted strings."""
@@ -2316,11 +2770,17 @@ def main():
         return
 
     # First arg = db path
+    force = False
+    for flag in ('--force', '-f'):
+        if flag in args:
+            args = [a for a in args if a != flag]
+            force = True
+
     db_path = os.path.expanduser(args[0])
     if os.path.isdir(db_path):
         db_path = os.path.join(db_path, 'books.db')
 
-    if not cli.set_books(db_path):
+    if not cli.set_books(db_path, force=force):
         sys.exit(1)
 
     if len(args) > 1:

@@ -1,0 +1,60 @@
+{
+  "name": "navigation-read",
+  "description": "Read the Tradebee two-level navigation tree without pagination.",
+  "version": "1.0.0",
+  "input": {
+    "type": "object",
+    "properties": {
+      "language": {
+        "type": "string",
+        "description": "Required exact enabled site language selected from languages-get. Results are restricted to this language."
+      },
+      "navigation_id": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Optional positive navigation ID for one exact item. Omit it to avoid ID filtering. It cannot be combined with parent_navigation_id."
+      },
+      "parent_navigation_id": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "Optional parent filter. Use 0 for first-level navigation or a positive first-level ID for its children. It cannot be combined with navigation_id."
+      },
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "navigation_id",
+            "parent_navigation_id",
+            "language",
+            "name",
+            "url",
+            "system_children_type",
+            "content",
+            "open_in_new_window",
+            "sort",
+            "create_time",
+            "update_time",
+            "is_leaf",
+            "children"
+          ]
+        },
+        "description": "Optional fields to return. Omit it or send [] for all supported fields. The content field is first-level custom child-navigation HTML and is empty for system children, manual-child containers, and second-level items. The sort field ranges from 1 to 999999, with smaller values appearing earlier. When system_children_type is returned: 0 disables system children; 1 first-level product groups; 2 news groups; 3 FAQ groups; 4 certificate groups; 5 case groups; 6 all product groups without cover images; 7 blog groups. Do not send pagination parameters."
+      }
+    },
+    "required": [
+      "language"
+    ]
+  },
+  "output": {
+    "type": "object",
+    "description": "API result with data.list ordered by sort ascending, so smaller sort values appear earlier; first-level items contain children and all second-level children arrays are empty."
+  },
+  "dependencies": {
+    "language": {
+      "skill": "languages-get",
+      "field": "list[].language",
+      "mode": "select"
+    }
+  }
+}

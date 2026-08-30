@@ -1,43 +1,56 @@
-## Description: <br>
-Manages digital garden notes, link structures, and health metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages digital garden notes, link structures, and health metrics.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-External users and developers use this skill to design, maintain, and evaluate digital garden knowledge bases, including bidirectional links, content maturity, maintenance cadence, and health metrics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may suggest archive, delete, or pruning actions for knowledge-base notes. <br>
-Mitigation: Review proposed archive, delete, and pruning actions before applying them to notes or documentation. <br>
-Risk: The skill can activate for broad documentation or linking requests. <br>
-Mitigation: Use it for digital garden or knowledge-base maintenance tasks where its linking and lifecycle guidance is relevant. <br>
+## Use Case:
 
+External users, developers, and documentation maintainers use this skill to organize evolving note collections, maintain bidirectional links, track content maturity, and decide when knowledge should be archived or formalized.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-memory-palace-digital-garden-cultivator) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
-- [Linking Patterns](modules/linking-patterns.md) <br>
-- [Garden Maintenance](modules/maintenance.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with example shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides digital garden maintenance workflows, linking guidance, maturity levels, and health metric formats.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server-resolved release metadata) <br>
+Risk: The skill includes note-cleanup guidance such as archive, move, remove, and delete actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require user confirmation before changing, archiving, moving, or deleting garden files.
+
+Risk: Broad activation terms may cause the skill to appear during general linking, curation, knowledge-base, or documentation tasks.
+
+Mitigation: Confirm that the current task is specifically about digital garden maintenance before applying its workflows.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-memory-palace-digital-garden-cultivator)
+- [OpenClaw Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace)
+- [Linking Patterns](artifact/modules/linking-patterns.md)
+- [Maintenance Guide](artifact/modules/maintenance.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration, Shell commands]
+
+**Output Format:** [Markdown with inline YAML and bash examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe note layouts, maintenance schedules, link patterns, health metrics, and review actions for garden files.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence; artifact frontmatter lists 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

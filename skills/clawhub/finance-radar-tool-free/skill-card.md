@@ -1,40 +1,57 @@
-## Description: <br>
-Provides basic stock and cryptocurrency analysis using Yahoo Finance data, including price lookup, fundamentals, technical indicators, dividend information, and an eight-dimension score for a single ticker. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+股票与加密货币基础分析工具，用于查询单只标的价格、基本面、技术面、股息信息，并生成8维度评分。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and personal investors use this skill to request quick single-ticker stock or cryptocurrency analysis, including price, fundamentals, technical indicators, dividends, and an eight-dimension score. It is for preliminary screening and does not provide investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review reports broad execution and file authority alongside activation language that includes unrelated domains. <br>
-Mitigation: Review before installing, enable only for finance ticker analysis, and avoid using it as a general data-analysis or automation skill unless the publisher narrows the activation language and documents the actual script to run. <br>
-Risk: Financial analysis may be delayed, incomplete, or misleading if used as direct investment advice. <br>
-Mitigation: Treat outputs as preliminary screening, cross-check with other sources, and keep human review in the investment decision process. <br>
+## Use Case:
 
+External users and developers use this Chinese-language skill for quick, single-ticker stock or crypto screening before deeper investment research. Outputs are informational analysis and should not be treated as investment advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/finance-radar-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline bash command examples and structured analysis summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Single-ticker free edition; analysis depends on Yahoo Finance data availability and latency.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill requests command execution for finance lookups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed pip install and shell commands before running them, and limit use to explicit stock or crypto analysis requests.
+
+Risk: The skill describes broad file, automation, and export capabilities beyond its finance-analysis purpose.
+
+Mitigation: Keep agent permissions scoped to the specific finance lookup workflow and avoid granting unrelated file or automation access.
+
+Risk: Generated stock or crypto analysis may be mistaken for investment advice.
+
+Mitigation: Treat outputs as informational screening only and require independent review before investment decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/finance-radar-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown with inline shell commands and finance-analysis summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include current-price, fundamentals, technical indicators, dividend details, and 8-dimension score summaries for a single ticker.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

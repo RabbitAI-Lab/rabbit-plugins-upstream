@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/phone-validity-check",
   "slug": "phone-validity-check",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1784189520492,
-  "contentHash": "95c149afbc976371d45c503e0d3463f415590828c14a7f4f8e7ef8e9ddaaadcd",
-  "fetchedAt": "2026-07-26T18:13:28.030Z"
+  "version": "1.0.2",
+  "updatedAt": 1787563810491,
+  "contentHash": "aec32d062572ed2b281be2eb5882c3a789b14b2c03c3a050c96646c3ae233a09",
+  "fetchedAt": "2026-08-30T13:28:21.158Z"
 }

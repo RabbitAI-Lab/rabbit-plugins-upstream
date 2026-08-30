@@ -1,44 +1,58 @@
-## Description: <br>
-Generates phased, dependency-ordered implementation tasks from specifications after a spec is complete and before implementation begins. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates phased, dependency-ordered implementation tasks from specifications.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to turn specifications and implementation plans into phased task lists with explicit dependencies, file ownership, verification criteria, and safe parallelization markers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be invoked by generic planning-related terms, so an agent could apply it when a user did not intend a full implementation task breakdown. <br>
-Mitigation: Confirm the user wants task planning before generating or acting on a phased task list. <br>
-Risk: Generated task lists can include installs, git operations, or production changes that carry operational risk if executed without review. <br>
-Mitigation: Review generated tasks and commands before execution, especially for dependency installation, repository changes, or production-impacting work. <br>
+## Use Case:
 
+Developers and engineers use this skill after a specification is complete to turn specs and implementation plans into phased tasks with explicit dependencies, parallel markers, affected files, and completion criteria.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-spec-kit-task-planning) <br>
-- [OpenClaw metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/spec-kit) <br>
-- [Task phase structure](artifact/modules/phase-structure.md) <br>
-- [Task dependency patterns](artifact/modules/dependency-patterns.md) <br>
-- [Technology stack patterns](artifact/modules/tech-stack-patterns.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown task plan with task IDs, phases, dependencies, file paths, criteria, and optional inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include parallel markers for independent tasks and quality checklist items for review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata; skill frontmatter lists 1.9.8) <br>
+Risk: Broad triggers may cause the skill to appear in ordinary planning or implementation conversations more often than intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review whether task-planning behavior is appropriate for the current request before relying on its task breakdown.
+
+Risk: Generated task plans can still contain incorrect dependencies, unsafe parallel markers, or incomplete file coordination.
+
+Mitigation: Review dependencies, shared files, shared state, and completion criteria before assigning tasks for execution.
+
+Risk: The inspected release is documentation-only, while the related full plugin may contain separate agents, hooks, or commands.
+
+Mitigation: Review and scan any separate Claude Code plugin before installing it as part of a larger workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-spec-kit-task-planning)
+- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/spec-kit)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown task breakdowns with task IDs, phases, dependencies, affected files, parallel markers, and completion criteria]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include configuration or ignore-file guidance when the implementation plan identifies a relevant technology stack.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

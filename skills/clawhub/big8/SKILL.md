@@ -1,6 +1,6 @@
 ---
 name: big8
-description: "☯ Big8 AI玄学助手 — 读图看风水·看面相·算八字·查星座·每日一卦·老黄历。上传图片分析家居风水/面相，输入生日排八字，查星座运势，起卦占卜。Chinese fortune-telling, face reading, feng shui, BaZi, zodiac."
+description: "☯ Big8 AI玄学助手 — 读图看风水·看面相·算八字·查星座·每日一卦·老黄历。上传图片分析家居风水/面相，输入生日排八字看大运流年，查星座运势/每日运势，起卦占卜，查老黄历今日宜忌。八字算命、风水布局、面相分析、星座运势、黄历查询一站式。| Chinese fortune-telling — BaZi, face reading, feng shui, horoscope, zodiac, daily almanac."
 tags:
   - 玄学
   - 风水

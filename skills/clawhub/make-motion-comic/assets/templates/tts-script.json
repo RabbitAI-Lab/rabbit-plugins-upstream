@@ -1,0 +1,15 @@
+{
+  "lines": [
+    {
+      "id": "01",
+      "shot": 1,
+      "speaker": "旁白",
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-4%",
+      "pitch": "-2Hz",
+      "volume": "+0%",
+      "text": "把第一句台词放在这里。",
+      "pause_after": 0.5
+    }
+  ]
+}

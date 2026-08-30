@@ -2,6 +2,14 @@
 
 > **Safety:** All write operations (POST, PUT, PATCH, DELETE) require explicit user confirmation before execution. Verify the target resource and intended effect with the user first. See the main [SKILL.md](../SKILL.md#security--permissions) for full security policy.
 
+> **⚠ Backend administration, not just data access.** A Supabase connection reaches a live application backend with three distinct blast radiuses, and the admin routes below are far more powerful than ordinary record reads:
+>
+> - **Auth admin (`auth/v1/admin/*`) manages end-user accounts.** These routes enumerate, create, and delete the *application's users* — not the Maton user. Listing them exports an account roster with email addresses and identity metadata; creating one provisions a real login (and can set a password or mark an email confirmed, which is an authentication bypass if misused); deleting one destroys a person's account and whatever the app keys to it. Never enumerate users to "look around", never create an account the user did not ask for, and confirm deletions per user by email, not by UUID.
+> - **Storage admin manages buckets, not just files.** Deleting a bucket removes everything in it. Creating or updating one with `public: true` exposes every object it holds to anyone with the URL — a permanent, silent disclosure. State the intended visibility and get explicit approval before creating or changing a bucket.
+> - **Database writes go through PostgREST against production tables.** A `PATCH` or `DELETE` without a filter applies to every matching row. Always include a filter that identifies the intended rows, verify with a `GET` first, and never rely on the API's defaults to bound the change.
+>
+> Which of these the connection can actually do depends on the key behind it: a service-role key bypasses Row Level Security entirely and can read and write every table regardless of policy. Assume that level of access unless the user says otherwise, and prefer reads until they confirm the specific write.
+
 **App name:** `supabase`
 **Base URL proxied:** `{project_ref}.supabase.co`
 

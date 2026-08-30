@@ -1,45 +1,65 @@
-## Description: <br>
-Podio API integration with managed OAuth for managing workspaces, apps, items, tasks, comments, and files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Podio API integration with managed OAuth for managing workspaces, apps, items, tasks, and comments through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to connect an agent to Podio through Maton-managed OAuth so it can read and manage organizations, workspaces, apps, items, tasks, comments, and files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Podio data through the connected account. <br>
-Mitigation: Confirm the exact target resource and intended effect before approving any write or delete operation. <br>
-Risk: MATON_API_KEY and OAuth connection URLs grant access to sensitive account workflows. <br>
-Mitigation: Treat API keys and connection URLs as secrets, avoid exposing them in shared outputs, and choose the intended Podio connection when more than one account is available. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect and manage Podio organizations, workspaces, apps, items, tasks, comments, and files through a managed OAuth gateway. It is suited for Podio account workflows where read operations are preferred by default and writes require explicit user confirmation.
 
-## Reference(s): <br>
-- [ClawHub Podio Skill](https://clawhub.ai/byungkyu/podio) <br>
-- [Maton](https://maton.ai) <br>
-- [Podio API Documentation](https://developers.podio.com/doc) <br>
-- [Podio API Authentication](https://developers.podio.com/authentication) <br>
-- [Podio Items API](https://developers.podio.com/doc/items) <br>
-- [Podio Tasks API](https://developers.podio.com/doc/tasks) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code examples and API request guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and an active Podio OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill can authorize Maton to access a user's Podio account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth when possible, review the selected Maton account and Podio connection, and create new connections only after explicit user approval.
+
+Risk: Podio writes can create, update, delete, comment, share, or trigger workflows in connected workspaces.
+
+Mitigation: Default to read and list calls, then confirm the target resource, payload, and intended effect before any POST, PUT, PATCH, or DELETE request.
+
+Risk: API-key fallback exposes a long-lived Maton credential to the local environment.
+
+Mitigation: Prefer OAuth and use the raw HTTP fallback only when the CLI cannot be installed; never print, persist, or pass the key on a command line.
+
+## Reference(s):
+
+- [ClawHub Podio Skill](https://clawhub.ai/byungkyu/skills/podio)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Podio API Documentation](https://developers.podio.com/doc)
+- [Podio API Authentication](https://developers.podio.com/authentication)
+- [Podio Items API](https://developers.podio.com/doc/items)
+- [Podio Tasks API](https://developers.podio.com/doc/tasks)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Code, Configuration]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Maton OAuth or API-key authentication and may return Podio API JSON responses.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

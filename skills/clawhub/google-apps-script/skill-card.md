@@ -1,48 +1,66 @@
-## Description: <br>
-Google Apps Script API integration with managed OAuth for managing Apps Script projects, deployments, versions, script execution, and process monitoring. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Apps Script API integration with managed OAuth for managing Apps Script projects, deployments, versions, function execution, and process monitoring.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and automation engineers use this skill to create, update, deploy, inspect, and run Google Apps Script projects through Maton-managed OAuth connections. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and a connected Google account to access Apps Script projects. <br>
-Mitigation: Keep MATON_API_KEY secret, install only if Maton is trusted for this account, and connect only the intended Google account. <br>
-Risk: Create, update, deploy, delete, and script-run actions can change Apps Script projects or trigger side effects. <br>
-Mitigation: Review the target project, selected connection, and intended effect before approving write operations or script execution. <br>
-Risk: Multiple active Google Apps Script connections can send requests to the wrong account. <br>
-Mitigation: Specify the intended connection when more than one account is connected. <br>
+## Use Case:
 
+Developers and agents use this skill to authenticate through Maton and operate the Google Apps Script API for project management, deployment and version workflows, remote function runs, and execution monitoring. It is intended for workflows where read/list operations are default and connection, write, delete, or function execution actions are confirmed by the user.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/byungkyu/google-apps-script) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Google Apps Script API overview](https://developers.google.com/apps-script/api) <br>
-- [Google Apps Script API reference](https://developers.google.com/apps-script/api/reference/rest) <br>
-- [Google Apps Script deployments guide](https://developers.google.com/apps-script/api/how-tos/manage-deployments) <br>
-- [Google Apps Script execution guide](https://developers.google.com/apps-script/api/how-tos/execute) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, JSON, and HTTP examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Google Apps Script OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Connected-account operations can modify Apps Script projects, deployments, versions, or run script functions with side effects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read/list calls, specify the intended Maton profile and connection when needed, and require explicit user confirmation before creating connections, changing resources, deleting resources, or running functions.
+
+Risk: Credential exposure or overly broad authorization could expose Maton or Google account access.
+
+Mitigation: Use OAuth where possible, keep credentials in the operating system credential store, do not print or persist tokens or API keys, and authorize only the accounts and scopes needed for the task.
+
+Risk: Content returned from Google Apps Script APIs may include untrusted text or data.
+
+Mitigation: Treat API responses as data, validate identifiers and payloads before reuse, and avoid executing or interpolating returned content into shell commands or follow-up requests.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-apps-script)
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton API reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Google Apps Script API overview](https://developers.google.com/apps-script/api)
+- [Google Apps Script API reference](https://developers.google.com/apps-script/api/reference/rest)
+- [Google Apps Script projects resource](https://developers.google.com/apps-script/api/reference/rest/v1/projects)
+- [Google Apps Script deployments guide](https://developers.google.com/apps-script/api/how-tos/manage-deployments)
+- [Google Apps Script function execution guide](https://developers.google.com/apps-script/api/how-tos/execute)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with bash and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and user-confirmed OAuth or API-key authentication.]
+
+## Skill Version(s):
+
+1.1.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

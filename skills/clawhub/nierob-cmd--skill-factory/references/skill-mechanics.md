@@ -1,118 +1,163 @@
-# Skill design mechanics reference
+# Skill Mechanics
 
-Loaded on demand from SKILL.md — the reasoning behind every rule in the main
-build process. You don't need to read this top to bottom; jump to the
-numbered section you need.
+This reference explains the reasoning behind the Skill Factory rules. Load it when designing or reviewing a skill; do not copy the entire reference into every generated `SKILL.md`.
 
-## 1. Progressive disclosure (3 levels)
+## 1. Skill as a contract
 
-- Level 1: metadata (`name` + `description`) — always in context.
-- Level 2: `SKILL.md` body — loaded after the skill triggers (flow, routing).
-- Level 3: `references/` + `scripts/` — loaded only on demand.
+A skill has two audiences:
 
-This is the single biggest token-cost lever a skill author has. A skill with
-everything crammed into one huge SKILL.md pays that token cost on every
-trigger, even for the 90% of invocations that never need the deep-dive
-material.
+1. the agent deciding whether the skill is relevant;
+2. the agent executing the instructions after activation.
 
-## 2. Scripts that run without ever entering context
+The frontmatter description therefore acts as a discovery contract. It should say what the skill does and the kinds of requests that should activate it. The body contains the execution procedure.
 
-A script under `scripts/` should be invoked directly (e.g.
-`python -m scripts.verify`) rather than pasted into the model's context. The
-model reads the *result*, not the script source, so the cost is near zero
-regardless of script size.
+A useful test is:
 
-## 3. Domain organization through references
+> Could a user understand the capability and activation boundary from the description alone?
 
-`SKILL.md` should hold the decision logic (which variant, which path). The
-supporting detail belongs in `references/`, split by topic, so the model
-loads only the one file it actually needs.
+If not, improve the description rather than hiding the missing information in the body.
 
-## 4. Table of contents for files over ~300 lines
+## 2. Architecture follows task shape
 
-Past that size, a table of contents lets the model jump straight to the
-relevant section instead of reading the whole file into context.
+Do not choose a router because the factory can create one.
 
-## 5. Pushy descriptions — fighting under-triggering
+Use the smallest structure that keeps execution clear:
 
-The single most common skill-authoring failure is a description written in
-natural, modest language that the model never matches against a real user
-message. Write the description more aggressively than feels natural: list
-synonyms, list the contexts where it applies, don't undersell it. Draft 2-3
-candidate descriptions and pick the one that triggers most reliably against
-your eval set.
+- one workflow → single skill;
+- large supporting knowledge → references;
+- deterministic repeated work → scripts;
+- 2–6 distinct modes → router + variants;
+- genuinely separate capabilities → skill family.
 
-## 6. Automatic trigger-tuning loop
+Extra layers create more discovery decisions, more maintenance, and more opportunities for inconsistent behavior.
 
-Split your eval set 60/40 into train/test. Iterate the description against
-the train split, up to ~5 rounds, then confirm against the held-out test
-split. This keeps you from overfitting the description to the exact wording
-of your training examples.
+## 3. Progressive disclosure
 
-## 7. Eval sets need hard negatives
+Put frequently needed execution instructions in `SKILL.md`.
 
-A good eval set isn't just "should trigger" examples — it needs near-miss
-negatives: inputs that sound adjacent to the skill's domain but shouldn't
-trigger it. Without hard negatives you can't tell a well-tuned description
-from an over-eager one.
+Move large, stable, or rarely needed material into references.
 
-## 8. Lack of Surprise (security property)
+Good candidates for references:
 
-The `description` is a contract with the user and the reviewing human: it
-must not hide instructions that aren't disclosed there. A skill that says
-"formats your code" and secretly also phones home or exfiltrates data
-violates this property — and it's the first thing a skill-security-auditor
-should catch.
+- detailed domain rules;
+- long examples;
+- schemas;
+- compatibility matrices;
+- troubleshooting;
+- background rationale.
 
-## 9. Avoid rigid CAPS/MUST language — justify instead
+The main skill should tell the agent when and why to load each reference.
 
-Compare:
+## 4. Trigger evaluation
 
-> ALWAYS use Kotlin.
+A skill that is excellent after activation can still be poor if it activates at the wrong time.
 
-vs.
+Use realistic test prompts.
 
-> Kotlin by default. Rationale: null-safety, official support. Java also
-> works if the project already standardized on it.
+### Positive
 
-The second form generalizes better to edge cases the author didn't
-anticipate, because the model has the reasoning, not just the verdict.
+Requests that should clearly use the skill.
 
-## 10. Conditional, per-environment instructions
+### Hard negative
 
-One `SKILL.md` can hold clearly labeled sections for different runtimes —
-e.g. "Claude.ai-specific," "OpenClaw-specific," "API-specific" — so the same
-skill file works correctly across hosts instead of needing per-host forks.
+Requests that share vocabulary but require another capability.
 
-## 11. Packaging into a `.skill` file (optional)
+### Borderline
 
-Use `package_skill.py` (or your host's equivalent) once the skill family is
-stable, if you need a single-file distributable artifact rather than a
-directory.
+Requests where the correct decision depends on context.
 
-## 12. Directory name = frontmatter `name` (critical)
+### Adversarial
 
-When updating an existing skill, keep the directory name and the
-frontmatter `name` field exactly as they were. Changing either makes the
-host treat it as a brand-new skill rather than a new version of the
-existing one — you lose version history and any existing install
-references break.
+Requests deliberately combining multiple intents or trying to push the skill outside its intended boundary.
 
-## 13. Selective triggering by task complexity
+The objective is not a perfect keyword match. It is a reliable activation boundary.
 
-Models will often (correctly) skip loading a skill for a trivial,
-one-step request, because they can just do it directly. Design for this:
+## 5. Self-contained execution
 
-- Eval queries need to be complex enough that the skill actually has a
-  chance to trigger — trivial eval queries produce a false sense that the
-  description "works."
-- The description itself should hint at complexity ("multi-step process,"
-  "step by step") so the model's own judgment about whether to load the
-  skill lines up with when the skill is actually useful.
-- Test with both simple and complex queries before shipping.
+A published skill should not depend on the author's previous conversation.
 
-## 14. Explicit "why," not just "what"
+Avoid:
 
-Justify every instruction. This is what lets a model generalize the
-intended behavior to an input the author never explicitly covered, instead
-of following the letter of a rule into an obviously wrong edge case.
+- “as discussed earlier”;
+- personal paths;
+- undocumented project conventions;
+- hidden files;
+- unexplained environment variables;
+- private APIs.
+
+If an external dependency is necessary, document it.
+
+## 6. Portability
+
+A skill may be installed in environments different from the author's.
+
+Prefer portable commands and explicit prerequisites.
+
+When a platform-specific dependency is unavoidable, state:
+
+- supported environment;
+- required binary/package;
+- required version where relevant;
+- configuration needed;
+- expected permissions.
+
+## 7. Security and trust
+
+A public skill should be understandable enough to audit.
+
+Avoid unexplained:
+
+- downloads;
+- network requests;
+- credential access;
+- destructive commands;
+- privilege escalation;
+- obfuscated code.
+
+If a capability genuinely needs one of these, make the behavior explicit and limit it to the minimum required scope.
+
+## 8. Lack of surprise
+
+The skill should behave in ways that a reasonable user would expect from its description.
+
+Examples:
+
+- A PDF-analysis skill should not silently modify unrelated files.
+- A formatting skill should not upload documents to a remote service unless that behavior is disclosed and required.
+- A router should not silently select a variant when the evidence is ambiguous.
+
+When behavior could surprise the user, disclose it and prefer confirmation where appropriate.
+
+## 9. Evaluation before publication
+
+A publishable skill should have evidence that its trigger boundary and core workflow work.
+
+The minimum recommended evaluation set is small by design. It is better to have realistic cases than dozens of trivial keyword examples.
+
+Record failures and turn important failures into regression tests.
+
+## 10. Versioning
+
+Use semantic intent when practical:
+
+- patch: fixes, wording, or non-behavioral corrections;
+- minor: backward-compatible capabilities;
+- major: changed public behavior, architecture, or compatibility expectations.
+
+For a major redesign of the factory itself, use a major version.
+
+## 11. Publication readiness
+
+Before publication, inspect the whole package, not only `SKILL.md`.
+
+A skill is publish-ready when:
+
+- its identity is stable;
+- its capability is clear;
+- activation is bounded;
+- execution is self-contained;
+- dependencies are disclosed;
+- supporting files are justified;
+- portability and security have been reviewed;
+- realistic evaluations have been considered;
+- the package contains no author-specific secrets or assumptions.

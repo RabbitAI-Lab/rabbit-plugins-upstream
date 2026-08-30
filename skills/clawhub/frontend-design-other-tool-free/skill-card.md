@@ -1,43 +1,53 @@
-## Description: <br>
-前端设计工具 helps individual developers and independent designers generate distinctive frontend design tokens, HTML/CSS snippets, and practical design guidance for single-page or component-level interfaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向个人开发者的前端界面设计助手，产出有辨识度的高质量页面。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External developers, individual builders, and independent designers use this skill to create visual direction, design tokens, frontend code snippets, and quality checklists for landing pages, portfolios, and single UI components. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill declares broad command execution and file write capability for preview and output workflows. <br>
-Mitigation: Review generated commands and file changes before running or accepting them, especially outside frontend design and local preview tasks. <br>
-Risk: The trigger wording is broad and may activate for non-design coding, debugging, or deployment tasks. <br>
-Mitigation: Use the skill for frontend UI/design work and route architecture, operations, and deployment requests to more appropriate workflows. <br>
-Risk: Generated frontend proposals may include visual, accessibility, or responsiveness issues. <br>
-Mitigation: Validate outputs against the skill's quality checks for responsive breakpoints, visible keyboard focus, reduced motion, readable text, and token consistency. <br>
+## Use Case:
 
+Developers, independent builders, and design-oriented teams use this skill to generate distinctive front-end design tokens, single-page or component-level HTML/CSS, and anti-template quality checks for UI work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/frontend-design-other-tool-free) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with design tokens, HTML/CSS snippets, checklists, and optional shell preview commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs focus on single-page and component-level frontend design; generated work should be reviewed for responsiveness, keyboard focus, reduced-motion behavior, and visual fit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata) <br>
+Risk: The skill may activate during broader programming, debugging, testing, or deployment requests outside its front-end design purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Narrow the trigger to UI design, HTML/CSS generation, and local preview workflows before installation when a tighter scope is required.
+
+Risk: The skill requests command, file, and browser capabilities for a design helper.
+
+Mitigation: Review proposed commands and file changes before execution, and limit tool access to the capabilities needed for the current design task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/frontend-design-other-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown with HTML/CSS examples and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce design tokens, front-end code snippets, checklists, and local preview commands.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

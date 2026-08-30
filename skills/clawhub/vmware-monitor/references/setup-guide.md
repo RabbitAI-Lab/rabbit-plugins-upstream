@@ -2,17 +2,17 @@
 
 ## Install
 
-All install methods fetch from the same source: [github.com/zw008/VMware-Monitor](https://github.com/zw008/VMware-Monitor) (MIT licensed). We recommend reviewing the source code before installing.
+All install methods fetch from the same source: [github.com/vmware-skills/VMware-Monitor](https://github.com/vmware-skills/VMware-Monitor) (MIT licensed). We recommend reviewing the source code before installing.
 
 ```bash
 # Via PyPI (recommended for version pinning)
 uv tool install vmware-monitor
 
 # Via Skills.sh (fetches from GitHub)
-npx skills add zw008/VMware-Monitor
+npx skills add vmware-skills/VMware-Monitor
 
 # Via ClawHub (fetches from ClawHub registry snapshot of GitHub)
-clawhub install vmware-monitor
+clawhub install @zw008/vmware-monitor
 ```
 
 ### Claude Code
@@ -71,7 +71,7 @@ pointed at the same vCenter: an environment-scoped `deny` rule in
 ## Development Install
 
 ```bash
-git clone https://github.com/zw008/VMware-Monitor.git
+git clone https://github.com/vmware-skills/VMware-Monitor.git
 cd VMware-Monitor
 uv venv && source .venv/bin/activate
 uv pip install -e .
@@ -154,9 +154,9 @@ whitespace are handled correctly).
 
 > **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "vSphere" are trademarks of Broadcom.
 
-- **Read-Only by Design**: This is an independent repository with zero destructive code paths. No power off, delete, create, reconfigure, or migrate functions exist in the codebase.
-- **Source Code**: Fully open source at [github.com/zw008/VMware-Monitor](https://github.com/zw008/VMware-Monitor) (MIT). The `uv` installer fetches the `vmware-monitor` package from PyPI, which is built from this GitHub repository. We recommend reviewing the source code and commit history before deploying in production.
-- **TLS Verification**: Enabled by default. The `disableSslCertValidation` option exists solely for ESXi hosts using self-signed certificates in isolated lab/home environments. In production, always use CA-signed certificates with full TLS verification.
+- **Read-Only by Design**: This is an independent repository with zero destructive code paths. No power off, delete, create, reconfigure, or migrate functions exist in the codebase. Enforced by `tests/eval/regression/test_read_only_enforcement.py`, which allowlists every vSphere method the package calls against pyVmomi's own type metadata. It is a gate on source code, not a runtime block, and this repo has no CI — for defence that does not depend on it, use a read-only vCenter account.
+- **Source Code**: Fully open source at [github.com/vmware-skills/VMware-Monitor](https://github.com/vmware-skills/VMware-Monitor) (MIT). The `uv` installer fetches the `vmware-monitor` package from PyPI, which is built from this GitHub repository. We recommend reviewing the source code and commit history before deploying in production.
+- **TLS Verification**: Enabled by default. Setting `verify_ssl: false` is solely for ESXi hosts using self-signed certificates in isolated lab/home environments. In production, always use CA-signed certificates with full TLS verification.
 - **Credentials & Config**: This skill requires the following secrets, all stored in `~/.vmware-monitor/.env` (`chmod 600`, loaded via `python-dotenv`):
   - `VMWARE_<TARGET>_PASSWORD` — per-target password where `<TARGET>` is the uppercased target name from `config.yaml` (hyphens become underscores). Example: target named `vcenter-prod` uses `VMWARE_VCENTER_PROD_PASSWORD`.
   - (Optional) Webhook URLs for Slack/Discord notifications
@@ -181,7 +181,7 @@ whitespace are handled correctly).
 
 ### MCP Server — Local Agent Compatibility
 
-The MCP server works with any MCP-compatible agent via stdio transport. All 27 tools are **read-only**. Config templates in `examples/mcp-configs/`:
+The MCP server works with any MCP-compatible agent via stdio transport. All 31 tools are **read-only**. Config templates in `examples/mcp-configs/`:
 
 | Agent | Local Models | Config Template |
 |-------|:----------:|-----------------|

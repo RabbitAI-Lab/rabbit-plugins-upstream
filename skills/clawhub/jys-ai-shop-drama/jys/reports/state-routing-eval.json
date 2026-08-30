@@ -1,0 +1,59 @@
+{
+  "ok": true,
+  "summary": {
+    "total": 8,
+    "passed": 8
+  },
+  "results": [
+    {
+      "name": "plain_continue_uses_next_skill",
+      "expected": "jys-s2",
+      "actual": "jys-s2",
+      "passed": true
+    },
+    {
+      "name": "waiting_choice_stays_in_current_skill",
+      "expected": "jys-s2",
+      "actual": "jys-s2",
+      "passed": true
+    },
+    {
+      "name": "explicit_skill_overrides_default",
+      "expected": "jys-s3",
+      "actual": "jys-s3",
+      "passed": true
+    },
+    {
+      "name": "hook_change_during_s2",
+      "expected": "jys-s2",
+      "actual": "jys-s2",
+      "passed": true
+    },
+    {
+      "name": "hook_change_during_s4",
+      "expected": "jys-s4",
+      "actual": "jys-s4",
+      "passed": true
+    },
+    {
+      "name": "unknown_product_routes_to_s1",
+      "expected": "jys-s1",
+      "actual": "jys-s1",
+      "passed": true
+    },
+    {
+      "name": "s2_and_s3_confirmed_routes_to_s4",
+      "expected": "jys-s4",
+      "actual": "jys-s4",
+      "passed": true
+    },
+    {
+      "name": "final_confirmation_completes_workflow",
+      "expected": "jys-s5",
+      "actual": "jys-s5",
+      "passed": true
+    }
+  ],
+  "evidence_type": "deterministic_policy_smoke",
+  "provider_backed_routing_eval": "missing evidence"
+}

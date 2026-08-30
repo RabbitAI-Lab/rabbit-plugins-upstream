@@ -30,13 +30,28 @@ import { createHash } from "crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// Read from package.json rather than a literal. The hardcoded string had
+// drifted to "0.8.20" while the package shipped 0.8.31 — eleven releases of
+// every MCP client being told the wrong server version, which is the kind of
+// thing that only surfaces when someone is debugging something else.
+const PKG_VERSION = (() => {
+  try {
+    return JSON.parse(
+      readFileSync(join(__dirname, "..", "package.json"), "utf8"),
+    ).version;
+  } catch {
+    return "0.0.0";
+  }
+})();
+
 const DATA_DIR = join(__dirname, "..", "data");
 const DB_PATH = join(DATA_DIR, "registry.db");
 const OPENAPI_JSON_PATH = join(DATA_DIR, "openapi.json");
 // Bundled with the npm package so runtime semantic search has zero
 // network dependency. Same model fastembed uses at crawl time
 // (Xenova/all-MiniLM-L6-v2) — vectors are bitwise-comparable.
-const EMBEDDING_MODEL_DIR = join(DATA_DIR, "models", "all-MiniLM-L6-v2");
+const EMBEDDING_MODEL_DIR = join(DATA_DIR, "models", "Xenova", "all-MiniLM-L6-v2");
 const GITHUB_DB_URL =
   "https://github.com/PaulieB14/subgraph-registry/raw/main/python/data/registry.db";
 
@@ -50,7 +65,7 @@ const GITHUB_DB_URL =
 //   3. Paste the new hash here and bump package.json version
 //   4. Update SKILL.md "Verifying the registry" section
 const EXPECTED_DB_SHA256 =
-  "b84e3a1cdf564b12cd3ef96cea67c02af67cb6af2ac946d5d0337be45c64d5d4";
+  "425b7a5bde8f61d8ae2f26ea6e201ffd3308c3328a0547fb0d29530222eba0d2";
 // Skip-verification escape hatch (set to "1" only if you're rebuilding the DB
 // locally and know what you're doing — never set in agent-runtime defaults).
 const SKIP_VERIFY = process.env.SUBGRAPH_REGISTRY_SKIP_VERIFY === "1";
@@ -162,6 +177,187 @@ function getDb() {
   return db;
 }
 
+// ── Network aliases ────────────────────────────────────────
+// The corpus stores graph-node's chain IDs (`mainnet`, `arbitrum-one`,
+// `matic`), but every human and every model says "ethereum", "arbitrum",
+// "polygon" — and so does our own auto_description, which prints the pretty
+// name from classifier.py NETWORK_NAMES. So an agent reads "Ethereum" in a
+// description, passes network:"ethereum" back, and gets zero results with no
+// error. SKILL.md made it worse by documenting `ethereum, arbitrum, base` as
+// the example values; two of those three matched nothing.
+// mainnet/bsc/arbitrum-one/matic alone are ~45% of the corpus.
+const NETWORK_ALIASES = {
+  ethereum: "mainnet",
+  eth: "mainnet",
+  "ethereum-mainnet": "mainnet",
+  arbitrum: "arbitrum-one",
+  "arbitrum one": "arbitrum-one",
+  arb: "arbitrum-one",
+  polygon: "matic",
+  "polygon-pos": "matic",
+  bnb: "bsc",
+  "bnb-chain": "bsc",
+  "binance-smart-chain": "bsc",
+  binance: "bsc",
+  op: "optimism",
+  "optimism-mainnet": "optimism",
+  avax: "avalanche",
+  "avalanche-c-chain": "avalanche",
+  xdai: "gnosis",
+  zksync: "zksync-era",
+  "zksync era": "zksync-era",
+  blast: "blast-mainnet",
+  "polygon-zk": "polygon-zkevm",
+  near: "near-mainnet",
+  mode: "mode-mainnet",
+  sei: "sei-mainnet",
+  ftm: "fantom",
+};
+
+// Normalize a caller-supplied chain name to the value stored in the corpus.
+// Unknown values pass through untouched so a legitimate new chain still works.
+function normalizeNetwork(name) {
+  if (!name || typeof name !== "string") return name;
+  const k = name.trim().toLowerCase();
+  return NETWORK_ALIASES[k] || k;
+}
+
+// ── Testnets ───────────────────────────────────────────────
+// 723 of the 5,425 served, non-denied subgraphs (13.3%) are on testnets, and
+// they compete directly with production because a testnet deployment's text is
+// near-identical to its mainnet twin's — that is exactly how ENS Sepolia (58
+// queries/30d) came to outrank ENS mainnet (34.8M queries/30d).
+//
+// Detected from the network name rather than a new column, so it works on the
+// corpus already shipped. All 57 matching networks were checked by hand; the
+// six without an explicit -testnet/-sepolia/-goerli suffix (chapel, fuji,
+// holesky, holesky-beacon, mumbai, polygon-amoy) are the well-known BSC,
+// Avalanche, Ethereum and Polygon testnets.
+const TESTNET_MARKERS = [
+  "sepolia", "goerli", "testnet", "devnet", "chapel", "fuji",
+  "holesky", "mumbai", "amoy", "baobab", "rinkeby", "kovan",
+];
+
+function isTestnetNetwork(name) {
+  if (!name) return false;
+  const n = String(name).toLowerCase();
+  return TESTNET_MARKERS.some((m) => n.includes(m));
+}
+
+// SQL fragment excluding testnets. Static string — the markers are a constant
+// allowlist, never caller input, so there is nothing to bind or escape.
+const NOT_TESTNET_SQL = TESTNET_MARKERS.map(
+  (m) => `network NOT LIKE '%${m}%'`,
+).join(" AND ");
+
+// Whether to hide testnets for this call.
+//
+// The trap: a caller who explicitly asks for network:"sepolia" must not get an
+// empty result because a default filter silently contradicts their request.
+// An explicit testnet network always wins over the default exclusion.
+function shouldExcludeTestnets({ include_testnets, network }) {
+  if (include_testnets) return false;
+  if (network && isTestnetNetwork(normalizeNetwork(network))) return false;
+  return true;
+}
+
+// Tokenize a free-text query into searchable terms.
+//
+// The old inline version was `.filter((w) => w.length > 2)`, which silently
+// dropped every protocol version token — "v2", "v3", "v4" are all two chars.
+// That made "uniswap v3" byte-identical to "uniswap", so the single most
+// natural way to disambiguate the largest protocol family in the corpus did
+// nothing at all. Keep the length floor for noise words, but let version
+// tokens through.
+const VERSION_TOKEN_RE = /^v\d+$/;
+
+function queryTerms(query) {
+  return query
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((w) => w.length > 2 || VERSION_TOKEN_RE.test(w))
+    .slice(0, 5);
+}
+
+// ── Maturity / cold-start handling ─────────────────────────
+// reliability_score is built from four CUMULATIVE inputs (curation signal,
+// indexer stake, lifetime query fees, 30d volume — see _reliability_score in
+// python/classifier.py), so it measures accrued traction and therefore age.
+// Measured on the 2026-08-25 corpus, served and non-denied:
+//
+//   age      n      avg reliability
+//   <30d     64     0.107
+//   30-90d   227    0.143
+//   90-365d  1100   0.225
+//   >1y      4034   0.313
+//
+// The newest entry in the global top 25 is 280 days old. A good subgraph
+// deployed last month cannot rank, no matter how good it is — 59 of those 64
+// sub-30-day subgraphs are already serving real query volume.
+//
+// Rather than reweight the score (which would silently change every existing
+// caller's results and trade a measurable signal for a guess), surface the
+// young matches SEPARATELY and label them honestly, so the agent makes the
+// call. A label alone would not be enough: at 0.107 average, young subgraphs
+// are not in the ranked page to be labelled, so this needs its own lookup.
+const EMERGING_MAX_AGE_DAYS = 90;
+const NEW_MAX_AGE_DAYS = 30;
+const EMERGING_LIMIT = 3;
+
+// Shared so the main search and its emerging companion query select exactly
+// the same columns — they feed the same row mapper.
+const SEARCH_COLS = `id, display_name, description, auto_description, domain, protocol_type, network,
+           reliability_score, ipfs_hash, entity_count, canonical_entities,
+           powered_by_substreams, active_allocation_count, example_query, denied_at, created_at`;
+
+function ageDays(created_at) {
+  if (!created_at) return null;
+  return Math.max(0, Math.floor(Date.now() / 1000 - created_at) / 86400) | 0;
+}
+
+function maturityOf(created_at) {
+  const d = ageDays(created_at);
+  if (d === null) return "unknown";
+  if (d < NEW_MAX_AGE_DAYS) return "new";
+  if (d < EMERGING_MAX_AGE_DAYS) return "emerging";
+  return "established";
+}
+
+const EMERGING_CAVEAT =
+  "Recent deployments that matched your query but ranked below the main list " +
+  "because reliability_score is cumulative (curation signal, indexer stake, " +
+  "lifetime query fees, 30d volume) and so grows with age — the newest subgraph " +
+  "in the whole registry's top 25 is 280 days old. A low score here is expected " +
+  "at this age and is NOT evidence of a problem; these are unproven, not bad. " +
+  "Prefer `subgraphs` for production work. Consider these when the protocol is " +
+  "itself new (no mature deployment can exist), when you want the newest schema, " +
+  "or when the ranked list missed what you asked for.";
+
+// Young matches for the same filter, fetched separately because they cannot
+// compete on the main ORDER BY. Returns [] on any failure — this is an
+// enrichment, and it must never take down the search that already succeeded.
+function findEmerging(where, params, excludeIds, selectCols) {
+  try {
+    const cutoff = Math.floor(Date.now() / 1000) - EMERGING_MAX_AGE_DAYS * 86400;
+    const notIn = excludeIds.length
+      ? ` AND id NOT IN (${excludeIds.map(() => "?").join(",")})`
+      : "";
+    const sql = `
+      SELECT ${selectCols}
+      FROM subgraphs
+      ${where ? `${where} AND` : "WHERE"} created_at > ?${notIn}
+      ORDER BY reliability_score DESC
+      LIMIT ?
+    `;
+    return getDb()
+      .prepare(sql)
+      .all(...params, cutoff, ...excludeIds, EMERGING_LIMIT);
+  } catch {
+    return [];
+  }
+}
+
 // ── Tool Implementations ───────────────────────────────────
 
 function searchSubgraphs({
@@ -172,6 +368,8 @@ function searchSubgraphs({
   entity = "",
   min_reliability = 0,
   include_unserved = false,
+  include_denied = false,
+  include_testnets = false,
   limit = 20,
 } = {}) {
   const conditions = [];
@@ -183,13 +381,30 @@ function searchSubgraphs({
     conditions.push("active_allocation_count > 0");
   }
 
+  // Default: hide curation-denied deployments (deniedAt > 0 on the network
+  // subgraph — denied indexing rewards, typically spam, duplicates or
+  // deprecations). classifier.py has persisted this since the denied_at
+  // column landed, explicitly "so agents can filter denied subgraphs", but
+  // nothing in this file ever read it, so the filter the crawler was feeding
+  // did not exist. The 0.5 reliability penalty already keeps denied entries
+  // out of the top of a ranked page — measured: 0 of the global top 20, and
+  // none in any domain's top 10 — so this changes few results today. It
+  // matters for the narrow queries where a denied fork IS the best textual
+  // match, and it makes the signal visible either way via `denied` below.
+  if (!include_denied) {
+    conditions.push("denied_at = 0");
+  }
+  if (shouldExcludeTestnets({ include_testnets, network })) {
+    conditions.push(`(${NOT_TESTNET_SQL})`);
+  }
+
   if (domain) {
     conditions.push("domain = ?");
     params.push(domain);
   }
   if (network) {
     conditions.push("network = ?");
-    params.push(network);
+    params.push(normalizeNetwork(network));
   }
   if (protocol_type) {
     conditions.push("protocol_type = ?");
@@ -203,9 +418,34 @@ function searchSubgraphs({
     conditions.push("reliability_score >= ?");
     params.push(min_reliability);
   }
+  // Terms are OR'd for recall, then RANKED by how many of them matched.
+  //
+  // Before this, a multi-word query OR'd its terms and ordered the result by
+  // reliability alone, so a high-reliability subgraph matching ONE incidental
+  // word beat a lower-reliability one matching all three. The effect was that
+  // being more specific made the answer worse: "aave lending arbitrum"
+  // returned uniswap-v3-arbitrum, Arbitrum Minimal, camelot-amm-v3 and Graph
+  // TAP — not one Aave subgraph — while the bare query "aave" was correct.
+  //
+  // Keep the OR (dropping to AND would kill recall on descriptions that
+  // phrase things differently) and let matched_terms break the tie first.
+  //
+  // A hit in display_name is worth 3, a hit in the description 1. Counting
+  // them equally is not enough on short terms, where LIKE '%term%' matches
+  // half the corpus incidentally: searching "ens" scored ENS and four Uniswap
+  // subgraphs at 1 apiece — "tokens" contains "ens" — and reliability then
+  // handed the top slots to Uniswap. Weighting the name restores ENS to #1
+  // without narrowing what still gets found.
+  const matchParams = [];
+  let matchExpr = "0";
   if (query) {
-    const words = query.trim().split(/\s+/).filter((w) => w.length > 2).slice(0, 5);
+    const words = queryTerms(query);
     if (words.length) {
+      matchExpr = words
+        .map(() => "((CASE WHEN display_name LIKE ? THEN 3 ELSE 0 END) + (CASE WHEN (description LIKE ? OR auto_description LIKE ?) THEN 1 ELSE 0 END))")
+        .join(" + ");
+      words.forEach((w) => matchParams.push(`%${w}%`, `%${w}%`, `%${w}%`));
+
       const wordConds = words.map(() => "(display_name LIKE ? OR description LIKE ? OR auto_description LIKE ?)");
       words.forEach((w) => params.push(`%${w}%`, `%${w}%`, `%${w}%`));
       conditions.push(`(${wordConds.join(" OR ")})`);
@@ -219,17 +459,20 @@ function searchSubgraphs({
   // Over-fetch to allow dedup by IPFS hash (same deployment, different subgraph IDs)
   const fetchLimit = limit * 3;
   const sql = `
-    SELECT id, display_name, description, auto_description, domain, protocol_type, network,
-           reliability_score, ipfs_hash, entity_count, canonical_entities,
-           powered_by_substreams, active_allocation_count
+    SELECT ${SEARCH_COLS}, (${matchExpr}) AS matched_terms
     FROM subgraphs
     ${where}
-    ORDER BY reliability_score DESC
+    ORDER BY matched_terms DESC, reliability_score DESC
     LIMIT ?
   `;
-  params.push(fetchLimit);
+  // Snapshot the filter params BEFORE the LIMIT is appended — the emerging
+  // companion query reuses the same WHERE and must not inherit this LIMIT.
+  const filterParams = [...params];
 
-  const rows = getDb().prepare(sql).all(...params);
+  // Positional binding order: the SELECT-clause scoring expression is bound
+  // before the WHERE clause, so matchParams must lead. filterParams stays
+  // WHERE-only, which is what the emerging companion query needs.
+  const rows = getDb().prepare(sql).all(...matchParams, ...filterParams, fetchLimit);
   // Dedup by IPFS hash — keep highest reliability per deployment
   const seenIpfs = new Set();
   const results = [];
@@ -249,15 +492,58 @@ function searchSubgraphs({
       canonical_entities: JSON.parse(r.canonical_entities),
       powered_by_substreams: Boolean(r.powered_by_substreams),
       active_allocation_count: r.active_allocation_count || 0,
+      // Curation-denied on the network subgraph. Only ever true when the
+      // caller passed include_denied — surfaced so that choice stays visible
+      // in the result rather than being silently carried.
+      denied: Boolean(r.denied_at),
+    testnet: isTestnetNetwork(r.network),
+      testnet: isTestnetNetwork(r.network),
+      // Ready-to-run GraphQL generated from this subgraph's actual schema — so an
+      // agent can POST it to query_url_x402 immediately, no get_subgraph_detail round-trip.
+      example_query: r.example_query || null,
+      age_days: ageDays(r.created_at),
+      maturity: maturityOf(r.created_at),
       ...buildQueryEndpoints(r.id),
     });
     if (results.length >= limit) break;
   }
 
+  // Young matches that could not compete on the cumulative score. Same filter,
+  // separate lookup, clearly labelled — never blended into `subgraphs`, so a
+  // caller that ignores this field sees exactly what it saw before.
+  const emerging = findEmerging(
+    where,
+    filterParams,
+    results.map((x) => x.id),
+    SEARCH_COLS,
+  ).map((r) => ({
+    id: r.id,
+    display_name: r.display_name,
+    description: (r.description || r.auto_description || "").slice(0, 300),
+    domain: r.domain,
+    protocol_type: r.protocol_type,
+    network: r.network,
+    reliability_score: r.reliability_score,
+    ipfs_hash: r.ipfs_hash,
+    entity_count: r.entity_count,
+    canonical_entities: JSON.parse(r.canonical_entities),
+    powered_by_substreams: Boolean(r.powered_by_substreams),
+    active_allocation_count: r.active_allocation_count || 0,
+    denied: Boolean(r.denied_at),
+    testnet: isTestnetNetwork(r.network),
+    example_query: r.example_query || null,
+    age_days: ageDays(r.created_at),
+    maturity: maturityOf(r.created_at),
+    ...buildQueryEndpoints(r.id),
+  }));
+
   return {
     total: results.length,
     subgraphs: results,
-    query_instructions: "Two ways to query: (a) RECOMMENDED — POST GraphQL to query_url_x402 and pay $0.01 USDC on Base per query via x402 (no API key required; gateway returns HTTP 402 with a payment manifest, use an x402 client like @graphprotocol/client-x402 to sign and retry). (b) LEGACY — replace [api-key] in query_url with a Graph API key from https://thegraph.com/studio/apikeys/. Call get_subgraph_detail first for the schema.",
+    ...(emerging.length
+      ? { emerging, emerging_caveat: EMERGING_CAVEAT }
+      : {}),
+    query_instructions: "Two ways to query: (a) RECOMMENDED — POST GraphQL to query_url_x402 and pay $0.01 USDC on Base per query via x402 (no API key required; gateway returns HTTP 402 with a payment manifest, use an x402 client like @graphprotocol/client-x402 to sign and retry). (b) LEGACY — replace [api-key] in query_url with a Graph API key from https://thegraph.com/studio/apikeys/. Each result includes a ready-to-run `example_query` generated from that subgraph's real schema — POST it to query_url_x402 as-is, or adapt the entity/fields. Use get_subgraph_detail for the full schema.",
   };
 }
 
@@ -278,56 +564,94 @@ function recommendSubgraph({ goal, chain = "" }) {
     lending: ["lend", "borrow", "loan", "collateral", "aave", "compound"],
     bridge: ["bridge", "cross-chain"],
     staking: ["stake", "validator", "delegation"],
-    options: ["option", "call", "put", "strike"],
+    // "call", "put" and "strike" are gone. They are ordinary English words —
+    // "reputation" contains "put", so the goal "reputation scores for onchain
+    // agents" inferred protocol_type ["options"] and returned the Polygon
+    // Optimistic Oracle. "option" alone is specific enough to keep.
+    options: ["option", "derivatives contract"],
     perpetuals: ["perp", "perpetual", "leverage", "margin"],
     governance: ["governance", "vote", "proposal"],
     "name-service": ["ens", "name service", "domain name"],
     "nft-marketplace": ["nft market", "opensea", "blur"],
   };
 
+  // Match on word boundaries, not bare substrings. Boundaries alone would not
+  // have saved "reputation"/"put" if "put" had stayed in the list — hence the
+  // removals above and the demotion from filter to bonus below — but they do
+  // stop "smart contract" inferring nfts via "art", and "start"/"chart"/
+  // "party" doing the same.
+  const hitsGoal = (kws) =>
+    kws.some((k) =>
+      new RegExp(`\\b${k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(goalLower),
+    );
   const domains = Object.entries(domainMap)
-    .filter(([, kws]) => kws.some((k) => goalLower.includes(k)))
+    .filter(([, kws]) => hitsGoal(kws))
     .map(([d]) => d);
   const ptypes = Object.entries(typeMap)
-    .filter(([, kws]) => kws.some((k) => goalLower.includes(k)))
+    .filter(([, kws]) => hitsGoal(kws))
     .map(([t]) => t);
 
-  const conditions = ["active_allocation_count > 0"];
+  // recommend_subgraph exposes no include_* escape hatches — it answers "which
+  // one should I use", so a curation-denied deployment is never the right
+  // answer and the filter is unconditional here.
+  const conditions = ["active_allocation_count > 0", "denied_at = 0"];
+  if (shouldExcludeTestnets({ include_testnets: false, network: chain })) {
+    conditions.push(`(${NOT_TESTNET_SQL})`);
+  }
   const params = [];
 
   if (chain) {
     conditions.push("network = ?");
-    params.push(chain);
+    params.push(normalizeNetwork(chain));
+  }
+  // The inferred domain/protocol_type used to go into the WHERE clause, so a
+  // single bad substring collapsed the candidate pool instead of merely
+  // mis-ordering it: "tokens" contains "ens" and cut 5,479 candidates to 78
+  // with ENS on top, and chain:"arbitrum" returned total_matches 0 with no
+  // error at all. Inference is a guess about intent; a guess belongs in the
+  // ORDER BY, where being wrong costs a few positions, not every result.
+  //
+  // The text terms now ALWAYS constrain (they used to be skipped entirely
+  // whenever anything was inferred), so the pool stays tied to what was
+  // actually asked.
+  const scoreParts = [];
+  const scoreParams = [];
+
+  const words = queryTerms(goalLower);
+  if (words.length) {
+    const textConds = words.map(() => "(display_name LIKE ? OR description LIKE ? OR auto_description LIKE ?)");
+    scoreParts.push(
+      words
+        .map(() => "((CASE WHEN display_name LIKE ? THEN 4 ELSE 0 END) + (CASE WHEN (description LIKE ? OR auto_description LIKE ?) THEN 1 ELSE 0 END))")
+        .join(" + "),
+    );
+    words.forEach((w) => scoreParams.push(`%${w}%`, `%${w}%`, `%${w}%`));
+    words.forEach((w) => params.push(`%${w}%`, `%${w}%`, `%${w}%`));
+    conditions.push(`(${textConds.join(" OR ")})`);
   }
   if (domains.length) {
-    conditions.push(`domain IN (${domains.map(() => "?").join(",")})`);
-    params.push(...domains);
+    scoreParts.push(`(CASE WHEN domain IN (${domains.map(() => "?").join(",")}) THEN 1 ELSE 0 END)`);
+    scoreParams.push(...domains);
   }
   if (ptypes.length) {
-    conditions.push(`protocol_type IN (${ptypes.map(() => "?").join(",")})`);
-    params.push(...ptypes);
+    scoreParts.push(`(CASE WHEN protocol_type IN (${ptypes.map(() => "?").join(",")}) THEN 1 ELSE 0 END)`);
+    scoreParams.push(...ptypes);
   }
 
-  if (!domains.length && !ptypes.length) {
-    const words = goalLower.split(/\s+/).filter((w) => w.length > 2).slice(0, 5);
-    if (words.length) {
-      const textConds = words.map(() => "(display_name LIKE ? OR description LIKE ?)");
-      words.forEach((w) => params.push(`%${w}%`, `%${w}%`));
-      conditions.push(`(${textConds.join(" OR ")})`);
-    }
-  }
-
+  const goalScore = scoreParts.length ? scoreParts.join(" + ") : "0";
   const where = `WHERE ${conditions.join(" AND ")}`;
   const sql = `
     SELECT id, display_name, description, auto_description, domain, protocol_type, network,
-           reliability_score, ipfs_hash, canonical_entities, active_allocation_count
+           reliability_score, ipfs_hash, canonical_entities, active_allocation_count, example_query,
+           (${goalScore}) AS goal_score
     FROM subgraphs
     ${where}
-    ORDER BY reliability_score DESC
+    ORDER BY goal_score DESC, reliability_score DESC
     LIMIT 15
   `;
 
-  const rows = getDb().prepare(sql).all(...params);
+  // SELECT-clause params bind before WHERE-clause params.
+  const rows = getDb().prepare(sql).all(...scoreParams, ...params);
   // De-dup first so we batch the stability lookup over the trimmed set.
   const seenIpfs = new Set();
   const keep = [];
@@ -357,6 +681,7 @@ function recommendSubgraph({ goal, chain = "" }) {
       ipfs_hash: r.ipfs_hash,
       canonical_entities: JSON.parse(r.canonical_entities),
       active_allocation_count: r.active_allocation_count || 0,
+      example_query: r.example_query || null,
       schema_changed_at: stab.schema_changed_at,
       schema_stable_days: stab.schema_stable_days,
       ...buildQueryEndpoints(r.id),
@@ -441,7 +766,34 @@ function getSubgraphDetail({ subgraph_id }) {
 // Stable, machine-readable manifest other crawlers and agents can index
 // without going through MCP. Served at /.well-known/subgraph/{id}.jsonld and
 // /subgraphs/{id}.jsonld (alias, same payload).
-const JSONLD_CONTEXT = "https://subgraph-registry.paulieb14.dev/context.jsonld";
+// Every JSON-LD document used to carry @context and @id under
+// subgraph-registry.paulieb14.dev, a hostname that has never resolved
+// (NXDOMAIN). A JSON-LD processor that dereferences the context gets nothing,
+// and the @id identified each subgraph by a URL that 404s — so the documents
+// the README calls "auto-discoverable" were undiscoverable by construction.
+//
+// Two changes. The context is inlined, because a context that must be fetched
+// is a dependency on a host we do not run. And @id now defaults to The Graph's
+// explorer, which is the canonical, resolving identifier for a subgraph and is
+// where we want an agent following the link to end up anyway.
+//
+// Set SUBGRAPH_REGISTRY_BASE_URL to serve these under your own origin (the
+// --http-only transport does exactly that).
+const PUBLIC_BASE_URL = (process.env.SUBGRAPH_REGISTRY_BASE_URL || "").replace(/\/+$/, "");
+const EXPLORER_BASE = "https://thegraph.com/explorer/subgraphs";
+
+function subgraphIri(id) {
+  return PUBLIC_BASE_URL ? `${PUBLIC_BASE_URL}/subgraphs/${id}` : `${EXPLORER_BASE}/${id}`;
+}
+
+const JSONLD_CONTEXT = {
+  "@vocab": "https://schema.org/",
+  id: "@id",
+  name: "https://schema.org/name",
+  description: "https://schema.org/description",
+  network: "https://schema.org/provider",
+  SubgraphDeployment: "https://schema.org/Dataset",
+};
 
 function buildJsonLdManifest(row) {
   if (!row) return null;
@@ -450,7 +802,7 @@ function buildJsonLdManifest(row) {
   return {
     "@context": JSONLD_CONTEXT,
     "@type": "SubgraphDeployment",
-    "@id": `https://subgraph-registry.paulieb14.dev/subgraphs/${row.id}`,
+    "@id": subgraphIri(row.id),
     id: row.id,
     ipfsHash: row.ipfs_hash,
     name: row.display_name,
@@ -536,7 +888,7 @@ async function getEmbedder() {
       }
       const extractor = await pipeline(
         "feature-extraction",
-        "all-MiniLM-L6-v2",
+        "Xenova/all-MiniLM-L6-v2",
         { quantized: true },
       );
       return extractor;
@@ -585,6 +937,8 @@ async function semanticSearchSubgraphs({
   limit = 10,
   min_score = 0.3,
   include_unserved = false,
+  include_denied = false,
+  include_testnets = false,
   domain = "",
   network = "",
   protocol_type = "",
@@ -604,10 +958,18 @@ async function semanticSearchSubgraphs({
   // SQL pre-filter shaves ~14k → <1k rows for narrow queries (e.g.
   // "lending positions on Arbitrum"). Cosine math runs only on the
   // post-filter set.
-  const conditions = ["embedding IS NOT NULL"];
+  // Exclude the handful of null-ipfs "shell" rows — they carry embeddings but
+  // are unqueryable (no deployment) so they must not surface as recommendations.
+  const conditions = ["embedding IS NOT NULL", "ipfs_hash != ''", "ipfs_hash IS NOT NULL"];
   const params = [];
   if (!include_unserved) {
     conditions.push("active_allocation_count > 0");
+  }
+  if (!include_denied) {
+    conditions.push("denied_at = 0");
+  }
+  if (shouldExcludeTestnets({ include_testnets, network })) {
+    conditions.push(`(${NOT_TESTNET_SQL})`);
   }
   if (domain) {
     conditions.push("domain = ?");
@@ -615,7 +977,7 @@ async function semanticSearchSubgraphs({
   }
   if (network) {
     conditions.push("network = ?");
-    params.push(network);
+    params.push(normalizeNetwork(network));
   }
   if (protocol_type) {
     conditions.push("protocol_type = ?");
@@ -631,7 +993,7 @@ async function semanticSearchSubgraphs({
       `SELECT id, display_name, description, auto_description, domain,
               protocol_type, network, reliability_score, ipfs_hash,
               entity_count, canonical_entities, powered_by_substreams,
-              active_allocation_count, embedding
+              active_allocation_count, example_query, denied_at, created_at, embedding
        FROM subgraphs
        ${where}`,
     )
@@ -647,7 +1009,23 @@ async function semanticSearchSubgraphs({
     if (score < min_score) continue;
     scored.push({ row: r, score });
   }
-  scored.sort((a, b) => b.score - a.score);
+  // Rank on similarity WEIGHTED by reliability, not similarity alone.
+  //
+  // Pure cosine made this the only tool in the package that ignored the
+  // registry's own quality signal, and testnets win on pure cosine because
+  // their text is near-identical to mainnet's. Observed: "ENS domain name
+  // registrations" put ENS Sepolia (58 queries/30d, reliability 0.2463) above
+  // ENS mainnet (34.8M queries/30d, reliability 0.9775) on a cosine margin of
+  // 0.0105 — a rounding error deciding between a toy and the real thing.
+  //
+  // The 0.5 floor is deliberate: reliability is itself age-biased (see the
+  // maturity block above), so a multiplier that ran to 0 would re-bury every
+  // new subgraph and undo the emerging work. At 0.5 + 0.5*r a brand-new
+  // subgraph keeps half its similarity and can still outrank an established
+  // one it genuinely beats on meaning, while a 0.01 cosine tie resolves
+  // toward the subgraph that is actually serving traffic.
+  const effective = (s) => s.score * (0.5 + 0.5 * (s.row.reliability_score || 0));
+  scored.sort((a, b) => effective(b) - effective(a));
 
   const results = [];
   for (const { row: r, score } of scored) {
@@ -666,6 +1044,17 @@ async function semanticSearchSubgraphs({
       canonical_entities: JSON.parse(r.canonical_entities),
       powered_by_substreams: Boolean(r.powered_by_substreams),
       active_allocation_count: r.active_allocation_count || 0,
+      denied: Boolean(r.denied_at),
+    testnet: isTestnetNetwork(r.network),
+      testnet: isTestnetNetwork(r.network),
+      example_query: r.example_query || null,
+      // No `emerging` companion list here: this tool ranks by cosine score,
+      // not reliability_score, so a three-week-old subgraph can and does take
+      // the top slot on merit. The cold-start bias is a property of the ranked
+      // search, not of semantic search — what this tool needs is the label, so
+      // a caller knows a strong match is also unproven.
+      age_days: ageDays(r.created_at),
+      maturity: maturityOf(r.created_at),
       semantic_score: Number(score.toFixed(4)),
       ...buildQueryEndpoints(r.id),
     });
@@ -719,6 +1108,7 @@ function getSchemaChanges({ subgraph_id, since_timestamp = 0 }) {
         `SELECT fingerprint, prev_fingerprint, detected_at, ipfs_hash
          FROM schema_history
          WHERE subgraph_id = ? AND detected_at >= ?
+           AND prev_fingerprint IS NOT NULL
          ORDER BY detected_at DESC`,
       )
       .all(subgraph_id, since);
@@ -730,17 +1120,41 @@ function getSchemaChanges({ subgraph_id, since_timestamp = 0 }) {
     };
   }
 
+  // Baselines are excluded from `rows`, so "no rows" now means "never changed
+  // since we first saw it" rather than "no history". Those are very different
+  // claims to an agent deciding whether a schema is safe to depend on, and
+  // collapsing them to stable_days: null loses the distinction. Report the
+  // first sighting separately and measure stability from it, so a subgraph
+  // that has genuinely never changed reads as stable — which is the honest
+  // answer, and the one the old code accidentally gave everybody.
+  let first_seen_at = null;
+  try {
+    const fs = getDb()
+      .prepare(
+        "SELECT MIN(detected_at) AS t FROM schema_history WHERE subgraph_id = ?",
+      )
+      .get(subgraph_id);
+    first_seen_at = fs && fs.t != null ? fs.t : null;
+  } catch {
+    first_seen_at = null;
+  }
+
+  const never_changed = rows.length === 0;
   const last_changed_at = rows.length > 0 ? rows[0].detected_at : null;
+  const stable_since = last_changed_at !== null ? last_changed_at : first_seen_at;
   const stable_days =
-    last_changed_at !== null
-      ? Math.round(((now - last_changed_at) / 86400) * 10) / 10
+    stable_since !== null
+      ? Math.round(((now - stable_since) / 86400) * 10) / 10
       : null;
 
   return {
     subgraph_id,
     total_changes: rows.length,
+    never_changed,
+    first_seen_at,
     last_changed_at,
     stable_days,
+    stable_days_basis: never_changed ? "first_seen" : "last_change",
     changed_within_24h:
       last_changed_at !== null && now - last_changed_at < 86400,
     changed_within_7d:
@@ -764,7 +1178,8 @@ function getSchemaStabilityFor(id) {
     const r = getDb()
       .prepare(
         "SELECT MAX(detected_at) AS schema_changed_at " +
-          "FROM schema_history WHERE subgraph_id = ?",
+          "FROM schema_history WHERE subgraph_id = ? " +
+          "AND prev_fingerprint IS NOT NULL",
       )
       .get(id);
     if (!r || r.schema_changed_at == null) {
@@ -790,6 +1205,7 @@ function getSchemaStabilityBatch(ids) {
         `SELECT subgraph_id, MAX(detected_at) AS schema_changed_at
          FROM schema_history
          WHERE subgraph_id IN (${placeholders})
+           AND prev_fingerprint IS NOT NULL
          GROUP BY subgraph_id`,
       )
       .all(...ids);
@@ -821,7 +1237,7 @@ const TOOLS = [
   {
     name: "search_subgraphs",
     description:
-      "Search and filter the classified subgraph registry (15,500+ subgraphs). Filter by domain (defi, nfts, dao, gaming, identity, infrastructure, social, analytics), network (mainnet, arbitrum-one, base, matic, bsc, optimism, avalanche), protocol_type (dex, lending, bridge, staking, options, perpetuals, nft-marketplace, yield-aggregator, governance, name-service), canonical entity type (liquidity_pool, trade, token, position, vault, loan, collateral, liquidation, nft_collection, nft_item, nft_sale, proposal, delegate, domain_name, account, transaction, daily_snapshot, hourly_snapshot), or free-text keyword. Returns subgraphs ranked by reliability score. Each result includes query_url_x402 (POST GraphQL and pay $0.01 USDC on Base per query — no API key needed) and a legacy query_url (Studio API key required).",
+      "Search and filter the classified subgraph registry (15,000+ subgraphs). Filter by domain (defi, nfts, dao, gaming, identity, infrastructure, social, analytics), network (mainnet, arbitrum-one, base, matic, bsc, optimism, avalanche), protocol_type (dex, lending, bridge, staking, options, perpetuals, nft-marketplace, yield-aggregator, governance, name-service), canonical entity type (liquidity_pool, trade, token, position, vault, loan, collateral, liquidation, nft_collection, nft_item, nft_sale, proposal, delegate, domain_name, account, transaction, daily_snapshot, hourly_snapshot), or free-text keyword. Returns subgraphs ranked by reliability score. Each result includes query_url_x402 (POST GraphQL and pay $0.01 USDC on Base per query — no API key needed) and a legacy query_url (Studio API key required), plus age_days and maturity (new | emerging | established). Because reliability_score is cumulative it structurally favours older deployments, so a separate `emerging` list carries recent matches that ranked below the main cut for age rather than quality — read `emerging_caveat` before offering one to a user.",
     inputSchema: {
       type: "object",
       additionalProperties: false,
@@ -831,8 +1247,23 @@ const TOOLS = [
         network: { type: "string", description: "Filter by chain: mainnet, arbitrum-one, base, matic, bsc, optimism, avalanche, etc." },
         protocol_type: { type: "string", description: "Filter by protocol type: dex, lending, bridge, staking, options, perpetuals, etc." },
         entity: { type: "string", description: "Filter by canonical entity: liquidity_pool, trade, token, position, vault, loan, etc." },
-        min_reliability: { type: "number", description: "Minimum reliability score (0-1). Higher = more query fees, volume, curation signal, and indexer allocation." },
+        min_reliability: { type: "number", description: "Minimum reliability score (0-1). Higher = more query fees, volume, curation signal, and indexer allocation. NOTE: all four inputs are cumulative, so this score rises with age — setting a floor here filters out good recent subgraphs along with bad ones." },
         limit: { type: "integer", description: "Max results to return (default: 20)", default: 20 },
+        include_unserved: {
+          type: "boolean",
+          description: "Include subgraphs with 0 active indexer allocations (returns 'no allocations' on query). Default false.",
+          default: false,
+        },
+        include_denied: {
+          type: "boolean",
+          description: "Include curation-denied deployments (deniedAt > 0 — denied indexing rewards, typically spam, duplicates or deprecations). Default false. When true, each result carries denied: true so the choice stays visible.",
+          default: false,
+        },
+        include_testnets: {
+          type: "boolean",
+          description: "Include testnet deployments (sepolia, goerli, holesky, chapel, fuji, mumbai, amoy, *-testnet). Default false — a testnet twin's text is near-identical to its mainnet original, so it competes for the top slot without being the thing anyone wanted. Ignored when you explicitly request a testnet network, so network:\"sepolia\" still works. Each result carries testnet: true|false.",
+          default: false,
+        },
       },
     },
   },
@@ -902,6 +1333,16 @@ const TOOLS = [
           description: "Include subgraphs with 0 active indexer allocations (returns 'no allocations' on query). Default false.",
           default: false,
         },
+        include_denied: {
+          type: "boolean",
+          description: "Include curation-denied deployments (deniedAt > 0 — denied indexing rewards, typically spam, duplicates or deprecations). Default false. When true, each result carries denied: true so the choice stays visible.",
+          default: false,
+        },
+        include_testnets: {
+          type: "boolean",
+          description: "Include testnet deployments (sepolia, goerli, holesky, chapel, fuji, mumbai, amoy, *-testnet). Default false — a testnet twin's text is near-identical to its mainnet original, so it competes for the top slot without being the thing anyone wanted. Ignored when you explicitly request a testnet network, so network:\"sepolia\" still works. Each result carries testnet: true|false.",
+          default: false,
+        },
         domain: {
           type: "string",
           description: "Pre-filter by domain (defi, nfts, dao, gaming, identity, infrastructure, social, analytics)",
@@ -956,7 +1397,7 @@ const HANDLERS = {
 
 function createServer() {
   const server = new Server(
-    { name: "subgraph-registry", version: "0.6.0" },
+    { name: "subgraph-registry", version: PKG_VERSION },
     { capabilities: { tools: {} } }
   );
 
@@ -1024,6 +1465,62 @@ function startHttpTransport(port) {
     res.json({ status: "ok", subgraphs: getDb().prepare("SELECT COUNT(*) as c FROM subgraphs").get().c });
   });
 
+  // ── payql compatibility shim ─────────────────────────────────────
+  // payql (npm `payql`, same author) advertises PAYQL_REGISTRY_URL as a "free
+  // discovery source (e.g. your own subgraph registry)" — but it POSTs the
+  // Graph network subgraph's GraphQL document and reads
+  // `data.subgraphMetadataSearch`, a shape this registry has never served. So
+  // pointing payql here returned zero hits and, because the response still
+  // parsed as JSON, it failed as an empty success rather than an error. The
+  // two projects were built to compose and the seam between them was dead.
+  //
+  // Serve that shape. No GraphQL engine needed: the only input that varies is
+  // the `text` variable, and the result set is what search_subgraphs already
+  // computes. Answering in the incumbent's vocabulary means payql works
+  // against this registry with no change on its side.
+  //
+  // Token amounts are returned as wei-scale strings because payql divides them
+  // by 1e18 (weiToGRT); handing back plain GRT would under-report by 1e18.
+  app.post("/graphql", express.json({ limit: "256kb" }), (req, res) => {
+    try {
+      const text = String(req.body?.variables?.text ?? "");
+      const first = Math.max(1, Math.min(Number(req.body?.variables?.first) || 10, 50));
+      // payql sends a prefix tsquery ("uniswap:* | v3:*"); strip the fulltext
+      // operators back to plain words before handing them to LIKE matching.
+      const plain = text.replace(/:\*/g, " ").replace(/[|&()]/g, " ").trim();
+      const { subgraphs = [] } = searchSubgraphs({ query: plain, limit: first });
+      res.json({
+        data: {
+          subgraphMetadataSearch: subgraphs.map((s) => ({
+            displayName: s.display_name,
+            description: s.description,
+            categories: s.domain ? [s.domain] : [],
+            subgraphs: [
+              {
+                id: s.id,
+                active: true,
+                currentSignalledTokens: null,
+                currentVersion: {
+                  subgraphDeployment: {
+                    ipfsHash: s.ipfs_hash,
+                    stakedTokens: null,
+                    signalledTokens: null,
+                    queryFeesAmount: null,
+                  },
+                },
+              },
+            ],
+          })),
+        },
+      });
+    } catch (err) {
+      // Answer in GraphQL's error shape so a client that only knows GraphQL
+      // sees a failure instead of an empty success — the exact trap this
+      // route exists to close.
+      res.status(500).json({ errors: [{ message: String(err?.message || err) }] });
+    }
+  });
+
   // ── OpenAPI 3.1 spec (auto-generated at release time) ────────────
   // scripts/gen-openapi.js inventories the TOOLS array + the REST
   // routes below and writes data/openapi.json. We serve the file
@@ -1083,7 +1580,7 @@ function startHttpTransport(port) {
       generatedAt: new Date().toISOString(),
       count: rows.length,
       subgraphs: rows.map((r) => ({
-        "@id": `https://subgraph-registry.paulieb14.dev/subgraphs/${r.id}`,
+        "@id": subgraphIri(r.id),
         id: r.id,
         name: r.display_name,
         network: r.network,
@@ -1142,6 +1639,14 @@ export const REST_ROUTES = [
       },
       required: ["status", "subgraphs"],
     },
+  },
+  {
+    method: "post",
+    path: "/graphql",
+    summary: "payql compatibility — search results in subgraphMetadataSearch shape",
+    description:
+      "Answers a `subgraphMetadataSearch` query in The Graph network subgraph's shape, so payql (PAYQL_REGISTRY_URL) can use this registry as a free discovery source with no change on its side. Only the `text` and `first` variables are read; results come from the same index search_subgraphs uses.",
+    response: { type: "object", description: "{ data: { subgraphMetadataSearch: [...] } }" },
   },
   {
     method: "get",

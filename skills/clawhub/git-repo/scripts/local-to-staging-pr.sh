@@ -9,34 +9,58 @@
 # gate is the later promotion PR.
 #
 # Usage:
-#   local-to-staging-pr.sh <repo-dir> <commit-sha> [--branch <name>] [--base <next-feat|next-fix>]
+#   local-to-staging-pr.sh <repo-dir> <commit-sha> [--branch <name>] [--base <next-feat|next-fix>] [--push [--body-file <path>]]
 #
 # <repo-dir>:   path to the repo working copy (e.g. ~/.agents)
 # <commit-sha>: commit to cherry-pick (must exist on the local branch)
 # --branch:     feature branch name (default: derived from the commit subject)
 # --base:       override the auto-derived base (feat -> next-feat, fix/chore -> next-fix)
+# --push:       after a clean cherry-pick, also `git push -u origin <branch>`. The
+#               caller (a human explicitly opting in per-invocation, mirroring the
+#               same confirmation a bare `git push` would need) decides when this
+#               is appropriate — the script never pushes by default.
+# --body-file:  only meaningful with --push. Path to an ALREADY-AUTHORED PR body
+#               file — when given, also runs `gh pr create --draft` with it. PR
+#               title/body content still goes through human authorship before
+#               this flag is used; this only automates the ceremony around
+#               content someone already wrote and reviewed.
 #
 # On cherry-pick conflict, the script stops and reports the conflicted files —
 # conflict resolution is not automated (case-by-case judgment required, see
 # session precedent: prefer the newer/more-refined side after manual diff).
 #
-# Does NOT push or create the PR without a clean cherry-pick. Does NOT force-push.
+# Without --push: does NOT push or create the PR (prints the manual commands
+# instead — unchanged default behavior). Never force-pushes, with or without
+# --push.
 
 set -euo pipefail
 
-REPO="${1:?Usage: local-to-staging-pr.sh <repo-dir> <commit-sha> [--branch <name>] [--base <next-feat|next-fix>]}"
+REPO="${1:?Usage: local-to-staging-pr.sh <repo-dir> <commit-sha> [--branch <name>] [--base <next-feat|next-fix>] [--push [--body-file <path>]]}"
 SHA="${2:?missing commit-sha}"
 BRANCH_OVERRIDE=""
 BASE_OVERRIDE=""
+DO_PUSH=0
+BODY_FILE=""
 
 shift 2
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --branch) BRANCH_OVERRIDE="$2"; shift 2 ;;
     --base) BASE_OVERRIDE="$2"; shift 2 ;;
+    --push) DO_PUSH=1; shift ;;
+    --body-file) BODY_FILE="$2"; shift 2 ;;
     *) echo "Unknown option: $1" >&2; exit 1 ;;
   esac
 done
+
+if [[ -n "$BODY_FILE" && "$DO_PUSH" -eq 0 ]]; then
+  echo "--body-file requires --push" >&2
+  exit 1
+fi
+if [[ -n "$BODY_FILE" && ! -f "$BODY_FILE" ]]; then
+  echo "--body-file path does not exist: $BODY_FILE" >&2
+  exit 1
+fi
 
 cd "$REPO"
 
@@ -89,6 +113,27 @@ if [[ "$MISSING" -eq 1 ]]; then
 fi
 
 WT_DIR=".claude/worktrees/$(echo "$BRANCH" | tr '/' '-')"
+
+# Reuse-first hygiene (non-interactive subset of worktree.md's "Worktree
+# decision tree" — Steps 1-3): before adding a new worktree, inventory
+# existing ones under .claude/worktrees/ and reclaim any whose branch is
+# already merged into origin/main. Merged branches have no unique commits,
+# so removal is safe without user confirmation; left unpruned they
+# accumulate across repeated script runs. This does NOT replace the
+# interactive reuse-first gate for *unmerged* inactive candidates — that
+# choice requires a human (AskUserQuestion), which a non-interactive script
+# cannot make, so it stays the plain-base manual path's responsibility.
+while IFS= read -r wt_path; do
+  [[ -z "$wt_path" || "$wt_path" != "$REPO"/.claude/worktrees/* ]] && continue
+  wt_branch=$(git -C "$wt_path" branch --show-current 2>/dev/null || true)
+  [[ -z "$wt_branch" ]] && continue
+  if git merge-base --is-ancestor "$wt_branch" origin/main 2>/dev/null; then
+    echo "Reclaiming already-merged worktree: $wt_path ($wt_branch)" >&2
+    git worktree remove "$wt_path" --force 2>/dev/null || true
+    git branch -D "$wt_branch" 2>/dev/null || true
+  fi
+done < <(git worktree list --porcelain | awk '/^worktree /{print $2}')
+
 if [[ -d "$WT_DIR" ]]; then
   echo "Worktree already exists at $WT_DIR — remove it first or pass a different --branch." >&2
   exit 1
@@ -143,6 +188,22 @@ fi
 
 chmod +x "$WT_DIR/.githooks/pre-commit" 2>/dev/null || true
 
-echo "== ready to push: git -C $WT_DIR push -u origin $BRANCH"
-echo "== then: gh pr create -R es6kr/skills --base $BASE --head $BRANCH --draft --title \"$SUBJECT\" --body-file <sanitized-body.md>"
-echo "== (push/PR creation left manual — this script stops after the clean cherry-pick + pre-flight checks)"
+if [[ "$DO_PUSH" -eq 0 ]]; then
+  echo "== ready to push: git -C $WT_DIR push -u origin $BRANCH"
+  echo "== then: gh pr create -R es6kr/skills --base $BASE --head $BRANCH --draft --title \"$SUBJECT\" --body-file <sanitized-body.md>"
+  echo "== (push/PR creation left manual — this script stops after the clean cherry-pick + pre-flight checks. Pass --push to also push, and --push --body-file <path> to also open the draft PR from an already-authored body.)"
+  exit 0
+fi
+
+echo "== pushing (--push given)"
+git -C "$WT_DIR" push -u origin "$BRANCH"
+
+if [[ -z "$BODY_FILE" ]]; then
+  echo "== pushed. PR creation left manual (no --body-file given):"
+  echo "  gh pr create -R es6kr/skills --base $BASE --head $BRANCH --draft --title \"$SUBJECT\" --body-file <sanitized-body.md>"
+  exit 0
+fi
+
+echo "== opening draft PR (--body-file given)"
+PR_URL=$(gh pr create -R es6kr/skills --base "$BASE" --head "$BRANCH" --draft --title "$SUBJECT" --body-file "$BODY_FILE")
+echo "== draft PR: $PR_URL"

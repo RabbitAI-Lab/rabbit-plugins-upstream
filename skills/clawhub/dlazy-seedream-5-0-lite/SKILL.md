@@ -1,14 +1,13 @@
 ---
 name: dlazy-seedream-5.0-lite
 version: 1.3.4
-description: Fast image generation with Doubao Seedream 5.0 Lite. Supports text-to-image and image-to-image. 使用豆包 Seedream 5.0 Lite 极速生成图像，支持文生图与图生图。
+description: "Fast image generation with Doubao Seedream 5.0 Lite. Supports text-to-image and image-to-image. 使用豆包 Seedream 5.0 Lite 极速生成图像，支持文生图与图生图。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy seedream-5.0-lite -h for help."}}
 ---
 
-# dlazy-seedream-5.0-lite
+# 文生图 Seedream 5.0 Lite
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Fast image generation with Doubao Seedream 5.0 Lite. Supports text-to-image and image-to-image.
@@ -89,6 +88,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -101,7 +101,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "seedream-5.0-lite",
-    "modelId": "seedream-5.0-lite",
+    "modelId": "doubao-seedream-5-0-lite",
     "outputs": [
       {
         "type": "image",

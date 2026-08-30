@@ -4,6 +4,10 @@ import importlib.util
 
 from .common import *
 
+SUBPROCESS_EXEC_CALL_NAMES = {"run", "Popen", "call", "check_call", "check_output"}
+EVIDENCE_FILE_LIST_LIMIT = 8
+
+
 def is_generated_python_cache(path: Path) -> bool:
     return "__pycache__" in {part.lower() for part in path.parts} or path.suffix.lower() in {".pyc", ".pyo"}
 
@@ -78,7 +82,7 @@ def python_exec_call_labels(text: str) -> set[str]:
                     os_aliases.add(alias.asname or alias.name)
         elif isinstance(node, ast.ImportFrom) and node.module == "subprocess":
             for alias in node.names:
-                if alias.name in {"run", "Popen", "call", "check_call", "check_output"}:
+                if alias.name in SUBPROCESS_EXEC_CALL_NAMES:
                     subprocess_call_names.add(alias.asname or alias.name)
 
     for node in ast.walk(tree):
@@ -91,7 +95,7 @@ def python_exec_call_labels(text: str) -> set[str]:
             elif func.id in {"eval", "exec"}:
                 labels.add("dynamic-exec")
         elif isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name):
-            if func.value.id in subprocess_aliases and func.attr in {"run", "Popen", "call", "check_call", "check_output"}:
+            if func.value.id in subprocess_aliases and func.attr in SUBPROCESS_EXEC_CALL_NAMES:
                 labels.add("script-exec-call")
             elif func.value.id in os_aliases and func.attr == "system":
                 labels.add("script-exec-call")
@@ -807,7 +811,7 @@ def _reference_quality_evidence(
                 "reference-link-broken",
                 0.25,
                 "SKILL.md points to missing reference files",
-                files=broken_links[:8],
+                files=broken_links[:EVIDENCE_FILE_LIST_LIMIT],
                 metrics={"matches": len(broken_links)},
             )
         )
@@ -846,7 +850,7 @@ def _reference_quality_evidence(
                 "long-reference-without-toc",
                 0.20 if len(long_reference_without_toc) >= 3 else 0.10,
                 "long reference files need a visible table of contents",
-                files=long_reference_without_toc[:8],
+                files=long_reference_without_toc[:EVIDENCE_FILE_LIST_LIMIT],
                 metrics={"matches": len(long_reference_without_toc)},
             )
         )
@@ -858,7 +862,7 @@ def _reference_quality_evidence(
                 "reference-content-pollution",
                 0.35,
                 "reference content includes ads, upsells, unrelated text, or tool/skill promotion",
-                files=polluted_reference_paths[:8],
+                files=polluted_reference_paths[:EVIDENCE_FILE_LIST_LIMIT],
                 metrics={
                     "matches": len(polluted_reference_paths),
                     "signal_types": sorted(pollution_labels),
@@ -909,7 +913,7 @@ def _bundled_resource_quality_evidence(
                 "vague-resource-names",
                 0.20,
                 "resource filenames are too generic for selective loading",
-                files=vague_files[:8],
+                files=vague_files[:EVIDENCE_FILE_LIST_LIMIT],
                 metrics={"matches": len(vague_files)},
             )
         )
@@ -925,7 +929,7 @@ def _bundled_resource_quality_evidence(
                 "private-bundle-artifact",
                 0.60,
                 "bundle contains private-looking or environment-specific files",
-                files=private_paths[:8],
+                files=private_paths[:EVIDENCE_FILE_LIST_LIMIT],
                 metrics={"matches": len(private_paths)},
             )
         )
@@ -945,7 +949,7 @@ def _bundled_resource_quality_evidence(
                 "private-content-artifact",
                 0.60,
                 "bundle contains credential-like content",
-                files=private_content_paths[:8],
+                files=private_content_paths[:EVIDENCE_FILE_LIST_LIMIT],
                 metrics={
                     "matches": len(private_content_paths),
                     "signal_types": sorted(private_content_labels),
@@ -964,7 +968,7 @@ def _bundled_resource_quality_evidence(
                 "executable-asset",
                 0.30,
                 "assets include executables or installers",
-                files=executable_assets[:8],
+                files=executable_assets[:EVIDENCE_FILE_LIST_LIMIT],
                 metrics={"matches": len(executable_assets)},
             )
         )
@@ -996,7 +1000,7 @@ def _script_quality_evidence(root: Path, script_files: list[Path]) -> list[dict[
                 "script-maintenance-smell",
                 penalty,
                 "scripts look likely to need local fixes",
-                files=script_smell_files[:8],
+                files=script_smell_files[:EVIDENCE_FILE_LIST_LIMIT],
                 metrics={"scripts_count": len(script_files), "matches": len(script_smell_files)},
             )
         )
@@ -1008,7 +1012,7 @@ def _script_quality_evidence(root: Path, script_files: list[Path]) -> list[dict[
                 "script-syntax-error",
                 0.50,
                 "Python scripts have syntax errors",
-                files=syntax_error_files[:8],
+                files=syntax_error_files[:EVIDENCE_FILE_LIST_LIMIT],
                 metrics={"matches": len(syntax_error_files)},
             )
         )
@@ -1019,7 +1023,7 @@ def _script_quality_evidence(root: Path, script_files: list[Path]) -> list[dict[
                 "script-import-error",
                 0.50,
                 "Python scripts import modules missing from the local environment or bundle",
-                files=import_error_files[:8],
+                files=import_error_files[:EVIDENCE_FILE_LIST_LIMIT],
                 metrics={"matches": len(import_error_files)},
             )
         )

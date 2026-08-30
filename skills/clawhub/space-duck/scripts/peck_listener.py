@@ -96,6 +96,20 @@ POLL_WAKE   = Path.home() / '.space-duck' / 'poll_wake'
 LISTENER_PID = Path.home() / '.space-duck' / 'listener.pid'
 LISTENER_LOG = Path.home() / '.space-duck' / 'listener.log'
 
+
+def _align_inbox_ownership(path):
+    """0.8.6 — F5: when running as root, inbox files default root:600 and a
+    non-root responder's chain history silently skips them. Match the inbox
+    dir's owner so the intended reader keeps access."""
+    try:
+        if hasattr(os, 'geteuid') and os.geteuid() == 0:
+            st = path.parent.stat()
+            if st.st_uid != 0:
+                os.chown(path, st.st_uid, st.st_gid)
+        os.chmod(path, 0o600)
+    except OSError as e:
+        print(f'   warn: inbox ownership align failed: {e}')
+
 # Config search order — matches pair.py CANDIDATE_DIRS so a Docker-mounted
 # /data/.spaceduck and a bare-host ~/.space-duck both work. HOME-first so
 # we match send_peck.py priority; OTP rekeys reach ~/.space-duck first and
@@ -178,6 +192,16 @@ def _fetch_shared_mds_for_peck(event, listener_cfg):
         url = (ref.get('fetch_url') or '').strip()
         if not fn or not url or '..' in fn or '/' in fn:
             failed += 1; errors.append(f'{fn}: bad ref')
+            continue
+        # [TT3] fetch_url arrives inside an unauthenticated peck body — never
+        # attach the Beak Key to an attacker-supplied host. Fail closed.
+        try:
+            from _apiguard import is_allowed_fetch_host
+            _host_ok = is_allowed_fetch_host(url, cfg)
+        except Exception:
+            _host_ok = False
+        if not _host_ok:
+            failed += 1; errors.append(f'{fn}: untrusted fetch_url host')
             continue
         try:
             req = urllib.request.Request(
@@ -380,7 +404,9 @@ class PeckHandler(BaseHTTPRequestHandler):
         # Persist to inbox before any side-effects.
         try:
             INBOX.mkdir(parents=True, exist_ok=True)
-            (INBOX / f'{peck_id}.json').write_text(json.dumps(event, indent=2))
+            inbox_path = INBOX / f'{peck_id}.json'
+            inbox_path.write_text(json.dumps(event, indent=2))
+            _align_inbox_ownership(inbox_path)  # 0.8.6 — F5
         except Exception as e:
             print(f'   warn: could not write inbox: {e}')
 
@@ -468,6 +494,8 @@ def _load_poll_config():
         except (OSError, json.JSONDecodeError):
             continue
         if cfg.get('beak_key') and cfg.get('spaceduck_id'):
+            from _apiguard import check_api_base  # [HARDEN-071]
+            check_api_base(cfg)
             cfg['_path'] = str(p)
             candidates.append(cfg)
     if not candidates:
@@ -575,7 +603,115 @@ def _http_post_json(url, headers, body, timeout=15):
         return 0, {'error': f'{type(e).__name__}: {e}'}
 
 
-def _deliver(event, forward_to, on_peck_cmd):
+# [AUTOUP-076] The Spaceduckling release duck (JP / askegor). Update-trigger
+# pecks are honored ONLY from these ids unless config.json "update_senders"
+# overrides. Keep this list short and boring.
+OFFICIAL_UPDATE_SENDERS = ('6249EE82B88241E9',)
+
+
+def _maybe_self_update(event, poll_cfg=None):
+    """[AUTOUP-075] Consent-based self-update trigger.
+
+    A peck whose message contains the literal marker [SPACE-DUCK-UPDATE]
+    is treated as an "check for updates now" signal — never as a command
+    with arbitrary content. The only action ever taken is running the
+    skill's own update.sh, which installs the official latest from the
+    ClawHub registry and no-ops when already up to date, so a forged
+    trigger cannot install anything but the genuine latest release.
+
+    Owner consent model (config.json "auto_update"):
+      "auto" — the duck self-updates in the background and logs to
+               ~/.space-duck/logs/self_update.log
+      "ask" / absent (default) — no action here; the peck still fans out
+               to the owner's forward channels as a normal notification,
+               and the owner runs /update themselves.
+
+    Sender gate [AUTOUP-076]: the auto path only fires for pecks from
+    OFFICIAL_UPDATE_SENDERS (the Spaceduckling release duck) unless the
+    owner overrides via config.json "update_senders". Default-open was a
+    hole: any connected peer could force an update + listener bounce.
+
+    SECURITY INVARIANT: this hook must only ever be called from the POLL
+    path (_deliver), whose transport is beak_key-authenticated against
+    the pinned api_base. NEVER call it from the HTTP push handler
+    (PeckHandler.do_POST) — that surface is unauthenticated and
+    sender_spaceduck_id there is attacker-controlled.
+
+    Debounce: at most one auto-update run per hour.
+    """
+    # [AUTOUP-077] Whole body is exception-proof: a malformed config or odd
+    # event shape must never crash the poll loop (_deliver runs unguarded).
+    try:
+        msg = event.get('message') or ''
+        if '[SPACE-DUCK-UPDATE]' not in msg:
+            return
+        # [AUTOUP-077] Prefer the AUTHENTICATED config the poll loop already
+        # resolved — first-path-on-disk can be a stale copy (the Sam/Wayne
+        # multi-path config bug class).
+        cfg = poll_cfg if isinstance(poll_cfg, dict) else None
+        if cfg is None:
+            cfg = {}
+            for p in _POLL_CONFIG_PATHS:
+                try:
+                    if p.exists():
+                        loaded = json.loads(p.read_text())
+                        if isinstance(loaded, dict):
+                            cfg = loaded
+                            break
+                except (OSError, json.JSONDecodeError):
+                    continue
+        mode = str(cfg.get('auto_update') or 'ask').lower()
+        if mode != 'auto':
+            print('   🔔 update trigger received — auto_update is "ask"; '
+                  'owner runs update.sh (or set auto_update:"auto" in config.json)')
+            return
+        # [AUTOUP-077] Type-harden: a bare-string update_senders would make
+        # `in` do SUBSTRING matching — coerce to an exact-match list.
+        raw_allowed = cfg.get('update_senders')
+        if isinstance(raw_allowed, str):
+            allowed = [raw_allowed]
+        elif isinstance(raw_allowed, (list, tuple)) and raw_allowed:
+            allowed = [str(a) for a in raw_allowed]
+        else:
+            allowed = list(OFFICIAL_UPDATE_SENDERS)
+        sender = event.get('sender_spaceduck_id') or ''
+        if sender not in allowed:
+            print(f'   ⚠️ update trigger from {sender or "?"} not in update_senders — ignored')
+            return
+        _run_self_update(sender)
+    except Exception as e:
+        print(f'   ⚠️ self-update hook error (ignored): {type(e).__name__}: {e}')
+
+
+def _run_self_update(sender):
+    update_sh = Path(__file__).resolve().parent / 'update.sh'
+    if not update_sh.exists():
+        print('   ⚠️ update.sh not found — cannot self-update')
+        return
+    stamp = Path.home() / '.space-duck' / 'last_self_update'
+    try:
+        if stamp.exists() and (time.time() - stamp.stat().st_mtime) < 3600:
+            print('   ⏳ self-update debounced (ran <1h ago)')
+            return
+        stamp.parent.mkdir(parents=True, exist_ok=True)
+        stamp.write_text(str(int(time.time())))
+    except OSError:
+        pass
+    log_path = Path.home() / '.space-duck' / 'logs' / 'self_update.log'
+    try:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        logf = open(log_path, 'a')
+        logf.write(f'\n== self-update triggered by peck from {sender or "?"} '
+                   f'at {time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())} ==\n')
+        logf.flush()
+        subprocess.Popen(['bash', str(update_sh)], stdout=logf, stderr=logf,
+                         start_new_session=True)
+        print(f'   ⬆️ auto_update=auto — self-update started (log: {log_path})')
+    except Exception as e:
+        print(f'   ⚠️ self-update spawn failed: {e}')
+
+
+def _deliver(event, forward_to, on_peck_cmd, poll_cfg=None):
     """Run the same fanout as the HTTP push handler. Reused verbatim from
     PeckHandler.do_POST so push and poll mode behave identically."""
     peck_id = event.get('peck_id') or f'peck_{int(time.time()*1000)}'
@@ -586,9 +722,13 @@ def _deliver(event, forward_to, on_peck_cmd):
 
     try:
         INBOX.mkdir(parents=True, exist_ok=True)
-        (INBOX / f'{peck_id}.json').write_text(json.dumps(event, indent=2))
+        inbox_path = INBOX / f'{peck_id}.json'
+        inbox_path.write_text(json.dumps(event, indent=2))
+        _align_inbox_ownership(inbox_path)  # 0.8.6 — F5
     except Exception as e:
         print(f'   warn: could not write inbox: {e}')
+
+    _maybe_self_update(event, poll_cfg)  # [AUTOUP-075/077]
 
     # Surface + fetch any inbound shared MDs (Gap D-client). Manifest is
     # written regardless; content fetch is best-effort and uses beak_key
@@ -703,6 +843,27 @@ def run_poll(interval, forward_to, on_peck_cmd, cold_start_floor_sec=86400,
     INBOX.mkdir(parents=True, exist_ok=True)
     _write_pid_file()
 
+    # 0.8.12 [NUDGE-0812] — daily update-nudge on the peck-only path.
+    #
+    # The nudge shipped in 0.8.11 lives in telegram_listener.py's pulse
+    # thread, so a box running ONLY this listener (Josh's laptop is the
+    # reference case) had no update path at all and would sit on a stale
+    # version forever. Same shared implementation, same disk-persisted rate
+    # limit. On a box that also runs the pulse thread the two threads share
+    # that one state file, so in practice whichever checks first suppresses
+    # the other for 24h; there is no lock, so a simultaneous check could
+    # duplicate a single nudge once per published version. Bounded and
+    # self-healing -- last_nudged is only recorded on a dispatched nudge.
+    try:
+        import threading
+        from _version_nudge import version_nudge_loop
+        threading.Thread(
+            target=version_nudge_loop,
+            args=(beak_key, sd_id, api_base, False),
+            daemon=True).start()
+    except Exception as _e:      # never block the poll loop on the nudge
+        print(f'    (update-nudge thread unavailable: {_e})')
+
     print(f'🦆 peck_listener (poll)  agent={agent_name}  duck={sd_id[:10]}…')
     print(f'    api: {api_base}')
     print(f'    config: {cfg["_path"]}')
@@ -742,7 +903,7 @@ def run_poll(interval, forward_to, on_peck_cmd, cold_start_floor_sec=86400,
                         if pts > processed_max_ts:
                             processed_max_ts = pts
                         continue
-                    _deliver(peck, forward_to, on_peck_cmd)
+                    _deliver(peck, forward_to, on_peck_cmd, poll_cfg=cfg)
                     if pid:
                         _append_seen_id(pid, seen_set, seen_list)
                     if pts > processed_max_ts:

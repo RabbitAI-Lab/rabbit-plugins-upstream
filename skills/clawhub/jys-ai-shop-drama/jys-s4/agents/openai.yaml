@@ -1,0 +1,4 @@
+interface:
+  display_name: "JYS S4 · 写剧本"
+  short_description: "把剧情骨架细化为事件大纲，并逐段完成可确认的完整台词"
+  default_prompt: "Use $jys-s4 to 根据已确认的剧情骨架和产品写成完整剧本。"

@@ -1,45 +1,60 @@
-## Description: <br>
-Captures data quality issues, metric drift, pipeline failures, misleading visualizations, metric definition mismatches, and data freshness problems to enable continuous analytics improvement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures data quality issues, metric drift, pipeline failures, misleading visualizations, metric definition mismatches, and data freshness problems to enable continuous analytics improvement.
 
-## Publisher: <br>
-[jose-compu](https://clawhub.ai/user/jose-compu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jose-compu](https://clawhub.ai/user/jose-compu)
 
-## Use Case: <br>
-Developers, analytics engineers, and data teams use this skill to capture recurring analytics issues, data quality lessons, metric definition conflicts, and improvement requests so they can be reviewed and promoted into durable analytics standards. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent analytics learning logs and reminders can influence future agent behavior beyond the immediate task. <br>
-Mitigation: Prefer project-local setup, review generated or modified guidance files before trusting them, and keep logged entries concise and relevant. <br>
-Risk: Optional hooks can inspect broad command output and may surface analytics reminders in unrelated contexts if enabled too widely. <br>
-Mitigation: Use analytics-specific hook filters where possible, avoid global user-level hooks, and leave Bash output detection disabled unless needed. <br>
-Risk: Analytics logs may accidentally capture connection strings, credentials, API keys, PII, or raw query results. <br>
-Mitigation: Redact sensitive values, summarize failures instead of storing full outputs, and follow the skill guidance not to log credentials or PII. <br>
+## Use Case:
 
+Developers, data engineers, analytics engineers, and BI teams use this skill to capture recurring analytics issues and convert proven patterns into data dictionaries, pipeline runbooks, dashboard standards, and data quality SLAs.
 
-## Reference(s): <br>
-- [Self-Improving Analytics on ClawHub](https://clawhub.ai/jose-compu/self-improving-analytics) <br>
-- [OpenClaw Integration](references/openclaw-integration.md) <br>
-- [Hook Setup Guide](references/hooks-setup.md) <br>
-- [Entry Examples](references/examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and reusable log-entry templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or updates local .learnings markdown files when the agent follows the workflow; optional hooks can inject reminders.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: Persistent hooks can add reminders to future agent sessions beyond the immediate task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep hooks project-scoped and use the prompt reminder path unless Bash-output detection is specifically needed.
+
+Risk: Analytics learnings may accidentally include secrets, PII, or sensitive query output.
+
+Mitigation: Redact credentials, PII, raw query results, and full table dumps before writing learning entries.
+
+Risk: Promoting entries into AGENTS.md, TOOLS.md, MEMORY.md, hooks, or generated skills can change future agent behavior.
+
+Mitigation: Review proposed changes and apply promotions only after explicit user approval.
+
+## Reference(s):
+
+- [Self-Improving Analytics ClawHub Page](https://clawhub.ai/jose-compu/skills/self-improving-analytics)
+- [OpenClaw Integration](references/openclaw-integration.md)
+- [Hook Setup Guide](references/hooks-setup.md)
+- [Entry Examples](references/examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured log-entry templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes local learning logs only when the agent follows the skill workflow; optional hooks emit reminder text.]
+
+## Skill Version(s):
+
+1.1.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

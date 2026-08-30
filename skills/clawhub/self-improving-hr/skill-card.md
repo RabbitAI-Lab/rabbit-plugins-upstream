@@ -1,45 +1,59 @@
-## Description: <br>
-Captures policy gaps, compliance risks, recruiting process issues, onboarding friction, retention signals, candidate experience problems, and offboarding gaps to enable continuous HR improvement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures policy gaps, compliance risks, recruiting process issues, onboarding friction, retention signals, candidate experience problems, and offboarding gaps to enable continuous HR improvement.
 
-## Publisher: <br>
-[jose-compu](https://clawhub.ai/user/jose-compu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jose-compu](https://clawhub.ai/user/jose-compu)
 
-## Use Case: <br>
-HR and people-operations teams use this agent skill to capture anonymized HR process learnings, compliance risks, candidate experience issues, onboarding friction, and retention patterns. The captured Markdown logs can inform policy updates, onboarding checklists, interview scorecards, compliance calendars, and HR workflow improvements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive HR context and persistent learning logs may accidentally capture employee or candidate personal data. <br>
-Mitigation: Keep .learnings local and out of version control, do not store PII or confidential employee details, and anonymize examples before logging. <br>
-Risk: Broad always-on hooks can add HR reminders or inspect Bash output in sessions where the HR workflow is not intended. <br>
-Mitigation: Use project-local hooks with HR-specific matchers, enable the optional hook workflow intentionally, and avoid the Bash output detector unless it is necessary. <br>
-Risk: Generated policy, AGENTS.md, or extracted-skill changes could introduce incorrect HR guidance. <br>
-Mitigation: Manually review proposed policy, AGENTS.md, and generated-skill changes before accepting them, especially for compliance-sensitive content. <br>
+## Use Case:
 
+HR teams and agents use this skill to capture anonymized HR process learnings, compliance risks, recruiting and onboarding friction, retention signals, and improvement requests. It helps convert recurring patterns into reviewed policy documents, checklists, compliance calendars, interview scorecards, or reusable HR skills.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/jose-compu/self-improving-hr) <br>
-- [Entry Examples](references/examples.md) <br>
-- [OpenClaw Integration](references/openclaw-integration.md) <br>
-- [Hook Setup Guide](references/hooks-setup.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes or proposes project-local .learnings Markdown entries and optional HR skill scaffolds; no external API keys are required by the artifact evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: HR learning logs can involve sensitive employee or candidate context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep .learnings local and untracked, anonymize examples, and do not log names, government identifiers, salary details, medical information, or other PII.
+
+Risk: Optional hooks can persist reminders across sessions and may inspect command output when PostToolUse is enabled.
+
+Mitigation: Install hooks only in workspaces where HR process logging is intended, keep them project-scoped, prefer the minimal prompt reminder hook, and avoid PostToolUse unless output inspection is needed.
+
+Risk: Promoting local observations into policies, agent instructions, hooks, memory, or generated skills can make unreviewed HR guidance durable.
+
+Mitigation: Require explicit review and approval before any promotion into permanent HR materials or agent behavior.
+
+## Reference(s):
+
+- [OpenClaw Integration](references/openclaw-integration.md)
+- [Hook Setup Guide](references/hooks-setup.md)
+- [Entry Examples](references/examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local learning-log entries and optional reminder hook output; no external service output is required.]
+
+## Skill Version(s):
+
+1.1.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

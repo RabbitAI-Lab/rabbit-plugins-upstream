@@ -1,41 +1,52 @@
-## Description: <br>
-Searches Westin hotels under Marriott, returns current prices and booking links, and helps retrieve hotel details and package offers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+搜索万豪集团旗下威斯汀酒店并返回实时价格与预订链接，支持酒店详情查询和套餐优惠搜索。当用户需要预订威斯汀酒店、查找Westin酒店价格时使用
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[travel-skills](https://clawhub.ai/user/travel-skills)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External travel-planning users use this skill to find Westin hotels, compare prices, open booking links, review hotel details, and search package offers. Agents should present only the hotel data returned by the skill.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Hotel searches can send cities, dates, hotel names, and review keywords to an external proxy that is not clearly disclosed in the user-facing instructions.
+
+Mitigation: Review the proxy disclosure and avoid using sensitive travel plans unless the data-sharing behavior is acceptable.
+
+Risk: Hotel prices, availability, package offers, and booking links can change after the skill returns results.
+
+Mitigation: Confirm current terms on the booking page before making a reservation.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Travelers and travel-planning agents use this skill to search Westin hotel availability, compare prices and locations, inspect hotel details, and find package offers before following external booking links. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, shell commands, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel search terms, dates, and keywords are sent to the publisher cloud proxy and downstream travel APIs. <br>
-Mitigation: Avoid entering sensitive personal details in search keywords and review the disclosed data flow before deployment. <br>
-Risk: The artifact uses a configurable proxy endpoint and a hardcoded fallback token. <br>
-Mitigation: Use a trusted PROXY_URL and PROXY_TOKEN from the environment, and prefer a version that validates the proxy endpoint and removes the fallback token. <br>
+**Output Format:** [Markdown text with hotel details, prices, hotel IDs, and booking links]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/westin-hotel-booking) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+**Other Properties Related to Output:** [Results are constrained to script-returned hotel data and may include live prices, addresses, room details, package offers, and booking URLs.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API Calls, guidance] <br>
-**Output Format:** [Markdown text with hotel results, prices, details, package summaries, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns search results and guidance only; it does not complete bookings directly.] <br>
+1.1.5 (source: ClawHub release evidence)
 
-## Skill Version(s): <br>
-1.1.4 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

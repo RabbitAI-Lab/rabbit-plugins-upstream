@@ -1,45 +1,59 @@
-## Description: <br>
-Google Drive (workspace.google.com). Use this skill for Google Drive requests, including reading, creating, updating, and deleting Drive data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to operate Google Drive through the OOMOL `googledrive` connector and `oo` CLI for reading, creating, updating, and deleting Drive data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to let an agent inspect Google Drive content and perform file, shared drive, permission, comment, reply, revision, label, approval, and change workflows through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions can expose private Google Drive files, permissions, metadata, comments, labels, revisions, and change history to the agent. <br>
-Mitigation: Install only for users who want an agent to access their OOMOL-connected Google Drive, and treat read results as sensitive. <br>
-Risk: Write and destructive actions can change permissions, comments, labels, files, folders, shared drives, replies, revisions, or trash state. <br>
-Mitigation: Inspect the live action schema, review the exact payload and effect, and require explicit user confirmation before state-changing or destructive operations. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Verify the oo CLI installer source before setup and only run authentication or connection steps after a relevant command fails. <br>
+## Use Case:
 
+Developers and external agent users use this skill when they need an agent to inspect Google Drive metadata, list or retrieve files, manage collaboration objects, or perform confirmed state-changing Drive actions through an already connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-googledrive) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Google Drive](https://workspace.google.com/products/drive/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Google Drive connector responses as JSON when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and server release metadata) <br>
+Risk: The skill can change Google Drive state, including files, shared drives, comments, replies, labels, permissions, revisions, and trash.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact payload and effect with the user before running write actions, and inspect the live connector schema before constructing the payload.
+
+Risk: Destructive actions can permanently delete Drive content, comments, replies, revisions, permissions, shared drives, or trash contents.
+
+Mitigation: Get explicit user approval for the target and operation before any destructive action, and use read/list actions first when needed to verify the target.
+
+Risk: The connector acts on the user's connected Google Drive account.
+
+Mitigation: Install and use the skill only when the user accepts this account-level access, and review prompts carefully before approving uploads, deletions, permission changes, or other state-changing actions.
+
+## Reference(s):
+
+- [Google Drive product page](https://workspace.google.com/products/drive/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Google Drive skill on ClawHub](https://clawhub.ai/oomol/skills/oo-googledrive)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses use JSON with `data` and `meta.executionId`; write and destructive actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

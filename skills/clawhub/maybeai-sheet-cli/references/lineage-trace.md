@@ -1,188 +1,118 @@
-# Formula Lineage Trace Reference
+# Formula Lineage and Computation Evidence
 
-## Contents
+## 1. Select the model before tracing
 
-1. When to use this
-2. What lineage does
-3. Request
-4. Response
-5. Recommended workflows
-6. Limitations and recovery
+A question about a computed value may concern three different producers:
 
-## 1. When to use this
+| Target | Correct identity | Evidence to inspect |
+|---|---|---|
+| Excel Sheet formula | `worksheet_name` and A1 cell | `mbs formula lineage` |
+| Base column Formula | `table_id`, `field_id`, record identity | validation, persisted-formula readback, and recalculation evidence |
+| Worksheet SQL Config | result worksheet and raw SQL config | stored SQL, preview, and materialization evidence |
 
-Read this document when the user asks where a formula cell, computed column, or SQL formula result comes from.
+Do not send a Base `field_id` to the A1 lineage command, and do not explain a
+SQL Config result as though it were an ordinary formula cell.
 
-Use lineage trace for questions like:
 
-- why a target cell has a wrong or unexpected value
-- which source columns feed a computed column
-- whether a formula depends on another formula column
-- how a `=SQL(...)` result cell maps back to source worksheet columns
-- building a dependency graph for a target cell
+## Public command discovery
 
-Do not use it as a substitute for reading actual values. After lineage identifies relevant sheets and columns, use `excel-worksheet range read`, `excel-table sample`, or `db-table sample` when exact data values are needed.
-
-## 2. What lineage does
-
-`mbs formula lineage` is read-only formula dependency tracing.
-
-It:
-
-- accepts a workbook `document_id` or MaybeAI spreadsheet `uri`
-- accepts one or more target cells
-- requires each target to identify a worksheet by `worksheet_name` or `gid`
-- traces ordinary Excel formula references such as `A2`, `A:A`, `A2:B10`, and cross-sheet references
-- treats repeated row formulas as column lineage when appropriate
-- traces supported `=SQL("...")` formulas through final SELECT outputs, CTEs, table aliases, joins, and source worksheet columns
-- returns either a nested dependency tree or graph-style nodes and edges
-
-## 3. Request
+This reference does not define a command tree or flag contract. Before
+generating a lineage or Formula command, inspect the installed public surface:
 
 ```bash
-mbs formula lineage --doc-id <DOC_ID> --worksheet-name Report --cell C2 --format tree --output yaml
-mbs formula lineage --url <MAYBE_SHEET_URL> --worksheet-name Report --cell C2 --format node
+mbs --help
+mbs range --help
+mbs formula --help
+mbs sql --help
 ```
 
-`--cell` must be an exact A1 cell such as `C2` or `AE2`. Do not pass only `C:C`.
-Use `--format tree` by default; use `--format node` for graph rendering.
+Use nested `--help` for the selected public leaf. Do not generate hidden
+compatibility commands.
 
-## 4. Response
+## 2. Sheet formula lineage
 
-Common top-level fields:
+`mbs range lineage` is read-only A1-style dependency tracing for Sheet
+targets and SQL result cells that the service exposes as cells.
 
-```json
-{
-  "success": true,
-  "document_id": "<document_id>",
-  "format": "tree",
-  "results": []
-}
+```bash
+mbs range lineage --target "https://www.maybe.ai/docs/spreadsheets/d/<DOC_ID>?gid=<GID>" --range C2 --format tree --output yaml
+mbs range lineage --target "https://www.maybe.ai/docs/spreadsheets/d/<DOC_ID>?gid=<GID>" --range C2:E2 --format node
 ```
 
-With `format: "tree"`, each result contains:
+`--range` accepts a concrete A1 address such as `C2` or an A1 range such as
+`C2:E2`; `range lineage --cell` is not accepted. Use `--format tree` for a
+human explanation and `--format node` for a graph.
 
-- `target`: the requested target cell
-- `lineage`: the traced dependency node
-- nested `depends_on`: upstream dependencies
-- optional `produced_by`: SQL formula producer for SQL result cells
+A tree result normally contains:
 
-Common node fields:
+- `target`, `lineage`, and nested `depends_on`
+- Sheet cells/ranges, column headers, and ordinary formula text
+- an optional `produced_by` Worksheet SQL Config node
+- SQL fingerprints, dependencies, and last-run state where SQL Config lineage
+  is available
 
-- `id`: stable node id when available
-- `type`: node type
-- `worksheet_name`: worksheet name
-- `gid`: worksheet gid
-- `cell`: concrete cell for cell-level nodes
-- `range`: cell or column range
-- `column`: header from row 1 when available
-- `formula`: exact formula for formula-cell or SQL formula nodes
-- `sample_formula`: sample formula for formula-column nodes
-- `depends_on`: upstream dependencies
+The trace is read-only. Read source values separately with
+`range read` or `table sample`.
 
-Common node types:
+## 3. Base column Formula evidence
 
-- `target_cell`: the requested target
-- `formula_cell`: a formula in a single cell
-- `formula_column`: a column-like repeated formula
-- `source_cell`: non-formula source cell
-- `source_column`: non-formula source column
-- `sql_formula`: `=SQL(...)` formula producer
-- `sql_result_cell`: output cell produced by a SQL formula
-- `unresolved`: reference could not be resolved or trace limits were reached
+Base Formula evidence is not an A1 dependency graph, and compile output alone
+does not prove that a Formula was persisted or executed. Resolve the stable
+`table_id` and `field_id`, then inspect the public Formula leaves before use:
 
-Example `tree` response shape:
-
-```json
-{
-  "success": true,
-  "document_id": "<document_id>",
-  "format": "tree",
-  "results": [
-    {
-      "target": {
-        "type": "target_cell",
-        "worksheet_name": "Report",
-        "cell": "C2",
-        "range": "C2:C2",
-        "column": "Category"
-      },
-      "lineage": {
-        "type": "formula_column",
-        "worksheet_name": "Report",
-        "range": "C:C",
-        "column": "Category",
-        "sample_formula": "=XLOOKUP(A2,Products!A:A,Products!C:C,\"\")",
-        "depends_on": [
-          {
-            "type": "source_column",
-            "worksheet_name": "Report",
-            "range": "A:A",
-            "column": "SKU"
-          },
-          {
-            "type": "source_column",
-            "worksheet_name": "Products",
-            "range": "C:C",
-            "column": "Category"
-          }
-        ]
-      }
-    }
-  ]
-}
+```bash
+mbs formula validate --help
+mbs formula set --help
+mbs formula read --help
+mbs formula recalculate --help
 ```
 
-With `format: "node"`, the response omits `results` and returns:
+For a supported Base Formula workflow, retain all of the following evidence:
 
-- `nodes`: flat lineage nodes
-- `edges`: dependency edges
+1. Validation output for the intended formula and target field.
+2. The successful persistence result from `formula set` (when a write was
+   requested).
+3. Persisted-formula readback that identifies the target field and stored
+   expression.
+4. Recalculation result, including execution status and any field errors.
+5. A representative record read only as value evidence after recalculation.
 
-Edge relations include:
+If public `formula validate`, `formula set`, `formula read`, or `formula
+recalculate` help does not cover the requested Base behavior, report a
+capability gap. Do not substitute a cell lineage query, a range formula, a
+row-2 template, or a hidden compatibility command.
 
-- `produced_by`: target/result produced by a formula node
-- `formula_depends_on`: ordinary formula dependency
-- `sql_depends_on`: SQL expression dependency
+## 4. Worksheet SQL Config lineage
 
-Use `node` when a UI, graph renderer, or downstream tool needs stable ids and edges.
+For an SQL-produced result, inspect the stored config and the materialized
+output first:
 
-## 5. Recommended workflows
+```bash
+mbs sql config get --doc-id <DOC_ID> --worksheet-name <SQL_RESULT_SHEET> --output json
+mbs sql preview --doc-id <DOC_ID> --worksheet-name <SQL_RESULT_SHEET> --sql-file query.sql --output table
+mbs sql overwrite --doc-id <DOC_ID> --worksheet-name <SQL_RESULT_SHEET> --confirm-overwrite
+```
 
-### Explain a wrong formula result
+Then use A1 lineage only when the target is a Sheet/SQL-result cell:
 
-1. `mbs workbook list-worksheets` and a small `mbs excel-worksheet range read` to confirm the sheet name.
-2. Call `mbs formula lineage --format tree`.
-3. Walk `lineage.depends_on` and summarize the chain in business terms.
-4. If a source column looks suspicious, use `mbs excel-worksheet range read` or table sample to inspect sample values.
+```bash
+mbs formula lineage --doc-id <DOC_ID> --worksheet-name <SQL_RESULT_SHEET> --cell C2 --format tree
+```
 
-### Build a dependency graph
+Trace the `worksheet_sql_config`/SQL dependency nodes back to source
+worksheets or Base tables. The authoritative query text is raw SQL in SQL
+Config, not a cell formula.
 
-1. Call `mbs formula lineage --format node`.
-2. Render `nodes` by `id`.
-3. Render `edges` by `from`, `to`, and `relation`.
-4. Label nodes with `worksheet_name`, `column`, `cell`, and `sample_formula` or `formula`.
+## 5. Recovery
 
-### Trace SQL formula output
-
-1. Identify a result cell in the SQL output block, usually row 2 or below.
-2. Call `mbs formula lineage` for that output cell.
-3. Inspect `produced_by` to find the `sql_formula`.
-4. Inspect `depends_on` to see source worksheet columns used for that output column.
-
-## 6. Limitations and recovery
-
-Important limits:
-
-- `cell` must be a concrete A1 cell.
-- Lineage traces formulas and references; it does not calculate or mutate values.
-- Formula parsing focuses on A1-style references, ranges, column references, and cross-sheet references.
-- SQL tracing supports the common worksheet SQL subset, including CTEs, aliases, final SELECT outputs, and FROM/JOIN sources. It is not a full SQL parser.
-- Deep or huge graphs may return `unresolved` if trace limits are reached.
-- External workbook references or references to missing sheets may return `unresolved`.
-
-Recovery:
-
-1. If the worksheet cannot be found, call `mbs workbook list-worksheets` and retry with the exact `worksheet_name` or `gid`.
-2. If the target is not a formula, the result may be a `source_cell` or `source_column`; read nearby formulas if the user expected computation.
-3. If SQL lineage is incomplete, inspect the SQL formula text and validate source headers with `mbs excel-table schema` or `mbs db-table schema`.
-4. If lineage identifies the right columns but not the wrong values, switch to `mbs excel-worksheet range read` or table sample for exact source rows.
+1. If workbook inspection and worksheet listing do not reveal the engine and
+   object identity, stop and resolve it before tracing or writing.
+2. If a Sheet A1 trace returns a source cell rather than a formula, inspect
+   nearby cells and the source data.
+3. If Base results are stale, obtain validation, persisted-formula readback,
+   and recalculation evidence; a table sample alone cannot show whether
+   recalculation ran.
+4. If SQL output is stale or incomplete, inspect the saved config, preview the
+   exact raw SQL, and validate the materialization result.
+5. Existing legacy SQL wrapper cells are migration-only objects. Do not edit
+   them through formula commands; use the SQL migration workflow.

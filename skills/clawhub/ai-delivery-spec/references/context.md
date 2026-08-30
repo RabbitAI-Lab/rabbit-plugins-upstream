@@ -90,12 +90,23 @@ Round 0 建立来源/权威清单；后续按端到端角色纵切，通常每�
 
 禁止按前端/后端横切、单轮重建巨型 Product Truth，或把中间分轮包装成最终完成。
 
+原型类任务还有更早的切片信号：任一来源超过 100KB、三个以上重型 HTML/Axure 页面，或单次改动
+横跨多个视图时，同时加载本文件与 `references/prototype.md`。先记录来源权威、页面、动作、处理器、
+指标、状态和开放项，再按端到端角色路径或稳定 ID 切片。只有用户已确认可见评审模式时，三个以上
+重型页面才允许进入分页/懒加载评审容器；材料很大本身不构成自动生成评审模式的授权。
+
+Stage 0 的对象计数或结构 PASS 不证明主链可达。对每条进入本轮范围的核心链，逐步核对“上一步实际产出
+的对象/状态/版本/身份键”是否满足下一动作守卫；再核对失败、退回、重试和补偿能否回到可达入口。无法
+从源码、运行证据或权威决定确认时登记 `UNK-*`，不能因两个按钮分别可点击就宣称端到端闭环。
+结构化盘点使用 `critical_chains` 与 `reachability_breaks`；旧台账可先以 GAP 兼容，但一旦声明链路，空断裂
+清单不能掩盖未评估或 unknown/broken 的 link/recovery。Stage 0 只记录观察事实和缺口，不替产品决定目标规则。
+
 ## Agent 交接投影 / Agent Handoff Projection
 
 长时间 AI Coding 只按 `schemas/agent-handoff.schema.json` 生成已触发工作包：
 
 - 根 `AGENTS.md`：权威、稳定全局守卫、路由、命令和变更协议；引用 PRD而不复制所有规则；
-- `MOD-*`：一个可独立负责的模块纵切，含输入输出、直接依赖、AC和 `qa_projection`；
+- `MOD-*`：一个可独立负责的模块纵切，含输入输出、直接依赖、`STEP-*` 实施步骤引用、AC和 `qa_projection`；
 - `XCT-*`：影响至少两个模块的 RBAC、多租户、审计、血缘、AI运行时或其他横切规则；
 - `EDGE-*`：生产者/消费者对象或状态交接、映射、重试、对账和AC；
 - `HANDOFF-*`：发送/接收双方、已确认基线和返回问题/提案。
@@ -104,6 +115,30 @@ Round 0 建立来源/权威清单；后续按端到端角色纵切，通常每�
 还必须引用工程团队维护的 `engineering_baseline_ref`。模块 Agent 只加载根摘要、一个模块包、
 直接 XCT/EDGE 和测试，不加载全项目；它可返回 `REV-*` 或变更提案，但不能直接修改业务基线。
 Qoder/Claude/Cursor/Codex 规则只是控制面的投影，不能复制出不同业务 ID。
+
+当实现存在不可从 PRD 推断的环境、权限或安全边界时，只在同一 manifest 中增加可选
+`execution_constraints`，不新建“执行阶段”或第二份需求合同：
+
+```yaml
+execution_constraints:
+  baseline_ref: ENG-BASELINE-001
+  protected_surfaces: []
+  allowed_actions: []
+  forbidden_actions: []
+  environment_refs: []
+  secret_refs: [] # 只写 SECRET-* 或密钥系统引用，绝不写原值
+  required_evidence: []
+  rollback_owner: "{accountable human}"
+```
+
+这里记录“实现不能越过什么、要拿什么证据”，不写 Sprint、命令流水账、数据库方案或部署步骤。
+约束必须回链已批准业务/工程来源；`forbidden_actions` 优先于 Agent 自主性，`secret_refs` 不得被
+展开到提示词、日志、代码或测试夹具。
+
+可见评审工作台是随产品 `CurrentContext` 变化的人类解释层，不替产品导航，也不是 Agent 的第五个
+角色镜头。Agent 从 manifest 取得当前 packet 与 `STEP/AC` 引用，再解析同 hash 的 PRD/Truth 切片和
+工程基线；评审 HTML 仅可用于定位 `VIEW/REG/ACT` 和可见状态，不得从人类摘要反推出新规则。handoff
+缺失或 hash 漂移时返回 GAP，不能退回“通读评审原型后自行实现”。
 
 每个 `XCT-*` 正文至少声明：影响模块、全局不变量、执行点、例外与失败处理和对应 `AC-*`。
 只有“权限/审计见全局规则”的空壳不能进入 ready_for_implementation，门禁返回

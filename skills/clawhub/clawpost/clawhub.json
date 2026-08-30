@@ -1,10 +1,10 @@
 {
   "name": "Claw Post",
   "slug": "clawpost",
-  "tagline": "Secure, agent-native social posting — X, LinkedIn, Facebook Groups, TikTok. No platform credentials shared.",
-  "description": "Claw Post — secure social posting infrastructure for OpenClaw agents. Post to X (Twitter), LinkedIn, Facebook (feed + groups with automated search/join), and TikTok using your real Chrome browser session via a paired extension. No OAuth tokens or social-platform API keys are ever shared with the agent or service. Human-like posting with lower ban risk than traditional API tools. Full Facebook Groups automation: search by keyword, evaluate relevance, join, and post. One API endpoint, one API key, four platforms. Free tier included.",
+  "tagline": "Secure, agent-native social posting — X, LinkedIn, Facebook Groups, TikTok, Instagram, plus Reddit comments in your browser. No platform credentials shared.",
+  "description": "Claw Post — secure social posting infrastructure for OpenClaw agents. Post to X (Twitter), LinkedIn, Facebook (feed + groups with automated search/join), TikTok, and Instagram using your real Chrome browser session via a paired extension. Comment/reply on Reddit threads the same way — no Reddit API key. No OAuth tokens or social-platform API keys are ever shared with the agent or service. Human-like posting with lower ban risk than traditional API tools. Full Facebook Groups automation: search by keyword, evaluate relevance, join, and post. One API key, five feed platforms plus Reddit browser actions. Free tier included.",
   "category": "social",
-  "tags": ["social", "twitter", "x", "linkedin", "facebook", "facebook-groups", "tiktok", "posting", "chrome-extension", "automation", "zero-credential"],
+  "tags": ["social", "twitter", "x", "linkedin", "facebook", "facebook-groups", "tiktok", "instagram", "reddit", "posting", "comments", "chrome-extension", "automation", "zero-credential"],
   "env": {
     "CLAWPOST_API_KEY": {
       "required": true,

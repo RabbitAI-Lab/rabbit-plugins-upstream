@@ -1,46 +1,65 @@
-## Description: <br>
-Queries monthly customs trade trend details for a company by company ID and optional filters, returning trade count, quantity, weight, and amount over time. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过企业 ID 查询海关数据中的月度贸易趋势，按月返回交易次数、数量、重量和金额，并支持日期、产品、HS 编码、国家、贸易伙伴和港口等可选筛选条件。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External trade teams, analysts, and supply-chain managers use this skill to analyze company-level customs trade patterns, monitor seasonal changes, and track long-term import/export activity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a paid external customs-data API, so queries and account actions can incur charges. <br>
-Mitigation: Tell the user when an operation may cost money, use the pricing helper or pricing page for current rates, and wait for explicit confirmation before paid calls. <br>
-Risk: The API key may be stored locally in ~/.upkuajing/.env. <br>
-Mitigation: Keep the local environment file private, avoid sharing the key, and consider tightening file permissions before use. <br>
-Risk: Recharge and account-management helpers can create payment flows or expose account balance information. <br>
-Mitigation: Review account and recharge actions with the user before running them, and only open payment flows when the user intends to proceed. <br>
+## Use Case:
 
+External trade teams, analysts, and supply-chain managers use this skill to inspect a company's monthly customs trade activity and identify procurement cycles, seasonal changes, supplier sales signals, and longer-term import/export trends.
 
-## Reference(s): <br>
-- [公司贸易趋势 API 参考](references/customs-company-trends-api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/upkuajing/skills/customs-company-trends-zh) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer portal](https://developer.upkuajing.com/) <br>
-- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; paid API calls may return fee and balance details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md metadata) <br>
+Risk: The skill may read or store the Upkuajing API key in plaintext at ~/.upkuajing/.env.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the API key private, prefer a protected environment variable when possible, and restrict access to the local .env file.
+
+Risk: The workflow uses paid API calls and can create recharge payment links when requested.
+
+Mitigation: Review pricing and require explicit user confirmation before chargeable lookups or recharge actions.
+
+Risk: Optional error reports may include request context or customer-related details.
+
+Mitigation: Review and redact secrets or sensitive customer data before submitting an error report.
+
+Risk: The automatic version check contacts openapi.upkuajing.com.
+
+Mitigation: Install and run the skill only in environments where that network contact is acceptable.
+
+## Reference(s):
+
+- [公司贸易趋势 API 参考](references/customs-company-trends-api.md)
+- [Agent调用Skill异常上报 API 参考](references/skill-error-report-api.md)
+- [跨境魔方](https://www.upkuajing.com)
+- [跨境魔方开放平台](https://developer.upkuajing.com/)
+- [开放平台价格说明](https://www.upkuajing.com/web/openapi/price.html)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [JSON API responses with concise Markdown guidance and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; paid API calls should be confirmed by the user before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

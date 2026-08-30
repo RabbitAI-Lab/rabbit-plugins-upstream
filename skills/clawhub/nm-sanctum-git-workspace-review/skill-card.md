@@ -1,41 +1,50 @@
-## Description: <br>
-Verifies workspace state and staged changes as a preflight before commits or PRs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Verifies workspace state and staged changes as a read-only preflight before commits or pull requests.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect repository status, staged changes, and diffs before commit, pull request, or release-note workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security summary says the skill claims to be read-only while instructing agents to stage or unstage files, run Makefile targets, and fix files. <br>
-Mitigation: Require explicit confirmation before staging, unstaging, formatting, linting, merge-abort, make commands, or file edits. <br>
-Risk: The security verdict is suspicious for normal use because the skill can move from repository inspection into modifying the workspace. <br>
-Mitigation: Install only when that behavior is intended, and narrow triggers or edit the skill if a truly read-only review helper is required. <br>
+## Use Case:
 
+Developers and engineers use this skill before commit, pull request, or release-note workflows to inspect repository status, staged changes, diff statistics, and detailed diffs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-git-workspace-review) <br>
-- [ClawHub metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, markdown] <br>
-**Output Format:** [Markdown with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include git status, diff statistics, detailed diff review notes, and code-quality check results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The skill is described as read-only, but the security evidence says it may alter staged files and run project formatting or lint commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the skill as write-capable, review proposed staging and formatting actions before allowing changes, and avoid broad triggers when only display-only git output is needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-git-workspace-review)
+- [Sanctum plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and git review notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct the agent to run formatting, linting, staging, unstaging, and git diff commands.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
