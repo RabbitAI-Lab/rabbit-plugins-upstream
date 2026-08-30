@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/pdf",
+  "repo": "openai/skills",
+  "skillId": "pdf",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "75605de0c36f3ca8ef3de2631a54233721285c5aa3c6f08ddd3380fc4fe9a330",
+  "fetchedAt": "2026-08-30T13:00:20.487Z"
+}

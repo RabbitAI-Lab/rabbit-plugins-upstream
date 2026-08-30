@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/cancel-ralph",
+  "repo": "cursor/plugins",
+  "skillId": "cancel-ralph",
+  "branch": "main",
+  "pushedAt": "2026-08-28T17:12:06Z",
+  "contentHash": "54564ec52365b433d64dd2b1273255369afed85b9ad00bf05fe8c373c427060e",
+  "fetchedAt": "2026-08-30T13:00:16.175Z"
+}

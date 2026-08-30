@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/flux-image",
+  "repo": "inference-sh/skills",
+  "skillId": "flux-image",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "4e5652cdf82e0025ee06941359cb067678da2243a60354bc580fdd2b4b8a7ac6",
+  "fetchedAt": "2026-08-30T12:59:00.035Z"
+}
