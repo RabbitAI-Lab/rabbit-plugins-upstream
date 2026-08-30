@@ -9,7 +9,7 @@ The Hugging Face Hub CLI tool `hf` is available. IMPORTANT: The `hf` command rep
 
 Use `hf --help` to view available functions. Note that auth commands are now all under `hf auth` e.g. `hf auth whoami`.
 
-Generated with `huggingface_hub v1.23.0`. Run `hf skills add --force` to regenerate.
+Generated with `huggingface_hub v1.29.0`. Run `hf skills add --force` to regenerate.
 
 ## Commands
 
@@ -40,11 +40,12 @@ Generated with `huggingface_hub v1.23.0`. Run `hf skills add --force` to regener
 - `hf buckets list` — List buckets or files in a bucket. `[--human-readable --tree --recursive --search TEXT --format [auto|human|agent|json|quiet]]`
 - `hf buckets move FROM_ID TO_ID` — Move (rename) a bucket to a new name or namespace. `[--format [auto|human|agent|json|quiet]]`
 - `hf buckets remove ARGUMENT` — Remove files from a bucket. `[--recursive --yes --dry-run --include TEXT --exclude TEXT --format [auto|human|agent|json|quiet]]`
+- `hf buckets settings BUCKET_ID` — Update bucket settings (visibility). `[--private --public --format [auto|human|agent|json|quiet]]`
 - `hf buckets sync` — Sync files between local directory and a bucket. `[--delete --ignore-times --ignore-sizes --plan TEXT --apply TEXT --dry-run --include TEXT --exclude TEXT --filter-from TEXT --existing --ignore-existing --verbose --format [auto|human|agent|json|quiet]]`
 
 ### `hf cache` — Manage local cache directory.
 
-- `hf cache list` — List cached repositories or revisions. `[--cache-dir TEXT --revisions --filter TEXT --sort [accessed|accessed:asc|accessed:desc|modified|modified:asc|modified:desc|name|name:asc|name:desc|size|size:asc|size:desc] --limit INTEGER --format [auto|human|agent|json|quiet]]`
+- `hf cache list` — List cached repositories or revisions. `[--cache-dir TEXT --revisions --filter TEXT --sort [accessed|accessed:asc|accessed:desc|modified|modified:asc|modified:desc|name|name:asc|name:desc|size|size:asc|size:desc] --limit INTEGER --show-warnings --format [auto|human|agent|json|quiet]]`
 - `hf cache prune` — Remove detached revisions and incomplete downloads from the cache. `[--cache-dir TEXT --yes --dry-run --format [auto|human|agent|json|quiet]]`
 - `hf cache rm TARGETS` — Remove cached repositories or revisions. `[--cache-dir TEXT --yes --dry-run --format [auto|human|agent|json|quiet]]`
 - `hf cache verify REPO_ID` — Verify checksums for a single repo revision from cache or a local directory. `[--type [model|dataset|space] --revision TEXT --cache-dir TEXT --local-dir TEXT --fail-on-missing-files --fail-on-extra-files --format [auto|human|agent|json|quiet]]`
@@ -87,13 +88,14 @@ Generated with `huggingface_hub v1.23.0`. Run `hf skills add --force` to regener
 - `hf endpoints catalog deploy --repo TEXT` — Deploy an Inference Endpoint from the Model Catalog. `[--name TEXT --accelerator TEXT --namespace TEXT --format [auto|human|agent|json|quiet]]`
 - `hf endpoints catalog list` — List available Catalog models. `[--format [auto|human|agent|json|quiet]]`
 - `hf endpoints delete NAME` — Delete an Inference Endpoint permanently. `[--namespace TEXT --yes --format [auto|human|agent|json|quiet]]`
-- `hf endpoints deploy NAME --repo TEXT --framework TEXT --accelerator TEXT --instance-size TEXT --instance-type TEXT --region TEXT --vendor TEXT` — Deploy an Inference Endpoint from a Hub repository. `[--namespace TEXT --task TEXT --min-replica INTEGER --max-replica INTEGER --scale-to-zero-timeout INTEGER --scaling-metric [pendingRequests|hardwareUsage] --scaling-threshold FLOAT --revision TEXT --custom-image TEXT --health-route TEXT --port INTEGER --container-command TEXT --container-args TEXT --env TEXT --env-file TEXT --secrets TEXT --secrets-file TEXT --type [public|protected|authenticated|private] --format [auto|human|agent|json|quiet]]`
+- `hf endpoints deploy NAME --repo TEXT --framework TEXT --accelerator TEXT --instance-size TEXT --instance-type TEXT --region TEXT --vendor TEXT` — Deploy an Inference Endpoint from a Hub repository. `[--namespace TEXT --task TEXT --min-replica INTEGER --max-replica INTEGER --scale-to-zero-timeout INTEGER --scaling-metric [pendingRequests|hardwareUsage] --scaling-threshold FLOAT --revision TEXT --custom-image TEXT --engine [custom|hf-serve|llamacpp|sglang|tei|tgi|tgi-neuron|vllm|vllm-neuron] --health-route TEXT --port INTEGER --tensor-parallel-size INTEGER --data-parallel-size INTEGER --container-command TEXT --container-args TEXT --env TEXT --env-file TEXT --secrets TEXT --secrets-file TEXT --type [public|protected|authenticated|private] --format [auto|human|agent|json|quiet]]`
 - `hf endpoints describe NAME` — Get information about an existing endpoint. `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
+- `hf endpoints hardware` — List the hardware available to deploy an Inference Endpoint on. `[--namespace TEXT --vendor TEXT --region TEXT --accelerator TEXT --instance-type TEXT --all --format [auto|human|agent|json|quiet]]`
 - `hf endpoints list` — Lists all Inference Endpoints for the given namespace. `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
 - `hf endpoints pause NAME` — Pause an Inference Endpoint. `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
 - `hf endpoints resume NAME` — Resume an Inference Endpoint. `[--namespace TEXT --fail-if-already-running --format [auto|human|agent|json|quiet]]`
 - `hf endpoints scale-to-zero NAME` — Scale an Inference Endpoint to zero. `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
-- `hf endpoints update NAME` — Update an existing endpoint. `[--namespace TEXT --repo TEXT --accelerator TEXT --instance-size TEXT --instance-type TEXT --framework TEXT --revision TEXT --task TEXT --min-replica INTEGER --max-replica INTEGER --scale-to-zero-timeout INTEGER --scaling-metric [pendingRequests|hardwareUsage] --scaling-threshold FLOAT --format [auto|human|agent|json|quiet]]`
+- `hf endpoints update NAME` — Update an existing endpoint. `[--namespace TEXT --repo TEXT --accelerator TEXT --instance-size TEXT --instance-type TEXT --framework TEXT --revision TEXT --task TEXT --custom-image TEXT --engine [custom|hf-serve|llamacpp|sglang|tei|tgi|tgi-neuron|vllm|vllm-neuron] --health-route TEXT --port INTEGER --tensor-parallel-size INTEGER --data-parallel-size INTEGER --container-command TEXT --container-args TEXT --min-replica INTEGER --max-replica INTEGER --scale-to-zero-timeout INTEGER --scaling-metric [pendingRequests|hardwareUsage] --scaling-threshold FLOAT --format [auto|human|agent|json|quiet]]`
 
 ### `hf extensions` — Manage hf CLI extensions.
 
@@ -109,29 +111,29 @@ Generated with `huggingface_hub v1.23.0`. Run `hf skills add --force` to regener
 - `hf jobs cancel JOB_ID` — Cancel a Job `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
 - `hf jobs hardware` — List available hardware options for Jobs `[--format [auto|human|agent|json|quiet]]`
 - `hf jobs inspect JOB_IDS` — Display detailed information on one or more Jobs `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
-- `hf jobs labels JOB_ID` — Update labels on a Job. Replaces all existing labels. `[--label TEXT --clear --namespace TEXT --format [auto|human|agent|json|quiet]]`
-- `hf jobs list` — List Jobs. `[--all --status [COMPLETED|CANCELED|ERROR|DELETED|SCHEDULING|RUNNING] --label TEXT --limit INTEGER --namespace TEXT --filter TEXT --format [auto|human|agent|json|quiet]]`
+- `hf jobs labels JOB_ID` — Update labels on a Job. Passing --label replaces all existing labels; passing --name alone keeps them. `[--name TEXT --label TEXT --clear --namespace TEXT --format [auto|human|agent|json|quiet]]`
+- `hf jobs list` — List Jobs. `[--all --status [COMPLETED|CANCELED|ERROR|DELETED|SCHEDULING|RUNNING] --label TEXT --name TEXT --limit INTEGER --namespace TEXT --filter TEXT --format [auto|human|agent|json|quiet]]`
 - `hf jobs logs JOB_ID` — Fetch the logs of a Job. `[--follow --tail INTEGER --namespace TEXT --format [auto|human|agent|json|quiet]]`
-- `hf jobs run IMAGE COMMAND` — Run a Job. `[--env TEXT --secrets TEXT --label TEXT --volume TEXT --env-file TEXT --secrets-file TEXT --flavor [cpu-basic|cpu-upgrade|cpu-performance|cpu-xl|t4-small|t4-medium|l4x1|l4x4|l40sx1|l40sx4|l40sx8|a10g-small|a10g-large|a10g-largex2|a10g-largex4|a100-large|a100x4|a100x8|h200|h200x2|h200x4|h200x8|rtx-pro-6000|rtx-pro-6000x2|rtx-pro-6000x4|rtx-pro-6000x8] --timeout TEXT --detach --expose INTEGER --ssh --namespace TEXT]`
+- `hf jobs run IMAGE COMMAND` — Run a Job. `[--env TEXT --secrets TEXT --name TEXT --label TEXT --volume TEXT --env-file TEXT --secrets-file TEXT --flavor [cpu-basic|cpu-upgrade|cpu-performance|cpu-xl|t4-small|t4-medium|l4x1|l4x4|l40sx1|l40sx4|l40sx8|a10g-small|a10g-large|a10g-largex2|a10g-largex4|a100-large|a100x4|a100x8|h200|h200x2|h200x4|h200x8|rtx-pro-6000|rtx-pro-6000x2|rtx-pro-6000x4|rtx-pro-6000x8] --timeout TEXT --detach --expose INTEGER --ssh --resource-group-id TEXT --namespace TEXT]`
 - `hf jobs scheduled delete SCHEDULED_JOB_ID` — Delete a scheduled Job. `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
 - `hf jobs scheduled inspect SCHEDULED_JOB_IDS` — Display detailed information on one or more scheduled Jobs `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
-- `hf jobs scheduled labels SCHEDULED_JOB_ID` — Update labels on a scheduled Job. Replaces all existing labels. `[--label TEXT --clear --namespace TEXT --format [auto|human|agent|json|quiet]]`
+- `hf jobs scheduled labels SCHEDULED_JOB_ID` — Update labels on a scheduled Job. Passing --label replaces all existing labels; passing --name alone keeps them. `[--name TEXT --label TEXT --clear --namespace TEXT --format [auto|human|agent|json|quiet]]`
 - `hf jobs scheduled list` — List scheduled Jobs `[--all --namespace TEXT --filter TEXT --format [auto|human|agent|json|quiet]]`
 - `hf jobs scheduled resume SCHEDULED_JOB_ID` — Resume (unpause) a scheduled Job. `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
-- `hf jobs scheduled run SCHEDULE IMAGE COMMAND` — Schedule a Job. `[--suspend --concurrency --env TEXT --secrets TEXT --label TEXT --volume TEXT --env-file TEXT --secrets-file TEXT --flavor [cpu-basic|cpu-upgrade|cpu-performance|cpu-xl|t4-small|t4-medium|l4x1|l4x4|l40sx1|l40sx4|l40sx8|a10g-small|a10g-large|a10g-largex2|a10g-largex4|a100-large|a100x4|a100x8|h200|h200x2|h200x4|h200x8|rtx-pro-6000|rtx-pro-6000x2|rtx-pro-6000x4|rtx-pro-6000x8] --timeout TEXT --expose INTEGER --namespace TEXT]`
+- `hf jobs scheduled run SCHEDULE IMAGE COMMAND` — Schedule a Job. `[--suspend --concurrency --env TEXT --secrets TEXT --name TEXT --label TEXT --volume TEXT --env-file TEXT --secrets-file TEXT --flavor [cpu-basic|cpu-upgrade|cpu-performance|cpu-xl|t4-small|t4-medium|l4x1|l4x4|l40sx1|l40sx4|l40sx8|a10g-small|a10g-large|a10g-largex2|a10g-largex4|a100-large|a100x4|a100x8|h200|h200x2|h200x4|h200x8|rtx-pro-6000|rtx-pro-6000x2|rtx-pro-6000x4|rtx-pro-6000x8] --timeout TEXT --expose INTEGER --resource-group-id TEXT --namespace TEXT]`
 - `hf jobs scheduled suspend SCHEDULED_JOB_ID` — Suspend (pause) a scheduled Job. `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
 - `hf jobs scheduled trigger SCHEDULED_JOB_ID` — Trigger a scheduled Job to run immediately (does not change the schedule). `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
-- `hf jobs scheduled uv run SCHEDULE SCRIPT` — Run a UV script (local file or URL) on HF infrastructure `[--suspend --concurrency --image TEXT --flavor [cpu-basic|cpu-upgrade|cpu-performance|cpu-xl|t4-small|t4-medium|l4x1|l4x4|l40sx1|l40sx4|l40sx8|a10g-small|a10g-large|a10g-largex2|a10g-largex4|a100-large|a100x4|a100x8|h200|h200x2|h200x4|h200x8|rtx-pro-6000|rtx-pro-6000x2|rtx-pro-6000x4|rtx-pro-6000x8] --env TEXT --secrets TEXT --label TEXT --volume TEXT --env-file TEXT --secrets-file TEXT --timeout TEXT --expose INTEGER --namespace TEXT --with TEXT --python TEXT]`
+- `hf jobs scheduled uv run SCHEDULE SCRIPT` — Run a UV script (local file or URL) on HF infrastructure `[--suspend --concurrency --image TEXT --flavor [cpu-basic|cpu-upgrade|cpu-performance|cpu-xl|t4-small|t4-medium|l4x1|l4x4|l40sx1|l40sx4|l40sx8|a10g-small|a10g-large|a10g-largex2|a10g-largex4|a100-large|a100x4|a100x8|h200|h200x2|h200x4|h200x8|rtx-pro-6000|rtx-pro-6000x2|rtx-pro-6000x4|rtx-pro-6000x8] --env TEXT --secrets TEXT --name TEXT --label TEXT --volume TEXT --env-file TEXT --secrets-file TEXT --timeout TEXT --expose INTEGER --resource-group-id TEXT --namespace TEXT --with TEXT --python TEXT]`
 - `hf jobs ssh JOB_ID` — SSH into a running Job. `[--identity-file PATH --dry-run --namespace TEXT --format [auto|human|agent|json|quiet]]`
 - `hf jobs stats` — Fetch the resource usage statistics and metrics of Jobs `[--namespace TEXT --format [auto|human|agent|json|quiet]]`
-- `hf jobs uv run SCRIPT` — Run a UV script (local file or URL) on HF infrastructure `[--image TEXT --flavor [cpu-basic|cpu-upgrade|cpu-performance|cpu-xl|t4-small|t4-medium|l4x1|l4x4|l40sx1|l40sx4|l40sx8|a10g-small|a10g-large|a10g-largex2|a10g-largex4|a100-large|a100x4|a100x8|h200|h200x2|h200x4|h200x8|rtx-pro-6000|rtx-pro-6000x2|rtx-pro-6000x4|rtx-pro-6000x8] --env TEXT --secrets TEXT --label TEXT --volume TEXT --env-file TEXT --secrets-file TEXT --timeout TEXT --detach --expose INTEGER --ssh --namespace TEXT --with TEXT --python TEXT]`
+- `hf jobs uv run SCRIPT` — Run a UV script (local file or URL) on HF infrastructure `[--image TEXT --flavor [cpu-basic|cpu-upgrade|cpu-performance|cpu-xl|t4-small|t4-medium|l4x1|l4x4|l40sx1|l40sx4|l40sx8|a10g-small|a10g-large|a10g-largex2|a10g-largex4|a100-large|a100x4|a100x8|h200|h200x2|h200x4|h200x8|rtx-pro-6000|rtx-pro-6000x2|rtx-pro-6000x4|rtx-pro-6000x8] --env TEXT --secrets TEXT --name TEXT --label TEXT --volume TEXT --env-file TEXT --secrets-file TEXT --timeout TEXT --detach --expose INTEGER --ssh --resource-group-id TEXT --namespace TEXT --with TEXT --python TEXT]`
 - `hf jobs wait JOB_IDS` — Wait for one or more Jobs to reach a terminal state. `[--timeout TEXT --namespace TEXT --format [auto|human|agent|json|quiet]]`
 
 ### `hf models` — Interact with models on the Hub.
 
 - `hf models card MODEL_ID` — Get the model card (README) for a model on the Hub. `[--metadata --text --format [auto|human|agent|json|quiet]]`
 - `hf models info MODEL_ID` — Get info about a model on the Hub. `[--revision TEXT --expand TEXT --format [auto|human|agent|json|quiet]]`
-- `hf models list` — List models on the Hub, or files in a model repo. `[--search TEXT --author TEXT --filter TEXT --pipeline-tag TEXT --gated --apps TEXT --num-parameters TEXT --inference-provider [cerebras|cohere|deepinfra|fal-ai|featherless-ai|fireworks-ai|groq|hf-inference|novita|nscale|openai|ovhcloud|publicai|replicate|scaleway|together|wavespeed|zai-org] --warm --sort [created_at|downloads|last_modified|likes|trending_score] --limit INTEGER --expand TEXT --human-readable --tree --recursive --revision TEXT --format [auto|human|agent|json|quiet]]`
+- `hf models list` — List models on the Hub, or files in a model repo. `[--search TEXT --author TEXT --filter TEXT --pipeline-tag TEXT --gated --apps TEXT --num-parameters TEXT --inference-provider [baseten|cerebras|cohere|deepinfra|fal-ai|featherless-ai|fireworks-ai|groq|hf-inference|novita|nscale|openai|ovhcloud|publicai|replicate|scaleway|together|wavespeed|zai-org] --warm --sort [created_at|downloads|last_modified|likes|trending_score] --limit INTEGER --expand TEXT --human-readable --tree --recursive --revision TEXT --format [auto|human|agent|json|quiet]]`
 
 ### `hf papers` — Interact with papers on the Hub.
 
@@ -224,7 +226,7 @@ Generated with `huggingface_hub v1.23.0`. Run `hf skills add --force` to regener
 
 To mount Hub repositories or buckets as local filesystems — no download, no copy, no waiting — use `hf-mount`. Files are fetched on demand. GitHub: https://github.com/huggingface/hf-mount
 
-Install: `curl -fsSL https://raw.githubusercontent.com/huggingface/hf-mount/main/install.sh | sh`
+Install: `brew install hf-mount`, or download a binary from https://github.com/huggingface/hf-mount/releases
 
 Some command examples:
 - `hf-mount start repo openai-community/gpt2 /tmp/gpt2` — mount a repo (read-only)
